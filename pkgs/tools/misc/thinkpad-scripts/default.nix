@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "thinkpad-scripts";
   version = "4.12.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martin-ueding";

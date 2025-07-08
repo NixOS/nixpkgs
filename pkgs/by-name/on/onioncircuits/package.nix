@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.tails.boum.org";

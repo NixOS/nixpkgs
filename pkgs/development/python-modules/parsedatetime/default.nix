@@ -2,24 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pythonOlder,
-  future,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
-  format = "setuptools";
-  disabled = isPy27; # no longer compatible with icu package
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4cb368fbb18a0b7231f4d76119165451c8d2e35951455dfee97c62a87b04d455";
+    hash = "sha256-TLNo+7GKC3Ix9NdhGRZUUcjS41lRRV3+6XxiqHsE1FU=";
   };
 
-  propagatedBuildInputs = lib.optional (pythonOlder "3.13") future;
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

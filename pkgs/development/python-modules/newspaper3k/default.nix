@@ -15,6 +15,7 @@
 buildPythonPackage rec {
   pname = "newspaper3k";
   version = "0.2.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

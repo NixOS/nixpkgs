@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "kcc";
   version = "5.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

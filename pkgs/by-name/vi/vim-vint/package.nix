@@ -9,6 +9,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Vimjas";

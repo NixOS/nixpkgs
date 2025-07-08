@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "genxword";
   version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "riverrun";

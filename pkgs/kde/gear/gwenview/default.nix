@@ -4,6 +4,7 @@
   qtwayland,
   qtimageformats,
   phonon,
+  phonon-vlc,
   pkg-config,
   cfitsio,
   exiv2,
@@ -23,6 +24,7 @@ mkKdeDerivation {
     qtimageformats
 
     phonon
+    phonon-vlc
 
     cfitsio
     exiv2

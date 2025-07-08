@@ -15,6 +15,7 @@
   bumpfontversion,
   coreutils,
   diffenator2,
+  ffmpeg-python,
   font-v,
   fontbakery,
   fontfeatures,
@@ -61,14 +62,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.85";
+  version = "0.9.86";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-D7s4msdJFiBlIvREiOqLACDwciNi9Di0dRB+qLpfhFY=";
+    hash = "sha256-4N27R+rbPSnxg701OGtrD7/iwTaUBdhp528+9n4ZIt8=";
   };
 
   postPatch = ''
@@ -91,7 +92,7 @@ buildPythonPackage rec {
 
     substituteInPlace \
       Lib/gftools/builder/operations/autohintOTF.py \
-      --replace-fail '"otfautohint' '"${lib.getExe' afdko "otfautohint"}'
+      --replace-fail 'otfautohint' '${lib.getExe' afdko "otfautohint"}'
 
     substituteInPlace \
       Lib/gftools/builder/operations/paintcompiler.py \
@@ -106,7 +107,7 @@ buildPythonPackage rec {
       --replace-fail '"cp' '"${lib.getExe' coreutils "cp"}'
 
     substituteInPlace \
-      Lib/gftools/builder/operations/{fix,remap,autohint,buildStat,addSubset,remapLayout,buildVTT}.py \
+      Lib/gftools/builder/operations/{fix,remap,autohint,buildStat,addSubset,remapLayout,buildVTT,buildAvar2}.py \
       --replace-fail '"gftools' '"${placeholder "out"}/bin/gftools'
 
     substituteInPlace \
@@ -135,6 +136,7 @@ buildPythonPackage rec {
       beautifulsoup4
       brotli
       bumpfontversion
+      ffmpeg-python
       font-v
       fontfeatures
       fontmake

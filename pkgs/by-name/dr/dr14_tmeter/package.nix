@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dr14_tmeter";
   version = "1.0.16";
+  format = "setuptools";
 
   disabled = !python3Packages.isPy3k;
 

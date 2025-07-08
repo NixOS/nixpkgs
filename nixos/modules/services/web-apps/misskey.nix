@@ -319,7 +319,7 @@ in
     systemd.services.misskey = {
       after = [
         "network-online.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "lndmanage";
   version = "0.16.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bitromortac";

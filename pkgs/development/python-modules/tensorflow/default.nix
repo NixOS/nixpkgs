@@ -599,7 +599,7 @@ let
 in
 buildPythonPackage {
   __structuredAttrs = true;
-  inherit version pname;
+  inherit version pname format;
   disabled = pythonAtLeast "3.12";
 
   src = bazel-build.python;

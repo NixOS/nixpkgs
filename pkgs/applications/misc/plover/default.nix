@@ -14,6 +14,7 @@
     mkDerivationWith buildPythonPackage rec {
       pname = "plover";
       version = "4.0.2";
+      format = "setuptools";
 
       meta = with lib; {
         broken = stdenv.hostPlatform.isDarwin;

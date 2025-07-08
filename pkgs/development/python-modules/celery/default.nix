@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.5.2";
+  version = "5.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TWkw81T50pKVQl16NyYSRcdKMoB8Rddkvtwoav0Ock4=";
+    hash = "sha256-bJcq55aMK1KBIn8Bw6P5hAN9IcUSnQe/NVDMKvxrEKU=";
   };
 
   build-system = [ setuptools ];
@@ -117,10 +117,6 @@ buildPythonPackage rec {
     ];
 
   pythonImportsCheck = [ "celery" ];
-
-  passthru.tests = {
-    inherit (nixosTests) sourcehut;
-  };
 
   meta = with lib; {
     description = "Distributed task queue";

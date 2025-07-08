@@ -5,6 +5,7 @@
   callPackage,
   fetchFromGitHub,
   lib,
+  nixosTests,
   stdenvNoCC,
 }:
 
@@ -161,6 +162,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     srcs = { inherit corteza-server corteza-webapp; };
+    tests = { inherit (nixosTests) corteza; };
   };
 
   inherit (corteza-server) meta;

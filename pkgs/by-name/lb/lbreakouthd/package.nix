@@ -18,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QFqNGv2+XXe1Dt8HAoqXEHWXFNU/IQ2c9FYEqehrWdI=";
   };
 
+  # On macOS with a case-insensitive filesystem, "sdl.h" shadows <SDL.h>
+  postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
+    mv src/sdl.h src/lbhd_sdl.h
+    for file in src/*.cpp src/*.h; do
+      substituteInPlace "$file" --replace-quiet 'sdl.h' 'lbhd_sdl.h'
+    done
+  '';
+
   buildInputs = [
     SDL2
     SDL2_image
@@ -40,6 +48,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ ];
     inherit (SDL2.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

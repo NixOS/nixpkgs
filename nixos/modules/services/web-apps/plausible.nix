@@ -196,13 +196,13 @@ in
           after =
             optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
-              "postgresql.service"
+              "postgresql.target"
               "plausible-postgres.service"
             ];
           requires =
             optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
-              "postgresql.service"
+              "postgresql.target"
               "plausible-postgres.service"
             ];
 
@@ -309,7 +309,7 @@ in
       (mkIf cfg.database.postgres.setup {
         # `plausible' requires the `citext'-extension.
         plausible-postgres = {
-          after = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
           partOf = [ "plausible.service" ];
           serviceConfig = {
             Type = "oneshot";

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "parsero";
   version = "0.81";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "behindthefirewalls";

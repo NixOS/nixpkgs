@@ -20,6 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "bubblemail";
   version = "1.9";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "framagit.org";

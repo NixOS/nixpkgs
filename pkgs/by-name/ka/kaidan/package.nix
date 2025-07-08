@@ -9,6 +9,7 @@
   zxing-cpp,
   qxmpp,
   gst_all_1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "invent.kde.org";
     owner = "network";
     repo = "kaidan";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
   };
 
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "User-friendly and modern chat app, using XMPP";
     mainProgram = "kaidan";
@@ -74,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-40
     ];
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = with lib.platforms; linux;
   };
 })

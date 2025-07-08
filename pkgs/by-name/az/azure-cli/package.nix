@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.74.0";
+  version = "2.75.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-wX1XKC3snnKEQeqlW+btshjdcMR/5m2Z69QtcJe2Opc=";
+    hash = "sha256-u6umAqRUfiACt23mxTtfosLdxKSPvDVJMkVjPCtxr24=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -142,6 +142,7 @@ py.pkgs.toPythonApplication (
   py.pkgs.buildAzureCliPackage rec {
     pname = "azure-cli";
     inherit version src;
+    format = "setuptools";
 
     sourceRoot = "${src.name}/src/azure-cli";
 

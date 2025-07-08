@@ -27,7 +27,7 @@ OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_PATH {}; \
 if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     echo "Attempting to update etcd from $OLD_VERSION to $LATEST_VERSION"
     ETCD_SRC_HASH=$(nix-prefetch-url --quiet --unpack https://github.com/etcd-io/etcd/archive/refs/tags/${LATEST_TAG}.tar.gz)
-    ETCD_SRC_HASH=$(nix hash to-sri --type sha256 $ETCD_SRC_HASH)
+    ETCD_SRC_HASH=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $ETCD_SRC_HASH)
 
     setKV () {
         sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "$ETCD_PATH/default.nix"

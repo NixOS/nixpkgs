@@ -441,9 +441,6 @@ rec {
         # do not know how to test without a valid build.lua
         "ppmcheckpdf"
 
-        # *.inc files in source container rather than run
-        "texaccents"
-
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
       ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!

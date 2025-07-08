@@ -16,6 +16,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
   version = "2.14.0.0";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";

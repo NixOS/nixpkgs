@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
   version = "0.8.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
   bpftools,
   lib,
   nspr,
@@ -18,21 +17,25 @@
   bash,
   zsh,
   nix-update-script,
+  llvmPackages,
+  withNonBTF ? false,
+  kernel ? null,
 }:
 
 buildGoModule rec {
   pname = "ecapture";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "gojue";
     repo = "ecapture";
     tag = "v${version}";
-    hash = "sha256-4cdjdTJjblI6ywpVE1/ZuM4gGkD2uZdfwfFx2gtr5yE=";
+    hash = "sha256-SY7Q8WlxE473An6/MntjPaIT3mFE/u9JJS6nb8BWiuQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    llvmPackages.libllvm
     clang
     fd
     bpftools
@@ -94,16 +97,23 @@ buildGoModule rec {
       --replace-fail '"errors"' ' '
   '';
 
-  postConfigure = ''
-    sed -i '/git/d' Makefile
-    sed -i '/git/d' variables.mk
+  postConfigure =
+    ''
+      sed -i '/git/d' Makefile
+      sed -i '/git/d' variables.mk
 
-    substituteInPlace Makefile \
-      --replace-fail '/bin/bash' '${lib.getExe bash}'
-
-    make ebpf
-    go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
-  '';
+      substituteInPlace Makefile \
+        --replace-fail '/bin/bash' '${lib.getExe bash}'
+    ''
+    + lib.optionalString withNonBTF ''
+      substituteInPlace variables.mk \
+        --replace-fail "-emit-llvm" "-emit-llvm -I${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include -Wno-error=implicit-function-declaration"
+      KERN_BUILD_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build KERN_SRC_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source make ebpf_noncore
+    ''
+    + ''
+      make ebpf
+      go-bindata -pkg assets -o "assets/ebpf_probe.go" $(find user/bytecode -name "*.o" -printf "./%p ")
+    '';
 
   checkFlags =
     let

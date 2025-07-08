@@ -14,6 +14,7 @@ let
   };
 in
 python3.pkgs.buildPythonApplication {
+  format = "setuptools";
   pname = "xmldiff";
   inherit version src;
 

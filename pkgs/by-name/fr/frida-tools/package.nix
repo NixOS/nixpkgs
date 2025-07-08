@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "frida-tools";
   version = "14.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

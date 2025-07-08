@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
   version = "1.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";

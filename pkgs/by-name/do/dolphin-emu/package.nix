@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   qt6,
+  wrapGAppsHook3,
   # darwin-only
   xcbuild,
 
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       pkg-config
       qt6.wrapQtAppsHook
+      wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild # for plutil
@@ -168,6 +170,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ./Binaries/Dolphin.app $out/Applications
       ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
     '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests = {

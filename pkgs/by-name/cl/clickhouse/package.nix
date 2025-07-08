@@ -21,7 +21,7 @@
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "clickhouse";
-  version = "25.3.4.190";
+  version = "25.3.5.42";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -29,7 +29,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${tag}.tar.gz";
-    hash = "sha256-8KH0mziVlayu9g4EwW+hpSV97P72CYDKwGCZ5ycDUwE=";
+    hash = "sha256-LvGl9XJK6Emt7HnV/Orp7qEmJSr3TBJZtApL6GrWIMg=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -113,7 +113,6 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_TESTS=OFF"
       "-DENABLE_DELTA_KERNEL_RS=0"
       "-DCOMPILER_CACHE=disabled"
-      "-DENABLE_EMBEDDED_COMPILER=ON"
     ]
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
@@ -143,6 +142,12 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace-fail "<level>trace</level>" "<level>warning</level>"
+  '';
+
+  # Basic smoke test
+  doCheck = true;
+  checkPhase = ''
+    $NIX_BUILD_TOP/$sourceRoot/build/programs/clickhouse local --query 'SELECT 1' | grep 1
   '';
 
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.

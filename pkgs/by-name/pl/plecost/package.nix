@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "plecost";
   version = "1.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iniqua";

@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-appcontainers";
   version = "3.2.0";
+  format = "setuptools";
   pyroject = true;
 
   disabled = pythonOlder "3.7";

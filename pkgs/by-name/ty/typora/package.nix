@@ -24,7 +24,10 @@ let
   pname = "typora";
   version = "1.10.8";
   src = fetchurl {
-    url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
+    urls = [
+      "https://download.typora.io/linux/typora_${version}_amd64.deb"
+      "https://download2.typoraio.cn/linux/typora_${version}_amd64.deb"
+    ];
     hash = "sha256-7auxTtdVafvM2fIpQVvEey1Q6eLVG3mLdjdZXcqSE/Q=";
   };
 

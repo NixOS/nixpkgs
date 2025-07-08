@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kube-hunter";
   version = "0.6.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";

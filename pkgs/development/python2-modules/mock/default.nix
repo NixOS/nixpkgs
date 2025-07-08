@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "mock";
   version = "3.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

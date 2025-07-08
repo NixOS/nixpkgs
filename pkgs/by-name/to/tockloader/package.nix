@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tockloader";
   version = "1.9.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

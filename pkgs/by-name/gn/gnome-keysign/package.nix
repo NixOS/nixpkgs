@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-keysign";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

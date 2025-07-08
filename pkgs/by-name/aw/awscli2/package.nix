@@ -25,6 +25,7 @@ let
         });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
+          format = "setuptools";
           pyproject = null;
           src = prev.src.override {
             inherit version;
@@ -64,14 +65,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.49"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-0d7VdlX3xZkw1SVjbKErFhhoC2owI/JfBQOJ/GfIWyg=";
+    hash = "sha256-fg4UMAsylJJ0Xy8s84Qr7OdiFrzMIP9RsAH+pYDThrU=";
   };
 
   postPatch = ''

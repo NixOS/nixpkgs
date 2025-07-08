@@ -663,7 +663,7 @@ in
           "network.target"
         ]
         ++ optionals usePostgresql [
-          "postgresql.service"
+          "postgresql.target"
         ]
         ++ optionals useMysql [
           "mysql.service"
@@ -673,7 +673,7 @@ in
         ];
       requires =
         optionals (cfg.database.createDatabase && usePostgresql) [
-          "postgresql.service"
+          "postgresql.target"
         ]
         ++ optionals (cfg.database.createDatabase && useMysql) [
           "mysql.service"

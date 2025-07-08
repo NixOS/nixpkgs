@@ -2,7 +2,8 @@
 
 This document explains why the `lib.path` library is designed the way it is.
 
-The purpose of this library is to process [filesystem paths]. It does not read files from the filesystem.
+The purpose of this library is to process [filesystem paths].
+It does not read files from the filesystem.
 It exists to support the native Nix [path value type] with extra functionality.
 
 [filesystem paths]: https://en.m.wikipedia.org/wiki/Path_(computing)
@@ -11,11 +12,15 @@ It exists to support the native Nix [path value type] with extra functionality.
 As an extension of the path value type, it inherits the same intended use cases and limitations:
 - Only use paths to access files at evaluation time, such as the local project source.
 - Paths cannot point to derivations, so they are unfit to represent dependencies.
-- A path implicitly imports the referenced files into the Nix store when interpolated to a string. Therefore paths are not suitable to access files at build- or run-time, as you risk importing the path from the evaluation system instead.
+- A path implicitly imports the referenced files into the Nix store when interpolated to a string.
+  Therefore paths are not suitable to access files at build- or run-time, as you risk importing the path from the evaluation system instead.
 
 Overall, this library works with two types of paths:
-- Absolute paths are represented with the Nix [path value type]. Nix automatically normalises these paths.
-- Subpaths are represented with the [string value type] since path value types don't support relative paths. This library normalises these paths as safely as possible. Absolute paths in strings are not supported.
+- Absolute paths are represented with the Nix [path value type].
+  Nix automatically normalises these paths.
+- Subpaths are represented with the [string value type] since path value types don't support relative paths.
+  This library normalises these paths as safely as possible.
+  Absolute paths in strings are not supported.
 
   A subpath refers to a specific file or directory within an absolute base directory.
   It is a stricter form of a relative path, notably [without support for `..` components][parents] since those could escape the base directory.
@@ -24,7 +29,8 @@ Overall, this library works with two types of paths:
 
 This library is designed to be as safe and intuitive as possible, throwing errors when operations are attempted that would produce surprising results, and giving the expected result otherwise.
 
-This library is designed to work well as a dependency for the `lib.filesystem` and `lib.sources` library components. Contrary to these library components, `lib.path` does not read any paths from the filesystem.
+This library is designed to work well as a dependency for the `lib.filesystem` and `lib.sources` library components.
+Contrary to these library components, `lib.path` does not read any paths from the filesystem.
 
 This library makes only these assumptions about paths and no others:
 - `dirOf path` returns the path to the parent directory of `path`, unless `path` is the filesystem root, in which case `path` is returned.
@@ -53,9 +59,15 @@ Decision: Returned subpaths should always have a leading `./`.
 <details>
 <summary>Arguments</summary>
 
-- (+) In shells, just running `foo` as a command wouldn't execute the file `foo`, whereas `./foo` would execute the file. In contrast, `foo/bar` does execute that file without the need for `./`. This can lead to confusion about when a `./` needs to be prefixed. If a `./` is always included, this becomes a non-issue. This effectively then means that paths don't overlap with command names.
+- (+) In shells, just running `foo` as a command wouldn't execute the file `foo`, whereas `./foo` would execute the file.
+  In contrast, `foo/bar` does execute that file without the need for `./`.
+  This can lead to confusion about when a `./` needs to be prefixed.
+  If a `./` is always included, this becomes a non-issue.
+  This effectively then means that paths don't overlap with command names.
 - (+) Prepending with `./` makes the subpaths always valid as relative Nix path expressions.
-- (+) Using paths in command line arguments could give problems if not escaped properly, e.g. if a path was `--version`. This is not a problem with `./--version`. This effectively then means that paths don't overlap with GNU-style command line options.
+- (+) Using paths in command line arguments could give problems if not escaped properly, e.g. if a path was `--version`.
+  This is not a problem with `./--version`.
+  This effectively then means that paths don't overlap with GNU-style command line options.
 - (-) `./` is not required to resolve relative paths, resolution always has an implicit `./` as prefix.
 - (-) It's less noisy without the `./`, e.g. in error messages.
   - (+) But similarly, it could be confusing whether something was even a path.
@@ -63,7 +75,8 @@ Decision: Returned subpaths should always have a leading `./`.
 - (+) Makes it more uniform with absolute paths (those always start with `/`).
   - (-) That is not relevant for practical purposes.
 - (+) `find` also outputs results with `./`.
-  - (-) But only if you give it an argument of `.`. If you give it the argument `some-directory`, it won't prefix that.
+  - (-) But only if you give it an argument of `.`.
+    If you give it the argument `some-directory`, it won't prefix that.
 - (-) `realpath --relative-to` doesn't prefix relative paths with `./`.
   - (+) There is no need to return the same result as `realpath`.
 
@@ -84,7 +97,8 @@ Decision: It should be `./.`.
 - (+) `./` would be inconsistent with [the decision to not persist trailing slashes][trailing-slashes].
 - (-) `.` is how `realpath` normalises paths.
 - (+) `.` can be interpreted as a shell command (it's a builtin for sourcing files in `bash` and `zsh`).
-- (+) `.` would be the only path without a `/`. It could not be used as a Nix path expression, since those require at least one `/` to be parsed as such.
+- (+) `.` would be the only path without a `/`.
+  It could not be used as a Nix path expression, since those require at least one `/` to be parsed as such.
 - (-) `./.` is rather long.
   - (-) We don't require users to type this though, as it's only output by the library.
     As inputs all three variants are supported for subpaths (and we can't do anything about absolute paths)
@@ -102,14 +116,16 @@ Observing: Subpaths such as `foo/bar` can be represented in various ways:
 - list with all the components: `[ "foo" "bar" ]`
 - attribute set: `{ type = "relative-path"; components = [ "foo" "bar" ]; }`
 
-Considering: Paths should be as safe to use as possible. We should generate string outputs in the library and not encourage users to do that themselves.
+Considering: Paths should be as safe to use as possible.
+We should generate string outputs in the library and not encourage users to do that themselves.
 
 Decision: Paths are represented as strings.
 
 <details>
 <summary>Arguments</summary>
 
-- (+) It's simpler for the users of the library. One doesn't have to convert a path a string before it can be used.
+- (+) It's simpler for the users of the library.
+  One doesn't have to convert a path a string before it can be used.
   - (+) Naively converting the list representation to a string with `concatStringsSep "/"` would break for `[]`, requiring library users to be more careful.
 - (+) It doesn't encourage people to do their own path processing and instead use the library.
   With a list representation it would seem easy to just use `lib.lists.init` to get the parent directory, but then it breaks for `.`, which would be represented as `[ ]`.
@@ -125,18 +141,22 @@ Observing: Relative paths can have `..` components, which refer to the parent di
 
 Considering: Paths should be as safe and unambiguous as possible.
 
-Decision: `..` path components in string paths are not supported, neither as inputs nor as outputs. Hence, string paths are called subpaths, rather than relative paths.
+Decision: `..` path components in string paths are not supported, neither as inputs nor as outputs.
+Hence, string paths are called subpaths, rather than relative paths.
 
 <details>
 <summary>Arguments</summary>
 
 - (+) If we wanted relative paths to behave according to the "physical" interpretation (as a directory tree with relations between nodes), it would require resolving symlinks, since e.g. `foo/..` would not be the same as `.` if `foo` is a symlink.
-  - (-) The "logical" interpretation is also valid (treating paths as a sequence of names), and is used by some software. It is simpler, and not using symlinks at all is safer.
+  - (-) The "logical" interpretation is also valid (treating paths as a sequence of names), and is used by some software.
+    It is simpler, and not using symlinks at all is safer.
   - (+) Mixing both models can lead to surprises.
   - (+) We can't resolve symlinks without filesystem access.
   - (+) Nix also doesn't support reading symlinks at evaluation time.
-  - (-) We could just not handle such cases, e.g. `equals "foo" "foo/bar/.. == false`. The paths are different, we don't need to check whether the paths point to the same thing.
-    - (+) Assume we said `relativeTo /foo /bar == "../bar"`. If this is used like `/bar/../foo` in the end, and `bar` turns out to be a symlink to somewhere else, this won't be accurate.
+  - (-) We could just not handle such cases, e.g. `equals "foo" "foo/bar/.. == false`.
+    The paths are different, we don't need to check whether the paths point to the same thing.
+    - (+) Assume we said `relativeTo /foo /bar == "../bar"`.
+      If this is used like `/bar/../foo` in the end, and `bar` turns out to be a symlink to somewhere else, this won't be accurate.
       - (-) We could decide to not support such ambiguous operations, or mark them as such, e.g. the normal `relativeTo` will error on such a case, but there could be `extendedRelativeTo` supporting that.
 - (-) `..` are a part of paths, a path library should therefore support it.
   - (+) If we can convincingly argue that all such use cases are better done e.g. with runtime tools, the library not supporting it can nudge people towards using those.
@@ -163,7 +183,8 @@ Decision: All functions remove trailing slashes in their results.
 <details>
 <summary>Arguments</summary>
 
-- (+) It allows normalisations to be unique, in that there's only a single normalisation for the same path. If trailing slashes were preserved, both `foo/bar` and `foo/bar/` would be valid but different normalisations for the same path.
+- (+) It allows normalisations to be unique, in that there's only a single normalisation for the same path.
+  If trailing slashes were preserved, both `foo/bar` and `foo/bar/` would be valid but different normalisations for the same path.
 - Comparison to other frameworks to figure out the least surprising behavior:
   - (+) Nix itself doesn't support trailing slashes when parsing and doesn't preserve them when appending paths.
   - (-) [Rust's std::path](https://doc.rust-lang.org/std/path/index.html) does preserve them during [construction](https://doc.rust-lang.org/std/path/struct.Path.html#method.new).
@@ -192,7 +213,8 @@ Decision: All functions remove trailing slashes in their results.
 
 Observing: Functions could return subpaths or lists of path component strings.
 
-Considering: Subpaths are used as inputs for some functions. Using them for outputs, too, makes the library more consistent and composable.
+Considering: Subpaths are used as inputs for some functions.
+Using them for outputs, too, makes the library more consistent and composable.
 
 Decision: Subpaths should be preferred over list of path component strings.
 
@@ -203,7 +225,8 @@ Decision: Subpaths should be preferred over list of path component strings.
 - (-) It is less efficient when the components are needed, because after creating the normalised subpath string, it will have to be parsed into components again
   - (+) If necessary, we can still make it faster by adding builtins to Nix
   - (+) Alternatively if necessary, versions of these functions that return components could later still be introduced.
-- (+) It makes the path library simpler because there's only two types (paths and subpaths). Only `lib.path.subpath.components` can be used to get a list of components.
+- (+) It makes the path library simpler because there's only two types (paths and subpaths).
+  Only `lib.path.subpath.components` can be used to get a list of components.
   And once we have a list of component strings, `lib.lists` and `lib.strings` can be used to operate on them.
   For completeness, `lib.path.subpath.join` allows converting the list of components back to a subpath.
 </details>

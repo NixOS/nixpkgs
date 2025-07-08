@@ -7,6 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "win2xcur";
   version = "0.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "quantum5";

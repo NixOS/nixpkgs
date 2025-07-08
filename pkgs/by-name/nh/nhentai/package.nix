@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nhentai";
   version = "0.5.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RicterZ";

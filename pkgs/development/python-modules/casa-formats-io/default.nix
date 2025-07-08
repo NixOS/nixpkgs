@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "casa-formats-io";
   version = "0.3.0";
+  format = "setuptools";
   prproject = true;
 
   disabled = pythonOlder "3.9";

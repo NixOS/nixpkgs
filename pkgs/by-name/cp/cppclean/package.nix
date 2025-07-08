@@ -9,6 +9,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "cppclean";
   version = "0.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "myint";

@@ -40,7 +40,7 @@ do
     }
     ')
     url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.xunlei.download/com.xunlei.download_"$version"_"$i".deb")
-    hash+=("$(nix hash convert --to sri --hash-algo sha256 $sha256sum)")
+    hash+=("$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $sha256sum)")
 done
 
 cat >sources.nix <<EOF

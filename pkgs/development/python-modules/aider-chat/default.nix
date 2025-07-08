@@ -126,7 +126,7 @@ let
     d.stopwords
   ]);
 
-  version = "0.84.0";
+  version = "0.85.1";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -139,7 +139,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-TOlqwJM9wIAURSimuh9mysYDwgH9AfFev8jY9elLNk8=";
+      hash = "sha256-T2v07AFhrpq9a3XEU2B2orSu0afZFUsb3FRTBcJHDoQ=";
     };
 
     pythonRelaxDeps = true;
@@ -385,8 +385,8 @@ let
 
     meta = {
       description = "AI pair programming in your terminal";
-      homepage = "https://github.com/paul-gauthier/aider";
-      changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
+      homepage = "https://github.com/Aider-AI/aider";
+      changelog = "https://github.com/Aider-AI/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         happysalada

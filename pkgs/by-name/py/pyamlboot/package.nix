@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyamlboot";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "superna9999";

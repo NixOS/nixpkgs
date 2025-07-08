@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
     tag = "v${version}";
-    sha256 = "sha256-IU7E1zmeif9CdoBxzmh7MG2jElGGnEZyKnK7eYFrjsQ=";
+    sha256 = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
   };
 
   buildInputs = [

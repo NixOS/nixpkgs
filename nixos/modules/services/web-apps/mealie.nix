@@ -66,8 +66,8 @@ in
     systemd.services.mealie = {
       description = "Mealie, a self hosted recipe manager and meal planner";
 
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 

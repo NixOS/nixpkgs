@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "ffmpeg-normalize";
   version = "1.31.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

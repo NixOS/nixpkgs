@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
   version = "0.9.3.11.15";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coderholic";

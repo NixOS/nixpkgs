@@ -5,7 +5,7 @@
   cargo,
   copyDesktopItems,
   darwin,
-  electron_34,
+  electron_36,
   fetchFromGitHub,
   gnome-keyring,
   jq,
@@ -25,7 +25,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_34;
+  electron = electron_36;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,21 +34,27 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.5.1";
+  version = "2025.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-1gxd73E7Y7e1A6yU+J3XYQ4QzXZTxuKd+AE+t8HD478=";
+    hash = "sha256-KI6oIMNtqfywVqeTdzthSHBnAlF55cINTr04LNSq0AM=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
-    ./set-exe-path.patch # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
-    ./skip-afterpack-and-aftersign.patch # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
-    ./dont-use-platform-triple.patch # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
+    # The nixpkgs tooling trips over upstreams inconsistent lock files, so we fixed them by running npm install open@10.2.1 and cargo b
+    ./fix-lock-files.diff
+
+    # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
+    ./set-exe-path.patch
+    # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
+    ./skip-afterpack-and-aftersign.patch
+    # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
+    ./dont-use-platform-triple.patch
   ];
 
   postPatch = ''
@@ -76,7 +82,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-0IoBPRGdtkMeTrT5cqZLHB/WrUCONtsJ6YHh0y4K5Ls=";
+  npmDepsHash = "sha256-52cLVrfbeNeRH7OKN5QZdGD5VkUVliN0Rn/cbdohsG0=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -86,7 +92,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-ZD/UPYRa+HR7hyWDP6S/BKvQpYRDwWQJV6iGF9LT2uY=";
+    hash = "sha256-mt7zWKgH21khAIrfpBFzb+aS2V2mV56zMqCSLzDhGfQ=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

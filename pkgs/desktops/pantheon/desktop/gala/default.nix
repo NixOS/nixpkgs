@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   desktop-file-utils,
   gettext,
   libxml2,
@@ -30,26 +29,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "8.2.3";
+  version = "8.2.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-6M9IWwrCaJoi7b5e4ltdyZfdT7KkOgsollHNKhLPr9U=";
+    hash = "sha256-Q+1l9KZ1Za0pb4X2It99Ui7RiOsTWDt0UrIus9ZAoJU=";
   };
 
   patches = [
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
-
-    # WindowStateSaver: fix crash
-    # https://github.com/elementary/gala/pull/2443
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/9defe95ef412f87eb14e0efd8b87f2fde5378a76.patch";
-      hash = "sha256-P50ahXFlTLyHMT+WdHdLU2qNdMUnfXF+CjoJRchmyzw=";
-    })
   ];
 
   depsBuildBuild = [ pkg-config ];

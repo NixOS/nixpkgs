@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.34.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "etesync";

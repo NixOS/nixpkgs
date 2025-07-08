@@ -234,8 +234,8 @@ in
             after = [
               "network.target"
               "systemd-tmpfiles-setup.service"
-            ] ++ lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.service";
-            requires = lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.service";
+            ] ++ lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.target";
+            requires = lib.optional (cfg.settings.nipapd.db_host == "") "postgresql.target";
             wantedBy = [ "multi-user.target" ];
             preStart = lib.optionalString (cfg.settings.auth.default_backend == defaultAuthBackend) ''
               # Create/upgrade local auth database

@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "compdb";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Sarcasm";

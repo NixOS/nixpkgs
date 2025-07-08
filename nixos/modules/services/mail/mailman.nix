@@ -575,9 +575,9 @@ in
           after =
             [ "network.target" ]
             ++ lib.optional cfg.enablePostfix "postfix-setup.service"
-            ++ lib.optional withPostgresql "postgresql.service";
+            ++ lib.optional withPostgresql "postgresql.target";
           restartTriggers = [ mailmanCfgFile ];
-          requires = lib.optional withPostgresql "postgresql.service";
+          requires = lib.optional withPostgresql "postgresql.target";
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${mailmanEnv}/bin/mailman start";
@@ -609,8 +609,8 @@ in
             "hyperkitty.service"
           ];
           path = with pkgs; [ jq ];
-          after = lib.optional withPostgresql "postgresql.service";
-          requires = lib.optional withPostgresql "postgresql.service";
+          after = lib.optional withPostgresql "postgresql.target";
+          requires = lib.optional withPostgresql "postgresql.target";
           serviceConfig.RemainAfterExit = true;
           serviceConfig.Type = "oneshot";
           script = ''
@@ -709,11 +709,11 @@ in
           in
           {
             wantedBy = [ "multi-user.target" ];
-            after = lib.optional withPostgresql "postgresql.service";
+            after = lib.optional withPostgresql "postgresql.target";
             requires = [
               "mailman-uwsgi.socket"
               "mailman-web-setup.service"
-            ] ++ lib.optional withPostgresql "postgresql.service";
+            ] ++ lib.optional withPostgresql "postgresql.target";
             restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
             serviceConfig = {
               # Since the mailman-web settings.py obstinately creates a logs

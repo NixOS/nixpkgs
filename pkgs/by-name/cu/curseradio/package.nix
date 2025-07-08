@@ -8,6 +8,7 @@
 
 python3Packages.buildPythonApplication {
   version = "0.2";
+  format = "setuptools";
   pname = "curseradio";
 
   src = fetchFromGitHub {

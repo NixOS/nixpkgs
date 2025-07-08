@@ -9,6 +9,7 @@ let
   version = "0.5.3";
 in
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchPypi {

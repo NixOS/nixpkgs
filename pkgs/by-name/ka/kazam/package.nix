@@ -19,6 +19,7 @@
 python3Packages.buildPythonApplication {
   pname = "kazam";
   version = "unstable-2021-06-22";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "niknah";

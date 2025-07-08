@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
   version = "2.3.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0D3D3V";

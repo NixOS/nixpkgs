@@ -275,6 +275,62 @@ added using the parameter `extraPythonPackages`. For example, you could add
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
 
+## Overriding a test {#sec-override-nixos-test}
+
+The NixOS test framework returns tests with multiple overriding methods.
+
+`overrideTestDerivation` *function*
+:   Like applying `overrideAttrs` on the [test](#test-opt-test) derivation.
+
+    This is a convenience for `extend` with an override on the [`rawTestDerivationArg`](#test-opt-rawTestDerivationArg) option.
+
+    *function*
+    :   An extension function, e.g. `finalAttrs: prevAttrs: { /* … */ }`, the result of which is passed to [`mkDerivation`](https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv).
+        Just as with `overrideAttrs`, an abbreviated form can be used, e.g. `prevAttrs: { /* … */ }` or even `{ /* … */ }`.
+        See [`lib.extends`](https://nixos.org/manual/nixpkgs/stable/#function-library-lib.fixedPoints.extends).
+
+`extendNixOS { module = ` *module* `; specialArgs = ` *specialArgs* `; }`
+:   Evaluates the test with additional NixOS modules and/or arguments.
+
+    `module`
+    :   A NixOS module to add to all the nodes in the test. Sets test option [`extraBaseModules`](#test-opt-extraBaseModules).
+
+    `specialArgs`
+    :   An attribute set of arguments to pass to all NixOS modules. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. Sets test option [`node.specialArgs`](#test-opt-node.specialArgs).
+
+    This is a convenience function for `extend` that overrides the aforementioned test options.
+
+    :::{.example #ex-nixos-test-extendNixOS}
+
+    # Using extendNixOS in `passthru.tests` to make `(openssh.tests.overrideAttrs f).tests.nixos` coherent
+
+    ```nix
+    mkDerivation (finalAttrs: {
+      # …
+      passthru = {
+        tests = {
+          nixos = nixosTests.openssh.extendNixOS {
+            module = {
+              services.openssh.package = finalAttrs.finalPackage;
+            };
+          };
+        };
+      };
+    })
+    ```
+    :::
+
+`extend { modules = ` *modules* `; specialArgs = ` *specialArgs* `; }`
+:   Adds new `nixosTest` modules and/or module arguments to the test, which are evaluated together with the existing modules and [built-in options](#sec-test-options-reference).
+
+    If you're only looking to extend the _NixOS_ configurations of the test, and not something else about the test, you may use the `extendNixOS` convenience function instead.
+
+    `modules`
+    :   A list of modules to add to the test. These are added to the existing modules and then [evaluated](https://nixos.org/manual/nixpkgs/stable/index.html#module-system-lib-evalModules) together.
+
+    `specialArgs`
+    :   An attribute of arguments to pass to the test. These override the existing arguments, as well as any `_module.args.<name>` that the modules may define. See [`evalModules`/`specialArgs`](https://nixos.org/manual/nixpkgs/stable/#module-system-lib-evalModules-param-specialArgs).
+
 ## Test Options Reference {#sec-test-options-reference}
 
 The following options can be used when writing tests.

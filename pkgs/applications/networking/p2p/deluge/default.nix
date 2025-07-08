@@ -22,6 +22,7 @@ let
     pypkgs.buildPythonPackage rec {
       inherit pname;
       version = "2.2.0";
+      format = "setuptools";
 
       src = fetchurl {
         url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";

@@ -13,6 +13,7 @@ with python3.pkgs;
 buildPythonApplication rec {
   pname = "thonny";
   version = "4.1.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thonny";

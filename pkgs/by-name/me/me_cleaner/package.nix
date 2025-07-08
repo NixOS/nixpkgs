@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "me_cleaner";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "corna";

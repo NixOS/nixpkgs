@@ -44,7 +44,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.5.1";
+  version = "3.5.2";
 
   pyproject = true;
 
@@ -52,7 +52,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-4zlUHttny6nIRhx/5aDz2sh1Va0+nN+7cezBGtt5Img=";
+    hash = "sha256-WpiLi8raY1f6+Jjlamp+eDh429gjSwSufNfoPOcGIgU=";
   };
 
   postPatch = ''

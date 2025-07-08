@@ -17,7 +17,7 @@ for TYPE in "${DICT_TYPES[@]}"; do
   URL="https://github.com/$ORG/$REPO/releases/download/v$VERSION/sudachi-dictionary-$VERSION-$TYPE.zip"
 
   PLAIN_HASH=$(nix-prefetch-url --type sha256 "$URL" --unpack)
-  HASH=$(nix hash convert --hash-algo sha256 --to sri "$PLAIN_HASH")
+  HASH=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$PLAIN_HASH")
 
   sed -i -E "/(${TYPE} = fetchzip \{|^ *url = .*${TYPE}\.zip\";\$)/,/^ *hash = / s|hash = \"[^\"]*\"|hash = \"$HASH\"|" package.nix
 done

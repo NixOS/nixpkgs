@@ -31,10 +31,6 @@ jobs:
       max-parallel: 1
       matrix:
         pairs:
-          - from: release-24.11
-            into: staging-next-24.11
-          - from: staging-next-24.11
-            into: staging-24.11
           - from: release-25.05
             into: staging-next-25.05
           - from: staging-next-25.05

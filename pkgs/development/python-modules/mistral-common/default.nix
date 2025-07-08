@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.4";
+  version = "1.5.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mistral_common";
     inherit version;
-    hash = "sha256-CvQSSrCdFAl2HpHsYWgUdogtRvlBjuqJCNOcASIuD2s=";
+    hash = "sha256-TauSQwaEMhFKFfLEb/SRagViCnIrDfjetJ3POD+34r8=";
   };
 
   pythonRelaxDeps = [

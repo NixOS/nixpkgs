@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "usbsdmux";
   version = "24.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

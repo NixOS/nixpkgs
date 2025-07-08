@@ -40,6 +40,7 @@ buildGoModule rec {
       vskilet
       ma27
       chvp
+      SchweGELBin
     ];
     mainProgram = "mautrix-whatsapp";
   };

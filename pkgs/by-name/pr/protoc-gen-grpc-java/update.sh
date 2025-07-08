@@ -27,7 +27,7 @@ version="$(
 echo '{' >"${HASHES_FILE}"
 for arch in "${ARCHS[@]}"; do
   url="https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/${version}/protoc-gen-grpc-java-${version}-${arch}.exe"
-  hash=$(nix hash convert --hash-algo sha256 --to sri "$(nix-prefetch-url "${url}")")
+  hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$(nix-prefetch-url "${url}")")
   echo "  ${arch} = \"${hash}\";" >>"${HASHES_FILE}"
 done
 echo '}' >>"${HASHES_FILE}"

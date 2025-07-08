@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "systemd-wait";
   version = "0.1+2018-10-05";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Stebalien";

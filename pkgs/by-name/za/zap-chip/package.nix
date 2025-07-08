@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   electron,
   fetchFromGitHub,
@@ -87,5 +88,6 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
     mainProgram = "zap" + lib.optionalString (!withGui) "-cli";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

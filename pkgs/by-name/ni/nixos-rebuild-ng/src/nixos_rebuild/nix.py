@@ -242,33 +242,33 @@ def copy_closure(
                 nix_copy_closure(to_host, to=True)
 
 
-def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
+def edit() -> None:
     "Try to find and open NixOS configuration file in editor."
-    if flake:
-        run_wrapper(
-            [
-                "nix",
-                *FLAKE_FLAGS,
-                "edit",
-                *dict_to_flags(flake_flags),
-                "--",
-                str(flake),
-            ],
-            check=False,
-        )
-    else:
-        if flake_flags:
-            raise NixOSRebuildError("'edit' does not support extra Nix flags")
-        nixos_config = Path(
-            os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
-        )
-        if nixos_config.is_dir():
-            nixos_config /= "default.nix"
+    nixos_config = Path(
+        os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
+    )
+    if nixos_config.is_dir():
+        nixos_config /= "default.nix"
 
-        if nixos_config.exists():
-            run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
-        else:
-            raise NixOSRebuildError("cannot find NixOS config file")
+    if nixos_config.exists():
+        run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
+    else:
+        raise NixOSRebuildError("cannot find NixOS config file")
+
+
+def edit_flake(flake: Flake | None, flake_flags: Args | None = None) -> None:
+    "Try to find and open NixOS configuration file in editor for Flake config."
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "edit",
+            *dict_to_flags(flake_flags),
+            "--",
+            str(flake),
+        ],
+        check=False,
+    )
 
 
 def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
@@ -545,14 +545,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
 
 
-def repl(attr: str, build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
+def repl(build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_args = ["nix", "repl", "--file", build_attr.path]
     if build_attr.attr:
         run_args.append(build_attr.attr)
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
-def repl_flake(attr: str, flake: Flake, flake_flags: Args | None = None) -> None:
+def repl_flake(flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "epr";
   version = "2.4.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wustho";

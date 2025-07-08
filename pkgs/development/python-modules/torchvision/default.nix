@@ -32,6 +32,7 @@ let
   version = "0.22.1";
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   stdenv = torch.stdenv;

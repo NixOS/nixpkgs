@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "flask-xml-rpc-re";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Croydon";

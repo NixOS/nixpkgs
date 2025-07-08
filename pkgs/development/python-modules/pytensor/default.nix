@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.31.4";
+  version = "2.31.6";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-wHkEZqgnau8DaoOaSFg0Ma6EtjGLmc+y4fskNEyk7yg=";
+    hash = "sha256-J53wjbUlPJzecAQNeQ+xIlXwTFTLqQNicoFsnXhuoHM=";
   };
 
   build-system = [

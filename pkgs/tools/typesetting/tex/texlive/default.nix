@@ -43,6 +43,7 @@
   makeFontsConf,
   useFixedHashes ? true,
   recurseIntoAttrs,
+  nixfmt-rfc-style,
 }:
 let
   stdenv = gcc12Stdenv;
@@ -99,13 +100,13 @@ let
 
   version = {
     # day of the snapshot being taken
-    year = "2024";
-    month = "03";
-    day = "09";
+    year = "2025";
+    month = "06";
+    day = "03";
     # TeX Live version
-    texliveYear = 2024;
+    texliveYear = 2025;
     # final (historic) release or snapshot
-    final = true;
+    final = false;
   };
 
   # The tarballs on CTAN mirrors for the current release are constantly
@@ -140,7 +141,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-YLn4+Ik9WR0iDS9Pjdo/aGyqFl7+eKoMzI3sgNSHmao=";
+    hash = "sha256-K8BoBuMRv5Lp5+trLF5PZOTjzW86i0ZL/jKqP6n7LwA=";
   };
 
   tlpdbNix =
@@ -150,7 +151,7 @@ let
         tl2nix = ./tl2nix.sed;
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt-rfc-style} > "$out"
       '';
 
   # map: name -> fixed-output hash

@@ -145,6 +145,13 @@ buildPythonPackage rec {
       "test_state_dict_type"
       "test_with_save_limit"
       "test_with_scheduler"
+
+      # torch._inductor.exc.InductorError: TypeError: cannot determine truth value of Relational
+      "test_regional_compilation_cold_start"
+      "test_regional_compilation_inference_speedup"
+
+      # Fails in nixpkgs-review due to a port conflict with simultaneous python builds
+      "test_config_compatibility"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # RuntimeError: torch_shm_manager: execl failed: Permission denied

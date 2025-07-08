@@ -57,7 +57,7 @@
     ''
       import jwt
 
-      machine.wait_for_unit("postgresql.service")
+      machine.wait_for_unit("postgresql.target")
 
       def wait_for_postgrest():
           machine.wait_for_unit("postgrest.service")

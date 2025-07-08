@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "wayback-machine-archiver";
   version = "1.9.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "agude";

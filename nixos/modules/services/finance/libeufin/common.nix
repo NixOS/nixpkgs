@@ -123,8 +123,8 @@ libeufinComponent:
                   echo "Bank initialisation complete"
                 fi
               '';
-            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
-            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
+            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
+            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
           };
       };
 

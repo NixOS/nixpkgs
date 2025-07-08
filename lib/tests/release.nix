@@ -2,9 +2,16 @@
   # The pkgs used for dependencies for the testing itself
   # Don't test properties of pkgs.lib, but rather the lib in the parent directory
   system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; } // {
-    lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!";
-  },
+  pkgs ?
+    import ../.. {
+      inherit system;
+      config = {
+        permittedInsecurePackages = [ "nix-2.3.18" ];
+      };
+    }
+    // {
+      lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!";
+    },
   # For testing someone may edit impure.nix to return cross pkgs, use `pkgsBuildBuild` directly so everything here works.
   pkgsBB ? pkgs.pkgsBuildBuild,
   nix ? pkgs-nixVersions.stable,

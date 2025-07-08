@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "gfal2-python";
   version = "1.13.0";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";

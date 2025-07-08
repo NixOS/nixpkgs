@@ -10,6 +10,7 @@ in
 python3Packages.buildPythonApplication {
   pname = "legendary-heroic";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";

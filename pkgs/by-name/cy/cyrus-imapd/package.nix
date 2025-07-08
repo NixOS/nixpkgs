@@ -66,13 +66,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-imapd";
-  version = "3.12.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "cyrusimap";
     repo = "cyrus-imapd";
     tag = "cyrus-imapd-${finalAttrs.version}";
-    hash = "sha256-sdHAxlrxQHzcSt2buOGfRv/OR8BYFHrNoo+r/ePVFsg=";
+    hash = "sha256-fwt8ierxM4bMp+ZfYINXUIcKNMnkTIWJTNWyv8GyX0c=";
   };
 
   nativeBuildInputs = [

@@ -65,10 +65,21 @@ extend-select = [
     "ISC001",
     "ISC002",
     "ISC003",
+    # unused arguments
+    "ARG001",
+    "ARG002",
+    "ARG003",
+    "ARG004",
+    "ARG005",
 ]
-ignore = [
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    # allow unused arguments in tests (e.g., mocks)
+    "ARG001",
+    "ARG005",
     # allow Any type
-   "ANN401"
+    "ANN401"
 ]
 
 [tool.pytest.ini_options]

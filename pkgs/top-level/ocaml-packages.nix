@@ -46,6 +46,8 @@ let
 
         apron = callPackage ../development/ocaml-modules/apron { };
 
+        argon2 = callPackage ../development/ocaml-modules/argon2 { };
+
         arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
 
         arp = callPackage ../development/ocaml-modules/arp { };
@@ -138,6 +140,8 @@ let
         brr = callPackage ../development/ocaml-modules/brr { };
 
         bwd = callPackage ../development/ocaml-modules/bwd { };
+
+        bytesrw = callPackage ../development/ocaml-modules/bytesrw { };
 
         bytestring = callPackage ../development/ocaml-modules/bytestring { };
 
@@ -948,6 +952,8 @@ let
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+        jsont = callPackage ../development/ocaml-modules/jsont { };
+
         jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
 
         junit = callPackage ../development/ocaml-modules/junit { };
@@ -965,6 +971,8 @@ let
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
+
+        kdl = callPackage ../development/ocaml-modules/kdl { };
 
         ke = callPackage ../development/ocaml-modules/ke { };
 

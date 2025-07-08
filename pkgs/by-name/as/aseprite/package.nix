@@ -168,5 +168,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       orivej
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "aseprite";
   };
 })

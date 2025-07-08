@@ -10,6 +10,7 @@ let
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

@@ -80,6 +80,8 @@ stdenv.mkDerivation rec {
       "--libdir=${placeholder "out"}/lib"
     ]
     ++ lib.optional (!interactive) "--disable-readline"
+    # autosetup only looks up readline.h in predefined set of directories.
+    ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
     ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
 
   env.NIX_CFLAGS_COMPILE = toString [

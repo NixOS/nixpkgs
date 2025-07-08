@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "pynamecheap";
   version = "0.0.3";
+  format = "setuptools";
 
   propagatedBuildInputs = [ requests ];
 

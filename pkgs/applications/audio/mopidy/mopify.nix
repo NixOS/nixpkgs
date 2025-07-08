@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Mopify";
   version = "1.7.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

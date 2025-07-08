@@ -23,8 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files

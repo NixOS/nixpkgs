@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "kernel-hardening-checker";
   version = "0.6.10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "a13xp0p0v";

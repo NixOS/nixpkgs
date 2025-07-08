@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kanjidraw";
   version = "0.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "obfusk";

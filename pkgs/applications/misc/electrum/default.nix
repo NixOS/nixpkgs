@@ -34,6 +34,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
   version = "4.5.8";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";

@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mlarchive2maildir";
   version = "0.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   _7zz,
   avalonia,
   buildDotnetModule,
-  copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
   fetchgit,
@@ -24,12 +23,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.12.3";
+  version = "0.13.4";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-X0zF0zqWwuCt7oWXwfzDtu+7KZ3yMQwQqP45rlfGm/o=";
+    hash = "sha256-Ub6HjZChOhRUDYQ2TAnrwOtrW6ahP+k74vCAmLkYABA=";
     fetchSubmodules = true;
   };
 
@@ -51,7 +50,6 @@ buildDotnetModule (finalAttrs: {
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     imagemagick # For resizing SVG icon in postInstall
   ];
 
@@ -75,11 +73,18 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postInstall = ''
+    ${lib.strings.toShellVars {
+      inherit (finalAttrs.meta) mainProgram;
+      INSTALL_EXEC = "\${INSTALL_EXEC}";
+      INSTALL_TRYEXEC = "\${INSTALL_TRYEXEC}";
+    }}
+
     # Desktop entry
     # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
     install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
     substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
-      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
+      --replace-fail "$INSTALL_EXEC" "$mainProgram" \
+      --replace-fail "$INSTALL_TRYEXEC" "$mainProgram"
 
     # AppStream metadata
     install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
@@ -113,7 +118,12 @@ buildDotnetModule (finalAttrs: {
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
-  doCheck = true;
+  # Avoid running `dotnet test` in the main package:
+  # - The test-suite is slow
+  # - Some tests fail intermittently
+  # - The package is often uncached; especially the unfree variant
+  # - We can enable tests in a `passthru.tests` override
+  doCheck = false;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
@@ -142,6 +152,40 @@ buildDotnetModule (finalAttrs: {
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    desktop-file-utils
+  ];
+
+  # Upstream use ${...} templates in the desktop entry, so assert that we haven't missed any
+  # See https://github.com/NixOS/nixpkgs/issues/421241
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'Checking for issues in $out/share/applications/com.nexusmods.app.desktop'
+    (
+      cd $out/share/applications
+      desktop-file-validate com.nexusmods.app.desktop
+      if grep '\$' com.nexusmods.app.desktop \
+        --with-filename --line-number
+      then
+        echo 'error: unexpected "$"'
+        exit 1
+      fi
+    ) &>/dev/stderr
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests = {
+    # Build the package and run `dotnet test`
+    app = finalAttrs.finalPackage.overrideAttrs {
+      pname = "${finalAttrs.pname}-tested";
+      doCheck = true;
+    };
+  };
 
   passthru.updateScript = nix-update-script { };
 

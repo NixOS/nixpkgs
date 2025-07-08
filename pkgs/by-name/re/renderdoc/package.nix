@@ -13,7 +13,7 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python3Packages,
+  # python3Packages.shiboken2 is currently broken
   python312Packages,
   qt5,
   stdenv,
@@ -24,9 +24,6 @@
 }:
 
 let
-  pythonPackages' =
-    # lib.meta.availableOn does not respect meta.broken?
-    if python3Packages.shiboken2.meta.available then python3Packages else python312Packages;
   custom_swig = fetchFromGitHub {
     owner = "baldurk";
     repo = "swig";
@@ -36,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.38";
+  version = "1.39";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6DvBV2amPfQff3LleXaqfoKzWvoHUJ0dh/bg/WcGIeA=";
+    hash = "sha256-UFaZtSA3oYOYKuV2loh5tX1rLnoKgRypaJe6H+j/uHU=";
   };
 
   outputs = [
@@ -55,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      pythonPackages'.pyside2
-      pythonPackages'.pyside2-tools
-      pythonPackages'.shiboken2
+      python312Packages.pyside2
+      python312Packages.pyside2-tools
+      python312Packages.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -75,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    pythonPackages'.python
+    python312Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -86,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_VER" finalAttrs.version)
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
-    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
   ];
 
   dontWrapQtApps = true;
@@ -117,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapQtApp $out/bin/qrenderdoc \
+        --set QT_QPA_PLATFORM "wayland;xcb" \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
       wrapProgram $out/bin/renderdoccmd \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
@@ -141,7 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      ShyAssassin
+    ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

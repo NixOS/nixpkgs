@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.11.1";
+  version = "7.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GReEn2Ph9pnfIdah9dHCUK3duuJenBJPC+12UVTJTvg=";
+    hash = "sha256-lqOOgSP02J+IILQ2QPH2I9aETx+X7qCcRmDwMXgKn/g=";
   };
 
   nativeBuildInputs = [ cffi ];

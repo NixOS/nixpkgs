@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "python-sql";
-  version = "1.5.2";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_sql";
     inherit version;
-    hash = "sha256-c19SNyGHy5VrGu6MoHADn3O6iRO7i33vlC78FNUGzTY=";
+    hash = "sha256-WzShJOitdMU6zZckhoS1v7tFODiPZnZmKYGjJxg+w2w=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

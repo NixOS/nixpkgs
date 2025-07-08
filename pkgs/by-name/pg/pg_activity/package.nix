@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
   version = "3.6.0";
+  format = "setuptools";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {

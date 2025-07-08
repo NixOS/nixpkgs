@@ -23,7 +23,6 @@
   libmicrohttpd,
   libarchive,
   gitUpdater,
-  autoreconfHook,
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
@@ -36,34 +35,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-eFf0S2JPTY1CHfhRqq57FALP5rzdLYBJ8V/AfT3edjU=";
   };
 
-  patches =
-    [
-      ./debug-info-from-env.patch
-      (fetchpatch {
-        name = "fix-aarch64_fregs.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "zvncoRkQx3AwPx52ehjA2vcFroF+yDC2MQR5uS6DATs=";
-      })
-      (fetchpatch {
-        name = "musl-asm-ptrace-h.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-asm-ptrace-h.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "8D1wPcdgAkE/TNBOgsHaeTZYhd9l+9TrZg8d5C7kG6k=";
-      })
-      (fetchpatch {
-        name = "musl-macros.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-macros.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "tp6O1TRsTAMsFe8vw3LMENT/vAu6OmyA8+pzgThHeA8=";
-      })
-      (fetchpatch {
-        name = "musl-strndupa.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
-    # Prevent headers and binaries from colliding which results in an error.
-    # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch;
+  patches = [
+    ./debug-info-from-env.patch
+    (fetchpatch {
+      name = "fix-aarch64_fregs.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "zvncoRkQx3AwPx52ehjA2vcFroF+yDC2MQR5uS6DATs=";
+    })
+    (fetchpatch {
+      name = "musl-asm-ptrace-h.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-asm-ptrace-h.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "8D1wPcdgAkE/TNBOgsHaeTZYhd9l+9TrZg8d5C7kG6k=";
+    })
+    (fetchpatch {
+      name = "musl-macros.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-macros.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "tp6O1TRsTAMsFe8vw3LMENT/vAu6OmyA8+pzgThHeA8=";
+    })
+    (fetchpatch {
+      name = "musl-strndupa.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
   postPatch =
     ''
@@ -85,16 +79,13 @@ stdenv.mkDerivation rec {
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
-  nativeBuildInputs =
-    [
-      m4
-      bison
-      flex
-      gettext
-      bzip2
-    ]
-    ++ lib.optional enableDebuginfod pkg-config
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;
+  nativeBuildInputs = [
+    m4
+    bison
+    flex
+    gettext
+    bzip2
+  ] ++ lib.optional enableDebuginfod pkg-config;
   buildInputs =
     [
       zlib
@@ -119,22 +110,28 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "strictflexarrays3" ];
 
-  configureFlags =
-    [
-      "--program-prefix=eu-" # prevent collisions with binutils
-      "--enable-deterministic-archives"
-      (lib.enableFeature enableDebuginfod "libdebuginfod")
-      (lib.enableFeature enableDebuginfod "debuginfod")
+  # build elfutils out-of-source-tree to avoid ./stack inclusion
+  # as a c++ header on libc++: https://sourceware.org/PR33103
+  preConfigure =
+    if (stdenv.targetPlatform.useLLVM or false) then
+      ''
+        mkdir build-tree
+        cd build-tree
+      ''
+    else
+      null;
+  configureScript = if (stdenv.targetPlatform.useLLVM or false) then "../configure" else null;
 
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
-      # Versioned symbols are nice to have, but we can do without.
-      (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
-    ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
-    ++ lib.optionals stdenv.cc.isClang [
-      "CFLAGS=-Wno-unused-private-field"
-      "CXXFLAGS=-Wno-unused-private-field"
-    ];
+  configureFlags = [
+    "--program-prefix=eu-" # prevent collisions with binutils
+    "--enable-deterministic-archives"
+    (lib.enableFeature enableDebuginfod "libdebuginfod")
+    (lib.enableFeature enableDebuginfod "debuginfod")
+
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+    # Versioned symbols are nice to have, but we can do without.
+    (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
+  ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler";
 
   enableParallelBuilding = true;
 

@@ -19,6 +19,7 @@
   sqlite,
   zlib,
   jq,
+  libpq,
 }:
 let
   py3 = python3.withPackages (p: [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
       py3
       unzip
       which
+      libpq.pg_config
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools

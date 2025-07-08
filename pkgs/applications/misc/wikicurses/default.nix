@@ -6,6 +6,7 @@
 
 pythonPackages.buildPythonApplication rec {
   version = "1.4";
+  format = "setuptools";
   pname = "wikicurses";
 
   src = fetchFromGitHub {

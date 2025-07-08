@@ -13,6 +13,7 @@ in
 mkDerivation rec {
   pname = "pigpio";
   version = "79";
+  format = if buildPythonPackage == null then null else "setuptools";
 
   src = fetchFromGitHub {
     owner = "joan2937";

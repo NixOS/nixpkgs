@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.16.3";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-mtzr/rRzcYcZl9tUkhxEKoFQWm1QTToOYZJXhynwDmk=";
+    hash = "sha256-6FvP/HgomsPxqCtKrZFxMlD2fFyT2e/JII2L7ANiOao=";
   };
 
   python = python3.override {
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-Z7c+AstVnxbPnEhc51qSqOYhRXqNJVwTvgHFcFp+pYg=";
+        hash = "sha256-VtYYwpMXPAC3g1OESnw3dzLTwiGqJBQcicFZskEucok=";
       };
 
       nativeBuildInputs =
@@ -294,6 +294,9 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
     # django.core.exceptions.FieldDoesNotExist: Document has no field named 'transaction_id'
     "test_convert"
+    # Favicon tests fail due to static file handling in the test environment
+    "test_favicon_view"
+    "test_favicon_view_missing_file"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;

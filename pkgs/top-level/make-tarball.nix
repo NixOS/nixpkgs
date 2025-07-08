@@ -3,7 +3,13 @@
   officialRelease,
   pkgs ? import nixpkgs.outPath { },
   nix ? pkgs.nix,
-  lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; },
+  lib-tests ? import ../../lib/tests/release.nix {
+    pkgs = import nixpkgs.outPath {
+      config = {
+        permittedInsecurePackages = [ "nix-2.3.18" ];
+      };
+    };
+  },
 }:
 
 pkgs.releaseTools.sourceTarball {

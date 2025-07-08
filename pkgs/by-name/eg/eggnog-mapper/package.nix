@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
   version = "2.1.12";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";

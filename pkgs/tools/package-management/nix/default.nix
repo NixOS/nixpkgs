@@ -159,6 +159,15 @@ lib.makeExtensible (
             patch-monitorfdhup
           ];
           self_attribute_name = "nix_2_3";
+          knownVulnerabilities = [
+            "CVE-2024-38531"
+            "CVE-2024-47174"
+            "CVE-2025-46415"
+            "CVE-2025-46416"
+            "CVE-2025-52991"
+            "CVE-2025-52992"
+            "CVE-2025-52993"
+          ];
           maintainers = with lib.maintainers; [ flokli ];
           teams = [ ];
         }).overrideAttrs
@@ -201,20 +210,20 @@ lib.makeExtensible (
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.30pre20250521_${lib.substring 0 8 src.rev}";
+        version = "2.30pre20250624_${lib.substring 0 8 src.rev}";
         inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "76a4d4c2913a1654dddd195b034ff7e66cb3e96f";
-          hash = "sha256-OA22Ig72oV6reHN8HMlimmnrsxpNzqyzi4h6YBVzzEA=";
+          rev = "448cfb71eafbb3f2932b025aa2600c80b6d383f1";
+          hash = "sha256-tk1H8lOA5lIvhNP/izZ6JzT0EuDmCOX5RBhOeHdc2cM=";
         };
       };
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_28;
+      latest = self.nix_2_29;
 
       # The minimum Nix version supported by Nixpkgs
       # Note that some functionality *might* have been backported into this Nix version,

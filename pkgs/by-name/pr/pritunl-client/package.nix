@@ -17,6 +17,8 @@
   iproute2,
   openvpn,
   electron,
+  wireguard-tools,
+  withWireguard ? stdenv.hostPlatform.isLinux,
 }:
 let
   version = "1.3.4275.94";
@@ -97,10 +99,19 @@ let
                 --prefix PATH : ${lib.makeBinPath hookScriptsDeps} \
                 --add-flags "--setenv PATH \$PATH"
             '';
+        pritunlDeps =
+          [
+            openvpn-wrapped
+          ]
+          ++ lib.optionals withWireguard [
+            openresolv
+            coreutils
+            wireguard-tools
+          ];
       in
       lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/pritunl-client-service \
-          --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
+          --prefix PATH : "${lib.makeBinPath pritunlDeps}"
       '';
     passthru.updateScript = nix-update-script { };
   };

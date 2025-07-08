@@ -8,6 +8,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Notify";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

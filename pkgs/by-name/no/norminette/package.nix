@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "norminette";
   version = "3.3.58";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "42School";

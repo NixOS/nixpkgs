@@ -10,6 +10,7 @@ let
 in
 pythonPackages.buildPythonApplication {
   version = "0.1.0";
+  format = "setuptools";
   pname = "flatten-references-graph";
 
   # Note: this uses only ./src/.gitignore

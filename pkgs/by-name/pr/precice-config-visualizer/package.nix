@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "config-visualizer";
   version = "unstable-2022-02-23";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "precice";

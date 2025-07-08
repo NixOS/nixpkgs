@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "virtnbdbackup";
   version = "2.29";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "abbbi";

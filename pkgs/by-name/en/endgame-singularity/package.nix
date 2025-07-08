@@ -5,7 +5,6 @@
   unzip,
   python3,
   enableDefaultMusicPack ? true,
-  unstableGitUpdater,
 }:
 
 let
@@ -15,8 +14,8 @@ let
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    rev = "8bbc2322ad1a0e83f78f5af731dfa97b6bd63f9c";
-    hash = "sha256-HiFE746JtGjZJbiKhB3ubfb376tJmz78jUfdu3/RQic=";
+    tag = "v${version}";
+    hash = "sha256-wYXuhlGp7gisgN2iRXKTpe0Om2AA8u0eBwKHHIYuqbk=";
   };
 
   music_src = fetchurl {
@@ -26,6 +25,7 @@ let
 in
 
 python3.pkgs.buildPythonApplication {
+  format = "setuptools";
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
@@ -44,14 +44,6 @@ python3.pkgs.buildPythonApplication {
           "$(echo $out/lib/python*/site-packages/singularity)/music"
           # ↑ we cannot glob on [...]/music, it doesn't exist yet
   '';
-
-  passthru = {
-    # for the updater
-    src = main_src;
-    updateScript = unstableGitUpdater {
-      tagPrefix = "v";
-    };
-  };
 
   meta = {
     homepage = "http://www.emhsoft.com/singularity/";

@@ -9,6 +9,7 @@ buildPythonApplication rec {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
   version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tinyfpga";

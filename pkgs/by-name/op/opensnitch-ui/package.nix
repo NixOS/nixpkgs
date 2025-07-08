@@ -6,6 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   pname = "opensnitch-ui";
 
   inherit (opensnitch) src version;

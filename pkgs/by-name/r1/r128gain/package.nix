@@ -11,6 +11,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "r128gain";
   version = "1.0.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "desbma";

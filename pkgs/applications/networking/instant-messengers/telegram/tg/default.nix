@@ -12,6 +12,7 @@
 buildPythonApplication rec {
   pname = "tg";
   version = "0.19.0";
+  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {

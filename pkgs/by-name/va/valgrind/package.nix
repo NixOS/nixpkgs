@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.eelco ];
     platforms =
       with lib.platforms;
-      lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips) (
+      lib.intersectLists (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips ++ riscv64) (
         darwin ++ freebsd ++ illumos ++ linux
       );
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

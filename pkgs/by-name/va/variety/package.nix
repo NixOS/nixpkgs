@@ -23,6 +23,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "variety";
   version = "0.8.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "varietywalls";

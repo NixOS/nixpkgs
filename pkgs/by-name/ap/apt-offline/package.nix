@@ -18,6 +18,7 @@ let
   };
 in
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   inherit pname version src;
 
   nativeBuildInputs = [ installShellFiles ];

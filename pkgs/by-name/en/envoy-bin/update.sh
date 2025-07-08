@@ -14,7 +14,7 @@ fetch_arch() {
     VER="$1"
     ARCH="$2"
     URL="https://github.com/envoyproxy/envoy/releases/download/v${VER}/envoy-${VER}-linux-${ARCH}"
-    nix hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --type sha256 "$URL")"
+    nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --type sha256 "$URL")"
 }
 
 replace_hash() {

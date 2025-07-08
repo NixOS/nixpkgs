@@ -25,13 +25,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.51.0";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-frCSuGEnYab4CTQoAuN876dG7Mwn/RJEnWouUuo7aJQ=";
+    hash = "sha256-ZijrDYG/HFPBOLEFqMDzoWhRoo/GiHr0dpjhKBJRAH8=";
   };
 
   outputs = [
@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-nRE4IV8+wCuYXNAxrl7RfBFdY/ZyAIpXs3pDfCeIh74=";
+    hash = "sha256-yBkdqOLAopEHcS4rbOUL3bLxy27l/gm60nICsL9zigk=";
   };
 
   npmRoot = "ui";

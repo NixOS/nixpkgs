@@ -21,12 +21,12 @@
 
   withRdpClient ? true,
 
-  version ? "17.5.1",
-  hash ? "sha256-+9Oit7GAUTNv5Z8ZDOuBBRnVvtdA9N0X97UJbLILX50=",
-  vendorHash ? "sha256-yeouUrLMfkKSYnS9va59cYWnGCvQatQQrNa1DuHQMug=",
+  version ? "17.5.4",
+  hash ? "sha256-ojRIyPTrSG3/xuqdaUNrN4s5HP3E8pvzjG8h+qFEYrc=",
+  vendorHash ? "sha256-IHXwCp1MdcEKJhIs9DNf77Vd93Ai2as7ROlh6AJT9+Q=",
   extPatches ? [ ],
   cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
-  pnpmHash ? "sha256-TZb1nABTbR+SPgykc/KMRkHW7oLawem6KWmdOFAbLbk=",
+  pnpmHash ? "sha256-YwftGEQTEI8NvFTFLMJHhYkvaIIP9+bskCQCp5xuEtY=",
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.

@@ -189,6 +189,7 @@ stdenvNoCC.mkDerivation (
 
     dontUnpack = true;
     dontConfigure = true;
+    dontFixup = true;
     doCheck = false;
 
     patchPhase = ''

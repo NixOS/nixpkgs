@@ -16,7 +16,7 @@ sed -i "s|$PREV_VERSION|$NEXT_VERSION|" "$FILE"
 
 # update hash
 PREV_HASH=$(nix eval --raw -f $NIXPKGS_ROOT/default.nix $ATTR.src.outputHash)
-NEXT_HASH=$(nix hash to-sri --type sha256 $(nix-prefetch-url --unpack --type sha256 $(nix eval --raw -f $NIXPKGS_ROOT/default.nix $ATTR.src.url)))
+NEXT_HASH=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --unpack --type sha256 $(nix eval --raw -f $NIXPKGS_ROOT/default.nix $ATTR.src.url)))
 sed -i "s|$PREV_HASH|$NEXT_HASH|" "$FILE"
 
 # update vendor hash

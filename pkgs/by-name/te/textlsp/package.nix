@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "textlsp";
   version = "0.3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hangyav";

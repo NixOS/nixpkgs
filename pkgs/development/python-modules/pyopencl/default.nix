@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2025.2.4";
+  version = "2025.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Tan6HUwDnG7/z6lLPysUhRkr32qqa6ix8SoBCBf4dCA=";
+    hash = "sha256-VmnCMaq6op/7M+n1U9mPgRpCyZtkgmzMXQuWW6Clbd4=";
   };
 
   build-system = [

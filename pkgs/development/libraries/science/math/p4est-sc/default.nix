@@ -73,6 +73,6 @@ stdenv.mkDerivation {
     homepage = "https://www.p4est.org/";
     downloadPage = "https://github.com/cburstedde/libsc.git";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.cburstedde ];
+    maintainers = [ ];
   };
 }

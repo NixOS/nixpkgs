@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   alsa-lib,
   file,
   fluidsynth,
@@ -36,6 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FM/6TtNhDml1V9C5VisjLcZ3CzXsuwCZrsoz4yP3kI8=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/falkTX/Carla/pull/1933
+      name = "prefer-pyliblo3-over-pyliblo.patch";
+      url = "https://github.com/falkTX/Carla/commit/a81a2a545d2529233a6e0faa776fbd2d851442fb.patch?full_index=1";
+      hash = "sha256-CHK3Aq/W9PdfMGsJunLN/WAxOmWJHc0jr/3TdEaIcMM=";
+    })
+  ];
+
   nativeBuildInputs = [
     python3Packages.wrapPython
     pkg-config
@@ -47,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     with python3Packages;
     [
       rdflib
-      pyliblo
+      pyliblo3
     ]
     ++ lib.optional withFrontend pyqt5;
 

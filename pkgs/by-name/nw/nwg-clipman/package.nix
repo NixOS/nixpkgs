@@ -14,6 +14,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nwg-clipman";
   version = "0.2.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";

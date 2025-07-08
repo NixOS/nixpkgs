@@ -5,8 +5,8 @@
   linux,
   scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "19812";
-    sha256 = "1bhkc0r5p3d4mmmi26k5lsk56jgbc8hi46bfih313hxmrnsd07dy";
+    rev = "19835";
+    hash = "sha256-5usyLmlTr5nlM+/uWPQepzhhNSLi3Hol1BfnWb9CFws=";
   },
   ...
 }@args:
@@ -30,16 +30,30 @@ linux.override {
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
+
       buildPhase = ''
+        runHook preBuild
+
         # --force flag to skip empty files after deblobbing
-        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
-            ${major} ${minor} ${patch}
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force ${major} ${minor} ${patch}
+
+        runHook postBuild
       '';
+
       checkPhase = ''
+        runHook preCheck
+
         ${scripts}/deblob-check
+
+        runHook postCheck
       '';
+
       installPhase = ''
+        runHook preInstall
+
         cp -r . "$out"
+
+        runHook postInstall
       '';
     };
 

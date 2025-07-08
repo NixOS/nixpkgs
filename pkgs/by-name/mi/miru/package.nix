@@ -12,7 +12,6 @@ let
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       d4ilyrun
-      matteopacini
     ];
     mainProgram = "miru";
 

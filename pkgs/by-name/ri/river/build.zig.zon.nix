@@ -22,10 +22,10 @@ linkFarm "zig-packages" [
     };
   }
   {
-    name = "wlroots-0.19.1-jmOlcs7dAwCajnVWlQZIc-ySYjRlbLxy0F5FvTQqYA3P";
+    name = "wlroots-0.19.2-jmOlcsnnAwDFAeOamkUaxyHNhKngH4Ai5rrLSVbqA8LW";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.19.1.tar.gz";
-      hash = "sha256-37s4hXaYeKAyZySWZOMQP3BHz7EzxVNpj0dhJcPJoTM=";
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.19.2.tar.gz";
+      hash = "sha256-BMNvnRJdM8qhqtm2Do7l5LdD1INDXD3t0ykPHYwyI6U=";
     };
   }
   {

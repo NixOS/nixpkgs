@@ -1,4 +1,13 @@
 {
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
@@ -617,6 +626,9 @@
   "module-services-nextcloud-httpd": [
     "index.html#module-services-nextcloud-httpd"
   ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
+  ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"
   ],
@@ -1085,18 +1097,6 @@
   "module-services-taskserver-manual-ca-management": [
     "index.html#module-services-taskserver-manual-ca-management"
   ],
-  "module-services-sourcehut": [
-    "index.html#module-services-sourcehut"
-  ],
-  "module-services-sourcehut-basic-usage": [
-    "index.html#module-services-sourcehut-basic-usage"
-  ],
-  "module-services-sourcehut-configuration": [
-    "index.html#module-services-sourcehut-configuration"
-  ],
-  "module-services-sourcehut-httpd": [
-    "index.html#module-services-sourcehut-httpd"
-  ],
   "module-services-gitlab": [
     "index.html#module-services-gitlab"
   ],
@@ -1316,22 +1316,14 @@
   "module-services-postgres-initializing-extra-permissions": [
     "index.html#module-services-postgres-initializing-extra-permissions"
   ],
-  "module-services-postgres-initializing-extra-permissions-superuser": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser"
-  ],
   "module-services-postgres-initializing-extra-permissions-superuser-post-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user"
   ],
-  "module-services-postgres-initializing-extra-permissions-service-user-pre-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
+  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
   ],
   "module-services-postgres-authentication": [
@@ -1339,6 +1331,9 @@
   ],
   "module-services-postgres-authentication-user-mapping": [
     "index.html#module-services-postgres-authentication-user-mapping"
+  ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
   ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
@@ -2056,6 +2051,13 @@
   ],
   "sec-release-25.11-incompatibilities": [
     "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-incompatibilities-sourcehut-removed": [
+    "release-notes.html#sec-release-25.11-incompatibilities-sourcehut-removed",
+    "index.html#module-services-sourcehut",
+    "index.html#module-services-sourcehut-basic-usage",
+    "index.html#module-services-sourcehut-configuration",
+    "index.html#module-services-sourcehut-httpd"
   ],
   "sec-release-25.11-notable-changes": [
     "release-notes.html#sec-release-25.11-notable-changes"
