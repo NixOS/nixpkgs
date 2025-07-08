@@ -13,7 +13,7 @@
   ## Needed for Executing package.json scripts
   nodejs_22,
   python3,
-  electron,
+  electron_36,
 
   ## Needed for Compiling the native modules
   pkg-config,
@@ -57,6 +57,7 @@
 
 let
   nodejs = nodejs_22;
+  electron = electron_36;
   artifactName = "theia-ide";
 in
 
