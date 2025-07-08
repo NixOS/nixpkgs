@@ -32,10 +32,10 @@
 }@pkgs:
 
 let
-  defaultVersion = "2025.01";
+  defaultVersion = "2025.07";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-ze99UHyT8bvZ8BXqm8IfoHQmhIFAVQGUWrxvhU1baG8=";
+    hash = "sha256-D5M/bFpCaJW/MG6T5qxTxghw5LVM2lbZUhG+yZ5jvsc=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -71,9 +71,7 @@ let
 
         src = if src == null then defaultSrc else src;
 
-        patches = [
-          ./0001-configs-rpi-allow-for-bigger-kernels.patch
-        ] ++ extraPatches;
+        patches = extraPatches;
 
         postPatch = ''
           ${lib.concatMapStrings (script: ''
