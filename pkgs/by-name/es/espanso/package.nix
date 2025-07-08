@@ -20,6 +20,7 @@
   wl-clipboard,
   wxGTK32,
   makeWrapper,
+  securityWrapperPath ? null,
   nix-update-script,
   stdenv,
   waylandSupport ? false,
@@ -87,13 +88,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xdotool
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace scripts/create_bundle.sh \
-      --replace-fail target/mac/ $out/Applications/ \
-      --replace-fail /bin/echo ${coreutils}/bin/echo
-    substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
-      --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace scripts/create_bundle.sh \
+        --replace-fail target/mac/ $out/Applications/ \
+        --replace-fail /bin/echo ${coreutils}/bin/echo
+      substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
+        --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+    ''
+    + lib.optionalString (securityWrapperPath != null) ''
+      substituteInPlace espanso/src/cli/daemon/mod.rs \
+        --replace-fail \
+          'std::env::current_exe().expect("unable to obtain espanso executable location");' \
+          'std::ffi::OsString::from("${securityWrapperPath}/espanso");'
+    '';
 
   # Some tests require networking
   doCheck = false;
