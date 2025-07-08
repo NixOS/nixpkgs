@@ -66,6 +66,10 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
+    # Expose kscreen's D-Bus and systemd services (needed by system-config-monitor)
+    services.dbus.packages = [ pkgs.kdePackages.libkscreen ];
+    ###systemd.user.packages = [ pkgs.kdePackages.libkscreen ];
+
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
