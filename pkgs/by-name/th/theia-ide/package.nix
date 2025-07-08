@@ -63,7 +63,7 @@ in
 stdenv.mkDerivation rec {
   # Do NOT use this anywhere other than nixpkgs related things
   pname = "theia-ide";
-  version = "1.62.200";
+  version = "1.63.200";
 
   # executableName = artifactName;  # "TheiaIDE" ?
 
@@ -71,13 +71,13 @@ stdenv.mkDerivation rec {
     owner = "eclipse-theia";
     repo = "theia-ide";
     tag = "v${version}";
-    hash = "sha256-hjg+UEu+c4Mt7M34KZGxoYcHVR6hzs38/vZzOYPttJs=";
+    hash = "sha256-jVEJF1Z+NUf5UJEbRpinZVO/eZNVA3Y0iJw/QCvvS6g=";
   };
   # src = ./.;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-/EdYMau3I+xgmbU6IuKRa6cNDyvqJLPVgHkPn0yS46I=";
+    hash = "sha256-zbUegHSYrN3fDdlFBGh5DS1ohMuqb6GaaG67uQFDZJc=";
   };
 
   env = {
