@@ -110,8 +110,10 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://github.com/yt-dlp/yt-dlp/";
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
+    homepage = "https://github.com/yt-dlp/yt-dlp/";
+    license = licenses.unlicense;
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 
@@ -120,12 +122,10 @@ python3Packages.buildPythonApplication rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    changelog = "https://github.com/yt-dlp/yt-dlp/blob/${version}/Changelog.md";
-    license = licenses.unlicense;
+    mainProgram = "yt-dlp";
     maintainers = with maintainers; [
       SuperSandro2000
       donteatoreo
     ];
-    mainProgram = "yt-dlp";
   };
 }
