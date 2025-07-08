@@ -60,6 +60,7 @@
   libvpl,
   qrcodegencpp,
   nix-update-script,
+  extra-cmake-modules,
 }:
 
 let
@@ -81,13 +82,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.4";
+  version = "31.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-YxBPVXin8oJlo++oJogY1WMamIJmRqtSmKZDBsIZPU4=";
+    hash = "sha256-espGKoKldgjWoCEE+Xor7+N5N86HvWCf0V18tb8GaC8=";
     fetchSubmodules = true;
   };
 
@@ -107,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       wrapGAppsHook3
       wrapQtAppsHook
+      extra-cmake-modules
     ]
     ++ optional scriptingSupport swig
     ++ optional cudaSupport autoAddDriverRunpath;
