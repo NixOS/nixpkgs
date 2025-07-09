@@ -32,7 +32,7 @@ mkCoqDerivation {
         metacoq.version
       ]
       [
-        (case (range "8.17" "9.1") (range "1.3.1" "1.3.4") "0.1.1")
+        (case (range "8.17" "9.0") (range "1.3.1" "1.3.4") "0.1.1")
       ]
       null;
 
