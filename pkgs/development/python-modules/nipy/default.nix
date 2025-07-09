@@ -37,6 +37,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs nipy/_build_utils/cythoner.py
+
+    substituteInPlace lib/fff_python_wrapper/fffpy.c \
+      --replace-fail "NPY_OWNDATA" "NPY_ARRAY_OWNDATA" \
+      --replace-fail "NPY_BEHAVED" "NPY_ARRAY_BEHAVED"
   '';
 
   build-system = [
