@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     changelog = "https://github.com/chipsenkbeil/choose/blob/${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ heywoodlh ];
+    maintainers = with lib.maintainers; [
+      heywoodlh
+      niksingh710
+    ];
     mainProgram = "choose";
   };
 }
