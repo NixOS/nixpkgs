@@ -64,7 +64,7 @@ buildPythonPackage (finalAttrs: {
       orjson
       ujson
     ]
-    ++ (with finalAttrs.optional-dependencies; dynamodb ++ mongodb ++ redis ++ security ++ yaml);
+    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
