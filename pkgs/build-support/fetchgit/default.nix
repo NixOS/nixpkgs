@@ -1,20 +1,11 @@
 {
   lib,
+  repoRevToNameMaybe,
   stdenvNoCC,
   git,
   git-lfs,
   cacert,
 }:
-
-let
-  urlToName =
-    url: rev:
-    let
-      shortRev = lib.sources.shortRev rev;
-      appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
-    in
-    "${lib.sources.urlToName url}${appendShort}";
-in
 
 lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
@@ -24,7 +15,7 @@ lib.makeOverridable (
       url,
       tag ? null,
       rev ? null,
-      name ? urlToName url (lib.revOrTag rev tag),
+      name ? repoRevToNameMaybe url (lib.revOrTag rev tag) "git",
       leaveDotGit ? deepClone || fetchTags,
       outputHash ? lib.fakeHash,
       outputHashAlgo ? null,
