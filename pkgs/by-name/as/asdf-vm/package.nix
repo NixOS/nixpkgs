@@ -44,15 +44,11 @@ buildGoModule rec {
         mkdir -p $out/share/completions
 
         # Generate completions using the built asdf binary
-        $out/bin/asdf completion bash > $out/share/completions/asdf.bash || true
-        $out/bin/asdf completion zsh > $out/share/completions/_asdf || true
-        $out/bin/asdf completion fish > $out/share/completions/asdf.fish || true
-
-        # Install completions to standard locations
+'' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd asdf \
-          --bash $out/share/completions/asdf.bash \
-          --zsh $out/share/completions/_asdf \
-          --fish $out/share/completions/asdf.fish
+          --bash <($out/bin/asdf completion bash) \
+          --fish <($out/bin/asdf completion fish) \
+          --zsh <($out/bin/asdf completion zsh)
   '';
 
   meta = with lib; {
