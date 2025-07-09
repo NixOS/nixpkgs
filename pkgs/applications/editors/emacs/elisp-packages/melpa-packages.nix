@@ -1284,6 +1284,9 @@ let
 
           graphene = ignoreCompilationError super.graphene; # elisp error
 
+          # https://github.com/ppareit/graphviz-dot-mode/issues/85
+          graphviz-dot-mode = addPackageRequires super.graphviz-dot-mode [ self.flycheck ];
+
           greader = ignoreCompilationError super.greader; # elisp error
 
           # TODO report to upstream
