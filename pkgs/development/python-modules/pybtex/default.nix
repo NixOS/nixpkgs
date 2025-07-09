@@ -9,6 +9,9 @@
   # dependencies
   latexcodec,
   pyyaml,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +35,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pybtex" ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     homepage = "https://pybtex.org/";
