@@ -45,6 +45,7 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
     requests
     requests-kerberos
+    setuptools
   ];
 
   nativeCheckInputs = with python3Packages; [
