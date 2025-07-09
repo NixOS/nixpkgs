@@ -613,7 +613,7 @@ in
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
-  google-oslogin = handleTest ./google-oslogin { };
+  google-oslogin = runTest ./google-oslogin;
   gopro-tool = runTest ./gopro-tool.nix;
   goss = runTest ./goss.nix;
   gotenberg = runTest ./gotenberg.nix;
