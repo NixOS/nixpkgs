@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "latexcodec";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kX3F/iQnYswZ2WPmVItC1joRgCjN0zYdYjl+O2OLa8U=";
+    hash = "sha256-54ppEc1y+d7DUDHG7CNYTeaEK/vEYQqWeIaNFM37A1c=";
   };
 
   propagatedBuildInputs = [ six ];
