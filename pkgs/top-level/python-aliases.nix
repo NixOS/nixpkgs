@@ -723,6 +723,7 @@ mapAliases ({
   setuptools_scm = setuptools-scm; # added 2021-06-03
   setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
+  shippai = throw "shippai has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   shouldbe = throw "shouldbe was removed, because it was disabled on all python version since 3.8 and last updated in 2019."; # added 2024-05-12
   sip_4 = sip4; # added 2024-01-07
   slackclient = slack-sdk; # added 2024-06-27

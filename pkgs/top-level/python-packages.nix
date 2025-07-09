@@ -16107,8 +16107,6 @@ self: super: with self; {
 
   shiny = callPackage ../development/python-modules/shiny { };
 
-  shippai = callPackage ../development/python-modules/shippai { };
-
   shippinglabel = callPackage ../development/python-modules/shippinglabel { };
 
   shiv = callPackage ../development/python-modules/shiv { };
