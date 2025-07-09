@@ -6,7 +6,10 @@
 }:
 rec {
   name = "clickhouse-keeper";
-  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
+  meta.maintainers = with pkgs.lib.maintainers; [
+    jpds
+    thevar1able
+  ];
 
   nodes =
     let
