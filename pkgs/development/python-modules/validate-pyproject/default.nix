@@ -13,7 +13,7 @@
   setuptools-scm,
   tomli,
   trove-classifiers,
-  # validate-pyproject-schema-store,
+  validate-pyproject-schema-store,
 }:
 
 buildPythonPackage rec {
@@ -43,10 +43,9 @@ buildPythonPackage rec {
       tomli
       trove-classifiers
     ];
-    # TODO
-    # store = [
-    #   validate-pyproject-schema-store
-    # ];
+    store = [
+      validate-pyproject-schema-store
+    ];
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
