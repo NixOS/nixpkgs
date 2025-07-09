@@ -29,6 +29,8 @@ let
       };
     };
 
+    passthru.updateScript = ./update.sh;
+
     meta = {
       description = "Ruby kernel for Jupyter";
       homepage = "https://github.com/SciRuby/iruby";
