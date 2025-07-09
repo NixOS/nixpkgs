@@ -445,7 +445,7 @@ in
   fscrypt = runTest ./fscrypt.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   lauti = runTest ./lauti.nix;
-  easytier = handleTest ./easytier.nix { };
+  easytier = runTest ./easytier.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -613,7 +613,7 @@ in
   gokapi = runTest ./gokapi.nix;
   gollum = runTest ./gollum.nix;
   gonic = runTest ./gonic.nix;
-  google-oslogin = handleTest ./google-oslogin { };
+  google-oslogin = runTest ./google-oslogin;
   gopro-tool = runTest ./gopro-tool.nix;
   goss = runTest ./goss.nix;
   gotenberg = runTest ./gotenberg.nix;
@@ -853,7 +853,7 @@ in
   mautrix-meta-sqlite = runTest ./matrix/mautrix-meta-sqlite.nix;
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
-  mediatomb = handleTest ./mediatomb.nix { };
+  mediatomb = runTest ./mediatomb.nix;
   mediawiki = handleTest ./mediawiki.nix { };
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
@@ -901,11 +901,11 @@ in
   mumble = runTest ./mumble.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
-  musescore = handleTestOn [ "x86_64-linux" ] ./musescore.nix { };
+  musescore = runTestOn [ "x86_64-linux" ] ./musescore.nix;
   music-assistant = runTest ./music-assistant.nix;
   munin = runTest ./munin.nix;
   mutableUsers = runTest ./mutable-users.nix;
-  mycelium = handleTest ./mycelium { };
+  mycelium = runTest ./mycelium;
   mympd = runTest ./mympd.nix;
   mysql = handleTest ./mysql/mysql.nix { };
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix { };
@@ -935,7 +935,7 @@ in
   };
   ndppd = runTest ./ndppd.nix;
   nebula = runTest ./nebula.nix;
-  neo4j = handleTest ./neo4j.nix { };
+  neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netdata = runTest ./netdata.nix;
   nimdow = runTest ./nimdow.nix;
@@ -1261,11 +1261,11 @@ in
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
   scaphandre = handleTest ./scaphandre.nix { };
-  schleuder = handleTest ./schleuder.nix { };
+  schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
-  sddm = handleTest ./sddm.nix { };
+  sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
   seafile = runTest ./seafile.nix;
   searx = runTest ./searx.nix;
@@ -1454,7 +1454,7 @@ in
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   trezord = runTest ./trezord.nix;
   trickster = runTest ./trickster.nix;
-  trilium-server = handleTestOn [ "x86_64-linux" ] ./trilium-server.nix { };
+  trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
   tsm-client-gui = runTest ./tsm-client-gui.nix;
   ttyd = runTest ./web-servers/ttyd.nix;
   tt-rss = runTest ./web-apps/tt-rss.nix;
@@ -1511,7 +1511,7 @@ in
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = runTest ./victorialogs.nix;
-  victoriametrics = handleTest ./victoriametrics { };
+  victoriametrics = import ./victoriametrics { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
