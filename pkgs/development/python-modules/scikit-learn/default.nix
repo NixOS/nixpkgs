@@ -69,25 +69,10 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
-  disabledTests =
-    [
-      # Skip test_feature_importance_regression - does web fetch
-      "test_feature_importance_regression"
-
-      # Fail due to new deprecation warnings in scipy
-      # FIXME: reenable when fixed upstream
-      "test_logistic_regression_path_convergence_fail"
-      "test_linalg_warning_with_newton_solver"
-      "test_newton_cholesky_fallback_to_lbfgs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # doesn't seem to produce correct results?
-      # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
-      "test_sparse_input"
-    ];
+  disabledTests = [
+    # Skip test_feature_importance_regression - does web fetch
+    "test_feature_importance_regression"
+  ];
 
   pytestFlagsArray = [
     "--pyargs"
