@@ -30,6 +30,7 @@ self:
 let
 
   inherit (import ./lib-override-helper.nix pkgs lib)
+    ignoreCompilationError
     markBroken
     ;
 
@@ -67,6 +68,8 @@ let
             super.org-transclusion;
 
         rcirc-menu = markBroken super.rcirc-menu; # Missing file header
+
+        vc-jj = ignoreCompilationError super.vc-jj; # native-ice
         # keep-sorted end
       };
 
