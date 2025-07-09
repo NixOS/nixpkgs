@@ -10,6 +10,7 @@
   grpcio-reflection,
   jinja2,
   lib,
+  nix-update-script,
   mock,
   openssh,
   pexpect,
@@ -40,6 +41,8 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-cLofkkp2T6Y9nQ5LIS7w9URZlt8DQNN8dm3NnrvcKWY=";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   # Remove after package bump
   patches = [
