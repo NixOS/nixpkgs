@@ -15142,6 +15142,8 @@ self: super: with self; {
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
+  qreader_1 = callPackage ../development/python-modules/qreader/1.nix { };
+
   qscintilla = self.qscintilla-qt5;
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
