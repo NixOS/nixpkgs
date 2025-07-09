@@ -2,26 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   util-linux,
   ncurses,
   flex,
   bison,
+  lua5_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "unnethack";
-  version = "5.3.2";
+  version = "6.0.14";
 
   src = fetchFromGitHub {
-    name = "UnNetHack";
     owner = "UnNetHack";
     repo = "UnNetHack";
-    rev = version;
-    sha256 = "1rg0mqyplgn3dfh3wz09a600qxk7aidqw4d84kyiincljvhyb7ps";
+    # releases are not tagged
+    rev = "c8c1a467bb114fc7cb9967d20ebf389e11e1e7fd";
+    hash = "sha256-45sybOM2zCPCCuHGZ5sEeJzkgcwvi3MhgOC1v1kRwWg=";
   };
 
-  buildInputs = [ ncurses ];
+  patches = [
+    # util-linux does not contains "col" binary on Darwin. Only needed for documentation build.
+    # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
+    ./disable-col-check.patch
+  ];
+
+  buildInputs = [
+    ncurses
+    lua5_4
+  ];
 
   nativeBuildInputs = [
     util-linux
@@ -38,25 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [ "GAMEPERM=744" ];
-  patches = [
-    # fix regression with bison, merged in master
-    (fetchpatch {
-      name = "fix-bison.patch";
-      url = "https://github.com/UnNetHack/UnNetHack/commit/04f0a3a850a94eb8837ddcef31303968240d1c31.patch";
-      sha256 = "1zblbwqqz9nx16k6n31wi2hdvz775lvzmkjblmrx18nbm4ylj0n9";
-    })
-  ];
 
-  # Fails at startup due to off-by-one:
-  #   https://github.com/NixOS/nixpkgs/issues/292113#issuecomment-1969989058
-  # TODO: drop it once 6.x branch releases.
-  hardeningDisable = [ "fortify3" ];
-
-  # Fails the build occasionally due to missing build depends:
-  #   ./../sys/unix/unixmain.c:9:10: fatal error: date.h: No such file or directory
-  # TODO: remove once upstream issue is fixed:
-  #   https://github.com/UnNetHack/UnNetHack/issues/56
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile
@@ -81,12 +73,12 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/unnethack
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fork of NetHack";
     mainProgram = "unnethack";
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

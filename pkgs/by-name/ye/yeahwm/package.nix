@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     mainProgram = "yeahwm";
     maintainers = with lib.maintainers; [ ];
+    broken = stdenv.hostPlatform.isLinux; # Does not build with GCC 14.
     inherit (libX11.meta) platforms;
   };
 })
