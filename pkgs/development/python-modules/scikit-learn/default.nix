@@ -27,14 +27,14 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-learn";
     repo = "scikit-learn";
     tag = version;
-    hash = "sha256-jZaeev69C3whBUMnGJ91jkJt3Zsh37kdKEYe27kwJp4=";
+    hash = "sha256-PbBNFucMwvdVjdXIPjEqIAVK2ZtQvo0XevJ16fslX8U=";
   };
 
   postPatch = ''
