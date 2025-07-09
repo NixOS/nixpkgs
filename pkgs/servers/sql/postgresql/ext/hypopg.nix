@@ -26,6 +26,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "Hypothetical Indexes for PostgreSQL";
     homepage = "https://hypopg.readthedocs.io";
+    changelog = "https://github.com/HypoPG/hypopg/releases/tag/${finalAttrs.version}";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ bbigras ];
