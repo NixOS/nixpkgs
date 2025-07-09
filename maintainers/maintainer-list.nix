@@ -6263,6 +6263,12 @@
     githubId = 21953890;
     name = "Tim Digel";
   };
+  despsyched = {
+    email = "priyanshu.tripathi@deshaw.com";
+    github = "despsyched";
+    githubId = 196187334;
+    name = "Priyanshu Tripathi";
+  };
   desttinghim = {
     email = "opensource@louispearson.work";
     matrix = "@desttinghim:matrix.org";
