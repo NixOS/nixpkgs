@@ -1454,7 +1454,7 @@ in
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   trezord = runTest ./trezord.nix;
   trickster = runTest ./trickster.nix;
-  trilium-server = handleTestOn [ "x86_64-linux" ] ./trilium-server.nix { };
+  trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
   tsm-client-gui = runTest ./tsm-client-gui.nix;
   ttyd = runTest ./web-servers/ttyd.nix;
   tt-rss = runTest ./web-apps/tt-rss.nix;
