@@ -19102,6 +19102,10 @@ self: super: with self; {
 
   validate-pyproject = callPackage ../development/python-modules/validate-pyproject { };
 
+  validate-pyproject-schema-store =
+    callPackage ../development/python-modules/validate-pyproject-schema-store
+      { };
+
   validator-collection = callPackage ../development/python-modules/validator-collection { };
 
   validators = callPackage ../development/python-modules/validators { };
