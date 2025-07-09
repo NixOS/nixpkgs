@@ -132,7 +132,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
+    changelog = "https://github.com/plv8/plv8/blob/v${finalAttrs.version}/Changes";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
