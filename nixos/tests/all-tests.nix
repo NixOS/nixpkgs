@@ -1265,7 +1265,7 @@ in
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
-  sddm = handleTest ./sddm.nix { };
+  sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
   seafile = runTest ./seafile.nix;
   searx = runTest ./searx.nix;
