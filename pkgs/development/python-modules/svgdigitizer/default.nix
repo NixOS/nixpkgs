@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   setuptools,
@@ -77,5 +78,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
+    # https://github.com/echemdb/svgdigitizer/issues/252
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
