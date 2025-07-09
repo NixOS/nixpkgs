@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ matthewcroughan ];
+    teams = [ teams.geospatial ];
   };
 }
