@@ -18,6 +18,7 @@
 
   ## Needed for Compiling the native modules
   pkg-config,
+  xorg,
   libsecret,
   libX11,
   libxkbfile,
@@ -85,11 +86,18 @@ buildNpmPackage (finalAttrs: {
     ## Needed for Compiling the native modules
     pkg-config
     libsecret
+
+    xorg.libX11.dev
+    xorg.libxkbfile.dev
+
     libxkbfile.dev
     libX11.dev
   ];
 
   buildInput = [
+    xorg.libX11.dev
+    xorg.libxkbfile.dev
+
     libX11.dev
     libxkbfile.dev
   ];
