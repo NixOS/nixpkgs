@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.9.2";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     tag = version;
-    hash = "sha256-5S4HN5MFLgURImwFsyyTOxDhrZJ5Oe+Ln/TA/bsCsek=";
+    hash = "sha256-gPhRln7cUoRmypuTDTwoz4LyCBX3EwuKes/SEoz9NYM=";
   };
 
   build-system = [
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for manipulating indices of ndarrays";
     homepage = "https://github.com/Quansight-Labs/ndindex";
-    changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${version}";
+    changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };
