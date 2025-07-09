@@ -15168,6 +15168,8 @@ self: super: with self; {
 
   quadprog = callPackage ../development/python-modules/quadprog { };
 
+  quadrilateral-fitter = callPackage ../development/python-modules/quadrilateral-fitter { };
+
   qualysclient = callPackage ../development/python-modules/qualysclient { };
 
   quandl = callPackage ../development/python-modules/quandl { };
