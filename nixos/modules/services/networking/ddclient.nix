@@ -18,7 +18,7 @@ let
     ${lib.optionalString (cfg.use != "") "use=${cfg.use}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev4 != "") "usev4=${cfg.usev4}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev6 != "") "usev6=${cfg.usev6}"}
-    login=${cfg.username}
+    ${lib.optionalString (cfg.username != "") "login=${cfg.username}"}
     ${
       if cfg.protocol == "nsupdate" then
         "/run/${RuntimeDirectory}/ddclient.key"
