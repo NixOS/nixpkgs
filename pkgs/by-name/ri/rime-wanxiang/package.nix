@@ -10,7 +10,7 @@
 }:
 
 let
-  dataUpdater = callPackage ./data-updater.nix {};
+  dataUpdater = callPackage ./data-updater.nix { };
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -109,7 +109,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/amzxyz/rime_wanxiang/releases";
     changelog = "https://github.com/amzxyz/rime_wanxiang/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc-by-40;
-    maintainers = with lib.maintainers; [ rc-zb peromage];
+    maintainers = with lib.maintainers; [
+      rc-zb
+      peromage
+    ];
     platforms = lib.platforms.all;
   };
 })
