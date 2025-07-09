@@ -1454,6 +1454,9 @@ let
             self.flycheck
           ];
 
+          # https://gitlab.com/arvidnl/magit-gitlab/-/issues/8
+          magit-gitlab = addPackageRequires super.magit-gitlab [ self.glab ];
+
           # missing optional dependencies
           magnatune = addPackageRequires super.magnatune [ self.helm ];
 
