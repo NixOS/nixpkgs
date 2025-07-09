@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.29.245";
+  version = "2.30.251";
   pyproject = true;
 
   # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pCb+P6WQUPX+dzFfe6Hcfao1fH2NDtBmpYNWRx2FPko=";
+    hash = "sha256-ZQMhn1tRJ1p+TnfKQzKQOw+Akl0gUDCkjT9qp8oNvyo=";
   };
 
   postPatch = ''
