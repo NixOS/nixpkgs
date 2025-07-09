@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
   version = "8.3.1";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "clickable";
@@ -18,7 +18,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Vn2PyALaRrE+jJRdZzW+jjCm3f2GfpgrQcFGB7kr4EM=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     cookiecutter
     requests
     pyyaml
