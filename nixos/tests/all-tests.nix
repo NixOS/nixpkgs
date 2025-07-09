@@ -1261,7 +1261,7 @@ in
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
   scaphandre = handleTest ./scaphandre.nix { };
-  schleuder = handleTest ./schleuder.nix { };
+  schleuder = runTest ./schleuder.nix;
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
