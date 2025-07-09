@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "charge-lnd";
   version = "0.3.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "accumulator";
@@ -16,6 +16,10 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-a/zIEA2oF1+BoZXk4YDWx69eVFSnANUE/F+ARI/VsXU=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     aiorpcx
