@@ -22,10 +22,7 @@ in
 
     services.udev.packages = [ cfg.package ];
 
-    environment.systemPackages = [
-      cfg.package
-      pkgs.gtk3
-    ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 
