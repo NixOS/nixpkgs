@@ -18323,6 +18323,12 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  nova = {
+    email = "mail@novahahn.eu";
+    github = "novahahn";
+    githubId = 22519;
+    name = "Nova Hahn";
+  };
   nova-madeline = {
     matrix = "@nova:tchncs.de";
     github = "nova-r";
