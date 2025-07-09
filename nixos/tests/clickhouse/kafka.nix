@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, package, ... }:
 
 let
   kafkaNamedCollectionConfig = ''
@@ -38,7 +38,10 @@ in
         };
       };
 
-      services.clickhouse.enable = true;
+      services.clickhouse = {
+        enable = true;
+        inherit package;
+      };
       virtualisation.memorySize = 4096;
     };
 
