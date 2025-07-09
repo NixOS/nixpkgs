@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.2";
+  version = "1.47.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
-    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
+    hash = "sha256-hX5u+AD+qiu0V4+8gQIUvl08iLBy6lPFOEczqWVzcyk=";
   };
 
   # fuse2fs adds 14mb of dependencies
