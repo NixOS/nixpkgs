@@ -4,6 +4,7 @@
   bundlerEnv,
   fetchFromGitHub,
   fetchNpmDeps,
+  nixosTests,
   nodejs,
   npmHooks,
   ruby_3_4,
@@ -107,7 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # TODO tests
+    tests = {
+      inherit (nixosTests) dawarich;
+    };
     # run with: nix-shell ./maintainers/scripts/update.nix --argstr package dawarich
     updateScript = ./update.sh;
   };
