@@ -159,7 +159,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    tests.clickhouse = nixosTests.clickhouse;
+    tests.clickhouse = if lts then nixosTests.clickhouse-lts else nixosTests.clickhouse;
 
     updateScript = nix-update-script {
       extraArgs = nixUpdateExtraArgs;

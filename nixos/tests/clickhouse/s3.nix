@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, package, ... }:
 
 let
   s3 = {
@@ -50,7 +50,10 @@ in
         };
       };
 
-      services.clickhouse.enable = true;
+      services.clickhouse = {
+        enable = true;
+        inherit package;
+      };
       virtualisation.diskSize = 15 * 1024;
       virtualisation.memorySize = 4 * 1024;
     };
