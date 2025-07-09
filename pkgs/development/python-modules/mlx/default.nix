@@ -36,14 +36,14 @@ let
 
   mlx = buildPythonPackage rec {
     pname = "mlx";
-    version = "0.25.2";
+    version = "0.26.3";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "ml-explore";
       repo = "mlx";
       tag = "v${version}";
-      hash = "sha256-fkf/kKATr384WduFG/X81c5InEAZq5u5+hwrAJIg7MI=";
+      hash = "sha256-hbqV/2KYGJ1gyExZd5bgaxTdhl5+Gext+U/+1KAztMU=";
     };
 
     patches = [
