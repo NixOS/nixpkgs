@@ -14,6 +14,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-M6CIctTOVn7kIPmsoHQmYl2wQaUzfel7ryw/3ebQitg=";
   };
 
+  build-system = [
+    python3.pkgs.setuptools
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     lxml
     httpx
