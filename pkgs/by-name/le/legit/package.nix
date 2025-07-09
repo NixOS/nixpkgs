@@ -2,19 +2,24 @@
   lib,
   python3Packages,
   fetchPypi,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "legit";
   version = "1.2.0.post0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lJOWtoApqK9AWrIMkBkCNB72vVXH/sbatxFB1j1AaxE=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     click
     clint
     crayons
@@ -22,8 +27,11 @@ python3Packages.buildPythonApplication rec {
     six
   ];
 
-  # no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "legit" ];
 
   meta = with lib; {
     homepage = "https://github.com/frostming/legit";
