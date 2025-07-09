@@ -23,23 +23,28 @@
 
 let
   # Copied from the `prismlauncher` package
-  runtimeLibs = [
-    libX11
-    libXext
-    libXcursor
-    libXrandr
-    libXxf86vm
+  runtimeLibs =
+    [
+      # lwjgl
+      libGL
+      glfw
+      openal
+      (lib.getLib stdenv.cc.cc)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXext
+      libXcursor
+      libXrandr
+      libXxf86vm
 
-    # lwjgl
-    libpulseaudio
-    libGL
-    glfw
-    openal
-    (lib.getLib stdenv.cc.cc)
+      # lwjgl
+      libpulseaudio
 
-    # oshi
-    udev
-  ] ++ lib.optional textToSpeechSupport flite;
+      # oshi
+      udev
+    ]
+    ++ lib.optional textToSpeechSupport flite;
 in
 python3Packages.buildPythonApplication rec {
   pname = "portablemc";

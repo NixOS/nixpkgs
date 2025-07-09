@@ -20,6 +20,8 @@ let
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
+    # Used for auto video transcription
+    HF_HOME = "/var/cache/peertube/huggingface";
   };
 
   systemCallsList = [
@@ -36,7 +38,6 @@ let
 
   cfgService = {
     # Proc filesystem
-    ProcSubset = "pid";
     ProtectProc = "invisible";
     # Access write directories
     UMask = "0027";
@@ -419,6 +420,10 @@ in
               };
             };
           };
+        };
+        video_transcription = {
+          engine = lib.mkDefault "whisper-ctranslate2";
+          engine_path = lib.mkDefault (lib.getExe pkgs.whisper-ctranslate2);
         };
       }
       (lib.mkIf cfg.redis.enableUnixSocket {

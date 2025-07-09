@@ -1,32 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uriparser";
   version = "0.9.8";
 
-  # Release tarball differs from source tarball
-  src = fetchurl {
-    url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-ctG1Wb46GAb3iKPZvjShsGPUKqI4spuk7mM9bv/NM70=";
+  src = fetchFromGitHub {
+    owner = "uriparser";
+    repo = "uriparser";
+    tag = "uriparser-${finalAttrs.version}";
+    hash = "sha256-U/AM8ULKGDfL3t+VUcn+t9sn4z/uc+pDjf2HHwHLI2M=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DURIPARSER_BUILD_DOCS=OFF"
-  ] ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
+    (lib.cmakeBool "URIPARSER_BUILD_DOCS" false)
+    (lib.cmakeBool "URIPARSER_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   nativeCheckInputs = [ gtest ];
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = {
-    changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${version}/ChangeLog";
+    changelog = "https://github.com/uriparser/uriparser/blob/uriparser-${finalAttrs.version}/ChangeLog";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
       uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C.
@@ -38,4 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "uriparse";
     platforms = lib.platforms.unix;
   };
-}
+})

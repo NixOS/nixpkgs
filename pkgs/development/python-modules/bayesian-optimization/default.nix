@@ -12,6 +12,7 @@
   numpy,
   scipy,
   colorama,
+  packaging,
 
   # tests
   jupyter,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "2.0.4";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     tag = "v${version}";
-    hash = "sha256-F1+M5znfI7lHGJRRTgmQxrLTYZmLc90Q0TCvpRoSVTU=";
+    hash = "sha256-ruMxuMTXVpS5oaZk994xIjgUnhpybrvhvy69nvU5feE=";
   };
 
   build-system = [ poetry-core ];
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     numpy
     scipy
     colorama
+    packaging
   ];
 
   nativeCheckInputs = [

@@ -28,14 +28,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.09";
+  version = "25.00";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-iQJ2m2OZrdkzf2sDIbKuyu0wIUktfvySTpsGFSLDZOM=";
-        unfree = "sha256-HVSu5GvdCY3lVXLUkHxaXco22WO52J2ldkGgfsyMVVg=";
+        free = "sha256-YY2Nw1aeQjXay9IEd4SwuhgqzeK95nH4nlZGwAlud6o=";
+        unfree = "sha256-gwC/5OkIAHp0OHJWhwD7JpJVSx06oCFs1Ndf+iG5qB8=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;

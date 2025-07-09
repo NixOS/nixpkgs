@@ -20,12 +20,12 @@ let
     sha256Hash = "sha256-MEUqYZd/Ny2spzFqbZ40j2H4Tg6pHQGWqkpRrVtbwO8=";
   };
   betaVersion = {
-    version = "2025.1.1.11"; # "Android Studio Narwhal | 2025.1.1 RC 1"
-    sha256Hash = "sha256-upx+qcrd+E4XVV94iaqZPN8w1RpcD8KfV37397nkznU=";
+    version = "2025.1.1.12"; # "Android Studio Narwhal | 2025.1.1 RC 2"
+    sha256Hash = "sha256-mqQM39PePFYWIgukzN3X4rTHPUcdrFTc/OC9w4t+wJM=";
   };
   latestVersion = {
-    version = "2025.1.2.7"; # "Android Studio Narwhal Feature Drop | 2025.1.2 Canary 7"
-    sha256Hash = "sha256-wNBBvdofV6kL/C+JQNPz90YXzRqWYjkYaJGB4HHH6L4=";
+    version = "2025.1.2.8"; # "Android Studio Narwhal Feature Drop | 2025.1.2 Canary 8"
+    sha256Hash = "sha256-p7sIraR5MbFqr2svD1GKR71I0U1UDMkmAW4PAHjWyD4=";
   };
 in
 {

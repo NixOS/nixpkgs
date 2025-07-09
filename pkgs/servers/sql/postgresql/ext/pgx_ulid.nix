@@ -7,14 +7,9 @@
   postgresql,
   util-linux,
 }:
-let
-  buildPgrxExtension' = buildPgrxExtension.override {
-    # Upstream only works with a fixed minor version of cargo-pgrx for each release.
-    cargo-pgrx = cargo-pgrx_0_12_6;
-  };
-in
-buildPgrxExtension' (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "pgx_ulid";
   version = "0.2.0";
