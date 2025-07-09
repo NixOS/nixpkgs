@@ -2,29 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   latexcodec,
   pyyaml,
-  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "0.24.0";
-  format = "setuptools";
   pname = "pybtex";
-
-  doCheck = false;
-  pythonImportsCheck = [ "pybtex" ];
-
-  propagatedBuildInputs = [
-    latexcodec
-    pyyaml
-    setuptools
-  ];
+  version = "0.24.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
     sha256 = "818eae35b61733e5c007c3fcd2cfb75ed1bc8b4173c1f70b56cc4c0802d34755";
   };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    latexcodec
+    pyyaml
+  ];
+
+  pythonImportsCheck = [ "pybtex" ];
+
+  doCheck = false;
 
   meta = {
     homepage = "https://pybtex.org/";
