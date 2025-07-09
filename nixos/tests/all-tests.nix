@@ -649,10 +649,22 @@ in
   harmonia = runTest ./harmonia.nix;
   headscale = runTest ./headscale.nix;
   healthchecks = runTest ./web-apps/healthchecks.nix;
-  hbase2 = handleTest ./hbase.nix { package = pkgs.hbase2; };
-  hbase_2_5 = handleTest ./hbase.nix { package = pkgs.hbase_2_5; };
-  hbase_2_4 = handleTest ./hbase.nix { package = pkgs.hbase_2_4; };
-  hbase3 = handleTest ./hbase.nix { package = pkgs.hbase3; };
+  hbase2 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase2;
+  };
+  hbase_2_5 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase_2_5;
+  };
+  hbase_2_4 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase_2_4;
+  };
+  hbase3 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase3;
+  };
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
   homebox = runTest ./homebox.nix;
