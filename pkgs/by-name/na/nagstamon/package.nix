@@ -61,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       pSub
       liberodark
+      videl
     ];
     mainProgram = "nagstamon.py";
     # NameError: name 'bdist_rpm_options' is not defined. Did you mean: 'bdist_mac_options'?
