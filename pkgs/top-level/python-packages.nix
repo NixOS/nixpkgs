@@ -7875,6 +7875,8 @@ self: super: with self; {
 
   lazr-uri = callPackage ../development/python-modules/lazr-uri { };
 
+  lazrs = callPackage ../development/python-modules/lazrs { };
+
   lazy = callPackage ../development/python-modules/lazy { };
 
   lazy-imports = callPackage ../development/python-modules/lazy-imports { };
