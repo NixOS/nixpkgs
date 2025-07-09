@@ -1,0 +1,32 @@
+diff --git a/Gemfile b/Gemfile
+index 1e37a548..05cc7f9d 100644
+--- a/Gemfile
++++ b/Gemfile
+@@ -24,6 +24,7 @@ gem 'jwt', '~> 2.8'
+ gem 'kaminari'
+ gem 'lograge'
+ gem 'oj'
++gem 'openssl'
+ gem 'parallel'
+ gem 'pg'
+ gem 'prometheus_exporter'
+diff --git a/Gemfile.lock b/Gemfile.lock
+index e4ebfb9f..c0236241 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -282,6 +282,7 @@ GEM
+     oj (3.16.11)
+       bigdecimal (>= 3.0)
+       ostruct (>= 0.2)
++    openssl (3.3.1)
+     optimist (3.2.1)
+     orm_adapter (0.5.0)
+     ostruct (0.6.1)
+@@ -567,6 +568,7 @@ DEPENDENCIES
+   kaminari
+   lograge
+   oj
++  openssl
+   parallel
+   pg
+   prometheus_exporter

@@ -1,0 +1,11 @@
+diff --git a/app/controllers/concerns/utm_trackable.rb b/app/controllers/concerns/utm_trackable.rb
+index 88ea41fb..a0d5502b 100644
+--- a/app/controllers/concerns/utm_trackable.rb
++++ b/app/controllers/concerns/utm_trackable.rb
+@@ -1,5 +1,6 @@
+ # frozen_string_literal: true
+ 
++module UtmTrackable
+   extend ActiveSupport::Concern
+ 
+   UTM_PARAMS = %w[utm_source utm_medium utm_campaign utm_term utm_content].freeze
