@@ -1474,6 +1474,7 @@
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
   ./services/system/nix-daemon.nix
+  ./services/system/nohang.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
