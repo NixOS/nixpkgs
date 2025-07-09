@@ -2,7 +2,7 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   meson-python,
@@ -30,10 +30,11 @@ buildPythonPackage rec {
   version = "1.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "scikit_learn";
-    inherit version;
-    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn";
+    repo = "scikit-learn";
+    tag = version;
+    hash = "sha256-jZaeev69C3whBUMnGJ91jkJt3Zsh37kdKEYe27kwJp4=";
   };
 
   postPatch = ''
