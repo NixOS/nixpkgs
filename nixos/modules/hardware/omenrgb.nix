@@ -22,17 +22,11 @@ in
 
     services.udev.packages = [ cfg.package ];
 
-    environment = {
-      systemPackages = [
-        cfg.package
-        pkgs.gtk3
-      ];
+    environment.systemPackages = [
+      cfg.package
+      pkgs.gtk3
+    ];
 
-      variables = {
-        GSETTINGS_SCHEMA_DIR = "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}/glib-2.0/schemas";
-      };
-
-    };
   };
 
   meta.maintainers = pkgs.omenrgb.meta.maintainers;

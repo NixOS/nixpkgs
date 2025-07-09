@@ -5,6 +5,7 @@
   gcc,
   wxGTK32,
   coreutils,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation {
@@ -22,6 +23,10 @@ stdenv.mkDerivation {
     substituteInPlace ./backlight.rules \
       --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
   '';
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     gcc
