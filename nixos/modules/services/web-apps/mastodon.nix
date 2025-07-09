@@ -58,6 +58,9 @@ let
     }
     // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
     // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
+    // lib.optionalAttrs (cfg.experimentalFeatures != [ ]) {
+      EXPERIMENTAL_FEATURES = lib.concatStringsSep "," cfg.experimentalFeatures;
+    }
     // cfg.extraConfig;
 
   systemCallsList = [
@@ -765,6 +768,19 @@ in
             How old remote media needs to be in order to be removed.
           '';
         };
+      };
+
+      experimentalFeatures = lib.mkOption {
+        description = ''
+          Allows selectively enabling experimental features behind a flag.
+        '';
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = [
+          "fasp"
+          "http_message_signatures"
+          "modern_emojis"
+        ];
       };
     };
   };
