@@ -2,6 +2,7 @@
   lts ? false,
   version,
   hash,
+  nixUpdateExtraArgs ? [ ],
 }:
 
 {
@@ -23,6 +24,7 @@
   rustc,
   cargo,
   rustPlatform,
+  nix-update-script,
 }:
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
@@ -156,7 +158,13 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.tests.clickhouse = nixosTests.clickhouse;
+  passthru = {
+    tests.clickhouse = nixosTests.clickhouse;
+
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://clickhouse.com";
