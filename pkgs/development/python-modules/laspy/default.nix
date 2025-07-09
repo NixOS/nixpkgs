@@ -4,6 +4,7 @@
   fetchPypi,
   numpy,
   laszip,
+  lazrs,
   setuptools,
   pytestCheckHook,
   pythonOlder,
@@ -26,13 +27,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     laszip
+    lazrs # much faster laz reading, see https://laspy.readthedocs.io/en/latest/installation.html#laz-support
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "laspy"
+    # `laspy` supports multiple backends and detects them dynamically.
+    # We check their importability to make sure they are all working.
     "laszip"
+    "lazrs"
   ];
 
   meta = with lib; {
