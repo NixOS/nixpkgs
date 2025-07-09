@@ -1798,6 +1798,10 @@ let
 
         rebez = callPackage ../development/ocaml-modules/rebez { };
 
+        redis = callPackage ../development/ocaml-modules/redis/default.nix { };
+
+        redis-lwt = callPackage ../development/ocaml-modules/redis/lwt.nix { };
+
         reperf = callPackage ../development/ocaml-modules/reperf { };
 
         repr = callPackage ../development/ocaml-modules/repr { };
