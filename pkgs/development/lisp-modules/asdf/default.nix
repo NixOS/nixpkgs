@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "3.3.4";
 
   src = fetchurl {
-    url = "http://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
+    url = "https://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
     sha256 = "sha256-/k7cmN0ymZUgpP4K+IWfhq85TkzfPjTR4QdUgV9n1x4=";
   };
 

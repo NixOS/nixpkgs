@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
   version = "4.0a168";
 
   src = fetchurl {
-    url = "http://phylosolutions.com/paup-test/paup4a168_centos64.gz";
+    url = "https://phylosolutions.com/paup-test/paup4a168_centos64.gz";
     hash = "sha256-41dZswlrIQ05f1zJzId78DKmPf0QH1SfrexzvCAUxq8=";
   };
 

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://www.ffado.org/files/libffado-${version}.tgz";
+    url = "https://www.ffado.org/files/libffado-${version}.tgz";
     hash = "sha256-xELFL60Ryv1VE7tOhGyFHxAchIT4karFRe0ZDo/U0Q8=";
   };
 

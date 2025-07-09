@@ -279,7 +279,7 @@ let
     version = "138.0.7204.93";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/k3cs4pgesvh4zq3jml7x52esia_138.0.7204.93/GoogleChrome-138.0.7204.93.dmg";
+      url = "https://dl.google.com/release2/chrome/k3cs4pgesvh4zq3jml7x52esia_138.0.7204.93/GoogleChrome-138.0.7204.93.dmg";
       hash = "sha256-IEcwjrtNMMSjwNCrINjXRbnSI0Uf2JKtA+KwvQc5Fhc=";
     };
 

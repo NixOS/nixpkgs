@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "0.09";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${version}.tar.gz";
+    url = "https://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${version}.tar.gz";
     hash = "sha256-MXa1CY6alD83E/Q+MJmsv8NaImWd0pPJKZd/7nbe4J8=";
   };
 

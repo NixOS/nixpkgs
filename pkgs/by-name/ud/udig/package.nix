@@ -14,11 +14,11 @@ let
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "http://udig.refractions.net/files/downloads/udig-${version}.linux.gtk.x86_64.zip";
+      url = "https://udig.refractions.net/files/downloads/udig-${version}.linux.gtk.x86_64.zip";
       hash = "sha256-ijuSWq1jSsB8K653bjcUdNwVGZscDaTuegBr01oNEg4=";
     };
     x86_64-darwin = fetchurl {
-      url = "http://udig.refractions.net/files/downloads/udig-${version}.macosx.cocoa.x86_64.zip";
+      url = "https://udig.refractions.net/files/downloads/udig-${version}.macosx.cocoa.x86_64.zip";
       hash = "sha256-Ihk3InHB3/tEYRqH2ozhokz2GN8Gfig5DJkO/8P1LJs=";
     };
   };

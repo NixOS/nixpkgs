@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "2.06.11";
 
   src = fetchurl {
-    url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC-${version}.tar.gz";
+    url = "https://hepmc.web.cern.ch/hepmc/releases/HepMC-${version}.tar.gz";
     sha256 = "1pp89bs05nv60wjk1690ndwh4dsd5mk20bzsd4a2lklysdifvb6f";
   };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "http://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
+    url = "https://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
     hash = "sha256-A7hT2vnyQm/RjUENM76C7zofCcFQ0spNIhRiTU5jiLw=";
   };
 

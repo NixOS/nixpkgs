@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${version}.tar.gz";
+    url = "https://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-${version}.tar.gz";
     sha256 = "sha256-ln/vNy85HeUBhDrYdXDGz12r2WUfAPF4MJD7wSsqNMs=";
   };
 

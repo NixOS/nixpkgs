@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
 
   src = fetchurl {
-    url = "http://benediktmeurer.de/files/source/${pname}-${version}.tar.bz2";
+    url = "https://benediktmeurer.de/files/source/${pname}-${version}.tar.bz2";
     sha256 = "0dyvy0j6f47laxhnadvm71z1py9hz9zd49hamf6bij99cggb2ij1";
   };
 

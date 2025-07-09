@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.4";
 
   src = fetchurl {
-    url = "http://mirrors.ctan.org/web/tie/${pname}-${version}.tar.gz";
+    url = "https://mirrors.ctan.org/web/tie/${pname}-${version}.tar.gz";
     sha256 = "1m5952kdfffiz33p1jw0wv7dh272mmw28mpxw9v7lkb352zv4xsj";
   };
 

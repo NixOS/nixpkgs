@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "2.22";
 
   src = fetchurl {
-    url = "http://www.dhondt.de/ccx_${version}.src.tar.bz2";
+    url = "https://www.dhondt.de/ccx_${version}.src.tar.bz2";
     hash = "sha256-OpTcx3WjH1cCKXNLNB1rBjAevcdZhj35Aci5vxhUwLw=";
   };
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "iml";
   version = "1.0.5";
   src = fetchurl {
-    url = "http://www.cs.uwaterloo.ca/~astorjoh/iml-${version}.tar.bz2";
+    url = "https://www.cs.uwaterloo.ca/~astorjoh/iml-${version}.tar.bz2";
     sha256 = "0akwhhz9b40bz6lrfxpamp7r7wkk48p455qbn04mfnl9a1l6db8x";
   };
   buildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.6.2";
 
   src = fetchurl {
-    url = "http://home.math.au.dk/jensen/software/gfan/gfan${version}.tar.gz";
+    url = "https://home.math.au.dk/jensen/software/gfan/gfan${version}.tar.gz";
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 

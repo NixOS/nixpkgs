@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "opusfile";
   version = "0.12";
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/opus/opusfile-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/opus/opusfile-${version}.tar.gz";
     sha256 = "02smwc5ah8nb3a67mnkjzqmrzk43j356hgj2a97s9midq40qd38i";
   };
 
