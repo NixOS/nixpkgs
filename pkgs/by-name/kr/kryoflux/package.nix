@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tar -C $out -xf dtc/${stdenv.hostPlatform.linuxArch}/kryoflux-dtc*.tar.gz \
       --strip-components=1 \
       --wildcards '*/bin/*' '*/lib/*' '*/share/*'
+
     runHook postInstall
   '';
   meta = {
