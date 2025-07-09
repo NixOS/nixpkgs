@@ -118,7 +118,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/perses/perses/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fooker ];
-    platforms = lib.platforms.unix;
     mainProgram = "perses";
   };
 })
