@@ -1511,7 +1511,7 @@ in
   velocity = runTest ./velocity.nix;
   vengi-tools = runTest ./vengi-tools.nix;
   victorialogs = runTest ./victorialogs.nix;
-  victoriametrics = handleTest ./victoriametrics { };
+  victoriametrics = import ./victoriametrics { inherit runTest; };
   vikunja = runTest ./vikunja.nix;
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
