@@ -1280,6 +1280,8 @@ let
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
+          gnosis = mkHome super.gnosis;
+
           go = ignoreCompilationError super.go; # elisp error
 
           graphene = ignoreCompilationError super.graphene; # elisp error
