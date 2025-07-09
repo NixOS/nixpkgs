@@ -5,29 +5,28 @@
   fetchPypi,
 
   # build-system
+  meson-python,
+
+  # nativeBuildInputs
   cython,
   gfortran,
-  meson-python,
   numpy,
   scipy,
 
-  # native dependencies
+  # dependencies
   glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
-  pillow,
   joblib,
+  llvmPackages,
+  pillow,
+  pytest-xdist,
+  pytestCheckHook,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "scikit_learn";
@@ -41,22 +40,19 @@ buildPythonPackage rec {
       "'${version}',"
   '';
 
-  buildInputs = [
-    numpy.blas
-    pillow
-    glibcLocales
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  build-system = [
+    meson-python
+  ];
 
   nativeBuildInputs = [
-    gfortran
-  ];
-
-  build-system = [
     cython
-    meson-python
+    gfortran
+    glibcLocales
     numpy
+    numpy.blas
+    pillow
     scipy
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [
     joblib
@@ -93,8 +89,6 @@ buildPythonPackage rec {
     ];
 
   pytestFlagsArray = [
-    # verbose build outputs needed to debug hard-to-reproduce hydra failures
-    "-v"
     "--pyargs"
     "sklearn"
 
@@ -115,17 +109,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
-        major = versions.major version;
-        minor = versions.minor version;
-        dashVer = replaceStrings [ "." ] [ "-" ] version;
+        major = lib.versions.major version;
+        minor = lib.versions.minor version;
+        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
       in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ davhau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ davhau ];
   };
 }
