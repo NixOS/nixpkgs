@@ -50,7 +50,7 @@ buildGoModule rec {
     changelog = "https://github.com/Jacalz/rymdport/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "rymdport";
   };
 }
