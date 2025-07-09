@@ -40,7 +40,10 @@ let
 in
 {
   name = "clickhouse-s3";
-  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
+  meta.maintainers = with pkgs.lib.maintainers; [
+    jpds
+    thevar1able
+  ];
 
   nodes = {
     clickhouse = {
