@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mbake";
-  version = "1.2.4";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbodShojaei";
     repo = "bake";
     tag = "v${version}";
-    hash = "sha256-RzM3HC3lYq93mngpqNCohcPMISWQ4+Lwa1V88S0O0To=";
+    hash = "sha256-gQsie4/iUIe4g6ZH8bL33xW6CNxSg/sh429P4Xv0GjQ=";
   };
 
   build-system = [
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   ];
   versionCheckProgramArg = "--version";
 
-  pythonImportsCheck = [ "bake" ];
+  pythonImportsCheck = [ "mbake" ];
 
   meta = {
     description = "Makefile formatter and linter";
