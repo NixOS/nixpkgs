@@ -27,20 +27,22 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-learn";
     repo = "scikit-learn";
     tag = version;
-    hash = "sha256-jZaeev69C3whBUMnGJ91jkJt3Zsh37kdKEYe27kwJp4=";
+    hash = "sha256-U5c79YeCK8tbKgWY2fWQE0BMjTcwn4kJO3QyQY3wOlI=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"numpy>=2,<2.3.0\"," "\"numpy>=2,<2.4.0\","
   '';
 
   build-system = [
@@ -79,11 +81,13 @@ buildPythonPackage rec {
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
 
-    # Fail due to new deprecation warnings in scipy
-    # FIXME: reenable when fixed upstream
-    "test_logistic_regression_path_convergence_fail"
-    "test_linalg_warning_with_newton_solver"
-    "test_newton_cholesky_fallback_to_lbfgs"
+  disabledTestPaths = [
+    "tests/test_build.py::test_openmp_parallelism_enabled"
+  ];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "sklearn"
 
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
@@ -123,6 +127,9 @@ buildPythonPackage rec {
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
