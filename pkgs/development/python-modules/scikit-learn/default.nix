@@ -112,6 +112,9 @@ buildPythonPackage rec {
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
