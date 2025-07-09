@@ -1,5 +1,6 @@
 {
   lib,
+  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.51.0";
+  version = "0.52.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "datadogpy";
     tag = "v${version}";
-    hash = "sha256-DIuKawqOzth8XYF+M3fYm2kMeo3UbfS34/Qa4Y9V1h8=";
+    hash = "sha256-CmSUbqctElk9sCyQAL+SKqJBpT1vlpmp6mEX6HWN8Po=";
   };
 
   build-system = [ hatchling ];
@@ -65,10 +66,17 @@ buildPythonPackage rec {
       "test_timed"
       "test_timed_in_ms"
       "test_timed_start_stop_calls"
+
+      # OSError: AF_UNIX path too long
+      "test_socket_connection"
     ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/DataDog/datadogpy/issues/880
       "test_timed_coroutine"
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted
+      "test_dedicated_uds_telemetry_dest"
     ];
 
   pythonImportsCheck = [ "datadog" ];
@@ -76,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
-    changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/datadogpy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sarahec ];
   };
