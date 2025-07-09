@@ -1555,7 +1555,10 @@ in
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
   yarr = runTest ./yarr.nix;
-  ydotool = handleTest ./ydotool.nix { };
+  ydotool = import ./ydotool.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
