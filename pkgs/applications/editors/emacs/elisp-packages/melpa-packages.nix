@@ -1277,6 +1277,9 @@ let
           # https://github.com/nlamirault/emacs-gitlab/issues/68
           gitlab = addPackageRequires super.gitlab [ self.f ];
 
+          # https://github.com/TxGVNN/gitlab-pipeline/issues/8
+          gitlab-pipeline = addPackageRequires super.gitlab-pipeline [ self.glab ];
+
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
