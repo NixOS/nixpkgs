@@ -170,6 +170,7 @@ makeScopeWithSplicing' {
         xcode_16_1
         xcode_16_2
         xcode_16_3
+        xcode_16_4
         xcode
         requireXcode
         ;
