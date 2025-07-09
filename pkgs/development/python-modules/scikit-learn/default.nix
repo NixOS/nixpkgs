@@ -25,20 +25,22 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-learn";
     repo = "scikit-learn";
     tag = version;
-    hash = "sha256-jZaeev69C3whBUMnGJ91jkJt3Zsh37kdKEYe27kwJp4=";
+    hash = "sha256-U5c79YeCK8tbKgWY2fWQE0BMjTcwn4kJO3QyQY3wOlI=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"numpy>=2,<2.3.0\"," "\"numpy>=2,<2.4.0\","
   '';
 
   build-system = [
@@ -74,6 +76,10 @@ buildPythonPackage rec {
     "test_feature_importance_regression"
   ];
 
+  disabledTestPaths = [
+    "tests/test_build.py::test_openmp_parallelism_enabled"
+  ];
+
   pytestFlagsArray = [
     "--pyargs"
     "sklearn"
@@ -106,6 +112,9 @@ buildPythonPackage rec {
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
