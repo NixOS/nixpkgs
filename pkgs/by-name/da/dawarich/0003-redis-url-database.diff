@@ -1,0 +1,13 @@
+diff --git a/config/initializers/sidekiq.rb b/config/initializers/sidekiq.rb
+index 36994f83..eab639c2 100644
+--- a/config/initializers/sidekiq.rb
++++ b/config/initializers/sidekiq.rb
+@@ -24,7 +24,7 @@
+ end
+ 
+ Sidekiq.configure_client do |config|
+-  config.redis = { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_JOB_QUEUE_DB', 1)}" }
++  config.redis = { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_JOB_QUEUE_DB', 1) }
+ end
+ 
+ Sidekiq::Queue['reverse_geocoding'].limit = 1 if Sidekiq.server? && DawarichSettings.photon_uses_komoot_io?
