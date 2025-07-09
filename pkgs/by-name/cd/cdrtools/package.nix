@@ -7,16 +7,17 @@
   libcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdrtools";
   version = "3.02a09";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdrtools/${pname}-${version}.tar.bz2";
-    sha256 = "10ayj48jax2pvsv6j5gybwfsx7b74zdjj84znwag7wwf8n7l6a5a";
+    url = "mirror://sourceforge/cdrtools/cdrtools-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-qihDj0WO8/MUt58gKdsnZ52uHV/+FWm23ld0JRGRXoE=";
   };
 
   nativeBuildInputs = [ m4 ];
+
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     acl
     libcap
@@ -57,19 +58,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cdrtools.sourceforge.net/private/cdrecord.html";
     description = "Highly portable CD/DVD/BluRay command line recording software";
-    license = with licenses; [
+    license = with lib.licenses; [
       cddl
       gpl2Plus
-      lgpl21
+      lgpl21Plus
     ];
-    maintainers = with maintainers; [ wegank ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = with lib.platforms; linux ++ darwin;
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this
     # package in binary form.
     hydraPlatforms = [ ];
   };
-}
+})
