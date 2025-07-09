@@ -8,9 +8,13 @@
   buildNpmPackage,
 
   ## Needed for Executing package.json scripts
-  nodejs_22,
-  python3,
-  electron_36,
+  # nodejs_22,
+  # node-gyp,
+  # python3,
+  # electron_36,
+
+  # https://nixos.org/manual/nixpkgs/stable/#validatepkgconfig
+  validatePkgConfig,
 
   ## Needed for Compiling the native modules
   pkg-config,
@@ -20,7 +24,7 @@
 }:
 
 let
-  nodejs = nodejs_22;
+  # nodejs = nodejs_22;
 
   nodeHeaders = fetchurl {
     # url = "https://www.electronjs.org/headers/v30.1.2/node-v30.1.2-headers.tar.gz";
@@ -60,19 +64,34 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "build:electron";
 
+  # preBuild =
+  #   # preBuild
+  #   ''
+  #     # Fix for:  gyp: buildcheck.gypi not found
+  #     pushd ./node_modules/cpu-features
+  #     node buildcheck.js > buildcheck.gypi
+  #     popd
+  #   '';
+
   nativeBuildInputs = [
     ## Needed for Executing package.json scripts
     # nodejs
     # (python3.withPackages (ps: [ ps.distutils ]))
 
     # finalAttrs.node-gyp
-    node-gyp
+    # node-gyp
+    validatePkgConfig
 
     ## Needed for Compiling the native modules
     pkg-config
     libsecret
-    libxkbfile
-    libX11
+    libxkbfile.dev
+    libX11.dev
+  ];
+
+  buildInput = [
+    libX11.dev
+    libxkbfile.dev
   ];
 
   # [Long] Description summarised manually from following 3 pages:
