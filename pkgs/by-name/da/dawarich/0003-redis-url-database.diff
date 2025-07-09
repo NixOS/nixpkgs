@@ -1,0 +1,74 @@
+diff --git a/config/cable.yml b/config/cable.yml
+index 08d639f8..70bd078e 100644
+--- a/config/cable.yml
++++ b/config/cable.yml
+@@ -1,6 +1,7 @@
+ default: &default
+   adapter: redis
+-  url: <%= "#{ENV.fetch("REDIS_URL", "redis://localhost:6379")}/#{ENV.fetch('RAILS_WS_DB', 2)}" %>
++  url: <%= "#{ENV.fetch("REDIS_URL", "redis://localhost:6379")}" %>
++  db: <%= "#{ENV.fetch('RAILS_WS_DB', 2)}" %>
+ 
+ development:
+   <<: *default
+diff --git a/config/environments/development.rb b/config/environments/development.rb
+index 4b5e99bf..b01a091f 100644
+--- a/config/environments/development.rb
++++ b/config/environments/development.rb
+@@ -26,7 +26,7 @@
+ 
+   # Enable/disable caching. By default caching is disabled.
+   # Run rails dev:cache to toggle caching.
+-  config.cache_store = :redis_cache_store, { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}" }
++  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0) }
+ 
+   if Rails.root.join('tmp/caching-dev.txt').exist?
+     config.action_controller.perform_caching = true
+diff --git a/config/environments/production.rb b/config/environments/production.rb
+index 146ec651..9726ab33 100644
+--- a/config/environments/production.rb
++++ b/config/environments/production.rb
+@@ -73,7 +73,7 @@
+   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
+ 
+   # Use a different cache store in production.
+-  config.cache_store = :redis_cache_store, { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}" }
++  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0) }
+ 
+   # Use a real queuing backend for Active Job (and separate queues per environment).
+   config.active_job.queue_adapter = :sidekiq
+diff --git a/config/initializers/geocoder.rb b/config/initializers/geocoder.rb
+index 13a8bbdd..c7238e7a 100644
+--- a/config/initializers/geocoder.rb
++++ b/config/initializers/geocoder.rb
+@@ -4,7 +4,7 @@
+   debug_mode: true,
+   timeout: 5,
+   units: :km,
+-  cache: Redis.new(url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_CACHE_DB', 0)}"),
++  cache: Redis.new(url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_CACHE_DB', 0)),
+   always_raise: :all,
+   http_headers: {
+     'User-Agent' => "Dawarich #{APP_VERSION} (https://dawarich.app)"
+diff --git a/config/initializers/sidekiq.rb b/config/initializers/sidekiq.rb
+index 323655e3..eab639c2 100644
+--- a/config/initializers/sidekiq.rb
++++ b/config/initializers/sidekiq.rb
+@@ -1,7 +1,7 @@
+ # frozen_string_literal: true
+ 
+ Sidekiq.configure_server do |config|
+-  config.redis = { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_JOB_QUEUE_DB', 1)}" }
++  config.redis = { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_JOB_QUEUE_DB', 1) }
+   config.logger = Sidekiq::Logger.new($stdout)
+ 
+   if ENV['PROMETHEUS_EXPORTER_ENABLED'].to_s == 'true'
+@@ -24,7 +24,7 @@
+ end
+ 
+ Sidekiq.configure_client do |config|
+-  config.redis = { url: "#{ENV['REDIS_URL']}/#{ENV.fetch('RAILS_JOB_QUEUE_DB', 1)}" }
++  config.redis = { url: ENV['REDIS_URL'], db: ENV.fetch('RAILS_JOB_QUEUE_DB', 1) }
+ end
+ 
+ Sidekiq::Queue['reverse_geocoding'].limit = 1 if Sidekiq.server? && DawarichSettings.photon_uses_komoot_io?
