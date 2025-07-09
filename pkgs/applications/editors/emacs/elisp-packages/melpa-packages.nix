@@ -1274,6 +1274,9 @@ let
 
           gh-notify = buildWithGit super.gh-notify;
 
+          # https://gitlab.com/emacs-stuff/git-commit-insert-issue/-/issues/24
+          git-commit-insert-issue = addPackageRequires super.git-commit-insert-issue [ self.glab ];
+
           # https://github.com/nlamirault/emacs-gitlab/issues/68
           gitlab = addPackageRequires super.gitlab [ self.f ];
 
