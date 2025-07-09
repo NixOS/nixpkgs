@@ -905,7 +905,7 @@ in
   music-assistant = runTest ./music-assistant.nix;
   munin = runTest ./munin.nix;
   mutableUsers = runTest ./mutable-users.nix;
-  mycelium = handleTest ./mycelium { };
+  mycelium = runTest ./mycelium;
   mympd = runTest ./mympd.nix;
   mysql = handleTest ./mysql/mysql.nix { };
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix { };
