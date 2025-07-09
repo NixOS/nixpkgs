@@ -1,6 +1,8 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
+  installShellFiles,
   python3Packages,
   versionCheckHook,
 }:
@@ -18,6 +20,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   build-system = [
+    installShellFiles
     python3Packages.hatchling
   ];
 
@@ -25,6 +28,13 @@ python3Packages.buildPythonApplication rec {
     rich
     typer
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mbake \
+      --bash <($out/bin/mbake completions bash) \
+      --fish <($out/bin/mbake completions fish) \
+      --zsh <($out/bin/mbake completions zsh)
+  '';
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
