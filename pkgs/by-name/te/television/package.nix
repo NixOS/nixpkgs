@@ -8,16 +8,22 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";
-  version = "0.11.9";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
     tag = finalAttrs.version;
-    hash = "sha256-9ug3MFBAvdOpA7Cw5eqCjS2gWK0InqlfUAOItE0o40s=";
+    hash = "sha256-J4z0QKw4P2auIbp6SU+XsA/hCJJCN5WUIVwZJAICSrs=";
   };
 
-  cargoHash = "sha256-n417hrDLpBD7LhtHfqHPgr9N+gkdC9nw+iDnNRcTqQQ=";
+  postPatch = ''
+    substituteInPlace tests/common/mod.rs --replace-fail './target/debug/tv' '${rustPlatform.cargoInstallHook.targetSubdirectory}/tv'
+  '';
+
+  cargoHash = "sha256-ASJ3QXe4AqEtTdezwWvWvTIdKazQv+1Hr9gcjG6HcsE=";
+
+  checkType = "debug";
 
   passthru = {
     tests.version = testers.testVersion {
