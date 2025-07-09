@@ -110,6 +110,23 @@
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
 
+            # Ensure consistent permissions
+            # NOTE: For reasons not yet fully understood, pnpm might create files with
+            # inconsistent permissions, for example inside the ubuntu-24.04
+            # github actions runner.
+            # To ensure stable derivations, we need to set permissions
+            # consistently, namely:
+            # * All files with `-exec` suffix have 555.
+            # * All other files have 444.
+            # * All folders have 555.
+            # See https://github.com/NixOS/nixpkgs/pull/350063
+            # See https://github.com/NixOS/nixpkgs/issues/422889
+            if [[ ${toString fetcherVersion} -ge 2 ]]; then
+              find $out -type f -name "*-exec" -print0 | xargs -0 chmod 555
+              find $out -type f -not -name "*-exec" -print0 | xargs -0 chmod 444
+              find $out -type d -print0 | xargs -0 chmod 555
+            fi
+
             runHook postFixup
           '';
 
