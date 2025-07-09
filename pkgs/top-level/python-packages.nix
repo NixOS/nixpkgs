@@ -19286,6 +19286,8 @@ self: super: with self; {
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
+  validate-pyproject = callPackage ../development/python-modules/validate-pyproject { };
+
   validator-collection = callPackage ../development/python-modules/validator-collection { };
 
   validators = callPackage ../development/python-modules/validators { };
