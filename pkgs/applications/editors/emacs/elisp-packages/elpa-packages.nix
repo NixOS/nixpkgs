@@ -58,14 +58,16 @@ let
       commonOverrides = import ./elpa-common-overrides.nix pkgs lib buildPackages;
 
       overrides = self: super: {
+        # keep-sorted start block=yes newline_separated=yes
         # upstream issue: Wrong type argument: arrayp, nil
         org-transclusion =
           if super.org-transclusion.version == "1.2.0" then
             markBroken super.org-transclusion
           else
             super.org-transclusion;
-        rcirc-menu = markBroken super.rcirc-menu; # Missing file header
 
+        rcirc-menu = markBroken super.rcirc-menu; # Missing file header
+        # keep-sorted end
       };
 
       elpaPackages =

@@ -41,7 +41,10 @@ let
 
       commonOverrides = import ./nongnu-common-overrides.nix pkgs lib;
 
-      overrides = self: super: { };
+      overrides = self: super: {
+        # keep-sorted start block=yes newline_separated=yes
+        # keep-sorted end
+      };
 
     in
     let
