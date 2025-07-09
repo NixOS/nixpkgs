@@ -36,16 +36,17 @@ let
     in
 
     stdenv.mkDerivation (
-      rec {
+      finalAttrs:
+      {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.12.1";
+        version = "2.12.4";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
-          tag = "lts-v${version}";
-          hash = "sha256-yPWygW1swSwL3DrHPNIlTeTeV7XG4C9ALFA/+OTiz+4=";
+          tag = "lts-v${finalAttrs.version}";
+          hash = "sha256-MUYwydA9/6IcGtgfTujJc28Sz8n513R2vlsfy5erQnw=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [
