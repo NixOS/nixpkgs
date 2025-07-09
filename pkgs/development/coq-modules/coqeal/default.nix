@@ -30,7 +30,7 @@ let
       lib.switch
         [ coq.coq-version mathcomp.version ]
         [
-          (case (range "8.20" "9.0") (isGe "2.3.0") "2.1.0")
+          (case (range "8.20" "9.1") (isGe "2.3.0") "2.1.0")
           (case (range "8.16" "8.20") (isGe "2.1.0") "2.0.3")
           (case (range "8.16" "8.20") (isGe "2.0.0") "2.0.1")
           (case (range "8.16" "8.17") (isGe "2.0.0") "2.0.0")
