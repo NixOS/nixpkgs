@@ -6,6 +6,7 @@
   installShellFiles,
   runCommand,
   yq-go,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,11 +31,14 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/yq shell-completion zsh)
   '';
 
-  passthru.tests = {
-    simple = runCommand "${finalAttrs.pname}-test" { } ''
-      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
-      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
-    '';
+  passthru = {
+    tests = {
+      simple = runCommand "${finalAttrs.pname}-test" { } ''
+        echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+        [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+      '';
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
