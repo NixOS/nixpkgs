@@ -24966,6 +24966,12 @@
     githubId = 5404976;
     name = "Tyler Hardin";
   };
+  thattemperature = {
+    name = "That Temperature";
+    email = "2719023332@qq.com";
+    github = "thattemperature";
+    githubId = 125476238;
+  };
   thblt = {
     name = "Thibault Polge";
     email = "thibault@thb.lt";
