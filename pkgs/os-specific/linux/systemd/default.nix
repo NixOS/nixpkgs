@@ -558,6 +558,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "libiptc" withIptables)
       (lib.mesonEnable "repart" withRepart)
       (lib.mesonEnable "sysupdate" withSysupdate)
+      (lib.mesonEnable "sysupdated" withSysupdate)
       (lib.mesonEnable "seccomp" withLibseccomp)
       (lib.mesonEnable "selinux" withSelinux)
       (lib.mesonEnable "tpm2" withTpm2Tss)
