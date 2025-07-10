@@ -178,6 +178,7 @@ lib.makeOverridable (
       (optionalAttrs isModular {
         outputs = [
           "out"
+          "modules"
           "dev"
         ];
       })
@@ -337,14 +338,26 @@ lib.makeOverridable (
           ++ extraMakeFlags;
 
         installFlags =
-          [
-            "INSTALL_PATH=$(out)"
-          ]
-          ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+          [ "INSTALL_PATH=${placeholder "out"}" ]
+          ++ optionals isModular [ "INSTALL_MOD_PATH=${placeholder "modules"}" ]
           ++ optionals buildDTBs [
             "dtbs_install"
-            "INSTALL_DTBS_PATH=$(out)/dtbs"
+            "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
           ];
+
+        # We have a derivation output named "modules", but the kernel build
+        # system consumes an environment variable named "modules", which
+        # means a different thing, so we unset our definition here and
+        # consume it later via __structuredAttrs.
+        preBuild = lib.optionalString isModular ''
+          unset modules
+        '';
+
+        # Some fixup hooks expect environment variables to be set for all
+        # outputs, so we undo what we did in preBuild.
+        preFixup = lib.optionalString isModular ''
+          modules=${placeholder "modules"}
+        '';
 
         preInstall =
           let
@@ -439,10 +452,11 @@ lib.makeOverridable (
           if [ -z "''${dontStrip-}" ]; then
             installFlagsArray+=("INSTALL_MOD_STRIP=1")
           fi
+
           make modules_install $makeFlags "''${makeFlagsArray[@]}" \
             $installFlags "''${installFlagsArray[@]}"
-          unlink $out/lib/modules/${modDirVersion}/build
-          rm -f $out/lib/modules/${modDirVersion}/source
+          unlink ${placeholder "modules"}/lib/modules/${modDirVersion}/build
+          rm -f ${placeholder "modules"}/lib/modules/${modDirVersion}/source
 
           mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
