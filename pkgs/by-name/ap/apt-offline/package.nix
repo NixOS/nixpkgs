@@ -18,10 +18,14 @@ let
   };
 in
 python3Packages.buildPythonApplication {
-  format = "setuptools";
+  format = "pyproject";
   inherit pname version src;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
