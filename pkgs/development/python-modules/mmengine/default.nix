@@ -9,6 +9,7 @@
 
   # dependencies
   addict,
+  distutils,
   matplotlib,
   numpy,
   opencv4,
@@ -67,17 +68,13 @@ buildPythonPackage rec {
     + ''
       substituteInPlace tests/test_config/test_lazy.py \
         --replace-fail "import numpy.compat" ""
-
-      substituteInPlace mmengine/utils/dl_utils/collect_env.py \
-        --replace-fail \
-          "from distutils" \
-          "from setuptools._distutils"
     '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     addict
+    distutils
     matplotlib
     numpy
     opencv4
