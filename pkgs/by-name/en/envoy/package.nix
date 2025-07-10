@@ -34,9 +34,9 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.34.0";
-    rev = "d7809ba2b07fd869d49bfb122b27f6a7977b4d94";
-    hash = "sha256-SKdUrBXe0E3fMo73NROFO9Ck5FZidF/awP+QRA5t3VM=";
+    version = "1.34.1";
+    rev = "c435eeccd4201f8d6a200922b166f5dcee08272b";
+    hash = "sha256-oK2GQK6RFGmefTet6F8zSVZE/mMUQTwhwsT6sR/aRHw=";
   };
 
   # these need to be updated for any changes to fetchAttrs
