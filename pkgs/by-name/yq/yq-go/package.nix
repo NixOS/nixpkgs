@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   runCommand,
-  yq-go,
   nix-update-script,
 }:
 
@@ -33,8 +32,8 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = {
-      simple = runCommand "${finalAttrs.pname}-test" { } ''
-        echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      simple = runCommand "yq-go-test" { } ''
+        echo "test: 1" | ${finalAttrs.finalPackage}/bin/yq eval -j > $out
         [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
       '';
     };
