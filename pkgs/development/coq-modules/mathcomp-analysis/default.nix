@@ -58,7 +58,7 @@ let
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (range "8.20" "9.0") (range "2.1.0" "2.4.0") "1.12.0")
+        (case (range "8.20" "9.1") (range "2.1.0" "2.4.0") "1.12.0")
         (case (range "8.19" "8.20") (range "2.1.0" "2.3.0") "1.9.0")
         (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "1.1.0")
         (case (range "8.17" "8.19") (range "1.17.0" "1.19.0") "0.7.0")

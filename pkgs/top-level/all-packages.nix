@@ -369,6 +369,8 @@ with pkgs;
 
   copilot-language-server-fhs = copilot-language-server.fhs;
 
+  cup-docker-noserver = cup-docker.override { withServer = false; };
+
   deck = callPackage ../by-name/de/deck/package.nix {
     buildGoModule = buildGo123Module;
   };
@@ -2484,8 +2486,6 @@ with pkgs;
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
   cdist = python3Packages.callPackage ../tools/admin/cdist { };
-
-  cdrtools = callPackage ../tools/cd-dvd/cdrtools { };
 
   cemu-ti = qt5.callPackage ../applications/science/math/cemu-ti { };
 
@@ -9827,6 +9827,11 @@ with pkgs;
     go = buildPackages.go_1_24;
   };
 
+  go_1_25 = callPackage ../development/compilers/go/1.25.nix { };
+  buildGo125Module = callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_25;
+  };
+
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
@@ -11978,6 +11983,7 @@ with pkgs;
     musical-spectrum = callPackage ../applications/audio/deadbeef/plugins/musical-spectrum.nix { };
     statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
     playlist-manager = callPackage ../applications/audio/deadbeef/plugins/playlist-manager.nix { };
+    waveform-seekbar = callPackage ../applications/audio/deadbeef/plugins/waveform-seekbar.nix { };
   };
 
   deadbeef-with-plugins = callPackage ../applications/audio/deadbeef/wrapper.nix {
@@ -15296,10 +15302,6 @@ with pkgs;
 
   hh-suite = callPackage ../applications/science/biology/hh-suite {
     inherit (llvmPackages) openmp;
-  };
-
-  kallisto = callPackage ../applications/science/biology/kallisto {
-    autoconf = buildPackages.autoconf269;
   };
 
   mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };

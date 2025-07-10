@@ -11,24 +11,15 @@
 let
   ocamlPackages = coq.ocamlPackages;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.18" "9.0";
-        out = "2.2.6";
-      }
-      {
-        case = range "8.18" "8.20";
-        out = "2.2.1";
-      }
-      {
-        case = range "8.18" "8.19";
-        out = "2.1.2";
-      }
-      {
-        case = isEq "8.18";
-        out = "2.0.3+coq8.18";
-      }
+      (case (range "8.18" "9.1") "2.2.6")
+      (case (range "8.18" "8.20") "2.2.1")
+      (case (range "8.18" "8.19") "2.1.2")
+      (case (isEq "8.18") "2.0.3+coq8.18")
     ] null;
   location = {
     domain = "github.com";

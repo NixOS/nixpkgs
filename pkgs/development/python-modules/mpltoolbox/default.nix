@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mpltoolbox";
-  version = "25.04.0";
+  version = "25.05.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "mpltoolbox";
     tag = version;
-    hash = "sha256-+LqPTlVbSxuewWuPNUfGdgQjWFxo7s2i3e21WkNNK78=";
+    hash = "sha256-XDfCzkn/Mr0Rca+Ku/mDSneqSfMHS9i/XUP8vVLSKMQ=";
   };
 
   build-system = [

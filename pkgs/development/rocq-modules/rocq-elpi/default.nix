@@ -15,8 +15,9 @@ let
       let
         case = case: out: { inherit case out; };
       in
+      with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case ("9.0") "2.0.7")
+        (case (range "9.0" "9.1") "2.0.7")
       ] { };
   elpi = rocq-core.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
@@ -32,9 +33,12 @@ let
       let
         case = case: out: { inherit case out; };
       in
+      with lib.versions;
       lib.switch rocq-core.rocq-version [
+        (case (range "9.0" "9.1") "2.6.0")
         (case ("9.0") "2.5.2")
       ] null;
+    release."2.6.0".sha256 = "sha256-23BHq1NFUkI3ayXnGUwiGFySLyY3EuH4RyMgAhQqI4g=";
     release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     releaseRev = v: "v${v}";
 

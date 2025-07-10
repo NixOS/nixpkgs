@@ -1,5 +1,7 @@
 {
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   mkCoqDerivation,
   lib,
@@ -52,5 +54,14 @@
         '';
       }
     else
-      { propagatedBuildInputs = [ rocqPackages.stdlib ]; }
+      let
+        case = case: out: { inherit case out; };
+        rp = lib.switch coq.coq-version [
+          (case "9.0" rocqPackages_9_0)
+          (case "9.1" rocqPackages_9_1)
+        ] rocqPackages;
+      in
+      {
+        propagatedBuildInputs = [ rp.stdlib ];
+      }
   )

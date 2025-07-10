@@ -22,7 +22,7 @@ in
 python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tobi-wan-kenobi";
@@ -40,10 +40,15 @@ python3.pkgs.buildPythonPackage {
     })
   ];
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   buildInputs = lib.concatMap (p: p.buildInputs or [ ]) selectedPlugins;
+
   propagatedBuildInputs = lib.concatMap (p: p.propagatedBuildInputs or [ ]) selectedPlugins;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     netifaces
     psutil

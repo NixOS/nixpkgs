@@ -446,8 +446,8 @@ rec {
       "sha256-uYeekAsfyETYQYWR3L8S+uzlp6EQpvYEWsqiX+60b/Y=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.39.3"
-      "sha256-6qP6021SWUQIswXTFaKE/HUHyFAlBXZO+OukAF3GM5A=";
+    buildMypyBoto3Package "ec2" "1.39.4"
+      "sha256-1pZtasWQFl6Z2OWohEmUrwihIVfGIVl0qvihh+n0C0c=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.39.0"
@@ -982,8 +982,8 @@ rec {
       "sha256-tDHqekgcelTHYZze0rvuHHMseiyZF7ZL9VY3LVvvA8I=";
 
   mypy-boto3-opsworkscm =
-    buildMypyBoto3Package "opsworkscm" "1.39.0"
-      "sha256-Q8Rpjv6omBDmVt+f1kSLkBaQAzVFLU4UqgsOsjnUYLE=";
+    buildMypyBoto3Package "opsworkscm" "1.39.4"
+      "sha256-agKU7FBT2mFP4OXgOG0Io5BdOnh3IDIngs7iPU8VLLs=";
 
   mypy-boto3-organizations =
     buildMypyBoto3Package "organizations" "1.39.0"

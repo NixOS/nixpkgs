@@ -17,7 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.0") "1.9.1")
+        (case (range "9.0" "9.1") "1.9.1")
       ] null;
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     releaseRev = v: "v${v}";

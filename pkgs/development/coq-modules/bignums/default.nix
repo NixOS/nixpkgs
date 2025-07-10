@@ -2,6 +2,8 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   stdlib,
   version ? null,
@@ -60,16 +62,25 @@
     # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
     lib.optionalAttrs
       (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      {
-        configurePhase = ''
-          echo no configuration
-        '';
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          echo installing nothing
-        '';
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.bignums ];
-      }
+      (
+        let
+          case = case: out: { inherit case out; };
+          rp = lib.switch coq.coq-version [
+            (case (lib.versions.isEq "9.0") rocqPackages_9_0)
+            (case (lib.versions.isEq "9.1") rocqPackages_9_1)
+          ] rocqPackages;
+        in
+        {
+          configurePhase = ''
+            echo no configuration
+          '';
+          buildPhase = ''
+            echo building nothing
+          '';
+          installPhase = ''
+            echo installing nothing
+          '';
+          propagatedBuildInputs = o.propagatedBuildInputs ++ [ rp.bignums ];
+        }
+      )
   )

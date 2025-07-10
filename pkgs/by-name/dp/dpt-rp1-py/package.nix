@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dpt-rp1-py";
   version = "0.1.16";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "janten";
@@ -17,14 +17,17 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     anytree
     fusepy
     httpsig
     pbkdf2
     pyyaml
     requests
-    setuptools
     tqdm
     urllib3
     zeroconf

@@ -108,13 +108,28 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontStrip = true;
 
-  unpackPhase = "unzstd ${buck2-src} -o ./buck2 && unzstd ${rust-project-src} -o ./rust-project";
-  buildPhase = "chmod +x ./buck2 && chmod +x ./rust-project";
-  checkPhase = "./buck2 --version && ./rust-project --version";
+  unpackPhase = ''
+    runHook preUnpack
+    unzstd ${buck2-src} -o ./buck2
+    unzstd ${rust-project-src} -o ./rust-project
+    runHook postUnpack
+  '';
+  buildPhase = ''
+    runHook preBuild
+    chmod +x ./buck2 && chmod +x ./rust-project
+    runHook postBuild
+  '';
+  checkPhase = ''
+    runHook preCheck
+    ./buck2 --version && ./rust-project --version
+    runHook postCheck
+  '';
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
     install -D rust-project $out/bin/rust-project
+    runHook postInstall
   '';
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd buck2 \
@@ -149,7 +164,11 @@ stdenv.mkDerivation {
       mit
     ];
     mainProgram = "buck2";
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      lf-
+      _9999years
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

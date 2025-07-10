@@ -60,34 +60,35 @@
   libvpl,
   qrcodegencpp,
   nix-update-script,
+  extra-cmake-modules,
 }:
 
 let
   inherit (lib) optional optionals;
 
   cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "127.3.5";
+    version = "138.0.17";
     __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
-    gitRevision = "114ea2a";
-    chromiumVersion = "127.0.6533.120";
+    gitRevision = "ac9b751";
+    chromiumVersion = "138.0.7204.97";
 
     srcHash =
       {
-        aarch64-linux = "sha256-s8dR97rAO0mCUwbpYnPWyY3t8movq05HhZZKllhZdBs=";
-        x86_64-linux = "sha256-57E7bZKpViWno9W4AaaSjL9B4uxq+rDXAou1tsiODUg=";
+        aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
+        x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.4";
+  version = "31.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-YxBPVXin8oJlo++oJogY1WMamIJmRqtSmKZDBsIZPU4=";
+    hash = "sha256-espGKoKldgjWoCEE+Xor7+N5N86HvWCf0V18tb8GaC8=";
     fetchSubmodules = true;
   };
 
@@ -107,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       wrapGAppsHook3
       wrapQtAppsHook
+      extra-cmake-modules
     ]
     ++ optional scriptingSupport swig
     ++ optional cudaSupport autoAddDriverRunpath;

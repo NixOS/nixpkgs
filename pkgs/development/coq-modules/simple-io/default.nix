@@ -18,7 +18,7 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.17" "9.0") "1.10.0")
+      (case (range "8.17" "9.1") "1.10.0")
       (case (range "8.11" "8.19") "1.8.0")
       (case (range "8.7" "8.13") "1.3.0")
     ] null;

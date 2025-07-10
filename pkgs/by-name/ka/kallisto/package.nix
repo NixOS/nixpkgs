@@ -5,6 +5,7 @@
   autoconf,
   cmake,
   hdf5,
+  versionCheckHook,
   zlib,
   nix-update-script,
 }:
@@ -32,17 +33,28 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_HDF5=ON" ];
 
-  # Parallel build fails in some cases: https://github.com/pachterlab/kallisto/issues/160
   enableParallelBuilding = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Program for quantifying abundances of transcripts from RNA-Seq data";
+    description = "Near-optimal quantification of transcripts from RNA-seq data";
+    longDescription = ''
+      kallisto is a program for quantifying abundances of transcripts
+      from RNA sequencing data, or more generally of target sequences
+      using high-throughput sequencing reads. It is based on the novel
+      idea of pseudoalignment for rapidly determining the
+      compatibility of reads with targets, without the need for
+      alignment.
+    '';
     mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arcadio ];
+    maintainers = [ maintainers.arcadio ];
   };
 }

@@ -19,7 +19,7 @@
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      (case (range "8.14" "9.0") "0.2.0")
+      (case (range "8.14" "9.1") "0.2.0")
       (case (range "8.14" "8.20") "0.1.3")
     ] null;
   release = {
