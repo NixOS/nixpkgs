@@ -166,6 +166,7 @@ mapAliases ({
   cryptacular = throw "cryptacular was removed, because it was disabled on all python version since 3.6 and last updated in 2021"; # Added 2024-05-13
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
   cufflinks = throw "cufflinks has removed, since it is abandoned and broken"; # added 2025-02-16
+  curve25519-donna = throw "curve25519-donna was removed, since it is abandoned and unmaintained since 2015"; # added 2025-06-03
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
@@ -544,6 +545,7 @@ mapAliases ({
   pyhiveapi = pyhive-integration; # Added 2025-02-22
   pyhs100 = throw "pyhs100 has been removed in favor of python-kasa."; # added 2024-01-05
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
+  pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
   PyLD = pyld; # added 2022-06-22
   pylti = throw "pylti has been removed because it is unmaintained since 2019"; # added 2024-05-21
   pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04

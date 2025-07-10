@@ -3058,8 +3058,6 @@ self: super: with self; {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
-  curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
-
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
@@ -12702,7 +12700,7 @@ self: super: with self; {
 
   pylibjpeg-openjpeg = callPackage ../development/python-modules/pylibjpeg-openjpeg { };
 
-  pyliblo = callPackage ../development/python-modules/pyliblo { };
+  pyliblo3 = callPackage ../development/python-modules/pyliblo3 { };
 
   pylibmc = callPackage ../development/python-modules/pylibmc { };
 

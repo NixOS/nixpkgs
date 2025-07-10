@@ -1908,10 +1908,10 @@ with self;
 
   AuthenKrb5 = buildPerlModule {
     pname = "Authen-Krb5";
-    version = "1.905";
+    version = "1.906";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
-      hash = "sha256-13sAuxUBpW9xGOkarAx+Qi2888QY+c6YuAF3HDqg900=";
+      url = "mirror://cpan/authors/id/O/OD/ODENBACH/Authen-Krb5-1.906.tar.gz";
+      hash = "sha256-LcCSjvsTtfMF3zRSCI5j+StnrOqH+9RwMI9GD3kSboQ=";
     };
     propagatedBuildInputs = [ pkgs.libkrb5 ];
     buildInputs = [
@@ -14159,10 +14159,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.65";
+    version = "1.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-C3pJZaLJrW+nwDawloHHtEWyB1j6qYNnsmZZz2L+Axg=";
+      hash = "sha256-GOkdcI+Ah6JvvL+zsKYe0UcdKks855jecwTzBIGkZ+k=";
     };
     buildInputs = [
       DateManip
