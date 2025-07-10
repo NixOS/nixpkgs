@@ -9,18 +9,18 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pyrefly";
-  version = "0.17.1";
+  version = "0.23.1";
   pyproject = true;
 
   # fetch from PyPI instead of GitHub, since source repo does not have Cargo.lock
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w4ivRtmApXiXQT95GI4vvYBop7yxdbbkpW+YTyFtgXM=";
+    hash = "sha256-cDLZff34hegwnp14vXCzMmSVROHzaQUIL3A+Ez9XWqo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-Op5ueVkzZTiJ1zeBGVi8oeLcfSzXMYfk5zEg4OGyA5g=";
+    hash = "sha256-p9/eDhobE+3C7pCoHVdikrpQxgahP5dpUS4l9kCbi6A=";
   };
 
   build-system = [ maturin ];
