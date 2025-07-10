@@ -3317,8 +3317,6 @@ with pkgs;
     packages = config.ihaskell.packages or (_: [ ]);
   };
 
-  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
-
   ilspycmd = callPackage ../development/tools/ilspycmd {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -4219,8 +4217,6 @@ with pkgs;
   quictls = callPackage ../development/libraries/quictls { };
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
-
-  wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
@@ -7095,8 +7091,6 @@ with pkgs;
         inherit stdenv;
       }
   );
-
-  matter-compiler = callPackage ../development/compilers/matter-compiler { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
