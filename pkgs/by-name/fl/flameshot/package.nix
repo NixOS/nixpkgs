@@ -2,61 +2,79 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchFromGitLab,
   fetchpatch,
   cmake,
+  git,
   imagemagick,
   libicns,
-  libsForQt5,
+  kdePackages,
+  kdsingleapplication,
   grim,
   makeBinaryWrapper,
   nix-update-script,
   enableWlrSupport ? false,
   enableMonochromeIcon ? false,
 }:
+let
+  qtColorWidgets = fetchFromGitLab {
+    owner = "mattbas";
+    repo = "Qt-Color-Widgets";
+    rev = "352bc8f99bf2174d5724ee70623427aa31ddc26a";
+    hash = "sha256-Viwk2kXUfndvylvGUyrPgb+PecZYn6iRDR22tzlRbmY=";
+  };
+in
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);
 
 stdenv.mkDerivation {
   pname = "flameshot";
   # wlr screenshotting is currently only available on unstable version (>12.1.0)
-  version = "12.1.0-unstable-2025-05-04";
+  version = "12.1.0-unstable-2025-07-10";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
-    rev = "f4cde19c63473f8fadd448ad2056c22f0f847f34";
-    hash = "sha256-B/piB8hcZR11vnzvue/1eR+SFviTSGJoek1w4abqsek=";
+    rev = "32e97220427e4db86ad614acb3c905f303733091";
+    hash = "sha256-pMthhsIr7ZINVcv0BPID7sea1eXuQqOQvM4+BkIgte4=";
+
+    nativeBuildInputs = [
+      git
+    ];
+
+    postFetch = ''
+      cd "$out"
+      mkdir tmp
+      cp -r "${qtColorWidgets}" tmp/qtColorWidgets
+    '';
   };
 
   patches = [
-    # https://github.com/flameshot-org/flameshot/pull/3166
-    # fixes fractional scaling calculations on wayland
-    (fetchpatch {
-      name = "10-fix-wayland.patch";
-      url = "https://github.com/flameshot-org/flameshot/commit/5fea9144501f7024344d6f29c480b000b2dcd5a6.patch";
-      hash = "sha256-SnjVbFMDKD070vR4vGYrwLw6scZAFaQA4b+MbI+0W9E=";
-    })
+    ./0001-NixOS-dependency-injection.patch
   ];
 
   cmakeFlags =
     [
       (lib.cmakeBool "DISABLE_UPDATE_CHECKER" true)
       (lib.cmakeBool "USE_MONOCHROME_ICON" enableMonochromeIcon)
+      # I don't know what the hell these do
+      (lib.cmakeBool "USE_KDSINGLEAPPLICATION" false)
+      (lib.cmakeBool "FLAMESHOT_DEBUG_CAPTURE" false)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeBool "USE_WAYLAND_CLIPBOARD" true)
       (lib.cmakeBool "USE_WAYLAND_GRIM" enableWlrSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "Qt5_DIR" "${libsForQt5.qtbase.dev}/lib/cmake/Qt5")
+      (lib.cmakeFeature "Qt6_DIR" "${kdePackages.qtbase.dev}/lib/cmake/Qt6")
     ];
 
   nativeBuildInputs =
     [
       cmake
-      libsForQt5.qttools
-      libsForQt5.qtsvg
-      libsForQt5.wrapQtAppsHook
+      kdePackages.qttools
+      kdePackages.qtsvg
+      kdePackages.wrapQtAppsHook
       makeBinaryWrapper
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -65,8 +83,9 @@ stdenv.mkDerivation {
     ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.kguiaddons
+    kdePackages.qtbase
+    kdePackages.kguiaddons
+    kdsingleapplication
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
