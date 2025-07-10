@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -29,12 +31,20 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd conftest \
-      --bash <($out/bin/conftest completion bash) \
-      --fish <($out/bin/conftest completion fish) \
-      --zsh <($out/bin/conftest completion zsh)
-  '';
+  postInstall =
+    let
+      conftest =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.conftest;
+    in
+    ''
+      installShellCompletion --cmd conftest \
+        --bash <(${conftest}/bin/conftest completion bash) \
+        --fish <(${conftest}/bin/conftest completion fish) \
+        --zsh <(${conftest}/bin/conftest completion zsh)
+    '';
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
