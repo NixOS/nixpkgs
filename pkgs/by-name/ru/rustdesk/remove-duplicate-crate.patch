@@ -1,0 +1,17 @@
+--- result/Cargo.lock	1970-01-01 01:00:01.000000000 +0100
++++ pkgs/by-name/ru/rustdesk/Cargo.lock	2025-05-16 15:25:08.472443583 +0200
+@@ -1200,14 +1200,6 @@
+ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
+
+ [[package]]
+-name = "core-foundation-sys"
+-version = "0.8.6"
+-source = "git+https://github.com/madsmtm/core-foundation-rs.git?rev=7d593d016175755e492a92ef89edca68ac3bd5cd#7d593d016175755e492a92ef89edca68ac3bd5cd"
+-dependencies = [
+- "objc2-encode 2.0.0-pre.2",
+-]
+-
+-[[package]]
+ name = "core-graphics"
+ version = "0.22.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
