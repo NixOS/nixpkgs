@@ -26514,12 +26514,6 @@
     githubId = 123554;
     name = "Thibaut Smith";
   };
-  vidister = {
-    email = "v@vidister.de";
-    github = "vidister";
-    githubId = 11413574;
-    name = "Fiona Weber";
-  };
   vieta = {
     email = "xyzVieta@gmail.com";
     github = "yVieta";
