@@ -29,6 +29,16 @@ stdenv.mkDerivation rec {
     wxGTK32
   ];
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./samples/minimal -t -s ./samples
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     homepage = "https://utelle.github.io/wxsqlite3/";
     description = "C++ wrapper around the public domain SQLite 3.x for wxWidgets";
