@@ -807,6 +807,9 @@ let
 in
 
 {
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
   config = mkMerge [
     bondWarnings
     (mkIf (!cfg.useNetworkd) normalConfig)

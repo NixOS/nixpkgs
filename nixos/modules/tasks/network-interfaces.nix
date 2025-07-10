@@ -1669,6 +1669,8 @@ in
 
   ###### implementation
 
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
   config = {
 
     warnings =
