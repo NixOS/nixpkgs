@@ -90,7 +90,7 @@ in
           };
 
           dns = {
-            server = mkOption {
+            address = mkOption {
               type = types.str;
               default = "127.0.0.1:53";
               description = ''
@@ -173,7 +173,7 @@ in
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
 
-        reloadTriggers = [ configFile ];
+        restartTriggers = [ configFile ];
 
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {
