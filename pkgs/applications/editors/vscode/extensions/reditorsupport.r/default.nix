@@ -6,7 +6,9 @@
   languageserver ? rPackages.languageserver,
   R,
   radian,
+  r-syntax ? vscode-extensions.reditorsupport.r-syntax,
 
+  vscode-extensions,
   rPackages,
 }:
 
@@ -20,6 +22,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
   nativeBuildInputs = [
     jq
     moreutils
+  ];
+  propagatedExtensions = [
+    r-syntax
   ];
   postInstall = ''
     cd "$out/$installPrefix"
