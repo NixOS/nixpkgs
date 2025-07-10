@@ -1410,6 +1410,18 @@ builtins.intersectAttrs super {
     (enableCabalFlag "debug")
     # Split outputs to reduce closure size
     enableSeparateBinOutput
+    # Build the primitive library to generate its interface files.
+    # These are needed in order to use Agda in Nix builds.
+    (overrideCabal (drv: {
+      postInstall =
+        drv.postInstall or ""
+        + ''
+          agdaExe=''${bin:-$out}/bin/agda
+
+          echo "Generating Agda core library interface files..."
+          (cd "$("$agdaExe" --print-agda-data-dir)/lib/prim" && "$agdaExe" --build-library)
+        '';
+    }))
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
