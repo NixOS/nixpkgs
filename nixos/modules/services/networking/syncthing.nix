@@ -847,7 +847,8 @@ in
       ];
     };
 
-    systemd.packages = [ pkgs.syncthing ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} = {
