@@ -427,6 +427,27 @@ let
         }"
       ];
 
+      sandboxProfile = ''
+        (allow file-read*
+          (literal "/Library/Keychains/System.keychain")
+          (literal "/private/var/db/mds/system/mdsDirectory.db")
+          (literal "/private/var/db/mds/system/mdsObject.db"))
+
+        ; Allow files written by Module Directory Services (MDS), which is used
+        ; by Security.framework: https://apple.stackexchange.com/a/411476
+        ; These rules are based on the system sandbox profiles found in
+        ; /System/Library/Sandbox/Profiles.
+        (allow file-write*
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsDirectory\.db$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsObject\.db_?$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mds\.lock$"))
+
+        (allow mach-lookup
+          (global-name "com.apple.FSEvents")
+          (global-name "com.apple.SecurityServer")
+          (global-name "com.apple.system.opendirectoryd.membership"))
+      '';
+
       postInstall =
         let
           # nodejs_18 does not have node_js2c, and we don't want to rebuild the other ones
