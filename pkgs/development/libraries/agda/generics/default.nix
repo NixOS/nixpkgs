@@ -20,6 +20,11 @@ mkDerivation rec {
     standard-library
   ];
 
+  # Agda expects a single .agda-lib file.
+  preBuild = ''
+    rm tests.agda-lib
+  '';
+
   # everythingFile = "./README.agda";
 
   meta = with lib; {
