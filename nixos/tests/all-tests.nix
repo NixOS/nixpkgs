@@ -912,7 +912,7 @@ in
   mysql-backup = handleTest ./mysql/mysql-backup.nix { };
   mysql-replication = handleTest ./mysql/mysql-replication.nix { };
   n8n = runTest ./n8n.nix;
-  nagios = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix { };
+  nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
   nar-serve = runTest ./nar-serve.nix;
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
@@ -1260,9 +1260,9 @@ in
   sane = runTest ./sane.nix;
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
-  scaphandre = handleTest ./scaphandre.nix { };
+  scaphandre = runTest ./scaphandre.nix;
   schleuder = runTest ./schleuder.nix;
-  scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
+  scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
   sddm = import ./sddm.nix { inherit runTest; };
