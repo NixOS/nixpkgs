@@ -1266,7 +1266,7 @@ in
   stunnel = handleTest ./stunnel.nix { };
   sudo = handleTest ./sudo.nix { };
   sudo-rs = runTest ./sudo-rs.nix;
-  sunshine = handleTest ./sunshine.nix { };
+  sunshine = runTest ./sunshine.nix;
   suricata = handleTest ./suricata.nix { };
   suwayomi-server = handleTest ./suwayomi-server.nix { };
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix { };
