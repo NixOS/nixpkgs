@@ -1377,7 +1377,7 @@ in
   systemd-initrd-luks-tpm2 = runTest ./systemd-initrd-luks-tpm2.nix;
   systemd-initrd-luks-unl0kr = runTest ./systemd-initrd-luks-unl0kr.nix;
   systemd-initrd-modprobe = runTest ./systemd-initrd-modprobe.nix;
-  systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix { };
+  systemd-initrd-networkd = import ./systemd-initrd-networkd.nix { inherit runTest; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
   systemd-initrd-networkd-openvpn = handleTestOn [
     "x86_64-linux"
