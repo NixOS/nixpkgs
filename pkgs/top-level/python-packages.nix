@@ -5588,6 +5588,8 @@ self: super: with self; {
 
   gevent = callPackage ../development/python-modules/gevent { };
 
+  gevent-eventemitter = callPackage ../development/python-modules/gevent-eventemitter { };
+
   gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
 
   gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
