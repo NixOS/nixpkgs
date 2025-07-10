@@ -5,8 +5,6 @@
   setuptools,
   aiohttp,
   backoff,
-  pytestCheckHook,
-  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -28,10 +26,10 @@ buildPythonPackage rec {
     backoff
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  # There are no unit tests upstream. The existing tests are unmaintained
+  # integration tests that run against a docker container.
+  # See <https://github.com/vinteo/py-opensprinkler/issues/4>.
+  doCheck = false;
 
   pythonImportsCheck = [ "pyopensprinkler" ];
 
