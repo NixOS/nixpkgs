@@ -1894,10 +1894,17 @@ won't take effect until you reboot the system.
     //
     // Wait for events from systemd to settle. process() will return true if we have received any
     // messages on the bus.
-    while dbus_conn
-        .process(Duration::from_millis(250))
-        .unwrap_or_default()
-    {}
+    let mut waited = Duration::from_millis(0);
+    let wait_interval = Duration::from_millis(250);
+    let max_wait = Duration::from_secs(90);
+    log::debug!("waiting for systemd events to settle");
+    while dbus_conn.process(wait_interval).unwrap_or_default() {
+        waited += wait_interval;
+        if waited >= max_wait {
+            log::debug!("timed out waiting systemd events to settle");
+            break;
+        }
+    }
 
     let new_active_units = get_active_units(&systemd)?;
 
