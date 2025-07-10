@@ -505,11 +505,22 @@ builtins.intersectAttrs super {
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
   # `dev` and `lib` output in, or Cabal will have trouble finding the library.
   # Since it looks a bit neater having it in a list, we circumvent the singular
-  # LLVM input here.
-  llvm-ffi = addBuildDepends [
-    pkgs.llvmPackages_16.llvm.lib
-    pkgs.llvmPackages_16.llvm.dev
-  ] super.llvm-ffi;
+  # LLVM input that llvm-ffi declares.
+  llvm-ffi =
+    let
+      matchingLlvmVersion = lib.strings.toInt (lib.versions.major super.llvm-ffi.version);
+      nextLlvmVersion = matchingLlvmVersion + 1;
+    in
+    lib.warnIf (pkgs ? "llvmPackages_${toString nextLlvmVersion}")
+      # This package can be updated by changing the version constraint in
+      # configuration-hackage2nix/main.yaml and regenerating the haskellPackages set.
+      "haskellPackages.llvm-ffi: LLVM ${toString nextLlvmVersion} is available in Nixpkgs, consider updating."
+      addBuildDepends
+      [
+        pkgs."llvmPackages_${toString matchingLlvmVersion}".llvm.lib
+        pkgs."llvmPackages_${toString matchingLlvmVersion}".llvm.dev
+      ]
+      super.llvm-ffi;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
