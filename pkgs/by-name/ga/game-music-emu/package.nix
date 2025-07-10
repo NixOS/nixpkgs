@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/libgme/game-music-emu/wiki";
