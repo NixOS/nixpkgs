@@ -27278,11 +27278,14 @@
   "repo": "elken/doom-modeline-now-playing",
   "unstable": {
    "version": [
-    20250707,
-    950
+    20250710,
+    1417
    ],
-   "commit": "ba1619e98e011dabb24450db3e2e125bcce02a19",
-   "sha256": "0i8gdmfvw68qd8n3350jk4ndpzlldqrd5s4j8hlfdn1gcblr6k33"
+   "deps": [
+     "doom-modeline"
+   ],
+   "commit": "684bfde0b88a2cb31dd824216608ecbc2eb00c8b",
+   "sha256": "0ky4fhybl9181x4dw5siv459vryvv8gm8zv7y2pksgrsh2ya9r1i"
   },
   "stable": {
    "version": [
