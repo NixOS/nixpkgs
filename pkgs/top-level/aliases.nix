@@ -1753,6 +1753,7 @@ mapAliases {
   SP800-90B_EntropyAssessment = sp800-90b-entropyassessment; # Added on 2024-06-12
   SPAdes = spades; # Added 2024-06-12
   spark2014 = gnatprove; # Added 2024-02-25
+  space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
   spatialite_gui = throw "spatialite_gui has been renamed to spatialite-gui"; # Added 2025-01-12
   spatialite_tools = throw "spatialite_tools has been renamed to spatialite-tools"; # Added 2025-02-06
 
@@ -1850,11 +1851,12 @@ mapAliases {
   tcludp = tclPackages.tcludp; # Added 2024-10-02
   tclvfs = tclPackages.tclvfs; # Added 2024-10-02
   tclx = tclPackages.tclx; # Added 2024-10-02
+  tcp-cutter = throw "tcp-cutter has been removed because it fails to compile and the source url is dead"; # Added 2025-05-25
   tdesktop = telegram-desktop; # Added 2023-04-07
   tdom = tclPackages.tdom; # Added 2024-10-02
   teamspeak_client = teamspeak3; # Added 2024-11-07
   teamspeak5_client = teamspeak6-client; # Added 2025-01-29
-  teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
+  teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # Added 2024-08-23
   telepathy-gabble = throw "'telepathy-gabble' has been removed as it was unmaintained, unused, broken and used outdated libraries"; # Added 2025-04-20
   telepathy-logger = throw "'telepathy-logger' has been removed as it was unmaintained, unused and broken"; # Added 2025-04-20
   teleport_13 = throw "teleport 13 has been removed as it is EOL. Please upgrade to Teleport 14 or later"; # Added 2024-05-26
