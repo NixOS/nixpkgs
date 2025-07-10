@@ -23,13 +23,13 @@ dependencies = [
 
 [[package]]
 name = "analyzeme"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "decodeme 10.1.3",
- "decodeme 12.0.1",
+ "decodeme 12.0.3",
  "flate2",
  "measureme 10.1.3",
- "measureme 12.0.1",
+ "measureme 12.0.3",
  "memchr",
  "rustc-hash",
  "serde",
@@ -117,9 +117,9 @@ checksum = "9555578bc9e57714c812a1f84e4fc5b4d21fcb063490c624de019f7464c91268"
 
 [[package]]
 name = "clap"
-version = "4.5.40"
+version = "4.5.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40b6887a1d8685cebccf115538db5c0efe625ccac9696ad45c409d96566e910f"
+checksum = "be92d32e80243a54711e5d7ce823c35c41c9d929dc4ab58e1276f625841aadf9"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -127,9 +127,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.40"
+version = "4.5.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0c66c08ce9f0c698cbce5c0279d0bb6ac936d8674174fe48f736533b964f59e"
+checksum = "707eab41e9622f9139419d573eca0900137718000c517d47da73045f54331c3d"
 dependencies = [
  "anstream",
  "anstyle",
@@ -139,9 +139,9 @@ dependencies = [
 
 [[package]]
 name = "clap_derive"
-version = "4.5.40"
+version = "4.5.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2c7947ae4cc3d851207c1adb5b5e260ff0cca11446b1d6d1423788e442257ce"
+checksum = "ef4f52386a59ca4c860f7393bcf8abd8dfd91ecccc0f774635ff68e92eeef491"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -172,11 +172,11 @@ dependencies = [
 
 [[package]]
 name = "crox"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "analyzeme",
  "clap",
- "measureme 12.0.1",
+ "measureme 12.0.3",
  "rustc-hash",
  "serde",
  "serde_json",
@@ -218,9 +218,9 @@ dependencies = [
 
 [[package]]
 name = "decodeme"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
- "measureme 12.0.1",
+ "measureme 12.0.3",
  "memchr",
  "rustc-hash",
  "serde",
@@ -256,12 +256,12 @@ checksum = "34aa73646ffb006b8f5147f3dc182bd4bcb190227ce861fc4a4844bf8e3cb2c0"
 
 [[package]]
 name = "flamegraph"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "analyzeme",
  "clap",
  "inferno",
- "measureme 12.0.1",
+ "measureme 12.0.3",
 ]
 
 [[package]]
@@ -363,9 +363,9 @@ checksum = "1171693293099992e19cddea4e8b849964e9846f4acee11b3948bcc337be8776"
 
 [[package]]
 name = "libredox"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0ff37bd590ca25063e35af745c343cb7a0271906fb7b37e4813e8f79f00268d"
+checksum = "1580801010e535496706ba011c15f8532df6b42297d2e471fec38ceadd8c0638"
 dependencies = [
  "bitflags",
  "libc",
@@ -403,7 +403,7 @@ dependencies = [
 
 [[package]]
 name = "measureme"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "log",
  "memmap2",
@@ -439,20 +439,20 @@ dependencies = [
 
 [[package]]
 name = "mmedit"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "clap",
- "decodeme 12.0.1",
- "measureme 12.0.1",
+ "decodeme 12.0.3",
+ "measureme 12.0.3",
 ]
 
 [[package]]
 name = "mmview"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "analyzeme",
  "clap",
- "measureme 12.0.1",
+ "measureme 12.0.3",
 ]
 
 [[package]]
@@ -578,9 +578,9 @@ dependencies = [
 
 [[package]]
 name = "rgb"
-version = "0.8.50"
+version = "0.8.51"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57397d16646700483b67d2dd6511d79318f9d057fdbd21a4066aeac8b41d310a"
+checksum = "a457e416a0f90d246a4c3288bd7a25b2304ca727f253f95be383dd17af56be8f"
 dependencies = [
  "bytemuck",
 ]
@@ -649,11 +649,11 @@ checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
 
 [[package]]
 name = "stack_collapse"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "analyzeme",
  "clap",
- "measureme 12.0.1",
+ "measureme 12.0.3",
 ]
 
 [[package]]
@@ -670,11 +670,11 @@ checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "summarize"
-version = "12.0.1"
+version = "12.0.3"
 dependencies = [
  "analyzeme",
  "clap",
- "measureme 12.0.1",
+ "measureme 12.0.3",
  "prettytable-rs",
  "rustc-hash",
  "serde",
