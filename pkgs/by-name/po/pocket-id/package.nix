@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2ayPS6gD8w5fLu+4yC0E4Z/zeX7CHUQgWXgAgL0uKs=";
+    hash = "sha256-fg9iT4JGB3CvmPiRaQwfyKxZ5T0mweDQAQYYU/fdb/g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
