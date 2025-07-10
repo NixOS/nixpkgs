@@ -1,7 +1,7 @@
 {
   lib,
-  stdenv,
-  gccStdenv,
+  #  stdenv,
+  gcc13Stdenv,
   coreutils,
   fetchFromGitHub,
   openjdk,
@@ -11,8 +11,14 @@
   makeDesktopItem,
   makeWrapper,
 }:
+
 let
-  stdenv' = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
+  # The current version of prism does not build with gcc > 13
+  # it should be fixed in the upcoming version of prism.
+  # at that point revert stdenv' to :
+  #
+  # stdenv' = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
+  stdenv' = gcc13Stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "prism-model-checker";
