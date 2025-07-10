@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.45.4";
+  version = "4.46.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-qcsm7dB7F7Snul2PbH/7RdK17c5qT+mk+FvfqnFfuak=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lMmcqAe1A/ET/2Dju6Gj0+I/g4z23EmtuRio0NYTHws=";
   };
 
-  vendorHash = "sha256-cA5Y0/2lvYfVXr4zgtp/U8aBUkHnh9xb9jDHVk/2OME=";
+  vendorHash = "sha256-wfn8u8I4dyAD4PbeiQGSai1gQ2ZDFBi2mysZVKa0mkA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
-    changelog = "https://github.com/mikefarah/yq/raw/v${finalAttrs.version}/release_notes.txt";
+    changelog = "https://github.com/mikefarah/yq/raw/${finalAttrs.src.tag}/release_notes.txt";
     mainProgram = "yq";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [
