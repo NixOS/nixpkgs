@@ -1262,7 +1262,7 @@ in
   saunafs = runTest ./saunafs.nix;
   scaphandre = runTest ./scaphandre.nix;
   schleuder = runTest ./schleuder.nix;
-  scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
+  scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
   sddm = import ./sddm.nix { inherit runTest; };
