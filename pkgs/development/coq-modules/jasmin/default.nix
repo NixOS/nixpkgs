@@ -27,7 +27,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (range "8.19" "9.0") (range "2.2" "2.4") "2025.02.0")
+        (case (range "8.19" "9.1") (range "2.2" "2.4") "2025.02.0")
         (case (isEq "8.18") (isEq "2.2") "2024.07.2")
       ]
       null;

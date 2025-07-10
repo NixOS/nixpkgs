@@ -629,6 +629,12 @@ in
       '';
   };
 
+  hiredis-client = attrs: {
+    buildInputs = [
+      openssl
+    ];
+  };
+
   hpricot = attrs: {
     dontBuild = false;
     patches = [

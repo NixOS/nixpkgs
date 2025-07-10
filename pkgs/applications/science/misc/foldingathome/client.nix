@@ -15,13 +15,13 @@
 }:
 let
   pname = "fah-client";
-  version = "8.3.18";
+  version = "8.4.9";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    sha256 = "sha256-BQNomjz6Bhod3FOC5iICwt1rPrZgIxGQ08yspSvAnJc=";
+    sha256 = "sha256-xApE5m8YyIFRJLQYeboWelWukuuIjHNZxPDyq0RzSL4=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -31,7 +31,7 @@ let
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      sha256 = "sha256-lqpC1fAMFb8iX02daVre/pE0c7DkwswlFigJS3ZGEjM=";
+      sha256 = "sha256-PewXhmkTru2yJhMkenbn7pcmVsa7eomjrMvs1PUGph8=";
     };
 
     nativeBuildInputs = [

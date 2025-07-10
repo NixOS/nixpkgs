@@ -26,14 +26,14 @@
 }:
 buildPythonPackage rec {
   pname = "cynthion";
-  version = "0.2.0";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-rbvw2eieZwTxStwCRuvIx/f4vdPsOFnV/U80Ga+fNPA=";
+    hash = "sha256-xL1/ckX+xKUQpugQkLB3SlZeNcBEaTMascTgoQ4C+hA=";
   };
 
   sourceRoot = "${src.name}/cynthion/python";

@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "arsenal";
   version = "1.1.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-NbNXyR5aNKvRJU9JWGk/ndwU1bhNgDOdcRqBkAY9nPA=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     libtmux
     docutils
     pyfzf

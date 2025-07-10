@@ -53,7 +53,7 @@ def get_tmp_dir() -> Path:
 
 
 def pythonize_name(name: str) -> str:
-    return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
+    return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
 class Driver:

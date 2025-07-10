@@ -35,7 +35,7 @@ let
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      (case (range "8.20" "9.0") "2.4.0")
+      (case (range "8.20" "9.1") "2.4.0")
       (case (range "8.19" "9.0") "2.3.0")
       (case (range "8.17" "8.20") "2.2.0")
       (case (range "8.17" "8.18") "2.1.0")

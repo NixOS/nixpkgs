@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "lil-pwny";
   version = "2.0.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PaperMtn";
@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication rec {
     tag = version;
     hash = "sha256-EE6+PQTmvAv5EvxI9QR/dQcPby13BBk66KSc7XDNAZA=";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   # Project has no test
   doCheck = false;

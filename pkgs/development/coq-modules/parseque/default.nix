@@ -1,6 +1,8 @@
 {
   lib,
   mkCoqDerivation,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   which,
   coq,
@@ -41,16 +43,25 @@ with lib;
     # this is just a wrapper for rocPackages.parseque for Rocq >= 9.0
     lib.optionalAttrs
       (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      {
-        configurePhase = ''
-          echo no configuration
-        '';
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          echo installing nothing
-        '';
-        propagatedBuildInputs = [ rocqPackages.parseque ];
-      }
+      (
+        let
+          case = case: out: { inherit case out; };
+          rp = lib.switch coq.coq-version [
+            (case "9.0" rocqPackages_9_0)
+            (case "9.1" rocqPackages_9_1)
+          ] rocqPackages;
+        in
+        {
+          configurePhase = ''
+            echo no configuration
+          '';
+          buildPhase = ''
+            echo building nothing
+          '';
+          installPhase = ''
+            echo installing nothing
+          '';
+          propagatedBuildInputs = [ rp.parseque ];
+        }
+      )
   )

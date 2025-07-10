@@ -25,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-utbey8DFXUWU6u2H2unNjCHE3/bwhPdrxAOApC+unGA=";
   };
 
+  # Avoiding optimizations for reproducibility
+  prePatch = ''
+    substituteInPlace .cargo/config.toml \
+      --replace-fail '"-C", "target-cpu=native", ' ""
+  '';
+
   cargoHash = "sha256-rwf9jdr+RDpUcTEG7Xhpph0zuyz6tdFx6hWEZRuxkTY=";
 
   nativeBuildInputs = [

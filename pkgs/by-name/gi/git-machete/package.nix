@@ -10,7 +10,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-machete";
   version = "3.36.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
@@ -18,6 +18,8 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-iSuOiQC+dKqcDCS4nTPMrNFpo3ipPUQhfoofM11UInI=";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 

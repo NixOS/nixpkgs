@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication {
   pname = "isrcsubmit";
   version = "2.1.0-unstable-2023-08-10";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "JonnyJD";
@@ -25,6 +25,10 @@ python3Packages.buildPythonApplication {
     substituteInPlace isrcsubmit.py --replace-fail "main(argv):" "main(argv=sys.argv):"
   '';
 
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
   dependencies =
     with python3Packages;
     [
@@ -34,6 +38,8 @@ python3Packages.buildPythonApplication {
     ++ lib.optional withKeyring [
       keyring
     ];
+
+  pythonImportsCheck = [ "isrcsubmit" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

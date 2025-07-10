@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "iotop";
   version = "0.6";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchurl {
     url = "http://guichaz.free.fr/iotop/files/iotop-${version}.tar.bz2";
@@ -22,7 +22,11 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+  build-system = [ python3Packages.setuptools ];
+
   doCheck = false;
+
+  pythonImportsCheck = [ "iotop" ];
 
   meta = with lib; {
     description = "Tool to find out the processes doing the most IO";

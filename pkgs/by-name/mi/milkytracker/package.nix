@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "milkytracker";
-  version = "1.05.01";
+  version = "1.06";
 
   src = fetchFromGitHub {
     owner = "milkytracker";
     repo = "MilkyTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31Jy93bQj9wZ9vWJe5DVnBqFXfPSH1qmk8kcT/t+FY0=";
+    hash = "sha256-IMX1+gJUghBxnaSTWnfDYzQVbKFQzQIS70H+L6ogVro=";
   };
 
   strictDeps = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
     install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
-    install -Dm644 $src/resources/org.milkytracker.MilkyTracker.metainfo.xml $out/share/appdata/org.milkytracker.MilkyTracker.metainfo.xml
+    install -Dm644 resources/org.milkytracker.MilkyTracker.metainfo.xml $out/share/appdata/org.milkytracker.MilkyTracker.metainfo.xml
   '';
 
   passthru.updateScript = gitUpdater {
