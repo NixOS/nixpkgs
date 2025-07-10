@@ -66,6 +66,10 @@ let
     fixupOptionType
     mergeOptionDecls
     ;
+  inherit (lib.fileset)
+    isFileset
+    unions
+    ;
 
   inAttrPosSuffix =
     v: name:
@@ -603,6 +607,13 @@ let
         emptyValue = {
           value = { };
         };
+      };
+
+      fileset = mkOptionType {
+        name = "fileset";
+        description = "fileset";
+        check = isFileset;
+        merge = loc: defs: unions (map (x: x.value) defs);
       };
 
       # A package is a top-level store path (/nix/store/hash-name). This includes:
