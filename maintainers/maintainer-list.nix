@@ -19565,6 +19565,12 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
+  peromage = {
+    name = "Fang Deng";
+    email = "fang@elfang.com";
+    github = "peromage";
+    githubId = 10389606;
+  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
