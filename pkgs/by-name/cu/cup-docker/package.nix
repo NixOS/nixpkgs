@@ -8,56 +8,68 @@
   nix-update-script,
   withServer ? true,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cup-docker";
   version = "3.4.0";
+
   src = fetchFromGitHub {
     owner = "sergi0g";
     repo = "cup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ciH3t2L2eJhk1+JXTqEJSuHve8OuVod7AuQ3iFWmKRE=";
   };
-  web = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "${pname}-web";
-    inherit version src;
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-    sourceRoot = "${finalAttrs.src.name}/web";
-    nativeBuildInputs = [
-      bun
-      nodejs-slim_latest
-    ];
-    configurePhase = ''
-      runHook preConfigure
-      bun install --no-progress --frozen-lockfile
-      substituteInPlace node_modules/.bin/{vite,tsc} \
-        --replace-fail "/usr/bin/env node" "${nodejs-slim_latest}/bin/node"
-      runHook postConfigure
-    '';
-    buildPhase = ''
-      runHook preBuild
-      bun run build
-      runHook postBuild
-    '';
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/dist
-      cp -R ./dist $out
-      runHook postInstall
-    '';
-    outputHash = "sha256-Ac1PJYmTQv9XrmhmF1p77vdXh8252hz0CUKxJA+VQR4=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  });
-in
-rustPlatform.buildRustPackage {
-  inherit
-    src
-    version
-    pname
-    ;
+
+  web = lib.optionalDrvAttr withServer (
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-web";
+
+      inherit (finalAttrs) version src;
+      sourceRoot = "${finalAttrs.src.name}/web";
+
+      outputHash = "sha256-Ac1PJYmTQv9XrmhmF1p77vdXh8252hz0CUKxJA+VQR4=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
+
+      nativeBuildInputs = [
+        bun
+        nodejs-slim_latest
+      ];
+
+      configurePhase = ''
+        runHook preConfigure
+
+        bun install --no-progress --frozen-lockfile
+        # patchShebangs doesn't work
+        substituteInPlace node_modules/.bin/{vite,tsc} \
+          --replace-fail "/usr/bin/env node" "${nodejs-slim_latest}/bin/node"
+
+        runHook postConfigure
+      '';
+
+      buildPhase = ''
+        runHook preBuild
+
+        bun run build
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/dist
+        cp -R ./dist $out
+
+        runHook postInstall
+      '';
+    }
+  );
 
   cargoHash = "sha256-L9zugOwlPwpdtjV87dT1PH7FAMJYHYFuvfyOfPe5b2k=";
 
@@ -66,16 +78,15 @@ rustPlatform.buildRustPackage {
     [
       "cli"
     ]
-    ++ lib.optional withServer [
+    ++ lib.optionals withServer [
       "server"
     ];
 
   preConfigure = lib.optionalString withServer ''
-    cp -r ${web}/dist src/static
+    cp -r $web/dist src/static
   '';
 
   passthru = {
-    inherit web;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -85,7 +96,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    description = "a lightweight way to check for container image updates. written in Rust";
+    description = "Lightweight tool written in Rust to check for container image updates";
     homepage = "https://cup.sergi0g.dev";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
@@ -95,4 +106,4 @@ rustPlatform.buildRustPackage {
       kuflierl
     ];
   };
-}
+})
