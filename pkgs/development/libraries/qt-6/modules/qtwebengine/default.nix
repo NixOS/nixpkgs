@@ -164,8 +164,8 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cmake/Functions.cmake \
-        --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+      substituteInPlace cmake/QtToolchainHelpers.cmake \
+        --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
     '';
 
   cmakeFlags =
