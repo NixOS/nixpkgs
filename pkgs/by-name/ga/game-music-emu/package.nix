@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.6.3";
+  version = "0.6.4";
   pname = "game-music-emu";
 
   src = fetchFromGitHub {
     owner = "libgme";
     repo = "game-music-emu";
     tag = finalAttrs.version;
-    hash = "sha256-XmPcFfKsEe07hH7f0xMs9hRJshOO/p58Zm9fYsmCCoA=";
+    hash = "sha256-qGNWFFUUjv2R5e/nQrriAyDJCARISqNB8e5/1zEJ3fk=";
   };
 
   nativeBuildInputs = [ cmake ];
