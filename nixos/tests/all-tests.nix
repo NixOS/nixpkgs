@@ -1386,9 +1386,7 @@ in
   systemd-networkd = runTest ./systemd-networkd.nix;
   systemd-networkd-bridge = runTest ./systemd-networkd-bridge.nix;
   systemd-networkd-dhcpserver = runTest ./systemd-networkd-dhcpserver.nix;
-  systemd-networkd-dhcpserver-static-leases =
-    handleTest ./systemd-networkd-dhcpserver-static-leases.nix
-      { };
+  systemd-networkd-dhcpserver-static-leases = runTest ./systemd-networkd-dhcpserver-static-leases.nix;
   systemd-networkd-ipv6-prefix-delegation =
     handleTest ./systemd-networkd-ipv6-prefix-delegation.nix
       { };
