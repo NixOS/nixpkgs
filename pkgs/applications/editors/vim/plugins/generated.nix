@@ -12925,6 +12925,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  refjump-nvim = buildVimPlugin {
+    pname = "refjump.nvim";
+    version = "2025-04-04";
+    src = fetchFromGitHub {
+      owner = "mawkler";
+      repo = "refjump.nvim";
+      rev = "571e60b34f751085e456b69f14ab12ae18d4c3fc";
+      sha256 = "0q16w0lfgagfqns2v98sdvywgd2qwj5hd894vbm7nwxn893fzm0f";
+    };
+    meta.homepage = "https://github.com/mawkler/refjump.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   registers-nvim = buildVimPlugin {
     pname = "registers.nvim";
     version = "2024-11-05";
