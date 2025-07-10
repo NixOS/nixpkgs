@@ -60,9 +60,7 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-
     _0x17
-
   ];
 
 }
