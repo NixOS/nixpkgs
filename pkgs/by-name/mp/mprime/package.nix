@@ -27,6 +27,9 @@ let
       x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
+
+  ccArch = stdenv.hostPlatform.gcc.arch or "x86-64";
+
 in
 
 stdenv.mkDerivation rec {
@@ -58,6 +61,15 @@ stdenv.mkDerivation rec {
     hwloc
     gmp
   ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # The following is needed because compiling with stdenv.hostPlatform.gcc.arch
+      # set to something like "znver1" causes fatal errors during runtime due to
+      # rounding issues
+      lib.optional (stdenv.hostPlatform.isx86_64 && ccArch != "x86-64") "-march=x86-64"
+    );
+  };
 
   enableParallelBuilding = true;
 
