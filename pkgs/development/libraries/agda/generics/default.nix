@@ -25,8 +25,6 @@ mkDerivation rec {
     rm tests.agda-lib
   '';
 
-  # everythingFile = "./README.agda";
-
   meta = with lib; {
     description = "Library for datatype-generic programming in Agda";
     homepage = src.meta.homepage;
