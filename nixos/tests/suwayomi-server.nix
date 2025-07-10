@@ -1,22 +1,9 @@
-{
-  system ? builtins.currentSystem,
-  pkgs,
-  lib ? pkgs.lib,
-}:
-let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (lib) recursiveUpdate;
+{ lib, runTest }:
 
+let
   baseTestConfig = {
     meta.maintainers = with lib.maintainers; [ ratcornu ];
-    nodes.machine =
-      { pkgs, ... }:
-      {
-        services.suwayomi-server = {
-          enable = true;
-          settings.server.port = 1234;
-        };
-      };
+
     testScript = ''
       machine.wait_for_unit("suwayomi-server.service")
       machine.wait_for_open_port(1234)
@@ -26,14 +13,23 @@ let
 in
 
 {
-  without-auth = makeTest (
-    recursiveUpdate baseTestConfig {
+  without-auth = runTest (
+    baseTestConfig
+    // {
       name = "suwayomi-server-without-auth";
+
+      nodes.machine = {
+        services.suwayomi-server = {
+          enable = true;
+          settings.server.port = 1234;
+        };
+      };
     }
   );
 
-  with-auth = makeTest (
-    recursiveUpdate baseTestConfig {
+  with-auth = runTest (
+    baseTestConfig
+    // {
       name = "suwayomi-server-with-auth";
 
       nodes.machine =

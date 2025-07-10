@@ -1324,7 +1324,10 @@ in
   sudo-rs = runTest ./sudo-rs.nix;
   sunshine = runTest ./sunshine.nix;
   suricata = runTest ./suricata.nix;
-  suwayomi-server = handleTest ./suwayomi-server.nix { };
+  suwayomi-server = import ./suwayomi-server.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   swap-file-btrfs = runTest ./swap-file-btrfs.nix;
   swap-partition = runTest ./swap-partition.nix;
   swap-random-encryption = runTest ./swap-random-encryption.nix;
