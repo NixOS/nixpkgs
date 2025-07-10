@@ -94615,11 +94615,11 @@
   "repo": "pinoaffe/org-vcard",
   "unstable": {
    "version": [
-    20250708,
-    814
+    20250710,
+    1155
    ],
-   "commit": "c438da390db9e5ad9e42b699aeaebe359ed7d9c2",
-   "sha256": "1c035xpvgdyjvmdpdk2mbv7vsch3mhwy54mmnbwlanjkpsld5l9v"
+   "commit": "92efba59824244defd4165ad0d65d53c882db209",
+   "sha256": "1s7ba46jmdi2j68yvvxc1rcmpq158wsqx04gc3anlb0m4agfjma1"
   },
   "stable": {
    "version": [
