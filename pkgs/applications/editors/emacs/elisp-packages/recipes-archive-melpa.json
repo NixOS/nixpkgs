@@ -11567,26 +11567,26 @@
   "repo": "kickingvegas/casual",
   "unstable": {
    "version": [
-    20250707,
-    2046
+    20250709,
+    1922
    ],
    "deps": [
     "transient"
    ],
-   "commit": "c7866a70b3e0689d58990b6903abaca2891e195c",
-   "sha256": "1jf12j92h88a624lg9vg82xf3djij3xkac9ycj5vavkypb6jnih2"
+   "commit": "a587b65b5e04003410610c1d264cf5f7d6bdf32a",
+   "sha256": "0vdgm2c3rbda1zhjmwd52kp3srd1wgqrzzl3iaz7rp2g271bwih0"
   },
   "stable": {
    "version": [
     2,
     7,
-    0
+    1
    ],
    "deps": [
     "transient"
    ],
-   "commit": "c7866a70b3e0689d58990b6903abaca2891e195c",
-   "sha256": "1jf12j92h88a624lg9vg82xf3djij3xkac9ycj5vavkypb6jnih2"
+   "commit": "a587b65b5e04003410610c1d264cf5f7d6bdf32a",
+   "sha256": "0vdgm2c3rbda1zhjmwd52kp3srd1wgqrzzl3iaz7rp2g271bwih0"
   }
  },
  {
