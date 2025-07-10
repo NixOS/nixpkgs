@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "imdshift";
   version = "1.0.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ayushpriya10";
@@ -16,7 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Uoa0uNOhCkT622Yy8GEg8jz9k5zmtXwGmvdb3MVTLX8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     boto3
     click
     prettytable
