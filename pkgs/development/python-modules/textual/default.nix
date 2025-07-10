@@ -101,5 +101,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
+    # https://github.com/Textualize/textual/issues/5868
+    broken = true;
   };
 }
