@@ -4051,6 +4051,22 @@ let
 
       reditorsupport.r = callPackage ./reditorsupport.r { };
 
+      reditorsupport.r-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "r-syntax";
+          publisher = "reditorsupport";
+          version = "0.1.3";
+          hash = "sha256-grkfkmyERVUkB8kSH+NPd2Mv4WF/h/obw8ebmxPx5zU=";
+        };
+        meta = {
+          description = "Syntax highlighter for R";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=reditorsupport.r-syntax";
+          homepage = "https://github.com/REditorSupport/vscode-R-syntax";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.pandapip1 ];
+        };
+      };
+
       reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "reloaded-cpp";
