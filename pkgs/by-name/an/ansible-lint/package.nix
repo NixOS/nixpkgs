@@ -98,6 +98,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       sengaya
       HarisDotParis
+      robsliwi
     ];
   };
 }
