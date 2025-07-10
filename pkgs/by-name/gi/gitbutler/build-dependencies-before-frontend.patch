@@ -1,0 +1,60 @@
+From 5b0ac6a90c7e134d293019ee666e11ef84b70250 Mon Sep 17 00:00:00 2001
+From: 25huizengek1 <25huizengek1@gmail.com>
+Date: Thu, 10 Jul 2025 22:12:30 +0200
+Subject: [PATCH] Make sure all dependencies are built before building frontend
+
+---
+ package.json                                  | 2 +-
+ packages/svelte-comment-injector/package.json | 2 +-
+ turbo.json                                    | 9 +++++++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/package.json b/package.json
+index 87991bcba..4cfefecd4 100644
+--- a/package.json
++++ b/package.json
+@@ -19,7 +19,7 @@
+ 		"test:e2e": "pnpm --filter @gitbutler/desktop run test:e2e",
+ 		"act:test:e2e": "act -j test -W .github/workflows/test-e2e.yml -P catthehacker/ubuntu:act-22.04",
+ 		"build": "turbo run build --no-daemon",
+-		"build:desktop": "turbo run --filter @gitbutler/desktop build --no-daemon",
++		"build:desktop": "turbo run build:desktop --no-daemon",
+ 		"build:test": "pnpm exec tauri build --config crates/gitbutler-tauri/tauri.conf.test.json -- --profile dev",
+ 		"check": "turbo run check --no-daemon",
+ 		"tauri": "tauri",
+diff --git a/packages/svelte-comment-injector/package.json b/packages/svelte-comment-injector/package.json
+index 8959f7379..2cfc75253 100644
+--- a/packages/svelte-comment-injector/package.json
++++ b/packages/svelte-comment-injector/package.json
+@@ -9,7 +9,7 @@
+ 	"main": "dist/index.js",
+ 	"types": "dist/index.d.ts",
+ 	"scripts": {
+-		"build": "tsc",
++		"buildtsc": "tsc",
+ 		"prepare": "pnpm build"
+ 	},
+ 	"keywords": [
+diff --git a/turbo.json b/turbo.json
+index f5ee383f1..2a20bbcbe 100644
+--- a/turbo.json
++++ b/turbo.json
+@@ -17,6 +17,15 @@
+ 				".vercel/**"
+ 			]
+ 		},
++		"buildtsc": {
++			"dependsOn": ["^buildtsc"],
++			"outputs": [
++				"dist/**"
++			]
++		},
++		"build:desktop": {
++			"dependsOn": ["@gitbutler/desktop#build", "buildtsc"]
++		},
+ 		"dev": {
+ 			"dependsOn": ["package"],
+ 			"cache": false,
+-- 
+2.49.0
+
