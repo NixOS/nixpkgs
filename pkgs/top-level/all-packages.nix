@@ -7096,8 +7096,6 @@ with pkgs;
       }
   );
 
-  matter-compiler = callPackage ../development/compilers/matter-compiler { };
-
   chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
