@@ -309,6 +309,7 @@ in
             };
             serverId = lib.mkOption {
               type = lib.types.str;
+              default = "";
               description = ''
                 Restrict logins to a specific server (optional, but recommended).
                 You can find a Discord server's  by right-clicking the server icon,
@@ -317,6 +318,7 @@ in
             };
             serverRoles = lib.mkOption {
               type = lib.types.commas;
+              default = "";
               description = "Optionally restrict logins to a comma-separated list of role IDs";
             };
           };
