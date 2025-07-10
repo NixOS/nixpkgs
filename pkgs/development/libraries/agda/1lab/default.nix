@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2024-08-05";
+  version = "unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "the1lab";
     repo = pname;
-    rev = "7cc9bf7bbe90be5491e0d64da90a36afa29a540b";
-    hash = "sha256-hOyf6ZzejDAFDRj6liFZsBc9bKdxV5bzTPP4kGXIhW0=";
+    rev = "e9c2ad2b3ba9cefad36e72cb9d732117c68ac862";
+    hash = "sha256-wKh77+xCdfMtnq9jMlpdnEptGO+/WVNlQFa1TDbdUGs=";
   };
 
   postPatch = ''
