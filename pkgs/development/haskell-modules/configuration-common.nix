@@ -318,11 +318,6 @@ with haskellLib;
     sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
   }) super.weeder;
 
-  # Version 2.1.1 is deprecated, but part of Stackage LTS at the moment.
-  # https://github.com/commercialhaskell/stackage/issues/7500
-  # https://github.com/yesodweb/shakespeare/issues/280
-  shakespeare = doDistribute self.shakespeare_2_1_0_1;
-
   # Work around -Werror failures until a more permanent solution is released
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/88
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
