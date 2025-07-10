@@ -316,7 +316,7 @@ in
               '';
             };
             serverRoles = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.commas;
               description = "Optionally restrict logins to a comma-separated list of role IDs";
             };
           };
