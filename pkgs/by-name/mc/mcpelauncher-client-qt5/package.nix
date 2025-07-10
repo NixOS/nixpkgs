@@ -21,7 +21,7 @@
   zenity,
   xdg-utils,
   sdl3,
-  darwin,
+  apple-sdk,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -86,32 +86,32 @@ clangStdenv.mkDerivation (finalAttrs: {
       qt5.qtwebengine
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Foundation
+      apple-sdk
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON_EXT" (
-      toString (fetchzip {
-        url = "https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip";
-        hash = "sha256-h8czZ4f5vZqvHkDVQawrQdUeQnWxewu4OONisqlrmmM=";
-        stripRoot = false;
-      })
-    ))
-    (lib.cmakeBool "USE_OWN_CURL" false)
-    (lib.cmakeBool "ENABLE_DEV_PATHS" false)
-    (lib.cmakeFeature "GAMEWINDOW_SYSTEM" "GLFW")
-    (lib.cmakeBool "USE_SDL3_AUDIO" false)
-    (lib.cmakeBool "BUILD_WEBVIEW" withQtWebview)
-    (lib.cmakeBool "XAL_WEBVIEW_USE_CLI" (!withQtWebview))
-    (lib.cmakeBool "XAL_WEBVIEW_USE_QT" withQtWebview)
-    (lib.cmakeBool "ENABLE_QT_ERROR_UI" withQtErrorWindow)
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.cmakeFeature "OPENSSL_ROOT_DIR" "${openssl}")
-    (lib.cmakeFeature "CMAKE_PREFIX_PATH" "${qt5.qtbase}")
-    (lib.cmakeFeature "CMAKE_FRAMEWORK_PATH" "${darwin.apple_sdk.frameworks.AppKit}/Library/Frameworks:${darwin.apple_sdk.frameworks.Foundation}/Library/Frameworks")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON_EXT" (
+        toString (fetchzip {
+          url = "https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip";
+          hash = "sha256-h8czZ4f5vZqvHkDVQawrQdUeQnWxewu4OONisqlrmmM=";
+          stripRoot = false;
+        })
+      ))
+      (lib.cmakeBool "USE_OWN_CURL" false)
+      (lib.cmakeBool "ENABLE_DEV_PATHS" false)
+      (lib.cmakeFeature "GAMEWINDOW_SYSTEM" "GLFW")
+      (lib.cmakeBool "USE_SDL3_AUDIO" false)
+      (lib.cmakeBool "BUILD_WEBVIEW" withQtWebview)
+      (lib.cmakeBool "XAL_WEBVIEW_USE_CLI" (!withQtWebview))
+      (lib.cmakeBool "XAL_WEBVIEW_USE_QT" withQtWebview)
+      (lib.cmakeBool "ENABLE_QT_ERROR_UI" withQtErrorWindow)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeFeature "OPENSSL_ROOT_DIR" "${openssl}")
+      (lib.cmakeFeature "CMAKE_PREFIX_PATH" "${qt5.qtbase}")
+    ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-framework AppKit -framework Foundation";

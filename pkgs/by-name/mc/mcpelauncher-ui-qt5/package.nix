@@ -11,7 +11,7 @@
   protobuf,
   qt5,
   glfw,
-  darwin,
+  apple-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,28 +36,29 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    zlib
-    libzip
-    curl
-    protobuf
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtquickcontrols
-    qt5.qtquickcontrols2
-    qt5.qtdeclarative
-    qt5.qtgraphicaleffects
-    glfw
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt5.qtwebengine
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      zlib
+      libzip
+      curl
+      protobuf
+      qt5.qtbase
+      qt5.qtsvg
+      qt5.qtquickcontrols
+      qt5.qtquickcontrols2
+      qt5.qtdeclarative
+      qt5.qtgraphicaleffects
+      glfw
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qt5.qtwebengine
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk
+    ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_PREFIX_PATH" "${qt5.qtbase}")
-    (lib.cmakeFeature "CMAKE_FRAMEWORK_PATH" "${darwin.apple_sdk.frameworks.AppKit}/Library/Frameworks:${darwin.apple_sdk.frameworks.Foundation}/Library/Frameworks")
     (lib.cmakeBool "BUILD_WEBVIEW" false)
     (lib.cmakeBool "ENABLE_WEBVIEW" false)
     (lib.cmakeBool "USE_WEBENGINE" false)
