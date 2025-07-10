@@ -99,8 +99,6 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
         --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
-      substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-        --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
       substituteInPlace utils/list-licenses/list-licenses.sh \
         --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
     ''
