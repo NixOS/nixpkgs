@@ -13,6 +13,8 @@ buildGoModule (finalAttrs: {
   pname = "conftest";
   version = "0.62.0";
 
+  __darwinAllowLocalNetworking = true; # required for tests
+
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
