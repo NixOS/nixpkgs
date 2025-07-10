@@ -4826,6 +4826,22 @@ with pkgs;
   temurin-bin = temurin-bin-21;
   temurin-jre-bin = temurin-jre-bin-21;
 
+  temurin = callPackage ../development/compilers/temurin { };
+  inherit (temurin)
+    temurin-jdk-11
+    temurin-jdk-17
+    temurin-jdk-21
+    temurin-jdk-23
+    temurin-jdk-24
+    temurin-jre-11
+    temurin-jre-17
+    temurin-jre-21
+    temurin-jre-23
+    temurin-jre-24
+    temurin-jdk
+    temurin-jre
+    ;
+
   semeru-bin-21 = javaPackages.compiler.semeru-bin.jdk-21;
   semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
