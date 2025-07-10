@@ -11196,6 +11196,8 @@ self: super: with self; {
 
   passlib = callPackage ../development/python-modules/passlib { };
 
+  password-entropy = callPackage ../development/python-modules/password-entropy { };
+
   paste = callPackage ../development/python-modules/paste { };
 
   pastedeploy = callPackage ../development/python-modules/pastedeploy { };
