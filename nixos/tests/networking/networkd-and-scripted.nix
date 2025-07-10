@@ -1458,6 +1458,7 @@ lib.mapAttrs (lib.const (
     attrs
     // {
       name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
+      meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     }
   )
 )) testCases
