@@ -13204,8 +13204,6 @@ with pkgs;
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
 
-  mpc-qt = qt6Packages.callPackage ../applications/video/mpc-qt { };
-
   mplayer = callPackage ../applications/video/mplayer (
     {
       libdvdnav = libdvdnav_4_2_1;
