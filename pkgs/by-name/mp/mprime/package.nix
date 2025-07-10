@@ -28,6 +28,8 @@ let
     ."${stdenv.hostPlatform.system}" or throwSystem;
 
   docDir = "share/mprime/doc";
+  ccArch = stdenv.hostPlatform.gcc.arch or "x86-64";
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
@@ -66,6 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     hwloc
     gmp
   ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString (
+      # The following is needed because compiling with stdenv.hostPlatform.gcc.arch
+      # set to something like "znver1" causes fatal errors during runtime due to
+      # rounding issues
+      lib.optional (stdenv.hostPlatform.isx86_64 && ccArch != "x86-64") "-march=x86-64"
+    );
+  };
 
   enableParallelBuilding = true;
 
