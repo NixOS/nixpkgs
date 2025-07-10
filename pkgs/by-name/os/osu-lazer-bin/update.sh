@@ -5,7 +5,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 bin_file="$(realpath ./package.nix)"
 
-new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
+new_tag_name="$(curl -s "https://api.github.com/repos/ppy/osu/releases/latest" | jq -r '.name')"
+new_version="${new_tag_name%-lazer}"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
     echo "Already up to date."
@@ -24,7 +25,7 @@ for pair in \
     'x86_64-linux osu.AppImage'; do
     set -- $pair
     echo "Prefetching binary for $1..."
-    prefetch_output=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://github.com/ppy/osu/releases/download/$new_version/$2")
+    prefetch_output=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://github.com/ppy/osu/releases/download/$new_tag_name/$2")
     if [[ "$1" == *"darwin"* ]]; then
         store_path=$(jq -r '.storePath' <<<"$prefetch_output")
         tmpdir=$(mktemp -d)
