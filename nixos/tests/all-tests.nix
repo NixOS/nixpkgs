@@ -1014,6 +1014,7 @@ in
   nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
+  nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = runTest ./noto-fonts.nix;
