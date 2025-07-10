@@ -6621,6 +6621,8 @@ self: super: with self; {
 
   html2image = callPackage ../development/python-modules/html2image { };
 
+  html2pdf4doc = callPackage ../development/python-modules/html2pdf4doc { };
+
   html2text = callPackage ../development/python-modules/html2text { };
 
   html5-parser = callPackage ../development/python-modules/html5-parser { };
@@ -11193,6 +11195,8 @@ self: super: with self; {
   pasimple = callPackage ../development/python-modules/pasimple { };
 
   passlib = callPackage ../development/python-modules/passlib { };
+
+  password-entropy = callPackage ../development/python-modules/password-entropy { };
 
   paste = callPackage ../development/python-modules/paste { };
 
