@@ -182,6 +182,7 @@ in
             StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/froide-govplan") "froide-govplan";
             User = "govplan";
             Group = "govplan";
+            TimeoutStartSec = "5m";
           };
           after = [
             "postgresql.target"
