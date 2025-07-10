@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "arsenal";
-  version = "1.1.0";
+  version = "1.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
     tag = version;
-    sha256 = "sha256-NbNXyR5aNKvRJU9JWGk/ndwU1bhNgDOdcRqBkAY9nPA=";
+    sha256 = "sha256-C8DEB/xojU7vGvmeBF+PBD6KWMaJgwa7PpRS5+YzQ6c=";
   };
 
   build-system = with python3.pkgs; [
