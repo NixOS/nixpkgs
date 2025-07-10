@@ -1,24 +1,33 @@
 {
-  stdenv,
   lib,
-  bison,
-  boost,
+  stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
+  bison,
   flex,
-  gtkwave,
-  libffi,
-  makeWrapper,
   pkg-config,
+
+  # propagatedBuildInputs
+  libffi,
   python3,
   readline,
-  symlinkJoin,
   tcl,
-  iverilog,
   zlib,
+
+  # tests
+  gtkwave,
+  iverilog,
+
+  # passthru
+  # plugins
+  symlinkJoin,
   yosys,
+  makeWrapper,
   yosys-bluespec,
   yosys-ghdl,
   yosys-symbiflow,
+  nix-update-script,
   enablePython ? true, # enable python binding
 }:
 
@@ -73,21 +82,16 @@ let
     ghdl = yosys-ghdl;
   } // (yosys-symbiflow);
 
-  boost_python = boost.override {
-    enablePython = true;
-    python = python3;
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.51";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y2Gf3CXd1em+4dlIo2+dwfZbqahM3kqG0rZUTjkIZak=";
+    hash = "sha256-yEAZvdBc+923a0OTtaCpTbrl33kcmvgwFlL5VEssHkQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -106,27 +110,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [
-    pkg-config
     bison
     flex
+    pkg-config
   ];
-  propagatedBuildInputs = [
-    tcl
-    readline
-    libffi
-    zlib
-    (python3.withPackages (
-      pp: with pp; [
-        click
-      ]
-    ))
-  ] ++ lib.optional enablePython boost_python;
+
+  propagatedBuildInputs =
+    [
+      libffi
+      readline
+      tcl
+      zlib
+      (python3.withPackages (
+        pp: with pp; [
+          click
+        ]
+      ))
+    ]
+    ++ lib.optionals enablePython [
+      python3.pkgs.boost
+    ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
     ./plugin-search-dirs.patch
-    ./fix-clang-build.patch # see https://github.com/YosysHQ/yosys/issues/2011
+    ./fix-clang-build.patch
   ];
 
   postPatch = ''
@@ -170,14 +179,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit withPlugins allPlugins;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open RTL synthesis framework and tools";
     homepage = "https://yosyshq.net/yosys/";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/YosysHQ/yosys/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       shell
       thoughtpolice
       Luflosi

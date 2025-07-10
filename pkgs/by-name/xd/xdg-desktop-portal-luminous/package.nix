@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-luminous";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "xdg-desktop-portal-luminous";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qdR4wuRqq+PgJPbAtG8xvgWC7NwAeWGJiBXTWWdfyCY=";
+    hash = "sha256-WxkCZwV4zuDvl0n4Qnanh/eSFTQu+8J1zMtBSTI2hM8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-MIbhNlB2Mv5gOHlVoB93aQczbq9qo+WP/Rz6pWEoxWU=";
+    hash = "sha256-HUImAQ2lDqrLYh+YDHjXNTHZiTthocB5U5L4gBmIGQQ=";
   };
 
   nativeBuildInputs = [

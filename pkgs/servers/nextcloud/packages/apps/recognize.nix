@@ -17,14 +17,14 @@
 let
   latestVersionForNc = {
     "31" = {
-      version = "9.0.0";
-      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
-      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+      version = "9.0.3";
+      appHash = "sha256-G7SDE72tszifozfT3vNxHW6WmMqQKhrSayQVANQaMbs=";
+      modelHash = "sha256-dB4ot/65xisR700kUXg3+Y+SkrpQO4mWrFfp+En0QEE=";
     };
     "30" = {
-      version = "8.2.0";
-      appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
-      modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+      version = "8.2.1";
+      appHash = "sha256-xSJbfL5HI1bo5KYvk/ssEjSUsWF1hFQkl5MOm/kXYDE=";
+      modelHash = "sha256-O1gh3d0MGQOHUbrIyX3f+R7lGJ7+i8tTmrnfKlczrsk=";
     };
   };
   currentVersionInfo =
