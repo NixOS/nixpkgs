@@ -18,8 +18,6 @@ let
 
   cudaMajorMinorVersionString = lib.replaceStrings [ "." ] [ "" ] cudaMajorMinorVersion;
 
-  # NOTE: torchvision doesn't use cudnn; torch does!
-  #   For this reason it is not included.
   cuda-common-redist = with cudaPackages; [
     (lib.getDev cuda_cccl) # <thrust/*>
     (lib.getDev libcublas) # cublas_v2.h
@@ -48,73 +46,71 @@ let
     name = "cuda-redist-${cudaMajorMinorVersion}";
     paths = cuda-common-redist;
   };
+
+  nonCudaAttrs = {
+    inherit pname version;
+    src = fetchFromGitHub {
+      owner = "bitsandbytes-foundation";
+      repo = "bitsandbytes";
+      tag = version;
+      hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
+    };
+
+    pyproject = true;
+
+    nativeBuildInputs = [ cmake ];
+
+    build-system = [ setuptools ];
+
+    buildInputs = [ ];
+
+    cmakeFlags = [ (lib.cmakeFeature "COMPUTE_BACKEND" "cpu") ];
+
+    preBuild = ''
+      make -j $NIX_BUILD_CORES
+      cd ..
+    '';
+
+    dependencies = [
+      scipy
+      torch
+    ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "bitsandbytes" ];
+
+    meta = {
+      description = "8-bit CUDA functions for PyTorch";
+      homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
+      changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ bcdarwin ];
+    };
+  };
+
+  cudaAttrs = lib.optionalAttrs cudaSupport {
+    postPatch = ''
+      substituteInPlace bitsandbytes/cextension.py \
+        --replace-fail "if cuda_specs:" "if True:" \
+        --replace-fail \
+          "cuda_binary_path = get_cuda_bnb_library_path(cuda_specs)" \
+          "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaMajorMinorVersionString}.so'"
+    '';
+
+    nativeBuildInputs = [ cudaPackages.cuda_nvcc ];
+
+    buildInputs = [ cuda-redist ];
+
+    cmakeFlags = [ (lib.cmakeFeature "COMPUTE_BACKEND" "cuda") ];
+
+    CUDA_HOME = "${cuda-native-redist}";
+
+    NVCC_PREPEND_FLAGS = [
+      "-I${cuda-native-redist}/include"
+      "-L${cuda-native-redist}/lib"
+    ];
+  };
+
 in
-buildPythonPackage {
-  inherit pname version;
-  pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "bitsandbytes-foundation";
-    repo = "bitsandbytes";
-    tag = version;
-    hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
-  };
-
-  # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
-  # When `cudaSupport` is enabled, bypass this check and load the cuda library unconditionally.
-  # Indeed, in this case, only `libbitsandbytes_cuda124.so` is built. `libbitsandbytes_cpu.so` is not.
-  # Also, hardcode the path to the previously built library instead of relying on
-  # `get_cuda_bnb_library_path(cuda_specs)` which relies on `torch.cuda` too.
-  #
-  # WARNING: The cuda library is currently named `libbitsandbytes_cudaxxy` for cuda version `xx.y`.
-  # This upstream convention could change at some point and thus break the following patch.
-  postPatch = lib.optionalString cudaSupport ''
-    substituteInPlace bitsandbytes/cextension.py \
-      --replace-fail "if cuda_specs:" "if True:" \
-      --replace-fail \
-        "cuda_binary_path = get_cuda_bnb_library_path(cuda_specs)" \
-        "cuda_binary_path = PACKAGE_DIR / 'libbitsandbytes_cuda${cudaMajorMinorVersionString}.so'"
-  '';
-
-  nativeBuildInputs = [
-    cmake
-    cudaPackages.cuda_nvcc
-  ];
-
-  build-system = [
-    setuptools
-  ];
-
-  buildInputs = lib.optionals cudaSupport [ cuda-redist ];
-
-  cmakeFlags = [
-    (lib.cmakeFeature "COMPUTE_BACKEND" (if cudaSupport then "cuda" else "cpu"))
-  ];
-  CUDA_HOME = "${cuda-native-redist}";
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${cuda-native-redist}/include"
-    "-L${cuda-native-redist}/lib"
-  ];
-
-  preBuild = ''
-    make -j $NIX_BUILD_CORES
-    cd .. # leave /build/source/build
-  '';
-
-  dependencies = [
-    scipy
-    torch
-  ];
-
-  doCheck = false; # tests require CUDA and also GPU access
-
-  pythonImportsCheck = [ "bitsandbytes" ];
-
-  meta = {
-    description = "8-bit CUDA functions for PyTorch";
-    homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
-  };
-}
+buildPythonPackage (lib.mergeAttrs cudaAttrs nonCudaAttrs)
