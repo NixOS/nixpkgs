@@ -509,7 +509,7 @@ builtins.intersectAttrs super {
   llvm-ffi = addBuildDepends [
     pkgs.llvmPackages_16.llvm.lib
     pkgs.llvmPackages_16.llvm.dev
-  ] (super.llvm-ffi.override { LLVM = null; });
+  ] super.llvm-ffi;
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
