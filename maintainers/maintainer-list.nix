@@ -24085,9 +24085,9 @@
   stepbrobd = {
     name = "Yifei Sun";
     email = "ysun@hey.com";
+    matrix = "@stepbrobd:matrix.org";
     github = "stepbrobd";
     githubId = 81826728;
-    keys = [ { fingerprint = "AC7C 52E6 BA2F E8DE 8F0F  5D78 D973 170F 9B86 DB70"; } ];
   };
   stephank = {
     email = "nix@stephank.nl";
