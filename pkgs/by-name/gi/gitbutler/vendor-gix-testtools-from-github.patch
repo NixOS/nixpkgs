@@ -1,0 +1,38 @@
+From 4c767f45d83c93bf49e65b1fd3877a99335d2f50 Mon Sep 17 00:00:00 2001
+From: 25huizengek1 <25huizengek1@gmail.com>
+Date: Thu, 10 Jul 2025 22:27:42 +0200
+Subject: [PATCH] Vendor gix-testtools from GitHub instead of crates.io
+
+---
+ Cargo.toml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index e013aa654..98e27cfd0 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -5,9 +5,10 @@ resolver = "2"
+ [workspace.dependencies]
+ bstr = "1.11.1"
+ # Add the `tracing` or `tracing-detail` features to see more of gitoxide in the logs. Useful to see which programs it invokes.
+-gix = { git = "https://github.com/GitoxideLabs/gitoxide", branch = "main", version = "0.72.1", default-features = false, features = [
++gix = { git = "https://github.com/GitoxideLabs/gitoxide", branch = "main", default-features = false, features = [
+ ] }
+-gix-testtools = "0.16.1"
++gix-testtools = { git = "https://github.com/GitoxideLabs/gitoxide", branch = "main", default-features = false, features = [ ] }
++
+ insta = "1.43.1"
+ git2 = { version = "0.20.0", features = [
+     "vendored-openssl",
+@@ -83,6 +84,8 @@ but-tools = { path = "crates/but-tools" }
+ git2-hooks = { version = "0.5.0" }
+ itertools = "0.14.0"
+ 
++[patch.crates-io]
++gix-path = { git = "https://github.com/GitoxideLabs/gitoxide", branch = "main" }
+ 
+ [profile.release]
+ codegen-units = 1 # Compile crates one after another so the compiler can optimize better
+-- 
+2.49.0
+
