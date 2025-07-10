@@ -23,18 +23,7 @@ mkDerivation rec {
     shopt -s globstar extglob
     files=(src/**/*.@(agda|lagda.md))
     sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
-
-    # Generate all-pages manually instead of building the build script.
-    mkdir -p _build
-    for f in "''${files[@]}"; do
-      f=''${f#src/} f=''${f%%.*} f=''${f//\//.}
-      echo "open import $f"
-    done > _build/all-pages.agda
   '';
-
-  libraryName = "1lab";
-  libraryFile = "1lab.agda-lib";
-  everythingFile = "_build/all-pages.agda";
 
   meta = with lib; {
     description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";

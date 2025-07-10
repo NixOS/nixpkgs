@@ -17,14 +17,6 @@ mkDerivation rec {
     hash = "sha256-LD6KasmQ9ZHRNQJ0N4wjyc6JiSkZpmyqQq9B0Wta1n0=";
   };
 
-  nativeBuildInputs = [ (ghcWithPackages (self: [ self.filemanip ])) ];
-  preConfigure = ''
-    runhaskell GenerateEverything.hs --include-deprecated
-    # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
-    # do be copied to the store.
-    rm EverythingSafe.agda
-  '';
-
   passthru.tests = { inherit (nixosTests) agda; };
   meta = with lib; {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";

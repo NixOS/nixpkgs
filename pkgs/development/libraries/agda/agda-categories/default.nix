@@ -24,11 +24,6 @@ mkDerivation rec {
     # version update of the stdlib, so we get rid of the version constraint
     # altogether.
     sed -Ei 's/standard-library-[0-9.]+/standard-library/' agda-categories.agda-lib
-
-    # The Makefile of agda-categories uses git(1) instead of find(1) to
-    # determine the list of source files. We cannot use git, as $PWD will not
-    # be a valid Git working directory.
-    find src -name '*.agda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.agda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda
   '';
 
   buildInputs = [ standard-library ];
