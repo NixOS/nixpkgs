@@ -10,18 +10,18 @@ GEM
     io-console (0.6.0)
     irb (1.7.4)
       reline (>= 0.3.6)
-    iruby (0.7.4)
+    iruby (0.8.2)
       data_uri (~> 0.1)
       ffi-rzmq
       irb
+      logger
       mime-types (>= 3.3.1)
       multi_json (~> 1.11)
-      native-package-installer
+    logger (1.7.0)
     mime-types (3.5.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0808)
     multi_json (1.15.0)
-    native-package-installer (1.1.8)
     reline (0.3.8)
       io-console (~> 0.5)
 
@@ -29,7 +29,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  iruby (= 0.7.4)
+  iruby (= 0.8.2)
 
 BUNDLED WITH
-   2.4.19
+   2.6.9
