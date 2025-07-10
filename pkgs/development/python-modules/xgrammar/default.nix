@@ -17,7 +17,7 @@
   torch,
   transformers,
   triton,
-
+  mlx-lm,
   # tests
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -55,19 +55,20 @@ buildPythonPackage rec {
     torch
     transformers
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    triton
-  ];
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform triton) triton
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform mlx-lm) mlx-lm;
 
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
-    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
-    "-ffat-lto-objects"
-  ];
+  NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+      "-ffat-lto-objects"
+    ]
+  );
 
   disabledTests = [
     # You are trying to access a gated repo.
