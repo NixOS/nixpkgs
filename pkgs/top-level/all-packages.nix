@@ -340,7 +340,7 @@ with pkgs;
 
   buildFHSEnv = buildFHSEnvBubblewrap;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
-  buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
+  buildSupportElfUtils = callPackage ../build-support/elf-utils { };
 
   cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
 
