@@ -112,6 +112,7 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      "-DENABLE_CHDIG=OFF"
       "-DENABLE_TESTS=OFF"
       "-DENABLE_DELTA_KERNEL_RS=0"
       "-DCOMPILER_CACHE=disabled"
