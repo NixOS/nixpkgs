@@ -16,14 +16,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib3mf";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = "lib3mf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wq/dT/8m+em/qFoNNj6s5lyx/MgNeEBGSMBpuJiORqA=";
   };
 
@@ -99,10 +99,11 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
+    changelog = "https://github.com/3MFConsortium/lib3mf/releases/tag/${finalAttrs.src.tag}";
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
-}
+})
