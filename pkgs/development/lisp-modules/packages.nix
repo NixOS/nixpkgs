@@ -103,6 +103,13 @@ let
 
       cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
+      cl-project = super.cl-project.overrideLispAttrs {
+        # install skeleton.asd
+        postInstall = ''
+          cp -v skeleton/skeleton.asd $out/skeleton
+        '';
+      };
+
       lessp = build-asdf-system {
         pname = "lessp";
         version = "0.2-f8a9e4664";
