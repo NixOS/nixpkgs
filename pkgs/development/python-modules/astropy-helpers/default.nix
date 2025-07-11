@@ -1,30 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   isPy3k,
   pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "astropy-helpers";
   version = "4.0.1";
-  format = "setuptools";
+  pyproject = true;
 
-  # ModuleNotFoundError: No module named 'imp'
   disabled = !isPy3k || pythonAtLeast "3.12";
 
-  doCheck = false; # tests requires sphinx-astropy
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f1096414d108778218d6bea06d4d9c7b2ff7c83856a451331ac194e74de9f413";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "astropy-helpers";
+    tag = "v${version}";
+    hash = "sha256-MjL/I+ApyoyoD2NmKuKWpDbyuEgvBb2OBhxqj/w/3lk=";
   };
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "astropy_helpers" ];
+
+  meta = {
     description = "Utilities for building and installing Astropy, Astropy affiliated packages, and their respective documentation";
     homepage = "https://github.com/astropy/astropy-helpers";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.smaret ];
   };
 }
