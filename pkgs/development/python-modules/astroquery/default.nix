@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   astropy,
+  boto3,
   requests,
   keyring,
   beautifulsoup4,
@@ -31,6 +33,15 @@ buildPythonPackage rec {
     hash = "sha256-5pNKV+XNfUQca7WoWboVphXffzyVIHCmfxwr4nBMaEk=";
   };
 
+  patches = [
+    # https://github.com/astropy/astroquery/pull/3311
+    (fetchpatch2 {
+      name = "setuptools-package-index.patch";
+      url = "https://github.com/astropy/astroquery/commit/9d43beb4b7bea424d73fff0b602ca90026155519.patch";
+      hash = "sha256-3QdOwP1rlWeScGxHT9ZVPmffE7S1XE0cbtnQ8T4bIYw=";
+    })
+  ];
+
   build-system = [
     astropy-helpers
     setuptools
@@ -53,6 +64,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
+    boto3
     matplotlib
     pillow
     pytest
