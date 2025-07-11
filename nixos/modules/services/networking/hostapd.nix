@@ -1435,7 +1435,7 @@ in
       preStart = concatStringsSep "\n" (mapAttrsToList makeRadioRuntimeFiles cfg.radios);
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/hostapd ${concatStringsSep " " runtimeConfigFiles}";
+        ExecStart = "${cfg.package}/bin/hostapd -dd ${concatStringsSep " " runtimeConfigFiles}";
         Restart = "always";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = "hostapd";
