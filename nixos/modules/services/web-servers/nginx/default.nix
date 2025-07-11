@@ -1665,7 +1665,7 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
-      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+      lastaction = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
     };
   };
 }
