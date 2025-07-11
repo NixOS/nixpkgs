@@ -2363,6 +2363,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cmp-dotenv = buildVimPlugin {
+    pname = "cmp-dotenv.nvim";
+    version = "2024-04-23";
+    src = fetchFromGitHub {
+      owner = "SergioRibera";
+      repo = "cmp-dotenv";
+      rev = "7af67e7ed4fd9e5b20127a624d22452fbd505ccd";
+      sha256 = "1k3dq7sf0nqmwy9fljdqikaiphy30g1ypzg5py9g8b3n9ww2b97x";
+    };
+    meta.homepage = "https://github.com/SergioRibera/cmp-dotenv";
+  };
+
   cmp-emoji = buildVimPlugin {
     pname = "cmp-emoji";
     version = "2024-03-19";
