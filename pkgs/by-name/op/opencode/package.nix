@@ -4,7 +4,7 @@
   buildGoModule,
   bun,
   fetchFromGitHub,
-  fetchurl,
+  models-dev,
   nix-update-script,
   testers,
   writableTmpDirAsHomeHook,
@@ -106,17 +106,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     outputHashMode = "recursive";
   };
 
-  models-dev-data = fetchurl {
-    url = "https://models.dev/api.json";
-    sha256 = "sha256-igxQOC+Hz2FnXIW/S4Px9WhRuBhcIQIHO+7U8jHU1TQ=";
-  };
-
-  nativeBuildInputs = [ bun ];
+  nativeBuildInputs = [
+    bun
+    models-dev
+  ];
 
   patches = [
-    # Patch `packages/opencode/src/provider/models-macro.ts` to load the prefetched `models.dev/api.json`
-    # from the `MODELS_JSON` environment variable instead of fetching it at build time.
-    ./fix-models-macro.patch
+    # Patch `packages/opencode/src/provider/models-macro.ts` to get contents of
+    # `api.json` from the file bundled with `bun build`.
+    ./local-models-dev.patch
   ];
 
   configurePhase = ''
@@ -127,10 +125,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+  env.MODELS_DEV_API_JSON = "${models-dev}/dist/api.json";
+
   buildPhase = ''
     runHook preBuild
 
-    export MODELS_JSON="$(cat ${finalAttrs.models-dev-data})"
     bun build \
       --define OPENCODE_VERSION="'${finalAttrs.version}'" \
       --compile \
