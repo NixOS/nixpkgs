@@ -906,6 +906,7 @@ stdenv.mkDerivation (finalAttrs: {
       withMachined
       withNetworkd
       withPortabled
+      withSysupdate
       withTimedated
       withTpm2Tss
       withUtmp
