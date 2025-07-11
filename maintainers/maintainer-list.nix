@@ -3028,6 +3028,12 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+  beaudan = {
+    name = "Beaudan Brown";
+    email = "beaudan.brown@gmail.com";
+    github = "BeaudanBrown";
+    githubId = 43770694;
+  };
   beeb = {
     name = "Valentin Bersier";
     email = "hi@beeb.li";
