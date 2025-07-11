@@ -27,7 +27,16 @@ in
 
       enable = mkEnableOption "Navidrome music server";
 
-      package = mkPackageOption pkgs "navidrome" { };
+      package = mkPackageOption pkgs "navidrome" {
+        example = literalExpression ''
+          pkgs.navidrome.override {
+            plugins = with pkgs.navidromePlugins; [
+              wikimedia
+              coverartarchive
+            ];
+          }
+        ''
+      };
 
       settings = mkOption {
         type = submodule {
@@ -160,7 +169,8 @@ in
             ];
             RestrictRealtime = true;
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            # Plugin Functionality uses mmap
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.package.plugins == []);
             UMask = "0066";
             ProtectHostname = true;
           };
