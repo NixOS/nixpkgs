@@ -95,6 +95,7 @@ buildPythonPackage rec {
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
     hash = "sha256-uMO2iEOi9ACYdIM8Thf7+y1KpHQEqVxO3yxZ8RaGFXA=";
+    fetcherVersion = 1;
   };
 
   postBuild = ''

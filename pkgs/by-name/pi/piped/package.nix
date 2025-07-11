@@ -29,6 +29,7 @@ buildNpmPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-WtZfRZFRV9I1iBlAoV69GGFjdiQhTSBG/iiEadPVcys=";
+    fetcherVersion = 1;
   };
 
   passthru.updateScript = unstableGitUpdater { };

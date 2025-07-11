@@ -37,6 +37,7 @@ let
         sourceRoot
         ;
       hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
+      fetcherVersion = 1;
     };
 
     nativeBuildInputs = [

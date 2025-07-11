@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     buildInputs = [ nodejs_22 ];
 
     hash = "sha256-FOhaBm0mc7rHBGzenqRWsxGwktXTq25n/6yz7IURYXY=";
+    fetcherVersion = 1;
   };
 
   env = {
