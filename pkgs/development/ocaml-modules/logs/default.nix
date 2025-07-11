@@ -10,7 +10,7 @@
   lwt,
   cmdliner,
   fmt,
-  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
+  fmtSupport ? true,
   js_of_ocaml-compiler,
   jsooSupport ? true,
   lwtSupport ? true,
@@ -49,17 +49,17 @@ let
   optional_buildInputs = map (d: d.pkg) (lib.filter (d: d.enabled) optional_deps);
 in
 
-if lib.versionOlder ocaml.version "4.03" then
+if lib.versionOlder ocaml.version "4.14" then
   throw "logs is not available for OCaml ${ocaml.version}"
 else
 
   stdenv.mkDerivation rec {
     name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "0.8.0";
+    version = "0.9.0";
 
     src = fetchurl {
       url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
+      hash = "sha256-7pcGW6Qc4o8Z3qlFPGvsTg7yYWWtc5TEEx6gxlwPBtU=";
     };
 
     nativeBuildInputs = [
