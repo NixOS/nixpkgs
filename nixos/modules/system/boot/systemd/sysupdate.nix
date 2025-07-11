@@ -114,6 +114,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = config.systemd.package.withSysupdate;
+        message = "Cannot enable systemd-sysupdate with systemd package not built with sysupdate support";
+      }
+    ];
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-sysupdate.service"
