@@ -323,6 +323,7 @@ in
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+                      add = [ "NET_BIND_SERVICE" ];
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;
