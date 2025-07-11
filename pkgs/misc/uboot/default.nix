@@ -236,6 +236,12 @@ in
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
+  };
+
   ubootBananaPim3 = buildUBoot {
     defconfig = "Sinovoip_BPI_M3_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
