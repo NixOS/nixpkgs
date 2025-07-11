@@ -27,11 +27,16 @@ let
   pname = "sparrow";
   version = "2.2.3";
 
+  arch = if stdenv.isAarch64 then "aarch64" else "x86_64";
+
   openjdk = jdk23.override { enableJavaFX = true; };
 
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-x86_64.tar.gz";
-    hash = "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-{arch}.tar.gz";
+    hash = if stdenv.isAarch64 then
+      "sha256-0ydhf9ykg58szrpla3blx1jpszslvkcs7yhnpj1aw5gy9w57hp6z"
+    else
+      "sha256-MsERgfJGpxRkQm4Ww30Tc95kThjlgI+nO4bq2zNGdeU=";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -49,7 +54,7 @@ let
       mkdir -m 700 -p $GNUPGHOME
       ln -s ${manifest} ./manifest.txt
       ln -s ${manifestSignature} ./manifest.txt.asc
-      ln -s $downloadedFile ./sparrowwallet-${version}-x86_64.tar.gz
+      ln -s $downloadedFile ./sparrowwallet-${version}-{arch}.tar.gz
       gpg --import ${publicKey}
       gpg --verify manifest.txt.asc manifest.txt
       sha256sum -c --ignore-missing manifest.txt
@@ -206,7 +211,7 @@ let
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
-      cp tor.gz modules/io.matthewnelson.kmp.tor.resource.exec.tor/io/matthewnelson/kmp/tor/resource/exec/tor/native/linux-libc/x86_64/tor.gz
+      cp tor.gz modules/io.matthewnelson.kmp.tor.resource.exec.tor/io/matthewnelson/kmp/tor/resource/exec/tor/native/linux-libc/{arch}/tor.gz
     '';
 
     installPhase = ''
@@ -294,7 +299,7 @@ stdenvNoCC.mkDerivation rec {
       msgilligan
       _1000101
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "sparrow-desktop";
   };
 }
