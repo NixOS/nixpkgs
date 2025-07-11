@@ -1,0 +1,13 @@
+diff -Naurd x/voxelio/src/stream.cpp y/voxelio/src/stream.cpp
+--- x/voxelio/src/stream.cpp	2023-09-11 07:50:51.522074934 +0000
++++ y/voxelio/src/stream.cpp	2023-09-11 08:02:19.105142327 +0000
+@@ -117,7 +117,8 @@
+         return;
+     }
+ 
+-    size_t overwriteLength = std::min(size() - pos, length);
++    size_t const remaining = size() - pos;
++    size_t overwriteLength = std::min(remaining, length);
+     size_t pushLength = length - overwriteLength;
+ 
+     auto overwriteTarget = static_cast<std::vector<u8> *>(sink)->begin() + static_cast<ptrdiff_t>(pos);
