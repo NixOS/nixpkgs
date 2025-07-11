@@ -435,8 +435,7 @@ in
 
     networking.firewall = lib.mkMerge [
       (mkIf cfg.openFirewallDHCP {
-        allowedUDPPorts = [ 53 ];
-        allowedTCPPorts = [ 53 ];
+        allowedUDPPorts = [ 67 ];
       })
 
       (mkIf cfg.openFirewallWebserver {
