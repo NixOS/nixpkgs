@@ -1,7 +1,7 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   astropy,
   requests,
   keyring,
@@ -17,33 +17,32 @@
   pyvo,
   astropy-helpers,
   setuptools,
-  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "astroquery";
   version = "0.4.10";
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6s2R6do3jmQXQPvDEjhQ2qg7oJJqb/9MQMy/XcbVpAY=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = "astroquery";
+    tag = "v${version}";
+    hash = "sha256-5pNKV+XNfUQca7WoWboVphXffzyVIHCmfxwr4nBMaEk=";
   };
 
-  disabled = !isPy3k;
+  build-system = [
+    astropy-helpers
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     requests
     keyring
     beautifulsoup4
     html5lib
     pyvo
-  ];
-
-  nativeBuildInputs = [
-    astropy-helpers
-    setuptools
   ];
 
   # Disable automatic update of the astropy-helper module
@@ -77,10 +76,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "astroquery" ];
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.smaret ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.smaret ];
   };
 }
