@@ -19,13 +19,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "foks";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "foks-proj";
     repo = "go-foks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N4sWxYnHeqvG/qcqoqakUbxjtoh8CNPegYPYdrgP+z4=";
+    hash = "sha256-BeDhq+963G7OA164HcBJ8njfwPhRbMxPuckk7V538WI=";
   };
 
   vendorHash = "sha256-8/SVOWMoCfeiuH2As2cC/HLRs1WQIQ4/Ko1olXDq6bo=";
