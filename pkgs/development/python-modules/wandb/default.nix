@@ -368,6 +368,7 @@ buildPythonPackage rec {
 
       # HandleAbandonedError / SystemExit when run in sandbox
       "test_makedirs_raises_oserror__uses_temp_dir"
+      "test_no_root_dir_access__uses_temp_dir"
 
       # AssertionError: Not all requests have been executed
       "test_image_refs"
