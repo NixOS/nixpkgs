@@ -11,16 +11,17 @@
   gdk-pixbuf,
   glib,
   gobject-introspection,
-  gtk-layer-shell,
-  gtk3,
+  gtk4-layer-shell,
+  gtk4,
   gvfs,
   json-glib,
+  libadwaita,
   libgee,
-  libhandy,
   libnotify,
   libpulseaudio,
   librsvg,
   meson,
+  blueprint-compiler,
   ninja,
   pkg-config,
   python3,
@@ -34,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SwayNotificationCenter";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kRawYbBLVx0ie4t7tChkA8QJShS83fUcGrJSKkxBy8Q=";
+    hash = "sha256-F7fccUaQUSHHqXO0lvnW1H3Af2YTQwQ17rNFhprgFz4=";
   };
 
   # build pkg-config is required to locate the native `scdoc` input
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gobject-introspection
     meson
+    blueprint-compiler
     ninja
     pkg-config
     python3
@@ -67,16 +69,16 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     gdk-pixbuf
     glib
-    gtk-layer-shell
-    gtk3
+    gtk4-layer-shell
+    gtk4
     gvfs
     json-glib
+    libadwaita
     libgee
-    libhandy
     libnotify
     libpulseaudio
     librsvg
-    pantheon.granite
+    pantheon.granite7
     # systemd # ends with broken permission
     wayland-scanner
   ];
