@@ -14,8 +14,6 @@
 }:
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-
   # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
   # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
   # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
@@ -71,7 +69,7 @@ in
   buildFlags ? [ ],
   haddockFlags ? [ ],
   description ? null,
-  doCheck ? !isCross,
+  doCheck ? stdenv.buildPlatform == stdenv.hostPlatform, # TODO: Turn this into canExecute
   doBenchmark ? false,
   doHoogle ? true,
   doHaddockQuickjump ? doHoogle,
@@ -232,7 +230,8 @@ let
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
-  nativeGhc = buildHaskellPackages.ghc;
+  setupGhc =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ghc else buildHaskellPackages.ghc;
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
@@ -360,7 +359,7 @@ let
     ++ optionals isGhcjs [
       "--ghcjs"
     ]
-    ++ optionals isCross (
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) (
       [
         "--configure-option=--host=${stdenv.hostPlatform.config}"
       ]
@@ -438,7 +437,7 @@ let
     ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild =
-    [ nativeGhc ]
+    [ setupGhc ]
     # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
     # platform. See crossCabalFlags above for more details.
     ++ lib.optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
@@ -498,7 +497,7 @@ let
     "lib/${ghc.targetPrefix}${ghc.haskellCompilerName}" + lib.optionalString (ghc ? hadrian) "/lib";
   ghcLibdir = mkGhcLibdir ghc;
 
-  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+  setupGhcCommand = "${setupGhc.targetPrefix}ghc";
 
   buildPkgDb = thisGhc: packageConfDir: ''
     # If this dependency has a package database, then copy the contents of it,
@@ -510,7 +509,7 @@ let
     # we compile with it, and doing so can result in having multiple copies of
     # e.g. Cabal in the database with the same name and version, which is
     # ambiguous.
-    if [ -d "$p/${mkGhcLibdir thisGhc}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${nativeGhc}" ]; then
+    if [ -d "$p/${mkGhcLibdir thisGhc}/package.conf.d" ] && [ "$p" != "${ghc}" ] && [ "$p" != "${setupGhc}" ]; then
       cp -f "$p/${mkGhcLibdir thisGhc}/package.conf.d/"*.conf ${packageConfDir}/
       continue
     fi
@@ -628,9 +627,9 @@ lib.fix (
         # pkgs* arrays defined in stdenv/setup.hs
         + ''
           for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
-            ${buildPkgDb nativeGhc "$setupPackageConfDir"}
+            ${buildPkgDb setupGhc "$setupPackageConfDir"}
           done
-          ${nativeGhcCommand}-pkg --package-db="$setupPackageConfDir" recache
+          ${setupGhcCommand}-pkg --package-db="$setupPackageConfDir" recache
         ''
         # For normal components
         + ''
@@ -711,7 +710,7 @@ lib.fix (
         done
 
         echo setupCompileFlags: $setupCompileFlags
-        ${nativeGhcCommand} $setupCompileFlags --make -o Setup -odir $builddir -hidir $builddir $i
+        ${setupGhcCommand} $setupCompileFlags --make -o Setup -odir $builddir -hidir $builddir $i
 
         runHook postCompileBuildDriver
       '';
@@ -969,6 +968,9 @@ lib.fix (
             withHoogle ? false,
           }:
           let
+            # Needs to match the condition for setupGhc.
+            isCross = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
             name = "ghc-shell-for-${drv.name}";
 
             withPackages = if withHoogle then ghcWithHoogle else ghcWithPackages;
