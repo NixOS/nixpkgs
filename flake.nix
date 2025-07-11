@@ -249,5 +249,24 @@
         */
         readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
       };
+
+      /**
+        Modules by module class: `modules.<class>.<name> = module;`
+      */
+      modules = {
+        /**
+          Modules that extend the NixOS test framework.
+
+          See https://nixos.org/manual/nixos/unstable/#sec-nixos-tests
+        */
+        nixosTest = {
+          /**
+            Adds a `setPackage` function to the NixOS test to make it overridable.
+
+            Beyond what the `extendNixOS` offers in this regard, this module and function have logic to make sure platform differences and package overrides are handled correctly.
+          */
+          set-package = ./nixos/tests/common/set-package.nix;
+        };
+      };
     };
 }
