@@ -59,6 +59,7 @@ buildNodejs {
       ./node-npm-build-npm-package-logic.patch
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
+      ./use-nix-codesign.patch
 
       # TODO: remove when included in a release
       (fetchpatch2 {
