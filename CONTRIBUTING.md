@@ -89,6 +89,7 @@ This section describes in some detail how changes can be made and proposed with 
 6. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) from the new branch in your Nixpkgs fork to the upstream Nixpkgs repository.
    Use the branch from step 2 as the pull requests base branch.
    Go through the [pull request template](#pull-request-template) in the pre-filled default description.
+   Make sure the title of the PR follows the applicable conventions from the [commit conventions](#commit-conventions).
 
 7. Respond to review comments, potential CI failures and potential merge conflicts by updating the pull request.
    Always keep the pull request in a mergeable state.
@@ -502,7 +503,11 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 ## Commit conventions
 [commit-conventions]: #commit-conventions
 
-- Create a commit for each logical unit.
+- Create a commit for each logical unit at the Nixpkgs level.
+  This means that you should rarely break multiple changes in the same file into different logical units, because that's too fine-grained at the Nixpkgs level.
+  Some cases where you'd do so are when each change is linked to a different change in Nixpkgs as a whole.
+  For example, if you're refactoring multiple files due to the same change, this is considered a logical unit, and should be in the same commit.
+  However, fixing different packages due to unrelated issues should ideally be in different commits, even if they're included in the same PR.
 
 - Check for unnecessary whitespace with `git diff --check` before committing.
 
