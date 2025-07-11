@@ -6,8 +6,10 @@
   zstd,
   openssl,
   curl,
+  cyrus_sasl,
   cmake,
   ninja,
+  pkg-config,
   deterministic-host-uname,
 }:
 
@@ -30,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
     # cross: build system uses uname to determine host system
     deterministic-host-uname
   ];
@@ -39,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     openssl
     curl
+    cyrus_sasl
   ];
 
   # examples and tests don't build on darwin statically
