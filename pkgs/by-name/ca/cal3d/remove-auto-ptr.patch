@@ -1,0 +1,22 @@
+diff --git a/src/cal3d/loader.cpp b/src/cal3d/loader.cpp
+index 005296f..9ece0c0 100644
+--- a/src/cal3d/loader.cpp
++++ b/src/cal3d/loader.cpp
+@@ -1135,7 +1135,7 @@ CalCoreBone *CalLoader::loadCoreBones(CalDataSource& dataSrc, int version)
+   }
+ 
+   // allocate a new core bone instance
+-  std::auto_ptr<CalCoreBone> pCoreBone( new(std::nothrow) CalCoreBone(strName) );
++  std::unique_ptr<CalCoreBone> pCoreBone( new(std::nothrow) CalCoreBone(strName) );
+   if(pCoreBone.get() == 0)
+   {
+     CalError::setLastError(CalError::MEMORY_ALLOCATION_FAILED, __FILE__, __LINE__);
+@@ -1760,7 +1760,7 @@ CalCoreSubmesh *CalLoader::loadCoreSubmesh(CalDataSource& dataSrc, int version)
+ 	}
+ 
+ 	// allocate a new core submesh instance
+-	std::auto_ptr<CalCoreSubmesh> pCoreSubmesh( new(std::nothrow) CalCoreSubmesh() );
++	std::unique_ptr<CalCoreSubmesh> pCoreSubmesh( new(std::nothrow) CalCoreSubmesh() );
+ 	if(pCoreSubmesh.get() == 0)
+ 	{
+ 		CalError::setLastError(CalError::MEMORY_ALLOCATION_FAILED, __FILE__, __LINE__);
