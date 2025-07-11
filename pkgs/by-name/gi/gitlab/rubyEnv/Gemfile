@@ -648,7 +648,9 @@ gem 'gitaly', '~> 18.1.0.pre.rc1', feature_category: :gitaly
 # KAS GRPC protocol definitions
 gem 'gitlab-kas-grpc', '~> 17.11.0', feature_category: :deployment_management
 
-gem 'grpc', '~> 1.72.0', feature_category: :shared
+# Lock until 1.74.0 is available
+# https://gitlab.com/gitlab-com/gl-infra/production/-/issues/20067
+gem 'grpc', '= 1.63.0', feature_category: :shared
 
 gem 'google-protobuf', '~> 3.25', '>= 3.25.3', feature_category: :shared
 

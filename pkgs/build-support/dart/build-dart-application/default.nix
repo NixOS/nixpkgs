@@ -101,6 +101,7 @@ let
     } // sdkSourceBuilders;
   };
   packageConfig = generators.linkPackageConfig {
+    inherit pubspecLock;
     packageConfig = pub2nix.generatePackageConfig {
       pname = if args.pname != null then "${args.pname}-${args.version}" else null;
 
