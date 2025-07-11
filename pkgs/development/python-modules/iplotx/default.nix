@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "iplotx";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabilab";
     repo = "iplotx";
     tag = version;
-    hash = "sha256-3Nn/sz1yUaxhGFr0hMGoLEBF5pNs+tz/KpsGtKkYujo=";
+    hash = "sha256-5piMXKr61F3euiCOlamZD7Iv6FQtrlbxwYYbZmD92Cg=";
   };
 
   build-system = [ hatchling ];
