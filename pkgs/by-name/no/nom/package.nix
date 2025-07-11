@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "nom";
@@ -16,8 +18,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
 
+  ldflags = [
+    "-X 'main.version=${version}'"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     homepage = "https://github.com/guyfedwards/nom";
+    changelog = "https://github.com/guyfedwards/nom/releases/tag/v${version}";
     description = "RSS reader for the terminal";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Only;
