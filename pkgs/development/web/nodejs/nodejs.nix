@@ -28,6 +28,7 @@
   runtimeShell,
   gnupg,
   installShellFiles,
+  darwin,
 }:
 
 {
@@ -300,6 +301,11 @@ let
 
       inherit patches;
 
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        substituteInPlace test/parallel/test-macos-app-sandbox.js \
+          --subst-var-by codesign '${darwin.sigtool}/bin/codesign'
+      '';
+
       __darwinAllowLocalNetworking = true; # for tests
 
       doCheck = canExecute;
@@ -395,7 +401,7 @@ let
               ]
               ++ lib.optionals stdenv.buildPlatform.isDarwin [
                 # Disable tests that don’t work under macOS sandbox.
-                "test-macos-app-sandbox"
+                # uv_os_setpriority returned EPERM (operation not permitted)
                 "test-os"
                 "test-os-process-priority"
 
