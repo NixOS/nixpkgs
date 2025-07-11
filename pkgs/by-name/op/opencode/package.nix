@@ -113,7 +113,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ bun ];
 
-  patches = [ ./fix-models-macro.patch ];
+  patches = [
+    # Patch `packages/opencode/src/provider/models-macro.ts` to load the prefetched `models.dev/api.json`
+    # from the `MODELS_JSON` environment variable instead of fetching it at build time.
+    ./fix-models-macro.patch
+  ];
 
   configurePhase = ''
     runHook preConfigure
