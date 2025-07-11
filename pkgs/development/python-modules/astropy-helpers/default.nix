@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -12,14 +10,17 @@ buildPythonPackage rec {
   version = "4.0.1";
   pyproject = true;
 
-  disabled = !isPy3k || pythonAtLeast "3.12";
-
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astropy-helpers";
     tag = "v${version}";
     hash = "sha256-MjL/I+ApyoyoD2NmKuKWpDbyuEgvBb2OBhxqj/w/3lk=";
   };
+
+  patches = [
+    # Fixes build with Python 3.12+
+    ./python-imp.patch
+  ];
 
   build-system = [ setuptools ];
 
