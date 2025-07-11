@@ -204,6 +204,8 @@ buildPythonPackage rec {
     "test_package_version"
     # expects timeout, but we have no route in the sandbox
     "test_connect_error_multi_hosts_each_message_preserved"
+    # fails for netbox-branching with AsserionError KeyboardInterrupt
+    "test_break_attempts"
   ];
 
   disabledTestPaths = [
