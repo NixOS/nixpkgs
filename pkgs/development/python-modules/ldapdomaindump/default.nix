@@ -4,15 +4,13 @@
   fetchFromGitHub,
   dnspython,
   ldap3,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ldapdomaindump";
   version = "0.10.0-unstable-2025-04-06";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dirkjanm";
@@ -21,12 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-gb/3gtXPQ86bkvunvj1wonxYAFHKkCh2H5dmSNTgz5g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dnspython
     ldap3
   ];
 
-  # requires ldap server
+  # Tests require LDAP server
   doCheck = false;
 
   pythonImportsCheck = [ "ldapdomaindump" ];
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Active Directory information dumper via LDAP";
     homepage = "https://github.com/dirkjanm/ldapdomaindump/";
-    changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/v${version}";
+    changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }
