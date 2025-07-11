@@ -24,6 +24,8 @@ let
 in
 
 {
+  meta.maintainers = pkgs.postfix-tlspol.meta.maintainers;
+
   options.services.postfix-tlspol = {
     enable = mkEnableOption "postfix-tlspol";
 

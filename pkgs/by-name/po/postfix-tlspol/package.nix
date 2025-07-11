@@ -32,7 +32,10 @@ buildGoModule rec {
     description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE.";
     homepage = "https://github.com/Zuplu/postfix-tlspol";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ valodim ];
+    maintainers = with lib.maintainers; [
+      hexa
+      valodim
+    ];
     mainProgram = "postfix-tlspol";
   };
 }
