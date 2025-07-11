@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index ace1b6a..f6f2ecf 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,6 +12,7 @@ DEPS := libadwaita-1 \
+ 		wireplumber-0.5 \
+ 		json-glib-1.0 \
+ 		libnm \
++		libpipewire-0.3 \
+ 		libpulse \
+ 		libpulse-simple \
+ 		libpulse-mainloop-glib \
