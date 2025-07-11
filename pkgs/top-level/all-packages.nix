@@ -3874,8 +3874,6 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
-
   nvfancontrol = callPackage ../tools/misc/nvfancontrol {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
