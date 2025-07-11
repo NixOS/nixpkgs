@@ -2,9 +2,8 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchFromGitHub,
+  fetchpatch,
   fetchPypi,
-  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -28,24 +27,6 @@ let
         # checks are failing with django 5
         doCheck = false;
       };
-      symbolic = prev.symbolic.overridePythonAttrs rec {
-        version = "10.2.1";
-        src = fetchFromGitHub {
-          owner = "getsentry";
-          repo = "symbolic";
-          tag = version;
-          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-          # the `py` directory is not included in the tarball, so we fetch the source via git instead
-          forceFetchGit = true;
-        };
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          inherit src postPatch;
-          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
-        };
-        postPatch = ''
-          ln -s ${./symbolic_Cargo.lock} Cargo.lock
-        '';
-      };
     };
   };
 
@@ -58,6 +39,7 @@ let
       brotli
       celery
       celery-batches
+      cxxfilt
       django
       django-allauth
       django-anymail
@@ -111,6 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
   };
+
+  patches = [
+    # update symbolic
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/merge_requests/1642.patch";
+      excludes = [ "uv.lock" ];
+      hash = "sha256-6x1W/79DBPVQdAFWAozK2TXUoj/oArEuNMrARIeWtIY=";
+    })
+  ];
 
   propagatedBuildInputs = pythonPackages;
 
