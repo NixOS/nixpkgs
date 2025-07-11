@@ -23,12 +23,12 @@ with lib;
       [
         {
           cases = [ (range "8.16" "9.0") ];
-          out = "0.2.2";
+          out = "0.3.0";
         }
       ]
       null;
 
-  release."0.2.2".sha256 = "sha256-O50Rs7Yf1H4wgwb7ltRxW+7IF0b04zpfs+mR83rxT+E=";
+  release."0.3.0".sha256 = "sha256-W2eenv5Q421eVn2ubbninFmmdT875f3w/Zs7yGHUKP4=";
 
   releaseRev = v: "v${v}";
 
