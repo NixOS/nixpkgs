@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = pnpm-hash;
+    fetcherVersion = 1;
   };
 
   env = {
