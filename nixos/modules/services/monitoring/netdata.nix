@@ -292,6 +292,7 @@ in
       };
     };
 
+    # nix repackaged variant of https://github.com/netdata/netdata/blob/826d60df4287c0e3b2798c456c103f024d8c46c3/system/systemd/netdata.service.in
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [
@@ -342,21 +343,20 @@ in
           NETDATA_CLAIM_TOKEN="$(cat "$CREDENTIALS_DIRECTORY/token")"
           echo "Loaded NETDATA_CLAIM_TOKEN into env"
         '')
-        "exec netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf"
+        "exec netdata -D"
       ];
       serviceConfig = {
+        LogNamespace = lib.optionalAttrs (cfg.package.withSystemdJournal) "netdata";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
-        ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
-          while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
-        '';
-
         TimeoutStopSec = cfg.deadlineBeforeStopSec;
+        CPUSchedulingPolicy = "batch";
         Restart = "on-failure";
         # User and group
         User = cfg.user;
         Group = cfg.group;
         # Performance
         LimitNOFILE = "30000";
+        Nice = 0;
         # Runtime directory and mode
         RuntimeDirectory = "netdata";
         RuntimeDirectoryMode = "0750";
@@ -399,6 +399,20 @@ in
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
+        ReadWriteDirectories = lib.optional config.services.postfix.enable [
+          "-/var/spool/postfix/maildrop"
+        ];
+        # https://github.com/netdata/netdata/issues/14238
+        BindReadOnlyPaths = map (p: "-/proc/" + p) [
+          "cpuinfo"
+          "diskstats"
+          "loadavg"
+          "meminfo"
+          "slabinfo"
+          "stat"
+          "swapsstat"
+          "uptime"
+        ];
       }
       // (lib.optionalAttrs (cfg.claimTokenFile != null) {
         LoadCredential = [ "token:${cfg.claimTokenFile}" ];
