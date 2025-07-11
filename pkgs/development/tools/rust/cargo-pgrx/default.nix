@@ -57,9 +57,9 @@ let
 in
 {
   cargo-pgrx_0_12_0_alpha_1 = generic {
-    version = "0.12.0-alpha.1";
-    hash = "sha256-0m9oaqjU42RYyttkTihADDrRMjr2WoK/8sInZALeHws=";
-    cargoHash = "sha256-zYjqE7LZLnTaVxWAPWC1ncEjCMlrhy4THtgecB7wBYY=";
+    version = "0.15.0";
+    hash = "sha256-sksRfNV6l8YbdI6fzrEtanpDVV4sh14JXLqYBydHwy0=";
+    cargoHash = "sha256-c+n1bJMO9254kT4e6exVNhlIouzkkzrRIOVzR9lZeg4=";
   };
 
   cargo-pgrx_0_12_6 = generic {
