@@ -31,39 +31,44 @@ let
 
   buildMachinesText = concatMapStrings (
     machine:
-    (concatStringsSep " " (
-      [
-        "${optionalString (machine.protocol != null) "${machine.protocol}://"}${
-          optionalString (machine.sshUser != null) "${machine.sshUser}@"
-        }${machine.hostName}"
-        (
-          if machine.system != null then
-            machine.system
-          else if machine.systems != [ ] then
-            concatStringsSep "," machine.systems
-          else
-            "-"
+    (
+      (optionalString (machine.comment != null) ''
+        # ${machine.comment}
+      '')
+      + concatStringsSep " " (
+        [
+          "${optionalString (machine.protocol != null) "${machine.protocol}://"}${
+            optionalString (machine.sshUser != null) "${machine.sshUser}@"
+          }${machine.hostName}"
+          (
+            if machine.system != null then
+              machine.system
+            else if machine.systems != [ ] then
+              concatStringsSep "," machine.systems
+            else
+              "-"
+          )
+          (if machine.sshKey != null then machine.sshKey else "-")
+          (toString machine.maxJobs)
+          (toString machine.speedFactor)
+          (
+            let
+              res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+            in
+            if (res == [ ]) then "-" else (concatStringsSep "," res)
+          )
+          (
+            let
+              res = machine.mandatoryFeatures;
+            in
+            if (res == [ ]) then "-" else (concatStringsSep "," machine.mandatoryFeatures)
+          )
+        ]
+        ++ optional (isNixAtLeast "2.4pre") (
+          if machine.publicHostKey != null then machine.publicHostKey else "-"
         )
-        (if machine.sshKey != null then machine.sshKey else "-")
-        (toString machine.maxJobs)
-        (toString machine.speedFactor)
-        (
-          let
-            res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
-          in
-          if (res == [ ]) then "-" else (concatStringsSep "," res)
-        )
-        (
-          let
-            res = machine.mandatoryFeatures;
-          in
-          if (res == [ ]) then "-" else (concatStringsSep "," machine.mandatoryFeatures)
-        )
-      ]
-      ++ optional (isNixAtLeast "2.4pre") (
-        if machine.publicHostKey != null then machine.publicHostKey else "-"
       )
-    ))
+    )
     + "\n"
   ) cfg.buildMachines;
 
@@ -201,6 +206,15 @@ in
                   If null, SSH will use its regular known-hosts file when connecting.
                 '';
               };
+              comment = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "This is a powerful builder located in Belgium";
+                description = ''
+                  A comment to describe the builder. Could be useful for noting the full
+                  DNS name of a machine, and using an IP address as hostName.
+                '';
+              };
             };
           }
         );
@@ -247,9 +261,7 @@ in
       ];
 
     # List of machines for distributed Nix builds
-    environment.etc."nix/machines" = mkIf (cfg.buildMachines != [ ]) {
-      text = buildMachinesText;
-    };
+    environment.etc."nix/machines" = mkIf (cfg.buildMachines != [ ]) { text = buildMachinesText; };
 
     # Legacy configuration conversion.
     nix.settings = mkIf (!cfg.distributedBuilds) { builders = null; };
