@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "impacket"
+    "ldap3"
     "pyasn1"
     "rich"
     "typer"
