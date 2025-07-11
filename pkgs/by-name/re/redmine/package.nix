@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   bundlerEnv,
-  ruby,
+  ruby_3_3,
   makeWrapper,
   nixosTests,
 }:
@@ -13,7 +13,7 @@ let
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby;
+    inherit ruby_3_3;
     gemdir = ./.;
     groups = [
       "development"
