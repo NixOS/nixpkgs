@@ -130,11 +130,6 @@ in
       message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
     }) cfg.backends;
 
-    users.users.statsd = {
-      uid = config.ids.uids.statsd;
-      description = "Statsd daemon user";
-    };
-
     systemd.services.statsd = {
       description = "Statsd Server";
       wantedBy = [ "multi-user.target" ];
@@ -143,7 +138,7 @@ in
       };
       serviceConfig = {
         ExecStart = "${pkgs.statsd}/bin/statsd ${configFile}";
-        User = "statsd";
+        DynamicUser = true;
       };
     };
 
