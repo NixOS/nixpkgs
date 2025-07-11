@@ -218,8 +218,8 @@ done
 for i in ${NIX_SWIFTFLAGS_COMPILE_BEFORE:-}; do
     extraBefore+=("$i")
 done
-addCFlagsToList extraAfter $NIX_CFLAGS_COMPILE_@suffixSalt@
-addCFlagsToList extraBefore ${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@
+addCFlagsToList extraAfter ${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@
+addCFlagsToList extraBefore ${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@
 
 if [ "$dontLink" != 1 ]; then
 
