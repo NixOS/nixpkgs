@@ -7,6 +7,7 @@
   python3Packages,
 
   nominatim, # required for testVersion
+  nixosTests,
   testers,
 }:
 
@@ -64,8 +65,9 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nominatim_db" ];
 
-  passthru = {
-    tests.version = testers.testVersion { package = nominatim; };
+  passthru.tests = {
+    version = testers.testVersion { package = nominatim; };
+    inherit (nixosTests) nominatim;
   };
 
   meta = {
