@@ -1,58 +1,58 @@
 {
-  flutter,
+  flutter327,
   fetchFromGitHub,
   util-linux,
-  wrapGAppsHook3,
+  copyDesktopItems,
   makeDesktopItem,
   lib,
 }:
 
-flutter.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "pathplanner";
   version = "2025.2.2";
 
   src = fetchFromGitHub {
     owner = "mjansen4857";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pathplanner";
+    tag = "v${version}";
     hash = "sha256-RTLesH7j3R9JbvNr46Tk8bHbCeMm0daeTaxSOibkPjM=";
   };
 
   nativeBuildInputs = [
     util-linux
-  ];
-
-  propagatedBuildInputs = [
-    wrapGAppsHook3
+    copyDesktopItems
   ];
 
   pubspecLock = lib.importJSON ./pubspec.lock;
 
-  desktop = makeDesktopItem {
-    desktopName = "Path Planner";
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "FRC auto tool";
-    type = "Application";
-    categories = [
-      "Application"
-      "Utility"
-    ];
-    genericName = pname;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Path Planner";
+      name = "pathplanner";
+      exec = "pathplanner";
+      icon = "pathplanner";
+      comment = "FRC motion planner";
+      categories = [
+        "Utility"
+      ];
+      genericName = "pathplanner";
+    })
+  ];
 
-  postInstall = ''
-    mkdir -p $out/share/icons $out/share/applications
-    cp $out/app/pathplanner/data/flutter_assets/images/icon.png $out/share/icons/${pname}.png
-    cp ${desktop}/share/applications/${pname}.desktop $out/share/applications
+  postPatch = ''
+    substituteInPlace linux/my_application.cc \
+      --replace-fail "images/icon.ico" "$out/app/pathplanner/data/flutter_assets/images/icon.ico"
   '';
 
-  meta = with lib; {
-    description = "PathPlanner is a motion profile generator for FRC robots";
+  postInstall = ''
+    install -Dm0644 $out/app/pathplanner/data/flutter_assets/images/icon.png $out/share/icons/pathplanner.png
+  '';
+
+  meta = {
+    description = "Motion profile generator for FRC robots";
     homepage = "https://pathplanner.dev/home.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totaltax ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totaltax ];
+    platforms = lib.platforms.linux;
   };
 }
