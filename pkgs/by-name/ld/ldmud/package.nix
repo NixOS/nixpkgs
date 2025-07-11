@@ -28,17 +28,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldmud";
-  version = "3.6.7";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "ldmud";
     repo = "ldmud";
     tag = finalAttrs.version;
-    hash = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
+    hash = "sha256-ojOLM1vkuwuF0vXx6lCH0+OlyLkkOOnTJEUiZPpUhzo=";
   };
 
   patches = [
-    ./libxml2-2.12.0-compat.patch
     ./mysql-compat.patch
   ];
 
