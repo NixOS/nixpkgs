@@ -144,7 +144,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
     install -Dm755 opencode $out/bin/opencode
 
     runHook postInstall
