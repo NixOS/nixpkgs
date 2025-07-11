@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   asciidoc,
   pkg-config,
@@ -19,14 +20,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jimtcl";
-  version = "0.82";
+  version = "0.83";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = finalAttrs.version;
-    sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
+    sha256 = "sha256-O7hYQgI5P9jpX1Emb4NeDTtIlALXBeJI+RMca7638Ug=";
   };
+
+  # https://github.com/msteveb/jimtcl/issues/308
+  patches = [
+    (fetchpatch {
+      name = "jimtcl-readline-stdio.patch";
+      url = "https://github.com/msteveb/jimtcl/commit/35e0e1f9b1f018666e5170a35366c5fc3b97309c.patch";
+      hash = "sha256-EvhDoovEGcGjBsS/4g5bv/x7smdUZEL6L+KeHTfzY14=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -53,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-ext=sqlite3"
     "--with-ext=readline"
     "--with-ext=json"
-    "--enable-utf8"
     "--ipv6"
   ] ++ (lib.optional SDLSupport "--with-ext=sdl");
 
