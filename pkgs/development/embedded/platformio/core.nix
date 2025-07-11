@@ -74,6 +74,7 @@ buildPythonApplication rec {
       git
       lockfile
       marshmallow
+      pip
       pyelftools
       pyserial
       requests
@@ -83,8 +84,10 @@ buildPythonApplication rec {
       starlette
       tabulate
       uvicorn
+      wheel
       wsproto
       zeroconf
+      zopfli
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       chardet
