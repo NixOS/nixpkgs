@@ -569,14 +569,17 @@ in
       })
     ]
     ++ [
-      (mkIf config.services.prometheus.exporters.deluge.enable {
-        system.activationScripts = {
-          deluge-exported.text = ''
-            mkdir -p /etc/deluge-exporter
-            echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
+      (mkIf
+        (
+          config.services.prometheus.exporters.deluge.enable
+          && config.services.prometheus.exporters.deluge.delugePasswordFile != null
+        )
+        {
+          environment.etc."deluge-exporter/password".text = ''
+            DELUGE_PASSWORD=${builtins.readFile config.services.prometheus.exporters.deluge.delugePasswordFile}
           '';
-        };
-      })
+        }
+      )
     ]
     ++ (mapAttrsToList (
       name: conf:
