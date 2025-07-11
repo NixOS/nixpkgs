@@ -14,7 +14,7 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "mjansen4857";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RTLesH7j3R9JbvNr46Tk8bHbCeMm0daeTaxSOibkPjM=";
   };
 
@@ -33,10 +33,8 @@ flutter.buildFlutterApplication rec {
     name = pname;
     exec = pname;
     icon = pname;
-    comment = "FRC auto tool";
-    type = "Application";
+    comment = "FRC motion planner";
     categories = [
-      "Application"
       "Utility"
     ];
     genericName = pname;
@@ -48,11 +46,11 @@ flutter.buildFlutterApplication rec {
     cp ${desktop}/share/applications/${pname}.desktop $out/share/applications
   '';
 
-  meta = with lib; {
-    description = "PathPlanner is a motion profile generator for FRC robots";
+  meta = {
+    description = "A motion profile generator for FRC robots";
     homepage = "https://pathplanner.dev/home.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ totaltax ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ totaltax ];
+    platforms = lib.platforms.linux;
   };
 }
