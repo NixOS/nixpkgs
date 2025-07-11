@@ -57,6 +57,9 @@ in
   },
   sourceRoot ? null,
   setSourceRoot ? null,
+  # Extra environment variables to set during the build.
+  # See: `../../../doc/languages-frameworks/haskell.section.md`
+  env ? { },
   buildDepends ? [ ],
   setupHaskellDepends ? [ ],
   libraryHaskellDepends ? [ ],
@@ -553,6 +556,19 @@ let
       "haskellPackages.mkDerivation: testTarget is deprecated. Use testTargets instead"
       (lib.concatStringsSep " " testTargets);
 
+  env' =
+    {
+      LANG = "en_US.UTF-8"; # GHC needs the locale configured during the Haddock phase.
+    }
+    // env
+    # Implicit pointer to integer conversions are errors by default since clang 15.
+    # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
+    // optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+      NIX_CFLAGS_COMPILE =
+        "-Wno-error=int-conversion"
+        + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
+    };
+
 in
 lib.fix (
   drv:
@@ -586,7 +602,11 @@ lib.fix (
         ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ];
       propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
-      LANG = "en_US.UTF-8"; # GHC needs the locale configured during the Haddock phase.
+      env =
+        optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
+          LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+        }
+        // env';
 
       prePatch =
         optionalString (editedCabalFile != null) ''
@@ -992,16 +1012,37 @@ lib.fix (
             nativeBuildInputs =
               [ ghcEnv ] ++ optional (allPkgconfigDepends != [ ]) pkg-config ++ collectedToolDepends;
             buildInputs = otherBuildInputsSystem;
-            LANG = "en_US.UTF-8";
-            LOCALE_ARCHIVE = lib.optionalString (
-              stdenv.buildPlatform.libc == "glibc"
-            ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-            "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
-            "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
-            # TODO: is this still valid?
-            "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
-            "NIX_${ghcCommandCaps}_LIBDIR" =
-              if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
+
+            env =
+              {
+                "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
+                "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
+                # TODO: is this still valid?
+                "NIX_${ghcCommandCaps}_DOCDIR" = "${ghcEnv}/share/doc/ghc/html";
+                "NIX_${ghcCommandCaps}_LIBDIR" =
+                  if ghc.isHaLVM or false then "${ghcEnv}/lib/HaLVM-${ghc.version}" else "${ghcEnv}/${ghcLibdir}";
+              }
+              // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
+                # TODO: Why is this written in terms of `buildPackages`, unlike
+                # the outer `env`?
+                #
+                # According to @sternenseemann [1]:
+                #
+                # > The condition is based on `buildPlatform`, so it needs to
+                # > match. `LOCALE_ARCHIVE` is set to accompany `LANG` which
+                # > concerns things we execute on the build platform like
+                # > `haddock`.
+                # >
+                # > Arguably the outer non `buildPackages` one is incorrect and
+                # > probably works by accident in most cases since the locale
+                # > archive is not platform specific (the trouble is that it
+                # > may sometimes be impossible to cross-compile). At least
+                # > that would be my assumption.
+                #
+                # [1]: https://github.com/NixOS/nixpkgs/pull/424368#discussion_r2202683378
+                LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+              }
+              // env';
           } "echo $nativeBuildInputs $buildInputs > $out";
 
         env = envFunc { };
@@ -1047,17 +1088,8 @@ lib.fix (
     // optionalAttrs (args ? postFixup) { inherit postFixup; }
     // optionalAttrs (args ? dontStrip) { inherit dontStrip; }
     // optionalAttrs (postPhases != [ ]) { inherit postPhases; }
-    // optionalAttrs (stdenv.buildPlatform.libc == "glibc") {
-      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-    }
     // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
-    }
-
-    # Implicit pointer to integer conversions are errors by default since clang 15.
-    # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-    // optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
-      NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
     }
   )
 )
