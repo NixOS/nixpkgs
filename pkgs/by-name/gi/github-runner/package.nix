@@ -25,13 +25,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.325.0";
+  version = "2.326.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ic/+bdEfipyOB7jA+SXBuyET6ERu6ox+SdlLy4mbuqw=";
+    hash = "sha256-bKOxTV6iAvC+QOsfSs1hTS9k/Ou+YGEwTr5hew23cLY=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
