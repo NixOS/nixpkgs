@@ -1,0 +1,236 @@
+{
+  "depends": [
+    {
+      "method": "git",
+      "path": "/nix/store/mki47dpj9mi8wa7gwhp3n0q6z9lhn1mv-nim-bearssl-667b404",
+      "rev": "667b40440a53a58e9f922e29e20818720c62d9ac",
+      "sha256": "0a4mf9g7p7zdhlzzfl9iikmhkyl7w5kf2mrn0bv4w4n30sl98m4s",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-bearssl",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "bearssl"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/s0xpqswh05sy658ah0jxwvarczi2p8b1-source",
+      "rev": "32ac8679680ea699f7dbc046e8e0131cac97d41a",
+      "sha256": "0w3ya0rpy0rp997nnfakq0cshpk4vyva195mmgrw5c9zp4pwv2hm",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-chronicles/archive/32ac8679680ea699f7dbc046e8e0131cac97d41a.tar.gz",
+      "subDir": "",
+      "packages": [
+        "chronicles"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/7sgxspvgamvlsds48j7lb3p48qcwz1iw-source",
+      "rev": "0646c444fce7c7ed08ef6f2c9a7abfd172ffe655",
+      "sha256": "1r499jl0lhnjq7hgddwgjl0gh3y1mprnqkhk0h6yh3cwgsmr5ym9",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-chronos/archive/0646c444fce7c7ed08ef6f2c9a7abfd172ffe655.tar.gz",
+      "subDir": "",
+      "packages": [
+        "chronos"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/cxdwn7p4cis5hd5w4jsn8lql5vzx5civ-source",
+      "rev": "2b08c774afaafd600cf4c6f994cf78b8aa090c0c",
+      "sha256": "10zl9a5phdsjj811v8by0yzadfc8d3azaj878an2hr8qsfi9y1ps",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-faststreams/archive/2b08c774afaafd600cf4c6f994cf78b8aa090c0c.tar.gz",
+      "subDir": "",
+      "packages": [
+        "faststreams"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/m2c5l6z5mgknzkidhjsaz7n8pr1lb5ia-source",
+      "rev": "79cbab1460f4c0cdde2084589d017c43a3d7b4f1",
+      "sha256": "14nfr78anj3vsj5rwy7ikjnggzdzb7m2x2pjjgi8z20a6pv9p1ha",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-http-utils/archive/79cbab1460f4c0cdde2084589d017c43a3d7b4f1.tar.gz",
+      "subDir": "",
+      "packages": [
+        "httputils"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/s6inc18jrmmnzpvdnms6lh85bv25523w-source",
+      "rev": "274372132de497e6b7b793c9d5d5474b71bf80a2",
+      "sha256": "04p030b0lk6j54bwyh47mc4qhvbym0px5l4y69p51n953s7affy7",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-json-rpc/archive/274372132de497e6b7b793c9d5d5474b71bf80a2.tar.gz",
+      "subDir": "",
+      "packages": [
+        "json_rpc"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/p6c3fm650blwa95zvf52vh08lmjk3vfj-source",
+      "rev": "6eadb6e939ffa7882ff5437033c11a9464d3385c",
+      "sha256": "00w5kv5w4hz9yq5xzkxk95591n1m56z76j1al8kqhsabbgvnab8a",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-json-serialization/archive/6eadb6e939ffa7882ff5437033c11a9464d3385c.tar.gz",
+      "subDir": "",
+      "packages": [
+        "json_serialization"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/1y5divckxhpdlhjf25jakr3fnlbqqv0k-source",
+      "rev": "dc07e3058c6904eef965394493b6ea99aa2adefc",
+      "sha256": "1nj45bn99lyylzd3add01irxn2irhpj2ll9sphjf1zlczmga7d49",
+      "srcDir": "",
+      "url": "https://github.com/cheatfate/nimcrypto/archive/dc07e3058c6904eef965394493b6ea99aa2adefc.tar.gz",
+      "subDir": "",
+      "packages": [
+        "nimcrypto"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/zk3nnz2rphdjll15cfws3k1m16gs7zpf-source",
+      "rev": "0673df07cb266e15942c3b5f5b8a4732f049cd73",
+      "sha256": "1aip87rhvl6jhxkpj0gw9z18g5k03qjkhwi15rgqh7dmy4f7qggv",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-regex/archive/0673df07cb266e15942c3b5f5b8a4732f049cd73.tar.gz",
+      "subDir": "",
+      "packages": [
+        "regex"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/17gj9sw2hw818cbxvd6i94n734inm1vf-source",
+      "rev": "df8113dda4c2d74d460a8fa98252b0b771bf1f27",
+      "sha256": "1h7amas16sbhlr7zb7n3jb5434k98ji375vzw72k1fsc86vnmcr9",
+      "srcDir": "",
+      "url": "https://github.com/arnetheduck/nim-results/archive/df8113dda4c2d74d460a8fa98252b0b771bf1f27.tar.gz",
+      "subDir": "",
+      "packages": [
+        "results"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/d6c7dvmzzvc1ja7kf65jbclbjv74zll7-source",
+      "rev": "2086c99608b4bf472e1ef5fe063710f280243396",
+      "sha256": "1m7c9bvxarw167kd5mpfnddzydji03azhz347hvad592qfw4vwrc",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-serialization/archive/2086c99608b4bf472e1ef5fe063710f280243396.tar.gz",
+      "subDir": "",
+      "packages": [
+        "serialization"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/a5kmnnbk27rxk9vsx1vchiiq9znkpijf-source",
+      "rev": "79e4fa5a9d3374db17ed63622714d3e1094c7f34",
+      "sha256": "0x92sgnxczwx5ak067d6169j9qm0cdpbrcpp1ijrzgyfgknpyq0r",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-stew/archive/79e4fa5a9d3374db17ed63622714d3e1094c7f34.tar.gz",
+      "subDir": "",
+      "packages": [
+        "stew"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/ch40287lsmlpcrimi6p32irsyp8750dz-source",
+      "rev": "1a2c661e3f50ff696b0b6692fab0d7bb2abf10cc",
+      "sha256": "1791gj3nxn8cffw0q5id5fahyqz6chl4b94hbvvcj45nv7drj8ms",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-stint/archive/1a2c661e3f50ff696b0b6692fab0d7bb2abf10cc.tar.gz",
+      "subDir": "",
+      "packages": [
+        "stint"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/5zsg89yl1c4xbwxz204f89fhqw0pfyh2-source",
+      "rev": "4d37244f9f5e1acd8592a4ceb5c3fc47bc160181",
+      "sha256": "1knxmh42y10lgk2np3msacb0p01m071zq522sz19rc7c192qylin",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-testutils/archive/4d37244f9f5e1acd8592a4ceb5c3fc47bc160181.tar.gz",
+      "subDir": "",
+      "packages": [
+        "testutils"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/kfq6qp0l8vcr7dlnb4ahjldyp2wmg9d2-source",
+      "rev": "66f2458710dc641dd4640368f9483c8a0ec70561",
+      "sha256": "092z3glgdb7rmwajm7dmqzvralkm7ixighixk8ycf8sf17zm72ck",
+      "srcDir": "src",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/66f2458710dc641dd4640368f9483c8a0ec70561.tar.gz",
+      "subDir": "",
+      "packages": [
+        "unicodedb"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/2ksmfd7p93a1a7ibcv3qzsk8h3c3shz7-source",
+      "rev": "845b6af28b9f68f02d320e03ad18eccccea7ddb9",
+      "sha256": "1c55kl05pbavm9v5dv42n43sql9qcrblhh3hnp99p5xmlv20c9vf",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-unittest2/archive/845b6af28b9f68f02d320e03ad18eccccea7ddb9.tar.gz",
+      "subDir": "",
+      "packages": [
+        "unittest2"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/y0bn3k5amqv7dymdg4743f6ib3xjv9c2-source",
+      "rev": "ebe308a79a7b440a11dfbe74f352be86a3883508",
+      "sha256": "0xzkhx0hbzidxfasy0sna9jnr83qfnddklmm4ngvp11fgz29licd",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-websock/archive/ebe308a79a7b440a11dfbe74f352be86a3883508.tar.gz",
+      "subDir": "",
+      "packages": [
+        "websock"
+      ]
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/0fqfwjcwsln69s6kjg21nan1zpjkhm5a-source",
+      "rev": "bd36a44410dd8365649e425ccade817178628e12",
+      "sha256": "159h07k8axskgpq64b79qsixf83nq7b9r09367ghj7f1bgbgfa6w",
+      "srcDir": "",
+      "url": "https://github.com/zevv/with/archive/bd36a44410dd8365649e425ccade817178628e12.tar.gz",
+      "subDir": "",
+      "packages": [
+        "with"
+      ]
+    },
+    {
+      "method": "git",
+      "path": "/nix/store/5wiybf9wc0fajjh5d4f9gi4k4d92yakz-nim-zlib-3f79980",
+      "rev": "3f7998095264d262a8d99e2be89045e6d9301537",
+      "sha256": "054raay2cx5yyq7bda7pvfa5d5m7shv70kp21l9g767idybc7jr8",
+      "srcDir": "",
+      "url": "https://github.com/status-im/nim-zlib",
+      "subDir": "",
+      "fetchSubmodules": true,
+      "leaveDotGit": false,
+      "packages": [
+        "zlib"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index d614a94..674f2d6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -7,7 +7,6 @@ rust-version = "1.82"
+ publish = false
+ 
+ [profile.release]
+-debug = true
+ lto = "thin"
+ codegen-units = 1
+ 

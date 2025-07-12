@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/winston0410/tree-sitter-hjson",
+  "rev": "02fa3b79b3ff9a296066da6277adfc3f26cbc9e0",
+  "date": "2021-08-02T21:41:53+01:00",
+  "path": "/nix/store/cvbkxylvkpgxcmkv87fvknlfxg4q09bg-tree-sitter-hjson",
+  "sha256": "0zqf4bxqd2bpzdsw4kghq0jmn7l4sgdlrrlhc567b03p6kfdzi1n",
+  "hash": "sha256-NsTf3DR3gHVMYZDmTNvThB5bJcDwTcJ1+3eJhvsiDn8=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

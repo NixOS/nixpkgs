@@ -1,0 +1,7 @@
+Fix https://savannah.gnu.org/bugs/index.php?53109
+
+--- a/solfege/mainwin.py
++++ b/solfege/mainwin.py
+@@ -270,1 +270,1 @@
+-        hdlbox = Gtk.HandleBox()
++        hdlbox = Gtk.HBox()

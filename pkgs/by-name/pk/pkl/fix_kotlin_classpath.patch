@@ -1,0 +1,14 @@
+diff --git a/pkl-gradle/pkl-gradle.gradle.kts b/pkl-gradle/pkl-gradle.gradle.kts
+index 08f0e8ca..a16c7073 100644
+--- a/pkl-gradle/pkl-gradle.gradle.kts
++++ b/pkl-gradle/pkl-gradle.gradle.kts
+@@ -58,7 +58,7 @@ sourceSets {
+     // if `compileClasspath` is filtered, causing "unresolved reference" errors in IntelliJ.
+     // As a workaround, don't perform filtering for IntelliJ (import).
+     if (System.getProperty("idea.sync.active") == null) {
+-      compileClasspath = compileClasspath.filter { !(it.path.contains("dists")) }
++      compileClasspath = compileClasspath.filter { !(it.path.contains("@gradle@") || it.path.contains("generated-gradle-jars/gradle-api-")) }
+     }
+   }
+ }
+

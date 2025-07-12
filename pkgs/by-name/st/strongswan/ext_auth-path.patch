@@ -1,0 +1,13 @@
+Index: strongswan-5.2.1/src/libcharon/plugins/ext_auth/ext_auth_listener.c
+===================================================================
+--- strongswan-5.2.1.orig/src/libcharon/plugins/ext_auth/ext_auth_listener.c
++++ strongswan-5.2.1/src/libcharon/plugins/ext_auth/ext_auth_listener.c
+@@ -101,6 +101,8 @@ METHOD(listener_t, authorize, bool,
+ 
+ 		*success = FALSE;
+ 
++		push_env(envp, countof(envp), "PATH=%s", getenv("PATH"));
++
+ 		push_env(envp, countof(envp), "IKE_UNIQUE_ID=%u",
+ 				 ike_sa->get_unique_id(ike_sa));
+ 		push_env(envp, countof(envp), "IKE_NAME=%s",

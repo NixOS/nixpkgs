@@ -1,0 +1,166 @@
+OpenBSD hardcodes the /sbin/init path which is super unhelpful for booting a
+NixOS system. This patch adds a boot parameter that can be passed through the
+bootloader and into the kernel specifying which init binary to use. This patch
+will assuredly not be accepted upstream but is very relevant to nixpkgs.
+
+This patch applies for both sys and stand.
+
+diff --git a/sys/arch/amd64/amd64/machdep.c b/sys/arch/amd64/amd64/machdep.c
+index f58e6c585c1..874f5a74d6d 100644
+--- a/sys/arch/amd64/amd64/machdep.c
++++ b/sys/arch/amd64/amd64/machdep.c
+@@ -181,6 +181,7 @@ int	physmem;
+ u_int64_t	dumpmem_low;
+ u_int64_t	dumpmem_high;
+ extern int	boothowto;
++extern char	initpath[MAXPATHLEN];
+ int	cpu_class;
+ 
+ paddr_t	dumpmem_paddr;
+@@ -255,6 +256,7 @@ bios_memmap_t	*bios_memmap;
+ u_int32_t	bios_cksumlen;
+ bios_efiinfo_t	*bios_efiinfo;
+ bios_ucode_t	*bios_ucode;
++char		*passed_init;
+ 
+ #if NEFI > 0
+ EFI_MEMORY_DESCRIPTOR *mmap;
+@@ -1992,6 +1994,7 @@ getbootinfo(char *bootinfo, int bootinfo_size)
+ 	bios_ddb_t *bios_ddb;
+ 	bios_bootduid_t *bios_bootduid;
+ 	bios_bootsr_t *bios_bootsr;
++	char *init_param;
+ #undef BOOTINFO_DEBUG
+ #ifdef BOOTINFO_DEBUG
+ 	printf("bootargv:");
+@@ -2089,6 +2092,11 @@ getbootinfo(char *bootinfo, int bootinfo_size)
+ 			bios_ucode = (bios_ucode_t *)q->ba_arg;
+ 			break;
+ 
++		case BOOTARG_INIT:
++			init_param = (char*)q->ba_arg;
++			memcpy(initpath, init_param, sizeof(initpath));
++			break;
++
+ 		default:
+ #ifdef BOOTINFO_DEBUG
+ 			printf(" unsupported arg (%d) %p", q->ba_type,
+diff --git a/sys/arch/amd64/include/biosvar.h b/sys/arch/amd64/include/biosvar.h
+index b0c71ea0350..93e81b1b051 100644
+--- a/sys/arch/amd64/include/biosvar.h
++++ b/sys/arch/amd64/include/biosvar.h
+@@ -225,6 +225,8 @@ typedef struct _bios_ucode {
+ 	uint64_t	uc_size;
+ } __packed bios_ucode_t;
+ 
++#define BOOTARG_INIT 13
++
+ #if defined(_KERNEL) || defined (_STANDALONE)
+ 
+ #ifdef _LOCORE
+diff --git a/sys/arch/amd64/stand/efiboot/efiboot.c b/sys/arch/amd64/stand/efiboot/efiboot.c
+index 95cf92d298d..ee77f6769fd 100644
+--- a/sys/arch/amd64/stand/efiboot/efiboot.c
++++ b/sys/arch/amd64/stand/efiboot/efiboot.c
+@@ -965,6 +965,9 @@ efi_makebootargs(void)
+ #endif
+ 
+ 	addbootarg(BOOTARG_EFIINFO, sizeof(bios_efiinfo), &bios_efiinfo);
++	if (cmd.init[0] != 0) {
++		addbootarg(BOOTARG_INIT, sizeof(cmd.init), &cmd.init);
++	}
+ }
+ 
+ /* Vendor device path used to indicate the mmio UART on AMD SoCs. */
+diff --git a/sys/kern/init_main.c b/sys/kern/init_main.c
+index b4816b2e9a0..db412097035 100644
+--- a/sys/kern/init_main.c
++++ b/sys/kern/init_main.c
+@@ -103,6 +103,8 @@ extern void stoeplitz_init(void);
+ #include "vscsi.h"
+ #include "softraid.h"
+ 
++#define DEBUG 1
++
+ const char	copyright[] =
+ "Copyright (c) 1982, 1986, 1989, 1991, 1993\n"
+ "\tThe Regents of the University of California.  All rights reserved.\n"
+@@ -127,6 +129,7 @@ int	db_active = 0;
+ int	ncpus =  1;
+ int	ncpusfound = 1;			/* number of cpus we find */
+ volatile int start_init_exec;		/* semaphore for start_init() */
++char	initpath[MAXPATHLEN];
+ 
+ #if !defined(NO_PROPOLICE)
+ long	__guard_local __attribute__((section(".openbsd.randomdata")));
+@@ -557,6 +560,7 @@ static char *initpaths[] = {
+ 	"/sbin/init",
+ 	"/sbin/oinit",
+ 	"/sbin/init.bak",
++	initpath,
+ 	NULL,
+ };
+ 
+diff --git a/sys/stand/boot/boot.c b/sys/stand/boot/boot.c
+index e090a0d0180..1a20b1ece47 100644
+--- a/sys/stand/boot/boot.c
++++ b/sys/stand/boot/boot.c
+@@ -74,7 +74,7 @@ boot(dev_t bootdev)
+ 	devboot(bootdev, cmd.bootdev);
+ 	strlcpy(cmd.image, kernelfile, sizeof(cmd.image));
+ 	cmd.boothowto = 0;
+-	cmd.conf = "/etc/boot.conf";
++	cmd.conf = "/boot/nixos/default.conf";
+ 	cmd.timeout = boottimeout;
+ 
+ 	if (upgrade()) {
+diff --git a/sys/stand/boot/cmd.h b/sys/stand/boot/cmd.h
+index 5045f052b8b..327f3de8d84 100644
+--- a/sys/stand/boot/cmd.h
++++ b/sys/stand/boot/cmd.h
+@@ -43,6 +43,7 @@ struct cmd_table {
+ struct cmd_state {
+ 	char bootdev[BOOTDEVLEN]; /* device */
+ 	char image[MAXPATHLEN - 16]; /* image */
++	char init[MAXPATHLEN];
+ 	int  boothowto; /* howto */
+ 	char *conf; /* /etc/boot.conf normally */
+ 	int timeout;
+diff --git a/sys/stand/boot/vars.c b/sys/stand/boot/vars.c
+index d1516776315..b12edcdaeac 100644
+--- a/sys/stand/boot/vars.c
++++ b/sys/stand/boot/vars.c
+@@ -42,6 +42,7 @@ static int Xdevice(void);
+ static int Xdebug(void);
+ #endif
+ static int Xdb_console(void);
++static int Xinit(void);
+ static int Ximage(void);
+ static int Xhowto(void);
+ #ifdef BOOT_STTY
+@@ -63,6 +64,7 @@ const struct cmd_table cmd_set[] = {
+ 	{"image",  CMDT_VAR, Ximage},
+ 	{"timeout",CMDT_VAR, Xtimeout},
+ 	{"db_console", CMDT_VAR, Xdb_console},
++	{"init", CMDT_VAR, Xinit},
+ 	{NULL,0}
+ };
+ 
+@@ -107,6 +109,17 @@ Xdb_console(void)
+ 	return (0);
+ }
+ 
++int
++Xinit(void)
++{
++	if (cmd.argc != 2) {
++		printf("%s\n", cmd.init);
++	} else {
++		strlcpy(cmd.init, cmd.argv[1], sizeof(cmd.init));
++	}
++	return 0;
++}
++
+ static int
+ Xtimeout(void)
+ {

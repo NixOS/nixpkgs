@@ -1,0 +1,37 @@
+From 30ca2903a8ed4eed974ea744e4b9bd96198c425d Mon Sep 17 00:00:00 2001
+From: Rodney Lorrimar <r.lorrimar@fugro-fsi.com.au>
+Date: Mon, 21 Dec 2009 02:07:46 +0000
+Subject: Include NUL terminator in unique_message_data_get_filename()
+
+https://bugzilla.gnome.org/show_bug.cgi?id=605104
+
+Signed-off-by: Emmanuele Bassi <ebassi@gnome.org>
+---
+diff --git a/unique/uniqueinternals.h b/unique/uniqueinternals.h
+index ace40ed..3cec152 100644
+--- a/unique/uniqueinternals.h
++++ b/unique/uniqueinternals.h
+@@ -13,7 +13,7 @@ G_BEGIN_DECLS
+ struct _UniqueMessageData
+ {
+   guchar *data;
+-  gint length;
++  gint length;  /* length of data not including NUL terminator */
+ 
+   GdkScreen *screen;
+   gchar *startup_id;
+diff --git a/unique/uniquemessage.c b/unique/uniquemessage.c
+index 10f6df5..c74392d 100644
+--- a/unique/uniquemessage.c
++++ b/unique/uniquemessage.c
+@@ -493,7 +493,7 @@ unique_message_data_get_filename (UniqueMessageData *message_data)
+ {
+   g_return_val_if_fail (message_data != NULL, NULL);
+ 
+-  return g_memdup (message_data->data, message_data->length);
++  return g_memdup (message_data->data, message_data->length + 1);
+ }
+ 
+ /**
+--
+cgit v0.9

@@ -1,0 +1,15 @@
+diff --git a/CLPS2C-Compiler/Program.cs b/CLPS2C-Compiler/Program.cs
+index 6991896..fe8cd5f 100644
+--- a/CLPS2C-Compiler/CLPS2C-Compiler/Program.cs
++++ b/CLPS2C-Compiler/CLPS2C-Compiler/Program.cs
+@@ -90,10 +90,6 @@ namespace CLPS2C_Compiler
+             }
+             else if (OutputLines.Count != 0)
+             {
+-                if (OutputLines[0].StartsWith(_newLine))
+-                {
+-                    OutputLines[0] = OutputLines[0].Substring(2);
+-                }
+                 Output += string.Join("", OutputLines);
+
+                 // Convert to PNACH Format

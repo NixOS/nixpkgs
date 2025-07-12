@@ -1,0 +1,45 @@
+From 221a1f15a42f3ef76ccafcddf66b7c4ade391bff Mon Sep 17 00:00:00 2001
+From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Date: Sat, 11 Feb 2023 12:17:00 -0500
+Subject: [PATCH] drop use of imghdr
+
+imghdr is deprecated and will be removed in python 3.13 (see https://peps.python.org/pep-0594/#imghdr)
+
+The relevant code in imghdr is just:
+
+```
+def test_jpeg(h, f):
+    """JPEG data with JFIF or Exif markers; and raw JPEG"""
+    if h[6:10] in (b'JFIF', b'Exif'):
+        return 'jpeg'
+    elif h[:4] == b'\xff\xd8\xff\xdb':
+        return 'jpeg'
+```
+
+So we transplant it directly
+---
+ pgpy/constants.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/pgpy/constants.py b/pgpy/constants.py
+index 28a4561a..983916d4 100644
+--- a/pgpy/constants.py
++++ b/pgpy/constants.py
+@@ -2,7 +2,6 @@
+ """
+ import bz2
+ import hashlib
+-import imghdr
+ import os
+ import zlib
+ import warnings
+@@ -429,8 +428,7 @@ class ImageEncoding(IntEnum):
+ 
+     @classmethod
+     def encodingof(cls, imagebytes):
+-        type = imghdr.what(None, h=imagebytes)
+-        if type == 'jpeg':
++        if imagebytes[6:10] in (b'JFIF', b'Exif') or imagebytes[:4] == b'\xff\xd8\xff\xdb':
+             return ImageEncoding.JPEG
+         return ImageEncoding.Unknown  # pragma: no cover
+ 
