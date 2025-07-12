@@ -8,10 +8,7 @@ let
 in
 
 self: super: {
-
-  # ghcjs does not use `llvmPackages` and exposes `null` attribute.
-  llvmPackages =
-    if self.ghc.llvmPackages != null then pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages else null;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.10.x core libraries.
   array = null;
