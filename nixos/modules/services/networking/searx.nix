@@ -141,7 +141,7 @@ in
             favicons = {
               cfg_schema = 1;
               cache = {
-                db_url = "/run/searx/faviconcache.db";
+                db_url = "/var/cache/searx/faviconcache.db";
                 HOLD_TIME = 5184000;
                 LIMIT_TOTAL_BYTES = 2147483648;
                 BLOB_MAX_BYTES = 40960;
