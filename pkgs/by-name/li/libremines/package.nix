@@ -3,46 +3,45 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtmultimedia,
-  qtwayland,
+  qt6,
+  qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libremines";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Bollos00";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libremines";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TQwjEgtqAvKnrpia6VloRgFwtq5TNDmxU+ZWjtEK/n8=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs =
     [
-      qtmultimedia
+      qt6Packages.qtmultimedia
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6Packages.qtwayland
     ];
 
   cmakeFlags = [ "-DUSE_QT6=TRUE" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt based Minesweeper game";
     mainProgram = "libremines";
     longDescription = ''
       A Free/Libre and Open Source Software Qt based Minesweeper game available for GNU/Linux, FreeBSD and Windows systems.
     '';
     homepage = "https://bollos00.github.io/LibreMines";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
-}
+})
