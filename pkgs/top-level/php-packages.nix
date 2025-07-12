@@ -191,9 +191,11 @@ lib.makeScope pkgs.newScope (
             runHook preInstall
 
             mkdir -p $out/lib/php/extensions
-            cp modules/${extName}.so $out/lib/php/extensions/${extName}.so
+            if [ -f "modules/${extName}.so" ]; then
+              cp modules/${extName}.so $out/lib/php/extensions/${extName}.so
+            fi
             mkdir -p $dev/include
-            ${rsync}/bin/rsync -r --filter="+ */" \
+            ${lib.getExe rsync} -r --filter="+ */" \
                                   --filter="+ *.h" \
                                   --filter="- *" \
                                   --prune-empty-dirs \
@@ -444,9 +446,25 @@ lib.makeScope pkgs.newScope (
               { name = "dba"; }
               {
                 name = "dom";
-                buildInputs = [ libxml2 ];
+                buildInputs =
+                  let
+                    lexbor = mkExtension {
+                      name = "lexbor";
+                      configureFlags = [ ];
+                      doCheck = false;
+                    };
+                  in
+                  [
+                    libxml2
+                  ]
+                  ++ lib.optionals (lib.versionAtLeast php.version "8.5") [
+                    lexbor
+                  ];
                 configureFlags = [
                   "--enable-dom"
+                ];
+                env.NIX_CFLAGS_COMPILE = toString [
+                  "-I../.."
                 ];
               }
               {
