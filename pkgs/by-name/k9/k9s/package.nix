@@ -59,6 +59,9 @@ buildGoModule (finalAttrs: {
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
       --zsh <($out/bin/k9s completion zsh)
+
+    mkdir -p $out/share/k9s/skins
+    cp -r $src/skins/* $out/share/k9s/skins/
   '';
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
