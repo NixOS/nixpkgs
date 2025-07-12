@@ -70,10 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # Don't attempt to sign the darwin app bundle.
-  # It's impure and may fail in some restricted environments.
-  CSC_IDENTITY_AUTO_DISCOVERY = lib.optionals stdenv.hostPlatform.isDarwin "false";
-
   nativeBuildInputs =
     [
       nodejs
@@ -94,9 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     pnpm build
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
     ./node_modules/.bin/electron-builder \
       --dir \
       --config .electron-builder.config.cjs \
+      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
