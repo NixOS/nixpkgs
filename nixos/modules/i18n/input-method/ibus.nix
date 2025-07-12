@@ -51,7 +51,7 @@ in
           "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = lib.mkOption {
-        type = with lib.types; nullOr path;
+        type = with lib.types; nullOr (oneOf [ path str ]);
         default = null;
         example = lib.literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
