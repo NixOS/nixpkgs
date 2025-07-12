@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.mcs.anl.gov/mpi/mpich2/";
     license = {
-      url = "http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
+      url = "https://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ lib.maintainers.markuskowa ];

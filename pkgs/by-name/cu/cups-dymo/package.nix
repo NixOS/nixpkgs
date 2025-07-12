@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   dl-name = "dymo-cups-drivers-1.4.0";
 
   src = fetchurl {
-    url = "http://download.dymo.com/dymo/Software/Download%20Drivers/Linux/Download/${dl-name}.tar.gz";
+    url = "https://download.dymo.com/dymo/Software/Download%20Drivers/Linux/Download/${dl-name}.tar.gz";
     sha256 = "0wagsrz3q7yrkzb5ws0m5faq68rqnqfap9p98sgk5jl6x7krf1y6";
   };
 

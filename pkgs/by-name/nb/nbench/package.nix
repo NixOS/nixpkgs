@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.2.3";
 
   src = fetchurl {
-    url = "http://www.math.utah.edu/~mayer/linux/nbench-byte-${version}.tar.gz";
+    url = "https://www.math.utah.edu/~mayer/linux/nbench-byte-${version}.tar.gz";
     sha256 = "1b01j7nmm3wd92ngvsmn2sbw43sl9fpx4xxmkrink68fz1rx0gbj";
   };
 

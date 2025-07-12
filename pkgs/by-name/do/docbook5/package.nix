@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "5.0.1";
 
   src = fetchurl {
-    url = "http://www.docbook.org/xml/${version}/docbook-${version}.zip";
+    url = "https://www.docbook.org/xml/${version}/docbook-${version}.zip";
     sha256 = "1iz3hq1lqgnshvlz4j9gvh4jy1ml74qf90vqf2ikbq0h4i2xzybs";
   };
 

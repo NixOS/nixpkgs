@@ -9,7 +9,7 @@
 
 let
   glucose' = fetchurl {
-    url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup.tgz";
+    url = "https://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup.tgz";
     sha256 = "0bq5l2jabhdfhng002qfk0mcj4pfi1v5853x3c7igwfrgx0jmfld";
   };
 in

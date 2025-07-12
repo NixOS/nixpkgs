@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "9f";
 
   src = fetchurl {
-    url = "http://www.ijg.org/files/jpegsrc.v${finalAttrs.version}.tar.gz";
+    url = "https://www.ijg.org/files/jpegsrc.v${finalAttrs.version}.tar.gz";
     hash = "sha256-BHBcEQyyRpyqeftx+6PXv4NJFHBulkGkWJSFwfgyVls=";
   };
 

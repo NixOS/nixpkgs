@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "20250627.8314b03";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
     hash = "sha256-av7ub9GnI+VwkTGafSB1J9YfCpjZOs2UMKVycMvzXwI=";
   };
 

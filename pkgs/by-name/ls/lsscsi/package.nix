@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.32";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/scsi/lsscsi-${version}.tgz";
+    url = "https://sg.danny.cz/scsi/lsscsi-${version}.tgz";
     sha256 = "sha256-CoAOnpTcoqtwLWXXJ3eujK4Hjj100Ly+1kughJ6AKaE=";
   };
 

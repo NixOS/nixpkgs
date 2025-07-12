@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "8.2.2";
 
   src = fetchurl {
-    url = "http://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
+    url = "https://nuttcp.net/nuttcp/nuttcp-${version}.tar.bz2";
     sha256 = "sha256-fq16ieeqoFnSDjQELFihmMKYHK1ylVDROI3fyQNtOYM=";
   };
 

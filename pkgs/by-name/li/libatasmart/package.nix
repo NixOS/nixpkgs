@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.19";
 
   src = fetchurl {
-    url = "http://0pointer.de/public/libatasmart-${version}.tar.xz";
+    url = "https://0pointer.de/public/libatasmart-${version}.tar.xz";
     sha256 = "138gvgdwk6h4ljrjsr09pxk1nrki4b155hqdzyr8mlk3bwsfmw31";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/hmap/releases/${pname}-${version}.tbz";
+    url = "https://erratique.ch/software/hmap/releases/${pname}-${version}.tbz";
     sha256 = "10xyjy4ab87z7jnghy0wnla9wrmazgyhdwhr4hdmxxdn28dxn03a";
   };
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www3.cmbi.umcn.nl/molden/";
     license = {
       fullName = "Free for academic/non-profit use";
-      url = "http://www3.cmbi.umcn.nl/molden/CopyRight.html";
+      url = "https://www3.cmbi.umcn.nl/molden/CopyRight.html";
       free = false;
     };
     platforms = platforms.linux;

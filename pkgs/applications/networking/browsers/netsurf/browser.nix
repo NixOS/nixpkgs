@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.11";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-wopiau/uQo0FOxP4i1xECSIkWXZSLRLq8TfP0y0gHLI=";
   };
 
