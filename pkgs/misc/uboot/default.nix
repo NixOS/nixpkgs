@@ -234,6 +234,19 @@ in
     ];
   };
 
+  ubootAppleM1 = buildUBoot {
+    defconfig = "apple_m1_defconfig";
+    # Enlarges font at boot screen
+    extraConfig = ''
+      CONFIG_VIDEO_FONT_4X6=n
+      CONFIG_VIDEO_FONT_8X16=n
+      CONFIG_VIDEO_FONT_SUN12X22=n
+      CONFIG_VIDEO_FONT_16X32=y
+    '';
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "u-boot-nodtb.bin" ];
+  };
+
   ubootBananaPi = buildUBoot {
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
