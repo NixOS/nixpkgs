@@ -15,7 +15,7 @@ let
 in
 {
   mkModDirDrv =
-    mods: modsDatFile: # a list of mod derivations
+    mods: modsDatFile: modsListFile: # a list of mod derivations
     let
       recursiveDeps = modDrv: [ modDrv ] ++ map recursiveDeps modDrv.deps;
       modDrvs = unique (flatten (map recursiveDeps mods));
@@ -34,6 +34,9 @@ in
         ''
         + (optionalString (modsDatFile != null) ''
           cp ${modsDatFile} $out/mod-settings.dat
+        '')
+        + (optionalString (modsListFile != null) ''
+          cp ${modsListFile} $out/mod-list.json
         '');
     };
 

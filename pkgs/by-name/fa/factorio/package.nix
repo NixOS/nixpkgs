@@ -21,6 +21,7 @@
   wayland,
 
   mods-dat ? null,
+  mods-list ? null,
   versionsJson ? ./versions.json,
   username ? "",
   token ? "", # get/reset token at https://factorio.com/profile
@@ -185,7 +186,7 @@ let
     fi
   '';
 
-  modDir = factorio-utils.mkModDirDrv mods mods-dat;
+  modDir = factorio-utils.mkModDirDrv mods mods-dat mods-list;
 
   base = with actual; {
     # remap -expansion to -space-age to better match the attr name in nixpkgs.
