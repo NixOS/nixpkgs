@@ -11,6 +11,7 @@ let
   inherit (lib)
     all
     attrNames
+    attrValues
     concatMapStrings
     concatMapStringsSep
     concatStrings
@@ -38,6 +39,8 @@ let
 
   inherit (lib.meta)
     availableOn
+    tryCPEFullVersionWithVendor
+    tryCPEPatchVersionInUpdateWithVendor
     ;
 
   inherit (lib.generators)
@@ -426,6 +429,8 @@ let
       # Used for the original location of the maintainer and team attributes to assist with pings.
       maintainersPosition = any;
       teamsPosition = any;
+
+      identifiers = attrs;
     };
 
   checkMetaAttr =
@@ -622,6 +627,57 @@ let
       maintainers =
         attrs.meta.maintainers or [ ]
         ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+    }
+    // {
+      identifiers =
+        let
+          defaultCPEParts = {
+            vendor = null;
+            product = attrs.pname or null;
+            version = null;
+            update = null;
+            edition = "*";
+            sw_edition = "*";
+            target_sw = "*";
+            target_hw = "*";
+            language = "*";
+            other = "*";
+          };
+          hasAllParts = cpeParts: !any isNull (attrValues cpeParts);
+          makeCPE =
+            cpeParts:
+            "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}";
+
+          cpeParts = defaultCPEParts // attrs.meta.identifiers.cpeParts or { };
+          cpe = if hasAllParts cpeParts then makeCPE cpeParts else null;
+
+          possibleCPEPartsFuns = [
+            tryCPEFullVersionWithVendor
+            tryCPEPatchVersionInUpdateWithVendor
+          ];
+          possibleCPEs =
+            if cpe != null then
+              [ { inherit cpeParts cpe; } ]
+            else if attrs.meta.identifiers.cpeParts.vendor or null == null then
+              [ ]
+            else
+              concatMap (
+                f:
+                let
+                  result = f attrs.meta.identifiers.cpeParts.vendor attrs.version;
+                  guessedParts = defaultCPEParts // attrs.meta.identifiers.cpeParts or { } // result.value;
+                in
+                optional (result.success && (hasAllParts guessedParts)) {
+                  cpeParts = guessedParts;
+                  cpe = (makeCPE guessedParts);
+                }
+              ) possibleCPEPartsFuns;
+          v1 = { inherit cpeParts cpe possibleCPEs; };
+        in
+        v1
+        // {
+          inherit v1;
+        };
     }
     // {
       # Expose the result of the checks for everyone to see.
