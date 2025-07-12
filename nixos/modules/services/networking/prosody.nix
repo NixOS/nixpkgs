@@ -1003,12 +1003,14 @@ in
         {
           User = cfg.user;
           Group = cfg.group;
-          Type = "forking";
+          Type = "simple";
           RuntimeDirectory = [ "prosody" ];
           PIDFile = "/run/prosody/prosody.pid";
-          ExecStart = "${cfg.package}/bin/prosodyctl start";
+          ExecStart = "${lib.getExe cfg.package} -F";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "on-abnormal";
 
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;
           PrivateMounts = true;
