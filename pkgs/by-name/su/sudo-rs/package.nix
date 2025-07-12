@@ -1,12 +1,11 @@
 {
   lib,
-  bash,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   nixosTests,
+  versionCheckHook,
   pam,
-  pandoc,
   rustPlatform,
   tzdata,
 }:
@@ -24,32 +23,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-o3//zJxB6CNHQl1DtfmFnSBP9npC4I9/hRuzpWrKoNs=";
 
-  nativeBuildInputs = [
-    installShellFiles
-    pandoc
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ pam ];
 
-  # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
-    substituteInPlace util/generate-docs.sh \
-      --replace-fail "/usr/bin/env bash" ${lib.getExe bash} \
-      --replace-fail util/pandoc.sh pandoc
-
     substituteInPlace build.rs \
       --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   postInstall = ''
-    ./util/generate-docs.sh
-    installManPage target/docs/man/*
+    for man_fn in docs/man/*.man; do
+      man_fn_fixed="$(echo "$man_fn" | sed -e 's,\.man$,,')"
+      ln -vs $(basename "$man_fn") "$man_fn_fixed"
+      installManPage "$man_fn_fixed"
+    done
   '';
 
   checkFlags = map (t: "--skip=${t}") [
     # Those tests make path assumptions
     "common::command::test::test_build_command_and_args"
-    "common::context::tests::test_build_context"
     "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
@@ -66,13 +59,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
-    # This expects some PATH_TZINFO environment var
-    "env::environment::tests::test_tzinfo"
-
     # Unsure why those are failing
     "env::tests::test_environment_variable_filtering"
     "su::context::tests::invalid_shell"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+  # sudo binary fails because it checks if it is suid 0
+  versionCheckProgram = "${placeholder "out"}/bin/su";
+  versionCheckProgramArg = "--version";
+
+  postInstallCheck = ''
+    [ -e ${placeholder "out"}/share/man/man8/sudo.8.gz ] || \
+      ( echo "Error: Some manpages might be missing!"; exit 1 )
+  '';
 
   passthru = {
     updateScript = nix-update-script {
