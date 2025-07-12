@@ -15,7 +15,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     libheif
     libjxl
-    libavif
+    # FIXME: cmake files are broken, disabled for now
+    # libavif
     libraw
     openexr
   ];

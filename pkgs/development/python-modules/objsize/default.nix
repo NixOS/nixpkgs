@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objsize" ];
 
-  pytestFlagsArray = [ "test_objsize.py" ];
+  enabledTestPaths = [ "test_objsize.py" ];
 
   meta = with lib; {
     description = "Traversal over objects subtree and calculate the total size";

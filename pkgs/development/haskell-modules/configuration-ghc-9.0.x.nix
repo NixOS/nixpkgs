@@ -157,9 +157,6 @@ self: super: {
     }
   );
 
-  # Restrictive upper bound on base and containers
-  sv2v = doJailbreak super.sv2v;
-
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
 

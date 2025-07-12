@@ -351,7 +351,7 @@ in
           parted
 
           # for hostname
-          nettools
+          net-tools
           # for pidof
           procps
           # for useradd, usermod

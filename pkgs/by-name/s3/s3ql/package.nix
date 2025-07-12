@@ -75,7 +75,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "s3ql" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   # SSL EOF error doesn't match connection reset error. Seems fine.
   disabledTests = [ "test_aborted_write2" ];

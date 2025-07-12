@@ -290,7 +290,7 @@ buildPythonPackage rec {
     airflow db reset -y
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/core/test_core.py"
   ];
 

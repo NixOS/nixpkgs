@@ -69,7 +69,7 @@ buildPythonPackage rec {
   preCheck = lib.optionalString config.cudaSupport ''
     export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
   '';
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
   disabledTests =
     [
       # try to download data:

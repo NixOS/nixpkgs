@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "graphene" ];
 

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pytestFlagsArray = [ "src/django_otp/test.py" ];
+  enabledTestPaths = [ "src/django_otp/test.py" ];
 
   pythonImportsCheck = [ "django_otp" ];
 

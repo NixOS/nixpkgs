@@ -35,7 +35,7 @@
   alsa-lib,
   curl,
   libvpx,
-  nettools,
+  net-tools,
   dbus,
   replaceVars,
   gsoap,
@@ -263,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
-    sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
+    sed -i -e 's|/sbin/ifconfig|${net-tools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
   '';
 

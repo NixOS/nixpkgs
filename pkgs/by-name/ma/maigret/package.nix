@@ -80,9 +80,9 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRemoveDeps = [ "future-annotations" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: There is no current event loop
-    "-W ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests =

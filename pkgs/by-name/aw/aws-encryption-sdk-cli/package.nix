@@ -60,9 +60,8 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   # Upstream did not adapt to pytest 8 yet.
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn8Warning"
   ];
 
   passthru = {

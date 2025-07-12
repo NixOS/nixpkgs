@@ -424,7 +424,7 @@ in
       ];
       path = [
         hydra-package
-        pkgs.nettools
+        pkgs.net-tools
         pkgs.openssh
         pkgs.bzip2
         config.nix.package
@@ -459,7 +459,7 @@ in
       ];
       path = with pkgs; [
         hydra-package
-        nettools
+        net-tools
         jq
       ];
       restartTriggers = [ hydraConf ];

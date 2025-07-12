@@ -45,7 +45,10 @@ buildPythonPackage rec {
     webtest
   ];
 
-  pytestFlagsArray = [ "--pyargs pecan" ];
+  pytestFlags = [
+    "--pyargs"
+    "pecan"
+  ];
 
   pythonImportsCheck = [ "pecan" ];
 

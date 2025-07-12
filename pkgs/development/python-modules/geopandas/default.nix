@@ -94,7 +94,7 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 
