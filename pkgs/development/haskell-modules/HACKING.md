@@ -256,6 +256,42 @@ Once you have configured credentials, running this takes only a few seconds.
 The best time to do this is after `staging-next` has been merged since this is
 the way Haskell package updates propagate to `master`.
 
+## Things to do after branch-off
+
+Twice a year a stable release branch is branched off from `master` to form
+a stable NixOS release. These releases don't benefit from our regular
+`haskell-updates` workflow since they *forbid breaking changes* which
+becomes unfeasible to manage at the scale of our package set. Instead
+we mostly rely on stable users spotting needed changes and proposing
+them as a PR.
+
+General information on the release process can be found in the
+[NixOS Releaes Wiki](https://nixos.github.io/release-wiki/Release-Process-Walkthrough.html).
+
+The main objective for `haskellPackages` in the context of stable release
+should be supporting packaged “end-user” software (pandoc, niv, ...), so
+Haskell maintainers should look out for changes to these packages and
+consider backporting them (especially bug fix and security-related releases).
+For a stable `haskellPackages` experience for development etc., a pinned
+revision of nixpkgs `master` is recommended.
+
+The following is a list of things to do and/or consider at branch-off:
+
+* On `master` and the release branch, update the `NEXT_NIXOS_RELEASE`
+  variable in `maintainers/scripts/haskell/regenerate-hackage-packages.sh`:
+  This value should always be the same as what the `.version` file at the
+  repository root of the `master` branch contains.
+
+* On the release branch, run `maintainers/scripts/haskell/freeze-packages.sh`
+  and delete `pkgs/development/haskell-modules/configuration-hackage2nix/stackage.yaml`
+  which is no longer needed.
+
+* Make sure `maintainers/scripts/haskell/regenerate-hackage-packages.sh` works correctly.
+
+* Make sure the references to the stable release in the documentation are accurate.
+
+* Document any steps forgotten here!
+
 ## Additional Info
 
 Here are some additional tips that didn't fit in above.
