@@ -32,13 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    TERMINFO=$out/share/terminfo make install PREFIX=$out
-
-    runHook postInstall
-  '';
+  installFlags = [
+    "TERMINFO=$(out)/share/terminfo"
+    "PREFIX=$(out)"
+  ];
 
   meta = {
     homepage = "https://github.com/gnotclub/xst";
