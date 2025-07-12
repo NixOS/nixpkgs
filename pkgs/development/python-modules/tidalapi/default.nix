@@ -46,6 +46,9 @@ buildPythonPackage rec {
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ drawbu ];
+    maintainers = with lib.maintainers; [
+      drawbu
+      ryand56
+    ];
   };
 }
