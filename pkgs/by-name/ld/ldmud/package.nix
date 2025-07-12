@@ -26,29 +26,29 @@
   python310,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldmud";
-  version = "3.6.7";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "ldmud";
-    repo = "ldmud";
-    rev = version;
-    sha256 = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    sha256 = "sha256-ojOLM1vkuwuF0vXx6lCH0+OlyLkkOOnTJEUiZPpUhzo=";
   };
 
   patches = [
-    ./libxml2-2.12.0-compat.patch
     ./mysql-compat.patch
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     bison
   ];
+
   buildInputs =
     [
       libgcrypt
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
     homepage = "https://ldmud.eu";
-    changelog = "https://github.com/ldmud/ldmud/blob/${version}/HISTORY";
+    changelog = "https://github.com/ldmud/ldmud/blob/${finalAttrs.version}/HISTORY";
     longDescription = ''
       LDMud started as a project to clean up and modernize Amylaar's LPMud
       gamedriver. Primary goals are full documentation, a commented source body
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ cpu ];
   };
-}
+})
