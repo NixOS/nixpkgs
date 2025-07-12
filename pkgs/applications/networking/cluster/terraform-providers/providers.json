@@ -1030,11 +1030,11 @@
     "vendorHash": "sha256-Koojva0MAw5WC942VbxZ6d1Pf1VwFvJMmp16TsHRS3w="
   },
   "pocketid": {
-    "hash": "sha256-lXhxW75m4Tam5vyurDDxM4NJ+226VjBrNnNeK1dVZ1o=",
+    "hash": "sha256-rUCjvJKLZE+cSsHZdntBF9WpZDtIkVkukmLGEvGVC8s=",
     "homepage": "https://registry.terraform.io/providers/Trozz/pocketid",
     "owner": "Trozz",
     "repo": "terraform-provider-pocketid",
-    "rev": "v0.1.2",
+    "rev": "v0.1.5",
     "spdx": "MIT",
     "vendorHash": "sha256-0oX7f4L5eljmOL8+g6KYdBcoIwng87+pi3XCXKDEb3w="
   },
