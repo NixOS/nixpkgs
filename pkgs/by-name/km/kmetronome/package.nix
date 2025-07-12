@@ -5,19 +5,16 @@
   cmake,
   pandoc,
   pkg-config,
-  qttools,
   alsa-lib,
-  drumstick,
-  qtbase,
-  qtsvg,
+  qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmetronome";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/kmetronome/${finalAttrs.version}/kmetronome-${finalAttrs.version}.tar.bz2";
     hash = "sha256-FJVmSMu0KDoq8DHRxxGyHQQflPCvH1h+WdsV9wcPAPA=";
   };
 
@@ -25,24 +22,24 @@ stdenv.mkDerivation rec {
     cmake
     pandoc
     pkg-config
-    qttools
+    qt6Packages.qttools
   ];
 
   buildInputs = [
     alsa-lib
-    drumstick
-    qtbase
-    qtsvg
+    qt6Packages.drumstick
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
   ];
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kmetronome.sourceforge.io/";
     description = "ALSA MIDI metronome with Qt interface";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
     mainProgram = "kmetronome";
   };
-}
+})
