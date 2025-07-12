@@ -8658,8 +8658,6 @@ with pkgs;
     inherit (lomiri) cmake-extras;
   };
 
-  libremines = qt6.callPackage ../games/libremines { };
-
   librepo = callPackage ../tools/package-management/librepo { };
 
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
