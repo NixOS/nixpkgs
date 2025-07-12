@@ -1,0 +1,77 @@
+[
+  {
+    "pname": "AsmResolver",
+    "version": "6.0.0-beta.1",
+    "hash": "sha256-ZW61z6Qmztdy2NaiqxvNcP5RWBIiIO6CWNnqYq0MwoA="
+  },
+  {
+    "pname": "AsmResolver.DotNet",
+    "version": "6.0.0-beta.1",
+    "hash": "sha256-VoTiIr2/r2my6sg2AOEeiqz9vZhWtq5mGaW2Hx90Uo4="
+  },
+  {
+    "pname": "AsmResolver.PE",
+    "version": "6.0.0-beta.1",
+    "hash": "sha256-tTU/flTxRJaC4gkmI/gctqIriGIMntkgTs51TqzcQlg="
+  },
+  {
+    "pname": "AsmResolver.PE.File",
+    "version": "6.0.0-beta.1",
+    "hash": "sha256-hPuFrpcm2VMiYEirsL4kYmAhOzjwjNXUklIfYJEonLo="
+  },
+  {
+    "pname": "AssetRipper.CIL",
+    "version": "1.1.2",
+    "hash": "sha256-UqxRdc8d0ZzGOl6aLB3Z4deAWiIwhG7mZq47mTkh1uI="
+  },
+  {
+    "pname": "AssetRipper.Gee.External.Capstone",
+    "version": "2.3.2",
+    "hash": "sha256-IrcwjWUR0hAO2dmDVIFCd82pJYnpnrRrUMd8Z0dcVjk="
+  },
+  {
+    "pname": "AssetRipper.Primitives",
+    "version": "3.1.3",
+    "hash": "sha256-17RT4wzgcZwzWjS92fX9lsZk91BKxEM8/kHc5aG/WU0="
+  },
+  {
+    "pname": "CommandLineParser",
+    "version": "2.9.1",
+    "hash": "sha256-ApU9y1yX60daSjPk3KYDBeJ7XZByKW8hse9NRZGcjeo="
+  },
+  {
+    "pname": "Disarm",
+    "version": "2022.1.0-master.57",
+    "hash": "sha256-c2FfmZK4u0E5mAqMCQGprzaf0X4dkhqktp74L/oSNOc="
+  },
+  {
+    "pname": "Iced",
+    "version": "1.21.0",
+    "hash": "sha256-0xYTYX4935Ejm7yUqMWHhJtCNuj4oqK6Weojl6FIfHo="
+  },
+  {
+    "pname": "Microsoft.Build.Tasks.Git",
+    "version": "8.0.0",
+    "hash": "sha256-vX6/kPij8vNAu8f7rrvHHhPrNph20IcufmrBgZNxpQA="
+  },
+  {
+    "pname": "Microsoft.SourceLink.Common",
+    "version": "8.0.0",
+    "hash": "sha256-AfUqleVEqWuHE7z2hNiwOLnquBJ3tuYtbkdGMppHOXc="
+  },
+  {
+    "pname": "Microsoft.SourceLink.GitHub",
+    "version": "8.0.0",
+    "hash": "sha256-hNTkpKdCLY5kIuOmznD1mY+pRdJ0PKu2HypyXog9vb0="
+  },
+  {
+    "pname": "Pastel",
+    "version": "5.1.0",
+    "hash": "sha256-6cL9gOExuOBJqfB7D5WcDUQPFXpmD7i1hVFtyjlhlOM="
+  },
+  {
+    "pname": "PolySharp",
+    "version": "1.14.1",
+    "hash": "sha256-l6hz+SG+cEO817xTMq4DbJSJVnRe6Ffr+uJGVj/t170="
+  }
+]
