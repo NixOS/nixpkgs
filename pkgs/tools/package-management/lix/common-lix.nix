@@ -100,6 +100,7 @@ let
   isLegacyParser = lib.versionOlder version "2.91";
   hasDtraceSupport = lib.versionAtLeast version "2.93";
   parseToYAML = lib.versionAtLeast version "2.93";
+  usesCapnp = lib.versionAtLeast version "2.94";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -144,9 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
         p.toml
       ]
       ++ lib.optionals finalAttrs.doInstallCheck [
+        p.aiohttp
         p.pytest
         p.pytest-xdist
       ]
+      ++ lib.optionals usesCapnp [ p.pycapnp ]
     ))
     pkg-config
     flex
@@ -178,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
+  ++ lib.optionals usesCapnp [ capnproto ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs = [
@@ -294,9 +298,8 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $devdoc/nix-support
       echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
-    + lib.optionalString (!hasExternalLixDoc) ''
+    + lib.optionalString (lib.versionOlder version "2.94" && !hasExternalLixDoc) ''
       # We do not need static archives.
-      # FIXME(Raito): why are they getting installed _at all_ ?
       rm $out/lib/liblix_doc.a
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
