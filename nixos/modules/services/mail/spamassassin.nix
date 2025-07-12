@@ -98,7 +98,7 @@ in
           # loadplugin Mail::SpamAssassin::Plugin::Shortcircuit
           loadplugin Mail::SpamAssassin::Plugin::SpamCop
           loadplugin Mail::SpamAssassin::Plugin::SPF
-          #loadplugin Mail::SpamAssassin::Plugin::TextCat
+          loadplugin Mail::SpamAssassin::Plugin::TextCat
           # loadplugin Mail::SpamAssassin::Plugin::TxRep
           loadplugin Mail::SpamAssassin::Plugin::URIDetail
           loadplugin Mail::SpamAssassin::Plugin::URIDNSBL
