@@ -31,21 +31,21 @@ A very basic configuration may look like this:
 }
 ```
 
-This will start the oCIS server and make it available at `https://localhost:9200`
+This will start the oCIS server and make it available at `https://0.0.0.0:9200`
 
-However to make this configuration work you will need generate a configuration.
-You can do this with:
+The oCIS will automatically initialize the oCIS server and generate a temporary admin
+password on first use, the password will be displayed in the journal for the service.
 
-```console
-$ nix-shell -p ocis_5-bin
-$ mkdir scratch/
-$ cd scratch/
-$ ocis init --config-path . --admin-password "changeme"
-```
+`$ systemctl status ocis-setup` or `$ journalctl -u ocis-setup`
+
+the initialization routine will not run as long as the ocis.yaml exists in the
+`services.ocis.configDir` to re-initialize oCIS simply remove the ocis.yaml file from that folder.
 
 You may need to pass `--insecure true` or provide the `OCIS_INSECURE = true;` to
 [`services.ocis.environment`][mod-envFile], if TLS certificates are generated
 and managed externally (e.g. if you are using oCIS behind reverse proxy).
+
+support for ACME Certificates is available via `ocis.useACMEHost = 'your.host.name';`
 
 If you want to manage the config file in your nix configuration, then it is
 encouraged to use a secrets manager like sops-nix or agenix.
@@ -108,6 +108,8 @@ Configuration in (`services.ocis.environment`)[mod-env] overrides those from
 [`services.ocis.environmentFile`][mod-envFile] and will have highest
 precedence
 
+the `services.ocis.insecure` value will always override any value set since it is passed directly
+as a CLI argument to the oCIS binary
 
 [mod-env]: #opt-services.ocis.environment
 [mod-envFile]: #opt-services.ocis.environmentFile
