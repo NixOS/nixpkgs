@@ -42,11 +42,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-uz+Wenl8iFHQhoPsQ9+v5K179a2G+msHIcrQM+qeWuU=";
+    hash = "sha256-r472Qoa93ckyMsXb5OpDaozLXchBfPoeiFvsUohPk0c=";
   };
 
   buildInputs =
