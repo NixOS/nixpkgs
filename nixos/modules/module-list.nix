@@ -198,6 +198,7 @@
   ./programs/ecryptfs.nix
   ./programs/environment.nix
   ./programs/envision.nix
+  ./programs/espanso-capdacoverride
   ./programs/evince.nix
   ./programs/extra-container.nix
   ./programs/fcast-receiver.nix
