@@ -389,6 +389,7 @@
   ./security/pam_mount.nix
   ./security/please.nix
   ./security/polkit.nix
+  ./security/restrict-suid-sgid.nix
   ./security/rngd.nix
   ./security/rtkit.nix
   ./security/soteria.nix
