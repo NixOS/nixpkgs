@@ -22,6 +22,7 @@
   libxslt,
   makeWrapper,
   meson,
+  nftables,
   ninja,
   openssh,
   perl,
@@ -91,6 +92,7 @@ let
       iptables
       kmod
       lvm2
+      nftables
       numactl
       numad
       openssh
