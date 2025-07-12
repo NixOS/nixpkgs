@@ -85,6 +85,9 @@ let
           ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
           ../../build-support/setup-hooks/strip.sh
         ]
+        ++ lib.optionals hostPlatform.isX32 [
+          ../../build-support/setup-hooks/move-libx32.sh
+        ]
         ++ lib.optionals hasCC [ cc ];
 
       defaultBuildInputs = extraBuildInputs;

@@ -96,6 +96,7 @@ let
           canExecute =
             platform:
             final.isAndroid == platform.isAndroid
+            && final.isX32 == platform.isX32 # Not default enabled
             && parse.isCompatible final.parsed.cpu platform.parsed.cpu
             && final.parsed.kernel == platform.parsed.kernel
             && (
@@ -174,7 +175,12 @@ let
           # for this platform normally assume.
           libDir =
             if final.isLinux then
-              if final.isx86_64 || final.isMips64 || final.isPower64 then "lib64" else "lib"
+              if final.isX32 then
+                "libx32"
+              else if final.isx86_64 || final.isMips64 || final.isPower64 then
+                "lib64"
+              else
+                "lib"
             else
               null;
           extensions =
