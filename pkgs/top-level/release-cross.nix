@@ -73,12 +73,14 @@ let
     buildPackages.binutils = nativePlatforms;
     buildPackages.gcc = nativePlatforms;
     libc = nativePlatforms;
+    cc = nativePlatforms;
   };
 
   common = {
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
     libc = nativePlatforms;
+    cc = nativePlatforms;
     nix = nativePlatforms;
     nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;
