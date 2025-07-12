@@ -60,17 +60,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/ty"
+        else
+          lib.getExe buildPackages.ty;
     in
     ''
       installShellCompletion --cmd ty \
-        --bash <(${emulator} $out/bin/ty generate-shell-completion bash) \
-        --fish <(${emulator} $out/bin/ty generate-shell-completion fish) \
-        --zsh <(${emulator} $out/bin/ty generate-shell-completion zsh)
-    ''
-  );
+        --bash <(${exe} generate-shell-completion bash) \
+        --fish <(${exe} generate-shell-completion fish) \
+        --zsh <(${exe} generate-shell-completion zsh)
+    '';
 
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };

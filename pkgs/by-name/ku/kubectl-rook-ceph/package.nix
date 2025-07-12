@@ -21,23 +21,23 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubectl-rook-ceph
   '';
+
   # FIXME: uncomment once https://github.com/rook/kubectl-rook-ceph/issues/353 has been resolved
   # nativeBuildInputs = [ installShellFiles ];
   # postInstall =
-  #   ''
-  #     ln -s $out/bin/cmd $out/bin/kubectl-rook-ceph
-  #   ''
-  #   + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-  #     let
-  #       emulator = stdenv.hostPlatform.emulator buildPackages;
-  #     in
-  #     ''
-  #       installShellCompletion --cmd kubectl-rook-ceph \
-  #       --bash <(${emulator} $out/bin/kubectl-rook-ceph completion bash) \
-  #       --fish <(${emulator} $out/bin/kubectl-rook-ceph completion fish) \
-  #       --zsh <(${emulator} $out/bin/kubectl-rook-ceph completion zsh)
-  #     ''
-  #   );
+  #   let
+  #    exe =
+  #      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+  #        "$out/bin/kubectl-rook-ceph"
+  #      else
+  #        lib.getExe buildPackages.kubectl-rook-ceph;
+  #  in
+  #  ''
+  #    installShellCompletion --cmd kubectl-rook-ceph \
+  #    --bash <(${exe} completion bash) \
+  #    --fish <(${exe} completion fish) \
+  #    --zsh <(${exe} completion zsh)
+  #  '';
 
   passthru.updateScript = nix-update-script { };
 

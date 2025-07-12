@@ -46,17 +46,21 @@ buildGoModule {
     "-skip=TestCat|TestInfo"
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/mcap"
+        else
+          lib.getExe buildPackages.mcap-cli;
     in
     ''
       installShellCompletion --cmd mcap \
-        --bash <(${emulator} $out/bin/mcap completion bash) \
-        --fish <(${emulator} $out/bin/mcap completion fish) \
-        --zsh <(${emulator} $out/bin/mcap completion zsh)
-    ''
-  );
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
+
   passthru = {
     updateScript = nix-update-script { };
   };

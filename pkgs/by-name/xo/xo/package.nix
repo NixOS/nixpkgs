@@ -29,17 +29,20 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/xo"
+        else
+          lib.getExe buildPackages.xo;
     in
     ''
       installShellCompletion --cmd xo \
-        --bash <(${emulator} $out/bin/xo completion bash) \
-        --fish <(${emulator} $out/bin/xo completion fish) \
-        --zsh <(${emulator} $out/bin/xo completion zsh)
-    ''
-  );
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

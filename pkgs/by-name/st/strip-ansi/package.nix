@@ -8,8 +8,11 @@
   installShellFiles,
 }:
 let
-  canRunStripAnsi = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  stripAnsiCompletions = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/strip-ansi-completions";
+  stripAnsiCompletions =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/strip-ansi-completions"
+    else
+      lib.getExe' buildPackages.strip-ansi "strip-ansi-completions";
 in
 rustPlatform.buildRustPackage {
   pname = "strip-ansi";
@@ -27,7 +30,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString canRunStripAnsi ''
+  postInstall = ''
     installShellCompletion --cmd strip-ansi \
       --bash <(${stripAnsiCompletions} bash) \
       --fish <(${stripAnsiCompletions} fish) \

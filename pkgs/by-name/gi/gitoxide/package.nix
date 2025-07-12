@@ -12,9 +12,16 @@
 }:
 
 let
-  canRunCmd = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
-  ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
+  gix =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/gix"
+    else
+      lib.getExe' buildPackages.gitoxide "gix";
+  ein =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/ein"
+    else
+      lib.getExe' buildPackages.gitoxide "ein";
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitoxide";
@@ -38,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ curl ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  preFixup = lib.optionalString canRunCmd ''
+  preFixup = ''
     installShellCompletion --cmd gix \
       --bash <(${gix} completions --shell bash) \
       --fish <(${gix} completions --shell fish) \

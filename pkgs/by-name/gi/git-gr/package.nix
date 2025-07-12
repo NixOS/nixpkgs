@@ -11,8 +11,6 @@
   openssl,
 }:
 let
-  canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  gitGr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/git-gr";
   pname = "git-gr";
   version = "1.4.3";
 in
@@ -41,18 +39,26 @@ rustPlatform.buildRustPackage {
       libiconv
     ];
 
-  postInstall = lib.optionalString canRunGitGr ''
-    manpages=$(mktemp -d)
-    ${gitGr} manpages "$manpages"
-    for manpage in "$manpages"/*; do
-      installManPage "$manpage"
-    done
+  postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/git-gr"
+        else
+          lib.getExe buildPackages.git-gr;
+    in
+    ''
+      manpages=$(mktemp -d)
+      ${exe} manpages "$manpages"
+      for manpage in "$manpages"/*; do
+        installManPage "$manpage"
+      done
 
-    installShellCompletion --cmd git-gr \
-      --bash <(${gitGr} completions bash) \
-      --fish <(${gitGr} completions fish) \
-      --zsh <(${gitGr} completions zsh)
-  '';
+      installShellCompletion --cmd git-gr \
+        --bash <(${exe} completions bash) \
+        --fish <(${exe} completions fish) \
+        --zsh <(${exe} completions zsh)
+    '';
 
   meta = {
     homepage = "https://github.com/9999years/git-gr";

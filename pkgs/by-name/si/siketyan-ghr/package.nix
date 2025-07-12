@@ -40,12 +40,16 @@ rustPlatform.buildRustPackage rec {
 
   postInstall =
     let
-      ghr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ghr";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/ghr"
+        else
+          lib.getExe buildPackages.siketyan-ghr;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       installShellCompletion --cmd ghr \
-        --bash <(${ghr} shell --completion bash) \
-        --fish <(${ghr} shell --completion fish)
+        --bash <(${exe} shell --completion bash) \
+        --fish <(${exe} shell --completion fish)
     '';
 
   env = {
