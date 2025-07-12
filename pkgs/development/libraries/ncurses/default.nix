@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--disable-stripping"
       "--with-versioned-syms"
     ]
-    ++ lib.optional unicodeSupport "--enable-widec"
+    ++ lib.optional (!unicodeSupport) "--disable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
