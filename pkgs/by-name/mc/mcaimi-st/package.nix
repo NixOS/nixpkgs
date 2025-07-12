@@ -33,13 +33,10 @@ stdenv.mkDerivation {
     ncurses
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    TERMINFO=$out/share/terminfo make install PREFIX=$out
-
-    runHook postInstall
-  '';
+  installFlags = [
+    "TERMINFO=$(out)/share/terminfo"
+    "PREFIX=$(out)"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
