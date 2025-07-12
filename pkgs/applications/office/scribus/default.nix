@@ -4,6 +4,7 @@
   cmake,
   cups,
   fetchurl,
+  fetchpatch,
   fontconfig,
   freetype,
   harfbuzzFull,
@@ -38,6 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
     hash = "sha256-UzvnrwOs+qc27F96P8JWKr0gD+9coqfN7gK19E1hgp4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-poppler-25.06.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/8dcf8d777bd85a0741c455961f2de382e3ed47ec.patch";
+      hash = "sha256-JBHCgvEJnYrUdtLnFSXTfr1FFin4uUNUnddYwfRbn7k=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.07.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/ff6c6abfa8683028e548a269dee6a859b6f63335.patch";
+      hash = "sha256-N4jve5feehsX5H0RXdxR4ableKL+c/rTyqCwkEf37Dk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
