@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "3.4.2";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = "gsd";
     tag = "v${version}";
-    hash = "sha256-sBO5tt85BVLUrqSVWUT/tYzeLWyvyyI9ZXjNLt9/uAE=";
+    hash = "sha256-8pEs1use/R7g0l6h+rxjpN5j8PznqkJpjLxqiupn9iY=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "General simulation data file format";
     mainProgram = "gsd";
     homepage = "https://github.com/glotzerlab/gsd";
-    changelog = "https://github.com/glotzerlab/gsd/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/glotzerlab/gsd/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.bsd2;
     maintainers = [ ];
   };
