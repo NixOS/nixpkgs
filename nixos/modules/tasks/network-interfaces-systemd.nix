@@ -219,7 +219,7 @@ let
 in
 
 {
-  config = mkMerge [
+  config = lib.mkIf cfg.enable (mkMerge [
 
     (mkIf config.boot.initrd.network.enable {
       # Note this is if initrd.network.enable, not if
@@ -576,5 +576,5 @@ in
         };
     })
 
-  ];
+  ]);
 }
