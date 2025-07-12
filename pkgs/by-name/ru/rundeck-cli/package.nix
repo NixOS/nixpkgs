@@ -3,16 +3,11 @@
   stdenv,
   fetchurl,
   makeBinaryWrapper,
-  jre11_minimal,
-  jdk11_headless,
+  temurin-jre-bin-11,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  jre11_minimal_headless = jre11_minimal.override {
-    jdk = jdk11_headless;
-  };
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck-cli";
   version = "2.0.9";
@@ -23,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
-  buildInputs = [ jre11_minimal_headless ];
+  buildInputs = [ temurin-jre-bin-11 ];
 
   dontUnpack = true;
 
@@ -34,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck-cli/rundeck-cli.jar
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe jre11_minimal_headless} $out/bin/rd \
+    makeWrapper ${lib.getExe temurin-jre-bin-11} $out/bin/rd \
       --add-flags "-jar $out/share/rundeck-cli/rundeck-cli.jar"
 
     runHook postInstall

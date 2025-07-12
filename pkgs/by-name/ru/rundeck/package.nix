@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
-  jdk17,
+  makeBinaryWrapper,
+  temurin-jre-bin-17,
   which,
   coreutils,
   openssh,
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RqyJ0/gZQ1gIYSPoYfGGN5VB5ubUMl00pHPlw6v6tBQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk17 ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
+  buildInputs = [ temurin-jre-bin-17 ];
 
   dontUnpack = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck/rundeck.war
 
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe jdk17} $out/bin/rundeck \
+    makeWrapper ${lib.getExe temurin-jre-bin-17} $out/bin/rundeck \
       --add-flags "-jar $out/share/rundeck/rundeck.war" \
       --prefix PATH : ${
         lib.makeBinPath [
