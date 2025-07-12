@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   ocamlPackages,
 }:
 
@@ -30,6 +31,14 @@ ocamlPackages.buildDunePackage rec {
   ];
 
   doCheck = true;
+
+  patches = [
+    (fetchpatch {
+      name = "fix-yojson-v3.patch";
+      url = "https://github.com/Beluga-lang/Beluga/commit/6255f51a1fd0c33545483500ca8a5e1592c1aeae.patch";
+      hash = "sha256-Sta8uPp2c++WBtfHmWOsu6ndbQmnvrw1KiUoNAUK/Fw=";
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/beluga/
