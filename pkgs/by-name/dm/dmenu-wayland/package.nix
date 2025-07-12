@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "dmenu-wayland";
-  version = "unstable-2023-05-18";
+  version = "0-unstable-2023-05-18";
 
   src = fetchFromGitHub {
     owner = "nyyManni";
@@ -63,12 +63,12 @@ stdenv.mkDerivation {
       --prefix PATH : $out/bin
   '';
 
-  meta = with lib; {
-    license = licenses.mit;
-    platforms = platforms.linux;
+  meta = {
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     description = "Efficient dynamic menu for wayland (wlroots)";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ rewine ];
     mainProgram = "dmenu-wl";
   };
 }
