@@ -981,7 +981,7 @@ in
               VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
             ''
             + (lib.concatMapAttrsStringSep "" (name: path: ''
-              ${name}="$(cat ${path})"
+              ${name}="$(cat '${path}')"
             '') (lib.filterAttrs (_: v: !isNull v) cfg.secrets))
             + lib.optionalString (cfg.redis.passwordFile != null) ''
               REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
