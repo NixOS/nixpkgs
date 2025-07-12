@@ -1,0 +1,14 @@
+---
+# Configuration file for pre-commit (https://pre-commit.com/).
+# Please run `pre-commit run --all-files` when adding or changing entries.
+
+repos:
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: ShellCheck
+        language: system
+        entry: shellcheck
+        args: [--color=always]
+        types: [shell]
+        stages: [commit]
