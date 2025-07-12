@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
+    hash = "sha256-6Ehw+/lrdmuCJKPzps58z6Nu+jtpGcyKL792XqTf5HY=";
   };
 
   outputs = [
