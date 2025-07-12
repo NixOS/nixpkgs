@@ -1,0 +1,38 @@
+From 5ba5d9ed05a94a0cf39699eae302e98512393376 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Tue, 8 Jul 2025 20:35:43 +0200
+Subject: [PATCH] Find OpenImageIO dependency for downstream consumers
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ cmake/modules/MaterialXConfig.cmake.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/cmake/modules/MaterialXConfig.cmake.in b/cmake/modules/MaterialXConfig.cmake.in
+index 0d631a9d..2a23b39e 100644
+--- a/cmake/modules/MaterialXConfig.cmake.in
++++ b/cmake/modules/MaterialXConfig.cmake.in
+@@ -8,6 +8,8 @@
+ # Auto-generated content:
+ @PACKAGE_INIT@
+ 
++include(CMakeFindDependencyMacro)
++
+ # Gather MaterialX targets:
+ include("${CMAKE_CURRENT_LIST_DIR}/@CMAKE_PROJECT_NAME@Targets.cmake")
+ 
+@@ -22,6 +24,11 @@ set_and_check(MATERIALX_STDLIB_DIR "@PACKAGE_CMAKE_INSTALL_PREFIX@/libraries")
+ if(@MATERIALX_BUILD_PYTHON@ AND @MATERIALX_INSTALL_PYTHON@)
+     set_and_check(MATERIALX_PYTHON_DIR "@PACKAGE_CMAKE_INSTALL_PREFIX@/python")
+ endif()
++
++if(@MATERIALX_BUILD_OIIO@)
++    find_dependency(OpenImageIO CONFIG)
++endif()
++
+ if(@MATERIALX_BUILD_RENDER@ AND @MATERIALX_INSTALL_RESOURCES@)
+     set_and_check(MATERIALX_RESOURCES_DIR "@PACKAGE_CMAKE_INSTALL_PREFIX@/resources")
+ endif()
+-- 
+2.49.0
+
