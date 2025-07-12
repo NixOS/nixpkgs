@@ -7,6 +7,7 @@
   automake,
   libtool,
   gitMinimal,
+  pkg-config,
   perl,
   python3,
   flex,
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prrte";
-  version = "3.0.11";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    hash = "sha256-4JEh4N/38k0Xgp0CqnFipaEZlJBQr8nyxoncyz0/7yo=";
+    hash = "sha256-gLCRTymwNsQw8GzWe8rPzwjYs604pc3/vRC465luNnc=";
     fetchSubmodules = true;
   };
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs ./autogen.pl ./config
+    patchShebangs ./autogen.pl ./config ./src/util/prte-convert-help.py
 
     # This is needed for multi-node jobs.
     # mpirun/srun/prterun does not have "prted" in its path unless
@@ -50,6 +51,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput "bin/prte_info" "''${!outputDev}"
+    moveToOutput "bin/prte-info" "''${!outputDev}"
+
     # Fix a broken symlink, created due to FHS assumptions
     rm "$out/bin/pcc"
     ln -s ${lib.getDev pmix}/bin/pmixcc "''${!outputDev}"/bin/pcc
@@ -66,6 +69,7 @@ stdenv.mkDerivation rec {
     libtool
     flex
     gitMinimal
+    pkg-config
   ];
 
   buildInputs = [
@@ -73,12 +77,6 @@ stdenv.mkDerivation rec {
     hwloc
     zlib
     pmix
-  ];
-
-  # Setting this manually, required for RiscV cross-compile
-  configureFlags = [
-    "--with-pmix=${lib.getDev pmix}"
-    "--with-pmix-libdir=${lib.getLib pmix}/lib"
   ];
 
   enableParallelBuilding = true;
