@@ -418,6 +418,16 @@ in
         Set this to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
       '';
     };
+    enabledApps = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      example = [ ];
+      description = ''
+        If set will ensure only set apps are enabled, all other will be disabled.
+        If `extraApps` is used and `extraAppsEnable` is true, extraApps are automatically included.
+        Mandatory apps will always stay enabled, no need to add them.
+      '';
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -1245,10 +1255,54 @@ in
 
               ${lib.getExe occ} config:system:delete trusted_domains
 
+              # Get list of currently enabled apps
+              ENABLED_APPS=$(${lib.getExe occ} app:list --output json | ${lib.getExe pkgs.jq} -r '.enabled | keys | join(" ")')
+              TO_ENABLE_APPS=""
+              TO_DISABLE_APPS=""
+
               ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps
-                ${lib.getExe occ} app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+                # Mark extra apps to enabled if not already
+                for app in ${concatStringsSep " " (attrNames cfg.extraApps)}; do
+                  if ! echo "$ENABLED_APPS" | grep -q "\b$app\b"; then
+                    TO_ENABLE_APPS="$TO_ENABLE_APPS $app"
+                    ENABLED_APPS="$ENABLED_APPS $app"
+                  fi
+                done
               ''}
+
+              ${lib.optionalString (cfg.enabledApps != null) ''
+                # Mark specified apps to enabled if not already
+                for app in ${concatStringsSep " " (lib.unique cfg.enabledApps)}; do
+                  if ! echo "$ENABLED_APPS" | grep -q "\b$app\b"; then
+                    TO_ENABLE_APPS="$TO_ENABLE_APPS $app"
+                    ENABLED_APPS="$ENABLED_APPS $app"
+                  fi
+                done
+
+                MANDATORY_APPS=$(${lib.getExe pkgs.jq} -r '.alwaysEnabled | join(" ")' "${cfg.package}/core/shipped.json")
+
+                # List of apps that should be enabled
+                SHOULD_BE_ENABLED="$MANDATORY_APPS ${
+                  concatStringsSep " " (
+                    cfg.enabledApps ++ lib.optionals cfg.extraAppsEnable (attrNames cfg.extraApps)
+                  )
+                }"
+
+                # Mark apps that are enabled but not in our desired list to be disabled
+                for app in $ENABLED_APPS; do
+                  if ! echo "$SHOULD_BE_ENABLED" | grep -q "\b$app\b"; then
+                    TO_DISABLE_APPS="$TO_DISABLE_APPS $app"
+                  fi
+                done
+              ''}
+
+              # Enable and Disable apps in an batch to speedup the process
+              if [ -n "$TO_ENABLE_APPS" ]; then
+                ${lib.getExe occ} app:enable $TO_ENABLE_APPS || { echo "Could not enable apps: $TO_ENABLE_APPS"; exit 1; }
+              fi
+              if [ -n "$TO_DISABLE_APPS" ]; then
+                ${lib.getExe occ} app:disable $TO_DISABLE_APPS || { echo "Could not disable apps: $TO_DISABLE_APPS"; exit 1; }
+              fi
 
               ${occSetTrustedDomainsCmd}
             '';
