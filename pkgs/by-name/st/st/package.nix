@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   pkg-config,
   fontconfig,
   freetype,
@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "st";
   version = "0.9.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://dl.suckless.org/st/st-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ayFdT0crIdYjLzDyIRF6d34kvP7miVXd77dCZGf5SUs=";
+    hash = "sha256-pFyK4XvV5Z4gBja8J996zF6wkdgQCNVccqUJ5+ejB/w=";
   };
 
   outputs = [
@@ -74,12 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qusic ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qusic ];
+    platforms = lib.platforms.unix;
     mainProgram = "st";
   };
 })
