@@ -13110,6 +13110,8 @@ self: super: with self; {
 
   pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
 
+  pyluwen = callPackage ../development/python-modules/pyluwen { };
+
   pylxd = callPackage ../development/python-modules/pylxd { };
 
   pylyrics = callPackage ../development/python-modules/pylyrics { };
@@ -18259,6 +18261,10 @@ self: super: with self; {
   );
 
   tskit = callPackage ../development/python-modules/tskit { };
+
+  tt-flash = callPackage ../development/python-modules/tt-flash { };
+
+  tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
   ttach = callPackage ../development/python-modules/ttach { };
 

@@ -1,0 +1,50 @@
+From 6ef07e64132262a40507aeb613c0de3d94b05bfe Mon Sep 17 00:00:00 2001
+From: Daniel DeGrasse <ddegrasse@tenstorrent.com>
+Date: Mon, 30 Jun 2025 18:26:38 -0400
+Subject: [PATCH] chore: loosen dependency requirements
+
+Loosen dependency requirements for tt-tools-common. By avoiding fixing
+dependencies to a specific version we can minimize conflicts with other
+packages. We can always restrict packages to a specific version range if
+we run into issues.
+
+Signed-off-by: Daniel DeGrasse <ddegrasse@tenstorrent.com>
+---
+ pyproject.toml | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f481eba..b483c12 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -24,20 +24,20 @@ classifiers = [
+   "Programming Language :: Python :: 3 :: Only",
+ ]
+ dependencies = [
+-  'distro==1.8.0',
+-  'elasticsearch==8.11.0',
+-  'psutil==5.9.6',
+-  'pyyaml==6.0.1',
+-  'rich==13.7.0',
+-  'textual==0.59.0',
+-  'requests==2.32.3',
+-  'tqdm==4.66.3',
++  'distro>=1.8.0',
++  'elasticsearch>=8.11.0',
++  'psutil>=5.9.6',
++  'pyyaml>=6.0.1',
++  'rich>=13.7.0',
++  'textual>=0.59.0',
++  'requests>=2.32.3',
++  'tqdm>=4.66.3',
+   'pydantic>=1.2',
+ ]
+ 
+ optional-dependencies.dev = [
+-  'black==23.11.0',
+-  'pre-commit==3.5.0',
++  'black>=23.11.0',
++  'pre-commit>=3.5.0',
+   "pyluwen @ git+https://github.com/tenstorrent/luwen.git@v0.4.9#subdirectory=crates/pyluwen",
+ ]
+ 
