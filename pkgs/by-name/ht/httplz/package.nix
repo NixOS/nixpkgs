@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   installShellFiles,
   makeWrapper,
   pkg-config,
@@ -9,18 +9,24 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "httplz";
-  version = "1.13.2";
+  version = "2.3.0";
 
-  src = fetchCrate {
-    inherit version;
-    pname = "https";
-    hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
+  src = fetchFromGitHub {
+    owner = "thecoshman";
+    repo = "http";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qinhdpm9eaTdpUk4ZZLaH1D/CZ22k4RisHu8clZCEGo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DXSHaiiIRdyrlX4UYPFD3aTAv65k3x/PU2VW047odH0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,8 +54,8 @@ rustPlatform.buildRustPackage rec {
     description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
-    changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
+    changelog = "https://github.com/thecoshman/http/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
   };
-}
+})
