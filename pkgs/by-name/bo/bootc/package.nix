@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "bootc-dev";
     repo = "bootc";
     rev = "v${version}";
     hash = "sha256-FuU3rQtKpK+ScQ10GivisSJseY2GOFJ/y2HRKIiU0G8=";
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Boot and upgrade via container images";
-    homepage = "https://containers.github.io/bootc";
+    homepage = "https://bootc-dev.github.io/bootc";
     license = lib.licenses.mit;
     mainProgram = "bootc";
     maintainers = with lib.maintainers; [ thesola10 ];
