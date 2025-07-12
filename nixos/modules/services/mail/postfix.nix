@@ -894,7 +894,7 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+                ${pkgs.postfix}/bin/postmap -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
