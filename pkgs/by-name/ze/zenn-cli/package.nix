@@ -24,7 +24,9 @@ let
   go-turbo = stdenv.mkDerivation {
     pname = "go-turbo";
     version = go-turbo-version;
-    src = go-turbo-srcs.${stdenv.hostPlatform.system};
+    src =
+      go-turbo-srcs.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     nativeBuildInputs = [ autoPatchelfHook ];
     dontBuild = true;
     installPhase = ''
