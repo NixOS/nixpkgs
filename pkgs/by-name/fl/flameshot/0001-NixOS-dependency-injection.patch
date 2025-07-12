@@ -1,0 +1,41 @@
+From 8ca703efdb1129d97d27f78b0bbd1d21056a9501 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Thu, 10 Jul 2025 18:13:32 +0200
+Subject: [PATCH] NixOS dependency injection
+
+---
+ CMakeLists.txt | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8df544bc..62bccb8b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,8 +48,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+ FetchContent_Declare(
+     qtColorWidgets
+-    GIT_REPOSITORY https://gitlab.com/mattbas/Qt-Color-Widgets.git
+-    GIT_TAG 352bc8f99bf2174d5724ee70623427aa31ddc26a
++    SOURCE_DIR "${CMAKE_SOURCE_DIR}/tmp/qtColorWidgets"
+ )
+ 
+ #Workaround for duplicate GUID in windows WIX installer
+@@ -129,12 +128,8 @@ if (USE_KDSINGLEAPPLICATION)
+   set(KDSingleApplication_EXAMPLES OFF CACHE BOOL "Don't build the examples")
+   set(KDSingleApplication_STATIC ON CACHE BOOL "Build static versions of the libraries")
+ 
+-  FetchContent_Declare(
+-      kdsingleApplication
+-      GIT_REPOSITORY https://github.com/KDAB/KDSingleApplication.git
+-      GIT_TAG v1.2.0
+-  )
+-  FetchContent_MakeAvailable(KDSingleApplication)
++  find_package(KDSingleApplication-qt6)
++  add_library(kdsingleapplication ALIAS KDAB::kdsingleapplication)
+ endif()
+ 
+ # ToDo: Check if this is used anywhere
+-- 
+2.49.0
+
