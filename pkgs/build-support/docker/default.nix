@@ -1,5 +1,5 @@
 {
-  bashInteractive,
+  bash,
   buildPackages,
   cacert,
   callPackage,
@@ -575,24 +575,18 @@ rec {
       '';
     };
 
+  # Wrapper around `streamLayeredImage` to build an image from the result.
+  #
+  # Deprecated. Use `streamLayeredImage` + `writeImageStream` instead.
   buildLayeredImage = lib.makeOverridable (
     {
-      name,
       compressor ? "gz",
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor;
       stream = streamLayeredImage (builtins.removeAttrs args [ "compressor" ]);
-      compress = compressorForImage compressor name;
-    in
-    runCommand "${baseNameOf name}.tar${compress.ext}" {
-      inherit (stream) imageName;
-      passthru = {
-        inherit (stream) imageTag;
-        inherit stream;
-      };
-      nativeBuildInputs = compress.nativeInputs;
-    } "${stream} | ${compress.compress} > $out"
+    }
   );
 
   # 1. extract the base image
@@ -959,11 +953,11 @@ rec {
     ln -s ${coreutils}/bin/env $out/usr/bin
   '';
 
-  # This provides /bin/sh, pointing to bashInteractive.
-  # The use of bashInteractive here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
+  # This provides /bin/sh, pointing to bash (interactive).
+  # The use of bash (interactive) here is intentional to support cases like `docker run -it <image_name>`, so keep these use cases in mind if making any changes to how this works.
   binSh = runCommand "bin-sh" { } ''
     mkdir -p $out/bin
-    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+    ln -s ${bash}/bin/bash $out/bin/sh
   '';
 
   # This provides the ca bundle in common locations
@@ -1232,7 +1226,8 @@ rec {
     result
   );
 
-  # This function streams a docker image that behaves like a nix-shell for a derivation
+  # This function streams a docker image that behaves like a nix-shell for a derivation.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
@@ -1242,10 +1237,19 @@ rec {
       tag ? null,
       uid ? 1000,
       gid ? 1000,
+      # Default to `/build` instead of a non-existent `/homeless-shelter` for backwards compatibility.
+      #
+      # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
-      shell ? bashInteractive + "/bin/bash",
+      shell ? lib.getExe bash,
       command ? null,
       run ? null,
+      includeBuildDerivation ? true,
+      # Legacy convenience derivations for backwards compatibility.
+      extraContents ? [
+        binSh
+        usrBinEnv
+      ],
     }:
     assert lib.assertMsg (!(drv.drvAttrs.__structuredAttrs or false))
       "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
@@ -1253,106 +1257,115 @@ rec {
       command == null || run == null
     ) "streamNixShellImage: Can't specify both command and run";
     let
-
-      # A binary that calls the command to build the derivation
-      builder = writeShellScriptBin "buildDerivation" ''
-        exec ${lib.escapeShellArg (valueToString drv.drvAttrs.builder)} ${lib.escapeShellArgs (map valueToString drv.drvAttrs.args)}
-      '';
-
-      staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
-
-      # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L493-L526
-      rcfile = writeText "nix-shell-rc" ''
-        unset PATH
-        dontAddDisableDepTrack=1
-        # TODO: https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L506
-        [ -e $stdenv/setup ] && source $stdenv/setup
-        PATH=${staticPath}:"$PATH"
-        SHELL=${lib.escapeShellArg shell}
-        BASH=${lib.escapeShellArg shell}
-        set +e
-        [ -n "$PS1" -a -z "$NIX_SHELL_PRESERVE_PROMPT" ] && PS1='\n\[\033[1;32m\][nix-shell:\w]\$\[\033[0m\] '
-        if [ "$(type -t runHook)" = function ]; then
-          runHook shellHook
-        fi
-        unset NIX_ENFORCE_PURITY
-        shopt -u nullglob
-        shopt -s execfail
-        ${optionalString (command != null || run != null) ''
-          ${optionalString (command != null) command}
-          ${optionalString (run != null) run}
-          exit
-        ''}
-      '';
-
-      # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
-      sandboxBuildDir = "/build";
+      #
+      # Create an environment variable map.
+      #
 
       drvEnv =
-        devShellTools.unstructuredDerivationInputEnv { inherit (drv) drvAttrs; }
+        devShellTools.unstructuredDerivationInputEnv {
+          inherit (drv) drvAttrs;
+        }
         // devShellTools.derivationOutputEnv {
           outputList = drv.outputs;
           outputMap = drv;
         };
 
-      # Environment variables set in the image
-      envVars =
+      # https://github.com/NixOS/nix/blob/2.28.2/src/libstore/include/nix/store/globals.hh#L686-L693
+      sandboxBuildDir = "/build";
+
+      # https://github.com/NixOS/nix/blob/2.28.2/src/libstore/unix/build/local-derivation-goal.cc#L1186
+      initEnv =
         {
-
-          # Root certificates for internet access
-          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
-          # PATH = "/path-not-set";
-          # Allows calling bash and `buildDerivation` as the Cmd
-          PATH = staticPath;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
+          # Not setting `PATH` since it's set by the Nix shell shim.
           HOME = homeDirectory;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
           NIX_STORE = storeDir;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
           # TODO: Make configurable?
           NIX_BUILD_CORES = "1";
-
         }
         // drvEnv
         // {
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
           NIX_BUILD_TOP = sandboxBuildDir;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
           TMPDIR = sandboxBuildDir;
           TEMPDIR = sandboxBuildDir;
           TMP = sandboxBuildDir;
           TEMP = sandboxBuildDir;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
           PWD = sandboxBuildDir;
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
-          # We don't set it here because the output here isn't handled in any special way
-          # NIX_LOG_FD = "2";
-
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
+          # Not setting `NIX_LOG_FD` since log messages don't need special handling in this context.
           TERM = "xterm-256color";
         };
 
+      # https://github.com/NixOS/nix/blob/2.28.2/src/libstore/unix/build/local-derivation-goal.cc#L1785
+      runChildEnv = {
+        # https://github.com/NixOS/nix/blob/2.28.2/src/libstore/include/nix/store/globals.hh#L1049-L1067
+        NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
+
+      env = initEnv // runChildEnv;
+
+      #
+      # Create a nix-shell shim.
+      #
+      # nix-shell proper relies on a startup file. Startup files are only run with certain (non-)interactive + (non-)login shell permutations.
+      #
+      # https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
+      #
+      # Use a nix-shell shim as the OCI container entrypoint instead.
+      #
+
+      path = lib.concatStringsSep ":" (
+        [
+          (dirOf shell)
+        ]
+        ++ lib.optionals includeBuildDerivation [
+          (lib.makeBinPath [
+            # A binary that builds the derivation.
+            (writeShellScriptBin "buildDerivation" ''
+              exec ${lib.escapeShellArg (valueToString drv.drvAttrs.builder)} ${lib.escapeShellArgs (map valueToString drv.drvAttrs.args)}
+            '')
+          ])
+        ]
+      );
+
+      # https://github.com/NixOS/nix/blob/2.28.2/src/nix-build/nix-build.cc#L601-L635
+      nixShell = writeScript "nix-shell" ''
+        #!${shell}
+
+        unset PATH
+        dontAddDisableDepTrack=1
+        # TODO: https://github.com/NixOS/nix/blob/2.28.2/src/nix-build/nix-build.cc#L612
+        [ -e $stdenv/setup ] && source $stdenv/setup
+        PATH=${path}:"$PATH"
+        SHELL=${lib.escapeShellArg shell}
+        BASH=${lib.escapeShellArg shell}
+        set +e
+        [ -n "$PS1" -a -z "$NIX_SHELL_PRESERVE_PROMPT" ] && PS1='\n\[\033[1;32m\][nix-shell:\w]\$\[\033[0m\] '
+        if [ "$(type -t runHook)" = function ]; then runHook shellHook; fi
+        unset NIX_ENFORCE_PURITY
+        shopt -u nullglob
+        shopt -s execfail
+
+        exec "$@"
+      '';
+
+      nixShellScript = writeScript "nix-shell-script" ''
+        ${optionalString (command != null) command}
+        ${optionalString (run != null) run}
+        exit
+      '';
     in
     streamLayeredImage {
       inherit name tag;
       contents = [
-        binSh
-        usrBinEnv
         (fakeNss.override {
-          # Allows programs to look up the build user's home directory
-          # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910
-          # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
-          # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
+          # Allows programs to look up the build user's home directory.
+          #
+          # https://github.com/NixOS/nix/blob/2.28.2/src/libstore/unix/build/local-derivation-goal.cc#L1069-L1075
+          #
+          # This slightly differs, however, since we use the passed-in `homeDirectory` instead of `sandboxBuildDir`.
+          # We're doing this because it's arguably a bug in Nix that `sandboxBuildDir` is used here.
+          #
+          # https://github.com/NixOS/nix/issues/6379
           extraPasswdLines = [
             "nixbld:x:${toString uid}:${toString gid}:Build user:${homeDirectory}:/noshell"
           ];
@@ -1360,57 +1373,77 @@ rec {
             "nixbld:!:${toString gid}:"
           ];
         })
-      ];
+      ] ++ (if builtins.isList extraContents then extraContents else [ extraContents ]);
 
       fakeRootCommands = ''
         # Effectively a single-user installation of Nix, giving the user full
         # control over the Nix store. Needed for building the derivation this
-        # shell is for, but also in case one wants to use Nix inside the
-        # image
+        # shell is for, but also in case one wants to use Nix inside the image.
         mkdir -p ./nix/{store,var/nix} ./etc/nix
         chown -R ${toString uid}:${toString gid} ./nix ./etc/nix
 
-        # Gives the user control over the build directory
+        # Gives the user control over the build directory.
         mkdir -p .${sandboxBuildDir}
         chown -R ${toString uid}:${toString gid} .${sandboxBuildDir}
       '';
 
-      # Run this image as the given uid/gid
-      config.User = "${toString uid}:${toString gid}";
-      config.Cmd =
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L185-L186
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L534-L536
-        if run == null then
-          [
-            shell
-            "--rcfile"
-            rcfile
-          ]
-        else
-          [
-            shell
-            rcfile
-          ];
-      config.WorkingDir = sandboxBuildDir;
-      config.Env = lib.mapAttrsToList (name: value: "${name}=${value}") envVars;
+      config = {
+        # Run this image as the given uid/gid.
+        User = "${toString uid}:${toString gid}";
+        Env = lib.mapAttrsToList (name: value: "${name}=${value}") env;
+        Entrypoint = [ nixShell ];
+        Cmd =
+          # https://github.com/NixOS/nix/blob/2.28.2/src/nix-build/nix-build.cc#L223-L227
+          if (command != null) then
+            [
+              shell
+              "-i"
+              nixShellScript
+            ]
+          else if (run != null) then
+            [
+              shell
+              nixShellScript
+            ]
+          else
+            [ shell ];
+        WorkingDir = sandboxBuildDir;
+      };
     };
 
-  # Wrapper around streamNixShellImage to build an image from the result
+  # Wrapper around `streamNixShellImage` to build an image from the result.
+  #
+  # Deprecated. Use `streamNixShellImage` + `writeImageStream` instead.
+  #
   # Docs: doc/build-helpers/images/dockertools.section.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage =
     {
-      drv,
       compressor ? "gz",
       ...
     }@args:
-    let
+    writeImageStream {
+      inherit compressor;
       stream = streamNixShellImage (builtins.removeAttrs args [ "compressor" ]);
-      compress = compressorForImage compressor drv.name;
+    };
+
+  # Writes out an image tarball stream with optional compression.
+  #
+  # Docs: doc/build-helpers/images/dockertools.section.md
+  writeImageStream =
+    {
+      stream,
+      compressor ? "gz",
+    }:
+    let
+      compress = compressorForImage compressor stream.name;
     in
-    runCommand "${drv.name}-env.tar${compress.ext}" {
+    runCommand "${stream.name}.tar${compress.ext}" {
       inherit (stream) imageName;
-      passthru = { inherit (stream) imageTag; };
+      passthru = {
+        inherit stream;
+        inherit (stream) imageTag;
+      };
       nativeBuildInputs = compress.nativeInputs;
     } "${stream} | ${compress.compress} > $out";
 }
