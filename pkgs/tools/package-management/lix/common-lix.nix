@@ -100,6 +100,7 @@ let
   isLegacyParser = lib.versionOlder version "2.91";
   hasDtraceSupport = lib.versionAtLeast version "2.93";
   parseToYAML = lib.versionAtLeast version "2.93";
+  usesCapnp = lib.versionAtLeast version "2.94";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -139,12 +140,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-    (python3.pythonOnBuildForHost.withPackages (p: [
-      p.pytest
-      p.pytest-xdist
-      p.python-frontmatter
-      p.toml
-    ]))
+    (python3.pythonOnBuildForHost.withPackages (
+      p:
+      [
+        p.pytest
+        p.pytest-xdist
+        p.python-frontmatter
+        p.toml
+      ]
+      ++ lib.optionals usesCapnp [ p.pycapnp ]
+    ))
     pkg-config
     flex
     jq
@@ -176,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
+  ++ lib.optionals usesCapnp [ capnproto ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs = [
