@@ -1035,6 +1035,23 @@ self: super:
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
 
+  # Add pdflatex to let it build docs (ends up in lhs2tex.doc)
+  lhs2tex = addBuildTools [
+    (pkgs.texlive.combine { inherit (pkgs.texlive)
+      scheme-basic
+      koma-script
+      stmaryrd
+      paralist
+      relsize
+      psnfss
+      palatino
+      mathpazo
+      rsfs
+      ec
+      ;
+    })
+  ] super.lhs2tex;
+
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal (drv: {
     broken = pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isi686;
