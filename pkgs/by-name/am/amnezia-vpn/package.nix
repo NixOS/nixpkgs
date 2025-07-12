@@ -64,24 +64,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.6.0";
+  version = "4.8.7.2";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-WQbay3dtGNPPpcK1O7bfs/HKO4ytfmQo60firU/9o28=";
+    hash = "sha256-HooQ1ITaIkUya+ioG8Mtr0xiZpYmS3Ed0YAQbm7BS0s=";
     fetchSubmodules = true;
   };
-
-  # Temporary patch header file to fix build with QT 6.9
-  patches = [
-    (fetchpatch {
-      name = "add-missing-include.patch";
-      url = "https://github.com/amnezia-vpn/amnezia-client/commit/c44ce0d77cc3acdf1de48a12459a1a821d404a1c.patch";
-      hash = "sha256-Q6UMD8PlKAcI6zNolT5+cULECnxNrYrD7cifvNg1ZrY=";
-    })
-  ];
 
   postPatch =
     ''
