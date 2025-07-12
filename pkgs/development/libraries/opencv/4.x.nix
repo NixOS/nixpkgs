@@ -155,7 +155,7 @@ let
       else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
         { ${name "mac_intel64"} = ""; }
       else
-        throw "ICV is not available for this platform (or not yet supported by this package)";
+        throw "ICV is not available for ${effectiveStdenv.hostPlatform.system} (or not yet supported by this package)";
     dst = ".cache/ippicv";
   };
 
@@ -341,7 +341,8 @@ effectiveStdenv.mkDerivation {
     ++ optionals enablePython [
       pythonPackages.python
     ]
-    ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
+    # FIXME: Do we actually want `equals`, or should we use `canExec`?
+    ++ optionals (lib.systems.equals effectiveStdenv.buildPlatform effectiveStdenv.hostPlatform) [
       hdf5
     ]
     ++ optionals enableGtk2 [
@@ -445,19 +446,20 @@ effectiveStdenv.mkDerivation {
       pkg-config
       unzip
     ]
-    ++ optionals enablePython (
-      [
-        pythonPackages.pip
-        pythonPackages.wheel
-        pythonPackages.setuptools
-      ]
-      ++ optionals (effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
-        pythonPackages.pythonImportsCheckHook
-      ]
-    )
+    ++ optionals enablePython [
+      pythonPackages.pip
+      pythonPackages.wheel
+      pythonPackages.setuptools
+    ]
     ++ optionals enableCuda [
       cudaPackages.cuda_nvcc
     ];
+
+  nativeCheckInputs =
+    optionals (enablePython && effectiveStdenv.buildPlatform.canExec effectiveStdenv.hostPlatform)
+      [
+        pythonPackages.pythonImportsCheckHook
+      ];
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
@@ -625,7 +627,8 @@ effectiveStdenv.mkDerivation {
         withIpp = opencv4.override { enableIpp = true; };
       }
       // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-      // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+      # FIXME: is !(isx86_64 && isDarwin) correct, or should it be more general, like !isDarwin ?
+      // optionalAttrs (with effectiveStdenv.buildPlatform; !(isx86_64 && isDarwin)) {
         opencv4-tests = callPackage ./tests.nix {
           inherit
             enableGStreamer
