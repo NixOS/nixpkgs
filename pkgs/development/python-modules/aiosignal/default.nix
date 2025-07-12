@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.3.2";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiosignal";
     rev = "v${version}";
-    hash = "sha256-CvNarJpSq8EKnt+PuSerMK/ZVbxL9rp7rQ4dkWykG1M=";
+    hash = "sha256-b46/LGoCeL4mhbBPAiPir7otzKKrlKcEFzn8pG/foh0=";
   };
 
   propagatedBuildInputs = [ frozenlist ];
