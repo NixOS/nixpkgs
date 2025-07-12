@@ -26,9 +26,7 @@ let
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
-  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (
-    mkCellServDB cfg.cellName cfg.cellServDB
-  );
+  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellServDB);
 
   afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
     mkdir -p $out
@@ -65,27 +63,25 @@ in
       };
 
       cellServDB = mkOption {
-        default = [ ];
-        type =
-          with types;
-          listOf (submodule {
-            options = cellServDBConfig;
-          });
+        default = { };
+        type = cellServDBType cfg.cellName;
         description = ''
           This cell's database server records, added to the global
           CellServDB. See {manpage}`CellServDB(5)` man page for syntax. Ignored when
           `afsdb` is set to `true`.
         '';
-        example = [
-          {
-            ip = "1.2.3.4";
-            dnsname = "first.afsdb.server.dns.fqdn.org";
-          }
-          {
-            ip = "2.3.4.5";
-            dnsname = "second.afsdb.server.dns.fqdn.org";
-          }
-        ];
+        example = {
+          "dns.fqdn.org" = [
+            {
+              ip = "1.2.3.4";
+              dnsname = "first.afsdb.server.dns.fqdn.org";
+            }
+            {
+              ip = "2.3.4.5";
+              dnsname = "second.afsdb.server.dns.fqdn.org";
+            }
+          ];
+        };
       };
 
       cache = {
