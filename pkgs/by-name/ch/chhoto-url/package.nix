@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${finalAttrs.src}/resources $out/share/chhoto-url/resources
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) chhoto-url; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Simple, blazingly fast, selfhosted URL shortener with no unnecessary features";
