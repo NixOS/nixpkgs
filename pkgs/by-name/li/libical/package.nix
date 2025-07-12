@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pkgsBuildBuild,
-  pkgsBuildHost,
   cmake,
   glib,
   icu,
@@ -15,7 +14,10 @@
   python3,
   tzdata,
   fixDarwinDylibNames,
-  withIntrospection ? stdenv.hostPlatform.emulatorAvailable pkgsBuildHost,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
   gobject-introspection,
   vala,
 }:
