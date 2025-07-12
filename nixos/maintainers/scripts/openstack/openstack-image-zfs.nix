@@ -113,7 +113,7 @@ in
       postVM = ''
          extension=''${rootDiskImage##*.}
          friendlyName=$out/${config.image.baseName}
-         rootDisk="$friendlyName.root.$extension"
+         rootDisk="$friendlyName.$extension"
          mv "$rootDiskImage" "$rootDisk"
 
          mkdir -p $out/nix-support
