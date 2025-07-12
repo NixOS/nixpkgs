@@ -77,12 +77,6 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-
-    # Fail since tree-sitter-markdown was updated to 0.5.0
-    # ValueError: Incompatible Language version 15. Must be between 13 and 14
-    # https://github.com/Textualize/textual/issues/5868
-    "test_setting_builtin_language_via_attribute"
-    "test_setting_builtin_language_via_constructor"
   ];
 
   pytestFlagsArray = [
