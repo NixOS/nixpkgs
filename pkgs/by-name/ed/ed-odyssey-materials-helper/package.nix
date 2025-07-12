@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk23,
+  jdk24,
   makeWrapper,
   wrapGAppsHook3,
   libXxf86vm,
@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.178";
+  version = "2.183";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
+    hash = "sha256-nb0OdMv8G/OginivS0vlbOEC1HW12TTvIFethsIxOUU=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
     # remove "new version available" popup
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
+
+    # remove JDK 23 pin
+    # (the package does use preview features)
+    for f in build.gradle */build.gradle; do
+      substituteInPlace $f \
+        --replace-fail 'languageVersion = JavaLanguageVersion.of(23)' ""
+    done
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -56,7 +63,10 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk24}"
+    "--stacktrace"
+  ];
 
   gradleBuildTask = "application:jpackage";
 
