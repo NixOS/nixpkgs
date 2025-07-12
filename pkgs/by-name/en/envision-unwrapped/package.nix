@@ -33,28 +33,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "2.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
     rev = finalAttrs.version;
-    hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
+    hash = "sha256-EZjiuIrpht/QLVi85hchZZE3AoBj6ha2GUHX0kjHlLo=";
   };
-
-  patches = [
-    ./support-headless-cli.patch
-  ];
 
   strictDeps = true;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version;
-    # TODO: Use srcOnly instead
-    src = applyPatches {
-      inherit (finalAttrs) src patches;
-    };
-    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-26oVPVvSYXYCtcv4IBMlZ3m1F4fimsaoI1ucRnR27pU=";
   };
 
   nativeBuildInputs = [
