@@ -39,19 +39,16 @@
 
   # fancy setup: run in uWSGI and use nginx as proxy
   nodes.fancy =
-    { config, ... }:
+    { config, lib, ... }:
     {
       services.searx = {
         enable = true;
         # searx refuses to run if unchanged
         settings.server.secret_key = "somesecret";
 
-        runInUwsgi = true;
+        configureNginx = true;
+        domain = "localhost";
         uwsgiConfig = {
-          # serve using the uwsgi protocol
-          socket = "/run/searx/uwsgi.sock";
-          chmod-socket = "660";
-
           # use /searx as url "mountpoint"
           mount = "/searx=searx.webapp:application";
           module = "";
@@ -59,19 +56,12 @@
         };
       };
 
-      # use nginx as reverse proxy
-      services.nginx.enable = true;
-      services.nginx.virtualHosts.localhost = {
-        locations."/searx".extraConfig = ''
-          include ${pkgs.nginx}/conf/uwsgi_params;
-          uwsgi_pass unix:/run/searx/uwsgi.sock;
-        '';
-        locations."/searx/static/".alias = "${config.services.searx.package}/share/static/";
+      services.nginx.virtualHosts.${config.services.searx.domain} = {
+        locations = {
+          "/static/" = lib.mkForce { };
+          "/searx/static/".alias = "${config.services.searx.package}/share/static/";
+        };
       };
-
-      # allow nginx access to the searx socket
-      users.users.nginx.extraGroups = [ "searx" ];
-
     };
 
   testScript = ''
