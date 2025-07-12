@@ -542,9 +542,19 @@ lib.mapAttrs mkLicense (
       fullName = "European Union Public License 1.1";
     };
 
+    eupl11Only = {
+      spdxId = "EUPL-1.1";
+      fullName = "European Union Public License 1.1 only";
+    };
+
     eupl12 = {
       spdxId = "EUPL-1.2";
       fullName = "European Union Public License 1.2";
+    };
+
+    eupl12Only = {
+      spdxId = "EUPL-1.2";
+      fullName = "European Union Public License 1.2 only";
     };
 
     fdl11Only = {
