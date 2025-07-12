@@ -9,9 +9,10 @@
   libXft,
   ncurses,
   writeText,
-  conf ? null,
-  patches ? [ ],
-  extraLibs ? [ ],
+  config,
+  conf ? config.st.conf or null,
+  patches ? config.st.patches or [ ],
+  extraLibs ? config.st.extraLibs or [ ],
   nixosTests,
   # update script dependencies
   gitUpdater,
