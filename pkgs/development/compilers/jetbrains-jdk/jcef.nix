@@ -44,46 +44,51 @@
   udev,
   boost,
   thrift,
+  darwin,
+  apple-sdk_15,
 }:
 
-assert !stdenv.hostPlatform.isDarwin;
-# I can't test darwin
-
 let
-  rpath = lib.makeLibraryPath [
-    glib
-    nss
-    nspr
-    atk
-    at-spi2-atk
-    libdrm
-    libGL
-    expat
-    libxcb
-    libxkbcommon
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
-    libgbm
-    gtk3
-    pango
-    cairo
-    alsa-lib
-    dbus
-    at-spi2-core
-    cups
-    libxshmfence
-    udev
-  ];
+  rpath = lib.makeLibraryPath (
+    [
+      glib
+      nss
+      nspr
+      atk
+      at-spi2-atk
+      expat
+      libxcb
+      libxkbcommon
+      libX11
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libXrandr
+      gtk3
+      pango
+      cairo
+      dbus
+      at-spi2-core
+      cups
+      libxshmfence
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libdrm
+      libGL
+      libgbm
+      alsa-lib
+      udev
+    ]
+  );
 
   buildType = if debugBuild then "Debug" else "Release";
   platform =
     {
       "aarch64-linux" = "linuxarm64";
       "x86_64-linux" = "linux64";
+      "aarch64-darwin" = "macosarm64";
+      "x86_64-darwin" = "macosx64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   arches =
@@ -93,8 +98,18 @@ let
         projectArch = "arm64";
         targetArch = "arm64";
       };
+      "macosarm64" = {
+        depsArch = "universal";
+        projectArch = "arm64";
+        targetArch = "arm64";
+      };
       "linux64" = {
         depsArch = "amd64";
+        projectArch = "x86_64";
+        targetArch = "x86_64";
+      };
+      "macosx64" = {
+        depsArch = "universal";
         projectArch = "x86_64";
         targetArch = "x86_64";
       };
@@ -111,25 +126,33 @@ stdenv.mkDerivation rec {
   # Run `git rev-list --count HEAD`
   version = "1014";
 
-  nativeBuildInputs = [
-    cmake
-    python3
-    jdk
-    git
-    rsync
-    ant
-    ninja
-    strip-nondeterminism
-    stripJavaArchivesHook
-  ];
-  buildInputs = [
-    boost
-    libX11
-    libXdamage
-    nss
-    nspr
-    thrift
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+      jdk
+      git
+      rsync
+      ant
+      ninja
+      strip-nondeterminism
+      stripJavaArchivesHook
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.xcode_16_1
+    ];
+  buildInputs =
+    [
+      boost
+      libX11
+      libXdamage
+      nss
+      nspr
+      thrift
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      apple-sdk_15
+    ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
@@ -145,6 +168,8 @@ stdenv.mkDerivation rec {
         {
           "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
           "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
+          "macosx64" = "sha256-BkG/duc49skqOLSgkKSNlsm4H6egUgNqBt8snJrc7MU=";
+          "macosarm64" = "sha256-5WKGRDOrZqcVIWuPw4TIsoGwvSkyiOUzwHXXIDQnITs=";
         }
         .${platform};
       urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
@@ -153,11 +178,49 @@ stdenv.mkDerivation rec {
       url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
       inherit name hash;
     };
-  # Find the hash in tools/buildtools/linux64/clang-format.sha1
-  clang-fmt = fetchurl {
-    url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
-    hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
-  };
+  # Find the hash in tools/buildtools/${platform}/clang-format.sha1
+  clang-fmt =
+    let
+      platformInfo =
+        {
+          "linuxarm64" = {
+            key = "dd736afb28430c9782750fc0fd5f0ed497399263";
+            hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+          };
+          "linux64" = {
+            key = "dd736afb28430c9782750fc0fd5f0ed497399263";
+            hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+          };
+          "macosx64" = {
+            key = "a1b33be85faf2578f3101d7806e443e1c0949498";
+            hash = "sha256-RscqWe309rwQe1vEoefAP+fHxx5KAtvQA0Zh3lj62pc=";
+          };
+          "macosarm64" = {
+            key = "f1424c44ee758922823d6b37de43705955c99d7e";
+            hash = "sha256-m+qCYEZUmCgU37JTlEVdyYml4T/rA3Lt/vJh7/ToSlo=";
+          };
+        }
+        .${platform};
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/chromium-clang-format/${platformInfo.key}";
+      hash = platformInfo.hash;
+    };
+  clangFmtFolder = if stdenv.isDarwin then "mac" else "linux64";
+
+  os = if stdenv.isDarwin then "macosx" else "linux";
+
+  toolFolder = if stdenv.isDarwin then "mac" else "linux";
+
+  patchLibs =
+    if stdenv.isDarwin then
+      ''''
+    else
+      ''
+        patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
+        patchelf third_party/cef/${cef-bin.name}/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
+        patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
+      '';
 
   configurePhase = ''
     runHook preConfigure
@@ -166,10 +229,7 @@ stdenv.mkDerivation rec {
 
     cp -r ${cef-bin} third_party/cef/${cef-bin.name}
     chmod +w -R third_party/cef/${cef-bin.name}
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/libcef.so --set-rpath "${rpath}" --add-needed libudev.so
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/libGLESv2.so --set-rpath "${rpath}" --add-needed libGL.so.1
-    patchelf third_party/cef/${cef-bin.name}/${buildType}/chrome-sandbox --set-interpreter $(cat $NIX_BINTOOLS/nix-support/dynamic-linker)
-    sed 's/-O0/-O2/' -i third_party/cef/${cef-bin.name}/cmake/cef_variables.cmake
+    ${patchLibs}
 
     sed \
       -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
@@ -178,8 +238,8 @@ stdenv.mkDerivation rec {
       -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
       -i tools/git_util.py
 
-    cp ${clang-fmt} tools/buildtools/linux64/clang-format
-    chmod +w tools/buildtools/linux64/clang-format
+    cp ${clang-fmt} tools/buildtools/${clangFmtFolder}/clang-format
+    chmod +w tools/buildtools/${clangFmtFolder}/clang-format
 
     sed \
       -e 's|include(cmake/vcpkg.cmake)||' \
@@ -188,6 +248,10 @@ stdenv.mkDerivation rec {
       -i CMakeLists.txt
 
     sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift}/bin/thrift)|' -i remote/CMakeLists.txt
+
+    # Remove runtime for appbundler because it only recognizes MacOS style Java home paths
+    # https://github.com/ome/appbundler/blob/6f153a3706960e3568a6815c27f5cd02cb36f654/appbundler/src/com/oracle/appbundler/AppBundlerTask.java#L629
+    sed -e 's|<runtime dir="''${env.JAVA_HOME}"/>||' -i build.xml
 
     mkdir jcef_build
     cd jcef_build
@@ -217,10 +281,10 @@ stdenv.mkDerivation rec {
       export JCEF_ROOT_DIR=$(realpath ..)
       export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
       export JB_TOOLS_DIR=$(realpath ../jb/tools)
-      export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
+      export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/${toolFolder}
       export OUT_CLS_DIR=$(realpath ../out/${platform})
       export TARGET_ARCH=${targetArch} DEPS_ARCH=${depsArch}
-      export OS=linux
+      export OS=${os}
       export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
       mkdir -p $unpacked/{jogl,gluegen,jcef}
