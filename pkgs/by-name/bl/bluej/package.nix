@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${openjdk}/bin/java $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
                    -cp $out/share/bluej/boot.jar bluej.Boot"
 
