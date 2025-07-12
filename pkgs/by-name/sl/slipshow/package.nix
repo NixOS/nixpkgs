@@ -8,13 +8,13 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "slipshow";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
     tag = "v${version}";
-    hash = "sha256-1gjQDkjDxanshvn1fNxwpJFt12uRWnkmRbs0tWdTgtM=";
+    hash = "sha256-muH6WsZH+BKn+wKcgs3Q2agyAVZgF5xDZg3XAsqNXcw=";
   };
 
   postPatch = ''
