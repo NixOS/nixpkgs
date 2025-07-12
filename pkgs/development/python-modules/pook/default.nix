@@ -10,7 +10,6 @@
   pytest-httpbin,
   pytest-pook,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   version = "2.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "pook";
@@ -28,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-z0QaMdsX2xLXICgQwnlUD2KsgCn0jB4wO83+6O4B3D8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     furl
     jsonschema
     xmltodict
@@ -64,8 +61,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
-    changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
