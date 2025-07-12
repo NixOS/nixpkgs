@@ -1,43 +1,22 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-prefetch common-updater-scripts nix coreutils
+#!nix-shell -i bash -p curl jq nix-prefetch common-updater-scripts nix coreutils moreutils
 # shellcheck shell=bash
+
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
 
-old_version=$(jq -r ".version" sources.json || echo -n "0.0.1")
-version=$(curl -s "https://api.github.com/repos/typesense/typesense/releases/latest" | jq -r ".tag_name")
-version="${version#v}"
+latestVersion=$(curl -sL "https://api.github.com/repos/typesense/typesense/releases/latest" | jq --raw-output ".tag_name" | sed 's/^v//')
+currentVersion=$(nix eval --raw -f . typesense.version)
 
-if [[ "$old_version" == "$version" ]]; then
-    echo "Already up to date!"
-    exit 0
+if [[ "$latestVersion" == "$currentVersion" ]]; then
+  exit 0
 fi
 
-declare -A platforms=(
-    [aarch64-linux]="linux-arm64"
-    [aarch64-darwin]="darwin-arm64"
-    [x86_64-darwin]="darwin-amd64"
-    [x86_64-linux]="linux-amd64"
-)
+MY_PATH=$(dirname $(realpath "$0"))
 
-sources_tmp="$(mktemp)"
-cat <<EOF > "$sources_tmp"
-{
-  "version": "$version",
-  "platforms": {}
-}
-EOF
+jq --arg version "$latestVersion" '.version = $version' $MY_PATH/sources.json | sponge $MY_PATH/sources.json
 
-for platform in "${!platforms[@]}"; do
-    arch="${platforms[$platform]}"
-    url="https://dl.typesense.org/releases/${version}/typesense-server-${version}-${arch}.tar.gz"
-    sha256hash="$(nix-prefetch-url --type sha256 "$url")"
-    hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256hash")"
-    echo "$(jq --arg arch "$arch" \
-      --arg platform "$platform" \
-      --arg hash "$hash" \
-      '.platforms += {($platform): {arch: $arch, hash: $hash}}' \
-      "$sources_tmp")" > "$sources_tmp"
+systems=$(nix eval --json -f . typesense.meta.platforms | jq --raw-output '.[]')
+for system in $systems; do
+  hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . typesense.src.url --system "$system")))
+  jq --arg system "$system" --arg hash "$hash" '.platforms[$system].hash = $hash' $MY_PATH/sources.json | sponge $MY_PATH/sources.json
 done
-
-cp "$sources_tmp" sources.json
