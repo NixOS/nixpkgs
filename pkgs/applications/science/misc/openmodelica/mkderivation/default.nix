@@ -61,7 +61,16 @@ let
 
   # Simple to to m4 configuration scripts
   postPatch =
-    lib.optionalString ifDeps ''
+    ''
+      sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
+      #patch refs to $HOME and patch out the check against MODELICAPATH
+      #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
+      sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
+        s|listMember(userLibraries.*|true then|g
+        s|getInstallationCachePath()|getCachePath()|g
+      '
+    ''
+    + lib.optionalString ifDeps ''
       sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
     ''
     + appendByAttr "postPatch" "\n" pkg;
@@ -115,7 +124,7 @@ stdenv.mkDerivation (
       ;
 
     src = fetchgit (import ./src-main.nix);
-    version = "1.18.0";
+    version = "1.25.1";
 
     nativeBuildInputs = getAttrDef "nativeBuildInputs" [ ] pkg ++ [
       autoconf
@@ -128,6 +137,8 @@ stdenv.mkDerivation (
     buildInputs = getAttrDef "buildInputs" [ ] pkg ++ lib.optional ifDeps joinedDeps;
 
     dontUseCmakeConfigure = true;
+
+    enableParallelBuilding = true;
 
     hardeningDisable = [ "format" ];
   }
