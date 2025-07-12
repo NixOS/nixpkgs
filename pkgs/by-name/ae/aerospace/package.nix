@@ -55,7 +55,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nikitabobko/AeroSpace";
     description = "i3-like tiling window manager for macOS";
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ alexandru0-dev ok-nick ];
+    maintainers = with lib.maintainers; [
+      alexandru0-dev
+      ok-nick
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
