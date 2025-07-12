@@ -131,6 +131,8 @@ let
       ""
     else if targetPlatform.libc == "musl" then
       "${sharedLibraryLoader}/lib/ld-musl-*"
+    else if targetPlatform.libc == "mlibc" then
+      "${sharedLibraryLoader}/lib/ld.so"
     else if targetPlatform.libc == "uclibc" then
       "${sharedLibraryLoader}/lib/ld*-uClibc.so.1"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then
