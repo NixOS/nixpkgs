@@ -9,7 +9,7 @@
 
 let
   pname = "wasilibc";
-  version = "22-unstable-2024-10-16";
+  version = "25-unstable-2025-05-13";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "98897e29fcfc81e2b12e487e4154ac99188330c4";
-    hash = "sha256-NFKhMJj/quvN3mR7lmxzA9w46KhX92iG0rQA9qDeS8I=";
+    rev = "6b2d6bd4db22cfd56762de24d9af7df04e6c1d46";
+    hash = "sha256-D0WEWDF9W3ZlyITbJgWBL0JeVz+hwjNePlL+qzS2FAE=";
     fetchSubmodules = true;
   };
 
@@ -32,6 +32,12 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-Werror" ""
+    patchShebangs scripts/install-include-headers.sh
+    # Simple fix for https://github.com/WebAssembly/wasi-libc/issues/583
+    sed -i 's|BULK_MEMORY_THRESHOLD|20|g' \
+      libc-top-half/musl/src/string/memmove.c \
+      libc-top-half/musl/src/string/memset.c \
+      libc-top-half/musl/src/string/memcpy.c
   '';
 
   preBuild = ''
