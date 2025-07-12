@@ -15,6 +15,7 @@
   scrypt,
   nixosTests,
   writeShellScript,
+  versionCheckHook,
 
   # for update.nix
   writeScript,
@@ -27,6 +28,7 @@
   gnused,
   nix,
 }:
+
 let
   tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
     PATH="${
@@ -48,13 +50,14 @@ let
     base64 -d | tail --bytes=32 | base32 | tr -d =
   '';
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
   version = "0.4.8.17";
 
   src = fetchurl {
-    url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ebRyXh1LiHueaP0JsNIkN3fVzjzUceU4WDvPb52M21Y=";
+    url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ebRyXh1LiHueaP0JsNIkN3fVzjzUceU4WDvPb52M21Y=";
   };
 
   outputs = [
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
     [
       libevent
@@ -98,8 +102,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
-      --replace 'pathfind torsocks' true          \
-      --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+      --replace-fail 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
 
     patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
@@ -116,6 +119,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tor
     ln -s ${tor-client-auth-gen} $out/bin/tor-client-auth-gen
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests.tor = nixosTests.tor;
@@ -135,10 +142,9 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.torproject.org/";
     description = "Anonymizing overlay network";
-
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a
       network of relays run by volunteers all around the world: it makes it
@@ -148,17 +154,16 @@ stdenv.mkDerivation rec {
       instant messaging clients, remote login, and other applications based on
       the TCP protocol.
     '';
-
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       gpl3Only
     ];
-
-    maintainers = with maintainers; [
+    mainProgram = "tor";
+    maintainers = with lib.maintainers; [
       thoughtpolice
       joachifm
       prusnak
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
