@@ -422,7 +422,7 @@ in
             };
           };
         };
-        video_transcription = {
+        video_transcription = lib.mkIf (!pkgs.stdenv.hostPlatform.isAarch64) {
           engine = lib.mkDefault "whisper-ctranslate2";
           engine_path = lib.mkDefault (lib.getExe pkgs.whisper-ctranslate2);
         };
