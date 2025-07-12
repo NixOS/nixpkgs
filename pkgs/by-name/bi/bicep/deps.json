@@ -11,8 +11,8 @@
   },
   {
     "pname": "Azure.Bicep.Types.Az",
-    "version": "0.2.771",
-    "hash": "sha256-VByaJddUXteY5SNE6EsMW6s1p8bJZuM3DdPZ9jPOBkE="
+    "version": "0.2.784",
+    "hash": "sha256-F3Vu7AdbwbMz2msxYcrG7uedrsdtDtKU7+s3n+/bqRw="
   },
   {
     "pname": "Azure.Bicep.Types.K8s",
@@ -46,28 +46,28 @@
   },
   {
     "pname": "Azure.Deployments.Core",
-    "version": "1.384.0",
-    "hash": "sha256-GkARRAP79e4QtCCVF+YU8o2Lr/tMtlJB2q3UvZJ5zvw="
+    "version": "1.393.0",
+    "hash": "sha256-ndgyA2iYbE/S4HBwos01ozoVqKrXogz5rggQ5D/21jA="
   },
   {
     "pname": "Azure.Deployments.DiffEngine",
-    "version": "1.384.0",
-    "hash": "sha256-i+3LW2XtndizGWCjrLAfhmckicU6fFzSEhJeNL4+Rh4="
+    "version": "1.393.0",
+    "hash": "sha256-tLvsvnmcPsIF+vrxkYGV83MJsplGotEt8lVlhuTorBo="
   },
   {
     "pname": "Azure.Deployments.Engine",
-    "version": "1.384.0",
-    "hash": "sha256-l1yKQPexJO11HMKWhFWFdWmUidJAgzhFrudxHVF+KdA="
+    "version": "1.393.0",
+    "hash": "sha256-3z5kQNEEaiVH4YP03oa/+huk88i7KKcgIhubkHXPp6U="
   },
   {
     "pname": "Azure.Deployments.Expression",
-    "version": "1.384.0",
-    "hash": "sha256-FFu6uNZWXH/54EpyM2KH9cm3YYF66Lnq+w7470oTqhk="
+    "version": "1.393.0",
+    "hash": "sha256-8pjakM5oz5JowKXMj13ErIfz0NBbM7pkHcoUG9jY4Tc="
   },
   {
     "pname": "Azure.Deployments.Extensibility",
-    "version": "1.384.0",
-    "hash": "sha256-lOz0lIdB7RCqQJJrpjRocgJCN/luHj0GFbIrsUN5SWU="
+    "version": "1.393.0",
+    "hash": "sha256-IaiaDrvhyJb45WtAT0mhKG8DDs5QxCC5KzQjQq+vSRY="
   },
   {
     "pname": "Azure.Deployments.Extensibility.Core",
@@ -91,8 +91,8 @@
   },
   {
     "pname": "Azure.Deployments.Templates",
-    "version": "1.384.0",
-    "hash": "sha256-yuWJqgh0hDzQNOjMhN1Wg0MxDgvMpFaNCsvumtldrZA="
+    "version": "1.393.0",
+    "hash": "sha256-FtOufi5hNlz3H+kpbNaw89FPtZ8qpFX2DAfBZP/z1Io="
   },
   {
     "pname": "Azure.Identity",
