@@ -10,15 +10,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xst";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "gnotclub";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-2pXR9U2tTBd0lyeQ3BjnXW+Ne9aUQg/+rnpmYPPG06A=";
+    repo = "xst";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2pXR9U2tTBd0lyeQ3BjnXW+Ne9aUQg/+rnpmYPPG06A=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gnotclub/xst";
     description = "Simple terminal fork that can load config from Xresources";
     mainProgram = "xst";
-    license = licenses.mit;
-    maintainers = [ maintainers.vyp ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vyp ];
+    platforms = lib.platforms.linux;
   };
-}
+})
