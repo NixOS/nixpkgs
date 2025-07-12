@@ -85,7 +85,7 @@ buildPythonPackage rec {
   meta = {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
-    changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
+    changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
