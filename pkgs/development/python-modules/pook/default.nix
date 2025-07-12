@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  falcon,
   fetchFromGitHub,
   furl,
   hatchling,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = "pook";
     tag = "v${version}";
-    hash = "sha256-DDHaKsye28gxyorILulrLRBy/B9zV673jeVZ85uPZAo=";
+    hash = "sha256-z0QaMdsX2xLXICgQwnlUD2KsgCn0jB4wO83+6O4B3D8=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    falcon
     pytest-asyncio
     pytest-httpbin
     pytest-pook
