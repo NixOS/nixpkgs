@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
-  version = "0.13.79";
+  version = "0.13.80";
 
   src = fetchFromGitHub {
     owner = "gdraheim";
     repo = "zziplib";
     rev = "v${version}";
-    hash = "sha256-PUG6MAglYJXJzQMWM7KfLFbHG3bva7FyaP+HdCsRnZQ=";
+    hash = "sha256-vvPcQBRk1iIPNk5qI7N0Nv9JWndVfFH6oGxyr9ZIt0g=";
   };
 
   nativeBuildInputs = [
