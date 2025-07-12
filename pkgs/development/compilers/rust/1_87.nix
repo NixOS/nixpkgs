@@ -7,7 +7,6 @@
 # 2. The LLVM version used for building should match with rust upstream.
 #    Check the version number in the src/llvm-project git submodule in:
 #    https://github.com/rust-lang/rust/blob/<version-tag>/.gitmodules
-# 3. Firefox and Thunderbird should still build on x86_64-linux.
 
 {
   stdenv,
