@@ -30,25 +30,14 @@
   ninja,
   opencv4,
   pkg-config,
-  qt5compat,
-  qtcharts,
-  qtdeclarative,
-  qtlocation,
-  qtmultimedia,
-  qtscxml,
-  qtserialport,
-  qtspeech,
-  qttools,
-  qtwayland,
-  qtwebsockets,
-  qtwebengine,
+  qt6,
+  qt6Packages,
   rtl-sdr,
   serialdv,
   sdrplay,
   sgp4,
   soapysdr-with-plugins,
   uhd,
-  wrapQtAppsHook,
   zlib,
   withSDRplay ? false,
 }:
@@ -60,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ymDKHGJNoCOMa1zzFvjTzFa34wP1+iKSfJZZi7Sk/GM=";
   };
 
@@ -68,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -96,17 +85,17 @@ stdenv.mkDerivation (finalAttrs: {
       limesuite
       mbelib
       opencv4
-      qt5compat
-      qtcharts
-      qtdeclarative
-      qtlocation
-      qtmultimedia
-      qtscxml
-      qtserialport
-      qtspeech
-      qttools
-      qtwebsockets
-      qtwebengine
+      qt6Packages.qt5compat
+      qt6Packages.qtcharts
+      qt6Packages.qtdeclarative
+      qt6Packages.qtlocation
+      qt6Packages.qtmultimedia
+      qt6Packages.qtscxml
+      qt6Packages.qtserialport
+      qt6Packages.qtspeech
+      qt6Packages.qttools
+      qt6Packages.qtwebsockets
+      qt6Packages.qtwebengine
       rtl-sdr
       serialdv
       sgp4
@@ -114,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       uhd
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals withSDRplay [ sdrplay ];
 

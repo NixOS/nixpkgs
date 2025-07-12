@@ -1366,7 +1366,7 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-Y6OnTmAleyYsmUn/F6kOFNkA4x+QQt00mx97UNWVIWU=",
+                    "hash": "sha256-/5e0R3R3RRsRNcYYHqb/VJ8DIXc528baIccnQocoxwU=",
                     "owner": "electron",
                     "repo": "electron",
                     "tag": "v36.7.1"

@@ -1,23 +1,28 @@
 {
   lib,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
   mopidy,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "Mopidy-Scrobbler";
+pythonPackages.buildPythonApplication rec {
+  pname = "mopidy-scrobbler";
   version = "2.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit version;
+    pname = "Mopidy-Scrobbler";
     sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
-    pylast
+    pythonPackages.pylast
   ];
 
   # no tests implemented
