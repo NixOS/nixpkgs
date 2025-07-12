@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ancp-bids";
-  version = "0.2.9";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ANCPLabOldenburg";
     repo = "ancp-bids";
     tag = version;
-    hash = "sha256-vmw8SAikvbaHnPOthBQxTbyvDwnnZwCOV97aUogIgxw=";
+    hash = "sha256-n8QfQ2PGdAO6kTfkbFpj3f2gYa3vwuYg+vPpZlGNpb0=";
   };
 
   build-system = [ setuptools ];
