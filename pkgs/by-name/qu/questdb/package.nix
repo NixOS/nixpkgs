@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin $out/share/java
     cp questdb.sh $out/bin
+    cp env.sh $out/bin
+    cp print-hello.sh $out/bin
     cp questdb.jar $out/share/java
 
     ln -s $out/share/java/questdb.jar $out/bin
