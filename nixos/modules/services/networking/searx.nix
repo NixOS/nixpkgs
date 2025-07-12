@@ -24,13 +24,8 @@ let
     # write NixOS settings as JSON
     (
       umask 077
-      cp --no-preserve=mode ${settingsFile} settings.yml
+      ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
     )
-
-    # substitute environment variables
-    env -0 | while IFS='=' read -r -d ''' n v; do
-      sed "s#@$n@#$v#g" -i settings.yml
-    done
   '';
 
   settingType =
@@ -90,12 +85,12 @@ in
         example = literalExpression ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
-            server.secret_key = "@SEARX_SECRET_KEY@";
+            server.secret_key = "''${SEARX_SECRET_KEY}";
 
             engines = lib.singleton
               { name = "wolframalpha";
                 shortcut = "wa";
-                api_key = "@WOLFRAM_API_KEY@";
+                api_key = "''${WOLFRAM_API_KEY}";
                 engine = "wolframalpha_api";
               };
           }
@@ -105,7 +100,7 @@ in
           the default configuration. It's also possible to refer to
           environment variables
           (defined in [](#opt-services.searx.environmentFile))
-          using the syntax `@VARIABLE_NAME@`.
+          using the syntax `''${VARIABLE_NAME}`.
 
           ::: {.note}
           For available settings, see the Searx
