@@ -1,0 +1,72 @@
+(Patch from https://lists.denx.de/pipermail/u-boot/2024-July/559077.html)
+
+
+pkg_resources is deprecated long ago and being removed in python 3.12.
+
+Reimplement functions with importlib.resources.
+
+Link: https://docs.python.org/3/library/importlib.resources.html
+Signed-off-by: Jiaxun Yang <jiaxun.yang at flygoat.com>
+---
+ tools/binman/control.py | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/tools/binman/control.py b/tools/binman/control.py
+index 2f00279232b8..5549b0ad2185 100644
+--- a/tools/binman/control.py
++++ b/tools/binman/control.py
+@@ -8,12 +8,11 @@
+ from collections import OrderedDict
+ import glob
+ try:
+-    import importlib.resources
+-except ImportError:  # pragma: no cover
++    from importlib import resources
++except ImportError:
+     # for Python 3.6
+-    import importlib_resources
++    import importlib_resources as resources
+ import os
+-import pkg_resources
+ import re
+ 
+ import sys
+@@ -96,12 +95,12 @@ def _ReadMissingBlobHelp():
+             msg = ''
+         return tag, msg
+ 
+-    my_data = pkg_resources.resource_string(__name__, 'missing-blob-help')
++    my_data = resources.files(__package__).joinpath('missing-blob-help').read_text()
+     re_tag = re.compile('^([-a-z0-9]+):$')
+     result = {}
+     tag = None
+     msg = ''
+-    for line in my_data.decode('utf-8').splitlines():
++    for line in my_data.splitlines():
+         if not line.startswith('#'):
+             m_tag = re_tag.match(line)
+             if m_tag:
+@@ -151,8 +150,9 @@ def GetEntryModules(include_testing=True):
+     Returns:
+         Set of paths to entry class filenames
+     """
+-    glob_list = pkg_resources.resource_listdir(__name__, 'etype')
+-    glob_list = [fname for fname in glob_list if fname.endswith('.py')]
++    directory = resources.files("binman.etype")
++    glob_list = [entry.name for entry in directory.iterdir()
++                 if entry.name.endswith('.py')]
+     return set([os.path.splitext(os.path.basename(item))[0]
+                 for item in glob_list
+                 if include_testing or '_testing' not in item])
+@@ -735,7 +735,7 @@ def Binman(args):
+     global state
+ 
+     if args.full_help:
+-        with importlib.resources.path('binman', 'README.rst') as readme:
++        with resources.path('binman', 'README.rst') as readme:
+             tools.print_full_help(str(readme))
+         return 0
+ 
+
+-- 
+2.45.2
