@@ -112,10 +112,6 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    # "toolz"
-  ];
-
   dependencies = [
     atpublic
     parsy
@@ -358,6 +354,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [
+      cpcloud
+      sarahec
+    ];
   };
 }
