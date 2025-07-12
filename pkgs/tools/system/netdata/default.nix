@@ -57,14 +57,14 @@
   withML ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.3";
+  version = "2.5.4";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OdH6cQ2dYvbeLh9ljaqmdr02VN2qbvNUXbPNCEkNzxc=";
+    hash = "sha256-rDqvb5C5CQvobLqIIZFne1ujBRrKiOTp7Cl21GpZ6h8=";
     fetchSubmodules = true;
   };
 
