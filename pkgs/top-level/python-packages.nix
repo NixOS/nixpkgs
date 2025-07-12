@@ -17881,6 +17881,8 @@ self: super: with self; {
 
   timm = callPackage ../development/python-modules/timm { };
 
+  timple = callPackage ../development/python-modules/timple { };
+
   timy = callPackage ../development/python-modules/timy { };
 
   tiny-cuda-nn = toPythonModule (
