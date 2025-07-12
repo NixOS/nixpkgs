@@ -39,7 +39,6 @@
   libglvnd,
   numactl,
   amf-headers,
-  intel-media-sdk,
   svt-av1,
   vulkan-loader,
   libappindicator,
@@ -146,9 +145,6 @@ stdenv'.mkDerivation rec {
     ++ lib.optionals cudaSupport [
       cudaPackages.cudatoolkit
       cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      intel-media-sdk
     ];
 
   runtimeDependencies = [

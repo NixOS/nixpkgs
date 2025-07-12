@@ -10661,6 +10661,8 @@ self: super: with self; {
 
   openaiauth = callPackage ../development/python-modules/openaiauth { };
 
+  openai-agents = callPackage ../development/python-modules/openai-agents { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
