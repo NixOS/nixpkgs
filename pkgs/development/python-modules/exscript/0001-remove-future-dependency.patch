@@ -1,0 +1,213 @@
+diff --git a/Exscript/emulators/command.py b/Exscript/emulators/command.py
+index c454398..9f894db 100644
+--- a/Exscript/emulators/command.py
++++ b/Exscript/emulators/command.py
+@@ -23,7 +23,6 @@
+ """
+ Defines the behavior of commands by mapping commands to functions.
+ """
+-from past.builtins import execfile
+ from builtins import str
+ from builtins import object
+ import re
+@@ -84,7 +83,7 @@ class CommandSet(object):
+                each of the handlers in the file.
+         """
+         args = {}
+-        execfile(filename, args)
++        exec(open(filename).read(), args)
+         commands = args.get('commands')
+         if commands is None:
+             raise Exception(filename + ' has no variable named "commands"')
+diff --git a/Exscript/logger.py b/Exscript/logger.py
+index e917f71..ca004dc 100644
+--- a/Exscript/logger.py
++++ b/Exscript/logger.py
+@@ -24,8 +24,6 @@
+ Logging to memory.
+ """
+ from __future__ import print_function, absolute_import, unicode_literals
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import filter
+ from builtins import str
+ from builtins import object
+diff --git a/Exscript/protocols/dummy.py b/Exscript/protocols/dummy.py
+index dfda0c2..70bef49 100644
+--- a/Exscript/protocols/dummy.py
++++ b/Exscript/protocols/dummy.py
+@@ -24,8 +24,6 @@
+ A client that talks to a :class:`Exscript.emulators.VirtualDevice`.
+ """
+ from __future__ import absolute_import, unicode_literals
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import str
+ from ..emulators import VirtualDevice
+ from .protocol import Protocol
+diff --git a/Exscript/protocols/protocol.py b/Exscript/protocols/protocol.py
+index e4de3da..b3a23ea 100644
+--- a/Exscript/protocols/protocol.py
++++ b/Exscript/protocols/protocol.py
+@@ -24,8 +24,6 @@
+ An abstract base class for all protocols.
+ """
+ from __future__ import absolute_import, unicode_literals
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import object
+ import re
+ import sys
+diff --git a/Exscript/protocols/telnet.py b/Exscript/protocols/telnet.py
+index 298adae..7a162c0 100644
+--- a/Exscript/protocols/telnet.py
++++ b/Exscript/protocols/telnet.py
+@@ -24,8 +24,6 @@
+ The Telnet protocol.
+ """
+ from __future__ import absolute_import, unicode_literals
+-from future import standard_library
+-standard_library.install_aliases()
+ from ..util.tty import get_terminal_size
+ from . import telnetlib
+ from .protocol import Protocol
+diff --git a/Exscript/protocols/telnetlib.py b/Exscript/protocols/telnetlib.py
+index 63301a1..59e0606 100644
+--- a/Exscript/protocols/telnetlib.py
++++ b/Exscript/protocols/telnetlib.py
+@@ -57,8 +57,6 @@ To do:
+ 
+ """
+ from __future__ import print_function
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import chr
+ from builtins import bytes
+ from builtins import range
+diff --git a/Exscript/servers/httpd.py b/Exscript/servers/httpd.py
+index b7f10e0..5774065 100644
+--- a/Exscript/servers/httpd.py
++++ b/Exscript/servers/httpd.py
+@@ -24,8 +24,6 @@
+ A threaded HTTP server with support for HTTP/Digest authentication.
+ """
+ from __future__ import print_function
+-from future import standard_library
+-standard_library.install_aliases()
+ import sys
+ import time
+ import urllib.request, urllib.parse, urllib.error
+diff --git a/Exscript/util/collections.py b/Exscript/util/collections.py
+index fbf3798..4083a0e 100644
+--- a/Exscript/util/collections.py
++++ b/Exscript/util/collections.py
+@@ -1,6 +1,4 @@
+ from __future__ import unicode_literals, absolute_import
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import str
+ from builtins import chr
+ from builtins import range
+diff --git a/Exscript/util/file.py b/Exscript/util/file.py
+index f7db3a3..adb5964 100644
+--- a/Exscript/util/file.py
++++ b/Exscript/util/file.py
+@@ -25,8 +25,6 @@ Utilities for reading data from files.
+ """
+ from __future__ import print_function, absolute_import
+ from builtins import str
+-from future import standard_library
+-standard_library.install_aliases()
+ import sys
+ import re
+ import os
+diff --git a/Exscript/util/interact.py b/Exscript/util/interact.py
+index f13fba4..96ede12 100644
+--- a/Exscript/util/interact.py
++++ b/Exscript/util/interact.py
+@@ -24,8 +24,6 @@
+ Tools for interacting with the user on the command line.
+ """
+ from __future__ import print_function, absolute_import
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import input
+ from builtins import str
+ from builtins import object
+diff --git a/Exscript/util/url.py b/Exscript/util/url.py
+index 5074ea0..cca25e2 100644
+--- a/Exscript/util/url.py
++++ b/Exscript/util/url.py
+@@ -24,8 +24,6 @@
+ Working with URLs (as used in URL formatted hostnames).
+ """
+ from __future__ import unicode_literals, absolute_import
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import str
+ from builtins import chr
+ from builtins import range
+diff --git a/requirements.txt b/requirements.txt
+index 0423975..6253991 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,3 @@
+-future
+ configparser
+ pycryptodomex
+ paramiko>=1.17
+diff --git a/setup.py b/setup.py
+index ff20fe1..424e498 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,7 @@ setup(name             = 'Exscript',
+       package_data     = {},
+       packages         = find_packages(),
+       scripts          = ['scripts/exscript', 'scripts/otp'],
+-      install_requires = ['future', 'configparser', 'paramiko', 'pycryptodomex'],
++      install_requires = ['configparser', 'paramiko', 'pycryptodomex'],
+       extras_require   = {},
+       keywords         = ' '.join(['exscript',
+                                    'telnet',
+diff --git a/tests/Exscript/protocols/ProtocolTest.py b/tests/Exscript/protocols/ProtocolTest.py
+index c20445d..fd7239f 100644
+--- a/tests/Exscript/protocols/ProtocolTest.py
++++ b/tests/Exscript/protocols/ProtocolTest.py
+@@ -1,5 +1,3 @@
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import str
+ import sys
+ import unittest
+diff --git a/tests/Exscript/workqueue/JobTest.py b/tests/Exscript/workqueue/JobTest.py
+index ea39ebc..5fdc952 100644
+--- a/tests/Exscript/workqueue/JobTest.py
++++ b/tests/Exscript/workqueue/JobTest.py
+@@ -1,5 +1,3 @@
+-from future import standard_library
+-standard_library.install_aliases()
+ import sys
+ import unittest
+ import re
+diff --git a/tests/Exscript/workqueue/PipelineTest.py b/tests/Exscript/workqueue/PipelineTest.py
+index 534467d..ac5d376 100644
+--- a/tests/Exscript/workqueue/PipelineTest.py
++++ b/tests/Exscript/workqueue/PipelineTest.py
+@@ -1,5 +1,3 @@
+-from future import standard_library
+-standard_library.install_aliases()
+ from builtins import next
+ import sys
+ import unittest
+diff --git a/tox.ini b/tox.ini
+index 3a68f4a..65910f6 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -10,7 +10,6 @@ envlist = py27, py34
+ changedir = tests/Exscript
+ commands = {envpython} ./run_suite.py 1
+ deps =
+-    future
+     configparser
+     paramiko
+     pycrypto
