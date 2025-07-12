@@ -279,19 +279,24 @@ buildPythonPackage rec {
     "--timeout=1024"
   ];
 
-  disabledTestPaths = [
-    # Require docker access
-    "tests/system_tests"
+  disabledTestPaths =
+    [
+      # Require docker access
+      "tests/system_tests"
 
-    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
-    "tests/unit_tests/test_analytics/test_sentry.py"
+      # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
+      "tests/unit_tests/test_analytics/test_sentry.py"
 
-    # Server connection times out under load
-    "tests/unit_tests/test_wandb_login.py"
+      # Server connection times out under load
+      "tests/unit_tests/test_wandb_login.py"
 
-    # PermissionError: unable to write to .cache/wandb/artifacts
-    "tests/unit_tests/test_artifacts/test_wandb_artifacts.py"
-  ];
+      # PermissionError: unable to write to .cache/wandb/artifacts
+      "tests/unit_tests/test_artifacts/test_wandb_artifacts.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Breaks in sandbox: "Timed out waiting for wandb service to start"
+      "tests/unit_tests/test_job_builder.py"
+    ];
 
   disabledTests =
     [
@@ -391,6 +396,15 @@ buildPythonPackage rec {
 
       # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
       "test_wandb_image_with_matplotlib_figure"
+
+      # AssertionError: assert 'did you mean https://api.wandb.ai' in '1'
+      "test_login_bad_host"
+
+      # Asserttion error: 1 != 0 (testing system exit code)
+      "test_login_host_trailing_slash_fix_invalid"
+
+      # Breaks in sandbox: "Timed out waiting for wandb service to start"
+      "test_setup_offline"
     ];
 
   pythonImportsCheck = [ "wandb" ];

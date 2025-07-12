@@ -10657,11 +10657,11 @@ self: super: with self; {
 
   openai = callPackage ../development/python-modules/openai { };
 
+  openai-agents = callPackage ../development/python-modules/openai-agents { };
+
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openaiauth = callPackage ../development/python-modules/openaiauth { };
-
-  openai-agents = callPackage ../development/python-modules/openai-agents { };
 
   openant = callPackage ../development/python-modules/openant { };
 
