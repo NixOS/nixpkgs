@@ -3078,6 +3078,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  comfy-line-numbers-nvim = buildVimPlugin {
+    pname = "comfy-line-numbers.nvim";
+    version = "2025-05-27";
+    src = fetchFromGitHub {
+      owner = "mluders";
+      repo = "comfy-line-numbers.nvim";
+      rev = "eb1c966e22fbabe3a3214c78bda9793ccf9d2a5d";
+      sha256 = "0dp4sk695s2ra89zsb69g1xsh27qkfv16jp7b4nr316idsdf3899";
+    };
+    meta.homepage = "https://github.com/mluders/comfy-line-numbers.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   command-t = buildVimPlugin {
     pname = "command-t";
     version = "2025-07-03";
