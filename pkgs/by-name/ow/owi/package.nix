@@ -21,7 +21,7 @@ ocamlPackages.buildDunePackage rec {
     repo = "owi";
     rev = "bcd7d362ed165c542deb2d49da1d45296aa03277";
     fetchSubmodules = true;
-    hash = "sha256-ewaAkSyxtiiE8WcHusOyZDesqI61kCEN3pMb99R7Dkw=";
+    hash = "sha256-611k9CQx0C3QKR4NZpnr77LoBZSFBEdU0uRnZshO1cc=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

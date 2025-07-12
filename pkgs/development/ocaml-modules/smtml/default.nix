@@ -31,7 +31,7 @@ buildDunePackage rec {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${version}";
-    hash = "sha256-QxVORnu28mcs54ZEPMxI5Bch/+/gkIfn0bTqrnSKUOw=";
+    hash = "sha256-gmYyVUkwXBqGKGhp6Pqdf2PJafUJ1hF96WxOLq1h2f8=";
   };
 
   nativeBuildInputs = [
