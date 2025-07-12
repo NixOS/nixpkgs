@@ -17,6 +17,8 @@ buildGoModule rec {
   };
   vendorHash = "sha256-YqduGY9c4zRQscjqze3ZOAB8EYj+0/6V7NceRwLe3DY=";
 
+  hardeningDisable = [ "pie" ];
+
   buildInputs = [ sqlite ];
 
   buildPhase = ''

@@ -31,6 +31,8 @@ buildGoModule (
 
     vendorHash = "sha256-RqZ/3+Xus5N1raiUTUpiKVBs/lrJQcSwr1dJib2ytwc=";
 
+    hardeningDisable = [ "pie" ];
+
     subPackages = [ "." ];
 
     ldflags = [ "-s" ];
