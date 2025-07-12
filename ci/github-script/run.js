@@ -7,7 +7,7 @@ import { getOctokit } from '@actions/github'
 import labels from './labels.cjs'
 
 if (process.argv.length !== 4)
-  throw new Error('Call this with exactly two arguments: ./run.js OWNER REPO')
+  throw new Error('Call this with exactly three arguments: ./run OWNER REPO')
 const [, , owner, repo] = process.argv
 
 const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
