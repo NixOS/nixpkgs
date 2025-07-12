@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "brltty";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "sha256-FsM9AeL1lnBziJlmB7EZAIgDKylT8D4Il81Fe1y9Yjg=";
+    sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
   };
 
   nativeBuildInputs = [
