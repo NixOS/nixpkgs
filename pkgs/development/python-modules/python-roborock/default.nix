@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.23.0";
+  version = "2.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-R4whfpm7DuR5KNbQv0e+KEK9clNO5AN7wCQ6ShyaGC0=";
+    hash = "sha256-TMnJMAK0MHswT1vPH1OnC35hrEOCHyH2YodNpM/VjC8=";
   };
 
   postPatch = ''

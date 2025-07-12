@@ -1,0 +1,103 @@
+From 8e1b7a128a69393c6d3f53b8f66bd52c6bbce908 Mon Sep 17 00:00:00 2001
+From: John Ericson <git@JohnEricson.me>
+Date: Wed, 18 Aug 2021 01:55:45 -0400
+Subject: [PATCH 2/3] driver: for_each_pass: Pass to callback whether dir is
+ machine-disambiguated
+
+We will use this in the subsequent diff to control what basenames we
+search for. In machine-specific subdirectories, we should just look for
+the original basename, but in machine-agnostic subdirectories, we might
+additionally look for prefixed disambiguated names, as an alternate
+method of keeping targets apart.
+---
+ gcc/gcc.cc | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 55738d258b3..f9f83d1a804 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -2783,7 +2783,7 @@ static void *
+ for_each_path (const struct path_prefix *paths,
+ 	       bool do_multi,
+ 	       size_t extra_space,
+-	       void *(*callback) (char *, void *),
++	       void *(*callback) (char *, bool, void *),
+ 	       void *callback_info)
+ {
+   struct prefix_list *pl;
+@@ -2844,7 +2844,7 @@ for_each_path (const struct path_prefix *paths,
+ 	  if (!skip_multi_dir)
+ 	    {
+ 	      memcpy (path + len, multi_suffix, suffix_len + 1);
+-	      ret = callback (path, callback_info);
++	      ret = callback (path, true, callback_info);
+ 	      if (ret)
+ 		break;
+ 	    }
+@@ -2855,7 +2855,7 @@ for_each_path (const struct path_prefix *paths,
+ 	      && pl->require_machine_suffix == 2)
+ 	    {
+ 	      memcpy (path + len, just_multi_suffix, just_suffix_len + 1);
+-	      ret = callback (path, callback_info);
++	      ret = callback (path, true, callback_info);
+ 	      if (ret)
+ 		break;
+ 	    }
+@@ -2865,7 +2865,7 @@ for_each_path (const struct path_prefix *paths,
+ 	      && !pl->require_machine_suffix && multiarch_dir)
+ 	    {
+ 	      memcpy (path + len, multiarch_suffix, multiarch_len + 1);
+-	      ret = callback (path, callback_info);
++	      ret = callback (path, true, callback_info);
+ 	      if (ret)
+ 		break;
+ 	    }
+@@ -2893,7 +2893,7 @@ for_each_path (const struct path_prefix *paths,
+ 	      else
+ 		path[len] = '\0';
+ 
+-	      ret = callback (path, callback_info);
++	      ret = callback (path, false, callback_info);
+ 	      if (ret)
+ 		break;
+ 	    }
+@@ -2948,7 +2948,7 @@ struct add_to_obstack_info {
+ };
+ 
+ static void *
+-add_to_obstack (char *path, void *data)
++add_to_obstack (char *path, bool, void *data)
+ {
+   struct add_to_obstack_info *info = (struct add_to_obstack_info *) data;
+ 
+@@ -3040,7 +3040,7 @@ struct file_at_path_info {
+ };
+ 
+ static void *
+-file_at_path (char *path, void *data)
++file_at_path (char *path, bool, void *data)
+ {
+   struct file_at_path_info *info = (struct file_at_path_info *) data;
+   size_t len = strlen (path);
+@@ -3091,7 +3091,7 @@ find_a_file (const struct path_prefix *pprefix, const char *name, int mode,
+    path. Like file_at_path but tries machine prefix and exe suffix too. */
+ 
+ static void *
+-program_at_path (char *path, void *data)
++program_at_path (char *path, bool machine_specific, void *data)
+ {
+   /* try first with machine-prefixed name */
+   struct file_at_path_info *info = (struct file_at_path_info *) data;
+@@ -6074,7 +6074,7 @@ struct spec_path_info {
+ };
+ 
+ static void *
+-spec_path (char *path, void *data)
++spec_path (char *path, bool, void *data)
+ {
+   struct spec_path_info *info = (struct spec_path_info *) data;
+   size_t len = 0;
+-- 
+2.47.2
+

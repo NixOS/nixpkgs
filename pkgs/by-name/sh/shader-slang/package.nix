@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.8.1";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PScbMkJJ4rh8I8ID709GKtLmd5+4Z2x2BlFEdWpoesI=";
+    hash = "sha256-5M/sKoCFVGW4VcOPzL8dVhTuo+esjINPXw76fnO7OEw=";
     fetchSubmodules = true;
   };
 
@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-DSLANG_USE_SYSTEM_GLSLANG=ON"
     ]
     ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
+
+  postInstall = ''
+    mv "$out/cmake" "$dev/cmake"
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/slangc";

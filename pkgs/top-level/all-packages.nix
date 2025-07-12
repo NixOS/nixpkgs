@@ -498,10 +498,6 @@ with pkgs;
     autoPatchcilHook
     ;
 
-  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
-    dotnetfx = dotnetfx40;
-  };
-
   buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
   fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
   dupeguru = callPackage ../applications/misc/dupeguru {
@@ -3317,8 +3313,6 @@ with pkgs;
     packages = config.ihaskell.packages or (_: [ ]);
   };
 
-  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
-
   ilspycmd = callPackage ../development/tools/ilspycmd {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -3876,8 +3870,6 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ntfy-sh = callPackage ../tools/misc/ntfy-sh { };
-
   nvfancontrol = callPackage ../tools/misc/nvfancontrol {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
@@ -4219,8 +4211,6 @@ with pkgs;
   quictls = callPackage ../development/libraries/quictls { };
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
-
-  wayback_machine_downloader = callPackage ../applications/networking/wayback_machine_downloader { };
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
@@ -4849,8 +4839,8 @@ with pkgs;
     jdk = jdk8;
   };
 
-  armips = callPackage ../development/compilers/armips {
-    stdenv = gcc10Stdenv;
+  armips = callPackage ../by-name/ar/armips/package.nix {
+    stdenv = clangStdenv;
   };
 
   ballerina = callPackage ../development/compilers/ballerina {
@@ -5004,6 +4994,17 @@ with pkgs;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
+
+  inherit
+    (rec {
+      # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
+      gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
+      gccNGPackages_15 = gccNGPackagesSet."15";
+      mkGCCNGPackages = gccNGPackagesSet.mkPackage;
+    })
+    gccNGPackages_15
+    mkGCCNGPackages
+    ;
 
   wrapNonDeterministicGcc =
     stdenv: ccWrapper:
@@ -6139,7 +6140,6 @@ with pkgs;
     );
 
   # prolog
-  yosys = callPackage ../development/compilers/yosys { };
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
   yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
@@ -6940,7 +6940,7 @@ with pkgs;
   });
   binutilsNoLibc = wrapBintoolsWith {
     bintools = binutils-unwrapped;
-    libc = targetPackages.preLibcHeaders;
+    libc = targetPackages.preLibcHeaders or preLibcHeaders;
   };
 
   libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix { };
@@ -7096,8 +7096,6 @@ with pkgs;
       }
   );
 
-  matter-compiler = callPackage ../development/compilers/matter-compiler { };
-
   chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
@@ -7239,9 +7237,7 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
-  flow = callPackage ../development/tools/analysis/flow {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
+  flow = callPackage ../development/tools/analysis/flow { };
 
   framac = callPackage ../by-name/fr/framac/package.nix {
     ocamlPackages = ocaml-ng.ocamlPackages_5_2;
@@ -7440,6 +7436,12 @@ with pkgs;
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
+
+  inherit (callPackage ../misc/optee-os { })
+    buildOptee
+    opteeQemuArm
+    opteeQemuAarch64
+    ;
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 
@@ -10498,6 +10500,7 @@ with pkgs;
     mariadb_106
     mariadb_1011
     mariadb_114
+    mariadb_118
     ;
   mariadb = mariadb_1011;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
@@ -11353,6 +11356,7 @@ with pkgs;
     ubootOrangePi3
     ubootOrangePi3B
     ubootOrangePi5
+    ubootOrangePi5Max
     ubootOrangePi5Plus
     ubootOrangePiPc
     ubootOrangePiZeroPlus2H5
