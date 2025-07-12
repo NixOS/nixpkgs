@@ -580,6 +580,12 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adam-gaia = {
+    email = "nixpkgs@agaia.dev";
+    github = "adam-gaia";
+    githubId = 36975781;
+    name = "Adam Gaia";
+  };
   adamjhf = {
     github = "adamjhf";
     githubId = 50264672;
