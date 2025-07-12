@@ -7931,6 +7931,8 @@ self: super: with self; {
 
   leanblueprint = callPackage ../development/python-modules/leanblueprint { };
 
+  leanclient = callPackage ../development/python-modules/leanclient { };
+
   leaone-ble = callPackage ../development/python-modules/leaone-ble { };
 
   leather = callPackage ../development/python-modules/leather { };
