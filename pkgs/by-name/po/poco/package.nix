@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
         url = "https://patch-diff.githubusercontent.com/raw/pocoproject/poco/pull/4879.patch";
         hash = "sha256-VFWuRuf0GPYFp43WKI8utl+agP+7a5biLg7m64EMnVo=";
       })
+      # https://github.com/pocoproject/poco/issues/4977
+      ./disable-flaky-tests.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./disable-broken-tests-darwin.patch
