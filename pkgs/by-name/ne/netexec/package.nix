@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python312,
   writableTmpDirAsHomeHook,
 }:
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
