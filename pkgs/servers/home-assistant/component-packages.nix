@@ -933,7 +933,8 @@
       ];
     "coinbase" =
       ps: with ps; [
-      ]; # missing inputs: coinbase coinbase-advanced-py
+        coinbase-advanced-py
+      ]; # missing inputs: coinbase
     "color_extractor" =
       ps: with ps; [
         colorthief
