@@ -8,7 +8,12 @@
   apparmorRulesFromClosure,
   libxcrypt,
   util-linux,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
@@ -59,6 +64,7 @@ stdenv.mkDerivation rec {
       "--disable-rlogin"
       "--disable-rexec"
     ]
+    ++ lib.optional withPrefix "--program-prefix=g"
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
 
   doCheck = true;
