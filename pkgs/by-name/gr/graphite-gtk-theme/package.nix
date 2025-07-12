@@ -62,13 +62,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-07-15";
+    version = "2025-07-06";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "graphite-gtk-theme";
       rev = version;
-      hash = "sha256-k93l/7DF0HSKPfiIxzBLz0mBflgbdYJyGLEmWZx3q7o=";
+      hash = "sha256-TOIpQTYg+1DX/Tq5BMygxbUC0NpzPWBGDtOnnT55c1w=";
     };
 
     nativeBuildInputs = [

@@ -3573,7 +3573,7 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
-  kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd { };
+  kcollectd = kdePackages.callPackage ../tools/misc/kcollectd { };
 
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
 
@@ -8655,8 +8655,6 @@ with pkgs;
     inherit (lomiri) cmake-extras;
   };
 
-  libremines = qt6.callPackage ../games/libremines { };
-
   librepo = callPackage ../tools/package-management/librepo { };
 
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
@@ -11229,8 +11227,6 @@ with pkgs;
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
   sddm-sugar-dark = libsForQt5.callPackage ../data/themes/sddm-sugar-dark { };
-
-  sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
 
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 

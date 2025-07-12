@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ceedling (1.0.0)
+    ceedling (1.0.1)
       constructor (~> 2)
       deep_merge (~> 1.2)
       diy (~> 1.1)
@@ -26,4 +26,4 @@ DEPENDENCIES
   ceedling
 
 BUNDLED WITH
-   2.5.22
+   2.5.9
