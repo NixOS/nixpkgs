@@ -2673,6 +2673,8 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
+  clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
+
   cmdpack = callPackages ../tools/misc/cmdpack { };
 
   cocoapods = callPackage ../development/tools/cocoapods { };
