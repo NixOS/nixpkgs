@@ -1645,6 +1645,18 @@ with self;
     };
   };
 
+  ArrayPrintCols = buildPerlPackage {
+    pname = "Array-PrintCols";
+    version = "2.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AK/AKSTE/Array-PrintCols-2.6.tar.gz";
+      hash = "sha256-y2gzCcX8p1UaK+HDkY5GgnZX+Xwb/bhpgiKzJfEdVeE=";
+    };
+    propagatedBuildInputs = [ FileShareDir ];
+    meta = {
+    };
+  };
+
   ArrayRefElem = buildPerlPackage {
     pname = "Array-RefElem";
     version = "1.00";
@@ -2340,6 +2352,90 @@ with self;
       license = with lib.licenses; [
         artistic1
         gpl1Only
+      ];
+    };
+  };
+
+  BeamEmitter = buildPerlPackage {
+    pname = "Beam-Emitter";
+    version = "1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Beam-Emitter-1.007.tar.gz";
+      hash = "sha256-cBmNscasPWIX2Nl8ZXfRZpVBijuM+q6FOIojUJ9GnZU=";
+    };
+    buildInputs = [
+      TestAPI
+      TestFatal
+      TestLib
+    ];
+    propagatedBuildInputs = [
+      ModuleRuntime
+      Moo
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/preaction/Beam-Emitter";
+      description = "Role for event emitting classes";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  BeamService = buildPerlPackage {
+    pname = "Beam-Service";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Beam-Service-0.001.tar.gz";
+      hash = "sha256-YSj9I8RZC/jYBYoBV6VgoiU3fDx7iZJYsD/BcZBZUdQ=";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [
+      Moo
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/preaction/Beam-Service";
+      description = "Role for services to access Beam::Wire features";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  BeamWire = buildPerlPackage {
+    pname = "Beam-Wire";
+    version = "1.026";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Beam-Wire-1.026.tar.gz";
+      hash = "sha256-L+6L9WXeEQpGu0ZQAn6cdLjTaQqWlCdxEaJdwAI632c=";
+    };
+    buildInputs = [
+      TestDeep
+      TestDifferences
+      TestException
+      TestLib
+    ];
+    propagatedBuildInputs = [
+      BeamEmitter
+      BeamService
+      ConfigAny
+      DataDPath
+      ModuleRuntime
+      Moo
+      PathTiny
+      Throwable
+      TypeTiny
+      YAML
+    ];
+    meta = {
+      homepage = "https://github.com/preaction/Beam-Wire";
+      description = "Lightweight Dependency Injection Container";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
       ];
     };
   };
@@ -6877,17 +6973,16 @@ with self;
 
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
-    version = "2.33";
+    version = "3.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-2.33.tar.gz";
-      hash = "sha256-anDeIbbMfysQAGfo4Yjblm6agAG122+pdufLWylK5kU=";
+      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-3.04.tar.gz";
+      hash = "sha256-QCbFfQ2/ZJbA1WGibxYbdj07jt81ETnAc0kuIbX7zgc=";
     };
+    propagatedBuildInputs = [
+      CryptPBKDF2
+      CryptX
+    ];
     meta = {
-      description = "Encrypt Data with Cipher Block Chaining Mode";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
     };
   };
 
@@ -8017,6 +8112,30 @@ with self;
     };
   };
 
+  DataDPath = buildPerlPackage {
+    pname = "Data-DPath";
+    version = "0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/Data-DPath-0.60.tar.gz";
+      hash = "sha256-mfRCbUWMW7jUxRDgwmKcioiuT0ZhwLHkXFVQNi+S7ME=";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [
+      ClassXSAccessor
+      IteratorUtil
+      SubExporter
+      aliased
+    ];
+    meta = {
+      homepage = "http://metacpan.org/release/Data-DPath";
+      description = "DPath is not XPath!";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   DataDump = buildPerlPackage {
     pname = "Data-Dump";
     version = "1.25";
@@ -8983,6 +9102,24 @@ with self;
     ];
     meta = {
       description = "Parses Date::Parse compatible formats";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  DateTimeFormatDurationISO8601 = buildPerlPackage {
+    pname = "DateTime-Format-Duration-ISO8601";
+    version = "0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/DateTime-Format-Duration-ISO8601-0.008.tar.gz";
+      hash = "sha256-LAFPeyuZCriWt236zy3Vhi1fN1nj4NJN0Y31a3eEbIs=";
+    };
+    propagatedBuildInputs = [ DateTime ];
+    meta = {
+      homepage = "https://metacpan.org/release/DateTime-Format-Duration-ISO8601";
+      description = "Parse and format ISO8601 duration";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -13721,6 +13858,40 @@ with self;
     };
   };
 
+  FilePathList = buildPerlPackage {
+    pname = "File-PathList";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADAMK/File-PathList-1.04.tar.gz";
+      hash = "sha256-4+J5nzvO6uSZL+MeqJLDTpFB+SN1mM+tvImCTt56Ziw=";
+    };
+    propagatedBuildInputs = [ ParamsUtil ];
+    meta = {
+      description = "Find a file within a set of paths (like @INC or Java classpaths)";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  FilePathTiny = buildPerlPackage {
+    pname = "File-Path-Tiny";
+    version = "1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/File-Path-Tiny-1.0.tar.gz";
+      hash = "sha256-LsF42juYmeS0ZquLce27K/I6Awfr4C/seqH1gm9h9Vo=";
+    };
+    propagatedBuildInputs = [ TestException ];
+    meta = {
+      description = "Recursive versions of mkdir() and rmdir() without as much overhead as File::Path";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   FilePid = buildPerlPackage {
     pname = "File-Pid";
     version = "1.01";
@@ -17784,6 +17955,33 @@ with self;
     };
   };
 
+  Iterator = buildPerlPackage {
+    pname = "Iterator";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROODE/Iterator-0.03.tar.gz";
+      hash = "sha256-W4igQ06wSSe9CmXm+SDzrmrDmzIucuGxlwGLcLDO+H8=";
+    };
+    propagatedBuildInputs = [ ExceptionClass ];
+    meta = {
+    };
+  };
+
+  IteratorUtil = buildPerlPackage {
+    pname = "Iterator-Util";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROODE/Iterator-Util-0.02.tar.gz";
+      hash = "sha256-YYLkiPHxlh2GU9a7PssSIndv8oNbUawSCRjFI4wetWM=";
+    };
+    propagatedBuildInputs = [
+      ExceptionClass
+      Iterator
+    ];
+    meta = {
+    };
+  };
+
   GeographyCountries = buildPerlPackage {
     pname = "Geography-Countries";
     version = "2009041301";
@@ -18188,6 +18386,20 @@ with self;
     };
   };
 
+  JSONSchemaValidator = buildPerlPackage {
+    pname = "JSONSchema-Validator";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PU/PUTINTSEV/JSONSchema-Validator-0.011.tar.gz";
+      hash = "sha256-7ZH3OWhWZ4lF/CQloufF4340U+AQW2SKVJXzbPOepAw=";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      description = "Validator for JSON Schema Draft4/Draft6/Draft7 and OpenAPI Specification 3.0";
+      license = lib.licenses.mit;
+    };
+  };
+
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
     version = "5.14";
@@ -18285,6 +18497,53 @@ with self;
     };
   };
 
+  LaTeXDriver = buildPerlPackage {
+    pname = "LaTeX-Driver";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/LaTeX-Driver-1.2.0.tar.gz";
+      hash = "sha256-X7gXBy71tnnwOEXjsk2tLxNqxyRjNspH0hfAuOhMzPk=";
+    };
+    propagatedBuildInputs = [
+      CaptureTiny
+      ClassAccessor
+      ExceptionClass
+      FileSlurp
+      Filepushd
+      LogAny
+      Readonly
+    ];
+    buildInputs = [ pkgs.texliveFull ];
+    meta = {
+      description = "Latex driver";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LaTeXEncode = buildPerlPackage {
+    pname = "LaTeX-Encode";
+    version = "0.092.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EI/EINHVERFR/LaTeX-Encode-0.092.0.tar.gz";
+      hash = "sha256-rKC5eg+0ff7kdAkld390CQAzV3d9/aaMABwR+0Y7ZfE=";
+    };
+    buildInputs = [ CarpAlways ];
+    propagatedBuildInputs = [
+      HTMLParser
+      Readonly
+    ];
+    meta = {
+      description = "Encode characters for LaTeX formatting";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   LatexIndent = buildPerlPackage rec {
     pname = "latexindent.pl";
     version = "3.21";
@@ -18311,6 +18570,29 @@ with self;
       description = "Perl script to add indentation to LaTeX files";
       homepage = "https://github.com/cmhughes/latexindent.pl";
       license = lib.licenses.gpl3Plus;
+    };
+  };
+
+  LaTeXTable = buildPerlPackage {
+    pname = "LaTeX-Table";
+    version = "1.0.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LI/LIMAONE/LaTeX-Table-v1.0.6.tar.gz";
+      hash = "sha256-1sypAdR4fGRuimpjPEQ5LhrpdXv/axigaxPyMV15Qz8=";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [
+      ModulePluggable
+      Moose
+      MooseXFollowPBP
+      TemplateToolkit
+    ];
+    meta = {
+      description = "Perl extension for the automatic generation of LaTeX tables";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -19098,6 +19380,735 @@ with self;
     };
   };
 
+  LocaleCLDR = buildPerlModule {
+    pname = "Locale-CLDR";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-v0.46.0.tar.gz";
+      hash = "sha256-UMQgOSWX4L9LARxdPsQ/Ft9BT0vT+SleaAERh0xPMZI=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      ClassLoad
+      DateTime
+      DateTimeLocale
+      Moo
+      MooXClassAttribute
+      TypeTiny
+      UnicodeRegexSet
+      namespaceautoclean
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "A Module to create locale objects with localisation data from the CLDR";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesAr = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Ar";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ar-v0.46.0.tar.gz";
+      hash = "sha256-mycRf+UONTPatYsASPPShktoehRF458DhRjAhwaUSxM=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Arabic )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesBg = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Bg";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Bg-v0.46.0.tar.gz";
+      hash = "sha256-QMwTjhI23iQ+CKe3bS6JfVUKIuwk49C4w4p5o+xvSeI=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Bulgarian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesCa = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Ca";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ca-v0.46.0.tar.gz";
+      hash = "sha256-O8XNvt5Tsql/BxoYOXhHnt8hkwcIo8y1ceYuhoMC+9A=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Catalan )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesCs = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Cs";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Cs-v0.46.0.tar.gz";
+      hash = "sha256-0X4y4GL+Pt8iskX8QSUo0Qw9QxCCL2tR2Ymp7OFcOHg=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Czech )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesDa = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Da";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Da-v0.46.0.tar.gz";
+      hash = "sha256-l07z7BYSZvM/hn/fLv5QANdJcfwpsbe6m2854emRIE4=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Danish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesDe = buildPerlModule {
+    pname = "Locale-CLDR-Locales-De";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-De-v0.46.0.tar.gz";
+      hash = "sha256-vx5cWww/4FB98P/bHDOb/G3tww9scP60HcYLUBSeeWU=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for German )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesEl = buildPerlModule {
+    pname = "Locale-CLDR-Locales-El";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-El-v0.46.0.tar.gz";
+      hash = "sha256-JG++IhiTclre/OmBG2jxlPMa/3zgxGPq9POB6C8LmoI=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Greek )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesEn = buildPerlModule {
+    pname = "Locale-CLDR-Locales-En";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-En-v0.46.0.tar.gz";
+      hash = "sha256-YRBfsPb/Xv5GeAi20NHRl7/mJsyAg9TeO7INbYkZl1E=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for English )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesEs = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Es";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Es-v0.46.0.tar.gz";
+      hash = "sha256-dYRSAfatO3hzyAVE1LYe+qdy8OagaztaciXHx4+OlSQ=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Spanish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesEt = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Et";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Et-v0.46.0.tar.gz";
+      hash = "sha256-097K4++IfZl4G3B7+TjUtA5L1rsibGPxwtsMwISxEU4=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Estonian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesFi = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Fi";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Fi-v0.46.0.tar.gz";
+      hash = "sha256-ciU8xwD/v2lq3iq/1Mi8k7atOWQ5vWhBwg3MBa8Xapw=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Finnish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesFr = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Fr";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Fr-v0.46.0.tar.gz";
+      hash = "sha256-9SSbmgD4J89AkwF4h5g9YSv9fzR1meABWSehSN3IZAk=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for French )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesHu = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Hu";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Hu-v0.46.0.tar.gz";
+      hash = "sha256-fWC+LEukJHRM1IgGJr0a742SbZN54YPJ98oTtteaP8w=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Hungarian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesId = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Id";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Id-v0.46.0.tar.gz";
+      hash = "sha256-/4t79j7Y2TDRhrkrgt1oya+HIH9n1l15x+nuiZA9yzE=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Indonesian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesIs = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Is";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Is-v0.46.0.tar.gz";
+      hash = "sha256-qGxMYosy7bujgP237MXIHgTnoKAaMFChIgeGstlMsYo=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Icelandic )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesIt = buildPerlModule {
+    pname = "Locale-CLDR-Locales-It";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-It-v0.46.0.tar.gz";
+      hash = "sha256-EuKWG6eDiuHa8O5Xa+CbTPSiA+mNSHVnZqyIB90nwhE=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Italian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesLt = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Lt";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Lt-v0.46.0.tar.gz";
+      hash = "sha256-W4ZPUxt6aOPU4ga/S5jqHmOWsdtYngU0yOqM+OX7lNI=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Lithuanian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesMs = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Ms";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ms-v0.46.0.tar.gz";
+      hash = "sha256-f5GsEQ4aJ2QyPyOixQ7smV0+vxD07wy3gnCRD0slLog=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Malay )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesNb = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Nb";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Nb-v0.46.0.tar.gz";
+      hash = "sha256-27YOY/FZSLR0xTQEEE9YrqLTWVLC2dOKcesbBcFFjnU=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      LocaleCLDRLocalesNo
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Norwegian Bokml )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesNl = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Nl";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Nl-v0.46.0.tar.gz";
+      hash = "sha256-agA4Wy9kri84S7kw1FRMmzOZFc5rZQahi5qSRjLoz6Q=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Dutch )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesNo = buildPerlModule {
+    pname = "Locale-CLDR-Locales-No";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-No-v0.46.0.tar.gz";
+      hash = "sha256-p5+h0USizdgXQD/v9mktiYmhDqj9S/eI7Jh9DKXue0k=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Norwegian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesPl = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Pl";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Pl-v0.46.0.tar.gz";
+      hash = "sha256-tohTDG+DF/E+80XsYbr9MdXEcEnHVjRQSdtgPkSeLB4=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Polish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesPt = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Pt";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Pt-v0.46.0.tar.gz";
+      hash = "sha256-HDRrHL7nJZxfSajehnZsSEt0NCEIbL5cpa1sD8MexY4=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Portuguese )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesRu = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Ru";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Ru-v0.46.0.tar.gz";
+      hash = "sha256-Ul4XYWkL+2tVk8hFl4R+z1BHOc3/2jFDzAYrkovZ3qY=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Russian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesSv = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Sv";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Sv-v0.46.0.tar.gz";
+      hash = "sha256-cndJNfTM+Nzapn5HIU8QHrn4Wk1wpfSxiaknYceXjSk=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Swedish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesTr = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Tr";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Tr-v0.46.0.tar.gz";
+      hash = "sha256-ZzZ2tEF5wRHkLVUrQArQtYXeVag9I6A5Pgw7/htUJJg=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Turkish )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesUk = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Uk";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Uk-v0.46.0.tar.gz";
+      hash = "sha256-4iqxrQzdwKrqzhRm8mCDrmdZnYAzoYWPODAowMbwFVA=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Ukrainian )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  LocaleCLDRLocalesZh = buildPerlModule {
+    pname = "Locale-CLDR-Locales-Zh";
+    version = "0.46.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGNI/Locale-CLDR-Locales-Zh-v0.46.0.tar.gz";
+      hash = "sha256-o7CBB9V9ZANnFm0+lUjcagq2U58oxPJN9YwhoSwu8MU=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      DateTime
+      LocaleCLDR
+      Moo
+      MooXClassAttribute
+      TypeTiny
+    ];
+    meta = {
+      homepage = "https://github.com/ThePilgrim/perlcldr";
+      description = "Locale::CLDR - Data Package ( Perl localization data for Chinese )";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   LocaleCodes = buildPerlPackage {
     pname = "Locale-Codes";
     version = "3.76";
@@ -19236,6 +20247,24 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  Locales = buildPerlPackage {
+    pname = "Locales";
+    version = "0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/Locales-0.34.tar.gz";
+      hash = "sha256-6k3c6fTc/5PSBeF7xYSCQJDXqlpbrtVjMFwm6IngkM0=";
+    };
+    propagatedBuildInputs = [
+      FileSlurp
+      ModuleWant
+      StringUnicodeUTF8
+      TestCarp
+    ];
+    meta = {
+      description = "Methods for getting localized CLDR language/territory names (and a subset of other data)";
     };
   };
 
@@ -20868,6 +21897,24 @@ with self;
     };
   };
 
+  MathRandomISAACXS = buildPerlModule {
+    pname = "Math-Random-ISAAC-XS";
+    version = "1.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JAWNSY/Math-Random-ISAAC-XS-1.004.tar.gz";
+      hash = "sha256-mveQ65LRxjMNM8baqN7PipxdzIe4F3nWsS4UuTHDuHs=";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/Math-Random-ISAAC-XS";
+      description = "C implementation of the ISAAC PRNG algorithm";
+      # nix-generate-from-cpan detected lib.licenses.unfreeDistribute
+      # According to https://metacpan.org/pod/Math::Random::ISAAC::XS#COPYRIGHT-AND-LICENSE
+      # the intent is PublicDomain
+      license = lib.licenses.publicDomain;
+    };
+  };
+
   MathRandomMTAuto = buildPerlPackage {
     pname = "Math-Random-MT-Auto";
     version = "6.23";
@@ -22360,6 +23407,22 @@ with self;
     };
   };
 
+  ModuleWant = buildPerlPackage {
+    pname = "Module-Want";
+    version = "0.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/Module-Want-0.6.tar.gz";
+      hash = "sha256-xyUkQjT1qncmI/7gDTDz9tnFOaQW3i2wXz7KU7O6Nt4=";
+    };
+    propagatedBuildInputs = [
+      FilePathTiny
+      TestCarp
+    ];
+    meta = {
+      description = "Check @INC once for modules that you want but may not have";
+    };
+  };
+
   MojoDOM58 = buildPerlPackage {
     pname = "Mojo-DOM58";
     version = "3.001";
@@ -23270,6 +24333,29 @@ with self;
     };
   };
 
+  MooseXClassAttribute = buildPerlPackage {
+    pname = "MooseX-ClassAttribute";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-ClassAttribute-0.29.tar.gz";
+      hash = "sha256-YUTHfFJ3DU+DHK22yto3ElyAs+T/yyRtp+6dVZIu5yU=";
+    };
+    buildInputs = [
+      TestFatal
+      TestRequires
+    ];
+    propagatedBuildInputs = [
+      Moose
+      namespaceautoclean
+      namespaceclean
+    ];
+    meta = {
+      homepage = "http://metacpan.org/release/MooseX-ClassAttribute";
+      description = "Declare class attributes Moose-style";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   MooseXStorageFormatJSONpm = buildPerlPackage {
     pname = "MooseX-Storage-Format-JSONpm";
     version = "0.093094";
@@ -23362,6 +24448,28 @@ with self;
     meta = {
       description = "Giving an easy Moo style way to make command organized CLI apps";
       homepage = "https://metacpan.org/release/MooX-Cmd";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  MooXClassAttribute = buildPerlPackage {
+    pname = "MooX-ClassAttribute";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-ClassAttribute-0.011.tar.gz";
+      hash = "sha256-wLmKZi7ynJv2X0SknCR6VS6Jhic1oXimVoExgf0NQ/M=";
+    };
+    propagatedBuildInputs = [
+      ExporterTiny
+      Moo
+      RoleTiny
+    ];
+    meta = {
+      homepage = "https://metacpan.org/release/MooX-ClassAttribute";
+      description = "Declare class attributes Moose-style... but without Moose";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -23726,6 +24834,20 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  MooseXFollowPBP = buildPerlPackage {
+    pname = "MooseX-FollowPBP";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-FollowPBP-0.05.tar.gz";
+      hash = "sha256-+zJJUee+IimfX2iLPsNJHaRzYPnEojpZtrko0o0+IEc=";
+    };
+    propagatedBuildInputs = [ Moose ];
+    meta = {
+      description = "Name your accessors get_foo() and set_foo()";
+      license = lib.licenses.artistic2;
     };
   };
 
@@ -26352,6 +27474,24 @@ with self;
     };
   };
 
+  NumberTolerant = buildPerlPackage {
+    pname = "Number-Tolerant";
+    version = "1.710";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Number-Tolerant-1.710.tar.gz";
+      hash = "sha256-/da5NOoDSk9hdQ8OON1m33xWWvHtiJHu98XM3mBHo84=";
+    };
+    propagatedBuildInputs = [ SubExporter ];
+    meta = {
+      homepage = "https://github.com/rjbs/Number-Tolerant";
+      description = "Tolerance ranges for inexact numbers";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   NumberWithError = buildPerlPackage {
     pname = "Number-WithError";
     version = "1.01";
@@ -27454,6 +28594,158 @@ with self;
     };
   };
 
+  PGObject = buildPerlPackage {
+    pname = "PGObject";
+    version = "2.4.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EI/EINHVERFR/PGObject-2.4.0.tar.gz";
+      hash = "sha256-zrqlPujd6TDNlFlrwfOseR1s4EtD9zITr/GOOiO19r8=";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [
+      CarpClan
+      DBDPg
+      ListMoreUtils
+      LogAny
+    ];
+    meta = {
+      description = "A toolkit integrating intelligent PostgreSQL dbs into Perl objects";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectSimple = buildPerlPackage {
+    pname = "PGObject-Simple";
+    version = "3.1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Simple-3.1.0.tar.gz";
+      hash = "sha256-9qG1vjnqZw5r62gFR8/qVtDI04Z4I36Z4UVJVg0858M=";
+    };
+    propagatedBuildInputs = [
+      CarpClan
+      LogAny
+      PGObject
+    ];
+    meta = {
+      description = "Minimalist stored procedure mapper based on LedgerSMB's DBObject";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectSimpleRole = buildPerlPackage {
+    pname = "PGObject-Simple-Role";
+    version = "2.1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Simple-Role-2.1.1.tar.gz";
+      hash = "sha256-scoiO8sjkzBA0/8WI66lYr10I/1jZgDo6NqYH4QdvHM=";
+    };
+    # nix-generate-from-cpan did not pick up required TestException dep
+    propagatedBuildInputs = [
+      CarpClan
+      LogAny
+      Moo
+      TestException
+      PGObjectSimple
+    ];
+    meta = {
+      description = "Moo/Moose mappers for minimalist PGObject framework";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectTypeBigFloat = buildPerlPackage {
+    pname = "PGObject-Type-BigFloat";
+    version = "2.001001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Type-BigFloat-2.001001.tar.gz";
+      hash = "sha256-d0WNl9+MdXvgi5YMqxFKK+sxNVLLJEEjXF6f09CwxVE=";
+    };
+    propagatedBuildInputs = [ PGObject ];
+    meta = {
+      description = "Math::BigFloat wrappers for PGObject classes";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectTypeDateTime = buildPerlPackage {
+    pname = "PGObject-Type-DateTime";
+    version = "2.1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EI/EINHVERFR/PGObject-Type-DateTime-2.1.1.tar.gz";
+      hash = "sha256-UXCgDzbiILMHWZ3FaemhSSZKmUmB6Jz1vLqFQ951n1k=";
+    };
+    propagatedBuildInputs = [
+      DateTime
+      DateTimeTimeZone
+      PGObject
+      TermTable
+      TestSimple
+    ];
+    meta = {
+      description = "DateTime Wrappers for PGObject";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectTypeByteString = buildPerlPackage {
+    pname = "PGObject-Type-ByteString";
+    version = "1.2.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Type-ByteString-1.2.3.tar.gz";
+      hash = "sha256-9FG++wsSIQicvAtvYNFApT0uorV6ijXorWi0xft9odU=";
+    };
+    buildInputs = [ FileSlurp ];
+    propagatedBuildInputs = [
+      DBDPg
+      PGObject
+      RefUtil
+    ];
+    meta = {
+      description = "Wrapper for raw strings mapping to BYTEA columns";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectUtilDBMethod = buildPerlPackage {
+    pname = "PGObject-Util-DBMethod";
+    version = "1.01.000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Util-DBMethod-1.01.000.tar.gz";
+      hash = "sha256-J0zHJ4dO9wEDzzvKiaIGzC2FJD5WolZdErvR7lkbSAQ=";
+    };
+    meta = {
+      description = "Declarative stored procedure <-> object mappings for the PGObject Framework";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  PGObjectUtilDBAdmin = buildPerlPackage {
+    pname = "PGObject-Util-DBAdmin";
+    version = "1.6.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/PGObject-Util-DBAdmin-1.6.2.tar.gz";
+      hash = "sha256-lMu6KNKVgpYvigwZ7w4GEpjIcpcog0r15AqQHt7kGtY=";
+    };
+    buildInputs = [
+      PerlCritic
+      PerlCriticStricterSubs
+      TestException
+    ];
+    propagatedBuildInputs = [
+      CaptureTiny
+      DBDPg
+      DBI
+      LogAny
+      Moo
+      ScopeGuard
+      namespaceclean
+    ];
+    meta = {
+      description = "PostgreSQL Database Management Facilities for PGObject";
+      license = lib.licenses.bsd3;
+    };
+  };
+
   PDFBuilder = buildPerlPackage {
     pname = "PDF-Builder";
     version = "3.025";
@@ -27715,6 +29007,30 @@ with self;
       description = "Some add-on policies for Perl::Critic";
       homepage = "https://user42.tuxfamily.org/perl-critic-pulp/index.html";
       license = with lib.licenses; [ gpl3Plus ];
+    };
+  };
+
+  PerlCriticStricterSubs = buildPerlModule {
+    pname = "Perl-Critic-StricterSubs";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-StricterSubs-0.08.tar.gz";
+      hash = "sha256-zeFNMUMEKUdE0q3ZIzhrMEf0MLx9Cn0mZAUqTtv8KgM=";
+    };
+    buildInputs = [ TestWarnings ];
+    propagatedBuildInputs = [
+      FilePathList
+      ListMoreUtils
+      PPI
+      PerlCritic
+    ];
+    meta = {
+      homepage = "http://perlcritic.com";
+      description = "Perl::Critic plugin for stricter subroutine checking";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -28062,6 +29378,28 @@ with self;
     };
   };
 
+  PlackBuilderConditionals = buildPerlModule {
+    pname = "Plack-Builder-Conditionals";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Plack-Builder-Conditionals-0.05.tar.gz";
+      hash = "sha256-TUyym5kmx76eTL4vnNPUdUJpxcQEaYh0Mx39Gdb6cIs=";
+    };
+    propagatedBuildInputs = [
+      ListMoreUtils
+      NetCIDRLite
+      Plack
+    ];
+    meta = {
+      homepage = "https://github.com/kazeburo/Plack-Builder-Conditionals";
+      description = "Plack::Builder extension";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   PlackMiddlewareAuthDigest = buildPerlModule {
     pname = "Plack-Middleware-Auth-Digest";
     version = "0.05";
@@ -28278,6 +29616,31 @@ with self;
     meta = {
       description = "Middleware for session management";
       homepage = "https://github.com/plack/Plack-Middleware-Session";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  PlackRequestWithEncoding = buildPerlModule {
+    pname = "Plack-Request-WithEncoding";
+    version = "0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOZNION/Plack-Request-WithEncoding-0.14.tar.gz";
+      hash = "sha256-+4xC1epaGPx+8Fv2TJolmU/PBZzV0EFFuxENBFj+tAc=";
+    };
+    buildInputs = [
+      HTTPMessage
+      ModuleBuildTiny
+    ];
+    propagatedBuildInputs = [
+      HashMultiValue
+      Plack
+    ];
+    meta = {
+      homepage = "https://github.com/moznion/Plack-Request-WithEncoding";
+      description = "Subclass of L<Plack::Request> which supports encoded requests";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -30410,6 +31773,37 @@ with self;
     };
   };
 
+  SessionStorageSecure = buildPerlPackage {
+    pname = "Session-Storage-Secure";
+    version = "1.000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Session-Storage-Secure-1.000.tar.gz";
+      hash = "sha256-WLLwTrpWqZJElLs+3dQmr/p1w93tHFY/gpb8wT+OZms=";
+    };
+    buildInputs = [
+      NumberTolerant
+      TestDeep
+      TestFatal
+    ];
+    propagatedBuildInputs = [
+      CryptCBC
+      CryptRijndael
+      CryptURandom
+      MathRandomISAACXS
+      Moo
+      MooXTypesMooseLike
+      SerealDecoder
+      SerealEncoder
+      StringCompareConstantTime
+      namespaceclean
+    ];
+    meta = {
+      homepage = "https://github.com/dagolden/Session-Storage-Secure";
+      description = "Encrypted, expiring, compressed, serialized session data with integrity";
+      license = lib.licenses.asl20;
+    };
+  };
+
   SetInfinite = buildPerlPackage {
     pname = "Set-Infinite";
     version = "0.65";
@@ -31703,6 +33097,39 @@ with self;
     };
   };
 
+  StringUnicodeUTF8 = buildPerlPackage {
+    pname = "String-UnicodeUTF8";
+    version = "0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/String-UnicodeUTF8-0.23.tar.gz";
+      hash = "sha256-NqYZfdb6S482FR3xAIZVyquN799qHo/uql45azbuRVo=";
+    };
+    propagatedBuildInputs = [
+      BFlags
+      ModuleWant
+      StringUnquotemeta
+    ];
+    meta = {
+      description = "Non-collation related unicode/utf-8 bytes string-type-agnostic utils that work as far back as perl 5.6";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  StringUnquotemeta = buildPerlPackage {
+    pname = "String-Unquotemeta";
+    version = "0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/String-Unquotemeta-0.1.tar.gz";
+      hash = "sha256-kxqvvTsJA5n9wkFtqIFWdkR/MMSaKOGBND9Mfr79rWM=";
+    };
+    meta = {
+      description = "Undo what quotemeta() does, nothing more nothing less";
+    };
+  };
+
   StringUtil = buildPerlModule {
     pname = "String-Util";
     version = "1.34";
@@ -32667,6 +34094,24 @@ with self;
     };
   };
 
+  TemplatePluginLatex = buildPerlPackage {
+    pname = "Template-Plugin-Latex";
+    version = "3.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Template-Plugin-Latex-3.12.tar.gz";
+      hash = "sha256-NyvGpY3OeDKzhrfgxlKKfg7luaQ91xyvzZ2j6B/2+9U=";
+    };
+    propagatedBuildInputs = [
+      LaTeXDriver
+      LaTeXEncode
+      LaTeXTable
+      TemplateToolkit
+    ];
+    meta = {
+      description = "Latex support for the Template Toolkit";
+    };
+  };
+
   TemplateTimer = buildPerlPackage {
     pname = "Template-Timer";
     version = "1.00";
@@ -33011,12 +34456,11 @@ with self;
 
   TermTable = buildPerlPackage {
     pname = "Term-Table";
-    version = "0.017";
+    version = "0.024";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.017.tar.gz";
-      hash = "sha256-8R20JorYBE9uGhrJU0ygzTrXecQAb/83+uUA25j6yRo=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.024.tar.gz";
+      hash = "sha256-UiiFOMOwUUvNK2H2RWhsJWYZ5WpCGumS4rdtMZJ8Ts4=";
     };
-    propagatedBuildInputs = [ Importer ];
     meta = {
       description = "Format a header and rows into a table";
       license = with lib.licenses; [
@@ -33197,6 +34641,23 @@ with self;
     };
   };
 
+  TestSimple = buildPerlPackage {
+    pname = "Test-Simple";
+    version = "1.302211";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302211.tar.gz";
+      hash = "sha256-wM9pdEE07ML8vSd3rhI70TWGgpWgA02h0DpxJXTNmmI=";
+    };
+    buildInputs = [ TermTable ];
+    meta = {
+      description = "Basic utilities for writing tests";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   Test2Suite = buildPerlPackage {
     pname = "Test2-Suite";
     version = "0.000156";
@@ -33287,6 +34748,20 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  TestAPI = buildPerlPackage {
+    pname = "Test-API";
+    version = "0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-API-0.010.tar.gz";
+      hash = "sha256-fmA08OspMU0x0zVIKBBqzidF8hYM08FEOim2j1PKIxM=";
+    };
+    meta = {
+      homepage = "https://github.com/dagolden/Test-API";
+      description = "Test a list of subroutines provided by a module";
+      license = lib.licenses.asl20;
     };
   };
 
@@ -33384,6 +34859,18 @@ with self;
       description = "Provides a bits_is() subroutine for testing binary data";
       homepage = "https://metacpan.org/release/Test-Bits";
       license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  TestCarp = buildPerlPackage {
+    pname = "Test-Carp";
+    version = "0.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/Test-Carp-0.2.tar.gz";
+      hash = "sha256-jQ6o7evIGzukEorY7yI4t2oZk9tdQ0dYzq7DNreudDw=";
+    };
+    meta = {
+      description = "Test your code for calls to Carp functions";
     };
   };
 
@@ -34082,6 +35569,22 @@ with self;
         gpl1Plus
       ];
       mainProgram = "kwalitee-metrics";
+    };
+  };
+
+  TestLib = buildPerlPackage {
+    pname = "Test-Lib";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Test-Lib-0.003.tar.gz";
+      hash = "sha256-2EtI2SVny6PQr7HoF1qrg2v6ioOOGayQgMq8Lj+dyfU=";
+    };
+    meta = {
+      description = "Use libraries from a t/lib directory";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -35487,6 +36990,23 @@ with self;
         gpl1Plus
       ];
       mainProgram = "test-yaml";
+    };
+  };
+
+  TeXEncode = buildPerlPackage {
+    pname = "TeX-Encode";
+    version = "2.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AT/ATHREEF/TeX-Encode-2.010.tar.gz";
+      hash = "sha256-P1j5CO4nK0Q4zzOGRpQct9UgHk6/XnvzNdcNb7tzmc8=";
+    };
+    meta = {
+      homepage = "https://github.com/athreef/TeX-Encode";
+      description = "Encode/decode Perl utf-8 strings into TeX";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
     };
   };
 
@@ -37257,6 +38777,22 @@ with self;
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
       description = "UAX #14 Unicode Line Breaking Algorithm";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  UnicodeRegexSet = buildPerlPackage {
+    pname = "Unicode-Regex-Set";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SADAHIRO/Unicode-Regex-Set-0.04.tar.gz";
+      hash = "sha256-aJu9nQmVS/H1rZKG6qO63F+v6Hf6pQcXueaClLAVTQw=";
+    };
+    meta = {
+      description = "Subtraction and Intersection of Character Sets in Unicode Regular Expressions";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -39302,7 +40838,6 @@ with self;
   TextTabsWrap = null; # part of Perl 5.22
   DigestSHA = null;
   "if" = null;
-  TestSimple = null;
   AttributeHandlers = null; # part of Perl 5.26
   base = null; # part of Perl 5.26
   CPANMeta = null; # part of Perl 5.26
