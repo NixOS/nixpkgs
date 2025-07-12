@@ -171,6 +171,7 @@ buildPythonPackage rec {
 
       # attempt to insert nil object from objects[1]
       "test_timer_10_2_7"
+      "test_timer"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
