@@ -1,19 +1,24 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   isPyPy,
+
   R,
-  libdeflate,
   rWrapper,
   rPackages,
+
+  libdeflate,
   pcre,
   xz,
   bzip2,
   zlib,
   zstd,
   icu,
+
+  setuptools,
+
   ipython,
   jinja2,
   pytz,
@@ -22,18 +27,20 @@
   cffi,
   tzlocal,
   simplegeneric,
+
   pytestCheckHook,
+
   extraRPackages ? [ ],
 }:
 
 buildPythonPackage rec {
-  version = "3.5.17";
-  format = "setuptools";
   pname = "rpy2";
+  version = "3.5.17";
+  pyproject = true;
 
   disabled = isPyPy;
   src = fetchPypi {
-    inherit version pname;
+    inherit pname version;
     hash = "sha256-2/8Iww89eRYZImI4WKWztoo/uo7hdH1q9BvEumjz1YI=";
   };
 
@@ -44,8 +51,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
-    substituteInPlace 'requirements.txt' --replace 'pytest' ""
+    substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace-fail '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
   '';
 
   buildInputs =
@@ -78,7 +84,11 @@ buildPythonPackage rec {
     R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ipython
     jinja2
     pytz
