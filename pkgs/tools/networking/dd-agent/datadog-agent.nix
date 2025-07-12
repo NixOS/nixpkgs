@@ -18,17 +18,17 @@
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "5.0.124";
+  payloadVersion = "5.0.156";
   python = pythonPackages.python;
   owner = "DataDog";
   repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.56.2";
+  version = "7.67.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev = version;
-    hash = "sha256-rU3eg92MuGs/6r7oJho2roeUCZoyfqYt1xOERoRPqmQ=";
+    tag = version;
+    hash = "sha256-ZYs2GjRHDW2s0l8gGJNHOcuJCthoyQDjIGSgg625mZE=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -51,9 +51,9 @@ buildGoModule rec {
 
   vendorHash =
     if stdenv.hostPlatform.isDarwin then
-      "sha256-3Piq5DPMTZUEjqNkw5HZY25An2kATX6Jac9unQfZnZc="
+      "sha256-vZO5/UfgyJV8sW2tmAlQTk7QZaVIcX/qHylsR8S4Mro="
     else
-      "sha256-FR0Et3DvjJhbYUPy9mpN0QCJ7QDU4VRZFUTL0J1FSXw=";
+      "sha256-BAJTnVONUWsGh5ieZLUR4L3SEEn5xL7XOC/YTQeKH7Y=";
 
   subPackages = [
     "cmd/agent"
@@ -67,7 +67,11 @@ buildGoModule rec {
     makeWrapper
   ];
   buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
-  PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
+
+  env = {
+    PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
+    GOWORK = "off";
+  };
 
   tags =
     [
@@ -98,7 +102,7 @@ buildGoModule rec {
   postPatch = ''
     sed -e "s|PyChecksPath =.*|PyChecksPath = filepath.Join(_here, \"..\", \"${python.sitePackages}\")|" \
         -e "s|distPath =.*|distPath = filepath.Join(_here, \"..\", \"share\", \"datadog-agent\")|" \
-        -i cmd/agent/common/path/path_nix.go
+        -i pkg/util/defaultpaths/path_nix.go
     sed -e "s|/bin/hostname|${lib.getBin hostname}/bin/hostname|" \
         -i pkg/util/hostname/fqdn_nix.go
   '';
