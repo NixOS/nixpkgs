@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "seventeenlands";
   version = "0.1.43";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "seventeenlands" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     python-dateutil
     requests
     tkinter
