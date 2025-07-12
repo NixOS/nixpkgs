@@ -15144,7 +15144,11 @@ self: super: with self; {
 
   qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
 
+  qrdet = callPackage ../development/python-modules/qrdet { };
+
   qreactor = callPackage ../development/python-modules/qreactor { };
+
+  qreader_1 = callPackage ../development/python-modules/qreader/1.nix { };
 
   qscintilla = self.qscintilla-qt5;
 
@@ -15173,6 +15177,8 @@ self: super: with self; {
   qtpy = callPackage ../development/python-modules/qtpy { };
 
   quadprog = callPackage ../development/python-modules/quadprog { };
+
+  quadrilateral-fitter = callPackage ../development/python-modules/quadrilateral-fitter { };
 
   qualysclient = callPackage ../development/python-modules/qualysclient { };
 
