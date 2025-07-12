@@ -8,6 +8,7 @@
   libXft,
   ncurses,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     "TERMINFO=$(out)/share/terminfo"
     "PREFIX=$(out)"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/gnotclub/xst";
