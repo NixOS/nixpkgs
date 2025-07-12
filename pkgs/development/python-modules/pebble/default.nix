@@ -28,8 +28,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   pythonImportsCheck = [ "pebble" ];
 
   meta = {
