@@ -347,6 +347,7 @@ let
         any
         listOf
         bool
+        nullOr
         ;
       platforms = listOf (union [
         str
@@ -356,7 +357,7 @@ let
     {
       # These keys are documented
       description = str;
-      mainProgram = str;
+      mainProgram = nullOr str;
       longDescription = str;
       branch = str;
       homepage = union [
