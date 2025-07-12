@@ -259,6 +259,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
+        example = lib.literalExpression "\"\${pkgs.where_is_my_sddm_theme}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
         description = ''
           Greeter theme to use.
         '';
