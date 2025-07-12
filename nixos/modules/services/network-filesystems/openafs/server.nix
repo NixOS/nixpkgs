@@ -67,10 +67,10 @@ let
       null;
 
   buCellServDB = pkgs.writeText "backup-cellServDB-${cfg.cellName}" (
-    mkCellServDB cfg.cellName cfg.roles.backup.cellServDB
+    mkCellServDB cfg.roles.backup.cellServDB
   );
 
-  useBuCellServDB = (cfg.roles.backup.cellServDB != [ ]) && (!cfg.roles.backup.enableFabs);
+  useBuCellServDB = (cfg.roles.backup.cellServDB != { }) && (!cfg.roles.backup.enableFabs);
 
   cfg = config.services.openafsServer;
 
@@ -128,9 +128,22 @@ in
       };
 
       cellServDB = mkOption {
-        default = [ ];
-        type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
-        description = "Definition of all cell-local database server machines.";
+        default = { };
+        type = cellServDBType cfg.cellName;
+        description = ''
+          Definition of all cell-local database server machines. If a single
+          list is provided, it will be used as the servers for `cellName`.
+        '';
+        example = [
+          {
+            ip = "1.2.3.4";
+            dnsname = "first.afsdb.server.dns.fqdn.org";
+          }
+          {
+            ip = "2.3.4.5";
+            dnsname = "second.afsdb.server.dns.fqdn.org";
+          }
+        ];
       };
 
       package = mkPackageOption pkgs "openafs" { };
@@ -226,8 +239,8 @@ in
           };
 
           cellServDB = mkOption {
-            default = [ ];
-            type = with types; listOf (submodule [ { options = cellServDBConfig; } ]);
+            default = { };
+            type = cellServDBType cfg.cellName;
             description = ''
               Definition of all cell-local backup database server machines.
               Use this when your cell uses less backup database servers than
@@ -308,7 +321,7 @@ in
         mode = "0644";
       };
       cellServDB = {
-        text = mkCellServDB cfg.cellName cfg.cellServDB;
+        text = mkCellServDB cfg.cellServDB;
         target = "openafs/server/CellServDB";
         mode = "0644";
       };
@@ -319,7 +332,7 @@ in
       };
       buCellServDB = {
         enable = useBuCellServDB;
-        text = mkCellServDB cfg.cellName cfg.roles.backup.cellServDB;
+        text = mkCellServDB cfg.roles.backup.cellServDB;
         target = "openafs/backup/CellServDB";
       };
     };
@@ -336,7 +349,6 @@ in
         preStart = ''
           mkdir -m 0755 -p /var/openafs
           ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString useBuCellServDB "cp ${buCellServDB}"}
         '';
         serviceConfig = {
           ExecStart = "${openafsBin}/bin/bosserver -nofork";
