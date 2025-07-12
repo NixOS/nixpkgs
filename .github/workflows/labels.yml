@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           sparse-checkout: |
-            ci/labels
+            ci/github-script
 
       - name: Install dependencies
         run: npm install @actions/artifact bottleneck
@@ -69,7 +69,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 3
           script: |
-            require('./ci/labels/labels.cjs')({
+            require('./ci/github-script/labels.cjs')({
               github,
               context,
               core,
