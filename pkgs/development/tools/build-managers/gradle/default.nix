@@ -231,8 +231,8 @@ rec {
   };
 
   gradle_7 = gen {
-    version = "7.6.5";
-    hash = "sha256-uBL+wO230n4K41lViHuylUU2+j5E7a9IEVDaBY4VTZo=";
+    version = "7.6.6";
+    hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
     defaultJava = jdk17;
   };
 
