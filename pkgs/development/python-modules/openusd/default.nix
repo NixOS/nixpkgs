@@ -1,7 +1,7 @@
 {
   alembic,
   bison,
-  boost,
+  boost-python,
   buildPythonPackage,
   cmake,
   distutils,
@@ -140,7 +140,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [
-      boost
+      boost-python
       jinja2
       numpy
       opensubdiv
