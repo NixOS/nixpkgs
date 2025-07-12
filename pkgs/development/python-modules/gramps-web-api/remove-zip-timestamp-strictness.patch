@@ -1,0 +1,13 @@
+diff --git a/gramps_webapi/api/media.py b/gramps_webapi/api/media.py
+index aacf8f8..dfbc8b9 100644
+--- a/gramps_webapi/api/media.py
++++ b/gramps_webapi/api/media.py
+@@ -173,7 +173,7 @@ class MediaHandlerLocal(MediaHandlerBase):
+         paths_seen = set()
+         if progress_cb:
+             total = db_handle.get_number_of_media()
+-        with zipfile.ZipFile(zip_filename, "w") as zip_file:
++        with zipfile.ZipFile(zip_filename, "w", strict_timestamps=False) as zip_file:
+             for i, obj in enumerate(db_handle.iter_media()):
+                 if progress_cb:
+                     progress_cb(current=i, total=total)
