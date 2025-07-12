@@ -107,7 +107,7 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      spam-filter.resource = lib.mkDefault "file://${cfg.package.spam-filter}/spam-filter.toml";
       webadmin =
         let
           hasHttpListener = builtins.any (listener: listener.protocol == "http") (
@@ -232,6 +232,7 @@ in
       happysalada
       euxane
       onny
+      norpol
     ];
   };
 }
