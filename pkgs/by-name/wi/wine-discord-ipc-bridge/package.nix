@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  darwinSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-jzsbOKMakNQ6RNMlioX088fGzFBDxOP45Atlsfm2RKg=";
   };
+
+  patches = lib.optional darwinSupport ./darwinSupport.patch;
 
   postPatch = ''
     patchShebangs winediscordipcbridge-steam.sh
@@ -33,6 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = [ maintainers.uku3lig ];
     mainProgram = "winediscordipcbridge";
-    platforms = [ "i686-windows" ];
+    platforms = if darwinSupport then [ "x86_64-windows" ] else [ "i686-windows" ];
   };
 })
