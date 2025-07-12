@@ -13,27 +13,27 @@
 
 let
   pname = "anytype";
-  version = "0.46.5";
+  version = "0.47.5";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-gDlxyHxBLWVBLnaI6rFclfjwqkw9gneBEC7ssmWDKYU=";
+    hash = "sha256-u4LgnXaNPMohcu/vw5agzUHh4pRWnruAGZo++J0q/Ww=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "1d7ca0073bdd02d0145b8da3b1b956ca0652a108";
-    hash = "sha256-aL79DOIFH3CocbcLW0SJ472mYPZJXrPJyRKy8zXiF4o=";
+    rev = "bd68ab3ffb0216dc3de845222b76efaf03745fd2";
+    hash = "sha256-BRPjvcGJmLBl5P3KUXG7Ol9S9AKV7o/9eLemX8GDrB8=";
   };
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-WEw3RCi7dWs2eMYxLH7DcmWBrN4T8T6beIyplcXgJAA=";
+  npmDepsHash = "sha256-1Tig1ItirOUE2TC/Pw6cGkgMnEWoqQ2kdDJEqtYgBUU=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -52,7 +52,7 @@ buildNpmPackage {
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
-    ./0001-fix-single-instance-detection-when-not-packaged.patch
+    ./0002-remove-grpc-devtools.patch
   ];
 
   buildPhase = ''
