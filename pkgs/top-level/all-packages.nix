@@ -12059,8 +12059,6 @@ with pkgs;
     patches = config.dwm.patches or [ ];
   };
 
-  dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
-
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];
   };
