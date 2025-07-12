@@ -1566,16 +1566,6 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  # Fixes bug in an Ord instance that was causing the test suite to fail
-  # https://github.com/fpringle/servant-routes/issues/33
-  servant-routes = appendPatches [
-    (pkgs.fetchpatch {
-      name = "servant-routes-fix-ord.patch";
-      url = "https://github.com/fpringle/servant-routes/commit/d1ef071f11c6a0810637beb8ea0b08f8e524b48a.patch";
-      sha256 = "1c2xpi7sz0621fj9r1010587d1l39j6mm8l4vqmz9pldccmcb0f2";
-    })
-  ] super.servant-routes;
-
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch =
