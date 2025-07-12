@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "mcaimi-st";
-  version = "0.pre+unstable=2021-08-30";
+  version = "0-unstable-2021-08-30";
 
   src = fetchFromGitHub {
     owner = "mcaimi";
@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/gnotclub/xst";
+  meta = {
+    homepage = "https://github.com/mcaimi/st";
     description = "Suckless Terminal fork";
     mainProgram = "st";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }
