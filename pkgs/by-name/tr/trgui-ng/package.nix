@@ -15,7 +15,7 @@
   webkitgtk_4_1,
 }:
 let
-  version = "1.4.0-unstable-2025-05-18";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "openscopeproject";
