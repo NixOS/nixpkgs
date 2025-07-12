@@ -30,7 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}";
+    fetchurl (
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
+    );
 
   dontUnpack = true;
 

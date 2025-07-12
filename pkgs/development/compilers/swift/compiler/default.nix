@@ -484,6 +484,7 @@ stdenv.mkDerivation {
             "aarch64" = "AArch64";
           }
           .${targetPlatform.parsed.cpu.name}
+            or (throw "Unsupported CPU architecture: ${targetPlatform.parsed.cpu.name}")
         }
       "
       buildProject llvm llvm-project/llvm
