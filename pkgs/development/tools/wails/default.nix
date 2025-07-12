@@ -11,22 +11,24 @@
   # Linux specific dependencies
   gtk3,
   webkitgtk_4_0,
+
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wails";
-  version = "2.10.1";
+  version = "2.10.2";
 
-  src =
-    fetchFromGitHub {
-      owner = "wailsapp";
-      repo = "wails";
-      tag = "v${version}";
-      hash = "sha256-PLlr2iBvYwJBvozQGvM68Xp3ts7Pt75hGhNZmMhNqbI=";
-    }
-    + "/v2";
+  src = fetchFromGitHub {
+    owner = "wailsapp";
+    repo = "wails";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b0ns2cXlUT5tPbVEOzQGftxoUqGEDuzj+2KDxNnfs4c=";
+  };
 
-  vendorHash = "sha256-7f7QJv2PM7/CG30bWSDP4+wuhi5Aa9rXT5voHm+QivE=";
+  sourceRoot = "${finalAttrs.src.name}/v2";
+
+  vendorHash = "sha256-u1NoAHxBSzw44W3l5MzMxMUjgrfM9EDkKwR4GAPQBVE=";
 
   proxyVendor = true;
 
@@ -84,6 +86,12 @@ buildGoModule rec {
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "version";
+
   meta = {
     description = "Build applications using Go + HTML + CSS + JS";
     homepage = "https://wails.io";
@@ -92,4 +100,4 @@ buildGoModule rec {
     mainProgram = "wails";
     platforms = lib.platforms.unix;
   };
-}
+})
