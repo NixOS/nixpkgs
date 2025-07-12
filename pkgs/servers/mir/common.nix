@@ -26,6 +26,7 @@
   lttng-ust,
   libgbm,
   nettle,
+  pixman,
   udev,
   wayland,
   wayland-scanner,
@@ -105,32 +106,39 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    boost
-    egl-wayland
-    freetype
-    glib
-    glm
-    libdrm
-    libepoxy
-    libevdev
-    libglvnd
-    libinput
-    libuuid
-    libxcb
-    libxkbcommon
-    libxmlxx
-    yaml-cpp
-    lttng-ust
-    libgbm
-    nettle
-    udev
-    wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.xorgproto
-    xwayland
-  ] ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [ libapparmor ];
+  buildInputs =
+    [
+      boost
+      egl-wayland
+      freetype
+      glib
+      glm
+      libdrm
+      libepoxy
+      libevdev
+      libglvnd
+      libinput
+      libuuid
+      libxcb
+      libxkbcommon
+      libxmlxx
+      yaml-cpp
+      lttng-ust
+      libgbm
+      nettle
+      udev
+      wayland
+      xorg.libX11
+      xorg.libXcursor
+      xorg.xorgproto
+      xwayland
+    ]
+    ++ lib.optionals (lib.strings.versionAtLeast version "2.18.0") [
+      libapparmor
+    ]
+    ++ lib.optionals (lib.strings.versionAtLeast version "2.21.0") [
+      pixman
+    ];
 
   nativeCheckInputs = [
     dbus
