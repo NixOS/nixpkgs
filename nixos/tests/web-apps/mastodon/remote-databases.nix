@@ -149,7 +149,6 @@ import ../../make-test-python.nix (
           services.mastodon = {
             enable = true;
             configureNginx = false;
-            settings.LOCAL_DOMAIN = "mastodon.local";
             enableUnixSocket = false;
             streamingProcesses = 2;
             redis = {
@@ -170,11 +169,12 @@ import ../../make-test-python.nix (
               createLocally = false;
               fromAddress = "mastodon@mastodon.local";
             };
-            extraConfig = {
+            trustedProxy = "192.168.2.103";
+            settings = {
+              LOCAL_DOMAIN = "mastodon.local";
               BIND = "0.0.0.0";
               EMAIL_DOMAIN_ALLOWLIST = "example.com";
               RAILS_SERVE_STATIC_FILES = "true";
-              TRUSTED_PROXY_IP = "192.168.2.103";
             };
           };
         };

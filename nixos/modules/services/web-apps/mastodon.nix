@@ -65,8 +65,7 @@ let
       ES_PREFIX = cfg.elasticsearch.prefix;
     }
     // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
-    // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
-    // cfg.extraConfig;
+    // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; };
 
   systemCallsList = [
     "@cpu-emulation"
