@@ -11,7 +11,11 @@ let
 
   format = pkgs.formats.ini { listToValue = toString; };
 
-  definitionsDirectory = utils.systemdUtils.lib.definitions "sysupdate.d" format cfg.transfers;
+  # TODO: Switch back to using utils.systemdUtils.lib.definitions once https://github.com/systemd/systemd/pull/38187 is resolved.
+  sysupdateTransfers = lib.mapAttrs' (name: value: {
+    name = "sysupdate.d/${name}.transfer";
+    value.source = format.generate "${name}.transfer" value;
+  }) cfg.transfers;
 in
 {
   options.systemd.sysupdate = {
@@ -126,7 +130,10 @@ in
       "systemd-sysupdate.timer"
       "systemd-sysupdate-reboot.service"
       "systemd-sysupdate-reboot.timer"
+      "systemd-sysupdated.service"
     ];
+
+    systemd.services.systemd-sysupdated.aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
 
     systemd.timers = {
       "systemd-sysupdate" = {
@@ -139,7 +146,7 @@ in
       };
     };
 
-    environment.etc."sysupdate.d".source = definitionsDirectory;
+    environment.etc = sysupdateTransfers;
   };
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
