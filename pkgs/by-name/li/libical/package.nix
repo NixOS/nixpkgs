@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       "-DENABLE_GTK_DOC=False"
+      "-DLIBICAL_BUILD_EXAMPLES=False"
       "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
       "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
     ]
