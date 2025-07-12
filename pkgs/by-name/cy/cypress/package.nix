@@ -64,20 +64,12 @@ stdenv.mkDerivation rec {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
-    [
-      libXScrnSaver
-      libXdamage
-      libXtst
-      libxshmfence
-      nss
-      gtk2
-      alsa-lib
-      gtk3
-      libgbm
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    nss
+    alsa-lib
+    gtk3
+    libgbm
+  ];
 
   runtimeDependencies = lib.optional stdenv.hostPlatform.isLinux (lib.getLib udev);
 
