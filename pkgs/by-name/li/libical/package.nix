@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DLIBICAL_BUILD_EXAMPLES=False"
       "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
       "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+      "-DSTATIC_ONLY=${if stdenv.hostPlatform.isStatic then "True" else "False"}"
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
@@ -94,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
+
+    ./static.patch
   ];
 
   # Using install check so we do not have to manually set GI_TYPELIB_PATH
