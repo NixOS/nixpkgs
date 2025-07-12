@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   installShellFiles,
   buildGoModule,
@@ -86,6 +87,11 @@ buildGoModule rec {
   patches = [
     (replaceVars ./hardcode-paths.patch {
       bin_path = helpersBin;
+    })
+    (fetchpatch2 {
+      name = "CVE-2025-6032.patch";
+      url = "https://github.com/containers/podman/commit/726b506acc8a00d99f1a3a1357ecf619a1f798c3.patch?full_index=1";
+      hash = "sha256-QtlQJHDaoyh7ER7tLSUuuxgh6nV4xxivuC+Lh2RswAU=";
     })
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
