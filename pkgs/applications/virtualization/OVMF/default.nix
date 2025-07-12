@@ -142,6 +142,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "stackprotector"
     "pic"
     "fortify"
+    "relro"
   ];
 
   buildFlags =
