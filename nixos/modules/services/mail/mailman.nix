@@ -556,9 +556,9 @@ in
     ];
 
     services.postfix = lib.mkIf cfg.enablePostfix {
-      recipientDelimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       config = {
         owner_request_special = "no"; # Mailman handles -owner addresses on its own
+        recipient_delimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       };
     };
 

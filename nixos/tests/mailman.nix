@@ -13,11 +13,11 @@
       services.mailman.webHosts = [ "example.com" ];
 
       services.postfix.enable = true;
-      services.postfix.destination = [
+      services.postfix.config.mydestination = [
         "example.com"
         "example.net"
       ];
-      services.postfix.relayDomains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
+      services.postfix.config.relay_domains = [ "hash:/var/lib/mailman/data/postfix_domains" ];
       services.postfix.config.local_recipient_maps = [
         "hash:/var/lib/mailman/data/postfix_lmtp"
         "proxy:unix:passwd.byname"
