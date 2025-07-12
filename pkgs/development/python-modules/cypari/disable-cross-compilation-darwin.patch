@@ -1,0 +1,55 @@
+diff --git a/build_pari.sh b/build_pari.sh
+index 6f3a1bc..c71d633 100644
+--- a/build_pari.sh
++++ b/build_pari.sh
+@@ -42,30 +42,31 @@ if [ ! -e ${GMPPREFIX} ] ; then
+     fi
+     if [ $(uname) = "Darwin" ] ; then
+ 	export ABI=64
+-        if /usr/bin/machine | grep arm > /dev/null ; then
+-	    BUILD_SYSTEM=arm64-none-darwin
+-	else
+-            BUILD_SYSTEM=x86_64-none-darwin
+-        fi
+ 	# Use the old linker for x86_64 to avoid a spurious "branch8 out of range" error.
+ 	if [ `/usr/bin/ld -ld_classic 2> >(grep -c warning)` != "0" ] ; then
+ 	    export LDFLAGS="-ld_classic"
+ 	fi
+-	export CFLAGS="-arch x86_64 -mmacosx-version-min=10.9 -mno-avx -mno-avx2 -mno-bmi2"
+-	./configure --with-pic --build=${BUILD_SYSTEM} --host=x86_64-none-darwin --enable-fat --prefix=${GMPPREFIX}/intel
+-	make install
+-        make distclean
+-	export CFLAGS="-arch arm64 -mmacosx-version-min=10.9"
+-        export LDFLAGS=""
+-	./configure --with-pic --build=${BUILD_SYSTEM} --host=arm64-none-darwin --prefix=${GMPPREFIX}/arm
+-	make install
+-	make distclean
+-	cd ../../libcache
+-        mkdir -p gmp/lib
+-        mv gmp/arm/{include,share} gmp
+-	lipo -create gmp/arm/lib/libgmp.10.dylib gmp/intel/lib/libgmp.10.dylib -output gmp/lib/libgmp.dylib
+-	lipo -create gmp/arm/lib/libgmp.a gmp/intel/lib/libgmp.a -output gmp/lib/libgmp.a
++    if /usr/bin/machine | grep arm > /dev/null ; then
++	    BUILD_SYSTEM=arm64-none-darwin
++	    export CFLAGS="-arch arm64 -mmacosx-version-min=10.9"
++      export LDFLAGS=""
++	    ./configure --with-pic --build=${BUILD_SYSTEM} --host=${BUILD_SYSTEM} --prefix=${GMPPREFIX}/arm
++	    make install
++	    make distclean
++	    cd ../../libcache
++            mkdir -p gmp/lib
++            mv gmp/arm/{include,share} gmp
++	    lipo -create gmp/arm/lib/libgmp.10.dylib gmp/intel/lib/libgmp.10.dylib -output gmp/lib/libgmp.dylib
++	    lipo -create gmp/arm/lib/libgmp.a gmp/intel/lib/libgmp.a -output gmp/lib/libgmp.a
+ 	cd ..
++	  else
++      BUILD_SYSTEM=x86_64-none-darwin
++	    export CFLAGS="-arch x86_64 -mmacosx-version-min=10.9 -mno-avx -mno-avx2 -mno-bmi2"
++	    ./configure --with-pic --build=${BUILD_SYSTEM} --host=${BUILD_SYSTEM} --enable-fat --prefix=${GMPPREFIX}/intel
++	    make install
++	    make distclean
++			cd ../..
++    fi
+     else
+ 	if [ `python -c "import sys; print(sys.platform)"` = 'win32' ] ; then
+ 	    # Windows
