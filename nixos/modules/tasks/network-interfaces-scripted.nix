@@ -42,6 +42,14 @@ let
     ip link del dev "${i}" 2>/dev/null || true
   '';
 
+  formatIpArgs =
+    args:
+    lib.pipe args [
+      (lib.filterAttrs (n: v: v != null))
+      (lib.mapAttrsToList (n: v: "${n} ${toString v}"))
+      (lib.concatStringsSep " ")
+    ];
+
   # warn that these attributes are deprecated (2017-2-2)
   # Should be removed in the release after next
   bondDeprecation = rec {
@@ -99,6 +107,7 @@ let
             || (hasAttr dev cfg.bonds)
             || (hasAttr dev cfg.macvlans)
             || (hasAttr dev cfg.sits)
+            || (hasAttr dev cfg.ipips)
             || (hasAttr dev cfg.vlans)
             || (hasAttr dev cfg.greTunnels)
             || (hasAttr dev cfg.vswitches)
@@ -160,39 +169,41 @@ let
               EOF
             ''}
 
-            # Set the default gateway.
-            ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-              ${optionalString (cfg.defaultGateway.interface != null) ''
-                ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${
-                  optionalString (cfg.defaultGateway.metric != null) "metric ${toString cfg.defaultGateway.metric}"
-                } proto static
-              ''}
-              ip route replace default ${
-                optionalString (cfg.defaultGateway.metric != null) "metric ${toString cfg.defaultGateway.metric}"
-              } via "${cfg.defaultGateway.address}" ${
-                optionalString (
-                  cfg.defaultGatewayWindowSize != null
-                ) "window ${toString cfg.defaultGatewayWindowSize}"
-              } ${
-                optionalString (cfg.defaultGateway.interface != null) "dev ${cfg.defaultGateway.interface}"
-              } proto static
-            ''}
-            ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-              ${optionalString (cfg.defaultGateway6.interface != null) ''
-                ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${
-                  optionalString (cfg.defaultGateway6.metric != null) "metric ${toString cfg.defaultGateway6.metric}"
-                } proto static
-              ''}
-              ip -6 route replace default ${
-                optionalString (cfg.defaultGateway6.metric != null) "metric ${toString cfg.defaultGateway6.metric}"
-              } via "${cfg.defaultGateway6.address}" ${
-                optionalString (
-                  cfg.defaultGatewayWindowSize != null
-                ) "window ${toString cfg.defaultGatewayWindowSize}"
-              } ${
-                optionalString (cfg.defaultGateway6.interface != null) "dev ${cfg.defaultGateway6.interface}"
-              } proto static
-            ''}
+            # Set the default gateway
+            ${flip concatMapStrings
+              [
+                {
+                  version = "-4";
+                  gateway = cfg.defaultGateway;
+                }
+                {
+                  version = "-6";
+                  gateway = cfg.defaultGateway6;
+                }
+              ]
+              (
+                { version, gateway }:
+                optionalString (gateway != null && gateway.address != "") ''
+                  ${optionalString (gateway.interface != null) ''
+                    ip ${version} route replace ${gateway.address} proto static ${
+                      formatIpArgs {
+                        metric = gateway.metric;
+                        dev = gateway.interface;
+                      }
+                    }
+                  ''}
+                  ip ${version} route replace default proto static ${
+                    formatIpArgs {
+                      metric = gateway.metric;
+                      via = gateway.address;
+                      window = cfg.defaultGatewayWindowSize;
+                      dev = gateway.interface;
+                      src = gateway.source;
+                    }
+                  }
+                ''
+              )
+            }
           '';
         };
 
@@ -240,10 +251,10 @@ let
                 ''
                   echo "${cidr}" >> $state
                   echo -n "adding address ${cidr}... "
-                  if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
+                  if out=$(ip addr replace "${cidr}" dev "${i.name}" nodad 2>&1); then
                     echo "done"
                   else
-                    echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' failed: $out"
+                    echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' nodad failed: $out"
                     exit 1
                   fi
                 ''
@@ -617,7 +628,7 @@ let
               deps = deviceDependency v.dev;
             in
             {
-              description = "6-to-4 Tunnel Interface ${n}";
+              description = "IPv6 in IPv4 Tunnel Interface ${n}";
               wantedBy = [
                 "network-setup.service"
                 (subsystemDevice n)
@@ -631,18 +642,65 @@ let
               script = ''
                 # Remove Dead Interfaces
                 ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
-                ip link add name "${n}" type sit \
-                  ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
-                  ${optionalString (v.local != null) "local \"${v.local}\""} \
-                  ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
-                  ${optionalString (v.dev != null) "dev \"${v.dev}\""} \
-                  ${optionalString (v.encapsulation != null)
-                    "encap ${v.encapsulation.type} encap-dport ${toString v.encapsulation.port} ${
-                      optionalString (
-                        v.encapsulation.sourcePort != null
-                      ) "encap-sport ${toString v.encapsulation.sourcePort}"
-                    }"
+                ip link add name "${n}" type sit ${
+                  formatIpArgs {
+                    inherit (v)
+                      remote
+                      local
+                      ttl
+                      dev
+                      ;
+                    encap = if v.encapsulation.type == "6in4" then null else v.encapsulation.type;
+                    encap-dport = v.encapsulation.port;
+                    encap-sport = v.encapsulation.sourcePort;
                   }
+                }
+                ip link set dev "${n}" up
+              '';
+              postStop = ''
+                ip link delete dev "${n}" || true
+              '';
+            }
+          );
+
+        createIpipDevice =
+          n: v:
+          nameValuePair "${n}-netdev" (
+            let
+              deps = deviceDependency v.dev;
+            in
+            {
+              description = "IP in IP Tunnel Interface ${n}";
+              wantedBy = [
+                "network-setup.service"
+                (subsystemDevice n)
+              ];
+              bindsTo = deps;
+              after = [ "network-pre.target" ] ++ deps;
+              before = [ "network-setup.service" ];
+              serviceConfig.Type = "oneshot";
+              serviceConfig.RemainAfterExit = true;
+              path = [ pkgs.iproute2 ];
+              script = ''
+                # Remove Dead Interfaces
+                ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
+                ip tunnel add name "${n}" ${
+                  formatIpArgs {
+                    inherit (v)
+                      remote
+                      local
+                      ttl
+                      dev
+                      ;
+                    mode =
+                      {
+                        "4in6" = "ipip6";
+                        "ipip" = "ipip";
+                      }
+                      .${v.encapsulation.type};
+                    encaplimit = if v.encapsulation.type == "ipip" then null else v.encapsulation.limit;
+                  }
+                }
                 ip link set dev "${n}" up
               '';
               postStop = ''
@@ -732,6 +790,7 @@ let
       // mapAttrs' createMacvlanDevice cfg.macvlans
       // mapAttrs' createFouEncapsulation cfg.fooOverUDP
       // mapAttrs' createSitDevice cfg.sits
+      // mapAttrs' createIpipDevice cfg.ipips
       // mapAttrs' createGreDevice cfg.greTunnels
       // mapAttrs' createVlanDevice cfg.vlans
       // {
@@ -748,6 +807,9 @@ let
 in
 
 {
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
   config = mkMerge [
     bondWarnings
     (mkIf (!cfg.useNetworkd) normalConfig)
