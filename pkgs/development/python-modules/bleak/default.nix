@@ -29,7 +29,7 @@ buildPythonPackage rec {
   postPatch = ''
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
     substituteInPlace bleak/backends/bluezdbus/version.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
+      --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
   nativeBuildInputs = [ poetry-core ];

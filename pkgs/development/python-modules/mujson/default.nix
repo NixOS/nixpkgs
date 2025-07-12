@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # https://github.com/mattgiles/mujson/issues/8
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "license_file = LICENSE" ""
+      --replace-fail "license_file = LICENSE" ""
   '';
 
   # No tests

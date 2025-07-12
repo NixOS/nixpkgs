@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   patchPhase = ''
-    substituteInPlace dkim/dknewkey.py --replace \
+    substituteInPlace dkim/dknewkey.py --replace-fail \
       /usr/bin/openssl ${openssl}/bin/openssl
   '';
 

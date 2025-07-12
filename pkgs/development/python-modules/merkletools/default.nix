@@ -23,7 +23,7 @@ buildPythonPackage rec {
   postPatch = ''
     # pysha3 is deprecated and not needed for Python > 3.6
     substituteInPlace setup.py \
-      --replace "install_requires=install_requires" "install_requires=[],"
+      --replace-fail "install_requires=install_requires" "install_requires=[],"
   '';
 
   checkInputs = [ pytestCheckHook ];

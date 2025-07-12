@@ -23,12 +23,12 @@ buildPythonPackage rec {
   # setup script tries to get data from the network but we use the nixpkgs' one
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'ZIP_NAME = urlparse(ZIP_URL).path.split("/")[-1]' "" \
-      --replace "not os.path.exists(RESOURCE_DIR)" "False"
+      --replace-fail 'ZIP_NAME = urlparse(ZIP_URL).path.split("/")[-1]' "" \
+      --replace-fail "not os.path.exists(RESOURCE_DIR)" "False"
     substituteInPlace INFO.json \
-      --replace "%%VERSION%%" ${version} \
-      --replace "%%DICT_VERSION%%" ${version} \
-      --replace "%%DICT_TYPE%%" ${sudachidict.dict-type}
+      --replace-fail "%%VERSION%%" ${version} \
+      --replace-fail "%%DICT_VERSION%%" ${version} \
+      --replace-fail "%%DICT_TYPE%%" ${sudachidict.dict-type}
   '';
 
   build-system = [ setuptools ];

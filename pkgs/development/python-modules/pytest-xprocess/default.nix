@@ -18,12 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-FeJwY3WG6rxWdV7l/MgcSL20a6fvfA1bG2QwLQgMxg8=";
   };
 
-  postPatch = ''
-    # Remove test QoL package from install_requires
-    substituteInPlace setup.py \
-      --replace "'pytest-cache', " ""
-  '';
-
   nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];

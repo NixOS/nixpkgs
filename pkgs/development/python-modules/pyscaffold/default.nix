@@ -46,10 +46,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "platformdirs>=2,<4" "platformdirs"
-  '';
-
   propagatedBuildInputs = [
     colorama
     configupdater

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pytest >= 5.0, < 7.0" "pytest >= 5.0"
+      --replace-fail "pytest >= 5.0, < 7.0" "pytest >= 5.0"
   '';
 
   nativeBuildInputs = [ flit-core ];

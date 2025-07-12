@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=about['__version__']," "version='${version}',"
+      --replace-fail "version=about['__version__']," "version='${version}',"
   '';
 
   nativeBuildInputs = [ setuptools ];

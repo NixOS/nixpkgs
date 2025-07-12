@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "base58>=1.0.2,<2.0" "base58>=1.0.2" \
-      --replace "py-multihash>=0.2.0,<1.0.0" "py-multihash>=0.2.0" \
-      --replace "'pytest-runner'," ""
+      --replace-fail "base58>=1.0.2,<2.0" "base58>=1.0.2" \
+      --replace-fail "py-multihash>=0.2.0,<1.0.0" "py-multihash>=0.2.0" \
+      --replace-fail "'pytest-runner'," ""
   '';
 
   propagatedBuildInputs = [

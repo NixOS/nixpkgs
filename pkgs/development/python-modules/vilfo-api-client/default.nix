@@ -22,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "get-mac" "getmac"
-  '';
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [

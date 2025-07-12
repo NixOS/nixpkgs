@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "test.test_yasi" "tests.test_yasi"
+      --replace-fail "test.test_yasi" "tests.test_yasi"
   '';
 
   pythonImportsCheck = [ "yasi" ];
