@@ -50,6 +50,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-KR6BmYj3q9w0yGHFq9+l1x989XjiG3mkaZiyDGCYWPA=";
 
+  # Ensure that only the `lsp-ai` package is built (excluding `xtask`)
+  cargoBuildFlags = [
+    "--package"
+    "lsp-ai"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
