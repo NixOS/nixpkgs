@@ -34,7 +34,7 @@ in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "40.1.0";
+  version = "46.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,13 +42,13 @@ buildPythonPackage rec {
     owner = "apache";
     repo = "arrow-datafusion-python";
     tag = version;
-    hash = "sha256-5WOSlx4XW9zO6oTY16lWQElShLv0ubflVPfSSEGrFgg=";
+    hash = "sha256-jzCHNxqoMf5Meh8sPnaifKvJ2Q+zk/c5l15JeulcMf8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "datafusion-cargo-deps";
     inherit src;
-    hash = "sha256-xUpchV4UFEX1HkCpClOwxnEfGLVlOIX4UmzYKiUth9U=";
+    hash = "sha256-KgEMvwy7ZGcmuO3VFEj6qd3500lbEjKzT+kke3OnpSY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
