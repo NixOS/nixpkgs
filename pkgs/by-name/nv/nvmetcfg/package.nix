@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nvmetcfg";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "vifino";
     repo = "nvmetcfg";
     rev = "v${version}";
-    hash = "sha256-LoQTcHM6czzQ5ZwXcklFXf/7WlRsoJTF61UhQ56aleQ=";
+    hash = "sha256-u8V+mhVegv9X7LDRXfC9IVTBLh+96oLRzmsIuTJu6PI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-c/6tz68ZI42RgD2N4WZI3nzFo2J5gjk8UoPlelQaxIo=";
+  cargoHash = "sha256-h45DRNUw6LfVvEB848oab++r0gP+gzuvneh1XjVtpgM=";
 
   passthru.tests = {
     inherit (nixosTests) nvmetcfg;
