@@ -13,13 +13,13 @@
 
 let
   pname = "mangayomi";
-  version = "0.6.25";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-vuikoTyvUESz9ZESo4gy76syLYVO1WZdvoJf6NsyW4Y=";
+    hash = "sha256-nlA5DLYSj9VVpDo7o5Umccoz8RAF+ac3LWV7108t2Ds=";
   };
 
   metaCommon = {
