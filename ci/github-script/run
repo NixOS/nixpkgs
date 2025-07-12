@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --import ./run
 import { execSync } from 'node:child_process'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -48,7 +48,7 @@ program
   .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
   .action(async (owner, repo) => {
-    const labels = (await import('./labels.cjs')).default
+    const labels = (await import('./labels.js')).default
     run(labels, owner, repo)
   })
 

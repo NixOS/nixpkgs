@@ -69,7 +69,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 3
           script: |
-            require('./ci/github-script/labels.cjs')({
+            require('./ci/github-script/labels.js')({
               github,
               context,
               core,
