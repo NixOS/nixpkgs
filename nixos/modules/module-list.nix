@@ -1201,6 +1201,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
+  ./services/networking/llama-swap.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/lokinet.nix
