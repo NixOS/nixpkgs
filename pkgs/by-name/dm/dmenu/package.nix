@@ -9,8 +9,11 @@
   pkg-config,
   zlib,
   writeText,
-  conf ? null,
-  patches ? null,
+  # customization
+  config,
+  conf ? config.dmenu.conf or null,
+  extraLibs ? config.dmenu.extraLibs or [ ],
+  patches ? config.dmenu.patches or [ ],
   # update script dependencies
   gitUpdater,
 }:
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     libXinerama
     zlib
     libXft
-  ];
+  ] ++ extraLibs;
 
   inherit patches;
 
