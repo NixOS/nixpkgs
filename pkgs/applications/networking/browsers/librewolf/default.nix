@@ -13,12 +13,13 @@ in
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
-  version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
   requireSigning = false;
   allowAddonSideload = true;
   branding = "browser/branding/librewolf";
   inherit (librewolf-src)
+    packageVersion
+    version
     extraConfigureFlags
     extraPatches
     extraPostPatch

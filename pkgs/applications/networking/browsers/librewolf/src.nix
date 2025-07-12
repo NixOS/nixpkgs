@@ -8,6 +8,7 @@ let
 in
 {
   inherit (src) packageVersion;
+  version = src.firefox.version;
   source = fetchFromGitea (
     src.source
     // {
