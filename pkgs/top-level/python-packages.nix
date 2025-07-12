@@ -13168,6 +13168,8 @@ self: super: with self; {
 
   pymetar = callPackage ../development/python-modules/pymetar { };
 
+  pymetasploit3 = callPackage ../development/python-modules/pymetasploit3 { };
+
   pymeteireann = callPackage ../development/python-modules/pymeteireann { };
 
   pymeteoclimatic = callPackage ../development/python-modules/pymeteoclimatic { };
