@@ -2,160 +2,200 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
-
-with lib;
 let
+  inherit (utils.systemdUtils.lib)
+    assertInt
+    assertOnlyFields
+    assertValueOneOf
+    attrsToSection
+    boolValues
+    checkUnitConfig
+    ;
+  inherit (utils.systemdUtils.unitOptions)
+    unitOption
+    ;
+
+  inherit (lib)
+    literalExpression
+    mkIf
+    mkMerge
+    mkOption
+    mkOrder
+    mkRenamedOptionModuleWith
+    optionalAttrs
+    types
+    ;
+
   cfg = config.services.resolved;
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  resolvedConf = ''
-    [Resolve]
-    ${optionalString (
-      config.networking.nameservers != [ ]
-    ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
-    ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-    ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
-    LLMNR=${cfg.llmnr}
-    DNSSEC=${cfg.dnssec}
-    DNSOverTLS=${cfg.dnsovertls}
-    ${config.services.resolved.extraConfig}
-  '';
+  resolvedConf =
+    ''
+      [Resolve]
+      ${attrsToSection (
+        {
+          DNS = config.networking.nameservers;
+          Domains = config.networking.search;
+          LLMNR = true;
+          DNSSEC = false;
+          DNSOverTLS = false;
+        }
+        // cfg.settings
+      )}
+    ''
+    + cfg.extraConfig;
+
+  check.resolved = checkUnitConfig "Resolve" [
+    (assertOnlyFields [
+      "DNS"
+      "FallbackDNS"
+      "Domains"
+      "LLMNR"
+      "MulticastDNS"
+      "DNSSEC"
+      "DNSOverTLS"
+      "Cache"
+      "CacheFromLocalhost"
+      "DNSStubListener"
+      "DNSStubListenerExtra"
+      "ReadEtcHosts"
+      "ResolveUnicastSingleLabel"
+      "StaleRetentionSec"
+    ])
+    (assertValueOneOf "LLMNR" (boolValues ++ [ "resolve" ]))
+    (assertValueOneOf "MulticastDNS" (boolValues ++ [ "resolve" ]))
+    (assertValueOneOf "DNSSEC" (boolValues ++ [ "allow-downgrade" ]))
+    (assertValueOneOf "DNSOverTLS" (boolValues ++ [ "opportunistic" ]))
+    (assertValueOneOf "Cache" (boolValues ++ [ "no-negative" ]))
+    (assertValueOneOf "CacheFromLocalhost" boolValues)
+    (assertValueOneOf "DNSStubListener" (
+      boolValues
+      ++ [
+        "tcp"
+        "udp"
+      ]
+    ))
+    (assertValueOneOf "ReadEtcHosts" boolValues)
+    (assertValueOneOf "ResolveUnicastSingleLabel" boolValues)
+    (assertInt "StaleRetentionSec")
+  ];
 
 in
 {
+  imports = [
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2511;
+      from = [
+        "services"
+        "resolved"
+        "fallbackDns"
+      ];
+      to = [
+        "services"
+        "resolved"
+        "settings"
+        "FallbackDNS"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2511;
+      from = [
+        "services"
+        "resolved"
+        "domains"
+      ];
+      to = [
+        "services"
+        "resolved"
+        "settings"
+        "Domains"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2511;
+      from = [
+        "services"
+        "resolved"
+        "llmnr"
+      ];
+      to = [
+        "services"
+        "resolved"
+        "settings"
+        "LLMNR"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2511;
+      from = [
+        "services"
+        "resolved"
+        "dnssec"
+      ];
+      to = [
+        "services"
+        "resolved"
+        "settings"
+        "DNSSEC"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2511;
+      from = [
+        "services"
+        "resolved"
+        "dnsovertls"
+      ];
+      to = [
+        "services"
+        "resolved"
+        "settings"
+        "DNSOverTLS"
+      ];
+    })
+  ];
 
   options = {
+    services.resolved = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
-    services.resolved.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
+          Search for `services.resolved` to see all options.
+        '';
+      };
+      settings = mkOption {
+        default = { };
+        # We set the dafults using an attribute set merge in the conf generation, so that all defaults are not lost when one value is changed.
+        defaultText = literalExpression ''
+          {
+            DNS = config.networking.nameservers;
+            Domains = config.networking.search;
+            LLMNR = true;
+            DNSSEC = false;
+            DNSOverTLS = false;
+          }
+        '';
+        example = { };
+        type = types.addCheck (types.attrsOf unitOption) check.resolved;
+        description = ''
+          Each attribute in this set specifies an option in the `[Resolve]` section of the service configuration. See {manpage}`resolved.conf(5)` for details.
+        '';
+      };
 
-        Search for `services.resolved` to see all options.
-      '';
-    };
-
-    services.resolved.fallbackDns = mkOption {
-      default = null;
-      example = [
-        "8.8.8.8"
-        "2001:4860:4860::8844"
-      ];
-      type = types.nullOr (types.listOf types.str);
-      description = ''
-        A list of IPv4 and IPv6 addresses to use as the fallback DNS servers.
-        If this option is null, a compiled-in list of DNS servers is used instead.
-        Setting this option to an empty list will override the built-in list to an empty list, disabling fallback.
-      '';
-    };
-
-    services.resolved.domains = mkOption {
-      default = config.networking.search;
-      defaultText = literalExpression "config.networking.search";
-      example = [ "example.com" ];
-      type = types.listOf types.str;
-      description = ''
-        A list of domains. These domains are used as search suffixes
-        when resolving single-label host names (domain names which
-        contain no dot), in order to qualify them into fully-qualified
-        domain names (FQDNs).
-
-        For compatibility reasons, if this setting is not specified,
-        the search domains listed in
-        {file}`/etc/resolv.conf` are used instead, if
-        that file exists and any domains are configured in it.
-      '';
-    };
-
-    services.resolved.llmnr = mkOption {
-      default = "true";
-      example = "false";
-      type = types.enum [
-        "true"
-        "resolve"
-        "false"
-      ];
-      description = ''
-        Controls Link-Local Multicast Name Resolution support
-        (RFC 4795) on the local host.
-
-        If set to
-        - `"true"`: Enables full LLMNR responder and resolver support.
-        - `"false"`: Disables both.
-        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
-      '';
-    };
-
-    services.resolved.dnssec = mkOption {
-      default = "false";
-      example = "true";
-      type = types.enum [
-        "true"
-        "allow-downgrade"
-        "false"
-      ];
-      description = ''
-        If set to
-        - `"true"`:
-            all DNS lookups are DNSSEC-validated locally (excluding
-            LLMNR and Multicast DNS). Note that this mode requires a
-            DNS server that supports DNSSEC. If the DNS server does
-            not properly support DNSSEC all validations will fail.
-        - `"allow-downgrade"`:
-            DNSSEC validation is attempted, but if the server does not
-            support DNSSEC properly, DNSSEC mode is automatically
-            disabled. Note that this mode makes DNSSEC validation
-            vulnerable to "downgrade" attacks, where an attacker might
-            be able to trigger a downgrade to non-DNSSEC mode by
-            synthesizing a DNS response that suggests DNSSEC was not
-            supported.
-        - `"false"`: DNS lookups are not DNSSEC validated.
-
-        At the time of September 2023, systemd upstream advise
-        to disable DNSSEC by default as the current code
-        is not robust enough to deal with "in the wild" non-compliant
-        servers, which will usually give you a broken bad experience
-        in addition of insecure.
-      '';
-    };
-
-    services.resolved.dnsovertls = mkOption {
-      default = "false";
-      example = "true";
-      type = types.enum [
-        "true"
-        "opportunistic"
-        "false"
-      ];
-      description = ''
-        If set to
-        - `"true"`:
-            all DNS lookups will be encrypted. This requires
-            that the DNS server supports DNS-over-TLS and
-            has a valid certificate. If the hostname was specified
-            via the `address#hostname` format in {option}`services.resolved.domains`
-            then the specified hostname is used to validate its certificate.
-        - `"opportunistic"`:
-            all DNS lookups will attempt to be encrypted, but will fallback
-            to unecrypted requests if the server does not support DNS-over-TLS.
-            Note that this mode does allow for a malicious party to conduct a
-            downgrade attack by immitating the DNS server and pretending to not
-            support encryption.
-        - `"false"`:
-            all DNS lookups are done unencrypted.
-      '';
-    };
-
-    services.resolved.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Extra config to append to resolved.conf.
-      '';
+      extraConfig = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Extra config to append to resolved.conf.
+        '';
+      };
     };
 
     boot.initrd.services.resolved.enable = mkOption {
