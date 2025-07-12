@@ -9,10 +9,6 @@
   yarnBuildHook,
   yarnInstallHook,
   nodePackages,
-  python3,
-  pkg-config,
-  libsass,
-  stdenv,
   fetchzip,
 }:
 let
@@ -35,9 +31,13 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
-  vendorHash = "sha256-eq3YKIZZzZihDYgFH3YTETHvNG6hAE/oJ5Ul2XRMn4U=";
+  patches = [
+    # Node-sass is deprecated and fails to cross-compile
+    # See: https://github.com/InvoicePlane/InvoicePlane/issues/1275
+    ./node_switch_to_sass.patch
+  ];
 
-  buildInputs = [ libsass ];
+  vendorHash = "sha256-eq3YKIZZzZihDYgFH3YTETHvNG6hAE/oJ5Ul2XRMn4U=";
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -45,31 +45,17 @@ php.buildComposerProject2 (finalAttrs: {
     yarnInstallHook
     # Needed for executing package.json scripts
     nodePackages.grunt-cli
-    pkg-config
-    (python3.withPackages (ps: with ps; [ distutils ]))
-    stdenv.cc
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-qAm4HnZwfwfjv7LqG+skmFLTHCSJKWH8iRDWFFebXEs=";
   };
 
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
 
   postBuild = ''
-    # Building node-sass dependency
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    pushd node_modules/node-sass
-    LIBSASS_EXT=auto yarn run build --offline
-    popd
-
-    # Running package.json scripts
     grunt build
   '';
 
