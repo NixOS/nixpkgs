@@ -28,6 +28,12 @@ stdenv.mkDerivation {
     hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 
+  patches = [
+    # Fixes test-float-h failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ];
+
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
