@@ -51,31 +51,6 @@ nix-build -A some-package
 
 See the [general package conventions](../README.md#conventions) for more information on package definitions.
 
-### Changing implicit attribute defaults
-
-The above expression is called using these arguments by default:
-```nix
-{
-  lib = pkgs.lib;
-  stdenv = pkgs.stdenv;
-  libbar = pkgs.libbar;
-}
-```
-
-But the package might need `pkgs.libbar_2` instead.
-While the function could be changed to take `libbar_2` directly as an argument,
-this would change the `.override` interface, breaking code like `.override { libbar = ...; }`.
-So instead it is preferable to use the same generic parameter name `libbar`
-and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
-
-```nix
-{
-  libfoo = callPackage ../by-name/so/some-package/package.nix {
-    libbar = libbar_2;
-  };
-}
-```
-
 ## Manual migration guidelines
 
 Most packages are still defined in `all-packages.nix` and the [category hierarchy](../README.md#category-hierarchy).
