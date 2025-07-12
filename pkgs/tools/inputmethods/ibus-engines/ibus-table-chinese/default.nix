@@ -1,78 +1,40 @@
 {
   lib,
   stdenv,
-  fetchgit,
   fetchFromGitHub,
   pkg-config,
   ibus,
   ibus-table,
   python3,
   cmake,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   src = fetchFromGitHub {
-    owner = "definite";
+    owner = "mike-fabian";
     repo = "ibus-table-chinese";
-    rev = "3380c96b5230721e9b80685a719508c505b8137a";
-    hash = "sha256-Ymzkim1k6KQxcSX2LaczRsxV2DYCFxIWI5xulmhOrw8=";
-  };
-
-  cmakeFedoraSrc = fetchgit {
-    url = "https://pagure.io/cmake-fedora.git";
-    rev = "7d5297759aef4cd086bdfa30cf6d4b2ad9446992";
-    hash = "sha256-9uQbQ9hbiT+IpYh7guA4IOOIiLeeYuWc2EntePuWqVc=";
+    rev = "3a416012f3b898fe17225925f59d0672a8a0c0db";
+    sha256 = "sha256-KA4jRSlQ78IeP7od3VtgdR58Z/6psNkMCVwvg3vhFIM=";
   };
 in
 stdenv.mkDerivation {
   pname = "ibus-table-chinese";
-  version = "1.8.3";
+  version = "1.8.12";
 
-  srcs = [
-    src
-    cmakeFedoraSrc
-  ];
+  inherit src;
 
-  sourceRoot = src.name;
-
-  postUnpack = ''
-    chmod u+w -R ${cmakeFedoraSrc.name}
-    mv ${cmakeFedoraSrc.name}/* source/cmake-fedora
-  '';
-
-  preConfigure = ''
-    # cmake script needs ./Modules folder to link to cmake-fedora
-    ln -s cmake-fedora/Modules ./
-  '';
-
-  # Fails when writing to /prj_info.cmake in https://pagure.io/cmake-fedora/blob/master/f/Modules/ManageVersion.cmake
-  cmakeFlags = [
-    "-DPRJ_INFO_CMAKE_FILE=/dev/null"
-    "-DPRJ_DOC_DIR=REPLACE"
-    "-DDATA_DIR=share"
-  ];
-  # Must replace PRJ_DOC_DIR with actual share/ folder for ibus-table-chinese
-  # Otherwise it tries to write to /ibus-table-chinese if not defined (!)
   postConfigure = ''
-    substituteInPlace cmake_install.cmake --replace '/build/source/REPLACE' $out/share/ibus-table-chinese
+    substituteInPlace cmake_install.cmake --replace-fail /var/empty $out
+    substituteInPlace CMakeLists.txt --replace-fail /var/empty $out
   '';
   # Fails otherwise with "no such file or directory: <table>.txt"
   dontUseCmakeBuildDir = true;
-  # Fails otherwise sometimes with
-  # FileExistsError: [Errno 17] File exists: '/build/tmp.BfVAUM4llr/ibus-table-chinese/.local/share/ibus-table'
-  enableParallelBuilding = false;
-
-  preBuild = ''
-    export HOME=$(mktemp -d)/ibus-table-chinese
-  '';
-
-  postFixup = ''
-    rm -rf $HOME
-  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
