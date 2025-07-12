@@ -391,6 +391,7 @@
   ./security/polkit.nix
   ./security/rngd.nix
   ./security/rtkit.nix
+  ./security/selinux.nix
   ./security/soteria.nix
   ./security/sudo-rs.nix
   ./security/sudo.nix
