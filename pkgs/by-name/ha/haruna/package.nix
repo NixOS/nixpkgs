@@ -2,25 +2,11 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  breeze-icons,
-  breeze,
   cmake,
-  extra-cmake-modules,
   ffmpeg-headless,
-  kconfig,
-  kcoreaddons,
-  kfilemetadata,
-  ki18n,
-  kiconthemes,
-  kio,
-  kirigami,
-  kxmlgui,
-  kdoctools,
-  mpvqt,
+  kdePackages,
   pkg-config,
-  wrapQtAppsHook,
-  qqc2-desktop-style,
-  qtbase,
+  qt6,
   yt-dlp,
 }:
 
@@ -42,36 +28,36 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    breeze-icons
-    breeze
-    qqc2-desktop-style
+    kdePackages.breeze-icons
+    kdePackages.breeze
+    kdePackages.qqc2-desktop-style
     yt-dlp
 
     ffmpeg-headless
-    kconfig
-    kcoreaddons
-    kfilemetadata
-    ki18n
-    kiconthemes
-    kio
-    kirigami
-    kxmlgui
-    kdoctools
-    mpvqt
-    qtbase
+    kdePackages.kconfig
+    kdePackages.kcoreaddons
+    kdePackages.kfilemetadata
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kio
+    kdePackages.kirigami
+    kdePackages.kxmlgui
+    kdePackages.kdoctools
+    kdePackages.mpvqt
+    qt6.qtbase
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       cc-by-40
       cc-by-sa-40
@@ -80,7 +66,7 @@ stdenv.mkDerivation rec {
       gpl3Plus
       wtfpl
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jojosch
       kashw2
     ];
