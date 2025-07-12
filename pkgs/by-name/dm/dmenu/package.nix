@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   fontconfig,
   libX11,
   libXinerama,
@@ -16,13 +16,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dmenu";
   version = "5.3";
 
-  src = fetchurl {
-    url = "https://dl.suckless.org/tools/dmenu-${version}.tar.gz";
-    sha256 = "sha256-Go9T5v0tdJg57IcMXiez4U2lw+6sv8uUXRWeHVQzeV8=";
+  src = fetchzip {
+    url = "https://dl.suckless.org/tools/dmenu-${finalAttrs.version}.tar.gz";
+    hash = "sha256-3lRLa3NIg+7bUSDnef/rVL3XwvWWHTIPQ8mcVaq/SVI=";
   };
 
   buildInputs = [
@@ -54,17 +54,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { url = "git://git.suckless.org/dmenu"; };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, highly customizable, and efficient menu for the X Window System";
     homepage = "https://tools.suckless.org/dmenu";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       pSub
       globin
       qusic
       _0david0mp
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "dmenu";
   };
-}
+})
