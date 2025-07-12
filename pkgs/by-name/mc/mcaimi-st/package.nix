@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "mcaimi-st";
-  version = "0-unstable-2021-08-30";
+  version = "0-unstable-2025-03-12";
 
   src = fetchFromGitHub {
     owner = "mcaimi";
     repo = "st";
-    rev = "1a8cad03692ee6d32c03a136cdc76bdb169e15d8";
-    hash = "sha256-xyVEvD8s1J9Wj9NB4Gg+0ldvde7M8IVpzCOTttC1IY0=";
+    rev = "f1ae5cdafadceaf622e1c0ff56da04803bf658b3";
+    hash = "sha256-rGru0LqbuJQ4QOts6xYDztAST0K5HCys2gUPZg2w4SE=";
   };
 
   nativeBuildInputs = [
