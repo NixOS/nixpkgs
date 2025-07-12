@@ -135,6 +135,7 @@ let
       ./with-mysql-and-memcached.nix
       ./with-postgresql-and-redis.nix
       ./with-objectstore.nix
+      ./with-onlyoffice.nix
     ];
 in
 listToAttrs (
