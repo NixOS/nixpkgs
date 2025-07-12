@@ -55,6 +55,5 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
     platforms = platforms.linux;
-    outputsToInstall = [ "out" ];
   };
 }
