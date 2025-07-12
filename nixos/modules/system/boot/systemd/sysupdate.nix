@@ -149,5 +149,8 @@ in
     environment.etc = sysupdateTransfers;
   };
 
-  meta.maintainers = with lib.maintainers; [ nikstur ];
+  meta.maintainers = with lib.maintainers; [
+    nikstur
+    jmbaur
+  ];
 }
