@@ -5,7 +5,7 @@
   testers,
   tuxedo-rs,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxedo-rs";
   version = "0.3.1";
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AaronErhardt";
     repo = "tuxedo-rs";
-    rev = "tailor-v${version}";
+    rev = "tailor-v${finalAttrs.version}";
     hash = "sha256-+NzwUs8TZsA0us9hI1UmEKdiOo9IqTRmTOHs4xmC7MY=";
   };
 
@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion {
     package = tuxedo-rs;
-    command = "${meta.mainProgram} --version";
-    version = version;
+    command = "${finalAttrs.meta.mainProgram} --version";
+    version = finalAttrs.version;
   };
 
   postInstall = ''
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux;
     mainProgram = "tailor";
   };
-}
+})
