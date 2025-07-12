@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nototools";
   version = "0.2.20";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -17,11 +17,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 
-  postPatch = ''
-    sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
-  '';
-
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRemoveDeps = [
     # https://github.com/notofonts/nototools/pull/901
@@ -71,6 +70,8 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     cp -r third_party $out
   '';
+
+  pythonImportsCheck = [ "nototools" ];
 
   meta = with lib; {
     description = "Noto fonts support tools and scripts plus web site generation";

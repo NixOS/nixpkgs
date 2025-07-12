@@ -14,7 +14,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nwg-clipman";
   version = "0.2.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
@@ -54,6 +54,8 @@ python3Packages.buildPythonPackage rec {
   '';
 
   strictDeps = true;
+
+  pythonImportsCheck = [ "nwg_clipman" ];
 
   passthru.updateScript = nix-update-script { };
 

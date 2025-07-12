@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
   version = "6.4.0";
+  pyproject = true;
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -17,17 +18,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
   };
 
-  format = "setuptools";
-
   sourceRoot = "${src.name}/nemo-emblems";
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/share" "share"
+      --replace-fail "/usr/share" "share"
 
     substituteInPlace nemo-extension/nemo-emblems.py \
-      --replace "/usr/share/locale" "${cinnamon-translations}/share/locale"
+      --replace-fail "/usr/share/locale" "${cinnamon-translations}/share/locale"
   '';
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-emblems";
