@@ -62,7 +62,8 @@ in
   testScript = ''
     server.wait_for_unit("nginx.service")
 
-    target.succeed("systemctl start systemd-sysupdate")
+    print(target.succeed("updatectl list"))
+    target.succeed("updatectl update")
     assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
   '';
 }
