@@ -1,0 +1,72 @@
+diff --git a/Makefile b/Makefile
+index c4fc6fb1..f5f1c044 100644
+--- a/Makefile
++++ b/Makefile
+@@ -320,14 +320,6 @@ COMMONDOCS     = $(SPECFILES) $(GENDEPENDS)
+ # Script to translate math on build time
+ TRANSLATEMATH = $(NODEJS) $(SCRIPTS)/translate_math.js $(KATEXSRCDIR)/katex.min.js
+ 
+-# Install katex in KATEXINSTDIR ($(OUTDIR)/katex) to be shared by all
+-# HTML targets.
+-# We currently only need the css and fonts, but copy all of KATEXSRCDIR anyway.
+-$(KATEXINSTDIR): $(KATEXSRCDIR)
+-	$(QUIET)$(MKDIR) $(KATEXINSTDIR)
+-	$(QUIET)$(RMRF)  $(KATEXINSTDIR)
+-	$(QUIET)$(CP) -rf $(KATEXSRCDIR) $(KATEXINSTDIR)
+-
+ # Spec targets
+ # There is some complexity to try and avoid short virtual targets like 'html'
+ # causing specs to *always* be regenerated.
+@@ -363,14 +355,14 @@ getchunker:
+ html: $(HTMLDIR)/vkspec.html $(SPECSRC) $(COMMONDOCS)
+ 
+ $(HTMLDIR)/vkspec.html: KATEXDIR = ../katex
+-$(HTMLDIR)/vkspec.html: $(SPECSRC) $(COMMONDOCS) $(KATEXINSTDIR)
++$(HTMLDIR)/vkspec.html: $(SPECSRC) $(COMMONDOCS)
+ 	$(QUIET)$(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) -o $@ $(SPECSRC)
+ 	$(QUIET)$(TRANSLATEMATH) $@
+ 
+ diff_html: $(HTMLDIR)/diff.html $(SPECSRC) $(COMMONDOCS)
+ 
+ $(HTMLDIR)/diff.html: KATEXDIR = ../katex
+-$(HTMLDIR)/diff.html: $(SPECSRC) $(COMMONDOCS) $(KATEXINSTDIR)
++$(HTMLDIR)/diff.html: $(SPECSRC) $(COMMONDOCS)
+ 	$(QUIET)$(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) \
+ 	    -a diff_extensions="$(DIFFEXTENSIONS)" \
+ 	    -r $(CONFIGS)/extension-highlighter.rb --trace \
+@@ -419,7 +411,7 @@ STYLEFILES = $(wildcard $(SPECDIR)/style/[A-Za-z]*.adoc)
+ styleguide: $(OUTDIR)/styleguide.html
+ 
+ $(OUTDIR)/styleguide.html: KATEXDIR = katex
+-$(OUTDIR)/styleguide.html: $(STYLESRC) $(STYLEFILES) $(GENDEPENDS) $(KATEXINSTDIR)
++$(OUTDIR)/styleguide.html: $(STYLESRC) $(STYLEFILES) $(GENDEPENDS)
+ 	$(QUIET)$(MKDIR) $(OUTDIR)
+ 	$(QUIET)$(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) -o $@ $(STYLESRC)
+ 	$(QUIET)$(TRANSLATEMATH) $@
+@@ -639,7 +631,7 @@ ADOCREFOPTS = -a cross-file-links -a refprefix='refpage.' -a isrefpage \
+ # Running translate_math.js on every refpage is slow and most of them
+ # do not contain math, so do a quick search for latexmath delimiters.
+ $(MANHTMLDIR)/%.html: KATEXDIR = ../../katex
+-$(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
++$(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS)
+ 	$(VERYQUIET)echo "Building $@ from $< using default options"
+ 	$(VERYQUIET)$(MKDIR) $(MANHTMLDIR)
+ 	$(VERYQUIET)$(ASCIIDOC) -b html5 $(ADOCOPTS) $(ADOCHTMLOPTS) $(ADOCREFOPTS) \
+@@ -649,7 +641,7 @@ $(MANHTMLDIR)/%.html: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
+ 	fi
+ 
+ $(MAN3DIR)/%.3: KATEXDIR = ../../katex
+-$(MAN3DIR)/%.3: $(REFPATH)/%.adoc $(GENDEPENDS) $(KATEXINSTDIR)
++$(MAN3DIR)/%.3: $(REFPATH)/%.adoc $(GENDEPENDS)
+ 	$(VERYQUIET)echo "Building $@ from $< using default options"
+ 	$(VERYQUIET)$(MKDIR) $(MAN3DIR)
+ 	$(VERYQUIET)$(ASCIIDOC) -b manpage $(ADOCOPTS) $(ADOCREFOPTS) \
+@@ -678,7 +670,7 @@ manhtml: $(OUTDIR)/apispec.html
+ 
+ $(OUTDIR)/apispec.html: KATEXDIR = katex
+ $(OUTDIR)/apispec.html: ADOCMISCOPTS =
+-$(OUTDIR)/apispec.html: $(SPECVERSION) $(REFPATH)/apispec.adoc $(SVGFILES) $(GENDEPENDS) $(KATEXINSTDIR)
++$(OUTDIR)/apispec.html: $(SPECVERSION) $(REFPATH)/apispec.adoc $(SVGFILES) $(GENDEPENDS)
+ 	$(QUIET)$(MKDIR) $(OUTDIR)
+ 	$(QUIET)$(ASCIIDOC) -b html5 -a html_spec_relative='html/vkspec.html' \
+ 	    $(ADOCOPTS) $(ADOCHTMLOPTS) -o $@ $(REFPATH)/apispec.adoc
