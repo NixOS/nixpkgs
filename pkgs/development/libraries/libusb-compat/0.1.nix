@@ -7,7 +7,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libusb-compat";
   version = "0.1.8";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb-compat-0.1";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-pAPERYSxoc47gwpPUoMkrbK8TOXyx03939vlFN0hHRg=";
   };
 
@@ -36,8 +36,10 @@ stdenv.mkDerivation rec {
   # without this, libusb-compat is unable to find libusb1
   postFixup = ''
     find $out/lib -name \*.so\* -type f -exec \
-      patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
+      patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} {} \;
   '';
+
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
 
   meta = with lib; {
     homepage = "https://libusb.info/";
@@ -50,4 +52,4 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
   };
-}
+})
