@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
-  version = "0.9";
+  version = "1.0rc1";
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+    rev = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-jKAKdja2Q8FldgnRqOdFSnr1XHCC8eC6WeIUv83e7x4=";
   };
 
   nativeBuildInputs =
@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]);
 
   postPatch = ''
-    patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
-      --replace-fail /bin/chmod "${coreutils}/bin/chmod"
+      --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}" \
+      --replace-fail chmod "${lib.getExe' coreutils "chmod"}"
   '';
 
   doInstallCheck = true;
@@ -90,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      liberodark
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "openrgb";
