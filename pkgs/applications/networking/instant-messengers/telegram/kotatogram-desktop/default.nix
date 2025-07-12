@@ -5,6 +5,10 @@
   fetchpatch,
   libsForQt5,
   yasm,
+  alsa-lib,
+  jemalloc,
+  libopus,
+  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -38,7 +42,7 @@ in
 telegram-desktop.override {
   pname = "kotatogram-desktop";
   inherit withWebkit;
-  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs (old: {
     pname = "kotatogram-desktop-unwrapped";
     version = "${version}-unstable-2024-09-27";
 
@@ -60,6 +64,13 @@ telegram-desktop.override {
       })
     ];
 
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      alsa-lib
+      jemalloc
+      libopus
+      libpulseaudio
+    ];
+
     meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
       longDescription = ''
@@ -74,5 +85,5 @@ telegram-desktop.override {
       maintainers = with lib.maintainers; [ ilya-fedin ];
       mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
     };
-  };
+  });
 }
