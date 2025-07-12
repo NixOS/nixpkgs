@@ -26538,6 +26538,11 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
+  viitorags = {
+    name = "Vitor Gabriel";
+    github = "viitorags";
+    githubId = 152658654;
+  };
   vikanezrimaya = {
     email = "vika@fireburn.ru";
     github = "vikanezrimaya";
