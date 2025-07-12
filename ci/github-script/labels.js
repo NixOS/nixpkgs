@@ -1,61 +1,12 @@
 module.exports = async function ({ github, context, core, dry }) {
-  const Bottleneck = require('bottleneck')
   const path = require('node:path')
   const { DefaultArtifactClient } = require('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
+  const withRateLimit = require('./withRateLimit.js')
 
   const artifactClient = new DefaultArtifactClient()
 
-  const stats = {
-    issues: 0,
-    prs: 0,
-    requests: 0,
-    artifacts: 0,
-  }
-
-  // Rate-Limiting and Throttling, see for details:
-  //   https://github.com/octokit/octokit.js/issues/1069#throttling
-  //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
-  const allLimits = new Bottleneck({
-    // Avoid concurrent requests
-    maxConcurrent: 1,
-    // Will be updated with first `updateReservoir()` call below.
-    reservoir: 0,
-  })
-  // Pause between mutative requests
-  const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
-  github.hook.wrap('request', async (request, options) => {
-    // Requests to the /rate_limit endpoint do not count against the rate limit.
-    if (options.url == '/rate_limit') return request(options)
-    // Search requests are in a different resource group, which allows 30 requests / minute.
-    // We do less than a handful each run, so not implementing throttling for now.
-    if (options.url.startsWith('/search/')) return request(options)
-    stats.requests++
-    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method))
-      return writeLimits.schedule(request.bind(null, options))
-    else return allLimits.schedule(request.bind(null, options))
-  })
-
-  async function updateReservoir() {
-    let response
-    try {
-      response = await github.rest.rateLimit.get()
-    } catch (err) {
-      core.error(`Failed updating reservoir:\n${err}`)
-      // Keep retrying on failed rate limit requests instead of exiting the script early.
-      return
-    }
-    // Always keep 1000 spare requests for other jobs to do their regular duty.
-    // They normally use below 100, so 1000 is *plenty* of room to work with.
-    const reservoir = Math.max(0, response.data.resources.core.remaining - 1000)
-    core.info(`Updating reservoir to: ${reservoir}`)
-    allLimits.updateSettings({ reservoir })
-  }
-  await updateReservoir()
-  // Update remaining requests every minute to account for other jobs running in parallel.
-  const reservoirUpdater = setInterval(updateReservoir, 60 * 1000)
-
-  async function handlePullRequest(item) {
+  async function handlePullRequest({ item, stats }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
     const pull_number = item.number
@@ -221,7 +172,7 @@ module.exports = async function ({ github, context, core, dry }) {
     return prLabels
   }
 
-  async function handle(item) {
+  async function handle({ item, stats }) {
     try {
       const log = (k, v, skip) => {
         core.info(`#${item.number} - ${k}: ${v}` + (skip ? ' (skipped)' : ''))
@@ -237,7 +188,7 @@ module.exports = async function ({ github, context, core, dry }) {
 
       if (item.pull_request || context.payload.pull_request) {
         stats.prs++
-        Object.assign(itemLabels, await handlePullRequest(item))
+        Object.assign(itemLabels, await handlePullRequest({ item, stats }))
       } else {
         stats.issues++
       }
@@ -326,9 +277,9 @@ module.exports = async function ({ github, context, core, dry }) {
     }
   }
 
-  try {
+  await withRateLimit({ github, core }, async (stats) => {
     if (context.payload.pull_request) {
-      await handle(context.payload.pull_request)
+      await handle({ item: context.payload.pull_request, stats })
     } else {
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
@@ -447,17 +398,11 @@ module.exports = async function ({ github, context, core, dry }) {
             arr.findIndex((firstItem) => firstItem.number == thisItem.number),
         )
 
-      ;(await Promise.allSettled(items.map(handle)))
+      ;(await Promise.allSettled(items.map((item) => handle({ item, stats }))))
         .filter(({ status }) => status == 'rejected')
         .map(({ reason }) =>
           core.setFailed(`${reason.message}\n${reason.cause.stack}`),
         )
-
-      core.notice(
-        `Processed ${stats.prs} PRs, ${stats.issues} Issues, made ${stats.requests + stats.artifacts} API requests and downloaded ${stats.artifacts} artifacts.`,
-      )
     }
-  } finally {
-    clearInterval(reservoirUpdater)
-  }
+  })
 }
