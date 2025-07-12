@@ -178,6 +178,7 @@ lib.makeOverridable (
       (optionalAttrs isModular {
         outputs = [
           "out"
+          "mod"
           "dev"
         ];
       })
@@ -337,10 +338,8 @@ lib.makeOverridable (
           ++ extraMakeFlags;
 
         installFlags =
-          [
-            "INSTALL_PATH=$(out)"
-          ]
-          ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+          [ "INSTALL_PATH=${placeholder "out"}" ]
+          ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "mod"}")
           ++ optionals buildDTBs [
             "dtbs_install"
             "INSTALL_DTBS_PATH=$(out)/dtbs"
@@ -441,8 +440,8 @@ lib.makeOverridable (
           fi
           make modules_install $makeFlags "''${makeFlagsArray[@]}" \
             $installFlags "''${installFlagsArray[@]}"
-          unlink $out/lib/modules/${modDirVersion}/build
-          rm -f $out/lib/modules/${modDirVersion}/source
+          unlink $mod/lib/modules/${modDirVersion}/build
+          rm -f $mod/lib/modules/${modDirVersion}/source
 
           mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
