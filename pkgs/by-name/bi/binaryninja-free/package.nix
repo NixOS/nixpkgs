@@ -9,6 +9,7 @@
   libGLU,
   libxkbcommon,
   makeDesktopItem,
+  requireFile,
   stdenv,
   unzip,
   wayland,
@@ -20,11 +21,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "binaryninja-free";
-  version = "5.0.7486";
+  version = "5.0.7648";
 
-  src = fetchurl {
-    url = "https://web.archive.org/web/20250526111956/https://cdn.binary.ninja/installers/binaryninja_free_linux.zip";
-    hash = "sha256-iZjIgokwnHJaY6OgrnDcto3Un5g42MqTWXKo6OL1Rcs=";
+  src = requireFile {
+    name = "binaryninja_free_linux.zip";
+    url = "https://binary.ninja/free/";
+    hash = "sha256-CBRoQaVQ3/wlRA2SE3EOgM9BiU+WlT2nGi3CkBTrT+g=";
   };
 
   icon = fetchurl {
