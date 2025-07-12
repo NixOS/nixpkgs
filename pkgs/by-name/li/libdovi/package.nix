@@ -7,13 +7,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libdovi";
   version = "3.3.1";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchCrate {
     pname = "dolby_vision";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ecd+r0JWZtP/rxt4Y3Cj2TkygXIMy5KZhZpXBwJNPx4=";
   };
 
@@ -43,10 +48,10 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C library for Dolby Vision metadata parsing and writing";
     homepage = "https://crates.io/crates/dolby_vision";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kranzes ];
   };
-}
+})
