@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.9.2";
+  version = "5.9.3";
   src = fetchurl {
     url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
-    hash = "sha256-63WHr9yUuNx3s2pNvTSPTLwQ2M+757Mr++Yfocb6G8c=";
+    hash = "sha256-Kc1/dHCYmHqnwvLGV1c7GciaLkKfHaC9FG2KCLXBCUk=";
   };
 
   nativeBuildInputs = [
