@@ -25,6 +25,7 @@ let
     isFunction
     oldestSupportedReleaseIsAtLeast
     isList
+    isPath
     isString
     length
     mapAttrs
@@ -376,12 +377,25 @@ let
       loadModule =
         args: fallbackFile: fallbackKey: m:
         if isFunction m then
-          unifyModuleSyntax fallbackFile fallbackKey (applyModuleArgs fallbackKey m args)
+          loadModule args fallbackFile fallbackKey (applyModuleArgs fallbackKey m args)
         else if isAttrs m then
           if m._type or "module" == "module" then
             unifyModuleSyntax fallbackFile fallbackKey m
           else if m._type == "if" || m._type == "override" then
-            loadModule args fallbackFile fallbackKey { config = m; }
+            let
+              inner = loadModule args fallbackFile fallbackKey m.content;
+            in
+            inner
+            // {
+              # We only push down into `imports` and `config`.
+              # It doesn't make any sense for the others.
+              imports = m // {
+                content = inner.imports;
+              };
+              config = m // {
+                content = inner.config;
+              };
+            }
           else
             throw (
               messages.not_a_module {
@@ -402,10 +416,10 @@ let
             ];
           in
           throw "Module imports can't be nested lists. Perhaps you meant to remove one level of lists? Definitions: ${showDefs defs}"
+        else if isPath m || isString m then
+          loadModule args (toString m) (toString m) (import m)
         else
-          unifyModuleSyntax (toString m) (toString m) (
-            applyModuleArgsIfFunction (toString m) (import m) args
-          );
+          throw "module ${fallbackFile} (${fallbackKey}) does not look like a module.";
 
       checkModule =
         if class != null then
@@ -462,7 +476,8 @@ let
             n: x:
             let
               module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
-              collectedImports = collectStructuredModules module._file module.key module.imports args;
+              imports = concatLists (pushDownProperties module.imports);
+              collectedImports = collectStructuredModules module._file module.key imports args;
             in
             {
               key = module.key;
@@ -1150,6 +1165,16 @@ let
     optionalValue = if isDefined then { value = mergedValue; } else { };
   };
 
+  # map elements of list or attribute set
+  mapAny =
+    f: x:
+    if isAttrs x then
+      mapAttrs (n: f) x
+    else if isList x then
+      map f x
+    else
+      throw "Cannot map over ${x} using `mapAny`.";
+
   /**
     Given a config set, expand mkMerge properties, and push down the
     other properties into the children.  The result is a list of
@@ -1177,9 +1202,9 @@ let
     if cfg._type or "" == "merge" then
       concatMap pushDownProperties cfg.contents
     else if cfg._type or "" == "if" then
-      map (mapAttrs (n: v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
+      map (mapAny (v: mkIf cfg.condition v)) (pushDownProperties cfg.content)
     else if cfg._type or "" == "override" then
-      map (mapAttrs (n: v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
+      map (mapAny (v: mkOverride cfg.priority v)) (pushDownProperties cfg.content)
     # FIXME: handle mkOrder?
     else
       [ cfg ];
