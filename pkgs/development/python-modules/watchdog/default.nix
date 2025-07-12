@@ -43,6 +43,8 @@ buildPythonPackage rec {
       "--deselect=tests/test_emitter.py::test_close"
       # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
+      # OSError: Too many open files (opens 2048 files)
+      "--deselect=tests/test_inotify_c.py::test_select_fd"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
