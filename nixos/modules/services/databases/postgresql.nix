@@ -944,4 +944,5 @@ in
 
   meta.doc = ./postgresql.md;
   meta.maintainers = pkgs.postgresql.meta.maintainers;
+  meta.tests = { nixosTests }: nixosTests.postgresql;
 }
