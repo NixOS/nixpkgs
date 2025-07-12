@@ -175,7 +175,7 @@ rec {
     # This breaks the override pattern.
     # In case this turns out to be a problem, we can still add more magic
     else
-      pkgs.runCommandLocal name { } ''
+      pkgs.runCommandLocal name { meta.mainProgram = null; } ''
         ln -s ${inner}/bin/${name} $out
       '';
 

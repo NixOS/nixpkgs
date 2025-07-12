@@ -58,6 +58,17 @@ lib.fix (self: {
     verify = isList;
   };
 
+  nullOr =
+    t:
+    assert isTypeDef t;
+    let
+      inherit (t) verify;
+    in
+    {
+      name = "nullOr<${t.name}>";
+      verify = v: isNull v || verify v;
+    };
+
   attrsOf =
     t:
     assert isTypeDef t;
