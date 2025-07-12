@@ -7,7 +7,7 @@
   libnotify,
   makeWrapper,
   pkg-config,
-  xorg,
+  libX11,
   enableAlsaUtils ? true,
   alsa-utils,
   coreutils,
@@ -31,14 +31,14 @@ let
     ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dwm-status";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
-    repo = pname;
-    tag = version;
+    repo = "dwm-status";
+    tag = finalAttrs.version;
     hash = "sha256-982JFYZroskKppAOZjBWOFt624FfRjhXpYN57s/cM50=";
   };
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     gdk-pixbuf
     libnotify
-    xorg.libX11
+    libX11
   ];
 
   useFetchCargoVendor = true;
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Highly performant and configurable DWM status service";
     homepage = "https://github.com/Gerschtli/dwm-status";
-    changelog = "https://github.com/Gerschtli/dwm-status/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Gerschtli/dwm-status/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gepbird
@@ -74,4 +74,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dwm-status";
     platforms = lib.platforms.linux;
   };
-}
+})
