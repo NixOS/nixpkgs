@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amule-project";
     repo = "amule";
-    rev = version;
+    tag = version;
     sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 

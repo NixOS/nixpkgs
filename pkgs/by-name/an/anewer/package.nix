@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ysf";
     repo = "anewer";
-    rev = version;
+    tag = version;
     sha256 = "181mi674354bddnq894yyq587w7skjh35vn61i41vfi6lqz5dy3d";
   };
 
