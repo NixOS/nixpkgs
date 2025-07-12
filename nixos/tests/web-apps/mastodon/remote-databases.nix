@@ -149,7 +149,7 @@ import ../../make-test-python.nix (
           services.mastodon = {
             enable = true;
             configureNginx = false;
-            localDomain = "mastodon.local";
+            settings.LOCAL_DOMAIN = "mastodon.local";
             enableUnixSocket = false;
             streamingProcesses = 2;
             redis = {
