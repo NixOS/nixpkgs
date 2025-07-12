@@ -6,7 +6,6 @@
   libX11,
   libXinerama,
   libXft,
-  pkg-config,
   zlib,
   writeText,
   # customization
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Go9T5v0tdJg57IcMXiez4U2lw+6sv8uUXRWeHVQzeV8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     fontconfig
     libX11
@@ -53,9 +51,6 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=(
       PREFIX="$out"
       CC="$CC"
-      # default config.mk hardcodes dependent libraries and include paths
-      INCS="`$PKG_CONFIG --cflags fontconfig x11 xft xinerama`"
-      LIBS="`$PKG_CONFIG --libs   fontconfig x11 xft xinerama`"
     )
   '';
 
