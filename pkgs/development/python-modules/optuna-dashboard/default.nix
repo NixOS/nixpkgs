@@ -58,6 +58,12 @@ buildPythonPackage rec {
     streamlit
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: module 'numpy' has no attribute 'float128' ==> not available on 64-bit Darwin
+    "test_infer_sortable"
+    "test_serialize_numpy_floating"
+  ];
+
   # Disable tests that use playwright (needs network)
   disabledTestPaths = [
     "e2e_tests/test_dashboard/test_usecases/test_preferential_optimization.py"
