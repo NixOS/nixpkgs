@@ -699,6 +699,12 @@ def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
+    if not sudo and os.geteuid() != 0:
+        raise NixOSRebuildError(
+            "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        )
+
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
             all_channels
