@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "oauthlib";
-  version = "3.2.2";
+  version = "3.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "oauthlib";
     repo = "oauthlib";
-    rev = "v${version}";
-    hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
+    tag = "v${version}";
+    hash = "sha256-ZTmR+pTNQaRQMnUA+8hXM5VACRd8Hn62KTNooy5FQyk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -49,14 +49,6 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # https://github.com/oauthlib/oauthlib/issues/877
-    "test_rsa_bad_keys"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    "test_filter_params"
-  ];
-
   pythonImportsCheck = [ "oauthlib" ];
 
   passthru.tests = {
@@ -69,7 +61,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.tag}/CHANGELOG.rst";
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     homepage = "https://github.com/oauthlib/oauthlib";
     license = licenses.bsd3;
