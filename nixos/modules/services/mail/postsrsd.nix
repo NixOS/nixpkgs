@@ -211,6 +211,14 @@ in
         '';
       };
 
+      configurePostfix = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to configure the required settings to use postsrsd in the local Postfix instance.
+        '';
+      };
+
       user = lib.mkOption {
         type = lib.types.str;
         default = "postsrsd";
@@ -225,103 +233,67 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    users.users = lib.optionalAttrs (cfg.user == "postsrsd") {
-      postsrsd = {
-        group = cfg.group;
-        uid = config.ids.uids.postsrsd;
-      };
-    };
-
-    users.groups = lib.optionalAttrs (cfg.group == "postsrsd") {
-      postsrsd.gid = config.ids.gids.postsrsd;
-    };
-
-    systemd.services.postsrsd-generate-secrets = {
-      path = [ pkgs.coreutils ];
-      script = ''
-        if [ -e "${cfg.secretsFile}" ]; then
-          echo "Secrets file exists. Nothing to do!"
-        else
-          echo "WARNING: secrets file not found, autogenerating!"
-          DIR="$(dirname "${cfg.secretsFile}")"
-          install -m 750 -o ${cfg.user} -g ${cfg.group} -d "$DIR"
-          install -m 600 -o ${cfg.user} -g ${cfg.group} <(dd if=/dev/random bs=18 count=1 | base64) "${cfg.secretsFile}"
-        fi
-      '';
-      serviceConfig = {
-        Type = "oneshot";
-      };
-    };
-
-    environment.etc."postsrsd.conf".source = configFile;
-
-    systemd.services.postsrsd = {
-      description = "PostSRSd SRS rewriting server";
-      after = [
-        "network.target"
-        "postsrsd-generate-secrets.service"
-      ];
-      before = [ "postfix.service" ];
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "postsrsd-generate-secrets.service" ];
-      restartTriggers = [ configFile ];
-
-      serviceConfig = {
-        ExecStart = toString [
-          (lib.getExe pkgs.postsrsd)
-          "-C"
-          "/etc/postsrsd.conf"
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.enable && cfg.configurePostfix && config.services.postfix.enable) {
+      services.postfix.config = {
+        # https://github.com/roehling/postsrsd#configuration
+        sender_canonical_maps = "socketmap:${cfg.settings.socketmap}:forward";
+        sender_canonical_classes = "envelope_sender";
+        recipient_canonical_maps = "socketmap:${cfg.settings.socketmap}:reverse";
+        recipient_canonical_classes = [
+          "envelope_recipient"
+          "header_recipient"
         ];
-        User = cfg.user;
-        Group = cfg.group;
-        RuntimeDirectory = "postsrsd";
-        RuntimeDirectoryMode = "0750";
-        LoadCredential = "secrets-file:${cfg.secretsFile}";
+      };
 
-        CapabilityBoundingSet = [ "" ];
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        PrivateNetwork = lib.hasPrefix "unix:" cfg.settings.socketmap;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        ProtectProc = "invisible";
-        ProcSubset = "pid";
-        RemoveIPC = true;
-        RestrictAddressFamilies =
-          if lib.hasPrefix "unix:" cfg.settings.socketmap then
-            [ "AF_UNIX" ]
+      users.users.postfix.extraGroups = [ cfg.group ];
+    })
+
+    (lib.mkIf cfg.enable {
+      users.users = lib.optionalAttrs (cfg.user == "postsrsd") {
+        postsrsd = {
+          group = cfg.group;
+          uid = config.ids.uids.postsrsd;
+        };
+      };
+
+      users.groups = lib.optionalAttrs (cfg.group == "postsrsd") {
+        postsrsd.gid = config.ids.gids.postsrsd;
+      };
+
+      systemd.services.postsrsd-generate-secrets = {
+        path = [ pkgs.coreutils ];
+        script = ''
+          if [ -e "${cfg.secretsFile}" ]; then
+            echo "Secrets file exists. Nothing to do!"
           else
-            [
-              "AF_INET"
-              "AF_INET6"
-            ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged @resources"
+            echo "WARNING: secrets file not found, autogenerating!"
+            DIR="$(dirname "${cfg.secretsFile}")"
+            install -m 750 -o ${cfg.user} -g ${cfg.group} -d "$DIR"
+            install -m 600 -o ${cfg.user} -g ${cfg.group} <(dd if=/dev/random bs=18 count=1 | base64) "${cfg.secretsFile}"
+          fi
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+        };
+      };
+
+      environment.etc."postsrsd.conf".source = configFile;
+
+      systemd.services.postsrsd = {
+        description = "PostSRSd SRS rewriting server";
+        after = [
+          "network.target"
+          "postsrsd-generate-secrets.service"
         ];
-        UMask = "0027";
         before = [ "postfix.service" ];
         wantedBy = [ "multi-user.target" ];
         requires = [ "postsrsd-generate-secrets.service" ];
         restartTriggers = [ configFile ];
+
         serviceConfig = {
           ExecStart = utils.escapeSystemdExecArgs [
-            (lib.getExe cfg.package)
+            (lib.getExe pkgs.postsrsd)
             "-C"
             "/etc/postsrsd.conf"
           ];
@@ -369,6 +341,6 @@ in
           UMask = "0027";
         };
       };
-    };
-  };
+    })
+  ];
 }
