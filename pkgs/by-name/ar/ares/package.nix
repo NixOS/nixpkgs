@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "144";
+  version = "145";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BpVyPdtsIUstLVf/HGO6vcAlLgJP5SgJbZtqEV/uJ2g=";
+    hash = "sha256-es+K5+qlK7FcJCFEIMcOsXCZSnoXEEmtS0yhpCvaILM";
   };
 
   nativeBuildInputs =
