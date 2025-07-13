@@ -3,43 +3,53 @@ import { execSync } from 'node:child_process'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { program } from 'commander'
 import { getOctokit } from '@actions/github'
-import labels from './labels.cjs'
 
-if (process.argv.length !== 4)
-  throw new Error('Call this with exactly three arguments: ./run OWNER REPO')
-const [, , owner, repo] = process.argv
+async function run(action, owner, repo) {
+  const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
 
-const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
+  const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
+  try {
+    process.env.GITHUB_WORKSPACE = tmp
+    process.chdir(tmp)
 
-const tmp = mkdtempSync(join(tmpdir(), 'labels-'))
-try {
-  process.env.GITHUB_WORKSPACE = tmp
-  process.chdir(tmp)
-
-  await labels({
-    github: getOctokit(token),
-    context: {
-      payload: {},
-      repo: {
-        owner,
-        repo,
+    await action({
+      github: getOctokit(token),
+      context: {
+        payload: {},
+        repo: {
+          owner,
+          repo,
+        },
       },
-    },
-    core: {
-      getInput() {
-        return token
+      core: {
+        getInput() {
+          return token
+        },
+        error: console.error,
+        info: console.log,
+        notice: console.log,
+        setFailed(msg) {
+          console.error(msg)
+          process.exitCode = 1
+        },
       },
-      error: console.error,
-      info: console.log,
-      notice: console.log,
-      setFailed(msg) {
-        console.error(msg)
-        process.exitCode = 1
-      },
-    },
-    dry: true,
-  })
-} finally {
-  rmSync(tmp, { recursive: true })
+      dry: true,
+    })
+  } finally {
+    rmSync(tmp, { recursive: true })
+  }
 }
+
+program
+  .command('labels')
+  .description('Manage labels on pull requests.')
+  .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
+  .action(async (owner, repo) => {
+    const labels = (await import('./labels.cjs')).default
+    run(labels, owner, repo)
+  })
+
+await program.parse()
