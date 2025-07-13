@@ -14539,4 +14539,17 @@ with pkgs;
   davis = callPackage ../by-name/da/davis/package.nix {
     php = php83; # https://github.com/tchapi/davis/issues/195
   };
+
+  gpac = callPackage ../by-name/gp/gpac/package.nix {
+    ffmpeg = ffmpeg.override {
+      version = "7.0.2";
+      hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
+      ffmpegVariant = "headless";
+    };
+  };
+
+  gpac_nightly = callPackage ../by-name/gp/gpac/package.nix {
+    ffmpeg = ffmpeg-headless;
+    releaseChannel = "nightly";
+  };
 }
