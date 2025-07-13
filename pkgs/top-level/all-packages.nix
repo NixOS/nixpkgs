@@ -4990,7 +4990,13 @@ with pkgs;
   flutter327 = flutterPackages.v3_27;
   flutter324 = flutterPackages.v3_24;
 
-  fpc = callPackage ../development/compilers/fpc { };
+  fpc = callPackage ../development/compilers/fpc {
+    # https://github.com/NixOS/nixpkgs/issues/416485
+    # TODO: remove when upstream issue is fixed:
+    # https://gitlab.com/freepascal.org/fpc/source/-/issues/41045
+    stdenv =
+      if stdenv.cc.isClang && stdenv.hostPlatform.isx86_64 then llvmPackages_17.stdenv else stdenv;
+  };
 
   gambit = callPackage ../development/compilers/gambit { };
   gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
