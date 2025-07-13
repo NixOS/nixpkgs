@@ -1004,6 +1004,26 @@ in
     };
   };
 
+  tmux-nvim = mkTmuxPlugin {
+    pluginName = "tmux-nvim";
+    rtpFilePath = "tmux.nvim.tmux";
+    version = "unstable-2025-07-13";
+    src = fetchFromGitHub {
+      owner = "aserowy";
+      repo = "tmux.nvim";
+      rev = "2c1c3be0ef287073cef963f2aefa31a15c8b9cd8";
+      hash = "sha256-/XIjqQr9loWVTXZDaZx2bSQgco46z7yam50dCnM5p1U=";
+    };
+
+    meta = {
+      homepage = "https://github.com/aserowy/tmux.nvim";
+      description = "tmux integration for nvim features pane movement and resizing from within nvim";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ vaavaav ];
+    };
+  };
+
   weather = mkTmuxPlugin {
     pluginName = "weather";
     rtpFilePath = "tmux-weather.tmux";
