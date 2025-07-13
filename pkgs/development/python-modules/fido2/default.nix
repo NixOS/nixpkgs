@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.2.0";
+  version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
+    hash = "sha256-MGHNBec7Og72r8O4A9V8gmqi1qlzLRar1ydzYfWOeWQ=";
   };
 
   build-system = [ poetry-core ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  pytestFlagsArray = [ "-v" "--no-device" ];
 
   pythonImportsCheck = [ "fido2" ];
 

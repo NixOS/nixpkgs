@@ -7,6 +7,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # build-time dependencies
   gettext,
@@ -17,6 +18,7 @@
 
   # optional-dependencies
   fido2,
+  oauthlib,
   python3-openid,
   python3-saml,
   requests,
@@ -40,7 +42,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.7.0";
+  version = "65.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,12 +51,15 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+    hash = "sha256-pwWrdWk3bARM4dKbEnUWXuyjw/rTcOjk3YXowDa+Hm8=";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     asgiref
@@ -66,6 +71,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    idp-oidc = [
+      oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
     mfa = [
       fido2
       qrcode
@@ -74,7 +83,7 @@ buildPythonPackage rec {
     saml = [ python3-saml ];
     socialaccount = [
       requests
-      requests-oauthlib
+      oauthlib
       pyjwt
     ] ++ pyjwt.optional-dependencies.crypto;
     steam = [ python3-openid ];
