@@ -15,6 +15,8 @@
   gtk4,
   gobject-introspection,
   gnome,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
   buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -71,10 +73,33 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      attrPath = "libglycin";
-      packageName = "glycin";
-    };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          attrPath = "libglycin";
+          packageName = "glycin";
+        };
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version libglycin --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = {
