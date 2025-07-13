@@ -87,10 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature pythonSupport "use-python")
   ];
 
-  preConfigure = lib.optionalString mysqlSupport ''
-    export CPPFLAGS="-I${lib.getDev libmysqlclient}/include/mysql"
-    export LDFLAGS="-L${libmysqlclient}/lib/mysql"
-  '';
+  preConfigure =
+    lib.optionalString mysqlSupport ''
+      export CPPFLAGS="-I${lib.getDev libmysqlclient}/include/mysql"
+      export LDFLAGS="-L${libmysqlclient}/lib/mysql"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export LDFLAGS="$LDFLAGS -L${libiconv}/lib -liconv"
+    '';
 
   installTargets = [
     "install-driver"
