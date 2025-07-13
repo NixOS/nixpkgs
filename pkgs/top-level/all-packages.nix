@@ -12042,11 +12042,7 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  dwm = callPackage ../applications/window-managers/dwm {
-    # dwm is configured entirely through source modification. Allow users to
-    # specify patches through nixpkgs.config.dwm.patches
-    patches = config.dwm.patches or [ ];
-  };
+  dwm = callPackage ../applications/window-managers/dwm { };
 
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];

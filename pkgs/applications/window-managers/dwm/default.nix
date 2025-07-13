@@ -7,8 +7,11 @@
   libXft,
   writeText,
   pkg-config,
-  patches ? [ ],
-  conf ? null,
+  # customization
+  config,
+  conf ? config.dwm.conf or null,
+  patches ? config.dwm.patches or [ ],
+  extraLibs ? config.dwm.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     libX11
     libXinerama
     libXft
-  ];
+  ] ++ extraLibs;
 
   prePatch = ''
     sed -i "s@/usr/local@$out@" config.mk
