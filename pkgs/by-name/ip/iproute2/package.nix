@@ -11,6 +11,7 @@
   elfutils,
   libmnl,
   libbpf,
+  python3,
   gitUpdater,
   pkgsStatic,
 }:
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
       db
       iptables
       libmnl
+      python3
     ]
     # needed to uploaded bpf programs
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
