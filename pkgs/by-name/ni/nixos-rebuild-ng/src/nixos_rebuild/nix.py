@@ -693,16 +693,26 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all_channels: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
     that has a `.update-on-nixos-rebuild` file) or all.
     """
+    if not sudo and os.geteuid() != 0:
+        raise NixOSRebuildError(
+            "if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+            "also pass '--sudo' or run the command as root (e.g., with sudo)"
+        )
+
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
             all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
-            run_wrapper(["nix-channel", "--update", channel_path.name], check=False)
+            run_wrapper(
+                ["nix-channel", "--update", channel_path.name],
+                check=False,
+                sudo=sudo,
+            )
