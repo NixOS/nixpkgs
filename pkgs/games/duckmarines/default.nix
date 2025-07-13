@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.0c";
 
   icon = fetchurl {
-    url = "http://tangramgames.dk/img/thumb/duckmarines.png";
+    url = "https://tangramgames.dk/img/thumb/duckmarines.png";
     sha256 = "07ypbwqcgqc5f117yxy9icix76wlybp1cmykc8f3ivdps66hl0k5";
   };
 

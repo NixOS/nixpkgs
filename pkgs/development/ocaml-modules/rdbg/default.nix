@@ -14,7 +14,7 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";
+    url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";
     hash = "sha512:6076eaa3608a313f8ac71a4f5aa4fcc64aeb0c646d581e5035110d4c80f94de34f2ba26f90a9a1e92a7f788c9e799f1f7b0e3728c853a21983ad732f0ee60352";
   };
 

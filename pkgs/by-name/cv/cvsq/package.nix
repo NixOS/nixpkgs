@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.11";
 
   src = fetchurl {
-    url = "http://www.linta.de/~aehlig/cvsq/cvsq-${version}.tgz";
+    url = "https://www.linta.de/~aehlig/cvsq/cvsq-${version}.tgz";
     sha256 = "0491k4skk3jyyd6plp2kcihmxxav9rsch7vd1yi697m2fqckp5ws";
   };
 

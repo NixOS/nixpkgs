@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   version = "unstable-2007-04-18";
 
   src = fetchurl {
-    url = "http://www.pabr.org/sixlinux/sixpair.c";
+    url = "https://www.pabr.org/sixlinux/sixpair.c";
     sha256 = "1b0a3k7gs544cbji7n29jxlrsscwfx6s1r2sgwdl6hmkc1l9gagr";
   };
 

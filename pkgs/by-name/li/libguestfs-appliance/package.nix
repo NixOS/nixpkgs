@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.54.0";
 
   src = fetchurl {
-    url = "http://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
+    url = "https://download.libguestfs.org/binaries/appliance/appliance-${version}.tar.xz";
     hash = "sha256-D7f4Cnjx+OmLfqQWmauyXZiSjayG9TCmxftj0iOPFso=";
   };
 

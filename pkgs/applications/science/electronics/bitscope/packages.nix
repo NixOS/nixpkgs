@@ -21,7 +21,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "08mc82pjamyyyhh15sagsv0sc7yx5v5n54bg60fpj7v41wdwrzxw";
       };
     };
@@ -40,7 +40,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "00b4gxwz7w6pmfrcz14326b24kl44hp0gzzqcqxwi5vws3f0y49d";
       };
     };
@@ -59,7 +59,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "05xr5mnka1v3ibcasg74kmj6nlv1nmn3lca1wv77whkq85cmz0s1";
       };
     };
@@ -78,7 +78,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "0fc6crfkprj78dxxhvhbn1dx1db5chm0cpwlqpqv8sz6whp12mcj";
       };
     };
@@ -97,7 +97,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "0lkb7z9gfkiyxdwh4dq1zxfls8gzdw0na1vrrbgnxfg3klv4xns3";
       };
     };
@@ -116,7 +116,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "0nirbci6ymhk4h4bck2s4wbsl5r9yndk2jvvv72zwkg21248mnbp";
       };
     };
@@ -138,7 +138,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "1ybjfbh3narn29ll4nci4b7rnxy0hj3wdfm4v8c6pjr8pfvv9spy";
       };
     };
@@ -157,7 +157,7 @@ in
       };
 
       src = fetchurl {
-        url = "http://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
+        url = "https://bitscope.com/download/files/${toolName}_${version}_amd64.deb";
         sha256 = "1079n7msq6ks0n4aasx40rd4q99w8j9hcsaci71nd2im2jvjpw9a";
       };
     };

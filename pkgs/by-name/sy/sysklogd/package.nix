@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "http://www.infodrom.org/projects/sysklogd/download/sysklogd-${version}.tar.gz";
+    url = "https://www.infodrom.org/projects/sysklogd/download/sysklogd-${version}.tar.gz";
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 

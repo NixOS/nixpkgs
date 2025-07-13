@@ -12,12 +12,12 @@ gccStdenv.mkDerivation (finalAttrs: {
   debianrev = "28";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/a/arj/arj_${finalAttrs.version}.orig.tar.gz";
+    url = "https://deb.debian.org/debian/pool/main/a/arj/arj_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-WJ5Mm8zIZp57bY1vzWTgH2osIf4QqtVqgzBOzDuWp9s=";
   };
 
   versionPatch = fetchzip {
-    url = "http://deb.debian.org/debian/pool/main/a/arj/arj_${finalAttrs.version}-${finalAttrs.debianrev}.debian.tar.xz";
+    url = "https://deb.debian.org/debian/pool/main/a/arj/arj_${finalAttrs.version}-${finalAttrs.debianrev}.debian.tar.xz";
     hash = "sha256-rmu5RSZ6OHGT093PShzkvC3ktm/U6smta6pmn9D7Jfw=";
   };
 

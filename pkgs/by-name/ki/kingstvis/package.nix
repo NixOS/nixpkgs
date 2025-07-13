@@ -16,7 +16,7 @@ let
   pname = "kingstvis";
   version = "3.6.1";
   src = fetchzip {
-    url = "http://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
+    url = "https://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
     hash = "sha256-eZJ3RZWdmNx/El3Hh5kUf44pIwdvwOEkRysYBgUkS18=";
   };
 in

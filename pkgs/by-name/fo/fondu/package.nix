@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "fondu";
 
   src = fetchurl {
-    url = "http://fondu.sourceforge.net/fondu_src-${version}.tgz";
+    url = "https://fondu.sourceforge.net/fondu_src-${version}.tgz";
     sha256 = "152prqad9jszjmm4wwqrq83zk13ypsz09n02nrk1gg0fcxfm7fr2";
   };
 

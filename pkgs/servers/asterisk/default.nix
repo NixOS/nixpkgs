@@ -173,7 +173,7 @@ let
     };
 
   mp3-202 = fetchsvn {
-    url = "http://svn.digium.com/svn/thirdparty/mp3/trunk";
+    url = "https://svn.digium.com/svn/thirdparty/mp3/trunk";
     rev = "202";
     sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "stacks";
   version = "2.68";
   src = fetchurl {
-    url = "http://catchenlab.life.illinois.edu/stacks/source/${pname}-${version}.tar.gz";
+    url = "https://catchenlab.life.illinois.edu/stacks/source/${pname}-${version}.tar.gz";
     sha256 = "sha256-ncUeo1bWDrRVewstGohUqvrkkq7Yf5dOAknMCapedlA=";
   };
 

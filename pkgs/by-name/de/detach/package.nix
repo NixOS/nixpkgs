@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.2.3";
 
   src = fetchzip {
-    url = "http://inglorion.net/download/detach-${version}.tar.bz2";
+    url = "https://inglorion.net/download/detach-${version}.tar.bz2";
     hash = "sha256-nnhJGtmPlTeqM20FAKRyhhSMViTXFpQT0A1ol4lhsoc=";
   };
 

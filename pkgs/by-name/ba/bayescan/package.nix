@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "http://cmpg.unibe.ch/software/BayeScan/files/BayeScan${version}.zip";
+    url = "https://cmpg.unibe.ch/software/BayeScan/files/BayeScan${version}.zip";
     sha256 = "0ismima8j8z0zj9yc267rpf7z90w57b2pbqzjnayhc3ab8mcbfy6";
   };
 

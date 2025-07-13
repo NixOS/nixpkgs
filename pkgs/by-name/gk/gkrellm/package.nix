@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.0";
 
   src = fetchurl {
-    url = "http://gkrellm.srcbox.net/releases/gkrellm-${finalAttrs.version}.tar.bz2";
+    url = "https://gkrellm.srcbox.net/releases/gkrellm-${finalAttrs.version}.tar.bz2";
     hash = "sha256-b4NmV2C5Nq1LVfkYKx7HYB+vOKDyXqHkvdyZZQiPAy0=";
   };
 

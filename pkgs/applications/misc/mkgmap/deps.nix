@@ -1,11 +1,11 @@
 { fetchurl }:
 {
   fastutil = fetchurl {
-    url = "http://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
+    url = "https://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
     sha256 = "0d88m0rpi69wgxhnj5zh924q4zsvxq8m4ybk7m9mr3gz1hx0yx8c";
   };
   osmpbf = fetchurl {
-    url = "http://ivy.mkgmap.org.uk/repo/crosby/osmpbf/1.3.3/jars/osmpbf.jar";
+    url = "https://ivy.mkgmap.org.uk/repo/crosby/osmpbf/1.3.3/jars/osmpbf.jar";
     sha256 = "0zb4pqkwly5z30ww66qhhasdhdrzwmrw00347yrbgyk2ii4wjad3";
   };
   protobuf = fetchurl {

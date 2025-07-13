@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://pyropus.ca/software/memtester/old-versions/memtester-${version}.tar.gz";
+    url = "https://pyropus.ca/software/memtester/old-versions/memtester-${version}.tar.gz";
     sha256 = "sha256-5CfeZj970i0evuivElBqhSwBC9T8vKHg5rApctKYtbs=";
   };
 

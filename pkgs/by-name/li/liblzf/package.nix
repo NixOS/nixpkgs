@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.6";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/liblzf/liblzf-${finalAttrs.version}.tar.gz";
+    url = "https://dist.schmorp.de/liblzf/liblzf-${finalAttrs.version}.tar.gz";
     hash = "sha256-nF3gH3ucyuQMP2GdJqer7JmGwGw20mDBec7dBLiftGo=";
   };
 

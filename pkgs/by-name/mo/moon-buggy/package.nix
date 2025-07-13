@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://m.seehuhn.de/programs/moon-buggy-${version}.tar.gz";
+    url = "https://m.seehuhn.de/programs/moon-buggy-${version}.tar.gz";
     sha256 = "0gyjwlpx0sd728dwwi7pwks4zfdy9rm1w1xbhwg6zip4r9nc2b9m";
   };
 
