@@ -838,15 +838,19 @@ def test_switch_to_configuration_with_systemd_run(
 @patch("pathlib.Path.is_dir", autospec=True, return_value=True)
 def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(False)
-    mock_run.assert_called_once_with(["nix-channel", "--update", "nixos"], check=False)
+        n.upgrade_channels(all_channels=False, sudo=True)
+    mock_run.assert_called_once_with(
+        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+    )
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(True)
+        n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False),
-            call(["nix-channel", "--update", "nixos-hardware"], check=False),
-            call(["nix-channel", "--update", "home-manager"], check=False),
+            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
+            call(
+                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
+            ),
+            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
         ]
     )
