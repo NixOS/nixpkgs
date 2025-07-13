@@ -116,7 +116,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preInstall = "pushd src-tauri";
 
-  postInstall = "popd";
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/bin
+      makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
+    ''
+    + ''
+      popd
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
@@ -132,7 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/mountain-loop/yaak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ redyf ];
-    mainProgram = "yaak";
+    mainProgram = "yaak-app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
