@@ -532,7 +532,9 @@ buildPythonPackage rec {
       blas
       blas.provider
     ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+    # Including openmp leads to two copies being used. This segfaults on ARM.
+    # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
+    # ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isAarch64) [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport (
       with cudaPackages;
       [
