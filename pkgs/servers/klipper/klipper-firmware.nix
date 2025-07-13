@@ -33,7 +33,14 @@ stdenv.mkDerivation rec {
     wxGTK32 # Required for bossac
   ];
 
-  preBuild = "cp ${firmwareConfig} ./.config";
+  configurePhase = ''
+    cp ${firmwareConfig} ./.config
+    chmod +w ./.config
+    echo qy | { make menuconfig >/dev/null || true; }
+    if ! diff ${firmwareConfig} ./.config; then
+      echo " !!! Menuconfig has changed. Please update your configuration."
+    fi
+  '';
 
   postPatch = ''
     patchShebangs .
@@ -41,7 +48,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "V=1"
-    "KCONFIG_CONFIG=${firmwareConfig}"
     "WXVERSION=3.2"
   ];
 
@@ -58,7 +64,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (klipper.meta) homepage license;
     description = "Firmware part of Klipper";
-    maintainers = with maintainers; [ vtuan10 ];
+    maintainers = with maintainers; [ vtuan10 cab404 ];
     platforms = platforms.linux;
   };
 }
