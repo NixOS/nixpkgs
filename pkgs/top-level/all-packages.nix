@@ -12042,8 +12042,6 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  dwm = callPackage ../applications/window-managers/dwm { };
-
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];
   };
