@@ -21766,6 +21766,18 @@
     githubId = 10631029;
     name = "Richard Ipsum";
   };
+  richardjacton = {
+    email = "richardjacton@richardjacton.net";
+    github = "richardjacton";
+    githubId = 6893043;
+    name = "Richard J. Acton";
+    matrix = "@richardjacton:matrix.org";
+    keys = [
+      {
+        fingerprint = "5EE1 1764 8462 E5A3 610C  1964 8E5D EFCF C330 7916";
+      }
+    ];
+  };
   richiejp = {
     email = "io@richiejp.com";
     github = "richiejp";
