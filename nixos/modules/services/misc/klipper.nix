@@ -187,10 +187,7 @@ in
           + lib.optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}";
         printerConfig =
           if cfg.settings != null then
-            pkgs.concatText "klipper.cfg" [
-              (format.generate "klipper.cfg" cfg.settings)
-              (pkgs.writeText "klipper-extra.cfg" cfg.extraSettings)
-            ]
+              builtins.toFile "klipper.cfg" ((format.generate "" cfg.settings).text + cfg.extraSettings)
           else
             cfg.configFile;
       in
