@@ -10,4 +10,4 @@ To run any of the scripts locally:
 
 ## Labeler
 
-Run `./run.js OWNER REPO`, where OWNER is your username or "NixOS" and REPO the name of your fork or "nixpkgs".
+Run `./run.js labels OWNER REPO`, where OWNER is your username or "NixOS" and REPO the name of your fork or "nixpkgs".
