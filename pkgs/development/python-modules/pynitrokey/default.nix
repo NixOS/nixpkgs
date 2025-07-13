@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   installShellFiles,
   libnitrokey,
-  flit-core,
+  poetry-core,
   certifi,
   cffi,
   click,
@@ -30,7 +31,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.8.5";
+  version = "0.9.0";
   mainProgram = "nitropy";
 in
 
@@ -40,12 +41,14 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPhH4IdpKKA9d8sJOGMWpGerzki5qZHFHe4u4ao2RgE=";
+    hash = "sha256-sRyJuyBSJdl+8DJKvhXsy1i8OzHRA7OtNn3KCM+dxuc=";
   };
+
+  disabled = pythonOlder "3.10";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     certifi
@@ -72,9 +75,6 @@ buildPythonPackage {
   ];
 
   pythonRelaxDeps = true;
-
-  # pythonRelaxDepsHook runs in postBuild so cannot be used
-  pypaBuildFlags = [ "--skip-dependency-check" ];
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
