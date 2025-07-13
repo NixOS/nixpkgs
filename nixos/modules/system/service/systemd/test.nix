@@ -11,14 +11,17 @@
 let
   machine = evalSystem (
     { lib, ... }:
+    let
+      hello' = lib.getExe hello;
+    in
     {
 
       # Test input
 
       system.services.foo = {
         process = {
-          executable = hello;
-          args = [
+          argv = [
+            hello'
             "--greeting"
             "hoi"
           ];
@@ -26,8 +29,8 @@ let
       };
       system.services.bar = {
         process = {
-          executable = hello;
-          args = [
+          argv = [
+            hello'
             "--greeting"
             "hoi"
           ];
@@ -37,8 +40,8 @@ let
         };
         services.db = {
           process = {
-            executable = hello;
-            args = [
+            argv = [
+              hello'
               "--greeting"
               "Hi, I'm a database, would you believe it"
             ];
@@ -72,12 +75,12 @@ runCommand "test-modular-service-systemd-units"
     cat -n ${toplevel}/etc/systemd/system/foo.service
     (
       set -x
-      grep -F 'ExecStart=${hello}/bin/hello --greeting hoi' ${toplevel}/etc/systemd/system/foo.service >/dev/null
+      grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "hoi"' ${toplevel}/etc/systemd/system/foo.service >/dev/null
 
-      grep -F 'ExecStart=${hello}/bin/hello --greeting hoi' ${toplevel}/etc/systemd/system/bar.service >/dev/null
+      grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "hoi"' ${toplevel}/etc/systemd/system/bar.service >/dev/null
       grep -F 'X-Bar=lol crossbar whatever' ${toplevel}/etc/systemd/system/bar.service >/dev/null
 
-      grep    'ExecStart=${hello}/bin/hello --greeting .*database.*' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
+      grep    'ExecStart="${hello}/bin/hello" "--greeting" ".*database.*"' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
       grep -F 'RestartSec=42' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
 
       [[ ! -e ${toplevel}/etc/systemd/system/foo.socket ]]
