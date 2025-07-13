@@ -24,6 +24,12 @@
       path = ../12;
     }
   ];
+  "clang/macro_file_mangling.patch" = [
+    {
+      after = "19";
+      path = ../20;
+    }
+  ];
   "clang/aarch64-tblgen.patch" = [
     {
       after = "17";
