@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -253,6 +254,8 @@ in
       };
     };
 
+    environment.etc."postsrsd.conf".source = configFile;
+
     systemd.services.postsrsd = {
       description = "PostSRSd SRS rewriting server";
       after = [
@@ -262,21 +265,109 @@ in
       before = [ "postfix.service" ];
       wantedBy = [ "multi-user.target" ];
       requires = [ "postsrsd-generate-secrets.service" ];
+      restartTriggers = [ configFile ];
 
       serviceConfig = {
-        ExecStart = "${lib.getExe pkgs.postsrsd} -C ${configFile}";
+        ExecStart = toString [
+          (lib.getExe pkgs.postsrsd)
+          "-C"
+          "/etc/postsrsd.conf"
+        ];
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = "postsrsd";
+        RuntimeDirectoryMode = "0750";
         LoadCredential = "secrets-file:${cfg.secretsFile}";
 
+        CapabilityBoundingSet = [ "" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
+        PrivateNetwork = lib.hasPrefix "unix:" cfg.settings.socketmap;
         PrivateTmp = true;
         PrivateUsers = true;
         ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RemoveIPC = true;
+        RestrictAddressFamilies =
+          if lib.hasPrefix "unix:" cfg.settings.socketmap then
+            [ "AF_UNIX" ]
+          else
+            [
+              "AF_INET"
+              "AF_INET6"
+            ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
+        UMask = "0027";
+        before = [ "postfix.service" ];
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "postsrsd-generate-secrets.service" ];
+        restartTriggers = [ configFile ];
+        serviceConfig = {
+          ExecStart = utils.escapeSystemdExecArgs [
+            (lib.getExe cfg.package)
+            "-C"
+            "/etc/postsrsd.conf"
+          ];
+          User = cfg.user;
+          Group = cfg.group;
+          RuntimeDirectory = "postsrsd";
+          RuntimeDirectoryMode = "0750";
+          LoadCredential = "secrets-file:${cfg.secretsFile}";
+
+          CapabilityBoundingSet = [ "" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateNetwork = lib.hasPrefix "unix:" cfg.settings.socketmap;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RemoveIPC = true;
+          RestrictAddressFamilies =
+            if lib.hasPrefix "unix:" cfg.settings.socketmap then
+              [ "AF_UNIX" ]
+            else
+              [
+                "AF_INET"
+                "AF_INET6"
+              ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          UMask = "0027";
+        };
       };
     };
   };
