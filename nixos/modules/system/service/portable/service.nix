@@ -7,18 +7,6 @@
 let
   inherit (lib) mkOption types;
   pathOrStr = types.coercedTo types.path (x: "${x}") types.str;
-  program =
-    types.coercedTo (
-      types.package
-      // {
-        # require mainProgram for this conversion
-        check = v: v.type or null == "derivation" && v ? meta.mainProgram;
-      }
-    ) lib.getExe pathOrStr
-    // {
-      description = "main program, path or command";
-      descriptionClass = "conjunction";
-    };
 in
 {
   # https://nixos.org/manual/nixos/unstable/#modular-services
@@ -45,18 +33,15 @@ in
       visible = "shallow";
     };
     process = {
-      executable = mkOption {
-        type = program;
-        description = ''
-          The path to the executable that will be run when the service is started.
-        '';
-      };
-      args = lib.mkOption {
+      argv = lib.mkOption {
         type = types.listOf pathOrStr;
+        example = lib.literalExpression ''[ (lib.getExe config.package) "--nobackground" ]'';
         description = ''
-          Arguments to pass to the `executable`.
+          Command filename and arguments for starting this service.
+          This is a raw command-line that should not contain any shell escaping.
+          If expansion of environmental variables is required then use
+          a shell script or `importas` from `pkgs.execline`.
         '';
-        default = [ ];
       };
     };
   };

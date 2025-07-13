@@ -20,8 +20,10 @@ let
     services = {
       service1 = {
         process = {
-          executable = "/usr/bin/echo"; # *giggles*
-          args = [ "hello" ];
+          argv = [
+            "/usr/bin/echo" # *giggles*
+            "hello"
+          ];
         };
         assertions = [
           {
@@ -37,21 +39,27 @@ let
         process = {
           # No meta.mainProgram, because it's supposedly an executable script _file_,
           # not a directory with a bin directory containing the main program.
-          executable = dummyPkg "cowsay.sh";
-          args = [ "world" ];
+          argv = [
+            (dummyPkg "cowsay.sh")
+            "world"
+          ];
         };
       };
       service3 = {
         process = {
-          executable = "/bin/false";
-          args = [ ];
+          argv = [ "/bin/false" ];
         };
         services.exclacow = {
           process = {
-            executable = dummyPkg "cowsay-ng" // {
-              meta.mainProgram = "cowsay";
-            };
-            args = [ "!" ];
+            argv = [
+              (lib.getExe (
+                dummyPkg "cowsay-ng"
+                // {
+                  meta.mainProgram = "cowsay";
+                }
+              ))
+              "!"
+            ];
           };
           assertions = [
             {
@@ -91,8 +99,10 @@ let
         services = {
           service1 = {
             process = {
-              executable = "/usr/bin/echo";
-              args = [ "hello" ];
+              argv = [
+                "/usr/bin/echo"
+                "hello"
+              ];
             };
             services = { };
             assertions = [
@@ -107,8 +117,10 @@ let
           };
           service2 = {
             process = {
-              executable = "${dummyPkg "cowsay.sh"}";
-              args = [ "world" ];
+              argv = [
+                "${dummyPkg "cowsay.sh"}"
+                "world"
+              ];
             };
             services = { };
             assertions = [ ];
@@ -116,13 +128,14 @@ let
           };
           service3 = {
             process = {
-              executable = "/bin/false";
-              args = [ ];
+              argv = [ "/bin/false" ];
             };
             services.exclacow = {
               process = {
-                executable = "${dummyPkg "cowsay-ng"}/bin/cowsay";
-                args = [ "!" ];
+                argv = [
+                  "${dummyPkg "cowsay-ng"}/bin/cowsay"
+                  "!"
+                ];
               };
               services = { };
               assertions = [

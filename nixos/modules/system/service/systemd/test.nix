@@ -11,14 +11,17 @@
 let
   machine = evalSystem (
     { lib, ... }:
+    let
+      hello' = lib.getExe hello;
+    in
     {
 
       # Test input
 
       system.services.foo = {
         process = {
-          executable = hello;
-          args = [
+          argv = [
+            hello'
             "--greeting"
             "hoi"
           ];
@@ -26,8 +29,8 @@ let
       };
       system.services.bar = {
         process = {
-          executable = hello;
-          args = [
+          argv = [
+            hello'
             "--greeting"
             "hoi"
           ];
@@ -37,8 +40,8 @@ let
         };
         services.db = {
           process = {
-            executable = hello;
-            args = [
+            argv = [
+              hello'
               "--greeting"
               "Hi, I'm a database, would you believe it"
             ];
