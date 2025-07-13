@@ -13256,6 +13256,12 @@
     githubId = 464625;
     name = "Enric Morales";
   };
+  kilian = {
+    email = "kilian@kilianvalkhof.com";
+    github = "kilian";
+    githubId = 41970;
+    name = "Kilian Valkhof";
+  };
   kilianar = {
     email = "mail@kilianar.de";
     github = "kilianar";
@@ -17087,6 +17093,12 @@
     github = "mrtnvgr";
     githubId = 48406064;
     keys = [ { fingerprint = "6FAD DB43 D5A5 FE52 6835  0943 5B33 79E9 81EF 48B1"; } ];
+  };
+  mrtrimble = {
+    name = "Ryan Trimble";
+    email = "mrtrimble2@gmail.com";
+    github = "mrtrimble";
+    githubId = 5217768;
   };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";
