@@ -4,12 +4,10 @@
   fetchFromGitHub,
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Vimjas";
@@ -18,18 +16,18 @@ buildPythonApplication rec {
     hash = "sha256-A0yXDkB/b9kEEXSoLeqVdmdm4p2PYL2QHqbF4FgAn30=";
   };
 
-  # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
-  disabled = !pythonAtLeast "3.5";
+  build-system = with python3Packages; [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
-  ];
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     ansicolor
     chardet
     pyyaml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   preCheck = ''
