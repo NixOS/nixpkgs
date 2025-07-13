@@ -41,17 +41,27 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp cubiomes-viewer $out/bin
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p "$out/Applications/"
+          cp -R cubiomes-viewer.app "$out/Applications/cubiomes-viewer.app"
+          ln -s "$out/Applications/cubiomes-viewer.app/Contents/MacOS/cubiomes-viewer" "$out/bin/cubiomes-viewer"
+        ''
+      else
+        ''
+          cp cubiomes-viewer $out/bin
 
-    mkdir -p $out/share/{pixmaps,applications}
-    cp rc/icons/map.png $out/share/pixmaps/com.github.cubitect.cubiomes-viewer.png
-    cp etc/com.github.cubitect.cubiomes-viewer.desktop $out/share/applications
+          mkdir -p $out/share/{pixmaps,applications}
+          cp rc/icons/map.png $out/share/pixmaps/com.github.cubitect.cubiomes-viewer.png
+          cp etc/com.github.cubitect.cubiomes-viewer.desktop $out/share/applications
+        ''
+    }
 
     runHook postInstall
   '';
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/Cubitect/cubiomes-viewer";
     description = "Graphical Minecraft seed finder and map viewer";
     mainProgram = "cubiomes-viewer";
