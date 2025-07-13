@@ -21,17 +21,28 @@ let
 
   cfg = config.services.openafsClient;
 
-  cellServDB = pkgs.fetchurl {
-    url = "http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14";
-    sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
-  };
-
   clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellServDB);
+
+  cellServDB =
+    let
+      localCells = builtins.attrNames cfg.cellServDB;
+      localCellsRegex = lib.concatMapStringsSep "\\|" (lib.replaceStrings [ "." ] [ "\\." ]) localCells;
+      sedExpr = '':x /^>\(${localCellsRegex}\) / { n; :y /^>/! { n; by }; bx }; p'';
+      globalCommand =
+        if cfg.cellServDB != { } then
+          ''sed -n -e ${lib.escapeShellArg sedExpr} ${cfg.globalCellServDBFile}''
+        else
+          ''cat ${cfg.globalCellServDBFile}'';
+    in
+    pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
+      ${lib.optionalString (cfg.globalCellServDBFile != null) ''${globalCommand} > $out''}
+      cat ${clientServDB} >> $out
+    '';
 
   afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
     mkdir -p $out
     echo ${cfg.cellName} > $out/ThisCell
-    cat ${cellServDB} ${clientServDB} > $out/CellServDB
+    cp ${cellServDB} $out/CellServDB
     echo "${cfg.mountPoint}:${cfg.cache.directory}:${toString cfg.cache.blocks}" > $out/cacheinfo
   '';
 
@@ -60,6 +71,20 @@ in
         type = types.str;
         description = "Cell name.";
         example = "grand.central.org";
+      };
+
+      globalCellServDBFile = mkOption {
+        default = pkgs.fetchurl {
+          url = "http://dl.central.org/dl/cellservdb/CellServDB.2023-10-31";
+          sha256 = "sha256-fuVHhTJI5FNwObBkAoTMZvZwVY4YEMTJX8fLpOVkQsU=";
+        };
+        type = types.nullOr types.pathInStore;
+        description = ''
+          Global CellServDB file to be deployed. Set to `null` to only deploy the
+          cells in `cellServDB`. Any cells defined in `cellServDB` will override
+          cells in the global file.
+        '';
+        example = lib.literalExpression "./CellServDB";
       };
 
       cellServDB = mkOption {
@@ -219,9 +244,7 @@ in
 
     environment.etc = {
       clientCellServDB = {
-        source = pkgs.runCommand "CellServDB" { preferLocalBuild = true; } ''
-          cat ${cellServDB} ${clientServDB} > $out
-        '';
+        source = cellServDB;
         target = "openafs/CellServDB";
         mode = "0644";
       };
