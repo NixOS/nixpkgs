@@ -67,10 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p CryptoPkg/Library/OpensslLib/openssl
       (
       cd CryptoPkg/Library/OpensslLib/openssl
-      tar --strip-components=1 -xf ${buildPackages.openssl.src}
+      tar --strip-components=1 -xf ${buildPackages.openssl_3.src}
 
       # Apply OpenSSL patches.
-      ${lib.pipe buildPackages.openssl.patches [
+      ${lib.pipe buildPackages.openssl_3.patches [
         (builtins.filter (
           patch:
           !builtins.elem (baseNameOf patch) [
