@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "systemd-wait";
   version = "0.1+2018-10-05";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stebalien";
@@ -16,7 +16,9 @@ python3Packages.buildPythonApplication {
     sha256 = "1l8rd0wzf3m7fk0g1c8wc0csdisdfac0filhixpgp0ck9ignayq5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     dbus-python
     pygobject3
   ];
