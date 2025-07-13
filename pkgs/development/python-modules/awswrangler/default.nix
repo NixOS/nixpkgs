@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "awswrangler" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Subset of tests that run in upstream CI (many others require credentials)
     # https://github.com/aws/aws-sdk-pandas/blob/20fec775515e9e256e8cee5aee12966516608840/.github/workflows/minimal-tests.yml#L36-L43
     "tests/unit/test_metadata.py"

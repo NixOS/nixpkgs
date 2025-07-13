@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''

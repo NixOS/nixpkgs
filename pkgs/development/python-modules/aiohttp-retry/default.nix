@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_retry" ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   meta = with lib; {
     description = "Retry client for aiohttp";

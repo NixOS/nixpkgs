@@ -28,7 +28,7 @@
   importlib-resources,
   pyparsing,
   pytest-responses,
-  nettools,
+  net-tools,
 }:
 
 buildPythonPackage rec {
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     pytest-responses
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ net-tools ];
 
   disabledTestPaths = [
     # require networking

@@ -131,7 +131,7 @@ buildPythonPackage rec {
     # Too many floating point arithmetic errors
     "test/visual/mpl/circuit/test_circuit_matplotlib_drawer.py"
   ];
-  pytestFlagsArray = [ "--durations=10" ];
+  pytestFlags = [ "--durations=10" ];
   disabledTests =
     [
       "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure

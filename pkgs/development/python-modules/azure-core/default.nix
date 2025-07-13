@@ -62,7 +62,7 @@ buildPythonPackage rec {
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   # disable tests which touch network
   disabledTests = [

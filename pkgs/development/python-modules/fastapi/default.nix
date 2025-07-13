@@ -116,11 +116,11 @@ buildPythonPackage rec {
     ++ passlib.optional-dependencies.bcrypt
     ++ optional-dependencies.all;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
-    "-W ignore::DeprecationWarning"
-    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::DeprecationWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   disabledTests = [

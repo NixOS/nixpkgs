@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hmmlearn" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "hmmlearn"
   ];

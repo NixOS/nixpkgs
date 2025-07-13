@@ -268,7 +268,7 @@ python.pkgs.buildPythonApplication rec {
   # manually managed in postPatch
   dontUsePytestXdist = false;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "src"
   ];
 

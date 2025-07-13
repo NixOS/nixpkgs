@@ -17,7 +17,6 @@
   coreutils,
   curl, # Preferred to using the Perl HTTP libs - according to hw-probe.
   dmidecode,
-  edid-decode,
   gnugrep,
   gnutar,
   hwinfo,
@@ -27,6 +26,7 @@
   perl,
   smartmontools,
   usbutils,
+  v4l-utils,
   xz,
 
   # Conditionally recommended
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
         smartmontools
         pciutils
         usbutils
-        edid-decode
         iproute2 # (ip)
         coreutils # (sort)
         gnugrep
         curl
         gnutar
+        v4l-utils
         xz
         kmod # (lsmod)
       ];

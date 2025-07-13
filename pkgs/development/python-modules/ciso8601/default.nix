@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   pythonImportsCheck = [ "ciso8601" ];
 

@@ -70,9 +70,8 @@ buildPythonPackage rec {
         wheel
       ];
 
-      pytestFlagsArray = [
-        "-W"
-        "ignore::DeprecationWarning"
+      pytestFlags = [
+        "-Wignore::DeprecationWarning"
       ];
 
       __darwinAllowLocalNetworking = true;

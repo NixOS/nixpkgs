@@ -67,6 +67,11 @@ buildPythonPackage rec {
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # AttributeError: <asgiref.local._CVar object at 0x7ffff57ed950> object has no attribute 'default'
     "test_delete_pattern_with_settings_default_scan_count"

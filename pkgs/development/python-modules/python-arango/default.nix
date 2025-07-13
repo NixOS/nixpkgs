@@ -98,15 +98,11 @@ buildPythonPackage rec {
       --foxx.api=false &
   '';
 
-  pytestFlagsArray = [
-    "--host"
-    testDBOpts.host
-    "--port"
-    testDBOpts.port
-    "--passwd"
-    testDBOpts.password
-    "--secret"
-    testDBOpts.secret
+  pytestFlags = [
+    "--host=${testDBOpts.host}"
+    "--port=${testDBOpts.port}"
+    "--passwd=${testDBOpts.password}"
+    "--secret=${testDBOpts.secret}"
   ];
 
   disabledTests = [

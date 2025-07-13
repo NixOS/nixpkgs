@@ -42,7 +42,7 @@ buildPythonPackage rec {
     docker-compose
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langgraph_cli" ];
 

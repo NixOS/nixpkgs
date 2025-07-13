@@ -1,13 +1,21 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 with haskellLib;
 
 let
   inherit (pkgs) lib;
 
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc910.${pkg.pname} may no longer be needed" pkg;
+
 in
 
-self: super: {
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries
@@ -68,11 +76,12 @@ self: super: {
   extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   fourmolu = doDistribute self.fourmolu_0_16_0_0;
   # https://github.com/digital-asset/ghc-lib/issues/600
-  ghc-lib = doDistribute (doJailbreak self.ghc-lib_9_10_2_20250503);
-  ghc-lib-parser = doDistribute (doJailbreak self.ghc-lib-parser_9_10_2_20250503);
+  ghc-lib = doDistribute self.ghc-lib_9_10_2_20250515;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_2_20250515;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   htree = doDistribute self.htree_0_2_0_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
+  stylish-haskell = doDistribute self.stylish-haskell_0_15_0_1;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
@@ -88,7 +97,6 @@ self: super: {
   #
   # Jailbreaks
   #
-  base64 = doJailbreak super.base64; # base <4.20
   # 2025-04-09: base <4.20, containers <0.7, filepath <1.5, Cabal-syntax <3.11
   cabal-install-parsers =
     assert super.cabal-install-parsers.version == "0.6.1.1";
@@ -98,15 +106,8 @@ self: super: {
   haddock-library =
     assert super.haddock-library.version == "1.11.0";
     doJailbreak super.haddock-library;
-  spdx = doJailbreak super.spdx; # Cabal-syntax < 3.13
-  tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
-  tree-diff = doJailbreak super.tree-diff; # base <4.20
+  large-generics = doJailbreak super.large-generics; # base <4.20
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
-  time-compat = doJailbreak super.time-compat; # base <4.20
-  # https://github.com/haskell-party/feed/issues/73
-  feed = doJailbreak super.feed; # base
-
-  bitvec = doJailbreak super.bitvec; # primitive <0.9
 
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
 
@@ -118,17 +119,11 @@ self: super: {
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
-  haskell-language-server = disableCabalFlag "retrie" (
-    disableCabalFlag "hlint" (
-      disableCabalFlag "stylishhaskel" (
-        super.haskell-language-server.override {
-          stylish-haskell = null;
-          retrie = null;
-          apply-refact = null;
-          hlint = null;
-        }
-      )
-    )
-  );
+  haskell-language-server = super.haskell-language-server.override {
+    floskell = null;
+    retrie = null;
+    hlint = null;
+    apply-refact = null;
+  };
 
 }

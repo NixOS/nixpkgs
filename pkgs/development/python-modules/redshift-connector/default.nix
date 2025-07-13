@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   # integration tests require a Redshift cluster
-  pytestFlagsArray = [ "test/unit" ];
+  enabledTestPaths = [ "test/unit" ];
 
   __darwinAllowLocalNetworking = true; # required for tests
 

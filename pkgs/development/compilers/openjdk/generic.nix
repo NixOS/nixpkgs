@@ -428,6 +428,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = if atLeast17 then [ "images" ] else [ "all" ];
 
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   # -j flag is explicitly rejected by the build system:
   #     Error: 'make -jN' is not supported, use 'make JOBS=N'
