@@ -235,7 +235,7 @@ module.exports = async function ({ github, context, core, dry }) {
 
       const itemLabels = {}
 
-      if (item.pull_request) {
+      if (item.pull_request || context.payload.pull_request) {
         stats.prs++
         Object.assign(itemLabels, await handlePullRequest(item))
       } else {
