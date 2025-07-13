@@ -58,7 +58,7 @@ let
     changelog = "https://mochi.cards/changelog.html";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ poopsicles ];
+    maintainers = with lib.maintainers; [ dibenzepin ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
