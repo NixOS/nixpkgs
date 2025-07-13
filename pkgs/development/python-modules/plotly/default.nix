@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.1.2";
+  version = "6.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-+vIq//pDLaaTmRGW+oytho3TfMmLCtuIoHeFenLVcek=";
+    hash = "sha256-Vfj5jG0AkBjivExOx7oMoocTopWl0yMc1INpEbtlgTc=";
   };
 
   postPatch = ''
