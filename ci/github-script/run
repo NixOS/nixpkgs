@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { program } from 'commander'
 import { getOctokit } from '@actions/github'
 
-async function run(action, owner, repo, pull_number) {
+async function run(action, owner, repo, pull_number, dry) {
   const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
 
   const github = getOctokit(token)
@@ -45,7 +45,7 @@ async function run(action, owner, repo, pull_number) {
           process.exitCode = 1
         },
       },
-      dry: true,
+      dry,
     })
   } finally {
     rmSync(tmp, { recursive: true })
@@ -58,9 +58,10 @@ program
   .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
   .argument('[pr]', 'Number of the Pull Request to label')
-  .action(async (owner, repo, pr) => {
+  .option('--no-dry', 'Make actual modifications')
+  .action(async (owner, repo, pr, options) => {
     const labels = (await import('./labels.js')).default
-    run(labels, owner, repo, pr)
+    run(labels, owner, repo, pr, options.dry)
   })
 
 await program.parse()
