@@ -67,7 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Kesomannen/gale";
     license = lib.licenses.gpl3Only;
     mainProgram = "gale";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      notohh
+    ];
     platforms = lib.platforms.linux;
   };
 })
