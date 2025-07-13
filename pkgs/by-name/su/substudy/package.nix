@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.randomhacks.net/substudy";
     license = licenses.asl20;
     mainProgram = "substudy";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
   };
 }
