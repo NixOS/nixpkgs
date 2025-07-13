@@ -91,12 +91,19 @@ postgresqlBuildExtension (finalAttrs: {
     ./autogen.sh
   '';
 
-  configureFlags = [
-    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
-    "--with-gdalconfig=${gdal}/bin/gdal-config"
-    "--with-jsondir=${json_c.dev}"
-    "--disable-extension-upgrades-install"
-  ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
+  configureFlags =
+    let
+      isCross = stdenv.hostPlatform.config != stdenv.buildPlatform.config;
+    in
+    [
+      (lib.enableFeature false "extension-upgrades-install")
+      (lib.withFeatureAs true "pgconfig" "${postgresql.pg_config}/bin/pg_config")
+      (lib.withFeatureAs true "gdalconfig" "${gdal}/bin/gdal-config")
+      (lib.withFeatureAs true "jsondir" (lib.getDev json_c))
+      (lib.withFeatureAs true "xml2config" (lib.getExe' (lib.getDev libxml2) "xml2-config"))
+      (lib.withFeatureAs withSfcgal "sfcgal" "${sfcgal}/bin/sfcgal-config")
+      (lib.withFeature (!isCross) "json") # configure: error: cannot check for file existence when cross compiling
+    ];
 
   makeFlags = [
     "PERL=${perl}/bin/perl"
