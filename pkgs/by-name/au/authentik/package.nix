@@ -4,7 +4,6 @@
   callPackages,
   cacert,
   fetchFromGitHub,
-  buildNpmPackage,
   buildGoModule,
   runCommand,
   bash,
@@ -16,13 +15,13 @@
 }:
 
 let
-  version = "2025.4.1";
+  version = "2025.6.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
+    hash = "sha256-LS66GqC4OU2rq8S8IcDR1TscaRTXdxn8UsaIA/DSZGY=";
   };
 
   meta = {
@@ -45,7 +44,7 @@ let
 
     sourceRoot = "${src.name}/website";
 
-    outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
+    outputHash = "sha256-Y4V0/hPtO1/fkzRhLyufUZsOSfQRi+4VxII0TAKefzk=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -55,6 +54,9 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
+      npm i --cache ./cache --cpu arm64 @rspack/binding-linux-arm64-gnu
+      npm i --cache ./cache --cpu x64 @rspack/binding-linux-x64-gnu
+
       rm -r ./cache node_modules/.package-lock.json
     '';
 
@@ -73,6 +75,8 @@ let
 
     postPatch = ''
       substituteInPlace package.json --replace-fail 'cross-env ' ""
+      substituteInPlace ../packages/docusaurus-config/lib/common.js \
+        --replace-fail 'title: "authentik",' 'title: "authentik", future: { experimental_faster : { rspackBundler: false }},'
     '';
 
     sourceRoot = "${src.name}/website";
@@ -82,11 +86,13 @@ let
 
       cp -r ${website-deps} node_modules
       chmod -R +w node_modules
+
       pushd node_modules/.bin
       patchShebangs $(readlink docusaurus)
       popd
-      cat node_modules/.bin/docusaurus
-      npm run build-bundled
+      npm run build:schema
+      npm run build:api
+      npm run build:docusaurus
 
       runHook postBuild
     '';
@@ -120,21 +126,88 @@ let
     '';
   };
 
-  webui = buildNpmPackage {
+  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
+  webui-deps = stdenvNoCC.mkDerivation {
+    pname = "authentik-webui-deps";
+    inherit src version meta;
+
+    sourceRoot = "${src.name}/web";
+
+    outputHash =
+      if stdenvNoCC.hostPlatform.isAarch then
+        "sha256-0HVAdebt5V1zvnzc2KkM7OB97YqXKexomAkcpz5PdNY="
+      else
+        "sha256-EC+DmywdeuM0lL7VhF6W8qUujOZmUgTOwz1SYC34NfM=";
+    outputHashMode = "recursive";
+
+    nativeBuildInputs = [
+      nodejs
+      cacert
+    ];
+
+    postPatch = ''
+      substituteInPlace packages/core/version/node.js \
+        --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
+        --replace-fail '(PackageJSON.version);' '"${version}";'
+    '';
+
+    buildPhase = ''
+      npm ci --cache ./cache
+
+      rm -r node_modules/chromedriver node_modules/.bin/chromedriver
+
+      rm -r ./cache node_modules/.package-lock.json
+      rm node_modules/@goauthentik/{core,web-sfe,esbuild-plugin-live-reload}
+      cp -r packages/core node_modules/@goauthentik/
+      cp -r packages/sfe node_modules/@goauthentik/web-sfe
+    '';
+
+    installPhase = ''
+      mv node_modules $out
+    '';
+
+    dontPatchShebangs = true;
+  };
+
+  webui = stdenvNoCC.mkDerivation {
     pname = "authentik-webui";
     inherit version meta;
 
     src = runCommand "authentik-webui-source" { } ''
-      mkdir -p $out/web/node_modules/@goauthentik/
+      mkdir $out
       cp -r ${src}/web $out/
       ln -s ${src}/package.json $out/
-      ln -s ${src}/website $out/
+      chmod -R +w $out/web
+      ln -s ${src}/website $out/web/
+      cp -r ${webui-deps} $out/web/node_modules
+      chmod -R +w $out/web/node_modules
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-i95sH+KUgAQ76cv1+7AE/UA6jsReQMttDGWClNE2Ol4=";
+
+    nativeBuildInputs = [
+      nodejs
+    ];
 
     postPatch = ''
       cd web
+
+      substituteInPlace packages/core/version/node.js \
+        --replace-fail 'import PackageJSON from "../../../../package.json" with { type: "json" };' "" \
+        --replace-fail '(PackageJSON.version);' '"${version}";'
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd node_modules/.bin
+      patchShebangs $(readlink rollup)
+      patchShebangs $(readlink wireit)
+      patchShebangs $(readlink lit-localize)
+      popd
+
+      npm run build
+
+      runHook postBuild
     '';
 
     CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
@@ -205,6 +278,17 @@ let
         pythonImportsCheck = [ "rest_framework" ];
       };
 
+      tenant-schemas-celery = prev.tenant-schemas-celery.overrideAttrs (_: rec {
+        version = "3.0.0";
+
+        src = fetchFromGitHub {
+          owner = "maciej-gol";
+          repo = "tenant-schemas-celery";
+          tag = version;
+          hash = "sha256-rGLrP8rE9SACMDVpNeBU85U/Sb2lNhsgEgHJhAsdKNM=";
+        };
+      });
+
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
@@ -218,7 +302,6 @@ let
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
-            --replace-fail '"dumb-init",' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
@@ -229,9 +312,9 @@ let
           prev.pythonRelaxDepsHook
         ];
 
-        pythonRelaxDeps = [
-          "xmlsec"
-        ];
+        pythonRemoveDeps = [ "dumb-init" ];
+
+        pythonRelaxDeps = true;
 
         propagatedBuildInputs =
           with final;
@@ -339,7 +422,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-cEB22KFDONcJBq/FvLpYKN7Zd06mh8SACvCSuj5i4fI=";
+    vendorHash = "sha256-rYwtS6gypC35c4+BgxQ+oDOew+Nnpn9tB4OC8daw/FU=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
