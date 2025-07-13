@@ -13,17 +13,17 @@
 
   # whether to include firmware update tool
   desktopVideoUpdater ? desktopVideoFull,
-  libusb1 ? desktopVideoUpdater,
+  libusb1,
 
   # whether to include gui applications as well
   desktopVideoGUI ? desktopVideoFull,
-  dbus ? desktopVideoGUI,
-  fontconfig ? desktopVideoGUI,
-  freetype ? desktopVideoGUI,
-  glib ? desktopVideoGUI,
-  libICE ? desktopVideoGUI,
-  libXrender ? desktopVideoGUI,
-  qt5 ? desktopVideoGUI,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  libICE,
+  libXrender,
+  qt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
