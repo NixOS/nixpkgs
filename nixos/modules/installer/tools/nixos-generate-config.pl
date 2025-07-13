@@ -344,7 +344,12 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (
+        glob("/dev/stratis/*/*"),
+        glob("/dev/mapper/*"),
+        glob("/dev/disk/by-uuid/*"),
+        glob("/dev/disk/by-label/*"),
+    ) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
