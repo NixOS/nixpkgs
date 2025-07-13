@@ -4,8 +4,10 @@
 
 ### Overview of Lua {#lua-overview}
 
-Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
+Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3, 5.4.
 The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua5_2` refers to Lua 5.2.
+The Nix expressions for the interpreters can be found in
+`pkgs/development/interpreters/lua-5/default.nix`.
 
 Lua libraries are in separate sets, with one set per interpreter version.
 
@@ -13,9 +15,7 @@ The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Lua libraries for this specific
 interpreter. E.g., the `busted` package corresponding to the default interpreter
 is `lua.pkgs.busted`, and the lua 5.2 version is `lua5_2.pkgs.busted`.
-The main package set contains aliases to these package sets, e.g.
-`luaPackages` refers to `lua5_1.pkgs` and `lua52Packages` to
-`lua5_2.pkgs`.
+The main package set contains aliases to these package sets, e.g. `lua52Packages` refers to `lua5_2.pkgs`.
 
 Note that nixpkgs patches the non-luajit interpreters to avoid referring to
 `/usr` and have `;;` (a [placeholder](https://www.lua.org/manual/5.1/manual.html#pdf-package.path) replaced with the default LUA_PATH) work correctly.
