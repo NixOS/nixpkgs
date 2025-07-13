@@ -173,7 +173,7 @@ in
         message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
       {
-        assertion = (cfg.configFile != null) -> (cfg.extraSettings != "");
+        assertion = (cfg.configFile != null) -> (cfg.extraSettings == "");
         message = "You can't use services.klipper.extraSettings with services.klipper.configFile.";
       }
     ];
