@@ -74,10 +74,8 @@ in
       };
 
       globalCellServDBFile = mkOption {
-        default = pkgs.fetchurl {
-          url = "http://dl.central.org/dl/cellservdb/CellServDB.2023-10-31";
-          sha256 = "sha256-fuVHhTJI5FNwObBkAoTMZvZwVY4YEMTJX8fLpOVkQsU=";
-        };
+        default = pkgs.openafs.cellservdb;
+        defaultText = literalExpression "pkgs.openafs.cellservdb";
         type = types.nullOr types.pathInStore;
         description = ''
           Global CellServDB file to be deployed. Set to `null` to only deploy the
