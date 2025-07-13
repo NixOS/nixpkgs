@@ -20,6 +20,8 @@ module.exports = async function ({ github, core }, callback) {
   // Pause between mutative requests
   const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
   github.hook.wrap('request', async (request, options) => {
+    // Requests to a different host do not count against the rate limit.
+    if (options.url.startsWith('https://github.com')) return request(options)
     // Requests to the /rate_limit endpoint do not count against the rate limit.
     if (options.url == '/rate_limit') return request(options)
     // Search requests are in a different resource group, which allows 30 requests / minute.
