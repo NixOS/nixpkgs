@@ -129,7 +129,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       mpickering
       nagisa
-      paveloom
     ];
     platforms = platforms.linux ++ platforms.darwin;
   };
