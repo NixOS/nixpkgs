@@ -4,6 +4,7 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { program } from 'commander'
+import * as core from '@actions/core'
 import { getOctokit } from '@actions/github'
 
 async function run(action, owner, repo, pull_number, dry) {
@@ -22,6 +23,7 @@ async function run(action, owner, repo, pull_number, dry) {
   const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
   try {
     process.env.GITHUB_WORKSPACE = tmp
+    process.env['INPUT_GITHUB-TOKEN'] = token
     process.chdir(tmp)
 
     await action({
@@ -33,18 +35,7 @@ async function run(action, owner, repo, pull_number, dry) {
           repo,
         },
       },
-      core: {
-        getInput() {
-          return token
-        },
-        error: console.error,
-        info: console.log,
-        notice: console.log,
-        setFailed(msg) {
-          console.error(msg)
-          process.exitCode = 1
-        },
-      },
+      core,
       dry,
     })
   } finally {
