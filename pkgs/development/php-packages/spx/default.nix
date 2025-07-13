@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   zlib,
+  php,
 }:
 
 let
@@ -15,8 +16,8 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
-    rev = "v${version}";
     hash = "sha256-2MOl9waWY3zK5NzQ19TJKK8kE7xC4K+e9AwV+wyAHZc=";
+    tag = "v${version}";
   };
 
   configureFlags = [
@@ -30,5 +31,6 @@ buildPecl {
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
     maintainers = with lib.maintainers; [ drupol ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
