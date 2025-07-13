@@ -112,6 +112,12 @@ in
         '';
       };
 
+      extraSettings = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "Extra lines to append to the generated Klipper configuration.";
+      };
+
       firmwares = lib.mkOption {
         description = "Firmwares klipper should manage";
         default = { };
@@ -166,6 +172,10 @@ in
         assertion = (cfg.configFile != null) != (cfg.settings != null);
         message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
+      {
+        assertion = (cfg.configFile != null) -> (cfg.extraSettings == "");
+        message = "You can't use services.klipper.extraSettings with services.klipper.configFile.";
+      }
     ];
 
     services.klipper = lib.mkIf cfg.octoprintIntegration {
@@ -180,7 +190,10 @@ in
           + lib.optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
           + lib.optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}";
         printerConfig =
-          if cfg.settings != null then format.generate "klipper.cfg" cfg.settings else cfg.configFile;
+          if cfg.settings != null then
+            builtins.toFile "klipper.cfg" ((format.generate "" cfg.settings).text + cfg.extraSettings)
+          else
+            cfg.configFile;
       in
       {
         description = "Klipper 3D Printer Firmware";

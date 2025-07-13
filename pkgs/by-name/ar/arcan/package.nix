@@ -53,7 +53,8 @@
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
-  useTracy ? true,
+  # For debugging only, disabled by upstream
+  useTracy ? false,
   # Configurable options
   sources ? callPackage ./sources.nix { },
 }:
