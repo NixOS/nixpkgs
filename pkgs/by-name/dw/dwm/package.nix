@@ -33,12 +33,14 @@ stdenv.mkDerivation rec {
     libXft
   ] ++ extraLibs;
 
-  prePatch = ''
-    sed -i "s@/usr/local@$out@" config.mk
-  '';
-
-  preBuild = lib.optional stdenv.hostPlatform.isStatic ''
-    makeFlagsArray+=(LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)")
+  preBuild = ''
+    makeFlagsArray+=(
+      "PREFIX=$out"
+      "CC=$CC"
+      ${lib.optionalString stdenv.hostPlatform.isStatic ''
+        LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)"
+      ''}
+    )
   '';
 
   # Allow users set their own list of patches
@@ -51,8 +53,6 @@ stdenv.mkDerivation rec {
         if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
     in
     lib.optionalString (conf != null) "cp ${configFile} config.def.h";
-
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   passthru.updateScript = gitUpdater {
     url = "git://git.suckless.org/dwm";
