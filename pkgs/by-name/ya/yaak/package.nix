@@ -20,27 +20,29 @@
   makeWrapper,
   nix-update-script,
   stdenv,
+  cacert,
+  lld,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.1.2";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gD6gp7Qtf162zpRY0b3+g98GSH2aY07s2Auv4+lmbXQ=";
+    hash = "sha256-XSIgxCpN/6C3P8RbXOfRIjGpjvp937jtmif3AFDEJcQ=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4D7ETUOLixpFB4luqQlwkGR/C6Ke6+ZmPg3dKKkrw7c=";
+    hash = "sha256-S1YEJUgIdcfqqObKOeQyalEnHXtycVoSO5zFjhwikcM=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-YxOSfSyn+gUsw0HeKrkXZg568X9CAY1UWKnGHHWCC78=";
+  cargoHash = "sha256-J1TSbTorHga7kyNTuFsu77LlGdrwa81TtYr3c58BpSE=";
 
   cargoRoot = "src-tauri";
 
@@ -53,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     perl
     makeWrapper
+    cacert
+    lld
   ];
 
   buildInputs =
