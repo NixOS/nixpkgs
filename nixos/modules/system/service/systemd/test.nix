@@ -72,12 +72,12 @@ runCommand "test-modular-service-systemd-units"
     cat -n ${toplevel}/etc/systemd/system/foo.service
     (
       set -x
-      grep -F 'ExecStart=${hello}/bin/hello --greeting hoi' ${toplevel}/etc/systemd/system/foo.service >/dev/null
+      grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "hoi"' ${toplevel}/etc/systemd/system/foo.service >/dev/null
 
-      grep -F 'ExecStart=${hello}/bin/hello --greeting hoi' ${toplevel}/etc/systemd/system/bar.service >/dev/null
+      grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "hoi"' ${toplevel}/etc/systemd/system/bar.service >/dev/null
       grep -F 'X-Bar=lol crossbar whatever' ${toplevel}/etc/systemd/system/bar.service >/dev/null
 
-      grep    'ExecStart=${hello}/bin/hello --greeting .*database.*' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
+      grep    'ExecStart="${hello}/bin/hello" "--greeting" ".*database.*"' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
       grep -F 'RestartSec=42' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
 
       [[ ! -e ${toplevel}/etc/systemd/system/foo.socket ]]
