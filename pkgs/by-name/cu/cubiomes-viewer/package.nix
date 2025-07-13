@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qtbase,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +24,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    qtbase
+    qt5.qtbase
   ];
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   preBuild = ''
