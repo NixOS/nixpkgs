@@ -47,7 +47,7 @@ buildPecl {
 
   meta = {
     changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${version}";
-    broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
+    broken = lib.versionOlder php.version "8.1" || lib.versionAtLeast php.version "8.5";
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = lib.licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";
