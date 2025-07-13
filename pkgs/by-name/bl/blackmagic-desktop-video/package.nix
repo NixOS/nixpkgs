@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXrender
       qt5.qtbase
     ];
-  nativeBuildInputs = [ ] ++ lib.optionals desktopVideoGUI [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals desktopVideoGUI [ qt5.wrapQtAppsHook ];
 
   # yes, the below download function is an absolute mess.
   # blame blackmagicdesign.
