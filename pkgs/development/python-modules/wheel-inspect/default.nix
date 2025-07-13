@@ -55,9 +55,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheel_inspect" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {

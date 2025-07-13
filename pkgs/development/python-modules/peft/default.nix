@@ -68,7 +68,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # These tests fail when MPS devices are detected
   disabledTests = lib.optional stdenv.hostPlatform.isDarwin [

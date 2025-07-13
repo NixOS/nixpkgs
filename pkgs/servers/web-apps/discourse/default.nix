@@ -17,7 +17,7 @@
   cacert,
   util-linux,
   gawk,
-  nettools,
+  net-tools,
   imagemagick,
   optipng,
   pngquant,
@@ -72,7 +72,7 @@ let
     procps # For ps and kill
     util-linux # For renice
     gawk
-    nettools # For hostname
+    net-tools # For hostname
 
     # Image optimization
     imagemagick

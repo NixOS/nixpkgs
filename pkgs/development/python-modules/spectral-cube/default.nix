@@ -59,11 +59,10 @@ buildPythonPackage rec {
     cd build/lib
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # FutureWarning: Can't acquire a memory view of a Dask array. This will raise in the future
     # https://github.com/radio-astro-tools/spectral-cube/issues/943
-    "-W"
-    "ignore::FutureWarning"
+    "-Wignore::FutureWarning"
   ];
 
   disabledTests =

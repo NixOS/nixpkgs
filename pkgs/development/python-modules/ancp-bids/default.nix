@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ancpbids" ];
 
-  pytestFlagsArray = [ "tests/auto" ];
+  enabledTestPaths = [ "tests/auto" ];
 
   disabledTests = [ "test_fetch_dataset" ];
 

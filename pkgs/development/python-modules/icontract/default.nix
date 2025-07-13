@@ -67,10 +67,9 @@ buildPythonPackage rec {
     "tests/test_typeguard.py"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # RuntimeWarning: coroutine '*' was never awaited
-    "-W"
-    "ignore::RuntimeWarning"
+    "-Wignore::RuntimeWarning"
   ];
 
   pythonImportsCheck = [ "icontract" ];

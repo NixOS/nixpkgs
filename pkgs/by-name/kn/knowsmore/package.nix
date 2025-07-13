@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "knowsmore" ];
 
-  pytestFlagsArray = [ "tests/tests*" ];
+  enabledTestPaths = [ "tests/tests*" ];
 
   meta = with lib; {
     description = "Tool for pentesting Microsoft Active Directory";

@@ -103,7 +103,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs pre_commit/resources/hook-tmpl
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--forked"
   ];
 

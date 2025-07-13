@@ -8,7 +8,7 @@
   mariadb,
   redis,
   curl,
-  nettools,
+  net-tools,
   runtimeShell,
 }:
 
@@ -30,7 +30,7 @@ mattermost.overrideAttrs (
       mariadb
       redis
       curl
-      nettools
+      net-tools
       gotestsum
     ];
 

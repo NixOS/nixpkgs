@@ -58,9 +58,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

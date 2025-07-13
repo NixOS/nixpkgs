@@ -260,7 +260,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Always show more information when tests fail
     "-vv"
   ];

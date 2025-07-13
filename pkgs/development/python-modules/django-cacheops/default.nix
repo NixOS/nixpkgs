@@ -14,7 +14,7 @@
   jinja2,
   before-after,
   pythonOlder,
-  nettools,
+  net-tools,
   pkgs,
   setuptools,
 }:
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     dill
     jinja2
     before-after
-    nettools
+    net-tools
     pkgs.valkey
     redisTestHook
   ];

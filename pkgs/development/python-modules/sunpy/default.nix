@@ -145,9 +145,8 @@ buildPythonPackage rec {
     "sunpy/io/setup_package.py"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # Wants a configuration file

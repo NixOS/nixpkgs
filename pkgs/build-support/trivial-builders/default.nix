@@ -671,8 +671,8 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
