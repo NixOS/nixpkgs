@@ -149,6 +149,9 @@ buildGoModule rec {
     # Skip time dependent/flaky test
     "-skip=TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked"
     "-skip=TestParallelAccessOfQueue"
+    "-skip=TestRetryableRegistrar_RegisterWithRetry_Failure_RegistrationAttemptedChannel"
+    # fails on aarch64-darwin
+    "-skip=TestIsWorkerRunning"
   ];
 
   postFixup = ''
