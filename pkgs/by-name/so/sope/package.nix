@@ -68,6 +68,10 @@ clangStdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/GNUstep/Makefiles
     find /build/Makefiles -mindepth 1 -maxdepth 1 -not -type l -exec cp -r '{}' $out/share/GNUstep/Makefiles \;
+
+    patchelf $out/lib/GNUstep/GDLAdaptors-*/PostgreSQL.gdladaptor/PostgreSQL \
+      --add-needed libpq.so \
+      --add-rpath ${lib.makeLibraryPath [ libpq ]}
   '';
 
   meta = {
