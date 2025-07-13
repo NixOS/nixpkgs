@@ -23,12 +23,13 @@ let
   };
 in
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     pname = "libgpg-error";
     version = "1.51";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${finalAttrs.version}.tar.bz2";
       hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
     };
 
@@ -74,11 +75,13 @@ stdenv.mkDerivation (
 
     doCheck = true; # not cross
 
+    passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fix lib.getExe
+
     meta = {
       homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
-      changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
+      changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${finalAttrs.version}";
       description = "Small library that defines common error values for all GnuPG components";
-      mainProgram = "gen-posix-lock-obj";
+      mainProgram = if genPosixLockObjOnly then "gen-posix-lock-obj" else "gpg-error";
 
       longDescription = ''
         Libgpg-error is a small library that defines common error values
