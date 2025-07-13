@@ -138,7 +138,7 @@ buildDotnetModule rec {
     homepage = "https://eddie.website";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eddie-ui";
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }
