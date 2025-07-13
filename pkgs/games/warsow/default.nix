@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "2.1.2";
 
   src = fetchurl {
-    url = "http://warsow.net/${pname}-${version}.tar.gz";
-    sha256 = "07y2airw5qg3s1bf1c63a6snjj22riz0mqhk62jmfm9nrarhavrc";
+    url = "https://warsow.net/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "0.152";
 
   src = fetchurl {
-    url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
-    sha256 = "sha256-9obo897Td9e8h9IWqQ6elRLfQVbnWwbGVaFmSK6HZbI=";
+    url = "https://www.benf.org/other/cfr/cfr_${version}.jar";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -16,8 +16,8 @@
 let
   localeSrcBase = "uClibc-locale-030818.tgz";
   localeSrc = fetchurl {
-    url = "http://www.uclibc.org/downloads/${localeSrcBase}";
-    sha256 = "xDYr4xijjxjZjcz0YtItlbq5LwVUi7k/ZSmP6a+uvVc=";
+    url = "https://www.uclibc.org/downloads/${localeSrcBase}";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
   resolvedExtraKleeuClibcConfig = lib.mapAttrsToList (name: value: "${name}=${value}") (
     extraKleeuClibcConfig

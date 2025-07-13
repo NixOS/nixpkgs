@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   pname = "fcrackzip";
   version = "1.0";
   src = fetchurl {
-    url = "http://oldhome.schmorp.de/marc/data/${pname}-${version}.tar.gz";
-    sha256 = "0l1qsk949vnz18k4vjf3ppq8p497966x4c7f2yx18x8pk35whn2a";
+    url = "https://oldhome.schmorp.de/marc/data/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   CFLAGS = "-std=gnu89";

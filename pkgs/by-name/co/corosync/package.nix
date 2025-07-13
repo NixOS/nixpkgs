@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   version = "3.1.9";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
+    url = "https://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

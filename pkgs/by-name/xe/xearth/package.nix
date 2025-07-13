@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://xearth.org/${pname}-${version}.tar.gz";
-    hash = "sha256-vLFAfMNbP23TYGssYHInO2qRLL2e0a4i+y0maUVBMJw=";
+    url = "https://xearth.org/${pname}-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   postPatch = "sed -i '48i #include <stdlib.h>' gifout.c";

@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.4.2";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/${pname}-${version}.tar.gz";
-    sha256 = "18bzvhzx8k24mpcim5669n3wg9hd0sfsxj8zjpbr24hywrlppgc2";
+    url = "https://www.codesink.org/download/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildFlags = [ "cutee" ];

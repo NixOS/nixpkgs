@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
 
   src = fetchurl {
-    url = "http://swfmill.org/releases/swfmill-${version}.tar.gz";
-    sha256 = "sha256-2yT2OWOVf67AK7FLi2HNr3CWd0+M/eudNXPi4ZIxVI4=";
+    url = "https://swfmill.org/releases/swfmill-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

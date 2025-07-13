@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "4.1.7";
 
   src = fetchurl {
-    url = "http://download.joedog.org/siege/${pname}-${version}.tar.gz";
-    hash = "sha256-7BQM7dFZl5OD1g2+h6AVHCwSraeHkQlaj6hK5jW5MCY=";
+    url = "https://download.joedog.org/siege/${pname}-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux [

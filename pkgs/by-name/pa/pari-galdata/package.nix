@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   pname = "pari-galdata";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/packages/galdata.tgz";
-    sha256 = "1pch6bk76f1i6cwwgm7hhxi5h71m52lqayp4mnyj0jmjk406bhdp";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/packages/galdata.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

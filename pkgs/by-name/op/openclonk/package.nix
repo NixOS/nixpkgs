@@ -34,8 +34,8 @@
 
 let
   soundtrack_src = fetchurl {
-    url = "http://www.openclonk.org/download/Music.ocg";
-    hash = "sha256-Mye6pl1eSgEQ/vOLfDsdHDjp2ljb3euGKBr7s36+2W4=";
+    url = "https://www.openclonk.org/download/Music.ocg";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 stdenv.mkDerivation {

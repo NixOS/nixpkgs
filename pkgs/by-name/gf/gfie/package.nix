@@ -11,8 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.2";
 
   src = fetchurl {
-    url = "http://greenfishsoftware.org/dl/gfie/gfie-${finalAttrs.version}.deb";
-    hash = "sha256-hyL0t66jRTVF1Hq2FRUobsfjLGmYgsMGDE/DBdoXhCI=";
+    url = "https://greenfishsoftware.org/dl/gfie/gfie-${finalAttrs.version}.deb";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   unpackCmd = "dpkg -x $curSrc source";

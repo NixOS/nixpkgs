@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   version = "2.6.0";
 
   src = fetchurl {
-    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
-    sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
+    url = "https://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

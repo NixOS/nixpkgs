@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   version = "0.27.0";
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
-    hash = "sha256-qpSFcAl1DV9h2/AWvBUOO9y9s6zfyK0gtzq4tD6aG6Y=";
+    url = "https://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

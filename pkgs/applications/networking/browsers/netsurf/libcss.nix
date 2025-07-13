@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.9.2";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libcss-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-LfIVu+w01R1gwaBLAbLfTV0Y9RDx86evS4DN21ZxFU4=";
+    url = "https://download.netsurf-browser.org/libs/releases/libcss-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

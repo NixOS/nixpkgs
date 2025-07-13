@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "4.13.0";
 
   src = fetchurl {
-    url = "http://www.web-polygraph.org/downloads/srcs/polygraph-${version}-src.tgz";
-    sha256 = "1rwzci3n7q33hw3spd79adnclzwgwlxcisc9szzjmcjqhbkcpj1a";
+    url = "https://www.web-polygraph.org/downloads/srcs/polygraph-${version}-src.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [

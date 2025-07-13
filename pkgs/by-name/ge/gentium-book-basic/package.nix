@@ -9,8 +9,8 @@ stdenvNoCC.mkDerivation rec {
   version = "1.102";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${lib.versions.major version}${lib.versions.minor version}.zip";
-    hash = "sha256-oCmpl95MJRfCV25cg/4cf8AwQWnoymXasSss1ziOPoE=";
+    url = "https://software.sil.org/downloads/r/gentium/GentiumBasic_${lib.versions.major version}${lib.versions.minor version}.zip";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

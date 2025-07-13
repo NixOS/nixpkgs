@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
   # breaks autoconf in a bunch of packages, it's better to cherry-pick patches as needed
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FkQwgnmpdXmQSeSCavLPx4fK0quxGqFFYuQCUh+GmSo=";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

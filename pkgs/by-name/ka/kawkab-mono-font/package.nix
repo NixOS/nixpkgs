@@ -9,9 +9,9 @@ stdenvNoCC.mkDerivation {
   version = "20151015";
 
   src = fetchzip {
-    url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
+    url = "https://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
     stripRoot = false;
-    hash = "sha256-arZTzXj7Ba5G4WF3eZVGNaONhOsYVPih9iBgsN/lg14=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://stable.hypertriton.com/bsdbuild/${pname}-${version}.tar.gz";
-    sha256 = "1zrdjh7a6z4khhfw9zrp490afq306cpl5v8wqz2z55ys7k1n5ifl";
+    url = "https://stable.hypertriton.com/bsdbuild/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [

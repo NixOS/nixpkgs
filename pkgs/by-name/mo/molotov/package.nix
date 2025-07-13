@@ -8,8 +8,8 @@ let
   pname = "molotov";
   version = "4.4.0";
   src = fetchurl {
-    url = "http://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
-    sha256 = "sha256-l4Il6i8uXSeJqH3ITC8ZUpKXPQb0qcW7SpKx1R46XDc=";
+    url = "https://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

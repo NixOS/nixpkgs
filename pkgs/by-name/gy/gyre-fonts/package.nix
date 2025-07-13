@@ -9,9 +9,9 @@ stdenvNoCC.mkDerivation rec {
   version = "2.005";
 
   src = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
+    url = "https://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
     stripRoot = false;
-    hash = "sha256-+6IufuFf+IoLXoZEPlfHUNgRhKrQNBEZ1OwPD9/uOjg=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

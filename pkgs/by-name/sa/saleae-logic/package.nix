@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
-    url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
-    sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
+    url = "https://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   desktopItem = makeDesktopItem {

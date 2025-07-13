@@ -9,8 +9,8 @@ stdenvNoCC.mkDerivation rec {
   version = "0.0.4.7";
 
   src = fetchurl {
-    url = "http://rtega.be/chmn/CNstrokeorder-${version}.ttf";
-    hash = "sha256-YYtOcUvt1V0DwAs/vf9KltcmYCFJNirvwjGyOK4JpIY=";
+    url = "https://rtega.be/chmn/CNstrokeorder-${version}.ttf";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   dontUnpack = true;

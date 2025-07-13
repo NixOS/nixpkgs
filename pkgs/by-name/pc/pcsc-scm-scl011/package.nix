@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   version = "2.09";
 
   src = fetchurl {
-    url = "http://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${version}.zip";
-    sha256 = "0ik26sxgqgsqplksl87z61vwmx51k7plaqmrkdid7xidgfhfxr42";
+    url = "https://files.identiv.com/products/smart-card-readers/contactless/scl010-011/Linux_Driver_Ver${version}.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ unzip ];

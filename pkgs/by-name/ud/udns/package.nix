@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   buildPhase = "make staticlib sharedlib rblcheck_s dnsget_s";
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/udns/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aWotDVGNqYXZdaZeEdFm8/V829HUI3aguFMH9JYBxug=";
+    url = "https://www.corpit.ru/mjt/udns/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   # udns uses a very custom build and hardcodes a .so name in a few places.

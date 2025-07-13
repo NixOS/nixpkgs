@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   version = "2.23";
 
   src = fetchurl {
-    url = "http://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
-    sha256 = "0v1ipynyjklb3chd1vq26a21sjjg66sir57gi2kkrbwnpk195a9z";
+    url = "https://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   preConfigure = ''

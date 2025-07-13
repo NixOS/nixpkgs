@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "2.0.11";
 
   src = fetchurl {
-    url = "http://ftp.netfilter.org/pub/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0apxgmkhsk3vxn9q3libxn3dgrdljrxyy4mli2gk49m7hi3na7xp";
+    url = "https://ftp.netfilter.org/pub/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   makeFlags = [

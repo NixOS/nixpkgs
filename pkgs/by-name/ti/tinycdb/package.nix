@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
     );
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wyG5BekCwsqZo/+Kjd39iCMkf+Ht7IpLuF+Dhpxjn7g=";
+    url = "https://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   meta = with lib; {

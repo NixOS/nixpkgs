@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "1.4";
 
   src = fetchurl {
-    url = "http://linukz.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0qrcvn7227qaayjcd5rm7z0k5q89qfy5qkdgwr5pd7ih0va8rmpz";
+    url = "https://linukz.org/download/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installFlags = [

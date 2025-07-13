@@ -22,13 +22,13 @@
 let
   pyStrokeVer = "20121124";
   pyStroke = fetchurl {
-    url = "http://download.fcitx-im.org/data/py_stroke-${pyStrokeVer}.tar.gz";
-    hash = "sha256-jrEoqb+kOVLmfPL87h/RNMb0z9MXvC9sOKYV9etk4kg=";
+    url = "https://download.fcitx-im.org/data/py_stroke-${pyStrokeVer}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
   pyTableVer = "20121124";
   pyTable = fetchurl {
-    url = "http://download.fcitx-im.org/data/py_table-${pyTableVer}.tar.gz";
-    hash = "sha256-QhRqyX3mwT1V+eme2HORX0xmc56cEVMqNFVrrfl5LAQ=";
+    url = "https://download.fcitx-im.org/data/py_table-${pyTableVer}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 

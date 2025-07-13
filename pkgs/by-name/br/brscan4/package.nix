@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   src =
     {
       "i686-linux" = fetchurl {
-        url = "http://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
-        sha256 = "sha256-ymIAg+rfSYP5uzsAM1hUYZacJ0PXmKEoljNtb0pgGMw=";
+        url = "https://download.brother.com/welcome/dlf006646/${pname}-${version}.i386.deb";
+        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://download.brother.com/welcome/dlf006645/${pname}-${version}.amd64.deb";

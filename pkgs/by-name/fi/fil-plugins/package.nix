@@ -10,8 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-HAvycSEZZfZwoVp3g7QWcwfbdyZKwWJKBuVmeWTajuk=";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/FIL-plugins-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [ ladspaH ];

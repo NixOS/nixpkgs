@@ -10,8 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.5";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/ogg/libogg-${finalAttrs.version}.tar.xz";
-    sha256 = "01b7050bghdvbxvw0gzv588fn4a27zh42ljpwzm4vrf8dziipnf4";
+    url = "https://downloads.xiph.org/releases/ogg/libogg-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   outputs = [

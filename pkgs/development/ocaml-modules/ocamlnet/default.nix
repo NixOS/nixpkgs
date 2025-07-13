@@ -22,8 +22,8 @@ lib.throwIf (lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.v
     version = "4.1.9";
 
     src = fetchurl {
-      url = "http://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
-      sha256 = "1vlwxjxr946gdl61a1d7yk859cijq45f60dhn54ik3w4g6cx33pr";
+      url = "https://download.camlcity.org/download/ocamlnet-${version}.tar.gz";
+      sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     };
 
     nativeBuildInputs = [

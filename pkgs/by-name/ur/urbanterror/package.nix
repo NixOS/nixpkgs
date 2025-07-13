@@ -20,10 +20,10 @@ let
 
   urbanterror-maps = fetchzip {
     name = "urbanterror-maps";
-    url = "http://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${
+    url = "https://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${
       builtins.replaceStrings [ "." ] [ "" ] version
     }_full.zip";
-    hash = "sha256-C6Gb5PPECAOjQhmkrzkV6dpY/zHVtUj9oq3507o2PUI=";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   urbanterror-source = fetchzip {

@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.12";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/x/xxgdb/xxgdb_${finalAttrs.version}.orig.tar.gz";
-    sha256 = "0jwazg99wk2l7r390ggw0yr8xipl07bp0qynni141xss530i6d1a";
+    url = "https://deb.debian.org/debian/pool/main/x/xxgdb/xxgdb_${finalAttrs.version}.orig.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

@@ -10,8 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1";
 
   src = fetchurl {
-    url = "http://www.dettus.net/n2048/n2048_v${finalAttrs.version}.tar.gz";
-    hash = "sha256-c4bHWmdQuwyRXIm/sqw3p71pMv6VLAzIuUTaDHIWn6A=";
+    url = "https://www.dettus.net/n2048/n2048_v${finalAttrs.version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   env = {

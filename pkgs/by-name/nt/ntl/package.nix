@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   version = "11.5.1";
 
   src = fetchurl {
-    url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
+    url = "https://www.shoup.net/ntl/ntl-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [

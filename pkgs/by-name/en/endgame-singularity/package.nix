@@ -19,8 +19,8 @@ let
   };
 
   music_src = fetchurl {
-    url = "http://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
-    sha256 = "0vf2qaf66jh56728pq1zbnw50yckjz6pf6c6qw6dl7vk60kkqnpb";
+    url = "https://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 

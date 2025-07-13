@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libbdplus/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-uT7qPq7zPW6RVdLDSwaMUFSTqlpJNuYydPQ0KrD0Clg=";
+    url = "https://get.videolan.org/libbdplus/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [

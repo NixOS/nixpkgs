@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   pname = "pinpoint";
   version = "0.1.8";
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/pinpoint/0.1/${pname}-${version}.tar.xz";
-    sha256 = "1jp8chr9vjlpb5lybwp5cg6g90ak5jdzz9baiqkbg0anlg8ps82s";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/pinpoint/0.1/${pname}-${version}.tar.xz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
   nativeBuildInputs = [
     pkg-config

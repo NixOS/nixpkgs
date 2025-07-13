@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   pname = "pari-seadata-small";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/packages/seadata-small.tgz";
-    sha256 = "13qafribxwkz8h3haa0cng7arz0kh7398br4y7vqs9ib8w9yjnxz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/packages/seadata-small.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   pname = "dd_rescue";
 
   src = fetchurl {
-    hash = "sha256-YB3gyUX/8dsFfIbGUWX5rvRuIa2q9E4LOCtEOz+z/bk=";
-    url = "http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    url = "https://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
   };
 
   dd_rhelp_src = fetchurl {

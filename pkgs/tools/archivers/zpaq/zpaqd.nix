@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   version = "715";
 
   src = fetchurl {
-    url = "http://mattmahoney.net/dc/zpaqd${version}.zip";
-    sha256 = "sha256-Mx87Zt0AASk0ZZCjyTzYbhlYJAXBlb59OpUWsqynyCA=";
+    url = "https://mattmahoney.net/dc/zpaqd${version}.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   sourceRoot = ".";

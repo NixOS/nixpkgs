@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "2.4";
 
   src = fetchurl {
-    url = "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
-    sha256 = "sha256-ssi2fKbAMizr5eLAMng+G25ui3v98zCNWzMg7uLgGas=";
+    url = "https://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

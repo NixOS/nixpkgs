@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "1.0pre4";
 
   src = fetchurl {
-    url = "http://ex-parrot.com/pdw/iftop/download/iftop-${version}.tar.gz";
-    sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
+    url = "https://ex-parrot.com/pdw/iftop/download/iftop-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   # Explicitly link against libgcc_s, to work around the infamous

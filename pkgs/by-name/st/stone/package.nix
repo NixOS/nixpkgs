@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "2.4";
 
   src = fetchurl {
-    url = "http://www.gcd.org/sengoku/stone/stone-${version}.tar.gz";
-    hash = "sha256-1dwa9uxdpQPypAs98/4ZqPv5085pa49G9NU9KsjY628=";
+    url = "https://www.gcd.org/sengoku/stone/stone-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [ openssl ];

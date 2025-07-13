@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   pname = "weather";
 
   src = fetchurl {
-    url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wn3cpgfrlqntMIiVFh4317DrbGgQ4YRnFz3KHXacTw4=";
+    url = "https://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

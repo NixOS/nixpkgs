@@ -31,28 +31,28 @@ stdenv.mkDerivation (finalAttrs: {
     # Follow All patches from http://t2sde.org/packages/bsd-games.html
     # May be removed in the next version
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/delay_output-sym.patch";
-      hash = "sha256-qbtp2cJVmEuxbTgpXM2gRHSNLE25OCmNxK+aeBBPRBw=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/delay_output-sym.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
-      hash = "sha256-oioJ5M7DAUVzX8k998p2h/APn8azw9Z8txmBuly2ouw=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-gcc43.patch";
-      hash = "sha256-9pkJmEOmM5vd/5nm3AlsbJNX0oX1kCtFrmciGpStvlA=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-gcc43.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-glibc.patch";
-      hash = "sha256-yNL88XORTXl2qSYTlYCYDN2G++TzBxywBpYdK+ufwrA=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix-glibc.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix.patch";
-      hash = "sha256-UFXvtfVzJLRWvzbv0gaoVdt0vZOUj4UWWqoCZL/BDqE=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/hotfix.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
     (fetchpatch {
-      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/postfix-bsd.patch";
-      hash = "sha256-Noqq+FpSJb3heejGGHyLYYkHB3fC4qCv/p1XMfEGdx8=";
+      url = "https://svn.exactcode.de/t2/trunk/package/games/bsd-games/postfix-bsd.patch";
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     })
   ];
 

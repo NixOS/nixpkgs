@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "2.0.7";
 
   src = fetchurl {
-    url = "http://files.itstool.org/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-a5p80poSu5VZj1dQ6HY87niDahogf4W3TYsydbJ+h8o=";
+    url = "https://files.itstool.org/${pname}/${pname}-${version}.tar.bz2";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

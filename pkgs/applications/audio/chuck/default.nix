@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   pname = "chuck";
 
   src = fetchurl {
-    url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "sha256-hIwsC9rYgXWSTFqUufKGqoT0Gnsf4nR4KQ0iSVbj8xg=";
+    url = "https://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs =

@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   pname = "caps";
   version = "0.9.26";
   src = fetchurl {
-    url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
-    sha256 = "1jcq9y51vdnk93q27r566y9qmddvadhr4ddnvkiypaq5rrdnqjg7";
+    url = "https://www.quitte.de/dsp/caps_${version}.tar.bz2";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   configurePhase = ''

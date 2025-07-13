@@ -9,8 +9,8 @@ stdenvNoCC.mkDerivation rec {
   version = "PR7";
 
   src = fetchzip {
-    url = "http://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
-    hash = "sha256-pJqC/sbNjxEwbVf2CVoXMBI5zvT3DqzRlKSqFT8I2sM=";
+    url = "https://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

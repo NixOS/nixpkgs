@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
-    sha256 = "0qha7jvkdmil3jiwrpsfhkqsbkqn9dzgx3ayxwjdmv73ikmg95j6";
+    url = "https://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildCommand = ''

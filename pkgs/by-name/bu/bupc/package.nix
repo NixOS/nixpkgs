@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "2020.12.0";
 
   src = fetchurl {
-    url = "http://upc.lbl.gov/download/release/berkeley_upc-${version}.tar.gz";
-    hash = "sha256-JdpFORlXHpCQE+TivoQQnjQlxQN7C8BNfHvTOSwXbYQ=";
+    url = "https://upc.lbl.gov/download/release/berkeley_upc-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   postPatch = ''

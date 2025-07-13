@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   name = "uni-vga";
 
   src = fetchurl {
-    url = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
-    sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
+    url = "https://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs =

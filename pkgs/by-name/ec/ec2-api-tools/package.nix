@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "1.7.5.1";
 
   src = fetchurl {
-    url = "http://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
-    sha256 = "sha256-hRq+MEA+4chqPr3d9bS//X70tYcRBTD+rfAJVNmuLzo=";
+    url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

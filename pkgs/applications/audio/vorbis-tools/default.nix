@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   version = "1.4.3";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-${version}.tar.gz";
-    hash = "sha256-of493Gd3vc6/a3l+ft/gQ3lUskdW/8yMa4FrY+BGDd4=";
+    url = "https://downloads.xiph.org/releases/vorbis/vorbis-tools-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

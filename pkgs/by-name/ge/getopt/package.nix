@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   pname = "getopt";
   version = "1.1.6";
   src = fetchurl {
-    url = "http://frodo.looijaard.name/system/files/software/getopt/getopt-${version}.tar.gz";
-    sha256 = "1zn5kp8ar853rin0ay2j3p17blxy16agpp8wi8wfg4x98b31vgyh";
+    url = "https://frodo.looijaard.name/system/files/software/getopt/getopt-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   # This should be fine on Linux and Darwin. Clang 16 requires it because otherwise getopt will

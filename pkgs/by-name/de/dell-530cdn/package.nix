@@ -8,8 +8,8 @@ let
   version = "1.3-1";
 
   src = fetchurl {
-    url = "http://downloads.dell.com/printer/Dell-5130cdn-Color-Laser-${version}.noarch.rpm";
-    sha256 = "0pj32sj6jcdnpa5v75af0hnvx4z0ky0m1k2522cfdx4cb1r2lna9";
+    url = "https://downloads.dell.com/printer/Dell-5130cdn-Color-Laser-${version}.noarch.rpm";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 runCommand "Dell-5130cdn-Color-Laser-1.3-1" { } ''

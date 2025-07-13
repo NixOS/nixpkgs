@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   version = "1.6";
 
   src = fetchurl {
-    url = "http://www.nickg.me.uk/files/xcowsay-${version}.tar.gz";
-    sha256 = "sha256-RqzoZP8o0tIfS3BY8CleGNAEGhIMEHipUfpDxOD1yMU=";
+    url = "https://www.nickg.me.uk/files/xcowsay-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [

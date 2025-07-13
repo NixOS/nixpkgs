@@ -26,8 +26,8 @@ stdenv.mkDerivation {
 
   src = fetchurl rec {
     name = "dmd.${version}.${OS}.tar.xz";
-    url = "http://downloads.dlang.org/releases/2.x/${version}/${name}";
-    sha256 = hashes.${OS} or (throw "missing bootstrap sha256 for OS ${OS}");
+    url = "https://downloads.dlang.org/releases/2.x/${version}/${name}";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   dontConfigure = true;

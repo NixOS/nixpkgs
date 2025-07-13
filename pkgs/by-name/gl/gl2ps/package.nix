@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://geuz.org/gl2ps/src/${pname}-${version}.tgz";
-    sha256 = "1sgzv547h7hrskb9qd0x5yp45kmhvibjwj2mfswv95lg070h074d";
+    url = "https://geuz.org/gl2ps/src/${pname}-${version}.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

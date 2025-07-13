@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
   version = "4.8";
 
   src = fetchurl {
-    url = "http://home.hccnet.nl/h.g.muller/fmax4_8w.c";
-    hash = "sha256-ikn+CA5lxtDYSDT+Nsv1tfORhKW6/vlmHcGAT9SFfQc=";
+    url = "https://home.hccnet.nl/h.g.muller/fmax4_8w.c";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   ini = fetchurl {
-    url = "http://home.hccnet.nl/h.g.muller/fmax.ini";
-    hash = "sha256-lh2ivXx4jNdWn3pT1WKKNEvkVQ31JfdDx+vqNx44nf8=";
+    url = "https://home.hccnet.nl/h.g.muller/fmax.ini";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   unpackPhase = ''

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "3.4.3";
 
   src = fetchurl {
-    url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
+    url = "https://fastjet.fr/repo/fastjet-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

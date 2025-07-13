@@ -9,8 +9,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "6.200";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${finalAttrs.version}.zip";
-    hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
+    url = "https://software.sil.org/downloads/r/gentium/GentiumPlus-${finalAttrs.version}.zip";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   installPhase = ''

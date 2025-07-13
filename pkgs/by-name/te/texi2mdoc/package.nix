@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   version = "0.1.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/texi2mdoc/snapshots/texi2mdoc-${version}.tgz";
-    sha256 = "1zjb61ymwfkw6z5g0aqmsn6qpw895zdxv7fv3059gj3wqa3zsibs";
+    url = "https://mdocml.bsd.lv/texi2mdoc/snapshots/texi2mdoc-${version}.tgz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

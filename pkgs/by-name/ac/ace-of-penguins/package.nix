@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
 
   src = fetchurl {
-    url = "http://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
-    hash = "sha256-H+47BTOSGkKHPAYj8z2HOgZ7HuxY8scMAUSRRueaTM4=";
+    url = "https://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   patches = [

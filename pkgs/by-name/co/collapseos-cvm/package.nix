@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   pname = "collapseos-cvm";
   version = "20220316";
   src = fetchurl {
-    url = "http://collapseos.org/files/collapseos-${version}.tar.gz";
-    hash = "sha256-8bt6wj93T82K9fqtuC/mctkMCzfvW0taxv6QAKeJb5g=";
+    url = "https://collapseos.org/files/collapseos-${version}.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
   buildInputs = [ ncurses ];
   sourceRoot = "cvm";

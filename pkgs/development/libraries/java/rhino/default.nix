@@ -10,8 +10,8 @@
 
 let
   xbeans = fetchurl {
-    url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
-    sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
+    url = "https://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 in
 stdenv.mkDerivation {

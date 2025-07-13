@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "1.86pl4";
 
   src = fetchurl {
-    url = "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif${version}.tar.gz";
-    sha256 = "163vdcixs764jj8xa08w80qm4kcijf7xj911yp8jvz6pi1q5g13i";
+    url = "https://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   pf-patch = fetchurl {

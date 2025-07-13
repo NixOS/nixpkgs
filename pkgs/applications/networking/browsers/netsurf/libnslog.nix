@@ -13,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.3";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libnslog-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-/JjcqdfvpnCWRwpdlsAjFG4lv97AjA23RmHHtNsEU9A=";
+    url = "https://download.netsurf-browser.org/libs/releases/libnslog-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [

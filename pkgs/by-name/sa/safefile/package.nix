@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   version = "1.0.5";
 
   src = fetchurl {
-    url = "http://research.cs.wisc.edu/mist/${pname}/releases/${pname}-${version}.tar.gz";
-    sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
+    url = "https://research.cs.wisc.edu/mist/${pname}/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   meta = with lib; {

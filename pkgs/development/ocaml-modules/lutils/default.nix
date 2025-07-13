@@ -13,8 +13,8 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lutils.v${version}.tgz";
-    hash = "sha512:d3c3b80286b1aa236ba922d9e18a133721fc80126c8b89520fb811dce9400e217aaa75b5d49e03988be7f6bf5f2e1a391d02ceeaa5ec0a0cd5ce218083a29514";
+    url = "https://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/lutils.v${version}.tgz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   propagatedBuildInputs = [

@@ -9,8 +9,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.2";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
-    hash = "sha256-dPH+MfYdyHauClcD7N1zwjw4EPdtt9uQGCUh9OomsPw=";
+    url = "https://mdocml.bsd.lv/pod2mdoc/snapshots/pod2mdoc-${finalAttrs.version}.tgz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   # use compat_ohash instead of system ohash, which is BSD-specific

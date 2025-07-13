@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${version}.tar.gz";
-    sha256 = "197lw2nwmzsmfsbvgvi8z7kj69n374kgfzzp8pkmk7mp2vkk991k";
+    url = "https://www.hpcg-benchmark.org/downloads/hpcg-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [ mpi ];

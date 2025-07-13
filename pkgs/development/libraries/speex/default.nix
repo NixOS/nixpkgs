@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   version = "1.2.1";
 
   src = fetchurl {
-    url = "http://downloads.us.xiph.org/releases/speex/speex-${version}.tar.gz";
-    sha256 = "sha256-S0TU8rOKNwotmKeDKf78VqDPk9HBvnACkhe6rmYo/uo=";
+    url = "https://downloads.us.xiph.org/releases/speex/speex-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   postPatch = ''

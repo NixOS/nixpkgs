@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "0.7.3";
 
   src = fetchurl {
-    url = "http://www.flpsed.org/${pname}-${version}.tar.gz";
-    sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
+    url = "https://www.flpsed.org/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   buildInputs = [ fltk13 ];

@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://mirror.ctan.org/macros/latex/contrib/lkproof.zip";
-    sha256 = "1qjkjhpc4rm62qxn18r83zdlwnj1wvnkcpdiqlv7w4bakh0gvjly";
+    url = "https://mirror.ctan.org/macros/latex/contrib/lkproof.zip";
+    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ unzip ];

@@ -29,8 +29,8 @@ buildPythonPackage rec {
   disabled = pythonAtLeast "3.13";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/bindings/python/python-efl-${version}.tar.xz";
-    hash = "sha256-3Ns5fhIHihnpDYDnxvPP00WIZL/o1UWLzgNott4GKNc=";
+    url = "https://download.enlightenment.org/rel/bindings/python/python-efl-${version}.tar.xz";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
