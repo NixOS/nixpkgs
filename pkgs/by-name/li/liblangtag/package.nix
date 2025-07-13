@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   core_zip = fetchurl {
     # please update if an update is available
     url = "https://www.unicode.org/Public/cldr/46/core.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-+86cInWGKtJmaPs0eD/mwznz2S3f61oQoXdftYGBoV0=";
   };
 
   language_subtag_registry = fetchurl {

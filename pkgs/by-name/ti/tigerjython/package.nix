@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # - Wait for the archive link to be generated and copy it to the url field - adjust hash accordingly.
   src = fetchurl {
     url = "https://web.archive.org/web/20250104142121/https://tjgroup.ch/download/TigerJython.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-V/POFftRs/jjgNaHOrKcW2AdlQY2yjO+xiwJi63oECo=";
   };
 
   nativeBuildInputs = [

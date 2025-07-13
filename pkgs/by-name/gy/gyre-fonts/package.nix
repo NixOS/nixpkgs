@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     url = "https://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg-${version}otf.zip";
     stripRoot = false;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-+6IufuFf+IoLXoZEPlfHUNgRhKrQNBEZ1OwPD9/uOjg=";
   };
 
   installPhase = ''

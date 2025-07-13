@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
   };
 
   nativeBuildInputs = [ pkg-config ];

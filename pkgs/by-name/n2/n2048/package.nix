@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.dettus.net/n2048/n2048_v${finalAttrs.version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-c4bHWmdQuwyRXIm/sqw3p71pMv6VLAzIuUTaDHIWn6A=";
   };
 
   env = {

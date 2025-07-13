@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
   patches = [

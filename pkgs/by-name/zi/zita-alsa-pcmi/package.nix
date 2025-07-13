@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.6.1";
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-iil6zj16R0Ex7T+jIQacExM3eFtWojfW8WjIXueW1Ww=";
   };
 
   buildInputs = [ alsa-lib ];

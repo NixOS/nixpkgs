@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "liquidwar5";
   src = fetchurl {
     url = "https://www.ufoot.org/download/liquidwar/v5/${version}/liquidwar-${version}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "2tCqhN1BbK0FVCHtm0DfOe+ueNPfdZwFg8ZMVPfy/18=";
   };
 
   buildInputs = [ allegro ];

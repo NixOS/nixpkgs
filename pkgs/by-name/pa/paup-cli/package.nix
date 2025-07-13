@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://phylosolutions.com/paup-test/paup4a168_centos64.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-41dZswlrIQ05f1zJzId78DKmPf0QH1SfrexzvCAUxq8=";
   };
 
   unpackPhase = ''

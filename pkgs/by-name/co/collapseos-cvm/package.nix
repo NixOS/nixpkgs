@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "20220316";
   src = fetchurl {
     url = "https://collapseos.org/files/collapseos-${version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-8bt6wj93T82K9fqtuC/mctkMCzfvW0taxv6QAKeJb5g=";
   };
   buildInputs = [ ncurses ];
   sourceRoot = "cvm";

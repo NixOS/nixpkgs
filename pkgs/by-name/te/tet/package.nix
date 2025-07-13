@@ -10,7 +10,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "https://tetworks.opengroup.org/downloads/38/software/Sources/3.8/tet3.8-src.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1j57hv56df38w249l595b8rsgmsyvjkbysai03a9724gax5jl9av";
   };
 
   patchPhase = "chmod +x configure";

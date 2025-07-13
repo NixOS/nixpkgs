@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-elina";
   src = fetchurl {
     url = "https://files.sri.inf.ethz.ch/elina-${version}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1nymykskq1yx87y4xl6hl9i4q6kv0qaq25rniqgl1bfn883p1ysc";
   };
 
   # fails with make 4.4

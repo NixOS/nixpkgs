@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     name = "${pname}-${version}";
     url = "https://www.etallen.com/msr/${pname}-${version}.src.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-e01qYWbOALkXp5NpexuVodMxA3EBySejJ6ZBpZjyT+E=";
   };
 
   nativeBuildInputs = [

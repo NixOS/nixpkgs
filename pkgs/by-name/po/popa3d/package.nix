@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-A7hT2vnyQm/RjUENM76C7zofCcFQ0spNIhRiTU5jiLw=";
   };
 
   patches = [

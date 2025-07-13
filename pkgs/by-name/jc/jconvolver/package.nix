@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
 
   reverbs = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/jconvolver-reverbs.tar.bz2";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "127aj211xfqp37c94d9cn0mmwzbjkj3f6br5gr67ckqirvsdkndi";
   };
   weird = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/weird.wav";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "14xchdikx5k8zlgwglrqi168vki3n3rwhn73dkbj5qwh2ndrlyrc";
   };
 
   porihall-sf = fetchurl {

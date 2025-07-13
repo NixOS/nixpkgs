@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${version}-src.tgz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-gcC6REfZentIPEDhGznUSYu8mvVfpPeMz/Bks+N43Fk=";
   };
 
   buildFlags = lib.optional stdenv.hostPlatform.isLinux "unix";

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://0pointer.de/lennart/projects/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1v0s5x81jzwnnl7hr254d4nkyc8qcv983pzr6vqmbr9l9q553a0g";
   };
 
   buildInputs = [ lynx ];

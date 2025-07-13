@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.pabr.org/sixlinux/sixpair.c";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1b0a3k7gs544cbji7n29jxlrsscwfx6s1r2sgwdl6hmkc1l9gagr";
   };
 
   # hcitool is deprecated

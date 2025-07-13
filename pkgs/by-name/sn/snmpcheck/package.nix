@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.9";
   src = fetchurl {
     url = "https://www.nothink.org/codes/snmpcheck/snmpcheck-${version}.rb";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-9xkLqbgxU1uykx+M9QsbPAH8OI/Cqn9uw6ALe23Lbq0=";
     executable = true;
   };
 

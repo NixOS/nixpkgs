@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/gentium/Gentium-${finalAttrs.version}.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-RBBecFdi/yyFfBk1CcQebOuAdKNUczpwOP52zVtbc2o=";
   };
 
   installPhase = ''

@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-pJqC/sbNjxEwbVf2CVoXMBI5zvT3DqzRlKSqFT8I2sM=";
   };
 
   installPhase = ''

@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://pecita.eu/b/Pecita.otf";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-D9IZ+p4UFHUNt9me7D4vv0x6rMK9IaViKPliCEyX6t4=";
   };
 
   dontUnpack = true;

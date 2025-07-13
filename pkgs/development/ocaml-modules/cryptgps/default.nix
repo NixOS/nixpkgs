@@ -16,7 +16,7 @@ else
 
     src = fetchurl {
       url = "https://download.camlcity.org/download/cryptgps-0.2.1.tar.gz";
-      sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      sha256 = "1mp7i42cm9w9grmcsa69m3h1ycpn6a48p43y4xj8rsc12x9nav3s";
     };
 
     nativeBuildInputs = [

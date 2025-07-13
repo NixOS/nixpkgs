@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation {
   version = "unstable-2023-08-20";
   src = fetchzip {
     url = "https://www2.scrabbleforbundet.no/wp-content/uploads/2023/08/nsf2023.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-bcVqZ2yPHurl6sRNgeLNAyyR8WR9ewmtn85Xuw/rZ3s=";
   };
 
   installPhase = ''

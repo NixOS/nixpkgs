@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://mirror.ifarchive.org/if-archive/infocom/tools/ztools/ztools731.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-vlQX0/fCAr88KJwMnYUSROFOg9tfVK5Hz58AUDuhNXg=";
   };
 
   sourceRoot = ".";

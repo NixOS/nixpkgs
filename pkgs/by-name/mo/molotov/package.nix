@@ -9,7 +9,7 @@ let
   version = "4.4.0";
   src = fetchurl {
     url = "https://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-l4Il6i8uXSeJqH3ITC8ZUpKXPQb0qcW7SpKx1R46XDc=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

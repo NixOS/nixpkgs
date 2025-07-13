@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://microbiology.se/sw/ITSx_${version}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "0lrmy2n3ax7f208k0k8l3yz0j5cpz05hv4hx1nnxzn0c51z1pc31";
   };
 
   buildInputs = [

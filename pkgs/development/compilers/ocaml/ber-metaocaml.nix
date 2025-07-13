@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   metaocaml = fetchurl {
     url = "https://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-vvq3xI4jSAsrXcDk97TPbFDYgO9NcQeN/yBcUbcb/y0=";
   };
 
   x11env = buildEnv {

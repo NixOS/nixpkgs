@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "https://dl.chemaxon.com/marvin/${version}/marvin_linux_${lib.versions.majorMinor version}.deb";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
   };
 
   nativeBuildInputs = [

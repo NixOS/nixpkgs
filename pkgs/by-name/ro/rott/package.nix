@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional withSharewareData (fetchzip {
       url = "https://icculus.org/rott/share/1rott13.zip";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-l0pP+mNPAabGh7LZrwcB6KOhPRSycrZpAlPVTyDXc6Y=";
       stripRoot = false;
     });
 

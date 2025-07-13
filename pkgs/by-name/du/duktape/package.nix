@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.7.0";
   src = fetchurl {
     url = "https://duktape.org/duktape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-kPjS+otVZ8aJmDDd7ywD88J5YLEayiIvoXqnrGE8KJA=";
   };
 
   # https://github.com/svaarala/duktape/issues/2464

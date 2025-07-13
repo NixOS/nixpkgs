@@ -40,12 +40,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.carpeludum.com/download/Fusion363x.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "14s6czy20h5khyy7q95hd7k77v17ssafv9l6lafkiysvj2nmw94g";
   };
 
   plugins = fetchurl {
     url = "https://www.carpeludum.com/download/PluginsLinux.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "0d623cvh6n5ijj3wb64g93mxx2xbichsn7hj7brbb0ndw5cs70qj";
   };
 
   runner = writeText "kega-fusion" ''

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   rebol = fetchurl {
     url = "https://www.rebol.com/downloads/v278/rebol-core-278-4-2.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1c1v0pyhf3d8z98qc93a5zmx0bbl0qq5lr8mbkdgygqsq2bv2xbz";
   };
 
   buildInputs = [

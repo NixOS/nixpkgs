@@ -8,12 +8,12 @@ let
 
   srcs = {
     lemon = fetchurl {
-      sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      sha256 = "1c5pk2hz7j9hix5mpc38rwnm8dnlr2jqswf4lan6v78ccbyqzkjx";
       url = "https://www.sqlite.org/src/raw/tool/lemon.c?name=680980c7935bfa1edec20c804c9e5ba4b1dd96f5";
       name = "lemon.c";
     };
     lempar = fetchurl {
-      sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      sha256 = "1ba13a6yh9j2cs1aw2fh4dxqvgf399gxq1gpp4sh8q0f2w6qiw3i";
       url = "https://www.sqlite.org/src/raw/tool/lempar.c?name=01ca97f87610d1dac6d8cd96ab109ab1130e76dc";
       name = "lempar.c";
     };

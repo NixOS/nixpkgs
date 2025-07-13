@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Prebuilt neural network model that is needed during the build - can be overwritten
     nnmodel = fetchurl {
       url = "https://rowetel.com/downloads/deep/lpcnet_191005_v1.0.tgz";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      hash = "sha256-UJRAkkdR/dh/+qVoPuPd3ZN69cgzuRBMzOZdUWFJJsg=";
     };
   };
 

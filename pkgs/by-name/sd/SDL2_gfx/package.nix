@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.ferzkopp.net/Software/SDL2_gfx/SDL2_gfx-${finalAttrs.version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-Y+DgGt3tyd8vhbk6JI8G6KBK/6AUqDXC6jS/405XYmI=";
   };
 
   nativeBuildInputs = [

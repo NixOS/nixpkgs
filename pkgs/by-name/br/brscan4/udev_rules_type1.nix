@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf006654/brother-udev-rule-type1-${version}.all.deb";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "0i0x5jw135pli4jl9mgnr5n2rrdvml57nw84yq2999r4frza53xi";
   };
 
   dontBuild = true;

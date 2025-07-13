@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/bindings/python/python-efl-${version}.tar.xz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-3Ns5fhIHihnpDYDnxvPP00WIZL/o1UWLzgNott4GKNc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

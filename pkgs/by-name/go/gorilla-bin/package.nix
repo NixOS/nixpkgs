@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "gorilla1537_64.bin";
     url = "https://gorilla.dp100.com/downloads/gorilla1537_64.bin";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "19ir6x4c01825hpx2wbbcxkk70ymwbw4j03v8b2xc13ayylwzx0r";
   };
 
   nativeBuildInputs = [

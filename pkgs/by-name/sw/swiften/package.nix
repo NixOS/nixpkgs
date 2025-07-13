@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://swift.im/git/swift/snapshot/swift-${version}.tar.bz2";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-aj+T6AevtR8birbsj+83nfzFC6cf72q+7nwSM0jaZrA=";
   };
 
   patches = [

@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    inherit hash;
   };
 
   installPhase = ''

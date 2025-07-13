@@ -22,12 +22,12 @@
   # lua
   "lua-5.4.6.tar.gz" = {
     url = "https://www.lua.org/ftp/lua-5.4.6.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-fV6huctqoLWco93hxq3LV++DobqOVDLA7NBr9DmzrYg=";
   };
   # lpeg
   "lpeg-1.1.0.tar.gz" = {
     url = "https://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.1.0.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-SxVdZ9IkbB/6ete8RmweqJm7xA/vAlfMnAPOy67UNSo=";
   };
   # luafilesystem
   "v1_8_0.zip" = {
@@ -37,12 +37,12 @@
   # cdk
   "t20200923.tar.gz" = {
     url = "https://github.com/ThomasDickey/cdk-snapshots/archive/refs/tags/t20200923.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-rjL4oMSDJZWAZJ8pG8FApfpvrVNJvY+6D8ZV+gwvDnI=";
   };
   # libtermkey
   "libtermkey-0.22.tar.gz" = {
     url = "https://www.leonerd.org.uk/code/libtermkey/libtermkey-0.22.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-aUW9PEqqg9qD2AoEXFVj2k7dfQN0xiwNNa7AnrMBRgA=";
   };
   # lua-std-regex
   "1.0.zip" = {

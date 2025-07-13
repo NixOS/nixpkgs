@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.code.sf.net/p/wsjt/wsjtx";
     rev = "wsjtx-${version}";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
   nativeBuildInputs = [

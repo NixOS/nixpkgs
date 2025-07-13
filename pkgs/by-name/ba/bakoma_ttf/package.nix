@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     name = "${pname}.tar.bz2";
     url = "https://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-dYaUMneFn1yC5lIMSLQSNmFRW16AdUXGqWBobzAbPsg=";
   };
 
   installPhase = ''

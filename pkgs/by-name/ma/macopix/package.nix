@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
     url = "https://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

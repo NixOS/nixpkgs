@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://www.jdom.org/dist/binary/jdom-${version}.zip";
     stripRoot = false;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-Y++mlO+7N5EU2NhRzLl5x5WXNqu/2tDO/NpNhfRegcg=";
   };
 
   installPhase = ''

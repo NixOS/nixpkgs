@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
   src = fetchurl {
     url = "https://www.muchsync.org/src/${pname}-${version}.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-+D4vb80O9IE0df3cjTkoVoZlTaX0FWWh6ams14Gjvqw=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

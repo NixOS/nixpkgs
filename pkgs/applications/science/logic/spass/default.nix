@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.spass-prover.org/download/sources/spass${baseVersion}${minorVersion}.tgz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "11cyn3kcff4r79rsw2s0xm6rdb8bi0kpkazv2b48jhcms7xw75qp";
   };
 
   sourceRoot = ".";

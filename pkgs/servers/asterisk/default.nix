@@ -175,7 +175,7 @@ let
   mp3-202 = fetchsvn {
     url = "https://svn.digium.com/svn/thirdparty/mp3/trunk";
     rev = "202";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
 
   asterisk-opus = fetchFromGitHub {

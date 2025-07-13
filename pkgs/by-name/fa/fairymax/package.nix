@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://home.hccnet.nl/h.g.muller/fmax4_8w.c";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-ikn+CA5lxtDYSDT+Nsv1tfORhKW6/vlmHcGAT9SFfQc=";
   };
 
   ini = fetchurl {
     url = "https://home.hccnet.nl/h.g.muller/fmax.ini";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-lh2ivXx4jNdWn3pT1WKKNEvkVQ31JfdDx+vqNx44nf8=";
   };
 
   unpackPhase = ''

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   icon = fetchurl {
     url = "https://tangramgames.dk/img/thumb/sienna.png";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "12q2rhk39dmb6ir50zafn8dylaad5gns8z3y21mfjabc5l5g02nn";
   };
 
   desktopItems = [

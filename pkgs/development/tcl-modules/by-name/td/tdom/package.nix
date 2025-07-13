@@ -13,7 +13,7 @@ mkTclDerivation rec {
 
   src = fetchzip {
     url = "https://tdom.org/downloads/tdom-${version}-src.tgz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-zN855tb9JQUtcB7K1DeAjUBrqhoNH44KbeHwp3qewqw=";
   };
 
   buildInputs = [

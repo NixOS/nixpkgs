@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 
   outputs = [

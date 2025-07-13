@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchzip {
     url = "https://www.alighieri.org/tools/bluesnarfer.tar.gz";
     stripRoot = false;
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-HGdrJZohKIsOkLETBdHz80w6vxmG25aMEWXrQlpMgRw=";
   };
 
   sourceRoot = finalAttrs.src.name + "/bluesnarfer";

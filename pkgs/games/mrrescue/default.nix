@@ -14,7 +14,7 @@ let
 
   icon = fetchurl {
     url = "https://tangramgames.dk/img/thumb/mrrescue.png";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
   };
 
   desktopItem = makeDesktopItem {

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.netlib.org/linalg/spooles/spooles.${version}.tgz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "1pf5z3vvwd8smbpibyabprdvcmax0grzvx2y0liy98c7x6h5jid8";
   };
 
   sourceRoot = ".";

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
   };
 
   sourceRoot = ".";

@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
   };
 
   license = fetchurl {
     url = "https://www.iozone.org/docs/Iozone_License.txt";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-O/8yztxKBI/UKs6vwv9mq16Rn3cf/UHpSxdVnAPVCYw=";
   };
 
   preBuild = "pushd src/current";

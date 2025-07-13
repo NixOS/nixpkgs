@@ -629,7 +629,7 @@ final: prev: {
         }).outPath;
       src = fetchurl {
         url = "https://dkolf.de/dkjson-lua/dkjson-2.8.tar.gz";
-        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        hash = "sha256-JOjNO+uRwchh63uz+8m9QYu/+a1KpdBHGBYlgjajFTI=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.5";
@@ -1314,7 +1314,7 @@ final: prev: {
         }).outPath;
       src = fetchurl {
         url = "https://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lmathx.tar.gz";
-        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        sha256 = "1r0ax3lq4xx6469aqc6qlfl3jynlghzhl5j65mpdj0kyzv4nknzf";
       };
 
       meta = {
@@ -3511,7 +3511,7 @@ final: prev: {
         }).outPath;
       src = fetchurl {
         url = "https://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/luuid.tar.gz";
-        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        sha256 = "1bfkj613d05yps3fivmz0j1bxf2zkg9g1yl0ifffgw0vy00hpnvm";
       };
 
       disabled = luaOlder "5.2" || luaAtLeast "5.4";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.0";
   src = fetchurl {
     url = "https://oldhome.schmorp.de/marc/data/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "0l1qsk949vnz18k4vjf3ppq8p497966x4c7f2yx18x8pk35whn2a";
   };
 
   CFLAGS = "-std=gnu89";

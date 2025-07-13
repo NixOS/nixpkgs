@@ -23,7 +23,7 @@ let
     url = "https://cdn.urbanterror.info/urt/43/releases/zips/UrbanTerror${
       builtins.replaceStrings [ "." ] [ "" ] version
     }_full.zip";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-C6Gb5PPECAOjQhmkrzkV6dpY/zHVtUj9oq3507o2PUI=";
   };
 
   urbanterror-source = fetchzip {

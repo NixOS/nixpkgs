@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   icon = fetchurl {
     url = "https://tangramgames.dk/img/thumb/duckmarines.png";
-    sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    sha256 = "07ypbwqcgqc5f117yxy9icix76wlybp1cmykc8f3ivdps66hl0k5";
   };
 
   desktopItem = makeDesktopItem {

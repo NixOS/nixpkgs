@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     # Original site is no longer available
     url = "https://deb.debian.org/debian/pool/main/l/lcab/lcab_${finalAttrs.version}.orig.tar.gz";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-Bl8sF5O2XyhHHA9xt88SCnBk8o0cRLB8q/SewOl/H8g=";
   };
 
   patches = [
