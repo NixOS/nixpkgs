@@ -693,7 +693,7 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all_channels: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False, sudo: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -705,4 +705,8 @@ def upgrade_channels(all_channels: bool = False) -> None:
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
-            run_wrapper(["nix-channel", "--update", channel_path.name], check=False)
+            run_wrapper(
+                ["nix-channel", "--update", channel_path.name],
+                check=False,
+                sudo=sudo,
+            )
