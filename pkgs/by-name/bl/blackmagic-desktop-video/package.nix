@@ -128,23 +128,25 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "/usr/lib/blackmagic/DesktopVideo/DesktopVideoHelper" "$out/bin/DesktopVideoHelper"
     ''
     + lib.optionalString desktopVideoUpdater ''
-      mkdir -p $out/{bin/Firmware,share/icons,share/applications}
+      mkdir -p $out/{opt/blackmagic/DesktopVideo/{,Firmware},share/icons,share/applications}
       cp $unpacked/usr/share/man/man1/DesktopVideo{UpdateTool,Updater}.1 $out/share/man/man1
       cp -r $unpacked/usr/share/icons/* $out/share/icons
       cp $unpacked/usr/share/applications/DesktopVideoUpdater.desktop $out/share/applications
-      cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/Firmware $out/bin/Firmware  # UpdateTool expects Firmware dir next to it
+      cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/Firmware $out/opt/blackmagic/DesktopVideo/Firmware  # UpdateTool expects Firmware dir next to it
       cp $unpacked/usr/lib/blackmagic/DesktopVideo/libDVUpdate.so $out/lib
-      cp $unpacked/usr/lib/blackmagic/DesktopVideo/DesktopVideo{UpdateTool,Updater} $out/bin/
+      cp $unpacked/usr/lib/blackmagic/DesktopVideo/DesktopVideo{UpdateTool,Updater} $out/opt/blackmagic/DesktopVideo
+      ln -s $out/opt/blackmagic/DesktopVideo/DesktopVideo{UpdateTool,Updater} $out/bin
     ''
     + lib.optionalString desktopVideoGUI ''
-      mkdir -p $out/{share/{icons,applications},bin/plugins}
+      mkdir -p $out/{share/{icons,applications},opt/blackmagic/DesktopVideo/{,plugins}}
       cp -r $unpacked/usr/share/doc/desktopvideo-gui $out/share/doc
       cp $unpacked/usr/share/man/man1/BlackmagicDesktopVideoSetup.1 $out/share/man/man1
       cp -r $unpacked/usr/share/icons/* $out/share/icons
       cp $unpacked/usr/share/applications/BlackmagicDesktopVideoSetup.desktop $out/share/applications
-      cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/plugins $out/bin/plugins
-      cp $unpacked/usr/lib/blackmagic/DesktopVideo/qt.conf $out/bin/
-      cp $unpacked/usr/lib/blackmagic/DesktopVideo/BlackmagicDesktopVideoSetup $out/bin/
+      cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/plugins $out/opt/blackmagic/DesktopVideo/plugins
+      cp $unpacked/usr/lib/blackmagic/DesktopVideo/qt.conf $out/opt/blackmagic/DesktopVideo
+      cp $unpacked/usr/lib/blackmagic/DesktopVideo/BlackmagicDesktopVideoSetup $out/opt/blackmagic/DesktopVideo
+      ln -s $out/opt/blackmagic/DesktopVideo/BlackmagicDesktopVideoSetup $out/bin
     ''
     + ''
       runHook postInstall
