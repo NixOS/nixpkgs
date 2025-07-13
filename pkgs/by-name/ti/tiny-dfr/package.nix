@@ -7,6 +7,7 @@
   gdk-pixbuf,
   glib,
   libinput,
+  librsvg,
   libxml2,
   pango,
   udev,
@@ -15,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny-dfr";
-  version = "0.3.2";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "WhatAmISupposedToPutHere";
     repo = "tiny-dfr";
     rev = "v${version}";
-    hash = "sha256-5u5jyoDEt7aMs8/8QrhrUrUzFJJCNayqbN2WrMhUCV4=";
+    hash = "sha256-G4OeYZH3VF6fKWxHYLTmwzQmQ4JupgYNH/6aJSgINvg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9UlH2W8wNzdZJxIgOafGylliS2RjaBlpirxSWHJ/SIQ=";
+  cargoHash = "sha256-/PtoAc2ZNJfW5gegcFQAAlEmjSMysZ+QebVfHtW35Nk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     glib
     libinput
+    librsvg
     libxml2
     pango
     udev
