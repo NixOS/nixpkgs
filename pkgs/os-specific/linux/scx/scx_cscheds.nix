@@ -67,6 +67,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
     substituteInPlace meson.build \
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
+
+    # TODO: Remove in next release.
+    substituteInPlace lib/scxtest/overrides.h \
+      --replace-fail '#define __builtin_preserve_enum_value(x,y,z) 1' '#define __builtin_preserve_enum_value(x,y) 1'
   '';
 
   nativeBuildInputs =
