@@ -6,8 +6,18 @@ import { join } from 'node:path'
 import { program } from 'commander'
 import { getOctokit } from '@actions/github'
 
-async function run(action, owner, repo) {
+async function run(action, owner, repo, pull_number) {
   const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
+
+  const github = getOctokit(token)
+
+  const payload = !pull_number ? {} : {
+    pull_request: (await github.rest.pulls.get({
+      owner,
+      repo,
+      pull_number,
+    })).data
+  }
 
   const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
   try {
@@ -15,9 +25,9 @@ async function run(action, owner, repo) {
     process.chdir(tmp)
 
     await action({
-      github: getOctokit(token),
+      github,
       context: {
-        payload: {},
+        payload,
         repo: {
           owner,
           repo,
@@ -47,9 +57,10 @@ program
   .description('Manage labels on pull requests.')
   .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
-  .action(async (owner, repo) => {
+  .argument('[pr]', 'Number of the Pull Request to label')
+  .action(async (owner, repo, pr) => {
     const labels = (await import('./labels.js')).default
-    run(labels, owner, repo)
+    run(labels, owner, repo, pr)
   })
 
 await program.parse()
