@@ -16722,12 +16722,6 @@
     githubId = 16974598;
     name = "Mike Playle";
   };
-  mkazulak = {
-    email = "kazulakm@gmail.com";
-    github = "mulderr";
-    githubId = 5698461;
-    name = "Maciej Kazulak";
-  };
   mkez = {
     email = "matias+nix@zwinger.fi";
     github = "mk3z";
