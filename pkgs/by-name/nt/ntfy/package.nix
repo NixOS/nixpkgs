@@ -27,7 +27,7 @@ python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dschep";
@@ -73,8 +73,10 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     # We disable the Darwin specific things because it relies on pyobjc, which we don't have.
     substituteInPlace setup.py \
-      --replace "':sys_platform == \"darwin\"'" "'darwin'"
+      --replace-fail "':sys_platform == \"darwin\"'" "'darwin'"
   '';
+
+  build-system = with python.pkgs; [ setuptools ];
 
   dependencies =
     with python.pkgs;
@@ -122,6 +124,8 @@ python.pkgs.buildPythonApplication rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  pythonImportsCheck = [ "ntfy" ];
 
   meta = with lib; {
     description = "Utility for sending notifications, on demand and when commands finish";
