@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   stdenv,
   buildPackages,
   fetchurl,
@@ -144,6 +145,8 @@ stdenv.mkDerivation {
       fi
     done
   '';
+
+  passthru.cellservdb = callPackage ../cellservdb.nix { };
 
   meta = with lib; {
     outputsToInstall = [
