@@ -76,6 +76,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [
