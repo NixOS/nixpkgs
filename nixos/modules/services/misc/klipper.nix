@@ -172,6 +172,10 @@ in
         assertion = (cfg.configFile != null) != (cfg.settings != null);
         message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
+      {
+        assertion = (cfg.configFile != null) && (cfg.extraSettings != null);
+        message = "You can't use services.klipper.extraSettings with services.klipper.configFile.";
+      }
     ];
 
     services.klipper = lib.mkIf cfg.octoprintIntegration {
