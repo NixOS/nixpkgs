@@ -5,6 +5,7 @@
   tpm2-tss,
   autoreconfHook,
   autoconf-archive,
+  pandoc,
   pkg-config,
   qrencode,
 }:
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
+    pandoc
     pkg-config
   ];
 
