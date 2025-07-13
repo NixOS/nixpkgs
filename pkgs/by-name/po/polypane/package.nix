@@ -35,7 +35,10 @@ appimageTools.wrapType2 {
       A desktop browser for web devs. Preview viewports side-by-side, audit accessibility, SEO and performance. Built to boost productivity and streamline building and testing.
     '';
     homepage = "https://polypane.app/";
-    maintainers = with maintainers; [ kilian mrtrimble ];
+    maintainers = with maintainers; [
+      kilian
+      mrtrimble
+    ];
     platforms = [ "x86_64-linux" ];
     changelog = "https://polypane.app/docs/changelog/";
     license = licenses.unfree;
