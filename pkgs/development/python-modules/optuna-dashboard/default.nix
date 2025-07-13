@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   alembic,
@@ -55,6 +56,12 @@ buildPythonPackage rec {
     moto
     plotly
     streamlit
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: module 'numpy' has no attribute 'float128' ==> not available on 64-bit Darwin
+    "test_infer_sortable"
+    "test_serialize_numpy_floating"
   ];
 
   # Disable tests that use playwright (needs network)
