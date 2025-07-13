@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   zlib,
+  php,
 }:
 
 let
@@ -15,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-P53g/o4i+QETWdErZaGA3AREvnr8kL9h0B1BMQlKdFA=";
   };
 
@@ -30,5 +31,6 @@ buildPecl {
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
     maintainers = with lib.maintainers; [ piotrkwiecinski ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
