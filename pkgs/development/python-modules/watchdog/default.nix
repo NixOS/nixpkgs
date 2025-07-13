@@ -76,8 +76,6 @@ buildPythonPackage rec {
       "--deselect=tests/test_fsevents.py::test_watchdog_recursive"
       # SystemError: Cannot start fsevents stream. Use a kqueue or polling observer...
       "--deselect=tests/test_fsevents.py::test_add_watch_twice"
-      # fsevents:fsevents.py:318 Unhandled exception in FSEventsEmitter
-      "--deselect=ests/test_fsevents.py::test_recursive_check_accepts_relative_paths"
       # gets stuck
       "--deselect=tests/test_fsevents.py::test_converting_cfstring_to_pyunicode"
     ];
