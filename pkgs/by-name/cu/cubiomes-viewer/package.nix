@@ -4,15 +4,14 @@
   fetchFromGitHub,
   qt5,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cubiomes-viewer";
   version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "Cubitect";
-    repo = pname;
-    rev = version;
+    repo = "cubiomes-viewer";
+    tag = finalAttrs.version;
     hash = "sha256-izDKS08LNT2rV5rIxlWRHevJAKEbAVzekjfZy0Oen1I=";
     fetchSubmodules = true;
   };
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/Cubitect/cubiomes-viewer";
     description = "Graphical Minecraft seed finder and map viewer";
@@ -60,8 +59,8 @@ stdenv.mkDerivation rec {
       Cubiomes Viewer provides a graphical interface for the efficient and flexible seed-finding
       utilities provided by cubiomes and a map viewer for the Minecraft biomes and structure generation.
     '';
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hqurve ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hqurve ];
   };
-}
+})
