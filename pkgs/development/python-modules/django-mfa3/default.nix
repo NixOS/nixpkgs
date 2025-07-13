@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   django,
   setuptools,
   pyotp,
@@ -12,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "django-mfa3";
-  version = "0.15.1";
+  version = "1.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
     tag = version;
-    hash = "sha256-HcurgGSzPnKVRpL9NVq0vkCmYDvj/HoWYVbnIrK5pSI=";
+    hash = "sha256-bgIzrSM8KP6uQHvn393NWYw9DODdHLMqKn6pgw3EG/w=";
   };
 
   build-system = [ setuptools ];
