@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       libbsd
     ]
     ++ optionals stdenv.hostPlatform.isLinux [
-      #liburing # FIXME: better solution
+      liburing
       systemd
     ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
