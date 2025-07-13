@@ -16,7 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "rofi-rbw";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
@@ -25,57 +25,47 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Qdbz3UjWMCuJUzR6UMt/apt+OjMAr2U7uMtv9wxEZKE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.hatchling
   ];
 
-  buildInputs = [
-    rbw
-  ]
-  ++ lib.optionals waylandSupport [
-    wl-clipboard
-    wtype
-  ]
-  ++ lib.optionals x11Support [
-    xclip
-    xdotool
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.configargparse
   ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 
-  wrapper_paths = [
-    rbw
-  ]
-  ++ lib.optionals waylandSupport [
-    wl-clipboard
-    wtype
-  ]
-  ++ lib.optionals x11Support [
-    xclip
-    xdotool
-  ];
+  preFixup =
+    let
+      wrapperPaths = [
+        rbw
+      ]
+      ++ lib.optionals waylandSupport [
+        wl-clipboard
+        wtype
+      ]
+      ++ lib.optionals x11Support [
+        xclip
+        xdotool
+      ];
 
-  wrapper_flags =
-    lib.optionalString waylandSupport "--typer wtype --clipboarder wl-copy"
-    + lib.optionalString x11Support "--typer xdotool --clipboarder xclip";
+      wrapperFlags =
+        lib.optionalString waylandSupport " --typer wtype --clipboarder wl-copy"
+        + lib.optionalString x11Support " --typer xdotool --clipboarder xclip";
+    in
+    ''
+      makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath wrapperPaths} --add-flags "${wrapperFlags}")
+    '';
 
-  preFixup = ''
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath wrapper_paths} --add-flags "${wrapper_flags}")
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Rofi frontend for Bitwarden";
     homepage = "https://github.com/fdw/rofi-rbw";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       equirosa
       dit7ya
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";
   };
 }
