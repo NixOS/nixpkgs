@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
-  version = "2.6.3";
+  version = "2.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mcmtroffaes";
     repo = "sphinxcontrib-bibtex";
     tag = version;
-    hash = "sha256-cqz5Jamtlflo5rFhWPCPlYoymApUtXPG4oTRjfDI+WY=";
+    hash = "sha256-sT23DkIfJcb3cFBFdL31RRzlDoJRcCUYIdpUVuYjGuo=";
   };
 
   build-system = [ setuptools ];
