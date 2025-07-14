@@ -103,12 +103,8 @@ let
       moreutils
     ];
 
-    patchPhase = ''
-      runHook prePatch
-
+    prePatch = ''
       jq '.version = "${version}"' app/package.json | sponge app/package.json
-
-      runHook postPatch
     '';
 
     configurePhase =
