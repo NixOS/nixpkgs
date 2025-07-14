@@ -26,14 +26,14 @@
   testers,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "eddie";
   version = "2.24.6";
 
   src = fetchFromGitHub {
     owner = "AirVPN";
     repo = "Eddie";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XSLxjF2k9cw+cx6KzFIQHtjDWqLT2V49KRw+oIyxM5M=";
   };
 
@@ -75,7 +75,7 @@ buildDotnetModule rec {
 
   makeWrapperArgs = [
     "--add-flags \"--path.resources=${placeholder "out"}/share/eddie-ui\""
-    "--prefix PATH : ${nativeRuntimeInputs}"
+    "--prefix PATH : ${finalAttrs.nativeRuntimeInputs}"
   ];
 
   executables = [ "eddie-cli" ];
@@ -120,7 +120,7 @@ buildDotnetModule rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/eddie-ui \
       --add-flags $out/lib/eddie-ui/App.Forms.Linux.exe \
-      --prefix LD_LIBRARY_PATH : ${runtimeInputs} \
+      --prefix LD_LIBRARY_PATH : ${finalAttrs.runtimeInputs} \
       ''${makeWrapperArgs[@]}
   '';
 
@@ -139,4 +139,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
