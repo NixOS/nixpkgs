@@ -15,29 +15,25 @@
   lua53Packages,
   perlPackages,
   gtk3,
+  nix-update-script,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.63.0";
+  version = "0.63.2";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
     tag = version;
-    hash = "sha256-wFVAytrcRu3Ezy/VcbmXwl+X96QMa5KimjUoP07hmFg=";
+    hash = "sha256-de92lBnn0tp7Awm6PLJw12GfYohXY9m59XPmw7npvOg=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/solemnwarning/rehex/commit/0cfe145e034019952383ad28a431f552a5567f89.patch";
-      hash = "sha256-PmqvjAXjqZM1BuqHHyQC5qXubTDYlE3VR1DiCCx3aeU=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
     which
+    wrapGAppsHook3
     zip
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
 
@@ -70,6 +66,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Reverse Engineers' Hex Editor";

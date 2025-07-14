@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-dependency-tracking"
-    "--with-threads=single"
+    "gcc_cv_target_thread_file=single"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
   ];
