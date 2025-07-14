@@ -12,7 +12,7 @@
   git,
   gnused,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
   rebar3-nix,
 }:
 
@@ -95,7 +95,7 @@ let
           git
           gnused
           nix
-          nixfmt-rfc-style
+          nixfmt
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
