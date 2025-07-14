@@ -432,6 +432,15 @@ let
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
+    // {
+      # `pytest` defaults to discover tests in the current directory if no paths or test items are specified.
+      # Provide an explicit default value to simplify overriding.
+      enabledTestPaths =
+        lib.throwIf
+          (attrs.enabledTestPaths or [ "." ] == [ ])
+          "${lib.getName finalAttrs}: enabledTestPaths must be a non-empty list (default to [ \".\" ])."
+          attrs.enabledTestPaths or [ "." ];
+    }
     //
       lib.mapAttrs
         (
@@ -443,7 +452,6 @@ let
         (
           getOptionalAttrs [
             "enabledTestMarks"
-            "enabledTestPaths"
             "enabledTests"
           ] attrs
         )
