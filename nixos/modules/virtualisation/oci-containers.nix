@@ -558,7 +558,7 @@ let
           Restart = "always";
         }
         // optionalAttrs (cfg.backend == "podman") {
-          Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+          Environment = "PODMAN_SYSTEMD_UNIT=%n";
           Type = "notify";
           NotifyAccess = "all";
           Delegate = mkIf (container.podman.sdnotify == "healthy") true;
