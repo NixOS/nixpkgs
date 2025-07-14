@@ -20,7 +20,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
   version = "1.8.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
@@ -87,6 +87,8 @@ python3Packages.buildPythonApplication rec {
       ''
     else
       null;
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [ installShellFiles ];
 
