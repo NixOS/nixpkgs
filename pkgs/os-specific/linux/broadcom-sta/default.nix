@@ -94,12 +94,15 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
-    homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
+    homepage = "https://www.broadcom.com/support/download-search?pg=Legacy%20Products&pf=Legacy%20Wireless&pn&pa&po&dk&pl";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [
       j0hax
       nullcube
     ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }
