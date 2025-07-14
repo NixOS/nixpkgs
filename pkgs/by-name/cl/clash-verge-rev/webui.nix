@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = npm-hash;
+    fetcherVersion = 1;
   };
 
   nativeBuildInputs = [

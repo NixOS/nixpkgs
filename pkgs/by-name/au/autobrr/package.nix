@@ -41,6 +41,7 @@ let
         sourceRoot
         ;
       hash = "sha256-XFGxutHWk1RHnrN//WVTr4RyARIkygdG2C1Af5W0dBc=";
+      fetcherVersion = 1;
     };
 
     postBuild = ''

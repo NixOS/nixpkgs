@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     hash = "sha256-2n61uKdT9Q1fobpHunRhC3Eql3fqsV+DcyaEGjYDOyY=";
+    fetcherVersion = 1;
   };
   buildPhase = ''
     runHook preBuild
