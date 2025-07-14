@@ -18,6 +18,8 @@ let
     isPath
     isString
     isList
+    mkEnableOption
+    mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
     ;
@@ -81,11 +83,9 @@ in
 
   options = {
     services.postsrsd = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the postsrsd SRS server for Postfix.";
-      };
+      enable = mkEnableOption "the postsrsd SRS server for Postfix.";
+
+      package = mkPackageOption pkgs "postsrsd" { };
 
       secretsFile = lib.mkOption {
         type = lib.types.path;
@@ -207,7 +207,7 @@ in
         description = ''
           Configuration options for the postsrsd.conf file.
 
-          See the [example configuration](https://github.com/roehling/postsrsd/blob/main/doc/postsrsd.conf) for possible values.
+          See the [example configuration](https://github.com/roehling/postsrsd/blob/${cfg.package.version}/doc/postsrsd.conf) for possible values.
         '';
       };
 
@@ -293,7 +293,7 @@ in
 
         serviceConfig = {
           ExecStart = utils.escapeSystemdExecArgs [
-            (lib.getExe pkgs.postsrsd)
+            (lib.getExe cfg.package)
             "-C"
             "/etc/postsrsd.conf"
           ];
@@ -343,4 +343,7 @@ in
       };
     })
   ];
+
+  # package version referenced in option documentation
+  meta.buildDocsInSandbox = false;
 }
