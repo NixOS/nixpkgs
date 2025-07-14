@@ -6,14 +6,14 @@
   gh,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "claude-squad";
   version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "smtg-ai";
     repo = "claude-squad";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mzW9Z+QN4EQ3JLFD3uTDT2/c+ZGLzMqngl3o5TVBZN0=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ buildGoModule rec {
     mv $out/bin/claude-squad $out/bin/cs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal application for managing multiple AI coding agents in isolated workspaces";
     homepage = "https://github.com/smtg-ai/claude-squad";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ benjaminkitt ];
     mainProgram = "cs";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.darwin;
   };
-}
+})
