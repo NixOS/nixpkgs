@@ -79,7 +79,7 @@ buildGoModule (finalAttrs: {
         --zsh <(${apko}/bin/apko completion zsh)
     '';
 
-  nativeCheckInstallInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "version";
 
