@@ -91,6 +91,10 @@
     && !stdenv.hostPlatform.isStatic,
   elfutils,
 
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
+
   # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
   ghcFlavour ?
@@ -461,6 +465,7 @@ let
       gmp
       libffi
       ncurses
+      numactl
       ;
   };
 
@@ -646,6 +651,11 @@ stdenv.mkDerivation (
         "--with-libdw-includes=${lib.getDev targetLibs.elfutils}/include"
         "--with-libdw-libraries=${lib.getLib targetLibs.elfutils}/lib"
       ]
+      ++ lib.optionals enableNuma [
+        "--enable-numa"
+        "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+        "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
+      ]
       ++ lib.optionals targetPlatform.isDarwin [
         # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
         # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
@@ -713,8 +723,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage0:ghc (i.e. stage1) doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     hadrianFlags =
       [
