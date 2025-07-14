@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       ;
     hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
+    fetcherVersion = 1;
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'

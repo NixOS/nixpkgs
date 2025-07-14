@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation rec {
       patches
       ;
     hash = "sha256-y1R+rlaOtFOHHAgEHPBl40536U10Ft0iUSfGcfXS08Y=";
+    fetcherVersion = 1;
   };
 
   # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
