@@ -28,15 +28,13 @@
 
 buildDotnetModule rec {
   pname = "eddie";
-  version = "2.24.4";
+  version = "2.24.6";
 
   src = fetchFromGitHub {
     owner = "AirVPN";
     repo = "Eddie";
-    # Upstream uses the summaries of commits for
-    # specifying the versions of experimental builds
-    rev = "aeaa7e594d71610dd2c231a8dc5c5aaddc89a7c1";
-    hash = "sha256-AlnWqrKoZb4s4MfPClxlEqzKIOwWL/frA+dx2kCNwW4=";
+    tag = version;
+    hash = "sha256-XSLxjF2k9cw+cx6KzFIQHtjDWqLT2V49KRw+oIyxM5M=";
   };
 
   patches = [
