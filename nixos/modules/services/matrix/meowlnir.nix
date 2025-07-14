@@ -8,89 +8,149 @@ let
   cfg = config.services.meowlnir;
   format = pkgs.formats.yaml { };
 
+  registrationFile = "${cfg.dataDir}/registration.yaml";
+
   settingsFile = "${cfg.dataDir}/config.yaml";
   settingsFileUnsubstituted = format.generate "meowlnir-config-unsubstituted.yaml" cfg.settings;
-
-  registrationFile = "${cfg.dataDir}/registration.yaml";
-  registrationFileUnsubstituted = format.generate "meowlnir-registration-unsubstituted.yaml" cfg.registration;
 in
 {
   options.services.meowlnir = {
     enable = lib.mkEnableOption "meowlnir service";
 
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.meowlnir;
+      defaultText = lib.literalExpression "pkgs.meowlnir";
+      description = "The meowlnir package to use.";
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
+
+        config = {
+          _module.args = { inherit cfg lib; };
+        };
+
         options = {
-          meowlnir = {
-            id = lib.mkOption {
-              type = lib.types.str;
-              default = "meowlnir";
-              description = "The ID of the appservice.";
-            };
-            address = lib.mkOption {
-              type = lib.types.str;
-              default = "http://${cfg.settings.meowlnir.hostname}:${toString cfg.settings.meowlnir.port}";
-              defaultText = lib.literalExpression "http://\${config.services.meowlnir.settings.meowlnir.hostname}:\${toString config.services.meowlnir.settings.meowlnir.port}";
-              description = "The address for the appservice to listen on.";
-            };
-            hostname = lib.mkOption {
-              type = lib.types.str;
-              default = "localhost";
-              description = "The hostname for the appservice to listen on.";
-            };
-            port = lib.mkOption {
-              type = lib.types.int;
-              default = 29339;
-              description = "The port for the appservice to listen on.";
-            };
+          homeserver = lib.mkOption {
+            type = lib.types.attrs;
+            default = { };
+            description = ''
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
           };
-          encryption = {
-            enable =
-              lib.mkEnableOption "end-to-end encryption support. This requires MSC3202, MSC4190 and MSC4203 to be implemented on the server"
-              // {
-                default = true;
-              };
-            pickle_key = lib.mkOption {
-              type = lib.types.str;
-              default = "fi.mau.meowlnir.e2ee";
-              description = "The pickle key for the encryption module.";
+
+          meowlnir = lib.mkOption {
+            type = lib.types.attrs;
+            default = rec {
+              id = "meowlnir";
+              default = "http://${hostname}:${port}";
+              hostname = "localhost";
+              port = 29339;
+              as_token = "generate";
+              hs_token = "generate";
             };
+            defaultText = lib.literalExpression ''
+              {
+                id = "meowlnir";
+                default = "http://''${hostname}:''${port}";
+                hostname = "localhost";
+                port = 29339;
+                as_token = "generate";
+                hs_token = "generate";
+              }
+            '';
+            description = ''
+              The configuration for the meowlnir appservice.
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
           };
-          database = {
-            type = lib.mkOption {
-              type = lib.types.enum [
-                "sqlite3-fk-wal"
-                "postgres"
-              ];
-              default = "sqlite3-fk-wal";
-              description = ''
-                The type of database to use. Supported values are
-                `sqlite3-fk-wal` and `postgres`.
-              '';
+
+          encryption = lib.mkOption {
+            type = lib.types.attrs;
+            default = {
+              enable = true;
+              pickle_key = "generate";
             };
-            uri = lib.mkOption {
-              type = lib.types.str;
-              default = "file:${cfg.dataDir}/meowlnir.db?_txlock=immediate";
-              defaultText = lib.literalExpression "file:\${config.services.meowlnir.dataDir}/meowlnir.db?_txlock=immediate";
-              description = "The database URI.";
-            };
+            defaultText = lib.literalExpression ''
+              {
+                enable = true;
+                pickle_key = "generate";
+              }
+            '';
+            description = ''
+              The encryption configuration for meowlnir.
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
           };
-          logging = {
-            min_level = lib.mkOption {
-              type = lib.types.str;
-              default = "debug";
-              description = "The minimum logging level.";
+
+          database = lib.mkOption {
+            type = lib.types.attrs;
+            default = {
+              type = "sqlite3";
+              uri = "file:${cfg.dataDir}/meowlnir.db?_txlock=immediate";
             };
-            writers = lib.mkOption {
-              type = lib.types.listOf lib.types.attrs;
-              default = [
+            defaultText = lib.literalExpression ''
+              {
+                type = "sqlite3";
+                uri = "file:${cfg.dataDir}/meowlnir.db?_txlock=immediate";
+              }
+            '';
+            description = ''
+              The database configuration for meowlnir.
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
+          };
+
+          synapse_db = lib.mkOption {
+            type = lib.types.attrs;
+            default = {
+              type = "postgres";
+            };
+            defaultText = lib.literalExpression ''
+              {
+                type = "postgres";
+              }
+            '';
+            description = ''
+              The Synapse database configuration for meowlnir.
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
+          };
+
+          logging = lib.mkOption {
+            type = lib.types.attrs;
+            default = {
+              min_level = "debug";
+              writers = [
                 {
                   type = "stdout";
                   format = "json";
                 }
               ];
             };
+            defaultText = lib.literalExpression ''
+              {
+                min_level = "debug";
+                writers = [
+                  {
+                    type = "stdout";
+                    format = "json";
+                  }
+                ];
+              }
+            '';
+            description = ''
+              The logging configuration for meowlnir.
+              See [example-config.yaml](https://github.com/maunium/meowlnir/blob/main/config/example-config.yaml)
+              for more information.
+            '';
           };
         };
       };
@@ -127,38 +187,13 @@ in
       '';
     };
 
-    registration = lib.mkOption rec {
-      apply = lib.recursiveUpdate default;
-      inherit (format) type;
-      example = {
-        as_token = "$MEOWLNIR_AS_TOKEN";
-        hs_token = "$MEOWLNIR_HS_TOKEN";
-        sender_localpart = "mohMex1ro0zaeraimeem";
-        namespaces = {
-          users = [
-            {
-              regex = "@abuse:example.com";
-              exclusive = true;
-            }
-          ];
-        };
-      };
-      default = {
-        inherit (cfg.settings.meowlnir) id;
-        url = cfg.settings.meowlnir.address;
-        sender_localpart = "meowlnirfakesenderlocalpart";
-        rate_limited = false;
-        "org.matrix.msc3202" = true;
-        "io.element.msc4190" = true;
-        "de.sorunome.msc2409.push_ephemeral" = true;
-        receive_ephemeral = true;
-      };
+    registerToSynapse = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.matrix-synapse.enable;
+      defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
       description = ''
-        {file}`registration.yaml` configuration as a Nix attribute set. See
-        [Appservice registration in the README](https://github.com/maunium/meowlnir/?tab=readme-ov-file#appservice-registration)
-
-        Secret tokens should be specified using {option}`environmentFile`
-        instead
+        Whether to add meowlnir's app service registration file to
+        `services.matrix-synapse.settings.app_service_config_files`.
       '';
     };
 
@@ -186,38 +221,85 @@ in
       '';
     };
 
+    serviceUnit = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      default = "meowlnir.service";
+      description = ''
+        The systemd unit (a service or a target) for other services to depend on if they
+        need to be started after matrix-synapse.
+        This option is useful as the actual parent unit for all matrix-synapse processes
+        changes when configuring workers.
+      '';
+    };
+
+    registrationServiceUnit = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      default = "meowlnir-registration.service";
+      description = ''
+        The registration service that generates the registration file.
+        Systemd unit (a service or a target) for other services to depend on if they
+        need to be started after meowlnir registration service.
+        This option is useful as the actual parent unit for all matrix-synapse processes
+        changes when configuring workers.
+      '';
+    };
+
     serviceDependencies = lib.mkOption {
-      type = with lib.types; listOf str;
-      default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-      defaultText = lib.literalExpression ''
-        optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
+      type = lib.types.listOf lib.types.str;
+      default =
+        [ cfg.registrationServiceUnit ]
+        ++ (lib.lists.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
+        ++ (lib.lists.optional config.services.matrix-conduit.enable "matrix-conduit.service")
+        ++ (lib.lists.optional config.services.dendrite.enable "dendrite.service");
+
+      defaultText = ''
+        [ cfg.registrationServiceUnit ] ++
+        (lib.lists.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit) ++
+        (lib.lists.optional config.services.matrix-conduit.enable "matrix-conduit.service") ++
+        (lib.lists.optional config.services.dendrite.enable "dendrite.service");
       '';
       description = ''
         List of Systemd services to require and wait for when starting the application service.
       '';
     };
-
-    registerToSynapse = lib.mkOption {
-      type = lib.types.bool;
-      default = config.services.matrix-synapse.enable;
-      defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
-      description = ''
-        Whether to add the bridge's app service registration file to
-        `services.matrix-synapse.settings.app_service_config_files` and enable
-        the required experimental features.
-      '';
-    };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          cfg.settings.homeserver.domain or "" != "" && cfg.settings.homeserver.address or "" != "";
+        message = ''
+          The options with information about the homeserver:
+          `services.meowlnir.settings.homeserver.domain` and
+          `services.meowlnir.settings.homeserver.address` have to be set.
+        '';
+      }
+      {
+        assertion = cfg.settings.meowlnir.id != "";
+        message = ''
+          The option `services.meowlnir.settings.appservice.id` has to be set.
+        '';
+      }
+    ];
+
     users = {
       users.meowlnir = {
         home = cfg.dataDir;
         description = "Meowlnir bridge user";
         group = "meowlnir";
         isSystemUser = true;
+        extraGroups = [ "meowlnir-registration" ];
       };
-      groups.meowlnir = { };
+
+      groups = {
+        meowlnir = { };
+        meowlnir-registration = {
+          members = lib.lists.optional config.services.matrix-synapse.enable "matrix-synapse";
+        };
+      };
     };
 
     services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
@@ -232,75 +314,160 @@ in
         };
       };
     };
-    systemd.services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
-      serviceConfig.SupplementaryGroups = [ "meowlnir" ];
-    };
+    systemd.services = {
+      matrix-synapse = lib.mkIf cfg.registerToSynapse {
+        serviceConfig.SupplementaryGroups = [ "meowlnir-registration" ];
+        # Make synapse depend on the registration service when auto-registering
+        wants = [ "meowlnir-registration.service" ];
+        after = [ "meowlnir-registration.service" ];
+      };
 
-    services.meowlnir.settings = {
-      # Note: this is defined here to avoid the docs depending on `config`
-      homeserver.domain = lib.mkDefault config.services.matrix-synapse.settings.server_name;
-    };
+      meowlnir-registration = {
+        description = "Meowlnir registration generation service";
 
-    systemd.services.meowlnir = {
-      description = "meowlnir - opinionated Matrix moderation bot";
+        wantedBy = lib.mkIf cfg.registerToSynapse [ "multi-user.target" ];
+        before = lib.mkIf cfg.registerToSynapse [ "matrix-synapse.service" ];
 
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+        path = [
+          pkgs.yq
+          pkgs.envsubst
+          cfg.package
+        ];
 
-      restartTriggers = [ settingsFileUnsubstituted ];
-      preStart = ''
-        # ensure that the data directory is set up correctly
-        mkdir -p ${cfg.dataDir}
-        chmod 755 ${cfg.dataDir}
+        script = ''
+          # substitute the settings file by environment variables
+          # in this case read from EnvironmentFile
+          rm -f '${settingsFile}'
+          old_umask=$(umask)
+          umask 0177
+          envsubst \
+            -o '${settingsFile}' \
+            -i '${settingsFileUnsubstituted}'
+          config_has_tokens=$(yq '.appservice | has("as_token") and has("hs_token")' '${settingsFile}')
+          registration_already_exists=$([[ -f '${registrationFile}' ]] && echo "true" || echo "false")
+          echo "There are tokens in the config: $config_has_tokens"
+          echo "Registration already existed: $registration_already_exists"
+          # tokens not configured from config/environment file, and registration file
+          # is already generated, override tokens in config to make sure they are not lost
+          if [[ $config_has_tokens == "false" && $registration_already_exists == "true" ]]; then
+            echo "Copying as_token, hs_token from registration into configuration"
+            yq -sY '.[0].appservice.as_token = .[1].as_token
+              | .[0].appservice.hs_token = .[1].hs_token
+              | .[0]' '${settingsFile}' '${registrationFile}' \
+              > '${settingsFile}.tmp'
+            mv '${settingsFile}.tmp' '${settingsFile}'
+          fi
+          # make sure --generate-registration does not affect config.yaml
+          cp '${settingsFile}' '${settingsFile}.tmp'
+          echo "Generating registration file"
+          meowlnir \
+            --generate-registration \
+            --config='${settingsFile}.tmp' \
+            --registration='${registrationFile}'
+          rm '${settingsFile}.tmp'
+          # no tokens configured, and new were just generated by generate registration for first time
+          if [[ $config_has_tokens == "false" && $registration_already_exists == "false" ]]; then
+            echo "Copying newly generated as_token, hs_token from registration into configuration"
+            yq -sY '.[0].appservice.as_token = .[1].as_token
+              | .[0].appservice.hs_token = .[1].hs_token
+              | .[0]' '${settingsFile}' '${registrationFile}' \
+              > '${settingsFile}.tmp'
+            mv '${settingsFile}.tmp' '${settingsFile}'
+          fi
+          # make sure --generate-registration does not affect config.yaml
+          cp '${settingsFile}' '${settingsFile}.tmp'
+          echo "Generating registration file"
+          meowlnir \
+            --generate-registration \
+            --config='${settingsFile}.tmp' \
+            --registration='${registrationFile}'
+          rm '${settingsFile}.tmp'
+          # no tokens configured, and new were just generated by generate registration for first time
+          if [[ $config_has_tokens == "false" && $registration_already_exists == "false" ]]; then
+            echo "Copying newly generated as_token, hs_token from registration into configuration"
+            yq -sY '.[0].appservice.as_token = .[1].as_token
+              | .[0].appservice.hs_token = .[1].hs_token
+              | .[0]' '${settingsFile}' '${registrationFile}' \
+              > '${settingsFile}.tmp'
+            mv '${settingsFile}.tmp' '${settingsFile}'
+          fi
+          # Make sure correct tokens are in the registration file
+          if [[ $config_has_tokens == "true" || $registration_already_exists == "true" ]]; then
+            echo "Copying as_token, hs_token from configuration to the registration file"
+            yq -sY '.[1].as_token = .[0].appservice.as_token
+              | .[1].hs_token = .[0].appservice.hs_token
+              | .[1]' '${settingsFile}' '${registrationFile}' \
+              > '${registrationFile}.tmp'
+            mv '${registrationFile}.tmp' '${registrationFile}'
+          fi
+          umask $old_umask
+          chown :meowlnir-registration '${registrationFile}'
+          chmod 640 '${registrationFile}'
+        '';
 
-        # substitute the settings file by environment variables
-        # in this case read from EnvironmentFile
-        test -f '${settingsFile}' && rm -f '${settingsFile}'
-        old_umask=$(umask)
-        umask 0177
-        ${pkgs.envsubst}/bin/envsubst \
-          -o '${settingsFile}' \
-          -i '${settingsFileUnsubstituted}'
-        umask $old_umask
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          UMask = 27;
 
-        ${pkgs.envsubst}/bin/envsubst \
-          -o '${registrationFile}' \
-          -i '${registrationFileUnsubstituted}'
-        chmod 644 ${registrationFile}
-      '';
+          User = "meowlnir";
+          Group = "meowlnir";
 
-      serviceConfig = {
-        User = "meowlnir";
-        Group = "meowlnir";
-        EnvironmentFile = cfg.environmentFile;
-        StateDirectory = baseNameOf cfg.dataDir;
-        StateDirectoryMode = "0750";
-        WorkingDirectory = cfg.dataDir;
-        ExecStart = "${pkgs.meowlnir}/bin/meowlnir --config=${settingsFile}";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        Restart = "on-failure";
-        RestartSec = "30s";
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" ];
-        Type = "simple";
-        UMask = "0027";
+          SystemCallFilter = [ "@system-service" ];
+
+          ProtectSystem = "strict";
+          ProtectHome = true;
+
+          ReadWritePaths = [ cfg.dataDir ];
+          StateDirectory = "meowlnir";
+          EnvironmentFile = cfg.environmentFile;
+        };
+
+        restartTriggers = [ settingsFileUnsubstituted ];
+      };
+
+      meowlnir = {
+        description = "meowlnir - opinionated Matrix moderation bot";
+
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
+        after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+
+        restartTriggers = [ settingsFileUnsubstituted ];
+
+        serviceConfig = {
+          Type = "simple";
+          User = "meowlnir";
+          Group = "meowlnir";
+          PrivateUsers = true;
+          Restart = "on-failure";
+          RestartSec = 30;
+          WorkingDirectory = cfg.dataDir;
+          ExecStart = ''
+            ${lib.getExe cfg.package} \
+              --config='${settingsFile}'
+          '';
+          EnvironmentFile = cfg.environmentFile;
+
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          RestrictSUIDSGID = true;
+          RestrictRealtime = true;
+          LockPersonality = true;
+          ProtectKernelLogs = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = "@system-service";
+          ReadWritePaths = [ cfg.dataDir ];
+        };
       };
     };
   };
