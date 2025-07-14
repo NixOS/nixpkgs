@@ -41,5 +41,6 @@
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
+  "@spyglassmc/language-server" = "spyglassmc-language-server";
   vscode-json-languageserver = "vscode-json-languageserver";
 }

@@ -144,6 +144,7 @@
 , "sloc"
 , "smartdc"
 , "speed-test"
+, "@spyglassmc/language-server"
 , "svelte-check"
 , "svgo"
 , "tern"
