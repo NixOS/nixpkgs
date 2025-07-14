@@ -126,7 +126,7 @@ import ../../make-test-python.nix (
           environment = {
             etc = {
               "mastodon/password-redis-db".text = redisPassword;
-              "mastodon/password-posgressql-db".text = postgresqlPassword;
+              "mastodon/password-postgresql-db".text = postgresqlPassword;
             };
           };
 
@@ -163,7 +163,6 @@ import ../../make-test-python.nix (
               port = 5432;
               name = "mastodon";
               user = "mastodon";
-              passwordFile = "/etc/mastodon/password-posgressql-db";
             };
             smtp = {
               createLocally = false;
@@ -176,6 +175,7 @@ import ../../make-test-python.nix (
               EMAIL_DOMAIN_ALLOWLIST = "example.com";
               RAILS_SERVE_STATIC_FILES = "true";
             };
+            secrets.DB_PASS = "/etc/mastodon/password-postgresql-db";
           };
         };
 

@@ -304,6 +304,20 @@ in
         "SECRET_KEY_BASE"
       ]
     )
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "mastodon"
+        "database"
+        "passwordFile"
+      ]
+      [
+        "services"
+        "mastodon"
+        "secrets"
+        "DB_PASS"
+      ]
+    )
   ];
 
   options = {
@@ -613,16 +627,6 @@ in
           default = "mastodon";
           description = "Database user.";
         };
-
-        passwordFile = lib.mkOption {
-          type = lib.types.nullOr lib.types.path;
-          default = null;
-          example = "/var/lib/mastodon/secrets/db-password";
-          description = ''
-            A file containing the password corresponding to
-            {option}`database.user`.
-          '';
-        };
       };
 
       smtp = {
@@ -837,6 +841,15 @@ in
               default = "/var/lib/mastodon/secrets/secret-key-base";
               type = lib.types.path;
             };
+            DB_PASS = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
+              default = null;
+              example = "/var/lib/mastodon/secrets/db-password";
+              description = ''
+                A file containing the password corresponding to
+                {option}`database.user`.
+              '';
+            };
           };
         };
       };
@@ -985,9 +998,6 @@ in
             + lib.optionalString (cfg.redis.passwordFile != null) ''
               REDIS_PASSWORD="$(cat ${cfg.redis.passwordFile})"
             ''
-            + lib.optionalString (cfg.database.passwordFile != null) ''
-              DB_PASS="$(cat ${cfg.database.passwordFile})"
-            ''
             + lib.optionalString cfg.smtp.authenticate ''
               SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
             ''
@@ -1017,7 +1027,7 @@ in
           script =
             lib.optionalString (!databaseActuallyCreateLocally) ''
               umask 077
-              export PGPASSWORD="$(cat '${cfg.database.passwordFile}')"
+              export PGPASSWORD="$(cat '${cfg.secrets.DB_PASS}')"
             ''
             + ''
               result="$(psql -t --csv -c \
