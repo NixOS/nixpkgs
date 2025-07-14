@@ -2124,7 +2124,7 @@ with haskellLib;
     self: super: {
       # stack needs to be built with the same hpack version that the upstream releases use.
       # https://github.com/NixOS/nixpkgs/issues/223390
-      hpack = self.hpack_0_38_0;
+      hpack = self.hpack_0_38_1;
     }
   );
 
