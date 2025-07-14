@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-dependency-tracking"
     "--with-toolexeclibdir=${builtins.placeholder "out"}/lib"
-    "--with-threads=posix"
+    "gcc_cv_target_thread_file=posix"
     "cross_compiling=true"
     "--disable-multilib"
 

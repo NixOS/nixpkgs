@@ -51,21 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Submitted:
-    #  - https://gcc.gnu.org/pipermail/gcc-patches/2021-August/577639.html
-    #  - https://gcc.gnu.org/pipermail/gcc-patches/2021-August/577640.html
-    #  - https://gcc.gnu.org/pipermail/gcc-patches/2021-August/577638.html
-    #
-    # In Git: https://github.com/Ericson2314/gcc/tree/prog-target-15
     (getVersionFile "gcc/0001-find_a_program-First-search-with-machine-prefix.patch")
     (getVersionFile "gcc/0002-driver-for_each_pass-Pass-to-callback-whether-dir-is.patch")
     (getVersionFile "gcc/0003-find_a_program-Only-search-for-prefixed-paths-in-und.patch")
 
-    # Submitted: https://inbox.sourceware.org/gcc-patches/20210818203840.1550133-1-John.Ericson@Obsidian.Systems/T/#t
-    # In Git: https://github.com/Ericson2314/gcc/tree/libgcc-custom-threading-model-15
-    (getVersionFile "gcc/custom-threading-model.patch")
-
-    # TODO: fix up and send to upstream
     (getVersionFile "gcc/fix-collect2-paths.diff")
   ];
 
