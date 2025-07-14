@@ -2,6 +2,7 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
+  gettext,
   glib,
   gobject-introspection,
   intltool,
@@ -28,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    gettext
     gobject-introspection
     intltool
     wrapGAppsHook3
@@ -44,6 +46,8 @@ python3.pkgs.buildPythonApplication rec {
     mutagen
     pygobject3
   ];
+
+  patches = [ ./fix-gettext-0.25.patch ];
 
   meta = with lib; {
     description = "MPRIS 2 support for mpd";
