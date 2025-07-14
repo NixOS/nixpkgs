@@ -5,12 +5,14 @@
 
 pkgs.callPackage (
   {
-    mkShell,
+    gh,
     importNpmLock,
+    mkShell,
     nodejs,
   }:
   mkShell {
     packages = [
+      gh
       importNpmLock.hooks.linkNodeModulesHook
       nodejs
     ];

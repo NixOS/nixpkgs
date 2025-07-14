@@ -5,8 +5,8 @@ It provides a `nix-shell` environment to run and test these actions locally.
 
 To run any of the scripts locally:
 
-- Provide `gh` on `PATH` and make sure it's authenticated.
 - Enter `nix-shell` in `./ci/github-script`.
+- Ensure `gh` is authenticated.
 
 ## Labeler
 
