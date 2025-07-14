@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "amazon-cloudwatch-agent";
-  version = "1.300057.1";
+  version = "1.300057.2";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-cloudwatch-agent";
     tag = "v${version}";
-    hash = "sha256-8ZjShOsTpzvXHR/q6PztbFgFbmxcAFcj6MuACOuOBBw=";
+    hash = "sha256-/8pK/9cUq9I9JdfQpaTRf3Dh1NByrWIQi4N0YH3rba4=";
   };
 
-  vendorHash = "sha256-8pffeYCIzEYu7fLx0F6Dw0gDJMGVTctV/j8WGDySDJY=";
+  vendorHash = "sha256-V/J9zzEyC6M1crCDAnZ3CAkoJMBjErBB61LKr0Cizl4=";
 
   # See the list in https://github.com/aws/amazon-cloudwatch-agent/blob/v1.300049.1/Makefile#L68-L77.
   subPackages = [
