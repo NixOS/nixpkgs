@@ -76,11 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/include $dev
   '';
 
-  meta = with lib; {
+  meta = {
     description = "EFI variant of Libkrun, a dynamic library providing Virtualization-based process isolation capabilities";
     homepage = "https://github.com/containers/libkrun";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ quinneden ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ quinneden ];
     platforms = [ "aarch64-darwin" ];
   };
 })
