@@ -5,6 +5,7 @@
 
 let
   inherit (pkgs.testers) testEqualArrayOrMap;
+  inherit (lib.asserts) assertMsg;
   jq = lib.getExe pkgs.jq;
   script = ''
     mkdir -p $out
@@ -104,5 +105,13 @@ in
         # Remove all fields.
         preserveMetaFields = [ ];
       };
+
+  test_string_context =
+  let
+    test = builtins.tryEval
+      ((pkgs.runCommand "test" {} '''').overrideAttrs { meta.vendor = lib.getExe pkgs.jq; });
+  in
+    assert assertMsg (test.value == false) "test_string_context should not eval successfully.";
+    builtins.toFile "test_string_context" (toString test.value);
 
 }

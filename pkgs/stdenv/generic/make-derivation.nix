@@ -772,7 +772,11 @@ let
             "version"
           ];
           meta = foldl' (acc: x: acc // optAttr x) { } nonMetaAttributes // attrs.meta or { };
+          nixMetaJSON = builtins.toJSON (filterAttrs (n: _: (elem n preserveMetaFields)) meta);
+          nixMetaJSONContext = builtins.getContext nixMetaJSON;
         in
+          assert assertMsg (nixMetaJSONContext == {})
+            "Context not allowed nixMetaJSON: ${builtins.toJSON nixMetaJSONContext}";
         makeDerivationArgument (
           removeAttrs attrs (
             [
@@ -784,7 +788,7 @@ let
           )
           // optionalAttrs __structuredAttrs { env = checkedEnv; }
           // optionalAttrs (preserveMetaFields != [ ]) {
-            nixMetaJSON = builtins.toJSON (filterAttrs (n: _: (elem n preserveMetaFields)) meta);
+            inherit nixMetaJSON;
           }
           // {
             cmakeFlags = makeCMakeFlags attrs;
