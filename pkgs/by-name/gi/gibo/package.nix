@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   installShellFiles,
 }:
 buildGoModule (finalAttrs: {
@@ -39,6 +40,8 @@ buildGoModule (finalAttrs: {
     $out/bin/gibo version | grep -F "${finalAttrs.version}"
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/simonwhitaker/gibo";
