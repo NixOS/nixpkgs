@@ -50,8 +50,8 @@ buildGoModule rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/services/idp";
-    hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
     fetcherVersion = 1;
+    hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
   };
   pnpmRoot = "services/idp";
 

@@ -81,8 +81,8 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
     fetcherVersion = 1;
+    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
   buildPhase = ''
