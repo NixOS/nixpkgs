@@ -53,7 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wagtail/Willow/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      desiderius
       kuflierl
     ];
   };

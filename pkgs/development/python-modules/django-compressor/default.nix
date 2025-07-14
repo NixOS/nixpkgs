@@ -81,6 +81,5 @@ buildPythonPackage rec {
     homepage = "https://django-compressor.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
   };
 }
