@@ -14,7 +14,7 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 let
   config =
     (import ../lib/eval-config.nix {
-      inherit system;
+      system = null;
       modules = [
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
@@ -22,6 +22,7 @@ let
           fileSystems."/".device = "/dev/disk/by-label/nixos";
           boot.loader.grub.device = "/dev/vda";
           boot.loader.timeout = 0;
+          nixpkgs.pkgs = pkgs;
         }
       ];
     }).config;

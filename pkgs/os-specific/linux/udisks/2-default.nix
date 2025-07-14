@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
   pkg-config,
   gnused,
   autoreconfHook,
@@ -35,6 +36,7 @@
   nilfs-utils,
   ntfs3g,
   nixosTests,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,20 +57,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      bash = "${bash}/bin/bash";
+    (replaceVars ./fix-paths.patch {
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
-      mkswap = "${util-linux}/bin/mkswap";
       sed = "${gnused}/bin/sed";
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
-      swapon = "${util-linux}/bin/swapon";
       true = "${coreutils}/bin/true";
     })
-    (substituteAll {
-      src = ./force-path.patch;
+    (replaceVars ./force-path.patch {
       path = lib.makeBinPath [
         btrfs-progs
         coreutils
@@ -82,6 +79,13 @@ stdenv.mkDerivation rec {
         parted
         util-linux
       ];
+    })
+
+    # CVE-2025-6019: https://www.openwall.com/lists/oss-security/2025/06/17/5
+    (fetchpatch {
+      name = "CVE-2025-6019-2.patch";
+      url = "https://www.openwall.com/lists/oss-security/2025/06/17/5/2";
+      hash = "sha256-pgTA6yxQ1o9OU3qBeV1lh2O6mBkaUcc9md4uwFwz+AM=";
     })
   ];
 
@@ -98,6 +102,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
     docbook_xml_dtd_43
     docbook_xsl
+    udevCheckHook
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -141,6 +146,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+  doInstallCheck = true;
 
   passthru = {
     inherit libblockdev;
@@ -154,7 +160,8 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       gpl2Plus
     ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);
+    maintainers = with maintainers; [ johnazoidberg ];
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

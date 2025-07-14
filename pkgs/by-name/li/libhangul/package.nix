@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ni9b0v70wkm0116na7ghv03pgxsfpfszhgyj3hld3bxamfal1ar";
   };
 
+  configureFlags = [
+    # detection doesn't work for cross builds
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
   meta = with lib; {
     description = "Core algorithm library for Korean input routines";
     mainProgram = "hangul";

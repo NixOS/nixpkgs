@@ -9,7 +9,7 @@
 
 let
   pname = "mov-cli";
-  version = "4.4.15";
+  version = "4.4.19";
 in
 python3.pkgs.buildPythonPackage {
   inherit pname version;
@@ -18,8 +18,8 @@ python3.pkgs.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-mHtKQtLhHYwd2GEA0rCZQ4C/DEgsc6Rk7ZLpXFyW5d8=";
+    tag = version;
+    hash = "sha256-sNeScHmQYR4Avr5OEFpE90Qn7udBgi1Ox5elFSyKXrY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -1,7 +1,6 @@
 {
   buildPecl,
   lib,
-  fetchpatch,
   pcre2,
   fetchFromGitHub,
 }:
@@ -33,6 +32,6 @@ buildPecl {
     description = "Userland cache for PHP";
     homepage = "https://pecl.php.net/package/APCu";
     license = licenses.php301;
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

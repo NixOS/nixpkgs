@@ -10,16 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
-    repo = pname;
+    repo = "notmuch-mailmover";
     rev = "v${version}";
-    hash = "sha256-ionqR60mI/oHnqVqtdIeIU1HeCbXfLGIHqaHDYEZONk=";
+    hash = "sha256-xX1sH+8DaLgCzkl5WwwNEE9+iTdZX0d64SxfmvuVVgs=";
   };
 
-  cargoHash = "sha256-tUhdfmYAdDlDMez03+ObX9PEU0CML12c5D8N95xiErI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5jEM5FURnfuoOiu2rqsh4shMp1ajv0zMpIx7r0gv6Bc=";
 
   nativeBuildInputs = [
     installShellFiles

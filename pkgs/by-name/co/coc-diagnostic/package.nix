@@ -9,7 +9,7 @@
   npmHooks,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-diagnostic";
   version = "0.24.1";
 
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-/WBOZKIIE2ERKuGwG+unXyam2JavPOuUeSIwZQ9RiHY=";
   };
 
@@ -33,6 +33,11 @@ stdenvNoCC.mkDerivation rec {
     npmHooks.npmInstallHook
   ];
 
+  # ERROR: noBrokenSymlinks: found 1 dangling symlinks and 0 reflexive symlinks
+  postFixup = ''
+    unlink $out/lib/node_modules/coc-diagnostic/node_modules/.bin/node-which
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -41,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
-}
+})

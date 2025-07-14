@@ -136,7 +136,7 @@ let
       default = null;
       example = "1 6 3 4 5 0 7";
       description = ''
-        Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
+        Sets the logical button mapping for this device, see {manpage}`XSetPointerMapping(3)`. The string  must
         be  a  space-separated  list  of  button mappings in the order of the logical buttons on the
         device, starting with button 1.  The default mapping is "1 2 3 ... 32". A mapping of 0 deac‐
         tivates the button. Multiple buttons can have the same mapping.  Invalid mapping strings are

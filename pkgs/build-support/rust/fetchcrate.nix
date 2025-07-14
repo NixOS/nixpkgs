@@ -21,6 +21,8 @@ assert pname == null || pname == crateName;
   {
     name = "${crateName}-${version}.tar.gz";
     url = "${registryDl}/${crateName}/${version}/download";
+
+    passthru = { inherit pname version; };
   }
   // lib.optionalAttrs unpack {
     extension = "tar.gz";

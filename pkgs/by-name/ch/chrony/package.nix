@@ -10,17 +10,15 @@
   libseccomp,
   pps-tools,
   nixosTests,
-  apple-sdk_11,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.6.1";
+  version = "4.7";
 
   src = fetchurl {
     url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-Vx/3P78K4wl/BgTsouALHYuy6Rr/4aNJR4X/IdYZnFw=";
+    hash = "sha256-wN5BqMBR5dMrEBtfcBS5jKl4sY5ZLzDOaEC21GAtlHs=";
   };
 
   outputs = [
@@ -40,10 +38,6 @@ stdenv.mkDerivation rec {
       libcap
       libseccomp
       pps-tools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
     ];
 
   configureFlags = [
@@ -88,7 +82,6 @@ stdenv.mkDerivation rec {
         illumos
       ];
     maintainers = with lib.maintainers; [
-      fpletz
       thoughtpolice
       vifino
     ];

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-F/bNETgscbhEkpG/D1eSJaBNdpi0+xEYuNL4RURGST0=";
+    tag = "v${version}";
+    hash = "sha256-Llpe3Z0Yfd0vRgx95D4YVrnNJk0g/VqPuNvtUrUpFk0=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "x_wr_timezone" ];
 
   meta = {
-    changelog = "https://github.com/niccokunzmann/x-wr-timezone/blob/${src.rev}/README.rst#changelog";
+    changelog = "https://github.com/niccokunzmann/x-wr-timezone/blob/${src.tag}/README.rst#changelog";
     description = "Convert calendars using X-WR-TIMEZONE to standard ones";
     homepage = "https://github.com/niccokunzmann/x-wr-timezone";
     license = lib.licenses.lgpl3Plus;

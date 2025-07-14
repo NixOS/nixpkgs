@@ -6,7 +6,7 @@
   catch2,
   cmake,
   ninja,
-  cudaPackages_11_8,
+  cudaPackages_11,
   cudaPackages_12,
   boost,
   fmt_9,
@@ -24,7 +24,7 @@ let
   # The runtime closure, thankfully, is quite small as it does not
   # include the CUDA libraries.
   cudaPackageSets = [
-    cudaPackages_11_8
+    cudaPackages_11
     cudaPackages_12
   ];
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PysxuN5WT7GB0oOvT5ezYeOau6AMVDDWE5HOAcmqw/Y=";
   };
 
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";
     homepage = "https://developer.nvidia.com/dcgm";
     license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
     mainProgram = "dcgmi";
     platforms = platforms.linux;
   };

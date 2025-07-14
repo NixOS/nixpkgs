@@ -1,15 +1,25 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "i3altlayout";
   version = "0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1h0phf3s6ljffxw0bs73k041wildaz01h37iv5mxhami41wrh4qf";
   };
 
-  pythonPath = with python3Packages; [ enum-compat i3ipc docopt ];
+  pythonRemoveDeps = [ "enum-compat" ];
+
+  pythonPath = with python3Packages; [
+    i3ipc
+    docopt
+  ];
 
   doCheck = false;
 

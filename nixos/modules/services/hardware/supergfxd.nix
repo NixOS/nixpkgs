@@ -19,7 +19,7 @@ in
         default = null;
         description = ''
           The content of /etc/supergfxd.conf.
-          See https://gitlab.com/asus-linux/supergfxctl/#config-options-etcsupergfxdconf.
+          See <https://gitlab.com/asus-linux/supergfxctl/#config-options-etcsupergfxdconf>.
         '';
       };
     };

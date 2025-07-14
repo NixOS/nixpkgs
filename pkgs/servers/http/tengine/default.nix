@@ -8,7 +8,7 @@
   libxcrypt,
   libxml2,
   libxslt,
-  substituteAll,
+  replaceVars,
   gd,
   geoip,
   gperftools,
@@ -48,17 +48,17 @@ stdenv.mkDerivation rec {
     jemalloc
   ] ++ lib.concatMap (mod: mod.inputs or [ ]) modules;
 
-  patches =
-    lib.singleton (substituteAll {
-      src = ../nginx/nix-etag-1.15.4.patch;
-      preInstall = ''
-        export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
-      '';
-    })
-    ++ [
-      ./check-resolv-conf.patch
-      ../nginx/nix-skip-check-logs-path.patch
-    ];
+  patches = [
+    ../nginx/nix-etag-1.15.4.patch
+    ./check-resolv-conf.patch
+    ../nginx/nix-skip-check-logs-path.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+  '';
 
   configureFlags =
     [

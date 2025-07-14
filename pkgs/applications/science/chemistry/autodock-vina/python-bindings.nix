@@ -2,11 +2,14 @@
   lib,
   buildPythonPackage,
   autodock-vina,
-  boost,
   swig,
   setuptools,
   numpy,
 }:
+
+let
+  inherit (autodock-vina) boost;
+in
 
 buildPythonPackage {
   inherit (autodock-vina)
@@ -53,7 +56,7 @@ buildPythonPackage {
     numpy
   ];
 
-  # upstrem has no tests
+  # upstream has no tests
   doCheck = false;
 
   pythonImportsCheck = [

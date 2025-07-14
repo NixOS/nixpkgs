@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hackebrot";
     repo = "pytest-emoji";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GuKBbIIODDnMi9YMX3zR4Jc3cbK+Zibj1ZeWvYkUY24=";
   };
 

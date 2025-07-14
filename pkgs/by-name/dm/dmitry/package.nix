@@ -16,16 +16,18 @@ stdenv.mkDerivation {
     hash = "sha256-cYFeBM8xFMaLXYk6Rg+5JvfbbIJI9F3mefzCX3+XbB0=";
   };
 
+  patches = [ ./implicit-function-declaration.patch ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deepmagic Information Gathering Tool";
     mainProgram = "dmitry";
     homepage = "https://github.com/jaygreig86/dmitry";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

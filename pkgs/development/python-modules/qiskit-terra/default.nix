@@ -82,10 +82,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-f5VLNxv9DKwfRy5zacydfz4Zrkbiee7JecOAbVelSto=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-nTYrNH3h1kAwwPx7OMw6eI61vYy8iFhm4eWDTGhWxt4=";
   };
 
   propagatedBuildInputs =
@@ -132,7 +131,7 @@ buildPythonPackage rec {
     # Too many floating point arithmetic errors
     "test/visual/mpl/circuit/test_circuit_matplotlib_drawer.py"
   ];
-  pytestFlagsArray = [ "--durations=10" ];
+  pytestFlags = [ "--durations=10" ];
   disabledTests =
     [
       "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "ovoenergy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
+    tag = version;
+    hash = "sha256-7SXnOyvBsBPQ+4tC6pcEXGtcLdqKjzlB2xDZmw/uWcM=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
-    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${version}";
+    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -12,6 +12,7 @@ let
       pypdf2 = super.pypdf2.overridePythonAttrs (oldAttrs: rec {
         version = "2.11.1";
         format = "setuptools";
+        pyproject = null;
         src = fetchPypi {
           pname = "PyPDF2";
           inherit version;

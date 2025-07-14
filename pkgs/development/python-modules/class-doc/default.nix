@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "class-doc";
   version = "0.2.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "danields761";
-    repo = pname;
+    repo = "class-doc";
     rev = "9b122d85ce667d096ebee75a49350bbdbd48686d"; # no 0.2.6 version tag
     hash = "sha256-4Sn/TuBvBpl1nvJBg327+sVrjGavkYKEYP32DwLWako=";
   };

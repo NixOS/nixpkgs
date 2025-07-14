@@ -6,17 +6,18 @@
   openssl,
   fetchpatch,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liboqs";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
     repo = "liboqs";
     rev = finalAttrs.version;
-    hash = "sha256-+Gx1JPrJoeMix9DIF0rJQTivxN1lgaCIYFvJ1pnYZzM=";
+    hash = "sha256-E3wOiWeQSgWzzu4zoYfLV1kGV3jsFE+XEnUezWSqkcA=";
   };
 
   patches = [
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";

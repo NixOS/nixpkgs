@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keypunch";
-  version = "4.0";
+  version = "6.3";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "keypunch";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Xd4fzreComOUnoJ6l2ncMWn6DlUeRCM+YwApilhFd/8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NjPC7WbzOk0tDjM8la+TKGy+U2NNT2kwcrSkaG7TylQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-agFOxSZBi8f0zEPd+ha5c3IAbSH2jHfUx2iNeHFs9jI=";
+    hash = "sha256-gQg6CCb5OzK2fLWMtkRTv1hK642IezRN+5qLMGVV6s8=";
   };
 
   strictDeps = true;
@@ -61,12 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Practice your typing skills";
     homepage = "https://github.com/bragefuglseth/keypunch";
+    changelog = "https://github.com/bragefuglseth/keypunch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
     maintainers = with lib.maintainers; [
       tomasajt
       getchoo
     ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

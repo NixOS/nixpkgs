@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koaning";
     repo = "mktestdocs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-egLlgq0lQOk0cPBly01zQ0rkl7D7Rf/bZ4en5oG+wlE=";
   };
 

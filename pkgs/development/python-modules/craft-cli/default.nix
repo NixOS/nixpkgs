@@ -4,24 +4,27 @@
   fetchFromGitHub,
   nix-update-script,
   platformdirs,
+  jinja2,
+  overrides,
   pyyaml,
   setuptools-scm,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.12.0";
+  version = "3.0.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-edN0eEXBaYDUqSc7Xv22MpG9wkHqI6x1HtRkQ468yH8=";
+    tag = version;
+    hash = "sha256-RAnvx5519iXZnJm8jtY635e0DEL7jnIgZtTCindqMTY=";
   };
 
   postPatch = ''
@@ -32,6 +35,8 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    jinja2
+    overrides
     platformdirs
     pyyaml
   ];
@@ -42,9 +47,10 @@ buildPythonPackage rec {
     pytest-check
     pytest-mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 

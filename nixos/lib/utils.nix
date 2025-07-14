@@ -377,7 +377,7 @@ let
          <<'EOF'
         ${toJSON set}
         EOF
-        (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
+        (( ! inherit_errexit_enabled )) && shopt -u inherit_errexit
       '';
 
     /*

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Yc0l3kE+6dM9v4QUZPFpm/yjDCrqVO35Vy5srEjAExE=";
   };
 

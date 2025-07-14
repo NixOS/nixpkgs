@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.5.0";
+  version = "1.6.0";
 
   disabled = pythonOlder "3.8";
 
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pluggy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-f0DxyZZk6RoYtOEXLACcsOn2B+Hot4U4g5Ogr/hKmOE=";
+    tag = version;
+    hash = "sha256-pkQjPJuSASWmzwzp9H/UTJBQDr2r2RiofxpF135lAgc=";
   };
 
   build-system = [ setuptools-scm ];

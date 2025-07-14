@@ -195,7 +195,7 @@ in
           modules for compatibility reasons! If you rely on these modules, consider
           migrating to better alternatives.
 
-          More information: https://raw.githubusercontent.com/svanderburg/dysnomia/f65a9a84827bcc4024d6b16527098b33b02e4054/README-legacy.md
+          More information: <https://raw.githubusercontent.com/svanderburg/dysnomia/f65a9a84827bcc4024d6b16527098b33b02e4054/README-legacy.md>
 
           If you have migrated already or don't rely on these Dysnomia modules, you can
           disable legacy mode with the following NixOS configuration option:

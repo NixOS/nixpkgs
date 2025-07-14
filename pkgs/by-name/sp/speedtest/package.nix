@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Ketok4321";
     repo = "speedtest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BFPOumMuFKttw8+Jp4c2d9r9C2eIzEX52SNdASdNldw=";
   };
 

@@ -6,7 +6,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libraspberrypi";
   version = "unstable-2022-06-16";
 

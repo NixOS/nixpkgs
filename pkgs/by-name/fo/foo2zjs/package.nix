@@ -6,6 +6,7 @@
   bc,
   ghostscript,
   systemd,
+  udevCheckHook,
   vim,
   time,
 }:
@@ -19,12 +20,16 @@ stdenv.mkDerivation rec {
     sha256 = "14x3wizvncdy0xgvmcx541qanwb7bg76abygqy17bxycn1zh5r1x";
   };
 
-  buildInputs = [
-    foomatic-filters
+  nativeBuildInputs = [
     bc
+    foomatic-filters
     ghostscript
-    systemd
     vim
+    udevCheckHook
+  ];
+
+  buildInputs = [
+    systemd
   ];
 
   patches = [
@@ -69,6 +74,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ time ];
   doCheck = false; # fails to find its own binary. Also says "Tests will pass only if you are using ghostscript-8.71-16.fc14".
+  doInstallCheck = true;
 
   preInstall = ''
     mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}

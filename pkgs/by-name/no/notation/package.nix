@@ -4,21 +4,20 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  notation,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "notation";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TliXrI5G+1Zw5vhrpEtcjDv2EjRjUsGEfwKOOf8vtZg=";
+    repo = "notation";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l9A5AwKJ/atN92Oral6PRH2nCbMJ+/ST9weXYRZXWms=";
   };
 
-  vendorHash = "sha256-kK4iwpzSz0JFnY1DbA7rjIzrqZO3imTCOfgtQKd0oV8=";
+  vendorHash = "sha256-WFcy7to3bV3V3bBto5F175PEIxrG9Tj7MuLeBXdSvaM=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -30,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/notaryproject/notation/internal/version.Version=${version}"
+    "-X github.com/notaryproject/notation/internal/version.Version=${finalAttrs.version}"
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
 
@@ -42,7 +41,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = notation;
+    package = finalAttrs.finalPackage;
     command = "notation version";
   };
 
@@ -53,4 +52,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "notation";
   };
-}
+})

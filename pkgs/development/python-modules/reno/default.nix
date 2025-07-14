@@ -23,7 +23,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "reno";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-le9JtE0XODlYhTFsrjxFXG/Weshr+FyN4M4S3BMBLUE=";
   };
 
@@ -85,6 +85,6 @@ buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

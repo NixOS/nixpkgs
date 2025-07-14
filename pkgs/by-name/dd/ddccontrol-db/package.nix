@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol-db";
-  version = "20240920";
+  version = "20250504";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
-    repo = pname;
+    repo = "ddccontrol-db";
     rev = version;
-    sha256 = "sha256-u+buByJ7w1VHs4fGWNRy2EDFYheztbzpFga3tS6PnKk=";
+    sha256 = "sha256-C0FpasSh1fKA8Xcm080dYKyXREQ0Ryy5YBknEiuiLcM=";
   };
 
   nativeBuildInputs = [

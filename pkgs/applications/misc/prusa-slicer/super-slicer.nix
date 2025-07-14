@@ -6,6 +6,7 @@
   wxGTK31,
   prusa-slicer,
   libspnav,
+  opencascade-occt_7_6,
 }:
 let
   appname = "SuperSlicer";
@@ -13,38 +14,28 @@ let
   description = "PrusaSlicer fork with more features and faster development cycle";
 
   patches = [
-    # Fix compile error with boost 1.79. See https://github.com/supermerill/SuperSlicer/issues/2823
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/81e3ca3b7c131e8345aede89e3bbcd700e1ad567/media-gfx/superslicer/files/superslicer-2.4.58.3-boost-1.79-port-v2.patch";
-      # Excludes Linux-only patches
-      excludes = [
-        "src/slic3r/GUI/FreeCADDialog.cpp"
-        "src/slic3r/GUI/Tab.cpp"
-        "src/slic3r/Utils/Http.cpp"
-      ];
-      hash = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
-    })
     # Drop if this fix gets merged upstream
     (fetchpatch {
       url = "https://github.com/supermerill/SuperSlicer/commit/fa7c545efa5d1880cf24af32083094fc872d3692.patch";
       hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
     })
+    ./super-slicer-use-boost186.patch
   ];
 
   versions = {
     stable = {
-      version = "2.3.57.12";
-      hash = "sha256-lePhDRHI++9zs54bTt2/Lu6ZQ7egjJCWb752aI0s7Mw==";
-      patches = null;
+      version = "2.5.59.13";
+      hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
+      inherit patches;
     };
     latest = {
-      version = "2.4.58.5";
-      hash = "sha256-UywxEGedXaBUTKojEkbkuejI6SdPSkPxTJMwUDNW6W0=";
+      version = "2.5.59.13";
+      hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
     };
     beta = {
-      version = "2.5.59.6";
-      hash = "sha256-4ivhkcvVw5NlPsDz3J840aWc0qnp/XzCnTTCICwi3/c=";
+      version = "2.5.60.0";
+      hash = "sha256-dDRK07SatLLhuoc2fJKbHUwAofRRvBUoXWO61W2blFM=";
       inherit patches;
     };
   };
@@ -69,7 +60,7 @@ let
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
       postPatch =
-        super.postPatch
+        (super.postPatch or "")
         + ''
           substituteInPlace src/CMakeLists.txt \
             --replace "scintilla" "" \
@@ -84,8 +75,14 @@ let
             --replace-fail 'auto &vi' 'auto vi'
         '';
 
-      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
-      postInstall = null;
+      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary
+      # but we do still need to move OCCTWrapper.so to the lib directory
+      postInstall = ''
+        if [[ -f $out/bin/OCCTWrapper.so ]]; then
+          mkdir -p "$out/lib"
+          mv -v $out/bin/*.* $out/lib/
+        fi
+      '';
       separateDebugInfo = true;
 
       buildInputs = super.buildInputs ++ [
@@ -118,7 +115,7 @@ let
       passthru = allVersions;
 
     };
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {
@@ -129,9 +126,12 @@ let
       fetchSubmodules = true;
     };
   });
-  prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
+  prusa-slicer-deps-override = prusa-slicer.override {
+    wxGTK-override = wxGTK31-prusa;
+    opencascade-override = opencascade-occt_7_6;
+  };
   allVersions = builtins.mapAttrs (
-    _name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))
+    _name: version: (prusa-slicer-deps-override.overrideAttrs (override version))
   ) versions;
 in
 allVersions.stable

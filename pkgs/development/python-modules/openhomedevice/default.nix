@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bazwilliams";
     repo = "openhomedevice";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u05aciRFCnqMJRClUMApAPDLpXOKn4wUTLgvR7BVZTA=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openhomedevice" ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   meta = with lib; {
     description = "Python module to access Linn Ds and Openhome devices";

@@ -27,14 +27,16 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    boost
+  nativeBuildInputs = [
     doxygen
     gperf
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    boost
     librevenge
     libxml2
-    perl
     zlib
   ];
 

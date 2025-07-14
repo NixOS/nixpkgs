@@ -13,6 +13,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   python3Packages,
@@ -63,12 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.brotli
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Webfont Kit Generator is a simple utility that allows you to generate woff, woff2 and the necessary CSS boilerplate from non-web font formats (otf & ttf)";
     mainProgram = "webfontkitgenerator";
     homepage = "https://apps.gnome.org/app/com.rafaelmardojai.WebfontKitGenerator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ benediktbroich ];
+    teams = [ teams.gnome-circle ];
     platforms = platforms.unix;
   };
 })

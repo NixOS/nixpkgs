@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "sqids";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZHeY59W/6yNuesRwnP1M2AhjCmxQ+AIF3xe0yT5WAUA=";
+    hash = "sha256-WsCPDFybaBS8Lnx57lkx4ISdJdlcUOQVdxsCKkT1ivk=";
   };
 
   build-system = [ setuptools-scm ];

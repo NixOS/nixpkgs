@@ -36,10 +36,13 @@ PRERELEASES = False
 
 BULK_UPDATE = False
 
+NIX = "nix"
+NIX_PREFETCH_URL = "nix-prefetch-url"
+NIX_PREFETCH_GIT = "nix-prefetch-git"
 GIT = "git"
 
 NIXPKGS_ROOT = (
-    subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    subprocess.check_output([GIT, "rev-parse", "--show-toplevel"])
     .decode("utf-8")
     .strip()
 )
@@ -79,7 +82,7 @@ def _get_attr_value(attr_path: str) -> Optional[Any]:
     try:
         response = subprocess.check_output(
             [
-                "nix",
+                NIX,
                 "--extra-experimental-features",
                 "nix-command",
                 "eval",
@@ -164,7 +167,7 @@ def _hash_to_sri(algorithm, value):
     return (
         subprocess.check_output(
             [
-                "nix",
+                NIX,
                 "--extra-experimental-features",
                 "nix-command",
                 "hash",
@@ -260,7 +263,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     try:
         homepage = subprocess.check_output(
             [
-                "nix",
+                NIX,
                 "--extra-experimental-features",
                 "nix-command",
                 "eval",
@@ -301,7 +304,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
 
         algorithm = "sha256"
         cmd = [
-            "nix-prefetch-git",
+            NIX_PREFETCH_GIT,
             f"https://github.com/{owner}/{repo}.git",
             "--hash",
             algorithm,
@@ -317,7 +320,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
             hash = (
                 subprocess.check_output(
                     [
-                        "nix-prefetch-url",
+                        NIX_PREFETCH_URL,
                         "--type",
                         "sha256",
                         "--unpack",
@@ -336,7 +339,7 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
             try:
                 hash = (
                     subprocess.check_output(
-                        ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
+                        [NIX_PREFETCH_URL, "--type", "sha256", "--unpack", tag_url],
                         stderr=subprocess.DEVNULL,
                     )
                     .decode("utf-8")
@@ -500,6 +503,12 @@ def _update_package(path, target):
             # incase there's no prefix, just rewrite without interpolation
             text = text.replace('"${version}";', "version;")
 
+            # update changelog to reference the src.tag
+            if result := re.search("changelog = \"[^\"]+\";", text):
+                cl_old = result[0]
+                cl_new = re.sub(r"v?\$\{(version|src.rev)\}", "${src.tag}", cl_old)
+                text = text.replace(cl_old, cl_new)
+
     with open(path, "w") as f:
         f.write(text)
 
@@ -550,6 +559,8 @@ def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwa
 
     if changelog := _get_attr_value(f"{pkgs_prefix}{pname}.meta.changelog"):
         msg += f"\n\n{changelog}"
+
+    msg += "\n\nThis commit was automatically generated using update-python-libraries."
 
     try:
         subprocess.check_call([GIT, "add", path])

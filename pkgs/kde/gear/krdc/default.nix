@@ -6,6 +6,7 @@
   libssh,
   libvncserver,
   freerdp,
+  fuse3,
 }:
 mkKdeDerivation {
   pname = "krdc";
@@ -20,6 +21,7 @@ mkKdeDerivation {
     libssh
     libvncserver
     freerdp
+    fuse3
   ];
 
   meta.mainProgram = "krdc";

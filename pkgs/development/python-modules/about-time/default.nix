@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "about_time" ];
+
+  postInstall = ''
+    mkdir -p $out/share/doc/python${python.pythonVersion}-$pname-$version/
+    mv $out/LICENSE $out/share/doc/python${python.pythonVersion}-$pname-$version/
+  '';
 
   meta = with lib; {
     description = "Cool helper for tracking time and throughput of code blocks, with beautiful human friendly renditions";

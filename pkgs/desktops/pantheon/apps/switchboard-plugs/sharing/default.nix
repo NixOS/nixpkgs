@@ -9,6 +9,7 @@
   vala,
   elementary-bluetooth-daemon,
   libgee,
+  gettext,
   granite7,
   gtk4,
   switchboard,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -49,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-sharing";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

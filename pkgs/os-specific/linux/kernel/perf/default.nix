@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   elfutils,
   python3,
   perl,
@@ -39,6 +39,7 @@
   zstd,
   withLibcap ? true,
   libcap,
+  buildPackages,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -60,25 +61,16 @@ stdenv.mkDerivation {
   pname = "perf-linux";
   inherit (kernel) version src;
 
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   patches =
-    lib.optionals (lib.versionAtLeast kernel.version "5.10") [
-      # fix wrong path to dmesg
-      ./fix-dmesg-path.diff
-    ]
-    ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
-      (fetchpatch {
-        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
-        hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
-      })
-      (fetchpatch {
-        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=366e17409f1f17ad872259ce4a4f8a92beb4c4ee";
-        hash = "sha256-NZK1u40qvMwWcgkgJPGpEax2eMo9xHrCQxSYYOK0rbo=";
-      })
-      (fetchpatch {
-        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
-        hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
-      })
-    ];
+    lib.optionals (lib.versionAtLeast kernel.version "5.10" && lib.versionOlder kernel.version "6.13")
+      [
+        # fix wrong path to dmesg
+        ./fix-dmesg-path.diff
+      ];
 
   postPatch =
     ''
@@ -114,7 +106,7 @@ stdenv.mkDerivation {
       "WERROR=0"
       "ASCIIDOC8=1"
     ]
-    ++ kernel.makeFlags
+    ++ kernelModuleMakeFlags
     ++ lib.optional (!withGtk) "NO_GTK2=1"
     ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
     ++ lib.optional (!withLibcap) "NO_LIBCAP=1";

@@ -140,31 +140,33 @@ in
         serviceConfig = {
           Type = "oneshot";
           TimeoutStartSec = 300;
-          ExecStart = pkgs.substituteAll {
+          ExecStart = pkgs.replaceVarsWith {
             src = ./initialize_kasmweb.sh;
             isExecutable = true;
-            binPath = lib.makeBinPath [
-              pkgs.docker
-              pkgs.openssl
-              pkgs.gnused
-              pkgs.yq-go
-            ];
-            runtimeShell = pkgs.runtimeShell;
-            kasmweb = pkgs.kasmweb;
-            postgresUser = "postgres";
-            postgresPassword = "postgres";
-            inherit (cfg)
-              datastorePath
-              sslCertificate
-              sslCertificateKey
-              redisPassword
-              networkSubnet
-              defaultUserPassword
-              defaultAdminPassword
-              defaultManagerToken
-              defaultRegistrationToken
-              defaultGuacToken
-              ;
+            replacements = {
+              binPath = lib.makeBinPath [
+                pkgs.docker
+                pkgs.openssl
+                pkgs.gnused
+                pkgs.yq-go
+              ];
+              runtimeShell = pkgs.runtimeShell;
+              kasmweb = pkgs.kasmweb;
+              postgresUser = "postgres";
+              postgresPassword = "postgres";
+              inherit (cfg)
+                datastorePath
+                sslCertificate
+                sslCertificateKey
+                redisPassword
+                networkSubnet
+                defaultUserPassword
+                defaultAdminPassword
+                defaultManagerToken
+                defaultRegistrationToken
+                defaultGuacToken
+                ;
+            };
           };
         };
       };

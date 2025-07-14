@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.23.0";
+  version = "0.26.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "ariadne";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zdM6LKtrD6m3hWn90yAgsinCvaa86BaTdhgf/VzGDLA=";
+    tag = version;
+    hash = "sha256-zkxRg11O/P7+qU+vdDG3i8Tpn6dXByaGLN9t+e2dhyE=";
   };
 
   patches = [ ./remove-opentracing.patch ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ariadne" ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   disabledTests = [
     # TypeError: TestClient.request() got an unexpected keyword argument 'content'
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for implementing GraphQL servers using schema-first approach";
     homepage = "https://ariadnegraphql.org";
-    changelog = "https://github.com/mirumee/ariadne/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mirumee/ariadne/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ samuela ];
   };

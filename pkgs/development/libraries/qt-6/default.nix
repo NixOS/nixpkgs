@@ -136,6 +136,7 @@ let
       qtmultimedia = callPackage ./modules/qtmultimedia {
         inherit (gst_all_1)
           gstreamer
+          gst-plugins-bad
           gst-plugins-base
           gst-plugins-good
           gst-libav
@@ -158,12 +159,17 @@ let
       qtsvg = callPackage ./modules/qtsvg.nix { };
       qtscxml = callPackage ./modules/qtscxml.nix { };
       qttools = callPackage ./modules/qttools { };
-      qttranslations = callPackage ./modules/qttranslations.nix { };
+      qttranslations = callPackage ./modules/qttranslations.nix {
+        qttools = self.qttools.override {
+          qtbase = self.qtbase.override { qttranslations = null; };
+          qtdeclarative = null;
+        };
+      };
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine {
-        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds;
+        inherit (darwin) bootstrap_cmds;
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix { };
@@ -214,18 +220,5 @@ let
     otherSplices = generateSplicesForMkScope "qt6";
     f = addPackages;
   };
-
-  bootstrapScope = baseScope.overrideScope (
-    final: prev: {
-      qtbase = prev.qtbase.override { qttranslations = null; };
-      qtdeclarative = null;
-    }
-  );
-
-  finalScope = baseScope.overrideScope (
-    final: prev: {
-      qttranslations = bootstrapScope.qttranslations;
-    }
-  );
 in
-finalScope
+baseScope

@@ -10,6 +10,7 @@
   fonttools,
 
   pytestCheckHook,
+  pytest-cov-stub,
   qrcode,
   camelot,
   uharfbuzz,
@@ -18,20 +19,15 @@
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.8.1";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MYurl/nEZhdhGxeNalwTWnZ8lr9SYJBR7hIjBZLOrJU=";
+    tag = version;
+    hash = "sha256-NfHMmyFT+ZpqfRc41DetbFXs/twr12XagOkk3nGhrYk=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=fpdf --cov-report=xml" ""
-  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -43,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     qrcode
     camelot
     uharfbuzz

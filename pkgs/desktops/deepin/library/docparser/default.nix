@@ -8,6 +8,7 @@
   pugixml,
   libzip,
   libuuid,
+  libxml2,
   tinyxml-2,
 }:
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     pugixml
     libzip
     libuuid
+    libxml2
     tinyxml-2
   ];
 
@@ -44,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/docparser";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

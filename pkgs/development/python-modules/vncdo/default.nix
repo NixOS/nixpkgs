@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "vncdotool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QrD6z/g85FwaZCJ1PRn8CBKCOQcbVjQ9g0NpPIxguqk=";
   };
 

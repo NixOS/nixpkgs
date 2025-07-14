@@ -7,13 +7,12 @@
   libxslt,
   perl,
   curl,
-  pcre,
   libxml2,
   librdf_rasqal,
   gmp,
   libmysqlclient,
   withMysql ? false,
-  postgresql,
+  libpq,
   withPostgresql ? false,
   sqlite,
   withSqlite ? true,
@@ -33,20 +32,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     pkg-config
-  ];
+  ] ++ lib.optional withPostgresql libpq.pg_config;
 
   buildInputs =
     [
       openssl
       libxslt
       curl
-      pcre
       libxml2
       gmp
     ]
     ++ lib.optional withMysql libmysqlclient
     ++ lib.optional withSqlite sqlite
-    ++ lib.optional withPostgresql postgresql
+    ++ lib.optional withPostgresql libpq
     ++ lib.optional withBdb db;
 
   propagatedBuildInputs = [ librdf_rasqal ];

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "seqdiag";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Dh9JMx50Nexi0q39rYr9MpkKmQRAfT7lzsNOXoTuphg=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   patches = [ ./fix_test_generate.patch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "src/seqdiag/tests/" ];
+  enabledTestPaths = [ "src/seqdiag/tests/" ];
 
   pythonImportsCheck = [ "seqdiag" ];
 

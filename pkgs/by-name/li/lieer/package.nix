@@ -8,23 +8,26 @@
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.6";
-  format = "setuptools";
+  format = "pyproject";
 
   passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     notmuch2
     google-api-python-client
     google-auth-oauthlib
     tqdm
-    setuptools
   ];
 
   # no tests

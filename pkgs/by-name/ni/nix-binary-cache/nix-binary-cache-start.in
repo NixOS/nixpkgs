@@ -1,7 +1,7 @@
 #! @shell@
 
 parse_opts () {
-  while @coreutils@/test -n "$1" && @coreutils@/test "x$1" != x-- ; do 
+  while @coreutils@/test -n "$1" && @coreutils@/test "x$1" != x-- ; do
     case "$1" in
       --store-dir)
         shift;
@@ -76,7 +76,7 @@ workingdir="$(@coreutils@/mktemp -d)"
 cd "$workingdir"
 
 PORT=8080
-(echo "STORE_DIR=${NIX_STORE_DIR:-/nix/store}"; parse_opts "$@" 
+(echo "STORE_DIR=${NIX_STORE_DIR:-/nix/store}"; parse_opts "$@"
   ) > nix-binary-cache.conf || exit
 . "$workingdir/nix-binary-cache.conf"
 
@@ -94,8 +94,8 @@ server.use-ipv6 = \"enable\"
 }
 " >> lighttpd.conf
 
-cp @out@/nix-binary-cache.cgi . 
-cp @out@/nix-binary-cache.cgi ./nix-bc.cgi 
+cp @out@/nix-binary-cache.cgi .
+cp @out@/nix-binary-cache.cgi ./nix-bc.cgi
 
 ip="$(@iproute@/ip a | @gnugrep@/grep 'inet .* scope global' | @coreutils@/head -n 1)"
 ip="${ip%%/*}"

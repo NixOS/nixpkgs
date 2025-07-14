@@ -5,7 +5,6 @@
   installShellFiles,
   mkShell,
   nix,
-  nixosTests,
   python3,
   python3Packages,
   runCommand,
@@ -16,14 +15,21 @@
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
-}:
-let
-  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
   # This version is kind of arbitrary, we use some features that were
   # implemented in newer versions of Nix, but not necessary 2.18.
   # However, Lix is a fork of Nix 2.18, so this looks like a good version
   # to cut specific functionality.
-  withNix218 = lib.versionAtLeast nix.version "2.18";
+  # ATTN: This currently doesn't disambiguate between Nix and Lix, so using this
+  # in a conditional needs careful checking against both Nix implementations.
+  withNix218 ? lib.versionAtLeast nix.version "2.18",
+  # passthru.tests
+  nixosTests,
+  nixVersions,
+  lixPackageSets,
+  nixos-rebuild-ng,
+}:
+let
+  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
@@ -50,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     # would silently downgrade the whole system to be i686 NixOS on the
     # next reboot.
     # The binary will be included in the wrapper for Python.
-    nix
+    (lib.getBin nix)
   ];
 
   postPatch = ''
@@ -77,7 +83,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-vv" ];
+  pytestFlags = [ "-vv" ];
 
   makeWrapperArgs = lib.optionals (withTmpdir != null) [
     "--set TMPDIR ${withTmpdir}"
@@ -89,6 +95,9 @@ python3Packages.buildPythonApplication rec {
         ps: with ps; [
           mypy
           pytest
+          # this is to help development (e.g.: better diffs) inside devShell
+          # only, do not use its helpers like `mocker`
+          pytest-mock
           ruff
         ]
       );
@@ -102,8 +111,30 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+        with_reexec = nixos-rebuild-ng.override {
+          withReexec = true;
+          withNgSuffix = false;
+        };
+        with_nix_latest = nixos-rebuild-ng.override {
+          nix = nixVersions.latest;
+        };
+        with_nix_stable = nixos-rebuild-ng.override {
+          nix = nixVersions.stable;
+        };
+        with_nix_2_3 = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = nixVersions.nix_2_3;
+        };
+        with_lix_latest = nixos-rebuild-ng.override {
+          nix = lixPackageSets.latest.lix;
+        };
+        with_lix_stable = nixos-rebuild-ng.override {
+          nix = lixPackageSets.stable.lix;
+        };
+
         inherit (nixosTests)
-          nixos-rebuild-install-bootloader-ng
+          # FIXME: this test is disabled since it times out in @ofborg
+          # nixos-rebuild-install-bootloader-ng
           nixos-rebuild-specialisations-ng
           nixos-rebuild-target-host-ng
           ;
@@ -129,7 +160,8 @@ python3Packages.buildPythonApplication rec {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-rebuild-ng";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.thiagokokada ];
+    maintainers = [ ];
+    teams = [ lib.teams.nixos-rebuild ];
     mainProgram = executable;
   };
 }

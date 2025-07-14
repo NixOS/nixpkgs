@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YGSd0IG6TWnHmDiVEE3F2KNQ4dXJhkPqAJsIrWyuHos=";
+    tag = version;
+    hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +93,10 @@ buildPythonPackage rec {
     "test_issue1982"
     "test_opener_fsspec_http_fs"
     "test_fsspec_http_msk_sidecar"
+    # expect specific magic numbers that our version of GDAL does not produce
+    "test_warp"
+    "test_warpedvrt"
+    "test_rio_warp"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
@@ -109,6 +113,6 @@ buildPythonPackage rec {
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

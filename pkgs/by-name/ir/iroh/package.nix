@@ -1,29 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "iroh";
-  version = "0.29.0";
+  version = "0.90.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
-    repo = pname;
+    repo = "iroh";
     rev = "v${version}";
-    hash = "sha256-jwAwVoYW8VowhLc5Ac37XpX7WvXOunzMQxaE3BNy9Gw=";
+    hash = "sha256-0YXNPKdM9OQC+MiKQzki5FmVMbCRO1l02ik+uRi90aQ=";
   };
 
-  cargoHash = "sha256-RW3WgdUIdldh5eVF6RuX4MgB653Caye720wy8NqMgsI=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [
-      Security
-      SystemConfiguration
-    ]
-  );
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tt2SHvL/S82jzzaO5e95vQvwJSgJpUh2dDIgLhs1V5w=";
 
   # Some tests require network access which is not available in nix build sandbox.
   doCheck = false;
@@ -31,7 +24,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Efficient IPFS for the whole world right now";
     homepage = "https://iroh.computer";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ cameronfyfe ];
     mainProgram = "iroh";
   };

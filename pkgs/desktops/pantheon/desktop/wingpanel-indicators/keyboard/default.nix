@@ -6,7 +6,7 @@
   pkg-config,
   meson,
   ninja,
-  substituteAll,
+  replaceVars,
   vala,
   gtk3,
   granite,
@@ -30,8 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
     })
   ];
@@ -62,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-keyboard";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

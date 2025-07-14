@@ -8,19 +8,21 @@
   pam,
   pandoc,
   rustPlatform,
+  tzdata,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.3";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
-    rev = "v${version}";
-    hash = "sha256-aXKkEdg44AJTcaGyllQmyUON3Z+irIatz06/l0cbi+E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-02ODKMumYUKcmSfPAiCwpRph5+Zy+g5uqqbJ9ThRxRg=";
   };
-  cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o3//zJxB6CNHQl1DtfmFnSBP9npC4I9/hRuzpWrKoNs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,8 +34,11 @@ rustPlatform.buildRustPackage rec {
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''
     substituteInPlace util/generate-docs.sh \
-      --replace "/usr/bin/env bash" ${lib.getExe bash} \
-      --replace util/pandoc.sh pandoc
+      --replace-fail "/usr/bin/env bash" ${lib.getExe bash} \
+      --replace-fail util/pandoc.sh pandoc
+
+    substituteInPlace build.rs \
+      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   postInstall = ''
@@ -45,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     # Those tests make path assumptions
     "common::command::test::test_build_command_and_args"
     "common::context::tests::test_build_context"
+    "common::context::tests::test_build_run_context"
     "common::resolve::test::canonicalization"
     "common::resolve::tests::test_resolve_path"
     "system::tests::kill_test"
@@ -69,19 +75,27 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
     tests = nixosTests.sudo-rs;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
-    changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "${finalAttrs.meta.homepage}/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      nicoo
+      rvdp
+    ];
+    mainProgram = "sudo";
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.networking.rxe;
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -32,21 +38,24 @@ in {
       description = "RoCE interfaces";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-modules-load.service" "network-online.target" ];
-      wants = [ "network-pre.target" "network-online.target" ];
+      after = [
+        "systemd-modules-load.service"
+        "network-online.target"
+      ];
+      wants = [
+        "network-pre.target"
+        "network-online.target"
+      ];
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = map ( x:
-          "${pkgs.iproute2}/bin/rdma link add rxe_${x} type rxe netdev ${x}"
-          ) cfg.interfaces;
+        ExecStart = map (
+          x: "${pkgs.iproute2}/bin/rdma link add rxe_${x} type rxe netdev ${x}"
+        ) cfg.interfaces;
 
-        ExecStop = map ( x:
-          "${pkgs.iproute2}/bin/rdma link delete rxe_${x}"
-          ) cfg.interfaces;
+        ExecStop = map (x: "${pkgs.iproute2}/bin/rdma link delete rxe_${x}") cfg.interfaces;
       };
     };
   };
 }
-

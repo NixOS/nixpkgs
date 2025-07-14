@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rD0qKYmWTu0LMRdWgul8OGp1FcczSY2/OxT8+oXO78E=";
+    tag = version;
+    hash = "sha256-lmN31Xdp1PCLhgInGxvTKTLBXFpz3NnHYSFjKQfRfec=";
   };
 
   pythonRelaxDeps = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collect POST requests";
     homepage = "https://github.com/firefly-cpp/succulent";
-    changelog = "https://github.com/firefly-cpp/succulent/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/firefly-cpp/succulent/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

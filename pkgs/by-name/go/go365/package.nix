@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "optiv";
     repo = "Go365";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jmsbZrqc6XogUhuEWcU59v88id2uLqN/68URwylzWZI=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     mv $out/bin/Go365 $out/bin/$pname
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Office 365 enumeration tool";
     homepage = "https://github.com/optiv/Go365";
     changelog = "https://github.com/optiv/Go365/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "Go365";
   };
 }

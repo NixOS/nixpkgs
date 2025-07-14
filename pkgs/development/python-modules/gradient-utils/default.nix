@@ -21,8 +21,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Paperspace";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "gradient-utils";
+    tag = "v${version}";
     hash = "sha256-swnl0phdOsBSP8AX/OySI/aYI9z60Ss3SsJox/mb9KY=";
   };
 

@@ -6,6 +6,7 @@
   wheel,
   parts,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -21,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-+/rBno+OH7yEiN4K9VC6BCEPuOv8nNp0hU+fWegjqPw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '--cov=bitlist --cov-report term-missing' ""
-  '';
-
   build-system = [
     setuptools
     wheel
@@ -35,7 +31,10 @@ buildPythonPackage rec {
 
   dependencies = [ parts ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "bitlist" ];
 

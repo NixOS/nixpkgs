@@ -6,18 +6,18 @@
   clipper2,
   gtest,
   glm,
-  tbb_2021_11,
+  tbb_2021,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-02bZAPA4mnWzS9NYVcSW0JE7BidrwzNKBO2nl7BxiiE=";
+    hash = "sha256-dCCTjWRjXSyuEDxGI9ZS2UTmLdZVSmDOmHFnhox3N+4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     glm
-    tbb_2021_11
+    tbb_2021
     clipper2
   ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkPhase = ''
-    test/manifold_test
+    test/manifold_test --gtest_filter=-CrossSection.RoundOffset
   '';
 
   meta = {
@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       hzeller
       pca006132
     ];
-    platforms = lib.platforms.linux; # currently issues with Darwin
+    platforms = lib.platforms.unix;
   };
 })

@@ -7,7 +7,7 @@
   pytestCheckHook,
   pytz,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +20,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xIswmHQMl5pAqvcTNqeuO3P6MynKt3ahzUgGQroaqmw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./rapidjson-include-dir.patch;
+    (replaceVars ./rapidjson-include-dir.patch {
       rapidjson = lib.getDev rapidjson;
     })
   ];

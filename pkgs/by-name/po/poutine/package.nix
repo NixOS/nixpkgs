@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "boostsecurityio";
     repo = "poutine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YBoGsexYT2/lAWEajMVa/xNRBv1R1i0hB6pTAlk43E0=";
   };
 
@@ -33,12 +33,13 @@ buildGoModule rec {
       --zsh <($out/bin/${meta.mainProgram} completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security scanner that detects misconfigurations and vulnerabilities in build pipelines of repositories";
     homepage = "https://github.com/boostsecurityio/poutine";
     changelog = "https://github.com/boostsecurityio/poutine/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "poutine";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

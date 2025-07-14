@@ -11,6 +11,7 @@ with python3Packages;
 buildPythonApplication {
   pname = "steamcontroller";
   version = "2017-08-11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ynsta";

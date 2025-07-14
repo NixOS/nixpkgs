@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pcre,
   pcre2,
   jemalloc,
@@ -54,7 +55,25 @@ let
         ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
         ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
-      buildFlags = [ "localstatedir=/var/spool" ];
+      buildFlags = [ "localstatedir=/var/run" ];
+
+      patches =
+        lib.optionals (stdenv.isDarwin && lib.versionAtLeast version "7.7") [
+          # Fix VMOD section attribute on macOS
+          # Unreleased commit on master
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+            hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+          })
+          # Fix endian.h compatibility on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+          ./patches/0001-fix-endian-h-compatibility-on-macos.patch
+        ]
+        ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
+          # Fix duplicate OS_CODE definitions on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4347
+          ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
+        ];
 
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
@@ -83,7 +102,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = [ ];
+        teams = [ lib.teams.flyingcircus ];
         platforms = platforms.unix;
       };
     };
@@ -91,12 +110,12 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.13";
-    hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
+    version = "6.0.14";
+    hash = "sha256-tZlBf3ppntxxYSufEJ86ot6ujvnbfIyZOu9B3kDJ72k=";
   };
-  # EOL 2025-03-15
-  varnish75 = common {
-    version = "7.5.0";
-    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
+  # EOL 2026-03-15
+  varnish77 = common {
+    version = "7.7.1";
+    hash = "sha256-TAbFyZaApCm3KTT5/VE5Y/fhuoVTszyn7BLIWlwrdRo=";
   };
 }

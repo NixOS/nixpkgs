@@ -2,50 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook3,
-  libxkbcommon,
+  libcosmicAppHook,
   sqlite,
-  vulkan-loader,
-  wayland,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oboete";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "mariinkys";
     repo = "oboete";
-    tag = version;
-    hash = "sha256-W5dd8UNjG2w0N1EngDPK7Q83C2TF9UfW0GGvPaW6nls=";
+    tag = finalAttrs.version;
+    hash = "sha256-I62DQovTa9QWlmA4amnOnp2vomw4/fQuRnj2kY/tdm8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-UZUqPITtpHeNrsi6Nao+dfK3ACVJmZIc47aqSbwTemw=";
+  cargoHash = "sha256-HV0Q44T9eSEg/MYpFnRCcifsRfZDlvHJ9viCiC1ouUI=";
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs = [ libcosmicAppHook ];
 
-  buildInputs = [
-    libxkbcommon
-    sqlite
-    vulkan-loader
-    wayland
-  ];
-
-  postFixup = ''
-    wrapProgram $out/bin/oboete \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libxkbcommon
-          wayland
-        ]
-      }"
-  '';
+  buildInputs = [ sqlite ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -54,10 +32,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple flashcards application for the COSMIC™ desktop written in Rust";
     homepage = "https://github.com/mariinkys/oboete";
-    changelog = "https://github.com/mariinkys/oboete/releases/tag/${src.tag}";
+    changelog = "https://github.com/mariinkys/oboete/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "oboete";
   };
-}
+})

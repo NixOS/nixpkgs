@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, which
-, bison
-, gnuplot
-, libxls
-, libxlsxwriter
-, libxml2
-, libzip
-, ncurses
-, xlsSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  which,
+  bison,
+  gnuplot,
+  libxls,
+  libxlsxwriter,
+  libxml2,
+  libzip,
+  ncurses,
+  xlsSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sc-im";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "sha256-nNOifSYbmJjuw6c8TerIQRlhCwbs7GnzD2J7O3vs0gI=";
+    sha256 = "sha256-V2XwzZwn+plMxQuTCYxbeTaqdud69z77oMDDDi+7Jw0=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -34,17 +35,22 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [
-    gnuplot
-    libxml2
-    libzip
-    ncurses
-  ] ++ lib.optionals xlsSupport [
-    libxls
-    libxlsxwriter
-  ];
+  buildInputs =
+    [
+      gnuplot
+      libxml2
+      libzip
+      ncurses
+    ]
+    ++ lib.optionals xlsSupport [
+      libxls
+      libxlsxwriter
+    ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  # https://github.com/andmarti1424/sc-im/issues/884
+  hardeningDisable = [ "fortify" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 

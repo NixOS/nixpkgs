@@ -7,15 +7,20 @@
 python3Packages.buildPythonApplication rec {
   pname = "arxiv-latex-cleaner";
   version = "1.0.8";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "google-research";
     repo = "arxiv-latex-cleaner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CQb1u1j+/px+vNqA3iXZ2oe6/0ZWeMjWrUQL9elRDEI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pillow
     pyyaml
     regex

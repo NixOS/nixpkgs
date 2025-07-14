@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "bazel-watcher";
-  version = "0.25.3";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    hash = "sha256-5cRj04e5VVG4NSe4LOLkZIrerT4laLEDeXCqTiJj6MM=";
+    hash = "sha256-Hefg6PZfmuGUCEuYNwpJOkwPqt87qd1GpEG+IutPhDo=";
   };
 
-  vendorHash = "sha256-0I/bvuyosN55oNSMuom4C8rVjxneUaqV19l9OMiwWhU=";
+  vendorHash = "sha256-H1Bqw5hbOLS4oJeQOdIXQ9c2H8jGtoW1J75BIkTNR9k=";
 
   # The dependency github.com/fsnotify/fsevents requires CGO
   env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";

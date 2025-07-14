@@ -63,8 +63,66 @@ let
       '';
     };
 
+  podmanRootlessTests = lib.genAttrs [ "conmon" "healthy" ] (
+    type:
+    makeTest {
+      name = "oci-containers-podman-rootless-${type}";
+      meta.maintainers = lib.teams.flyingcircus.members;
+      nodes = {
+        podman =
+          { pkgs, ... }:
+          {
+            environment.systemPackages = [ pkgs.redis ];
+            users.groups.redis = { };
+            users.users.redis = {
+              isSystemUser = true;
+              group = "redis";
+              home = "/var/lib/redis";
+              linger = type == "healthy";
+              createHome = true;
+              uid = 2342;
+              subUidRanges = [
+                {
+                  count = 65536;
+                  startUid = 2147483646;
+                }
+              ];
+              subGidRanges = [
+                {
+                  count = 65536;
+                  startGid = 2147483647;
+                }
+              ];
+            };
+            virtualisation.oci-containers = {
+              backend = "podman";
+              containers.redis = {
+                image = "redis:latest";
+                imageFile = pkgs.dockerTools.examples.redis;
+                ports = [ "6379:6379" ];
+                podman = {
+                  user = "redis";
+                  sdnotify = type;
+                };
+              };
+            };
+          };
+      };
+
+      testScript = ''
+        start_all()
+        podman.wait_for_unit("podman-redis.service")
+        ${lib.optionalString (type != "healthy") ''
+          podman.wait_for_open_port(6379)
+        ''}
+        podman.wait_until_succeeds("set -eo pipefail; echo 'keys *' | redis-cli")
+      '';
+    }
+  );
 in
-lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; }) { } [
-  "docker"
-  "podman"
-]
+{
+  docker = mkOCITest "docker";
+  podman = mkOCITest "podman";
+  podman-rootless-conmon = podmanRootlessTests.conmon;
+  podman-rootless-healthy = podmanRootlessTests.healthy;
+}

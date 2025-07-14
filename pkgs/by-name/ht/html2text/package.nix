@@ -2,22 +2,35 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  autoconf-archive,
   autoreconfHook,
+  bison,
+  gettext,
   libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "html2text";
-  version = "2.2.3";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "grobian";
     repo = "html2text";
     rev = "v${version}";
-    hash = "sha256-7Ch51nJ5BeRqs4PEIPnjCGk+Nm2ydgJQCtkcpihXun8=";
+    hash = "sha256-e/KWyc7lOdWhtFC7ZAD7sYgCsO3JzGkLUThVI7edqIQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    bison
+    gettext
+  ];
+
+  # These changes have all been made in HEAD, across several commits
+  # amongst other changes.
+  # See https://gitlab.com/grobian/html2text/-/merge_requests/57
+  patches = [ ./gettext-0.25.patch ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 

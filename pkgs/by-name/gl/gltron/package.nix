@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
   # The build fails, unless we disable the default -Wall -Werror
   configureFlags = [ "--disable-warn" ];
 
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
+
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+
   buildInputs = [
     SDL
     libGLU
@@ -50,6 +54,7 @@ stdenv.mkDerivation rec {
     SDL_sound
   ];
 
+  strictDeps = true;
   enableParallelBuilding = true;
 
   meta = {

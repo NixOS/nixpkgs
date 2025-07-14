@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-with lib;
 let
 
   cfg = config.services.tor;
@@ -29,8 +28,8 @@ in
 
     services.tor.tsocks = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to build tsocks wrapper script to relay application traffic via Tor.
@@ -45,8 +44,8 @@ in
         '';
       };
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         default = "localhost:9050";
         example = "192.168.0.20";
         description = ''
@@ -54,8 +53,8 @@ in
         '';
       };
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to TSocks
@@ -69,13 +68,13 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.tsocks.enable {
+  config = lib.mkIf cfg.tsocks.enable {
 
     environment.systemPackages = [ torify ]; # expose it to the users
 
     services.tor.tsocks.config = ''
-      server = ${toString (head (splitString ":" cfg.tsocks.server))}
-      server_port = ${toString (tail (splitString ":" cfg.tsocks.server))}
+      server = ${toString (lib.head (lib.splitString ":" cfg.tsocks.server))}
+      server_port = ${toString (lib.tail (lib.splitString ":" cfg.tsocks.server))}
 
       local = 127.0.0.0/255.128.0.0
       local = 127.128.0.0/255.192.0.0

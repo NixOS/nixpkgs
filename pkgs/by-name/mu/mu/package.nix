@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.12.8";
+  version = "1.12.11";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-lc6GWGvWy/RjjY64vu8n8OtBUZjN6L8OQ/Q01eM34h4=";
+    hash = "sha256-t4Jv1RX1mMGwiYg9mFrRuO2j54EfaGM3ouOdg8upds8=";
   };
 
   postPatch = ''
@@ -89,17 +89,17 @@ stdenv.mkDerivation rec {
   # Tests need a UTF-8 aware locale configured
   env.LANG = "C.UTF-8";
 
-  meta = with lib; {
+  meta = {
     description = "Collection of utilities for indexing and searching Maildirs";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       antono
       chvp
       peterhoeg
     ];
     mainProgram = "mu";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

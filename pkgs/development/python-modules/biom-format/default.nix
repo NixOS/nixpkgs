@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biocore";
     repo = "biom-format";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-E/6dIN8tdsu6cBVBW/BOeAQwJB9XRRL3flQZSKqIZlc=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "biom_tests/tests" ];
+  enabledTestPaths = [ "biom_tests/tests" ];
 
   pythonImportsCheck = [ "biom" ];
 

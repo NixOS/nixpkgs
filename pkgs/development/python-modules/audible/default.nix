@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ILGhjuPIxpRxu/dVDmz531FUgMWosk4P+onPJltuPIs=";
   };
 

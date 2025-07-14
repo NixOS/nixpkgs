@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
-    repo = pname;
+    repo = "aws-sso-creds";
     rev = "v${version}";
     sha256 = "sha256-QYE+HvvBEWPxopVP8QMqb4lNRyAtVDewuiWzja9XdM4=";
   };

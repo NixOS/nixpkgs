@@ -2,23 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "ptest";
-  version = "1.7.4";
-  format = "setuptools";
+  version = "2.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KarlGong";
-    repo = pname;
-    rev = version + "-release";
-    sha256 = "0v1zpfjagjlvdmgv6d502nmb7s996wadvpzg93i651s64rrlwq4s";
+    repo = "ptest";
+    tag = "${version}-release";
+    hash = "sha256-lmiBqFWGfYdsBXCh6dQ9xed+HhpP6PWa9Csr68GtLxs=";
   };
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "ptest" ];
+
+  # I don't know how to run the tests
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(.*)-release"
+    ];
+  };
+
+  meta = {
     description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports";
     homepage = "https://pypi.python.org/pypi/ptest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    mainProgram = "ptest";
   };
 }

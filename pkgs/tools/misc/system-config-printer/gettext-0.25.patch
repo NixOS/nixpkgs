@@ -1,0 +1,12 @@
+diff --git a/Makefile.am b/Makefile.am
+index 9993ca0d..678fa629 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,5 +1,7 @@
+ SUBDIRS=. po
+ 
++ACLOCAL_AMFLAGS = -I m4
++
+ EXPORT_MODULES=					\
+ 	cupshelpers/__init__.py			\
+ 	cupshelpers/cupshelpers.py		\

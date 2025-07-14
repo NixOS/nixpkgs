@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "lightwalletd";
-  version = "0.4.16";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo = "lightwalletd";
     rev = "v${version}";
-    hash = "sha256-M9xfV2T8L+nssrJj29QmPiErNMpfpT8BY/30Vj8wPjY=";
+    hash = "sha256-YmSQjfqwTZC3NkPH6k7gwHcaYRURive5rc0MVOKWCi8=";
   };
 
-  vendorHash = "sha256-z5Hs+CkPswWhz+Ya5MyHKA3MZzQkvS7WOxNckElkg6U=";
+  vendorHash = "sha256-jAsX+BhVYbD/joCMT2vdDdRLqZOG9AfXmbRPJcJcQEw=";
 
   ldflags = [
     "-s"

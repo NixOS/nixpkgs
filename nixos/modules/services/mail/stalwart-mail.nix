@@ -8,7 +8,6 @@ let
   cfg = config.services.stalwart-mail;
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
-  dataDir = "/var/lib/stalwart-mail";
   useLegacyStorage = lib.versionOlder config.system.stateVersion "24.11";
 
   parsePorts =
@@ -32,7 +31,7 @@ in
       default = false;
       description = ''
         Whether to open TCP firewall ports, which are specified in
-        {option}`services.stalwart-mail.settings.listener` on all interfaces.
+        {option}`services.stalwart-mail.settings.server.listener` on all interfaces.
       '';
     };
 
@@ -46,6 +45,29 @@ in
         By default, the module is configured to store everything locally.
       '';
     };
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/stalwart-mail";
+      description = ''
+        Data directory for stalwart
+      '';
+    };
+
+    credentials = lib.mkOption {
+      description = ''
+        Credentials envs used to configure Stalwart-Mail secrets.
+        These secrets can be accessed in configuration values with
+        the macros such as
+        `%{file:/run/credentials/stalwart-mail.service/VAR_NAME}%`.
+      '';
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example = {
+        user_admin_password = "/run/keys/stalwart_admin_password";
+      };
+    };
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -63,15 +85,15 @@ in
           {
             # structured data in SQLite, blobs on filesystem
             db.type = lib.mkDefault "sqlite";
-            db.path = lib.mkDefault "${dataDir}/data/index.sqlite3";
+            db.path = lib.mkDefault "${cfg.dataDir}/data/index.sqlite3";
             fs.type = lib.mkDefault "fs";
-            fs.path = lib.mkDefault "${dataDir}/data/blobs";
+            fs.path = lib.mkDefault "${cfg.dataDir}/data/blobs";
           }
         else
           {
             # everything in RocksDB
             db.type = lib.mkDefault "rocksdb";
-            db.path = lib.mkDefault "${dataDir}/db";
+            db.path = lib.mkDefault "${cfg.dataDir}/db";
             db.compression = lib.mkDefault "lz4";
           };
       storage.data = lib.mkDefault "db";
@@ -85,19 +107,17 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      config.resource =
+      spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      webadmin =
         let
           hasHttpListener = builtins.any (listener: listener.protocol == "http") (
-            lib.attrValues cfg.settings.server.listener
+            lib.attrValues (cfg.settings.server.listener or { })
           );
         in
         {
-          spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
-        }
-        // lib.optionalAttrs ((builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener) {
-          webadmin = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
+          path = "/var/cache/stalwart-mail";
+          resource = lib.mkIf (hasHttpListener) (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
         };
-      webadmin.path = "/var/cache/stalwart-mail";
     };
 
     # This service stores a potentially large amount of data.
@@ -112,6 +132,10 @@ in
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - stalwart-mail stalwart-mail - -"
+    ];
+
     systemd = {
       packages = [ cfg.package ];
       services.stalwart-mail = {
@@ -124,24 +148,32 @@ in
         preStart =
           if useLegacyStorage then
             ''
-              mkdir -p ${dataDir}/data/blobs
+              mkdir -p ${cfg.dataDir}/data/blobs
             ''
           else
             ''
-              mkdir -p ${dataDir}/db
+              mkdir -p ${cfg.dataDir}/db
             '';
 
         serviceConfig = {
           ExecStart = [
             ""
-            "${cfg.package}/bin/stalwart-mail --config=${configFile}"
+            "${lib.getExe cfg.package} --config=${configFile}"
           ];
+          LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 
           StandardOutput = "journal";
           StandardError = "journal";
 
+          ReadWritePaths = [
+            cfg.dataDir
+          ];
           CacheDirectory = "stalwart-mail";
           StateDirectory = "stalwart-mail";
+
+          # Upstream uses "stalwart" as the username since 0.12.0
+          User = "stalwart-mail";
+          Group = "stalwart-mail";
 
           # Bind standard privileged ports
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

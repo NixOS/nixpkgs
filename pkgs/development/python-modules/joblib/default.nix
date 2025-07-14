@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.4.2";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I4LFgWsmNvvSCgng9Ona1HNnZf37fcpYKUO5wTZrPw4=";
+    hash = "sha256-2HV/lVOJo916IxUuQ7wpfC4MLTBgBW2tD+78iKBpObU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -43,13 +43,14 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  pytestFlagsArray = [ "joblib/test" ];
+  enabledTestPaths = [ "joblib/test" ];
 
   disabledTests =
     [
       "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
       "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
       "test_nested_parallel_warnings" # tests is flaky under load
+      "test_memory" # tests - and the module itself - assume strictatime mount for build directory
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.

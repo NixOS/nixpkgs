@@ -19,8 +19,8 @@ let
   commonInvidousServiceConfig = {
     description = "Invidious (An alternative YouTube front-end)";
     wants = [ "network-online.target" ];
-    after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-    requires = lib.optional cfg.database.createLocally "postgresql.service";
+    after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+    requires = lib.optional cfg.database.createLocally "postgresql.target";
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -343,7 +343,7 @@ in
       description = ''
         How many invidious instances to run.
 
-        See https://docs.invidious.io/improve-public-instance/#2-multiple-invidious-processes for more details
+        See <https://docs.invidious.io/improve-public-instance/#2-multiple-invidious-processes> for more details
         on how this is intended to work. All instances beyond the first one have the options `channel_threads`
         and `feed_threads` set to 0 to avoid conflicts with multiple instances refreshing subscriptions. Instances
         will be configured to bind to consecutive ports starting with {option}`services.invidious.port` for the
@@ -449,7 +449,7 @@ in
 
           If {option}`services.invidious.nginx.enable` is used, nginx will be configured automatically. If not, you
           need to configure a reverse proxy yourself according to
-          https://docs.invidious.io/improve-public-instance/#3-speed-up-video-playback-with-http3-ytproxy.
+          <https://docs.invidious.io/improve-public-instance/#3-speed-up-video-playback-with-http3-ytproxy>.
         '';
       };
 

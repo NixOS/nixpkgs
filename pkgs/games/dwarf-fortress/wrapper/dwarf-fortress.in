@@ -1,7 +1,31 @@
 #!@stdenv_shell@ -e
 
 export NIXPKGS_DF_EXE="@dfExe@"
+export NIXPKGS_DF_GAME=1
 source @dfInit@
+
+# All potential important files in DF 50 and below.
+for path in dwarfort dwarfort.exe df *.so* libs raw data/init/* data/!(init|index|announcement); do
+  force_delete=0
+  if [[ "$path" == *fmod*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -eq 0 ]; then
+    # Delete fmod plugins if we're using SDL_mixer.
+    force_delete=1
+  elif [[ "$path" == *mixer*.so* ]] && [ "${_NIXPKGS_DF_OPTS[fmod]}" -ne 0 ]; then
+    # Delete SDL_mixer plugins if we're using fmod.
+    force_delete=1
+  fi
+
+  if [ -e "$path" ] && [ "$force_delete" -eq 0 ]; then
+    update_path "$path"
+  else
+    cleanup_path "$path"
+  fi
+done
+
+# These need to be copied due to read only flags on older versions of DF.
+for path in index announcement help dipscript; do
+  forcecopy_path "data/$path"
+done
 
 # If we're switching back from dfhack to vanilla, cleanup all dfhack
 # links so Dwarf Fortress doesn't autoload its leftover libdfhooks.so.
@@ -32,4 +56,4 @@ else
   done
 fi
 
-go
+go "$@"

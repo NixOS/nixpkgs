@@ -6,7 +6,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "decoder";
   version = "unstable-2021-11-20";
 
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     mainProgram = "decoder";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

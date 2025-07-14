@@ -1,29 +1,37 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   testers,
   wakatime-cli,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.102.3";
+  version = "1.115.6";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
-    rev = "v${version}";
-    hash = "sha256-RnEyrbdYP8BYQ9M+iwikTfYF8HRosR6vhHiQJvGNZ/s=";
+    tag = "v${version}";
+    hash = "sha256-kLvYU+mu9vXD0mfgrvpMFeeLTJcp4NxY4Z3n0ks5RC4=";
   };
 
-  vendorHash = "sha256-s9nCr55XR/0ZriweDOBRIDpmp+GUE85FWLJkWXqX5/U=";
+  vendorHash = "sha256-jyFUauK+CAuSv+dKUyVtuoTizeGkKnNquZLA96oq1BM=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
   ];
+
+  # dial tcp 127.0.0.1:51272: connect: operation not permitted
+  # and goroutine 33 [IO wait, 10 minutes] on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let
@@ -34,10 +42,8 @@ buildGoModule rec {
         "TestSendHeartbeats_ExtraHeartbeats"
         "TestSendHeartbeats_IsUnsavedEntity"
         "TestSendHeartbeats_NonExistingExtraHeartbeatsEntity"
+        "TestSendHeartbeats_ExtraHeartbeatsIsUnsavedEntity"
         "TestFileExperts_Err(Auth|Api|BadRequest)"
-
-        # Flaky tests
-        "TestLoadParams_ApiKey_FromVault_Err_Darwin"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

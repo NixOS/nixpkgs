@@ -31,9 +31,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Analogj";
     repo = "lexicon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
+
+  # https://beautiful-soup-4.readthedocs.io/en/latest/#method-names
+  postPatch = ''
+    sed 's/\<findAll\>/find_all/g' \
+      -i src/lexicon/_private/providers/*.py
+    sed 's/\<renderContents\>/encode_contents/g' \
+      -i src/lexicon/_private/providers/*.py
+  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -68,7 +76,7 @@ buildPythonPackage rec {
     pytest-vcr
   ] ++ optional-dependencies.full;
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTestPaths = [
     # Needs network access

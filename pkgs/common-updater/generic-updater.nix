@@ -18,6 +18,7 @@
   allowedVersions ? "",
   ignoredVersions ? "",
   rev-prefix ? "",
+  rev-suffix ? "",
   odd-unstable ? false,
   patchlevel-unstable ? false,
 }:
@@ -43,8 +44,9 @@ let
     allowed_versions="$6"
     ignored_versions="$7"
     rev_prefix="$8"
-    odd_unstable="$9"
-    patchlevel_unstable="''${10}"
+    rev_suffix="$9"
+    odd_unstable="''${10}"
+    patchlevel_unstable="''${11}"
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
@@ -88,6 +90,11 @@ let
     if [ -n "$rev_prefix" ]; then
       tags=$(echo "$tags" | ${grep} "^$rev_prefix")
       tags=$(echo "$tags" | ${sed} -e "s,^$rev_prefix,,")
+    fi
+    # cut any revision suffix not used in the NixOS package version
+    if [ -n "$rev_suffix" ]; then
+      tags=$(echo "$tags" | ${grep} -- "$rev_suffix$")
+      tags=$(echo "$tags" | ${sed} -e "s,$rev_suffix\$,,")
     fi
     tags=$(echo "$tags" | ${grep} "^[0-9]")
     if [ -n "$allowed_versions" ]; then
@@ -145,6 +152,7 @@ in
     allowedVersions
     ignoredVersions
     rev-prefix
+    rev-suffix
     odd-unstable
     patchlevel-unstable
   ];

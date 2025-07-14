@@ -16,13 +16,18 @@
 
 buildPythonPackage rec {
   pname = "pymssql";
-  version = "2.3.1";
+  version = "2.3.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3e4VxMGT4UyS/izXIMqb4duh4PQXgkA4C49fbwDaBMY=";
+    hash = "sha256-EXyC16qQIRcaqb6YNoR1UZ8z2cMgc83Pmw12Ixq8ZDY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=54.0,<70.3" "setuptools>=54.0"
+  '';
 
   build-system = [
     cython

@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "j3ssie";
     repo = "goverview";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IgvpMuDwMK9IdPs1IRbPbpgr7xZuDX3boVT5d7Lb+3w=";
   };
 
@@ -35,12 +35,12 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to get an overview of the list of URLs";
     mainProgram = "goverview";
     homepage = "https://github.com/j3ssie/goverview";
     changelog = "https://github.com/j3ssie/goverview/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

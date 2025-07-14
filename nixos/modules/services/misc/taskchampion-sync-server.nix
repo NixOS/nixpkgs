@@ -22,6 +22,12 @@ in
       type = types.str;
       default = "taskchampion";
     };
+    host = lib.mkOption {
+      description = "Host address on which to serve";
+      type = types.str;
+      default = "127.0.0.1";
+      example = "0.0.0.0";
+    };
     port = lib.mkOption {
       description = "Port on which to serve";
       type = types.port;
@@ -44,6 +50,11 @@ in
         type = types.ints.positive;
         default = 14;
       };
+    };
+    allowClientIds = lib.mkOption {
+      description = "Client IDs to allow (can be repeated; if not specified, all clients are allowed)";
+      type = types.listOf types.str;
+      default = [ ];
     };
   };
 
@@ -74,10 +85,11 @@ in
         DynamicUser = false;
         ExecStart = ''
           ${lib.getExe cfg.package} \
-            --port ${builtins.toString cfg.port} \
+            --listen "${cfg.host}:${builtins.toString cfg.port}" \
             --data-dir ${cfg.dataDir} \
             --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
-            --snapshot-days ${builtins.toString cfg.snapshot.days}
+            --snapshot-days ${builtins.toString cfg.snapshot.days} \
+            ${lib.concatMapStringsSep " " (id: "--allow-client-id ${id}") cfg.allowClientIds}
         '';
       };
     };

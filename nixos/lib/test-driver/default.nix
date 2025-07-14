@@ -14,22 +14,12 @@
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
-let
-  fs = lib.fileset;
-in
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
   pyproject = true;
 
-  src = fs.toSource {
-    root = ./.;
-    fileset = fs.unions [
-      ./pyproject.toml
-      ./test_driver
-      ./extract-docstrings.py
-    ];
-  };
+  src = ./src;
 
   build-system = with python3Packages; [
     setuptools
@@ -41,6 +31,7 @@ python3Packages.buildPythonApplication {
       colorama
       junit-xml
       ptpython
+      ipython
     ]
     ++ extraPythonPackages python3Packages;
 

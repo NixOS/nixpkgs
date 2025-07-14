@@ -1,38 +1,55 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, openssl, readline, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  readline,
+  fetchurl,
+}:
 
 let
-
   iana-enterprise-numbers = fetchurl {
-    url = "https://web.archive.org/web/20230312103209id_/https://www.iana.org/assignments/enterprise-numbers.txt";
-    sha256 = "sha256-3Z5uoOYfbF1o6MSgvnr00w4Z5w4IHc56L1voKDzeH/w=";
+    url = "https://web.archive.org/web/20250113140800id_/https://www.iana.org/assignments/enterprise-numbers.txt";
+    hash = "sha256-aRgBEfZYwoL6YnU3aD0WYeMnJD5ZCj34S/9aQyzBIO4=";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "ipmitool";
-  version = "1.8.19";
+  version = "1.8.19-unstable-2025-02-18";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "IPMITOOL_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-VVYvuldRIHhaIUibed9cLX8Avfy760fdBLNO8MoUKCk=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "IPMITool";
+    repo = "ipmitool";
+    rev = "3c91e6d91ec6090fe548c55ef301c33ff20c8ed8";
+    hash = "sha256-7R3jmPPd8+yKs7Q1vlU/ZaZusZVB0s+xc1HGeLyLdk0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl readline ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'AC_MSG_WARN([** Neither wget nor curl could be found.])' 'AM_CONDITIONAL([DOWNLOAD], [true])'
-    cp ${iana-enterprise-numbers} enterprise-numbers
+  buildInputs = [
+    openssl
+    readline
+  ];
+
+  configureFlags = [ "--disable-registry-download" ];
+
+  postInstall = ''
+    # Install to path reported in configure as "Set IANA PEN dictionary search path to ..."
+    install -Dm444 ${iana-enterprise-numbers} $out/share/misc/enterprise-numbers
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface to IPMI-enabled devices";
     mainProgram = "ipmitool";
-    license = licenses.bsd3;
-    homepage = "https://github.com/ipmitool/ipmitool";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.bsd3;
+    homepage = "https://codeberg.org/IPMITool/ipmitool";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

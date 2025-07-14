@@ -27,7 +27,7 @@ let
     sort
     switch
     switch-if
-    versionAtLeast
+    versionOlder
     versions
     ;
 
@@ -112,7 +112,7 @@ let
   shortVersion =
     x:
     if (isString x && match "^/.*" x == null) then
-      findFirst (v: versions.majorMinor v == x) null (sort versionAtLeast (attrNames release))
+      findFirst (v: versions.majorMinor v == x) null (sort (l: r: versionOlder r l) (attrNames release))
     else
       null;
   isShortVersion = x: shortVersion x != null;
@@ -148,14 +148,15 @@ switch arg [
       in
       {
         version = rv.version or v;
-        src = rv.src or fetcher (
-          location
-          // {
-            rev = releaseRev v;
-            artifact = releaseArtifact v;
-          }
-          // rv
-        );
+        src =
+          rv.src or (fetcher (
+            location
+            // {
+              rev = releaseRev v;
+              artifact = releaseArtifact v;
+            }
+            // rv
+          ));
       };
   }
   {

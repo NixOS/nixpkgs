@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-ynFuCD+tp8E/DDdB/HU9BCmwKcmQy6NBx26MKnP4W0o=";
   };
 
-  sourceRoot = "./source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   buildInputs = [
     meson

@@ -1,39 +1,57 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
-  exo,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
   glib,
   gtk3,
-  libXtst,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
   xfconf,
-  xorgproto,
+  gitUpdater,
 }:
 
-mkXfceDerivation rec {
-  category = "panel-plugins";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-cpugraph-plugin";
-  version = "1.2.10";
-  rev-prefix = "xfce4-cpugraph-plugin-";
-  odd-unstable = false;
-  sha256 = "sha256-VPelWTtFHmU4ZgWLTzZKbtmQ4LOtVwJvpLG9rHtGoNs=";
+  version = "1.3.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "panel-plugins";
+    repo = "xfce4-cpugraph-plugin";
+    tag = "xfce4-cpugraph-plugin-${finalAttrs.version}";
+    hash = "sha256-IXAoxMzKZhABiiZYhL4UGkzqFNGMJicGQqSIfy2DEfc=";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
-    exo
     glib
     gtk3
-    libXtst
     libxfce4ui
     libxfce4util
     xfce4-panel
     xfconf
-    xorgproto
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-cpugraph-plugin-"; };
+
+  meta = {
     description = "CPU graph show for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-cpugraph-plugin";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

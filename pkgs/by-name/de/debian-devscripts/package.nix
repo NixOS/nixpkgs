@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   fetchpatch,
   xz,
   dpkg,
@@ -27,13 +27,16 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in
-stdenv.mkDerivation rec {
-  version = "2.23.5";
+stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
+  version = "2.25.15";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "devscripts";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s2QSfJyHsFr1eiia/yFj3jsS5k38xNewEe/g5PFpqag=";
   };
 
   patches = [
@@ -45,15 +48,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
-    substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    substituteInPlace scripts/debrebuild.pl \
+      --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
+    # Remove man7 target to avoid missing *.7 file error
+    substituteInPlace doc/Makefile \
+      --replace-fail " install_man7" ""
   '';
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
   ];
+
   buildInputs =
     [
       xz
@@ -121,15 +128,14 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
-    ln -s cvs-debi $out/bin/cvs-debc
     ln -s debchange $out/bin/dch
     ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Debian package maintenance scripts";
-    license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

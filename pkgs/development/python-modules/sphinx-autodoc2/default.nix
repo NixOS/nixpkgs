@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-extensions2";
     repo = "sphinx-autodoc2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Wu079THK1mHVilD2Fx9dIzuIOOYOXpo/EMxVczNutCI=";
   };
 

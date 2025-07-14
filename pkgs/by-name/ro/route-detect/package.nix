@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mschwager";
     repo = "route-detect";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4WkYjAQyteHJTJvSZoSfVUnBvsDQ3TWb5Ttp3uCgvdU=";
   };
 

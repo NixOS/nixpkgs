@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danifus";
     repo = "pyzipper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+fZXoAUeB/bUI3LrIFlMTktJgn+GNFBiDHvH2Jgo0pg=";
   };
 

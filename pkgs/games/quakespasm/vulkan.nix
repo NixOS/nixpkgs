@@ -8,6 +8,7 @@
   libmpg123,
   libopus,
   libvorbis,
+  libX11,
   makeWrapper,
   meson,
   moltenvk,
@@ -17,17 +18,18 @@
   stdenv,
   vulkan-headers,
   vulkan-loader,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.31.3";
+  version = "1.32.3.1";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
-    rev = version;
-    sha256 = "sha256-VqTfcwt6/VTotD2Y7x7WiVwISRGOLfmMWh6EO5DSMX4=";
+    tag = finalAttrs.version;
+    hash = "sha256-Hsj6LgxlEICI3MMDMCE1KvslYrsYfQPhShpP5kzLCTI=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +38,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    copyDesktopItems
   ];
 
   buildInputs =
@@ -46,6 +49,7 @@ stdenv.mkDerivation rec {
       libmpg123
       libopus
       libvorbis
+      libX11
       opusfile
       vulkan-loader
     ]
@@ -64,18 +68,36 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp vkquake "$out/bin"
+
+    install -D ../Misc/vkQuake_256.png "$out/share/icons/hicolor/256x256/apps/vkquake.png"
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      exec = finalAttrs.meta.mainProgram;
+      name = "vkquake";
+      icon = "vkquake";
+      comment = finalAttrs.meta.description;
+      desktopName = "vkQuake";
+      categories = [ "Game" ];
+    })
+  ];
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf $out/bin/vkquake \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Quake port based on QuakeSpasm";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/Novum/vkQuake";
+    changelog = "https://github.com/Novum/vkQuake/releases";
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.
       It is based on the popular QuakeSpasm port and runs all mods compatible with it
@@ -85,11 +107,11 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       PopeRigby
       ylh
     ];
     mainProgram = "vkquake";
   };
-}
+})

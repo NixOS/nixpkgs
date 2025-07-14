@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   samba,
   shadow,
   qtdeclarative,
@@ -10,8 +10,7 @@ mkKdeDerivation {
   pname = "kdenetwork-filesharing";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       inherit samba;
       usermod = lib.getExe' shadow "usermod";
     })

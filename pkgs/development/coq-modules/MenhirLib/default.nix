@@ -13,16 +13,13 @@ let
     domain = "gitlab.inria.fr";
     inherit version;
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
       lib.switch coq.coq-version [
-        {
-          case = range "8.12" "8.20";
-          out = "20240715";
-        }
-        {
-          case = range "8.7" "8.11";
-          out = "20200624";
-        }
+        (case (range "8.12" "9.1") "20240715")
+        (case (range "8.7" "8.11") "20200624")
       ] null;
     release = {
       "20240715".sha256 = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI="; # coq 8.9 - 8.20
@@ -35,11 +32,11 @@ let
     };
     propagatedBuildInputs = [ stdlib ];
     preBuild = "cd coq-menhirlib/src";
-    meta = with lib; {
+    meta = {
       homepage = "https://gitlab.inria.fr/fpottier/menhir/-/tree/master/coq-menhirlib";
       description = "A support library for verified Coq parsers produced by Menhir";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ ];
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [ damhiya ];
     };
   };
 in

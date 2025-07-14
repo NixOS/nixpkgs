@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.5";
+  version = "3.50.6";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-E4gZsPLOCK15xG5MiwN5sNQs/3KEkzC57I5moqcGy20=";
+    hash = "sha256-/d6ezujW/yeZV95zv/12ttUEUliZARtEGFoCXe6Dp/I=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/xapp-project/gnome-online-accounts-gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 })

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AMDmi3";
     repo = "jsonslicer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nPifyqr+MaFqoCYFbFSSBDjvifpX0CFnHCdMCvhwYTA=";
   };
 

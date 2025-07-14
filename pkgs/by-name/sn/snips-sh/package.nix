@@ -8,14 +8,14 @@
 }:
 buildGoModule rec {
   pname = "snips-sh";
-  version = "0.4.1";
-  vendorHash = "sha256-weqlhnhUG2gn9SFS63q1LYmPa7liGYYcJN5qorj6x2E=";
+  version = "0.5.0";
+  vendorHash = "sha256-jitainpBp6YIzdMURI/lLxSi1Wk42Ubncoq6pFj8OKM=";
 
   src = fetchFromGitHub {
     owner = "robherley";
     repo = "snips.sh";
     rev = "v${version}";
-    hash = "sha256-FEo2/TPwes8/Iwfp7OIo1HbLWF9xmVS9ZMC9HysyK/k=";
+    hash = "sha256-wumM5LyEQCL38Lmipz+BCB0dycH0Bj7lvUYwsctUg54=";
   };
 
   tags = (lib.optional (!withTensorflow) "noguesser");
@@ -27,7 +27,10 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     homepage = "https://snips.sh";
-    maintainers = with lib.maintainers; [ jeremiahs ];
+    maintainers = with lib.maintainers; [
+      jeremiahs
+      matthiasbeyer
+    ];
     mainProgram = "snips.sh";
   };
 }

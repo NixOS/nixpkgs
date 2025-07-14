@@ -12,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jreisinger";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "waf-tester";
+    tag = "v${version}";
     hash = "sha256-UPviooQNGRVwf/bTz9ApedJDAGeCvh9iD1HXFOQXPcw=";
   };
 
@@ -31,12 +31,12 @@ buildGoModule rec {
     version = "waf-tester ${version}, commit none, built at unknown by unknown";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test Web Application Firewalls (WAFs)";
     mainProgram = "waf-tester";
     homepage = "https://github.com/jreisinger/waf-tester";
     changelog = "https://github.com/jreisinger/waf-tester/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

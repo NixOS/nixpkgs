@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     mainProgram = "tpm_server";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

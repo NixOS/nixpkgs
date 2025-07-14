@@ -14,7 +14,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpm";
   version = "unstable-2020-06-17";
 
@@ -70,7 +70,11 @@ stdenv.mkDerivation rec {
 
   # Provide libgpm.so for compatibility
   postInstall = ''
-    ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
+    if test -e "$out/lib/libgpm.so.2"; then
+      ln -sv "$out/lib/libgpm.so.2" "$out/lib/libgpm.so"
+    else
+      rm -f "$out/lib/libgpm.so.2"
+    fi
   '';
 
   passthru.tests.static = pkgsStatic.gpm;

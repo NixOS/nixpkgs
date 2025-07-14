@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mosajjal";
     repo = "dnsmonster";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0WHTrqnc3vYQro+nSsQipAPVymR8L4uOwtd9GJHxhVM=";
   };
 
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X=github.com/mosajjal/dnsmonster/util.releaseVersion=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Passive DNS Capture and Monitoring Toolkit";
     homepage = "https://github.com/mosajjal/dnsmonster";
     changelog = "https://github.com/mosajjal/dnsmonster/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "dnsmonster";
   };

@@ -1,8 +1,8 @@
 diff --git a/wikiman.sh b/wikiman.sh
-index 89a436e..adc6510 100755
+index 994c0b7..49bfc4b 100755
 --- a/wikiman.sh
 +++ b/wikiman.sh
-@@ -46,38 +46,7 @@ if printenv WIKIMAN_TUI_PREVIEW >/dev/null; then
+@@ -50,38 +50,7 @@ if printenv WIKIMAN_TUI_PREVIEW >/dev/null; then
  fi
  
  init() {
@@ -22,23 +22,23 @@ index 89a436e..adc6510 100755
 -		*)
 -			case "$(dirname "$(command -v wikiman)")" in
 -				"$HOME/bin"|"$HOME/.local/bin")
--					echo 'warning: unsupported installation path, using fallback for user install' 1>&2;
+-					>&2 echo 'warning: unsupported installation path, using fallback for user install' ;
 -					conf_sys_usr="$HOME/.local/share";
 -					conf_sys_etc="${XDG_CONFIG_HOME:-"$HOME/.config"}/wikiman";;
 -				'/bin'|'/sbin'|'/usr/bin'|'/usr/sbin')
--					echo 'warning: unsupported installation path, using fallback for Linux' 1>&2;
+-					>&2 echo 'warning: unsupported installation path, using fallback for Linux' ;
 -					conf_sys_usr='/usr';
 -					conf_sys_etc='/etc';;
 -				'/usr/local/bin'|'/usr/local/sbin')
--					echo 'warning: unsupported installation path, using fallback for BSD' 1>&2;
+-					>&2 echo 'warning: unsupported installation path, using fallback for BSD' ;
 -					conf_sys_usr='/usr/local';
 -					conf_sys_etc='/usr/local/etc';;
 -				*)
--					echo 'error: unsupported installation path - failed to establish fallback' 1>&2;
+-					>&2 echo 'error: unsupported installation path - failed to establish fallback' ;
 -					exit 5;;
 -			esac;;
 -	esac
-+	conf_sys_etc="/etc/xdg/wikiman/wikiman.conf"
++	conf_sys_etc="/etc"
  
  	export conf_sys_usr
  	export conf_sys_etc

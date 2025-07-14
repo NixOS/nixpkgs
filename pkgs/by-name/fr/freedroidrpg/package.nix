@@ -56,6 +56,8 @@ stdenv.mkDerivation {
     zlib
   ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+
   enableParallelBuilding = true;
 
   meta = with lib; {

@@ -3,8 +3,8 @@
   mirage-crypto-rng,
   duration,
   mirage-runtime,
-  mirage-time,
-  mirage-clock,
+  mirage-mtime,
+  mirage-sleep,
   mirage-unix,
   mirage-time-unix,
   mirage-clock-unix,
@@ -13,7 +13,7 @@
   ohex,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-crypto-rng-mirage";
 
   inherit (mirage-crypto-rng) version src;
@@ -30,8 +30,8 @@ buildDunePackage rec {
     duration
     mirage-crypto-rng
     mirage-runtime
-    mirage-time
-    mirage-clock
+    mirage-mtime
+    mirage-sleep
     logs
     lwt
   ];

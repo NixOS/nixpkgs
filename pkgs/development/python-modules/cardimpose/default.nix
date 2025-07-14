@@ -1,18 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   pymupdf,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cardimpose";
-  version = "0.2.1";
+  version = "0.2.1-unstable-2024-12-28";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7GyLTUzWd9cZ8/k+0FfzKW3H2rKZ3NHqkZkNmiQ+Tec=";
+  src = fetchFromGitHub {
+    owner = "frsche";
+    repo = "cardimpose";
+    rev = "eb26a9795e20db3e3dd5b62dbcbbad547cb05a55";
+    hash = "sha256-Fel0YOe2D76h+QAon/wxI6EsZhfLca+0ncNi9i888+E=";
   };
 
   build-system = [ setuptools ];

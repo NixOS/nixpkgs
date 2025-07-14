@@ -7,6 +7,8 @@
   mp3gain,
   mp3val,
   python3Packages,
+  version,
+  lib,
   ...
 }:
 {
@@ -169,4 +171,7 @@
     flask-cors
   ];
   zero = { };
+  _typing = {
+    testPaths = [ ];
+  };
 }

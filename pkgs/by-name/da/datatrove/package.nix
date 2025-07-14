@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datatrove";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2NJja2yWeHOgo1pCuwHN6SgYnsimuZdK0jE8ucTH4r8=";
   };
 

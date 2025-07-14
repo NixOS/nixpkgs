@@ -65,7 +65,6 @@
   libjpegSupport ? true,
   libjpeg,
   useUnfreeCodecs ? false,
-  darwin,
   buildPackages,
 }:
 
@@ -118,14 +117,14 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mplayer";
-  version = "1.5-unstable-2024-07-03";
+  version = "1.5-unstable-2024-12-21";
 
   src = fetchsvn {
     url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "38637";
-    hash = "sha256-9KQOB6QIs1VZhazJqW8dY4ASiMgoxV6davfpKgLPbmE=";
+    rev = "38668";
+    hash = "sha256-ezWYBkhiSBgf/SeTrO6sKGbL/IrX+82KXCIlqYMEtgY=";
   };
 
   prePatch = ''
@@ -176,11 +175,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional libpngSupport libpng
     ++ lib.optional libjpegSupport libjpeg
     ++ lib.optional bs2bSupport libbs2b
-    ++ lib.optional v4lSupport libv4l
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.OpenGL
-    ];
+    ++ lib.optional v4lSupport libv4l;
 
   configurePlatforms = [ ];
   configureFlags =
@@ -276,7 +271,8 @@ stdenv.mkDerivation rec {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
-    maintainers = [ ];
+    # Picking it up: no idea about the origin of some choices (but seems fine)
+    maintainers = [ maintainers.raskin ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

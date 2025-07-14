@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.9";
+  version = "1.5.10";
   pname = "pysmi";
   pyproject = true;
 
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cAeLoDwAf56aWWKKUjOB0fpy7C3gBJchJJtQ6986thc=";
+    tag = "v${version}";
+    hash = "sha256-fJwMkOzI5IrDEyH6wV/zD79k6rzuuqDvfZkuHC44TGY=";
   };
 
   build-system = [ poetry-core ];

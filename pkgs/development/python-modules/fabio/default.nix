@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "fabio";
-  version = "2024.4.0";
+  version = "2024.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NPVxu4sZ7hIvrHrh1iRakraa5fj1cUnH259tTDByRNc=";
+    hash = "sha256-+HPfUfRoUxwRqufgzYihTyIfTvCUMfvFpspnse1HU1s=";
   };
 
   pythonImportsCheck = [ "fabio" ];

@@ -1,12 +1,12 @@
 {
   buildDunePackage,
-  substituteAll,
+  replaceVars,
   ocaml,
   menhirLib,
   menhirSdk,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "menhir";
 
   minimalOCamlVersion = "4.03";
@@ -19,8 +19,7 @@ buildDunePackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./menhir-suggest-menhirLib.patch;
+    (replaceVars ./menhir-suggest-menhirLib.patch {
       libdir = "${menhirLib}/lib/ocaml/${ocaml.version}/site-lib/menhirLib";
     })
   ];

@@ -1,13 +1,15 @@
 {
   mkKdeDerivation,
-  libcanberra,
-  libvlc,
+  pkg-config,
+  mpv,
 }:
 mkKdeDerivation {
   pname = "kalarm";
 
-  extraBuildInputs = [
-    libcanberra
-    libvlc
+  extraCmakeFlags = [
+    "-DENABLE_LIBVLC=0"
   ];
+
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ mpv ];
 }

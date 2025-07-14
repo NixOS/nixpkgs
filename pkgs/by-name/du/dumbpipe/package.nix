@@ -1,30 +1,31 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dumbpipe";
-  version = "0.21.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
-    repo = pname;
+    repo = "dumbpipe";
     rev = "v${version}";
-    hash = "sha256-WJwjxVtv022Qm1NUnibh2jq1g0P/hi0HjeA9l7fMdRw=";
+    hash = "sha256-IF9KL5Rf7PsM8T/ZdFfycFRDUGmpAqdWyCPFaCGN/ko=";
   };
 
-  cargoHash = "sha256-oq8jWRFVEB9sMZ7ufke5D1BMpGms8WJWVL/LGV+g/GI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qrFARMY5kjxirCJvCW5O1QPU+yaAh16AvULGqbKUY+w=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      SystemConfiguration
-    ]
-  );
+  __darwinAllowLocalNetworking = true;
+
+  # On Darwin, dumbpipe invokes CoreFoundation APIs that read ICU data from the
+  # system. Ensure these paths are accessible in the sandbox to avoid segfaults
+  # during checkPhase.
+  sandboxProfile = ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
 
   meta = with lib; {
     description = "Connect A to B - Send Data";

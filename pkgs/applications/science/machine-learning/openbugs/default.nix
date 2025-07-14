@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OpenBUGS";
   version = "3.2.3";
 
@@ -18,9 +19,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software package for performing Bayesian analysis and simulation using Markov Chain Monte Carlo";
-    homepage = "https://www.mrc-bsu.cam.ac.uk/software/bugs/openbugs/";
+    homepage = "https://github.com/jsta/openbugs/";
     changelog = "https://github.com/jsta/openbugs/blob/master/ChangeLog";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ andresnav ];
   };

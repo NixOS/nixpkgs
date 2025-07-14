@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
@@ -71,14 +71,13 @@ python3.pkgs.buildPythonApplication rec {
     "pubs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line bibliography manager";
     mainProgram = "pubs";
     homepage = "https://github.com/pubs/pubs";
     changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
-      gebner
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
   };

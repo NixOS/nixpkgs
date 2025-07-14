@@ -14,25 +14,27 @@
   openssl,
   readline,
   runtimeShell,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nmh";
-  version = "1.7.1";
+  version = "1.8";
   src = fetchFromSavannah {
     repo = "nmh";
     rev = finalAttrs.version;
-    hash = "sha256-sBftXl4hWs4bKw5weHkif1KIJBpheU/RCePx0WXuv9o=";
+    hash = "sha256-ShAdinvBA7guVBhjqTelBRiUzyo5KqHcawlQS9kXtqs=";
   };
 
+  patches = [ ./reproducible-build-date.patch ];
+
   postPatch = ''
-    substituteInPlace config/config.c --replace /bin/cat ${coreutils}/bin/cat
     substituteInPlace \
       sbr/arglist.c \
       uip/mhbuildsbr.c \
       uip/whatnowsbr.c \
       uip/slocal.c \
-      --replace '"/bin/sh"' '"${runtimeShell}"'
+      --replace-fail '"/bin/sh"' '"${runtimeShell}"'
     # the "cleanup" pseudo-test makes diagnosing test failures a pain
     ln -s -f ${stdenv}/bin/true test/cleanup
   '';
@@ -57,11 +59,18 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   enableParallelBuilding = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/install-mh";
+  versionCheckProgramArg = "-version";
+
   meta = {
     description = "New MH Mail Handling System";
     homepage = "https://nmh.nongnu.org/";
-    downloadPage = "http://download.savannah.nongnu.org/releases/nmh/";
-    changelog = "http://savannah.nongnu.org/news/?group=nmh";
+    downloadPage = "https://download.savannah.nongnu.org/releases/nmh/";
+    changelog = "https://savannah.nongnu.org/news/?group=nmh";
     license = [ lib.licenses.bsd3 ];
     longDescription = ''
       This is the nmh mail user agent (reader/sender), a command-line based

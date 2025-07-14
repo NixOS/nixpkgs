@@ -18,6 +18,13 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "klipper" "mutableConfigFolder" ]
+      [ "services" "klipper" "configDir" ]
+    )
+  ];
+
   ##### interface
   options = {
     services.klipper = {
@@ -52,23 +59,22 @@ in
         default = false;
         example = true;
         description = ''
-          Whether to copy the config to a mutable directory instead of using the one directly from the nix store.
-          This will only copy the config if the file at `services.klipper.mutableConfigPath` doesn't exist.
+          Whether to manage the config outside of NixOS.
+
+          It will still be initialized with the defined NixOS config if the file doesn't already exist.
         '';
       };
 
-      mutableConfigFolder = lib.mkOption {
+      configDir = lib.mkOption {
         type = lib.types.path;
         default = "/var/lib/klipper";
-        description = "Path to mutable Klipper config file.";
+        description = "Path to Klipper config file.";
       };
 
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = ''
-          Path to default Klipper config.
-        '';
+        description = "Path to default Klipper config.";
       };
 
       octoprintIntegration = lib.mkOption {
@@ -104,6 +110,12 @@ in
           Configuration for Klipper. See the [documentation](https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides)
           for supported values.
         '';
+      };
+
+      extraSettings = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "Extra lines to append to the generated Klipper configuration.";
       };
 
       firmwares = lib.mkOption {
@@ -160,12 +172,11 @@ in
         assertion = (cfg.configFile != null) != (cfg.settings != null);
         message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
+      {
+        assertion = (cfg.configFile != null) -> (cfg.extraSettings == "");
+        message = "You can't use services.klipper.extraSettings with services.klipper.configFile.";
+      }
     ];
-
-    environment.etc = lib.mkIf (!cfg.mutableConfig) {
-      "klipper.cfg".source =
-        if cfg.settings != null then format.generate "klipper.cfg" cfg.settings else cfg.configFile;
-    };
 
     services.klipper = lib.mkIf cfg.octoprintIntegration {
       user = config.services.octoprint.user;
@@ -178,29 +189,44 @@ in
           "--input-tty=${cfg.inputTTY}"
           + lib.optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
           + lib.optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}";
-        printerConfigPath =
-          if cfg.mutableConfig then cfg.mutableConfigFolder + "/printer.cfg" else "/etc/klipper.cfg";
-        printerConfigFile =
-          if cfg.settings != null then format.generate "klipper.cfg" cfg.settings else cfg.configFile;
+        printerConfig =
+          if cfg.settings != null then
+            builtins.toFile "klipper.cfg" ((format.generate "" cfg.settings).text + cfg.extraSettings)
+          else
+            cfg.configFile;
       in
       {
         description = "Klipper 3D Printer Firmware";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         preStart = ''
-          mkdir -p ${cfg.mutableConfigFolder}
-          ${lib.optionalString (cfg.mutableConfig) ''
-            [ -e ${printerConfigPath} ] || {
-              cp ${printerConfigFile} ${printerConfigPath}
-              chmod +w ${printerConfigPath}
+          mkdir -p ${cfg.configDir}
+          pushd ${cfg.configDir}
+          if [ -e printer.cfg ]; then
+            ${
+              if cfg.mutableConfig then
+                ":"
+              else
+                ''
+                  # Backup existing config using the same date format klipper uses for SAVE_CONFIG
+                  old_config="printer-$(date +"%Y%m%d_%H%M%S").cfg"
+                  mv printer.cfg "$old_config"
+                  # Preserve SAVE_CONFIG section from the existing config
+                  cat ${printerConfig} <(printf "\n") <(sed -n '/#*# <---------------------- SAVE_CONFIG ---------------------->/,$p' "$old_config") > printer.cfg
+                  ${pkgs.diffutils}/bin/cmp printer.cfg "$old_config" && rm "$old_config"
+                ''
             }
-          ''}
-          mkdir -p ${cfg.mutableConfigFolder}/gcodes
+          else
+            cat ${printerConfig} > printer.cfg
+          fi
+          popd
         '';
+
+        restartTriggers = lib.optional (!cfg.mutableConfig) [ printerConfig ];
 
         serviceConfig =
           {
-            ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${printerConfigPath}";
+            ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
             RuntimeDirectory = "klipper";
             StateDirectory = "klipper";
             SupplementaryGroups = [ "dialout" ];
@@ -227,9 +253,11 @@ in
       };
 
     environment.systemPackages =
-      with pkgs;
       let
         default = a: b: if a != null then a else b;
+        genconf = pkgs.klipper-genconf.override {
+          klipper = cfg.package;
+        };
         firmwares = lib.filterAttrs (n: v: v != null) (
           lib.mapAttrs (
             mcu:
@@ -241,6 +269,7 @@ in
             }:
             if enable then
               pkgs.klipper-firmware.override {
+                klipper = cfg.package;
                 mcu = lib.strings.sanitizeDerivationName mcu;
                 firmwareConfig = configFile;
               }
@@ -251,14 +280,15 @@ in
         firmwareFlasher = lib.mapAttrsToList (
           mcu: firmware:
           pkgs.klipper-flash.override {
-            mcu = lib.strings.sanitizeDerivationName mcu;
+            klipper = cfg.package;
             klipper-firmware = firmware;
+            mcu = lib.strings.sanitizeDerivationName mcu;
             flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           }
         ) (lib.filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
       in
-      [ klipper-genconf ] ++ firmwareFlasher ++ lib.attrValues firmwares;
+      [ genconf ] ++ firmwareFlasher ++ lib.attrValues firmwares;
   };
   meta.maintainers = [
     lib.maintainers.cab404

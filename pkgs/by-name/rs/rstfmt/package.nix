@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dzhu";
     repo = "rstfmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zvmKgNzfxyWYHoaD+q84I48r1Mpp4kU4oIGAwMSRRlA=";
   };
 
@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
     "rstfmt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Formatter for reStructuredText";
     homepage = "https://github.com/dzhu/rstfmt";
     changelog = "https://github.com/dzhu/rstfmt/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

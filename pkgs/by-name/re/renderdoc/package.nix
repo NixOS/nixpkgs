@@ -13,7 +13,8 @@
   nix-update-script,
   pcre,
   pkg-config,
-  python311Packages,
+  # python3Packages.shiboken2 is currently broken
+  python312Packages,
   qt5,
   stdenv,
   vulkan-loader,
@@ -32,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.36";
+  version = "1.39";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a7jUWjNrpy3FnLRccljV7obAlnQwyMJrAaGf9iZa0UY=";
+    hash = "sha256-UFaZtSA3oYOYKuV2loh5tX1rLnoKgRypaJe6H+j/uHU=";
   };
 
   outputs = [
@@ -51,9 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     [
       libXdmcp
       libpthreadstubs
-      python311Packages.pyside2
-      python311Packages.pyside2-tools
-      python311Packages.shiboken2
+      python312Packages.pyside2
+      python312Packages.pyside2-tools
+      python312Packages.shiboken2
       qt5.qtbase
       qt5.qtsvg
       vulkan-loader
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pcre
     pkg-config
-    python311Packages.python
+    python312Packages.python
     qt5.qtx11extras
     qt5.wrapQtAppsHook
   ];
@@ -82,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BUILD_VERSION_DIST_VER" finalAttrs.version)
     (lib.cmakeFeature "BUILD_VERSION_DIST_CONTACT" "https://github.com/NixOS/nixpkgs/")
     (lib.cmakeBool "BUILD_VERSION_STABLE" true)
-    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_UNSUPPORTED_EXPERIMENTAL_POSSIBLY_BROKEN_WAYLAND" waylandSupport)
   ];
 
   dontWrapQtApps = true;
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapQtApp $out/bin/qrenderdoc \
+        --set QT_QPA_PLATFORM "wayland;xcb" \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
       wrapProgram $out/bin/renderdoccmd \
         --suffix LD_LIBRARY_PATH : "$out/lib:${libPath}"
@@ -137,7 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "renderdoccmd";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      ShyAssassin
+    ];
     platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
   };
 })

@@ -20,31 +20,33 @@
   libiconv,
   # FONTCONFIG_FILE
   makeFontsConf,
-  gentium,
+  gentium-plus,
 
   # passthru.tests
   runCommand,
-  poppler_utils,
+  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.8";
+  version = "0.15.13";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    hash = "sha256-ZMF6uv1bHvMEGagbAAmYhwwbCBtjctVbwx35w7g/D2o=";
+    hash = "sha256-XpfBllGv9xBoe5MpLVNhy0EWUglLzIxiyBHBn3qBRks=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+    dontConfigure = true;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-xv411fxOkjsbVNCNEIaopjLHbUCWdw+1JWePXHdrKBc=";
+    hash = "sha256-phRnyaF8KTYlgrgBeVNPxBAokRBUoj9vs7P9y97wbG8=";
   };
 
   nativeBuildInputs = [
     zstd
     pkg-config
+    fontconfig # fc-match
     jq
     cargo
     rustc
@@ -98,9 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
-      gentium
+      gentium-plus
     ];
   };
+  strictDeps = true;
+  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 
@@ -153,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler_utils
+            poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;
@@ -167,7 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

@@ -1,4 +1,12 @@
-{ lib, stdenv, makeWrapper, nix, skopeo, jq, coreutils }:
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  nix,
+  skopeo,
+  jq,
+  coreutils,
+}:
 
 stdenv.mkDerivation {
   name = "nix-prefetch-docker";
@@ -10,7 +18,14 @@ stdenv.mkDerivation {
   installPhase = ''
     install -vD ${./nix-prefetch-docker} $out/bin/$name;
     wrapProgram $out/bin/$name \
-      --prefix PATH : ${lib.makeBinPath [ nix skopeo jq coreutils ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nix
+          skopeo
+          jq
+          coreutils
+        ]
+      } \
       --set HOME /homeless-shelter
   '';
 

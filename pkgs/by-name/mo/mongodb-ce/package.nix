@@ -5,34 +5,34 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
   jq,
   nix-update,
   gitMinimal,
   pup,
+  nixosTests,
 }:
 
 let
-  version = "8.0.4";
+  version = "8.0.11";
 
   srcs = version: {
     "x86_64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-N5rwtPrrjVJj7UAk/weBAhV4+7wHRLNowkX6gEWCQVU=";
+      hash = "sha256-XErxsovZyMR1UmwClxn5Bm08hoYHArCtn8TSv/8eDYo=";
     };
     "aarch64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-uBa7/jxfZBNmB0l2jspJW2QQ8VY0GtWxc/tPlkV6UBk=";
+      hash = "sha256-p1eBobdnJ/uPZHScWFs3AOB7/BJn/MZQ8+VpOHonY2A=";
     };
     "x86_64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-Ya+HIlRPWXPp9aX1AlRgkh/pfKRgxhqNep/6uuARmCo=";
+      hash = "sha256-RLq+aFJixSt3EginpgIHWnR4CGk0KX5cmC3QrbW3jJ8=";
     };
     "aarch64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-IZ47PXsxwEn/e890cNOO/3BOVt8qwY1N94Ql4phcz1g=";
+      hash = "sha256-kNzByPEXi5T3+vr6t/EJuKIDEfGybrsbBqJ8vaEV5tY=";
     };
   };
 in
@@ -57,14 +57,21 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm 755 bin/mongod $out/bin/mongod
-    install -Dm 755 bin/mongos $out/bin/mongos
-
+    install -Dm 755 bin/mongod -t $out/bin
+    install -Dm 755 bin/mongos -t $out/bin
     runHook postInstall
   '';
 
-  passthru = {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = "--version";
+  # Only enable the version install check on darwin.
+  # On Linux, this would fail as mongod relies on tcmalloc, which
+  # requires access to `/sys/devices/system/cpu/possible`.
+  # See https://github.com/NixOS/nixpkgs/issues/377016
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
 
+  passthru = {
     updateScript =
       let
         script = writeShellApplication {
@@ -102,9 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
     };
   };
 

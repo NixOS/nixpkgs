@@ -38,17 +38,8 @@ in
 
       enable = lib.mkEnableOption "Graylog, a log management solution";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default =
-          if lib.versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
-        defaultText = lib.literalExpression (
-          if lib.versionOlder config.system.stateVersion "23.05" then
-            "pkgs.graylog-3_3"
-          else
-            "pkgs.graylog-5_1"
-        );
-        description = "Graylog package to use.";
+      package = lib.mkPackageOption pkgs "graylog" {
+        example = "graylog-6_0";
       };
 
       user = lib.mkOption {
@@ -138,6 +129,22 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+
+    # Note: when changing the default, make it conditional on
+    # ‘system.stateVersion’ to maintain compatibility with existing
+    # systems!
+    services.graylog.package =
+      let
+        mkThrow = ver: throw "graylog-${ver} was removed, please upgrade your graylog version.";
+        base =
+          if lib.versionAtLeast config.system.stateVersion "25.05" then
+            pkgs.graylog-6_0
+          else if lib.versionAtLeast config.system.stateVersion "23.05" then
+            mkThrow "5_1"
+          else
+            mkThrow "3_3";
+      in
+      lib.mkDefault base;
 
     users.users = lib.mkIf (cfg.user == "graylog") {
       graylog = {

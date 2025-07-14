@@ -9,12 +9,12 @@
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.8.0";
+  version = "1.9.1";
   pname = if withQuic then "angieQuic" else "angie";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-UbAylZB0ukki5AZ7XUgSLIQHekT3h8IqLyy/c/mBGwE=";
+    hash = "sha256-rxHMBt/r58F4MjdbNIqNeGrwUs785f+vqqiYSE4YzjY=";
   };
 
   configureFlags =

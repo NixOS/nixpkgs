@@ -12,7 +12,7 @@ gccStdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.codesynthesis.com/libcutl/libcutl.git";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LY2ZyxduI6xftVjVqjNkhYPFTL5bvHC289Qcei1Kiw4=";
   };
 

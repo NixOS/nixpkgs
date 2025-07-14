@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.2.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramnes";
     repo = "notion-sdk-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IEWFrdqrawFbuwA8bUewanmBoGWsjHJ7ucgvHQEaMcA=";
+    tag = version;
+    hash = "sha256-vzgFW37pA4LRS+Rqz1QN92EuLTrlWnJqA/H+IhSHQi8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the official Notion API";
     homepage = "https://github.com/ramnes/notion-sdk-py";
-    changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${version}";
+    changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };

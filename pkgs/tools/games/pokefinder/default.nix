@@ -17,24 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "pokefinder";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
     rev = "v${version}";
-    sha256 = "R0FrRRQRe0tWrHUoU4PPwOgIsltUEImEMTXL79ISfRE=";
+    sha256 = "wjHqox0Vxc73/UTcE7LSo/cG9o4eOqkcjTIW99BxsAc=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./set-desktop-file-name.patch
-    # fix compatibility with our libstdc++
-    # https://github.com/Admiral-Fish/PokeFinder/pull/392
-    (fetchpatch {
-      url = "https://github.com/Admiral-Fish/PokeFinder/commit/2cb1b049cabdf0d1b32c8cf29bf6c9d9c5c55cb0.patch";
-      hash = "sha256-F/w7ydsZ5tZParMWi33W3Tv8A6LLiJt4dAoCrs40DIo=";
-    })
   ];
 
   postPatch = ''

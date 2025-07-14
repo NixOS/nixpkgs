@@ -1,6 +1,3 @@
-if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
-source $stdenv/setup
-
 # Wrap the given `aclocal' program, appending extra `-I' flags
 # corresponding to the directories listed in $ACLOCAL_PATH.  (Note
 # that `wrapProgram' can't be used for that purpose since it can only

@@ -1,21 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "2.1.0";
+  version = "2.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eCB5DvuzFnOc3otOGTVyQ/w2CKFSAkKIUT3ZaNfZWf8=";
+  src = fetchFromGitHub {
+    owner = "abseil";
+    repo = "abseil-py";
+    tag = "v${version}";
+    hash = "sha256-KsaFfdq6+Pc8k0gM1y+HJ1v6VrTAK7TBgh92BSFuc+Q=";
   };
 
   build-system = [ setuptools ];

@@ -16,6 +16,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   autoAddDriverRunpath,
+  fetchpatch2,
 }:
 let
   version = "1.1.4";
@@ -31,9 +32,16 @@ stdenv'.mkDerivation {
   src = fetchFromGitHub {
     owner = "pierotofy";
     repo = "OpenSplat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/pierotofy/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
+      hash = "sha256-hWJWU/n1pRAAbExAYUap6CoSjIu2dzCToUmacSSpa0I=";
+    })
+  ];
 
   nativeBuildInputs =
     [

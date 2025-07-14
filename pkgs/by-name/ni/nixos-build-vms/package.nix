@@ -1,13 +1,17 @@
 {
-  substituteAll,
+  replaceVarsWith,
   runtimeShell,
   installShellFiles,
 }:
-substituteAll {
+replaceVarsWith {
   name = "nixos-build-vms";
+
   src = ./nixos-build-vms.sh;
-  inherit runtimeShell;
-  buildVms = ./build-vms.nix;
+
+  replacements = {
+    inherit runtimeShell;
+    buildVms = "${./build-vms.nix}";
+  };
 
   dir = "bin";
   isExecutable = true;

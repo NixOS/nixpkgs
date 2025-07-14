@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sass";
     repo = "libsass-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CiSr9/3EDwpDEzu6VcMBAlm3CtKTmGYbZMnMEjyZVxI=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  pytestFlagsArray = [ "sasstests.py" ];
+  enabledTestPaths = [ "sasstests.py" ];
 
   pythonImportsCheck = [ "sass" ];
 

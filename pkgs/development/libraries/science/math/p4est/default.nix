@@ -7,6 +7,7 @@
   p4est-withMetis ? true,
   metis,
   p4est-sc,
+  mpiCheckPhaseHook,
 }:
 
 let
@@ -56,6 +57,10 @@ stdenv.mkDerivation {
     doCheck
     ;
 
+  nativeCheckInputs = lib.optionals mpiSupport [
+    mpiCheckPhaseHook
+  ];
+
   meta = {
     branch = "prev3-develop";
     description = "Parallel AMR on Forests of Octrees";
@@ -67,6 +72,6 @@ stdenv.mkDerivation {
     homepage = "https://www.p4est.org/";
     downloadPage = "https://github.com/cburstedde/p4est.git";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.cburstedde ];
+    maintainers = [ ];
   };
 }

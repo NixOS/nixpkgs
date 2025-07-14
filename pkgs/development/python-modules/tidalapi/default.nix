@@ -12,17 +12,17 @@
 }:
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.6";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X6U34T1sM4P+JFpOfcI7CmULcGZ4SCXwP2fFHKi1cWE=";
+    hash = "sha256-3I5Xi9vmyAlUNKBmmTuGnetaiiVzL3sEEy31npRZlFU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     python-dateutil
     mpegdash
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tidalapi" ];
 
   meta = {
-    changelog = "https://github.com/tamland/python-tidal/releases/tag/v${version}";
+    changelog = "https://github.com/tamland/python-tidal/blob/v${version}/HISTORY.rst";
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
     license = lib.licenses.gpl3;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "F-Secure";
     repo = "pytest-voluptuous";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xdj4qCSSJQI9Rb1WyUYrAg1I5wQ5o6IJyIjJAafP/LY=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_voluptuous" ];
 
-  pytestFlagsArray = [ "tests/test_plugin.py" ];
+  enabledTestPaths = [ "tests/test_plugin.py" ];
 
   meta = with lib; {
     description = "Pytest plugin for asserting data against voluptuous schema";

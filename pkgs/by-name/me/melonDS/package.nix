@@ -9,6 +9,7 @@
   libarchive,
   libpcap,
   libslirp,
+  pipewire,
   pkg-config,
   qt6,
   stdenv,
@@ -27,17 +28,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0rc-unstable-2024-12-05";
+  version = "1.0rc-unstable-2025-07-07";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "7d718ada390bc54749fa35389437147e1bbefae1";
-    hash = "sha256-Oh69L4yOSeEAAUjUupMN7cQbPEUjZ0M/5FmiBvsBGxw=";
+    rev = "85dcf65231224f34e25b5007b644d8987e33838c";
+    hash = "sha256-ZKPsE3+kkv2xlIHB+TBKp2J5GnKU7BA1+O4Y1Rq4low=";
   };
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     wrapQtAppsHook
   ];
@@ -46,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       SDL2
       enet
-      extra-cmake-modules
       libarchive
       libslirp
       libGL
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
+          pipewire
           wayland
         ]
       }"
@@ -103,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "melonDS";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       artemist
       benley
       shamilton

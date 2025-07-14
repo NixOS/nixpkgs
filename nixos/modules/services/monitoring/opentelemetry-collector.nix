@@ -32,7 +32,7 @@ in
       description = ''
         Specify the configuration for Opentelemetry Collector in Nix.
 
-        See https://opentelemetry.io/docs/collector/configuration/ for available options.
+        See <https://opentelemetry.io/docs/collector/configuration/> for available options.
       '';
     };
 

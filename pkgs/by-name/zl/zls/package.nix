@@ -1,31 +1,24 @@
 {
   lib,
   stdenv,
+  zig_0_14,
   fetchFromGitHub,
-  zig_0_13,
   callPackage,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zls";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = "zls";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-vkFGoKCYUk6B40XW2T/pdhir2wzN1kpFmlLcoLwJx1U=";
+    hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
   };
 
-  zigBuildFlags = [
-    "-Dversion_data_path=${zig_0_13.src}/doc/langref.html.in"
-  ];
-
-  nativeBuildInputs = [ zig_0_13.hook ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  nativeBuildInputs = [ zig_0_14.hook ];
 
   postPatch = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p

@@ -8,8 +8,6 @@
   libchewing,
   libpinyin,
   maliit-framework,
-  pcre,
-  presage,
   qtfeedback,
   qtmultimedia,
   qtquickcontrols2,
@@ -20,15 +18,15 @@
   wrapGAppsHook3,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "maliit-keyboard";
-  version = "2.3.1";
+  version = "2.3.1-unstable-2024-09-04";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "keyboard";
-    rev = version;
-    sha256 = "sha256-XH3sKQuNMLgJi2aV+bnU2cflwkFIw4RYVfxzQiejCT0=";
+    rev = "cbb0bbfa67354df76c25dbc3b1ea99a376fd15bb";
+    sha256 = "sha256-6ITlV/RJkPDrnsFyeWYWaRTYTaY6NAbHDqpUZGGKyi4=";
   };
 
   postPatch = ''
@@ -42,8 +40,6 @@ mkDerivation rec {
     libchewing
     libpinyin
     maliit-framework
-    pcre
-    presage
     qtfeedback
     qtmultimedia
     qtquickcontrols2

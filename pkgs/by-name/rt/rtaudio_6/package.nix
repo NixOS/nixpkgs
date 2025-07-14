@@ -13,7 +13,6 @@
   jackSupport ? true,
   libjack2,
   coreaudioSupport ? stdenv.hostPlatform.isDarwin,
-  darwin,
   validatePkgConfig,
 }:
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Acsxbnl+V+Y4mKC1gD11n0m03E96HMK+oEY/YV7rlIY=";
   };
 
@@ -45,9 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals jackSupport [
       libjack2
-    ]
-    ++ lib.optionals coreaudioSupport [
-      darwin.apple_sdk.frameworks.CoreAudio
     ];
 
   cmakeFlags = [

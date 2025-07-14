@@ -6,26 +6,27 @@
   nodejs,
   yarnConfigHook,
   yarnBuildHook,
+  nix-update-script,
   extraBuildEnv ? { },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web";
-  version = "0.9.16";
+  version = "1.1.53";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "web" ];
-    rev = "refs/tags/photos-v${finalAttrs.version}";
+    tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DqfUUXY79CndEqPT8TR4PasLtaSCtqZaV2kp10Vu4PQ=";
+    hash = "sha256-LYFkqB44pS7WLa4HEnYrnRanh04P82ydsqiZYHNAshc=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-tgFh8Av1Wl77N4hR2Y5TQp9lEH4ZCQnCIWMPmlZBlV4=";
+    hash = "sha256-8uqKlqBnYTft3P7r1rQaEqn7ixj55yWnSLKTNi/0MZA=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "photos-v(.*)"
+    ];
+  };
+
   meta = {
     description = "Web client for Ente Photos";
     homepage = "https://ente.io/";
     changelog = "https://github.com/ente-io/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      surfaceflinger
       pinpox
     ];
     platforms = lib.platforms.all;

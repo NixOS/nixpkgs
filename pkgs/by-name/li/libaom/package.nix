@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.11.0";
+  version = "3.12.1";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-SqXDeIApj7XEK2cChenN9pun5eNm4Q+Smpp76xHwMMU=";
+    hash = "sha256-AAS6wfq4rZ4frm6+gwKoIS3+NVzPhhfW428WXJQ2tQ8=";
     stripRoot = false;
   };
 
@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    # This can be removed when we switch to libcxx from llvm 20
+    # https://github.com/llvm/llvm-project/pull/122361
+    NIX_CFLAGS_COMPILE = "-D_XOPEN_SOURCE=700";
+  };
+
   preConfigure = ''
     # build uses `git describe` to set the build version
     cat > $NIX_BUILD_TOP/git << "EOF"
@@ -77,7 +83,7 @@ stdenv.mkDerivation rec {
       "-DCONFIG_TUNE_VMAF=1"
     ]
     ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-      "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
+      "-DCMAKE_ASM_COMPILER=${lib.getBin stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       # armv7l-hf-multiplatform does not support NEON
@@ -112,7 +118,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Alliance for Open Media AV1 codec library";
     longDescription = ''
       Libaom is the reference implementation of the AV1 codec from the Alliance
@@ -121,13 +127,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://aomedia.org/av1-features/get-started/";
     changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [
-      primeos
+    maintainers = with lib.maintainers; [
       kiloreux
       dandellion
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     outputsToInstall = [ "bin" ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

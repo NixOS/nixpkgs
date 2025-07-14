@@ -14,11 +14,12 @@ in
 buildPythonPackage {
   pname = "docstr-coverage";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "HunterMcGushion";
     repo = "docstr_coverage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k1ny4fWS+CmgLNWPlYPsscjei2UZ6h8QJrZSay5abck=";
   };
 

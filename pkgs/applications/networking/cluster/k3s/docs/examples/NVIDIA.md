@@ -33,7 +33,7 @@ Note here we are pointing the nvidia runtime to "/run/current-system/sw/bin/nvid
 
 Now apply the following runtime class to k3s cluster:
 
-```
+```yaml
 apiVersion: node.k8s.io/v1
 handler: nvidia
 kind: RuntimeClass
@@ -43,9 +43,12 @@ metadata:
   name: nvidia
 ```
 
-Following [k8s-device-plugin](https://github.com/NVIDIA/k8s-device-plugin#deployment-via-helm) install the helm chart with `runtimeClassName: nvidia` set. In order to passthrough the nvidia card into the container, your deployments spec must contain - runtimeClassName: nvidia - env:
+Following [k8s-device-plugin](https://github.com/NVIDIA/k8s-device-plugin#deployment-via-helm) install the helm chart with `runtimeClassName: nvidia` set. In order to passthrough the nvidia card into the container, your deployments spec must contain
 
-```
+```yaml
+runtimeClassName: nvidia
+# for each container
+  env:
    - name: NVIDIA_VISIBLE_DEVICES
      value: all
    - name: NVIDIA_DRIVER_CAPABILITIES

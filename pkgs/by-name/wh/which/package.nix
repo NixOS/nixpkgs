@@ -2,32 +2,32 @@
   lib,
   stdenv,
   fetchurl,
+  directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "which";
-  version = "2.21";
+  version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/which/which-${version}.tar.gz";
-    hash = "sha256-9KJFuUEks3fYtJZGv0IfkVXTaqdhS26/g3BdP/x26q0=";
+    url = "mirror://gnu/which/which-${finalAttrs.version}.tar.gz";
+    hash = "sha256-osVYIm/E2eTOMxvS/Tw/F/lVEV0sAORHYYpO+ZeKKnM=";
   };
 
   strictDeps = true;
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    # Enable 64-bit file API. Otherwise `which` fails to find tools
-    # on filesystems with 64-bit inodes (like `btrfs`) when running
-    # binaries from 32-bit systems (like `i686-linux`).
-    lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
-  );
+  passthru.updateScript = directoryListingUpdater {
+    inherit (finalAttrs) pname version;
+    url = "https://ftp.gnu.org/gnu/which/";
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/which/";
     description = "Shows the full path of (shell) commands";
     license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     mainProgram = "which";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
   '';
 
+  dontStrip = true;
+
   meta = with lib; {
     description = "Physics based puzzle game";
     longDescription = ''

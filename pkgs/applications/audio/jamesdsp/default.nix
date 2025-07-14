@@ -1,6 +1,7 @@
 {
   copyDesktopItems,
   fetchFromGitHub,
+  fetchpatch,
   glibmm,
   gst_all_1,
   lib,
@@ -42,6 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Audio4Linux/JDSP4Linux/pull/241.patch";
+      hash = "sha256-RtVKlw2ca8An4FodeD0RN95z9yHDHBgAxsEwLAmW7co=";
+      name = "fix-build-with-new-pipewire.patch";
+    })
+    ./fix-build-on-qt6_9.diff
+  ];
+
   buildInputs =
     [
       glibmm
@@ -65,6 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qmakeFlags = lib.optionals usePulseaudio [ "CONFIG+=USE_PULSEAUDIO" ];
+
+  # https://github.com/Audio4Linux/JDSP4Linux/issues/228
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
 
   desktopItems = [
     (makeDesktopItem {

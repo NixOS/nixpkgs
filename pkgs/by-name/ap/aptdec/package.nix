@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Xerbo";
     repo = "aptdec";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-5Pr2PlCPSEIWnThJXKcQEudmxhLJC2sVa9BfAOEKHB4=";
     fetchSubmodules = true;
   };

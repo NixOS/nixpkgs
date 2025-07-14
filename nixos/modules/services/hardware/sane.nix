@@ -184,6 +184,12 @@ in
       environment.etc."sane-config".source = config.hardware.sane.configDir;
       environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
+      # sane sets up udev rules that tag scanners with `uaccess`. This way, physically logged in users
+      # can access them without belonging to the `scanner` group. However, the `scanner` user used by saned
+      # does not have a real logind seat, so `uaccess` is not enough.
+      services.udev.extraRules = ''
+        ENV{DEVNAME}!="", ENV{libsane_matched}=="yes", RUN+="${pkgs.acl}/bin/setfacl -m g:scanner:rw $env{DEVNAME}"
+      '';
 
       users.groups.scanner.gid = config.ids.gids.scanner;
       networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];

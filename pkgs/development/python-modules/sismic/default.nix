@@ -23,7 +23,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "AlexandreDecan";
     repo = "sismic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0g39jJI3UIniJY/oHQMZ53GCOJIbqdVeOED9PWxlw6E=";
   };
 
@@ -42,7 +42,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sismic" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     # Time related tests, might lead to flaky tests on slow/busy machines

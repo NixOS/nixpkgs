@@ -54,6 +54,8 @@ in
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
+      after = [ "network.target" ];
+      wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";

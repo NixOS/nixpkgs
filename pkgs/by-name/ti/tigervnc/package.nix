@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   xorg,
   xkeyboard_config,
   zlib,
@@ -22,26 +21,19 @@
   perl,
   makeWrapper,
   nixosTests,
+  ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.14.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.15.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    rev = "v${version}";
-    sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZuuvRJe/lAqULWObPxGHVJrDPCTK4IVSqX0K1rWOctw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "vncauth-security-type.patch";
-      url = "https://github.com/TigerVNC/tigervnc/commit/4f6a3521874da5a67fd746389cfa9b6199eb3582.diff";
-      hash = "sha256-lSkR8e+jsBwkQUJZmA0tb8nM5iSbYtO8uVXtgk5wdF8=";
-    })
-  ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -124,10 +116,10 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv 'TigerVNC Viewer ${version}.app' $out/Applications/
+      mv 'TigerVNC Viewer ${finalAttrs.version}.app' $out/Applications/
       rm $out/bin/vncviewer
       echo "#!/usr/bin/env bash
-      open $out/Applications/TigerVNC\ Viewer\ ${version}.app --args \$@" >> $out/bin/vncviewer
+      open $out/Applications/TigerVNC\ Viewer\ ${finalAttrs.version}.app --args \$@" >> $out/bin/vncviewer
       chmod +x $out/bin/vncviewer
     '';
 
@@ -138,6 +130,7 @@ stdenv.mkDerivation rec {
       libjpeg_turbo
       pixman
       gawk
+      ffmpeg
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux (
       with xorg;
@@ -192,7 +185,8 @@ stdenv.mkDerivation rec {
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     # Prevent a store collision.
     priority = 4;
   };
-}
+})

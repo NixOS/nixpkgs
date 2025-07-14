@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0OXP78oyNe/UcI05NHskPyXAuX3dwAW4Uz4dI4b8KV0=";
   };
 
@@ -38,10 +38,9 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [

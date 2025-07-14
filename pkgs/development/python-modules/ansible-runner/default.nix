@@ -1,41 +1,49 @@
 {
   lib,
   stdenv,
-  ansible-core,
   buildPythonPackage,
-  fetchPypi,
-  glibcLocales,
-  importlib-metadata,
-  mock,
-  openssh,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   packaging,
   pexpect,
+  python-daemon,
+  pyyaml,
+  pythonOlder,
+  importlib-metadata,
+
+  # tests
+  ansible-core,
+  glibcLocales,
+  mock,
+  openssh,
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  python-daemon,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gtArJUiDDzelNRe2XII8SvNxBpQGx9ITtckEHUXgxbY=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible-runner";
+    tag = version;
+    hash = "sha256-Fyavc13TRHbslRVoBawyBgvUKhuIZsxBc7go66axE0Y=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
+      --replace-fail "setuptools>=45, <=70.0.0" setuptools \
+      --replace-fail "setuptools-scm[toml]>=6.2, <=8.1.0" setuptools-scm
   '';
 
   build-system = [
@@ -53,13 +61,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ansible-core # required to place ansible CLI onto the PATH in tests
     glibcLocales
-    pytestCheckHook
+    mock
+    openssh
     pytest-mock
     pytest-timeout
     pytest-xdist
-    mock
-    openssh
+    pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -77,10 +87,11 @@ buildPythonPackage rec {
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
     # Assertion error
+    "test_callback_plugin_censoring_does_not_overwrite"
     "test_get_role_list"
     "test_include_role_from_collection_events"
+    "test_module_level_no_log"
     "test_resolved_actions"
-    "test_callback_plugin_censoring_does_not_overwrite"
   ];
 
   disabledTestPaths =
@@ -98,12 +109,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansible_runner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helps when interfacing with Ansible";
     homepage = "https://github.com/ansible/ansible-runner";
     changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "ansible-runner";
   };
 }

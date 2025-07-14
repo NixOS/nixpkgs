@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed -i 1i'#include <unistd.h>' xzoom.c
+  '';
+
   nativeBuildInputs = [
     imake
     gccmakedep

@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
   gmp,
   mpfr,
   ntl,
+  windows,
   autoconf,
   automake,
   gettext,
@@ -14,7 +14,7 @@
   blas,
   lapack,
   withBlas ? true,
-  withNtl ? true,
+  withNtl ? !ntl.meta.broken,
 }:
 
 assert
@@ -23,19 +23,12 @@ assert
 
 stdenv.mkDerivation rec {
   pname = "flint3";
-  version = "3.0.1";
+  version = "3.3.1";
 
   src = fetchurl {
-    url = "https://www.flintlib.org/flint-${version}.tar.gz";
-    sha256 = "sha256-ezEaAFA6hjiB64F32+uEMi8pOZ89fXLzsaTJuh1XlLQ=";
+    url = "https://flintlib.org/download/flint-${version}.tar.gz";
+    hash = "sha256-ZNcOUTB2z6lx4EELWMHaXTURKRPppWtE4saBtFnT6vs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/flintlib/flint/commit/e7d005c369754243cba32bd782ea2a5fc874fde5.diff";
-      hash = "sha256-IqEtYEpNVXfoTeerh/0ig+eDqUpAlGdBB3uO8ShYh3o=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -57,11 +50,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withNtl [
       ntl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      windows.mingw_w64_pthreads
     ];
 
   # We're not using autoreconfHook because flint's bootstrap
   # script calls autoreconf, among other things.
-  preConfigurePhase = ''
+  preConfigure = ''
     echo "Executing bootstrap.sh"
     ./bootstrap.sh
   '';
@@ -84,9 +80,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast Library for Number Theory";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smasher164 ] ++ teams.sage.members;
-    platforms = platforms.unix;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ smasher164 ];
+    teams = [ teams.sage ];
+    platforms = platforms.all;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";
   };

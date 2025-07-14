@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pydsdl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Q6Zt7qiFZvTK2pF4nWfHbjwQHZffzKOad6X/HQ94EUo=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pydsdl/_test.py" ];
+  enabledTestPaths = [ "pydsdl/_test.py" ];
 
   meta = with lib; {
     description = "Library to process Cyphal DSDL";

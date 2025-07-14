@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVarsWith,
+  udevCheckHook,
 }:
 
 # Provides a facility to hook into rfkill changes.
@@ -29,14 +30,20 @@
 # in the rfkill package.
 
 let
-  rfkillHook = substituteAll {
-    inherit (stdenv) shell;
+  rfkillHook = replaceVarsWith {
+    replacements = { inherit (stdenv) shell; };
     isExecutable = true;
     src = ./rfkill-hook.sh;
   };
 in
 stdenv.mkDerivation {
   name = "rfkill-udev";
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
   dontBuild = true;

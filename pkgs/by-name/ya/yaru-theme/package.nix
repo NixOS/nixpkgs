@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "24.10.4";
+  version = "25.04.2";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    hash = "sha256-ioBni/prc2HzrXd6zBgZQQsfQDWxlfWOphtY0o/8uM0=";
+    hash = "sha256-+Jis5ODElztIp/QBuKqVyg0cTtPKr246WHrlGSBKgm0=";
   };
 
   nativeBuildInputs = [

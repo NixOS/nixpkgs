@@ -8,6 +8,7 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -15,13 +16,14 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.1.13";
+  version = "1.1.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sYJrVAeZi0a7yD0i/zIIxcu9X/c5HvgoI/n50eXD47s=";
+    tag = version;
+    hash = "sha256-cAM4h0OOXxItSf0Gb9PfHn385FXMKwvIUuYTrjgABwA=";
   };
 
   outputs = [
@@ -33,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     gobject-introspection
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -49,7 +52,14 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     pyudev
     pyyaml
+    typing-extensions
     xlib
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-mock
+    pytest-cov-stub
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where
@@ -66,10 +76,10 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  # no tests
-  doCheck = false;
-
-  pythonImportsCheck = [ "solaar" ];
+  pythonImportsCheck = [
+    "solaar"
+    "solaar.gtk"
+  ];
 
   meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";

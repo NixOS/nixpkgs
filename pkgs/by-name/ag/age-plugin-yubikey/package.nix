@@ -6,7 +6,6 @@
   pkg-config,
   openssl,
   pcsclite,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,28 +14,21 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "str4d";
-    repo = pname;
+    repo = "age-plugin-yubikey";
     rev = "36290c74ebd2723832aae684d43b927c9104f744";
     hash = "sha256-vfemYGQnn3IzG7Y6iVKHZlYN+55/+A+N/GMG3TLs1h0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "age-core-0.10.0" = "sha256-Iw1KPYhUwfAvLGpYAGuSRhynrRJhD3EqOIS4UY6qC6c=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CVbRKKX2A0MrHgjkjKAXhX80db1fimFlNxusvseUnxQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   meta = with lib; {
     description = "YubiKey plugin for age";

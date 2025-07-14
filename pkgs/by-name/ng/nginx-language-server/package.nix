@@ -1,22 +1,24 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nginx-language-server";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = "nginx-language-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AXWrNt4f3jkAbidE1goDgFicu4sSBv08f/Igyh2bRII=";
+    tag = "v${version}";
+    hash = "sha256-v9+Y8NBvN8HvTdNrK9D9YQuqDB3olIu5LfYapjlVlAM=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
@@ -24,21 +26,31 @@ python3.pkgs.buildPythonApplication rec {
     "pydantic"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     crossplane
     lsprotocol
     pydantic
     pygls
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "nginx_language_server" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Language server for nginx.conf";
     homepage = "https://github.com/pappasam/nginx-language-server";
     changelog = "https://github.com/pappasam/nginx-language-server/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "nginx-language-server";
   };
 }

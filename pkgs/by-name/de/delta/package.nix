@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
   };
 
-  cargoHash = "sha256-DIWzRVTADfAZdFckhh2lIfOD13h7GP3KIOQHf/oBHgc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qF55A1CENoHu3LBtNRc/n2PKYxMls7pdn2d56Mp18Qs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -58,12 +59,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_diff_real_files"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dandavison/delta";
     description = "Syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
       figsoda

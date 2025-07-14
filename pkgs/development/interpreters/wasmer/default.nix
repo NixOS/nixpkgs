@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
   };
 
-  cargoHash = "sha256-6UwFfTHhAr56K7kDAp0dCSoCjZuCHdgw2bpOD1WdvYU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Fympp2A04viibo4U79FiBSJIeGDUWS34OOwebCks6S0=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

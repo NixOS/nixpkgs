@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       -e '/bin_PROGRAMS/s/spf_example_static//' src/spf_example/Makefile.am
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration";
+  CFLAGS = "-Wno-error=implicit-function-declaration";
 
   doCheck = true;
 
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
       lgpl21Plus
       bsd2
     ];
-    maintainers = with maintainers; [ euxane ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ euxane ];
+    teams = [ teams.helsinki-systems ];
     platforms = platforms.all;
   };
 }

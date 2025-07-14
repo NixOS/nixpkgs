@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "24.8.0";
+  version = "25.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JQCUVCC2eEw4ue6IWvA59edHHvKEqwP6Nezd5GiM2D8=";
+    hash = "sha256-M0ltXNEiKtczkTUrSujaFSU8Xeibk6gLPiyNmhnsJmY=";
   };
 
   nativeBuildInputs = [
@@ -73,9 +73,8 @@ buildPythonPackage rec {
     parameterized
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   preCheck =
@@ -95,6 +94,9 @@ buildPythonPackage rec {
     [
       # requires network access
       "test_gen_check_output"
+      # broken on Python 3.13.4
+      # FIXME: remove this when fixed upstream
+      "test_simple_format[pep_701]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails on darwin

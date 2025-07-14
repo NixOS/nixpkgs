@@ -1,37 +1,59 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs
-, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  docutils,
+  libpthreadstubs,
+  withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
+  libpciaccess,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  valgrind-light,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.123";
+  version = "2.4.124";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ormFZ6FJp0sPUOkegl+cAxXYbnvpt0OU2uiymMqtt54=";
+    hash = "sha256-rDYpP2HKSq+vSxaip6//MSqk9cN8n715fenjwIY8o3k=";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
-  nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs ]
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    docutils
+  ];
+  buildInputs =
+    [ libpthreadstubs ]
     ++ lib.optional withIntel libpciaccess
     ++ lib.optional withValgrind valgrind-light;
 
-  mesonFlags = [
-    "-Dinstall-test-programs=true"
-    "-Dcairo-tests=disabled"
-    (lib.mesonEnable "intel" withIntel)
-    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "valgrind" withValgrind)
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
-    "-Dtegra=enabled"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Detnaviv=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dinstall-test-programs=true"
+      "-Dcairo-tests=disabled"
+      (lib.mesonEnable "intel" withIntel)
+      (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+      (lib.mesonEnable "valgrind" withValgrind)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [
+      "-Dtegra=enabled"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "-Detnaviv=disabled"
+    ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -61,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

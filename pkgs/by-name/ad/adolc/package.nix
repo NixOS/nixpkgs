@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "ADOL-C";
-    rev = "refs/tags/releases/${finalAttrs.version}";
+    tag = "releases/${finalAttrs.version}";
     hash = "sha256-oU229SuOl/gHoRT8kiWfd5XFiByjeypgdVWFLMYFHfA=";
   };
 

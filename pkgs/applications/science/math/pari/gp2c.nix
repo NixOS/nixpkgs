@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     inherit (pari.meta)
       license
       maintainers
+      teams
       platforms
       broken
       ;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://tango.freedesktop.org/Standard_Icon_Naming_Specification";
+    homepage = "https://tango.freedesktop.org/Standard_Icon_Naming_Specification";
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };

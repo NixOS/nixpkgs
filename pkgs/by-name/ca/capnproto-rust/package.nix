@@ -3,19 +3,21 @@
   fetchCrate,
   rustPlatform,
   capnproto,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "capnproto-rust";
-  version = "0.17.2";
+  version = "0.21.1";
 
   src = fetchCrate {
     crateName = "capnpc";
     inherit version;
-    hash = "sha256-WVjXVLVoTCAtA8a6+zaX4itAaPCWb2c0trtSsxBopO4=";
+    hash = "sha256-WqzcUnAx/qD50/ZlWlWS4bguTxW+qFj0uFzwsbxHBaw=";
   };
 
-  cargoHash = "sha256-h9YArxHnY14T8eQCS4JVItjaCjv+2dorcOVBir7r6SY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FtJvm6uUFSHn8lQxEFoWpSZgqomfHYkR3E0kKsV/II4=";
 
   postInstall = ''
     mkdir -p $out/include/capnp
@@ -25,6 +27,8 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     capnproto
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cap'n Proto codegen plugin for Rust";

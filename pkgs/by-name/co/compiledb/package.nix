@@ -7,22 +7,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "compiledb";
-  version = "0.10.1";
+  version = "0.10.7";
   pyproject = true;
-
-  build-system = [ python3Packages.setuptools ];
 
   src = fetchFromGitHub {
     owner = "nickdiego";
     repo = "compiledb";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pN2F0bFT5r8w+8kZOP/tU7Cx1SDN81fzkMfnj19jMWM=";
+    tag = version;
+    hash = "sha256-toqBf5q1EfZVhZN5DAtxkyFF7UlyNbqxWAIWFMwacxw=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = with python3Packages; [
     click
     bashlex
-    shutilwhich
   ];
 
   # fix the tests

@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    hash = "sha256-ofS0KMsn0KG8squIvMPxSCgE/qNK+Kd47psNziLBBoo=";
+    hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
   };
 
   nativeBuildInputs = [

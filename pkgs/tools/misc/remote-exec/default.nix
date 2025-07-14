@@ -16,11 +16,12 @@
 buildPythonApplication rec {
   pname = "remote-exec";
   version = "1.13.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "remote-cli";
     repo = "remote";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rsboHJLOHXnpXtsVsvsfKsav8mSbloaq2lzZnU2pw6c=";
   };
 

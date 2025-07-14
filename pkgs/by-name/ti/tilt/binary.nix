@@ -4,6 +4,8 @@
   src,
   version,
   tilt-assets,
+  stdenv,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -20,6 +22,15 @@ buildGoModule rec {
   subPackages = [ "cmd/tilt" ];
 
   ldflags = [ "-X main.version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tilt \
+      --bash <($out/bin/tilt completion bash) \
+      --fish <($out/bin/tilt completion fish) \
+      --zsh <($out/bin/tilt completion zsh)
+  '';
 
   preBuild = ''
     mkdir -p pkg/assets/build

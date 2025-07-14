@@ -10,15 +10,19 @@
   python3Packages,
   libadwaita,
 }:
-python3Packages.buildPythonApplication rec {
+let
+
   pname = "nicotine-plus";
-  version = "3.3.6";
+  version = "3.3.10";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
   pyproject = true;
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
-    rev = "refs/tags/${version}";
-    hash = "sha256-je3hyxbF9wKW2gvHoDp712EJxBxooS2z0pQM57WDdOk=";
+    tag = version;
+    hash = "sha256-ic/+Us56UewMjD8vgmxxCisoId96Qtaq8/Ll+CCFR3Y=";
   };
 
   nativeBuildInputs = [

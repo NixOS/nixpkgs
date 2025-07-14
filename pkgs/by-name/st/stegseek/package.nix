@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "RickdeJager";
-    repo = pname;
+    repo = "stegseek";
     rev = "v${version}";
     sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };
@@ -31,9 +31,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  doCheck = true;
+  # tests get stuck on aarch64-linux
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
   meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be

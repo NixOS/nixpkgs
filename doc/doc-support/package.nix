@@ -12,8 +12,10 @@
   nixos-render-docs-redirects,
   writeShellScriptBin,
   nixpkgs ? { },
+  markdown-code-runner,
+  roboto,
+  treefmt,
 }:
-
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
@@ -25,30 +27,38 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [ nixos-render-docs ];
 
-    src = lib.fileset.toSource {
-      root = ../.;
-      fileset = lib.fileset.unions [
-        (lib.fileset.fileFilter (file: file.hasExt "md" || file.hasExt "md.in") ../.)
-        ../style.css
-        ../anchor-use.js
-        ../anchor.min.js
-        ../manpage-urls.json
-        ../redirects.json
-      ];
+    src = lib.cleanSourceWith {
+      src = ../.;
+      filter =
+        path: type:
+        type == "directory"
+        || lib.hasSuffix ".md" path
+        || lib.hasSuffix ".md.in" path
+        || lib.elem path (
+          map toString [
+            ../style.css
+            ../anchor-use.js
+            ../anchor.min.js
+            ../manpage-urls.json
+            ../redirects.json
+          ]
+        );
     };
 
     postPatch = ''
       ln -s ${optionsJSON}/share/doc/nixos/options.json ./config-options.json
+      ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
+      ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
-      cat \
-        ./functions/library.md.in \
-        ${lib-docs}/index.md \
-        > ./functions/library.md
+      cat ./functions/library.md.in ${lib-docs}/index.md > ./functions/library.md
+
       substitute ./manual.md.in ./manual.md \
         --replace-fail '@MANUAL_VERSION@' '${lib.version}'
 
@@ -77,19 +87,27 @@ stdenvNoCC.mkDerivation (
         --section-toc-depth 1 \
         manual.md \
         out/index.html
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
-      mv "$dest/index.html" "$dest/manual.html"
+      cp "$dest/index.html" "$dest/manual.html"
+
+      cp ${roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dest/Roboto.ttf"
 
       cp ${epub} "$dest/nixpkgs-manual.epub"
 
       mkdir -p $out/nix-support/
-      echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+      echo "doc manual $dest index.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+
+      runHook postInstall
     '';
 
     passthru = {
@@ -104,8 +122,8 @@ stdenvNoCC.mkDerivation (
       shell =
         let
           devmode' = devmode.override {
-            buildArgs = "./.";
-            open = "/share/doc/nixpkgs/manual.html";
+            buildArgs = toString ../.;
+            open = "/share/doc/nixpkgs/index.html";
           };
           nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
         in
@@ -113,10 +131,14 @@ stdenvNoCC.mkDerivation (
           packages = [
             devmode'
             nixos-render-docs-redirects'
+            markdown-code-runner
           ];
         };
 
-      tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
+      tests = {
+        manpage-urls = callPackage ../tests/manpage-urls.nix { };
+        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
+      };
     };
   }
 )

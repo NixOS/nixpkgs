@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "schachmat";
-    repo = pname;
+    repo = "wego";
     rev = version;
     sha256 = "sha256-YGUll0Wi/oulNMXSrSFeAVe+aGpyFeyXRZTW4ngC3Zk=";
   };

@@ -10,36 +10,32 @@
   sqlite,
   zstd,
   stdenv,
-  darwin,
   open-policy-agent,
   cctools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.12.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iBDvvKy5alaieIm+Jv9WnqHVGjItDSvJAk+ClTRj3v0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rHlzLawpCD9onhca9NzgUXmA2vDmW48cQrV05qs+tn8=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
-    hash = "sha256-EfDxbdjzF0yLQlueIYKmdpU4v9dx7g8bltU63mIWfo0=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-0rJAU4PZAshTu6KD4EzIltUT8PO4dnWCY5oM3kyxBBk=";
   };
 
   npmRoot = "frontend";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -49,19 +45,14 @@ rustPlatform.buildRustPackage rec {
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
   ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
-  buildInputs =
-    [
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -95,12 +86,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
     homepage = "https://github.com/element-hq/matrix-authentication-service";
-    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
-    # Note: broken on x86_64-darwin because of aligned_alloc, can be revisited after
-    # https://github.com/NixOS/nixpkgs/pull/346043 is merged
-    badPlatforms = [ "x86_64-darwin" ];
   };
-}
+})

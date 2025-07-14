@@ -178,6 +178,15 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
+
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
     for i in "$out/bin/"*; do
@@ -211,14 +220,12 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  # In nixpkgs, musl based builds currently enable `pie` hardening by default
-  # (see `defaultHardeningFlags` in `make-derivation.nix`).
-  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # GHC cannot currently produce outputs that are ready for `-pie` linking.
   # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
   # See:
   # * https://github.com/NixOS/nixpkgs/issues/129247
   # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "pie" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -255,11 +262,9 @@ stdenv.mkDerivation rec {
     ];
     # build segfaults, use ghc8107Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
-    maintainers =
-      with lib.maintainers;
-      [
-        guibou
-      ]
-      ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [
+      guibou
+    ];
+    teams = [ lib.teams.haskell ];
   };
 }

@@ -1,6 +1,6 @@
 {
   bc-ur,
-  boost,
+  boost186,
   cmake,
   fetchFromGitHub,
   hidapi,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
     rev = finalAttrs.version;
-    hash = "sha256-CwydKX8cCtmrUSLUHNCDOteVmkjzj0zMHgwUyrWrWm8=";
+    hash = "sha256-DZBRZBcoba32Z/bFThn/9siC8VESg5gdfoFO4Nw8JqM=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       bc-ur
-      boost
+      boost186
       hidapi
       libsodium
       libusb1

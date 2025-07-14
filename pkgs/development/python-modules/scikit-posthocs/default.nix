@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-posthocs";
-  version = "0.11.1";
+  version = "0.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
     tag = "v${version}";
-    hash = "sha256-RPTWbhaDMdPiIQ6TLeWwZKYI9m23dEXu9iqBLYIEVN4=";
+    hash = "sha256-W1jm9mKJCwTPihZhtuCIM3HILT/nXLXbTjR+E2nwsug=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multiple Pairwise Comparisons (Post Hoc) Tests in Python";
     homepage = "https://github.com/maximtrp/scikit-posthocs";
-    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/v${version}";
+    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };

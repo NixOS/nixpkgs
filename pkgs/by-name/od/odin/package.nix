@@ -1,41 +1,41 @@
 {
-  fetchFromGitHub,
   lib,
-  libiconv,
   llvmPackages,
-  MacOSX-SDK,
+  fetchFromGitHub,
   makeBinaryWrapper,
-  nix-update-script,
-  Security,
   which,
+  nix-update-script,
 }:
 
 let
   inherit (llvmPackages) stdenv;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "0-unstable-2024-10-12";
+  version = "dev-2025-06";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "af9ae4897ad9e526d74489ddd12cfae179639ff3";
-    hash = "sha256-ky3jiVk2KfOW4JjXqiCTdnbEu7bnmTVupw2r5fwyB00=";
+    tag = finalAttrs.version;
+    hash = "sha256-Dhy62+ccIjXUL/lK8IQ+vvGEsTrd153tPp4WIdl3rh4=";
   };
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/linker.cpp \
-          --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
-    ''
-    + ''
-      substituteInPlace build_odin.sh \
-          --replace-fail '-framework System' '-lSystem'
-      patchShebangs build_odin.sh
-    '';
+  patches = [
+    ./darwin-remove-impure-links.patch
+    # The default behavior is to use the statically linked Raylib libraries,
+    # but GLFW still attempts to load Xlib at runtime, which won't normally be
+    # available on Nix based systems. Instead, use the "system" Raylib version,
+    # which can be provided by a pure Nix expression, for example in a shell.
+    ./system-raylib.patch
+  ];
+  postPatch = ''
+    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
 
-  LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+    patchShebangs --build build_odin.sh
+  '';
+
+  LLVM_CONFIG = lib.getExe' llvmPackages.llvm.dev "llvm-config";
 
   dontConfigure = true;
 
@@ -44,11 +44,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Security
   ];
 
   installPhase = ''
@@ -87,13 +82,14 @@ stdenv.mkDerivation {
     description = "Fast, concise, readable, pragmatic and open sourced programming language";
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
+    changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      znaniye
+      diniamo
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;
   };
-}
+})

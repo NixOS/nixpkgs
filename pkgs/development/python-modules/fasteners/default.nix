@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "harlowja";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "fasteners";
+    tag = version;
     hash = "sha256-XFa1ItFqkSYE940p/imWFp5e9gS6n+D1uM6Cj+Vzmmg=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasteners" ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   meta = with lib; {
     description = "Module that provides useful locks";

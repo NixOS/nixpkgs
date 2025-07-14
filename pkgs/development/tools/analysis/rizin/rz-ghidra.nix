@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rz-ghidra";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "rz-ghidra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W9VcKrDAh7GNRbE4eyWbtHlsYLmrjBBgVvWNyMUhlDk=";
+    hash = "sha256-uI0EnuHAuyrXYKDijh5Tg/WcQ/5yyZnW3d5MMHZxnqA=";
     fetchSubmodules = true;
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plizonczyk";
     repo = "noiseprotocol";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VZkKNxeSxLhRDhrj4VKV/1eXl7RtcsnCHru5KC/OYNY=";
   };
 

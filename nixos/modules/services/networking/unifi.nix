@@ -1,9 +1,18 @@
-{ config, options, lib, pkgs, utils, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = lib.escapeShellArgs ([
-      "@${cfg.jrePackage}/bin/java" "java"
+  cmd = lib.escapeShellArgs (
+    [
+      "@${cfg.jrePackage}/bin/java"
+      "java"
       "--add-opens=java.base/java.lang=ALL-UNNAMED"
       "--add-opens=java.base/java.time=ALL-UNNAMED"
       "--add-opens=java.base/sun.security.util=ALL-UNNAMED"
@@ -13,7 +22,11 @@ let
     ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
     ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
     ++ cfg.extraJvmOptions
-    ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
+    ++ [
+      "-jar"
+      "${stateDir}/lib/ace.jar"
+    ]
+  );
 in
 {
 
@@ -34,9 +47,7 @@ in
       '';
     };
 
-    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" {
-      default = "unifi8";
-    };
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" { };
 
     services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
       default = "mongodb-7_0";
@@ -89,11 +100,12 @@ in
 
     assertions = [
       {
-        assertion = lib.versionAtLeast config.system.stateVersion "24.11"
-        || (
-          options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
-          && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
-        );
+        assertion =
+          lib.versionAtLeast config.system.stateVersion "24.11"
+          || (
+            options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
+            && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
+          );
         message = ''
           Support for UniFi < 8 has been dropped; please explicitly set
           `services.unifi.unifiPackage` and `services.unifi.mongodbPackage`.
@@ -102,7 +114,7 @@ in
           only supports migrating one major version at a time; therefore, you
           may wish to set `services.unifi.mongodbPackage = pkgs.mongodb-6_0;`
           and activate your configuration before upgrading again to the default
-          `mongodb-7_0` supported by `unifi8`.
+          `mongodb-7_0` supported by `unifi`.
 
           For more information, see the MongoDB upgrade notes:
           <https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/#upgrade-recommendations-and-checklists>
@@ -116,18 +128,18 @@ in
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
-    users.groups.unifi = {};
+    users.groups.unifi = { };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
+        3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
     };
@@ -140,13 +152,16 @@ in
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
       # Make sure package upgrades trigger a service restart
-      restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
+      restartTriggers = [
+        cfg.unifiPackage
+        cfg.mongodbPackage
+      ];
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         ExecStart = "${cmd} start";
         ExecStop = "${cmd} stop";
-        Restart = "on-failure";
+        Restart = "always";
         TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
@@ -215,7 +230,11 @@ in
 
   };
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "unifi"
+      "dataDir"
+    ] "You should move contents of dataDir to /var/lib/unifi/data")
     (lib.mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 }

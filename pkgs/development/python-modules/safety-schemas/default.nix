@@ -12,16 +12,25 @@
 
 buildPythonPackage rec {
   pname = "safety-schemas";
-  version = "0.0.10";
+  version = "0.0.14";
   pyproject = true;
 
   src = fetchPypi {
     pname = "safety_schemas";
     inherit version;
-    hash = "sha256-Xsg7sZ4XADdI0qSxHkPh8rRHHJQ0Mp6aDYDRBplmuWw=";
+    hash = "sha256-SZU/elnpGVcr4lWVqJRvnLvNIGb+PhYMlGfZ0dbXr2o=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace hatchling==1.26.3 hatchling
+  '';
+
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
 
   dependencies = [
     dparse

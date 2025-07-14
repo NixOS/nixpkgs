@@ -16,19 +16,18 @@
   liburcu,
   ncurses,
   pkg-config,
-  gnumake42,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = pname;
+    repo = "netsniff-ng";
+    owner = "netsniff-ng";
     rev = "v${version}";
-    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
+    hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     flex
     makeWrapper
     pkg-config
-    gnumake42 # fails with make 4.4
   ];
 
   buildInputs = [

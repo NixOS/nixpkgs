@@ -3,10 +3,14 @@
   qtbase,
   qtlanguageserver,
   qtshadertools,
+  qtsvg,
   openssl,
+  darwin,
   stdenv,
   lib,
   pkgsBuildBuild,
+  replaceVars,
+  fetchpatch,
 }:
 
 qtModule {
@@ -16,16 +20,41 @@ qtModule {
     qtbase
     qtlanguageserver
     qtshadertools
+    qtsvg
     openssl
   ];
   strictDeps = true;
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+  ];
+
   patches = [
-    # prevent headaches from stale qmlcache data
-    ./disable-disk-cache.patch
+    # invalidates qml caches created from nix applications at different
+    # store paths and disallows saving caches of bare qml files in the store.
+    (replaceVars ./invalidate-caches-from-mismatched-store-paths.patch {
+      nixStore = builtins.storeDir;
+      nixStoreLength = builtins.toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
+    })
     # add version specific QML import path
     ./use-versioned-import-path.patch
+    # This should make it into the 6.9.2 release.
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/672e6777e8e6a8fd.diff";
+      hash = "sha256-nPczX6SHZPcdg7AqpRIwPCrcS3PId+Ibb0iPSiHUdaw=";
+    })
   ];
+
+  preConfigure =
+    let
+      storePrefixLen = builtins.toString ((builtins.stringLength builtins.storeDir) + 1);
+    in
+    ''
+      # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place
+      # of the old tag, which is otherwise the qt version, invalidating caches from other
+      # qtdeclarative store paths.
+      echo "QTDHASH:''${out:${storePrefixLen}:32}" > .tag
+    '';
 
   cmakeFlags =
     [
@@ -37,4 +66,9 @@ qtModule {
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
     ];
+
+  meta.maintainers = with lib.maintainers; [
+    nickcao
+    outfoxxed
+  ];
 }

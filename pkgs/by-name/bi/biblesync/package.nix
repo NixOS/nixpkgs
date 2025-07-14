@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       navigation, and handling of incoming packets.
     '';
     license = licenses.publicDomain;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

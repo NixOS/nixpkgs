@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "conda-inject";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M4+bz7ZuHlcF8tF5kSCUjjkIHG75eCCW1IJxcwxNL6o=";
   };
 

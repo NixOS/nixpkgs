@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
-  version = "1.68.2";
+  version = "1.73.0";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-GxD/1qoLIjQzgYyNuK4zLvBZtOcV+w+KamnUS2qcesw=";
+    hash = "sha256-/7xbLCEetpVf4WmS42qChAYnFzoeiCmHagXumW5oIjA=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [

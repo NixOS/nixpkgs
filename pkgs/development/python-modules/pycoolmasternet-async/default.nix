@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "pycoolmasternet-async";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MfWWy4C/G2w0Zb4C6iYbcfKciFtWctZ63K8lWaHuSnQ=";
   };
 

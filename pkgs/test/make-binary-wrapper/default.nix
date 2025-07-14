@@ -20,16 +20,7 @@ let
     runCommand "make-binary-wrapper-test-${testname}" env ''
       mkdir -p tmp/foo # for the chdir test
 
-      source=${
-        lib.fileset.toSource {
-          root = ./.;
-          fileset = lib.fileset.unions [
-            (./. + "/${testname}.cmdline")
-            (./. + "/${testname}.c")
-            (lib.fileset.maybeMissing (./. + "/${testname}.env"))
-          ];
-        }
-      }
+      source=${./. + "/${testname}"}
 
       params=$(<"$source/${testname}.cmdline")
       eval "makeCWrapper /send/me/flags $params" > wrapper.c

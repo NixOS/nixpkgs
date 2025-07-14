@@ -14,19 +14,18 @@
   wrapGAppsHook3,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.2.2";
+  version = "2.2.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k/CNxLScZDCXiwJhP5qh5HD5VUKlOLaYV8ICYgz6NKI=";
+    hash = "sha256-VE+pcCSblj5CADJppyM1mUchOibUtr7NrVwINrSprY0=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+    substituteInPlace setup.py --replace-fail "root_dir = sys.prefix" "root_dir = '/'"
   '';
 
   nativeBuildInputs = [
@@ -39,14 +38,15 @@ buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     babel
     psutil
     xlib
     pygobject3
     dbus-python
     croniter
-    setuptools
     packaging
   ];
 
@@ -72,6 +72,8 @@ buildPythonApplication rec {
   '';
 
   doCheck = false; # no tests
+
+  pythonImportsCheck = [ "safeeyes" ];
 
   passthru.tests.version = testers.testVersion { package = safeeyes; };
 

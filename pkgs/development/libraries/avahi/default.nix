@@ -11,6 +11,7 @@
   expat,
   gettext,
   glib,
+  autoreconfHook,
   libiconv,
   libevent,
   nixosTests,
@@ -127,6 +128,18 @@ stdenv.mkDerivation rec {
         "fuzz/fuzz-packet.c"
       ];
     })
+    # https://github.com/avahi/avahi/pull/659 merged Nov 19
+    (fetchpatch {
+      name = "CVE-2024-52616.patch";
+      url = "https://github.com/avahi/avahi/commit/f8710bdc8b29ee1176fe3bfaeabebbda1b7a79f7.patch";
+      hash = "sha256-BUQOQ4evKLBzV5UV8xW8XL38qk1rg6MJ/vcT5NBckfA=";
+    })
+    # https://github.com/avahi/avahi/pull/265 merged Mar 3, 2020
+    (fetchpatch {
+      name = "fix-requires-in-pc-file.patch";
+      url = "https://github.com/avahi/avahi/commit/366e3798bdbd6b7bf24e59379f4a9a51af575ce9.patch";
+      hash = "sha256-9AdhtzrimmcpMmeyiFcjmDfG5nqr/S8cxWTaM1mzCWA=";
+    })
   ];
 
   depsBuildBuild = [
@@ -137,6 +150,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
+    autoreconfHook
   ];
 
   buildInputs =

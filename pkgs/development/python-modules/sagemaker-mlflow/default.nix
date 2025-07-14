@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1bonIqZ+cFxCOxoFWn1MLBOIiB1wUX69/lUTPPupJaw=";
   };
 

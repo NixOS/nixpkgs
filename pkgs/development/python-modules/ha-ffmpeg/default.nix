@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "ha-ffmpeg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-TbSoKoOiLx3O7iykiTri5GBHGj7WoB8iSCpFIrV4ZgU=";
   };
 
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/ha-ffmpeg/";
     changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

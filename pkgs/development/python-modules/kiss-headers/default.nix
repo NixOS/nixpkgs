@@ -5,6 +5,7 @@
   hatchling,
   requests,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -14,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Ousret";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "kiss-headers";
+    tag = version;
     hash = "sha256-WeAzlC1yT+0nPSuB278z8T0XvPjbre051f/Rva5ujAk=";
   };
 
@@ -23,12 +24,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=kiss_headers --doctest-modules --cov-report=term-missing -rxXs" "--doctest-modules -rxXs"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTestPaths = [
     # Tests require internet access

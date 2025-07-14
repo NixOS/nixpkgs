@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncobj";
-  version = "0.3.13";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bakwc";
     repo = "PySyncObj";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZWzvvv13g/iypm+MIl5q0Y8ekqzZEY5upSTPk3MFTPI=";
+    tag = "v${version}";
+    hash = "sha256-a1fECsLIEFu9Wwai0viR/lkqWVWBKs+OdxHey3Pltmo=";
   };
 
   build-system = [ setuptools ];

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JR/YfMUs5IHBRr3uYqHXLNcr23YHyDvgH2y/1ip+2Y8=";
   };
 
-  cargoHash = "sha256-nYaCN09LP/2MfNRY8oZKtjzFCBFCeRF1IZ2ZBmbHg7I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jXUAjK/fqBaXaehcbFZU02w9/MTHluqKjtWGoAJa7ks=";
 
   meta = with lib; {
     description = " A simple generator for self-contained HTML flexbox galleries";

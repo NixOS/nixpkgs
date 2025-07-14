@@ -31,18 +31,17 @@ in
       '';
     };
 
-    tokenPath = mkOption {
+    environmentFile = mkOption {
       type = path;
       description = ''
-        A run-time path to the token file, which is supposed to be provisioned
-        outside of Nix store.
+        An environment file containg at least the FASTLY_API_TOKEN= environment
+        variable.
       '';
     };
   };
   serviceOpts = {
     serviceConfig = {
-      LoadCredential = "fastly-api-token:${cfg.tokenPath}";
-      Environment = [ "FASTLY_API_TOKEN=%d/fastly-api-token" ];
+      EnvironmentFile = cfg.environmentFile;
       ExecStart = escapeSystemdExecArgs (
         [
           (getExe pkgs.prometheus-fastly-exporter)

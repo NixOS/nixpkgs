@@ -57,6 +57,10 @@ buildPythonPackage rec {
     description = "Google Drive API Python wrapper library";
     homepage = "https://github.com/iterative/PyDrive2";
     changelog = "https://github.com/iterative/PyDrive2/releases/tag/${version}";
+    # Not compatible with pyopenssl 24.3.0
+    # https://github.com/iterative/PyDrive2/issues/361
+    # TODO: re-enable it in `duplicity` when fixed
+    broken = true;
     license = licenses.asl20;
     maintainers = with maintainers; [ sei40kr ];
   };

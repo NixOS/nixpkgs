@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       gepbird
       globin
-      willibutz
     ];
     platforms = platforms.unix;
     mainProgram = "feh";

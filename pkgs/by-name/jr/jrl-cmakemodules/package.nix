@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "jrl-cmakemodules";
-  version = "0-unstable-2024-11-20";
+  version = "0-unstable-2025-05-04";
 
   src = fetchFromGitHub {
     owner = "jrl-umi3218";
     repo = "jrl-cmakemodules";
-    rev = "29c0eb4e659304f44d55a0389e2749812d858659";
-    hash = "sha256-a23x0IIvIXJAsi8Z2/ku63hrHuSEC45FqzhxCy/T5tw=";
+    rev = "2dd858f5a71d8224f178fb3dc0bcd95256ba10e7";
+    hash = "sha256-Iq9IuhEJBmDd14FhQ3wb94AoJDUjJ1h1D3qCdQYCnUc=";
   };
 
   nativeBuildInputs = [ cmake ];

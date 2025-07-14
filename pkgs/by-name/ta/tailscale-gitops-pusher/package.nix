@@ -1,10 +1,10 @@
 {
   lib,
   tailscale,
-  buildGo123Module,
+  buildGo124Module,
 }:
 
-buildGo123Module {
+buildGo124Module {
   inherit (tailscale)
     version
     src
@@ -32,6 +32,6 @@ buildGo123Module {
     description = "Allows users to use a GitOps flow for managing Tailscale ACLs";
     license = licenses.bsd3;
     mainProgram = "gitops-pusher";
-    maintainers = teams.cyberus.members;
+    teams = [ teams.cyberus ];
   };
 }

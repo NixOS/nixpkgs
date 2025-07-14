@@ -22,6 +22,7 @@
   libXdmcp,
   libstartup_notification,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "nick87720z";
     repo = "tint2";
-    rev = version;
+    tag = version;
     hash = "sha256-9sEe/Gnj+FWLPbWBtfL1YlNNC12j7/KjQ40xdkaFJVQ=";
   };
 
@@ -44,6 +45,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-K547KYlRkVl1s2THi3ZCRuM447EFJwTqUEBjKQnV8Sc=";
     })
   ];
+
+  # Fix build with gcc14
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=incompatible-pointer-types";
 
   nativeBuildInputs = [
     pkg-config
@@ -75,12 +79,16 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in ./src/launcher/apps-common.c \
-             ./src/launcher/icon-theme-common.c
-    do
-      substituteInPlace $f --replace-fail /usr/share/ /run/current-system/sw/share/
-    done
+    # Add missing dependency on libm
+    substituteInPlace src/tint2conf/CMakeLists.txt \
+      --replace-fail "RSVG_LIBRARIES} )" "RSVG_LIBRARIES} m)"
+
+    substituteInPlace src/launcher/apps-common.c src/launcher/icon-theme-common.c \
+      --replace-fail /usr/share/ /run/current-system/sw/share/
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.com/nick87720z/tint2";

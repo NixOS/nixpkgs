@@ -1,46 +1,53 @@
 {
   lib,
-  buildGoModule,
   fetchFromGitLab,
+  rustPlatform,
+  nix-update-script,
+  installShellFiles,
 }:
-let
-  version = "1.4.1";
-in
-buildGoModule {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
-    rev = "v${version}";
-    hash = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3FJv1n1+cpV4yrBR6PKTAhSkjas/4uTZqn4nW948jAk=";
   };
 
-  vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";
+  cargoHash = "sha256-Is8Mkl7Qfbe2CwYB+Da99NDQZd9+qR4NnT8iU/JMPJ0=";
 
-  ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=unknown"
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
-  postBuild = ''
-    $CC helpers_c/ip46tables.c -o ip46tables
-    $CC helpers_c/nft46.c -o nft46
-  '';
+  checkFlags = [
+    # Those time-based tests behave poorly in low-resource environments (CI...)
+    "--skip=daemon::filter::tests"
+    "--skip=treedb::raw::tests::write_then_read_1000"
+    "--skip=simple"
+  ];
 
   postInstall = ''
-    cp ip46tables nft46 $out/bin
+    installBin $releaseDir/ip46tables $releaseDir/nft46
+    installManPage $releaseDir/reaction*.1
+    installShellCompletion --cmd reaction \
+      --bash $releaseDir/reaction.bash \
+      --fish $releaseDir/reaction.fish \
+      --zsh $releaseDir/_reaction
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Scan logs and take action: an alternative to fail2ban";
     homepage = "https://framagit.org/ppom/reaction";
-    changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
-    license = licenses.agpl3Plus;
+    changelog = "https://framagit.org/ppom/reaction/-/releases/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
-    maintainers = with maintainers; [ ppom ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ppom ];
+    platforms = lib.platforms.unix;
   };
-}
+})

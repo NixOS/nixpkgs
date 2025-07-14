@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ffuf";
     repo = "ffuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+wcNqQHtB8yCLiJXMBxolCWsYZbBAsBGS1hs7j1lzUU=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for web fuzzing";
     mainProgram = "ffuf";
     longDescription = ''
@@ -42,7 +42,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/ffuf/ffuf";
     changelog = "https://github.com/ffuf/ffuf/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

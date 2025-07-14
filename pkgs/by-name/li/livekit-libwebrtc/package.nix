@@ -74,37 +74,58 @@ let
 in
 stdenv.mkDerivation {
   pname = "livekit-libwebrtc";
-  version = "m114";
+  version = "125-unstable-2025-03-24";
 
   src = "${sources}/src";
 
-  patches = [
-    # Adds missing dependencies to generated LICENSE
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
-      hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
-    })
-    # Fixes the certificate chain, required for Let's Encrypt certs
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
-      hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
-    })
-    # Adds dependencies and features required by livekit
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
-      hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
-    })
-    # Fixes concurrency and localization issues
-    (fetchpatch {
-      url = "https://github.com/zed-industries/webrtc/commit/08f7a701a2eda6407670508fc2154257a3c90308.patch";
-      hash = "sha256-oWYZLwqjRSHDt92MqsxsoBSMyZKj1ubNbOXZRbPpbEw=";
-    })
-    # Required for dynamically linking to ffmpeg libraries and exposing symbols
-    ./0001-shared-libraries.patch
-  ];
+  patches =
+    [
+      # Adds missing dependencies to generated LICENSE
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
+        hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
+      })
+      # Fixes the certificate chain, required for Let's Encrypt certs
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
+        hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
+      })
+      # Adds dependencies and features required by livekit
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
+        hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
+      })
+      # Fixes "error: no matching member function for call to 'emplace'"
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/zed-industries/livekit-rust-sdks/refs/heads/main/webrtc-sys/libwebrtc/patches/abseil_use_optional.patch";
+        hash = "sha256-FOwlwOqgv5IEBCMogPACbXXxdNhGzpYcVfsolcwA7qU=";
+
+        extraPrefix = "third_party/";
+        stripLen = 1;
+      })
+      # Required for dynamically linking to ffmpeg libraries and exposing symbols
+      ./0001-shared-libraries.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./0002-disable-narrowing-const-reference.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # GCC does not support C11 _Generic in C++ mode. Fixes boringssl build with GCC
+      (fetchpatch {
+        name = "fix-gcc-c11-generic-boringssl";
+
+        url = "https://github.com/google/boringssl/commit/c70190368c7040c37c1d655f0690bcde2b109a0d.patch";
+        hash = "sha256-xkmYulDOw5Ny5LOCl7rsheZSFbSF6md2NkZ3+azjFQk=";
+        stripLen = 1;
+        extraPrefix = "third_party/boringssl/src/";
+      })
+    ];
 
   postPatch =
     ''
+      substituteInPlace .gn \
+        --replace-fail "vpython3" "python3"
+
       substituteInPlace tools/generate_shim_headers/generate_shim_headers.py \
         --replace-fail "OFFICIAL_BUILD" "GOOGLE_CHROME_BUILD"
 
@@ -143,6 +164,11 @@ stdenv.mkDerivation {
       substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
     '';
 
+  outputs = [
+    "dev"
+    "out"
+  ];
+
   nativeBuildInputs =
     (builtins.concatLists (
       lib.mapAttrsToList (
@@ -157,7 +183,7 @@ stdenv.mkDerivation {
       cpio
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
     [ nasm ]
@@ -226,7 +252,7 @@ stdenv.mkDerivation {
       "api/task_queue:default_task_queue_factory"
       "sdk:native_api"
       "sdk:default_codec_factory_objc"
-      "pc:peerconnection"
+      "pc:peer_connection"
       "sdk:videocapture_objc"
       "sdk:mac_framework_objc"
     ];
@@ -245,24 +271,24 @@ stdenv.mkDerivation {
     ''
       runHook preInstall
 
-      mkdir -p $out/{lib,include}
-      cp obj/webrtc.ninja $out/
-      cp args.gn $out/
-      cp LICENSE.md $out/
+      mkdir -p $out/lib
+      mkdir -p $dev/include
+
+      install -m0644 obj/webrtc.ninja args.gn LICENSE.md $dev
+
+      pushd ../..
+      find . -name "*.h" -print | cpio -pd $dev/include
+      popd
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp libwebrtc.so $out/lib/
-      cp libthird_party_boringssl.so $out/lib/
+      install -m0644 libwebrtc.so libthird_party_boringssl.so $out/lib
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Library/Frameworks
-      cp -r WebRTC.framework $out/Library/Frameworks
-      cp libwebrtc.dylib $out/lib
-      cp libthird_party_boringssl.dylib $out/lib/
+      install -m0644 WebRTC.framework/Versions/A/WebRTC $out/lib/libwebrtc.dylib
+      install -m0644 libthird_party_boringssl.dylib $out/lib
     ''
     + ''
-      cd ../..
-      find . -name "*.h" -print | cpio -pd $out/include
+      ln -s $out/lib $dev/lib
 
       runHook postInstall
     '';
@@ -270,13 +296,10 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     boringssl="$out/lib/libthird_party_boringssl.dylib"
     webrtc="$out/lib/libwebrtc.dylib"
-    framework="$out/Library/Frameworks/WebRTC.framework/Versions/A/WebRTC"
 
     install_name_tool -id "$boringssl" "$boringssl"
     install_name_tool -id "$webrtc" "$webrtc"
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
-    install_name_tool -id "$framework" "$framework"
-    install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$framework"
   '';
 
   passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''

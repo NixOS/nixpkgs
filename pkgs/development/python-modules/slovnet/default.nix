@@ -24,7 +24,7 @@ buildPythonPackage rec {
     razdel
   ];
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
   disabledTestPaths = [
     # Tries to download model binary artifacts:
     "tests/test_api.py"

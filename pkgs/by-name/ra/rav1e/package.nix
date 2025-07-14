@@ -13,14 +13,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
+    hash = "sha256-hVeBrfZxqkxzUeuut0XgU4qph1z4gPzV/9mS7X9byto=";
   };
 
-  cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EDXzpHrdaHd3FQEuVnkQzqsYAjShsGc4XLhDAfmVXK8=";
 
   nativeBuildInputs = [
     cargo-c

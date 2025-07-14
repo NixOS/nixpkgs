@@ -1,49 +1,55 @@
 {
   lib,
+  nodejs,
   buildNpmPackage,
   fetchFromGitHub,
-  makeWrapper,
   redocly,
   testers,
 }:
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.26.0";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-jBfAMrmJ9+k1Fx2gZoQ8UiTT13tSvxXUKXNCW3vmuUY=";
+    hash = "sha256-on5FqAYy6Ap0e5R3u1Wx4j8ijepj3K8FSpts7nTsXRI=";
   };
 
-  npmDepsHash = "sha256-IcyX+LmMduE8CY6wNSTv0D4c3vCZu48EXsUSsqfOqFQ=";
+  npmDepsHash = "sha256-Duxdp8/HhoFwVRe9vLRsp08uTANGAY3u/lhgfHI2eag=";
 
   npmBuildScript = "prepare";
-
-  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     npm --prefix packages/cli run copy-assets
   '';
 
   postInstall = ''
-    rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core}
+    rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core,respect-core}
     cp -R packages/cli $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli
     cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
+    cp -R packages/respect-core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/respect-core
 
-    mkdir $out/bin
-    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
-      $out/bin/redocly \
-      --set-default REDOCLY_TELEMETRY off \
-      --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
+    # Create a wrapper script to force the correct command name (Nodejs uses argv[1] for command name)
+    mkdir -p $out/bin
+    cat <<EOF > $out/bin/redocly
+    #!${lib.getBin nodejs}/bin/node
+    // Override argv[1] to show "redocly" instead of "cli.js"
+    process.argv[1] = 'redocly';
+
+    // Set environment variables directly
+    process.env.REDOCLY_TELEMETRY = process.env.REDOCLY_TELEMETRY || "off";
+    process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE = process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE || "true";
+
+    require('$out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js');
+    EOF
+    chmod +x $out/bin/redocly
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = redocly;
-    };
+    tests.version = testers.testVersion { package = redocly; };
   };
 
   meta = {

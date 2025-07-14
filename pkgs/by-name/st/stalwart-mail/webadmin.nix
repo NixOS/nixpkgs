@@ -3,26 +3,26 @@
   rustPlatform,
   fetchFromGitHub,
   trunk,
-  tailwindcss,
+  tailwindcss_3,
   fetchNpmDeps,
   nix-update-script,
   nodejs,
   npmHooks,
   llvmPackages,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_93,
   binaryen,
   zip,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "webadmin";
-  version = "0.1.20";
+  version = "0.1.28";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
     tag = "v${version}";
-    hash = "sha256-0/XiYFQDqcpRS9DXPyKQwoifnEd2YxFiyDbV12zd2RU=";
+    hash = "sha256-OgZ2qs84zVM2zNmBQSPnb9Uy4mahzNC81vbWM9wmrn4=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  cargoHash = "sha256-uyLGrCZvKiePHFG0C++ELwT/1FTH8c4baAUxV2ueHZ8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rcgeSdCGIRvpz2xZPw0I753+D3zm9AYbtuUdMSp2I94=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -43,14 +44,11 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.bintools-unwrapped
     nodejs
     npmHooks.npmConfigHook
-    tailwindcss
+    tailwindcss_3
     trunk
     # needs to match with wasm-bindgen version in upstreams Cargo.lock
-    (wasm-bindgen-cli.override {
-      version = "0.2.93";
-      hash = "sha256-DDdu5mM3gneraM85pAepBXWn3TMofarVR4NbjMdz3r0=";
-      cargoHash = "sha256-birrg+XABBHHKJxfTKAMSlmTVYLmnmqMDfRnmG6g/YQ=";
-    })
+    wasm-bindgen-cli_0_2_93
+
     zip
   ];
 

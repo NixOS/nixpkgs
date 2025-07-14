@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  darwin,
+  removeReferencesTo,
   perl,
   pkg-config,
   libcap,
@@ -10,6 +10,7 @@
   libtool,
   libxml2,
   openssl,
+  liburcu,
   libuv,
   nghttp2,
   jemalloc,
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.28";
+  version = "9.20.10";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-D7O6LDN7tIjKaPXfKWxDXNJVBY+2PQgi6R2wI1yQVxY=";
   };
 
   outputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    removeReferencesTo
   ];
   buildInputs =
     [
@@ -56,14 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
       libxml2
       openssl
+      liburcu
       libuv
       nghttp2
       jemalloc
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -90,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
 
+    mkdir -p $out/etc
     cat <<EOF >$out/etc/rndc.conf
     include "/etc/bind/rndc.key";
     options {
@@ -128,14 +131,21 @@ stdenv.mkDerivation (finalAttrs: {
       sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
     '';
 
+  postFixup = ''
+    remove-references-to -t "$out" "$dnsutils/bin/delv"
+  '';
+
   passthru = {
-    tests = {
-      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-      inherit (nixosTests) bind;
-      prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-    };
+    tests =
+      {
+        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+        inherit (nixosTests) bind;
+        prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+      };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.
@@ -150,8 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
-    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/CHANGES";
-    maintainers = with maintainers; [ globin ];
+    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
 
     outputsToInstall = [

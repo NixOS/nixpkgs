@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open5gs";
     repo = "open5gs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XSDjVW+5l2trrilKMcSfX6QIfh/ijWxjoJg33Bn1DBU=";
   };
 

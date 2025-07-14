@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmschrei";
     repo = "apricot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-v9BHFxmlbwXVipPze/nV35YijdFBuka3gAl85AlsffQ=";
   };
 

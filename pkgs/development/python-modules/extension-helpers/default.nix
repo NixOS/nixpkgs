@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "extension-helpers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qneulhSYB2gYiCdgoU7Dqg1luLWhVouFVihcKeOA37E=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "extension_helpers" ];
 
-  pytestFlagsArray = [ "extension_helpers/tests" ];
+  enabledTestPaths = [ "extension_helpers/tests" ];
 
   disabledTests = [
     # Test require network access

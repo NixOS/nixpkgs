@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "caderek";
     repo = "gramma";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gfBwKpsttdhjD/Opn8251qskURpwLX2S5NSbpwP3hFg=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Latrodect";
     repo = "wss-repo-vulnerability-search-manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jXTivaXHHt63u9N7w40jyLUU2kg5LxAn50PVpqwUc0M=";
   };
 

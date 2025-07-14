@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cairo";
-  version = "2.8.5";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "starkware-libs";
     repo = "cairo";
     rev = "v${version}";
-    hash = "sha256-zNSQVMF5ciGGUBQyPFvIVtePNMbJ3e0LXBmRWMohoGA=";
+    hash = "sha256-VOyqKeiPJ3/VOqcdQXC/rZnTriC2ScmAQ4IlouHjvpI=";
   };
 
-  cargoHash = "sha256-jVQErw89rCm9f3uJftmyytru1xQa+FKsUkszHJWBGNU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e2Nire1TLcliq5KxoINJIZJdgohHRTXqIZPj1GNIe2A=";
 
   # openssl crate requires perl during build process
   nativeBuildInputs = [

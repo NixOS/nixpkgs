@@ -82,13 +82,15 @@ in
         TimeoutSec = 0;
         RestartSec = 2;
         Restart = "always";
-        StartLimitBurst = 3;
         LimitNOFILE = "infinity";
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
         Delegate = true;
         NotifyAccess = "all";
         KillMode = "mixed";
+      };
+      unitConfig = {
+        StartLimitBurst = 3;
       };
     };
   };

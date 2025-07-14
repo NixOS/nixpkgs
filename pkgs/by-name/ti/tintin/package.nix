@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tintin";
-  version = "2.02.41";
+  version = "2.02.51";
 
   src = fetchFromGitHub {
     owner = "scandum";
     repo = "tintin";
     rev = version;
-    hash = "sha256-AfWw9CMBAzTTsrZXDEoOdpvUofIQfLCW7hRgSb7LB00=";
+    hash = "sha256-QU9Q2VbJ44NHm//LTwDoHQIUV/LnLM94I7GtoCxL3js=";
   };
 
   buildInputs = [

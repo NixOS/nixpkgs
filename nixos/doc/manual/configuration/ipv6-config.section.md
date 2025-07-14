@@ -2,7 +2,7 @@
 
 IPv6 is enabled by default. Stateless address autoconfiguration is used
 to automatically assign IPv6 addresses to all interfaces, and Privacy
-Extensions (RFC 4946) are enabled by default. You can adjust the default
+Extensions (RFC 4941) are enabled by default. You can adjust the default
 for this by setting [](#opt-networking.tempAddresses). This option
 may be overridden on a per-interface basis by
 [](#opt-networking.interfaces._name_.tempAddress). You can disable

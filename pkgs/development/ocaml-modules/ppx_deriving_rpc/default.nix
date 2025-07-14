@@ -8,7 +8,7 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ppx_deriving_rpc";
 
   inherit (rpclib) version src;

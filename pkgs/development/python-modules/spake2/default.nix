@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   cryptography,
   pytestCheckHook,
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "warner";
     repo = "python-spake2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WPMGH1OzG+5O+2lNl2sv06/dNardY+BHYDS290Z36vQ=";
   };
 

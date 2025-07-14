@@ -5,6 +5,7 @@
   fetchFromGitHub,
   erlang,
   makeWrapper,
+  nix-update-script,
   coreutils,
   curl,
   bash,
@@ -57,6 +58,16 @@ let
       true
     else
       versionOlder (versions.major (getVersion erlang)) maxShiftMajor;
+
+  elixirShebang =
+    if stdenv.hostPlatform.isDarwin then
+      # Darwin disallows shebang scripts from using other scripts as their
+      # command. Use env as an intermediary instead of calling elixir directly
+      # (another shebang script).
+      # See https://github.com/NixOS/nixpkgs/pull/9671
+      "${coreutils}/bin/env $out/bin/elixir"
+    else
+      "$out/bin/elixir";
 in
 assert assertMsg (versionAtLeast (getVersion erlang) minimumOTPVersion) compatibilityMsg;
 assert assertMsg maxAssert compatibilityMsg;
@@ -104,8 +115,17 @@ stdenv.mkDerivation ({
     done
 
     substituteInPlace $out/bin/mix \
-      --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
+      --replace "/usr/bin/env elixir" "${elixirShebang}"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(${lib.versions.major version}\\.${lib.versions.minor version}\\.[0-9\\-rc.]+)"
+      "--override-filename"
+      "pkgs/development/interpreters/elixir/${lib.versions.major version}.${lib.versions.minor version}.nix"
+    ];
+  };
 
   pos = builtins.unsafeGetAttrPos "sha256" args;
   meta = with lib; {
@@ -120,8 +140,8 @@ stdenv.mkDerivation ({
       with hot code upgrades.
     '';
 
-    license = licenses.epl10;
+    license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = teams.beam.members;
+    teams = [ teams.beam ];
   };
 })

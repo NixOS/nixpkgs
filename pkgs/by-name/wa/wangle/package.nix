@@ -6,7 +6,7 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
+  sanitiseHeaderPathsHook,
 
   folly,
   fizz,
@@ -15,8 +15,6 @@
   gflags,
   libevent,
   double-conversion,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   gtest,
 
@@ -25,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2024.11.18.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "out"
@@ -35,30 +33,29 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wangle";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4mqE9GgJP2f7QAykwdhMFoReE9wmPKOXqSHJ2MHP2G0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t3b+R2tb4VTsjDL9Jzjcaehs5k+BLNLilm3+nXxyjj0=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
+    sanitiseHeaderPathsHook
   ];
 
-  buildInputs =
-    [
-      folly
-      fizz
-      openssl
-      glog
-      gflags
-      libevent
-      double-conversion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    folly
+    fizz
+    openssl
+    glog
+    gflags
+    libevent
+    double-conversion
+  ];
 
   checkInputs = [
     gtest
@@ -110,18 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

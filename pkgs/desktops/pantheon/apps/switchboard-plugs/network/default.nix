@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  substituteAll,
+  replaceVars,
   vala,
   libadwaita,
   libgee,
@@ -21,18 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "8.0.1";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-DXXEMST/EIckZkp5BozNP+NlyutlxF92ZeJngj8+EdM=";
+    hash = "sha256-mTTcavuxnRSBiifFpga14xPReHguvp9wIUS71Djorjk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit networkmanagerapplet;
     })
   ];
@@ -66,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-network";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

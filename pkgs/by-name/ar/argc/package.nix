@@ -14,16 +14,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
     rev = "v${version}";
-    hash = "sha256-76QWVERWnA9tZoymEdQUlaHedLmo68rIlab1UFsVWtc=";
+    hash = "sha256-sviGDwxbCBsNY5viV7Qim6B/COd1Uz0Wj/6n/Ge+A50=";
   };
 
-  cargoHash = "sha256-MzwIdsrSgKdHZ4AyLv4ofApxJN1DgXywyVAYLMPabwY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uyUwmTDa1RcgQbc/6wMwRK6932CatuGMr0FPd2rAufk=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
@@ -60,16 +61,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line options, arguments and sub-commands parser for bash";
     mainProgram = "argc";
     homepage = "https://github.com/sigoden/argc";
     changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

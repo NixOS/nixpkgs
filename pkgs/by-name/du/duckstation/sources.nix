@@ -25,7 +25,7 @@
           # Some files are filled by using Git commands; it requires deepClone.
           # More info at `checkout_ref` function in nix-prefetch-git.
           # However, `.git` is a bit nondeterministic (and Git itself makes no
-          # guarrantees whatsoever).
+          # guarantees whatsoever).
           # Then, in order to enhance reproducibility, what we will do here is:
           #
           # - Execute the desired Git commands;

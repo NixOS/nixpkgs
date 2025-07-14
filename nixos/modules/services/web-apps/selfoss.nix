@@ -158,7 +158,7 @@ in
 
     systemd.services.selfoss-update = {
       serviceConfig = {
-        ExecStart = "${pkgs.php}/bin/php ${dataDir}/cliupdate.php";
+        ExecStart = "${pkgs.php83}/bin/php ${dataDir}/cliupdate.php";
         User = "${cfg.user}";
       };
       startAt = "hourly";

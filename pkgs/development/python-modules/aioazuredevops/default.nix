@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aioazuredevops";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RZBiFPzYtEoc51T3irVHL9xVlZgACyM2lu1TkMoatqU=";
   };
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "test_get_build"
   ];
 
-  pytestFlagsArray = [ "--snapshot-update" ];
+  pytestFlags = [ "--snapshot-update" ];
 
   pythonImportsCheck = [ "aioazuredevops" ];
 

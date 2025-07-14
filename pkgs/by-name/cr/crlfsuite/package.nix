@@ -7,16 +7,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "crlfsuite";
   version = "2.5.2";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Nefcore";
     repo = "CRLFsuite";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-mK20PbVGhTEjhY5L6coCzSMIrG/PHHmNq30ZoJEs6uI=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     colorama
     requests
   ];

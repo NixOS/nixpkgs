@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pylhc";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "sdds";
+    tag = "v${version}";
     hash = "sha256-h1gEqzmKCUr8+w3Fv8lv35/0itZwela//AQsD3u0UJA=";
   };
 

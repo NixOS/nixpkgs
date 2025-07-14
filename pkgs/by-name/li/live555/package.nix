@@ -1,12 +1,21 @@
 {
-  lib,
+  buildPackages,
   cctools,
   fetchpatch,
   fetchurl,
+  lib,
+  live555,
   openssl,
+  runCommand,
   stdenv,
+  writeScript,
+
+  # tests
   vlc,
 }:
+let
+  isStatic = stdenv.hostPlatform.isStatic;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
@@ -42,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
     "C_COMPILER=$(CC)"
     "CPLUSPLUS_COMPILER=$(CXX)"
-    "LIBRARY_LINK=$(AR) cr "
     "LINK=$(CXX) -o "
+    "LIBRARY_LINK=${if isStatic then "$(AR) cr " else "$(CC) -o "}"
   ];
 
   # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
@@ -83,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       platform =
         if stdenv.hostPlatform.isLinux then
-          "linux"
+          if isStatic then "linux" else "linux-with-shared-libraries"
         else if stdenv.hostPlatform.isDarwin then
           "macosx-catalina"
         else
@@ -97,17 +106,52 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postConfigure
     '';
 
-  passthru.tests = {
-    # Downstream dependency
-    inherit vlc;
-  };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if ! ($out/bin/openRTSP || :) 2>&1 | grep -q "Usage: "; then
+      echo "Executing example program failed" >&2
+      exit 1
+    else
+      echo "Example program executed successfully"
+    fi
+  '';
+
+  passthru.tests =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    {
+      # The installCheck phase above cannot be ran in cross-compilation scenarios,
+      # therefore the passthru test
+      run-test-prog = runCommand "live555-run-test-prog" { } ''
+        if ! (${emulator} ${live555}/bin/openRTSP || :) 2>&1 | grep -q "Usage: "; then
+          echo "Executing example program failed" >&2
+          exit 1
+        else
+          echo "Example program executed successfully"
+          touch $out
+        fi
+      '';
+
+      inherit vlc;
+    };
+
+  passthru.updateScript = writeScript "update-live555" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    # Expect the text in format of '2025.05.24:'
+    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+      head -n1 | tr -d ':')"
+    update-source-version live555 "$new_version"
+  '';
 
   meta = {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
     changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
     license = with lib.licenses; [ lgpl21Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "state-spaces";
     repo = "mamba";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R702JjM3AGk7upN7GkNK8u1q4ekMK9fYQkpO6Re45Ng=";
   };
 

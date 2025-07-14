@@ -1,28 +1,35 @@
-{ config, pkgs, lib }:
+{
+  config,
+  pkgs,
+  lib,
+}:
 
 # NOTE: New packages should generally go to top-level instead of here!
-lib.makeScope pkgs.newScope (self:
-let
-  inherit (self) callPackage;
-in
-{
-  updateScript = callPackage ./update.nix { };
+lib.makeScope pkgs.newScope (
+  self:
+  let
+    inherit (self) callPackage;
+  in
+  {
+    updateScript = callPackage ./update.nix { };
 
-  # Temporary helper until gdk-pixbuf supports multiple cache files.
-  # This will go away, do not use outside Nixpkgs.
-  _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
+    # Temporary helper until gdk-pixbuf supports multiple cache files.
+    # This will go away, do not use outside Nixpkgs.
+    _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
-# ISO installer
-# installerIso = callPackage ./installer.nix {};
+    # ISO installer
+    # installerIso = callPackage ./installer.nix {};
 
-#### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
+    #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-  gvfs = pkgs.gvfs.override { gnomeSupport = true; };
+    gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
+    nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
-}) // lib.optionalAttrs config.allowAliases {
-#### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+  }
+)
+// lib.optionalAttrs config.allowAliases {
+  #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = throw "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly."; # Added on 2024-06-22.
   libchamplain = throw "The ‘gnome.libchamplain’ was removed as unused. Please use ‘pkgs.libchamplain’ directly."; # Added on 2024-08-11.
   libsoup = throw "The ‘gnome.libsoup’ was removed as unused. Please use ‘pkgs.libsoup’."; # Added on 2024-08-11.
@@ -91,7 +98,7 @@ in
   gnome-session = throw "The ‘gnome.gnome-session’ was moved to top-level. Please use ‘pkgs.gnome-session’ directly."; # Added on 2024-08-28.
   gnome-session-ctl = throw "The ‘gnome.gnome-session-ctl’ was moved to top-level. Please use ‘pkgs.gnome-session-ctl’ directly."; # Added on 2024-08-28.
   gnome-settings-daemon = throw "The ‘gnome.gnome-settings-daemon’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon’ directly."; # Added on 2024-08-28.
-  gnome-settings-daemon43 = throw "The ‘gnome.gnome-settings-daemon43’ was moved to top-level. Please use ‘pkgs.gnome-settings-daemon43’ directly."; # Added on 2024-08-28.
+  gnome-settings-daemon43 = throw "The ‘gnome.gnome-settings-daemon43’ was removed since it is no longer used by Pantheon."; # Added on 2024-08-28.
   gnome-shell = throw "The ‘gnome.gnome-shell’ was moved to top-level. Please use ‘pkgs.gnome-shell’ directly."; # Added on 2024-08-28.
   gnome-shell-extensions = throw "The ‘gnome.gnome-shell-extensions’ was moved to top-level. Please use ‘pkgs.gnome-shell-extensions’ directly."; # Added on 2024-08-11.
   gnome-software = throw "The ‘gnome.gnome-software’ was moved to top-level. Please use ‘pkgs.gnome-software’ directly."; # Added on 2024-08-11.
@@ -113,7 +120,7 @@ in
   lightsoff = throw "The ‘gnome.lightsoff’ was moved to top-level. Please use ‘pkgs.lightsoff’ directly."; # Added on 2024-08-11.
   metacity = throw "The ‘gnome.metacity’ was moved to top-level. Please use ‘pkgs.metacity’ directly."; # Added on 2024-08-11.
   mutter = throw "The ‘gnome.mutter’ was moved to top-level. Please use ‘pkgs.mutter’ directly."; # Added on 2024-08-28.
-  mutter43 = throw "The ‘gnome.mutter43’ was moved to top-level. Please use ‘pkgs.mutter43’ directly."; # Added on 2024-08-28.
+  mutter43 = throw "The ‘gnome.mutter43’ was removed since it is no longer used by Pantheon."; # Added on 2024-08-28.
   nautilus = throw "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly."; # Added on 2024-06-13.
   networkmanager-openvpn = throw "The ‘gnome.networkmanager-openvpn’ was moved to top-level. Please use ‘pkgs.networkmanager-openvpn’ directly."; # Added on 2024-08-31.
   networkmanager-vpnc = throw "The ‘gnome.networkmanager-vpnc’ was moved to top-level. Please use ‘pkgs.networkmanager-vpnc’ directly."; # Added on 2024-08-31.
@@ -137,6 +144,6 @@ in
   yelp-xsl = throw "The ‘gnome.yelp-xsl’ was moved to top-level. Please use ‘pkgs.yelp-xsl’ directly."; # Added on 2024-06-22.
   zenity = throw "The ‘gnome.zenity’ was moved to top-level. Please use ‘pkgs.zenity’ directly."; # Added on 2024-06-22.
 
-#### Removals
+  #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
 }

@@ -9,12 +9,16 @@
 python3Packages.buildPythonApplication rec {
   pname = "httpstat";
   version = "1.3.1";
+  format = "pyproject";
   src = fetchFromGitHub {
     owner = "reorx";
-    repo = pname;
+    repo = "httpstat";
     rev = version;
     sha256 = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
+
   doCheck = false; # No tests
   buildInputs = [ glibcLocales ];
   runtimeDeps = [ curl ];

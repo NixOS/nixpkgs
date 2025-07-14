@@ -6,10 +6,10 @@
   installShellFiles,
   libiconv,
   libmysqlclient,
+  libpq,
   nix-update-script,
   openssl,
   pkg-config,
-  postgresql,
   rustPlatform,
   sqlite,
   testers,
@@ -27,15 +27,16 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.6";
+  version = "2.2.11";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-jKTQxlmpTlb0eITwNbnYfONknGhHsO/nzdup04ikEB0=";
+    hash = "sha256-utiIuifPxHjvC0TkY2XLeOlqReaal/4T4hrJ7tmQ27k=";
   };
 
-  cargoHash = "sha256-+QbCPHczxCkDOFo/PDFTK0xReCWoz8AiLNwXA3aG9N0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QHcH0jgBAYtyYJoaBJW92HR5ZBgdMLupe5+l22Wpfjg=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport postgresql
+    ++ lib.optional postgresqlSupport libpq
     ++ lib.optionals mysqlSupport [
       libmysqlclient
       zlib

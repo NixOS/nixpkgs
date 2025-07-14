@@ -6,10 +6,10 @@ index b4b1f8fa..99d52cba 100755
     [ "x$XDG_SESSION_CLASS" != "xgreeter" ] &&
     [  -n "$SHELL" ]; then
    if [ "$1" != '-l' ]; then
--    exec bash -c "exec -l '$SHELL' -c '$0 -l $*'"
+-    exec bash -c "exec -l '$SHELL' -c 'exec $0 -l $*'"
 +    # Make sure the shell actually sets up the environment.
 +    unset __NIXOS_SET_ENVIRONMENT_DONE
-+    exec @bash@ -c "exec -l '$SHELL' -c '$0 -l $*'"
++    exec @bash@ -c "exec -l '$SHELL' -c 'exec $0 -l $*'"
    else
      shift
    fi

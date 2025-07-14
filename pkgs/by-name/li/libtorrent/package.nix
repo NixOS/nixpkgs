@@ -4,36 +4,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf-archive,
   autoreconfHook,
   cppunit,
-  libsigcxx,
   openssl,
   pkg-config,
   zlib,
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-libtorrent";
-  version = "0.14.0";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-MDLAp7KFmVvHL+haWVYwWG8gnLkTh6g19ydRkbu9cIs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iFndmET8bQUg3iZ6c6WDCzSS2tx6sYJt+fEkPAaNm18=";
   };
 
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     pkg-config
   ];
 
   buildInputs = [
     cppunit
-    libsigcxx
     openssl
     zlib
   ];
@@ -55,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -11,7 +11,7 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk,
+  gtk3,
   girara,
   gettext,
   gnome,
@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     "-Dtests=disabled"
+    # by default, zathura searches for zathurarc under $out/etc
+    "-Dsysconfdir=/etc"
     # Make sure tests are enabled for doCheck
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
@@ -73,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      gtk
+      gtk3
       girara
       libintl
       sqlite

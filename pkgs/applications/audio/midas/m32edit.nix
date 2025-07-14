@@ -5,9 +5,9 @@ callPackage ./generic.nix (
   // rec {
     brand = "Midas";
     type = "M32";
-    version = "4.1";
+    version = "4.3";
     url = "https://mediadl.musictribe.com/download/software/midas_${type}/${type}-Edit_LINUX_${version}.tar.gz";
-    sha256 = "0aqhdrxqa49liyvbbw5x32kwk0h1spzvmizmdxklrfs64vvr9bvh";
+    hash = "sha256-1+7xGmSqIPn5NGOnk2VvPJxkI2y1em/kjeldXU0M35w=";
     homepage = "https://midasconsoles.com/midas/product?modelCode=P0B3I";
   }
 )

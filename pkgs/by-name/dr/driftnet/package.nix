@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lMn60vtOMPs1Tr+SnAOUZDrNIO7gEXdHpizjXiEkkoM=";
   };
 
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";
     changelog = "https://github.com/deiv/driftnet/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "driftnet";
   };
 }

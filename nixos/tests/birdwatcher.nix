@@ -1,23 +1,12 @@
 # This test does a basic functionality check for birdwatcher
 
 {
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. {
-    inherit system;
-    config = { };
-  },
-}:
-
-let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) optionalString;
-in
-makeTest {
   name = "birdwatcher";
-  nodes = {
-    host1 = {
+  nodes.host1 =
+    { pkgs, ... }:
+    {
       environment.systemPackages = with pkgs; [ jq ];
-      services.bird2 = {
+      services.bird = {
         enable = true;
         config = ''
           log syslog all;
@@ -71,8 +60,8 @@ makeTest {
           filter_fields = []
           [bird]
           listen = "0.0.0.0:29184"
-          config = "/etc/bird/bird2.conf"
-          birdc  = "${pkgs.bird}/bin/birdc"
+          config = "/etc/bird/bird.conf"
+          birdc  = "${pkgs.bird2}/bin/birdc"
           ttl = 5 # time to live (in minutes) for caching of cli output
           [parser]
           filter_fields = []
@@ -84,12 +73,11 @@ makeTest {
         '';
       };
     };
-  };
 
   testScript = ''
     start_all()
 
-    host1.wait_for_unit("bird2.service")
+    host1.wait_for_unit("bird.service")
     host1.wait_for_unit("birdwatcher.service")
     host1.wait_for_open_port(29184)
     host1.succeed("curl http://[::]:29184/status | jq -r .status.message | grep 'Daemon is up and running'")

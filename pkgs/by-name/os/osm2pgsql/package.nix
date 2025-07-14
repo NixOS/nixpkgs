@@ -10,7 +10,7 @@
   cli11,
   zlib,
   boost,
-  postgresql,
+  libpq,
   python3,
   withLuaJIT ? false,
   lua,
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-+EFvYloLm/cDOflqj6ZIgjFoljKhYBVIKxD8L9j2Hj4=";
+    hash = "sha256-5rENMcYCfHUdb4QsyOnnGe/qCbdYLoXI15e7OqJXit4=";
   };
 
   postPatch = ''
@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
       expat
       fmt_11
       libosmium
+      libpq
       nlohmann_json
       opencv
-      postgresql
       potrace
       proj
       protozero
@@ -82,11 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers =
-      lib.teams.geospatial.members
-      ++ (with lib.maintainers; [
-        jglukasik
-        das-g
-      ]);
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

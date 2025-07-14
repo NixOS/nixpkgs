@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "apktool";
-  version = "2.10.0";
+  version = "2.11.1";
 
   src = fetchurl {
     urls = [
       "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar"
       "https://github.com/iBotPeaches/Apktool/releases/download/v${version}/apktool_${version}.jar"
     ];
-    hash = "sha256-wDUKu6tTFCSN/i7gyQfe9O3RT2+u8fXTctPUq9KPBDE=";
+    hash = "sha256-VtWcUk/HZCY7qNNFdU2Nr1WxiHgYsVzTtZT1VdJJ4ts=";
   };
 
   dontUnpack = true;
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${lib.getBin aapt}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for reverse engineering Android apk files";
     mainProgram = "apktool";
     homepage = "https://ibotpeaches.github.io/Apktool/";
     changelog = "https://github.com/iBotPeaches/Apktool/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    platforms = with platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = with lib.platforms; unix;
   };
 }

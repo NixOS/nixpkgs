@@ -12,7 +12,9 @@
   gtk3,
   dconf,
   wrapGAppsHook3,
-  aria2 ? null,
+  aria2,
+  # Boolean guards
+  aria2Support ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,13 +53,11 @@ stdenv.mkDerivation rec {
       gst-plugins-base
       gst-plugins-good
     ])
-    ++ (lib.optional (aria2 != null) aria2);
+    ++ (lib.optional aria2Support aria2);
 
   enableParallelBuilding = true;
 
-  preFixup = lib.optionalString (
-    aria2 != null
-  ) ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
+  preFixup = lib.optionalString aria2Support ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with lib; {
     description = "Download manager using GTK and libcurl";

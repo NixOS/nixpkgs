@@ -12,31 +12,33 @@
   cyrus_sasl,
   pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  libgcrypt,
+  gmp,
   gtk3,
   vala,
   gettext,
   perl,
   python3,
+  gi-docgen,
   gnome,
   gdk-pixbuf,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-vnc";
-  version = "1.3.1";
+  version = "1.5.0";
 
   outputs = [
     "out"
     "bin"
     "man"
     "dev"
+    "devdoc"
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "USdjrE4FWdAVi2aCyl3Ro71jPwgvXkNJ1xWOa1+A8c4=";
+    url = "mirror://gnome/sources/gtk-vnc/${lib.versions.majorMinor finalAttrs.version}/gtk-vnc-${finalAttrs.version}.tar.xz";
+    sha256 = "wL60dHUorZMdpDrMVnxqAZD3/GJEZVce2czs4Cw03SM=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     gettext
     perl # for pod2man
     python3
+    gi-docgen
   ];
 
   buildInputs =
@@ -57,7 +60,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
       zlib
       glib
-      libgcrypt
+      gmp
       cyrus_sasl
       gtk3
     ]
@@ -69,9 +72,14 @@ stdenv.mkDerivation rec {
     "-Dpulseaudio=disabled"
   ];
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gtk-vnc";
       versionPolicy = "none";
     };
   };
@@ -87,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "gvnccapture";
   };
-}
+})

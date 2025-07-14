@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       licenses.cc0
       licenses.publicDomain
     ];
-    maintainers = with maintainers; [ alyaeanyx ];
+    maintainers = with maintainers; [ pentane ];
     platforms = platforms.linux;
     hydraPlatforms = [ ];
   };

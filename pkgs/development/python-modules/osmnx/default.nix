@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5IvohqEYYvFqAKOYreEsEKjzfJaqShYck2xCSQXXfyQ=";
   };
 

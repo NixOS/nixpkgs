@@ -3,6 +3,7 @@
   _7zz,
   alsa-lib,
   systemd,
+  wrapGAppsHook4,
   autoPatchelfHook,
   blas,
   dpkg,
@@ -15,12 +16,13 @@
   musl,
   nss,
   patchelf,
+  openssl,
   stdenv,
   xorg,
 }:
 let
   pname = "positron-bin";
-  version = "2024.11.0-116";
+  version = "2025.07.0-204";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -28,13 +30,18 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
-        hash = "sha256-5Ym42InDgFLGdZk0LYV1H0eC5WzmsYToG1KLdiGgTto=";
+        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
+        hash = "sha256-f1EQw6fKH4pgVG7+YcLPv6FawJ2TN507hYLD0pn+PlM=";
+      }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-SxjQPZ2wUmSIYOxBB6AS6Ue7ajXzMkY32nHdkZkNhBA=";
       }
     else
       fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.deb";
-        hash = "sha256-pE25XVYFW8WwyQ7zmox2mmXy6ZCSaXk2gSnPimg7xtU=";
+        url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-f27LC4+SXnkyePw/fw8r9JYsOQKVoIiFkAet/QtwbNg=";
       };
 
   buildInputs =
@@ -48,6 +55,7 @@ stdenv.mkDerivation {
       musl
       nss
       stdenv.cc.cc
+      openssl
       xorg.libX11
       xorg.libXcomposite
       xorg.libXdamage
@@ -62,6 +70,7 @@ stdenv.mkDerivation {
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
       dpkg
+      wrapGAppsHook4
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       _7zz
@@ -81,7 +90,8 @@ stdenv.mkDerivation {
 
         # Positron will use the system version of BLAS if we don't provide the nix version.
         wrapProgram "$out/Applications/Positron.app/Contents/Resources/app/bin/code" \
-          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib"
+          --prefix DYLD_INSERT_LIBRARIES : "${lib.makeLibraryPath [ blas ]}/libblas.dylib" \
+          --add-flags "--disable-updates"
 
         ln -s "$out/Applications/Positron.app/Contents/Resources/app/bin/code" "$out/bin/positron"
         runHook postInstall
@@ -97,8 +107,8 @@ stdenv.mkDerivation {
         install -m 444 -D usr/share/applications/positron.desktop "$out/share/applications/positron.desktop"
         substituteInPlace "$out/share/applications/positron.desktop" \
           --replace-fail \
-          "Icon=com.visualstudio.code.oss" \
-          "Icon=$out/share/pixmaps/com.visualstudio.code.oss.png" \
+          "Icon=co.posit.positron" \
+          "Icon=$out/share/pixmaps/co.posit.positron.png" \
           --replace-fail \
           "Exec=/usr/share/positron/positron %F" \
           "Exec=$out/share/positron/.positron-wrapped %F" \
@@ -108,7 +118,9 @@ stdenv.mkDerivation {
 
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
-          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}"
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
+          --add-flags "--disable-updates"
+
 
         mkdir -p "$out/bin"
         ln -s "$out/share/positron/positron" "$out/bin/positron"
@@ -126,6 +138,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }

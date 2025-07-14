@@ -5,7 +5,6 @@
   defusedxml,
   dnspython,
   fetchFromGitHub,
-  fetchpatch,
   iana-etc,
   libredirect,
   pytestCheckHook,
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secynic";
     repo = "ipwhois";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PY3SUPELcCvS/o5kfko4OD1BlTc9DnyqfkSFuzcAOSY=";
   };
 
@@ -38,14 +37,16 @@ buildPythonPackage rec {
     dnspython
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    libredirect.hook
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ipwhois" ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
   '';
 
   disabledTestPaths = [

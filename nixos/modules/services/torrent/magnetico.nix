@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.magnetico;
 
@@ -18,11 +15,11 @@ let
       credentialsFile
     else
       pkgs.writeText "magnetico-credentials" (
-        concatStrings (mapAttrsToList (user: hash: "${user}:${hash}\n") cfg.web.credentials)
+        lib.concatStrings (lib.mapAttrsToList (user: hash: "${user}:${hash}\n") cfg.web.credentials)
       );
 
   # default options in magneticod/main.go
-  dbURI = concatStrings [
+  dbURI = lib.concatStrings [
     "sqlite3://${dataDir}/database.sqlite3"
     "?_journal_mode=WAL"
     "&_busy_timeout=3000"
@@ -31,7 +28,7 @@ let
 
   crawlerArgs =
     with cfg.crawler;
-    escapeShellArgs (
+    lib.escapeShellArgs (
       [
         "--database=${dbURI}"
         "--indexer-addr=${address}:${toString port}"
@@ -43,7 +40,7 @@ let
 
   webArgs =
     with cfg.web;
-    escapeShellArgs (
+    lib.escapeShellArgs (
       [
         "--database=${dbURI}"
         (
@@ -63,10 +60,10 @@ in
   ###### interface
 
   options.services.magnetico = {
-    enable = mkEnableOption "Magnetico, Bittorrent DHT crawler";
+    enable = lib.mkEnableOption "Magnetico, Bittorrent DHT crawler";
 
-    crawler.address = mkOption {
-      type = types.str;
+    crawler.address = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       example = "1.2.3.4";
       description = ''
@@ -74,8 +71,8 @@ in
       '';
     };
 
-    crawler.port = mkOption {
-      type = types.port;
+    crawler.port = lib.mkOption {
+      type = lib.types.port;
       default = 0;
       description = ''
         Port to be used for indexing DHT nodes.
@@ -84,8 +81,8 @@ in
       '';
     };
 
-    crawler.maxNeighbors = mkOption {
-      type = types.ints.positive;
+    crawler.maxNeighbors = lib.mkOption {
+      type = lib.types.ints.positive;
       default = 1000;
       description = ''
         Maximum number of simultaneous neighbors of an indexer.
@@ -95,24 +92,24 @@ in
       '';
     };
 
-    crawler.maxLeeches = mkOption {
-      type = types.ints.positive;
+    crawler.maxLeeches = lib.mkOption {
+      type = lib.types.ints.positive;
       default = 200;
       description = ''
         Maximum number of simultaneous leeches.
       '';
     };
 
-    crawler.extraOptions = mkOption {
-      type = types.listOf types.str;
+    crawler.extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Extra command line arguments to pass to magneticod.
       '';
     };
 
-    web.address = mkOption {
-      type = types.str;
+    web.address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       example = "1.2.3.4";
       description = ''
@@ -120,16 +117,16 @@ in
       '';
     };
 
-    web.port = mkOption {
-      type = types.port;
+    web.port = lib.mkOption {
+      type = lib.types.port;
       default = 8080;
       description = ''
         Port the web interface will listen to.
       '';
     };
 
-    web.credentials = mkOption {
-      type = types.attrsOf types.str;
+    web.credentials = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       example = lib.literalExpression ''
         {
@@ -156,8 +153,8 @@ in
       '';
     };
 
-    web.credentialsFile = mkOption {
-      type = types.nullOr types.path;
+    web.credentialsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         The path to the file holding the credentials to access the web
@@ -174,8 +171,8 @@ in
       '';
     };
 
-    web.extraOptions = mkOption {
-      type = types.listOf types.str;
+    web.extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
         Extra command line arguments to pass to magneticow.
@@ -186,7 +183,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.magnetico = {
       description = "Magnetico daemons user";

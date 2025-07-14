@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # The file from which to extract *.ico files or a particular *.ico file.
-# (e.g.: './KeePass.exe', './myLibrary.dll', './my/path/to/app.ico'). 
+# (e.g.: './KeePass.exe', './myLibrary.dll', './my/path/to/app.ico').
 # As you notived, the utility can extract icons from a windows executable or
 # dll.
 rscFile=$1
@@ -28,7 +28,7 @@ nameRegex=$4
 # fancy, it will usually be '\1'.
 nameReplaceExp=$5
 
-# The 
+# The
 # out=./myOut
 out=$6
 
@@ -52,7 +52,7 @@ if [ "ico" = "$rscFileExt" ]; then
 else
   wrestool -x --output=$tmp/ico -t14 $rscFile
 fi
-    
+
 icotool --icon -x --palette-size=0 -o $tmp/png $tmp/ico/*.ico
 
 mkdir -p $out

@@ -1,6 +1,8 @@
---- a/CMakeLists.txt	2022-01-08 00:37:08.165330523 +0100
-+++ b/CMakeLists.txt	2022-01-08 00:52:41.163585173 +0100
-@@ -54,6 +54,7 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b1bd0189b..3fb7abffb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -66,6 +66,7 @@ enable_testing()
  
  option(USE_SHARED_CMARK   "Use your installed copy of cmark" off)
  option(USE_SHARED_CURL    "Use your installed copy of curl" off)
@@ -8,7 +10,7 @@
  option(USE_SHARED_GIFLIB  "Use your installed copy of giflib" off)
  option(USE_SHARED_JPEGLIB "Use your installed copy of jpeglib" off)
  option(USE_SHARED_ZLIB    "Use your installed copy of zlib" off)
-@@ -165,6 +165,7 @@
+@@ -185,6 +186,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_PROFILE "${CMAKE_BINARY_DIR}/bin")
  set(SOURCE_DATA_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/data)
  set(CMARK_DIR           ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cmark)
  set(CURL_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/curl)
@@ -16,10 +18,11 @@
  set(GIFLIB_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/third_party/giflib)
  set(LIBJPEG_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/jpeg)
  set(LIBPNG_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/third_party/libpng)
-@@ -204,6 +205,15 @@
+@@ -225,6 +227,16 @@ if(NOT USE_SHARED_CURL)
    set(CURL_STATICLIB ON BOOL)
  endif()
  
++# fmt
 +if(USE_SHARED_FMT)
 +  find_package(FMT REQUIRED)
 +  set(FMT_LIBRARIES fmt::fmt)
@@ -32,10 +35,12 @@
  # zlib
  if(USE_SHARED_ZLIB)
    find_package(ZLIB REQUIRED)
---- a/src/app/CMakeLists.txt	2022-01-08 00:37:07.378671200 +0100
-+++ b/src/app/CMakeLists.txt	2022-01-08 00:53:13.669969512 +0100
-@@ -741,7 +741,7 @@ target_link_libraries(app-lib
-   ${HARFBUZZ_LIBRARIES}
+diff --git a/src/app/CMakeLists.txt b/src/app/CMakeLists.txt
+index 9c67c0268..b19a3e412 100644
+--- a/src/app/CMakeLists.txt
++++ b/src/app/CMakeLists.txt
+@@ -754,7 +754,7 @@ target_link_libraries(app-lib
+   ${ZLIB_LIBRARIES}
    json11
    archive_static
 -  fmt
@@ -43,10 +48,11 @@
    tinyexpr
    qoi)
  
- if(ENABLE_PSD)
---- a/src/dio/CMakeLists.txt	2022-01-08 00:41:50.712726972 +0100
-+++ b/src/dio/CMakeLists.txt	2022-01-08 00:53:39.936408022 +0100
-@@ -10,7 +10,7 @@
+diff --git a/src/dio/CMakeLists.txt b/src/dio/CMakeLists.txt
+index 55cb24de5..b253dca0b 100644
+--- a/src/dio/CMakeLists.txt
++++ b/src/dio/CMakeLists.txt
+@@ -16,7 +16,7 @@ endif()
  
  target_link_libraries(dio-lib
    ${ZLIB_LIBRARIES}
@@ -55,9 +61,11 @@
    flic-lib
    laf-base
    fixmath-lib
---- a/third_party/CMakeLists.txt	2022-01-08 00:37:08.165330523 +0100
-+++ b/third_party/CMakeLists.txt	2022-01-08 00:54:30.455969136 +0100
-@@ -106,7 +106,10 @@
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 9d09a98c8..1973b134b 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -117,7 +117,10 @@ if(NOT USE_SHARED_HARFBUZZ AND NOT LAF_BACKEND STREQUAL "skia")
  endif()
  
  add_subdirectory(simpleini)

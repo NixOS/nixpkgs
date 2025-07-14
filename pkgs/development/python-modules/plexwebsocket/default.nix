@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "python-plexwebsocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gT9RWpaR33ROs6ttjH2joNPi99Ng94Tp/R9eZY1eGZk=";
   };
 

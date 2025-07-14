@@ -21,7 +21,7 @@ from .html import HTMLRenderer
 from .manpage import ManpageRenderer, man_escape
 from .manual_structure import make_xml_id, XrefTarget
 from .md import Converter, md_escape, md_make_code
-from .types import OptionLoc, Option, RenderedOption
+from .types import OptionLoc, Option, RenderedOption, AnchorStyle
 
 def option_is(option: Option, key: str, typ: str) -> Optional[dict[str, str]]:
     if key not in option:
@@ -317,10 +317,15 @@ class OptionsCommonMarkRenderer(OptionDocsRestrictions, CommonMarkRenderer):
 
 class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     __option_block_separator__ = ""
+    _anchor_style: AnchorStyle
+    _anchor_prefix: str
 
-    def __init__(self, manpage_urls: Mapping[str, str], revision: str):
+
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, anchor_style: AnchorStyle = AnchorStyle.NONE, anchor_prefix: str = ""):
         super().__init__(revision)
         self._renderer = OptionsCommonMarkRenderer(manpage_urls)
+        self._anchor_style = anchor_style
+        self._anchor_prefix = anchor_prefix
 
     def _parallel_render_prepare(self) -> Any:
         return (self._renderer._manpage_urls, self._revision)
@@ -342,11 +347,21 @@ class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     def _decl_def_footer(self) -> list[str]:
         return []
 
+    def _make_anchor_suffix(self, loc: list[str]) -> str:
+        if self._anchor_style == AnchorStyle.NONE:
+            return ""
+        elif self._anchor_style == AnchorStyle.LEGACY:
+            sanitized = ".".join(map(make_xml_id, loc))
+            return f" {{#{self._anchor_prefix}{sanitized}}}"
+        else:
+            raise RuntimeError("unhandled anchor style", self._anchor_style)
+
     def finalize(self) -> str:
         result = []
 
         for (name, opt) in self._sorted_options():
-            result.append(f"## {md_escape(name)}\n")
+            anchor_suffix = self._make_anchor_suffix(opt.loc)
+            result.append(f"## {md_escape(name)}{anchor_suffix}\n")
             result += opt.lines
             result.append("\n\n")
 
@@ -490,9 +505,30 @@ def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
     p.add_argument("infile")
     p.add_argument("outfile")
 
+def parse_anchor_style(value: str|AnchorStyle) -> AnchorStyle:
+    if isinstance(value, AnchorStyle):
+        # Used by `argparse.add_argument`'s `default`
+        return value
+    try:
+        return AnchorStyle(value.lower())
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"Invalid value {value}\nExpected one of {', '.join(style.value for style in AnchorStyle)}")
+
 def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
+    p.add_argument(
+        '--anchor-style',
+        required=False,
+        default=AnchorStyle.NONE.value,
+        choices = [style.value for style in AnchorStyle],
+        help = "(default: %(default)s) Anchor style to use for links to options. \nOnly none is standard CommonMark."
+    )
+    p.add_argument('--anchor-prefix',
+        required=False,
+        default="",
+        help="(default: no prefix) String to prepend to anchor ids. Not used when anchor style is none."
+    )
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -527,7 +563,10 @@ def _run_cli_manpage(args: argparse.Namespace) -> None:
 
 def _run_cli_commonmark(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
-        md = CommonMarkConverter(json.load(manpage_urls), revision = args.revision)
+        md = CommonMarkConverter(json.load(manpage_urls),
+            revision = args.revision,
+            anchor_style = parse_anchor_style(args.anchor_style),
+            anchor_prefix = args.anchor_prefix)
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))

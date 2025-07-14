@@ -24,7 +24,7 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
-    local update
+    local update=false
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -68,6 +68,31 @@ patchShebangs() {
         return 0
     fi
 
+    # like sponge from moreutils but in pure bash
+    _sponge() {
+        local content
+        local target
+        local restoreReadOnly
+        content=""
+        target="$1"
+
+        # Make file writable if it is read-only
+        if [[ ! -w "$target" ]]; then
+            chmod +w "$target"
+            restoreReadOnly=true
+        fi
+
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            content+="$line"$'\n'
+        done
+        printf '%s' "$content" > "$target"
+
+        # Restore read-only if it was read-only before
+        if [[ -n "${restoreReadOnly:-}" ]]; then
+            chmod -w "$target"
+        fi
+    }
+
     local f
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
@@ -89,7 +114,7 @@ patchShebangs() {
         if [[ "$oldPath" == *"/bin/env" ]]; then
             if [[ $arg0 == "-S" ]]; then
                 arg0=${args%% *}
-                args=${args#* }
+                [[ "$args" == *" "* ]] && args=${args#* } || args=
                 newPath="$(PATH="${!pathName}" type -P "env" || true)"
                 args="-S $(PATH="${!pathName}" type -P "$arg0" || true) $args"
 
@@ -126,11 +151,14 @@ patchShebangs() {
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
                 timestamp=$(stat --printf "%y" "$f")
-                sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" | _sponge "$f"
+
                 touch --date "$timestamp" "$f"
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
+
+    unset -f _sponge
 }
 
 patchShebangsAuto () {

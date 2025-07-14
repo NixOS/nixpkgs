@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.5.2";
+  version = "1.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
+    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
   };
 
   postPatch = ''
@@ -79,6 +79,12 @@ buildPythonPackage rec {
     [
       # Skip test_feature_importance_regression - does web fetch
       "test_feature_importance_regression"
+
+      # Fail due to new deprecation warnings in scipy
+      # FIXME: reenable when fixed upstream
+      "test_logistic_regression_path_convergence_fail"
+      "test_linalg_warning_with_newton_solver"
+      "test_newton_cholesky_fallback_to_lbfgs"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # doesn't seem to produce correct results?

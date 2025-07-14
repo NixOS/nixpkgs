@@ -1,9 +1,10 @@
-{ buildNpmPackage
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, lib
-, nix-update-script
+{
+  buildNpmPackage,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  lib,
+  nix-update-script,
 }:
 let
   pname = "scrutiny";
@@ -12,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 

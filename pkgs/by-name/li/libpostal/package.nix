@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, autoreconfHook, withData ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  autoreconfHook,
+  withData ? false,
+}:
 
 let
   releases = "https://github.com/openvenues/libpostal/releases";
@@ -17,14 +24,15 @@ let
     hash = "sha256-/Gn931Nx4UDBaiFUgGqC/NJUIKQ5aZT/+OYSlcfXva8=";
     stripRoot = false;
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libpostal";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
   };
 
@@ -33,6 +41,10 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-data-download"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "--disable-sse2" ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  };
 
   postBuild = lib.optionalString withData ''
     mkdir -p $out/share/libpostal

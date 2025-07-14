@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sk5LgFNo5Dc+oHCLu464Q1g0bk1QGsA7xMtMiits/8c=";
   };
 
@@ -50,6 +50,24 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
     pytz
   ];
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+
+  preInstallSphinx = ''
+    # remove invalid outputs for manpages
+    rm .sphinx/man/man/_static/jquery.js
+    rm .sphinx/man/man/_static/_sphinx_javascript_frameworks_compat.js
+    rmdir .sphinx/man/man/_static/
+  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo

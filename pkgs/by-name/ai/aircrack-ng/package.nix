@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     description = "WiFi security auditing tools suite";
     homepage = "https://www.aircrack-ng.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ caralice ];
+    maintainers = with lib.maintainers; [ magistau ];
     platforms =
       with lib.platforms;
       builtins.concatLists [

@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free and Open-source font for programming";
     homepage = "https://github.com/0xType/0xProto";
-    license = licenses.ofl;
-    maintainers = [ maintainers.edswordsmith ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ edswordsmith ];
+    platforms = lib.platforms.all;
   };
 }

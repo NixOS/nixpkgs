@@ -95,14 +95,14 @@ in
   # we strictly adhere to the EOL timeline, despite 3.3.4 being released one day before (2023-12-08).
   # A better policy is to keep these versions around, and clean up EOL versions just before
   # a new NixOS release.
-  spark_3_5 = spark rec {
+  spark_3_5 = spark {
     pname = "spark";
-    version = "3.5.1";
-    hash = "sha256-ez6Hm8Ss3nl4mxOHyh67ugYH81/thNRMCja6MQ+9Tpg=";
+    version = "3.5.5";
+    hash = "sha256-vzcWgIfHPhN3nyrxdk3f0p4fW3MpQ+FuEPnWPw0xNPg=";
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.3";
-    hash = "sha256-ifeytk08oaEyiEawwWbUWWuoynGTJNvnrkOW/CjeaSk=";
+    version = "3.4.4";
+    hash = "sha256-GItHmthLhG7y0XSF3QINCyE7wYFb0+lPZmYLUuMa4Ww=";
   };
 }

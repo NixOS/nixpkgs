@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-parler";
     repo = "django-parler";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tRGifFPCXF3aa3PQWKw3tl1H1TY+lgcChUP1VdwG1cE=";
   };
 

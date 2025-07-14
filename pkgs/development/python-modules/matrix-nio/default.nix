@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZNYK5D4aDKE+N62A/hPmTphir+UsWvj3BW2EPG1z+R4=";
   };
 
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTestPaths = lib.optionals (!withOlm) [
     "tests/encryption_test.py"

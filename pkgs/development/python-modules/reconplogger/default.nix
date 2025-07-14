@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "reconplogger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F/6vT3jLxpteUFtYNtGyiO/JxeRtwJKpdGXTFJ6IDCE=";
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reconplogger" ];
 
-  pytestFlagsArray = [ "reconplogger_tests.py" ];
+  enabledTestPaths = [ "reconplogger_tests.py" ];
 
   meta = with lib; {
     description = "Module to ease the standardization of logging within omni:us";

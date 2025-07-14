@@ -7,10 +7,6 @@
   ncurses,
   expect,
 
-  # darwin only below
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,23 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "${src.name}/src";
-  buildInputs =
-    [
-      libedit
-      zlib
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      [
-        Accelerate
-      ]
-      ++
-        lib.optionals stdenv.hostPlatform.isx86_64 # && isDarwin
-          [
-            CoreGraphics
-            CoreVideo
-          ]
-    );
+  buildInputs = [
+    libedit
+    zlib
+    ncurses
+  ];
 
   nativeCheckInputs = [ expect ];
   doCheck = true;

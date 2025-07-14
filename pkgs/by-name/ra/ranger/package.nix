@@ -12,17 +12,19 @@
   neoVimSupport ? true,
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
+  unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.3-unstable-2023-08-23";
+  version = "1.9.3-unstable-2025-06-04";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "38bb8901004b75a407ffee4b9e176bc0a436cb15";
-    hash = "sha256-NpsrABk95xHNvhlRjKFh326IW83mYj1cmK3aE9JQSRo=";
+    rev = "7e38143eaa91c82bed8f309aa167b1e6f2607576";
+    hash = "sha256-O0DjecncpN+Bv8Ng+keuvU9iVtWAV4a50p959pMvkww=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -67,14 +69,16 @@ python3Packages.buildPythonApplication rec {
         --replace "set preview_images false" "set preview_images true"
     '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       toonn
-      magnetophon
+      lucasew
     ];
     mainProgram = "ranger";
   };

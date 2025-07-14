@@ -315,14 +315,26 @@ checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-overrid
 checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.namedPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.namedPackage.defaultText._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackage.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.namedPackageSingletonDefault.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^".*Hello.*"$' options.namedPackageSingletonDefault.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.namedPackageSingletonDefault.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithExample.example._type ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"literalExpression"$' options.packageWithPathExample.example._type ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.hello"$' options.packageWithPathExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
 checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
-checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"null or package"$' options.nullablePackage.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.nullablePackageWithDefault.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
 # submoduleWith
 
@@ -351,6 +363,9 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
+
+## _prefix module argument is available at import time and contains the prefix
+checkConfigOutput '^true$' config.foo.ok ./prefix-module-argument.nix
 
 ## deferredModule
 # default module is merged into nodes.foo
@@ -397,6 +412,56 @@ checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-at
 # AttrsWith placeholder tests
 checkConfigOutput '^"mergedName.<id>.nested"$' config.result ./name-merge-attrsWith-1.nix
 checkConfigError 'The option .mergedName. in .*\.nix. is already declared in .*\.nix' config.mergedName ./name-merge-attrsWith-2.nix
+
+# Test type.functor.wrapped deprecation warning
+# should emit the warning on:
+# - merged types
+# - non-merged types
+# - nestedTypes elemType
+# attrsWith
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.attrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedAttrsWith.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+# listOf
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.listOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedListOf.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+# unique / uniq
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.unique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedUnique.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+# nullOr
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.nullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedNullOr.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+# functionTo
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.functionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedFunctionTo.type.nestedTypes.elemType.functor.wrapped ./deprecated-wrapped.nix
+
+# coercedTo
+# Note: test 'nestedTypes.finalType' and 'nestedTypes.coercedType'
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.finalType.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.coercedTo.type.nestedTypes.coercedType.functor.wrapped ./deprecated-wrapped.nix
+# either
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.functor.wrapped ./deprecated-wrapped.nix
+
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.either.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.left.functor.wrapped ./deprecated-wrapped.nix
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `.*functor.wrapped` attribute .*is accessed, use `.*nestedTypes.elemType` instead.' options.mergedEither.type.nestedTypes.right.functor.wrapped ./deprecated-wrapped.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
@@ -538,12 +603,12 @@ checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-i
 # Class checks, evalModules
 checkConfigOutput '^{}$' config.ok.config ./class-check.nix
 checkConfigOutput '"nixos"' config.ok.class ./class-check.nix
-checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
-checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
+checkConfigError 'The module `.*/module-class-is-darwin.nix`.*?expects class "nixos".' config.fail.config ./class-check.nix
+checkConfigError 'The module `foo.nix#darwinModules.default`.*?expects class "nixos".' config.fail-anon.config ./class-check.nix
 
 # Class checks, submoduleWith
 checkConfigOutput '^{}$' config.sub.nixosOk ./class-check.nix
-checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.sub.nixosFail.config ./class-check.nix
+checkConfigError 'The module `.*/module-class-is-darwin.nix`.*?expects class "nixos".' config.sub.nixosFail.config ./class-check.nix
 
 # submoduleWith type merge with different class
 checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
@@ -553,6 +618,7 @@ checkConfigError 'Expected a module, but found a value of type .*"flake".*, whil
 checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type "configuration", while trying to load a module into .*/import-error-submodule.nix, while trying to load a module into .*foo.*\.' config.foo ./import-error-submodule.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
@@ -586,6 +652,62 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# types.pathWith { inStore = true; }
+checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./pathWith.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./pathWith.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./pathWith.nix
+
+# types.pathWith { inStore = false; }
+checkConfigOutput '"/foo/bar"' config.pathNotInStore.ok1 ./pathWith.nix
+checkConfigOutput '".*/store"' config.pathNotInStore.ok2 ./pathWith.nix
+checkConfigOutput '".*/store/"' config.pathNotInStore.ok3 ./pathWith.nix
+checkConfigOutput '""' config.pathNotInStore.ok4 ./pathWith.nix
+checkConfigOutput '".*/store/.links"' config.pathNotInStore.ok5 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathNotInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathNotInStore.bad2 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: ".*/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathNotInStore.bad3 ./pathWith.nix
+checkConfigError 'A definition for option .* is not of type .path not in the Nix store.. Definition values:\n\s*- In .*: .*/pathWith.nix' config.pathNotInStore.bad4 ./pathWith.nix
+
+# types.pathWith { }
+checkConfigOutput '"/this/is/absolute"' config.anyPath.ok1 ./pathWith.nix
+checkConfigOutput '"./this/is/relative"' config.anyPath.ok2 ./pathWith.nix
+checkConfigError 'A definition for option .anyPath.bad1. is not of type .path.' config.anyPath.bad1 ./pathWith.nix
+
+# types.pathWith { absolute = true; }
+checkConfigOutput '"/this/is/absolute"' config.absolutePathNotInStore.ok1 ./pathWith.nix
+checkConfigError 'A definition for option .absolutePathNotInStore.bad1. is not of type .absolute path not in the Nix store.' config.absolutePathNotInStore.bad1 ./pathWith.nix
+checkConfigError 'A definition for option .absolutePathNotInStore.bad2. is not of type .absolute path not in the Nix store.' config.absolutePathNotInStore.bad2 ./pathWith.nix
+
+# types.pathWith failed type merge
+checkConfigError 'The option .conflictingPathOptionType. in .*/pathWith.nix. is already declared in .*/pathWith.nix' config.conflictingPathOptionType ./pathWith.nix
+
+# types.pathWith { inStore = true; absolute = false; }
+checkConfigError 'In pathWith, inStore means the path must be absolute' config.impossiblePathOptionType ./pathWith.nix
+
+# mkDefinition
+# check that mkDefinition 'file' is printed in the error message
+checkConfigError 'Cannot merge definitions.*\n\s*- In .file.*\n\s*- In .other.*' config.conflict ./mkDefinition.nix
+checkConfigError 'A definition for option .viaOptionDefault. is not of type .boolean.*' config.viaOptionDefault ./mkDefinition.nix
+checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
+checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
+
+# specialArgs._class
+checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.conditionalImportAsNixos.config.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.conditionalImportAsNixos.config.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.conditionalImportAsDarwin.config.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.conditionalImportAsDarwin.config.bar ./specialArgs-class.nix
+checkConfigOutput '"nixos"' config.sub.nixos.foo ./specialArgs-class.nix
+checkConfigOutput '"bar"' config.sub.conditionalImportAsNixos.foo ./specialArgs-class.nix
+checkConfigError 'attribute .*bar.* not found' config.sub.conditionalImportAsNixos.bar ./specialArgs-class.nix
+checkConfigError 'attribute .*foo.* not found' config.sub.conditionalImportAsDarwin.foo ./specialArgs-class.nix
+checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs-class.nix
 
 cat <<EOF
 ====== module tests ======

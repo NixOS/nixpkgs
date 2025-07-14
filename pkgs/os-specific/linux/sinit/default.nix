@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.suckless.org/sinit/";
     sha256 = "sha256-VtXkgixgElKKOT26uKN9feXDVjjtSgTWvcgk5o5MLmw=";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
   };
   buildInputs = [
     (lib.getOutput "static" stdenv.cc.libc)

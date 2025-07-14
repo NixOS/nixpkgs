@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nray-scanner";
     repo = "nray";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N78Bm/Le+pbA8hvDaUbjQpcdRlM0RKXnXyjOB8Nz3AE=";
   };
 
@@ -22,17 +22,13 @@ buildGoModule rec {
     "-w"
   ];
 
-  env = {
-    CGO_CFLAGS = "-Wno-undef-prefix";
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Distributed port scanner";
     homepage = "https://github.com/nray-scanner/nray";
     changelog = "https://github.com/nray-scanner/nray/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nray";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

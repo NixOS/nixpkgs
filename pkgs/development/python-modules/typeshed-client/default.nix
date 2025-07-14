@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dEfKZ930Jxa84HUqKpsL2JWQLeeWx6gIMtFHTbiw3Es=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typeshed_client" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
   meta = with lib; {
     description = "Retrieve information from typeshed and other typing stubs";

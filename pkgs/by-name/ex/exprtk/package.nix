@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ArashPartow";
-    repo = pname;
+    repo = "exprtk";
     rev = version;
     hash = "sha256-A4UzNYZZGgTJOw9G4Jg1wJZhxguFRohNEcwmwUOAX18=";
   };

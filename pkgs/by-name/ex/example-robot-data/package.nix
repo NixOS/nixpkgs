@@ -3,6 +3,7 @@
   doxygen,
   fetchFromGitHub,
   lib,
+  jrl-cmakemodules,
   pkg-config,
   pythonSupport ? false,
   python3Packages,
@@ -11,14 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "example-robot-data";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-IRmqeaN0EaIjYaibTEAR8KhixoNQsl6YydbGQRinP6w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i5YU5lcbB3gm8/YrRRiE2NDcLEq7+eF7GtIrJ1DF1cU=";
   };
 
   outputs = [
@@ -39,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.pythonImportsCheckHook
     ];
 
-  propagatedBuildInputs = lib.optionals pythonSupport [ python3Packages.pinocchio ];
+  propagatedBuildInputs = [
+    jrl-cmakemodules
+  ] ++ lib.optionals pythonSupport [ python3Packages.pinocchio ];
 
   cmakeFlags = [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport) ];
 
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   # The package expect to find an `example-robot-data/robots` folder somewhere
   # either in install prefix or in the sources
   # where it can find the meshes for unit tests
-  preCheck = "ln -s source ../../${finalAttrs.pname}";
+  preCheck = "ln -s source ../../example-robot-data";
   pythonImportsCheck = [ "example_robot_data" ];
 
   meta = with lib; {

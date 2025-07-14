@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "findimports";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "findimports";
-    rev = "refs/tags/${version}";
-    hash = "sha256-W4GKnIYOh3bk18yviL7GfMyXoWNLFWWDhKur9id1a78=";
+    tag = version;
+    hash = "sha256-2hhonlv7FF4s+wDOsBGnLsMxJEXlMlNbLEkI8HptyOI=";
   };
 
   build-system = [ setuptools ];

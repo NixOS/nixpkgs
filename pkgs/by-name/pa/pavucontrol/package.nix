@@ -15,7 +15,6 @@
   wrapGAppsHook4,
   meson,
   ninja,
-  libpressureaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optionals withLibcanberra libcanberra-gtk3)
     json-glib
     adwaita-icon-theme
-    libpressureaudio
   ];
 
   nativeBuildInputs = [

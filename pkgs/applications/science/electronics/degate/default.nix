@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  boost,
+  boost183,
   qtbase,
   qtimageformats,
   qttools,
@@ -12,7 +12,7 @@
 }:
 
 let
-  boost_static = boost.override { enableStatic = true; };
+  boost_static = boost183.override { enableStatic = true; };
 
 in
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DegateCommunity";
     repo = "Degate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-INoA3Z6ya03ZMn6E+nOCkXZLoxoo2WgPDw9v5miI09A=";
   };
 

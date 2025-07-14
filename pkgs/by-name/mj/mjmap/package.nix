@@ -2,33 +2,47 @@
   lib,
   buildGoModule,
   fetchFromSourcehut,
-  unstableGitUpdater,
+  scdoc,
+  installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
+
+let
+  version = "1.0.1";
+in
 
 buildGoModule {
   pname = "mjmap";
-  version = "0.1.0-unstable-2023-11-13";
+  inherit version;
 
   src = fetchFromSourcehut {
     owner = "~rockorager";
     repo = "mjmap";
-    rev = "d54badae8152b4db6eec8b03a7bd7c5ff1724aa7";
-    hash = "sha256-yFYYnklNNOHTfoT54kOIVoM4t282/0Ir4l72GmqlGSY=";
+    rev = "v${version}";
+    hash = "sha256-VV+bZ01l+uEe3wqdYyVwpzsZJNzoTCD38F6a58dozbg=";
   };
 
-  vendorHash = "sha256-fJuPrzjRH0FpYj2D9CsFdsdzYT0C3/D2PhmJIZTsgfQ=";
+  vendorHash = "sha256-sZsS8q/hkA2T/8QmtKzNof0mzCuWYin227+/7k3XTM0=";
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  nativeBuildInputs = [
+    scdoc
+    installShellFiles
+  ];
 
-    $out/bin/mjmap --version >/dev/null
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-    runHook postInstallCheck
+  versionCheckProgram = "mjmap";
+
+  postBuild = ''
+    make mjmap.1
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v.";
-  };
+  postInstall = ''
+    installManPage mjmap.1
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sendmail‐compatible JMAP client";

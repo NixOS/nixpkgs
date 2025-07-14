@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Patched module for IT87xx superio chip sensors support";
-    homepage = "https://github.com/hannesha/it87";
+    homepage = "https://github.com/frankcrawford/it87";
     license = licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = teams.lumiguide.members;
+    teams = [ teams.lumiguide ];
   };
 }

@@ -12,9 +12,6 @@
   SDL2,
   SDL2_mixer,
   timidity,
-  # Darwin dependencies
-  libiconv,
-  apple-sdk_11,
   # Update
   nix-update-script,
 }:
@@ -60,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDL2
       SDL2_mixer
       timidity
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   cmakeFlags = [ "-Wno-dev" ];
 

@@ -8,6 +8,7 @@
   sysfsutils,
   kmod,
   udev,
+  udevCheckHook,
   firmware ? config.pcmciaUtils.firmware or [ ], # Special pcmcia cards.
   configOpts ? config.pcmciaUtils.config or null, # Special hardware (map memory & port & irq)
 }: # used to generate postInstall script.
@@ -30,11 +31,18 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   patchPhase =
     ''
       sed -i "
         s,/sbin/modprobe,${kmod}&,;
         s,/lib/udev/,$out/sbin/,;
+        s,__UDEVHELPERDIR__/,$out/lib/udev/,;
       " udev/* # fix-color */
       sed -i "
         s,/lib/firmware,$out&,;

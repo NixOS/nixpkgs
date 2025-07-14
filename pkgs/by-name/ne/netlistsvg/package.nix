@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "nturley";
     repo = "netlistsvg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H37zhjfv7c/TV+pAk70eDiE6ZQ9JjZq1TFvac6OOKBk=";
   };
 
@@ -22,7 +22,7 @@ buildNpmPackage rec {
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  npmDepsHash = "sha256-nKxskNW8YFDloA9Nxs/Rfjew8nX+l9xKB8/8313KoYo=";
+  npmDepsHash = "sha256-Vs0RLj6ySkM5oQsBGv4MmgiIBMhiDhINpwuCBJH9L8s=";
 
   dontNpmBuild = true;
 

@@ -7,17 +7,21 @@
 
 buildNpmPackage rec {
   pname = "nezha-theme-admin";
-  version = "1.2.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
     tag = "v${version}";
-    hash = "sha256-BnpcCkI6lIno5W3ZemQQf1UVa6bpwmIJ5KXg6BQ5Ur0=";
+    hash = "sha256-9/lrbVfC+CRQCSJNx7dwKWPgemM6hbd6ZR5xG3tj8wA=";
   };
 
   # TODO: Switch to the bun build function once available in nixpkgs
-  npmDepsHash = "sha256-iXSks0LOTdbrSJdnSvzXW53wZanWjyDnL9ODcaBqpHI=";
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
+
+  npmDepsHash = "sha256-2iX3/Pw6i2zXH+cpMC6ttn5D/C8G/P9WgRApO7Br5p4=";
 
   npmPackFlags = [ "--ignore-scripts" ];
 
@@ -32,7 +36,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
   meta = {
     description = "Nezha monitoring admin frontend";

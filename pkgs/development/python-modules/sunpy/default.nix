@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "5.1.5";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V8w+ErYVKoAPv6X3eh4rUZ5TKti9Z46A1JAdIjabs8k=";
+    hash = "sha256-xgmmsbC7KGvUJ4mUD1T8t9aQDfz+IX31T4Wf9gguE9s=";
   };
 
   nativeBuildInputs = [
@@ -145,9 +145,8 @@ buildPythonPackage rec {
     "sunpy/io/setup_package.py"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   # Wants a configuration file

@@ -64,15 +64,14 @@ enables OpenCL support:
 
 ### Intel {#sec-gpu-accel-opencl-intel}
 
-[Intel Gen8 and later
-GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8)
-are supported by the Intel NEO OpenCL runtime that is provided by the
-intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
-the intel-ocl package, is an alternative for Gen7 GPUs.
+[Intel Gen12 and later GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen12)
+are supported by the Intel NEO OpenCL runtime that is provided by the `intel-compute-runtime` package.
+The previous generations (8,9 and 11), have been moved to the `intel-compute-runtime-legacy1` package.
+The proprietary Intel OpenCL runtime, in the `intel-ocl` package, is an alternative for Gen7 GPUs.
 
-The intel-compute-runtime or intel-ocl package can be added to
+Both `intel-compute-runtime` packages, as well as the `intel-ocl` package can be added to
 [](#opt-hardware.graphics.extraPackages)
-to enable OpenCL support. For example, for Gen8 and later GPUs, the following
+to enable OpenCL support. For example, for Gen12 and later GPUs, the following
 configuration can be used:
 
 ```nix

@@ -1,45 +1,18 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchurl,
+  unzip,
   autoPatchelfHook,
 }:
 
-let
-  platformInfoTable = {
-    "x86_64-linux" = {
-      id = "linux-x64";
-      hash = "sha256-/PD5e0bWgnIsIrvyOypoJw30VkgbOFWV1NJpPS2G0WM=";
-    };
-    "aarch64-linux" = {
-      id = "linux-arm64";
-      hash = "sha256-zfiorXZyIISZPXPwmcdYeHceDmQXkUhsvTkNZScg648=";
-    };
-    "x86_64-darwin" = {
-      id = "osx-x64";
-      hash = "sha256-cdNdV1fVPkz6B7vtKZiPsLQGqnIiDtYa9KTcwSkjdJg=";
-    };
-    "aarch64-darwin" = {
-      id = "osx-arm64";
-      hash = "sha256-Z1dq2t/HBQulbPF23ZCihOrcZHMpTXEQ6yXKORZaFPk=";
-    };
-  };
-
-  platformInfo =
-    platformInfoTable.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.15.4";
+  version = "0.15.8";
 
-  # Note: Only the prebuilt binaries are able to decrypt the encrypted voice models
-  src = fetchzip {
-    url = "https://github.com/VOICEVOX/voicevox_core/releases/download/${finalAttrs.version}/voicevox_core-${platformInfo.id}-cpu-${finalAttrs.version}.zip";
-    inherit (platformInfo) hash;
-  };
+  src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ unzip ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ stdenv.cc.cc.lib ];
 
@@ -54,6 +27,37 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # When updating, run the following command to fetch all FODs:
+  # nix-build -A voicevox-core.sources --keep-going
+  passthru.sources =
+    let
+      # Note: Only the prebuilt binaries are able to decrypt the encrypted voice models
+      fetchCoreArtifact =
+        { id, hash }:
+        fetchurl {
+          url = "https://github.com/VOICEVOX/voicevox_core/releases/download/${finalAttrs.version}/voicevox_core-${id}-cpu-${finalAttrs.version}.zip";
+          inherit hash;
+        };
+    in
+    {
+      "x86_64-linux" = fetchCoreArtifact {
+        id = "linux-x64";
+        hash = "sha256-n0rYSMR5wgjAtlQ4DWRAhJW/VevGG/Mmj6lXieG1U78=";
+      };
+      "aarch64-linux" = fetchCoreArtifact {
+        id = "linux-arm64";
+        hash = "sha256-GOgBH0UinZMiNszTp2CWJKT9prTi84KH3V9fxpmweeU=";
+      };
+      "x86_64-darwin" = fetchCoreArtifact {
+        id = "osx-x64";
+        hash = "sha256-8TRlu1ztPciKDX9Igr0TKcyLzP8WRwTN9F11MjXNNW8=";
+      };
+      "aarch64-darwin" = fetchCoreArtifact {
+        id = "osx-arm64";
+        hash = "sha256-6Na7LBZg2bWaX1VN6r6zdyg0mszBNn0e7u+cmqKVuY0=";
+      };
+    };
+
   meta = {
     changelog = "https://github.com/VOICEVOX/voicevox_core/releases/tag/${finalAttrs.version}";
     description = "Core library for the VOICEVOX speech synthesis software";
@@ -67,8 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
         redistributable = true;
       })
     ];
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.attrNames platformInfoTable;
+    maintainers = with lib.maintainers; [
+      tomasajt
+      eljamm
+    ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

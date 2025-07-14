@@ -11,13 +11,17 @@
 #            idrisLibraries = [ ];
 #          };
 #        in {
-#          lib = pkg.library { withSource = true; };
+#          lib1 = pkg.library { withSource = true; };
+#
+#          # implicitly without source:
+#          lib2 = pkg.library';
+#
 #          bin = pkg.executable;
 #        }
 #
 {
   src,
-  ipkgName,
+  ipkgName, # ipkg filename without the extension
   version ? "unversioned",
   idrisLibraries, # Other libraries built with buildIdris
   ...
@@ -44,78 +48,91 @@ let
   ipkgFileName = ipkgName + ".ipkg";
   idrName = "idris2-${idris2.version}";
   libSuffix = "lib/${idrName}";
-  propagatedIdrisLibraries = propagate idrisLibraryLibs;
-  libDirs = (lib.makeSearchPath libSuffix propagatedIdrisLibraries) + ":${idris2}/${idrName}";
+  libDirs = libs: (lib.makeSearchPath libSuffix libs) + ":${idris2}/${idrName}";
   supportDir = "${idris2}/${idrName}/lib";
   drvAttrs = builtins.removeAttrs attrs [
     "ipkgName"
     "idrisLibraries"
   ];
 
-  derivation = stdenv.mkDerivation (
-    finalAttrs:
-    drvAttrs
-    // {
-      pname = ipkgName;
-      inherit version;
-      src = src;
-      nativeBuildInputs = [
-        idris2
-        makeBinaryWrapper
-      ] ++ attrs.nativeBuildInputs or [ ];
-      buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [ ];
+  mkDerivation =
+    withSource:
+    let
+      applyWithSource = lib: if withSource then lib.withSource else lib;
+      propagatedIdrisLibraries = map applyWithSource (propagate idrisLibraryLibs);
+    in
+    stdenv.mkDerivation (
+      finalAttrs:
+      drvAttrs
+      // {
+        pname = ipkgName;
+        inherit src version;
+        nativeBuildInputs = [
+          idris2
+          makeBinaryWrapper
+        ] ++ attrs.nativeBuildInputs or [ ];
+        buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [ ];
 
-      env.IDRIS2_PACKAGE_PATH = libDirs;
+        env.IDRIS2_PACKAGE_PATH = libDirs propagatedIdrisLibraries;
 
-      buildPhase = ''
-        runHook preBuild
-        idris2 --build ${ipkgFileName}
-        runHook postBuild
+        buildPhase = ''
+          runHook preBuild
+          idris2 --build ${ipkgFileName}
+          runHook postBuild
+        '';
+
+        passthru = {
+          inherit propagatedIdrisLibraries;
+        } // (attrs.passthru or { });
+
+        shellHook = ''
+          export IDRIS2_PACKAGE_PATH="${finalAttrs.env.IDRIS2_PACKAGE_PATH}"
+        '';
+      }
+    );
+
+  mkExecutable =
+    withSource:
+    let
+      derivation = mkDerivation withSource;
+    in
+    derivation.overrideAttrs {
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/bin
+        scheme_app="$(find ./build/exec -name '*_app')"
+        if [ "$scheme_app" = ''' ]; then
+          mv -- build/exec/* $out/bin/
+          chmod +x $out/bin/*
+          # ^ remove after Idris2 0.8.0 is released. will be superfluous:
+          # https://github.com/idris-lang/Idris2/pull/3189
+        else
+          cd build/exec/*_app
+          rm -f ./libidris2_support.{so,dylib}
+          for file in *.so; do
+            bin_name="''${file%.so}"
+            mv -- "$file" "$out/bin/$bin_name"
+
+            wrapProgram "$out/bin/$bin_name" \
+              --prefix LD_LIBRARY_PATH : ${supportDir} \
+              --prefix DYLD_LIBRARY_PATH : ${supportDir}
+          done
+        fi
+        runHook postInstall
       '';
 
-      passthru = {
-        inherit propagatedIdrisLibraries;
-      } // (attrs.passthru or { });
+      # allow an executable's dependencies to be built with source. this is convenient when
+      # building a development shell for the executable using `mkShell`'s `inputsFrom`.
+      passthru = derivation.passthru // {
+        withSource = mkExecutable true;
+      };
+    };
 
-      shellHook = ''
-        export IDRIS2_PACKAGE_PATH="${finalAttrs.env.IDRIS2_PACKAGE_PATH}"
-      '';
-    }
-  );
-
-in
-{
-  executable = derivation.overrideAttrs {
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/bin
-      scheme_app="$(find ./build/exec -name '*_app')"
-      if [ "$scheme_app" = ''' ]; then
-        mv -- build/exec/* $out/bin/
-        chmod +x $out/bin/*
-        # ^ remove after Idris2 0.8.0 is released. will be superfluous:
-        # https://github.com/idris-lang/Idris2/pull/3189
-      else
-        cd build/exec/*_app
-        rm -f ./libidris2_support.so
-        for file in *.so; do
-          bin_name="''${file%.so}"
-          mv -- "$file" "$out/bin/$bin_name"
-          wrapProgram "$out/bin/$bin_name" \
-            --prefix LD_LIBRARY_PATH : ${supportDir} \
-            --prefix DYLD_LIBRARY_PATH : ${supportDir}
-        done
-      fi
-      runHook postInstall
-    '';
-  };
-
-  library =
-    {
-      withSource ? false,
-    }:
+  mkLibrary =
+    withSource:
     let
       installCmd = if withSource then "--install-with-src" else "--install";
+      derivation = mkDerivation withSource;
     in
     derivation.overrideAttrs {
       installPhase = ''
@@ -125,5 +142,30 @@ in
         idris2 ${installCmd} ${ipkgFileName}
         runHook postInstall
       '';
+
+      # allow a library built without source to be changed to one with source
+      # via a passthru attribute; i.e. `my-pkg.library'.withSource`.
+      # this is convenient because a library derivation can be distributed as
+      # without-source by default but downstream projects can still build it
+      # with-source. We surface this regardless of whether the original library
+      # was built with source because that allows downstream to call this
+      # property unconditionally.
+      passthru = derivation.passthru // {
+        withSource = mkLibrary true;
+      };
     };
+
+in
+{
+  executable = mkExecutable false;
+
+  library =
+    {
+      withSource ? false,
+    }:
+    mkLibrary withSource;
+
+  # Make a library without source; you can still use the `withSource` attribute
+  # on the resulting derivation to build the library with source at a later time.
+  library' = mkLibrary false;
 }

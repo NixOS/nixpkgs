@@ -7,15 +7,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cp210x-program";
   version = "0.4.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "VCTLabs";
     repo = "cp210x-program";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-IjKshP12WfFly9cPm6svD4qZW6cT8C7lOVrGenSqbfY=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     hexdump
     pyusb
   ];

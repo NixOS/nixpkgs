@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 

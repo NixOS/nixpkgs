@@ -13,6 +13,7 @@
   makeWrapper,
   pkg-config,
   systemd,
+  xdg-user-dirs,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -34,6 +35,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     substituteInPlace systemd/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+
+    # Inject a call to xdg-user-dirs-update, so when mediascanner2 launches, it can actually scan for files
+    substituteInPlace desktop/dm-lomiri-session.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_LIBEXECDIR@/lomiri-session/run-systemd-session' '${lib.getExe' xdg-user-dirs "xdg-user-dirs-update"} && @CMAKE_INSTALL_FULL_LIBEXECDIR@/lomiri-session/run-systemd-session'
   '';
 
   nativeBuildInputs = [
@@ -84,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/ubports/development/core/lomiri-session/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "lomiri-session";
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.linux;
   };
 })

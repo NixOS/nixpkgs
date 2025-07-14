@@ -54,18 +54,19 @@
   torchvision,
   av,
   sentencepiece,
+  hf-xet,
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.47.1";
+  version = "4.53.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-xwc84wFUSRJ8SNCLiI7FQ1v/JKnXkTW4EpNCjgUbZ8E=";
+    hash = "sha256-uipCL3xY8+thCA9+zVop5+MZr4pY4UVB7uEHa4hzLYo=";
   };
 
   build-system = [ setuptools ];
@@ -134,6 +135,9 @@ buildPythonPackage rec {
         flax
         optax
       ];
+      hf_xet = [
+        hf-xet
+      ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];
       onnxruntime = [
@@ -190,7 +194,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

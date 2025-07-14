@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = "enum4linux-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MN3AUubro9CHkdPe/X1xcE11ye/D/A+Kf6zUOJTN4l0=";
   };
 
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   # It's only a script and not a Python module. Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Windows/Samba enumeration tool";
     longDescription = ''
       enum4linux-ng.py is a rewrite of Mark Lowe's enum4linux.pl, a tool for
@@ -38,8 +38,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
     changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "enum4linux-ng";
   };
 }

@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ibs575pfr0wmhfcw6ln6iz7gw2y45l3bah11rksf6g9jlwsxy1d";
   };
 
-  buildInputs = [
-    python3
-  ]; # ToDo: optional stuff missing
+  # TODO: optional build inputs missing
 
   nativeBuildInputs =
     [
+      telepathy-glib # glib-genmarshal
       pkg-config
+      python3
       libxslt
       makeWrapper
     ]

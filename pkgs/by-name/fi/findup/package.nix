@@ -3,12 +3,8 @@
   stdenv,
   fetchFromGitHub,
   testers,
-  zig_0_11,
-  apple-sdk_11,
+  zig,
 }:
-let
-  zig = zig_0_11;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "findup";
   version = "1.1.2";
@@ -22,11 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ zig.hook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
-
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
+    # Doesn't support zig 0.12 or newer, last commit was 2 years ago.
+    broken = lib.versionAtLeast zig.version "0.12";
     homepage = "https://github.com/booniepepper/findup";
     description = "Search parent directories for sentinel files";
     license = lib.licenses.mit;

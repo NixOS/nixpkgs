@@ -12,6 +12,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "opcua-client-gui";
   version = "0.8.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";

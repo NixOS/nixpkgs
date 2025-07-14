@@ -12,6 +12,7 @@
   gtest,
   openmp,
   buildTests ? false,
+  buildBenchmarks ? false,
   buildSamples ? false,
   gpuTargets ? [ ],
 }:
@@ -19,7 +20,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "6.0.2";
+  version = "6.3.3";
 
   outputs =
     [
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-fi5b0IF++OiezpM3JuUkhwpmW2apeFH4r5g6CcFseNY=";
+    hash = "sha256-3a7fKpYyiqG3aGOg7YrTHmKoH4rgTVLD16DvrZ3YY1g=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       rocsparse
       git
     ]
-    ++ lib.optionals buildTests [
+    ++ lib.optionals (buildTests || buildBenchmarks) [
       gtest
     ]
     ++ lib.optionals (buildTests || buildSamples) [
@@ -60,20 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DBUILD_CLIENTS_SAMPLES=${if buildSamples then "ON" else "OFF"}"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+      (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+      (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildSamples)
     ]
     ++ lib.optionals (gpuTargets != [ ]) [
       "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
     ];
 
   # We have to manually generate the matrices
@@ -140,18 +138,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "ROCm SPARSE marshalling library";
     homepage = "https://github.com/ROCm/hipSPARSE";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

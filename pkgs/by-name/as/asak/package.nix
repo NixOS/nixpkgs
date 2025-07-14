@@ -3,35 +3,46 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  installShellFiles,
   alsa-lib,
   libjack2,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asak";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "chaosprint";
     repo = "asak";
-    rev = "v${version}";
-    hash = "sha256-Kq1WdVcTRdz6vJxUDd0bqb2bfrNGCl611upwYploR7w=";
+    tag = "v${version}";
+    hash = "sha256-7r05sVIHqBBOKwye2fr0pspo/uDqaYGjt5CpxqgqKzI=";
   };
 
-  cargoHash = "sha256-SS4BDhORiTV/HZhL3F9zwF8oBu/VFVYhF5Jzp2j0QFI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XoTfymCXrvoToSY7jw+Pn8Wm6fskFzl4f55uiKnSsJ8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [
     alsa-lib
     libjack2
   ];
 
-  # There is no tests
-  doCheck = false;
+  postInstall = ''
+    installManPage target/man/asak.1
+
+    installShellCompletion --cmd asak \
+      --bash target/completions/asak.bash \
+      --fish target/completions/asak.fish \
+      --zsh target/completions/_asak
+  '';
 
   meta = {
-    description = "A cross-platform audio recording/playback CLI tool with TUI, written in Rust";
+    description = "Cross-platform audio recording/playback CLI tool with TUI, written in Rust";
     homepage = "https://github.com/chaosprint/asak";
     changelog = "https://github.com/chaosprint/asak/releases/tag/v${version}";
     license = lib.licenses.mit;

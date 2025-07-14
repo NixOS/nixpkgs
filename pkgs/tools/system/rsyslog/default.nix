@@ -18,7 +18,7 @@
   withMysql ? true,
   libmysqlclient,
   withPostgres ? true,
-  postgresql,
+  libpq,
   withDbi ? true,
   libdbi,
   withNetSnmp ? true,
@@ -62,11 +62,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2412.0";
+  version = "8.2506.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-jN+loHfLpXa91rGEHMKEi3dOZjsuRKOVEruCAXQXSAI=";
+    hash = "sha256-bW/QJXyV51Z2XU1YWoM9VN06Dl7rgwi4YqgbNop0u3s=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withKrb5 libkrb5
     ++ lib.optional withJemalloc jemalloc
-    ++ lib.optional withPostgres postgresql
+    ++ lib.optional withPostgres libpq
     ++ lib.optional withDbi libdbi
     ++ lib.optional withNetSnmp net-snmp
     ++ lib.optional withUuid libuuid

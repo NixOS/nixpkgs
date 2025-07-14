@@ -12,22 +12,22 @@
   pytestCheckHook,
   pythonOlder,
   redis,
-  redis-server,
+  redisTestHook,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.26.1";
+  version = "2.29.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eBWdrN6QfrZaavKGuVMaU0s+k0VpsBCIaIzuxC7HyYE=";
+    tag = "v${version}";
+    hash = "sha256-wBUsoPmTIE3VFvmMnW4B9Unw/V63dIvsBTYCloElamA=";
   };
 
   build-system = [ poetry-core ];
@@ -50,6 +50,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    redisTestHook
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
@@ -57,12 +58,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not slow'" ];
 
   preCheck = ''
-    ${lib.getExe' redis-server "redis-server"} --port 6390 &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
+    redisTestPort=6390
   '';
 
   meta = with lib; {

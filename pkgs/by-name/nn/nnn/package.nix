@@ -28,13 +28,13 @@ assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HShHSjqD0zeE1/St1Y2dUeHfac6HQnPFfjmFvSuEXUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+2lFFBtaqRPBkEspCFtKl9fllbSR5MBB+4ks3Xh7vp4=";
   };
 
   patches = [
@@ -93,13 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "nnn";
   };
 })

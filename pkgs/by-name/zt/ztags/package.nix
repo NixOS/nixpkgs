@@ -4,7 +4,6 @@
   fetchFromGitHub,
   scdoc,
   zig_0_13,
-  apple-sdk_11,
 }:
 
 let
@@ -25,8 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
     zig.hook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     zig build docs --prefix $out

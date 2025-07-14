@@ -6,7 +6,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mceinject";
   version = "unstable-2013-01-19";
 

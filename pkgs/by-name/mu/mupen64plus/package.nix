@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   boost,
   dash,
   freetype,
@@ -24,6 +23,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
     sha256 = "sha256-KX4XGAzXanuOqAnRob4smO1cc1LccWllqA3rWYsh4TE=";
   };
+
+  patches = [
+    # Remove unused SDL2 header that erroneously adds libX11 dependency
+    ./remove-unused-header.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config

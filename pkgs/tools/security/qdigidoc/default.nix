@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   fetchurl,
-  fetchpatch,
   cmake,
   flatbuffers,
   gettext,
@@ -19,24 +18,12 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-szFLY9PpZMMYhfV5joueShfu92YDVmcCC3MOWIOAKVg=";
+    hash = "sha256-XP7KqhIYriHQzQrw77zUp/I9nnh9EqK0m9+N+69Lh5c=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
-      hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
-    })
-
-    # Regularly update this with what's on https://src.fedoraproject.org/rpms/qdigidoc/blob/rawhide/f/sandbox.patch
-    # This prevents attempts to download TSL lists inside the build sandbox.
-    # The list files are regularly updated (get new signatures), though this also happens at application runtime.
-    ./sandbox.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -54,6 +41,18 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
+  ];
+
+  # qdigidoc needs a (somewhat recent) config, as well as a TSL list for signing to work.
+  # To refresh, re-fetch and update what's in the vendor/ directory.
+  cmakeFlags = [
+    # If not provided before the build, qdigidoc tries to download a TSL list during the build.
+    # We pass it in via TSL_URL, fetched from https://ec.europa.eu/tools/lotl/eu-lotl.xml.
+    "-DTSL_URL=file://${./vendor/eu-lotl.xml}"
+    # `config.{json,pub,rsa}`, from https://id.eesti.ee/config.{json,pub,rsa}.
+    # The build system also looks for `config.{pub,rsa}` in the same directory,
+    # all three files need to be present.
+    "-DCONFIG_URL=file://${./vendor}/config.json"
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,

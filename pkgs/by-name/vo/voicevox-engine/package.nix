@@ -2,32 +2,28 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  replaceVars,
   voicevox-core,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.20.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Gib5R7oleg+XXyu2V65EqrflQ1oiAR7a09a0MFhSITc=";
+    tag = version;
+    hash = "sha256-LFbKnNv+NNfA6dvgVGr8fGr+3o5/sAyZ8XFZan2EJUY=";
   };
 
   patches = [
-    # the upstream package only uses poetry for dependency management, not for package definition
-    # this patch makes the package installable via poetry-core
-    (replaceVars ./make-installable.patch {
-      inherit version;
-    })
+    # this patch makes the package installable via hatchling
+    ./make-installable.patch
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
   dependencies =
@@ -35,27 +31,27 @@ python3Packages.buildPythonApplication rec {
       passthru.pyopenjtalk
     ]
     ++ (with python3Packages; [
-      numpy
       fastapi
       jinja2
-      python-multipart
-      uvicorn
-      soundfile
-      pyyaml
-      pyworld
-      semver
+      kanalizer
+      numpy
       platformdirs
-      soxr
       pydantic
+      python-multipart
+      pyworld
+      pyyaml
+      semver
+      setuptools
+      soundfile
+      soxr
       starlette
+      uvicorn
     ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
     "fastapi-slim"
   ];
-
-  pythonRelaxDeps = true;
 
   preConfigure = ''
     # copy demo metadata to temporary directory
@@ -91,12 +87,6 @@ python3Packages.buildPythonApplication rec {
     mv test_character_info resources/character_info
   '';
 
-  disabledTests = [
-    # this test checks the behaviour of openapi
-    # one of the functions returns a slightly different output due to openapi version differences
-    "test_OpenAPIの形が変わっていないことを確認"
-  ];
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     syrupy
@@ -105,22 +95,26 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     resources = fetchFromGitHub {
+      name = "voicevox-resource-${version}"; # this contains ${version} to invalidate the hash upon updating the package
       owner = "VOICEVOX";
       repo = "voicevox_resource";
-      rev = "refs/tags/${version}";
-      hash = "sha256-m888DF9qgGbK30RSwNnAoT9D0tRJk6cD5QY72FRkatM=";
+      tag = version;
+      hash = "sha256-/L7gqskzg7NFBO6Jg2MEMYuQeZK58hTWrRypTE42nGg=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
   };
 
   meta = {
-    changelog = "https://github.com/VOICEVOX/voicevox_engine/releases/tag/${version}";
+    changelog = "https://github.com/VOICEVOX/voicevox_engine/releases/tag/${src.tag}";
     description = "Engine for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox_engine";
     license = lib.licenses.lgpl3Only;
     mainProgram = "voicevox-engine";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      eljamm
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

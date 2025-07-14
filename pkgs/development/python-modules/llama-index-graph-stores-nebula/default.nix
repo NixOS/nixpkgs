@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-nebula";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_graph_stores_nebula";
     inherit version;
-    hash = "sha256-inkIF4LFaI8+zWa6jHK8TU+l19LiyUsbzzDTZTen0jY=";
+    hash = "sha256-0CooGtmDz9OAJ+B543eFbrFTzii5iXwmo0dV4c/E/es=";
   };
 
   build-system = [ poetry-core ];

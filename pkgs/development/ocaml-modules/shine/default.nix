@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-shine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-x/ubqPXT89GWYV9KIyzny0rJDB3TBurLX71i0DlvHLU=";
   };
 

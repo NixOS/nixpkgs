@@ -1,8 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
+  autogen,
+  autoconf,
+  automake,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -16,9 +19,11 @@ stdenv.mkDerivation rec {
   pname = "jemalloc";
   version = "5.3.0";
 
-  src = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+  src = fetchFromGitHub {
+    owner = "jemalloc";
+    repo = "jemalloc";
+    tag = version;
+    hash = "sha256-bb0OhZVXyvN+hf9BpPSykn5cGm87a0C+Y/iXKt9wTSs=";
   };
 
   patches = [
@@ -33,11 +38,29 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jemalloc/jemalloc/commit/4422f88d17404944a312825a1aec96cd9dc6c165.patch";
       hash = "sha256-dunkE7XHzltn5bOb/rSHqzpRniAFuGubBStJeCxh0xo=";
     })
+    # -O3 appears to introduce an unreproducibility where
+    # `rtree_read.constprop.0` shows up in some builds but
+    # not others, so we fall back to O2:
+    ./o3-to-o2.patch
   ];
 
+  nativeBuildInputs = [
+    autogen
+    autoconf
+    automake
+  ];
+
+  # TODO: switch to autoreconfHook when updating beyond 5.3.0
+  # https://github.com/jemalloc/jemalloc/issues/2346
+  configureScript = "./autogen.sh";
+
   configureFlags =
+    [
+      "--with-version=${version}-0-g0000000000000000000000000000000000000000"
+      "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
+    ]
     # see the comment on stripPrefix
-    lib.optional stripPrefix "--with-jemalloc-prefix="
+    ++ lib.optional stripPrefix "--with-jemalloc-prefix="
     ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
     # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
@@ -46,9 +69,17 @@ stdenv.mkDerivation rec {
       "--disable-thp"
       "je_cv_thp=no"
     ]
-    # AArch64 has configurable page size up to 64k. The default configuration
-    # for jemalloc only supports 4k page sizes.
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "--with-lg-page=16"
+    # The upstream default is dependent on the builders' page size
+    # https://github.com/jemalloc/jemalloc/issues/467
+    # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
+    ++ [
+      (
+        if (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64) then
+          "--with-lg-page=16"
+        else
+          "--with-lg-page=12"
+      )
+    ]
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--with-lg-vaddr=48";
@@ -58,7 +89,13 @@ stdenv.mkDerivation rec {
   # Tries to link test binaries binaries dynamically and fails
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  enableParallelBuilding = true;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    ! grep missing_version_try_git_fetch_tags $out/include/jemalloc/jemalloc.h
+  '';
+
+  # Parallel builds break reproducibility.
+  enableParallelBuilding = false;
 
   meta = with lib; {
     homepage = "https://jemalloc.net/";

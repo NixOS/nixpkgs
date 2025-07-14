@@ -2,30 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
-  requests,
+  hatchling,
+  httpx,
   tqdm,
+  urllib3,
   vcrpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "1.2.6";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sckott";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Pw0TgXxDRmR565hdNGipfDZ7P32pxWkmPWfaYK0RaI4=";
+    repo = "habanero";
+    tag = "v${version}";
+    hash = "sha256-XI+UOm3xONBNVSlywfBhnsCA9RdpEwDQ4oQixn4UBKk=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "urllib3" ];
 
   dependencies = [
-    requests
+    httpx
     tqdm
+    urllib3
   ];
 
   nativeCheckInputs = [
@@ -36,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "habanero" ];
 
   # almost the entirety of the test suite makes network calls
-  pytestFlagsArray = [ "test/test-filters.py" ];
+  enabledTestPaths = [ "test/test-filters.py" ];
 
   meta = {
     description = "Python interface to Library Genesis";

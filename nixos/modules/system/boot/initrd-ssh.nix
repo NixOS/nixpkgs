@@ -210,6 +210,7 @@ in
           }
 
           ${optionalString (!config.boot.initrd.systemd.enable) ''
+            SshdAuthPath /bin/sshd-auth
             SshdSessionPath /bin/sshd-session
           ''}
 
@@ -239,6 +240,7 @@ in
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${package}/bin/sshd
+        copy_bin_and_libs ${package}/libexec/sshd-auth
         copy_bin_and_libs ${package}/libexec/sshd-session
         cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
       '';
@@ -328,6 +330,7 @@ in
         };
         storePaths = [
           "${package}/bin/sshd"
+          "${package}/libexec/sshd-auth"
           "${package}/libexec/sshd-session"
         ];
 

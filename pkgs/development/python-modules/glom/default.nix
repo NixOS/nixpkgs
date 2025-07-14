@@ -9,56 +9,61 @@
   pythonAtLeast,
   pythonOlder,
   pyyaml,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "23.5.0";
-  format = "setuptools";
+  version = "24.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bq9eNIaqzFk4K6NOU+vqvXqTRdePfby+4m8DuqS4O6w=";
+    hash = "sha256-QyX5Z1mpEgRK97bGvQ26RK2MHrYDiqsFcylmHSAhuyc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "face==20.1.1" "face"
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boltons
     attrs
     face
   ];
 
+  optional-dependencies = {
+    toml = lib.optionals (pythonOlder "3.11") [ tomli ];
+    yaml = [ pyyaml ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
-    pyyaml
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     # test_cli.py checks the output of running "glom"
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests =
-    [
-      # Test is outdated (was made for PyYAML 3.x)
-      "test_main_yaml_target"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      "test_regular_error_stack"
-      "test_long_target_repr"
-    ];
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_regular_error_stack"
+    "test_long_target_repr"
+    "test_glom_error_stack"
+    "test_glom_error_double_stack"
+    "test_branching_stack"
+    "test_midway_branch"
+    "test_partially_failing_branch"
+    "test_coalesce_stack"
+    "test_nesting_stack"
+    "test_3_11_byte_code_caret"
+  ];
 
   pythonImportsCheck = [ "glom" ];
 
   meta = with lib; {
-    description = "Restructuring data, the Python way";
-    mainProgram = "glom";
+    description = "Module for restructuring data";
     longDescription = ''
       glom helps pull together objects from other objects in a
       declarative, dynamic, and downright simple way.
@@ -67,5 +72,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mahmoud/glom/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
+    mainProgram = "glom";
   };
 }

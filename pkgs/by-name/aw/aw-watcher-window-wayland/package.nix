@@ -7,7 +7,7 @@
   unstableGitUpdater,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "aw-watcher-window-wayland";
   version = "0-unstable-2024-10-08";
 

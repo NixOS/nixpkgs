@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -16,12 +15,10 @@ melpaBuild {
     hash = "sha256-3QDw4W3FbFvb2zpkDHAo9BJKxs3LaehyvUVJPKqS9RE=";
   };
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
   meta = {
     homepage = "https://github.com/ichernyshovvv/grid.el";
     description = "Library to put text data into boxes and manipulate them";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

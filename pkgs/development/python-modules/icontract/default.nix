@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = "icontract";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7mRQ1g2mllHIaZh0jEd/iCgaDja1KJXuRnamhDo/Pbo=";
   };
 
@@ -40,6 +40,9 @@ buildPythonPackage rec {
   dependencies = [
     asttokens
     typing-extensions
+  ];
+  pythonRelaxDeps = [
+    "asttokens"
   ];
 
   nativeCheckInputs = [
@@ -64,10 +67,9 @@ buildPythonPackage rec {
     "tests/test_typeguard.py"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # RuntimeWarning: coroutine '*' was never awaited
-    "-W"
-    "ignore::RuntimeWarning"
+    "-Wignore::RuntimeWarning"
   ];
 
   pythonImportsCheck = [ "icontract" ];

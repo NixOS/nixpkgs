@@ -26,19 +26,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
-  version = "0.7.0";
+  version = "25.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-h8/mWGuosBiQRpoW8rINJht/7UBVEnUnTKY5HBCAyw4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JZyhT220ARZ2rX0CZYeFkHx8i9ops7TcfGje0NKebnU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oO7l4zVKR93fFLqkY67DfzrAA9kUN06ov9ogwDuaVlE=";
+    hash = "sha256-RCSTxtHXkLsH8smGp2XzQeV9SSpLx5llrFg3cgIsWKY=";
   };
 
   strictDeps = true;
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
     changelog = "https://gitlab.gnome.org/YaLTeR/identity/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "identity";
     platforms = lib.platforms.linux;
   };

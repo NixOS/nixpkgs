@@ -11,7 +11,7 @@ if lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.
   throw "erm_xml is not available for OCaml ${ocaml.version}"
 else
 
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "ocaml${ocaml.version}-erm_xml";
     version = "0.3+20180112";
 

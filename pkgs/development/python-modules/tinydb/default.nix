@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "msiemens";
     repo = "tinydb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N/45XB7ZuZiq25v6DQx4K9NRVnBbUHPeiKKbxQ9YB3E=";
   };
 

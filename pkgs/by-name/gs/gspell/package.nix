@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gspell-app1";
     homepage = "https://gitlab.gnome.org/GNOME/gspell";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

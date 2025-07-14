@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.1.1";
+  version = "7.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "rdflib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/jRUV7H6JBWBv/gphjLjjifbEwMSxWke5STqkeSzwoE=";
+    tag = version;
+    hash = "sha256-u9hdwxAJIuTQ3zKstbwn88u1opzWXc8otJKbtIl4Li4=";
   };
 
   build-system = [ poetry-core ];

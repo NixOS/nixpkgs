@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
   };
 
@@ -75,7 +75,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [ "pins/tests/" ];
+  enabledTestPaths = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access

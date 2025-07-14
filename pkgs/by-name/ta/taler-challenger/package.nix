@@ -13,7 +13,7 @@
   libmicrohttpd,
   libsodium,
   libtool,
-  postgresql,
+  libpq,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-challenger";
-  version = "0.13.0";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://git.taler.net/challenger.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-OlUgE40Qo7on9VaMGKJ/MRWActDBqPe7Ja95dv1OFhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZKRqNlva3LZCuAva7h6Wk2NIuHF3rReR+yNETqbCv1k=";
   };
 
   # https://git.taler.net/challenger.git/tree/bootstrap
@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgnurl
     libmicrohttpd
+    libpq
     libsodium
     libtool
-    postgresql
     taler-exchange
     taler-merchant
   ];
@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/challenger.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

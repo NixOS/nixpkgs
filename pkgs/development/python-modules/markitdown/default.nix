@@ -4,7 +4,9 @@
   fetchFromGitHub,
   hatchling,
   beautifulsoup4,
+  defusedxml,
   ffmpeg-headless,
+  magika,
   mammoth,
   markdownify,
   numpy,
@@ -19,30 +21,39 @@
   requests,
   speechrecognition,
   youtube-transcript-api,
+  olefile,
+  xlrd,
+  lxml,
   pytestCheckHook,
   gitUpdater,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "markitdown";
-  version = "unstable-2024-12-18";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
-    rev = "3ce21a47abed0e4db162de1088d661887ae076ff";
-    hash = "sha256-5YafFL8OHNcGgB/qH6CmX0rTith1ZSRNIa+ktl4Ffvg=";
+    tag = "v${version}";
+    hash = "sha256-7T5cuFBivazKlUk3OKXKKU3YazRAfGRt9O+gCYX3ciQ=";
   };
+
+  sourceRoot = "${src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
   dependencies = [
     beautifulsoup4
+    defusedxml
     ffmpeg-headless
+    lxml
+    magika
     mammoth
     markdownify
     numpy
+    olefile
     openai
     openpyxl
     pandas
@@ -53,6 +64,7 @@ buildPythonPackage {
     python-pptx
     requests
     speechrecognition
+    xlrd
     youtube-transcript-api
   ];
 
@@ -63,6 +75,9 @@ buildPythonPackage {
   disabledTests = [
     # Require network access
     "test_markitdown_remote"
+    "test_module_vectors"
+    "test_cli_vectors"
+    "test_module_misc"
   ];
 
   passthru.updateScripts = gitUpdater { };

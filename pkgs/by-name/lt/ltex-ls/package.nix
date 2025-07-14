@@ -34,6 +34,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://valentjn.github.io/ltex/";
     description = "LSP language server for LanguageTool";
     license = licenses.mpl20;
+    mainProgram = "ltex-ls";
     maintainers = with maintainers; [ vinnymeller ];
     platforms = jre_headless.meta.platforms;
   };

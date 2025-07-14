@@ -131,10 +131,11 @@ let
           echo "${version}-default" > $out/include/config/kernel.release
         '';
 
-      meta = with lib; {
+      meta = {
         description = "Header files and scripts for Linux kernel";
-        license = licenses.gpl2Only;
-        platforms = platforms.linux;
+        license = lib.licenses.gpl2Only;
+        platforms = lib.platforms.linux;
+        teams = [ lib.teams.linux-kernel ];
       };
     };
 in
@@ -143,13 +144,13 @@ in
 
   linuxHeaders =
     let
-      version = "6.12";
+      version = "6.14.7";
     in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-saJWK+VuQq+z+EidTCp6xHKsIwmPHvHB5A2mAfVGJes=";
+        hash = "sha256-gRIgK8JtCGlXqU0hCabc1EeMW6GNDwpeHF3+6gH1SXI=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

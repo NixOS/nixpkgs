@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gchamon";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "sysrsync";
+    tag = version;
     hash = "sha256-2Sz3JrNmIGOnad+qjRzbAgsFEzDtwBT0KLEFyQKZra4=";
   };
 

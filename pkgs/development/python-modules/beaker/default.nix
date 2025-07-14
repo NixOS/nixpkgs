@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HzjhOPXElwKoJLrhGIbVn798tbX/kaS1EpQIX+vXCtE=";
   };
 
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    maintainers = with lib.maintainers; [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
   };
 }

@@ -4,11 +4,11 @@
   lib,
   pkg-config,
   jansson,
-  pcre,
+  pcre2,
   libxcrypt,
   expat,
   zlib,
-  # plugins: list of strings, eg. [ "python2" "python3" ]
+  # plugins: list of strings, eg. [ "python3" ]
   plugins ? [ ],
   pam,
   withPAM ? stdenv.hostPlatform.isLinux,
@@ -16,7 +16,6 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libcap,
   withCap ? stdenv.hostPlatform.isLinux,
-  python2,
   python3,
   ncurses,
   ruby,
@@ -31,25 +30,20 @@ let
     apxs2Support = false;
   };
 
-  pythonPlugin =
-    pkg:
-    lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-      interpreter = pkg.pythonOnBuildForHost.interpreter;
+  available = lib.listToAttrs [
+    (lib.nameValuePair "python3" {
+      interpreter = python3.pythonOnBuildForHost.interpreter;
       path = "plugins/python";
       inputs = [
-        pkg
+        python3
         ncurses
       ];
       install = ''
-        install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-        ${pkg.pythonOnBuildForHost.executable} -m compileall $out/${pkg.sitePackages}/
-        ${pkg.pythonOnBuildForHost.executable} -O -m compileall $out/${pkg.sitePackages}/
+        install -Dm644 uwsgidecorators.py $out/${python3.sitePackages}/uwsgidecorators.py
+        ${python3.pythonOnBuildForHost.executable} -m compileall $out/${python3.sitePackages}/
+        ${python3.pythonOnBuildForHost.executable} -O -m compileall $out/${python3.sitePackages}/
       '';
-    };
-
-  available = lib.listToAttrs [
-    (pythonPlugin python2)
-    (pythonPlugin python3)
+    })
     (lib.nameValuePair "rack" {
       path = "plugins/rack";
       inputs = [ ruby ];
@@ -86,13 +80,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.28";
+  version = "2.0.30";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
-    rev = finalAttrs.version;
-    hash = "sha256-/7Z9lq7JiGBrTpmtbIEqpMg7nw9SVm8ypmzd1/p6xgU=";
+    tag = finalAttrs.version;
+    hash = "sha256-I03AshxZyxrRmtYUH1Q+B6ISykjYRMGG+ZQSHRS7vDs=";
   };
 
   patches = [
@@ -109,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       jansson
-      pcre
+      pcre2
       libxcrypt
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
@@ -128,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   UWSGI_INCLUDES = lib.optionalString withCap "${libcap.dev}/include";
 
   passthru = {
-    inherit python2 python3;
+    inherit python3;
     tests.uwsgi = nixosTests.uwsgi;
   };
 

@@ -29,7 +29,7 @@ let
   clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zandronum${suffix}";
   version = "3.1.0";
 

@@ -8,10 +8,9 @@
   libX11,
   libXt,
   libGL,
-  openimageio,
+  openimageio_2,
   imath,
   python,
-  darwinMinVersionHook,
   apple-sdk_14,
 }:
 
@@ -19,6 +18,9 @@ buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
+  # nixpkgs-update: no auto update
+  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
+  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
@@ -35,12 +37,11 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      openimageio
+      openimageio_2
       imath
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      (darwinMinVersionHook "10.15")
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
@@ -65,6 +66,12 @@ buildPythonPackage rec {
     # required for cmake to find the bindings, when included in other projects
     ln -s $out/python $target_dir
   '';
+
+  # Update to 1.39 has major API changes and downstream software
+  # needs to adapt, first. So, do not include in mass updates. For reference, see
+  # https://github.com/NixOS/nixpkgs/pull/326466#issuecomment-2293029160
+  # and https://github.com/NixOS/nixpkgs/issues/380230
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";

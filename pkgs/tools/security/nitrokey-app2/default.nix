@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtwayland
-, qtsvg
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,9 +28,12 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland qtsvg
-  ];
+  buildInputs =
+    [ qtbase ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      qtsvg
+    ];
 
   propagatedBuildInputs = with python3.pkgs; [
     nitrokey
@@ -37,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     usb-monitor
   ];
 
-  pythonRelaxDeps = [ "pynitrokey" ];
+  pythonRelaxDeps = [ "nitrokey" ];
 
   pythonImportsCheck = [
     "nitrokeyapp"
@@ -53,7 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle panicgh ];
+    maintainers = with maintainers; [
+      _999eagle
+      panicgh
+    ];
     mainProgram = "nitrokeyapp";
   };
 }

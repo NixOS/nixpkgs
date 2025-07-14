@@ -3,18 +3,18 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  unstableGitUpdater,
+  gitUpdater,
 }:
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "exo";
-  version = "0-unstable-2024-12-15";
+  version = "0.0.14-alpha";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "cfedcec3a651f27085e1913f4bd42a699fa82076";
-    hash = "sha256-OPGWmIfIVW/1lJg+4iXRvzN6bY8+LzWx8SOgBUXjPQ0=";
+    tag = "v${version}";
+    hash = "sha256-GoYfpr6oFpreWQtSomOwgfzSoBAbjqGZ1mcc0u9TBl4=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -30,7 +30,6 @@ python3Packages.buildPythonApplication {
     grpcio
     grpcio-tools
     jinja2
-    netifaces
     numpy
     nuitka
     nvidia-ml-py
@@ -42,10 +41,11 @@ python3Packages.buildPythonApplication {
     pydantic
     requests
     rich
-    tenacity
+    scapy
     tqdm
     transformers
     tinygrad
+    uvloop
   ];
 
   pythonImportsCheck = [
@@ -66,14 +66,15 @@ python3Packages.buildPythonApplication {
   doCheck = stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      hardcodeZeroVersion = true;
+    updateScript = gitUpdater {
+      rev-prefix = "v-";
     };
   };
 
   meta = {
     description = "Run your own AI cluster at home with everyday devices";
     homepage = "https://github.com/exo-explore/exo";
+    changelog = "https://github.com/exo-explore/exo/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "exo";

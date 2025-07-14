@@ -29,17 +29,17 @@
   forceInstallAllHacks ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   nixosTests,
-  substituteAll,
+  replaceVars,
   wrapperPrefix ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.09";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9GZ3Ba24zEP9LzlzqIobVLFvIBkK/pOyHiIfL1cyCwU=";
+    hash = "sha256-T/Z5ghfju7w8cza+7afoPq+/AzAawpsiNtpmoPExdkM=";
   };
 
   outputs = [
@@ -83,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./xscreensaver-wrapper-prefix.patch;
+    (replaceVars ./xscreensaver-wrapper-prefix.patch {
       inherit wrapperPrefix;
     })
   ];
@@ -137,7 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };

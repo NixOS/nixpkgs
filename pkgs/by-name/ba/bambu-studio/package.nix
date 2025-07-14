@@ -4,9 +4,10 @@
   binutils,
   fetchFromGitHub,
   cmake,
+  ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost180,
+  boost186,
   cereal,
   cgal,
   curl,
@@ -26,7 +27,6 @@
   hicolor-icon-theme,
   ilmbase,
   libpng,
-  mesa,
   mpfr,
   nlopt,
   opencascade-occt_7_6,
@@ -34,7 +34,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021_11,
+  tbb_2021,
   webkitgtk_4_0,
   wxGTK31,
   xorg,
@@ -56,63 +56,74 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.10.01.50";
+  version = "01.10.02.76";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-7mkrPl2CQSfc1lRjl1ilwxdYcK5iRU//QGKmdCicK30=";
+    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    binutils
-    boost180
-    cereal
-    cgal
-    curl
-    dbus
-    eigen
-    expat
-    ffmpeg
-    gcc-unwrapped
-    glew
-    glfw
-    glib
-    glib-networking
-    gmp
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
-    gtk3
-    hicolor-icon-theme
-    ilmbase
-    libpng
-    mesa.osmesa
-    mpfr
-    nlopt
-    opencascade-occt_7_6
-    openvdb
-    pcre
-    tbb_2021_11
-    webkitgtk_4_0
-    wxGTK'
-    xorg.libX11
-    opencv
-  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+  buildInputs =
+    [
+      binutils
+      boost186
+      cereal
+      cgal
+      curl
+      dbus
+      eigen
+      expat
+      ffmpeg
+      gcc-unwrapped
+      glew
+      glfw
+      glib
+      glib-networking
+      gmp
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-good
+      gtk3
+      hicolor-icon-theme
+      ilmbase
+      libpng
+      mpfr
+      nlopt
+      opencascade-occt_7_6
+      openvdb
+      pcre
+      tbb_2021
+      webkitgtk_4_0
+      wxGTK'
+      xorg.libX11
+      opencv.cxxdev
+    ]
+    ++ lib.optionals withSystemd [ systemd ]
+    ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix an issue with
     ./patches/dont-link-opencv-world-bambu.patch
+    # Don't link osmesa
+    ./patches/no-osmesa.patch
+    # Fix the build with newer Boost versions. All but one commit is
+    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
+    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
+    ./0002-Replace-deprecated-Boost-methods-options.patch
+    ./0003-Fix-additional-Boost-upgrade-issues.patch
+    ./0004-Remove-deprecated-Boost-filesystem-header.patch
   ];
 
   doCheck = true;
@@ -126,10 +137,11 @@ stdenv.mkDerivation rec {
   # additionally need to set the path via the NLOPT environment variable.
   NLOPT = nlopt;
 
-  # Disable compiler warnings that clutter the build log.
-  # It seems to be a known issue for Eigen:
-  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
   NIX_CFLAGS_COMPILE = toString [
+    "-DBOOST_TIMER_ENABLE_DEPRECATED"
+    # Disable compiler warnings that clutter the build log.
+    # It seems to be a known issue for Eigen:
+    # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
     "-I${opencv.out}/include/opencv4"
   ];
@@ -177,16 +189,16 @@ stdenv.mkDerivation rec {
     mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
     changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
       dsluijk
     ];
     mainProgram = "bambu-studio";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

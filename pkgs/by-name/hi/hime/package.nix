@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "0.9.11";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "hime";
     owner = "hime-ime";
     rev = "v${version}";
     sha256 = "sha256-fCqet+foQjI+LpTQ/6Egup1GzXELlL2hgbh0dCKLwPI=";

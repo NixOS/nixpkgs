@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.121.0";
+  version = "0.126.3";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-Zx0+ybvxh4M1B+KB8DQCO5AF/1T7LbQgMSB3JeQK9Bc=";
+    sha256 = "sha256-8DjSUlYp7RLiYia8Ns3rhqS1cynazlQqiZ8m9jphPtM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
       downloaded and the java code runs.
     '';
     homepage = "https://www.jbang.dev";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+    ];
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

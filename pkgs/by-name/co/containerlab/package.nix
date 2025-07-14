@@ -3,29 +3,33 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.60.1";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
-    rev = "v${version}";
-    hash = "sha256-VueDf87kruLB1PCzknQO57eHrwJeGUDah1KaXaNsSlY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x6QDwduAMCD+Trj0awQXW0Tdleb2U6YBi/7mdMB6V/8=";
   };
 
-  vendorHash = "sha256-YX2JDDZ1jx32zfFj/2fY61zqxPIzmwntN+7kiGDxxV4=";
+  vendorHash = "sha256-XRgKfRw6VGg+lkbtPWUVNfAk5a7ZdFwVmhjtM7uSwHs=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/srl-labs/containerlab/cmd.version=${version}"
-    "-X github.com/srl-labs/containerlab/cmd.commit=${src.rev}"
-    "-X github.com/srl-labs/containerlab/cmd.date=1970-01-01T00:00:00Z"
+    "-X github.com/srl-labs/containerlab/cmd/version.Version=${finalAttrs.version}"
+    "-X github.com/srl-labs/containerlab/cmd/version.commit=${finalAttrs.src.rev}"
+    "-X github.com/srl-labs/containerlab/cmd/version.date=1970-01-01T00:00:00Z"
   ];
 
   preCheck = ''
@@ -41,13 +45,16 @@ buildGoModule rec {
       --zsh <($out/bin/containerlab completion zsh)
   '';
 
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+
   meta = {
     description = "Container-based networking lab";
     homepage = "https://containerlab.dev/";
-    changelog = "https://github.com/srl-labs/containerlab/releases/tag/${src.rev}";
+    changelog = "https://github.com/srl-labs/containerlab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "containerlab";
   };
-}
+})

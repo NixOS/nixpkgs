@@ -6,11 +6,12 @@
   libadwaita,
   modemmanager,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "satellite";
-  version = "0.9.0";
+  version = "0.9.1";
 
   pyproject = true;
 
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tpikonen";
     repo = "satellite";
     tag = version;
-    hash = "sha256-w0ZpH1joFoV7W7PH74//LGLUJQLCpAGcC6GlyTbdsTE=";
+    hash = "sha256-E/OKdVB+JDP/01ydEgA/B6+GMiVYB4jlPI70TW8HBDU=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   strictDeps = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Program for showing navigation satellite data";

@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   lib,
-  fetchFromGitLab,
+  callPackage,
   pyenchant,
   scikit-learn,
   pypillowfight,
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/paperwork-backend";

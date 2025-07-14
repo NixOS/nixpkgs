@@ -1,11 +1,4 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+{ lib, pkgs, ... }:
 
 let
   inherit (import ./ssh-keys.nix pkgs)
@@ -61,27 +54,25 @@ let
   };
 
 in
-makeTest {
+{
   name = "cloud-init";
-  meta.maintainers = with pkgs.lib.maintainers; [
+  meta.maintainers = with lib.maintainers; [
     lewo
     illustris
   ];
-  nodes.machine =
-    { ... }:
-    {
-      virtualisation.qemu.options = [
-        "-cdrom"
-        "${metadataDrive}/metadata.iso"
-      ];
-      services.cloud-init = {
-        enable = true;
-        network.enable = true;
-      };
-      services.openssh.enable = true;
-      networking.hostName = "";
-      networking.useDHCP = false;
+  nodes.machine = {
+    virtualisation.qemu.options = [
+      "-cdrom"
+      "${metadataDrive}/metadata.iso"
+    ];
+    services.cloud-init = {
+      enable = true;
+      network.enable = true;
     };
+    services.openssh.enable = true;
+    networking.hostName = "";
+    networking.useDHCP = false;
+  };
   testScript = ''
     # To wait until cloud-init terminates its run
     unnamed.wait_for_unit("cloud-init-local.service")

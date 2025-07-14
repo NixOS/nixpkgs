@@ -114,7 +114,7 @@ in
         the disk usage, since Privoxy itself never deletes the certificates.
 
         ::: {.note}
-        The format is that of the `tmpfiles.d(5)`
+        The format is that of the {manpage}`tmpfiles.d(5)`
         Age parameter.
         :::
       '';
@@ -229,6 +229,7 @@ in
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";
+      documentation = [ "man:privoxy(8)" ];
       after = [
         "network.target"
         "nss-lookup.target"
@@ -282,9 +283,8 @@ in
         # This allows setting absolute key/crt paths
         ca-directory = "/var/empty";
         certificate-directory = "/run/privoxy/certs";
-        trusted-cas-file = "/etc/ssl/certs/ca-certificates.crt";
+        trusted-cas-file = config.security.pki.caBundle;
       });
-
   };
 
   imports =

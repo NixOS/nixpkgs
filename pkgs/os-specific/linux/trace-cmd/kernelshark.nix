@@ -5,8 +5,6 @@
   qtbase,
   qtscxml,
   cmake,
-  asciidoc,
-  docbook_xsl,
   json_c,
   mesa_glu,
   libglut,
@@ -21,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kernelshark";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernelshark-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-KV8ahV2koX7OL1C42H5If14e7m54jv0DlZ1dNsVRUWE=";
+    hash = "sha256-OT6ClyZRE+pxWwm+sfzvN3CnoCIyxcAiVsi1fdzaT4M=";
   };
 
   outputs = [ "out" ];

@@ -1,50 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  # cudf,
   dask,
-  dask-expr,
   duckdb,
   fetchFromGitHub,
   hatchling,
   hypothesis,
-  # modin,
+  ibis-framework,
+  packaging,
   pandas,
   polars,
+  pyarrow-hotfix,
   pyarrow,
+  pyspark,
   pytest-env,
   pytestCheckHook,
-  pythonOlder,
+  rich,
+  sqlframe,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.18.4";
+  version = "1.40.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-PpkwiM5qRVLdmxbOHqzr1354nSgqPVlENIXhGhNSq9A=";
+    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
-    dask = [
-      dask
-      dask-expr
-    ];
+    dask = [ dask ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
+    pyspark = [ pyspark ];
+    ibis = [
+      ibis-framework
+      rich
+      packaging
+      pyarrow-hotfix
+    ];
+    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [
@@ -56,15 +59,24 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "narwhals" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  disabledTests = [
+    # Flaky
+    "test_rolling_var_hypothesis"
+    # Missing file
+    "test_pyspark_connect_deps_2517"
+    # Timezone issue
+    "test_to_datetime"
+    "test_unary_two_elements"
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/v${version}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

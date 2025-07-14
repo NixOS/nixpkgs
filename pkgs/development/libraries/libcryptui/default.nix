@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    dbus-glib # dbus-binding-tool
+    gtk3 # AM_GLIB_GNU_GETTEXT
     intltool
     autoreconfHook
   ];
@@ -43,6 +45,9 @@ stdenv.mkDerivation rec {
     libgnome-keyring
   ];
   propagatedBuildInputs = [ dbus-glib ];
+
+  env.GNUPG = lib.getExe gnupg;
+  env.GPGME_CONFIG = lib.getExe' (lib.getDev gpgme) "gpgme-config";
 
   enableParallelBuilding = true;
 
@@ -59,5 +64,8 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libcryptui";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
+    # ImportError: lib/gobject-introspection/giscanner/_giscanner.cpython-312-x86_64-linux-gnu.so
+    # cannot open shared object file: No such file or directory
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

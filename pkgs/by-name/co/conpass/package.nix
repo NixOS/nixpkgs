@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "conpass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7o4aQ6qpaWimWqgFO35Wht7mQsdVezoPTm7hp54FWR8=";
   };
 
@@ -31,12 +31,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "conpass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Continuous password spraying tool";
     homepage = "https://github.com/login-securite/conpass";
     changelog = "https://github.com/login-securite/conpass/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "conpass";
   };
 }

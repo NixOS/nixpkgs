@@ -11,13 +11,13 @@
 # https://github.com/abathur/resholve/issues/107
 resholve.mkDerivation rec {
   pname = "nix-direnv";
-  version = "3.0.6";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    hash = "sha256-oNqhPqgQT92yxbKmcgX4F3e2yTUPyXYG7b2xQm3TvQw=";
+    hash = "sha256-HdnQRcysoKNPbVa/D3KDcLgqf5+u9JDPmcl29cGj4AI=";
   };
 
   installPhase = ''

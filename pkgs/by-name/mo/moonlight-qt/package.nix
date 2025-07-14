@@ -19,7 +19,6 @@
   libxkbcommon,
   wayland,
   libdrm,
-  apple-sdk_11,
   nix-update-script,
 }:
 
@@ -52,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      (SDL2.override { drmSupport = stdenv.hostPlatform.isLinux; })
+      SDL2
       SDL2_ttf
       ffmpeg
       libopus
@@ -70,9 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qtwayland
       wayland
       libdrm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];

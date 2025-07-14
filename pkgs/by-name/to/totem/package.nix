@@ -20,6 +20,7 @@
   gnome,
   grilo,
   grilo-plugins,
+  libepoxy,
   libpeas,
   libportal-gtk3,
   libhandy,
@@ -32,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "43.1";
+  version = "43.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/totem-${version}.tar.xz";
-    hash = "sha256-VmgpHpxkRJhcs//k6k8CEvVMK75g3QERTBqVD5R1nm0=";
+    hash = "sha256-CwB9MPu5O5WmBPFISKSX9X/DM6dcLmOKJJly6ZwB5qQ=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     itstool
     gobject-introspection
     wrapGAppsHook3
+    gst_all_1.gstreamer # gst-inspect-1.0
   ];
 
   buildInputs = [
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    libepoxy
     libpeas
     libportal-gtk3
     libhandy
@@ -107,12 +110,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Totem/";
     changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
+    platforms = lib.platforms.linux;
+    # gst-inspect-1.0 is not smart enough for cross compiling
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

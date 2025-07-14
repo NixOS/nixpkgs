@@ -6,18 +6,14 @@
   threadweaver,
   ktexteditor,
   kdevelop-unwrapped,
-  python39,
+  python3,
 }:
-let
-  # FIXME: stick with python 3.9 until MR supporting 3.10 is ready:
-  # https://invent.kde.org/kdevelop/kdev-python/-/merge_requests/16
-  python = python39;
-in
-mkDerivation rec {
+
+mkDerivation {
   pname = "kdev-python";
 
   cmakeFlags = [
-    "-DPYTHON_EXECUTABLE=${python}/bin/python"
+    "-DPYTHON_EXECUTABLE=${lib.getExe python3}"
   ];
 
   nativeBuildInputs = [

@@ -29,12 +29,8 @@ import ./make-test-python.nix {
               "${pkgs.dovecot}/libexec/dovecot/deliver -d %{user.username}"
             match from any for local action dovecot_deliver
 
-            action do_relay relay
-            # DO NOT DO THIS IN PRODUCTION!
-            # Setting up authentication requires a certificate which is painful in
-            # a test environment, but THIS WOULD BE DANGEROUS OUTSIDE OF A
-            # WELL-CONTROLLED ENVIRONMENT!
-            match from any for any action do_relay
+            action relay_smtp2 relay host "smtp://192.168.1.2"
+            match from any for any action relay_smtp2
           '';
         };
         services.dovecot2 = {
@@ -107,7 +103,7 @@ import ./make-test-python.nix {
               import smtplib, sys
 
               with smtplib.SMTP('192.168.1.1') as smtp:
-                smtp.sendmail('alice@[192.168.1.1]', 'bob@[192.168.1.2]', """
+                smtp.sendmail('alice@smtp1', 'bob@smtp2', """
                   From: alice@smtp1
                   To: bob@smtp2
                   Subject: Test

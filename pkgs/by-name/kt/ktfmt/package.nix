@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ktfmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TIYV/V6vtGTTSLFf9dcKo8Ezx61e7Vvz3vQvbh0Kj/Y=";
   };
 

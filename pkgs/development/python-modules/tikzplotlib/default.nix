@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "tikzplotlib";
     rev = "v${version}";
     hash = "sha256-PLExHhEnxkEiXsE0rqvpNWwVZ+YoaDa2BTx8LktdHl0=";
   };

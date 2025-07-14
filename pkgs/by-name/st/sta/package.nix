@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   autoreconfHook,
+  cxxtest,
 }:
 
 stdenv.mkDerivation {
@@ -16,7 +17,27 @@ stdenv.mkDerivation {
     sha256 = "sha256-AiygCfBze7J1Emy6mc27Dim34eLR7VId9wodUZapIL4=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ autoreconfHook ];
+
+  doCheck = true;
+  nativeCheckInputs = [ cxxtest ];
+  checkInputs = [ cxxtest ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd test
+
+    cxxtestgen --error-printer --have-std -o tests.cpp sta_test_1.h sta_test_2.h
+    ${stdenv.cc.targetPrefix}c++ -o tester tests.cpp
+    ./tester
+
+    popd
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Simple statistics from the command line interface (CLI), fast";
@@ -31,7 +52,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/simonccarter/sta";
     maintainers = [ ];
     platforms = platforms.all;
-    badPlatforms = platforms.darwin;
     mainProgram = "sta";
   };
 }

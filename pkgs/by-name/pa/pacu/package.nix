@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
   };
 
@@ -72,12 +72,12 @@ python.pkgs.buildPythonApplication rec {
     "test_update_second_time"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS exploitation framework";
     homepage = "https://github.com/RhinoSecurityLabs/pacu";
     changelog = "https://github.com/RhinoSecurityLabs/pacu/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pacu";
   };
 }

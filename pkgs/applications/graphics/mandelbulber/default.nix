@@ -1,57 +1,71 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, libpng
-, gsl
-, libsndfile
-, lzo
-, qmake
-, qttools
-, qtbase
-, qtmultimedia
-, withOpenCL ? true
-, opencl-clhpp ? null
-, ocl-icd ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
+  libpng,
+  gsl,
+  libsndfile,
+  lzo,
+  libsForQt5,
+  withOpenCL ? true,
+  opencl-clhpp ? null,
+  ocl-icd ? null,
 }:
 
 assert withOpenCL -> opencl-clhpp != null;
 assert withOpenCL -> ocl-icd != null;
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mandelbulber";
-  version = "2.32";
+  version = "2.33";
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
-    rev = version;
-    sha256 = "sha256-amNNRuuk7qtcyXUVLEW71yEETExgKw48HeQQyxbi8BE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-3PPgH9E+k2DFm8ib1bmvTsllQ9kYi3oLDwPHcs1Otac=";
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    libpng
-    gsl
-    libsndfile
-    lzo
-  ] ++ lib.optionals withOpenCL [
-    opencl-clhpp
-    ocl-icd
-  ];
+  buildInputs =
+    [
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
+      libpng
+      gsl
+      libsndfile
+      lzo
+    ]
+    ++ lib.optionals withOpenCL [
+      opencl-clhpp
+      ocl-icd
+    ];
 
-  sourceRoot = "${src.name}/mandelbulber2";
+  sourceRoot = "${finalAttrs.src.name}/mandelbulber2";
 
   qmakeFlags = [
     "SHARED_PATH=${placeholder "out"}"
-    (if withOpenCL
-      then "qmake/mandelbulber-opencl.pro"
-      else "qmake/mandelbulber.pro")
+    (if withOpenCL then "qmake/mandelbulber-opencl.pro" else "qmake/mandelbulber.pro")
   ];
+
+  passthru = {
+    tests = {
+      test = runCommand "mandelbulber2-test" {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          writableTmpDirAsHomeHook
+        ];
+      } "mandelbulber2 --test && touch $out";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "3D fractal rendering engine";
@@ -62,4 +76,4 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ kovirobi ];
   };
-}
+})

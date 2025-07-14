@@ -27,6 +27,7 @@
   libcdio,
   libcdio-paranoia,
   libdrm,
+  libdisplay-info,
   libdvdnav,
   libjack2,
   libplacebo,
@@ -95,7 +96,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.39.0";
+  version = "0.40.0";
 
   outputs = [
     "out"
@@ -107,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BOGh+QBTO7hrHohh+RqjSF8eHQH8jVBPjG/k4eyFaaM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x8cDczKIX4+KrvRxZ+72TGlEQHd4Kx7naq0CSoOZGHA=";
   };
 
   postPatch = lib.concatStringsSep "\n" [
@@ -116,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     # between out and dev
     ''
       substituteInPlace meson.build \
-        --replace-fail "conf_data.set_quoted('CONFIGURATION', configuration)" \
+        --replace-fail "conf_data.set_quoted('CONFIGURATION', meson.build_options())" \
                        "conf_data.set_quoted('CONFIGURATION', '<omitted>')"
     ''
     # A trick to patchShebang everything except mpv_identify.sh
@@ -187,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
+      libdisplay-info
       libgbm
     ]
     ++ lib.optionals dvdnavSupport [
@@ -224,6 +226,13 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals zimgSupport [ zimg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
+
+  # https://github.com/mpv-player/mpv/issues/15591#issuecomment-2764797522
+  # In file included from ../player/clipboard/clipboard-mac.m:19:
+  # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
+  };
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
@@ -306,10 +315,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       fpletz
       globin
       ma27
+      SchweGELBin
     ];
     platforms = lib.platforms.unix;
   };

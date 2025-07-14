@@ -9,15 +9,16 @@
   crc32c,
   cryptography,
   docker,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   flask-cors,
   flask,
   freezegun,
   graphql-core,
   jinja2,
   joserfc,
-  jsondiff,
   jsonpath-ng,
+  jsonschema,
   multipart,
   openapi-spec-validator,
   py-partiql-parser,
@@ -37,17 +38,30 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.20";
+  version = "5.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JLExnMZvgfQIF6V6yAYCpfGGJmm91iHw2Wq5iaZXglU=";
+  src = fetchFromGitHub {
+    owner = "getmoto";
+    repo = "moto";
+    tag = version;
+    hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
   };
 
-  build-system = [ setuptools ];
+  # Fix tests with botocore 1.38.32
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/getmoto/moto/commit/8dcaaca0eefdf9ac957650c1562317b6d07fadf9.diff";
+      hash = "sha256-5zaerJR1rsMZQLn8cXjS8RYiKlSQ6azp7dk7JzLp+7I=";
+    })
+  ];
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     boto3
@@ -64,56 +78,54 @@ buildPythonPackage rec {
   optional-dependencies = {
     all = [
       antlr4-python3-runtime
-      aws-xray-sdk
-      cfn-lint
-      docker
-      flask
-      flask-cors
-      graphql-core
       joserfc
-      jsondiff
       jsonpath-ng
-      multipart
-      openapi-spec-validator
-      py-partiql-parser
-      pyparsing
+      docker
+      graphql-core
       pyyaml
+      cfn-lint
+      jsonschema
+      openapi-spec-validator
+      pyparsing
+      py-partiql-parser
+      aws-xray-sdk
       setuptools
+      multipart
     ];
     proxy = [
       antlr4-python3-runtime
-      aws-xray-sdk
-      cfn-lint
+      joserfc
+      jsonpath-ng
       docker
       graphql-core
-      joserfc
-      jsondiff
-      jsonpath-ng
-      multipart
-      openapi-spec-validator
-      py-partiql-parser
-      pyparsing
       pyyaml
+      cfn-lint
+      openapi-spec-validator
+      pyparsing
+      py-partiql-parser
+      aws-xray-sdk
       setuptools
+      multipart
     ];
     server = [
       antlr4-python3-runtime
-      aws-xray-sdk
-      cfn-lint
+      joserfc
+      jsonpath-ng
       docker
+      graphql-core
+      pyyaml
+      cfn-lint
+      openapi-spec-validator
+      pyparsing
+      py-partiql-parser
+      aws-xray-sdk
+      setuptools
       flask
       flask-cors
-      graphql-core
-      joserfc
-      jsondiff
-      jsonpath-ng
-      openapi-spec-validator
-      py-partiql-parser
-      pyparsing
-      pyyaml
-      setuptools
     ];
-    cognitoidp = [ joserfc ];
+    acm = [ ];
+    acmpca = [ ];
+    amp = [ ];
     apigateway = [
       pyyaml
       joserfc
@@ -123,19 +135,53 @@ buildPythonPackage rec {
       pyyaml
       openapi-spec-validator
     ];
+    applicationautoscaling = [ ];
+    appsync = [
+      graphql-core
+    ];
+    athena = [ ];
+    autoscaling = [ ];
+    awslambda = [
+      docker
+    ];
+    awslambda_simple = [ ];
+    backup = [ ];
+    batch = [
+      docker
+    ];
+    batch_simple = [ ];
+    budgets = [ ];
+    ce = [ ];
     cloudformation = [
-      aws-xray-sdk
-      cfn-lint
+      joserfc
       docker
       graphql-core
-      joserfc
-      jsondiff
-      openapi-spec-validator
-      py-partiql-parser
-      pyparsing
       pyyaml
+      cfn-lint
+      openapi-spec-validator
+      pyparsing
+      py-partiql-parser
+      aws-xray-sdk
       setuptools
     ];
+    cloudfront = [ ];
+    cloudtrail = [ ];
+    cloudwatch = [ ];
+    codebuild = [ ];
+    codecommit = [ ];
+    codepipeline = [ ];
+    cognitoidentity = [ ];
+    cognitoidp = [
+      joserfc
+    ];
+    comprehend = [ ];
+    config = [ ];
+    databrew = [ ];
+    datapipeline = [ ];
+    datasync = [ ];
+    dax = [ ];
+    dms = [ ];
+    ds = [ ];
     dynamodb = [
       docker
       py-partiql-parser
@@ -144,33 +190,116 @@ buildPythonPackage rec {
       docker
       py-partiql-parser
     ];
-    events = [ jsonpath-ng ];
-    glue = [ pyparsing ];
-    iotdata = [ jsondiff ];
+    ebs = [ ];
+    ec2 = [ ];
+    ec2instanceconnect = [ ];
+    ecr = [ ];
+    ecs = [ ];
+    efs = [ ];
+    eks = [ ];
+    elasticache = [ ];
+    elasticbeanstalk = [ ];
+    elastictranscoder = [ ];
+    elb = [ ];
+    elbv2 = [ ];
+    emr = [ ];
+    emrcontainers = [ ];
+    emrserverless = [ ];
+    es = [ ];
+    events = [
+      jsonpath-ng
+    ];
+    firehose = [ ];
+    forecast = [ ];
+    glacier = [ ];
+    glue = [
+      pyparsing
+    ];
+    greengrass = [ ];
+    guardduty = [ ];
+    iam = [ ];
+    inspector2 = [ ];
+    iot = [ ];
+    iotdata = [ ];
+    ivs = [ ];
+    kinesis = [ ];
+    kinesisvideo = [ ];
+    kinesisvideoarchivedmedia = [ ];
+    kms = [ ];
+    logs = [ ];
+    managedblockchain = [ ];
+    mediaconnect = [ ];
+    medialive = [ ];
+    mediapackage = [ ];
+    mediastore = [ ];
+    mediastoredata = [ ];
+    meteringmarketplace = [ ];
+    mq = [ ];
+    opsworks = [ ];
+    organizations = [ ];
+    panorama = [ ];
+    personalize = [ ];
+    pinpoint = [ ];
+    polly = [ ];
+    quicksight = [
+      jsonschema
+    ];
+    ram = [ ];
+    rds = [ ];
+    redshift = [ ];
+    redshiftdata = [ ];
+    rekognition = [ ];
+    resourcegroups = [ ];
     resourcegroupstaggingapi = [
-      cfn-lint
+      joserfc
       docker
       graphql-core
-      joserfc
-      jsondiff
-      openapi-spec-validator
-      py-partiql-parser
-      pyparsing
       pyyaml
+      cfn-lint
+      openapi-spec-validator
+      pyparsing
+      py-partiql-parser
     ];
+    route53 = [ ];
+    route53resolver = [ ];
     s3 = [
       pyyaml
       py-partiql-parser
-    ];
-    sns = [ ];
-    stepfunctions = [
-      antlr4-python3-runtime
-      jsonpath-ng
     ];
     s3crc32c = [
       pyyaml
       py-partiql-parser
       crc32c
+    ];
+    s3control = [ ];
+    sagemaker = [ ];
+    sdb = [ ];
+    scheduler = [ ];
+    secretsmanager = [ ];
+    servicediscovery = [ ];
+    servicequotas = [ ];
+    ses = [ ];
+    signer = [ ];
+    sns = [ ];
+    sqs = [ ];
+    ssm = [
+      pyyaml
+    ];
+    ssoadmin = [ ];
+    stepfunctions = [
+      antlr4-python3-runtime
+      jsonpath-ng
+    ];
+    sts = [ ];
+    support = [ ];
+    swf = [ ];
+    textract = [ ];
+    timestreamwrite = [ ];
+    transcribe = [ ];
+    wafv2 = [ ];
+    xray = [
+      aws-xray-sdk
+      setuptools
     ];
   };
 
@@ -181,7 +310,7 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ] ++ optional-dependencies.server;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
@@ -227,11 +356,19 @@ buildPythonPackage rec {
     # AssertionError: assert ResourceWarning not in [<class 'ResourceWarning'>, <class 'ResourceWarning'>]
     "test_delete_object_with_version"
 
-    # KeyError beucase of ap-southeast-5-apse5-az
+    # KeyError because of ap-southeast-5-apse5-az
     "test_zoneId_in_availability_zones"
 
     # Parameter validation fails
     "test_conditional_write"
+
+    # Requires newer botocore version
+    "test_dynamodb_with_account_id_routing"
+
+    # Assumes too much about threading.Timer() behavior (that it honors the
+    # timeout precisely and that the thread handler will complete in just 0.1s
+    # from the requested timeout)
+    "test_start_and_fire_timer_decision"
   ];
 
   disabledTestPaths = [
@@ -253,6 +390,9 @@ buildPythonPackage rec {
 
     # Infinite recursion with pycognito
     "tests/test_cognitoidp/test_cognitoidp.py"
+
+    # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
+    "tests/test_workspaces/test_workspaces.py"
   ];
 
   meta = {

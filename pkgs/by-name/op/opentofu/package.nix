@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.8.7";
+    version = "1.10.2";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
-      rev = "v${version}";
-      hash = "sha256-OLXR9aA94KcIsZxk8gOZxZsljMKuymScuYcoj9W5Hj4=";
+      tag = "v${version}";
+      hash = "sha256-kRIj6M5/HfuzYrFV9ygyZsbVrHqvmqPo40XLcsNg7fU=";
     };
 
-    vendorHash = "sha256-6M/uqwhNruIPx5srbimKuDJaFiZkyosoZQXWjxa6GxY=";
+    vendorHash = "sha256-npMGiUIDhp4n7nKMWeyq+TDggU1xm5RzQrGOxvzWcnI=";
     ldflags = [
       "-s"
       "-w"
@@ -60,12 +60,12 @@ let
 
     subPackages = [ "./cmd/..." ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [
         nickcao
         zowoq
       ];
@@ -99,31 +99,11 @@ let
     in
     test;
 
-  plugins =
-    lib.mapAttrs
-      (
-        _: provider:
-        if provider ? override then
-          # use opentofu plugin registry over terraform's
-          provider.override (oldArgs: {
-            provider-source-address =
-              lib.replaceStrings
-                [ "https://registry.terraform.io/providers" ]
-                [
-                  "registry.opentofu.org"
-                ]
-                oldArgs.homepage;
-          })
-        else
-          provider
-      )
-      (
-        removeAttrs terraform-providers [
-          "override"
-          "overrideDerivation"
-          "recurseForDerivations"
-        ]
-      );
+  plugins = removeAttrs terraform-providers [
+    "override"
+    "overrideDerivation"
+    "recurseForDerivations"
+  ];
 
   withPlugins =
     plugins:
@@ -182,13 +162,16 @@ let
           passthru = package.passthru // passthru;
 
           buildCommand = ''
-            # Create wrappers for terraform plugins because Terraform only
+            # Create wrappers for terraform plugins because OpenTofu only
             # walks inside of a tree of files.
+            # Also replace registry.terraform.io dir with registry.opentofu.org,
+            # so OpenTofu can find the plugins.
             for providerDir in ${toString actualPlugins}
             do
               for file in $(find $providerDir/libexec/terraform-providers -type f)
               do
                 relFile=''${file#$providerDir/}
+                relFile=''${relFile/registry.terraform.io/registry.opentofu.org}
                 mkdir -p $out/$(dirname $relFile)
                 cat <<WRAPPER > $out/$relFile
             #!${runtimeShell}

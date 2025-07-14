@@ -37,7 +37,7 @@ lib.checkListOfEnum "${pname}: color variants"
 
     src = fetchFromGitHub {
       owner = "yeyushengfan258";
-      repo = pname;
+      repo = "reversal-icon-theme";
       rev = "bdae2ea365731b25a869fc2c8c6a1fb849eaf5b2";
       hash = "sha256-Cd+1ggyS+Y2Sk8w5zifc4IFOwbFrbjL6S6awES/W0EE=";
     };
@@ -59,6 +59,9 @@ lib.checkListOfEnum "${pname}: color variants"
     # Package may install many small files.
     dontPatchELF = true;
     dontRewriteSymlinks = true;
+
+    # FIXME: https://github.com/yeyushengfan258/Reversal-icon-theme/issues/108
+    dontCheckForBrokenSymlinks = true;
 
     postPatch = ''
       patchShebangs install.sh

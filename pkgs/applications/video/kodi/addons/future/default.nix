@@ -27,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://python-future.org";
     description = "Missing compatibility layer between Python 2 and Python 3";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

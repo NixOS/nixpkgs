@@ -12,11 +12,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
-  version = "4.25";
+  version = "4.26";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    hash = "sha256-YZsBwIp5ouGk75wsAywuYyNSeNjCAx0iWgiA7YmUmnk=";
+    hash = "sha256-iK4h7YS8+W2nr3Bbmai4Ervt0YWYKgkQaZ5IH7Q9HkE=";
   };
 
   postPatch = ''

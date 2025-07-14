@@ -76,27 +76,31 @@ stdenv.mkDerivation {
     installShellFiles
     pkg-config
   ];
-  buildInputs = [
-    luajit
-    ncurses
-    openssl
-    curl
-    jq
-    gcc
-    elfutils
-    tbb
-    re2
-    protobuf
-    grpc
-    yaml-cpp
-    jsoncpp
-    nlohmann_json
-    zstd
-    uthash
-    clang
-    libbpf
-    bpftools
-  ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
+  buildInputs =
+    [
+      luajit
+      ncurses
+      openssl
+      curl
+      jq
+      tbb
+      re2
+      protobuf
+      grpc
+      yaml-cpp
+      jsoncpp
+      nlohmann_json
+      zstd
+      uthash
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      bpftools
+      elfutils
+      libbpf
+      clang
+      gcc
+    ]
+    ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [
     "pic"
@@ -158,7 +162,7 @@ stdenv.mkDerivation {
     '';
 
   postInstall =
-    ''
+    lib.optionalString stdenv.isLinux ''
       # Fix the bash completion location
       installShellCompletion --bash $out/etc/bash_completion.d/sysdig
       rm $out/etc/bash_completion.d/sysdig
@@ -191,7 +195,7 @@ stdenv.mkDerivation {
       mit
     ];
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     broken =
       kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";

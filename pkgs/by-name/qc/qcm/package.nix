@@ -40,16 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     ffmpeg
     cubeb
-  ] ++ cubeb.passthru.backendLibs;
+  ];
 
   # Correct qml import path
   postInstall = ''
     mv $out/lib/qt6 $out/lib/qt-6
   '';
-
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath cubeb.passthru.backendLibs}"
-  ];
 
   meta = {
     description = "Unofficial Qt client for netease cloud music";

@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-env-json";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "tesujimath";
     repo = "bash-env-json";
     rev = finalAttrs.version;
-    hash = "sha256-EYro4pMILnQFpXpFjdzSDuudhqC2EvysYMUmIOvesgo=";
+    hash = "sha256-gyqj5r11DOfXd23LT7qwRLEoWvpHUbxbd28QJnlWTaQ=";
   };
 
   installPhase = ''

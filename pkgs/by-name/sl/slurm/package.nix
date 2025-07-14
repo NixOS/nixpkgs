@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommand,
+  config,
   pkg-config,
   libtool,
   curl,
@@ -33,11 +35,13 @@
   enableX11 ? true,
   enableGtk2 ? false,
   gtk2,
+  enableNVML ? config.cudaSupport,
+  nvml,
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "24.11.0.1";
+  version = "25.05.1.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-waUCyzLCK3NRp8DfkvzWjGjzlB1MIZ7N9X+nfjrdAFY=";
+    hash = "sha256-Lu/ebXI8U4XggYhQ+yyKmGXpgqtCeYMWB3o0+Ujzj0s=";
   };
 
   outputs = [
@@ -113,7 +117,14 @@ stdenv.mkDerivation rec {
       http-parser
     ]
     ++ lib.optionals enableX11 [ xorg.xauth ]
-    ++ lib.optionals enableGtk2 [ gtk2 ];
+    ++ lib.optionals enableGtk2 [ gtk2 ]
+    ++ lib.optionals enableNVML [
+      (runCommand "collect-nvml" { } ''
+        mkdir $out
+        ln -s ${nvml.dev}/include $out/include
+        ln -s ${nvml.lib}/lib/stubs $out/lib
+      '')
+    ];
 
   configureFlags =
     [
@@ -132,7 +143,8 @@ stdenv.mkDerivation rec {
       "--without-rpath" # Required for configure to pick up the right dlopen path
     ]
     ++ (lib.optional enableGtk2 "--disable-gtktest")
-    ++ (lib.optional (!enableX11) "--disable-x11");
+    ++ (lib.optional (!enableX11) "--disable-x11")
+    ++ (lib.optional (enableNVML) "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py

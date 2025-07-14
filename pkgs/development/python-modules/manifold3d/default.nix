@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "manifold3d";
-  version = "3.0.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-02bZAPA4mnWzS9NYVcSW0JE7BidrwzNKBO2nl7BxiiE=";
+    tag = "v${version}";
+    hash = "sha256-dCCTjWRjXSyuEDxGI9ZS2UTmLdZVSmDOmHFnhox3N+4=";
   };
 
   dontUseCmakeConfigure = true;
@@ -62,8 +62,11 @@ buildPythonPackage rec {
   meta = {
     description = "Geometry library for topological robustness";
     homepage = "https://github.com/elalish/manifold";
-    changelog = "https://github.com/elalish/manifold/releases/tag/v${version}";
+    changelog = "https://github.com/elalish/manifold/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      pca006132
+    ];
   };
 }

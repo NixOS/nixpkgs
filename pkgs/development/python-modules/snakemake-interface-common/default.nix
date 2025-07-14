@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-common";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PMEs7yeVfSnZKbabLrbXfIKCIPteNV1wzbt9RIDG3qU=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_interface_common" ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
   meta = with lib; {
     description = "Common functions and classes for Snakemake and its plugins";

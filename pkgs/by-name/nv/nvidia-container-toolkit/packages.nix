@@ -8,7 +8,7 @@
 lib.makeScope newScope (self: {
 
   # The config is only exposed as an attrset so that the user may reach the
-  # deafult values, for inspectability purposes.
+  # default values, for inspectability purposes.
   dockerConfig = {
     disable-require = false;
     #swarm-resource = "DOCKER_RESOURCE_GPU"

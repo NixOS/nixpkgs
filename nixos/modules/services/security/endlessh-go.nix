@@ -4,20 +4,17 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.endlessh-go;
 in
 {
   options.services.endlessh-go = {
-    enable = mkEnableOption "endlessh-go service";
+    enable = lib.mkEnableOption "endlessh-go service";
 
-    package = mkPackageOption pkgs "endlessh-go" { };
+    package = lib.mkPackageOption pkgs "endlessh-go" { };
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
       example = "[::]";
       description = ''
@@ -25,8 +22,8 @@ in
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 2222;
       example = 22;
       description = ''
@@ -38,10 +35,10 @@ in
     };
 
     prometheus = {
-      enable = mkEnableOption "Prometheus integration";
+      enable = lib.mkEnableOption "Prometheus integration";
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         example = "[::]";
         description = ''
@@ -50,8 +47,8 @@ in
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 2112;
         example = 9119;
         description = ''
@@ -61,8 +58,8 @@ in
       };
     };
 
-    extraOptions = mkOption {
-      type = with types; listOf str;
+    extraOptions = lib.mkOption {
+      type = with lib.types; listOf str;
       default = [ ];
       example = [
         "-conn_type=tcp4"
@@ -73,8 +70,8 @@ in
       '';
     };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to open a firewall port for the SSH listener.
@@ -82,7 +79,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.endlessh-go = {
       description = "SSH tarpit";
       requires = [ "network.target" ];
@@ -90,21 +87,21 @@ in
       serviceConfig =
         let
           needsPrivileges = cfg.port < 1024 || cfg.prometheus.port < 1024;
-          capabilities = [ "" ] ++ optionals needsPrivileges [ "CAP_NET_BIND_SERVICE" ];
+          capabilities = [ "" ] ++ lib.optionals needsPrivileges [ "CAP_NET_BIND_SERVICE" ];
           rootDirectory = "/run/endlessh-go";
         in
         {
           Restart = "always";
           ExecStart =
             with cfg;
-            concatStringsSep " " (
+            lib.concatStringsSep " " (
               [
                 (lib.getExe cfg.package)
                 "-logtostderr"
                 "-host=${listenAddress}"
                 "-port=${toString port}"
               ]
-              ++ optionals prometheus.enable [
+              ++ lib.optionals prometheus.enable [
                 "-enable_prometheus"
                 "-prometheus_host=${prometheus.listenAddress}"
                 "-prometheus_port=${toString prometheus.port}"
@@ -113,7 +110,13 @@ in
             );
           DynamicUser = true;
           RootDirectory = rootDirectory;
-          BindReadOnlyPaths = [ builtins.storeDir ];
+          BindReadOnlyPaths = [
+            builtins.storeDir
+            "-/etc/hosts"
+            "-/etc/localtime"
+            "-/etc/nsswitch.conf"
+            "-/etc/resolv.conf"
+          ];
           InaccessiblePaths = [ "-+${rootDirectory}" ];
           RuntimeDirectory = baseNameOf rootDirectory;
           RuntimeDirectoryMode = "700";
@@ -152,8 +155,8 @@ in
         };
     };
 
-    networking.firewall.allowedTCPPorts = with cfg; optionals openFirewall [ port ];
+    networking.firewall.allowedTCPPorts = with cfg; lib.optionals openFirewall [ port ];
   };
 
-  meta.maintainers = with maintainers; [ azahi ];
+  meta.maintainers = with lib.maintainers; [ azahi ];
 }

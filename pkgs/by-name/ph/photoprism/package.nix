@@ -17,14 +17,14 @@
 }:
 
 let
-  version = "240711-2197af848";
+  version = "250321-57590c48b";
   pname = "photoprism";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "photoprism";
+    repo = "photoprism";
     rev = version;
-    hash = "sha256-ihDv5c5RUjDbFcAHJjzp/8qCwKfA+rlFXPziaYarzs8=";
+    hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
   };
 
   libtensorflow = callPackage ./libtensorflow.nix { };
@@ -54,7 +54,7 @@ let
     hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
-  assets_path = "$out/share/${pname}";
+  assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;

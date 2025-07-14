@@ -3,19 +3,20 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   bc,
   nukeReferences,
 }:
 
 stdenv.mkDerivation rec {
   name = "rtl8189es-${kernel.version}-${version}";
-  version = "2024-01-21";
+  version = "2025-04-29";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "eb51e021b0e1b6f94a4b49da3f4ee5c5fb20b715";
-    sha256 = "sha256-n7Bsstr1H1RvguAyJnVqk/JgEx8WEZWaVg7ZfEYykR0=";
+    rev = "7b43c5c7971eabea263dc2b6cc0928b84323f310";
+    sha256 = "sha256-1BCrMJlXswVZrnbulrF2m0lh7jw8PgHzYPkLk6Stbx8=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Makefile --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     (
       "CONFIG_PLATFORM_I386_PC="

@@ -16,11 +16,12 @@
   gnome,
   autoreconfHook,
   gtk-doc,
+  gnumeric,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goffice";
-  version = "0.10.57";
+  version = "0.10.59";
 
   outputs = [
     "out"
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Zr/X4x0vZ1bVpiw2cDg8u6ArPLTBBClQGSqAG3Kjyas=";
+    url = "mirror://gnome/sources/goffice/${lib.versions.majorMinor finalAttrs.version}/goffice-${finalAttrs.version}.tar.xz";
+    hash = "sha256-sI9xczJVlLcfu+pHajC1sxIMPa3/XAom0UDk5SSRZiI=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +61,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "goffice";
       versionPolicy = "odd-unstable";
+    };
+
+    tests = {
+      inherit gnumeric;
     };
   };
 
@@ -78,4 +83,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

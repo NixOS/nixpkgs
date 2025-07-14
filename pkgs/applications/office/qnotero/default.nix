@@ -10,11 +10,12 @@ python3Packages.buildPythonPackage rec {
   pname = "qnotero";
 
   version = "2.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ealbiter";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-Rym7neluRbYCpuezRQyLc6gSl3xbVR9fvhOxxW5+Nzo=";
   };
 

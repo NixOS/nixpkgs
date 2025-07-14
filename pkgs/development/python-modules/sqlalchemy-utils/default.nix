@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kvesteri";
     repo = "sqlalchemy-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
   };
 
@@ -92,9 +92,8 @@ buildPythonPackage rec {
       "test_render_mock_ddl"
     ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "sqlalchemy_utils" ];

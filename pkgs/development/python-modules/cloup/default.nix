@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "cloup";
-  version = "3.0.5";
-  format = "setuptools";
+  version = "3.0.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ySsmHHu34TAEkw8/tLPtrY3i0fEplNzdvgW8IZkEQ8U=";
+    hash = "sha256-yFLgoFQapDPGqzGpuLUD9j2Ygekd2vA4TWknll8rQhw=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ click ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  propagatedBuildInputs = [ click ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -8,27 +8,30 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "harbor-cli";
-  version = "0.0.2";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "goharbor";
     repo = "harbor-cli";
-    rev = "v${version}";
-    hash = "sha256-baS4UHjmE2eURFMDBhXbx9lcKPArb2RH2NVDt3MPE4s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7Fi4FeWsLwTtNZhD8TfSBTMr/LKzUm6UO4aWC0eJFtQ=";
   };
 
-  vendorHash = "sha256-rw2VPRi0VTm7/zVnQ8zL5f4mbzYKnmuxgCbgrpcukaU=";
+  vendorHash = "sha256-gkPMyDX5CO7j6JX3AUNw9o/HApRwLHAd8mD25rq96Lk=";
 
-  excludedPackages = [ "dagger" ];
+  excludedPackages = [
+    "dagger"
+    "doc"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${version}"
+    "-X github.com/goharbor/harbor-cli/cmd/harbor/internal/version.Version=${finalAttrs.version}"
   ];
 
   doCheck = false; # Network required
@@ -50,9 +53,9 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/goharbor/harbor-cli";
     description = "Command-line tool facilitates seamless interaction with the Harbor container registry";
-    changelog = "https://github.com/goharbor/harbor-cli/releases/tag/v${version}";
+    changelog = "https://github.com/goharbor/harbor-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "harbor";
   };
-}
+})

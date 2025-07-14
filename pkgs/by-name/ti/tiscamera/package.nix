@@ -129,6 +129,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  doInstallCheck = true;
+
   preFixup = ''
     gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';

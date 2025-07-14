@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjumbewu";
     repo = "django-rest-framework-csv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-XtMkSucB7+foRpTaRfGF1Co0n3ONNGyzex6MXR4xM5c=";
   };
 

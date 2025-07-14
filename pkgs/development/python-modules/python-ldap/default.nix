@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-ldap";
-    rev = "refs/tags/python-ldap-${version}";
+    tag = "python-ldap-${version}";
     hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
   };
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     "test_tls_ext_noca"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python modules for implementing LDAP clients";

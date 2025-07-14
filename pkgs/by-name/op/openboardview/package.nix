@@ -11,12 +11,8 @@
   fontconfig,
   gtk3,
   wrapGAppsHook3,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation rec {
   pname = "openboardview";
   version = "9.95.0";
@@ -44,15 +40,11 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook3
   ];
-  buildInputs =
-    [
-      SDL2
-      fontconfig
-      gtk3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    SDL2
+    fontconfig
+    gtk3
+  ];
 
   postPatch = ''
     substituteInPlace src/openboardview/CMakeLists.txt \

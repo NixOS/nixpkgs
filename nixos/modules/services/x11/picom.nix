@@ -126,7 +126,7 @@ in
       ];
       description = ''
         List of conditions of windows that should not be faded.
-        See `picom(1)` man page for more examples.
+        See {manpage}`picom(1)` man page for more examples.
       '';
     };
 
@@ -172,7 +172,7 @@ in
       ];
       description = ''
         List of conditions of windows that should have no shadow.
-        See `picom(1)` man page for more examples.
+        See {manpage}`picom(1)` man page for more examples.
       '';
     };
 
@@ -326,7 +326,7 @@ in
         description = ''
           Picom settings. Use this option to configure Picom settings not exposed
           in a NixOS option or to bypass one.  For the available options see the
-          CONFIGURATION FILES section at `picom(1)`.
+          CONFIGURATION FILES section at {manpage}`picom(1)`.
         '';
       };
   };

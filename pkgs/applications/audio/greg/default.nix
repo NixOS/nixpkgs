@@ -8,13 +8,14 @@ with pythonPackages;
 buildPythonApplication rec {
   pname = "greg";
   version = "0.4.8";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "manolomartinez";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 

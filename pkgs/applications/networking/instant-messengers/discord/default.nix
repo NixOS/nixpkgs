@@ -9,54 +9,54 @@ let
   versions =
     if stdenv.hostPlatform.isLinux then
       {
-        stable = "0.0.78";
-        ptb = "0.0.124";
-        canary = "0.0.549";
-        development = "0.0.56";
+        stable = "0.0.100";
+        ptb = "0.0.148";
+        canary = "0.0.709";
+        development = "0.0.81";
       }
     else
       {
-        stable = "0.0.330";
-        ptb = "0.0.153";
-        canary = "0.0.661";
-        development = "0.0.68";
+        stable = "0.0.350";
+        ptb = "0.0.179";
+        canary = "0.0.808";
+        development = "0.0.94";
       };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
         url = "https://stable.dl2.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        hash = "sha256-1G9NM0Z6dN2LtunHkkIzNNA+xFslxhnI8GVrjXlNZK8=";
+        hash = "sha256-3trE9awddfB1ZasJQjbQc0xOoTqIRY0thEwL7Uz5+O8=";
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        hash = "sha256-jJncDqX2vCWFIpgruX1SknZBrCvMM5HSy6je9xxnxqM=";
+        hash = "sha256-VRhcnjbC42nFZ3DepKNX75pBl0GeDaSWM1SGXJpuQs0=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        hash = "sha256-hwgvPNoEGjfg6uLlC/k3iYfxfjbja5H2F2aSiEcGZ/o=";
+        hash = "sha256-2lzXTuE+nkyw+GG9nAMxIIloAlEngY9Q6OKfbrWgFiI=";
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
-        hash = "sha256-pxoFT1P/F/0Mhy5sECZlzIxrHK+/Y8Sy5BvgvNYRfM4=";
+        hash = "sha256-njkuWtk+359feEYtWJSDukvbD5duXuRIr1m5cJVhNvs=";
       };
     };
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://stable.dl2.discordapp.net/apps/osx/${version}/Discord.dmg";
-        hash = "sha256-wLDr2jtjPsV3rUsFCNKKHXTwGPdoR/whLmr4w8I7x+U=";
+        hash = "sha256-Giz0bE16v2Q2jULcnZMI1AY8zyjZ03hw4KVpDPJOmCo=";
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        hash = "sha256-EvIEMyqOotnyqBC8w4XbF+RuP+g2Bjt4hD4aEeEzZGU=";
+        hash = "sha256-tGE7HAcWLpGlv5oXO7NEELdRtNfbhlpQeNc5zB7ba1A=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        hash = "sha256-dCeLnfgvaKngO8r/VIDgQLkMKgV7BDOOKcXUdo91Eeo=";
+        hash = "sha256-Cu7U70yzHgOAJjtEx85T3x9f1oquNz7VNsX53ISbzKg=";
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
-        hash = "sha256-5sUkGN9ucyYArGkfbGBdJokoqpHKBrkwxH055LpMlrs=";
+        hash = "sha256-+bmzdkOSMpKnLGEoeXmAJSv2UHzirOLe1HDHAdHG2U8=";
       };
     };
     aarch64-darwin = x86_64-darwin;

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rbanffy";
     repo = "pip-chill";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oWq3UWBL5nsCBUkaElashZKvm7pN3StJNubgU++8YFs=";
   };
 

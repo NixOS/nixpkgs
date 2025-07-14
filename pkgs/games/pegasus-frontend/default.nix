@@ -14,7 +14,7 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pegasus-frontend";
   version = "0-unstable-2024-11-11";
 

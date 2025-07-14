@@ -9,13 +9,11 @@
   xcbuild,
   pango,
   giflib,
-  apple-sdk_11,
-  darwinMinVersionHook,
   jellyfin,
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.10.3";
+  version = "10.10.7";
 
   src =
     assert version == jellyfin.version;
@@ -23,17 +21,17 @@ buildNpmPackage rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-xmy2cr6MJSen6Pok3Wde4mBcu5pM4qtGEBfqMpGdAxY=";
+      hash = "sha256-jX9Qut8YsJRyKI2L7Aww4+6G8z741WzN37CUx3KWQfY=";
     };
 
-  nodejs = nodejs_20;  # does not build with 22
+  nodejs = nodejs_20; # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \
       --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
   '';
 
-  npmDepsHash = "sha256-qzjniTbJRNeZ2WFu8RBjcdZR96nvGRHMERdEiELLufg=";
+  npmDepsHash = "sha256-nfvqVByD3Kweq+nFJQY4R2uRX3mx/qJvGFiKiOyMUdw=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -48,10 +46,6 @@ buildNpmPackage rec {
     [ pango ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
-      apple-sdk_11
-      # node-canvas builds code that requires aligned_alloc,
-      # which on Darwin requires at least the 10.15 SDK
-      (darwinMinVersionHook "10.15")
     ];
 
   installPhase = ''

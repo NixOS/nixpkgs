@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Language files for gruut tokenizer/phonemizer";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

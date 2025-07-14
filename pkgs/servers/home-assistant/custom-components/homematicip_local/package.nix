@@ -7,15 +7,15 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "danielperna84";
+  owner = "SukramJ";
   domain = "homematicip_local";
-  version = "1.75.0";
+  version = "1.84.1";
 
   src = fetchFromGitHub {
-    owner = "danielperna84";
+    owner = "SukramJ";
     repo = "custom_homematic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-H5Gf09C9/s2JYVTjgiYNe28mV18mqTiJ0ZDR6rnuojo=";
+    tag = version;
+    hash = "sha256-iR+y2hY8wF4flMWsh52gcupZbnaAlbwibHx1sY5JmmM=";
   };
 
   postPatch = ''
@@ -30,9 +30,9 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/danielperna84/custom_homematic/blob/${version}/changelog.md";
+    changelog = "https://github.com/SukramJ/custom_homematic/blob/${src.tag}/changelog.md";
     description = "Custom Home Assistant Component for HomeMatic";
-    homepage = "https://github.com/danielperna84/custom_homematic";
+    homepage = "https://github.com/SukramJ/custom_homematic";
     maintainers = with lib.maintainers; [ dotlambda ];
     license = lib.licenses.mit;
   };

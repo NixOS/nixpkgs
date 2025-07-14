@@ -1,5 +1,6 @@
 {
   lib,
+  nix-update-script,
   buildGoModule,
   fetchFromGitHub,
   olm,
@@ -13,21 +14,23 @@
 
 buildGoModule rec {
   pname = "mautrix-whatsapp";
-  version = "0.11.2";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "whatsapp";
     rev = "v${version}";
-    hash = "sha256-3S4aNoxK99iExhTJQP/JNq0GajCUjbdq4cUgCBudyXI=";
+    hash = "sha256-Es6RWUo/e25wYGIz6feVNXIQbMCDPl1iZoKT3x8vHtA=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-9iX+pzken+/7+nqYa71rcc1olCdpmu3UfR09ag3KSKs=";
+  vendorHash = "sha256-/R6MI6egGV1E1YzKcxBSOb2z97kA1HCK5GdMgfR1vSM=";
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-whatsapp";
@@ -37,6 +40,7 @@ buildGoModule rec {
       vskilet
       ma27
       chvp
+      SchweGELBin
     ];
     mainProgram = "mautrix-whatsapp";
   };

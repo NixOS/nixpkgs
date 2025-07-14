@@ -16,13 +16,20 @@ in
       // lib.mkOption {
         apply = pkg: pkg.override { systemdSupport = true; };
       };
+    systemd.target = lib.mkOption {
+      type = lib.types.str;
+      description = ''
+        The systemd target that will automatically start the Waybar service.
+      '';
+      default = "graphical-session.target";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd = {
       packages = [ cfg.package ];
-      user.services.waybar.wantedBy = [ "graphical-session.target" ];
+      user.services.waybar.wantedBy = [ cfg.systemd.target ];
     };
   };
 

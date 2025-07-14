@@ -16,6 +16,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
   };
-
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -46,7 +43,10 @@ buildPythonPackage rec {
     openapi-schema-validator
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # network access

@@ -1,10 +1,11 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  python3,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "wsrepl";
   version = "0.2.0";
   pyproject = true;
@@ -12,19 +13,20 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "doyensec";
     repo = "wsrepl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Y96p39TjpErGsR5vFS0NxEF/2Tnr2Zk7ULDgNXaXx9o=";
   };
 
   pythonRelaxDeps = [
+    "rich"
     "textual"
   ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     pygments
     pyperclip
     rich
@@ -39,12 +41,16 @@ python3.pkgs.buildPythonApplication rec {
     "wsrepl"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "WebSocket REPL";
     homepage = "https://github.com/doyensec/wsrepl";
     changelog = "https://github.com/doyensec/wsrepl/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wsrepl";
   };
 }

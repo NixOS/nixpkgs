@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # PyPI distribution does not include tests
   src = fetchFromGitHub {
     owner = "csingley";
-    repo = pname;
+    repo = "ofxtools";
     rev = version;
     hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };

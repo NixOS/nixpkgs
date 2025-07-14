@@ -1,11 +1,22 @@
 {
   self,
   bash,
+  fetchpatch,
   fzf,
   lib,
   openssl,
   zstd,
 }:
+
+let
+  js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+  js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+  gen_js_api = self.gen_js_api.override {
+    inherit js_of_ocaml-compiler;
+    ojs = self.ojs.override { inherit js_of_ocaml-compiler; };
+  };
+  js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+in
 
 with self;
 
@@ -211,6 +222,10 @@ with self;
       ctypes-foreign
       openssl
     ];
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/async_ssl/no-incompatible-pointer-types-017.patch";
+      hash = "sha256-bpfIi97/b1hIwsFzsmhFAZV1w8CdaMxXoi72ScSYMjY=";
+    };
   };
 
   async_unix = janePackage {
@@ -249,8 +264,8 @@ with self;
 
   base = janePackage {
     pname = "base";
-    version = "0.17.1";
-    hash = "sha256-5wqBpOHhiIy9JUuxb3OnpZHrHSM7VODuLSihaIyeFn0=";
+    version = "0.17.2";
+    hash = "sha256-GMUlo77IKXwsldZYK5uRcmjj2RyaDhdfFo1KRCJl9Dc=";
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [
@@ -483,7 +498,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "sha256-eqBMiEJ5xUrgFJTMZoEDxqkhedQxxbbf0DedZKHprww=";
+    version = "0.17.1";
+    hash = "sha256-xJoBW6TBBnzR5n38E5LHBFYO2CRIsME7OTdEZKn8EqU=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [
@@ -498,6 +514,7 @@ with self;
       patchShebangs unix_pseudo_terminal/src/discover.sh
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
+
   };
 
   csvfields = janePackage {
@@ -743,6 +760,10 @@ with self;
   janestreet_cpuid = janePackage {
     pname = "janestreet_cpuid";
     hash = "sha256-3ZwEZQSkJJyFW5/+C9x8nW6+GrfVwccNFPlcs7qNcjQ=";
+    patches = fetchpatch {
+      url = "https://github.com/janestreet/janestreet_cpuid/commit/55223d9708388fe990553669d881f78a811979b9.patch";
+      hash = "sha256-aggT6GGMkQj4rRkSZK4hoPRzEfpC8z9qnIROptMDf9E=";
+    };
     meta.description = "A library for parsing CPU capabilities out of the `cpuid` instruction";
     propagatedBuildInputs = [
       core
@@ -914,7 +935,16 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
+    ];
+    patches = [
+      # This patch is needed because of an issue with the aarch64 CRC32
+      # intrinsics that was introduced with ocaml_intrinsics v0.17. It should
+      # be removed as soon as
+      # https://github.com/janestreet/ocaml_intrinsics/pull/11 is merged.
+      ./ocaml_intrinsics-fix-aarch64-crc32-intrinsics.patch
     ];
   };
 
@@ -1121,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
@@ -1201,7 +1232,8 @@ with self;
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
-    hash = "sha256-m4Nr48ZET632I6vw5RjpNA0elW3lpN3aPmfA3RzsEn8=";
+    version = "0.17.2";
+    hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
     meta.description = "Cram like framework for OCaml";
     propagatedBuildInputs = [
       ppx_here
@@ -1536,12 +1568,25 @@ with self;
     ];
   };
 
-  ppxlib_jane = janePackage {
-    pname = "ppxlib_jane";
-    hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
-    meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
-    propagatedBuildInputs = [ ppxlib ];
-  };
+  ppxlib_jane = janePackage (
+    {
+      pname = "ppxlib_jane";
+      meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
+      propagatedBuildInputs = [ ppxlib ];
+    }
+    // (
+      if lib.versionAtLeast ocaml.version "5.3" then
+        {
+          version = "0.17.2";
+          hash = "sha256-AQJSdKtF6p/aG5Lx8VHVEOsisH8ep+iiml6DtW+Hdik=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
+        }
+    )
+  );
 
   profunctor = janePackage {
     pname = "profunctor";
@@ -1936,6 +1981,7 @@ with self;
     pname = "virtual_dom";
     hash = "sha256-5T+/N1fELa1cR9mhWLUgS3Fwr1OQXJ3J6T3YaHT9q7U=";
     meta.description = "OCaml bindings for the virtual-dom library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.3";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [
       base64

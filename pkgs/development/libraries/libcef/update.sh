@@ -1,25 +1,43 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq
+#!nix-shell -i bash -p curl gnused jq common-updater-scripts
 
-set -x -eu -o pipefail
+set -euo pipefail
 
-cd $(dirname "${BASH_SOURCE[0]}")
+current_version=$(nix-instantiate --eval -E "with import ./. {}; libcef.version or (lib.getVersion libcef)" | tr -d '"')
 
-VERSION_JSON=$(curl --silent https://cef-builds.spotifycdn.com/index.json | jq '[.linux64.versions[] | select (.channel == "stable")][0]')
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-CEF_VERSION=$(echo ${VERSION_JSON} | jq -r '.cef_version' | cut -d'+' -f1)
-GIT_REVISION=$(echo ${VERSION_JSON} | jq -r '.cef_version' | cut -d'+' -f2 | cut -c 2-)
-CHROMIUM_VERSION=$(echo ${VERSION_JSON} | jq -r '.chromium_version')
+version_json=$(curl --silent https://cef-builds.spotifycdn.com/index.json | jq '[.linux64.versions[] | select (.channel == "stable")][0]')
+cef_version=$(echo "$version_json" | jq -r '.cef_version' | cut -d'+' -f1)
+git_revision=$(echo "$version_json" | jq -r '.cef_version' | cut -d'+' -f2 | cut -c 2-)
+chromium_version=$(echo "$version_json" | jq -r '.chromium_version')
 
-SHA256_LINUX64=$(nix-prefetch-url --quiet https://cef-builds.spotifycdn.com/cef_binary_${CEF_VERSION}+g${GIT_REVISION}+chromium-${CHROMIUM_VERSION}_linux64_minimal.tar.bz2)
-SHA256_LINUXARM64=$(nix-prefetch-url --quiet https://cef-builds.spotifycdn.com/cef_binary_${CEF_VERSION}+g${GIT_REVISION}+chromium-${CHROMIUM_VERSION}_linuxarm64_minimal.tar.bz2)
+echo "Latest  version: $cef_version"
+echo "Current version: $current_version"
 
-setKV () {
-    sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" ./default.nix
+if [[ "$cef_version" == "$current_version" ]]; then
+    echo "Package is up-to-date"
+    exit 0
+fi
+
+update_nix_value() {
+    local key="$1"
+    local value="${2:-}"
+    sed -i "s|$key = \".*\"|$key = \"$value\"|" $ROOT/default.nix
 }
 
-setKV version ${CEF_VERSION}
-setKV gitRevision ${GIT_REVISION}
-setKV chromiumVersion ${CHROMIUM_VERSION}
-setKV 'platforms."aarch64-linux".sha256' ${SHA256_LINUXARM64}
-setKV 'platforms."x86_64-linux".sha256' ${SHA256_LINUX64}
+update_nix_value version "$cef_version"
+update_nix_value gitRevision "$git_revision"
+update_nix_value chromiumVersion "$chromium_version"
+
+declare -a platforms=(
+    "x86_64-linux 64"
+    "aarch64-linux arm64"
+)
+
+for platform in "${platforms[@]}"; do
+    read -r system arch <<< "$platform"
+    url="https://cef-builds.spotifycdn.com/cef_binary_${cef_version}+g${git_revision}+chromium-${chromium_version}_linux${arch}_minimal.tar.bz2"
+    hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")
+    update-source-version libcef "$cef_version" "$hash" --system="$system" --ignore-same-version
+done

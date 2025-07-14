@@ -23,14 +23,14 @@ mkDerivation {
   buildInputs = [
     karchive
     openexr
-    libavif
+    # FIXME: cmake files are broken, disabled for now
+    # libavif
     libheif
     libjxl
     libraw
     qtbase
   ];
   outputs = [ "out" ]; # plugins only
-  CXXFLAGS = "-I${getDev ilmbase}/include/OpenEXR";
   cmakeFlags = [
     "-DKIMAGEFORMATS_HEIF=ON"
   ];

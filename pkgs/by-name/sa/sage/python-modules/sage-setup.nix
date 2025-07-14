@@ -9,6 +9,7 @@
 
 buildPythonPackage rec {
   version = src.version;
+  format = "setuptools";
   pname = "sage-setup";
   src = sage-src;
 
@@ -26,6 +27,6 @@ buildPythonPackage rec {
     description = "Build system of the Sage library";
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
   };
 }

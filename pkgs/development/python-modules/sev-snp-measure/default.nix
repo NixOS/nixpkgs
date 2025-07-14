@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "sev-snp-measure";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M+d9uIAQvEmEsdhhjlwHbhB2RhlaGjphN4ov2ipzCFY=";
   };
 

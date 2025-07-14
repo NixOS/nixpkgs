@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.3.0";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OpCArFHQNhXnwZEKCiqN8IQkiStfE7BiiiBNP8zg6os=";
+    hash = "sha256-USA9me1XP6c0S/B8pibxDHzAlOCEasSqACO9DIPCWkE=";
   };
 
   outputs = [
@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [
       zaninime
-      AndersonTorres
     ];
     platforms = lib.platforms.all;
   };

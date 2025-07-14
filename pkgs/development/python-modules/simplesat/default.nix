@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "sat-solver";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/fBnpf1DtaF+wQYZztcB8Y20/ZMYxrF3fH5qRsMucL0=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       --replace-fail "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  pytestFlagsArray = [ "simplesat/tests" ];
+  enabledTestPaths = [ "simplesat/tests" ];
 
   meta = with lib; {
     description = "Prototype for SAT-based dependency handling";

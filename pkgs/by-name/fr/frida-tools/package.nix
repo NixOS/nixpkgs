@@ -1,19 +1,34 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "frida-tools";
-  version = "13.6.0";
+  version = "14.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M0S8tZagToIP6Qyr9RWNAGGfWOcOtO0bYKC02IhCpvg=";
+    hash = "sha256-ACiznCkOZvnPUSB+Xcs4IZfbPGyknr193gLok0FrzqA=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "frida"
+    "websockets"
+  ];
+
+  dependencies = with python3Packages; [
     pygments
     prompt-toolkit
     colorama
     frida-python
+    websockets
   ];
 
   meta = {

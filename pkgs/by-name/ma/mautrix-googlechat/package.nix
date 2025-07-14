@@ -10,11 +10,12 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
   version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4H+zUH0GEQ5e/9Bv0BVdf1/pXulx2ihZrhJ+jl/db+U=";
   };
 

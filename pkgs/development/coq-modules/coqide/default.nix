@@ -17,7 +17,7 @@ mkCoqDerivation rec {
   inherit (coq) src;
   release."${coq.version}" = { };
 
-  defaultVersion = if lib.versions.isGe "8.14" coq.version then coq.version else null;
+  defaultVersion = if lib.versions.range "8.14" "8.20" coq.version then coq.version else null;
 
   preConfigure = ''
     patchShebangs dev/tools/

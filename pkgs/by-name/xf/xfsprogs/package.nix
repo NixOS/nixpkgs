@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchurl,
+  autoreconfHook,
   gettext,
   pkg-config,
   icu,
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.12.0";
+  version = "6.15.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
+    hash = "sha256-E7kfdL7vitERN/fZ1xBVVz2R6WG8VbsCRZVvabhM1wQ=";
   };
 
   outputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
+    autoreconfHook
     gettext
     pkg-config
     libuuid # codegen tool uses libuuid
@@ -61,6 +63,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./install-sh
   '';
 
+  # The default --force would replace xfsprogs' custom install-sh.
+  autoreconfFlags = [
+    "--install"
+    "--verbose"
+  ];
+
   configureFlags = [
     "--disable-lib64"
     "--with-systemd-unit-dir=${placeholder "out"}/lib/systemd/system"
@@ -90,5 +98,8 @@ stdenv.mkDerivation rec {
       dezgeg
       ajs124
     ];
+    # error: ‘struct statx’ has no member named ‘stx_atomic_write_unit_min’ ‘stx_atomic_write_unit_max’ ‘stx_atomic_write_segments_max’
+    # remove if https://www.openwall.com/lists/musl/2024/10/23/6 gets merged
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

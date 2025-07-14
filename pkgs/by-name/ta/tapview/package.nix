@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "esr";
-    repo = pname;
+    repo = "tapview";
     rev = version;
     hash = "sha256-inrxICNglZU/tup+YnHaDiVss32K2OXht/7f8lOZI4g=";
   };

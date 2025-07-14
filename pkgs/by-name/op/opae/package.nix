@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opae";
     repo = "opae-sdk";
-    rev = "refs/tags/${tver}";
+    tag = tver;
     sha256 = "1dmkpnr9dqxwjhbdzx2r3fdfylvinda421yyg319am5gzlysxwi8";
   };
 

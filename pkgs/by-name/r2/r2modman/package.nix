@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.55";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gFQzZUuKEMcD34OlRuNNA2edzs2tQXm8hl3r6PIEUrE=";
+    hash = "sha256-l1xrp+Gl26kiWqh5pIKp4QiETrzr5mTrUP10T0DhUCw=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-VXlFB7hT+aL3yufJ/Ar7FMdrk2Iptf5rdvagAop00lk=";
+    hash = "sha256-HLVHxjyymi0diurVamETrfwYM2mkUrIOHhbYCrqGkeg=";
   };
 
   patches = [
@@ -95,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "r2modman";
-      exec = "r2modman";
+      exec = "r2modman %U";
       icon = "r2modman";
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
+      mimeTypes = [ "x-scheme-handler/ror2mm" ];
       keywords = [
         "launcher"
         "mod manager"

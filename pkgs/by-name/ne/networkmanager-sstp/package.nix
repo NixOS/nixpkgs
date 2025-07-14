@@ -29,18 +29,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    file
-    gettext
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      file
+      gettext
+      glib # for gdbus-codegen
+      pkg-config
+    ]
+    ++ lib.optionals withGnome [
+      gtk4 # for gtk4-builder-tool
+    ];
 
   buildInputs =
     [
       sstp
       networkmanager
-      glib
       ppp
     ]
     ++ lib.optionals withGnome [
@@ -63,6 +67,8 @@ stdenv.mkDerivation rec {
     "--enable-absolute-paths"
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -73,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NetworkManager's sstp plugin";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = licenses.gpl2Plus;
   };
 }

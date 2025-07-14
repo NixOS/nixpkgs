@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "lsp-tree-sitter";
-  version = "0.0.16";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "lsp-tree-sitter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nRzyVZFgb08M0I+xmhuX1LDwPsghlBLdZ2Ou8stKzk0=";
+    tag = version;
+    hash = "sha256-4DQzHdii2YS/Xg6AdT/kXC/8B88ZQaLgUf2oWoOthV8=";
   };
 
   build-system = [
@@ -45,5 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/neomutt/lsp-tree-sitter";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ doronbehar ];
+    # https://github.com/neomutt/lsp-tree-sitter/issues/4
+    broken = true;
   };
 }

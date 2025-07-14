@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.6.0";
+  version = "9.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.config";
+    pname = "oslo_config";
     inherit version;
-    hash = "sha256-nwXvcOSNmmGo0Mm+04naJPLvWonfW26N63x0HWETZn4=";
+    hash = "sha256-7qgAlQSr7mchN8WL2r2roYX0lrk8ha3SRuLNzr6dCKo=";
   };
 
   postPatch = ''
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Oslo Configuration API";
     homepage = "https://github.com/openstack/oslo.config";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

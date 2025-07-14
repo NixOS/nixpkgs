@@ -10,17 +10,17 @@
 
 maven.buildMavenPackage rec {
   pname = "schemaspy";
-  version = "6.2.4";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "schemaspy";
     repo = "schemaspy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yEqhLpGrJ4hki8o+u+bigVXv+3YvEb8TvHDTYsEl8z4=";
+    tag = "v${version}";
+    hash = "sha256-X85Yv6yx1Hpl3vNDHtv6u38Err668dkAx1lqpoGnALg=";
   };
 
   mvnParameters = "-Dmaven.test.skip=true -Dmaven.buildNumber.skip=true";
-  mvnHash = "sha256-LCPRiY/DDSUnLGnaFUS9PPKnh3TmSyAOqKfEKRLRjpg=";
+  mvnHash = "sha256-sCVWNzh8m3KvJyYzE2Mn+gbJTSt1/yX44dE4s7HkygU=";
 
   nativeBuildInputs = [
     makeWrapper

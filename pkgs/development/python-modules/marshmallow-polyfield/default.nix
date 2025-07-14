@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bachmann1234";
     repo = "marshmallow-polyfield";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jbpeyih2Ccw1Rk+QcXRO9AfN5B/DhZmxa/M6FzXHqqs=";
   };
 

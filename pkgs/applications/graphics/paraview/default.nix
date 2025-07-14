@@ -6,19 +6,14 @@
   boost,
   cmake,
   ffmpeg,
-  wrapQtAppsHook,
-  qtbase,
-  qtx11extras,
-  qttools,
-  qtxmlpatterns,
-  qtsvg,
+  libsForQt5,
   gdal,
   gfortran,
   libXt,
   makeWrapper,
   ninja,
   mpi,
-  python3,
+  python312,
   tbb,
   libGLU,
   libGL,
@@ -26,13 +21,13 @@
 }:
 
 let
-  version = "5.13.0";
+  version = "5.13.2";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      hash = "sha256-hoCa/aTy2mmsPHP3Zm0hLZlZKbtUMpjUlc2rFKKChco=";
+      hash = "sha256-jJ6YUT2rgVExfKv900LbSO+MDQ4u73K7cBScHxWoP+g=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
@@ -42,7 +37,7 @@ let
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewCatalystGuide-${version}.pdf";
       name = "CatalystGuide.pdf";
-      hash = "sha256-t1lJ1Wiswhdxovt2O4sXTXfFxshDiZZVdnkXt/+BQn8=";
+      hash = "sha256-Pl7X5cBj3OralkOw5A29CtXnA+agYr6kWHf/+KZNHow=";
     })
   ];
 
@@ -56,13 +51,13 @@ stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-JRSuvBON2n0UnbrFia4Qmf6eYb1Mc+Z7dIcXSeUhpIc=";
+    hash = "sha256-29PLXVpvj8RLkSDWQgj5QjBZ6l1/0NoVx/qcJXOSssU=";
     fetchSubmodules = true;
   };
 
   # Find the Qt platform plugin "minimal"
   preConfigure = ''
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
@@ -88,7 +83,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     ninja
     gfortran
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -100,11 +95,11 @@ stdenv.mkDerivation rec {
     boost
     ffmpeg
     gdal
-    qtbase
-    qtx11extras
-    qttools
-    qtxmlpatterns
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qttools
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qtsvg
   ];
 
   postInstall =
@@ -119,7 +114,7 @@ stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (
+    (python312.withPackages (
       ps: with ps; [
         numpy
         matplotlib
@@ -127,6 +122,9 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  # 23k objects, >4h on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     homepage = "https://www.paraview.org";

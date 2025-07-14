@@ -6,7 +6,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "ifconfig-parser";
   version = "0.0.5";
   pyproject = true;

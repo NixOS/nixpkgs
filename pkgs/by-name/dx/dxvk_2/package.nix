@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.5.2";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-be1TDfUivl+tjcwT/VYWMV2lP7uxFfCXVPSApKgoC78=";
+    hash = "sha256-edu9JQAKu8yUZLh+37RB1s1A3+s8xeUYQ5Oibdes9ZI=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 

@@ -10,6 +10,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -17,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "binary";
-  version = "5.2";
+  version = "5.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
-    rev = "refs/tags/${version}";
-    hash = "sha256-0pVQMPwy/XXJl2fHQ/gIi+e/cJY87CA9G+GPkdYFQBc=";
+    tag = version;
+    hash = "sha256-kJLEDE/jHKc/VDGa0lcm4eM7nEMam0fbEW8YJVfc7OY=";
   };
 
   strictDeps = true;
@@ -56,12 +57,16 @@ python3Packages.buildPythonApplication rec {
     mesonCheckPhase
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Small and simple app to convert numbers to a different base";
     homepage = "https://github.com/fizzyizzy05/binary";
     changelog = "https://github.com/fizzyizzy05/binary/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "binary";
     platforms = lib.platforms.linux;
   };

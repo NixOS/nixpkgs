@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,18 +23,20 @@ let
     ${cfg.extraConfig}
   '';
 
-  snmpGlobalDefs = with cfg.snmp; optionalString enable (
-    optionalString (socket != null) "snmp_socket ${socket}\n"
-    + optionalString enableKeepalived "enable_snmp_keepalived\n"
-    + optionalString enableChecker "enable_snmp_checker\n"
-    + optionalString enableRfc "enable_snmp_rfc\n"
-    + optionalString enableRfcV2 "enable_snmp_rfcv2\n"
-    + optionalString enableRfcV3 "enable_snmp_rfcv3\n"
-    + optionalString enableTraps "enable_traps"
-  );
+  snmpGlobalDefs =
+    with cfg.snmp;
+    optionalString enable (
+      optionalString (socket != null) "snmp_socket ${socket}\n"
+      + optionalString enableKeepalived "enable_snmp_keepalived\n"
+      + optionalString enableChecker "enable_snmp_checker\n"
+      + optionalString enableRfc "enable_snmp_rfc\n"
+      + optionalString enableRfcV2 "enable_snmp_rfcv2\n"
+      + optionalString enableRfcV3 "enable_snmp_rfcv3\n"
+      + optionalString enableTraps "enable_traps"
+    );
 
-  vrrpScriptStr = concatStringsSep "\n" (map (s:
-    ''
+  vrrpScriptStr = concatStringsSep "\n" (
+    map (s: ''
       vrrp_script ${s.name} {
         script "${s.script}"
         interval ${toString s.interval}
@@ -41,11 +48,11 @@ let
 
         ${s.extraConfig}
       }
-    ''
-  ) vrrpScripts);
+    '') vrrpScripts
+  );
 
-  vrrpInstancesStr = concatStringsSep "\n" (map (i:
-    ''
+  vrrpInstancesStr = concatStringsSep "\n" (
+    map (i: ''
       vrrp_instance ${i.name} {
         interface ${i.interface}
         state ${i.state}
@@ -83,10 +90,12 @@ let
 
         ${i.extraConfig}
       }
-    ''
-  ) vrrpInstances);
+    '') vrrpInstances
+  );
 
-  virtualIpLine = ip: ip.addr
+  virtualIpLine =
+    ip:
+    ip.addr
     + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
     + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
     + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
@@ -94,39 +103,52 @@ let
 
   notNullOrEmpty = s: !(s == null || s == "");
 
-  vrrpScripts = mapAttrsToList (name: config:
+  vrrpScripts = mapAttrsToList (
+    name: config:
     {
       inherit name;
-    } // config
+    }
+    // config
   ) cfg.vrrpScripts;
 
-  vrrpInstances = mapAttrsToList (iName: iConfig:
+  vrrpInstances = mapAttrsToList (
+    iName: iConfig:
     {
       name = iName;
-    } // iConfig
+    }
+    // iConfig
   ) cfg.vrrpInstances;
 
-  vrrpInstanceAssertions = i: [
-    { assertion = i.interface != "";
-      message = "services.keepalived.vrrpInstances.${i.name}.interface option cannot be empty.";
-    }
-    { assertion = i.virtualRouterId >= 0 && i.virtualRouterId <= 255;
-      message = "services.keepalived.vrrpInstances.${i.name}.virtualRouterId must be an integer between 0..255.";
-    }
-    { assertion = i.priority >= 0 && i.priority <= 255;
-      message = "services.keepalived.vrrpInstances.${i.name}.priority must be an integer between 0..255.";
-    }
-    { assertion = i.vmacInterface == null || i.useVmac;
-      message = "services.keepalived.vrrpInstances.${i.name}.vmacInterface has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
-    }
-    { assertion = !i.vmacXmitBase || i.useVmac;
-      message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
-    }
-  ] ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
+  vrrpInstanceAssertions =
+    i:
+    [
+      {
+        assertion = i.interface != "";
+        message = "services.keepalived.vrrpInstances.${i.name}.interface option cannot be empty.";
+      }
+      {
+        assertion = i.virtualRouterId >= 0 && i.virtualRouterId <= 255;
+        message = "services.keepalived.vrrpInstances.${i.name}.virtualRouterId must be an integer between 0..255.";
+      }
+      {
+        assertion = i.priority >= 0 && i.priority <= 255;
+        message = "services.keepalived.vrrpInstances.${i.name}.priority must be an integer between 0..255.";
+      }
+      {
+        assertion = i.vmacInterface == null || i.useVmac;
+        message = "services.keepalived.vrrpInstances.${i.name}.vmacInterface has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
+      }
+      {
+        assertion = !i.vmacXmitBase || i.useVmac;
+        message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
+      }
+    ]
+    ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
     ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
 
   virtualIpAssertions = vrrpName: ip: [
-    { assertion = ip.addr != "";
+    {
+      assertion = ip.addr != "";
       message = "The 'addr' option for an services.keepalived.vrrpInstances.${vrrpName}.virtualIps entry cannot be empty.";
     }
   ];
@@ -152,6 +174,8 @@ in
           Whether to enable Keepalived.
         '';
       };
+
+      package = lib.mkPackageOption pkgs "keepalived" { };
 
       openFirewall = mkOption {
         type = types.bool;
@@ -241,18 +265,26 @@ in
       };
 
       vrrpScripts = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-script-options.nix {
-          inherit lib;
-        }));
-        default = {};
+        type = types.attrsOf (
+          types.submodule (
+            import ./vrrp-script-options.nix {
+              inherit lib;
+            }
+          )
+        );
+        default = { };
         description = "Declarative vrrp script config";
       };
 
       vrrpInstances = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-instance-options.nix {
-          inherit lib;
-        }));
-        default = {};
+        type = types.attrsOf (
+          types.submodule (
+            import ./vrrp-instance-options.nix {
+              inherit lib;
+            }
+          )
+        );
+        default = { };
         description = "Declarative vhost config";
       };
 
@@ -308,7 +340,10 @@ in
 
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {
@@ -317,31 +352,39 @@ in
       };
     };
 
-    systemd.services.keepalived = let
-      finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
-    in {
-      description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" ];
-      wants = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "forking";
-        PIDFile = pidFile;
-        KillMode = "process";
-        RuntimeDirectory = "keepalived";
-        EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStartPre = lib.optional (cfg.secretFile != null)
-        (pkgs.writeShellScript "keepalived-pre-start" ''
-          umask 077
-          ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
-        '');
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
-          + " -f ${finalConfigFile}"
-          + " -p ${pidFile}"
-          + optionalString cfg.snmp.enable " --snmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        Restart = "always";
-        RestartSec = "1s";
+    systemd.services.keepalived =
+      let
+        finalConfigFile =
+          if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
+      in
+      {
+        description = "Keepalive Daemon (LVS and VRRP)";
+        after = [
+          "network.target"
+          "network-online.target"
+        ];
+        wants = [ "network-online.target" ];
+        serviceConfig = {
+          Type = "forking";
+          PIDFile = pidFile;
+          KillMode = "process";
+          RuntimeDirectory = "keepalived";
+          EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
+          ExecStartPre = lib.optional (cfg.secretFile != null) (
+            pkgs.writeShellScript "keepalived-pre-start" ''
+              umask 077
+              ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
+            ''
+          );
+          ExecStart =
+            "${lib.getExe cfg.package}"
+            + " -f ${finalConfigFile}"
+            + " -p ${pidFile}"
+            + optionalString cfg.snmp.enable " --snmp";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "always";
+          RestartSec = "1s";
+        };
       };
-    };
   };
 }

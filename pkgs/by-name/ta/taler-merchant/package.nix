@@ -11,17 +11,21 @@
   autoreconfHook,
   makeWrapper,
   jq,
+  libgcrypt,
+  texinfo,
+  curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.13.0";
+  version = "1.0.1";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-N3atOOE21OEks3G1LPOM5qo/kq0D5D9gmTfURCBZx6M=";
+    hash = "sha256-H/JqMGLP0u68g/bMqsollAk6sKL73TCZ9no49psYST0=";
   };
 
   postUnpack = ''
@@ -32,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   # path to the `taler-exchange` package is used.
   postPatch = ''
     substituteInPlace src/backend/taler-merchant-httpd.c \
-      --replace-fail 'TALER_TEMPLATING_init ("merchant");' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\");"
+      --replace-fail 'TALER_TEMPLATING_init (TALER_MERCHANT_project_data ())' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\")"
 
     substituteInPlace src/backend/taler-merchant-httpd_spa.c \
       --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
@@ -42,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
     makeWrapper
+    libgcrypt # AM_PATH_LIBGCRYPT
+    texinfo # makeinfo
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -50,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     # for ltdl.h
     libtool
   ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -62,13 +70,25 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  configureFlags = [
+    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
+  ];
+
   # NOTE: The executables that need database access fail to detect the
   # postgresql library in `$out/lib/taler`, so we need to wrap them.
   postInstall = ''
-    for exec in dbinit httpd webhook wirewatch depositcheck exchange; do
+    for exec in dbinit httpd webhook wirewatch depositcheck exchangekeyupdate; do
       wrapProgram $out/bin/taler-merchant-$exec \
         --prefix LD_LIBRARY_PATH : "$out/lib/taler"
     done
+  '';
+
+  postFixup = ''
+    # - taler-merchant-dbinit expects `versioning.sql` under `share/taler/sql`
+    # - taler-merchant-httpd expects `share/taler/merchant/templates`
+    mkdir -p $out/share/taler/sql
+    ln -s $out/share/taler-merchant $out/share/taler/merchant
+    ln -s $out/share/taler-merchant/sql $out/share/taler/sql/merchant
   '';
 
   enableParallelBuilding = true;
@@ -78,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ jq ];
 
   checkTarget = "check";
+
+  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Merchant component for the GNU Taler electronic payment system";
@@ -93,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

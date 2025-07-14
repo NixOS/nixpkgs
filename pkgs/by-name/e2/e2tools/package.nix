@@ -7,21 +7,22 @@
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "e2tools";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "e2tools";
     repo = "e2tools";
-    rev = "6ee7c2d9015dce7b90c3388096602e307e3bd790";
-    sha256 = "0nlqynrhj6ww7bnfhhfcx6bawii8iyvhgp6vz60zbnpgd68ifcx7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h5Asz3bG1zMOwJBLWZY0NBLRB3W8+6va6MkuOQvCuAc=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
+
   buildInputs = [ e2fsprogs ];
 
   enableParallelBuilding = true;
@@ -33,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.leenaars ];
   };
-}
+})

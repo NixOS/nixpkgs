@@ -18,6 +18,9 @@
   pytestCheckHook,
   pytest-mock,
   syrupy,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-mongodb==${version}";
+    tag = "langchain-mongodb==${version}";
     hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
@@ -37,6 +40,9 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
     "numpy"
   ];
 
@@ -56,16 +62,16 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-mongodb==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-mongodb==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;

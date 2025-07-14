@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pymorphy3";
-  version = "2.0.2";
+  version = "2.0.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-qYZm88wNOyZBb2Qhdpw83Oh679/dkWmrL/hQYsgEsaM=";
+    repo = "pymorphy3";
+    tag = version;
+    hash = "sha256-Ula2OQ80dcGeMlXauehXnlEkHLjjm4jZn39eFNltbEA=";
   };
 
   propagatedBuildInputs = [

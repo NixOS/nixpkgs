@@ -14,11 +14,12 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "isso";
   version = "0.13.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
   };
 
@@ -66,13 +67,9 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   passthru.tests = { inherit (nixosTests) isso; };
 

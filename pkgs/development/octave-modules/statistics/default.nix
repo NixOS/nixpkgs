@@ -12,7 +12,7 @@ buildOctavePackage rec {
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "statistics";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-k1YJtFrm71Th42IceX7roWaFCxU3284Abl8JAKLG9So=";
   };
 
@@ -20,13 +20,13 @@ buildOctavePackage rec {
     io
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://packages.octave.org/statistics";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       publicDomain
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Statistics package for GNU Octave";
   };
 }

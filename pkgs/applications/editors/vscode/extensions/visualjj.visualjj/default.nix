@@ -1,55 +1,53 @@
 {
+  stdenvNoCC,
   lib,
-  stdenv,
   vscode-utils,
-  fetchurl,
+  vscode-extension-update-script,
 }:
 
-let
-  version = "0.13.4";
-
-  sources = {
-    "x86_64-linux" = {
-      arch = "linux-x64";
-      url = "https://download.visualjj.com/visualjj-linux-x64-${version}.vsix";
-      hash = "sha256-q9ubYkhrV28sB9CV1dyBEIFEkTrkGHRXdz5+4xjeVzI=";
-    };
-    "x86_64-darwin" = {
-      arch = "darwin-x64";
-      url = "https://download.visualjj.com/visualjj-darwin-x64-${version}.vsix";
-      hash = "sha256-vV5u1QBICz3GIYRgH9UWM38a8YXtvW0u8r7c1SaKwxM=";
-    };
-    "aarch64-linux" = {
-      arch = "linux-arm64";
-      url = "https://download.visualjj.com/visualjj-linux-arm64-${version}.vsix";
-      hash = "sha256-fgT4brIhHI6gNCcsbHpz+v4/diyox2VoFlvCnhPIbPM=";
-    };
-    "aarch64-darwin" = {
-      arch = "darwin-arm64";
-      url = "https://download.visualjj.com/visualjj-darwin-arm64-${version}.vsix";
-      hash = "sha256-/uuLRkEY430R5RS7B6972iginpA3pWpApjI6RUTxcHM=";
-    };
-  };
-in
 vscode-utils.buildVscodeMarketplaceExtension {
-  vsix = fetchurl {
-    url = sources.${stdenv.hostPlatform.system}.url;
-    hash = sources.${stdenv.hostPlatform.system}.hash;
-    name = "visualjj-visualjj-${version}.zip";
-  };
+  mktplcRef =
+    let
+      sources = {
+        "x86_64-linux" = {
+          arch = "linux-x64";
+          hash = "sha256-/6V4hjwp3Vy4WEwTtcYvJk6Rt3AIeKqXWJ09Zsp9CZg=";
+        };
+        "x86_64-darwin" = {
+          arch = "darwin-x64";
+          hash = "sha256-bMwiMIhsvF6Q12vCgt9Os109acqW8Ovpt3o9Y8Sf+gk=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-SwBHNKqif3mGqNSF6Y100HCDaLmARe0jApPol7AzsOQ=";
+        };
+        "aarch64-darwin" = {
+          arch = "darwin-arm64";
+          hash = "sha256-SGTQdjvrXkEaCuHv9dfJfCBUgkfOtf+kLPiHYAqJ7+8=";
+        };
+      };
+    in
+    {
+      name = "visualjj";
+      publisher = "visualjj";
+      version = "0.15.4";
+    }
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
-  mktplcRef = {
-    inherit version;
-    name = "visualjj";
-    publisher = "visualjj";
-    arch = sources.${stdenv.hostPlatform.system}.arch;
-  };
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";
     downloadPage = "https://www.visualjj.com";
     homepage = "https://www.visualjj.com";
     license = lib.licenses.unfree;
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ lib.maintainers.drupol ];
   };
 }

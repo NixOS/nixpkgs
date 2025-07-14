@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "glfw";
-  version = "2.7.0";
+  version = "2.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9SNq8jKzgzFzonyMYoyjGbz4NDL83dPKWID9m3HZ7B8=";
+    tag = "v${version}";
+    hash = "sha256-MBITnzVNIl+PJ++RN4Dj6sYB1/bSMNHJTDamiG6pEfA=";
   };
 
   # Patch path to GLFW shared object
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for GLFW";
     homepage = "https://github.com/FlorianRhiem/pyGLFW";
-    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.McSinyx ];
   };

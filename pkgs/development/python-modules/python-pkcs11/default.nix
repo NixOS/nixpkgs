@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "danni";
-    repo = pname;
+    repo = "python-pkcs11";
     rev = "v${version}";
     sha256 = "0kncbipfpsb7m7mhv5s5b9wk604h1j08i2j26fn90pklgqll0xhv";
   };

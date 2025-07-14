@@ -17,6 +17,7 @@
   stumpy,
   cloudpickle,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-xdist,
   mock,
   matplotlib,
@@ -24,11 +25,13 @@
   ipython,
   notebook,
   pandas-datareader,
+  setuptools,
+  pywavelets,
 }:
 
 buildPythonPackage rec {
   pname = "tsfresh";
-  version = "0.20.3";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,17 +39,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Lw70PDiRVPiTzpnbfKSo7jjfBitCePSy15QL0z7+bMg=";
+    tag = "v${version}";
+    hash = "sha256-XwNCI1J/Z6w7nq59s9rSN4eVGgrMDQjPpGFy9SxrTn0=";
   };
 
   patches = [
     # The pyscaffold is not a build dependency but just a python project bootstrapping tool, so we do not need it
     ./remove-pyscaffold.patch
-    ./remove-pytest-coverage-flags.patch
   ];
 
   dependencies = [
+    setuptools
     requests
     numpy
     pandas
@@ -59,10 +62,15 @@ buildPythonPackage rec {
     distributed
     stumpy
     cloudpickle
+    pywavelets
   ] ++ dask.optional-dependencies.dataframe;
+
+  # python-datareader is disabled on Python 3.12+ and is require only for checks.
+  doCheck = !pandas-datareader.disabled;
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-xdist
     mock
     matplotlib
@@ -98,7 +106,7 @@ buildPythonPackage rec {
     description = "Automatic extraction of relevant features from time series";
     mainProgram = "run_tsfresh";
     homepage = "https://github.com/blue-yonder/tsfresh";
-    changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
   };

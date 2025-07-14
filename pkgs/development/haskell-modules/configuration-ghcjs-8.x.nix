@@ -40,7 +40,7 @@ self: super:
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
   stm = doJailbreak self.stm_2_5_3_1;
-  exceptions = dontCheck self.exceptions_0_10_8;
+  exceptions = dontCheck self.exceptions_0_10_9;
 
   ## OTHER PACKAGES
 
@@ -121,9 +121,6 @@ self: super:
   tasty-quickcheck = dontCheck super.tasty-quickcheck;
 
   temporary = dontCheck super.temporary;
-
-  # 2 tests fail, related to time precision
-  time-compat = dontCheck super.time-compat;
 
   # TODO: The tests have a TH error, which has been fixed in ghc
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15481 but somehow the issue is

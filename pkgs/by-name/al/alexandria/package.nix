@@ -22,22 +22,21 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "btpf";
     repo = "Alexandria";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-18i3/HLTfhBSa9/c55dCOfFal+V40wcHcLoYt1dU+d0=";
     fetchSubmodules = true;
   };
 
-  prePatch = ''
-    chmod +w .. # make sure that /build/source is writeable
-  '';
-
   npmDeps = fetchNpmDeps {
     inherit src;
-    sourceRoot = "${src.name}";
     hash = "sha256-6r9bEY7e1Eef/0/CJ26ITpFJcCVUEKLrFx+TNEomLPE=";
   };
 
-  cargoHash = "sha256-AsR2BJuz4RdPX1lmORwn6nK+8cm2Xmm1EOsxYkWx3hc=";
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VX/G4dF9DhlGfifp4xf9xkXli7BHFtKY2+HaMHqqPiA=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -59,12 +58,6 @@ rustPlatform.buildRustPackage rec {
     librsvg
     libappindicator-gtk3
   ];
-
-  npmRoot = "..";
-
-  sourceRoot = "${src.name}/src-tauri";
-
-  buildAndTestDir = ".";
 
   meta = {
     homepage = "https://github.com/btpf/Alexandria";

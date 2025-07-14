@@ -8,7 +8,7 @@
   lksctp-tools,
   libosmo-netif,
   libasn1c,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-iuh,
   osmo-mgw,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     lksctp-tools
     libosmo-netif
     libasn1c
-    libosmo-sccp
+    libosmo-sigtran
     osmo-iuh
     osmo-mgw
   ];

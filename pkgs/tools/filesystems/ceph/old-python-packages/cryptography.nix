@@ -41,11 +41,14 @@ buildPythonPackage rec {
     hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-pZHu3Oo9DWRAtldU0UvrH1FIg0bEvyfizPUhj9IBL58=";
   };
 
   # Since Cryptography v40 is quite outdated, we need to backport
@@ -82,7 +85,6 @@ buildPythonPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -100,7 +102,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths =
     [

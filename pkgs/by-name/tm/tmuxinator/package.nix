@@ -1,4 +1,9 @@
-{ lib, buildRubyGem, ruby, installShellFiles }:
+{
+  lib,
+  buildRubyGem,
+  ruby,
+  installShellFiles,
+}:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything
@@ -8,8 +13,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.3.2";
-  source.sha256 = "sha256-q1VS4ChHVqIpHHO/fGANG5IjgwUfBT2VqT9WAkQeGh4=";
+  version = "3.3.3";
+  source.sha256 = "sha256-kT0S5I+x5qYKqMwSOQl1je1zfOPOj2KT8YvJc7jFp5A=";
 
   erubi = buildRubyGem rec {
     inherit ruby;
@@ -35,7 +40,11 @@ buildRubyGem rec {
     source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
-  propagatedBuildInputs = [ erubi thor xdg ];
+  propagatedBuildInputs = [
+    erubi
+    thor
+    xdg
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,10 +54,12 @@ buildRubyGem rec {
 
   meta = with lib; {
     description = "Manage complex tmux sessions easily";
-    homepage    = "https://github.com/tmuxinator/tmuxinator";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ auntie ericsagnes ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/tmuxinator/tmuxinator";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      auntie
+    ];
+    platforms = platforms.unix;
     mainProgram = "tmuxinator";
   };
 }

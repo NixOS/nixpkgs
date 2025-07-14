@@ -12,7 +12,6 @@
   rocblas,
   miopen,
   migraphx,
-  clang,
   openmp,
   protobuf,
   qtcreator,
@@ -43,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.0.2";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-d32lcJq24MXeIWbNbo6putWaol5kF2io6cz4ZuL+DbE=";
+    hash = "sha256-SisCbUDCAiWQ1Ue7qrtoT6vO/1ztzqji+3cJD6MXUNw=";
   };
 
   patches = [
@@ -98,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
       "-DCMAKE_INSTALL_PREFIX_PYTHON=lib"
+      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
       # "-DAMD_FP16_SUPPORT=ON" `error: typedef redefinition with different types ('__half' vs 'half_float::half')`
     ]
     ++ lib.optionals (gpuTargets != [ ]) [
@@ -115,47 +117,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`
-    export CXXFLAGS+="--rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
-    patchShebangs rocAL/rocAL_pybind/examples
-
-    # Properly find miopen
+    export CXXFLAGS+=" --rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+    # Properly find miopen, fix ffmpeg version detection
     substituteInPlace amd_openvx_extensions/CMakeLists.txt \
-      --replace "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
-      --replace "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
+      --replace-fail "miopen     PATHS \''${ROCM_PATH} QUIET" "miopen PATHS ${miopen} QUIET" \
+      --replace-fail "\''${ROCM_PATH}/include/miopen/config.h" "${miopen}/include/miopen/config.h"
 
     # Properly find turbojpeg
-    substituteInPlace amd_openvx/cmake/FindTurboJpeg.cmake \
-      --replace "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
-      --replace "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
-
-    # Fix bad paths
-    substituteInPlace rocAL/rocAL/rocAL_hip/CMakeLists.txt amd_openvx_extensions/amd_nn/nn_hip/CMakeLists.txt amd_openvx/openvx/hipvx/CMakeLists.txt \
-      --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clang}/bin/clang++"
+    substituteInPlace cmake/FindTurboJpeg.cmake \
+      --replace-fail "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
+      --replace-fail "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
   '';
 
   postBuild = lib.optionalString buildDocs ''
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
   '';
 
-  postInstall = lib.optionalString (!useOpenCL && !useCPU) ''
-    patchelf $out/lib/rocal_pybind*.so --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
-    chmod +x $out/lib/rocal_pybind*.so
-  '';
-
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "Set of comprehensive computer vision and machine intelligence libraries, utilities, and applications";
     homepage = "https://github.com/ROCm/MIVisionX";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    broken = useOpenCL;
   };
 })

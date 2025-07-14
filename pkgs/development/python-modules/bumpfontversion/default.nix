@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "bumpfontversion";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qcKZGv/KeeSRBq4SdnuZlurp0CUs40iEQjw9/1LltUg=";
   };
 

@@ -1,47 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, libadwaita
-, libgee
-, granite7
-, gexiv2
-, gnome-settings-daemon
-, elementary-settings-daemon
-, gtk4
-, gala
-, wingpanel
-, wingpanel-indicator-keyboard
-, wingpanel-quick-settings
-, switchboard
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  libadwaita,
+  libgee,
+  granite7,
+  gexiv2,
+  gnome-settings-daemon,
+  elementary-settings-daemon,
+  gtk4,
+  gala,
+  wingpanel,
+  wingpanel-indicator-keyboard,
+  wingpanel-quick-settings,
+  switchboard,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.0.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "settings-desktop";
     rev = version;
-    sha256 = "sha256-Cv1Ldvk0+VzNsKnDFwDtLZ5ixUOGV+PWYAqN9KV9g/s=";
+    sha256 = "sha256-TYwiL6+VjfSDiFAlMe482gB8a/OtCYHl5r8gh9Hcvfg=";
   };
-
-  patches = [
-    # Set preferred color theme for mutter
-    # https://github.com/elementary/switchboard-plug-pantheon-shell/pull/413
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-pantheon-shell/commit/bdc8c167fabe5a4642efd37b0289e235e5d0a504.patch";
-      hash = "sha256-ueTAwURd8GM0U/qfPmoVLO7OVI/ppazq+ljnVzk0Npk=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -67,22 +58,15 @@ stdenv.mkDerivation rec {
     wingpanel-quick-settings # gsettings schemas
   ];
 
-  postPatch = ''
-    # Hide these before we land the new dock
-    substituteInPlace src/Views/Dock.vala \
-      --replace-fail "box.append (icon_box);" "" \
-      --replace-fail "box.append (hide_box);" ""
-  '';
-
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Switchboard Desktop Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
+    homepage = "https://github.com/elementary/settings-desktop";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

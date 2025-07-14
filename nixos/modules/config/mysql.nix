@@ -111,7 +111,7 @@ in
                 - `0` (or `"plain"`):
                   No encryption. Passwords are stored in plaintext. HIGHLY DISCOURAGED.
                 - `1` (or `"Y"`):
-                  Use crypt(3) function.
+                  Use {manpage}`crypt(3)` function.
                 - `2` (or `"mysql"`):
                   Use the MySQL PASSWORD() function. It is possible that the encryption function used
                   by `pam_mysql` is different from that of the MySQL server, as

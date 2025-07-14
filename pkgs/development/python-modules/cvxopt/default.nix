@@ -5,6 +5,7 @@
   isPyPy,
   blas,
   lapack,
+  setuptools-scm,
   suitesparse,
   unittestCheckHook,
   glpk ? null,
@@ -34,6 +35,8 @@ buildPythonPackage rec {
     lapack
   ];
 
+  build-system = [ setuptools-scm ];
+
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
   env =
@@ -43,6 +46,7 @@ buildPythonPackage rec {
       CVXOPT_BUILD_DSDP = "0";
       CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
       CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
+      SETUPTOOLS_SCM_PRETEND_VERSION = version;
     }
     // lib.optionalAttrs withGsl {
       CVXOPT_BUILD_GSL = "1";

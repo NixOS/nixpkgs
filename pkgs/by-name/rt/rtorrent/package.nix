@@ -1,12 +1,10 @@
 {
   lib,
   stdenv,
-  autoconf-archive,
   autoreconfHook,
   cppunit,
   curl,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   libtool,
   libtorrent,
@@ -15,18 +13,20 @@
   pkg-config,
   zlib,
   nixosTests,
-  unstableGitUpdater,
+  gitUpdater,
+  withLua ? false,
+  lua5_4_compat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rakshasa-rtorrent";
-  version = "0.10.0-unstable-2024-12-15";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "b8cb828d963719565528573123bb08b72cd50928";
-    hash = "sha256-nvyRRmZRdyRAazGAFqHDK+zME9bSkp+LwW9Na4M8+L0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZUZR/ydGhxLbjMEDAlbU5IbAxU1dCd0vvATdsn0NMQc=";
   };
 
   outputs = [
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf-archive
     autoreconfHook
     installShellFiles
     pkg-config
@@ -53,15 +52,15 @@ stdenv.mkDerivation rec {
     ncurses
     openssl
     zlib
-  ];
+  ] ++ lib.optionals withLua [ lua5_4_compat ];
 
   configureFlags = [
     "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
-  ];
+  ] ++ lib.optionals withLua [ "--with-lua" ];
 
   passthru = {
-    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };
@@ -86,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };
-}
+})

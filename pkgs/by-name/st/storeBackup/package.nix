@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
+    url = "mirror://savannah/storebackup/storeBackup-${version}.tar.bz2";
     hash = "sha256-Ki1DT2zypFFiiMVd9Y8eSX7T+yr8moWMoALmAexjqWU=";
   };
 

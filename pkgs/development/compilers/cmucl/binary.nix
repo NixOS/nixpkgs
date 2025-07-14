@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       ANSI Common Lisp standard.
     '';
     mainProgram = "lisp";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

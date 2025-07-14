@@ -27,7 +27,6 @@ let
       libaio,
       liburing,
       systemd,
-      CoreServices,
       cctools,
       perl,
       jemalloc,
@@ -110,7 +109,6 @@ let
             ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ])
           )
           ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            CoreServices
             cctools
             perl
             libedit
@@ -120,10 +118,16 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches =
           [
             ./patch/cmake-includedir.patch
+            # patch for musl compatibility
+            ./patch/include-cstdint-full.patch
           ]
           # Fixes a build issue as documented on
           # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
@@ -215,7 +219,8 @@ let
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
           license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
+          maintainers = with maintainers; [ thoughtpolice ];
+          teams = [ teams.helsinki-systems ];
           platforms = platforms.all;
         };
       };
@@ -251,140 +256,138 @@ let
             '';
         }
       );
+    in
 
-      server = stdenv.mkDerivation (
-        common
-        // {
-          pname = "mariadb-server";
+    stdenv.mkDerivation (
+      finalAttrs:
+      common
+      // {
+        pname = "mariadb-server";
 
-          nativeBuildInputs = common.nativeBuildInputs ++ [
-            bison
-            boost.dev
-            flex
+        nativeBuildInputs = common.nativeBuildInputs ++ [
+          bison
+          boost.dev
+          flex
+        ];
+
+        buildInputs =
+          common.buildInputs
+          ++ [
+            bzip2
+            lz4
+            lzo
+            snappy
+            xz
+            zstd
+            cracklib
+            judy
+            libevent
+            libxml2
+          ]
+          ++ lib.optional withNuma numactl
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
+          ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
+          ++ lib.optionals withStorageMroonga [
+            kytea
+            libsodium
+            msgpack
+            zeromq
+          ]
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+
+        propagatedBuildInputs = lib.optional withNuma numactl;
+
+        postPatch = ''
+          substituteInPlace scripts/galera_new_cluster.sh \
+            --replace ":-mariadb" ":-mysql"
+        '';
+
+        cmakeFlags =
+          common.cmakeFlags
+          ++ [
+            "-DMYSQL_DATADIR=/var/lib/mysql"
+            "-DENABLED_LOCAL_INFILE=OFF"
+            "-DWITH_READLINE=ON"
+            "-DWITH_EXTRA_CHARSETS=all"
+            "-DWITH_EMBEDDED_SERVER=${if withEmbedded then "ON" else "OFF"}"
+            "-DWITH_UNIT_TESTS=OFF"
+            "-DWITH_WSREP=ON"
+            "-DWITH_INNODB_DISALLOW_WRITES=ON"
+            "-DWITHOUT_EXAMPLE=1"
+            "-DWITHOUT_FEDERATED=1"
+            "-DWITHOUT_TOKUDB=1"
+          ]
+          ++ lib.optionals withNuma [
+            "-DWITH_NUMA=ON"
+          ]
+          ++ lib.optionals (!withStorageMroonga) [
+            "-DWITHOUT_MROONGA=1"
+          ]
+          ++ lib.optionals (!withStorageRocks) [
+            "-DWITHOUT_ROCKSDB=1"
+          ]
+          ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+            "-DWITH_ROCKSDB_JEMALLOC=ON"
+          ]
+          ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+            "-DWITH_JEMALLOC=yes"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "-DPLUGIN_AUTH_PAM=NO"
+            "-DPLUGIN_AUTH_PAM_V1=NO"
+            "-DWITHOUT_OQGRAPH=1"
+            "-DWITHOUT_PLUGIN_S3=1"
           ];
 
-          buildInputs =
-            common.buildInputs
-            ++ [
-              bzip2
-              lz4
-              lzo
-              snappy
-              xz
-              zstd
-              cracklib
-              judy
-              libevent
-              libxml2
-            ]
-            ++ lib.optional withNuma numactl
-            ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
-            ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
-            ++ lib.optionals withStorageMroonga [
-              kytea
-              libsodium
-              msgpack
-              zeromq
-            ]
-            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+        preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+          patchShebangs scripts/mytop.sh
+        '';
 
-          propagatedBuildInputs = lib.optional withNuma numactl;
-
-          postPatch = ''
-            substituteInPlace scripts/galera_new_cluster.sh \
-              --replace ":-mariadb" ":-mysql"
+        postInstall =
+          common.postInstall
+          + ''
+            rm -r "$out"/share/aclocal
+            chmod +x "$out"/bin/wsrep_sst_common
+            rm -f "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
+          ''
+          + lib.optionalString withStorageMroonga ''
+            mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
+          ''
+          + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.4") ''
+            mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
+            mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
+            rm -r "$out"/OFF
           '';
 
-          cmakeFlags =
-            common.cmakeFlags
-            ++ [
-              "-DMYSQL_DATADIR=/var/lib/mysql"
-              "-DENABLED_LOCAL_INFILE=OFF"
-              "-DWITH_READLINE=ON"
-              "-DWITH_EXTRA_CHARSETS=all"
-              "-DWITH_EMBEDDED_SERVER=${if withEmbedded then "ON" else "OFF"}"
-              "-DWITH_UNIT_TESTS=OFF"
-              "-DWITH_WSREP=ON"
-              "-DWITH_INNODB_DISALLOW_WRITES=ON"
-              "-DWITHOUT_EXAMPLE=1"
-              "-DWITHOUT_FEDERATED=1"
-              "-DWITHOUT_TOKUDB=1"
-            ]
-            ++ lib.optionals withNuma [
-              "-DWITH_NUMA=ON"
-            ]
-            ++ lib.optionals (!withStorageMroonga) [
-              "-DWITHOUT_MROONGA=1"
-            ]
-            ++ lib.optionals (!withStorageRocks) [
-              "-DWITHOUT_ROCKSDB=1"
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
-              "-DWITH_ROCKSDB_JEMALLOC=ON"
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-              "-DWITH_JEMALLOC=yes"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isDarwin [
-              "-DPLUGIN_AUTH_PAM=NO"
-              "-DPLUGIN_AUTH_PAM_V1=NO"
-              "-DWITHOUT_OQGRAPH=1"
-              "-DWITHOUT_PLUGIN_S3=1"
-            ];
+        CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 
-          preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-            patchShebangs scripts/mytop.sh
-          '';
-
-          postInstall =
-            common.postInstall
-            + ''
-              rm -r "$out"/share/aclocal
-              chmod +x "$out"/bin/wsrep_sst_common
-              rm -f "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
-            ''
-            + lib.optionalString withStorageMroonga ''
-              mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
-            ''
-            + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.4") ''
-              mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
-              mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
-              rm -r "$out"/OFF
-            '';
-
-          CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
-        }
-      );
-    in
-    server
-    // {
-      inherit client server;
-    };
+        passthru = {
+          inherit client;
+          server = finalAttrs.finalPackage;
+        };
+      }
+    );
 in
 self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
-  mariadb_105 = self.callPackage generic {
-    # Supported until 2025-06-24
-    version = "10.5.27";
-    hash = "sha256-76ZPpfczuCKrGmeV4evBecFgwIaQ7Ncduh6w9hru3RQ=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-  };
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.20";
-    hash = "sha256-R/BavH2+uz8msx51AisbOWnbvEdSxK5wH4kgpgSJbUE=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    version = "10.6.22";
+    hash = "sha256-LKYA3H6F6tHzPCEvnXax8vgS0knIveAuXzjq0Jit5CA=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.10";
-    hash = "sha256-sGp0ZQuDoWqpqwmJhEgrAo51sABnSxH/KIdyxhmm8CI=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    version = "10.11.13";
+    hash = "sha256-+Lc0dJ+9ZS6k4lW+jMeID5jQe2p/604eqMc2y0gNI+Q=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.4";
-    hash = "sha256-lvvS5uk/t+izc+6nXYW2/qV8DhEaAgkMu+/tUlmdx3s=";
-    inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    version = "11.4.7";
+    hash = "sha256-vyBofKEvp+/ajficqx8qZhKIzqQaz49TGJtp1SlDR9A=";
+  };
+  mariadb_118 = self.callPackage generic {
+    # Supported until 2028-06-04
+    version = "11.8.2";
+    hash = "sha256-shYs316TF9ioYhy+2oOZkyT8CsiUQhDhSrtf4Kn+o+8=";
   };
 }

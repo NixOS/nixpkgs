@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-principal";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-E9urzZc7/QtzAohSNAJsQtykrplb+MC189VGZI5kmEE=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_principal.py" ];
+  enabledTestPaths = [ "test_principal.py" ];
 
   meta = with lib; {
     homepage = "http://packages.python.org/Flask-Principal/";

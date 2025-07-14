@@ -10,7 +10,6 @@
   libuuid,
   libunwind,
   openssl,
-  darwin,
   lttng-ust,
   pam,
   testers,
@@ -32,13 +31,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.4.6";
+  version = "7.5.2";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  sourceRoot = ".";
+  sourceRoot = "source";
+
+  unpackPhase = ''
+    runHook preUnpack
+    mkdir -p "$sourceRoot"
+    tar xf $src --directory="$sourceRoot"
+    runHook postUnpack
+  '';
 
   strictDeps = true;
 
@@ -58,9 +64,6 @@ stdenv.mkDerivation rec {
       libuuid
       libunwind
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lttng-ust
@@ -96,19 +99,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-pILWaHh++Yw38KWnaWEH3/2z3DQMW+PRwVPsnSOQcqg=";
+        hash = "sha256-oC0deViccejTXkWNkPCFz8HwpojrvqTauGMhh8BX96E=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-wBWbA+hfRK4edpeBigEVWNpsgT0KroSL9awTv0NdhiQ=";
+        hash = "sha256-1NLFVih1X1zYsmCa1xF8Hq2gqgCG8ZXUgTHuSC731xo=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-ehja7RBbfPyAv4zAB2L+eZAQXdI/lRzDLOt0RlFlDj0=";
+        hash = "sha256-kF3J7Au1iJk6rKn//hXdv/x2QWSwnL32PV6iXoNig5w=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-b2AVIDxHgGxcxETBnY7QGWleYQ+9lIFUJkv5yo4VdWE=";
+        hash = "sha256-j6lYT2+V0pyhRmxDl6w5w3E3PWWBwS366evVPAbXdmQ=";
       };
     };
     tests.version = testers.testVersion {

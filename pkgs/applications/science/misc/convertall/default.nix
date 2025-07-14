@@ -1,49 +1,28 @@
 {
   lib,
-  stdenv,
+  flutter329,
   fetchFromGitHub,
-  python3,
-  wrapQtAppsHook,
 }:
 
-let
-  inherit (python3.pkgs) wrapPython pyqt5;
-in
-stdenv.mkDerivation rec {
+flutter329.buildFlutterApplication rec {
   pname = "convertall";
-  version = "0.8.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "doug-101";
     repo = "ConvertAll";
-    rev = "v${version}";
-    sha256 = "02xxasgbjbivsbhyfpn3cpv52lscdx5kc95s6ns1dvnmdg0fpng0";
+    tag = "v${version}";
+    hash = "sha256-esc2xhL0Jx5SaqM0GnnVzdtnSN9bX8zln66We/2RqoA=";
   };
 
-  nativeBuildInputs = [
-    python3
-    wrapPython
-    wrapQtAppsHook
-  ];
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  propagatedBuildInputs = [ pyqt5 ];
-
-  installPhase = ''
-    python3 install.py -p $out -x
-  '';
-
-  postFixup = ''
-    buildPythonPath $out
-    patchPythonScript $out/share/convertall/convertall.py
-    makeQtWrapper $out/share/convertall/convertall.py $out/bin/convertall
-  '';
-
-  meta = with lib; {
-    homepage = "https://convertall.bellz.org/";
+  meta = {
+    homepage = "https://convertall.bellz.org";
     description = "Graphical unit converter";
     mainProgram = "convertall";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = pyqt5.meta.platforms;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

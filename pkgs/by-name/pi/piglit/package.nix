@@ -3,6 +3,9 @@
   fetchFromGitLab,
   lib,
   cmake,
+  glslang,
+  libffi,
+  libgbm,
   libglut,
   libGL,
   libGLU,
@@ -11,8 +14,12 @@
   ninja,
   pkg-config,
   python3,
+  vulkan-loader,
   waffle,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libXau,
   libX11,
   libXrender,
   libxcb,
@@ -20,23 +27,27 @@
   mesa,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "piglit";
-  version = "unstable-2020-10-23";
+  version = "unstable-2025-04-15";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "piglit";
-    rev = "59e695c16fdcdd4ea4f16365f0e397a93cef7b80";
-    sha256 = "kx0+2Sdvdc3SbpAIl2OuGCWCpaLJC/7cXG+ZLvf92g8=";
+    rev = "d06f7bac988e67db53cbc05dc0b096b00856ab93";
+    hash = "sha256-bH9NjLEldlZwylq7S0q2vC5IQhUej0xZ6wD+mrWBK5A=";
   };
 
   buildInputs = [
+    glslang
+    libffi
+    libgbm
     libglut
     libGL
     libGLU
     libglvnd
+    libXau
     libX11
     libXrender
     libxcb
@@ -47,8 +58,11 @@ stdenv.mkDerivation rec {
         numpy
       ]
     ))
+    vulkan-loader
     waffle
     wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
   nativeBuildInputs = [

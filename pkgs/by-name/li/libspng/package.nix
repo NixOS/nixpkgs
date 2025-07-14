@@ -16,10 +16,17 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "randy408";
-    repo = pname;
+    repo = "libspng";
     rev = "v${version}";
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
   };
+
+  # disable two tests broken after libpng update
+  # https://github.com/randy408/libspng/issues/276
+  postPatch = ''
+    cat tests/images/meson.build | grep -v "'ch1n3p04'" | grep -v "'ch2n3p08'" > tests/images/meson.build-patched
+    mv tests/images/meson.build-patched tests/images/meson.build
+  '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bYqhrMmgkEAiA1eiDbIOwH/PktwtIfxmYJRwDrFsNIc=";
   };
 
-  cargoHash = "sha256-Q1FTVaFZzJJNQg6FDOaPpRCpPgw2EPQsnb8o6dSoVWw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lfWQ7VzFYhbEjrhKxPT8quhxbL+5pTzIPUVjBBHRk7Q=";
 
   meta = with lib; {
     description = "Create SVGs from terminal output";

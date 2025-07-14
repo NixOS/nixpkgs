@@ -4,24 +4,23 @@
   fetchFromGitHub,
   ncurses,
   perl,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvi";
-  version = "7.6.30";
+  version = "7.6.31";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
     rev = version;
-    hash = "sha256-P4w/PM9UmHmTzS9+WDK3x3MyZ7OoY2yO/Rx0vRMJuLI=";
+    hash = "sha256-RqmulYHQFZmTHQAYgZmB8tAG6mSquNODmssfKB8YqDU=";
   };
 
   buildInputs = [
     ncurses
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

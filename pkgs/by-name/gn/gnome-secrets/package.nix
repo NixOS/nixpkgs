@@ -14,11 +14,12 @@
   desktop-file-utils,
   appstream-glib,
   libadwaita,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "10.3";
+  version = "10.4";
   format = "other";
 
   src = fetchFromGitLab {
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    hash = "sha256-UcTLngBVp5L8Y1LmBxoxPuH5Zag2YfHA2Y+ByPBkh8A=";
+    hash = "sha256-FyBtw7Gkvd5XONkM7OVGxE+S5FpuUIl7KWLFHoQeoN4=";
   };
 
   nativeBuildInputs = [
@@ -65,12 +66,17 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mvnetbiz ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ mvnetbiz ];
+    teams = [ teams.gnome-circle ];
     mainProgram = "secrets";
   };
 }

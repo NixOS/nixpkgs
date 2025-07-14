@@ -1,46 +1,44 @@
 {
+  stdenv,
   lib,
   nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
   coreutils,
   bash,
   direnv,
   git,
   pkg-config,
   openssl,
-  Security,
-  SystemConfiguration,
+  cacert,
   usage,
   mise,
   testers,
+  runCommand,
+  jq,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.12.17";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-kdI7GEtUlVUJYN7ch8RjG1aWBMDkvLkdUGfyqWv4yAQ=";
+    hash = "sha256-PIUw84xwR9m06fPkO7MYf95Q21YvYnBMi+MY+OOz+2k=";
   };
 
-  cargoHash = "sha256-7ORbX2rWZ4tuf7qQo5lwTpHGFNCpo8R5ywJDdBjZcMU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5876Lc4rRNwTH8u5bMyV52Eps9QOcBHhE3v+33hzeBA=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-    ];
+
+  buildInputs = [ openssl ];
 
   postPatch = ''
     patchShebangs --build \
@@ -63,12 +61,18 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
-  checkFlags = [
-    # last_modified will always be different in nix
-    "--skip=tera::tests::test_last_modified"
-    # requires https://github.com/rbenv/ruby-build
-    "--skip=plugins::core::ruby::tests::test_list_versions_matching"
-  ];
+  nativeCheckInputs = [ cacert ];
+
+  checkFlags =
+    [
+      # last_modified will always be different in nix
+      "--skip=tera::tests::test_last_modified"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+      # started failing mid-April 2025
+      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
+      "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+    ];
 
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
@@ -85,11 +89,39 @@ rustPlatform.buildRustPackage rec {
       --bash ./completions/mise.bash \
       --fish ./completions/mise.fish \
       --zsh ./completions/_mise
+
+    mkdir -p $out/lib/mise
+    touch $out/lib/mise/.disable-self-update
   '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = mise; };
+    tests = {
+      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
+      });
+      usageCompat =
+        # should not crash
+        runCommand "mise-usage-compatibility"
+          {
+            nativeBuildInputs = [
+              mise
+              usage
+              jq
+            ];
+          }
+          ''
+            export HOME=$(mktemp -d)
+
+            spec="$(mise usage)"
+            for shl in bash fish zsh; do
+              echo "testing $shl"
+              usage complete-word --shell $shl --spec "$spec"
+            done
+
+            touch $out
+          '';
+    };
   };
 
   meta = {

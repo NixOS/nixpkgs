@@ -11,7 +11,7 @@
   zlib,
   libjpeg,
   libusb1,
-  python311Packages,
+  python3Packages,
   sane-backends,
   dbus,
   file,
@@ -20,7 +20,7 @@
   net-snmp,
   openssl,
   perl,
-  nettools,
+  net-tools,
   avahi,
   bash,
   util-linux,
@@ -35,16 +35,16 @@
 let
 
   pname = "hplip";
-  version = "3.24.4";
+  version = "3.25.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    hash = "sha256-XXZDgxiTpeKt351C1YGl2/5arwI2Johrh2LFZF2g8fs=";
+    hash = "sha256-6HL/KOslF3Balfbhg576HlCnejOq6JBSeN8r2CCRllM=";
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
+    url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
+    hash = "sha256-miz41WYehGVI27tZUjGlRIpctjcpzJPfjR9lLf0WelQ=";
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -78,9 +78,20 @@ assert
     builtins.elem hplipArch pluginArches
     || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-python311Packages.buildPythonApplication {
-  inherit pname version src;
+python3Packages.buildPythonApplication {
+  inherit pname version;
   format = "other";
+
+  srcs = [ src ] ++ lib.optional withPlugin plugin;
+
+  unpackCmd = lib.optionalString withPlugin ''
+    if ! [[ "$curSrc" =~ -plugin\.run$ ]]; then return 1; fi # fallback to regular unpackCmdHooks
+
+    # Unpack plugin shar
+    sh "$curSrc" --noexec --keep
+  '';
+
+  sourceRoot = "${pname}-${version}";
 
   buildInputs =
     [
@@ -110,7 +121,7 @@ python311Packages.buildPythonApplication {
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath =
-    with python311Packages;
+    with python3Packages;
     [
       dbus
       pillow
@@ -119,6 +130,7 @@ python311Packages.buildPythonApplication {
       usbutils
       dbus-python
       distro
+      distutils
     ]
     ++ lib.optionals withQt5 [
       pyqt5
@@ -129,7 +141,7 @@ python311Packages.buildPythonApplication {
     "--prefix"
     "PATH"
     ":"
-    "${nettools}/bin"
+    "${net-tools}/bin"
   ];
 
   patches = [
@@ -142,15 +154,15 @@ python311Packages.buildPythonApplication {
     # Remove all ImageProcessor functionality since that is closed source
     (fetchurl {
       url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
-      sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
+      hash = "sha256-tNYccuwrcx5WCe7ULk8r8J6MVcUytGspiW64zAvO0qI=";
     })
   ];
 
   postPatch = ''
     # https://github.com/NixOS/nixpkgs/issues/44230
     substituteInPlace createPPD.sh \
-      --replace ppdc "${cups}/bin/ppdc" \
-      --replace "gzip -c" "gzip -cn"
+      --replace-fail ppdc "${cups}/bin/ppdc" \
+      --replace-fail "gzip -c" "gzip -cn"
 
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -211,6 +223,7 @@ python311Packages.buildPythonApplication {
       "policykit_dir=${out}/share/polkit-1/actions"
       "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
       "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
+      "PYTHONEXECDIR=${out}/lib/python${lib.versions.majorMinor python3Packages.python.version}/site-packages"
       "hplip_confdir=${out}/etc/hp"
       "hplip_statedir=${out}/var/lib/hp"
     ];
@@ -223,6 +236,16 @@ python311Packages.buildPythonApplication {
 
   enableParallelBuilding = true;
   enableParallelInstalling = false;
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=return-mismatch"
+      "-Wno-error=int-conversion"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
 
   #
   # Running `hp-diagnose_plugin -g` can be used to diagnose
@@ -237,8 +260,7 @@ python311Packages.buildPythonApplication {
       done
     ''
     + lib.optionalString withPlugin ''
-      sh ${plugin} --noexec --keep
-      cd plugin_tmp
+      pushd $NIX_BUILD_TOP/plugin_tmp
 
       cp plugin.spec $out/share/hplip/
 
@@ -274,6 +296,8 @@ python311Packages.buildPythonApplication {
 
       mkdir -p $out/var/lib/hp
       cp ${hplipState} $out/var/lib/hp/hplip.state
+
+      popd
     '';
 
   # The installed executables are just symlinks into $out/share/hplip,
@@ -320,19 +344,19 @@ python311Packages.buildPythonApplication {
     "share/hplip"
     "lib/cups/backend"
     "lib/cups/filter"
-    python311Packages.python.sitePackages
+    python3Packages.python.sitePackages
     "lib/sane"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license =
       if withPlugin then
-        licenses.unfree
+        lib.licenses.unfree
       else
-        with licenses;
+        with lib.licenses;
         [
           mit
           bsd2
@@ -345,6 +369,6 @@ python311Packages.buildPythonApplication {
       "armv7l-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

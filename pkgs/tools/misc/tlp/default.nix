@@ -18,6 +18,7 @@
   shellcheck,
   smartmontools,
   systemd,
+  udevCheckHook,
   util-linux,
   x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
@@ -26,13 +27,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
+    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -46,7 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    udevCheckHook
+  ];
 
   # XXX: While [1] states that DESTDIR should not be used, and that the correct
   # variable to set is, in fact, PREFIX, tlp thinks otherwise. The Makefile for
@@ -80,6 +84,8 @@ stdenv.mkDerivation rec {
     shellcheck
   ];
   checkTarget = [ "checkall" ];
+
+  doInstallCheck = true;
 
   # TODO: Consider using resholve here
   postInstall =

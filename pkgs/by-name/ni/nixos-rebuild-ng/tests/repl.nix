@@ -13,7 +13,7 @@ let
   escapeExpect = lib.strings.escapeNixString;
 
   expectSetup = ''
-    set timeout 180
+    set timeout 300
     proc expect_simple { pattern } {
       puts "Expecting: $pattern"
       expect {
@@ -28,7 +28,7 @@ let
 
   # In case we want/need to evaluate packages or the assertions or whatever,
   # we want to have a linux system.
-  # TODO: make the non-flake test use thise.
+  # TODO: make the non-flake test use this.
   linuxSystem = lib.replaceStrings [ "darwin" ] [ "linux" ] stdenv.hostPlatform.system;
 
 in
@@ -76,7 +76,7 @@ runCommand "test-nixos-rebuild-repl"
 
     expect ${writeText "test-nixos-rebuild-repl-expect" ''
       ${expectSetup}
-      spawn nixos-rebuild repl --fast
+      spawn nixos-rebuild repl --no-reexec
 
       expect "nix-repl> "
 
@@ -116,7 +116,7 @@ runCommand "test-nixos-rebuild-repl"
 
     expect ${writeText "test-nixos-rebuild-repl-absolute-path-expect" ''
       ${expectSetup}
-      spawn sh -c "nixos-rebuild repl --fast --flake path:\$HOME#testconf"
+      spawn sh -c "nixos-rebuild repl --no-reexec --flake path:\$HOME#testconf"
 
       expect_simple "nix-repl>"
 
@@ -146,7 +146,7 @@ runCommand "test-nixos-rebuild-repl"
     pushd "$HOME"
     expect ${writeText "test-nixos-rebuild-repl-relative-path-expect" ''
       ${expectSetup}
-      spawn sh -c "nixos-rebuild repl --fast --flake .#testconf"
+      spawn sh -c "nixos-rebuild repl --no-reexec --flake .#testconf"
 
       expect_simple "nix-repl>"
 

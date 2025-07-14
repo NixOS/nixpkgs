@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "madmaxms";
-    repo = pname;
+    repo = "iconpack-obsidian";
     rev = "v${version}";
     sha256 = "1f32isq1xyn9b6p1nx5rssqgg9gw0jp9ld19860xk29fspmlfb8n";
   };
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     mint-x-icons
     hicolor-icon-theme
   ];
-  # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
+  # still missing parent themes: Ambient-MATE, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
 

@@ -3,28 +3,31 @@
   lib,
   fetchFromGitHub,
   libX11,
-  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libspnav";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "libspnav";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qBewSOiwf5iaGKLGRWOQUoHkUADuH8Q1mJCLiWCXmuQ=";
+    tag = "v${version}";
+    hash = "sha256-4ESzH2pMTGoDI/AAX8Iz/MVhxQD8q5cg9I91ryUi5Ys=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ libX11 ];
 
   configureFlags = [ "--disable-debug" ];
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags =
+    [
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "AR=${stdenv.cc.targetPrefix}ar"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "shared=-dynamiclib"
+      "shared+=-Wl,-install_name,$(out)/lib/$(lib_so)"
+    ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

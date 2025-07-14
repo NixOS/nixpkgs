@@ -130,7 +130,7 @@ let
         virtualisation.test.nodeName = mkOption {
           internal = true;
           default = name;
-          # We need to force this in specilisations, otherwise it'd be
+          # We need to force this in specialisations, otherwise it'd be
           # readOnly = true;
           description = ''
             The `name` in `nodes.<name>`; stable across `specialisations`.

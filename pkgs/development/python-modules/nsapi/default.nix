@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aquatix";
     repo = "ns-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-H8qxqzcGZ52W/HbTuKdnfnaYdZFaxzuUhrniS1zsL2w=";
   };
 

@@ -52,7 +52,7 @@ kaem.runCommand "${pname}-${version}"
         bsdOriginalUC
         caldera
       ];
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

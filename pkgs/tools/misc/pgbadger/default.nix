@@ -21,7 +21,7 @@ buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
   };
 
@@ -67,7 +67,7 @@ buildPerlPackage rec {
     description = "Fast PostgreSQL Log Analyzer";
     changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
-    maintainers = lib.teams.determinatesystems.members;
+    teams = [ lib.teams.determinatesystems ];
     mainProgram = "pgbadger";
   };
 }

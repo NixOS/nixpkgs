@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -24,11 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.7.0";
+  version = "1.10.0";
 
-  src = fetchurl {
-    url = with finalAttrs; "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    hash = "sha256-ZXgvChCktFWvnGuqtwQOL1N1IMqi7CCSgFzf02hjskc=";
+  src = fetchFromGitHub {
+    owner = "xkbcommon";
+    repo = "libxkbcommon";
+    tag = "xkbcommon-${finalAttrs.version}";
+    hash = "sha256-rLh5BD9a0bI0nHtWX+n0LqmdIO5ykd98rNc5hAN3ndE=";
   };
 
   patches = [
@@ -91,10 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      primeos
       ttuegel
     ];
     mainProgram = "xkbcli";

@@ -30,7 +30,7 @@
 let
   versions = callPackage ./versions.nix { };
 
-  matching-versions = lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (
+  matching-versions = lib.sort (v1: v2: lib.versionOlder v2.version v1.version) (
     lib.filter (
       v: v.lang == lang && (version == null || isMatching v.version version) && matchesDoc v
     ) versions
@@ -72,13 +72,12 @@ callPackage ./generic.nix {
   );
   meta = with lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
+    homepage = "https://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
       herberteuler
       rafaelrc
-      chewblacka
     ];
     platforms = [ "x86_64-linux" ];
   };

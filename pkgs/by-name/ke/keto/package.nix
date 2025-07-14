@@ -5,8 +5,8 @@
 }:
 let
   pname = "keto";
-  version = "0.13.0-alpha.0";
-  commit = "c75695837f170334b526359f28967aa33d61bce6";
+  version = "0.14.0";
+  commit = "613779b6dad89f6fb6b4fa6968f13ede11963c97";
 in
 buildGoModule {
   inherit pname version commit;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "keto";
     rev = "v${version}";
-    hash = "sha256-0yylaaXogN2HWXY8Tb7ScN4jdyeHecJ0gBYlVvcwaNE=";
+    hash = "sha256-DQiE7PvRnOzdRITRl7LgUDmCJO5/aUzbFdEIyiofZfU=";
   };
 
-  vendorHash = "sha256-lgwV4Ysjmd9e850Rf5c0wSZtMW3U34/piwwG7dQEUV4=";
+  vendorHash = "sha256-deQxdG3HZiMzzwTr6moILBSNeNR/3noFlJlIx1eyBZs=";
 
   tags = [
     "sqlite"

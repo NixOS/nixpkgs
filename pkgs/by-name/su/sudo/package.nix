@@ -17,13 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
   # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
   # e.g. links to man pages, value constraints etc.
-  version = "1.9.16p2";
+  version = "1.9.17p1";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-l2qlbT47KnVZMweGQoit23SMnBNuJdlanMaZqvp3I5w=";
+    hash = "sha256-/2B+pxcHIZdzinj3eGks1t+afj5ARWX1HeBjyidFXTI=";
   };
 
   prePatch = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ groff ];
-  buildInputs = [ pam ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isOpenBSD) [ pam ];
 
   enableParallelBuilding = true;
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ];
     maintainers = with maintainers; [ rhendric ];
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
     mainProgram = "sudo";
   };
 })

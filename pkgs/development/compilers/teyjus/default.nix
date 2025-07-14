@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "teyjus";
     repo = "teyjus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N4XKDd0NFr501PYUdb7PM2sWh0uD1/SUFXoMr10f064=";
   };
 

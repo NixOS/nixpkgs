@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   tzdata,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiozoneinfo";
-  version = "0.2.1";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,14 +20,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "aiozoneinfo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-u7yQiy5xKK1A19cmpXjA4MMK4q7RvtuvwkUECnddzG8=";
+    tag = "v${version}";
+    hash = "sha256-7qd6Yk/K4BLocu8eQK0hLaw2r1jhWIHBr9W4KsAvmx8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=aiozoneinfo --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -34,6 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -13,8 +13,9 @@
   pkg-config,
   sqlite,
   ragel,
+  fasttext,
   icu,
-  hyperscan,
+  vectorscan,
   jemalloc,
   blas,
   lapack,
@@ -23,23 +24,22 @@
   xxHash,
   zstd,
   libarchive,
-  withBlas ? true,
-  withHyperscan ? stdenv.hostPlatform.isx86_64,
+  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+  # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  withBlas ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
-assert withHyperscan -> stdenv.hostPlatform.isx86_64;
-
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.11.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-id5nmxdqx+0m0JCCvwaEuUAQkMLTlWadfieJ0wO/wJI=";
+    hash = "sha256-bAkT0msUkgGkjAIlF7lnJbimBKW1NSn2zjkCj3ErJ1I=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     perl
+    ragel
   ];
+
   buildInputs =
     [
       doctest
@@ -58,14 +60,15 @@ stdenv.mkDerivation rec {
       pcre
       sqlite
       ragel
+      fasttext
       icu
       jemalloc
       libsodium
       xxHash
       zstd
       libarchive
+      vectorscan
     ]
-    ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [
       blas
       lapack
@@ -73,23 +76,23 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
-  cmakeFlags =
-    [
-      # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
-      "-DENABLE_PCRE2=OFF"
-      "-DDEBIAN_BUILD=ON"
-      "-DRUNDIR=/run/rspamd"
-      "-DDBDIR=/var/lib/rspamd"
-      "-DLOGDIR=/var/log/rspamd"
-      "-DLOCAL_CONFDIR=/etc/rspamd"
-      "-DENABLE_JEMALLOC=ON"
-      "-DSYSTEM_DOCTEST=ON"
-      "-DSYSTEM_FMT=ON"
-      "-DSYSTEM_XXHASH=ON"
-      "-DSYSTEM_ZSTD=ON"
-    ]
-    ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
-    ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
+  cmakeFlags = [
+    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
+    "-DENABLE_PCRE2=OFF"
+    "-DDEBIAN_BUILD=ON"
+    "-DRUNDIR=/run/rspamd"
+    "-DDBDIR=/var/lib/rspamd"
+    "-DLOGDIR=/var/log/rspamd"
+    "-DLOCAL_CONFDIR=/etc/rspamd"
+    "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
+    "-DENABLE_FASTTEXT=ON"
+    "-DENABLE_JEMALLOC=ON"
+    "-DSYSTEM_DOCTEST=ON"
+    "-DSYSTEM_FMT=ON"
+    "-DSYSTEM_XXHASH=ON"
+    "-DSYSTEM_ZSTD=ON"
+    "-DENABLE_HYPERSCAN=ON"
+  ] ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 
   passthru.tests.rspamd = nixosTests.rspamd;
 

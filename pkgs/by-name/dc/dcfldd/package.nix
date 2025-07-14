@@ -1,27 +1,38 @@
 {
+  autoreconfHook,
+  fetchFromGitHub,
   lib,
+  pkg-config,
   stdenv,
-  fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dcfldd";
-  version = "1.3.4-1";
+  version = "1.9.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/dcfldd/dcfldd-${version}.tar.gz";
-    sha256 = "1y6mwsvm75f5jzxsjjk0yhf8xnpmz6y8qvcxfandavx59lc3l57m";
+  src = fetchFromGitHub {
+    owner = "resurrecting-open-source-projects";
+    repo = "dcfldd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xn1+8hLiLQMOv0q0Jkuqha9EZSJWMbCksnq/G6n4vQ8=";
   };
 
-  meta = with lib; {
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  meta = {
     description = "Enhanced version of GNU dd";
 
-    homepage = "https://dcfldd.sourceforge.net/";
+    homepage = "https://github.com/resurrecting-open-source-projects/dcfldd";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.all;
-    maintainers = with maintainers; [ qknight ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ qknight ];
     mainProgram = "dcfldd";
   };
-}
+})

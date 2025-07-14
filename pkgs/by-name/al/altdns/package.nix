@@ -16,12 +16,7 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-ElY6AZ7IBnOh7sRWNSQNmq7AYGlnjvYRn8/U+29BwWA=";
   };
 
-  prePatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "argparse" ""
-    substituteInPlace setup.py \
-      --replace-fail "argparse" ""
-  '';
+  pythonRemoveDeps = [ "argparse" ];
 
   build-system = with python3.pkgs; [
     setuptools

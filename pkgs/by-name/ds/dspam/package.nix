@@ -13,7 +13,7 @@
   zlib,
   mariadb-connector-c,
   withPgSQL ? false,
-  postgresql,
+  libpq,
   withSQLite ? false,
   sqlite,
   withDB ? false,
@@ -56,10 +56,13 @@ stdenv.mkDerivation rec {
       zlib
       mariadb-connector-c.out
     ]
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withDB db;
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    libpq.pg_config
+    makeWrapper
+  ];
   # patch out libmysql >= 5 check, since mariadb-connector is at 3.x
   postPatch = ''
     sed -i 's/atoi(m) >= 5/1/g' configure m4/mysql_drv.m4
@@ -87,8 +90,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withMySQL [
       "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
       "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
-    ]
-    ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
+    ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

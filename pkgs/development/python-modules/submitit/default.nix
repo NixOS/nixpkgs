@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "submitit";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PDQLzqQjoBAZM9FKsoRby26Pbh4nik3SltIHUw/xWcY=";
   };
 

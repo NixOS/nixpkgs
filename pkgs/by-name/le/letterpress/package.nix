@@ -14,6 +14,7 @@
   ninja,
   pkg-config,
   python3Packages,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "letterpress";
@@ -68,6 +69,10 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Create beautiful ASCII art";
     longDescription = ''
@@ -77,7 +82,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dawidd6 ] ++ lib.teams.gnome-circle.members;
+    maintainers = [ maintainers.dawidd6 ];
+    teams = [ teams.gnome-circle ];
     platforms = platforms.linux;
     mainProgram = "letterpress";
   };

@@ -62,8 +62,20 @@ let
     };
 
   selectPartitionTableLayout =
-    { useEFIBoot, useDefaultFilesystems }:
-    if useDefaultFilesystems then if useEFIBoot then "efi" else "legacy" else "none";
+    {
+      useEFIBoot,
+      useDefaultFilesystems,
+      useBIOSBoot,
+    }:
+    if useDefaultFilesystems then
+      if useEFIBoot then
+        "efi"
+      else if useBIOSBoot then
+        "legacy+boot"
+      else
+        "legacy"
+    else
+      "none";
 
   driveCmdline =
     idx:
@@ -228,10 +240,37 @@ let
       ${lib.getExe cfg.tpm.package} \
         socket \
         --tpmstate dir="$NIX_SWTPM_DIR" \
-        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+        --server type=unixio,path="$NIX_SWTPM_DIR"/socket \
+        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket.ctrl \
         --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+        --flags not-need-init \
         --tpm2 \
         --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+      (
+        export TPM2TOOLS_TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+        export PATH=${
+          lib.makeBinPath [
+            pkgs.tpm2-tools
+          ]
+        }:$PATH
+
+        tpm2_startup --clear
+        tpm2_startup
+
+        ${lib.optionalString (cfg.tpm.provisioning != null)
+          # Run provisioning in a subshell not to pollute vars
+          ''
+            (
+              export TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+              ${cfg.tpm.provisioning}
+            )
+          ''
+        }
+
+        tpm2_shutdown
+        tpm2_shutdown --clear
+      )
 
       # Enable `fdflags` builtin in Bash
       # We will need it to perform surgical modification of the file descriptor
@@ -249,7 +288,7 @@ let
       # will stop it.
       coproc waitingswtpm {
         read || :
-        echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        ${cfg.tpm.package}/bin/swtpm_ioctl --unix "$NIX_SWTPM_DIR"/socket.ctrl --stop 2>/dev/null
       }
       # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
       fdflags -s-cloexec ''${waitingswtpm[1]}
@@ -310,7 +349,9 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout {
+      inherit (cfg) useBIOSBoot useDefaultFilesystems useEFIBoot;
+    };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
@@ -364,7 +405,7 @@ in
       type = types.ints.positive;
       default = 1024;
       description = ''
-        The memory size in megabytes of the virtual machine.
+        The memory size of the virtual machine in MiB (1024×1024 bytes).
       '';
     };
 
@@ -404,8 +445,17 @@ in
 
     virtualisation.bootPartition = mkOption {
       type = types.nullOr types.path;
-      default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-      defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+      default =
+        if cfg.useEFIBoot then
+          "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then
+          "/dev/disk/by-label/BOOT"
+        else
+          null;
+      defaultText = literalExpression ''
+        if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
+        else if cfg.useBIOSBoot then "/dev/disk/by-label/BOOT"
+        else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
         The path (inside the VM) to the device containing the EFI System Partition (ESP).
@@ -430,7 +480,7 @@ in
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
-        a list of size in megabytes of each disk. These disks are
+        a list of size in MiB (1024×1024 bytes) of each disk. These disks are
         writeable by the VM.
       '';
     };
@@ -902,6 +952,14 @@ in
       '';
     };
 
+    virtualisation.useBIOSBoot = mkEnableOption null // {
+      description = ''
+        If enabled for legacy MBR VMs, the VM image will have a separate boot
+        partition mounted at /boot.
+        useBIOSBoot is ignored if useEFIBoot == true.
+      '';
+    };
+
     virtualisation.useEFIBoot = mkOption {
       type = types.bool;
       default = false;
@@ -980,6 +1038,26 @@ in
         example = "tpm-tis-device";
         description = "QEMU device model for the TPM, uses the appropriate default based on th guest platform system and the package passed.";
       };
+
+      provisioning = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Script to provision the TPM before control is handed off to the VM.
+
+          `TPM2TOOLS_TCTI` will be provided to configure tpm2-tools to use the
+          swtpm instance transparently.
+          `TCTI` is also provided as a generic value, consumer is expected to
+          re-export it however it may need (`TPM2OPENSSL_TCTI`, `TPM2_PKCS11_TCTI`,
+          ...).
+        '';
+        example = literalExpression ''
+          tpm2_nvdefine 0xcafecafe \
+            -C o \
+            -a "ownerread|policyread|policywrite|ownerwrite|authread|authwrite"
+          echo "foobar" | tpm2_nvwrite 0xcafecafe -C o
+        '';
+      };
     };
 
     virtualisation.useDefaultFilesystems = mkOption {
@@ -1051,7 +1129,7 @@ in
         {
           assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
           message = ''
-            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047 MiB RAM on 32bit max.
           '';
         }
         {
@@ -1080,6 +1158,9 @@ in
       You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
       `useBootLoader` useless. You might want to disable one of those options.
     '';
+
+    # Install Limine on the bootloader device
+    boot.loader.limine.biosDevice = cfg.bootLoaderDevice;
 
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
     # legacy and UEFI. In order to avoid this, we have to put "nodev" to force UEFI-only installs.
@@ -1198,7 +1279,7 @@ in
         "-nographic"
       ])
       (mkIf (cfg.tpm.enable) [
-        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket.ctrl"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
       ])
@@ -1267,6 +1348,7 @@ in
               {
                 device = "tmpfs";
                 fsType = "tmpfs";
+                options = [ "mode=755" ];
               }
             else
               {

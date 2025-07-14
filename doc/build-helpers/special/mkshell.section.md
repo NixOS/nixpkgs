@@ -8,11 +8,16 @@ repetition when using it with `nix-shell` (or `nix develop`).
 Here is a common usage example:
 
 ```nix
-{ pkgs ? import <nixpkgs> {} }:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 pkgs.mkShell {
   packages = [ pkgs.gnumake ];
 
-  inputsFrom = [ pkgs.hello pkgs.gnutar ];
+  inputsFrom = [
+    pkgs.hello
+    pkgs.gnutar
+  ];
 
   shellHook = ''
     export DEBUG=1

@@ -14,13 +14,13 @@
 let
   drv = stdenv.mkDerivation (finalAttrs: {
     pname = "sasquatch";
-    version = "4.5.1-4";
+    version = "4.5.1-5";
 
     src = fetchFromGitHub {
       owner = "onekey-sec";
       repo = "sasquatch";
       rev = "sasquatch-v${finalAttrs.version}";
-      hash = "sha256-0itva+j5WMKvueiUaO253UQ1S6W29xgtFvV4i3yvMtU=";
+      hash = "sha256-4Mltt0yFt4oh9hsrHL8/ch5n7nZYiXIJ1UgLktPvlKQ=";
     };
 
     patches = lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;

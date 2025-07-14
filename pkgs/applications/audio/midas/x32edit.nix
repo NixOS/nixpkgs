@@ -5,9 +5,9 @@ callPackage ./generic.nix (
   // rec {
     brand = "Behringer";
     type = "X32";
-    version = "4.1";
+    version = "4.3";
     url = "https://mediadl.musictribe.com/download/software/behringer/${type}/${type}-Edit_LINUX_${version}.tar.gz";
-    sha256 = "0zsw7qfmcci87skkpq8vx5zxk35phn8y4byispvki9ascifnnb33";
+    hash = "sha256-iVBBW6qVtEGlNXqKRZxObB9WfbOEjXMA1Nsp1CTFOH4=";
     homepage = "https://www.behringer.com/behringer/product?modelCode=P0ASF";
   }
 )

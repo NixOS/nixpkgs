@@ -10,7 +10,7 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   # pypinput is marked as broken for darwin
   pynputSupport ? stdenv.hostPlatform.isLinux,
-  # Experimental Drag & Drop support requires x11 & pyinput suport
+  # Experimental Drag & Drop support requires x11 & pyinput support
   hasDndSupport ? x11Support && pynputSupport,
   enableDragAndDrop ? false,
 }:
@@ -21,21 +21,24 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
   python3.pkgs.buildPythonApplication
   rec {
     pname = "tuifimanager";
-    version = "5.0.0";
-    format = "pyproject";
+    version = "5.1.5";
+
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "GiorgosXou";
       repo = "TUIFIManager";
-      rev = "v.${version}";
-      hash = "sha256-2yYD1YFGoN0uj3HzcYxEs3zbwfUIDLLzvfTcZILx5h4=";
+      tag = "v.${version}";
+      hash = "sha256-5ShrmjEFKGdmaGBFjMnIfcM6p8AZd13uIEFwDVAkU/8=";
     };
 
+    build-system = with python3.pkgs; [
+      setuptools
+      setuptools-scm
+    ];
+
     nativeBuildInputs =
-      [
-        python3.pkgs.setuptools
-        python3.pkgs.setuptools-scm
-      ]
+      [ ]
       ++ (lib.optionals enableDragAndDrop [
         qt6.wrapQtAppsHook
         makeWrapper

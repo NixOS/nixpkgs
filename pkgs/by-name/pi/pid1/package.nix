@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2dnQj3AQxedyq1YvHKt+lVXNEtuB5sMRSCqX9YeifzI=";
   };
 
-  cargoHash = "sha256-/KK9U1dgCLglgn/MJ7+sov4EEnY/nluEsz0ooMp6ggI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ldHtmbLoSFVxb0B3Oj21UOFNSXwu8xAPhpE8jBqOwr4=";
 
   meta = with lib; {
     description = "Signal handling and zombie reaping for PID1 process";

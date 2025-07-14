@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -20,7 +25,8 @@ let
     ${concatStringsSep "\n" (mapAttrsToList (ipv4: ipv6: "map " + ipv4 + " " + ipv6) cfg.mappings)}
   '';
 
-  addrOpts = v:
+  addrOpts =
+    v:
     assert v == 4 || v == 6;
     {
       options = {
@@ -116,7 +122,7 @@ in
 
       mappings = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         description = "Static IPv4 -> IPv6 host mappings.";
         example = literalExpression ''
           {
@@ -143,7 +149,10 @@ in
       virtualOwner = mkIf config.networking.useNetworkd "";
       ipv4 = {
         addresses = [
-          { address = cfg.ipv4.router.address; prefixLength = 32; }
+          {
+            address = cfg.ipv4.router.address;
+            prefixLength = 32;
+          }
         ];
         routes = [
           cfg.ipv4.pool
@@ -151,7 +160,10 @@ in
       };
       ipv6 = {
         addresses = [
-          { address = cfg.ipv6.router.address; prefixLength = 128; }
+          {
+            address = cfg.ipv6.router.address;
+            prefixLength = 128;
+          }
         ];
         routes = [
           cfg.ipv6.pool

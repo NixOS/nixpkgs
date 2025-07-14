@@ -34,7 +34,7 @@ buildNimPackage (finalAttrs: {
   NIX_LDFLAGS = [ "-lpcre" ];
 
   meta = {
-    description = "A functional, concatenative programming language with a minimalist syntax";
+    description = "Functional, concatenative programming language with a minimalist syntax";
     homepage = "https://min-lang.org/";
     changelog = "https://github.com/h3rald/min/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;

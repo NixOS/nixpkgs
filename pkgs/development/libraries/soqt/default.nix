@@ -8,7 +8,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soqt";
   version = "2020-12-05-unstable";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/coin3d/soqt";
     license = licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -5,13 +5,13 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "dnsmon-go";
   version = "unstable-2022-05-13";
 
   src = fetchFromGitHub {
     owner = "jonpulsifer";
-    repo = pname;
+    repo = "dnsmon-go";
     rev = "ec1d59f1f1314ce310ad4c04d2924e0ebd857f1d";
     hash = "sha256-lAJ2bjs5VLzrHd09eFK4X0V/cCee2QsgdgiKq+y2c10=";
   };

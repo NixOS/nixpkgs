@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "markupsafe";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BqCkQqPhjEx3qB/k3d3fSirR/HDBa7e4kpx3/VSwXJM=";
   };
 
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
   };
 }

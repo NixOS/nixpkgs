@@ -5,15 +5,13 @@
 
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "apt-repo";
   version = "0.5-unstable-2023-09-27";
   pyproject = true;
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "brennerm";
@@ -24,7 +22,8 @@ buildPythonPackage rec {
   passthru.updateScript = unstableGitUpdater { };
 
   build-system = [ setuptools ];
-  nativeBuildInputs = [ pytestCheckHook ];
+
+  doCheck = false; # All tests require a network connection
 
   pythonImportsCheck = [ "apt_repo" ];
 

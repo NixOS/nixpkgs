@@ -19,6 +19,7 @@
   nasm,
   pkg-config,
   which,
+  openssl,
 
   # Tests
   nixosTests,
@@ -26,7 +27,16 @@
   # Runtime dependencies
   arrow-cpp,
   babeltrace,
-  boost182, # using the version installed by ceph's `install-deps.sh`
+  # Note when trying to upgrade boost:
+  # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
+  #   and default to that.
+  # * The version that Ceph downloads if `-DWITH_SYSTEM_BOOST:BOOL=ON` is not given
+  #   is declared in `cmake/modules/BuildBoost.cmake` line `set(boost_version ...)`.
+  #
+  # If you want to upgrade to boost >= 1.86, you need a Ceph version that
+  # has this PR in:
+  #     https://github.com/ceph/ceph/pull/61312
+  boost183,
   bzip2,
   cryptsetup,
   cunit,
@@ -173,6 +183,7 @@ let
       johanot
       krav
       nh2
+      benaryorg
     ];
     platforms = [
       "x86_64-linux"
@@ -184,6 +195,7 @@ let
     with python.pkgs;
     buildPythonPackage {
       pname = "ceph-common";
+      format = "setuptools";
       inherit src version;
 
       sourceRoot = "ceph-${version}/src/python-common";
@@ -231,22 +243,24 @@ let
             hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
           };
           cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoTarball {
-            inherit src;
-            sourceRoot = "${pname}-${version}/${cargoRoot}";
-            name = "${pname}-${version}";
-            hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            inherit
+              pname
+              version
+              src
+              cargoRoot
+              ;
+            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
 
         # We pin the older `cryptography` 40 here;
-        # this also forces us to pin an older `pyopenssl` because the current one
-        # is not compatible with older `cryptography`, see:
-        #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
+        # this also forces us to pin other packages, see below
         cryptography = self.callPackage ./old-python-packages/cryptography.nix { };
 
         # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
         # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+        # and https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
         pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
           version = "23.1.1";
           src = fetchPypi {
@@ -257,12 +271,23 @@ let
           disabledTests = old.disabledTests or [ ] ++ [
             "test_export_md5_digest"
           ];
+          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+            "tests/test_ssl.py"
+          ];
           propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
             self.flaky
           ];
+          # hack: avoid building docs due to incompatibility with current sphinx
+          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
+          outputs = lib.filter (o: o != "doc") old.outputs;
         });
 
-        fastapi = super.fastapi.overridePythonAttrs (old: rec {
+        # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
+        # See https://github.com/NixOS/nixpkgs/issues/359723
+        # and https://github.com/python-trio/trustme/commit/586f7759d5c27beb44da60615a71848eb2a5a490
+        trustme = self.callPackage ./old-python-packages/trustme.nix { };
+
+        fastapi = super.fastapi.overridePythonAttrs (old: {
           # Flaky test:
           #     ResourceWarning: Unclosed <MemoryObjectSendStream>
           # Unclear whether it's flaky in general or only in this overridden package set.
@@ -285,7 +310,7 @@ let
       };
   };
 
-  boost = boost182.override {
+  boost' = boost183.override {
     enablePython = true;
     inherit python;
   };
@@ -335,10 +360,10 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.0";
+  version = "19.2.2";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-30vkW1j49hFIxyxzkssSKVSq0VqiwLfDtOb62xfxadM=";
+    hash = "sha256-7FD9LJs25VzUCRIBm01Cm3ss1YLTN9YLwPZnHSMd8rs=";
   };
 in
 rec {
@@ -354,6 +379,28 @@ rec {
         stripLen = 1;
         extraPrefix = "src/s3select/";
       })
+
+      ./boost-1.85.patch
+
+      (fetchpatch2 {
+        name = "ceph-boost-1.86-uuid.patch";
+        url = "https://github.com/ceph/ceph/commit/01306208eac492ee0e67bff143fc32d0551a2a6f.patch?full_index=1";
+        hash = "sha256-OnDrr72inzGXXYxPFQevsRZImSvI0uuqFHqtFU2dPQE=";
+      })
+
+      # See:
+      # * <https://github.com/boostorg/python/issues/394>
+      # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
+      # * <https://github.com/ceph/ceph/pull/60999>
+      ./boost-1.86-PyModule.patch
+
+      # TODO: Remove with Ceph >= 19.2.3
+      (fetchpatch2 {
+        name = "ceph-squid-client-disallow-unprivileged-users-to-escalate-root-privileges.patch";
+        url = "https://github.com/ceph/ceph/commit/380da5049e8ea7c35f34022fba24d3e2d4db6dd8.patch?full_index=1";
+        hash = "sha256-hVJ1v/n2YCJLusw+DEyK12MG73sJ/ccwbSc+2pLRxvw=";
+      })
+
     ];
 
     nativeBuildInputs = [
@@ -381,7 +428,7 @@ rec {
       ++ [
         arrow-cpp
         babeltrace
-        boost
+        boost'
         bzip2
         # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
         # This is important, otherwise the build system may not find the Python deps and then
@@ -445,9 +492,20 @@ rec {
       "${placeholder "out"}/${ceph-python-env.sitePackages}"
     ];
 
-    # replace /sbin and /bin based paths with direct nix store paths
-    # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
+    # * `unset AS` because otherwise the Ceph CMake build errors with
+    #       configure: error: No modern nasm or yasm found as required. Nasm should be v2.11.01 or later (v2.13 for AVX512) and yasm should be 1.2.0 or later.
+    #   because the code at
+    #       https://github.com/intel/isa-l/blob/633add1b569fe927bace3960d7c84ed9c1b38bb9/configure.ac#L99-L191
+    #   doesn't even consider using `nasm` or `yasm` but instead uses `$AS`
+    #   from `gcc-wrapper`.
+    #   (Ceph's error message is extra confusing, because it says
+    #   `No modern nasm or yasm found` when in fact it found e.g. `nasm`
+    #   but then uses `$AS` instead.
+    # * replace /sbin and /bin based paths with direct nix store paths
+    # * increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
     preConfigure = ''
+      unset AS
+
       substituteInPlace src/common/module.c \
         --replace "char command[128];" "char command[256];" \
         --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
@@ -480,7 +538,7 @@ rec {
       #          |       ^~~~~~~~~~~~~~~~~~
       # Looks like `close()` is somehow not included.
       # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
-      # So it's proably not worth trying to fix that for this Ceph version,
+      # So it's probably not worth trying to fix that for this Ceph version,
       # and instead just disable Ceph's Jaeger support.
       "-DWITH_JAEGER:BOOL=OFF"
       "-DWITH_TESTS:BOOL=OFF"

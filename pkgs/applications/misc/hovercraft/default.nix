@@ -16,6 +16,7 @@
 buildPythonApplication rec {
   pname = "hovercraft";
   version = "2.7";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

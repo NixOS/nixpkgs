@@ -3,11 +3,9 @@
   buildPythonPackage,
   contextlib2,
   fetchFromGitHub,
-  fetchurl,
   lib,
   pyyaml,
   six,
-  setuptools,
   flit-core,
   pytestCheckHook,
   pytest-xdist,
@@ -15,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "ml-collections";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
   build-system = [ flit-core ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ml_collections";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QUhwkfffjA6gKd6lTmEgnnoUeJOu82mfFPBta9/iebg=";
+    tag = "v${version}";
+    hash = "sha256-G9+UBqHalzI3quR8T5NEgJs+ep60ffFw9vyTTZDeZ9M=";
   };
 
   dependencies = [

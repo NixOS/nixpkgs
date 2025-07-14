@@ -8,11 +8,12 @@
 buildPythonPackage rec {
   pname = "rtfunicode";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5lmiazxiEENpdqzVgoKQoG2OW/w5nGmC8odulo2XaLo=";
   };
 

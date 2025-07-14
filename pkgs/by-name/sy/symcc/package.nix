@@ -4,8 +4,8 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  llvm_17,
-  clang_17,
+  llvm,
+  clang,
   z3,
   makeWrapper,
 }:
@@ -48,13 +48,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     ninja
-    llvm_17
-    clang_17
+    llvm
+    clang
     makeWrapper
   ];
 
   buildInputs = [
-    llvm_17
+    llvm
     z3
   ];
 

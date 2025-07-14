@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdoc3";
     repo = "pdoc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Opj1fU1eZvqsYJGCBliVwugxFV4H1hzOOTkjs4fOEWA=";
   };
 

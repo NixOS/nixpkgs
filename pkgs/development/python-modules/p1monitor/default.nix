@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   syrupy,
   pythonOlder,
@@ -22,14 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vr/JLvn593cgZ2KEsfDW1lS4QlGiymr0qZ8130zo6Ec=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
+      --replace '"0.0.0"' '"${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

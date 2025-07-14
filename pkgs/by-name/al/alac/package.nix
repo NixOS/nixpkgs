@@ -26,9 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  # error: 'TARGET_OS_MAC' is not defined, evaluates to 0
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DTARGET_OS_MAC";
-
   passthru = {
     updateScript = unstableGitUpdater { };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

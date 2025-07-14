@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pyinvoke";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "invocations";
+    tag = version;
     hash = "sha256-JnhdcxhBNsYgDMcljtGKjOT1agujlao/66QifGuh6I0=";
   };
 

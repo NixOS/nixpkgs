@@ -1,24 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   ecdsa,
+  fetchFromGitHub,
   hypothesis,
-  pythonAtLeast,
   pytestCheckHook,
+  pythonAtLeast,
+  setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "tlslite-ng";
-  version = "0.8.0b1-unstable-2024-06-24";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlsfuzzer";
     repo = "tlslite-ng";
-    rev = "4d2c6b8fc8d14bb5c90c8360bdb6f617e8e38591";
-    hash = "sha256-VCQjxZIs4rzlFrIakXI7YeLz7Ws9WRf8zGPcSryO9Ko=";
+    tag = "v${version}";
+    hash = "sha256-lKSFPJ4Dm8o1zUgvXjUUpStV5M+xf7s6wOg2ceYbpbw=";
   };
 
   build-system = [ setuptools ];
@@ -36,9 +36,9 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/tlsfuzzer/tlslite-ng/releases/tag/v${version}";
-    description = "Pure python implementation of SSL and TLS";
+    description = "Implementation of SSL and TLS";
     homepage = "https://github.com/tlsfuzzer/tlslite-ng";
+    changelog = "https://github.com/tlsfuzzer/tlslite-ng/releases/tag/${src.tag}";
     license = licenses.lgpl21Only;
     maintainers = [ ];
   };

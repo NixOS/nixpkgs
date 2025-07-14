@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xOKfdk8Bn9f5oszS0IHUD6HgzL9VSa5GBZ28n4fvAck=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [ "iso4217/test.py" ];
+  enabledTestPaths = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 

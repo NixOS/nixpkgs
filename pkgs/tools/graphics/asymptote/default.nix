@@ -18,6 +18,7 @@
   boehmgc,
   libGLU,
   libGL,
+  libglvnd,
   ncurses,
   readline,
   gsl,
@@ -25,17 +26,16 @@
   python3,
   qtbase,
   qtsvg,
-  boost,
+  boost186,
   zlib,
   perl,
   curl,
   texinfo,
   texliveSmall,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.92";
+  version = "3.05";
   pname = "asymptote";
 
   outputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
+    hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
@@ -64,7 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
       texinfo
       wrapQtAppsHook
       cmake
+      ghostscriptX
+      perl
       pkg-config
+      (python3.withPackages (
+        ps: with ps; [
+          click
+          cson
+          numpy
+          pyqt5
+        ]
+      ))
     ]
     ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
       texliveSmall.withPackages (
@@ -94,7 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     qtbase
     qtsvg
-    boost
+    # relies on removed asio::io_service
+    # https://github.com/kuafuwang/LspCpp/issues/52
+    boost186
     (python3.withPackages (
       ps: with ps; [
         cson
@@ -112,15 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
       libglut
       libGLU
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        GLUT
-        Cocoa
-      ]
-    );
+      libglvnd
+    ];
 
   dontWrapQtApps = true;
 
@@ -146,15 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # do not use bundled libgc.so
-  configureFlags =
-    [ "--enable-gc=system" ]
-    # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-xdr=no";
+  configureFlags = [ "--enable-gc=system" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     rm "$out"/bin/xasy
+    chmod +x "$out"/share/asymptote/GUI/xasy.py
     makeQtWrapper "$out"/share/asymptote/GUI/xasy.py "$out"/bin/xasy --prefix PATH : "$out"/bin
 
     if [[ -z $texdocContainer ]] ; then
@@ -199,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tool for programming graphics intended to replace Metapost";
+    homepage = "https://asymptote.sourceforge.io/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;

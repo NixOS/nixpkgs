@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   chromaprint,
   cmake,
@@ -33,16 +32,15 @@
   microsoft-gsl,
   mp4v2,
   opusfile,
-  pcre,
   pkg-config,
   portaudio,
   portmidi,
   protobuf,
+  qt5compat,
   qtbase,
+  qtdeclarative,
   qtkeychain,
-  qtscript,
   qtsvg,
-  qtx11extras,
   rubberband,
   serd,
   sord,
@@ -53,27 +51,31 @@
   upower,
   vamp-plugin-sdk,
   wavpack,
-  wrapGAppsHook3,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mixxx";
-  version = "2.4.2";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-YfpFRLosIIND+HnZN+76ZY0dQqEJaFkWZS84gZOCdfc=";
+    hash = "sha256-dKk3n3KDindnLbON52SW5h4cz96WVi0OPjwA27HqQCI=";
   };
+
+  # Should be removed when bumping to 2.6.x
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
+    wrapQtAppsHook
   ];
-
-  dontWrapGApps = true;
 
   buildInputs = [
     chromaprint
@@ -105,15 +107,14 @@ mkDerivation rec {
     microsoft-gsl
     mp4v2
     opusfile
-    pcre
     portaudio
     portmidi
     protobuf
+    qt5compat
     qtbase
+    qtdeclarative
     qtkeychain
-    qtscript
     qtsvg
-    qtx11extras
     rubberband
     serd
     sord
@@ -126,15 +127,15 @@ mkDerivation rec {
     wavpack
   ];
 
-  preFixup = ''
-    qtWrapperArgs+=(--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive ''${gappsWrapperArgs[@]})
-  '';
+  qtWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
   # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
+    # "BUILD_TESTING=OFF" must imply "BUILD_BENCH=OFF"
+    "-DBUILD_BENCH=OFF"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -147,15 +148,16 @@ mkDerivation rec {
     cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      bfortz
+    changelog = "https://github.com/mixxxdj/mixxx/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       benley
+      bfortz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

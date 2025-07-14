@@ -9,11 +9,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "sasutils";
   version = "0.6.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stanford-rc";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "sasutils";
+    tag = "v${version}";
     sha256 = "sha256-rx4IxS5q1c3z617F4DBWxuxxSPHKFrw2bTW6b6/qkds=";
   };
 

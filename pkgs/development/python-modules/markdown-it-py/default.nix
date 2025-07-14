@@ -33,8 +33,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "markdown-it-py";
+    tag = "v${version}";
     hash = "sha256-cmjLElJA61EysTUFMVY++Kw0pI4wOIXOyCY3To9fpQc=";
   };
 

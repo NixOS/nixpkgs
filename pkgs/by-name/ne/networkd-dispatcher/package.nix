@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
+  installShellFiles,
   python3Packages,
   asciidoc,
   wrapGAppsNoGuiHook,
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "craftyguy";
-    repo = pname;
+    repo = "networkd-dispatcher";
     rev = version;
     hash = "sha256-yO9/HlUkaQmW/n9N3vboHw//YMzBjxIHA2zAxgZNEv0=";
   };
@@ -36,13 +37,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Fix paths in systemd unit file
     substituteInPlace networkd-dispatcher.service \
-      --replace "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher"
+      --replace-fail "/usr/bin/networkd-dispatcher" "$out/bin/networkd-dispatcher"
     # Remove conditions on existing rules path
     sed -i '/ConditionPathExistsGlob/g' networkd-dispatcher.service
   '';
 
   nativeBuildInputs = [
-    asciidoc
+    asciidoc # for a2x
+    installShellFiles
     wrapGAppsNoGuiHook
     python3Packages.wrapPython
   ];
@@ -58,7 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3Packages; [
-    configparser
     dbus-python
     pygobject3
   ];
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     install -D -m755 -t $out/bin networkd-dispatcher
     install -Dm644 networkd-dispatcher.service $out/lib/systemd/system/networkd-dispatcher.service
     install -Dm644 networkd-dispatcher.conf $out/etc/conf.d/networkd-dispatcher.conf
-    install -D networkd-dispatcher.8 -t $out/share/man/man8/
+    installManPage networkd-dispatcher.8
     runHook postInstall
   '';
 

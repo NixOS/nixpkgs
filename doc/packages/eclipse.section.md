@@ -15,11 +15,13 @@ If you prefer to install plugins in a more declarative manner, then Nixpkgs also
 ```nix
 {
   packageOverrides = pkgs: {
-    myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-      eclipse = eclipse-platform;
-      jvmArgs = [ "-Xmx2048m" ];
-      plugins = [ plugins.color-theme ];
-    };
+    myEclipse =
+      with pkgs.eclipses;
+      eclipseWithPlugins {
+        eclipse = eclipse-platform;
+        jvmArgs = [ "-Xmx2048m" ];
+        plugins = [ plugins.color-theme ];
+      };
   };
 }
 ```
@@ -37,32 +39,34 @@ Expanding the previous example with two plugins using the above functions, we ha
 ```nix
 {
   packageOverrides = pkgs: {
-    myEclipse = with pkgs.eclipses; eclipseWithPlugins {
-      eclipse = eclipse-platform;
-      jvmArgs = [ "-Xmx2048m" ];
-      plugins = [
-        plugins.color-theme
-        (plugins.buildEclipsePlugin {
-          name = "myplugin1-1.0";
-          srcFeature = fetchurl {
-            url = "http://…/features/myplugin1.jar";
-            hash = "sha256-123…";
-          };
-          srcPlugin = fetchurl {
-            url = "http://…/plugins/myplugin1.jar";
-            hash = "sha256-123…";
-          };
-        })
-        (plugins.buildEclipseUpdateSite {
-          name = "myplugin2-1.0";
-          src = fetchurl {
-            stripRoot = false;
-            url = "http://…/myplugin2.zip";
-            hash = "sha256-123…";
-          };
-        })
-      ];
-    };
+    myEclipse =
+      with pkgs.eclipses;
+      eclipseWithPlugins {
+        eclipse = eclipse-platform;
+        jvmArgs = [ "-Xmx2048m" ];
+        plugins = [
+          plugins.color-theme
+          (plugins.buildEclipsePlugin {
+            name = "myplugin1-1.0";
+            srcFeature = fetchurl {
+              url = "http://…/features/myplugin1.jar";
+              hash = "sha256-123…";
+            };
+            srcPlugin = fetchurl {
+              url = "http://…/plugins/myplugin1.jar";
+              hash = "sha256-123…";
+            };
+          })
+          (plugins.buildEclipseUpdateSite {
+            name = "myplugin2-1.0";
+            src = fetchurl {
+              stripRoot = false;
+              url = "http://…/myplugin2.zip";
+              hash = "sha256-123…";
+            };
+          })
+        ];
+      };
   };
 }
 ```

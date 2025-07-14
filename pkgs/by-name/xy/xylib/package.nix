@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     wxGTK32
   ];
 
+  configureFlags = [
+    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+  ];
+
   meta = with lib; {
     description = "Portable library for reading files that contain x-y data from powder diffraction, spectroscopy and other experimental methods";
     license = licenses.lgpl21;

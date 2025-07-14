@@ -1,44 +1,43 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
-  qtbase,
-  qtx11extras,
+  qt6,
   cmake,
   ninja,
   libcprime,
   libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coreshot";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XPECvwZkJIoN/r5oFWJpgl/WASpybgLjCK/F0XVMHyU=";
+    repo = "coreshot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5KGaMCL9BCGZwK7HQz87B1qrNvx5SQyMooZw4MwMdCc=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    qt6.qtbase
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Screen capture utility from the C Suite";
     mainProgram = "coreshot";
     homepage = "https://gitlab.com/cubocore/coreapps/coreshot";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

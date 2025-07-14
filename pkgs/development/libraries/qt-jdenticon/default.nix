@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt-jdenticon";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "qt-jdenticon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Q5M7+XkY+/IS45rcFLYPfbcvQm8LDk4S9gzKigCIM7s=";
+    hash = "sha256-3XJHBn+S6oDPfmWSyFDW7qkg69wuxj+GUqMBUCDp3n0=";
   };
 
   nativeBuildInputs = [ qmake ];

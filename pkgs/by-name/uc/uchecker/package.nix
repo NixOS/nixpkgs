@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cloudlinux";
     repo = "kcare-uchecker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SST143oi0O9PcJbw4nxHwHNY6HkIGi1WMBzveUYVhJs=";
   };
 
@@ -39,12 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "uchecker"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to detect outdated shared libraries";
     homepage = "https://github.com/cloudlinux/kcare-uchecker";
     changelog = "https://github.com/cloudlinux/kcare-uchecker/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "uchecker";
   };
 }

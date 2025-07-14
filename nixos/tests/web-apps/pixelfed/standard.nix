@@ -1,4 +1,4 @@
-import ../../make-test-python.nix {
+{
   name = "pixelfed-standard";
   meta.maintainers = [ ];
 

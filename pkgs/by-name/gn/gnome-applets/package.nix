@@ -25,15 +25,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-applets";
-  version = "3.54.0";
+  version = "3.56.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-applets/${lib.versions.majorMinor finalAttrs.version}/gnome-applets-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FASM8amK2U4U715E/f6IVvo/KDZAHHkr/83mi4db2vk=";
+    hash = "sha256-+heu3JVa3ZgaouQ7TAcTU/aGu9HuwdcXqJCnNTIK0XE=";
   };
 
   nativeBuildInputs = [
     gettext
+    glib # glib-compile-resources
     itstool
     pkg-config
     libxml2
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-applets";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-applets/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

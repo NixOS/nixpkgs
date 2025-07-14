@@ -6,12 +6,13 @@
   mkNugetDeps,
   nix,
   cacert,
-  nuget-to-nix,
-  nixfmt-rfc-style,
+  nuget-to-json,
+  jq,
   dotnetCorePackages,
   xmlstarlet,
   patchNupkgs,
   symlinkJoin,
+  openssl,
 
   baseName ? "dotnet",
   releaseManifestFile,
@@ -77,11 +78,17 @@ let
         buildFlags =
           old.buildFlags
           ++ lib.optionals (lib.versionAtLeast old.version "9") [
-            # We need to set this as long as we have something in deps.nix. Currently
+            # We need to set this as long as we have something in deps.json. Currently
             # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
             # artifacts.
             "-p:SkipErrorOnPrebuilts=true"
           ];
+
+        # https://github.com/dotnet/source-build/issues/4920
+        ${if stdenv.isLinux && lib.versionAtLeast old.version "10" then "postFixup" else null} = ''
+          find $out \( -name crossgen2 -or -name ilc \) -type f -print0 |
+            xargs -0 patchelf --add-needed libssl.so --add-rpath "${lib.makeLibraryPath [ openssl ]}"
+        '';
 
         passthru = old.passthru or { } // {
           fetch-deps =
@@ -95,8 +102,8 @@ let
                 nativeBuildInputs = old.nativeBuildInputs ++ [
                   nix
                   cacert
-                  nuget-to-nix
-                  nixfmt-rfc-style
+                  nuget-to-json
+                  jq
                 ];
                 postPatch =
                   old.postPatch or ""
@@ -106,6 +113,7 @@ let
                       -s //Project -t elem -n Import \
                       -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
                       repo-projects/Directory.Build.targets
+
                     # make nuget-client use the standard arcade package-cache dir, which
                     # is where we scan for dependencies
                     xmlstarlet ed \
@@ -114,6 +122,15 @@ let
                       -s \$prev -t elem -n EnvironmentVariables \
                       -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
                       repo-projects/nuget-client.proj
+
+                    # https://github.com/dotnet/dotnet/pull/546
+                    for proj in arcade nuget-client; do
+                      xmlstarlet ed \
+                        --inplace \
+                        -s //Project -t elem -n PropertyGroup \
+                        -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1901' \
+                        src/$proj/Directory.Build.props
+                    done
                   '';
                 buildFlags = [ "--online" ] ++ old.buildFlags;
                 prebuiltPackages = null;
@@ -135,16 +152,20 @@ let
                 configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
                 genericBuild
 
-              depsFiles=(./src/*/deps.nix)
+              # intentionally after calling stdenv
+              set -Eeuo pipefail
+              shopt -s nullglob
 
-              cat $(nix-build ${toString ./combine-deps.nix} \
+              depsFiles=(./src/*/deps.json)
+
+              combined=$(nix-build ${toString ./combine-deps.nix} \
                 --arg list "[ ''${depsFiles[*]} ]" \
                 --argstr baseRid ${targetRid} \
-                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-                ) > deps.nix
-              nixfmt deps.nix
+                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
 
-              mv deps.nix "${toString prebuiltPackages.sourceFile}"
+              jq . "$combined" > deps.json
+
+              mv deps.json "${toString prebuiltPackages.sourceFile}"
               EOF
             '';
         };

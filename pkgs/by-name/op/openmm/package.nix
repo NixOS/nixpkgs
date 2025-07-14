@@ -18,18 +18,18 @@
   addDriverRunpath,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openmm";
-  version = "8.2.0";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "openmm";
-    repo = pname;
-    rev = version;
-    hash = "sha256-p0zjr8ONqGK4Vbnhljt16DeyeZ0bR1kE+YdiIlw/1L0=";
+    repo = "openmm";
+    rev = finalAttrs.version;
+    hash = "sha256-wXk5s6OascFWjHs4WpxGU9TcX0gSiOZ3BRusIH1NjpI=";
   };
 
-  # "This test is stochastic and may occassionally fail". It does.
+  # "This test is stochastic and may occasionally fail". It does.
   postPatch = ''
     rm \
       platforms/*/tests/Test*BrownianIntegrator.* \
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
-}
+})

@@ -15,7 +15,7 @@
   gnugrep,
   findutils,
   xorg,
-  nettools,
+  net-tools,
   iproute2,
   bc,
   procps,
@@ -36,7 +36,7 @@ let
     sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
   };
 
-  x2go-perl = perlPackages.buildPerlPackage rec {
+  x2go-perl = perlPackages.buildPerlPackage {
     pname = "X2Go";
     inherit version src;
     makeFlags = [
@@ -77,7 +77,7 @@ let
     gnused
     gnugrep
     findutils
-    nettools
+    net-tools
     iproute2
     bc
     procps
@@ -96,7 +96,7 @@ let
     xorg.setxkbmap
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [

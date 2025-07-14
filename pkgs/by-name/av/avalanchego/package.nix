@@ -1,38 +1,36 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
   nix-update-script,
-  stdenv,
 }:
 
-buildGoModule rec {
+buildGo123Module (finalAttrs: {
   pname = "avalanchego";
-  version = "1.12.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iedhLVNtwU8wSQIaq0r0fAYGH8fNnCRJW69D7wPdyx0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XGRGjoZyhvcQFhfZIYdljT77SUxrWhD46F6ckxD602Q=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-CNwqpRx0HNvYfkowEEZe/Ue6W2FDZVAkUgof5QH9XkI=";
-
+  vendorHash = "sha256-mff3Hlkp6gfq8HS7ypz9QikbDo98SwHF3g3Bq3i9RMY=";
 
   subPackages = [ "main" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ava-labs/avalanchego/version.GitCommit=${version}"
+    "-X github.com/ava-labs/avalanchego/version.GitCommit=${finalAttrs.version}"
   ];
 
   postInstall = ''
-    mv $out/bin/{main,${pname}}
+    mv $out/bin/{main,avalanchego}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -40,7 +38,7 @@ buildGoModule rec {
   meta = {
     description = "Go implementation of an Avalanche node";
     homepage = "https://github.com/ava-labs/avalanchego";
-    changelog = "https://github.com/ava-labs/avalanchego/releases/tag/v${version}";
+    changelog = "https://github.com/ava-labs/avalanchego/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       urandom
@@ -48,4 +46,4 @@ buildGoModule rec {
     ];
     mainProgram = "avalanchego";
   };
-}
+})

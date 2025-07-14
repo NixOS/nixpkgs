@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "napari-plugin-engine";
+    tag = "v${version}";
     hash = "sha256-cKpCAEYYRq3UPje7REjzhEe1J9mmrtXs8TBnxWukcNE=";
   };
 

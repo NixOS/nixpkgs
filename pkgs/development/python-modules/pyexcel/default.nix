@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyexcel";
-  version = "0.7.0";
+  version = "0.7.3";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+/Du5dk7ls728ZqfAHA/IsCmTxlyjZG5VCgAmlISlwk=";
+    hash = "sha256-V7PD+1XdCaYsu/Kunx54qhG2J8K/xgcv8tlYfAIrBtQ=";
   };
 
   propagatedBuildInputs = [

@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   aresponses,
+  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -21,13 +22,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
   };
 
+  pythonRelaxDeps = [ "async-timeout" ];
+
   build-system = [ poetry-core ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    async-timeout
+  ];
 
   nativeCheckInputs = [
     aresponses

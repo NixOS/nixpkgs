@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "Un1q32";
     repo = "pfetch";
     tag = version;
-    hash = "sha256-omI1Y1UKxSkg1QUd/GHHuGBwxfNOtxqYpzPbJdG7j3A=";
+    hash = "sha256-a2ay+Ag9vYwGGENRPCcFLCmtyOCyHhF6/P7NAn/CzSI=";
   };
 
   dontBuild = true;
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

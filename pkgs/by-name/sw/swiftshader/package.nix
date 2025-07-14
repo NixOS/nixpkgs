@@ -7,7 +7,7 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "swiftshader";
   version = "2023-09-11";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high-performance CPU-based implementation of the Vulkan 1.3 graphics API";
+    description = "High-performance CPU-based implementation of the Vulkan 1.3 graphics API";
     homepage = "https://opensource.google/projects/swiftshader";
     license = licenses.asl20;
     # Should be possible to support Darwin by changing the install phase with

@@ -3,16 +3,18 @@
   lib,
   python3,
   fetchzip,
+  testers,
+  valgrind,
   librandombytes,
   libcpucycles,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
-  version = "20240321";
+  version = "20241004";
 
   src = fetchzip {
     url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R10Q803vCjIZCS4Z/uErsx547RaXfAELGQm9NuNhw+I=";
+    hash = "sha256-gKLMk+yZ/nDlwohZiCFurSZwHExX3Ge2W1O0JoGQf8M=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
@@ -31,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    valgrind
+  ];
   buildInputs = [
     librandombytes
     libcpucycles
@@ -52,9 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "lib25519-test | head -n 2 | grep version";
+      version = "lib25519 version ${finalAttrs.version}";
+    };
+  };
+
   meta = {
     homepage = "https://randombytes.cr.yp.to/";
-    description = "A simple API for applications generating fresh randomness";
+    description = "Simple API for applications generating fresh randomness";
     changelog = "https://randombytes.cr.yp.to/download.html";
     license = with lib.licenses; [
       # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
@@ -69,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       imadnyc
       jleightcap
     ];
+    teams = with lib.teams; [ ngi ];
     # This supports whatever platforms libcpucycles supports
     inherit (libcpucycles.meta) platforms;
   };

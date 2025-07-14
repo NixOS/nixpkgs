@@ -4,7 +4,8 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  boost,
+  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost186
     cmake-extras
     dbus
     dbus-cpp
@@ -112,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/biometryd";
     changelog = "https://gitlab.com/ubports/development/core/biometryd/-/${finalAttrs.version}/ChangeLog";
     license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     mainProgram = "biometryd";
     platforms = platforms.linux;
     pkgConfigModules = [

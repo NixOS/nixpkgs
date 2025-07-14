@@ -9,21 +9,19 @@
   pcsclite,
   opensc,
   openssl,
-  xercesc,
   pkg-config,
-  xsd,
   zlib,
   xmlsec,
   xxd,
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.2.0";
   pname = "libdigidocpp";
 
   src = fetchurl {
     url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-    hash = "sha256-0G7cjJEgLJ24SwHRznKJ18cRY0m50lr6HXstfbYq9f8=";
+    hash = "sha256-d3AqTTVi3lzzu9Tw7p+KilNa0Q7cJBGwb6VoNNLeskE=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +36,6 @@ stdenv.mkDerivation rec {
     pcsclite
     opensc
     openssl
-    xercesc
-    xsd
     zlib
     xmlsec
   ];

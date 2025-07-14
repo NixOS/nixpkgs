@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spectra";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "yixuan";
-    repo = pname;
+    repo = "spectra";
     rev = "v${version}";
-    sha256 = "sha256-HaJmMo4jYmO/j53/nHrL3bvdQMAvp4Nuhhe8Yc7pL88=";
+    sha256 = "sha256-lfbOwnTP3GrN/1N/tyMXZrtEHIxAq3EjuHS8M+I87to=";
   };
 
   nativeBuildInputs = [ cmake ];

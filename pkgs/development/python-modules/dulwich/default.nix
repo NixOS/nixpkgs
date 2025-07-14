@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "0.22.6";
+  version = "0.22.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "v${version}";
-    hash = "sha256-sE5du5Nv2AOyiBpQ2hDJss1dVSVBzWypnGWk3/hI8UI=";
+    tag = "dulwich-${version}";
+    hash = "sha256-T0Tmu5sblTkqiak9U4ltkGbWw8ZE91pTlhPVMRi5Pxk=";
   };
 
   build-system = [
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "tests/contrib/test_swift_smoke.py"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
 
@@ -82,7 +82,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
     license = with licenses; [
       asl20
       gpl2Plus

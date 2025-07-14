@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.5";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
+    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
   };
 
   patches = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     [
       "--with-crypto_backend=openssl"
       "--disable-ssh-token"
+      "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     ]
     ++ lib.optionals (!rebuildMan) [
       "--disable-asciidoc"
@@ -77,13 +78,15 @@ stdenv.mkDerivation rec {
     ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
-  buildInputs = [
+  propagatedBuildInputs = [
     lvm2
     json_c
     openssl
     libuuid
     popt
   ] ++ lib.optional (!withInternalArgon2) libargon2;
+
+  enableParallelBuilding = true;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.
@@ -106,7 +109,10 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2Plus;
     mainProgram = "cryptsetup";
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = with lib.maintainers; [
+      numinit
+      raitobezarius
+    ];
     platforms = with lib.platforms; linux;
   };
 }

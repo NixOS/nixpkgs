@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_31,
+  electron_36,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.12.1";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-UpNtRZhAqRq/sRVkgg/RbLUWNXvHkAyGhu29zWE6Lk0=";
+    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
   };
 
-  electron = electron_31;
+  electron = electron_36;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-0YfydhQZgxjMvZYosuS+rGA+9qzSYTLilQqMqlnR1oQ=";
+  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-KZ4TDf9Nz1/dPWAN/gI3tq0gvzI4BvSR3fawte2n9u0=";
+        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -145,15 +145,15 @@ buildNpmPackage {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "feishin";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       onny
       jlbribeiro
     ];

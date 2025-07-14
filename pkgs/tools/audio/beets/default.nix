@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  config,
   fetchFromGitHub,
   python3Packages,
 }:
@@ -17,43 +18,47 @@
   **   alternatives = { enable = true; propagatedBuildInputs = [ beetsPackages.alternatives ]; };
   ** }; }
 */
-lib.makeExtensible (self: {
-  beets = self.beets-stable;
+let
+  extraPatches = [
+    # Bash completion fix for Nix
+    ./patches/bash-completion-always-print.patch
+  ];
+in
+lib.makeExtensible (
+  self:
+  {
+    beets = self.beets-stable;
 
-  beets-stable = callPackage ./common.nix rec {
-    inherit python3Packages;
-    version = "2.2.0";
-    src = fetchFromGitHub {
-      owner = "beetbox";
-      repo = "beets";
-      rev = "v${version}";
-      hash = "sha256-jhwXRgUUQJgQ/PLwvY1UfHCJ9UC8DcdBpE/janao0RM=";
+    beets-stable = callPackage ./common.nix rec {
+      inherit python3Packages extraPatches;
+      version = "2.3.1";
+      src = fetchFromGitHub {
+        owner = "beetbox";
+        repo = "beets";
+        tag = "v${version}";
+        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
+      };
     };
-    extraPatches = [
-      # Bash completion fix for Nix
-      ./patches/bash-completion-always-print.patch
-    ];
-  };
 
-  beets-minimal = self.beets.override { disableAllPlugins = true; };
+    beets-minimal = self.beets.override { disableAllPlugins = true; };
 
-  beets-unstable = callPackage ./common.nix {
-    inherit python3Packages;
-    version = "2.2.0-unstable-2024-12-02";
-    src = fetchFromGitHub {
-      owner = "beetbox";
-      repo = "beets";
-      rev = "f92c0ec8b14fbd59e58374fd123563123aef197b";
-      hash = "sha256-jhwXRgUUQJgQ/PLwvY1UfHCJ9UC8DcdBpE/janao0RM=";
+    beets-unstable = callPackage ./common.nix {
+      inherit python3Packages;
+      version = "2.3.1";
+      src = fetchFromGitHub {
+        owner = "beetbox";
+        repo = "beets";
+        rev = "d487d675b9115672c484eab8a6729b1f0fd24b68";
+        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
+      };
     };
-    extraPatches = [
-      # Bash completion fix for Nix
-      ./patches/bash-completion-always-print.patch
-    ];
-  };
 
-  alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
-  copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
-
-  extrafiles = throw "extrafiles is unmaintained since 2020 and broken since beets 2.0.0";
-})
+    alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
+    audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
+    copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
+    filetote = callPackage ./plugins/filetote.nix { beets = self.beets-minimal; };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    extrafiles = throw "extrafiles is unmaintained since 2020 and broken since beets 2.0.0";
+  }
+)

@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pypsrp";
+    tag = "v${version}";
     hash = "sha256-Pwfc9e39sYPdcHN1cZtxxGEglEYzPp4yOYLD5/4SSiU=";
   };
 

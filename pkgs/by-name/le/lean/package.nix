@@ -57,15 +57,14 @@ stdenv.mkDerivation rec {
       --replace "greadlink" "${coreutils}/bin/readlink"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      gebner
     ];
   };
 }

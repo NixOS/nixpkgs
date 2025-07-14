@@ -1,22 +1,24 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ferretdb";
   version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WMejspnk2PvJhvNGi4h+DF+fzipuOMcS1QWim5DnAhQ=";
   };
 
   postPatch = ''
-    echo v${version} > build/version/version.txt
+    echo v${finalAttrs.version} > build/version/version.txt
     echo nixpkgs     > build/version/package.txt
   '';
 
@@ -31,18 +33,21 @@ buildGoModule rec {
 
   # the binary panics if something required wasn't set during compilation
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/ferretdb --version | grep ${version}
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru.tests = nixosTests.ferretdb;
 
-  meta = with lib; {
+  meta = {
     description = "Truly Open Source MongoDB alternative";
     mainProgram = "ferretdb";
-    changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${version}";
+    changelog = "https://github.com/FerretDB/FerretDB/releases/tag/v${finalAttrs.version}";
     homepage = "https://www.ferretdb.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya noisersup julienmalka ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      dit7ya
+      noisersup
+      julienmalka
+    ];
   };
-}
+})

@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+UibbVz5CTisKMms/5VXGe39FYr56qzaEtX4TWQPkjk=";
   };
 
-  cargoHash = "sha256-/SUbmgdCy+3qpmu+cpNV+D/39jZ4jOzxgXegCHk9pHc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZCH8ka740X/yRbn4Mbno63jZifPMEaDABsftS3juDTo=";
 
   meta = {
     description = "Material you color generation tool";

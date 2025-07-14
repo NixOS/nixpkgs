@@ -13,14 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-ssh";
-  # XXX: using unstable to ensure proper build with libssh 0.11.1 (https://github.com/artyom-poptsov/guile-ssh/issues/42)
-  version = "0.17.0-unstable-2024-10-15";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "artyom-poptsov";
     repo = "guile-ssh";
-    rev = "9336580f92f83bb73041c5374b400144a56b4c35";
-    hash = "sha256-Hwg0xaNSm/SEZfzczjb7o8TJXfzT1mmOk1rJROxahLQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q7P/ehafnDtJhHOAWbswOfztkKHVtEw8OgcXKufVAX4=";
   };
 
   patches = [

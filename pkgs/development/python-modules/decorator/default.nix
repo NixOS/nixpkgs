@@ -1,27 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "decorator";
-  version = "5.1.1";
-  format = "setuptools";
+  version = "5.2.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Y3mWIRA2tjhe+RQ15PriKYlHL51XH6uoknuoJTrLwzA=";
+  src = fetchFromGitHub {
+    owner = "micheles";
+    repo = "decorator";
+    tag = version;
+    hash = "sha256-UBjZ8LdgJ6iLBjNTlA3up0qAVBqTSZMJt7oEhUo3ZEo=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "decorator" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py " ];
 
   meta = with lib; {
+    changelog = "https://github.com/micheles/decorator/blob/${src.tag}/CHANGES.md";
     homepage = "https://github.com/micheles/decorator";
     description = "Better living through Python with decorators";
     license = licenses.bsd2;

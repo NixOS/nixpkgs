@@ -45,6 +45,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Disable setting of C++98 standard which was dropped in boost 1.84.0
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++98 -ansi")' '#'
+  '';
+
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [
     boost
@@ -70,6 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://liblas.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lib.maintainers.michelk ];
+    maintainers = with maintainers; [ michelk ];
+    teams = [ teams.geospatial ];
   };
 }

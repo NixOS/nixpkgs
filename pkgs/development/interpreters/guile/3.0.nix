@@ -11,24 +11,18 @@
   libffi,
   libtool,
   libunistring,
-  libiconvReal,
   libxcrypt,
   makeWrapper,
   pkg-config,
+  autoreconfHook,
   pkgsBuildBuild,
   readline,
   writeScript,
-}@args:
+}:
 
 let
   # Do either a coverage analysis build or a standard build.
   builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
-  # workaround for libiconv bug in macOS 14/15
-  libunistring =
-    if stdenv.hostPlatform.isDarwin then
-      args.libunistring.override { libiconv = libiconvReal; }
-    else
-      args.libunistring;
 in
 builder rec {
   pname = "guile";
@@ -46,13 +40,19 @@ builder rec {
   ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) pkgsBuildBuild.guile_3_0;
+  depsBuildBuild =
+    [
+      buildPackages.stdenv.cc
+    ]
+    ++ lib.optional (
+      !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+    ) pkgsBuildBuild.guile_3_0;
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
-  ];
+  ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) autoreconfHook;
+
   buildInputs =
     [
       libffi
@@ -79,16 +79,24 @@ builder rec {
       libxcrypt
     ];
 
+  strictDeps = true;
+
   # According to
   # https://git.savannah.gnu.org/cgit/guix.git/tree/gnu/packages/guile.scm?h=a39207f7afd977e4e4299c6f0bb34bcb6d153818#n405
   # starting with Guile 3.0.8, parallel builds can be done
   # bit-reproducibly as long as we're not cross-compiling
-  enableParallelBuilding = stdenv.buildPlatform == stdenv.hostPlatform;
+  enableParallelBuilding = lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
 
   patches =
     [
       ./eai_system.patch
     ]
+    # Fix cross-compilation, can be removed at next release (as well as the autoreconfHook)
+    # Include this only conditionally so we don't have to run the autoreconfHook for the native build.
+    ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) (fetchpatch {
+      url = "https://cgit.git.savannah.gnu.org/cgit/guile.git/patch/?id=c117f8edc471d3362043d88959d73c6a37e7e1e9";
+      hash = "sha256-GFwJiwuU8lT1fNueMOcvHh8yvA4HYHcmPml2fY/HSjw=";
+    })
     ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
     ++ lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";

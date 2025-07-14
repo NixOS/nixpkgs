@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "OpenCorsairLink";
   version = "unstable-2019-12-23";
 
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     rev = "46dbf206e19a40d6de6bd73142ed93bdb26c5c1a";
     sha256 = "1nizicl0mc9pslc6065mnrs0fnn8sh7ca8iiw7w9ix57zrhabpld";
   };
+
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   patches = [
     # Pull upstream fix for -fno-common toolchain

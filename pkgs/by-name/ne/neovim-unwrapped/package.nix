@@ -4,12 +4,11 @@
   fetchFromGitHub,
   cmake,
   gettext,
-  msgpack-c,
   libuv,
   lua,
   pkg-config,
   unibilium,
-  libvterm-neovim,
+  utf8proc,
   tree-sitter,
   fetchurl,
   buildPackages,
@@ -96,7 +95,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.10.3";
+    version = "0.11.3";
 
     __structuredAttrs = true;
 
@@ -104,7 +103,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-nmnEyHE/HcrwK+CyJHNoLG0BqjnWleiBy0UYcJL7Ecc=";
+      hash = "sha256-B/An+SiRWC3Ea0T/sEk8aNBS1Ab9OENx/l4Z3nn8xE4=";
     };
 
     patches = [
@@ -134,16 +133,15 @@ stdenv.mkDerivation (
     buildInputs =
       [
         libuv
-        libvterm-neovim
         # This is actually a c library, hence it's not included in neovimLuaEnv,
         # see:
         # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
         # and it's definition at: pkgs/development/lua-modules/overrides.nix
         lua.pkgs.libluv
-        msgpack-c
         neovimLuaEnv
         tree-sitter
         unibilium
+        utf8proc
       ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [
         glibcLocales
@@ -198,14 +196,21 @@ stdenv.mkDerivation (
         # can spot that cmake says this option was "not used by the project".
         # That's because all dependencies were found and
         # third-party/CMakeLists.txt is not read at all.
-        "-DUSE_BUNDLED=OFF"
+        (lib.cmakeBool "USE_BUNDLED" false)
+        (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
       ]
-      ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
-      ++ lib.optionals lua.pkgs.isLuaJIT [
-        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
-        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
-        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
-      ];
+      ++ (
+        if lua.pkgs.isLuaJIT then
+          [
+            (lib.cmakeFeature "LUAC_PRG" "${lib.getExe' codegenLua "luajit"} -b -s %s -")
+            (lib.cmakeFeature "LUA_GEN_PRG" (lib.getExe' codegenLua "luajit"))
+            (lib.cmakeFeature "LUA_PRG" (lib.getExe' neovimLuaEnvOnBuild "luajit"))
+          ]
+        else
+          [
+            (lib.cmakeBool "PREFER_LUA" true)
+          ]
+      );
 
     preConfigure =
       ''
@@ -236,7 +241,7 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = [ "--version" ];
+    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {
@@ -265,7 +270,7 @@ stdenv.mkDerivation (
         asl20
         vim
       ];
-      maintainers = lib.teams.neovim.members;
+      teams = [ lib.teams.neovim ];
       platforms = lib.platforms.unix;
     };
   }

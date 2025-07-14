@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-P40IwFRtEQp6BGRgmt1x3UXtAKtWaMjR3kqhYq+p7wQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hBDB/Cp8JTk9hF3qDBCb7LicUZdpXHm2i2dsuw5geO4=";
 
   checkFlags = [
     # requires filesystem write access

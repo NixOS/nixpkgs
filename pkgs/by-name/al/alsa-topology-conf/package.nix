@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.bsd3;
     maintainers = [ maintainers.roastiek ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.freebsd;
   };
 }

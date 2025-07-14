@@ -6,25 +6,26 @@
   fetchFromGitHub,
   fetchNpmDeps,
   mono,
-  nodejs_18,
+  nodejs_20,
   slskd,
   testers,
+  nix-update-script,
 }:
 
 let
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
   # https://github.com/NixOS/nixpkgs/blob/d88947e91716390bdbefccdf16f7bebcc41436eb/pkgs/build-support/node/build-npm-package/default.nix#L62
   npmHooks = buildPackages.npmHooks.override { inherit nodejs; };
 in
 buildDotnetModule rec {
   pname = "slskd";
-  version = "0.22.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qRK6O2f9nbjmcTN3fr5xZDlCiTgX6m1iz2VYVBOLWaU=";
+    tag = version;
+    hash = "sha256-vUqDWzWJIZbb6WvANsLhUBzyQFi59/+jizarI8Ob3uQ=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ buildDotnetModule rec {
     name = "${pname}-${version}-npm-deps";
     inherit src;
     sourceRoot = "${src.name}/${npmRoot}";
-    hash = "sha256-eCHYPkE8eJKg0IX7hN9Wm9HsWKUFPW5T4e+o6N0CsNc=";
+    hash = "sha256-AbIlpu0KNuzwSQVIsSRhLQZqE3yA68DlIL4WbZ34Hi8=";
   };
 
   projectFile = "slskd.sln";
@@ -68,6 +69,7 @@ buildDotnetModule rec {
 
   passthru = {
     tests.version = testers.testVersion { package = slskd; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

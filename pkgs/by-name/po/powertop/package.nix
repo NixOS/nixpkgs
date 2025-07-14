@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = "powertop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 
@@ -61,16 +61,16 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
     description = "Analyze power consumption on Intel-based laptops";
     mainProgram = "powertop";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
       anthonyroussel
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

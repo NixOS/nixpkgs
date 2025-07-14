@@ -6,7 +6,7 @@
 }:
 let
   pname = "totp-cli";
-  version = "1.8.8";
+  version = "1.9.2";
 in
 buildGoModule {
   inherit pname version;
@@ -14,11 +14,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "yitsushi";
     repo = "totp-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aYTOtel7ZPDNF8/3mpk/dchBHzoA3ZDnViidQ/N9+As=";
+    tag = "v${version}";
+    hash = "sha256-JPS4LXEgFM+RJhJG9w/SmEYmq6kILie139UrFGyZ2q0=";
   };
 
-  vendorHash = "sha256-yicJjDFdvQ9EEF37pn3wHuLTVzpmBC8DwexgX7lGmh0=";
+  vendorHash = "sha256-GulRmDKatbu4N29Th4rUiVSvvg4hhepyx5X8TLLJ9kQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

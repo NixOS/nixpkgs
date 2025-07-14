@@ -1,8 +1,6 @@
 {
   lib,
-  apple-sdk_11,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
   pythonOlder,
   stdenv,
@@ -34,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
   };
@@ -63,13 +61,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  buildInputs =
-    [ libsoxr ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
-      (darwinMinVersionHook "10.13")
-      apple-sdk_11
-    ];
+  buildInputs = [ libsoxr ];
 
   dependencies = [ numpy ];
 

@@ -78,6 +78,10 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
       mkdir "$FLUTTER_ROOT/bin/cache/dart-sdk"
       lndir -silent '${flutter'}/bin/cache/dart-sdk' "$FLUTTER_ROOT/bin/cache/dart-sdk"
     ''
+    # Could not determine engine revision
+    + lib.optionalString (lib.versionAtLeast flutter'.version "3.32") ''
+      cp '${flutter'}/bin/internal/engine.version' "$FLUTTER_ROOT/bin/cache/engine.stamp"
+    ''
     + ''
 
       HOME="$(mktemp -d)" flutter precache ${

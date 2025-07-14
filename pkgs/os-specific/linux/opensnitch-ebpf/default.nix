@@ -43,10 +43,19 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     for file in opensnitch*.o; do
       install -Dm644 "$file" "$out/etc/opensnitchd/$file"
     done
+
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # reduces closure size significantly (fixes https://github.com/NixOS/nixpkgs/issues/391351)
+    for file in $out/etc/opensnitchd/*.o; do
+      llvm-strip --strip-debug $file
+    done
   '';
 
   meta = with lib; {

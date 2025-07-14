@@ -34,6 +34,17 @@ def get_schema_directory(schema_id):
         return f'"@{schema_to_var[schema_id]}@"'
     raise Exception(f"Unknown schema path {schema_id!r}, please add it to ./glib-schema-to-var.json")
 
+
+@script:python schema_exists_fn@
+fn;
+@@
+import json
+
+with open("./glib-schema-exists-function.json") as fn_file:
+    if (fn := json.load(fn_file)):
+        coccinelle.fn = fn
+
+
 @find_cpp_constants@
 identifier const_name;
 expression val;
@@ -143,3 +154,12 @@ fresh identifier SCHEMA_DIRECTORY = script:python(SCHEMA_ID) { get_schema_direct
 +   schema = g_settings_schema_source_lookup(schema_source, SCHEMA_ID, FALSE);
 +   settings = g_settings_new_full(schema, NULL, PATH);
 +}
+
+
+@replace_schema_exists_fns depends on ever record_cpp_constants || never record_cpp_constants@
+// We want to run after #define constants have been collected but even if there are no #defines.
+expression SCHEMA_ID;
+identifier schema_exists_fn.fn;
+@@
+-fn(SCHEMA_ID)
++TRUE

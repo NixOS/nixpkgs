@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [

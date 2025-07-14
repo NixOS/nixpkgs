@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   python3,
   autoreconfHook,
@@ -38,8 +39,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "seafile-server";
-  version = "11.0.12";
-
+  version = "11.0.12"; # Doc links match Seafile 11.0 in seafile.nix – update if version changes.
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-server";
@@ -50,6 +50,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
+    libsearpc # searpc-codegen.py
+    vala # valac
+    which
   ];
 
   buildInputs = [
@@ -63,10 +67,16 @@ stdenv.mkDerivation {
     fuse
     libarchive
     libjwt
-    which
-    vala
     libevhtp
     oniguruma
+  ];
+
+  patches = [
+    # https://github.com/haiwen/seafile-server/pull/658
+    (fetchpatch {
+      url = "https://github.com/haiwen/seafile-server/commit/8029a11a731bfe142af43f230f47b93811ebaaaa.patch";
+      hash = "sha256-AWNDXIyrKXgqgq3p0m8+s3YH8dKxWnf7uEMYzSsjmX4=";
+    })
   ];
 
   postInstall = ''
@@ -84,8 +94,6 @@ stdenv.mkDerivation {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      greizgh
-      schmittlauch
       melvyn2
     ];
     mainProgram = "seaf-server";

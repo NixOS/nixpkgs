@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.10.0";
+  version = "24.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-ApUSmWcllf6g9w+i1fe149VoNhV+2miFmmrWSS02dW4=";
+    hash = "sha256-aV0FVtXsV53MRk0oVrY0iA7RMZ9FsQ0ZBD8rV+sBFbU=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -108,6 +108,10 @@ buildPythonPackage rec {
             "MulticastTests.test_loopback"
             "MulticastTests.test_multicast"
             "MulticastTests.test_multiListen"
+          ];
+          "src/twisted/trial/test/test_script.py" = [
+            # Fails in LXC containers with less than all cores available (limits.cpu)
+            "AutoJobsTests.test_cpuCount"
           ];
           "src/twisted/internet/test/test_unix.py" = [
             # flaky?

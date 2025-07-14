@@ -17,11 +17,12 @@
   libuchardet,
   libusb1,
   libwebp,
+  nix-update-script,
   optipng,
   piper-tts,
   pkg-config,
-  podofo,
-  poppler_utils,
+  podofo_0_10,
+  poppler-utils,
   python3Packages,
   qt6,
   speechd-minimal,
@@ -35,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.22.0";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RmCte6tok0F/ts5cacAFBksNYfnLylY4JCmTyb+6IUk=";
+    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
   };
 
   patches = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-9hi4T9LB7aklWASMR8hIuKBgZm2arDvORfmk9S8wgCA=";
+      hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
     })
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
@@ -89,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     piper-tts
-    podofo
-    poppler_utils
+    podofo_0_10
+    poppler-utils
     qt6.qtbase
     qt6.qtwayland
     sqlite
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
         beautifulsoup4
         css-parser
         cssselect
+        fonttools
         python-dateutil
         dnspython
         faust-cchardet
@@ -148,14 +150,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
+    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
     export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo_0_10}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
     export PIPER_TTS_DIR=${piper-tts}/bin
@@ -186,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     let
-      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+      popplerArgs = "--prefix PATH : ${poppler-utils.out}/bin";
     in
     ''
       for program in $out/bin/*; do
@@ -206,7 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckInputs = with python3Packages; [
-    fonttools
     psutil
   ];
   installCheckPhase = ''
@@ -219,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 
@@ -226,6 +228,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
+  };
 
   meta = {
     homepage = "https://calibre-ebook.com";

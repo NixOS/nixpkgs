@@ -13,6 +13,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   stdenv,
   wrapGAppsHook4,
@@ -59,13 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     changelog = "https://github.com/rafaelmardojai/forge-sparks/releases/tag/${finalAttrs.version}";
     description = "Get Git forges notifications";
     homepage = "https://github.com/rafaelmardojai/forge-sparks";
     license = lib.licenses.mit;
     mainProgram = "forge-sparks";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

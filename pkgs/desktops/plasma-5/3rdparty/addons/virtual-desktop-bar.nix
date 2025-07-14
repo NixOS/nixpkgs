@@ -8,7 +8,7 @@
   qtx11extras,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "plasma-applet-virtual-desktop-bar";
   version = "unstable-2021-02-20";
 

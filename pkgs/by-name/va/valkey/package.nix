@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-WB0blQLxQOTkK8UGsH6WISZAisUAtGIDfjoc4RnPSew=";
+    hash = "sha256-5wSUDNFQ6GWT9aGO3Msm+GFSXpNcty8L8UdGw4R0GDw=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -85,12 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
+    # Skip some more flaky tests.
+    # Skip test requiring custom jemalloc (unit/memefficiency).
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
-      --skipunit integration/failover # flaky and slow
+      --skipunit unit/memefficiency \
+      --skipunit integration/failover \
+      --skipunit integration/aof-multi-part
 
     runHook postCheck
   '';
@@ -100,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-performance data structure server that primarily serves key/value workloads";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ rucadi ];
+    maintainers = with maintainers; [ ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

@@ -3,24 +3,23 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  zig_0_13,
-  apple-sdk_11,
+  zig_0_14,
   callPackage,
 }:
 
 let
-  zig = zig_0_13;
+  zig = zig_0_14;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linuxwave";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mPBtffqd0+B7J8FxolzOarCyJIZBWkWPBbqZlhX0VSY=";
+    hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };
 
   postPatch = ''
@@ -31,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     zig.hook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     installManPage man/linuxwave.1

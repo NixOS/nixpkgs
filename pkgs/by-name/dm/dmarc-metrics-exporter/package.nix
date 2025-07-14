@@ -1,9 +1,14 @@
 {
   lib,
   stdenv,
-  python3,
+  python312,
   fetchFromGitHub,
 }:
+
+let
+  # more-itertools unsupported on 3.13
+  python3 = python312;
+in
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
@@ -14,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cIsI4TNYuLK0fpUg9lnbl5KSBtzQoT/pTByI9hiy/7o=";
   };
 

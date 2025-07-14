@@ -1,33 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  cirq-core,
   fetchFromGitHub,
+
+  # build-system
+  pybind11,
+  setuptools,
+
+  # dependencies
+  numpy,
+
+  # tests
+  cirq-core,
   matplotlib,
   networkx,
-  numpy,
   pandas,
-  pybind11,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   scipy,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Tx+4FfkMShzTP1QEQVwHEz3FZ5pz3uXK2mlJFLNlTas=";
+    tag = "v${version}";
+    hash = "sha256-Wls7dJkuV/RXnMizwrYOJOKopWEf1r21FKoKHjmpEQ0=";
   };
 
   postPatch = ''
@@ -50,7 +52,6 @@ buildPythonPackage rec {
   build-system = [
     pybind11
     setuptools
-    wheel
   ];
 
   dependencies = [ numpy ];
@@ -69,17 +70,23 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # From .github/workflows
     "src/"
     "glue/cirq"
+  ];
+
+  disabledTests = [
+    # AssertionError: Sample rate 1.0 is over 5 standard deviations away from 1.0.
+    "test_frame_simulator_sampling_noisy_gates_agrees_with_cirq_data"
+    "test_tableau_simulator_sampling_noisy_gates_agrees_with_cirq_data"
   ];
 
   meta = {
     description = "Tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
     mainProgram = "stim";
     homepage = "https://github.com/quantumlib/stim";
-    changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";
+    changelog = "https://github.com/quantumlib/Stim/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chrispattison ];
   };

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyaml-env";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkaranasou";
     repo = "pyaml_env";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xSu+dksSVugShJwOqedXBrXIKaH0G5JAsynauOuP3OA=";
+    tag = "v${version}";
+    hash = "sha256-Mp5Zn2JA6j/OTkPCRggNdqdWkrUYyYHMVK6hy/EI0I8=";
   };
 
   build-system = [ setuptools ];

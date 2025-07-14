@@ -7,10 +7,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "nhentai";
   version = "0.5.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RicterZ";
-    repo = pname;
+    repo = "nhentai";
     rev = version;
     hash = "sha256-SjWIctAyczjYGP4buXQBA/RcrdikMSuSBtfhORNmXMc=";
   };

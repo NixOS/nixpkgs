@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "RUB-NDS";
     repo = "Terrapin-Scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PmKfHvad+YAwLcdoiDSOBMQFgOKzJ6NbGbt4v570gyI=";
   };
 

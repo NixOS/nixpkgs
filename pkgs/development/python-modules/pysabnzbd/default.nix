@@ -5,7 +5,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pysabnzbd";
   version = "1.1.1";
   format = "setuptools";

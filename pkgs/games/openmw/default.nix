@@ -7,9 +7,6 @@
   pkg-config,
   wrapQtAppsHook,
   SDL2,
-  CoreMedia,
-  VideoToolbox,
-  VideoDecodeAcceleration,
   boost,
   bullet,
   # Please unpin this on the next OpenMW release.
@@ -78,6 +75,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-zkjVt3GfQZsFXl2Ht3lCuQtDMYQWxhdFO4aGSb3rsyo=";
   };
 
+  patches = [ ./0001-function-inclusion-fixes-for-gcc14.patch ];
+
   postPatch =
     ''
       sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
@@ -96,27 +95,21 @@ stdenv.mkDerivation rec {
   # If not set, OSG plugin .so files become shell scripts on Darwin.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  buildInputs =
-    [
-      SDL2
-      boost
-      bullet'
-      ffmpeg_6
-      libXt
-      luajit
-      lz4
-      mygui
-      openal
-      osg'
-      recastnavigation
-      unshield
-      yaml-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreMedia
-      VideoDecodeAcceleration
-      VideoToolbox
-    ];
+  buildInputs = [
+    SDL2
+    boost
+    bullet'
+    ffmpeg_6
+    libXt
+    luajit
+    lz4
+    mygui
+    openal
+    osg'
+    recastnavigation
+    unshield
+    yaml-cpp
+  ];
 
   cmakeFlags =
     [

@@ -1,19 +1,19 @@
 diff --git a/cmake/external_dependencies.cmake b/cmake/external_dependencies.cmake
-index 2eb6ec5..9f1d67e 100644
+index 76648b2..145e978 100644
 --- a/cmake/external_dependencies.cmake
 +++ b/cmake/external_dependencies.cmake
-@@ -4,7 +4,7 @@ include(FetchContent)
- 
+@@ -3,7 +3,7 @@ include(FetchContent)
+
  function(setup_library SOURCE_TO_TEST)
      set(boolArgs HEADER_ONLY)
 -    set(oneValueArgs NAME CXX_FLAGS GIT_REPOSITORY GIT_TAG TEST_DEFINITIONS TEST_LINK_LIBS)
 +    set(oneValueArgs NAME CXX_FLAGS URL GIT_TAG TEST_DEFINITIONS TEST_LINK_LIBS)
      set(multiValueArgs WHEN)
      cmake_parse_arguments(LIB_SETUP "${boolArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
- 
-@@ -27,12 +27,11 @@ function(setup_library SOURCE_TO_TEST)
+
+@@ -26,12 +26,11 @@ function(setup_library SOURCE_TO_TEST)
      endif()
- 
+
      FetchContent_Declare(${LIB_SETUP_NAME}
 -                         GIT_REPOSITORY ${LIB_SETUP_GIT_REPOSITORY}
 -                         GIT_TAG ${LIB_SETUP_GIT_TAG})
@@ -26,7 +26,7 @@ index 2eb6ec5..9f1d67e 100644
          FetchContent_Populate(${LIB_SETUP_NAME})
          set(SRCDIR "${LIB_SETUP_NAME}_SOURCE_DIR")
          set(BINDIR "${LIB_SETUP_NAME}_BINARY_DIR")
-@@ -51,8 +50,7 @@ function(setup_argparse)
+@@ -50,8 +49,7 @@ function(setup_argparse)
              }")
      setup_library("${CHECK_SOURCE}"
                    NAME argparse
@@ -36,7 +36,7 @@ index 2eb6ec5..9f1d67e 100644
                    HEADER_ONLY
                    )
      if (NOT TARGET argparse::argparse)
-@@ -64,7 +62,7 @@ function(setup_curlpp)
+@@ -63,7 +61,7 @@ function(setup_curlpp)
      set(CHECK_SOURCE "#error unimplemented}")
      setup_library("${CHECK_SOURCE}"
                    NAME curlpp
@@ -63,7 +63,7 @@ index 2eb6ec5..9f1d67e 100644
 +                  URL @fmt_src@
                    TEST_LINK_LIBS fmt
                    )
- 
+
 @@ -126,7 +123,7 @@ function(setup_nlohmann_json)
          add_library(nlohmann_json INTERFACE)
      else()
@@ -84,7 +84,7 @@ index 2eb6ec5..9f1d67e 100644
                    )
      get_target_property(TARGET_TYPE pugixml TYPE)
 @@ -188,8 +184,7 @@ function(setup_spdlog)
- 
+
      setup_library("${CHECK_SOURCE}"
                    NAME spdlog
 -                  GIT_REPOSITORY https://github.com/gabime/spdlog.git
@@ -94,7 +94,7 @@ index 2eb6ec5..9f1d67e 100644
                    TEST_LINK_LIBS ${FMT_TARGET_NAME}
                    CXX_FLAGS "-Wno-attributes -Wno-reorder -Wno-redundant-move"
 @@ -198,8 +193,7 @@ endfunction()
- 
+
  function(setup_steamworkssdk)
      FetchContent_Declare(steamworkssdk
 -        URL https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip

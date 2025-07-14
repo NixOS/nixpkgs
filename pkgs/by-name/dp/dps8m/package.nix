@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dps8m";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "dps8m";
     repo = "dps8m";
     rev = "R${version}";
-    hash = "sha256-YCDeHryxXZXOXqUXkbWwH7Vna+ljzydFXPeo2et87x8=";
+    hash = "sha256-2PTL9C1sV+UTZibjyxBkQh9Y1xqwawNPwWL4eX0ilvU=";
     fetchSubmodules = true;
   };
 

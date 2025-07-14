@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cube2222";
-    repo = pname;
+    repo = "octosql";
     rev = "v${version}";
     hash = "sha256-kzbIts5d2KmFfaAnOdpIXI1fiqBYXe5t981g4Uyk/cc=";
   };

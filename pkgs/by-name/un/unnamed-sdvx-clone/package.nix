@@ -16,12 +16,13 @@
   curl,
   libcpr,
   rapidjson,
+  libX11,
+  libGL,
   writeShellScriptBin,
   makeDesktopItem,
   lib,
   copyDesktopItems,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "unnamed-sdvx-clone";
   version = "0.6.0";
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Drewol";
     repo = "unnamed-sdvx-clone";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-wuf7xZztoxzNQJzlJOfH/Dc25/717NevBx7E0RDybho=";
   };
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
+    libX11
+    libGL
   ];
 
   cmakeFlags = [
@@ -99,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A game based on K-Shoot MANIA and Sound Voltex";
+    description = "Game based on K-Shoot MANIA and Sound Voltex";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

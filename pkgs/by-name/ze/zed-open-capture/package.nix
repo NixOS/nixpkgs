@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   ];
 
   # all but one example require opencv with UI support, so disable it.
-  # The input OpenCV can be overriden with (opencv.override { enableGtk3 = true; })
+  # The input OpenCV can be overridden with (opencv.override { enableGtk3 = true; })
   cmakeFlags = lib.optionals (!withExamples) [
     "-DBUILD_EXAMPLES=OFF"
   ];

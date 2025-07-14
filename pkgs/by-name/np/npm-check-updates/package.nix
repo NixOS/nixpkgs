@@ -1,20 +1,27 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "npm-check-updates";
-  version = "16.14.12";
+  version = "18.0.1";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
-    rev = "v${version}";
-    hash = "sha256-3/DaEgPF9+wofYqA1XrJul4/cNGuGeXAeRg0HW0O+Ok=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JVwjjGs1BCQnL9q4zwnQ56JRWL5CZ9cf4FyK2jpfKKE=";
   };
 
-  npmDepsHash = "sha256-zUJKuiMycVCuXMh6caMzmi6qpgknVsvmqV3XykhlSBI=";
+  npmDepsHash = "sha256-75YPV96eKIhNVIT10ZYTJOVzJEFk98a2e4XUIoiYRd4=";
+
+  postPatch = ''
+    sed -i '/"prepare"/d' package.json
+  '';
+
+  makeCacheWritable = true;
 
   meta = {
     changelog = "https://github.com/raineorshine/npm-check-updates/blob/${src.rev}/CHANGELOG.md";

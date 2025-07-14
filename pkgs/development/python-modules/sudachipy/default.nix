@@ -15,13 +15,16 @@
 }:
 
 buildPythonPackage rec {
+  format = "setuptools";
   pname = "sudachipy";
   inherit (sudachi-rs) src version;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-vYn1dWu87ruEGT/9QVIvxY21LzesVyq1VPaLcTrDKvY=";
+  patches = sudachi-rs.cargoPatches;
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    patches = sudachi-rs.cargoPatches;
+    hash = "sha256-lUP/9s4W0JehxeCjMmq6G22KMGdDNnq1YlobeLQn2AE=";
   };
 
   nativeBuildInputs = [

@@ -138,6 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  env = {
+    # Fix GCC 14 build
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   passthru.tests = {
     apparmor = nixosTests.transmission_3; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
@@ -165,7 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 

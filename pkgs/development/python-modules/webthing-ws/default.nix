@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "webthing-ws";
+    tag = version;
     hash = "sha256-j7nc4yJczDs28RVFDHeQ2ZIG9mIW2m25AAeErVKi4E4=";
   };
 

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch2,
+  cmake,
   openssl,
   pkg-config,
   withPerl ? false,
@@ -21,24 +21,28 @@
   withDebug ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "znc";
-  version = "1.8.2";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "https://znc.in/releases/archive/${pname}-${version}.tar.gz";
-    sha256 = "03fyi0j44zcanj1rsdx93hkdskwfvhbywjiwd17f9q1a7yp8l8zz";
+    url = "https://znc.in/releases/archive/znc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-vmWtm2LvVFp+lIby90E07cU7pROtQ6adnYtHZgUzaxk=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "CVE-2024-39844.patch";
-      url = "https://github.com/znc/znc/commit/8cbf8d628174ddf23da680f3f117dc54da0eb06e.patch";
-      hash = "sha256-JeKirXReiCiNDUS9XodI0oHASg2mPDvQYtV6P4L0mHM=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace znc.pc.cmake.in \
+      --replace-fail 'bindir=''${exec_prefix}/@CMAKE_INSTALL_BINDIR@' "bindir=@CMAKE_INSTALL_FULL_BINDIR@" \
+      --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' "libdir=@CMAKE_INSTALL_FULL_LIBDIR@" \
+      --replace-fail 'datadir=''${prefix}/@CMAKE_INSTALL_DATADIR@' "datadir=@CMAKE_INSTALL_FULL_DATADIR@" \
+      --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' "includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@" \
+      --replace-fail 'datarootdir=''${prefix}/@CMAKE_INSTALL_DATAROOTDIR@' "datarootdir=@CMAKE_INSTALL_FULL_DATAROOTDIR@"
+  '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs =
     [ openssl ]
@@ -62,14 +66,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       schneefux
       lnl7
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
-}
+})

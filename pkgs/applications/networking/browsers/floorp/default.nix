@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.21.0";
+    packageVersion = "11.28.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,18 +17,17 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.5.0";
+    version = "128.12.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-gb190h7BAt0biE/RQayyzwSFCDEMe4F8YT6Re2mK9r4=";
+      hash = "sha256-2BSl7RHhqFAYSpshBYxuVWwLlVXdOT3xgH4tva5ShY4=";
     };
 
     extraConfigureFlags = [
-      "--with-app-name=${pname}"
       "--with-app-basename=${applicationName}"
       "--with-unsigned-addon-scopes=app,system"
       "--enable-proxy-bypass-protection"
@@ -46,7 +45,7 @@
     updateScript = ./update.sh;
 
     meta = {
-      description = "Fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
+      description = "Fork of Firefox that seeks balance between versatility, privacy and web openness";
       homepage = "https://floorp.app/";
       maintainers = with lib.maintainers; [ christoph-heiss ];
       platforms = lib.platforms.unix;
@@ -67,8 +66,7 @@
     privacySupport = true;
     webrtcSupport = true;
     enableOfficialBranding = false;
-    googleAPISupport = true;
-    mlsAPISupport = true;
+    geolocationSupport = true;
   }
 ).overrideAttrs
   (prev: {

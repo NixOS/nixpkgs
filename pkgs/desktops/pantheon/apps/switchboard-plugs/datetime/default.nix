@@ -5,13 +5,14 @@
   nix-update-script,
   meson,
   ninja,
-  substituteAll,
+  replaceVars,
   pkg-config,
   vala,
   libadwaita,
   libgee,
   libical,
   granite7,
+  gettext,
   gtk4,
   libxml2,
   switchboard,
@@ -30,13 +31,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       tzdata = tzdata;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja
@@ -62,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

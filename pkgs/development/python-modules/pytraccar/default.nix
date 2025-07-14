@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pytraccar";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   postPatch = ''
     # Upstream doesn't set version in the repo

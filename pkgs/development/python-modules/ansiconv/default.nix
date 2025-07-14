@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ansible";
-    repo = pname;
+    repo = "ansiconv";
     rev = "v${version}";
     sha256 = "0ljfpl8x069arzginvpi1v6hlaq4x2qpjqj01qds2ylz33scq8r4";
   };

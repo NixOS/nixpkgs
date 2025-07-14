@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-spectrum";
   namespace = "visualization.spectrum";
-  version = "20.2.0";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-rl6eydHv0g646H7478UQboVp/OrKExQYJOiaVDeDRhE=";
+    hash = "sha256-8yGmZeLJ8AdT17yqYVxYbmkZ6DqhlCyblbTUzf8MhE4=";
   };
 
   extraBuildInputs = [
@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "Spectrum visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

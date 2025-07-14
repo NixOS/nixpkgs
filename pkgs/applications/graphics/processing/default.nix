@@ -16,7 +16,7 @@
   libGL,
 }:
 let
-  buildNumber = "1293";
+  buildNumber = "1295";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -61,14 +61,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
+    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
   };
+
+  # Processing did not update the todo.txt file before tagging this release, so
+  # the "revision-check" Ant target fails.
+  patches = [ ./disable-revision-check.patch ];
 
   nativeBuildInputs = [
     ant

@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, adwaita-icon-theme
-, breeze-icons
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  adwaita-icon-theme,
+  breeze-icons,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec {
   pname = "kora-icon-theme";
-  version = "1.6.2";
+  version = "1.6.5";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-FBUOmiw3Ak1QVUrpj0+pfFqG/oKNnEXMRNlVKVNzK2I=";
+    sha256 = "sha256-Oralfx5MzCzkx+c+zwtFp8q83oKrNINd/PmVeugNKGo=";
   };
 
   nativeBuildInputs = [

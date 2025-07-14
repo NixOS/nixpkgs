@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "snjoetw";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "py-canary";
+    tag = version;
     hash = "sha256-zylWkssU85eSfR+Di7vQGTr6hOQkqXCObv/PCDHoKHA=";
   };
 

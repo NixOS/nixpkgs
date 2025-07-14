@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydanny";
     repo = "cached-property";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sOThFJs18DR9aBgIpqkORU4iRmhCVKehyM3DLYUt/Wc=";
   };
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydanny/cached-property/releases/tag/${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ];
   };
 }

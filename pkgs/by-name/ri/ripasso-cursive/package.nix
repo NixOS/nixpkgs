@@ -26,11 +26,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-j98X/+UTea4lCtFfMpClnfcKlvxm4DpOujLc0xc3VUY=";
   };
 
-  cargoHash = "sha256-dP8H4OOgtQEBEJxpbaR3KnXFtgBdX4r+dCpBJjBK1MM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4/87+SOUXLoOxd3a4Kptxa98mh/BWlEhK55uu7+Jrec=";
 
   patches = [
     ./fix-tests.patch

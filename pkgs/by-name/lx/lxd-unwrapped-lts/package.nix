@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd";
-    rev = "refs/tags/lxd-${version}";
+    tag = "lxd-${version}";
     hash = "sha256-3C5pLvO7oABWFhFiWtBr5ohFFWm20Gg36WBfVVJgKdc=";
   };
 
@@ -100,15 +100,15 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://ubuntu.com/lxd";
     changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       agpl3Plus
     ];
-    maintainers = [ ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

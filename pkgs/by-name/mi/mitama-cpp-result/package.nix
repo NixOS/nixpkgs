@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mitama-cpp-result";
-  version = "9.3.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "LoliGothick";
     repo = "mitama-cpp-result";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CWYVPpmPIZZTsqXKh+Ft3SlQ4C9yjUof1mJ8Acn5kmM=";
+    hash = "sha256-YqC19AarJgz5CagNI1wyHGJ3xoUeeufDDbjFvQwDOjo=";
   };
 
   nativeBuildInputs = [

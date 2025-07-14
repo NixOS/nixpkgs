@@ -10,15 +10,15 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wev";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2022-09-14";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
-    repo = pname;
-    rev = version;
-    sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
+    repo = "wev";
+    rev = "83de8e931ab04ce3322a58b359d8effa7901b21c";
+    sha256 = "sha256-lNFgjRXO/ZbcXJF06DykPoJJ6/a8ZfVA6g95i+rNdWs=";
   };
 
   strictDeps = true;
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       X11 tool xev.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "wev";
   };

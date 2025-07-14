@@ -2,7 +2,6 @@
   lib,
   stdenv,
   python,
-  pythonAtLeast,
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
@@ -21,19 +20,29 @@
 
 buildPythonPackage rec {
   pname = "jinja2";
-  version = "3.1.4";
+  version = "3.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Sjruesu+cwOu3o6WSNE7i/iKQpKCqmEiqZPwrIAMs2k=";
+    hash = "sha256-ATf7BZkNNfEnWlh+mu5tVtqCH8g0kaD7g4GDvkP2bW0=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    # Do not test with trio, it increases jinja2's dependency closure by a lot
+    # and everyone consuming these dependencies cannot rely on sphinxHook,
+    # because sphinx itself depends on jinja2.
+    substituteInPlace tests/test_async{,_filters}.py \
+      --replace-fail "import trio" "" \
+      --replace-fail ", trio.run" "" \
+      --replace-fail ", \"trio\"" ""
+  '';
 
-  propagatedBuildInputs = [ markupsafe ];
+  build-system = [ flit-core ];
+
+  dependencies = [ markupsafe ];
 
   optional-dependencies = {
     i18n = [ babel ];
@@ -44,14 +53,6 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.is32bit;
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.i18n;
-
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/pallets/jinja/issues/1900
-    "test_custom_async_iteratable_filter"
-    "test_first"
-    "test_loop_errors"
-    "test_package_zip_list"
-  ];
 
   passthru.doc = stdenv.mkDerivation {
     # Forge look and feel of multi-output derivation as best as we can.

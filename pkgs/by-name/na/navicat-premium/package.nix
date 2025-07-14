@@ -1,25 +1,25 @@
 {
-  fetchurl,
-  appimageTools,
   lib,
   stdenv,
+  fetchurl,
+  appimageTools,
 }:
 let
   pname = "navicat-premium";
-  version = "17.1.7";
+  version = "17.2.3";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://web.archive.org/web/20241217004300/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-        hash = "sha256-5dzZh06Ld8t4tgE3tWGPAaBuKcT9iSxi8KpSdO4Un64=";
+        url = "https://web.archive.org/web/20250516003452/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
+        hash = "sha256-QGz+0D0rNkuzkLxLO/tFlif4X4Zuzpb+btkqKNOBi7c=";
       };
       aarch64-linux = fetchurl {
-        url = "https://web.archive.org/web/20241217005701/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-        hash = "sha256-4NvjdNTo/WUlZIRAzA2D39NupqMjlCvjHSWk06spqRc=";
+        url = "https://web.archive.org/web/20250516004158/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
+        hash = "sha256-hxaqK9dPm/0mL3+LoQFeVSe14AD+tfYSNvEC9JsUvRE=";
       };
     }
-    .${stdenv.hostPlatform.system};
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -40,7 +40,7 @@ appimageTools.wrapType2 {
     description = "Database development tool that allows you to simultaneously connect to many databases";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -6,15 +6,15 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sysstat";
-  version = "12.7.4";
+  version = "12.7.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
+    owner = "sysstat";
+    repo = "sysstat";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A0ja5/AtRNaXRXCXG2sJsvWrHPePgIIy/+rF+F7RvqI=";
   };
 
   buildInputs = [ gettext ];
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     mainProgram = "iostat";
-    homepage = "http://sebastien.godard.pagesperso-orange.fr/";
+    homepage = "https://sysstat.github.io/";
     description = "Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.hensoko ];
   };
-}
+})

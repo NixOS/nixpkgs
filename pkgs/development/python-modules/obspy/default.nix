@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "obspy";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "obspy";
     repo = "obspy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Y833OWWBDYduyky0+MRbPoBtATTytak87hgh68QAgfw=";
+    tag = version;
+    hash = "sha256-QBV9FRvUUy8/5KK5RdAXXLB8SK9llFy1XRnQ9T5bgcU=";
   };
 
   build-system = [ setuptools ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework for seismological observatories";
     homepage = "https://www.obspy.org";
-    changelog = "https://github.com/obspy/obspy/releases/tag/${version}";
+    changelog = "https://github.com/obspy/obspy/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.ametrine ];
   };

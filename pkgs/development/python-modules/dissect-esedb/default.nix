@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-esedb";
-  version = "3.14";
+  version = "3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,16 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.esedb";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IDLarSiI7GHjOOLibk2s/KqKwmozgIHdSfClPQXOsXI=";
+    tag = version;
+    hash = "sha256-jLv62/3U89sbmcHAA2YYwVPLlLj85nMn4PRE565ppw4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for Microsofts Extensible Storage Engine Database (ESEDB)";
     homepage = "https://github.com/fox-it/dissect.esedb";
-    changelog = "https://github.com/fox-it/dissect.esedb/releases/tag/${version}";
-    license = licenses.agpl3Only;
+    changelog = "https://github.com/fox-it/dissect.esedb/releases/tag/${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

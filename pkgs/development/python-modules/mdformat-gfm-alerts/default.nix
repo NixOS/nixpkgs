@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-gfm-alerts";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-gfm-alerts";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2EYdNCyS1LxcEnCXkOugAAGx5XLWV4cWTNkXjR8RVQo=";
+    tag = "v${version}";
+    hash = "sha256-Hfi4Ek91G8WHAWjv7m52ZnT5Je9QyZT4yWSecaeTcvA=";
   };
 
   build-system = [ flit-core ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Format 'GitHub Markdown Alerts', which use blockquotes to render admonitions";
     homepage = "https://github.com/KyleKing/mdformat-gfm-alerts";
-    changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/v${version}";
+    changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

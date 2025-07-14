@@ -1,11 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  installShellFiles,
   pandoc,
   stdenv,
   nixosTests,
-  # Boolean flags
+  fetchpatch,
+  # The man page requires pandoc to build and resides in a separate "man"
+  # output which is pulled in on-demand. There is no need to disabled it unless
+  # pandoc is hard to build on your platform.
   withManpage ? true,
 }:
 
@@ -22,25 +24,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
 
-  patches = [ ./0000-fix-dbus-path.patch ];
-
-  nativeBuildInputs = lib.optionals withManpage [
-    installShellFiles
-    pandoc
+  patches = [
+    ./0000-fix-dbus-path.patch
+    # Respect `MANDIR`.
+    (fetchpatch {
+      url = "https://github.com/rfjakob/earlyoom/commit/c5a1799a5ff4b3fd3132d50a510e8c126933cf4a.patch";
+      hash = "sha256-64AkpTMmjiqZ6Byq6687zNIqrQ/IGRGgzzjyyAfcg14=";
+    })
+    # Correctly handle `PREFIX` as a default rather than always-concatenate.
+    (fetchpatch {
+      url = "https://github.com/rfjakob/earlyoom/commit/f7d6f1cc925962fbdcf57b1c2aeeabbf11e2d542.patch";
+      hash = "sha256-DJDeQzcEGJMoMGIi1D/ogMaKG1VQvPZN9jXtUDGjyjk=";
+    })
   ];
+
+  nativeBuildInputs = lib.optionals withManpage [ pandoc ];
 
   makeFlags = [
     "VERSION=${finalAttrs.version}"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    install -D earlyoom $out/bin/earlyoom
-  '' + lib.optionalString withManpage ''
-    installManPage earlyoom.1
-  '' + ''
-    runHook postInstall
-  '';
+    "PREFIX=${placeholder "out"}"
+  ] ++ lib.optional withManpage "MANDIR=${placeholder "man"}/share/man";
 
   passthru.tests = {
     inherit (nixosTests) earlyoom;
@@ -58,7 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "earlyoom";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      oxalica
+    ];
     platforms = lib.platforms.linux;
   };
 })

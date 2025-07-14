@@ -35,6 +35,6 @@ buildKodiAddon rec {
       asl20
       bsd3
     ];
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

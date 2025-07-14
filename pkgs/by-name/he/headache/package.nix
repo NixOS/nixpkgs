@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "frama-c";
-    repo = pname;
+    repo = "headache";
     rev = "v${version}";
     sha256 = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
   };
@@ -31,7 +31,7 @@ buildDunePackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://github.com/frama-c/${pname}";
+    homepage = "https://github.com/frama-c/headache";
     description = "Lightweight tool for managing headers in source code files";
     mainProgram = "headache";
     license = licenses.lgpl2Plus;

@@ -21,7 +21,6 @@
   stdio,
   uuseg,
   uutf,
-  janeStreet_0_15,
   ...
 }:
 
@@ -67,13 +66,9 @@ rec {
 
   cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
 
-  base_v = if lib.versionAtLeast version "0.25.1" then base else janeStreet_0_15.base;
-
-  stdio_v = if lib.versionAtLeast version "0.25.1" then stdio else janeStreet_0_15.stdio;
-
   library_deps =
     [
-      base_v
+      base
       cmdliner_v
       dune-build-info
       fix
@@ -81,7 +76,7 @@ rec {
       menhirLib
       menhirSdk
       ocp-indent
-      stdio_v
+      stdio
       uuseg
       uutf
     ]

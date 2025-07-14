@@ -8,22 +8,23 @@
   runCommand,
   nixosTests,
   npm-lockfile-fix,
+  nix-update-script,
   brotli,
-  tailwindcss,
+  tailwindcss_3,
   esbuild,
   ...
 }:
 
 let
   pname = "plausible";
-  version = "2.1.4";
+  version = "2.1.5";
   mixEnv = "ce";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    hash = "sha256-wV2zzRKJM5pQ06pF8vt1ieFqv6s3HvCzNT5Hed29Owk=";
+    hash = "sha256-4gwK/AxzhsU0vgvKgIXrOyQLCgZMeZyKjj7PWbUmJ+8=";
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/assets/package-lock.json
       sed -ie '
@@ -74,14 +75,15 @@ let
       src
       mixEnv
       ;
-    hash = "sha256-N6cYlYwNss2FPYcljANJYbXobmLFauZ64F7Sf/+7Ctg=";
+    hash = "sha256-edQ8byeV0WUaYDYMnmrstC6L2jztidR/JikGZLpX3WE=";
   };
 
   mjmlNif = rustPlatform.buildRustPackage {
     pname = "mjml-native";
     version = "";
     src = "${mixFodDeps}/mjml/native/mjml_nif";
-    cargoHash = "sha256-W4r8W+JGTE6j4gDogL5Yulr0mbaXjDbwDTwhzMbbDcQ=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-zDWOik65PWAMpIDDcG+DibprPVW/k+Q83+fjFI5vWaY=";
     doCheck = false;
 
     env = {
@@ -90,19 +92,24 @@ let
     };
   };
 
-  patchedMixFodDeps = runCommand mixFodDeps.name { } ''
-    mkdir $out
-    cp -r --no-preserve=mode ${mixFodDeps}/. $out
+  patchedMixFodDeps =
+    runCommand mixFodDeps.name
+      {
+        inherit (mixFodDeps) hash;
+      }
+      ''
+        mkdir $out
+        cp -r --no-preserve=mode ${mixFodDeps}/. $out
 
-    mkdir -p $out/mjml/priv/native
-    for lib in ${mjmlNif}/lib/*
-    do
-      # normalies suffix to .so, otherswise build would fail on darwin
-      file=''${lib##*/}
-      base=''${file%.*}
-      ln -s "$lib" $out/mjml/priv/native/$base.so
-    done
-  '';
+        mkdir -p $out/mjml/priv/native
+        for lib in ${mjmlNif}/lib/*
+        do
+          # normalies suffix to .so, otherswise build would fail on darwin
+          file=''${lib##*/}
+          base=''${file%.*}
+          ln -s "$lib" $out/mjml/priv/native/$base.so
+        done
+      '';
 
 in
 beamPackages.mixRelease rec {
@@ -124,8 +131,21 @@ beamPackages.mixRelease rec {
     tests = {
       inherit (nixosTests) plausible;
     };
-    updateScript = ./update.sh;
-    inherit assets tracker;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "tracker"
+        "-s"
+        "assets"
+        "-s"
+        "mjmlNif"
+      ];
+    };
+    inherit
+      assets
+      tracker
+      mjmlNif
+      ;
   };
 
   env = {
@@ -140,7 +160,7 @@ beamPackages.mixRelease rec {
     cp -r ${tracker} tracker
 
     cat >> config/config.exs <<EOF
-    config :tailwind, path: "${lib.getExe tailwindcss}"
+    config :tailwind, path: "${lib.getExe tailwindcss_3}"
     config :esbuild, path: "${lib.getExe esbuild}"
     EOF
   '';
@@ -160,7 +180,7 @@ beamPackages.mixRelease rec {
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
     description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
-    maintainers = teams.cyberus.members;
+    teams = [ teams.cyberus ];
     platforms = platforms.unix;
   };
 }

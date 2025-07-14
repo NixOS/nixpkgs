@@ -8,12 +8,12 @@
 
 buildPythonApplication rec {
   pname = "pass2csv";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p7r+zDakKy/N+RbxAfGatvkYCDKRh5T3owoYUrHJ5N0=";
+    hash = "sha256-IdcSwQ9O2HmCvT8p4tC7e2GQuhkE3kvMINszZH970og=";
   };
 
   nativeBuildInputs = [

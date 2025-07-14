@@ -22,12 +22,13 @@
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "5.1.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Kv3xEYB6przlEUTzIbkLY654l9N8Gb3YsFqQRTKZpI8=";
+    pname = "python_manilaclient";
+    inherit version;
+    hash = "sha256-wPYVZ0+a9g+IP3l3eH9gMWXfe5VGUzem7qWEOWZ+vlo=";
   };
 
   build-system = [
@@ -67,6 +68,6 @@ buildPythonPackage rec {
     mainProgram = "manila";
     homepage = "https://github.com/openstack/python-manilaclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -27,6 +27,11 @@ buildDunePackage rec {
     hash = "sha256-k4iDUJik7UTuztBw7YaFXASd8SqYMR1JgLm3JOyriGA=";
   };
 
+  # Compatibility with logs 0.8.0
+  postPatch = ''
+    substituteInPlace test/unix/dune --replace-warn logs.fmt 'logs.fmt logs.threaded'
+  '';
+
   minimalOCamlVersion = "4.08";
 
   buildInputs = [

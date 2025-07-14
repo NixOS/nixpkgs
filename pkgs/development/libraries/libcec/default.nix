@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcec";
-  version = "6.0.2";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "Pulse-Eight";
     repo = "libcec";
     rev = "libcec-${version}";
-    sha256 = "sha256-OWqCn7Z0KG8sLlfMWd0btJIFJs79ET3Y1AV/y/Kj2TU=";
+    sha256 = "sha256-t8GUQKWTcxjyaAlsTP4C+heYiVYowG7x+fmjHPND7As=";
   };
 
   # Fix dlopen path
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libcec.pulse-eight.com";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

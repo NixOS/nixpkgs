@@ -1,6 +1,6 @@
 {
   lib,
-  substituteAll,
+  replaceVars,
   mkDerivation,
   fetchFromGitHub,
   gitUpdater,
@@ -12,18 +12,17 @@
 
 mkDerivation rec {
   pname = "libqofono";
-  version = "0.123";
+  version = "0.124";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "libqofono";
     rev = version;
-    hash = "sha256-Ml86wHejSDyR2ibamuzg14GZ5S7zHBgPC9K5G+sgtC0=";
+    hash = "sha256-fI7RS0V8wrsJ2AZAyjVgHmG+c13DXdo6xTjIlGbOHI8=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch;
+    (replaceVars ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch {
       mobileBroadbandProviderInfo = mobile-broadband-provider-info;
     })
     ./0001-NixOS-Skip-tests-they-re-shock-full-of-hardcoded-FHS.patch

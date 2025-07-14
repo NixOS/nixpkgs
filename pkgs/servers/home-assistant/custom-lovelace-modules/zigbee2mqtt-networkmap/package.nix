@@ -7,20 +7,20 @@
 
 mkYarnPackage rec {
   pname = "zigbee2mqtt-networkmap";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "azuwis";
     repo = "zigbee2mqtt-networkmap";
     rev = "v${version}";
-    hash = "sha256-K4DyrurC4AzzJCcB4CS9UlQbUQSWpR7PevA2JFFMRZM=";
+    hash = "sha256-S4iUTjI+pFfa8hg1/lJSI1tl2nEIh+LO2WTYhWWLh/s=";
   };
 
   packageJSON = ./package.json;
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-h/5TWaIg8AfY6I/JBRmUF6yCCbxCMs9nRECWEaaK2to=";
+    hash = "sha256-yo+K3vUJH6WwyNj/UuvbhhmhdqzJ3XUzX+cKUueutjE=";
   };
 
   configurePhase = ''

@@ -1,39 +1,45 @@
-{ substituteAll
-, perl
-, shadow
-, util-linux
-, configurationDirectory ? "/etc/nixos-containers"
-, stateDirectory ? "/var/lib/nixos-containers"
-, nixosTests
+{
+  replaceVarsWith,
+  perl,
+  shadow,
+  util-linux,
+  installShellFiles,
+  configurationDirectory ? "/etc/nixos-containers",
+  stateDirectory ? "/var/lib/nixos-containers",
+  nixosTests,
 }:
+replaceVarsWith {
+  name = "nixos-container";
+  dir = "bin";
+  isExecutable = true;
+  src = ./nixos-container.pl;
 
-substituteAll {
-    name = "nixos-container";
-    dir = "bin";
-    isExecutable = true;
-    src = ./nixos-container.pl;
+  replacements = {
     perl = perl.withPackages (p: [ p.FileSlurp ]);
     su = "${shadow.su}/bin/su";
-    utillinux = util-linux;
 
-    inherit configurationDirectory stateDirectory;
+    inherit configurationDirectory stateDirectory util-linux;
+  };
 
-    passthru = {
-      tests = {
-        inherit (nixosTests)
-          containers-imperative
-          containers-ip
-          containers-tmpfs
-          containers-ephemeral
-          containers-unified-hierarchy
-          ;
-      };
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        containers-imperative
+        containers-ip
+        containers-tmpfs
+        containers-ephemeral
+        containers-unified-hierarchy
+        ;
     };
+  };
 
-    postInstall = ''
-      t=$out/share/bash-completion/completions
-      mkdir -p $t
-      cp ${./nixos-container-completion.sh} $t/nixos-container
-    '';
-    meta.mainProgram = "nixos-container";
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd nixos-container \
+      --bash ${./nixos-container-completion.sh} \
+      --fish ${./nixos-container-completion.fish}
+  '';
+
+  meta.mainProgram = "nixos-container";
 }

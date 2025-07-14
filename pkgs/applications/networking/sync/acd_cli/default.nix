@@ -16,6 +16,7 @@
 buildPythonApplication rec {
   pname = "acd_cli";
   version = "0.3.2";
+  format = "setuptools";
 
   doCheck = false;
 

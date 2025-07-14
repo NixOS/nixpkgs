@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   django,
-  python3,
+  python,
   django-guardian,
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "viewflow";
     repo = "django-fsm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-woN0F4hTaPk8HTGNT6zQlZDJ9SCVRut9maKSlDmalUE=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ django-guardian ];
 
   checkPhase = ''
-    ${python3.interpreter} tests/manage.py test
+    ${python.interpreter} tests/manage.py test
   '';
 
   pythonImportsCheck = [ "django_fsm" ];

@@ -12,13 +12,13 @@
   python3,
   gtk3,
   gnome,
-  substituteAll,
+  replaceVars,
   at-spi2-atk,
   at-spi2-core,
   dbus,
   xkbcomp,
   procps,
-  lsof,
+  gnugrep,
   coreutils,
   gsettings-desktop-schemas,
   speechd-minimal,
@@ -29,20 +29,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "47.2";
+  version = "48.6";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-XmevNX9xmOoApEOByrTE+U5oJtbtgAZo85QWziqrjlo=";
+    url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
+    hash = "sha256-7cUDRODf1yR2tcFLOqclyiaHGOpt2JvE7ib0ULM51pY=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       cat = "${coreutils}/bin/cat";
-      lsof = "${lsof}/bin/lsof";
+      grep = "${gnugrep}/bin/grep";
       pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
@@ -93,7 +92,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "orca";
     };
   };
 
@@ -112,7 +111,8 @@ python3.pkgs.buildPythonApplication rec {
 
       Needs `services.gnome.at-spi2-core.enable = true;` in `configuration.nix`.
     '';
-    maintainers = with maintainers; [ berce ] ++ teams.gnome.members;
+    maintainers = with maintainers; [ berce ];
+    teams = [ teams.gnome ];
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

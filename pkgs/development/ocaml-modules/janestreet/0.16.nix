@@ -9,6 +9,16 @@
   krb5,
 }:
 
+let
+  js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+  js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+  gen_js_api = self.gen_js_api.override {
+    inherit js_of_ocaml-compiler;
+    ojs = self.ojs.override { inherit js_of_ocaml-compiler; };
+  };
+  js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+in
+
 with self;
 
 {
@@ -191,6 +201,10 @@ with self;
     version = "0.16.1";
     pname = "async_ssl";
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/d7f046579bfc7cfe77ce12f57fd11c206e7e9f30/patches/async_ssl/no-incompatible-pointer-types-0161.patch";
+      hash = "sha256-NcQX9eZ97kaQCOVAuYgR8NlFD3ZrGbT/2QqCjYf9Xnw=";
+    };
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [
@@ -1043,6 +1057,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {

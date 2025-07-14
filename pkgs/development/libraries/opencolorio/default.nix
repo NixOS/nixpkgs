@@ -8,37 +8,31 @@
   pystring,
   imath,
   minizip-ng,
+  zlib,
   # Only required on Linux
   glew,
   libglut,
-  # Only required on Darwin
-  Carbon,
-  GLUT,
-  Cocoa,
   # Python bindings
   pythonBindings ? true, # Python bindings
   python3Packages,
   # Build apps
   buildApps ? true, # Utility applications
   lcms2,
-  openexr_3,
+  openexr,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-Ytqvd4qSqO+6hId3v7X9cd+zrOElcqTBev5miJL/07M=";
+    hash = "sha256-+P7T8UZuQEVmsMykSWtUxg0vC7Sr4fQJpovCU5sKtsA=";
   };
 
   patches = [
-    # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
-    # Needed for zlib >= 1.3 && cmake < 3.27.4.
-    ./broken-cmake-zlib-version.patch
     # Fix incorrect line number in test
     ./line-numbers.patch
   ];
@@ -51,7 +45,7 @@ stdenv.mkDerivation rec {
       --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals pythonBindings [ python3Packages.python ];
   buildInputs =
     [
       expat
@@ -59,15 +53,11 @@ stdenv.mkDerivation rec {
       pystring
       imath
       minizip-ng
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glew
       libglut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      GLUT
-      Cocoa
     ]
     ++ lib.optionals pythonBindings [
       python3Packages.python
@@ -75,7 +65,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals buildApps [
       lcms2
-      openexr_3
+      openexr
     ];
 
   cmakeFlags =
