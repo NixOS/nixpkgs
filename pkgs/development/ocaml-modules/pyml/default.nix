@@ -5,6 +5,7 @@
   utop,
   python3,
   stdcompat,
+  writableTmpDirAsHomeHook,
 }:
 
 buildDunePackage rec {
@@ -14,12 +15,16 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "thierry-martinez";
     repo = "pyml";
-    rev = version;
-    sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
+    tag = version;
+    hash = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
 
   buildInputs = [
     utop
+  ];
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
   ];
 
   propagatedBuildInputs = [
