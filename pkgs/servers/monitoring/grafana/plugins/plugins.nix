@@ -12,6 +12,7 @@
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
   grafana-discourse-datasource = callPackage ./grafana-discourse-datasource { };
+  grafana-exploretraces-app = callPackage ./grafana-exploretraces-app { };
   grafana-github-datasource = callPackage ./grafana-github-datasource { };
   grafana-googlesheets-datasource = callPackage ./grafana-googlesheets-datasource { };
   grafana-lokiexplore-app = callPackage ./grafana-lokiexplore-app { };
