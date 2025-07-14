@@ -19688,7 +19688,9 @@ self: super: with self; {
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
-  xformers = callPackage ../development/python-modules/xformers { };
+  xformers = callPackage ../development/python-modules/xformers {
+    inherit (pkgs.llvmPackages) openmp;
+  };
 
   xgboost = callPackage ../development/python-modules/xgboost { inherit (pkgs) xgboost; };
 
