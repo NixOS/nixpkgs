@@ -3,7 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "gibo";
@@ -35,11 +37,13 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/gibo completion zsh)
   '';
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/gibo version | grep -F "${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
