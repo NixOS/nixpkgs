@@ -15,11 +15,13 @@ let
         tag = "v${packages.libxml2_13.version}";
         hash = "sha256-acemyYs1yRSTSLH7YCGxnQzrEDm8YPTK4HtisC36LsY=";
       };
+      extraPatches = [
+        # same as upstream patch but fixed conflict and added required import:
+        # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
+        ./CVE-2025-6021.patch
+      ];
       freezeUpdateScript = true;
       extraMeta = {
-        knownVulnerabilities = [
-          "CVE-2025-6021"
-        ];
         maintainers = with lib.maintainers; [
           gepbird
         ];
