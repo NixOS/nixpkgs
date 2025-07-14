@@ -15,16 +15,16 @@ class Overlay:
     dtbo_file: Path
 
     @cached_property
-    def fdt(self):
+    def fdt(self) -> Fdt:
         with self.dtbo_file.open("rb") as fd:
             return Fdt(fd.read())
 
     @cached_property
-    def compatible(self):
+    def compatible(self) -> set[str]:
         return get_compatible(self.fdt)
 
 
-def get_compatible(fdt):
+def get_compatible(fdt) -> set[str]:
     root_offset = fdt.path_offset("/")
 
     try:
