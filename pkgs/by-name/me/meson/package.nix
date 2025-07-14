@@ -8,13 +8,16 @@
   llvmPackages,
   ninja,
   pkg-config,
-  python3,
+  python3Packages,
   replaceVars,
   writeShellScriptBin,
   zlib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python3 = python3Packages.python;
+in
+python3Packages.buildPythonApplication rec {
   pname = "meson";
   version = "1.8.2";
   format = "setuptools";

@@ -9043,7 +9043,7 @@ self: super: with self; {
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
   meson = toPythonModule (
-    (pkgs.meson.override { python3 = python; }).overridePythonAttrs (oldAttrs: {
+    (pkgs.meson.override { python3Packages = self; }).overridePythonAttrs (oldAttrs: {
       # We do not want the setup hook in Python packages because the build is performed differently.
       setupHook = null;
     })
@@ -14817,7 +14817,7 @@ self: super: with self; {
 
   pythonix = callPackage ../development/python-modules/pythonix {
     nix = pkgs.nixVersions.nix_2_3;
-    meson = pkgs.meson.override { python3 = self.python; };
+    meson = pkgs.meson.override { python3Packages = self; };
   };
 
   pythonnet = callPackage ../development/python-modules/pythonnet { };
