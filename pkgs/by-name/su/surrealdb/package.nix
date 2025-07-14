@@ -6,17 +6,16 @@
   openssl,
   rocksdb,
   testers,
-  surrealdb,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb";
   version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gZICuvgMOdwa39i+5ETUDuFfBtSiZuuFOYW5pHPkoms=";
   };
 
@@ -55,19 +54,19 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
-    package = surrealdb;
+    package = finalAttrs.finalPackage;
     command = "surreal version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       sikmir
       happysalada
       siriobalmelli
     ];
   };
-}
+})
