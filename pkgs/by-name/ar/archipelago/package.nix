@@ -40,7 +40,10 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/ArchipelagoMW/Archipelago/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "archipelago";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      pyrox0
+      iqubic
+    ];
     platforms = lib.platforms.linux;
   };
 }
