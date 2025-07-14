@@ -136,7 +136,9 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://eddie.website";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eddie-ui";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      ryand56
+    ];
     platforms = lib.platforms.linux;
   };
 })
