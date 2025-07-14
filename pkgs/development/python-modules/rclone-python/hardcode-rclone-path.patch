@@ -97,3 +97,33 @@ index d4a8413..1b29bd8 100644
  
      # add optional arguments and flags to the command
      args_str = args2string(args)
+diff --git a/tests/test_copy.py b/tests/test_copy.py
+index 4ded5fa..1cae53b 100644
+--- a/tests/test_copy.py
++++ b/tests/test_copy.py
+@@ -45,11 +45,11 @@ def create_local_file(
+ @pytest.mark.parametrize(
+     "wrapper_command,rclone_command",
+     [
+-        (rclone.copy, "rclone copy"),
+-        (rclone.copyto, "rclone copyto"),
+-        (rclone.sync, "rclone sync"),
+-        (rclone.move, "rclone move"),
+-        (rclone.moveto, "rclone moveto"),
++        (rclone.copy, "@rclone@ copy"),
++        (rclone.copyto, "@rclone@ copyto"),
++        (rclone.sync, "@rclone@ sync"),
++        (rclone.move, "@rclone@ move"),
++        (rclone.moveto, "@rclone@ moveto"),
+     ],
+ )
+ def test_rclone_command_called(wrapper_command: Callable, rclone_command: str):
+@@ -62,7 +62,7 @@ def test_rclone_command_called(wrapper_command: Callable, rclone_command: str):
+         rclone.utils.subprocess,
+         "Popen",
+         return_value=subprocess.Popen(
+-            "rclone help", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
++            "@rclone@ help", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
+         ),
+     ) as mock:
+         wrapper_command("nothing/not_a.file", "fake_remote:unicorn/folder")
