@@ -11739,8 +11739,6 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis { };
 
-  qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
-
   spatialite-gui = callPackage ../by-name/sp/spatialite-gui/package.nix {
     wxGTK = wxGTK32;
   };
