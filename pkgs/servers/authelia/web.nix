@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     hash = pnpmDepsHash;
+    fetcherVersion = 1;
   };
 
   postPatch = ''

@@ -31,6 +31,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit pname version src;
       hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
+      fetcherVersion = 1;
     };
     nativeBuildInputs = [
       pnpm.configHook

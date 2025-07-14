@@ -51,6 +51,7 @@ buildGoModule rec {
     inherit pname version src;
     sourceRoot = "${src.name}/services/idp";
     hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
+    fetcherVersion = 1;
   };
   pnpmRoot = "services/idp";
 

@@ -40,6 +40,7 @@ let
       inherit pname version;
       src = "${src}/rust/gui-client";
       hash = "sha256-bVWpyGwEaxYi3N6BJqOilnHJDgAykKHgRC2QKlvSm4Q=";
+      fetcherVersion = 1;
     };
     pnpmRoot = "rust/gui-client";
 

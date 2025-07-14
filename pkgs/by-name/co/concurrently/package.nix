@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     hash = "sha256-F1teWIABkK0mqZcK3RdGNKmexI/C59QWSrrD1jYbHt0=";
+    fetcherVersion = 1;
   };
 
   patches = [

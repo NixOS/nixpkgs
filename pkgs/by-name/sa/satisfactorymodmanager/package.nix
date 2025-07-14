@@ -56,6 +56,7 @@ buildGoModule rec {
       inherit pname version src;
       sourceRoot = "${src.name}/frontend";
       hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
+      fetcherVersion = 1;
     };
 
     pnpmRoot = "frontend";

@@ -35,6 +35,7 @@ beamPackages.mixRelease rec {
     inherit pname version;
     src = "${src}/apps/web/assets";
     hash = "sha256-ejyBppFtKeyVhAWmssglbpLleOnbw9d4B+iM5Vtx47A=";
+    fetcherVersion = 1;
   };
   pnpmRoot = "apps/web/assets";
 
