@@ -60,9 +60,7 @@ let
     # matches version in upstream envoy
     # https://github.com/mccurdyc/envoy/blob/6371b185dee99cd267e61ada6191e97f2406e334/bazel/repository_locations.bzl#L1407
     rev = "c4d7bb0fda912e24c64daf2aa749ec54cec99412";
-    # sha256 = pkgs.lib.fakeSha256;
     sha256 = "sha256-NSowlubJ3OK4h2W9dqmzhkgpceaXZ7ore2cRkNlBm5Q=";
-    # Do we need to somehow also tell envoy that this is used for extensions or is this only doing the override of fetching the source?
   };
 
   # these need to be updated for any changes to fetchAttrs
@@ -100,6 +98,7 @@ buildBazelPackage rec {
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
 
+      # TODO: These could maybe just be stored directly in the bazel repository cache instead of these patches
       # https://github.com/mccurdyc/envoy/blob/6371b185dee99cd267e61ada6191e97f2406e334/api/bazel/envoy_http_archive.bzl#L4-L9
       # Envoy's Bazel WONT fetch repos that are listed in the existing_rules list
       ./0005-com_github_wasmtime_from_nix.patch
@@ -118,6 +117,7 @@ buildBazelPackage rec {
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
     # https://nixos.org/manual/nixpkgs/unstable/#fun-substitute
+    # TODO: These could maybe just be stored directly in the bazel repository cache instead of these patches
     substituteInPlace WORKSPACE --subst-var-by com_github_wasmtime_from_nix ${com_github_wasmtime}
     substituteInPlace WORKSPACE --subst-var-by proxy_wasm_cpp_host_from_nix ${proxy_wasm_cpp_host}
 
@@ -161,7 +161,11 @@ buildBazelPackage rec {
 
   buildInputs = [ linuxHeaders ];
 
+  # This is a full derivation on its own
   fetchAttrs = {
+    # Has network access to fetch.
+    # The fetchAttrs phase creates a content-addressed cache of all dependencies
+    # The sha256 here is the hash of the fixed-output derivation
     sha256 = depsHash;
     env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
