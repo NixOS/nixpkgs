@@ -69,6 +69,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
       hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
+      fetcherVersion = 1;
     };
 
     strictDeps = true;
@@ -123,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
         "sha256-ry7s9fbKx4e1LR8DlI2LIJY9GQrxmU7JQt+3apJGw/M="
       else
         "sha256-AkrfugpNvk4KgesRLQbso8p5b96Dg174R9/xuP4JtJg=";
+    fetcherVersion = 1;
   };
 
   env = {

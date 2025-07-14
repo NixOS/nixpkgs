@@ -82,6 +82,7 @@ stdenvNoCC.mkDerivation {
     inherit pname src;
 
     hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    fetcherVersion = 1;
   };
 
   buildPhase = ''

@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
+    fetcherVersion = 1;
   };
 
   nativeBuildInputs = [
