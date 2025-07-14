@@ -2,14 +2,16 @@
   patches ? [ ],
 
   lib,
-  stdenv,
+  dotnetCorePackages,
   curl,
 
+  buildDotnetModule,
   callPackage,
-  fetchFromGitHub,
   copyDesktopItems,
+  fetchFromGitHub,
   makeDesktopItem,
   nix-update-script,
+  writeShellScriptBin,
 }:
 let
   version = "1.2.0";
@@ -24,14 +26,8 @@ let
   frontend = callPackage ./frontend.nix {
     inherit version src patches;
   };
-
-  backend = callPackage ./backend.nix {
-    inherit version src patches;
-
-    inherit frontend;
-  };
 in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "legendsviewer-next";
   inherit version src patches;
 
@@ -64,23 +60,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  nugetDeps = ./deps.json;
+  projectFile = "./LegendsViewer.Backend/LegendsViewer.Backend.csproj";
+  testProjectFile = "./LegendsViewer.Backend.Tests/LegendsViewer.Backend.Tests.csproj";
+  executables = [ meta.mainProgram ];
+
   nativeBuildInputs = [
     copyDesktopItems
+    # Fixes a build failure, the frontend node build is handled in ./frontend.nix
+    (writeShellScriptBin "npm" "")
   ];
 
-  dontUnpack = true;
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  dontCheck = true;
-
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
 
-    mkdir -p $out
+    lib=$out/lib/${pname}
 
-    ln -s ${backend}/bin $out/bin
-    ln -s ${backend}/lib $out/lib
+    mkdir -p $lib
+
+    cp ./LegendsViewer.Backend/bin/Release/*/*/* $lib
+    ln -s ${frontend} $lib/${frontend.pname}
 
     runHook postInstall
   '';
@@ -114,10 +115,8 @@ stdenv.mkDerivation rec {
     description = "Recreates Dwarf Fortress' Legends Mode from exported files";
     homepage = "https://github.com/${src.owner}/${src.repo}";
     license = lib.licenses.mit;
-
     mainProgram = "LegendsViewer";
     platforms = with lib.platforms; lib.intersectLists (darwin ++ linux) (x86_64 ++ aarch64);
-
     maintainers = with lib.maintainers; [ donottellmetonottellyou ];
   };
 }
