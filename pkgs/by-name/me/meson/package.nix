@@ -121,7 +121,7 @@ python3Packages.buildPythonApplication rec {
         substituteInPlace \
           'test cases/native/8 external program shebang parsing/script.int.in' \
           'test cases/common/274 customtarget exe for test/generate.py' \
-            --replace /usr/bin/env ${coreutils}/bin/env
+            --replace-fail /usr/bin/env ${coreutils}/bin/env
       ''
     ]
     # Remove problematic tests
@@ -175,7 +175,7 @@ python3Packages.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
 
     substituteInPlace "$out/share/bash-completion/completions/meson" \
-      --replace "python3 -c " "${python3.interpreter} -c "
+      --replace-fail "python3 -c " "${python3.interpreter} -c "
   '';
 
   setupHook = ./setup-hook.sh;
