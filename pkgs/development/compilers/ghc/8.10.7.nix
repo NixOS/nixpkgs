@@ -69,6 +69,10 @@ in
       || (stdenv.hostPlatform != stdenv.targetPlatform)
     ),
 
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
+
   # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
@@ -265,7 +269,7 @@ let
       basePackageSet = if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget;
     in
     {
-      inherit (basePackageSet) gmp ncurses;
+      inherit (basePackageSet) gmp ncurses numactl;
       # dynamic inherits are not possible in Nix
       libffi = basePackageSet.${libffi_name};
     };
@@ -513,6 +517,11 @@ stdenv.mkDerivation (
       ++ lib.optionals (disableLargeAddressSpace) [
         "--disable-large-address-space"
       ]
+      ++ lib.optionals enableNuma [
+        "--enable-numa"
+        "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+        "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
+      ]
       ++ lib.optionals enableUnregisterised [
         "--enable-unregisterised"
       ];
@@ -565,8 +574,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage1 GHC doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     # required, because otherwise all symbols from HSffi.o are stripped, and
     # that in turn causes GHCi to abort
