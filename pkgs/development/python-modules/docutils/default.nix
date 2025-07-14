@@ -17,8 +17,6 @@ let
     version = "0.21.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
     src = fetchurl {
       url = "mirror://sourceforge/docutils/docutils-${version}.tar.gz";
       hash = "sha256-OmsYcy7fGC2qPNEndbuzOM9WkUaPke7rEJ3v9uv6mG8=";
@@ -33,7 +31,9 @@ let
     nativeCheckInputs = [ pillow ];
 
     checkPhase = ''
+      runHook preCheck
       ${python.interpreter} test/alltests.py
+      runHook postCheck
     '';
 
     # Create symlinks lacking a ".py" suffix, many programs depend on these names
@@ -43,16 +43,20 @@ let
       done
     '';
 
-    meta = with lib; {
+    pythonImportsCheck = [ "docutils" ];
+
+    meta = {
       description = "Python Documentation Utilities";
       homepage = "http://docutils.sourceforge.net/";
-      license = with licenses; [
+      changelog = "https://sourceforge.net/projects/docutils/files/docutils/${version}";
+      license = with lib.licenses; [
         publicDomain
         bsd2
         psfl
         gpl3Plus
       ];
-      maintainers = with maintainers; [ jherland ];
+      maintainers = with lib.maintainers; [ jherland ];
+      mainProgram = "docutils";
     };
   };
 in
