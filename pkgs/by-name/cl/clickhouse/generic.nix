@@ -92,24 +92,20 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     ''
-      patchShebangs src/
-      patchShebangs utils/
+      patchShebangs src/ utils/
 
       sed -i 's|/usr/bin/env perl|"${lib.getExe perl}"|' contrib/openssl-cmake/CMakeLists.txt
 
-      substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
-        --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
-      substituteInPlace utils/list-licenses/list-licenses.sh \
+      substituteInPlace src/Storages/System/StorageSystemLicenses.sh utils/list-licenses/list-licenses.sh \
         --replace-fail '$(git rev-parse --show-toplevel)' "$NIX_BUILD_TOP/$sourceRoot"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's|gfind|find|' cmake/tools.cmake
-      sed -i 's|ggrep|grep|' cmake/tools.cmake
-
-      # Make sure Darwin invokes lld.ld64 not lld.
       substituteInPlace cmake/tools.cmake \
-        --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
+        --replace-fail 'gfind' 'find' \
+        --replace-fail 'ggrep' 'grep' \
+        --replace-fail '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
     ''
+    # Rust is handled by cmake
     + lib.optionalString rustSupport ''
       cargoSetupPostPatchHook() { true; }
     '';
@@ -141,19 +137,16 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "fortify" ];
 
   postInstall = ''
-    rm -rf $out/share/clickhouse-test
-
     sed -i -e '\!<log>/var/log/clickhouse-server/clickhouse-server\.log</log>!d' \
       $out/etc/clickhouse-server/config.xml
     substituteInPlace $out/etc/clickhouse-server/config.xml \
-      --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
-    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace-fail "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>" \
       --replace-fail "<level>trace</level>" "<level>warning</level>"
   '';
 
   # Basic smoke test
   doCheck = true;
-  checkPhase = ''
+  checkPhase = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $NIX_BUILD_TOP/$sourceRoot/build/programs/clickhouse local --query 'SELECT 1' | grep 1
   '';
 
