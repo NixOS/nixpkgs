@@ -98,6 +98,9 @@ buildPythonPackage rec {
     # Cause pytest to hang on Darwin after the tests are done
     "tests/test_eval_model.py"
     "tests/test_train.py"
+
+    # fails in sandbox as it tries to launch a web browser (which fails due to missing `osascript`)
+    "tests/test_plot.py::test_plot[plotly-ms-ssim-rgb]"
   ];
 
   meta = {
