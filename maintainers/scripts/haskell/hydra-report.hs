@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra
+#! nix-shell -p nix-eval-jobs
 #! nix-shell -i runhaskell
 
 {-
@@ -218,11 +218,22 @@ hydraJSONQuery = hydraQuery jsonResponse
 hydraPlainQuery :: [Text] -> Req ByteString
 hydraPlainQuery = hydraQuery bsResponse mempty
 
-hydraEvalCommand :: FilePath
-hydraEvalCommand = "hydra-eval-jobs"
+nixEvalCommand :: FilePath
+nixEvalCommand = "nix-eval-jobs"
 
-hydraEvalParams :: [String]
-hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
+nixEvalParams :: [String]
+nixEvalParams =
+  [
+    -- options necessary to make nix-eval-jobs behave like hydra-eval-jobs used to
+    -- https://github.com/NixOS/hydra/commit/d84ff32ce600204c6473889a3ff16cd6053533c9
+    "--meta",
+    "--constituents",
+    "--force-recurse",
+    "--max-jobs", "1",
+
+    "-I", ".",
+   "pkgs/top-level/release-haskell.nix"
+  ]
 
 nixExprCommand :: FilePath
 nixExprCommand = "nix-instantiate"
@@ -336,7 +347,7 @@ calculateReverseDependencies depMap =
 getMaintainerMap :: IO MaintainerMap
 getMaintainerMap = do
    hydraJobs :: HydraJobs <-
-      readJSONProcess hydraEvalCommand hydraEvalParams "Failed to decode hydra-eval-jobs output: "
+      readJSONProcess nixEvalCommand nixEvalParams "Failed to decode hydra-eval-jobs output: "
    handlesMap :: EmailToGitHubHandles <-
       readJSONProcess nixExprCommand ("maintainers/scripts/haskell/maintainer-handles.nix":nixExprParams) "Failed to decode nix output for lookup of github handles: "
    pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
