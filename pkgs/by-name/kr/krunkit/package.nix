@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "krunkit";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iOd4UjmSrVuJPvWwP8GV2DWYsTWAXAXguXK4VxiDOko=";
   };
 
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/krunkit
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Launch configurable virtual machines with libkrun";
     homepage = "https://github.com/containers/krunkit";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ quinneden ];
+    maintainers = with lib.maintainers; [ quinneden ];
   };
 })
