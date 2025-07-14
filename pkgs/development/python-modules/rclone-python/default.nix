@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
   setuptools,
   rich,
   rclone,
@@ -19,10 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-vvsiXS3uI0TcL+X8+75BQmycrF+EGIgQE1dmGef35rI=";
   };
 
+  patches = [
+    (replaceVars ./hardcode-rclone-path.patch {
+      rclone = lib.getExe rclone;
+    })
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
-    rclone
     rich
   ];
 
