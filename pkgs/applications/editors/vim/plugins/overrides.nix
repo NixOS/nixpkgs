@@ -1509,7 +1509,7 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
-  jdd-nvim = super.lazyjj-nvim.overrideAttrs {
+  jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
