@@ -9,14 +9,14 @@
 
 buildGoModule rec {
   pname = "museum";
-  version = "1.1.53";
+  version = "1.1.57";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
     rev = "photos-v${version}";
-    hash = "sha256-lgxgtxRV4jRnOwlgX1jY6CrgVF0pSvoW5fVEU3L0jMY=";
+    hash = "sha256-801wTTxruhZc18+TAPSYrBRtCPNZXwSKs2Hkvc/6BjM=";
   };
 
   vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
