@@ -21,8 +21,8 @@ let
 
   installLocalIcons = ''
     mkdir -p $out/share/homepage/public/icons
-    cp ${dashboardIcons}/png/* $out/share/homepage/public/icons
-    cp ${dashboardIcons}/svg/* $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/png/. $out/share/homepage/public/icons
+    cp -r --no-preserve=mode ${dashboardIcons}/svg/. $out/share/homepage/public/icons
     cp ${dashboardIcons}/LICENSE $out/share/homepage/public/icons/
   '';
 in
