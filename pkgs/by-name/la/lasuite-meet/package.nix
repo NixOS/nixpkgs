@@ -28,6 +28,8 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
+    # Add PKCE option
+    ./pkce.patch
   ];
 
   build-system = with python.pkgs; [ setuptools ];
