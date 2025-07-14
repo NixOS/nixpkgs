@@ -34,15 +34,16 @@ let
     pygit2
     pygments
     setuptools
+    setuptools-scm
     ;
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.9.4";
+    version = "7.0.2";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
+      hash = "sha256-93MfG0KsrqrLjPfkHApHKnqjGo9H5Ri66nNfHLKYfgw=";
     };
 
     format = "other";
@@ -54,7 +55,7 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
-          hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
+          hash = "sha256-VFMiTFwRhLoPEb3u7a0yPBqP8vA+1AGlBPxt4WTmyck=";
           sourceRoot = "mercurial-${version}/rust";
         }
       else
@@ -71,6 +72,7 @@ let
         gettext
         installShellFiles
         setuptools
+        setuptools-scm
       ]
       ++ lib.optionals rustSupport [
         rustPlatform.cargoSetupHook
