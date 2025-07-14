@@ -362,6 +362,7 @@
   ./programs/xwayland.nix
   ./programs/yazi.nix
   ./programs/ydotool.nix
+  ./programs/yubikey-manager.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
   ./programs/zoom-us.nix
