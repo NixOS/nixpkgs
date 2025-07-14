@@ -11,6 +11,7 @@
   yarn,
   testers,
   typescript,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,10 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
+  passthru = {
+    tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
