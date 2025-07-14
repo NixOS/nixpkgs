@@ -45,6 +45,7 @@ if [ "$current_commit" != "$head_commit" ]; then
      > $pin_file
 else
    echo "No new all-cabal-hashes version" >&2
+   exit 0
 fi
 
 version_diff="$old_date -> $new_date"
