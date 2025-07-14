@@ -131,6 +131,7 @@
           '';
 
           passthru = {
+            inherit fetcherVersion;
             serve = callPackage ./serve.nix {
               inherit pnpm;
               pnpmDeps = finalAttrs.finalPackage;
