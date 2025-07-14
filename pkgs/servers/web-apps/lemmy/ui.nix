@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   extraBuildInputs = [ libsass ];
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = pinData.uiPNPMDepsHash;
     fetcherVersion = 1;
+    hash = pinData.uiPNPMDepsHash;
   };
 
   buildPhase = ''

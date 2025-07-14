@@ -28,8 +28,8 @@ buildGoModule rec {
     pnpmDeps = pnpm_9.fetchDeps {
       inherit src version pname;
       sourceRoot = "${src.name}/ui";
-      hash = "sha256-/se6IWeHdazqS7PzOpgtT4IxCJ1WptqBzZ/BdmGb4BA=";
       fetcherVersion = 1;
+      hash = "sha256-/se6IWeHdazqS7PzOpgtT4IxCJ1WptqBzZ/BdmGb4BA=";
     };
 
     nativeBuildInputs = [

@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    hash = "sha256-OCxUhvPIPKSGTTeXaLmkErOBpYQ8mKmieUYj6qxuTK4=";
     fetcherVersion = 1;
+    hash = "sha256-OCxUhvPIPKSGTTeXaLmkErOBpYQ8mKmieUYj6qxuTK4=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''

@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # lockfileVersion: '6.0' need old pnpm
   pnpmDeps = pnpm_8.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-h1rcM+H2c0lk7bpGeQT5ue9bQIggrCFHkj4o7KxnH08=";
     fetcherVersion = 1;
+    hash = "sha256-h1rcM+H2c0lk7bpGeQT5ue9bQIggrCFHkj4o7KxnH08=";
   };
 
   cargoRoot = "src-tauri";

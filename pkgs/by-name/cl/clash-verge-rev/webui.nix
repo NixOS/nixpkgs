@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   pname = "${pname}-webui";
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = npm-hash;
     fetcherVersion = 1;
+    hash = npm-hash;
   };
 
   nativeBuildInputs = [

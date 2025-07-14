@@ -73,8 +73,8 @@ let
 
     pnpmDeps = pnpm_10.fetchDeps {
       inherit src pname version;
-      hash = pnpmHash;
       fetcherVersion = 1;
+      hash = pnpmHash;
     };
 
     nativeBuildInputs = [
