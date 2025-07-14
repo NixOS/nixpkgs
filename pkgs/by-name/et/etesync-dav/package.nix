@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.34.0";
+  version = "0.35.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
     tag = "v${version}";
-    hash = "sha256-+rNqyksOmDUh0OuvgEDWv6tuZQkn1gizz35Ptr6izos=";
+    hash = "sha256-CD02nuA9GD/oe7mjExUHIftkPxM1pZQKyDalXSoOhXY=";
   };
 
   build-system = with python3Packages; [ setuptools ];
