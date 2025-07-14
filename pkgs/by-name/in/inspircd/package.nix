@@ -31,6 +31,7 @@ let
 
   # compatible if libc is compatible
   libcModules = [
+    "log_syslog"
     "regex_posix"
     "sslrehashsignal"
   ];
@@ -50,12 +51,11 @@ let
       # GPLv2 compatible dependencies
       "argon2"
       "ldap"
+      "log_json"
       "mysql"
       "pgsql"
-      "regex_pcre"
       "regex_pcre2"
       "regex_re2"
-      "regex_tre"
       "sqlite3"
       "ssl_gnutls"
     ]
@@ -74,15 +74,13 @@ in
   openldap,
   libpq,
   libmysqlclient,
-  pcre,
   pcre2,
-  tre,
   re2,
   sqlite,
   gnutls,
   libmaxminddb,
   openssl,
-  mbedtls,
+  yyjson,
   # For a full list of module names, see https://docs.inspircd.org/packaging/
   extraModules ? compatibleModules lib stdenv,
 }:
@@ -104,12 +102,12 @@ let
       )
     ];
     ldap = [ openldap ];
+    log_json = [ yyjson ];
+    log_syslog = [ ];
     mysql = [ libmysqlclient ];
     pgsql = [ libpq ];
-    regex_pcre = [ pcre ];
     regex_pcre2 = [ pcre2 ];
     regex_re2 = [ re2 ];
-    regex_tre = [ tre ];
     sqlite3 = [ sqlite ];
     ssl_gnutls = [ gnutls ];
     # depends on stdenv.cc.libc
@@ -119,7 +117,6 @@ let
     regex_stdlib = [ ];
     # GPLv2 incompatible
     geo_maxmind = [ libmaxminddb ];
-    ssl_mbedtls = [ mbedtls ];
     ssl_openssl = [ openssl ];
   };
 
@@ -151,13 +148,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.18.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-Aulhg2CbtcpsxkH5kXkp4EoZF5/F9pOXJc1S08S5P08=";
+    sha256 = "sha256-/LiniV5moKGX7K6Hfzq1mxEBZ+sqnScQxT0AApiBPaA=";
   };
 
   outputs = [
