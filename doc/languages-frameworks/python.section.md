@@ -1319,6 +1319,7 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 `enabledTestPaths` and `disabledTestPaths`
 
 :   To specify path globs (files or directories) or test items.
+    `enabledTestPaths` defaults to `[ "." ]`.
 
 `enabledTests` and `disabledTests`
 
