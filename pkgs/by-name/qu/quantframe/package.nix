@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-3IHwwbl1aH3Pzh9xq2Jfev9hj6/LXZaVaIJOPbgsquE=";
+    fetcherVersion = 1;
   };
 
   useFetchCargoVendor = true;
