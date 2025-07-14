@@ -1,45 +1,60 @@
 diff --git a/time/chrono/+freebsd.ha b/time/chrono/+freebsd.ha
-index af49080e..3dde7963 100644
+index 967ae0a8..1779f6d9 100644
 --- a/time/chrono/+freebsd.ha
 +++ b/time/chrono/+freebsd.ha
-@@ -2,8 +2,8 @@
- // (c) Hare authors <https://harelang.org>
-
- def LOCALTIME_PATH: str = "/etc/localtime";
--def TZDB_PATH: str = "/usr/share/zoneinfo/";
-+def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
-
+@@ -3,4 +3,4 @@
+ 
  // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
  // leap second data.
 -export def UTC_LEAPSECS_PATH: str = "/var/db/ntpd.leap-seconds.list";
 +export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
 diff --git a/time/chrono/+linux.ha b/time/chrono/+linux.ha
-index 2756fd6f..1ea22385 100644
+index 3394a7b4..1779f6d9 100644
 --- a/time/chrono/+linux.ha
 +++ b/time/chrono/+linux.ha
-@@ -2,8 +2,8 @@
- // (c) Hare authors <https://harelang.org>
-
- def LOCALTIME_PATH: str = "/etc/localtime";
--def TZDB_PATH: str = "/usr/share/zoneinfo/";
-+def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
-
+@@ -3,4 +3,4 @@
+ 
  // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
  // leap second data.
 -export def UTC_LEAPSECS_PATH: str = "/usr/share/zoneinfo/leap-seconds.list";
 +export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
 diff --git a/time/chrono/+openbsd.ha b/time/chrono/+openbsd.ha
-index 2756fd6f..1ea22385 100644
+index 3394a7b4..1779f6d9 100644
 --- a/time/chrono/+openbsd.ha
 +++ b/time/chrono/+openbsd.ha
-@@ -2,8 +2,8 @@
- // (c) Hare authors <https://harelang.org>
-
- def LOCALTIME_PATH: str = "/etc/localtime";
--def TZDB_PATH: str = "/usr/share/zoneinfo/";
-+def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
-
+@@ -3,4 +3,4 @@
+ 
  // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
  // leap second data.
 -export def UTC_LEAPSECS_PATH: str = "/usr/share/zoneinfo/leap-seconds.list";
 +export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
+diff --git a/time/date/+freebsd.ha b/time/date/+freebsd.ha
+index 3b08c385..b036002a 100644
+--- a/time/date/+freebsd.ha
++++ b/time/date/+freebsd.ha
+@@ -7,4 +7,4 @@ export def LOCALTIME_PATH: str = "/etc/localtime";
+ 
+ // The filepath of the system's TZDB (Timezone Database) directory, a filetree
+ // of TZif (Time Zone Information Format) files and other related files.
+-export def TZDB_PATH: str = "/usr/share/zoneinfo";
++export def TZDB_PATH: str = "@tzdata@/share/zoneinfo";
+diff --git a/time/date/+linux.ha b/time/date/+linux.ha
+index 3b08c385..b036002a 100644
+--- a/time/date/+linux.ha
++++ b/time/date/+linux.ha
+@@ -7,4 +7,4 @@ export def LOCALTIME_PATH: str = "/etc/localtime";
+ 
+ // The filepath of the system's TZDB (Timezone Database) directory, a filetree
+ // of TZif (Time Zone Information Format) files and other related files.
+-export def TZDB_PATH: str = "/usr/share/zoneinfo";
++export def TZDB_PATH: str = "@tzdata@/share/zoneinfo";
+diff --git a/time/date/+openbsd.ha b/time/date/+openbsd.ha
+index 3b08c385..b036002a 100644
+--- a/time/date/+openbsd.ha
++++ b/time/date/+openbsd.ha
+@@ -7,4 +7,4 @@ export def LOCALTIME_PATH: str = "/etc/localtime";
+ 
+ // The filepath of the system's TZDB (Timezone Database) directory, a filetree
+ // of TZif (Time Zone Information Format) files and other related files.
+-export def TZDB_PATH: str = "/usr/share/zoneinfo";
++export def TZDB_PATH: str = "@tzdata@/share/zoneinfo";
