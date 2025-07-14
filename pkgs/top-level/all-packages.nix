@@ -9249,7 +9249,6 @@ with pkgs;
       };
       protobuf_27 = callPackage ../development/libraries/protobuf/27.nix { };
       protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
-      protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
       protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
         abseil-cpp = abseil-cpp_202103;
       };
@@ -9259,7 +9258,6 @@ with pkgs;
     protobuf_29
     protobuf_27
     protobuf_25
-    protobuf_24
     protobuf_21
     ;
 
@@ -12181,7 +12179,7 @@ with pkgs;
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
-      python = python311;
+      python = python3;
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
