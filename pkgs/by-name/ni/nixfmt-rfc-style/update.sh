@@ -8,15 +8,11 @@ set -eo pipefail
 
 # This is the directory of this update.sh script.
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 derivation_file="${script_dir}/generated-package.nix"
-date_file="${script_dir}/date.txt"
 
-# This is the latest version of nixfmt-rfc-style branch on GitHub.
-new_version=$(curl --silent https://api.github.com/repos/nixos/nixfmt/git/refs/heads/master | jq '.object.sha' --raw-output)
-new_date=$(curl --silent https://api.github.com/repos/nixos/nixfmt/git/commits/"$new_version" | jq '.committer.date' --raw-output)
+release_tag=$(curl --silent https://api.github.com/repos/NixOS/nixfmt/releases/latest | jq '.tag_name' --raw-output)
 
-echo "Updating nixfmt-rfc-style to version $new_date."
+echo "Updating nixfmt-rfc-style to version $release_tag."
 echo "Running cabal2nix and outputting to ${derivation_file}..."
 
 cat > "$derivation_file" << EOF
@@ -25,9 +21,7 @@ cat > "$derivation_file" << EOF
 EOF
 
 cabal2nix --jailbreak \
-  "https://github.com/nixos/nixfmt/archive/${new_version}.tar.gz" \
+  "https://github.com/nixos/nixfmt/archive/${release_tag}.tar.gz" \
   >> "$derivation_file"
-
-date --date="$new_date" -I > "$date_file"
 
 echo "Finished."
