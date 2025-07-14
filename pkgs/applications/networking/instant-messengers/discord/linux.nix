@@ -100,22 +100,16 @@ let
     dontStrip = true;
     dontPatchShebangs = true;
     
-    unpackPhase = ''
-      runHook preUnpack
-      
-      mkdir -p $out
-      cd $out
-      tar -xzf $src --strip-components=1
-      
-      runHook postUnpack
-    '';
-    
     dontBuild = true;
     dontConfigure = true;
     
     installPhase = ''
       runHook preInstall
       
+      mkdir -p $out/opt/${binaryName}
+      mv * $out/opt/${binaryName}
+      cd $out/opt
+
       # Apply modifications (do NOT chmod the binary - it breaks Krisp checksum validation)
       ${lib.optionalString withOpenASAR ''
         cp -f ${openasar} resources/app.asar
@@ -141,63 +135,63 @@ let
   fhsEnv = buildFHSEnv {
     name = "${pname}-fhs";
     
-    targetPkgs = pkgs: [
+    targetPkgs = pkgs: with pkgs; [
       # Core system libraries
-      pkgs.stdenv.cc.cc.lib
-      pkgs.glibc
+      stdenv.cc.cc.lib
+      glibc
       
       # Graphics and display
-      pkgs.libglvnd
-      pkgs.mesa
-      pkgs.libdrm
-      pkgs.libgbm
-      pkgs.wayland
+      libglvnd
+      mesa
+      libdrm
+      libgbm
+      wayland
       
       # X11 libraries
-      pkgs.xorg.libX11
-      pkgs.xorg.libXcomposite
-      pkgs.xorg.libXcursor
-      pkgs.xorg.libXdamage
-      pkgs.xorg.libXext
-      pkgs.xorg.libXfixes
-      pkgs.xorg.libXi
-      pkgs.xorg.libXrandr
-      pkgs.xorg.libXrender
-      pkgs.xorg.libXtst
-      pkgs.xorg.libXScrnSaver
-      pkgs.xorg.libxcb
-      pkgs.xorg.libxshmfence
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXtst
+      xorg.libXScrnSaver
+      xorg.libxcb
+      xorg.libxshmfence
       
       # GTK and desktop integration
-      pkgs.gtk3
-      pkgs.glib
-      pkgs.cairo
-      pkgs.pango
-      pkgs.gdk-pixbuf
-      pkgs.atk
-      pkgs.at-spi2-atk
-      pkgs.at-spi2-core
-      pkgs.libappindicator-gtk3
-      pkgs.libdbusmenu
+      gtk3
+      glib
+      cairo
+      pango
+      gdk-pixbuf
+      atk
+      at-spi2-atk
+      at-spi2-core
+      libappindicator-gtk3
+      libdbusmenu
       
       # Audio
-      pkgs.alsa-lib
-      pkgs.libpulseaudio
-      pkgs.pipewire
+      alsa-lib
+      libpulseaudio
+      pipewire
       
       # Other system libraries
-      pkgs.dbus
-      pkgs.systemd
-      pkgs.fontconfig
-      pkgs.freetype
-      pkgs.expat
-      pkgs.libuuid
-      pkgs.cups
-      pkgs.nspr
-      pkgs.nss
-      pkgs.libnotify
-      pkgs.libcxx
-      pkgs.libxkbcommon
+      dbus
+      systemd
+      fontconfig
+      freetype
+      expat
+      libuuid
+      cups
+      nspr
+      nss
+      libnotify
+      libcxx
+      libxkbcommon
     ] ++ lib.optional withTTS pkgs.speechd-minimal;
     
     multiPkgs = pkgs: [
@@ -237,7 +231,7 @@ let
       ''}
       
       # Execute Discord
-      exec ${discordDir}/${binaryName} \
+      exec ${discordDir}/opt/${binaryName}/${binaryName} \
         --no-sandbox \
         --disable-gpu-sandbox \
         $WAYLAND_FLAGS \
@@ -282,8 +276,8 @@ stdenv.mkDerivation {
     ln -s ${fhsEnv}/bin/${pname}-fhs $out/bin/${lib.strings.toLower binaryName}
     
     # Install icons
-    ln -s ${discordDir}/discord.png $out/share/pixmaps/${pname}.png
-    ln -s ${discordDir}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
+    ln -s ${discordDir}/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+    ln -s ${discordDir}/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
     
     # Install desktop file
     ln -s ${desktopItem}/share/applications/${pname}.desktop $out/share/applications/
