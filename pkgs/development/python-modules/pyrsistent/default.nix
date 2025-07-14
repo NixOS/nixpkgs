@@ -36,6 +36,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tobgu/pyrsistent/";
     description = "Persistent/Functional/Immutable data structures";
     license = licenses.mit;
-    maintainers = with maintainers; [ desiderius ];
   };
 }
