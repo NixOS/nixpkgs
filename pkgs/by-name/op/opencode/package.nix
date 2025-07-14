@@ -1,11 +1,13 @@
 {
-  lib,
-  stdenvNoCC,
   buildGoModule,
   bun,
   fetchFromGitHub,
   fetchurl,
+  installShellCompletions ? stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform,
+  installShellFiles,
+  lib,
   nix-update-script,
+  stdenvNoCC,
   testers,
   writableTmpDirAsHomeHook,
 }:
@@ -71,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nativeBuildInputs = [
       bun
       writableTmpDirAsHomeHook
-    ];
+    ] ++ lib.optional installShellCompletions installShellFiles;
 
     dontConfigure = true;
 
@@ -146,6 +148,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     install -Dm755 opencode $out/bin/opencode
+
+    ${lib.optionalString installShellCompletions ''
+      installShellCompletion --cmd opencode \
+        --bash <($out/bin/opencode completion bash) \
+        --fish <($out/bin/opencode completion fish) \
+        --zsh <($out/bin/opencode completion zsh)
+    ''}
 
     runHook postInstall
   '';
