@@ -1,10 +1,7 @@
 { lib, ... }:
 {
   name = "firefly-iii-data-importer";
-  meta = {
-    maintainers = [ lib.maintainers.savyajha ];
-    platforms = lib.platforms.linux;
-  };
+  meta.maintainers = [ lib.maintainers.savyajha ];
 
   nodes.dataImporter =
     { ... }:

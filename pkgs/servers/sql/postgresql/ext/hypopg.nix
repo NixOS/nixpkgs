@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "hypopg";
-  version = "1.4.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "HypoPG";
     repo = "hypopg";
     tag = finalAttrs.version;
-    hash = "sha256-J1ltvNHB2v2I9IbYjM8w2mhXvBX31NkMasCL0O7bV8w=";
+    hash = "sha256-88uKPSnITRZ2VkelI56jZ9GWazG/Rn39QlyHKJKSKMM=";
   };
 
   passthru = {
@@ -26,7 +26,6 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "Hypothetical Indexes for PostgreSQL";
     homepage = "https://hypopg.readthedocs.io";
-    changelog = "https://github.com/HypoPG/hypopg/releases/tag/${finalAttrs.version}";
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ bbigras ];

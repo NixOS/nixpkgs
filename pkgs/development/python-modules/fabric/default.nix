@@ -3,13 +3,14 @@
   buildPythonPackage,
   decorator,
   deprecated,
-  fetchFromGitHub,
+  fetchPypi,
   icecream,
   invoke,
   mock,
   paramiko,
   pytest-relaxed,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
 }:
 
@@ -18,11 +19,11 @@ buildPythonPackage rec {
   version = "3.2.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "fabric";
-    repo = "fabric";
-    tag = version;
-    hash = "sha256-7qC2UuI0RP5xlKIYSz1sLyK/nQYegXOou1mlJYFk7M0=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-h4PKQuOwB28IsmkBqsa52bHxnEEAdOesz6uQLBhP9KM=";
   };
 
   build-system = [ setuptools ];
@@ -57,10 +58,6 @@ buildPythonPackage rec {
     "preserves_remote_mode_by_default"
     "proxy_jump"
     "raises_TypeError_for_disallowed_kwargs"
-    # Assertion failures on mocks
-    # https://github.com/fabric/fabric/issues/2341
-    "client_defaults_to_a_new_SSHClient"
-    "defaults_to_auto_add"
   ];
 
   meta = {

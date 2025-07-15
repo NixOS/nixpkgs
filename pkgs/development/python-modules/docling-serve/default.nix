@@ -13,7 +13,6 @@
   uvicorn,
   websockets,
   tesserocr,
-  typer,
   rapidocr-onnxruntime,
   onnxruntime,
   torch,
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "0.14.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-R8W/FXKj2wLJOcjwIsna/2wFOLGM80Qr3WlYPJTTSNU=";
+    hash = "sha256-dPCD7Ovc6Xiga+gYOwg0mJIIhHywVOyxKIAFF5XUsYw=";
   };
 
   postPatch = ''
@@ -54,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   pythonRemoveDeps = [
-    "mlx-vlm" # not yet available on nixpkgs
+    "mlx-vlm" # not yet avainable on nixpkgs
   ];
 
   dependencies =
@@ -64,7 +63,6 @@ buildPythonPackage rec {
       httpx
       pydantic-settings
       python-multipart
-      typer
       uvicorn
       websockets
     ]

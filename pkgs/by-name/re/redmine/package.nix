@@ -3,17 +3,17 @@
   stdenv,
   fetchurl,
   bundlerEnv,
-  ruby_3_3,
+  ruby,
   makeWrapper,
   nixosTests,
 }:
 
 let
-  version = "6.0.6";
+  version = "6.0.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby_3_3;
+    inherit ruby;
     gemdir = ./.;
     groups = [
       "development"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-t6wtKIk4Brj0+9FIC3FL5UZhToMOICnUegvyajUrs/o=";
+    hash = "sha256-lNzFMRXgWBrEbmDD7ZMY8ZJs5GS6u7OF5SNiF9Hmpk4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

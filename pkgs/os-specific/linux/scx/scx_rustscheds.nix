@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
 
   # Copy compiled headers and libs from scx.cscheds
   postPatch = ''
-    mkdir libbpf
+    mkdir bpftool libbpf
+    cp -r ${scx.cscheds.dev}/bpftool/* bpftool/
     cp -r ${scx.cscheds.dev}/libbpf/* libbpf/
   '';
 

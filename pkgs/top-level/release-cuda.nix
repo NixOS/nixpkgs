@@ -90,7 +90,6 @@ let
       gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
-      kdePackages.kdenlive = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -98,7 +97,6 @@ let
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
-      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;

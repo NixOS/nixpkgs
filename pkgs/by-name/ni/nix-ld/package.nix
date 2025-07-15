@@ -8,17 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-ld";
-  version = "2.0.5";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-7ev9V128h7ZWi9JsFje6X1OzE5maJfmBMkxohxQysOA=";
+    hash = "sha256-ULoitJD5bMu0pFvh35cY5EEYywxj4e2fYOpqZwKB1lk=";
   };
 
+  # Submitted upstream: https://github.com/nix-community/nix-ld/pull/169
+  patches = [ ./rust-1.88.patch ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YR7j2dvZHMBUe0lW7GYFxJV11ZM+gX13NHj2uf3UEbQ=";
+  cargoHash = "sha256-cDbszVjZcomag0HZvXM+17SjDiGS07iPj78zgsXstHc=";
 
   hardeningDisable = [ "stackprotector" ];
 

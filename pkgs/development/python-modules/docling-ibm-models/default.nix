@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,7 +15,6 @@
   opencv-python-headless,
   pillow,
   pydantic,
-  rtree,
   safetensors,
   torch,
   torchvision,
@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "3.8.1";
+  version = "3.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-Yogg71CXQTdF5OUbdbma1rQxtLudTLjyOIFe2LS9CpI=";
+    hash = "sha256-a2y4vXgALPRtLhdH0Tqqht1gpdcfa1Gv4puthKDMk7U=";
   };
 
   build-system = [
@@ -51,7 +51,6 @@ buildPythonPackage rec {
     opencv-python-headless
     pillow
     pydantic
-    rtree
     safetensors
     torch
     torchvision

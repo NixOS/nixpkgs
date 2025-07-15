@@ -21,9 +21,6 @@
   # runtime deps
   gpgme,
   gnum4,
-
-  withNotmuch ? true,
-  notmuch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -69,9 +66,7 @@ rustPlatform.buildRustPackage rec {
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath ([ gpgme ] ++ lib.optional withNotmuch notmuch)
-      } \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 

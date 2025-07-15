@@ -40,5 +40,6 @@ buildNpmPackage rec {
     description = "Implementation of the Handshake protocol";
     homepage = "https://github.com/handshake-org/hsd";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ d-xo ];
   };
 }

@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
       zx2c4
       globin
       ma27
+      d-xo
     ];
     mainProgram = "wg";
     platforms = platforms.unix;

@@ -10,7 +10,6 @@
   libxml2,
   openssl,
   pcre,
-  pcre2,
   zlib,
   jabberSupport ? true,
   iksemel,
@@ -59,7 +58,7 @@ import ./versions.nix (
         libiconv
         libxml2
         openssl
-        (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
+        pcre
         zlib
       ]
       ++ optional odbcSupport unixODBC

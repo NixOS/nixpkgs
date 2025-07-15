@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   versionCheckHook,
   nix-update-script,
 }:
@@ -20,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-1u3oUbqhwHXD90ld70pjK2XPJe5hpUbJtU78QpIjAE8=";
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };
 
   # skip flaky tests
   checkFlags = [ "--skip=options::tests::test_detect_display_width" ];

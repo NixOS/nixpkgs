@@ -67,6 +67,7 @@ buildGoModule {
       gpl3Plus
     ];
     maintainers = with maintainers; [
+      d-xo
       happysalada
     ];
   };

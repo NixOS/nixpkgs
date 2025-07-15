@@ -59,8 +59,6 @@ buildPythonPackage rec {
     svgpathtools
     svgwrite
   ];
-  # https://github.com/echemdb/svgdigitizer/issues/252
-  MPLBACKEND = "Agg";
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -80,5 +78,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/echemdb/svgdigitizer/blob/${src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
+    # https://github.com/echemdb/svgdigitizer/issues/252
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

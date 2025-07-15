@@ -3,7 +3,7 @@
   stdenv,
   addDriverRunpath,
   config,
-  cudaPackages_12_4 ? { },
+  cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   fetchurl,
   makeWrapper,
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
           "${ocl-icd}/lib"
         ]
         ++ lib.optionals cudaSupport [
-          "${cudaPackages_12_4.cudatoolkit}/lib"
+          "${cudaPackages.cudatoolkit}/lib"
         ]
       );
     in

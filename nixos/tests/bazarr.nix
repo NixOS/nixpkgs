@@ -5,6 +5,7 @@ let
 in
 {
   name = "bazarr";
+  meta.maintainers = with lib.maintainers; [ d-xo ];
 
   nodes.machine =
     { pkgs, ... }:

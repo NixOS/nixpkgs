@@ -9,18 +9,17 @@
   typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-cov-stub,
 }:
 buildPythonPackage rec {
   pname = "x3dh";
-  version = "1.2.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-x3dh";
     tag = "v${version}";
-    hash = "sha256-NLuFfkutFtNrpBcLA/83QArCDrlrT+i85s2d6FHtuT0=";
+    hash = "sha256-/hC1Kze4yBOlgbWJcGddcYty9fqwZ08Lyi0IiqSDibI=";
   };
 
   strictDeps = true;
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "x3dh" ];

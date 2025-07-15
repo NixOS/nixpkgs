@@ -1,7 +1,6 @@
 {
-  lib,
   stdenv,
-
+  lib,
   fetchurl,
   unzip,
   qtbase,
@@ -10,11 +9,8 @@
   fixDarwinDylibNames,
 }:
 
-let
-  qtVersion = lib.versions.major qtbase.version;
-in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "qscintilla-qt${qtVersion}";
+  pname = "qscintilla-qt5";
   version = "2.14.1";
 
   src = fetchurl {
@@ -38,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup =
     let
       libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+      qtVersion = lib.versions.major qtbase.version;
     in
     ''
       ln -s $out/lib/libqscintilla2_qt${qtVersion}${libExt} $out/lib/libqscintilla2${libExt}

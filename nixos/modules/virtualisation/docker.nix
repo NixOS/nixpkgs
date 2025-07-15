@@ -88,7 +88,7 @@ in
       description = ''
         **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
 
-        Enable Nvidia GPU support inside docker containers.
+        Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
       '';
     };
 
@@ -246,7 +246,7 @@ in
         "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
         "net.ipv4.conf.default.forwarding" = mkOverride 98 true;
       };
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package ] ++ optional cfg.enableNvidia pkgs.nvidia-docker;
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
 
@@ -287,7 +287,10 @@ in
         };
 
         path =
-          [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package ++ cfg.extraPackages;
+          [ pkgs.kmod ]
+          ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker
+          ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {

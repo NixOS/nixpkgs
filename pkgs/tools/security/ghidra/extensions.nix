@@ -17,8 +17,6 @@ lib.makeScope newScope (self: {
     inherit ghidra;
   };
 
-  ghidra-firmware-utils = self.callPackage ./extensions/ghidra-firmware-utils { };
-
   ghidra-golanganalyzerextension = self.callPackage ./extensions/ghidra-golanganalyzerextension { };
 
   ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };

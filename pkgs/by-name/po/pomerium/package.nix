@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
   envoy,
@@ -17,17 +17,17 @@ let
     mapAttrsToList
     ;
 in
-buildGoModule rec {
+buildGo123Module rec {
   pname = "pomerium";
-  version = "0.30.3";
+  version = "0.29.4";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-Rjv4GjyUs9sH+P5kYimxFnE2SBosEWbc7PbKIaVFxsI=";
+    hash = "sha256-Oj/wC3rr7CAw2iB0H8yUvzv5VCEIo8kc5sZrxFX6NrI=";
   };
 
-  vendorHash = "sha256-+SvKF54rkBY2wBZOYKuIV30BVqRqICuiPya+HApne1s=";
+  vendorHash = "sha256-K9LcGvANajoVKEDIswahD0mT5845qGZzafmWMKkVn8Q=";
 
   ui = mkYarnPackage {
     inherit version;

@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.41.0";
+  version = "2.31.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-GD052HCqBLs+KUkOUOVdlXxS6+PD2pthGtz+zdQ6QnM=";
+    hash = "sha256-a2PZORT4Umf6AI3yEDDcUD0tm22Ahzm7Dwij/5ZUjNs=";
   };
 
   build-system = [
@@ -102,6 +102,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   optional-dependencies = {
@@ -159,14 +160,10 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
-    "test_formula_conversion_with_page_range"
 
     # requires network access
     "test_page_range"
     "test_parser_backends"
-    "test_confidence"
-    "test_e2e_webp_conversions"
-    "test_asr_pipeline_conversion"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

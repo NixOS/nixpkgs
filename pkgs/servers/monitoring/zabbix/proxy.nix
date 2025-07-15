@@ -8,7 +8,6 @@
   libiconv,
   openssl,
   pcre,
-  pcre2,
   zlib,
   buildPackages,
   odbcSupport ? true,
@@ -62,7 +61,7 @@ import ./versions.nix (
         libevent
         libiconv
         openssl
-        (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
+        pcre
         zlib
       ]
       ++ optional odbcSupport unixODBC
