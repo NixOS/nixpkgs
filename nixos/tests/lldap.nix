@@ -6,7 +6,7 @@ in
   name = "lldap";
 
   nodes.machine =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       services.lldap = {
         enable = true;
@@ -14,6 +14,8 @@ in
         settings = {
           verbose = true;
           ldap_base_dn = "dc=example,dc=com";
+
+          ldap_user_pass = "password";
         };
       };
       environment.systemPackages = [ pkgs.openldap ];
@@ -23,7 +25,8 @@ in
           { ... }:
           {
             services.lldap.settings = {
-              ldap_user_pass_file = toString (pkgs.writeText "adminPasswordFile" adminPassword);
+              ldap_user_pass = lib.mkForce null;
+              ldap_user_pass_file = lib.mkForce (toString (pkgs.writeText "adminPasswordFile" adminPassword));
               force_ldap_user_pass_reset = "always";
             };
           };
@@ -32,6 +35,7 @@ in
           { ... }:
           {
             services.lldap.settings = {
+              ldap_user_pass = lib.mkForce null;
               ldap_user_pass_file = toString (pkgs.writeText "adminPasswordFile" "password");
               force_ldap_user_pass_reset = false;
             };
