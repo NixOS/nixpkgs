@@ -6,19 +6,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "catppuccinifier-cli";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "lighttigerXIV";
     repo = "catppuccinifier";
-    rev = version;
-    hash = "sha256-CEjdCr7QgyQw+1VmeEyt95R0HKE0lAKZHrwahaxgJoU=";
+    tag = version;
+    hash = "sha256-YlHb8gueKyXB2JJeRJmo8oFLOeYcmthup4n4BkEHNTA=";
   };
 
   sourceRoot = "${src.name}/src/catppuccinifier-cli";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oFY07E31ZFy4AphqDCqL6BAhUNQtakHmLwER1RsAE7o=";
+  cargoHash = "sha256-mIzRK4rqD8ON8LqkG3QhOseZLM5+Rr1Rhj1uuu+KRMI=";
 
   meta = {
     description = "Apply catppuccin flavors to your wallpapers";
