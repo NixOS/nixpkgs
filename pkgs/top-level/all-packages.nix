@@ -739,11 +739,6 @@ with pkgs;
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
-  shortenPerlShebang = makeSetupHook {
-    name = "shorten-perl-shebang-hook";
-    propagatedBuildInputs = [ dieHook ];
-  } ../build-support/setup-hooks/shorten-perl-shebang.sh;
-
   sile = callPackage ../by-name/si/sile/package.nix {
     lua = luajit;
   };
