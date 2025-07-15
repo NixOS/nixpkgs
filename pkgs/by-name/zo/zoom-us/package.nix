@@ -246,10 +246,6 @@ else
     version = versions.${system} or "";
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = ''
-      unset QT_PLUGIN_PATH
-      unset LANG  # would break settings dialog on non-"en_XX" locales
-    '';
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
