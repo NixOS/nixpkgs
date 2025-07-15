@@ -3597,6 +3597,8 @@ self: super: with self; {
 
   deap = callPackage ../development/python-modules/deap { };
 
+  dearpygui = callPackage ../development/python-modules/dearpygui { };
+
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
   debianbts = callPackage ../development/python-modules/debianbts { };
