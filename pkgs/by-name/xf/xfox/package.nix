@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   pname = "xfox";
   version = "1.0.0";
   pyproject = true;
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "pxlman";
     repo = "xfox";
     tag = "v${version}";
