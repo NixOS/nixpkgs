@@ -115,6 +115,38 @@ makeScopeWithSplicing' {
       libsanitizer = callPackage ./libsanitizer { };
       libquadmath = callPackage ./libquadmath { };
 
+      grust-unwrapped = gccPackages.gcc-unwrapped.override {
+        stdenv = overrideCC stdenv buildGccPackages.gcc;
+        langRust = true;
+      };
+
+      libgrust = callPackage ./libgrust {
+        stdenv = overrideCC stdenv buildGccPackages.gcc;
+        grust = buildGccPackages.grustNoLibgrust;
+      };
+
+      grust = wrapCCWith rec {
+        cc = gccPackages.grust-unwrapped;
+        libcxx = targetGccPackages.libstdcxx;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        nixSupport.cc-cflags = gccPackages.grustNoLibgrust.nixSupport.cc-cflags ++ [
+          "-B${targetGccPackages.libgrust}/lib/"
+        ];
+      };
+
+      grustNoLibgrust = wrapCCWith rec {
+        cc = gccPackages.grust-unwrapped;
+        libcxx = targetGccPackages.libstdcxx;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        inherit (gccPackages.gcc) nixSupport;
+      };
+
       gfortran-unwrapped = gccPackages.gcc-unwrapped.override {
         stdenv = overrideCC stdenv buildGccPackages.gcc;
         langFortran = true;

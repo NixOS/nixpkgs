@@ -15,6 +15,7 @@
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
   langJit ? false,
+  langRust ? false,
   enablePlugin ? lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform,
   runCommand,
   buildPackages,
@@ -31,6 +32,7 @@
   getVersionFile,
   buildGccPackages,
   targetPackages,
+  cargo,
   libc,
   bintools,
 }:
@@ -48,7 +50,8 @@ let
     ++ lib.optional langGo "go"
     ++ lib.optional langObjC "objc"
     ++ lib.optional langObjCpp "obj-c++"
-    ++ lib.optional langJit "jit";
+    ++ lib.optional langJit "jit"
+    ++ lib.optional langRust "rust";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPrefix}${
@@ -86,11 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    texinfo
-    which
-    gettext
-  ] ++ lib.optional (perl != null) perl;
+  nativeBuildInputs =
+    [
+      texinfo
+      which
+      gettext
+    ]
+    ++ lib.optional (perl != null) perl
+    ++ lib.optional langRust cargo;
 
   buildInputs =
     [
