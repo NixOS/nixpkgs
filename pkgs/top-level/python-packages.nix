@@ -3409,6 +3409,8 @@ self: super: with self; {
 
   dctorch = callPackage ../development/python-modules/dctorch { };
 
+  ddgs = callPackage ../development/python-modules/ddgs { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
