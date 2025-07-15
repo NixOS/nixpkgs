@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/rust/tool";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-HnTsu46P3HRYo2d1DeaP6hqn+pVW3J4IM+CneckSFoM=";
 
   env.TEST_SYSTEMD = systemd;

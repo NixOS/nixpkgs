@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "@GIT_REV@" $(cat GIT_REV)
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-31kEYwlDA6iYcwPZyQU4gM/VLfPNeYcDKhhBqzNp/QE=";
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;

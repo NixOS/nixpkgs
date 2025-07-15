@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  useFetchCargoVendor = true;
-
   cargoHash = "sha256-lJbHPqQ3eybo03oZY2VyKlsxcTdbdrc8q8AjV+IahEY=";
 
   cargoBuildFlags = [

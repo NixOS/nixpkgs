@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-tlQ4PDrYnnbsxXRbrIoF08aSy7VP+iXgTKf0A8MITpo=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-Z4UbMdu35m/myiqrFFpvlmVfCD0MlSTQRvs2uhnxBAI=";
 
   buildInputs = [ openssl ];

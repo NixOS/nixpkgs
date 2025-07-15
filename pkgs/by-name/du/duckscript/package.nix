@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
       libiconv
     ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ft6EUajAj+Zw3cEhdajwwHAaMaUf+/vtTuUYni8E+o0=";
 
   meta = with lib; {

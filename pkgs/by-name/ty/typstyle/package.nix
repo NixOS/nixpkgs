@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-rIbLYV4f+XaEkyIFkJL1Biwg+TnjHi7e9kvIlroiNNA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YRsCuGvfSAUz0qsETIUcTKIchdkvleP3xJy0Hz+2BM0=";
 
   # Disabling tests requiring network access

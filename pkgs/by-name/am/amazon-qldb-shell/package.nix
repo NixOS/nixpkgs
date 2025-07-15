@@ -24,7 +24,6 @@ let
       rustPlatform.bindgenHook
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-tD35Py81QLDVlBahYzgskOQK5lQW03xuCnUwVUi4oLU=";
 
     passthru.tests.version = testers.testVersion { inherit package; };

@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-zDgAGOuK0Jkmm554qZsaA/ABFhuupJ+WToO8HSPp7Xc=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:

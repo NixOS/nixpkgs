@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/seshat-node/native";
 
-  useFetchCargoVendor = true;
-
   nativeBuildInputs = [
     nodejs
     python3

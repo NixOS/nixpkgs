@@ -75,7 +75,6 @@ rustPlatform.buildRustPackage rec {
   pname = "firezone-gui-client";
   inherit version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";

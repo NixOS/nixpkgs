@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TVPI3394elxDzn/8S4hDkVounWI6bo6vpZeYJJzDOr4=";
 
   nativeBuildInputs = [ installShellFiles ];

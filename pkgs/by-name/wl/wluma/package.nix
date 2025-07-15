@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage rec {
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-UFe+/qJ9jCJ0QtSeY9QFT8VPXQGWIG2tqay+WE2rhKU=";
 
   nativeBuildInputs = [

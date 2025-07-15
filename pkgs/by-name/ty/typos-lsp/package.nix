@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-O8TikrjFpmZ7PX7KmnErMW3OE6BoAlSAeZGD9qOEfog=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-V6uYmnsbWuQc002hdDfc/B1mzrS7xu0xcR/6m2oxyMU=";
 
   # fix for compilation on aarch64

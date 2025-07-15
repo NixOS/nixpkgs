@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage rec {
     fetcherVersion = 1;
   };
 
-  useFetchCargoVendor = true;
   cargoRoot = "app/${app-type}/src-tauri";
   buildAndTestSubdir = cargoRoot;
   cargoPatches = [
