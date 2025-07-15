@@ -49,6 +49,8 @@ buildNpmPackage' rec {
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
     ./set-exe-path.patch
+    # ensure that the desktop proxy is correctly located in libexec
+    ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
@@ -60,6 +62,8 @@ buildNpmPackage' rec {
     rm -r bitwarden_license
 
     substituteInPlace apps/desktop/src/main.ts --replace-fail '%%exePath%%' "$out/bin/bitwarden"
+    substituteInPlace apps/desktop/src/main/native-messaging.main.ts \
+      --replace-fail '%%desktopProxyPath%%' "$out/libexec/desktop_proxy"
 
     # force canUpdate to false
     # will open releases page instead of trying to update files
@@ -133,6 +137,10 @@ buildNpmPackage' rec {
     pushd apps/desktop/desktop_native/napi
     npm run build
     popd
+
+    pushd apps/desktop/desktop_native/proxy
+    cargo build --bin desktop_proxy --release -j $NIX_BUILD_CORES --offline
+    popd
   '';
 
   postBuild = ''
@@ -176,6 +184,8 @@ buildNpmPackage' rec {
 
   installPhase = ''
     runHook preInstall
+
+    install -Dm755 -t $out/libexec apps/desktop/desktop_native/target/release/desktop_proxy
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
