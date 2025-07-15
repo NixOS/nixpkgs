@@ -260,6 +260,7 @@ stdenv.mkDerivation (
 
   // (removeAttrs args [
     "withLinuxHeaders"
+    "linuxHeaders"
     "withGd"
     "enableCET"
     "postInstall"

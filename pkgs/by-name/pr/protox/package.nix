@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
   # tests are not included in the crate source
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Rust implementation of the protobuf compiler";
     mainProgram = "protox";
     homepage = "https://github.com/andrewhickman/protox";
     changelog = "https://github.com/andrewhickman/protox/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

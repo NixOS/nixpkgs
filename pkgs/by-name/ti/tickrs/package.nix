@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";
     changelog = "https://github.com/tarkah/tickrs/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "tickrs";
   };
 }

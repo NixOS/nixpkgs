@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "triforce-lv2";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "triforce";
     rev = version;
-    hash = "sha256-qEN/KQup4bpHCt8GpsiJ2wfUQxM8F9DWuGHEJiBVfQA=";
+    hash = "sha256-f4i0S6UaVfs1CUeQRqo22PRgMNwYDNoMunHidI1XzBk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mTvxPS1OpGhPqKzMC0XSJZaNEFajlEVkG3o1vk3+LNM=";
+  cargoHash = "sha256-2FC6wlFJkQryA/bcjF0GjrMQVb8hlUY+muFqPqShWss=";
 
   installPhase = ''
     export LIBDIR=$out/lib

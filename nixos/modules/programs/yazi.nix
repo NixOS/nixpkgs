@@ -76,7 +76,7 @@ in
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          bar = pkgs.bar;
+          inherit (pkgs.yaziPlugins) bar;
         }
       '';
     };
@@ -97,7 +97,7 @@ in
       example = lib.literalExpression ''
         {
           foo = ./foo;
-          bar = pkgs.bar;
+          inherit (pkgs.yaziPlugins) bar;
         }
       '';
     };

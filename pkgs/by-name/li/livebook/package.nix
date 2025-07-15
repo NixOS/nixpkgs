@@ -11,7 +11,7 @@
 }:
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.14.7";
+  version = "0.16.2";
 
   inherit elixir;
 
@@ -23,13 +23,13 @@ beamPackages.mixRelease rec {
     owner = "livebook-dev";
     repo = "livebook";
     tag = "v${version}";
-    hash = "sha256-8/u/1I3pSfxyF35ZnqClR7FXPL2rhBDdf4w/KUGjVVs=";
+    hash = "sha256-x4h5vT2p1SL/8p04DRpKbIbwL7XzctH27f4ZAwj0QOg=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-FrkM82LO7GIFpKQfhlEUrAuKu33BzPBs6OrWW4C6pI0=";
+    hash = "sha256-0gmUCVLrNfcRCPhaXuOfrYW05TDbDN5Zt9IA8OBU8Gc=";
   };
 
   postInstall = ''

@@ -1,33 +1,17 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   coursier,
   buildGraalvmNativeImage,
 }:
 
-let
-  baseName = "scala-update";
+buildGraalvmNativeImage (finalAttrs: {
+  pname = "scala-update";
   version = "0.2.2";
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
-    buildCommand = ''
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch io.github.kitlangton:scala-update_2.13:${version} > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
-    '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "kNnFzzHn+rFq4taqRYjBYaDax0MHW+vIoSFVN3wxA8M=";
-  };
-in
-buildGraalvmNativeImage {
-  pname = baseName;
-  inherit version;
 
-  buildInputs = [ deps ];
+  buildInputs = [ finalAttrs.finalPackage.passthru.deps ];
 
-  src = "${deps}/share/java/${baseName}_2.13-${version}.jar";
+  src = "${finalAttrs.finalPackage.passthru.deps}/share/java/scala-update_2.13-${finalAttrs.version}.jar";
 
   extraNativeImageBuildArgs = [
     "--no-fallback"
@@ -38,19 +22,37 @@ buildGraalvmNativeImage {
   buildPhase = ''
     runHook preBuild
 
-    native-image ''${nativeImageBuildArgs[@]} -cp $(JARS=("${deps}/share/java"/*.jar); IFS=:; echo "''${JARS[*]}")
+    native-image ''${nativeImageArgs[@]} -cp $(JARS=("${finalAttrs.finalPackage.passthru.deps}/share/java"/*.jar); IFS=:; echo "''${JARS[*]}")
 
     runHook postBuild
   '';
 
   installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
+    runHook preInstallCheck
+
+    $out/bin/scala-update --version | grep -q "${finalAttrs.version}"
+
+    runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  passthru.deps = stdenvNoCC.mkDerivation {
+    name = "scala-update-deps-${finalAttrs.version}";
+    buildCommand = ''
+      export COURSIER_CACHE=$(pwd)
+      ${lib.getExe coursier} fetch io.github.kitlangton:scala-update_2.13:${finalAttrs.version} > deps
+      mkdir -p $out/share/java
+      cp $(< deps) $out/share/java/
+    '';
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash = "kNnFzzHn+rFq4taqRYjBYaDax0MHW+vIoSFVN3wxA8M=";
+  };
+
+  meta = {
     description = "Update your Scala dependencies interactively";
     homepage = "https://github.com/kitlangton/scala-update";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rtimush ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rtimush ];
+    mainProgram = "scala-update";
   };
-}
+})

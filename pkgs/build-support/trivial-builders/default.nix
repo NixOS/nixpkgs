@@ -778,9 +778,6 @@ rec {
         ''
       );
 
-  # Remove after 25.05 branch-off
-  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
-
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
   writeClosure =
@@ -1022,6 +1019,12 @@ rec {
       postPatch ? "",
       ...
     }@args:
+    assert lib.assertMsg (
+      !args ? meta
+    ) "applyPatches will not merge 'meta', change it in 'src' instead";
+    assert lib.assertMsg (
+      !args ? passthru
+    ) "applyPatches will not merge 'passthru', change it in 'src' instead";
     if patches == [ ] && prePatch == "" && postPatch == "" then
       src # nothing to do, so use original src to avoid additional drv
     else
@@ -1034,6 +1037,7 @@ rec {
             "tag"
             "url"
             "outputHash"
+            "outputHashAlgo"
           ] src
         );
       in
@@ -1051,19 +1055,17 @@ rec {
           phases = "unpackPhase patchPhase installPhase";
           installPhase = "cp -R ./ $out";
         }
-        # Carry and merge information from the underlying `src` if present.
-        // (optionalAttrs (src ? meta || args ? meta) {
-          meta = src.meta or { } // args.meta or { };
+        # Carry (and merge) information from the underlying `src` if present.
+        // (optionalAttrs (src ? meta) {
+          inherit (src) meta;
         })
-        // (optionalAttrs (extraPassthru != { } || src ? passthru || args ? passthru) {
-          passthru = extraPassthru // src.passthru or { } // args.passthru or { };
+        // (optionalAttrs (extraPassthru != { } || src ? passthru) {
+          passthru = extraPassthru // src.passthru or { };
         })
         # Forward any additional arguments to the derviation
         // (removeAttrs args [
           "src"
           "name"
-          "meta"
-          "passthru"
           "patches"
           "prePatch"
           "postPatch"

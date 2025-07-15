@@ -14,6 +14,13 @@
   libffi,
   sqlite,
   lld,
+  writableTmpDirAsHomeHook,
+
+  # Test deps
+  curl,
+  nodejs,
+  git,
+  python3,
 }:
 
 let
@@ -21,22 +28,33 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.2.12";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5KCwWyPdx/OKjoKgHZ8BAih7dh21VrbC+N1U74B/KI=";
+    fetchSubmodules = true; # required for tests
+    hash = "sha256-lu3r1v3iB9NIruooRrV9NawUnKqufqlYJQe+Aumgn8E=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3I1yplJjVH7Mf2wjwk8qSdbHTcR20QSJGF9MHtnu+q8=";
+  cargoHash = "sha256-XJy7+cARYEX8tAPXLHJnEwXyZIwPaqhM7ZUzoem1Wo0=";
 
+  patches = [
+    ./tests-replace-hardcoded-paths.patch
+    ./tests-darwin-differences.patch
+    ./tests-no-chown.patch
+  ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
     tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
   '';
+
+  buildInputs = [
+    libffi
+    sqlite
+  ];
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
@@ -56,12 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--disable-multi-os-directory"
   ];
 
-  buildInputs = [
-    libffi
-    # required by libsqlite3-sys
-    sqlite.dev
-  ];
-  buildAndTestSubdir = "cli";
+  buildFlags = [ "--package=cli" ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
@@ -69,19 +82,86 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
 
-  # Tests have some inconsistencies between runs with output integration tests
-  # Skipping until resolved
-  doCheck = false;
-
-  preInstall = ''
-    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Unset the env var defined by bintools-wrapper because it triggers Deno's sandbox protection in some tests.
+    # ref: https://github.com/denoland/deno/pull/25271
+    unset LD_DYLD_PATH
   '';
 
-  postInstall = lib.optionalString canExecute ''
-    installShellCompletion --cmd deno \
-      --bash <($out/bin/deno completions bash) \
-      --fish <($out/bin/deno completions fish) \
-      --zsh <($out/bin/deno completions zsh)
+  cargoTestFlags = [
+    "--lib" # unit tests
+    "--test integration_tests"
+    # Test targets not included here:
+    # - node_compat: there are tons of network access in them and it's not trivial to skip test cases.
+    # - specs: this target uses a custom test harness that doesn't implement the --skip flag.
+    #   refs:
+    #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
+    #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
+  ];
+  checkFlags =
+    [
+      # Internet access
+      "--skip=check::ts_no_recheck_on_redirect"
+      "--skip=js_unit_tests::quic_test"
+      "--skip=js_unit_tests::net_test"
+      "--skip=node_unit_tests::http_test"
+      "--skip=node_unit_tests::http2_test"
+      "--skip=node_unit_tests::net_test"
+      "--skip=node_unit_tests::tls_test"
+      "--skip=npm::lock_file_lock_write"
+
+      # GPU access
+      "--skip=js_unit_tests::webgpu_test"
+      "--skip=js_unit_tests::jupyter_test"
+
+      # Use of /usr/bin
+      "--skip=specs::permission::proc_self_fd"
+
+      # Flaky
+      "--skip=init::init_subcommand_serve"
+
+      # Test hangs, needs investigation
+      "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Expects specific shared libraries from macOS to be linked
+      "--skip=shared_library_tests::macos_shared_libraries"
+
+      # Darwin sandbox issues
+      "--skip=watcher"
+      "--skip=node_unit_tests::_fs_watch_test"
+      "--skip=js_unit_tests::fs_events_test"
+    ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    curl
+    nodejs
+    git
+    python3
+  ];
+
+  preInstall = ''
+    # Delete generated shared libraries that aren't needed in the final package
+    find ./target \
+      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -delete
+  '';
+
+  postInstall = ''
+    # Remove non-essential binaries like denort and test_server
+    find $out/bin/* -not -name "deno" -delete
+
+    ${lib.optionalString canExecute ''
+      installShellCompletion --cmd deno \
+        --bash <($out/bin/deno completions bash) \
+        --fish <($out/bin/deno completions fish) \
+        --zsh <($out/bin/deno completions zsh)
+    ''}
   '';
 
   doInstallCheck = canExecute;

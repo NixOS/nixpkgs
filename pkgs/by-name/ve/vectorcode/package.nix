@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
 
   lspSupport ? true,
@@ -9,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.7";
+  version = "0.6.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-BDDvALeQSBVld2gEmcnlpf3GDpdEs64nFyE6cNKpeww=";
+    hash = "sha256-k9YpsVFV1HkIIIFPB7Iz7Jar+lY5vK6gpzNIlX55ZDY=";
   };
 
   build-system = with python3Packages; [
@@ -63,10 +64,17 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
+  postInstall = ''
+    $out/bin/vectorcode --print-completion=bash >vectorcode.bash
+    $out/bin/vectorcode --print-completion=zsh >vectorcode.zsh
+    installShellCompletion vectorcode.{bash,zsh}
+  '';
+
   pythonImportsCheck = [ "vectorcode" ];
 
   nativeCheckInputs =
     [
+      installShellFiles
       versionCheckHook
     ]
     ++ (with python3Packages; [
@@ -87,7 +95,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Code repository indexing tool to supercharge your LLM experience";
     homepage = "https://github.com/Davidyz/VectorCode";
-    changelog = "https://github.com/Davidyz/VectorCode/releases/tag/${version}";
+    changelog = "https://github.com/Davidyz/VectorCode/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "vectorcode";

@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.99.8";
+  version = "1.99.21";
   pname = "dd_rescue";
 
   src = fetchurl {
-    sha256 = "1gbxm8gr9sx5g1q9dycs21hkxikcy97q09lp1lvs59pnd9qpdnwh";
+    hash = "sha256-YB3gyUX/8dsFfIbGUWX5rvRuIa2q9E4LOCtEOz+z/bk=";
     url = "http://www.garloff.de/kurt/linux/ddrescue/${pname}-${version}.tar.bz2";
   };
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     description = "Tool to copy data from a damaged block device";
     maintainers = with maintainers; [
       raskin
-      domenkozar
     ];
     platforms = platforms.linux;
     homepage = "http://www.garloff.de/kurt/linux/ddrescue/";
     license = licenses.gpl2Plus;
+    mainProgram = "dd_rescue";
   };
 }

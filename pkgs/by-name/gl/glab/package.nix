@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.56.0";
+  version = "1.59.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dFyVhl4+WdQeoSZSY8JbkjJBhqOX/oN2b9q1CGlLhpc=";
+    hash = "sha256-YJ22nIB97MWeiv8anx4W3vugbNyBOC0oHRQ5Fihmt2k=";
   };
 
-  vendorHash = "sha256-m4IWtK2PNjs2UxzVCT2oSx6Gic2flN4Fq8w0mNIhHxo=";
+  vendorHash = "sha256-yJ9E6zJqDgSDLT+IbVHFvb6rGJQnrqgWHtgkGsO8Gb4=";
 
   ldflags = [
     "-s"

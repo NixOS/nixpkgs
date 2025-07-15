@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "deeplook";
-    repo = pname;
+    repo = "sparklines";
     tag = "v${version}";
     sha256 = "sha256-oit1bDqP96wwfTRCV8V0N9P/+pkdW2WYOWT6u3lb4Xs=";
   };

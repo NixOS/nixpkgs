@@ -137,6 +137,11 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     ln -s ${fhs-env}/bin/${fhs-env.name} $out/bin/packettracer8
 
+    mkdir -p $out/share/icons/hicolor/48x48/apps
+    ln -s ${unwrapped}/opt/pt/art/app.png $out/share/icons/hicolor/48x48/apps/cisco-packet-tracer.png
+    ln -s ${unwrapped}/usr/share/icons/gnome/48x48/mimetypes $out/share/icons/hicolor/48x48/mimetypes
+    ln -s ${unwrapped}/usr/share/mime $out/share/mime
+
     runHook postInstall
   '';
 
@@ -144,12 +149,14 @@ stdenvNoCC.mkDerivation {
     (makeDesktopItem {
       name = "cisco-pt8.desktop";
       desktopName = "Cisco Packet Tracer 8";
-      icon = "${unwrapped}/opt/pt/art/app.png";
+      icon = "cisco-packet-tracer";
       exec = "packettracer8 %f";
       mimeTypes = [
         "application/x-pkt"
         "application/x-pka"
         "application/x-pkz"
+        "application/x-pksz"
+        "application/x-pks"
       ];
     })
   ];

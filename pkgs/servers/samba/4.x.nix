@@ -79,11 +79,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.20.4";
+  version = "4.20.8";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-OpLpfq6zRbazIjL1A+FNNPA6eqZMRR/owlihG72pCOU=";
+    hash = "sha256-db4OjTH0UBPpsmD+fPMEo20tgSg5GRR3JXchXsFzqAc=";
   };
 
   outputs = [

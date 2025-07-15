@@ -41,6 +41,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = elfutils.meta.platforms or platforms.unix;
     badPlatforms = elfutils.meta.badPlatforms or [ ];
-    maintainers = [ lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.workflow ];
   };
 }

@@ -12,6 +12,7 @@
   fetchYarnDeps,
   stdenv,
   cctools,
+  nixosTests,
 }:
 
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix
@@ -21,13 +22,13 @@ let
 in
 mkYarnPackage rec {
   pname = "draupnir";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${version}";
-    hash = "sha256-EeYjtrfnX+z6SeXavUhUU53mURph48gIUZlF3tubl20=";
+    hash = "sha256-bDesbwTGmrwFp7VQwhxam9WApbmHj1aUrbIdYHdL7YA=";
   };
 
   nativeBuildInputs = [
@@ -95,10 +96,13 @@ mkYarnPackage rec {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) draupnir; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
-    description = "A moderation tool for Matrix";
+    description = "Moderation tool for Matrix";
     homepage = "https://github.com/the-draupnir-project/Draupnir";
     longDescription = ''
       As an all-in-one moderation tool, it can protect your server from

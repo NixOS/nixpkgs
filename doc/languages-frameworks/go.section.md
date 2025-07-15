@@ -195,6 +195,21 @@ Specifies the contents of the `go.sum` file and triggers rebuilds when it change
 Defaults to `null`
 
 
+## Versioned toolchains and builders {#ssec-go-toolchain-versions}
+
+Beside `buildGoModule`, there are also versioned builders available that pin a specific Go version, like `buildGo124Module` for Go 1.24.
+Similar, versioned toolchains are available, like `go_1_24` for Go 1.24.
+Both builder and toolchain of a certain version will be removed as soon as the Go version reaches end of life.
+
+As toolchain updates in nixpkgs cause mass rebuilds and must go through the staging cycle, it can take a while until a new Go minor version is available to consumers of nixpkgs.
+If you want quicker access to the latest minor, use `go_latest` toolchain and `buildGoLatestModule` builder.
+To learn more about the Go maintenance and upgrade procedure in nixpkgs, check out the [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy).
+
+::: {.warning}
+The use of `go_latest` and `buildGoLatestModule` is restricted within nixpkgs.
+The [Go toolchain/builder upgrade policy](https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/go/README.md#go-toolchainbuilder-upgrade-policy) must be followed.
+:::
+
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 
 Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation.

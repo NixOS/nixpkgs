@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+bMOcGWfcwPhxR9CBp4iH02CZC4oplCjsTDpPDsDnSs=";
   };
 
+  postPatch = ''
+    patchShebangs examples/test_c_child_requires_c_no_deps.bash
+    substituteInPlace examples/CMakeLists.txt --replace-fail \
+      "$""{CMAKE_INSTALL_LIBDIR}" "${if stdenv.hostPlatform.isDarwin then "lib" else "lib64"}"
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -37,14 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ python3 ];
 
-  # 98% tests passed, 1 tests failed out of 44
-  # 44 - c_child_requires_c_nodep (Failed)
-  #
-  # Package gz-c_child_private was not found in the pkg-config search path.
-  # Perhaps you should add the directory containing `gz-c_child_private.pc'
-  # to the PKG_CONFIG_PATH environment variable
-  # No package 'gz-c_child_private' found
-  doCheck = false;
+  doCheck = true;
 
   # Extract the version by matching the tag's prefix.
   passthru.updateScript = nix-update-script {

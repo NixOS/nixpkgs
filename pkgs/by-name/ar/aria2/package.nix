@@ -69,14 +69,14 @@ stdenv.mkDerivation rec {
     aria2 = nixosTests.aria2;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aria2.github.io";
     changelog = "https://github.com/aria2/aria2/releases/tag/release-${version}";
     description = "Lightweight, multi-protocol, multi-source, command-line download utility";
     mainProgram = "aria2c";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       koral
       timhae

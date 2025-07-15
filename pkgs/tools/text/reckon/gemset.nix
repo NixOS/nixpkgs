@@ -1,4 +1,14 @@
 {
+  abbrev = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0hj2qyx7rzpc7awhvqlm597x7qdxwi4kkml4aqnp5jylmsm4w6xd";
+      type = "gem";
+    };
+    version = "0.1.2";
+  };
   chronic = {
     groups = [ "default" ];
     platforms = [ ];
@@ -8,6 +18,16 @@
       type = "gem";
     };
     version = "0.10.2";
+  };
+  csv = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0gz7r2kazwwwyrwi95hbnhy54kwkfac5swh2gy5p5vw36fn38lbf";
+      type = "gem";
+    };
+    version = "3.3.5";
   };
   highline = {
     groups = [ "default" ];
@@ -41,7 +61,9 @@
   };
   reckon = {
     dependencies = [
+      "abbrev"
       "chronic"
+      "csv"
       "highline"
       "matrix"
       "rchardet"
@@ -50,9 +72,9 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0188k41lvz5vnn03qw1hbi6c2i88n5p3183rb0xz9rfjcngh2ly3";
+      sha256 = "1y4iqjmgzj9nrp22pmayia54mpb4d6ga85q9xzqir7mhcd2bdca1";
       type = "gem";
     };
-    version = "0.9.2";
+    version = "0.11.1";
   };
 }

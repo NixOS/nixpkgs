@@ -5,7 +5,7 @@ import os
 import sys
 from pathlib import Path
 from subprocess import CalledProcessError, run
-from typing import assert_never
+from typing import Final, assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
@@ -13,7 +13,9 @@ from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
-logger = logging.getLogger()
+NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
+
+logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
@@ -276,26 +278,28 @@ def reexec(
     flake_build_flags: Args,
 ) -> None:
     drv = None
-    attr = "config.system.build.nixos-rebuild"
     try:
         # Parsing the args here but ignore ask_sudo_password since it is not
         # needed and we would end up asking sudo password twice
         if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
             drv = nix.build_flake(
-                attr,
+                NIXOS_REBUILD_ATTR,
                 flake,
                 flake_build_flags | {"no_link": True},
+                quiet=True,
             )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(
-                attr,
+                NIXOS_REBUILD_ATTR,
                 build_attr,
                 build_flags | {"no_out_link": True},
+                quiet=True,
             )
     except CalledProcessError:
         logger.warning(
-            "could not build a newer version of nixos-rebuild, using current version"
+            "could not build a newer version of nixos-rebuild, using current version",
+            exc_info=logger.isEnabledFor(logging.DEBUG),
         )
 
     if drv:
@@ -319,9 +323,9 @@ def reexec(
                 # - Exec format error (e.g.: another OS/CPU arch)
                 logger.warning(
                     "could not re-exec in a newer version of nixos-rebuild, "
-                    + "using current version"
+                    + "using current version",
+                    exc_info=logger.isEnabledFor(logging.DEBUG),
                 )
-                logger.debug("re-exec exception", exc_info=True)
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
                 os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})

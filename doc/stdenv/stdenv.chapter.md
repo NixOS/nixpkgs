@@ -261,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
     qemu
   ];
-  checkPhase = ''[elided]'';
+  # `checkPhase` elided
 })
 ```
 
@@ -598,6 +598,8 @@ Additional file types can be supported by setting the `unpackCmd` variable (see 
 ##### `srcs` / `src` {#var-stdenv-src}
 
 The list of source files or directories to be unpacked or copied. One of these must be set. Note that if you use `srcs`, you should also set `sourceRoot` or `setSourceRoot`.
+
+These should ideally actually be sources and licensed under a FLOSS license.  If you have to use a binary upstream release or package non-free software, make sure you correctly mark your derivation as such in the [`sourceProvenance`](#var-meta-sourceProvenance) and [`license`](#sec-meta-license) fields of the [`meta`](#chap-meta) section.
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 

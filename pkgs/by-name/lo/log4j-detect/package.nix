@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "log4j-detect";
   version = "unstable-2021-12-14";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "takito1812";
-    repo = pname;
+    repo = "log4j-detect";
     rev = "2f5b7a598a6d0b4aee8111bb574ea72c6a1c76d6";
     sha256 = "sha256-fFKW7uPBfrnze0UoPL3Mfwd4sFOuHYuDP7kv6VtdM3o=";
   };
@@ -21,12 +21,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    sed -i "1 i #!/usr/bin/python" ${pname}.py
+    sed -i "1 i #!/usr/bin/python" log4j-detect.py
   '';
 
   installPhase = ''
     runHook preInstall
-    install -vD ${pname}.py $out/bin/${pname}
+    install -vD log4j-detect.py $out/bin/log4j-detect
     runHook postInstall
   '';
 

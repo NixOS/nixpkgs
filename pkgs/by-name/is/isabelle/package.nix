@@ -52,27 +52,28 @@ let
       cp libsha1.so $out/lib/
     '';
   };
+
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
   version = "2025";
 
-  dirname = "Isabelle${version}";
+  dirname = "Isabelle${finalAttrs.version}";
 
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
         hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
         hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
       }
     else
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux_arm.tar.gz";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
         hash = "sha256-p/Hp+7J5gJy5s6BVD5Ma1Mu2OS53I8BS7gKSOYYB0PE=";
       };
 
@@ -88,14 +89,14 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
 
-  sourceRoot = "${dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
+  sourceRoot = "${finalAttrs.dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $sourceRoot ${dirname}
-    sourceRoot=${dirname}
+    mv $sourceRoot ${finalAttrs.dirname}
+    sourceRoot=${finalAttrs.dirname}
   '';
 
   postPatch =
@@ -208,11 +209,11 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     # icon
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
-    cp "$out/Isabelle${version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
+    cp "$out/Isabelle${finalAttrs.version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
 
     # desktop item
     mkdir -p "$out/share"
-    cp -r "${desktopItem}/share/applications" "$out/share/applications"
+    cp -r "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
   '';
 
   desktopItem = makeDesktopItem {
@@ -220,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     exec = "isabelle jedit";
     icon = "isabelle";
     desktopName = "Isabelle";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [
       "Education"
       "Science"
@@ -229,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    description = "A generic proof assistant";
+    description = "Generic proof assistant";
 
     longDescription = ''
       Isabelle is a generic proof assistant.  It allows mathematical formulas

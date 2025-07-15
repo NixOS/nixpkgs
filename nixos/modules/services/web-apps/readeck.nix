@@ -57,7 +57,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.readeck = {
       description = "Readeck";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
@@ -68,6 +69,7 @@ in
         ExecStart = "${lib.getExe cfg.package} serve -config ${configFile}";
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
+        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = true;

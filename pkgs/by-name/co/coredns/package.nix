@@ -10,26 +10,7 @@
 }:
 
 let
-  attrsToPlugins =
-    attrs:
-    builtins.map (
-      {
-        name,
-        repo,
-        version,
-      }:
-      "${name}:${repo}"
-    ) attrs;
-  attrsToSources =
-    attrs:
-    builtins.map (
-      {
-        name,
-        repo,
-        version,
-      }:
-      "${repo}@${version}"
-    ) attrs;
+  attrsToSources = attrs: builtins.map ({ repo, version, ... }: "${repo}@${version}") attrs;
 in
 buildGoModule rec {
   pname = "coredns";
@@ -53,7 +34,47 @@ buildGoModule rec {
 
   # Override the go-modules fetcher derivation to fetch plugins
   modBuildPhase = ''
-    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
+    cp plugin.cfg plugin.cfg.orig
+    ${
+      (lib.concatMapStringsSep "\n" (
+        plugin:
+        let
+          position = plugin.position or "end-of-file";
+          formatPlugin = { name, repo, ... }: "${name}:${repo}";
+        in
+        if position == "end-of-file" then
+          "echo '${formatPlugin plugin}' >> plugin.cfg"
+        else if position == "start-of-file" then
+          "sed -i '1i ${formatPlugin plugin}' plugin.cfg"
+        else if lib.hasAttrByPath [ "before" ] position then
+          ''
+            if ! grep -q '^${position.before}:' plugin.cfg; then
+              echo 'Failed to insert ${plugin.name} before ${position.before} in plugin.cfg: ${position.before} is not in plugin.cfg'
+              exit 1
+            fi
+            sed -i '/^${position.before}:/i ${formatPlugin plugin}' plugin.cfg
+          ''
+        else if lib.hasAttrByPath [ "after" ] position then
+          ''
+            if ! grep -q '^${position.after}:' plugin.cfg; then
+              echo 'Failed to insert ${plugin.name} after ${position.after} in plugin.cfg: ${position.after} is not in plugin.cfg'
+              exit 1
+            fi
+            sed -i '/^${position.after}:/a ${formatPlugin plugin}' plugin.cfg
+          ''
+        else
+          throw ''
+            Unsupported position value in externalPlugin:
+              ${builtins.toJSON plugin}.
+            Valid values for position attr are:
+              - position = "end-of-file" (the default)
+              - position = "start-of-file"
+              - position.before = "{other plugin}"
+              - position.after = "{other plugin}"
+          ''
+      ) externalPlugins)
+    }
+    diff -u plugin.cfg.orig plugin.cfg || true
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
     go mod vendor

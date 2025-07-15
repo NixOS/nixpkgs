@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use, zero-downtime schema migration tool for Postgres";
     mainProgram = "reshape";
     homepage = "https://github.com/fabianlindfors/reshape";
     changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ilyakooo0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
   };
 }

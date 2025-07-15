@@ -66,11 +66,18 @@ in
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
     '')
+    (mkRemovedOptionModule [ "programs" "thefuck" ] ''
+      The corresponding package was removed from nixpkgs,
+      consider using `programs.pay-respects` instead.
+    '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
       + "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"
     ))
+    (mkRemovedOptionModule [ "programs" "yabar" ]
+      "programs.yabar has been removed from NixOS. This is because the yabar repository has been archived upstream."
+    )
     (mkRemovedOptionModule [ "security" "hideProcessInformation" ] ''
       The hidepid module was removed, since the underlying machinery
       is broken when using cgroups-v2.
@@ -101,6 +108,10 @@ in
     (mkRemovedOptionModule [
       "services"
       "chronos"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamsmtp"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "confluence" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
@@ -193,6 +204,9 @@ in
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
+    (mkRemovedOptionModule [ "services" "polipo" ] ''
+      The polipo project is unmaintained and archived upstream.
+    '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
     '')
@@ -212,6 +226,11 @@ in
       "services"
       "shout"
     ] "shout was removed because it was deprecated upstream in favor of thelounge.")
+    (mkRemovedOptionModule [ "services" "siproxd" ] ''
+      The siproxd package and the corresponding module have been removed due to
+      the service being unmaintained. `services.asterisk.*` or `services.freeswitch.*`
+      could be used instead.
+    '')
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
@@ -317,6 +336,10 @@ in
     (mkRemovedOptionModule [ "services" "conduwuit" ] ''
       The conduwuit project has been discontinued by upstream.
       See https://github.com/NixOS/nixpkgs/pull/397902 for more information.
+    '')
+    (mkRemovedOptionModule [ "services" "signald" ] ''
+      The signald project is unmaintained and has long been incompatible with the
+      official Signal servers.
     '')
 
     # Do NOT add any option renames here, see top of the file

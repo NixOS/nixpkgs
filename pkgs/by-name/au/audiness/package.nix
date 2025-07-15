@@ -31,12 +31,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "audiness" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to interact with Nessus";
     homepage = "https://github.com/audiusGmbH/audiness";
     changelog = "https://github.com/audiusGmbH/audiness/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "audiness";
   };
 }

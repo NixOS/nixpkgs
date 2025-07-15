@@ -1,12 +1,15 @@
 {
   lib,
-  buildGoModule,
+  # gopls breaks if it is compiled with a lower version than the one it is running against.
+  # This will affect users especially when project they work on bump go minor version before
+  # the update went through nixpkgs staging. Further, gopls is a central ecosystem component.
+  buildGoLatestModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "gopls";
   version = "0.18.1";
 

@@ -103,10 +103,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Sgk5eaPC0C3i+8AFSaMncQB/LngDLG+qXs0vep4VICU=";
   };
 
-  patches = [
-    # Backport of https://github.com/curl/curl/commit/5fbd78eb2dc4afbd8884e8eed27147fc3d4318f6
-    ./0001-http2-fix-stream-window-size-after-unpausing.patch
-  ];
+  patches =
+    [
+      # Backport of https://github.com/curl/curl/commit/5fbd78eb2dc4afbd8884e8eed27147fc3d4318f6
+      ./0001-http2-fix-stream-window-size-after-unpausing.patch
+    ]
+    ++ lib.optionals wolfsslSupport [
+      (fetchpatch {
+        # https://curl.se/docs/CVE-2025-4947.html backported to 8.13. Remove when version is bumped to 8.14.
+        # Note that this works since fetchpatch uses curl, but does not use WolfSSL.
+        name = "curl-CVE-2025-4947.patch";
+        url = "https://github.com/curl/curl/commit/a85f1df4803bbd272905c9e7125.diff";
+        hash = "sha256-z4IYAkg/RylTs1m8tbwI2tVqTCHkIpmkzdFBcRBJmH4=";
+
+        # All the test patches fail to apply (seemingly, they were added for 8.14)
+        includes = [ "lib/vquic/vquic-tls.c" ];
+      })
+      (fetchpatch {
+        # https://curl.se/docs/CVE-2025-5025.html backported to 8.13. Remove when version is bumped to 8.14.
+        # Note that this works since fetchpatch uses curl, but does not use WolfSSL.
+        name = "curl-CVE-2025-5025.patch";
+        url = "https://github.com/curl/curl/commit/e1f65937a96a451292e92313396.diff";
+        hash = "sha256-9k05eDGUA7XT+H4p8H8v0lYXC4cW7W2uvO+z4gLapX4=";
+      })
+    ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

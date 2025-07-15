@@ -60,6 +60,8 @@
   # Whether to use graphene-hardened-malloc
   useHardenedMalloc ? null,
 
+  # Whether to use IPC for communicating with Tor
+  useIPCTorService ? false,
   # Whether to disable multiprocess support
   disableContentSandbox ? false,
 
@@ -109,7 +111,7 @@ lib.warnIf (useHardenedMalloc != null)
         ++ lib.optionals mediaSupport [ ffmpeg ]
       );
 
-      version = "14.5.1";
+      version = "14.5.3";
 
       sources = {
         x86_64-linux = fetchurl {
@@ -119,7 +121,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
           ];
-          hash = "sha256-XmJsHPnzu7Sk1LeOQG2KN+s8YGeTI/Z7pa+OrkEIaIQ=";
+          hash = "sha256-1MgXLdoRrmwFAG2JtkCUa2NQ/H3Xxd9+2jbV+fRRVXA=";
         };
 
         i686-linux = fetchurl {
@@ -129,7 +131,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
           ];
-          hash = "sha256-68kqhHAwCBAxFnXW1MbMdG//AB3TI/luomVH3v26DkM=";
+          hash = "sha256-T6BdLhEXYzo3zIJZ2aREjAWmIRDV/xtVhVvkDUozoo4=";
         };
       };
 
@@ -261,11 +263,13 @@ lib.warnIf (useHardenedMalloc != null)
         lockPref("extensions.torlauncher.torrc-defaults_path", "$TBB_IN_STORE/TorBrowser/Data/Tor/torrc-defaults");
         lockPref("extensions.torlauncher.tor_path", "$TBB_IN_STORE/TorBrowser/Tor/tor");
 
-        // Insist on using IPC for communicating with Tor
+        // Optionally use IPC for communicating with Tor
         //
-        // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
-        lockPref("extensions.torlauncher.control_port_use_ipc", true);
-        lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+        // Sockets are created at \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
+        ${lib.optionalString useIPCTorService ''
+          lockPref("extensions.torlauncher.control_port_use_ipc", true);
+          lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+        ''}
 
         // Optionally disable multiprocess support.  We always set this to ensure that
         // toggling the pref takes effect.
@@ -353,13 +357,13 @@ lib.warnIf (useHardenedMalloc != null)
         };
       };
 
-      meta = with lib; {
+      meta = {
         description = "Privacy-focused browser routing traffic through the Tor network";
         mainProgram = "tor-browser";
         homepage = "https://www.torproject.org/";
         changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
-        platforms = attrNames sources;
-        maintainers = with maintainers; [
+        platforms = lib.attrNames sources;
+        maintainers = with lib.maintainers; [
           felschr
           panicgh
           joachifm
@@ -368,13 +372,13 @@ lib.warnIf (useHardenedMalloc != null)
         # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
         # the compound is "libre" in a strict sense (some components place certain
         # restrictions on redistribution), it's free enough for our purposes.
-        license = with licenses; [
+        license = with lib.licenses; [
           mpl20
           lgpl21Plus
           lgpl3Plus
           free
         ];
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       };
     }
   )

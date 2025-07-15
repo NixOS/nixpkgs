@@ -19,50 +19,50 @@
   },
   {
     "pname": "runtime.linux-arm64.Microsoft.NETCore.ILAsm",
-    "sha256": "aa9c7db232547cded947dbad0bcc2fc13ed5c0baae75e2ec7fc318367e03d7b6",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-arm64.microsoft.netcore.ilasm/8.0.14-servicing.25111.18/runtime.linux-arm64.microsoft.netcore.ilasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "485cc4c76fb1751f10f96f1a3a31c6e3b34f9ccf21aff007f6e299783770e279",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-arm64.microsoft.netcore.ilasm/8.0.16-servicing.25215.6/runtime.linux-arm64.microsoft.netcore.ilasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
     "pname": "runtime.linux-arm64.Microsoft.NETCore.ILDAsm",
-    "sha256": "1fe3aaca9a0a9f831f0e97f1800e80c7171344c12ad049f6eba37e83fab3a5f2",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-arm64.microsoft.netcore.ildasm/8.0.14-servicing.25111.18/runtime.linux-arm64.microsoft.netcore.ildasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "a41d1f12683d1e78cdbcfbae3da897be8e67f1c36cebc9aff7fdcab73e06ccc0",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-arm64.microsoft.netcore.ildasm/8.0.16-servicing.25215.6/runtime.linux-arm64.microsoft.netcore.ildasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
-    "hash": "sha256-56YRElhNyBSTiGkGsjNovrbhAz+VwMt6tF+/BjgU8ak=",
+    "hash": "sha256-yLIojj1GuucdeVGBCMWpSyNSYz9UB7Kgf3Z0tBn1Hcs=",
     "pname": "runtime.linux-x64.Microsoft.NETCore.ILAsm",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ilasm/8.0.14-servicing.25111.18/runtime.linux-x64.microsoft.netcore.ilasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ilasm/8.0.16-servicing.25215.6/runtime.linux-x64.microsoft.netcore.ilasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
-    "hash": "sha256-5v6i4UZp73QeTFoIR8rEk3XroVrivO5ejzqodYETtrY=",
+    "hash": "sha256-eiZ2r4bU86pJP9uhwZrXzYG2aNVCk5Ih/CYV64oX0B0=",
     "pname": "runtime.linux-x64.Microsoft.NETCore.ILDAsm",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ildasm/8.0.14-servicing.25111.18/runtime.linux-x64.microsoft.netcore.ildasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.linux-x64.microsoft.netcore.ildasm/8.0.16-servicing.25215.6/runtime.linux-x64.microsoft.netcore.ildasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
     "pname": "runtime.osx-arm64.Microsoft.NETCore.ILAsm",
-    "sha256": "fc91402ba7d18056a398ba6fea577887a2dc9fb976cd24c2636b3015aadb459a",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ilasm/8.0.14-servicing.25111.18/runtime.osx-arm64.microsoft.netcore.ilasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "c82200bcd92ca0de2d0c079b96c0e3dbac3e17688a5857cc91ebd6a19adffd58",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ilasm/8.0.16-servicing.25215.6/runtime.osx-arm64.microsoft.netcore.ilasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
     "pname": "runtime.osx-arm64.Microsoft.NETCore.ILDAsm",
-    "sha256": "69cb5a58d08f57fbddccaf49e68af4d0131cb2ebc5d4b02ffacfbb1d059eb56d",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ildasm/8.0.14-servicing.25111.18/runtime.osx-arm64.microsoft.netcore.ildasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "b9f2e63ac07740e093829220996e16d40e325cb2f09d03b7dbdb9cc754408904",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-arm64.microsoft.netcore.ildasm/8.0.16-servicing.25215.6/runtime.osx-arm64.microsoft.netcore.ildasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
     "pname": "runtime.osx-x64.Microsoft.NETCore.ILAsm",
-    "sha256": "6201911c22303d61ecccd7954af0fc0a0330aa24ac5c1a1bb1280f1161e3d5bf",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ilasm/8.0.14-servicing.25111.18/runtime.osx-x64.microsoft.netcore.ilasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "6410989c97ea00d97b6d6c494ee9e057db4f2d9d0838c6c2fc8c287b40285d41",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ilasm/8.0.16-servicing.25215.6/runtime.osx-x64.microsoft.netcore.ilasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   },
   {
     "pname": "runtime.osx-x64.Microsoft.NETCore.ILDAsm",
-    "sha256": "bb49a9cbe3c96b61360afa21c2d1313cd6a901e9d667e90ae79631db54ba5558",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ildasm/8.0.14-servicing.25111.18/runtime.osx-x64.microsoft.netcore.ildasm.8.0.14-servicing.25111.18.nupkg",
-    "version": "8.0.14-servicing.25111.18"
+    "sha256": "b8d2b7f24768d3ac2655e30f77aac4ffc696ad8ef419203f253f569d253f24ca",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ildasm/8.0.16-servicing.25215.6/runtime.osx-x64.microsoft.netcore.ildasm.8.0.16-servicing.25215.6.nupkg",
+    "version": "8.0.16-servicing.25215.6"
   }
 ]

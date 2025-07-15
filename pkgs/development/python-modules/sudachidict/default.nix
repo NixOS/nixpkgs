@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "SudachiDict";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-axa7eQ0jTo8GXJA5lwcvMyZLw9T573yeSo9xuvIm/gY=";
+    tag = "v${version}";
+    hash = "sha256-QORgO8FG0iSNuO1r2Myzjz6EYblNxbJSKxNHbF+h15c=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -31,9 +31,9 @@ buildPythonPackage rec {
       --replace "%%DICT_TYPE%%" ${sudachidict.dict-type}
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ sudachipy ];
+  dependencies = [ sudachipy ];
 
   # we need to prepare some files before the build
   # https://github.com/WorksApplications/SudachiDict/blob/develop/package_python.sh

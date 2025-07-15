@@ -37,12 +37,12 @@ python3Packages.buildPythonApplication rec {
     "wyoming_openwakeword"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${version}/CHANGELOG.md";
     description = "Open source voice assistant toolkit for many human languages";
     homepage = "https://github.com/rhasspy/wyoming-openwakeword";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "wyoming-openwakeword";
   };
 }

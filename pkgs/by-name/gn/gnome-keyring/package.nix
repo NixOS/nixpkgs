@@ -16,12 +16,10 @@
   libcap_ng,
   libselinux,
   p11-kit,
-  openssh,
   wrapGAppsNoGuiHook,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
-  writeText,
   useWrappedDaemon ? true,
 }:
 
@@ -44,6 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
+    glib # for glib-genmarshal
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     pam
-    openssh
     libcap_ng
     libselinux
     gcr
@@ -70,16 +68,8 @@ stdenv.mkDerivation rec {
     # installation directories
     "-Dpkcs11-config=${placeholder "out"}/etc/pkcs11" # todo: this should probably be /share/p11-kit/modules
     "-Dpkcs11-modules=${placeholder "out"}/lib/pkcs11"
-    # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
-    # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh-agent=true"
     # TODO: enable socket activation
     "-Dsystemd=disabled"
-    "--cross-file=${writeText "crossfile.ini" ''
-      [binaries]
-      ssh-add = '${lib.getExe' openssh "ssh-add"}'
-      ssh-agent = '${lib.getExe' openssh "ssh-agent"}'
-    ''}"
   ];
 
   # Tends to fail non-deterministically.
@@ -87,6 +77,7 @@ stdenv.mkDerivation rec {
   # - https://github.com/NixOS/nixpkgs/issues/51121
   # - At least “gnome-keyring:gkm::xdg-store / xdg-trust” is still flaky on 48.beta.
   doCheck = false;
+  strictDeps = true;
 
   checkPhase = ''
     runHook postCheck
@@ -115,17 +106,17 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
     license = [
       # Most of the code (some is 2Plus)
-      licenses.lgpl21Plus
+      lib.licenses.lgpl21Plus
       # Some stragglers
-      licenses.gpl2Plus
+      lib.licenses.gpl2Plus
     ];
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -73,13 +73,13 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.0";
+          version = "1.11.2";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-Zc9t2mZQVvwJsyd0VaS8tMdGm9Ix3/QNl5ogeOTohVU=";
+            hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
           };
 
           propagatedBuildInputs =
@@ -132,7 +132,7 @@ let
               zeroconf
               zipstream-ng
               class-doc
-              pydantic_1
+              pydantic
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ py.pkgs.appdirs ]
             ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ octoprint-pisupport ];

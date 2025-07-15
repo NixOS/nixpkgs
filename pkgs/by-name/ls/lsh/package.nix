@@ -14,11 +14,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-ogdyzfayleka4Y8x74ZtttD7MaeCl1qP/rQi9x0tMto=";
   subPackages = [ "." ];
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/latitudesh/lsh/releases/tag/v${version}";
     description = "Command-Line Interface for Latitude.sh";
     homepage = "https://github.com/latitudesh/lsh";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dzmitry-lahoda ];
   };
 }

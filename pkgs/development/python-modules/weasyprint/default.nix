@@ -1,26 +1,33 @@
 {
-  stdenv,
   lib,
+  stdenv,
   pkgs,
   buildPythonPackage,
-  cffi,
-  cssselect2,
-  fetchPypi,
-  flit-core,
+  fetchFromGitHub,
   fontconfig,
-  fonttools,
   glib,
   harfbuzz,
   pango,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  cffi,
+  cssselect2,
+  fonttools,
   pillow,
   pydyf,
   pyphen,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   tinycss2,
   tinyhtml5,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
+  replaceVars,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +35,11 @@ buildPythonPackage rec {
   version = "65.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "weasyprint";
-    hash = "sha256-EgKBvb1C/6p9flztvjGCos7zbqWtl/6fNX5DvmoeWOo=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "WeasyPrint";
+    tag = "v${version}";
+    hash = "sha256-iSeuRX1dnnrGZbcb1yTxOJPD5kgIWY6oz/0v02QJqSs=";
   };
 
   patches = [
@@ -64,7 +70,10 @@ buildPythonPackage rec {
     pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)
@@ -93,11 +102,6 @@ buildPythonPackage rec {
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
 
-  preCheck = ''
-    # Fontconfig wants to create a cache.
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
@@ -107,5 +111,10 @@ buildPythonPackage rec {
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.apm ];
+    badPlatforms = [
+      # Fatal Python error: Segmentation fault
+      # "...weasyprint/pdf/fonts.py", line 221 in _harfbuzz_subset
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

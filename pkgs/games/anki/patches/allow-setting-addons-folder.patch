@@ -1,0 +1,15 @@
+diff --git a/qt/aqt/profiles.py b/qt/aqt/profiles.py
+index 469908c1b2..34612d6e08 100644
+--- a/qt/aqt/profiles.py
++++ b/qt/aqt/profiles.py
+@@ -310,7 +310,9 @@ def profileFolder(self, create: bool = True) -> str:
+         return path
+ 
+     def addonFolder(self) -> str:
+-        return self._ensureExists(os.path.join(self.base, "addons21"))
++        path = Path(os.environ.get("ANKI_ADDONS") or Path(self.base) / "addons21")
++        path.mkdir(parents=True, exist_ok=True)
++        return str(path.resolve())
+ 
+     def backupFolder(self) -> str:
+         return self._ensureExists(os.path.join(self.profileFolder(), "backups"))

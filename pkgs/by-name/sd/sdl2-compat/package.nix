@@ -2,20 +2,24 @@
   cmake,
   lib,
   fetchFromGitHub,
-  monado,
   ninja,
+  sdl3,
+  stdenv,
+  testers,
+  libX11,
+  libGL,
   nix-update-script,
+
+  # passthru tests
   SDL2_ttf,
   SDL2_net,
   SDL2_gfx,
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
-  sdl3,
-  stdenv,
-  testers,
-  libX11,
-  libGL,
+  SDL_compat,
+  ffmpeg,
+  qemu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,16 +80,18 @@ stdenv.mkDerivation (finalAttrs: {
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
         inherit
+          SDL_compat
           SDL2_ttf
           SDL2_net
           SDL2_gfx
           SDL2_sound
           SDL2_mixer
           SDL2_image
+          ffmpeg
           ;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit monado;
+        inherit qemu;
       };
 
     updateScript = nix-update-script {

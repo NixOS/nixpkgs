@@ -14,7 +14,7 @@ let
   pname = "pridefetch";
   src = fetchFromGitHub {
     owner = "SpyHoodle";
-    repo = pname;
+    repo = "pridefetch";
     rev = "v" + version;
     inherit sha256;
   };

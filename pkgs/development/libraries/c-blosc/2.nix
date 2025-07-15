@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "2.17.1";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-VxMErhuk160/0jF6pl6/YKAwaswnfBKnmOD5ZgcU2U4=";
+    sha256 = "sha256-HYWohyI4IJX4jyTTwbSHJFI3p3PFrUGU6l0TEIP4Esc=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     lz4
     zlib-ng
     zstd
@@ -56,15 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
   # possibly https://github.com/Blosc/c-blosc2/issues/432
   enableParallelChecking = false;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "Blosc2" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Fast, compressed, persistent binary data store library for C";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${finalAttrs.version}";
-    pkgConfigModules = [
-      "blosc2"
-    ];
+    pkgConfigModules = [ "blosc2" ];
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clazy";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "clazy";
     tag = finalAttrs.version;
-    hash = "sha256-cNckRQ3+9HjJ1xYIDkosEP7K66+G0J3K9wt4OWLokLs=";
+    hash = "sha256-t1j/MrKD8ocmhbFtWz6BJUbPSCSWjlRmuYnsPhHWgAM=";
   };
 
   buildInputs = [

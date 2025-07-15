@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.11.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${version}";
-    hash = "sha256-/H3v5ZRAaWWouow82nr/+TOuL+IX6Ez+Mjk/C120MWM=";
+    hash = "sha256-xz5NilxPN5KyC4NYmx4Ax0L3khtD2oo3s7gxXWclCI4=";
   };
 
   build-system = [ poetry-core ];

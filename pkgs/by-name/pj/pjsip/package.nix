@@ -13,16 +13,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.14.1";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "pjsip";
     repo = "pjproject";
     tag = finalAttrs.version;
-    hash = "sha256-LDA3o1QMrAxcGuOi/YRoMzXmw/wFkfDs2wweZuIJ2RY=";
+    hash = "sha256-9WzOIKWGy71OMzaPOp1P8/pvhHio2rDJOkH1VaNItjU=";
   };
-
-  patches = [ ./fix-aarch64.patch ];
 
   postPatch = ''
     substituteInPlace \
@@ -48,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   env =
-    lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++11"; }
+    {
+      NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+    }
+    // lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++11"; }
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       NIX_CFLAGS_LINK = "-headerpad_max_install_names";
     };
@@ -108,9 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       # Rewrite library references for all executables.
-      find "$out" -executable -type f | while read executable; do
-        install_name_tool "''${change_args[@]}" "$executable"
-      done
+      find "$out" -type f -executable -path "*/bin/*" -o -type f -executable -path "*/share/*/samples/*" \
+        | while read executable; do
+          if isMachO "$executable"; then
+            install_name_tool "''${change_args[@]}" "$executable"
+          fi
+        done
     '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)

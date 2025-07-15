@@ -56,7 +56,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.6";
+  version = "4.4.7";
 
   outputs = [
     "out"
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-dzVlHxrXVCSMP4ZfyUq4N9UvL941C50Zto6Mb78LnfQ=";
+    hash = "sha256-9h25vfjw8QIrRZ6APTsvhW4D5O6fkhkiy/1bj7hGwwY=";
   };
 
   patches = [
@@ -214,7 +214,7 @@ stdenv.mkDerivation rec {
     cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful network protocol analyzer";
     longDescription = ''
       Wireshark (formerly known as "Ethereal") is a powerful network
@@ -223,9 +223,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.wireshark.org";
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       fpletz
     ];

@@ -9,8 +9,8 @@ buildGoModule rec {
   version = "0.4.6";
 
   src = fetchFromGitHub {
-    owner = "${pname}-network";
-    repo = pname;
+    owner = "popura-network";
+    repo = "popura";
     rev = "v${version}";
     hash = "sha256-iCu6/vD4vgn7aGdwK+OB8ib/QwUwoFuxDUs7vqbTZQc=";
   };

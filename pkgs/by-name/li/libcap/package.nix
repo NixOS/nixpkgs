@@ -8,7 +8,8 @@
   usePam ? !isStatic,
   pam ? null,
   isStatic ? stdenv.hostPlatform.isStatic,
-  withGo ? pkgsBuildHost.go.meta.available,
+  go,
+  withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null,
 
   # passthru.tests
   bind,
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = lib.optionals withGo [
-    pkgsBuildHost.go
+    go
   ];
 
   buildInputs = lib.optional usePam pam;

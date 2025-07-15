@@ -77,6 +77,7 @@ let
       extraWrapperArgs ? [ ],
       extraLdPath ? [ ],
       extraBuildInputs ? [ ],
+      extraTests ? { },
     }:
     mkJetBrainsProductCore {
       inherit
@@ -100,6 +101,9 @@ let
       inherit (ideInfo."${pname}") wmClass product;
       productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
       meta = mkMeta ideInfo."${pname}".meta fromSource;
+      passthru.tests = extraTests // {
+        plugins = callPackage ./plugins/tests.nix { ideName = pname; };
+      };
       libdbm =
         if ideInfo."${pname}".meta.isOpenSource then
           communitySources."${pname}".libdbm

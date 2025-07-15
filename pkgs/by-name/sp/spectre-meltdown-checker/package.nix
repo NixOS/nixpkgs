@@ -1,26 +1,29 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  coreutils,
   binutils-unwrapped,
+  coreutils,
+  fetchFromGitHub,
+  lib,
+  makeBinaryWrapper,
+  stdenv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spectre-meltdown-checker";
-  version = "0.46";
+  version = "0.46-unstable-2024-08-04";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "spectre-meltdown-checker";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-M4ngdtp2esZ+CSqZAiAeOnKtaK8Ra+TmQfMsr5q5gkg=";
+    rev = "34c6095912d115551f69435a55d6e0445932fdf9";
+    hash = "sha256-m0f0+AFPrB2fPNd1SkSj6y9PElTdefOdI51Jgfi816w=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   prePatch = ''
     substituteInPlace spectre-meltdown-checker.sh \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];

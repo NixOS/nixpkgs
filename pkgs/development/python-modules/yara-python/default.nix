@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.5.2";
+  version = "4.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "VirusTotal";
     repo = "yara-python";
     tag = "v${version}";
-    hash = "sha256-RXqazMg78eGxA4JPUqSx0PTcNDmrGjBt5m6OJTmshNU=";
+    hash = "sha256-2ZwLpkT46KNTQ1ymvMGjnrfHQaIy/rXid0kXoCBixXA=";
   };
 
   # undefined symbol: yr_finalize

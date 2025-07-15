@@ -74,9 +74,7 @@ in
       defaultText = lib.literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
-        "firefox-beta-bin"
         "firefox-bin"
-        "firefox-devedition-bin"
         "firefox-esr"
       ];
     };

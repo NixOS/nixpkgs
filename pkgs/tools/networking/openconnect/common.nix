@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       pradeepchhetri
       tricktron
-      alyaeanyx
+      pentane
     ];
     platforms = lib.platforms.unix;
     mainProgram = "openconnect";

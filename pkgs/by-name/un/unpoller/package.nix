@@ -26,11 +26,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) unpoller; };
 
-  meta = with lib; {
+  meta = {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
     homepage = "https://github.com/unpoller/unpoller";
     changelog = "https://github.com/unpoller/unpoller/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Frostman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Frostman ];
   };
 }

@@ -52,15 +52,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_hurlfmt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       eonpatapon
       figsoda
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "hurl";
   };
 }

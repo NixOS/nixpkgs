@@ -2,43 +2,23 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  git,
   nixosTests,
   python3,
   vaultwarden,
 }:
 
-let
-  version = "2025.1.1";
-
-  suffix = lib.head (lib.match "[0-9.]*([a-z]*)" version);
-
-  bw_web_builds = fetchFromGitHub {
-    owner = "dani-garcia";
-    repo = "bw_web_builds";
-    rev = "v${version}";
-    hash = "sha256-wQGpl7N0D83FrrV4T+LFe9h3n5Q/MqLbGGO2F5R9k2g=";
-  };
-
-in
 buildNpmPackage rec {
   pname = "vaultwarden-webvault";
-  inherit version;
+  version = "2025.5.0.0";
 
   src = fetchFromGitHub {
-    owner = "bitwarden";
-    repo = "clients";
-    rev = "web-v${lib.removeSuffix suffix version}";
-    hash = "sha256-Bq133V8CsDMnLeaKrW5JmLTGRaZVLRbp+tTgG725tqE=";
+    owner = "vaultwarden";
+    repo = "vw_web_builds";
+    tag = "v${version}";
+    hash = "sha256-Z3QPKeo7+QV3XnECvLXz2Upv41h579WoVH0Vev0fixk=";
   };
 
-  npmDepsHash = "sha256-bWcp3VJI2bObLH/XBx3cdxXQY9Cw+IFpeNA2TXVTtFg=";
-
-  postPatch = ''
-    ln -s ${bw_web_builds}/{patches,resources} ..
-    PATH="${git}/bin:$PATH" VAULT_VERSION="${lib.removePrefix "web-" src.rev}" \
-      bash ${bw_web_builds}/scripts/apply_patches.sh
-  '';
+  npmDepsHash = "sha256-FC3x7H0MQDVGajtaMA2PUK5+soG6kD9AaDbq/s1pOnY=";
 
   nativeBuildInputs = [
     python3
@@ -73,16 +53,15 @@ buildNpmPackage rec {
   '';
 
   passthru = {
-    inherit bw_web_builds;
     tests = nixosTests.vaultwarden;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates the web vault into vaultwarden";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     changelog = "https://github.com/dani-garcia/bw_web_builds/releases/tag/v${version}";
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     inherit (vaultwarden.meta) maintainers;
   };
 }

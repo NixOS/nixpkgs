@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "google-play";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "UlyssesZh";
     repo = "google-play";
     tag = "v${version}";
-    hash = "sha256-Qv79fM59AQ+Y0OfWXKW1Jub07J5net3pP8ANm7CtB6A=";
+    hash = "sha256-CmNBE3SJhDyY77mjC56pl0aiyt4ZW6pEYTtOK3FXGhE=";
   };
 
   subPackages = [
@@ -21,7 +21,7 @@ buildGoModule rec {
     "internal/badging"
   ];
 
-  vendorHash = "sha256-+n08a22VEHjKUyk/XxTXBu9yYggSgIxCFx8PFtA2OCc=";
+  vendorHash = "sha256-q0p9+74qUSY2AAnagtM6d6PPEhM1HHF019QWxTemiIo=";
 
   passthru.updateScript = nix-update-script { };
 

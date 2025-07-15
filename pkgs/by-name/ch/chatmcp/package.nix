@@ -1,6 +1,6 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "chatmcp";
-  version = "0.0.45";
+  version = "0.0.62";
 
   src = fetchFromGitHub {
     owner = "daodao97";
     repo = "chatmcp";
     tag = "v${version}";
-    hash = "sha256-UeQ0J30d/8jOWgpJRH0E5fyq5mPJpMyihEYmKYj/Hmg=";
+    hash = "sha256-DEq1LECqlvl3P4ib3RyHK3VLbcTh8PXJtbWwK/0R5dA=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

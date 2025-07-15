@@ -1,16 +1,19 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  readline,
-  termcap,
-  gnucap,
   callPackage,
+  fetchFromSavannah,
+  gnucap,
+  gnucap-full,
+  installShellFiles,
+  lib,
+  readline,
+  runCommand,
+  stdenv,
+  termcap,
   writeScript,
 }:
 
 let
-  version = "20240130-dev";
+  version = "20240220";
   meta = with lib; {
     description = "Gnu Circuit Analysis Package";
     longDescription = ''
@@ -18,29 +21,44 @@ let
       It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
     '';
     homepage = "http://www.gnucap.org/";
-    changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
-    license = licenses.gpl3Plus;
+    changelog = "https://git.savannah.gnu.org/gitweb/?p=gnucap.git;a=blob;f=NEWS";
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH
     maintainers = [ maintainers.raboof ];
     mainProgram = "gnucap";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnucap";
   inherit version;
 
-  src = fetchurl {
-    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/gnucap-${version}.tar.gz";
-    hash = "sha256-MUCtGw3BxGWgXgUwzklq5T1y9kjBTnFBa0/GK0hhl0E=";
+  src = fetchFromSavannah {
+    repo = "gnucap";
+    rev = version;
+    hash = "sha256-aZMiNKwI6eQZAxlF/+GoJhKczohgGwZ0/Wgpv3+AhYY=";
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
   buildInputs = [
     readline
     termcap
   ];
 
   doCheck = true;
+
+  postInstall = ''
+    installManPage man/*
+  '';
+
+  passthru.tests = {
+    verilog = runCommand "gnucap-verilog-test" { } ''
+      echo "attach mgsim" | ${gnucap-full}/bin/gnucap -a msgsim > $out
+      cat $out | grep "verilog: already installed"
+    '';
+  };
 
   inherit meta;
 }

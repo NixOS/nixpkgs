@@ -1,7 +1,7 @@
 {
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter329,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-hhKfHJRZyNsQcGhbgBdBvy2KjKOxg4+0yi+ynX3qMw4=";
+    hash = "sha256-ZJ5TMoBamXHU/pU790/6HHJwNqVsXpZ1OttPR/JSydY=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -38,6 +38,7 @@ flutter329.buildFlutterApplication rec {
       scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
       webdav_client = "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE=";
       flutter_saf = "sha256-zmRZ82aJPYX/N/lOUcOoT8UAHEDoUk0FTFSqB4gKR+U=";
+      rhttp = "sha256-6AH7A+CJg60Vk0ph3cJwj29GkmJEezI/VuZvRqqmOYs=";
       flutter_inappwebview = flutter_inappwebview-hash;
       flutter_inappwebview_android = flutter_inappwebview-hash;
       flutter_inappwebview_ios = flutter_inappwebview-hash;
@@ -45,7 +46,6 @@ flutter329.buildFlutterApplication rec {
       flutter_inappwebview_web = flutter_inappwebview-hash;
       flutter_inappwebview_windows = flutter_inappwebview-hash;
       flutter_inappwebview_platform_interface = flutter_inappwebview-hash;
-      rhttp = "sha256-odYLLj9Vd0+UQVXtYgGzMDKLD7SbTqrqHI1jAXVr5XU=";
     };
 
   nativeBuildInputs = [ copyDesktopItems ];

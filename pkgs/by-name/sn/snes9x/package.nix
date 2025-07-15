@@ -106,9 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 snes9x -t "$out/bin/"
-    install -Dm644 snes9x.conf.default -t "$out/share/doc/${finalAttrs.pname}/"
+    install -Dm644 snes9x.conf.default -t "$out/share/doc/snes9x/"
     install -Dm644 ../docs/{control-inputs,controls,snapshots}.txt -t \
-      "$out/share/doc/${finalAttrs.pname}/"
+      "$out/share/doc/snes9x/"
 
     runHook postInstall
   '';

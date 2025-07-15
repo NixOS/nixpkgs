@@ -59,13 +59,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.43.0";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-gUqNiiPipoxLKwGVsi42PyOnmPbfvUs7UwfqOdmFn/E=";
+    hash = "sha256-HDr4goUvAKeMk2UGmF2ON72ETQQipNwLfsvyB+f74LE=";
   };
 
   outputs = [
@@ -265,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
+    description = "Actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

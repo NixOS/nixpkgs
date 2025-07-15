@@ -24,6 +24,10 @@
   cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
 
+  postInstall = ''
+    cargo run --manifest-path ./tools/post-install/Cargo.toml -- --dir "$out"
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
     tests = postgresql.pkgs.timescaledb.tests;

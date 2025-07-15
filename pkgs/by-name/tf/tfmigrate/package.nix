@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Terraform / OpenTofu state migration tool for GitOps ";
+    description = "Terraform / OpenTofu state migration tool for GitOps ";
     homepage = "https://github.com/minamijoyo/tfmigrate";
     changelog = "https://github.com/minamijoyo/tfmigrate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

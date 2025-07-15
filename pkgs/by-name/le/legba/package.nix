@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
   # Paho C test fails due to permission issue
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Multiprotocol credentials bruteforcer / password sprayer and enumerator";
     homepage = "https://github.com/evilsocket/legba";
     changelog = "https://github.com/evilsocket/legba/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "legba";
   };
 }

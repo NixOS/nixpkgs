@@ -6,6 +6,8 @@
 
   nodejs_22,
   pnpm_9,
+
+  nixosTests,
 }:
 
 let
@@ -70,6 +72,9 @@ buildGo123Module {
 
   passthru = {
     inherit frontend;
+    tests = {
+      inherit (nixosTests) filebrowser;
+    };
   };
 
   meta = with lib; {

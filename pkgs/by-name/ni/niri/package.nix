@@ -3,6 +3,7 @@
   dbus,
   eudev,
   fetchFromGitHub,
+  installShellFiles,
   libdisplay-info,
   libglvnd,
   libinput,
@@ -15,6 +16,7 @@
   pkg-config,
   rustPlatform,
   seatd,
+  stdenv,
   systemd,
   wayland,
   withDbus ? true,
@@ -25,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.02";
+  version = "25.05.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
+    hash = "sha256-z4viQZLgC2bIJ3VrzQnR+q2F3gAOEQpU1H5xHtX/2fs=";
   };
 
   postPatch = ''
@@ -41,11 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xUjBQ65INi5qD7s5SpPw9TISgY6I3bjjUBmpubvM43I=";
+  cargoHash = "sha256-8ltuI94yIhff7JxIfe1mog4bDJ/7VFgLooMWOnSTREs=";
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     rustPlatform.bindgenHook
   ];
@@ -88,6 +91,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
     + lib.optionalString withDinit ''
       install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd $pname \
+        --bash <($out/bin/niri completions bash) \
+        --fish <($out/bin/niri completions fish) \
+        --zsh <($out/bin/niri completions zsh)
     '';
 
   env = {

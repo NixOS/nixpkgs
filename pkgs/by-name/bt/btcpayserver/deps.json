@@ -51,8 +51,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.6.9",
-    "hash": "sha256-pCCxZ1CW+Xc2KvG5yZ79vLYtcwr/PWsrz9A1x02ryb0="
+    "version": "1.6.10",
+    "hash": "sha256-v2D43E9aEFKN/oMP4W98BST+WBMRDLDBD6AKJZey7PA="
   },
   {
     "pname": "BTCPayServer.Lightning.Charge",
@@ -93,6 +93,11 @@
     "pname": "BTCPayServer.Lightning.LNDhub",
     "version": "1.5.3",
     "hash": "sha256-CbSjeix4JCVtgb8WCfsKgThpl/YbnhbJ3wcPoexpSew="
+  },
+  {
+    "pname": "BTCPayServer.Lightning.Phoenixd",
+    "version": "1.5.7",
+    "hash": "sha256-kDl8tDEzrwNwyFRp77NSFw0WkHwudeS5pefJNSvq/IM="
   },
   {
     "pname": "BTCPayServer.NETCore.Plugins",
@@ -701,28 +706,23 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "7.0.45",
-    "hash": "sha256-hWgtvAJvONk6jg1WiytE6M+ExkQJUCwO6cyVA6JE+8w="
-  },
-  {
-    "pname": "NBitcoin",
     "version": "7.0.50",
     "hash": "sha256-l3H70u5OAbd2hevX/yeVBdQyee/dUn5mp4iGvTnTcjk="
   },
   {
     "pname": "NBitcoin",
-    "version": "8.0.8",
-    "hash": "sha256-gpbxlfE7TN7mUOcWF9+r8htQTc19KqAuzsVaG5RYa3A="
-  },
-  {
-    "pname": "NBitcoin.Altcoins",
-    "version": "3.0.31",
-    "hash": "sha256-Mtaqj8Fl8jxeOBXz66fjZQKZ/yg6pARJKJTFW0V/wDA="
+    "version": "8.0.13",
+    "hash": "sha256-x7vMEgk5JXfGGNWfoclCwAbnx1mtlgbxl0HC0B/iV2E="
   },
   {
     "pname": "NBitcoin.Altcoins",
     "version": "3.0.33",
     "hash": "sha256-0RYmRKcluGwfTEcOEmoREC/9CgECEi7piQZetMXHOxI="
+  },
+  {
+    "pname": "NBitcoin.Altcoins",
+    "version": "4.0.8",
+    "hash": "sha256-n1e0BUhXl3D/fn1DbCdbelYfys2fc7+ZABazhUWxzo4="
   },
   {
     "pname": "NBitpayClient",

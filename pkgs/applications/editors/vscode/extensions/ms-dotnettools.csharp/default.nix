@@ -17,19 +17,19 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-yJ4bAxIg3yfQJPWJcl6jUMwQ/ssHkstJWuEp3wr0dDA=";
+        hash = "sha256-rxXyDIDANtWUT4z6SK+fHwMXu/xSOIGtNpILdlC5lMc=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-EpWHwansBwBD0aYoW2ek7iWFbp+s7ZH6ug3ejoSRG5U=";
+        hash = "sha256-3JLnZr7pGOY0wSmo9PpQclDE/Yb99qJLALgEBAPn4Ms=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-345hK47tyMGMJDKiujwpECDHMbRpLi17x2lH2rMX9Lg=";
+        hash = "sha256-yhP5dXP42ZKsoLZ3CySY+Nw2c0bF4IKDc0Le9ky+Qmc=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-u/vflQd285SuZ41ASd8nJgs+lN6892J3x6lPgWqVY+Y=";
+        hash = "sha256-KtOZ4AzsS30nF0DtJJT/CaLRD6Pa9pz1hYBgvxPbzZw=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -39,7 +39,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.76.27";
+    version = "2.80.16";
     inherit (extInfo) hash arch;
   };
 

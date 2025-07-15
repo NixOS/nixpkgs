@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lon";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "lon";
     tag = version;
-    hash = "sha256-tF9nzTIX0pU/N+h6i7ftn8RhwVB1o3O9+g+sziJvGwc=";
+    hash = "sha256-+hCqAtu9uo9BndZogXUIMMoL1pXmwyec5edj6gg82GM=";
   };
 
   sourceRoot = "source/rust/lon";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Aa8Rkny5hBfQpGcZYJrbzU00ExJPTfhQzKDbHAt8rXE=";
+  cargoHash = "sha256-i+DAVtXAYQ254Y7jechjOcwe3nT/0O4AzxBH5QkK9aM=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

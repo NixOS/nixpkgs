@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7gioQ0r0LlUftIWKRwTqeZQl0GtskcRKaEE5z6A0S24=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace-fail "-Wl,-z,relro,-z,now" ""
   '';
 

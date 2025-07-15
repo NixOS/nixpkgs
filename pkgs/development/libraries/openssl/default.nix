@@ -98,7 +98,10 @@ let
         ++ lib.optional static "etc";
       setOutputFlags = false;
       separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+        !stdenv.hostPlatform.isDarwin
+        && !stdenv.hostPlatform.isAndroid
+        && !(stdenv.hostPlatform.useLLVM or false)
+        && stdenv.cc.isGNU;
 
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
@@ -222,7 +225,7 @@ let
         # This avoids conflicts between man pages of openssl subcommands (for
         # example 'ts' and 'err') man pages and their equivalent top-level
         # command in other packages (respectively man-pages and moreutils).
-        # This is done in ubuntu and archlinux, and possiibly many other distros.
+        # This is done in ubuntu and archlinux, and possibly many other distros.
         "MANSUFFIX=ssl"
       ];
 

@@ -39,14 +39,10 @@ define_keymap(re.compile("Google-chrome|Chromium-browser|firefox"), {
     K("C-slash"): [K("C-z"), set_mark(False)],
 
     K("C-space"): aaflip(),
-    # K("C-space"): set_mark(True),
     K("C-M-space"): with_or_set_mark(K("C-right")),
 
     K("enter"): aaif(),
     K("C-s"): [K("F3"), aaset(True)],
     K("C-r"): [K("Shift-F3"), aaset(True)],
     K("C-g"): [K("esc"), aaset(False)]
-    # K("C-s"): K("F3"),
-    # K("C-r"): K("Shift-F3"),
-    # K("C-g"): [K("esc"), set_mark(False)]
 })

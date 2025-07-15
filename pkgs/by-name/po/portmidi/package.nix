@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "2.0.4";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "portmidi";
+    repo = "portmidi";
     rev = "v${version}";
     sha256 = "sha256-uqBeh9vBP6+V+FN4lfeGxePQcpZMDYUuAo/d9a5rQxU=";
   };

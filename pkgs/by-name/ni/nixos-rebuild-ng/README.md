@@ -35,40 +35,6 @@ an attempt of the rewrite.
   currently depends on `jq` for JSON parsing, while Python has `json` in
   standard library
 
-## Do's and Don'ts
-
-- Do: be as much of a drop-in replacement as possible
-- Do: fix obvious bugs
-- Do: improvements that are non-breaking
-- Don't: change logic in breaking ways even if this would be an improvement
-
-## How to use
-
-If you want to use `nixos-rebuild-ng` without replacing `nixos-rebuild`, add the
-following to your NixOS configuration:
-
-```nix
-{ pkgs, ... }:
-{
-  environment.systemPackages = [ pkgs.nixos-rebuild-ng ];
-}
-```
-
-And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
-
-If you want to completely replace `nixos-rebuild` with `nixos-rebuild-ng`, add
-the following to your NixOS configuration:
-
-```nix
-{ ... }:
-{
-  system.rebuild.enableNg = true;
-}
-```
-
-This will set `config.system.build.nixos-rebuild` to `nixos-rebuild-ng`, so
-all tools that expect it in that location should work.
-
 ## Development
 
 Run:

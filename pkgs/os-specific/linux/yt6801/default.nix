@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kmod ];
 
+  patches = lib.optionals (lib.versionAtLeast kernel.version "6.15") [
+    ./kernel_6.15_fix.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/Makefile \
       --replace-fail "sudo ls -l" "ls -l" \

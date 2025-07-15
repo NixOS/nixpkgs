@@ -21,11 +21,11 @@ let
     { pname, withGUI }:
     pypkgs.buildPythonPackage rec {
       inherit pname;
-      version = "2.1.1";
+      version = "2.2.0";
 
       src = fetchurl {
         url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
-        hash = "sha256-do3TGYAuQkN6s3lOvnW0lxQuCO1bD7JQO61izvRC3/c=";
+        hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
       propagatedBuildInputs =
@@ -108,7 +108,6 @@ let
         homepage = "https://deluge-torrent.org";
         license = licenses.gpl3Plus;
         maintainers = with maintainers; [
-          domenkozar
           ebzzry
         ];
         platforms = platforms.all;

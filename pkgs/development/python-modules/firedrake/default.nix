@@ -57,32 +57,21 @@ let
 in
 buildPythonPackage rec {
   pname = "firedrake";
-  version = "2025.4.0.post0";
+  version = "2025.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "firedrake";
     tag = version;
-    hash = "sha256-wQOS4v/YkIwXdQq6JMvRbmyhnzvx6wj0O6aszNa5ZMw=";
+    hash = "sha256-p/yquIKWynGY7UESDNBCf1cM8zpy8beuuRxSrSMvj7c=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/firedrakeproject/firedrake/commit/b358e33ab12b3c4bc3819c9c6e9ed0930082b750.patch?full_index=1";
-      hash = "sha256-y00GB8njhmHgtAVvlv8ImsJe+hMCU1QFtbB8llEhv/I=";
-    })
-  ];
-
   postPatch =
+    # relax build-dependency petsc4py
     ''
-      # relax build-dependency petsc4py
       substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.0" "petsc4py"
-
-      # These scripts are used by official source distribution only,
-      # and do not make sense in our binary distribution.
-      sed -i '/firedrake-\(check\|status\|run-split-tests\)/d' pyproject.toml
+        "petsc4py==3.23.3" "petsc4py"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace firedrake/petsc.py --replace-fail \
@@ -97,6 +86,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "decorator"
+    "slepc4py"
   ];
 
   build-system = [
@@ -140,8 +130,9 @@ buildPythonPackage rec {
       # required by script spydump
       matplotlib
     ]
-    ++ pytools.optional-dependencies.siphash
-    ++ lib.optional stdenv.hostPlatform.isDarwin islpy;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      islpy
+    ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \
@@ -160,6 +151,11 @@ buildPythonPackage rec {
     mpiCheckPhaseHook
     writableTmpDirAsHomeHook
   ];
+
+  # These scripts are used by official sdist/editable_wheel only
+  postInstall = ''
+    rm $out/bin/firedrake-{check,status,run-split-tests}
+  '';
 
   preCheck = ''
     rm -rf firedrake pyop2 tinyasm tsfc

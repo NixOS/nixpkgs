@@ -11,14 +11,14 @@
   lxd-lts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dqlite";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "dqlite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7ou077ozbpH21PcvEEcprr4UYJ/X398Ph9dh5C3YyBQ=";
   };
 
@@ -47,14 +47,14 @@ stdenv.mkDerivation rec {
     inherit lxd-lts;
   };
 
-  meta = with lib; {
+  meta = {
     description = ''
       Expose a SQLite database over the network and replicate it across a
       cluster of peers
     '';
     homepage = "https://dqlite.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

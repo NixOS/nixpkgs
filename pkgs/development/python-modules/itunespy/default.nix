@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sleepyfran";
-    repo = pname;
+    repo = "itunespy";
     tag = "v${version}";
     sha256 = "sha256-QvSKJAZa8v0tGURXwo4Dwo73JqsYs1xsBHW0lcaM7bk=";
   };

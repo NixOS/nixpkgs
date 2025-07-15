@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.21.2";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXFBn8hlI8MZ9Vy3goPjosn0JgvaAgZaFIGh/3rFdx8=";
+    hash = "sha256-tNHQHReeOUc5lCs4dI3a5UzeJao+RPWXH4KdWhPwESI=";
   };
 
   postPatch = ''
@@ -101,13 +101,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    ./bin/unittests
-    ./bin/integtests
+    ./bin/legacytests
 
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postInstall = ''
+    install -Dm644 ../README.md ../doc/configuration.md -t $out/share/doc/deskflow
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
@@ -117,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl
+      licenses.mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };

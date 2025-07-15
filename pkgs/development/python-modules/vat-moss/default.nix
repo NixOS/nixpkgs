@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pythonAtLeast,
   pytestCheckHook,
 }:
 
@@ -10,6 +11,9 @@ buildPythonPackage rec {
   pname = "vat-moss";
   version = "0.11.0";
   format = "setuptools";
+
+  # uses the removed cgi battery
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "raphaelm";

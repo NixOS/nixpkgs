@@ -9,7 +9,7 @@
   gobject-introspection,
   gtk3,
   wrapGAppsHook3,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
   libnotify,
   keybinder3,
   libappindicator,
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator
     libnotify
     librsvg
-    webkitgtk_4_1
+    webkitgtk_4_0
     wmctrl
   ];
 
@@ -124,7 +124,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "ulauncher";
     maintainers = with maintainers; [
       aaronjanse
-      sebtm
     ];
   };
 }

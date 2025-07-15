@@ -132,6 +132,21 @@ in
           "@system-service"
           "~@privileged"
         ];
+        SupplementaryGroups = [ "render" ]; # for rocm to access /dev/dri/renderD* devices
+        DeviceAllow = [
+          # CUDA
+          # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+          "char-nvidiactl"
+          "char-nvidia-caps"
+          "char-nvidia-frontend"
+          "char-nvidia-uvm"
+          # ROCm
+          "char-drm"
+          "char-fb"
+          "char-kfd"
+          # WSL (Windows Subsystem for Linux)
+          "/dev/dxg"
+        ];
       };
     };
 

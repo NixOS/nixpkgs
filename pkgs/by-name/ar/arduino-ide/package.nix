@@ -26,13 +26,13 @@ appimageTools.wrapType2 {
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source electronics prototyping platform";
     homepage = "https://www.arduino.cc/en/software";
     changelog = "https://github.com/arduino/arduino-ide/releases/tag/${version}";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "arduino-ide";
-    maintainers = with maintainers; [ clerie ];
+    maintainers = with lib.maintainers; [ clerie ];
     platforms = [ "x86_64-linux" ];
   };
 }

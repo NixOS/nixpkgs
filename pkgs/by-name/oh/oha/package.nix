@@ -5,6 +5,7 @@
   stdenv,
   pkg-config,
   openssl,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,17 +28,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
+    rust-jemalloc-sys
   ];
 
   # tests don't work inside the sandbox
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
     changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "oha";
   };
 }

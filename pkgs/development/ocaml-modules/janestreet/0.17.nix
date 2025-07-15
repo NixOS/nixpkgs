@@ -935,7 +935,16 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
+    ];
+    patches = [
+      # This patch is needed because of an issue with the aarch64 CRC32
+      # intrinsics that was introduced with ocaml_intrinsics v0.17. It should
+      # be removed as soon as
+      # https://github.com/janestreet/ocaml_intrinsics/pull/11 is merged.
+      ./ocaml_intrinsics-fix-aarch64-crc32-intrinsics.patch
     ];
   };
 
@@ -1142,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {

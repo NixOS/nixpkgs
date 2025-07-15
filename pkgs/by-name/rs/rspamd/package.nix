@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.11.1";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
+    hash = "sha256-4C+bhUkqdn9RelHf6LfcfxVCIiBUCt4BxuI9TGdlIMc=";
   };
 
   hardeningEnable = [ "pie" ];

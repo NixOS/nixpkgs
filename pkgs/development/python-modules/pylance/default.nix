@@ -20,6 +20,7 @@
   torch,
 
   # tests
+  datafusion,
   duckdb,
   ml-dtypes,
   pandas,
@@ -31,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.26.1";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-peTfrSDByfqg3jiSK8FZr7m+/Mu/mCqeZhR/902Qp4s=";
+    hash = "sha256-lEGxutBKbRFqr9Uhdv2oOXCdb8Y2quqLoSoJ0F+F3h0=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-UZ2a7bhK+rJ2jMw9hqyfHjfGRrmG/eB7thjkfguU11o=";
+    hash = "sha256-NZeFgEWkiDewWI5R+lpBsMTU7+7L7oaHefSGAS+CoFU=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    datafusion
     duckdb
     ml-dtypes
     pandas
@@ -101,6 +103,17 @@ buildPythonPackage rec {
       # Writes to read-only build directory
       "test_add_data_storage_version"
       "test_fix_data_storage_version"
+      "test_fts_backward_v0_27_0"
+
+      # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+      "test_table_loading"
+
+      # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
+      # ModuleNotFoundError: No module named 'lance'
+      "test_tracing"
+
+      # Flaky (AssertionError)
+      "test_index_cache_size"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...

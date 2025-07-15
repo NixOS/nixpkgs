@@ -57,16 +57,16 @@ stdenv.mkDerivation rec {
     "install-docs"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libhugetlbfs/libhugetlbfs";
     changelog = "https://github.com/libhugetlbfs/libhugetlbfs/blob/${version}/NEWS";
     description = "library and utilities for Linux hugepages";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    badPlatforms = flatten [
-      systems.inspect.platformPatterns.isStatic
-      systems.inspect.patterns.isMusl
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    badPlatforms = lib.flatten [
+      lib.systems.inspect.platformPatterns.isStatic
+      lib.systems.inspect.patterns.isMusl
     ];
   };
 }

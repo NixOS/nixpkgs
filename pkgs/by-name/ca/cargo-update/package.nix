@@ -16,15 +16,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "16.2.1";
+  version = "16.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Vl5ClzS3OULsd+3dlaN5iZPw2YZeBSPHWFOS+izmr7Q=";
+    hash = "sha256-VKXEbgm3Oc4rq/F2p/kuhhhiyKvLU6KHnKnQMBX17XU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Yq2jT8YnWPsNe7akShsj0nWxXXpgNvX1A95x7O8LOes=";
+  cargoHash = "sha256-AXYcDxKQ9p4deolcZFO5SmfwnQGxl1I03RK6tSTbjlo=";
 
   nativeBuildInputs =
     [
@@ -63,12 +63,12 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       gerschtli
       Br1ght0ne
       johntitor

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "go-swagger";
-    repo = pname;
+    repo = "go-swagger";
     tag = "v${version}";
     hash = "sha256-PeH9bkRObsw4+ttuWhaPfPQQTOAw8pwlgTEtPoUBiIQ=";
   };
@@ -28,12 +28,12 @@ buildGoModule rec {
     "-X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Golang implementation of Swagger 2.0, representation of your RESTful API";
     homepage = "https://github.com/go-swagger/go-swagger";
     changelog = "https://github.com/go-swagger/go-swagger/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "swagger";
   };
 }

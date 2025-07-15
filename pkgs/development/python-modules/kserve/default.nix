@@ -46,6 +46,7 @@
   avro,
   grpcio-testing,
   pytest-asyncio,
+  pytest-httpx,
   pytest-xdist,
   pytestCheckHook,
   tomlkit,
@@ -53,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.15.0";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-J2VFMHwhHpvtsywv3ixuVzpuDwq8y9w4heedYYWVBmM=";
+    hash = "sha256-NklR2Aoa5UdWkqNOfX+xl3R158JDSQtStXv9DkklOwM=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -115,7 +116,7 @@ buildPythonPackage rec {
     logging = [ asgi-logger ];
     ray = [ ray ];
     llm = [
-      # vllm (broken)
+      vllm
     ];
   };
 
@@ -123,6 +124,7 @@ buildPythonPackage rec {
     avro
     grpcio-testing
     pytest-asyncio
+    pytest-httpx
     pytest-xdist
     pytestCheckHook
     tomlkit
@@ -147,17 +149,13 @@ buildPythonPackage rec {
       "--deselect=test/test_server.py::TestRayServer::test_list_handler"
       "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
       "--deselect=test/test_server.py::TestRayServer::test_predict"
+      # Permission Error
+      "--deselect=test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
     ];
 
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
-
-    # Require broken vllm
-    "test/test_dataplane.py"
-    "test/test_model_repository.py"
-    "test/test_openai_completion.py"
-    "test/test_openai_embedding.py"
   ];
 
   disabledTests =
@@ -178,7 +176,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    changelog = "https://github.com/kserve/kserve/releases/tag/v${version}";
+    changelog = "https://github.com/kserve/kserve/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

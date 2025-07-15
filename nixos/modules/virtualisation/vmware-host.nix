@@ -75,10 +75,25 @@ in
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     services.printing.drivers = [ cfg.package ];
 
-    environment.etc."vmware/config".text = ''
-      ${builtins.readFile "${cfg.package}/etc/vmware/config"}
-      ${cfg.extraConfig}
-    '';
+    environment.etc."vmware/config".source =
+      let
+        packageConfig = "${cfg.package}/etc/vmware/config";
+      in
+      if cfg.extraConfig == "" then
+        packageConfig
+      else
+        pkgs.runCommandLocal "etc-vmware-config"
+          {
+            inherit packageConfig;
+            inherit (cfg) extraConfig;
+          }
+          ''
+            (
+              cat "$packageConfig"
+              printf "\n"
+              echo "$extraConfig"
+            ) >"$out"
+          '';
 
     environment.etc."vmware/bootstrap".source = "${cfg.package}/etc/vmware/bootstrap";
     environment.etc."vmware/icu".source = "${cfg.package}/etc/vmware/icu";

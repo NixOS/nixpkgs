@@ -53,12 +53,12 @@ rustPlatform.buildRustPackage rec {
 
   env.OUCH_ARTIFACTS_FOLDER = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility for easily compressing and decompressing files and directories";
     homepage = "https://github.com/ouch-org/ouch";
     changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       psibi
       krovuxdev

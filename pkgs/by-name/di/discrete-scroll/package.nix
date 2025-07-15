@@ -23,15 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 a.out $out/bin/discretescroll
+    install -Dm555 a.out $out/bin/discretescroll
     runHook postInstall
   '';
 
   meta = {
-    description = "Fix for OS X's scroll wheel problem";
+    description = "Fix for macOS's unnecessary scroll wheel acceleration";
     homepage = "https://github.com/emreyolcu/discrete-scroll";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bb2020 ];
     platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ bb2020 ];
   };
 })

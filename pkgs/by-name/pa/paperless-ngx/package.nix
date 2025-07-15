@@ -26,19 +26,19 @@
   xorg,
 }:
 let
-  version = "2.15.3";
+  version = "2.16.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-zkOOUMyAvYYJnYn4s7D4tsYhodVX5kvPdXBBknBsusY=";
+    hash = "sha256-mtzr/rRzcYcZl9tUkhxEKoFQWm1QTToOYZJXhynwDmk=";
   };
 
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_5_1;
 
       # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
       ocrmypdf = prev.ocrmypdf.override { tesseract = tesseract5; };
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-yoTXlxXLcWD2DMxqjb02ZORJ+E0xE1DbZm1VL7vXM4g=";
+        hash = "sha256-Z7c+AstVnxbPnEhc51qSqOYhRXqNJVwTvgHFcFp+pYg=";
       };
 
       nativeBuildInputs =
@@ -134,8 +134,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
-    if (( $NIX_BUILD_CORES > 4)); then
-      NIX_BUILD_CORES=4
+    if (( $NIX_BUILD_CORES > 3)); then
+      NIX_BUILD_CORES=3
     fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
@@ -149,15 +149,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "celery"
     "django-allauth"
-    "django-extensions"
-    "drf-spectacular-sidecar"
-    "filelock"
-    "python-dotenv"
-    "rapidfuzz"
-    # TODO: https://github.com/NixOS/nixpkgs/pull/373099
-    "zxing-cpp"
   ];
 
   dependencies =
@@ -168,7 +160,7 @@ python.pkgs.buildPythonApplication rec {
       channels-redis
       concurrent-log-handler
       dateparser
-      django_5
+      django
       django-allauth
       django-auditlog
       django-celery-results
@@ -313,21 +305,21 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt_tab
-      snowball_data
+      punkt-tab
+      snowball-data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       leona
       SuperSandro2000
       erikarvstedt

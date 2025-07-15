@@ -59,9 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       using them with RPCEmu.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = builtins.attrValues {
-      inherit (lib.maintainers) ;
-    };
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

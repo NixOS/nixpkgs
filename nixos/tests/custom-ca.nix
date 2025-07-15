@@ -1,6 +1,6 @@
 # Checks that `security.pki` options are working in curl and the main browser
-# engines: Gecko (via Firefox), Chromium, QtWebEngine (via qutebrowser) and
-# WebKitGTK (via Midori). The test checks that certificates issued by a custom
+# engines: Gecko (via Firefox), Chromium, QtWebEngine (via qutebrowser).
+# The test checks that certificates issued by a custom
 # trusted CA are accepted but those from an unknown CA are rejected.
 
 {
@@ -209,9 +209,5 @@ in
   qutebrowser = {
     args = "-T";
     error = "Certificate error";
-  };
-  midori = {
-    args = "-p";
-    error = "Security";
   };
 }

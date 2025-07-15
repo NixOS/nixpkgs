@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bdffont";
-  version = "0.0.30";
+  version = "0.0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "bdffont";
     inherit version;
-    hash = "sha256-DKZZSXZ3+s92K7RI1lMb8Er5+Tzj9AFJXgNwGs5qeMU=";
+    hash = "sha256-jE6k1gym4UCHpQJTPEip+c5e+9QxNpT41v3fK9WVoLc=";
   };
 
   build-system = [ hatchling ];

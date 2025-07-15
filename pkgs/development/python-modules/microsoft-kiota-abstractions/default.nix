@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-FUfVkJbpD0X7U7DPzyoh+84Bk7C07iLT9dmbUeliFu8=";
   };
 
-  sourceRoot = "source/packages/abstractions/";
+  sourceRoot = "${src.name}/packages/abstractions/";
 
   build-system = [ poetry-core ];
 

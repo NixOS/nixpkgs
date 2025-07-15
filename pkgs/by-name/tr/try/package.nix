@@ -8,34 +8,33 @@
   attr,
   makeWrapper,
   pandoc,
-  kmod,
+  coreutils,
   installShellFiles,
   versionCheckHook,
 }:
 stdenv.mkDerivation {
   pname = "try";
   version = "0.2.0-unstable-2025-02-25";
+
   src = fetchFromGitHub {
     owner = "binpash";
     repo = "try";
     rev = "67052d8f20725f3cdc22ffaec33f7b7c14f1eb6b";
     hash = "sha256-8mfCmqN50pRAeNTJUlRVrRQulWon4b2OL4Ug/ygBhB0=";
   };
+
+  # skip TRY_REQUIRE_PROG as it detects executable dependencies by running it
+  postPatch = ''
+    sed -i '/^AC_DEFUN(\[TRY_REQUIRE_PROG\]/,/^])$/c\AC_DEFUN([TRY_REQUIRE_PROG], [])' configure.ac
+  '';
+
   nativeBuildInputs = [
     makeWrapper
     autoreconfHook
     pandoc
-    attr
-    util-linux
-    kmod
     installShellFiles
   ];
-  # Trigger a overlay run to load the overlayfs module, required by ./configure
-  preConfigure = ''
-    mkdir lower upper work merged
-    unshare -r --mount mount -t overlay overlay -o lowerdir=lower,upperdir=upper,workdir=work merged
-    rm -rf lower upper work merged
-  '';
+
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin try
@@ -43,6 +42,7 @@ stdenv.mkDerivation {
     install -Dt $out/bin utils/try-summary
     wrapProgram $out/bin/try --prefix PATH : ${
       lib.makeBinPath [
+        coreutils
         util-linux
         mergerfs
         attr
@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     installShellCompletion --bash --name try.bash completions/try.bash
     runHook postInstall
   '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -60,15 +61,16 @@ stdenv.mkDerivation {
     export version=0.2.0
   '';
   versionCheckProgramArg = "-v";
-  meta = with lib; {
+
+  meta = {
     homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
     mainProgram = "try";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pasqui23
       ezrizhu
     ];
-    license = with licenses; [ mit ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
+    platforms = lib.platforms.linux;
   };
 }

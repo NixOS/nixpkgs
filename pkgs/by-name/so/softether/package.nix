@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "softether";
-  version = "4.41-9782-beta";
+  version = "4.44-9807-rtm";
 
   src = fetchFromGitHub {
     owner = "SoftEtherVPN";
     repo = "SoftEtherVPN_Stable";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yvN5hlfAtE+gWm0s/TY/Lp53By5SDHyQIvvDutRnDNQ=";
+    hash = "sha256-roi5M/YmSBH44pRPSVZcADIHDbSpAfASiPbTdijisUM=";
   };
 
   buildInputs = [

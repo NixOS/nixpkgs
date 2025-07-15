@@ -27,20 +27,24 @@
   xkeyboard_config,
   xorg,
   xterm,
-  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
-  version = "3.1.4";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = finalAttrs.version;
-    hash = "sha256-Qt9yGyGWKFBppO91D+hUfmN7CMg0I66rAXyRoCYUOEA=";
+    hash = "sha256-CMJdUG4Dd7pbtr/KXq0hV+zR5i+L/y610O+SWJTR/zQ=";
   };
 
+  # Notes:
+  # * SSH support does not require `openssh` on PATH, because turbovnc
+  #   uses a built-in SSH client ("JSch fork"), as commented on e.g.:
+  #   https://github.com/TurboVNC/turbovnc/releases/tag/3.2beta1
+  #
   # TODO:
   # * Build outputs that are unclear:
   #   * `-- FONT_ENCODINGS_DIRECTORY = /var/empty/share/X11/fonts/encodings`
@@ -48,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
   #     do with their `fontDirectories`?
   #   * `XORG_REGISTRY_PATH = /var/empty/lib64/xorg`
   #   * The thing about xorg `protocol.txt`
-  # * Does SSH support require `openssh` on PATH?
   # * Add `enableClient ? true` flag that disables the client GUI
   #   so that the server can be built without openjdk dependency.
   # * Perhaps allow to build the client on non-Linux platforms.
@@ -72,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pam
       perl
-      zlib
     ]
     ++ (with xorg; [
       libfontenc # for -DTVNC_SYSTEMX11=1
@@ -83,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXext
       libXfont2 # for -DTVNC_SYSTEMX11=1
       libxkbfile # for -DTVNC_SYSTEMX11=1
+      libxshmfence
       libXi
       mesa-gl-headers # for -DTVNC_SYSTEMX11=1
       pixman # for -DTVNC_SYSTEMX11=1
@@ -103,14 +106,27 @@ stdenv.mkDerivation (finalAttrs: {
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
     "-DXORG_DRI_DRIVER_PATH=${libGL.driverLink}/lib/dri"
     # The build system doesn't find these files automatically.
-    "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
-    "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
     "-DXKB_BASE_DIRECTORY=${xkeyboard_config}/share/X11/xkb"
     "-DXKB_BIN_DIRECTORY=${xkbcomp}/bin"
     # use system libs
-    "-DTVNC_SYSTEMLIBS=1"
-    "-DTVNC_SYSTEMX11=1"
-    "-DTVNC_DLOPENSSL=0"
+    # TurboVNC >= 3.1.4 no longer needs overrides to use system libraries
+    # instead of bundling them, see
+    # https://github.com/TurboVNC/turbovnc/releases/tag/3.2beta1:
+    # >  The TVNC_SYSTEMLIBS and TVNC_SYSTEMX11 CMake variables have been removed,
+    # > and the build system now behaves as if those variables are always on.
+    # > A new CMake variable (TVNC_ZLIBNG) can be used on x86 platforms
+    # > to disable the in-tree SIMD-accelerated zlib-ng implementation
+    # > and build against the system-supplied zlib implementation.
+    #
+    # We'd like to build against nixpkgs's `zlib-ng`, but if we pass
+    # `-DTVNC_ZLIBNG=0`, the above logic seems to imply that it looks
+    # for normal zlib as well, and the `./configure` output prints
+    #     -- zlib-ng disabled (TVNC_ZLIBNG = 0)
+    #     -- Found ZLIB: /nix/store/<...>/lib/libz.so (found version "1.3.1")
+    # so that seems to use normal `zlib`, even though it's not declared
+    # as a dependency here (probably it's part of `stdenv`).
+    # So for now, we use TruboVNC's in-tree `zlib-ng`.
+    #     "-DTVNC_ZLIBNG=0" # not given currently as explained above
   ];
 
   postInstall = ''

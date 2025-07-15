@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/riff --set-default RIFF_DISABLE_TELEMETRY true
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool that automatically provides external dependencies for software projects";
     mainProgram = "riff";
     homepage = "https://riff.sh";
     changelog = "https://github.com/DeterminateSystems/riff/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

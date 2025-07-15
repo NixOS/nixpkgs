@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Java serialization protocol analysis tool";
     homepage = "https://github.com/phith0n/zkar";
     changelog = "https://github.com/phith0n/zkar/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "zkar";
   };
 }

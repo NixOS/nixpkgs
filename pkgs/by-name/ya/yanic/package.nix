@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "yanic";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${version}";
-    hash = "sha256-uqmojpwGFs6inhmKIztYlGFvUS8AjQIYTHSkZcGyEUo=";
+    hash = "sha256-tKFveknZitkVFaLTZzT01SJZq1IPQfXQa7UJewjXjwU=";
   };
 
   vendorHash = "sha256-UYrQwOyWlKxDH5hHKAZCxQbO+eA6JsPuG0SbkWMF/HQ=";

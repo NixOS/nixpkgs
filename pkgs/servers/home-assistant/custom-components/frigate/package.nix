@@ -41,6 +41,14 @@ buildHomeAssistantComponent rec {
     ++ (homeassistant.getPackages "mqtt" homeassistant.python.pkgs)
     ++ (homeassistant.getPackages "stream" homeassistant.python.pkgs);
 
+  disabledTests = [
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/922
+    "test_frigate_camera_setup"
+    "test_frigate_camera_setup_birdseye"
+    "test_frigate_camera_setup_webrtc"
+    "test_frigate_camera_setup_birdseye_webrtc"
+  ];
+
   disabledTestPaths = [
     # https://github.com/blakeblackshear/frigate-hass-integration/issues/907
     "tests/test_media_source.py"

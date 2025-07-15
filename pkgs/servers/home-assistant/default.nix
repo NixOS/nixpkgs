@@ -151,8 +151,8 @@ let
         ];
       });
 
-      # Pinned due to home-assistant still needing 1.10.0 verison
-      # Remove this when home-assistant upates the jellyfin-apiclient-python version
+      # Pinned due to home-assistant still needing 1.10.0 version
+      # Remove this when home-assistant updates the jellyfin-apiclient-python version
       jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
         version = "1.10.0";
         src = fetchFromGitHub {
@@ -163,12 +163,12 @@ let
         };
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
+      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+          tag = "v${version}";
+          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
       });
 
@@ -192,6 +192,15 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+        };
       });
 
       plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
@@ -377,7 +386,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.2";
+  hassVersion = "2025.6.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -398,13 +407,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-el5s82R4MuTjUnMVXRQj4PhPxJxHoL6Jqvc6XRnJl8w=";
+    hash = "sha256-Pp2IIpVfzYE4BBJEq4Ll2s0vgsqxAApE8TmVd1zAg38=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-lddnAM3fja9enPYRSonwSe1aG8t55jSJQNveWPwrhOE=";
+    hash = "sha256-yc4tEyR3xpo4x9daWEwXFJBhSH3xeOc2ckO+7LWVRlA=";
   };
 
   build-system = with python.pkgs; [
@@ -423,6 +432,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -439,6 +451,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver

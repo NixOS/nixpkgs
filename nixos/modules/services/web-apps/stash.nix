@@ -167,7 +167,7 @@ let
             presets.recentlyAddedImages
           ]
         '';
-        apply = type: if builtins.isFunction type then (type uiPresets) else type;
+        apply = type: if lib.isFunction type then (type uiPresets) else type;
       };
       blobs_path = mkOption {
         type = types.path;
@@ -324,47 +324,47 @@ let
       '';
       apply =
         srcs:
-        optionalString (srcs != [ ]) (
-          pkgs.runCommand "stash-${kind}"
-            {
-              inherit srcs;
-              nativeBuildInputs = [ pkgs.yq-go ];
-              preferLocalBuild = true;
-            }
-            ''
-              find $srcs -mindepth 1 -name '*.yml' | while read plugin_file; do
-                grep -q "^#pkgignore" "$plugin_file" && continue
+        pkgs.runCommand "stash-${kind}"
+          {
+            inherit srcs;
+            nativeBuildInputs = [ pkgs.yq-go ];
+            preferLocalBuild = true;
+          }
+          ''
+            mkdir -p $out
+            touch $out/.keep
+            find $srcs -mindepth 1 -name '*.yml' | while read plugin_file; do
+              grep -q "^#pkgignore" "$plugin_file" && continue
 
-                plugin_dir=$(dirname $plugin_file)
-                out_path=$out/$(basename $plugin_dir)
-                mkdir -p $out_path
-                ls $plugin_dir | xargs -I{} ln -sf "$plugin_dir/{}" $out_path
+              plugin_dir=$(dirname $plugin_file)
+              out_path=$out/$(basename $plugin_dir)
+              mkdir -p $out_path
+              ls $plugin_dir | xargs -I{} ln -sf "$plugin_dir/{}" $out_path
 
-                env \
-                  plugin_id=$(basename $plugin_file .yml) \
-                  plugin_name="$(yq '.name' $plugin_file)" \
-                  plugin_description="$(yq '.description' $plugin_file)" \
-                  plugin_version="$(yq '.version' $plugin_file)" \
-                  plugin_files="$(find -L $out_path -mindepth 1 -type f -printf "%P\n")" \
-                  yq -n '
-                    .id = strenv(plugin_id) |
-                    .name = strenv(plugin_name) |
-                    (
-                      strenv(plugin_description) as $desc |
-                      with(select($desc == "null"); .metadata = {}) |
-                      with(select($desc != "null"); .metadata.description = $desc)
-                    ) |
-                    (
-                      strenv(plugin_version) as $ver |
-                      with(select($ver == "null"); .version = "Unknown") |
-                      with(select($ver != "null"); .version = $ver)
-                    ) |
-                    .date = (now | format_datetime("2006-01-02 15:04:05")) |
-                    .files = (strenv(plugin_files) | split("\n"))
-                  ' > $out_path/manifest
-              done
-            ''
-        );
+              env \
+                plugin_id=$(basename $plugin_file .yml) \
+                plugin_name="$(yq '.name' $plugin_file)" \
+                plugin_description="$(yq '.description' $plugin_file)" \
+                plugin_version="$(yq '.version' $plugin_file)" \
+                plugin_files="$(find -L $out_path -mindepth 1 -type f -printf "%P\n")" \
+                yq -n '
+                  .id = strenv(plugin_id) |
+                  .name = strenv(plugin_name) |
+                  (
+                    strenv(plugin_description) as $desc |
+                    with(select($desc == "null"); .metadata = {}) |
+                    with(select($desc != "null"); .metadata.description = $desc)
+                  ) |
+                  (
+                    strenv(plugin_version) as $ver |
+                    with(select($ver == "null"); .version = "Unknown") |
+                    with(select($ver != "null"); .version = $ver)
+                  ) |
+                  .date = (now | format_datetime("2006-01-02 15:04:05")) |
+                  .files = (strenv(plugin_files) | split("\n"))
+                ' > $out_path/manifest
+            done
+          '';
     };
 in
 {
@@ -512,7 +512,7 @@ in
           ExecStartPre = pkgs.writers.writeBash "stash-setup.bash" (
             ''
               install -d ${cfg.settings.generated}
-              if [[ ! -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
+              if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
                   password=$(< ${cfg.passwordFile}) \
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \

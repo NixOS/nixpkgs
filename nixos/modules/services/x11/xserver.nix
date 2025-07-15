@@ -761,7 +761,7 @@ in
         dmConf = cfg.displayManager;
         default =
           !(
-            dmConf.gdm.enable
+            config.services.displayManager.gdm.enable
             || config.services.displayManager.sddm.enable
             || dmConf.xpra.enable
             || dmConf.sx.enable

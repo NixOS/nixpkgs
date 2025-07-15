@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "timeslot";
   version = "0.1.2";
 
   # pypi distribution doesn't include tests, so build from source instead
   src = fetchFromGitHub {
     owner = "ErikBjare";
-    repo = pname;
+    repo = "timeslot";
     rev = "af35445e96cbb2f3fb671a75aac6aa93e4e7e7a6";
     sha256 = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
   };

@@ -19,6 +19,7 @@
   importlib-resources,
   numpy,
   typing-extensions,
+  jax,
 
   # tests
   gymnasium,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     tag = "v${version}";
-    hash = "sha256-RgFVpbjJp54FncQzFtdZM7p/1GBMsQ2HvLgIoaokiQc=";
+    hash = "sha256-VrPc3i1VYuThKdQn/wimNzMHNmPIAdTxbh2tuJb4YJY=";
   };
 
   build-system = [
@@ -59,12 +60,16 @@ buildPythonPackage rec {
       opencv
     ];
 
-  dependencies = [
-    gymnasium
-    importlib-resources
-    numpy
-    typing-extensions
-  ];
+  dependencies =
+    [
+      gymnasium
+      importlib-resources
+      numpy
+      typing-extensions
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      jax
+    ];
 
   postPatch =
     # Relax the pybind11 version

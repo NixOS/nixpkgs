@@ -310,12 +310,19 @@ buildStdenv.mkDerivation {
       ./no-buildconfig-ffx121.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
-    ++ [
+    ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1955112
+      # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
+      ./139-wayland-drag-animation.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "139") [ ./139-relax-apple-sdk.patch ]
+    ++ lib.optionals (lib.versionOlder version "139") [
       # Fix for missing vector header on macOS
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1959377
       # Fixed on Firefox 139
       ./firefox-mac-missing-vector-header.patch
-
+    ]
+    ++ lib.optionals (lib.versionOlder version "140") [
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1962497
       # https://phabricator.services.mozilla.com/D246545
       # Fixed on Firefox 140

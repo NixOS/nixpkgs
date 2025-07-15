@@ -533,7 +533,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
 ### Formatting
 
-CI [enforces](./.github/workflows/check-nix-format.yml) all Nix files to be
+CI [enforces](./.github/workflows/check-format.yml) all Nix files to be
 formatted using the [official Nix formatter](https://github.com/NixOS/nixfmt).
 
 You can ensure this locally using either of these commands:

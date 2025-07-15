@@ -63,7 +63,6 @@ with lib.maintainers;
     shortName = "apm employees";
     # Edits to this list should only be done by an already existing member.
     members = [
-      wolfgangwalther
       DutchGerman
     ];
   };
@@ -914,11 +913,20 @@ with lib.maintainers;
   ngi = {
     members = [
       eljamm
+      ethancedwards8
       fricklerhandwerk
+      prince213
       wegank
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
+  };
+
+  nixos-rebuild = {
+    members = [ thiagokokada ];
+    scope = "Maintain nixos-rebuild(-ng).";
+    shortName = "nixos-rebuild";
+    enableFeatureFreezePing = true;
   };
 
   node = {
@@ -1192,7 +1200,12 @@ with lib.maintainers;
   };
 
   systemd = {
-    members = [ ];
+    members = [
+      flokli
+      arianvp
+      elvishjerricco
+      aanderse
+    ];
     githubTeams = [ "systemd" ];
     scope = "Maintain systemd for NixOS.";
     shortName = "systemd";

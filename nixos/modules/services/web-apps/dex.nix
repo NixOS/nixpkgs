@@ -47,6 +47,8 @@ in
   options.services.dex = {
     enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
+    package = mkPackageOption pkgs "dex-oidc" { };
+
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -84,7 +86,7 @@ in
       '';
       description = ''
         The available options can be found in
-        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
+        [the example configuration](https://github.com/dexidp/dex/blob/v${cfg.package.version}/config.yaml.dist).
 
         It's also possible to refer to environment variables (defined in [services.dex.environmentFile](#opt-services.dex.environmentFile))
         using the syntax `$VARIABLE_NAME`.
@@ -103,7 +105,7 @@ in
       restartTriggers = restartTriggers;
       serviceConfig =
         {
-          ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
+          ExecStart = "${cfg.package}/bin/dex serve /run/dex/config.yaml";
           ExecStartPre = [
             "${pkgs.coreutils}/bin/install -m 600 ${configFile} /run/dex/config.yaml"
             "+${startPreScript}"

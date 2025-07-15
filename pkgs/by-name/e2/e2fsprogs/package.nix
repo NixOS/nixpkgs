@@ -88,17 +88,17 @@ stdenv.mkDerivation rec {
       [ -e $out/success ]
     '';
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://e2fsprogs.sourceforge.net/";
     changelog = "https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus # lib/ext2fs, lib/e2p
       bsd3 # lib/uuid
       mit # lib/et, lib/ss
     ];
-    platforms = platforms.unix;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ];
   };
 }

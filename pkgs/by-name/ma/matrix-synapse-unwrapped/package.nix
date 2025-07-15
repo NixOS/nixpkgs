@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   openssl,
   libiconv,
@@ -18,30 +17,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.129.0";
+  version = "1.131.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-JDaTFbRb2eNtzxZBLn8wOBEN5uJcInNrhFnGFZjI8is=";
+    hash = "sha256-nXDVkuV5GCk0Lp4LfyiModKdO30PJ40B5mXdm5tMHQo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-PdAyEGLYmMLgcPQjzjuwvQo55olKgr079gsgQnUoKTM=";
+    inherit pname version src;
+    hash = "sha256-9VJnn8aPkShqK2wYGFr+S5koIjma7VOr+LkLXwStL1E=";
   };
-
-  patches = [
-    # fix compatibility with authlib 1.5.2
-    # https://github.com/element-hq/synapse/pull/18390
-    (fetchpatch {
-      url = "https://github.com/element-hq/synapse/commit/c9adbc6a1ce6039b1c04ae3298e463a3e3b25c38.patch";
-      hash = "sha256-0EZL0esZ6IEjmBV1whSpfZoFsMJ2yZQPi1GjW7NQ484=";
-    })
-  ];
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
@@ -191,12 +180,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://matrix.org";
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sumnerevans ];
-    teams = [ teams.matrix ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sumnerevans ];
+    teams = [ lib.teams.matrix ];
   };
 }

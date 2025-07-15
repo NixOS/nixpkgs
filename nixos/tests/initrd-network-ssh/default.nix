@@ -4,7 +4,6 @@ import ../make-test-python.nix (
   {
     name = "initrd-network-ssh";
     meta.maintainers = with lib.maintainers; [
-      willibutz
       emily
     ];
 

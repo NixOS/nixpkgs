@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "netdiscover-scanner";
-    repo = pname;
+    repo = "netdiscover";
     tag = version;
     hash = "sha256-I3t9GsgKFo/eJrqYzj8T2Epfi3SURicwRYPBK25uHEw=";
   };

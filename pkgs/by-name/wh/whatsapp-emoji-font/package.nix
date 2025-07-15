@@ -4,8 +4,8 @@
   fetchFromGitHub,
   imagemagick,
   nix-update-script,
+  nototools,
   pngquant,
-  python3Packages,
   which,
   zopfli,
 }:
@@ -29,8 +29,8 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     imagemagick
+    nototools
     pngquant
-    python3Packages.nototools
     which
     zopfli
   ];

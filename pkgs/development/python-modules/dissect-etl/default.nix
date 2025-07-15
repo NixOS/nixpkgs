@@ -40,6 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.etl" ];
 
+  disabledTests = [
+    # Invalid header magic
+    "test_sqlite"
+    "test_empty"
+  ];
+
   meta = with lib; {
     description = "Dissect module implementing a parser for Event Trace Log (ETL) files";
     homepage = "https://github.com/fox-it/dissect.etl";

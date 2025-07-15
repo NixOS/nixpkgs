@@ -4,31 +4,30 @@
   fetchFromSourcehut,
   pkg-config,
   sqlite,
-  scdoc,
   installShellFiles,
   makeWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EHDGiyDGNr6cPj2N2cTV0f7I9vmM/WIZTsPR1f+HFIE=";
+    hash = "sha256-6oV9E6Q6FmCh24xT9+lsQ47GVs70sSujsn54dX6CPgY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/6YjyKB/xOCTNZlKewddEaZ1ZN2PC5dQoP0A5If67MA=";
+  cargoHash = "sha256-vnBk0uojWDM9PS8v5Qda2UflmIFZ09Qp9l25qTTWGMc=";
 
   PIMSYNC_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pkg-config
-    scdoc
     makeWrapper
     installShellFiles
   ];
@@ -37,13 +36,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
-  postBuild = ''
-    make man
+  postInstall = ''
+    installManPage pimsync.1 pimsync.conf.5 pimsync-migration.7
   '';
 
-  postInstall = ''
-    installManPage target/pimsync.1 target/pimsync.conf.5 target/pimsync-migration.7
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

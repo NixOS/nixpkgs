@@ -59,12 +59,12 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
     changelog = "https://github.com/s3ql/s3ql/releases/tag/s3ql-${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ rushmorem ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ rushmorem ];
+    platforms = lib.platforms.linux;
   };
 }

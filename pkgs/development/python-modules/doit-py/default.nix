@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pydoit";
-    repo = pname;
+    repo = "doit-py";
     rev = version;
     hash = "sha256-DBl6/no04ZGRHHmN9gkEtBmAMgmyZWcfPCcFz0uxAv4=";
   };

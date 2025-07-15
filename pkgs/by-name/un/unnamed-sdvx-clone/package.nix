@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A game based on K-Shoot MANIA and Sound Voltex";
+    description = "Game based on K-Shoot MANIA and Sound Voltex";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

@@ -10,11 +10,15 @@
   yq,
 }:
 
+let
+  pnpm' = pnpm;
+in
 {
-  fetchDeps =
+  fetchDeps = lib.makeOverridable (
     {
       hash ? "",
       pname,
+      pnpm ? pnpm',
       pnpmWorkspaces ? [ ],
       prePnpmInstall ? "",
       pnpmInstallFlags ? [ ],
@@ -52,7 +56,7 @@
             cacert
             jq
             moreutils
-            pnpm
+            args.pnpm or pnpm'
             yq
           ];
 
@@ -109,7 +113,7 @@
 
           passthru = {
             serve = callPackage ./serve.nix {
-              inherit pnpm;
+              pnpm = args.pnpm or pnpm';
               pnpmDeps = finalAttrs.finalPackage;
             };
           };
@@ -120,7 +124,8 @@
         }
         // hash'
       )
-    );
+    )
+  );
 
   configHook = makeSetupHook {
     name = "pnpm-config-hook";

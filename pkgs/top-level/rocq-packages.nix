@@ -37,6 +37,7 @@ let
       mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq { });
 
       bignums = callPackage ../development/rocq-modules/bignums { };
+      hierarchy-builder = callPackage ../development/rocq-modules/hierarchy-builder { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
 

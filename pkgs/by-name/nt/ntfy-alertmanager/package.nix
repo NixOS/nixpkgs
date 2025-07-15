@@ -16,7 +16,7 @@ buildGoModule rec {
   vendorHash = "sha256-8a6dvBERegpFYFHQGJppz5tlQioQAudCe3/Q7vro+ZI=";
 
   meta = with lib; {
-    description = "A bridge between ntfy and Alertmanager";
+    description = "Bridge between ntfy and Alertmanager";
     homepage = "https://git.xenrox.net/~xenrox/ntfy-alertmanager";
     license = licenses.agpl3Only;
     mainProgram = "ntfy-alertmanager";

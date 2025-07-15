@@ -20,7 +20,7 @@ with haskellLib;
 
 self: super:
 {
-  # Hackage's accelerate is from 2020 and incomptible with our GHC.
+  # Hackage's accelerate is from 2020 and incompatible with our GHC.
   # The existing derivation also has missing dependencies
   # compared to the source from github.
   # https://github.com/AccelerateHS/accelerate/issues/553
@@ -544,24 +544,24 @@ self: super:
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7.8";
+    version = "1.7.9";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      tag = "v1.7.8";
-      hash = "sha256-pb5aYkE8FOoa4n123slgHiOf1UbNSnKe5pEZC+xXD5g=";
+      tag = "v1.7.9";
+      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (
     overrideCabal
       (drv: {
-        version = "1.7.8";
+        version = "1.7.9";
         src = pkgs.fetchFromGitHub {
           owner = "cachix";
           repo = "cachix";
-          tag = "v1.7.8";
-          hash = "sha256-pb5aYkE8FOoa4n123slgHiOf1UbNSnKe5pEZC+xXD5g=";
+          tag = "v1.7.9";
+          hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
         };
         postUnpack = "sourceRoot=$sourceRoot/cachix";
       })
@@ -791,7 +791,7 @@ self: super:
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
 
-  # Bogus lower bound on data-default-class added via Hackage revison
+  # Bogus lower bound on data-default-class added via Hackage revision
   # https://github.com/mrkkrp/req/pull/180#issuecomment-2628201485
   req = overrideCabal {
     revision = null;
@@ -1963,7 +1963,7 @@ self: super:
     license = lib.licenses.bsd3;
     # ghc-bignum is not buildable if none of the three backends
     # is explicitly enabled. We enable Native for now as it doesn't
-    # depend on anything else as oppossed to GMP and FFI.
+    # depend on anything else as opposed to GMP and FFI.
     # Apply patch which fixes a compilation failure we encountered.
     # Will need to be kept until we can drop ghc-bignum entirely,
     # i. e. if GHC 8.10.* and 8.8.* have been removed.
@@ -2087,6 +2087,26 @@ self: super:
   # FIXME: These should be removed as gi-gtk4/gi-gdk4 become the standard
   gi-gtk_4 = self.gi-gtk_4_0_12;
   gi-gdk_4 = self.gi-gdk_4_0_10;
+
+  # Missing dependency on gi-gdkpixbuf
+  # https://github.com/haskell-gi/haskell-gi/commit/889f478456b38425eca7df42b01f85fae626f113
+  # Fixed in 2.91.35
+  gi-vte = overrideCabal (
+    oldAttrs:
+    assert lib.versionOlder oldAttrs.version "2.91.35";
+    {
+      # This is implemented as a sed expression instead of pulling a patch
+      # from upstream because the gi-vte repo doesn't actually contain a
+      # gi-vte.cabal file. The gi-vte.cabal file is generated from metadata in
+      # the repo.
+      postPatch =
+        (oldAttrs.postPatch or "")
+        + ''
+          sed -i 's/\(gi-gtk == .*\),/\1, gi-gdkpixbuf == 2.0.*,/' ./gi-vte.cabal
+        '';
+      buildDepends = (oldAttrs.buildDepends or [ ]) ++ [ self.gi-gdkpixbuf ];
+    }
+  ) super.gi-vte;
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck
@@ -2509,7 +2529,7 @@ self: super:
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
-  # Test failure after libxcrypt migration, reported upstrem at
+  # Test failure after libxcrypt migration, reported upstream at
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
 

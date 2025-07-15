@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A very simple static homepage for your server.";
+    description = "Very simple static homepage for your server";
     homepage = "https://homer-demo.netlify.app/";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;

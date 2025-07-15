@@ -27,12 +27,12 @@ buildGoModule rec {
     install -m755 $out/bin/cli $out/bin/sem
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cli to operate on semaphore ci (2.0)";
     homepage = "https://github.com/semaphoreci/cli";
     changelog = "https://github.com/semaphoreci/cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ liberatys ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ liberatys ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fuc";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
     tag = finalAttrs.version;
-    hash = "sha256-wmCLJUuGL5u0VIIT17VB63xjfyBVy7/f0Qy27MezDN8=";
+    hash = "sha256-VHIR/hw++Zv1IWzx45B7PTK0Jyzt1QqzM+Bj6CBAh1A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hZEPH0Bx7lCU9xYIFLqBez4y+gIA0+WCqag3ZE6cPM0=";
+  cargoHash = "sha256-xYpxrg8RWDW3RBvHRafrSh7gEB6qGGGxl/QRM1rtZJY=";
 
   RUSTC_BOOTSTRAP = 1;
 

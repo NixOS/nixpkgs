@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
+    repo = "flake8-bugbear";
     tag = version;
     hash = "sha256-ZMIpQUF+aXiq2NG0v19UwhWszrW/l50aJmG4YDV0+Wg=";
   };

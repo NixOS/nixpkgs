@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "landley";
-    repo = pname;
+    repo = "toybox";
     rev = version;
     sha256 = "sha256-D+tf2bJQlf2pLMNZdMUOoUdE3ea/KgkqoXGsnl1MVOE=";
   };

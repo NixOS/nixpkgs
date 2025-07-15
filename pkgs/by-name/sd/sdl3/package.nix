@@ -33,6 +33,11 @@
   wayland-scanner,
   xorg,
   zenity,
+  # for passthru.tests
+  SDL_compat,
+  sdl2-compat,
+  sdl3-image,
+  sdl3-ttf,
   alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   drmSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
@@ -204,7 +209,15 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      {
+      SDL_compat.tests
+      // sdl2-compat.tests
+      // {
+        inherit
+          SDL_compat
+          sdl2-compat
+          sdl3-image
+          sdl3-ttf
+          ;
         pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
         inherit (finalAttrs.passthru) debug-text-example;
       }

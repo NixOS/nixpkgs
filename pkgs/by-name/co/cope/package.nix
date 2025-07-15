@@ -33,7 +33,7 @@ perlPackages.buildPerlPackage {
   '';
 
   meta = {
-    description = "A colourful wrapper for terminal programs";
+    description = "Colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
     license = with lib.licenses; [
       artistic1

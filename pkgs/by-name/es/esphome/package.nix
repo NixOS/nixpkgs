@@ -17,19 +17,30 @@ let
     self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
+
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+        build-system = with self; [ setuptools ];
+        doCheck = false;
+      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.4.2";
+  version = "2025.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "esphome";
+    repo = "esphome";
     tag = version;
-    hash = "sha256-vy/wjtl/IbdSOxAUsV4bl7VNEBTetsvIDh2V1gDHSMs=";
+    hash = "sha256-p4+OuBGS9OJxxiQ4xOO2WseUrw3yXWyCZn7jilnh06E=";
   };
 
   build-systems = with python.pkgs; [
@@ -50,10 +61,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
-
-    # ensure component dependencies are available
-    cat requirements_optional.txt >> requirements.txt
+      --replace-fail "setuptools==80.4.0" "setuptools"
   '';
 
   # Remove esptool and platformio from requirements
@@ -151,16 +159,15 @@ python.pkgs.buildPythonApplication rec {
     tests = { inherit (nixosTests) esphome; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [
-      globin
+    maintainers = with lib.maintainers; [
       hexa
     ];
     mainProgram = "esphome";

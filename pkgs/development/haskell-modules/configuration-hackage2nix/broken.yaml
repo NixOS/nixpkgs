@@ -3739,7 +3739,6 @@ broken-packages:
   - lxd-client-config # failure in job https://hydra.nixos.org/build/233225008 at 2023-09-02
   - lxd-client # failure in job https://hydra.nixos.org/build/233231826 at 2023-09-02
   - lye # failure in job https://hydra.nixos.org/build/233229866 at 2023-09-02
-  - lz4-frame-conduit # failure in job https://hydra.nixos.org/build/233225578 at 2023-09-02
   - lzip # failure in job https://hydra.nixos.org/build/233215027 at 2023-09-02
   - lzma-streams # failure in job https://hydra.nixos.org/build/233229106 at 2023-09-02
   - lzo # failure in job https://hydra.nixos.org/build/233200657 at 2023-09-02

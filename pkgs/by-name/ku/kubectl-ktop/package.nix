@@ -30,11 +30,11 @@ buildGoModule rec {
     ln -s $out/bin/ktop $out/bin/kubectl-ktop
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Top-like tool for your Kubernetes clusters";
     homepage = "https://github.com/vladimirvivien/ktop";
     changelog = "https://github.com/vladimirvivien/ktop/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

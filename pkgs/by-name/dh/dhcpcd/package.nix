@@ -8,6 +8,8 @@
   runtimeShellPackage,
   runtimeShell,
   nixosTests,
+  # Always tries to do dynamic linking for udev.
+  withUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   enablePrivSep ? false,
 }:
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     [
       runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals withUdev [
       udev
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
@@ -58,9 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (
-    udev != null && stdenv.hostPlatform.isLinux
-  ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString withUdev "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
     inherit (nixosTests.networking.scripted)

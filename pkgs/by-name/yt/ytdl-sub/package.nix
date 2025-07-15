@@ -4,18 +4,18 @@
   ffmpeg,
   lib,
   versionCheckHook,
-  nix-update-script,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2025.05.05";
+  version = "2025.06.01.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
-    hash = "sha256-zLYP3iGbTcWuffed7o5RuoYjlUvVFRt8FUOhL1vbW/U=";
+    hash = "sha256-qwsUb9w/eeNO1mGYpnwkWgH5AfcUm7Y7DtkWep8SAcA=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";

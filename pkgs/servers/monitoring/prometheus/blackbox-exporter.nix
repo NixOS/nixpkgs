@@ -42,7 +42,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       globin
       fpletz
-      willibutz
       Frostman
       ma27
     ];

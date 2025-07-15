@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2024.0.0";
+  version = "2024.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = "v${version}";
-    hash = "sha256-9ipFayi9y/eND2q3Sz8J9B0OogkMDg73Q2+Pm3ujQ1w=";
+    hash = "sha256-fX6m6K8FaqTbyAKl21L59b5eMw7iw2x95OVFQK3rEVA=";
   };
 
   pythonRelaxDeps = [ "deepdiff" ];

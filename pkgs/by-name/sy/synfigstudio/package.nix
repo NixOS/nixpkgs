@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "2D animation program";
-    homepage = "http://www.synfig.org";
+    homepage = "https://www.synfig.org";
     license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;

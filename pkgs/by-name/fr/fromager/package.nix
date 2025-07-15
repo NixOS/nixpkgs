@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fromager";
-  version = "0.46.1";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = version;
-    hash = "sha256-SBb5gWV8/t3oRAR2R5T72DW1LKrxXXH6yho9l7agsNI=";
+    hash = "sha256-Jw5fOhY4WOwYG5QPCcsT6+BicGtqz9UrHcpPsPQlOWc=";
   };
 
   build-system = with python3.pkgs; [

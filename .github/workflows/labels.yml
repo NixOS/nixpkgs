@@ -6,21 +6,139 @@
 name: "Label PR"
 
 on:
-  pull_request_target:
-    types: [edited, opened, synchronize, reopened]
+  workflow_call:
+  workflow_run:
+    workflows:
+      - Review dismissed
+      - Review submitted
+    types: [completed]
+
+concurrency:
+  group: labels-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 permissions:
-  contents: read
+  issues: write # needed to create *new* labels
   pull-requests: write
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   labels:
     name: label-pr
     runs-on: ubuntu-24.04-arm
-    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
+    if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        id: eval
+        with:
+          script: |
+            const run_id = (await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'eval.yml',
+              event: 'pull_request_target',
+              head_sha: context.payload.pull_request?.head.sha ?? context.payload.workflow_run.head_sha
+            })).data.workflow_runs[0]?.id
+            core.setOutput('run-id', run_id)
+
+      - name: Download the comparison results
+        if: steps.eval.outputs.run-id
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          run-id: ${{ steps.eval.outputs.run-id }}
+          github-token: ${{ github.token }}
+          pattern: comparison
+          path: comparison
+          merge-multiple: true
+
+      - name: Labels from eval
+        if: steps.eval.outputs.run-id && github.event_name != 'pull_request'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
+
+            let pull_requests
+            if (context.payload.workflow_run) {
+              // PRs from forks don't have any PRs associated by default.
+              // Thus, we request the PR number with an API call *to* the fork's repo.
+              // Multiple pull requests can be open from the same head commit, either via
+              // different base branches or head branches.
+              const { head_repository, head_sha, repository } = context.payload.workflow_run
+              pull_requests = (await github.paginate(github.rest.repos.listPullRequestsAssociatedWithCommit, {
+                owner: head_repository.owner.login,
+                repo: head_repository.name,
+                commit_sha: head_sha
+              })).filter(pull_request => pull_request.base.repo.id == repository.id)
+            } else {
+              pull_requests = [ context.payload.pull_request ]
+            }
+
+            await Promise.all(
+              pull_requests.map(async (pull_request) => {
+                const pr = {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pull_request.number
+                }
+
+                // Get all currently set labels that we manage
+                const before =
+                  (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
+                  .map(({ name }) => name)
+                  .filter(name =>
+                    name.startsWith('10.rebuild') ||
+                    name == '11.by: package-maintainer' ||
+                    name.startsWith('12.approvals:') ||
+                    name == '12.approved-by: package-maintainer'
+                  )
+
+                const approvals = new Set(
+                  (await github.paginate(github.rest.pulls.listReviews, {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pull_request.number
+                  }))
+                  .filter(review => review.state == 'APPROVED')
+                  .map(review => review.user.id)
+                )
+
+                const maintainers = new Set(Object.keys(
+                  JSON.parse(await readFile('comparison/maintainers.json', 'utf-8'))
+                ))
+
+                // And the labels that should be there
+                const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
+                if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
+                if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
+
+                // Remove the ones not needed anymore
+                await Promise.all(
+                  before.filter(name => !after.includes(name))
+                  .map(name => github.rest.issues.removeLabel({
+                    ...pr,
+                    name
+                  }))
+                )
+
+                // And add the ones that aren't set already
+                const added = after.filter(name => !before.includes(name))
+                if (added.length > 0) {
+                  await github.rest.issues.addLabels({
+                    ...pr,
+                    labels: added
+                  })
+                }
+              })
+            )
+
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files
         if: |
+          github.event_name != 'workflow_run' &&
           github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
@@ -31,8 +149,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml # default
           sync-labels: true
+
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (no sync)
         if: |
+          github.event_name != 'workflow_run' &&
           github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
@@ -43,11 +164,14 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
+
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (development branches)
         # Development branches like staging-next, haskell-updates and python-updates get special labels.
         # This is to avoid the mass of labels there, which is mostly useless - and really annoying for
         # the backport labels.
         if: |
+          github.event_name != 'workflow_run' &&
           github.event.pull_request.head.repo.owner.login == 'NixOS' && (
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||

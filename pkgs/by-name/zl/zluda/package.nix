@@ -55,6 +55,11 @@ rustPlatform.buildRustPackage rec {
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.cargoShortTarget;
+  # Future packagers:
+  # This is a fix for https://github.com/NixOS/nixpkgs/issues/390469. Ideally
+  # ZLUDA should configure this automatically. Therefore, on every new update,
+  # please try removing this line and see if ZLUDA builds.
+  env.CMAKE_BUILD_TYPE = "Release";
 
   preConfigure = ''
     # disable test written for windows only: https://github.com/vosen/ZLUDA/blob/774f4bcb37c39f876caf80ae0d39420fa4bc1c8b/zluda_inject/tests/inject.rs#L55

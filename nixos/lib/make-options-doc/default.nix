@@ -45,7 +45,7 @@
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
 
-  > Note: NixOS itself uses this ouput to to build the configuration.nix man page"
+  > Note: NixOS itself uses this output to to build the configuration.nix man page"
 
   ## optionsNix
 
@@ -59,7 +59,7 @@
   let
     # Evaluate a NixOS configuration
     eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-      # Overriden explicitly here, this would include all modules from NixOS otherwise.
+      # Overridden explicitly here, this would include all modules from NixOS otherwise.
       # See: docs of eval-config.nix for more details
       baseModules = [];
       modules = [

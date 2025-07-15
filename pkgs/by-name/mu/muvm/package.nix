@@ -39,7 +39,7 @@ let
     dhcpcd
     passt
     (placeholder "out")
-  ] ++ lib.optionals stdenv.isAarch64 [ fex ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ fex ];
   wrapArgs = lib.escapeShellArgs [
     "--prefix"
     "PATH"
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
-    repo = pname;
+    repo = "muvm";
     rev = "muvm-${version}";
     hash = "sha256-1XPhVEj7iqTxdWyYwNk6cbb9VRGuhpvvowYDPJb1cWU=";
   };
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
         --replace-fail "/sbin/sysctl" "${lib.getExe' procps "sysctl"}"
     ''
     # Only patch FEX path if we're aarch64, otherwise we don't want the derivation to pull in FEX in any way
-    + lib.optionalString stdenv.isAarch64 ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace crates/muvm/src/guest/mount.rs \
         --replace-fail "/usr/share/fex-emu" "${fex}/share/fex-emu"
     '';

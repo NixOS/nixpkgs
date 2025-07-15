@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Allow completly unvendoring hyperhdr
+    # Allow completely unvendoring hyperhdr
     # This can be removed on the next hyperhdr release
     ./unvendor.patch
   ];

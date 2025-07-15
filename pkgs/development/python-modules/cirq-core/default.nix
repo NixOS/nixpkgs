@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.4.1-unstable-2024-09-21";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
-    rev = "3fefe2984a1203c0bf647c1ea84f4882b05f8477";
-    hash = "sha256-/WDKVxNJ8pewTLAFTyAZ/nnYcJSLubEJcn7qoJslZ3U=";
+    tag = "v${version}";
+    hash = "sha256-4FgXX4ox7BkjmLecxsvg0/JpcrHPn6hlFw5rk4bn9Cc=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -98,6 +98,10 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # https://github.com/quantumlib/Cirq/issues/5924
       "test_prepare_two_qubit_state_using_sqrt_iswap"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # test_scalar_division[scalar9-terms9-terms_expected9] result differs in the final digit
+      "test_scalar_division"
     ];
 
   meta = {

@@ -3,6 +3,7 @@
   azure-core,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   setuptools,
   typing-extensions,
 }:
@@ -35,6 +36,10 @@ buildPythonPackage rec {
     "azure.eventhub"
     "azure.eventhub.aio"
   ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "azure.eventhub."; };
+  };
 
   meta = with lib; {
     description = "Microsoft Azure Event Hubs Client Library for Python";

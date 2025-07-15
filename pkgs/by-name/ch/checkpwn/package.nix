@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_cli_"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Check Have I Been Pwned and see if it's time for you to change passwords";
     homepage = "https://github.com/brycx/checkpwn";
     changelog = "https://github.com/brycx/checkpwn/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "checkpwn";
   };
 }

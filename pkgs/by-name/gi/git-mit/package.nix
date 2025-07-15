@@ -44,11 +44,11 @@ rustPlatform.buildRustPackage {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";
     homepage = "https://github.com/PurpleBooth/git-mit";
     changelog = "https://github.com/PurpleBooth/git-mit/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

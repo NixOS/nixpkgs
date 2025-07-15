@@ -1,68 +1,83 @@
 {
   lib,
   stdenv,
-  accelerate,
   buildPythonPackage,
-  docker,
-  duckduckgo-search,
   fetchFromGitHub,
-  gradio,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   huggingface-hub,
   jinja2,
-  ipython,
-  litellm,
-  markdownify,
-  mcp,
-  mcpadapt,
-  openai,
-  pandas,
   pillow,
-  pytest-datadir,
-  pytestCheckHook,
   python-dotenv,
   requests,
   rich,
-  setuptools,
+
+  # optional-dependencies
+  # audio
   soundfile,
+  # bedrock
+  boto3,
+  # docker
+  docker,
+  websocket-client,
+  # gradio
+  gradio,
+  # litellm
+  litellm,
+  # mcp
+  mcp,
+  mcpadapt,
+  # openai
+  openai,
+  # toolkit
+  duckduckgo-search,
+  markdownify,
+  # torch
+  numpy,
   torch,
   torchvision,
+  # transformers
+  accelerate,
   transformers,
-  websocket-client,
+
+  # tests
+  ipython,
+  pytest-datadir,
+  pytestCheckHook,
   wikipedia-api,
 }:
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.13.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-LZW2MsBowr2ttl3V5J3AlIxZijo++DwT02gBVaXXBXs=";
+    hash = "sha256-pRpogmVes8ZX19GZff+HmGdykvMnBJ7hGsoYsUGVOSY=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
   dependencies = [
-    duckduckgo-search
     huggingface-hub
     jinja2
-    markdownify
-    pandas
     pillow
     python-dotenv
     requests
     rich
   ];
 
-  optional-dependencies = {
-    audio = [ soundfile ];
+  optional-dependencies = lib.fix (self: {
+    audio = [ soundfile ] ++ self.torch;
+    bedrock = [ boto3 ];
     docker = [
       docker
       websocket-client
@@ -85,14 +100,19 @@ buildPythonPackage rec {
     #   opentelemetry-exporter-otlp
     #   opentelemetry-sdk
     # ];
+    toolkit = [
+      duckduckgo-search
+      markdownify
+    ];
     torch = [
+      numpy
       torch
       torchvision
     ];
     transformers = [
       accelerate
       transformers
-    ];
+    ] ++ self.torch;
     # vision = [
     #   helium
     #   selenium
@@ -101,7 +121,7 @@ buildPythonPackage rec {
     #   torch
     #   vllm
     # ];
-  };
+  });
 
   nativeCheckInputs = [
     ipython
@@ -118,9 +138,10 @@ buildPythonPackage rec {
       "test_ddgs_with_kwargs"
       "test_e2b_executor_instantiation"
       "test_flatten_messages_as_text_for_all_models"
-      "test_from_mcp"
+      "mcp"
       "test_import_smolagents_without_extras"
       "test_vision_web_browser_main"
+      "test_multiple_servers"
       # Tests require network access
       "test_agent_type_output"
       "test_call_different_providers_without_key"
@@ -131,7 +152,7 @@ buildPythonPackage rec {
       "test_visit_webpage"
       "test_wikipedia_search"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Missing dependencies
       "test_get_mlx"
 

@@ -57,12 +57,12 @@ python3.pkgs.buildPythonApplication rec {
     "boofuzz"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network protocol fuzzing tool";
     mainProgram = "boo";
     homepage = "https://github.com/jtpereyda/boofuzz";
     changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

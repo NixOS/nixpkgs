@@ -15,7 +15,7 @@
   docker-compose,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -59,16 +59,13 @@ buildPythonPackage rec {
     "test_dockerfile_command_with_docker_compose"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "cli==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "cli==";
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
-    homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;

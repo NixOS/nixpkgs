@@ -6,7 +6,7 @@
 }:
 
 let
-  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "11.0";
+  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "darwin.apple_sdk_11_0" "11.0";
 in
 lib.genAttrs [
   "CLTools_Executables"
@@ -249,17 +249,24 @@ lib.genAttrs [
     "simd"
   ] mkStub;
 
-  inherit (pkgs)
-    callPackage
-    stdenv
-    llvmPackages_12
-    llvmPackages_13
-    llvmPackages_14
-    llvmPackages_15
-    llvmPackages_16
-    rustPlatform
-    xcodebuild
-    ;
-
   version = "11.0";
 }
+//
+  lib.genAttrs
+    [
+      "callPackage"
+      "stdenv"
+      "llvmPackages_12"
+      "llvmPackages_13"
+      "llvmPackages_14"
+      "llvmPackages_15"
+      "llvmPackages_16"
+      "rustPlatform"
+      "xcodebuild"
+    ]
+    (
+      name:
+      lib.warn
+        "darwin.apple_sdk_11_0.${name}: deprecated and will be removed in Nixpkgs 25.11; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin> for documentation and migration instructions"
+        pkgs.${name}
+    )

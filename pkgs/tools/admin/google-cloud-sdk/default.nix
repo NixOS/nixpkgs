@@ -21,7 +21,26 @@
 }:
 
 let
-  pythonEnv = python3.withPackages (
+  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
+  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
+  pythonCustom = python3.override {
+    self = pythonCustom;
+    packageOverrides = _: super: {
+      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+        version = "24.2.1";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
+        };
+        disabledTests = old.disabledTests ++ [
+          "test_shutdown_closed"
+          "test_closed"
+        ];
+      });
+    };
+  };
+
+  pythonEnv = pythonCustom.withPackages (
     p:
     with p;
     [

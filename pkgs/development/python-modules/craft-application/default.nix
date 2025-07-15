@@ -10,7 +10,7 @@
   craft-providers,
   jinja2,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   hypothesis,
   license-expression,
   nix-update-script,
@@ -20,29 +20,33 @@
   pytest-mock,
   pytest-subprocess,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   responses,
   setuptools-scm,
   snap-helpers,
   freezegun,
+  cacert,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.10.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
+    hash = "sha256-6iD35ql3/vUzILh5VMWiFwBKPoGPfCUgEKD4g7s55Y0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==75.8.0" "setuptools"
+
+      substituteInPlace craft_application/git/_utils.py \
+        --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
   '';
 
   build-system = [ setuptools-scm ];
@@ -68,7 +72,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     hypothesis
     pyfakefs
     pytest-check
@@ -76,11 +80,10 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Tests require access to /etc/os-release, which isn't accessible in
     # the test environment, so create a fake file, and modify the code
     # to look for it.
@@ -90,6 +93,11 @@ buildPythonPackage rec {
 
     substituteInPlace craft_application/util/platforms.py \
       --replace-fail "os_utils.OsRelease()" "os_utils.OsRelease(os_release_file='$HOME/os-release')"
+
+    # Not using `--replace-fail` here only because it simplifies overriding this package in the charmcraft
+    # derivation. Once charmcraft has moved to craft-application >= 5, `--replace-fail` can be added.
+    substituteInPlace tests/conftest.py \
+      --replace "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
   '';
 
   pythonImportsCheck = [ "craft_application" ];
@@ -109,6 +117,10 @@ buildPythonPackage rec {
       # slightly in a later revision of craft-platforms. No functional error.
       "test_platform_invalid_arch"
       "test_platform_invalid_build_arch"
+      # Asserts against string output which fails when not on Ubuntu.
+      "test_run_error_with_docs_url"
+      # Asserts a fallback path for SSL certs that we override in a patch.
+      "test_import_fallback_wrong_metadata"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
@@ -116,6 +128,11 @@ buildPythonPackage rec {
       "test_process_grammar_platform"
       "test_process_grammar_default"
     ];
+
+  disabledTestPaths = [
+    # These tests assert outputs of commands that assume Ubuntu-related output.
+    "tests/unit/services/test_lifecycle.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
   fetchurl,
   installShellFiles,
   jdk,
@@ -23,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     makeWrapper
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =

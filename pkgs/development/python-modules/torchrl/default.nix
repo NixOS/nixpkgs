@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-icT+QeA2FNhZjwD0ykui4aq5WswDv2i1QRh7dNlA4Cg=";
+    hash = "sha256-ANoqIAVKSq023hG83Q71t8oLzud1LeVN5WVPYL3nOks=";
   };
 
   build-system = [

@@ -62,12 +62,12 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ chromaprint ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find duplicate audio files using acoustic fingerprints";
     homepage = "https://codeberg.org/derat/soundalike";
     changelog = "https://codeberg.org/derat/soundalike/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ atar13 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ atar13 ];
     mainProgram = "soundalike";
   };
 }

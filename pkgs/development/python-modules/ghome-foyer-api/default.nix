@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ghome-foyer-api";
-  version = "1.1.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KapJI";
     repo = "ghome-foyer-api";
     tag = "v${version}";
-    hash = "sha256-sup+j9GFGTR+HimpkpvvAqtgYWtJt2qCPZzLvMG8hzI=";
+    hash = "sha256-Y8TfQ0cvmKyLw0UOoLbkXk2vSj+Qb11fCVfNrC1iYao=";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generated Python protobuf stubs for Google Home internal API";
     homepage = "https://github.com/KapJI/ghome-foyer-api";
-    changelog = "https://github.com/KapJI/ghome-foyer-api/releases/tag/v${version}";
+    changelog = "https://github.com/KapJI/ghome-foyer-api/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hensoko

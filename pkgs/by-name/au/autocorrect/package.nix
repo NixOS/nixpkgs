@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
-  version = "2.13.3";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
-    repo = pname;
+    repo = "autocorrect";
     rev = "v${version}";
-    sha256 = "sha256-fwq+Q2GpPXWfIQjfSACBjdyjrmYwVKSSZxCy3+NIKNI=";
+    sha256 = "sha256-Tqg0awxRtzqAVTTVrmN0RDTQvYJllejx8V94jTreZyI=";
   };
 
   cargoLock = {
@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Linter and formatter for help you improve copywriting, to correct spaces, punctuations between CJK (Chinese, Japanese, Korean)";
     mainProgram = "autocorrect";
     homepage = "https://huacnlee.github.io/autocorrect";
     changelog = "https://github.com/huacnlee/autocorrect/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }

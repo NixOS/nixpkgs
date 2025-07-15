@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/genact --print-completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nonsense activity generator";
     homepage = "https://github.com/svenstaro/genact";
     changelog = "https://github.com/svenstaro/genact/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "genact";
   };
 }

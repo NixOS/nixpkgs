@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "14.5.0";
+  version = "14.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-VWYl+8hS9XnvtqmokNntdKGHWSJVlGPomvAEwaBcjY8=";
+    hash = "sha256-hoBT83p2PHZR5NtVChdWK5SMjLt8llj59K5ODaKtRhQ=";
   };
 
   build-system = [ setuptools ];

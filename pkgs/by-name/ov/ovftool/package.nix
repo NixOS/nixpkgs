@@ -341,7 +341,7 @@ stdenv.mkDerivation (final: {
     ];
     platforms = builtins.attrNames ovftoolSystems;
     mainProgram = "ovftool";
-    knownVulnerabilities = lib.optionals (stdenv.isDarwin) [
+    knownVulnerabilities = lib.optionals (stdenv.hostPlatform.isDarwin) [
       "The bundled version of openssl 1.0.2zj in ovftool for Darwin has open vulnerabilities."
       "https://openssl-library.org/news/vulnerabilities-1.0.2/"
       "CVE-2024-0727"

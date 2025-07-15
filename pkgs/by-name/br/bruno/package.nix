@@ -13,24 +13,26 @@
   cairo,
   pango,
   npm-lockfile-fix,
+  jq,
+  moreutils,
 }:
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-4SIOLVXVxRSaSmZcje//+o/dyLINDAM2CvLQGEAykq0=";
+    hash = "sha256-5kCYKktD71LdknIITSXzl/r5IRUyBUCKL9mmjsMwYRI=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-W4qF2/AAcygqykB4zcBjb8KhfVaMrj8FLgadalDNF+0=";
+  npmDepsHash = "sha256-AA+f6xVd1hmZUum7AlhHivqNez7xP1kEd/GXd798QCI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -67,6 +69,10 @@ buildNpmPackage rec {
     # disable telemetry
     substituteInPlace packages/bruno-app/src/providers/App/index.js \
       --replace-fail "useTelemetry({ version });" ""
+
+    # fix version reported in sidebar and about page
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
+    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
   '';
 
   postConfigure = ''

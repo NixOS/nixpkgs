@@ -28,7 +28,7 @@ let
     inherit version;
 
     inherit src;
-    sourceRoot = "source/ms-tools";
+    sourceRoot = "${src.name}/ms-tools";
     vendorHash = null; # dependencies are vendored in the release tarball
 
     buildInputs = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/carrotIndustries/usbkvm";
-    description = "An open-source USB KVM (Keyboard, Video and Mouse) adapter";
+    description = "Open-source USB KVM (Keyboard, Video and Mouse) adapter";
     changelog = "https://github.com/carrotIndustries/usbkvm/releases/tag/v${version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lschuermann ];

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
-    repo = pname;
+    repo = "rtrtr";
     rev = "v${version}";
     hash = "sha256-1TmzC/d/odfYdo1CiCsFW3U7OCpTF4Gkw2w4c2yaxxw=";
   };
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = true;
 
-  meta = with lib; {
+  meta = {
     description = "RPKI data proxy";
     longDescription = ''
       TRTR is an RPKI data proxy, designed to collect Validated ROA Payloads
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/NLnetLabs/rtrtr";
     changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${version}/Changelog.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ steamwalker ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ steamwalker ];
     mainProgram = "rtrtr";
   };
 }
