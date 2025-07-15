@@ -3214,6 +3214,18 @@ with haskellLib;
   brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
   brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
 
+  # Floating point precision issues. Test suite is only checked on x86_64.
+  # https://github.com/tweag/monad-bayes/issues/368
+  monad-bayes = dontCheckIf (
+    let
+      inherit (pkgs.stdenv) hostPlatform;
+    in
+    !hostPlatform.isx86_64
+    # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
+    # also fails on Hydra
+    || hostPlatform.isDarwin
+  ) super.monad-bayes;
+
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = warnAfterVersion "0.7.2" (
     doJailbreak (
