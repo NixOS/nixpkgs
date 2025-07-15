@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/wl6xbAXfPUTSI38htgkWC3IlsxtFbPOpBHqcSVBGPk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kPweKXAitvODNoKTr2iB+qM9qMWGoKEQCxpkgrpnewY=";
 
   # Ensure that only the `scooter` package is built (excluding `xtask`)

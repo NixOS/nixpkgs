@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/fix-optional-dep-syntax.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-fKYpRvH8zt7GeiaBf1oZHBY4WSCVQzZ0Ca7Q3ek6QE0=";
 
   buildPhase = ''

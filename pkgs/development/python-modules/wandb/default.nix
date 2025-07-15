@@ -93,7 +93,6 @@ let
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-q8csheytw57C6+wPPaANkMkW1Smoo+IViiA6Cdrag4Q=";
 
     checkFlags = [

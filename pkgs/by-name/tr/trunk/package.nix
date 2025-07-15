@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-/5zvbSlMzZHxnAwuu0Jd6WVVjxJtIAQpRwZZHgYyPbs=";
 
   meta = with lib; {

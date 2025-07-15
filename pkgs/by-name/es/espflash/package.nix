@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-dLX5FC5A3+Dr3Dex+YEAnDgNNOQYd2JgGujXWpnSNUo=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

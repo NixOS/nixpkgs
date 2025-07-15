@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
   # Submitted upstream: https://github.com/nix-community/nix-ld/pull/169
   patches = [ ./rust-1.88.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cDbszVjZcomag0HZvXM+17SjDiGS07iPj78zgsXstHc=";
 
   hardeningDisable = [ "stackprotector" ];

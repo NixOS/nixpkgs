@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1/FNMXzEQB4LM57+SccUjJ31rYB46DO8AQYQBn6B7zg=";
 
   buildInputs = [ wfa2-lib ];

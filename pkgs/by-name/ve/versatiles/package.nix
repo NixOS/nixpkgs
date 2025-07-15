@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JWMoXsMRdllYrTpUdKYEi7i5AI5957qwrr8agvyKeT8="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8DtkeWo+lxv/9JzknpWnGYCA9v2HA4jFN4ZvseFpOGU="; # When updating: Same as above
 
   __darwinAllowLocalNetworking = true;

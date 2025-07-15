@@ -47,7 +47,6 @@ in
     hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-8otJ1uqGrCmlxAqvfAL3OjhBI4I6dAu6EoajstO46Sw=";
 
   # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL

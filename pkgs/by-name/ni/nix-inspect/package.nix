@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage {
   pname = "nix-inspect";
   version = "0.1.2";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3FTlbWSA0SKCfunQDdXu9g2aQAdAIfOTq5qJbzrRPjc=";
 
   buildInputs = [ workerPackage ];

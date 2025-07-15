@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-BzLduU2Wu4UhmgDvvuCEXsABO/jPC7AjptDW8/zePEk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-GZkHPoDKiqTVwRAWXXbELXC1I/KRO+9sshY8/rGbA4A=";
 
   meta = with lib; {

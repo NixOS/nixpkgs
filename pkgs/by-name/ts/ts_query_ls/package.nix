@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ cmake ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-I47MCmRumJW50dPOaL8rGB7hRvxvF2gx+XmwzKL67Ok=";
 
   meta = {

@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  useFetchCargoVendor = true;
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

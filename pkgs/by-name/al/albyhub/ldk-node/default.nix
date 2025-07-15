@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFeatures = [ "uniffi" ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-hM6VCU0kIg5ZmJM8C4HoybSc/VXNj6GTE/oFLfqGMcY=";
 
   # Skip tests because they download bitcoin-core and electrs zip files, and then fail
