@@ -684,22 +684,6 @@ with pkgs;
 
   makeWrapper = makeShellWrapper;
 
-  makeShellWrapper = makeSetupHook {
-    name = "make-shell-wrapper-hook";
-    propagatedBuildInputs = [ dieHook ];
-    substitutions = {
-      # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
-      shell =
-        if targetPackages ? runtimeShell then
-          targetPackages.runtimeShell
-        else
-          throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
-    };
-    passthru = {
-      tests = tests.makeWrapper;
-    };
-  } ../build-support/setup-hooks/make-wrapper.sh;
-
   compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
 
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
