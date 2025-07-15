@@ -1,23 +1,15 @@
 {
   lib,
-  pythonPackages,
+  python3Packages,
   fetchPypi,
   fetchpatch2,
   nixosTests,
 }:
 
-with pythonPackages;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rss2email";
   version = "3.14";
-  format = "setuptools";
-
-  propagatedBuildInputs = [
-    feedparser
-    html2text
-  ];
-  nativeCheckInputs = [ beautifulsoup4 ];
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +22,11 @@ buildPythonApplication rec {
       url = "https://github.com/rss2email/rss2email/commit/b5c0e78006c2db6929b5ff50e8529de58a00412a.patch";
       hash = "sha256-edmsi3I0acx5iF9xoAS9deSexqW2UtWZR/L7CgeZs/M=";
     })
+    (fetchpatch2 {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/rss2email/rss2email/commit/183a17aefe4eb66f898cf088519b1e845559f2bd.patch";
+      hash = "sha256-SoWahlOJ7KkaHMwOrKIBgwEz8zJQrSXVD1w2wiV1phE=";
+    })
   ];
 
   outputs = [
@@ -40,9 +37,18 @@ buildPythonApplication rec {
 
   postPatch = ''
     # sendmail executable is called from PATH instead of sbin by default
-    sed -e 's|/usr/sbin/sendmail|sendmail|' \
-        -i rss2email/config.py
+    substituteInPlace  rss2email/config.py \
+      --replace-fail '/usr/sbin/sendmail' 'sendmail'
   '';
+
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  dependencies = with python3Packages; [
+    feedparser
+    html2text
+  ];
 
   postInstall = ''
     install -Dm 644 r2e.1 $man/share/man/man1/r2e.1
@@ -54,11 +60,14 @@ buildPythonApplication rec {
     cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    env PATH=$out/bin:$PATH python ./test/test.py
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    python3Packages.unittestCheckHook
+  ];
+
+  unittestFlagsArray = [
+    "-s"
+    "test"
+  ];
 
   meta = with lib; {
     description = "Tool that converts RSS/Atom newsfeeds to email";

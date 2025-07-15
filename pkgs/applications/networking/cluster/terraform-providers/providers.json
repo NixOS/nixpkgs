@@ -326,13 +326,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-FYgjffK21Z/a7wpke5/Um0f8NiDfs7Xf4l7/f3i41+g=",
+    "hash": "sha256-u+iiWStjO2OFMkQp8Skynb4seTK61ETSKrEP+6o16LA=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.66.0",
+    "rev": "v3.67.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-9YkSNGNcdMBLJZSlMTGoDrLZFTeGSTfhX1H8ub77Ebk="
+    "vendorHash": "sha256-fLdJxYuN4p0ZwXUXcN6BtATcwVg9asgdjHg9nOPcxK4="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -624,11 +624,11 @@
     "vendorHash": "sha256-SsEWNIBkgcdTlSrB4hIvRmhMv2eJ2qQaPUmiN09A+NM="
   },
   "huaweicloud": {
-    "hash": "sha256-v0UqXIK4SPGouETUWSQI1K1hpsPMyUuEpLQ++Gs4+yk=",
+    "hash": "sha256-jXppJtVMPpipXbEhgenVtFP5YxwlQzekquRoZmgoP0Q=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.76.1",
+    "rev": "v1.76.4",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

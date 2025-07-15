@@ -37,8 +37,8 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${src.name}/frontend";
-      hash = "sha256-vLOtVeGFeHXgQglvKsih4lj1uIs6wipwfo374viIq4I=";
       fetcherVersion = 1;
+      hash = "sha256-vLOtVeGFeHXgQglvKsih4lj1uIs6wipwfo374viIq4I=";
     };
 
     installPhase = ''

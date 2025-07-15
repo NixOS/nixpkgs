@@ -9,6 +9,7 @@
   bash,
   coreutils,
   gnugrep,
+  gnused,
   gnutls,
   gsasl,
   libidn2,
@@ -20,6 +21,8 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   withScripts ? true,
+  withLibnotify ? true,
+  libnotify,
   gitUpdater,
   binlore,
   msmtp,
@@ -28,13 +31,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.26";
+  version = "1.8.30";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-MV3fzjjyr7qZw/BbKgsSObX+cxDDivI+0ZlulrPFiWM=";
+    hash = "sha256-aM2qId08zvT9LbncCQYHsklbvHVtcZJgr91JTjwpQ/0=";
   };
 
   meta = with lib; {
@@ -112,13 +115,17 @@ let
       msmtpq = {
         scripts = [ "bin/msmtpq" ];
         interpreter = getExe bash;
-        inputs = [
-          binaries
-          coreutils
-          gnugrep
-          netcat-gnu
-          which
-        ] ++ optionals withSystemd [ systemd ];
+        inputs =
+          [
+            binaries
+            coreutils
+            gnugrep
+            gnused
+            netcat-gnu
+            which
+          ]
+          ++ optionals withSystemd [ systemd ]
+          ++ optionals withLibnotify [ libnotify ];
         execer =
           [
             "cannot:${getBin binaries}/bin/msmtp"
@@ -126,9 +133,15 @@ let
           ]
           ++ optionals withSystemd [
             "cannot:${getBin systemd}/bin/systemd-cat"
+          ]
+          ++ optionals withLibnotify [
+            "cannot:${getBin libnotify}/bin/notify-send"
           ];
         fix."$MSMTP" = [ "msmtp" ];
-        fake.external = [ "ping" ] ++ optionals (!withSystemd) [ "systemd-cat" ];
+        fake.external =
+          [ "ping" ]
+          ++ optionals (!withSystemd) [ "systemd-cat" ]
+          ++ optionals (!withLibnotify) [ "notify-send" ];
         keep.source = [ "~/.msmtpqrc" ];
       };
 

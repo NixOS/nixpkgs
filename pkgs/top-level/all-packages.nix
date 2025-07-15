@@ -4287,10 +4287,6 @@ with pkgs;
 
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
-  rss2email = callPackage ../applications/networking/feedreaders/rss2email {
-    pythonPackages = python3Packages;
-  };
-
   rucio = callPackage ../by-name/ru/rucio/package.nix {
     # Pinned to python 3.12 while python313Packages.future does not evaluate and
     # until https://github.com/CZ-NIC/pyoidc/issues/649 is resolved
@@ -13305,10 +13301,6 @@ with pkgs;
     ;
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
-
-  msmtp = callPackage ../applications/networking/msmtp {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
