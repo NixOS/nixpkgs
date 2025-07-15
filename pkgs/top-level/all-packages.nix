@@ -267,14 +267,6 @@ with pkgs;
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
 
-  gogUnpackHook = makeSetupHook {
-    name = "gog-unpack-hook";
-    propagatedBuildInputs = [
-      innoextract
-      file-rename
-    ];
-  } ../build-support/setup-hooks/gog-unpack.sh;
-
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
