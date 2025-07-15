@@ -7,6 +7,7 @@
   gtest,
   glm,
   tbb_2021,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tbb = tbb_2021;
+    tests = {
+      python = python3Packages.manifold3d;
+    };
   };
 
   meta = {
@@ -50,10 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/elalish/manifold";
     changelog = "https://github.com/elalish/manifold/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hzeller
-      pca006132
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        hzeller
+        pca006132
+      ]
+      ++ python3Packages.manifold3d.meta.maintainers;
     platforms = lib.platforms.unix;
   };
 })

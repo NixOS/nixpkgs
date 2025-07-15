@@ -4,6 +4,7 @@
   python,
   fetchFromGitHub,
   scikit-build-core,
+  manifold,
   cmake,
   ninja,
   nanobind,
@@ -17,15 +18,8 @@
 
 buildPythonPackage rec {
   pname = "manifold3d";
-  version = "3.2.0";
+  inherit (manifold) version src;
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "elalish";
-    repo = "manifold";
-    tag = "v${version}";
-    hash = "sha256-tcEjgOU90tYnlZDedHJvnqWFDDtXGx64G80wnWz4lBI=";
-  };
 
   dontUseCmakeConfigure = true;
 
@@ -60,10 +54,12 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Geometry library for topological robustness";
-    homepage = "https://github.com/elalish/manifold";
-    changelog = "https://github.com/elalish/manifold/releases/tag/${src.tag}";
-    license = lib.licenses.asl20;
+    inherit (manifold.meta)
+      homepage
+      changelog
+      description
+      license
+      ;
     maintainers = with lib.maintainers; [
       pbsds
       pca006132
