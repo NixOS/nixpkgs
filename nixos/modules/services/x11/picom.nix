@@ -36,10 +36,13 @@ in {
       formats.libconfig.generate "picom.conf" cfg.settings;
 
     systemd.user.services.picom = {
-      description = "Picom Compositor";
+      description = "Picom composite manager";
       wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/picom --config /etc/xdg/picom/picom.conf";
+        RestartSec = 3;
         Restart = "on-failure";
       };
     };
