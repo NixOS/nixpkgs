@@ -14909,7 +14909,9 @@ self: super: with self; {
 
   pytweening = callPackage ../development/python-modules/pytweening { };
 
-  pytz = callPackage ../development/python-modules/pytz { };
+  pytz = callPackage ../development/python-modules/pytz {
+    inherit (pkgs) tzdata;
+  };
 
   pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
