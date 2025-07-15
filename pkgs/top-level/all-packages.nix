@@ -15220,8 +15220,6 @@ with pkgs;
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
-  # xfox = callPackage ../by-name/xf/xfox { };
-
   plasma-applet-volumewin7mixer =
     libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer
       { };
