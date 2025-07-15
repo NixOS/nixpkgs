@@ -59,10 +59,10 @@ python3Packages.buildPythonApplication rec {
     "test_thumbnail"
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # According to documentation, e2e tests can be flaky:
     # "This checksum can be inaccurate for end-to-end tests"
-    "--ignore=tests/e2e"
+    "tests/e2e"
   ];
 
   passthru.updateScript = ./update.sh;

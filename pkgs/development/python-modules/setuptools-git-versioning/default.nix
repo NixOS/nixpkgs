@@ -52,8 +52,7 @@ buildPythonPackage rec {
   '';
 
   # limit tests because the full suite takes several minutes to run
-  pytestFlagsArray = [
-    "-m"
+  enabledTestMarks = [
     "important"
   ];
 

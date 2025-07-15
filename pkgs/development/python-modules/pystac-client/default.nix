@@ -46,10 +46,13 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
+  ];
+
+  disabledTestMarks = [
     # Tests accessing Internet
-    "-m 'not vcr'"
+    "vcr"
   ];
 
   pythonImportsCheck = [ "pystac_client" ];

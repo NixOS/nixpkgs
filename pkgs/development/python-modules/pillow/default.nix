@@ -106,11 +106,6 @@ buildPythonPackage rec {
     numpy
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    # Checks for very precise color values on what's basically white
-    "--deselect=Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
-  ];
-
   disabledTests =
     [
       # Code quality mismathch 9 vs 10
@@ -126,6 +121,9 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes the interpreter
     "Tests/test_imagetk.py"
+
+    # Checks for very precise color values on what's basically white
+    "Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
   ];
 
   passthru.tests = {

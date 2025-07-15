@@ -61,8 +61,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [ "--verbose" ];
+
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/fast" ];
+  enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
     # avoid dependency on mypy

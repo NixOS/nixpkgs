@@ -84,7 +84,7 @@ buildPythonPackage rec {
     ++ fsspec.optional-dependencies.github
     ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "-m 'not needs_internet'" ];
+  disabledTestMarks = [ "needs_internet" ];
 
   preCheck = ''
     export IMAGEIO_USERDIR=$(mktemp -d)

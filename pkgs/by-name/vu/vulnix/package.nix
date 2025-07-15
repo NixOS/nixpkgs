@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   postBuild = "make -C doc";
 
-  pytestFlagsArray = [ "src/vulnix" ];
+  enabledTestPaths = [ "src/vulnix" ];
 
   postInstall = ''
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst

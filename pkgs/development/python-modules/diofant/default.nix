@@ -55,18 +55,20 @@ buildPythonPackage rec {
 
   doCheck = false; # some tests get stuck easily
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-m 'not slow'"
-  ];
-
   nativeCheckInputs = [
     hypothesis
     pexpect
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestMarks = [
+    "slow"
   ];
 
   disabledTests = [
