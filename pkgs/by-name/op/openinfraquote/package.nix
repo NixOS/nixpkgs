@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  unpackPhase = ''
+  unpackCmd = ''
     tar -xzf $src
   '';
 
