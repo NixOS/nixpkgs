@@ -15675,6 +15675,8 @@ self: super: with self; {
 
   robotframework = callPackage ../development/python-modules/robotframework { };
 
+  robotframework-browser = callPackage ../development/python-modules/robotframework-browser { };
+
   robotframework-assertion-engine =
     callPackage ../development/python-modules/robotframework-assertion-engine
       { };
