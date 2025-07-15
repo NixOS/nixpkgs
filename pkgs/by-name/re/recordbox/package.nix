@@ -4,13 +4,16 @@
   appstream-glib,
   blueprint-compiler,
   cargo,
+  dbus,
   desktop-file-utils,
   fetchFromGitea,
   glib,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
+  lcms2,
   libadwaita,
+  libseccomp,
   libxml2,
   meson,
   ninja,
@@ -24,27 +27,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.9.3";
+  version = "0.10.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "edestcroix";
     repo = "Recordbox";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-168L5i6mXeEqv7EKPMq4zHP5JRVxC7MNrUE9yj1zI60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o2cKVRpuAwE+/TI5mwtSvkCFaXN349GP9dDlgdh3Luk=";
   };
 
-  # Patch in our Cargo.lock and ensure AppStream tests don't use the network
-  # TODO: Switch back to the default `validate` when the upstream file actually
-  # passes it
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
-    substituteInPlace data/meson.build \
-      --replace-fail "['validate', appstream_file]" "['validate-relax', '--nonet', appstream_file]"
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-0/tKL5UW1QuhsddivU/r8n3T3xyRaGLRVpKuXcc4fmU=";
+  };
 
   strictDeps = true;
 
@@ -66,9 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    dbus
     gtk4
     hicolor-icon-theme
+    lcms2
     libadwaita
+    libseccomp
     sqlite
   ]
   ++ (with gst_all_1; [
@@ -101,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Relatively simple music player";
     homepage = "https://codeberg.org/edestcroix/Recordbox";
+    changelog = "https://codeberg.org/edestcroix/Recordbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "recordbox";
