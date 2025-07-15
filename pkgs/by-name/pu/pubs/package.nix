@@ -30,11 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     argcomplete
     beautifulsoup4
     bibtexparser
@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     requests
     six
+    standard-pipes # https://github.com/pubs/pubs/issues/282
   ];
 
   nativeCheckInputs = with python3.pkgs; [
