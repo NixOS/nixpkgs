@@ -5014,10 +5014,14 @@ with pkgs;
     (rec {
       # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
       gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
+
       gccNGPackages_15 = gccNGPackagesSet."15";
+      gfortran15 = gccNGPackages_15.gfortran;
+
       mkGCCNGPackages = gccNGPackagesSet.mkPackage;
     })
     gccNGPackages_15
+    gfortran15
     mkGCCNGPackages
     ;
 
