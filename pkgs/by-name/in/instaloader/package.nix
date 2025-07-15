@@ -4,12 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "instaloader";
   version = "4.14.1";
   format = "pyproject";
-
-  disabled = python3Packages.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "instaloader";
@@ -18,11 +16,11 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-ZGCO5xNUwrQFsSaAiP1yffrkSN+Mxdtrw+Kve0s2t2E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.requests
     python3Packages.sphinx
   ];
