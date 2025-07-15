@@ -152,8 +152,9 @@ let
       license = lib.licenses.unfree;
       platforms = builtins.attrNames srcs;
       maintainers = with lib.maintainers; [
-        danbst
-        tadfisher
+        philiptaron
+        ryan4yin
+        yarny
       ];
       mainProgram = "zoom";
     };
