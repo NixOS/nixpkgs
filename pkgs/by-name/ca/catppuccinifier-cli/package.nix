@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "catppuccinifier-cli";
   version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "lighttigerXIV";
     repo = "catppuccinifier";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YlHb8gueKyXB2JJeRJmo8oFLOeYcmthup4n4BkEHNTA=";
   };
 
-  sourceRoot = "${src.name}/src/catppuccinifier-cli";
+  sourceRoot = "${finalAttrs.src.name}/src/catppuccinifier-cli";
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-mIzRK4rqD8ON8LqkG3QhOseZLM5+Rr1Rhj1uuu+KRMI=";
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = with lib.platforms; linux ++ windows;
   };
-}
+})
