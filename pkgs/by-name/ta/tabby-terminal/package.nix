@@ -26,8 +26,8 @@
 
 let
   version = "1.0.233";
-  fullVersion = "1.0.223-unstable-2025-05-24" ;
-  
+  fullVersion = "1.0.223-unstable-2025-05-24";
+
   src = fetchFromGitHub {
     owner = "Eugeny";
     repo = "tabby";
