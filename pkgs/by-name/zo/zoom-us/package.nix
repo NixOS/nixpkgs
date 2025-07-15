@@ -152,8 +152,9 @@ let
       license = lib.licenses.unfree;
       platforms = builtins.attrNames srcs;
       maintainers = with lib.maintainers; [
-        danbst
-        tadfisher
+        philiptaron
+        ryan4yin
+        yarny
       ];
       mainProgram = "zoom";
     };
@@ -245,10 +246,6 @@ let
     version = versions.${system} or throwSystem;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = ''
-      unset QT_PLUGIN_PATH
-      unset LANG  # would break settings dialog on non-"en_XX" locales
-    '';
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
