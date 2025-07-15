@@ -4310,6 +4310,8 @@ self: super: with self; {
 
   drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
 
+  drf-pydantic = callPackage ../development/python-modules/drf-pydantic { };
+
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
