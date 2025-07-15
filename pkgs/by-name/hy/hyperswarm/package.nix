@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "hyperswarm";
-  version = "4.11.7";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "hyperswarm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z/FNBDJbiyR5AY40RDtiuQmjNUZ+BSGv8aewBnhSNZw=";
+    hash = "sha256-BQ1/kNJAFoxPJ2I3dyV7EHafKfbbDqCQw039VT4YLT8=";
   };
 
   npmDepsHash = "sha256-4ysUYFIFlzr57J7MdZit1yX3Dgpb2eY0rdYnwyppwK0=";
