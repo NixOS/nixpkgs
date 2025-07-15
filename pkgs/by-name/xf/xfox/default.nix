@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub rec {
     owner = "pxlman";
     repo = "xfox";
-    rev = "v1.0.0";
+    tag = "v${version}";
     sha256 = "sha256-gbcJ02ZaPqiCo0VHnVOYzrWR00dQXgKavFTgP+6rS34=";
   };
   propagatedBuildInputs = [
