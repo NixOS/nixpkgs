@@ -10,18 +10,18 @@
 }:
 
 let
-  ocamlPackages = ocaml-ng.ocamlPackages_5_1;
+  ocamlPackages = ocaml-ng.ocamlPackages_5_2;
 in
 ocamlPackages.buildDunePackage rec {
   pname = "owi";
-  version = "0.2-unstable-2025-05-05";
+  version = "0.2-unstable-2025-07-08";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "e4c2e85f1364714a77a925ec29321cf9b8fe90f4";
+    rev = "bcd7d362ed165c542deb2d49da1d45296aa03277";
     fetchSubmodules = true;
-    hash = "sha256-ewaAkSyxtiiE8WcHusOyZDesqI61kCEN3pMb99R7Dkw=";
+    hash = "sha256-611k9CQx0C3QKR4NZpnr77LoBZSFBEdU0uRnZshO1cc=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -32,9 +32,9 @@ ocamlPackages.buildDunePackage rec {
     llvmPackages.clang-unwrapped
     # lld + llc isn't included in unwrapped, so we pull it in here
     llvmPackages.bintools-unwrapped
+    makeWrapper
     rustc
     zig
-    makeWrapper
   ];
 
   buildInputs = with ocamlPackages; [
@@ -46,14 +46,11 @@ ocamlPackages.buildDunePackage rec {
     dune-site
     hc
     integers
-    menhir
     menhirLib
     ocaml_intrinsics
     patricia-tree
     prelude
     processor
-    pyml
-    re2
     scfg
     sedlex
     smtml
