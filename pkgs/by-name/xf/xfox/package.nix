@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --replace "evdev-binary" "evdev"
       '';
     meta = {
-    description = "A tool to remap gamepads to act as a virtual xbox gamepad.";
+    description = "Tool to remap gamepads to act as a virtual xbox gamepad.";
     homepage = "https://github.com/pxlman/xfox";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
