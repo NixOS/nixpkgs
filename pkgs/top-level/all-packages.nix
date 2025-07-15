@@ -13807,6 +13807,12 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
+  kiro = callPackage ../by-name/ki/kiro/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+  kiro-fhs = kiro.fhs;
+  kiro-fhsWithPackages = kiro.fhsWithPackages;
+
   whispers = with python3Packages; toPythonApplication whispers;
 
   # Should always be the version with the most features
