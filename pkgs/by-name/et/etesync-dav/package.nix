@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.35.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etesync";
