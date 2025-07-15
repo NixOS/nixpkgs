@@ -37,9 +37,28 @@
 let
   inherit (stdenv) targetPlatform hostPlatform;
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  langs =
+    lib.optional langC "c"
+    ++ lib.optional langCC "c++"
+    ++ lib.optional langD "d"
+    ++ lib.optional langFortran "fortran"
+    ++ lib.optional langJava "java"
+    ++ lib.optional langAda "ada"
+    ++ lib.optional langGo "go"
+    ++ lib.optional langObjC "objc"
+    ++ lib.optional langObjCpp "obj-c++"
+    ++ lib.optional langJit "jit";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "${targetPrefix}${if langFortran then "gfortran" else "gcc"}";
+  pname = "${targetPrefix}${
+    if (lib.length langs == 2 && langC && langCC) || (lib.length langs == 1 && (langC || langCC)) then
+      "gcc"
+    else if lib.length langs == 1 then
+      "g${lib.elemAt langs 0}"
+    else
+      "gcc-${lib.concatStrings (lib.intersperse "-" langs)}"
+  }";
   inherit version;
 
   src = monorepoSrc;
@@ -175,22 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--disable-multilib"
       "--disable-nls"
       "--disable-shared"
-      "--enable-languages=${
-        lib.concatStrings (
-          lib.intersperse "," (
-            lib.optional langC "c"
-            ++ lib.optional langCC "c++"
-            ++ lib.optional langD "d"
-            ++ lib.optional langFortran "fortran"
-            ++ lib.optional langJava "java"
-            ++ lib.optional langAda "ada"
-            ++ lib.optional langGo "go"
-            ++ lib.optional langObjC "objc"
-            ++ lib.optional langObjCpp "obj-c++"
-            ++ lib.optional langJit "jit"
-          )
-        )
-      }"
+      "--enable-languages=${lib.concatStrings (lib.intersperse "," langs)}"
       (lib.withFeature (isl != null) "isl")
       "--without-headers"
       "--with-gnu-as"
