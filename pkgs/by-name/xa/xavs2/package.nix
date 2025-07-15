@@ -76,6 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xavs2";
     pkgConfigModules = [ "xavs2" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.x86;
   };
 })
