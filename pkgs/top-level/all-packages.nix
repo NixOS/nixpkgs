@@ -669,10 +669,6 @@ with pkgs;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
-  copyPkgconfigItems = makeSetupHook {
-    name = "copy-pkg-config-items-hook";
-  } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
-
   makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
   makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
