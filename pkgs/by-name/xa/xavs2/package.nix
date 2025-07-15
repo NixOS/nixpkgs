@@ -32,16 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "date" 'date -ud "@$SOURCE_DATE_EPOCH"'
   '';
 
-  preConfigure =
-    ''
-      # Generate version.h
-      ./version.sh
-      cd build/linux
-    ''
-    + lib.optionalString stdenv.hostPlatform.isx86 ''
-      # `AS' is set to the binutils assembler, but we need nasm
-      unset AS
-    '';
+  preConfigure = ''
+    # Generate version.h
+    ./version.sh
+    cd build/linux
+
+    # We need to explicitly set AS to nasm on x86, because the assembly code uses NASM-isms,
+    # and to empty string on all other platforms, because the build system erroneously assumes
+    # that assembly code exists for non-x86 platforms, and will not attempt to build it
+    # if AS is explicitly set to empty.
+    export AS=${if stdenv.hostPlatform.isx86 then "nasm" else ""}
+  '';
 
   configureFlags =
     [ "--cross-prefix=${stdenv.cc.targetPrefix}" ]
