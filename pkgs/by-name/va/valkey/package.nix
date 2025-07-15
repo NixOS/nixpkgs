@@ -33,13 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JFtStE1avSWGptgj9KtfAr55+J1FydEzD5plvSe2mjM=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "CVE-2025-27151.patch";
-      url = "https://github.com/valkey-io/valkey/commit/73696bf6e2cf754acc3ec24eaf9ca6b879bfc5d7.patch?full_index=1";
-      hash = "sha256-9yt2GXfC8piyLskkMkXouEX5ZQwZLtL+MN6n6HuC/V4=";
-    })
-  ] ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
+  patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
