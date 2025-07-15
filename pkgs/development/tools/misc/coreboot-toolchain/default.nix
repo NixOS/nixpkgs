@@ -21,7 +21,10 @@ let
         perl,
         stdenvNoCC,
         zlib,
-        withAda ? true,
+        languages ? [
+          "c"
+          "ada"
+        ],
       }:
 
       stdenvNoCC.mkDerivation (finalAttrs: {
@@ -50,7 +53,7 @@ let
         buildInputs = [
           flex
           zlib
-          (if withAda then gnat else gcc)
+          (if builtins.elem "ada" languages then gnat else gcc)
         ];
 
         enableParallelBuilding = true;
@@ -71,7 +74,7 @@ let
 
         buildPhase = ''
           export CROSSGCC_VERSION=$(cat .crossgcc_version)
-          make crossgcc-${arch} CPUS=$NIX_BUILD_CORES DEST=$out
+          make crossgcc-${arch} CPUS=$NIX_BUILD_CORES DEST=$out BUILDGCC_OPTIONS="-l ${lib.strings.concatStringsSep "," languages}"
         '';
 
         meta = with lib; {
