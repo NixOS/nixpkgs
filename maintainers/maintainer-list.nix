@@ -9101,7 +9101,7 @@
   geodic = {
   	name = "geodic";
   	email = "th3geodic@proton.me";
-  	matrix = "@geodic:matrix.org"
+  	matrix = "@geodic:matrix.org";
   	github = "geodic";
   	githubId = 64704703;
   };
