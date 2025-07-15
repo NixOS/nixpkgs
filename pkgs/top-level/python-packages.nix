@@ -15929,6 +15929,8 @@ self: super: with self; {
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
+  sat-tmp = callPackage ../development/python-modules/sat-tmp { };
+
   satel-integra = callPackage ../development/python-modules/satel-integra { };
 
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
