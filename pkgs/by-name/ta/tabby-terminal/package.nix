@@ -8,7 +8,7 @@
   yarn,
   git,
   patch-package,
-  electron_32,
+  electron_36,
   prefetch-yarn-deps,
   fixup-yarn-lock,
   python3,
@@ -25,13 +25,14 @@
 }:
 
 let
-  version = "1.0.223" ;
+  version = "1.0.233";
+  fullVersion = "1.0.223-unstable-2025-05-24" ;
   
   src = fetchFromGitHub {
     owner = "Eugeny";
     repo = "tabby";
-    rev = "v${version}";
-    hash = "sha256-YWqbVrxG3/tOw1ERkoEosVlz6k2eTkcsQnHAtdKpkpE=";
+    rev = "406e9e1";
+    hash = "sha256-IMrRak6u7LRcvp2Ve2AOreNDPJM0kofMp53sKaobqO4=";
     leaveDotGit = true;
   };
 
@@ -79,7 +80,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-terminal";
-  version = version;
+  version = fullVersion;
   src = src;
 
   patches = [ ./splice-argv.patch ];
@@ -110,16 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  electronPackage = electron_32;
+  electronPackage = electron_36;
 
   electronHeaders = fetchurl {
     url = "https://www.electronjs.org/headers/v${finalAttrs.electronPackage.version}/node-v${finalAttrs.electronPackage.version}-headers.tar.gz";
-    hash = "sha256-D9j1wSDzartWUfDm2UrZDrgum2X+vV+DpDlKPFCtBbA=";
+    hash = "sha256-ppac1cHhnxNZTG1RLfBowMMs5qOnzX2KuNgBTVsE/N8=";
   };
 
   electronHeadersSHA = fetchurl {
     url = "https://www.electronjs.org/headers/v${finalAttrs.electronPackage.version}/SHASUMS256.txt";
-    hash = "sha256-ZnWVCzTwwog4kgeFAZGsM2F2mmebrpXMVMxn/K+LWlU=";
+    hash = "sha256-PdAXN3i/CngtTzdgCLP5749mXTfRNj9dporJvrhvvJU=";
   };
 
   buildInputs = [
@@ -177,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       cd $buildDir/node_modules
     ''
-    # Loop thought the "built in" plugins and link them to the node_modules
+    # Loop through the "built in" plugins and link them to the node_modules
     + lib.concatMapStringsSep "\n" (plugin: ''
       ln -fs ../${plugin} ${plugin}
     '') builtinPlugins
