@@ -1,5 +1,6 @@
 {
   lib,
+  buildPackages,
   dbus,
   eudev,
   fetchFromGitHub,
@@ -82,6 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
 
   postInstall =
+    let
+      niri = "${stdenv.hostPlatform.emulator buildPackages} ${placeholder "out"}/bin/niri";
+    in
+
     ''
       install -Dm0644 README.md resources/default-config.kdl -t $doc/share/doc/niri
       mv wiki $doc/share/doc/niri/wiki
@@ -100,11 +105,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     + lib.optionalString withDinit ''
       install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd $pname \
-        --bash <($out/bin/niri completions bash) \
-        --fish <($out/bin/niri completions fish) \
-        --zsh <($out/bin/niri completions zsh)
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd niri \
+        --bash <(${niri} completions bash) \
+        --fish <(${niri} completions fish) \
+        --zsh <(${niri} completions zsh)
     '';
 
   env = {
