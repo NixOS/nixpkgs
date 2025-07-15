@@ -36,6 +36,7 @@ stdenvNoCC.mkDerivation rec {
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall
