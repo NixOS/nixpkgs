@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
@@ -10,16 +11,23 @@
 
 buildGoModule rec {
   pname = "mods";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
     rev = "v${version}";
-    hash = "sha256-wzLYkcgUWPzghJEhYRh7HH19Rqov1RJAxdgp3AGnOTY=";
+    hash = "sha256-CT90uMQc0quQK/vCeLiHH8taEkCSDIcO7Q3aA+oaNmY=";
   };
 
-  vendorHash = "sha256-L+4vkh7u6uMm5ICMk8ke5RVY1oYeKMYWVYYq9YqpKiw=";
+  # Otherwise checks fail with `panic: open /etc/protocols: operation not permitted` when sandboxing is enabled on Darwin
+  # https://github.com/NixOS/nixpkgs/pull/381645#issuecomment-2656211797
+  modPostBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
+
+  vendorHash = "sha256-jtSuSKy6GpWrJAXVN2Acmtj8klIQrgJjNwgyRZIyqyY=";
 
   nativeBuildInputs = [
     installShellFiles
