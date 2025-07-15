@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-T8LwpEjeWNmkIo3Dn1BCFHBsTzA/Dt6/pk/NMtvT0N4=";
     fetcherVersion = 1;
+    hash = "sha256-T8LwpEjeWNmkIo3Dn1BCFHBsTzA/Dt6/pk/NMtvT0N4=";
   };
 
   buildPhase = ''

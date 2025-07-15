@@ -74,8 +74,8 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
       fetcherVersion = 1;
+      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
     };
 
     buildPhase = ''

@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-3Erva6srdkX1YQ727trx34Ufx524nz19MUyaDQToz6M=";
     fetcherVersion = 1;
+    hash = "sha256-3Erva6srdkX1YQ727trx34Ufx524nz19MUyaDQToz6M=";
   };
 
   meta = {
