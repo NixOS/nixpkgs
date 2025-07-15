@@ -443,8 +443,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "...";
     fetcherVersion = 2;
+    hash = "...";
   };
 })
 ```
@@ -568,8 +568,8 @@ This is the version of the output of `pnpm.fetchDeps`, if you haven't set it alr
   # ...
   pnpmDeps = pnpm.fetchDeps {
     # ...
-    hash = "..."; # you can use your already set hash here
     fetcherVersion = 1;
+    hash = "..."; # you can use your already set hash here
   };
 }
 ```
@@ -581,8 +581,8 @@ After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
   # ...
   pnpmDeps = pnpm.fetchDeps {
     # ...
-    hash = "..."; # clear this hash and generate a new one
     fetcherVersion = 2;
+    hash = "..."; # clear this hash and generate a new one
   };
 }
 ```
