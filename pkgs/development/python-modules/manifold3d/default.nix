@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "manifold3d";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
     tag = "v${version}";
-    hash = "sha256-dCCTjWRjXSyuEDxGI9ZS2UTmLdZVSmDOmHFnhox3N+4=";
+    hash = "sha256-tcEjgOU90tYnlZDedHJvnqWFDDtXGx64G80wnWz4lBI=";
   };
 
   dontUseCmakeConfigure = true;

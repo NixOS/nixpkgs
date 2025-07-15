@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     test/manifold_test --gtest_filter=-CrossSection.RoundOffset
   '';
 
+  passthru = {
+    tbb = tbb_2021;
+  };
+
   meta = {
     description = "Geometry library for topological robustness";
     homepage = "https://github.com/elalish/manifold";
