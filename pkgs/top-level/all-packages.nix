@@ -667,10 +667,6 @@ with pkgs;
       inherit url;
     };
 
-  ld-is-cc-hook = makeSetupHook {
-    name = "ld-is-cc-hook";
-  } ../build-support/setup-hooks/ld-is-cc-hook.sh;
-
   copyDesktopItems = makeSetupHook {
     name = "copy-desktop-items-hook";
   } ../build-support/setup-hooks/copy-desktop-items.sh;
