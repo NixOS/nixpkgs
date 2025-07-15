@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 
@@ -103,6 +102,16 @@ in
             example = "postgres://postgres-user:password@postgres-server/my-database";
           };
 
+          ldap_user_pass = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Password for default admin password.
+
+              Unsecure: Use `ldap_user_pass_file` settings instead.
+            '';
+          };
+
           ldap_user_pass_file = mkOption {
             type = types.nullOr types.str;
             default = null;
@@ -163,21 +172,36 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          (cfg.settings.ldap_user_pass_file or null) != null || (cfg.settings.ldap_user_pass or null) != null;
+        message = "lldap: Default admin user password must be set. Please set the `ldap_user_pass` or better the `ldap_user_pass_file` setting.";
+      }
+      {
+        assertion =
+          (cfg.settings.ldap_user_pass_file or null) == null || (cfg.settings.ldap_user_pass or null) == null;
+        message = "lldap: Both `ldap_user_pass` and `ldap_user_pass_file` settings should not be set at the same time. Set one to `null`.";
+      }
+    ];
+
     warnings =
-      lib.optionals
-        (
-          (cfg.settings.ldap_user_pass_file or null) != null
-          && cfg.settings.force_ldap_user_pass_reset == false
-          && cfg.silenceForceUserPassResetWarning == false
-        )
-        [
-          ''
-            lldap: The default admin password is declared with the setting `ldap_user_pass_file`, but `force_ldap_user_pass_reset` is set to `false`.
-            This means the admin password can be changed through the UI and will drift from the one defined in your nix config.
-            It also means changing the setting `ldap_user_pass_file` will have no effect on the admin password.
-            Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
-          ''
-        ];
+      lib.optionals (cfg.settings.ldap_user_pass or null != null) [
+        ''
+          lldap: Unsecure `ldap_user_pass` setting is used. Prefer `ldap_user_pass_file` instead.
+        ''
+      ]
+      ++
+        lib.optionals
+          (cfg.settings.force_ldap_user_pass_reset == false && cfg.silenceForceUserPassResetWarning == false)
+          [
+            ''
+              lldap: The `force_ldap_user_pass_reset` setting is set to `false` which means
+              the admin password can be changed through the UI and will drift from the one defined in your nix config.
+              It also means changing the setting `ldap_user_pass` or `ldap_user_pass_file` will have no effect on the admin password.
+              Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
+            ''
+          ];
 
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
