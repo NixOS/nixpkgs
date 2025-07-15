@@ -76,8 +76,8 @@
   },
   {
     "pname": "fsharp-analyzers",
-    "version": "0.31.0",
-    "hash": "sha256-PoAvaXbXsmvVw870UsnqdD20HoBHO7u4bzoaz5DXfzM="
+    "version": "0.32.0",
+    "hash": "sha256-MnhsK5tOeexL6uQhsV4nTRz8CGbz2o8VyHwAK8x91pE="
   },
   {
     "pname": "FSharp.Analyzers.Build",
@@ -86,8 +86,8 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
-    "version": "0.31.0",
-    "hash": "sha256-ws2nu1EyEESFqui/3l4+ucATy0Ag/XjjPvLZprcbC5c="
+    "version": "0.32.0",
+    "hash": "sha256-0mdnqvE4ltEfehzS+ylah5MSy+sXbYrKRHrNDlWvIjg="
   },
   {
     "pname": "FSharp.Compiler.Service",
@@ -206,8 +206,8 @@
   },
   {
     "pname": "Ionide.Analyzers",
-    "version": "0.14.5",
-    "hash": "sha256-0bJGA3+8+FC3C6e1l4j0mrRO2uujQOf2C3Qa+JxkH3o="
+    "version": "0.14.6",
+    "hash": "sha256-56FJUeWvxE2xbaX/qhfCN6ksiNWz7aGQySEskOnzFB0="
   },
   {
     "pname": "Ionide.KeepAChangelog.Tasks",

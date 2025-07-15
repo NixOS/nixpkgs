@@ -76,7 +76,7 @@ buildPythonPackage rec {
     ujson
   ] ++ lib.optionals (pythonOlder "3.10") [ testtools ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTestPaths =
     [

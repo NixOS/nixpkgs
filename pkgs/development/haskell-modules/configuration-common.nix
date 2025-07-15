@@ -566,6 +566,18 @@ with haskellLib;
           # TODO(@sternenseemann): submit upstreamable patch resolving this
           # (this should be possible by also taking PREFIX into account).
           ./patches/git-annex-no-usr-prefix.patch
+
+          # Pick fix for git 2.50 related test suite failures from 10.20250630
+          # https://git-annex.branchable.com/bugs/test_suite_fail_with_git_2.50/
+          (pkgs.fetchpatch {
+            name = "git-annex-workaround-for-git-2.50.patch";
+            url = "https://git.joeyh.name/index.cgi/git-annex.git/patch/?id=fb155b1e3e59cc1f9cf8a4fe7d47cba49d1c81af";
+            sha256 = "sha256-w6eXW0JqshXTd0/tNPZ0fOW2SVmA90G5eFhsd9y05BI=";
+            excludes = [
+              "doc/**"
+              "CHANGELOG"
+            ];
+          })
         ];
 
         postPatch = ''
@@ -754,6 +766,14 @@ with haskellLib;
   xmlgen = dontCheck super.xmlgen;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
+
+  # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
+  # https://github.com/Philonous/xml-picklers/issues/5
+  xml-picklers = appendPatch (pkgs.fetchpatch {
+    name = "xml-picklers-fix-prop-xp-attribute.patch";
+    url = "https://github.com/Philonous/xml-picklers/commit/887e5416b5e61c589cadf775d82013eb87751ea2.patch";
+    sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
+  }) super.xml-picklers;
 
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
@@ -2813,6 +2833,15 @@ with haskellLib;
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
 
+  # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
+  # exprParser fails to parse pretty printed structure correctly when the randomizer uses newlines (?)
+  tree-diff = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/parsec-ansi-wl-pprint/"
+    ];
+  }) super.tree-diff;
+
   # base <4.19
   # https://github.com/well-typed/large-records/issues/168
   large-generics = doJailbreak super.large-generics;
@@ -3100,6 +3129,18 @@ with haskellLib;
   brillo-examples = warnAfterVersion "1.13.3" (doJailbreak super.brillo-examples);
   brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
   brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
+
+  # Floating point precision issues. Test suite is only checked on x86_64.
+  # https://github.com/tweag/monad-bayes/issues/368
+  monad-bayes = dontCheckIf (
+    let
+      inherit (pkgs.stdenv) hostPlatform;
+    in
+    !hostPlatform.isx86_64
+    # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
+    # also fails on Hydra
+    || hostPlatform.isDarwin
+  ) super.monad-bayes;
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = warnAfterVersion "0.7.2" (

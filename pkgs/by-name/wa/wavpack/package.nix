@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+  ];
   buildInputs = [ libiconv ];
-
-  # autogen.sh:9
-  preAutoreconf = "cp ${gettext}/share/gettext/config.rpath .";
 
   src = fetchFromGitHub {
     owner = "dbry";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-V9jRIuDpZYIBohJRouGr2TI32BZMXSNVfavqPl56YO0=";
   };
+
+  patches = [ ./Fix-autoreconf-with-gettext-0.25.patch ];
 
   outputs = [
     "out"

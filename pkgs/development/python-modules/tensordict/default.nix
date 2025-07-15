@@ -19,6 +19,7 @@
   numpy,
   orjson,
   packaging,
+  pyvers,
   torch,
 
   # tests
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.8.3";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-d/6JKGFcFLXY9pxsnP27uwnAnIQ9EKvfTS30DCwQrCM=";
+    hash = "sha256-OdS9dw/BtSLZuY857O2njlFOMQj5IJ6v9c2aRP+H1Hc=";
   };
 
   build-system = [
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     numpy
     orjson
     packaging
+    pyvers
     torch
   ];
 

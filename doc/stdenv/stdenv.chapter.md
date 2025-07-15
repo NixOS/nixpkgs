@@ -1415,7 +1415,7 @@ This setup hook checks for, reports, and (by default) fails builds when "broken"
 This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
 
 ::: {.note}
-The hook only considers symlinks with targets inside the Nix store.
+The hook only considers symlinks with targets inside the Nix store or $TMPDIR directory (typically /nix/store and /build in the builder environment, the later being where build is executed).
 :::
 
 ::: {.note}

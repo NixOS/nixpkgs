@@ -76,7 +76,7 @@ buildPythonPackage rec {
     export HYPOTHESIS_PROFILE=ci
   '';
 
-  pytestFlagsArray = [ "tests/cover" ];
+  enabledTestPaths = [ "tests/cover" ];
 
   # Hypothesis by default activates several "Health Checks", including one that fires if the builder is "too slow".
   # This check is disabled [1] if Hypothesis detects a CI environment, i.e. either `CI` or `TF_BUILD` is defined [2].

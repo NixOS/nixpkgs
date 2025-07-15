@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies =
     [
       coreutils
-      unixtools.nettools
+      unixtools.net-tools
       unixtools.locale
       targetPackages.stdenv.cc
       gnugrep

@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) src pname version;
     hash = "sha256-KupqObdNrnWbbt9C4NNmgmQCfJ2O4FjJBwGy6XQhhHg=";
+    fetcherVersion = 1;
   };
 
   cargoRoot = "src-tauri";

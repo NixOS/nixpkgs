@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "routersploit" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Run the same tests as upstream does in the first round
     "tests/core/"
     "tests/test_exploit_scenarios.py"

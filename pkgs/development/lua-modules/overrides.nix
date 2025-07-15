@@ -51,6 +51,7 @@
   tree-sitter,
   unbound,
   unzip,
+  versionCheckHook,
   vimPlugins,
   yajl,
   zip,
@@ -587,9 +588,13 @@ in
       installShellFiles
       lua
       unzip
+      versionCheckHook
     ];
     # cmake is just to compile packages with "cmake" buildType, not luarocks itself
     dontUseCmakeConfigure = true;
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip
@@ -961,7 +966,8 @@ in
 
   rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs (oa: {
 
-    doCheck = true;
+    # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
+    doCheck = luaOlder "5.2";
     nativeCheckInputs = [
       final.nlua
       final.busted

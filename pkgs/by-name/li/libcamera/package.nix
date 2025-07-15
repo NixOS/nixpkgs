@@ -16,7 +16,7 @@
   doxygen,
   python3,
   python3Packages,
-  systemd, # for libudev
+  udev,
   libpisp,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-zlMjeLlEeigzisVr7kWVrTI5gRbpJb2pZvqXNdErITQ=";
+    hash = "sha256-JV5sa/jiqubcenSeYC4jlB/RgGJt3o1HTIyy7U4Ljlg=";
   };
 
   outputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       libdrm
 
       # hotplugging
-      systemd
+      udev
 
       # pycamera
       python3Packages.pybind11

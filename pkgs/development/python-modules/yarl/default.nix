@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cython,
+  cython_3_1,
   expandvars,
   setuptools,
   idna,
@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.20.0";
+  version = "1.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     tag = "v${version}";
-    hash = "sha256-O1ImUy+F+Ekj+Sij4XKC1cguTbbOPQbD2V5DpwDSxto=";
+    hash = "sha256-YN2Gn/wokwbBbVcKvqNNJZ8eZKxwwdKbA84kPsx1Dg0=";
   };
 
   build-system = [
-    cython
+    cython_3_1
     expandvars
     setuptools
   ];

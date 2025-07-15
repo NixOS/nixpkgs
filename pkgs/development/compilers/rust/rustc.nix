@@ -260,6 +260,17 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/NixOS/nixpkgs/issues/311930
       "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
       "--enable-use-libcxx"
+    ]
+    ++ optionals (!stdenv.hostPlatform.isx86_32) [
+      # This enables frame pointers for the compiler itself.
+      #
+      # Note that when compiling std, frame pointers (or at least non-leaf
+      # frame pointers, depending on version) are unconditionally enabled and
+      # cannot be overridden, so we do not touch that. (Also note this only
+      # applies to functions that can be immediately compiled when building
+      # std. Generic functions that do codegen when called in user code obey
+      # -Cforce-frame-pointers specified then, if any)
+      "--set rust.frame-pointers"
     ];
 
   # if we already have a rust compiler for build just compile the target std

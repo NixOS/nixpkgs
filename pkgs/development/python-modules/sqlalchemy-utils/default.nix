@@ -92,9 +92,8 @@ buildPythonPackage rec {
       "test_render_mock_ddl"
     ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "sqlalchemy_utils" ];

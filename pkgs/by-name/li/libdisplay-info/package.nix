@@ -7,7 +7,7 @@
   ninja,
   python3,
   hwdata,
-  edid-decode,
+  v4l-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-    edid-decode
+    v4l-utils
     hwdata
     python3
   ];
