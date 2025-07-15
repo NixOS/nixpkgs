@@ -671,6 +671,9 @@ let
               substitute "${lib.getDev postgresql}/nix-support/pg_config.env" "$dev/nix-support/pg_config.env" \
                 --replace-fail "${postgresql}" "$out" \
                 --replace-fail "${postgresql.man}" "$out"
+
+              # populate nix-support/propagated-build-inputs
+              eval fixupPhase
             '';
 
           passthru = {
