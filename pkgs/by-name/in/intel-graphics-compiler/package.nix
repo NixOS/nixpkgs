@@ -8,7 +8,7 @@
   bison,
   flex,
   intel-compute-runtime,
-  llvmPackages_14,
+  llvmPackages_15,
   opencl-clang,
   python3,
   spirv-tools,
@@ -26,8 +26,8 @@ let
     hash = "sha256-dSK+kNEZoF4bBx24S0No9aZLZiHK0U9TR1jRyEBL+2U=";
   };
 
-  inherit (llvmPackages_14) lld llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPackages_14) clang libclang;
+  inherit (llvmPackages_15) lld llvm;
+  inherit (if buildWithPatches then opencl-clang else llvmPackages_15) clang libclang;
   spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
 
   # Handholding the braindead build script
@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.8.3";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     tag = "v${version}";
-    hash = "sha256-1YzvzVmMW5s4keQfa7r6xfyVg7RWSdKNgBtdTN6SADg=";
+    hash = "sha256-1no41/YUr63OwPEaFFP/7n5GxfZqprCLk37zq60O2eM=";
   };
 
   postPatch = ''

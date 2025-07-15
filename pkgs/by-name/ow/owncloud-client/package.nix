@@ -15,7 +15,6 @@
   kdsingleapplication,
   ## darwin only
   libinotify-kqueue,
-  sparkleshare,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,20 +48,19 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libinotify-kqueue
-      sparkleshare
     ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Synchronise your ownCloud with your computer using this desktop client";
     homepage = "https://owncloud.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       qknight
       hellwolf
     ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
     changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };
 }

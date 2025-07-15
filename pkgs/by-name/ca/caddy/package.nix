@@ -10,12 +10,12 @@
   stdenv,
 }:
 let
-  version = "2.9.1";
+  version = "2.10.0";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-28ahonJ0qeynoqf02gws0LstaL4E08dywSJ8s3tgEDI=";
+    hash = "sha256-us1TnszA/10OMVSDsNvzRb6mcM4eMR3pQ5EF4ggA958=";
   };
 in
 buildGoModule {
@@ -26,10 +26,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${version}";
-    hash = "sha256-XW1cBW7mk/aO/3IPQK29s4a6ArSKjo7/64koJuzp07I=";
+    hash = "sha256-hzDd2BNTZzjwqhc/STbSAHnNlP7g1cFuMehqU1LumQE=";
   };
 
-  vendorHash = "sha256-qrlpuqTnFn/9oMTMovswpS1eAI7P9gvesoMpsIWKcY8=";
+  vendorHash = "sha256-9Iu4qmBVkGeSAywLgQuDR7y+TwCBqwhVxhfaXhCDnUc=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -91,6 +91,7 @@ buildGoModule {
       Br1ght0ne
       stepbrobd
       techknowlogick
+      ryan4yin
     ];
   };
 }

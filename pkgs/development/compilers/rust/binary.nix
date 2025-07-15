@@ -5,7 +5,6 @@
   wrapRustc,
   bash,
   curl,
-  darwin,
   zlib,
   autoPatchelfHook,
   gcc,
@@ -17,7 +16,6 @@
 
 let
   inherit (lib) optionalString;
-  inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
@@ -35,6 +33,7 @@ rec {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "Safe, concurrent, practical language";
+      mainProgram = "rustc";
       maintainers = with maintainers; [ qknight ];
       license = [
         licenses.mit
@@ -46,8 +45,7 @@ rec {
     buildInputs =
       [ bash ]
       ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib;
 
     postPatch = ''
       patchShebangs .
@@ -82,7 +80,6 @@ rec {
         # Platforms with host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
         "x86_64-darwin"
-        "i686-darwin"
         "aarch64-darwin"
         "i686-freebsd"
         "x86_64-freebsd"
@@ -110,7 +107,6 @@ rec {
       targetPlatforms = tier1TargetPlatforms ++ [
         # Platforms without host tools from
         # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-        "armv7a-darwin"
         "armv5tel-linux"
         "armv7a-linux"
         "m68k-linux"
@@ -154,10 +150,9 @@ rec {
     nativeBuildInputs = [
       makeWrapper
     ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
-    buildInputs =
-      [ bash ]
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+    buildInputs = [
+      bash
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
 
     postPatch = ''
       patchShebangs .

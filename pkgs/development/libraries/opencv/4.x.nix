@@ -13,7 +13,7 @@
   glib,
   glog,
   gflags,
-  protobuf_29,
+  protobuf_21,
   config,
   ocl-icd,
   qimgv,
@@ -29,7 +29,6 @@
   libwebp,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
-  ilmbase,
   enableJPEG2000 ? true,
   openjpeg,
   enableEigen ? true,
@@ -87,12 +86,6 @@
   # An empty lists means this setting is omitted which matches upstreams default.
   enabledModules ? [ ],
 
-  AVFoundation,
-  Cocoa,
-  VideoDecodeAcceleration,
-  CoreMedia,
-  MediaToolbox,
-  Accelerate,
   bzip2,
   callPackage,
 }@inputs:
@@ -281,8 +274,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags;
-  inherit (cudaFlags) cmakeCudaArchitecturesString cudaCapabilities;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString cudaCapabilities;
 
 in
 
@@ -343,7 +335,7 @@ effectiveStdenv.mkDerivation {
       glib
       glog
       pcre2
-      protobuf_29
+      protobuf_21
       zlib
     ]
     ++ optionals enablePython [
@@ -375,17 +367,12 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals enableEXR [
       openexr
-      ilmbase
     ]
     ++ optionals enableJPEG2000 [
       openjpeg
     ]
     ++ optionals enableFfmpeg [
       ffmpeg
-    ]
-    ++ optionals (enableFfmpeg && effectiveStdenv.hostPlatform.isDarwin) [
-      bzip2
-      VideoDecodeAcceleration
     ]
     ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
       elfutils
@@ -426,12 +413,6 @@ effectiveStdenv.mkDerivation {
     ]
     ++ optionals effectiveStdenv.hostPlatform.isDarwin [
       bzip2
-      AVFoundation
-      Cocoa
-      VideoDecodeAcceleration
-      CoreMedia
-      MediaToolbox
-      Accelerate
     ]
     ++ optionals enableDocs [
       doxygen
@@ -478,8 +459,6 @@ effectiveStdenv.mkDerivation {
       cudaPackages.cuda_nvcc
     ];
 
-  env.NIX_CFLAGS_COMPILE = optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
-
   # Configure can't find the library without this.
   OpenBLAS_HOME = optionalString withOpenblas openblas_.dev;
   OpenBLAS = optionalString withOpenblas openblas_;
@@ -489,6 +468,7 @@ effectiveStdenv.mkDerivation {
       (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
       (cmakeBool "WITH_OPENMP" true)
       (cmakeBool "BUILD_PROTOBUF" false)
+      (cmakeBool "WITH_PROTOBUF" true)
       (cmakeBool "PROTOBUF_UPDATE_FILES" true)
       (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
       (cmakeBool "BUILD_TESTS" runAccuracyTests)
@@ -611,7 +591,7 @@ effectiveStdenv.mkDerivation {
       substituteInPlace "$out/lib/cmake/opencv4/OpenCVConfig.cmake" \
         --replace-fail \
           'find_host_package(CUDA ''${OpenCV_CUDA_VERSION} EXACT REQUIRED)' \
-          'find_host_package(CUDA REQUIRED)' \
+          'find_host_package(CUDAToolkit REQUIRED)' \
         --replace-fail \
           'message(FATAL_ERROR "OpenCV static library was compiled with CUDA' \
           'message("OpenCV static library was compiled with CUDA'

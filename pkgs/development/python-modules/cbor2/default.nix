@@ -4,6 +4,8 @@
   fetchPypi,
   pythonOlder,
 
+  withCExtensions ? true,
+
   # build-system
   setuptools,
   setuptools-scm,
@@ -38,6 +40,14 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ];
+
+  env = lib.optionalAttrs (!withCExtensions) {
+    CBOR2_BUILD_C_EXTENSION = "0";
+  };
+
+  passthru = {
+    inherit withCExtensions;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";

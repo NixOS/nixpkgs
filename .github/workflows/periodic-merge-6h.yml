@@ -11,10 +11,14 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Merge every 6 hours
-    - cron:  '0 */6 * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 permissions: {}
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   periodic-merge:
@@ -35,4 +39,5 @@ jobs:
     with:
       from: ${{ matrix.pairs.from }}
       into: ${{ matrix.pairs.into }}
+    name: ${{ format('{0} → {1}', matrix.pairs.from, matrix.pairs.into) }}
     secrets: inherit

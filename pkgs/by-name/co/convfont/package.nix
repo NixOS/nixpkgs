@@ -1,5 +1,7 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ clevor ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     mainProgram = "convfont";
   };

@@ -45,6 +45,6 @@ buildPythonPackage {
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

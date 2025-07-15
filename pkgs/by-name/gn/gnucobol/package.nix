@@ -142,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Only
     ];
     maintainers = with maintainers; [
-      ericsagnes
       lovesegfault
       techknowlogick
       kiike

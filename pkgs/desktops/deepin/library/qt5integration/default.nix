@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/qt5integration";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

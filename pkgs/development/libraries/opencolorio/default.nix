@@ -12,17 +12,13 @@
   # Only required on Linux
   glew,
   libglut,
-  # Only required on Darwin
-  Carbon,
-  GLUT,
-  Cocoa,
   # Python bindings
   pythonBindings ? true, # Python bindings
   python3Packages,
   # Build apps
   buildApps ? true, # Utility applications
   lcms2,
-  openexr_3,
+  openexr,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,18 +59,13 @@ stdenv.mkDerivation rec {
       glew
       libglut
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      GLUT
-      Cocoa
-    ]
     ++ lib.optionals pythonBindings [
       python3Packages.python
       python3Packages.pybind11
     ]
     ++ lib.optionals buildApps [
       lcms2
-      openexr_3
+      openexr
     ];
 
   cmakeFlags =

@@ -22,7 +22,7 @@ php.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -32,6 +32,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpinsights.com/";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

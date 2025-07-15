@@ -12,7 +12,7 @@
   rustc,
   wrapGAppsHook4,
   gdk-pixbuf,
-  clapper,
+  clapper-unwrapped,
   gtk4,
   libadwaita,
   libxml2,
@@ -27,18 +27,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "3.3.5";
+  version = "4.0.3";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-H2/qKnsByidziUldX5MZBrMyMHfuQ4SN9wXizJUGQ8I=";
+    hash = "sha256-TVQZq+Akb7EFUazAgUqvlwC7htVpUf7Hck8p7vY0o3M=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hyu1sk/VcRLjxUFYiFeTvwlFVYq5crMMg+4Afb34Hvc=";
+    hash = "sha256-fjb/AVvWbSq+Mc+5D7wCncLQ8OPjnTqHMzFFYgmCCjY=";
   };
 
   postPatch = ''
@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4
 
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      clapper
+      clapper-unwrapped
       gtk4
       libadwaita
       libxml2
@@ -88,19 +89,20 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-bad
     ]);
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v."; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+    ignoredVersions = "(alpha|beta|rc)";
+  };
 
   meta = {
     description = "Modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = lib.licenses.gpl3Plus;
-    maintainers =
-      with lib.maintainers;
-      [
-        kira-bruneau
-        stunkymonkey
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      kira-bruneau
+      stunkymonkey
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
     mainProgram = "io.gitlab.news_flash.NewsFlash";
   };

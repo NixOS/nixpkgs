@@ -31,6 +31,6 @@ buildKodiBinaryAddon rec {
     description = "FishBMC visualization for kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

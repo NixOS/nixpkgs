@@ -2,6 +2,8 @@
   lib,
   python313,
   fetchFromGitLab,
+  fetchpatch,
+  fetchPypi,
   callPackage,
   stdenv,
   makeWrapper,
@@ -10,9 +12,21 @@
 
 let
   python = python313.override {
+    self = python;
     packageOverrides = final: prev: {
-      django = final.django_5;
-      django-extensions = prev.django-extensions.overridePythonAttrs { doCheck = false; };
+      django = final.django_5_2;
+      django-csp = prev.django-csp.overridePythonAttrs rec {
+        version = "4.0";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
+        };
+      };
+      django-ninja-cursor-pagination = prev.django-ninja-cursor-pagination.overridePythonAttrs {
+        # checks are failing with django 5
+        doCheck = false;
+      };
     };
   };
 
@@ -25,7 +39,7 @@ let
       brotli
       celery
       celery-batches
-      dj-stripe
+      cxxfilt
       django
       django-allauth
       django-anymail
@@ -36,10 +50,11 @@ let
       django-import-export
       django-ipware
       django-ninja
+      django-ninja-cursor-pagination
       django-organizations
+      django-postgres-partition
       django-prometheus
       django-redis
-      django-sql-utils
       django-storages
       google-cloud-logging
       gunicorn
@@ -69,15 +84,24 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "4.2.5";
+  version = "5.0.5";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OTf2rvx+ONnB7pLB7rinztXL7l2eZfIuI7PosCXaOH8=";
+    hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
   };
+
+  patches = [
+    # update symbolic
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/merge_requests/1642.patch";
+      excludes = [ "uv.lock" ];
+      hash = "sha256-6x1W/79DBPVQdAFWAozK2TXUoj/oArEuNMrARIeWtIY=";
+    })
+  ];
 
   propagatedBuildInputs = pythonPackages;
 

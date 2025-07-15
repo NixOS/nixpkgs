@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
-  SDL,
   SDL2,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,15 +16,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TaKXRceCt9sY9fN8Sed78WMSHdN2Hi/HY2+gy/NcJFY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [
-    SDL
     SDL2
   ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
   installFlags = [ "PREFIX=\"\"" ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/linuxconsole/";

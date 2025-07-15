@@ -9,7 +9,7 @@
   python-magic,
   pyyaml,
   requests,
-  sentry-sdk_2,
+  sentry-sdk,
   tenacity,
   setuptools,
   setuptools-scm,
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     python-magic
     pyyaml
     requests
-    sentry-sdk_2
+    sentry-sdk
     tenacity
   ];
 

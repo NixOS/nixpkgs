@@ -10,20 +10,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "countryfetch";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nik-rev";
     repo = "countryfetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KdFgY54vXLmq6IZfJzZ1IeZ2eQuNJoCRZUV3rVuPpcY=";
+    hash = "sha256-povKd1Y/2Mi+6yJd9+RsJ4F19/wvXvBOK2Jgbs4UnP0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XJI9k/5hdak8p0/J/x9u6lqJu/DIbX93Wwm3LALkAAw=";
+  cargoHash = "sha256-0ZBhRheJGapPqVieXbIpoboVV4RLXan042u5SSgrYQk=";
 
   env = {
-    RUSTC_BOOTSTRAP = 1;
     OPENSSL_NO_VENDOR = true;
   };
 

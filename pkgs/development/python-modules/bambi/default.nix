@@ -64,6 +64,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # ValueError: dtype attribute is not a valid dtype instance
+      "test_vonmises_regression"
+
       # AssertionError: assert (<xarray.DataArray 'yield' ()> Size: 1B\narray(False) & <xarray.DataArray 'yield' ()> Size: 1B\narray(False))
       # https://github.com/bambinos/bambi/issues/888
       "test_beta_regression"

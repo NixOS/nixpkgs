@@ -5,6 +5,7 @@
   extra-cmake-modules,
   fetchFromGitHub,
   fontconfig,
+  installShellFiles,
   llvmPackages,
   nix-update-script,
   openssl,
@@ -17,22 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.4.5-canary.4";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQ/Xocpk48eRhCyfRZx2rkAVqNn115rO3MRYF5fC2nI=";
+    hash = "sha256-PwZYi7B5gqiqal6qIFqciv8SFJbRBeVJKfIc29zuIxA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pngzlmkntTCv5/aw1UNbDGNQOVtMgFZHc2woj6R0vys=";
+  cargoHash = "sha256-zEkpWu/L5plFCnvliAtfu19ljB4pnrEesVQZOycOKRk=";
 
   nativeBuildInputs =
     [
       capnproto
       extra-cmake-modules
+      installShellFiles
       pkg-config
       protobuf
     ]
@@ -53,6 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd turbo \
+      --bash <($out/bin/turbo completion bash) \
+      --fish <($out/bin/turbo completion fish) \
+      --zsh <($out/bin/turbo completion zsh)
+  '';
 
   env = {
     # nightly features are used

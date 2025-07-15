@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  autoconf,
-  automake,
   fetchFromGitHub,
   glib,
   intltool,
@@ -10,6 +8,8 @@
   libtool,
   pkg-config,
   python3,
+  gettext,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,12 +28,17 @@ stdenv.mkDerivation rec {
     sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
+  patches = [
+    # glib gettext macros are broken/obsolete,
+    # so we patch libmypaint to use regular gettext instead.
+    ./0001-configure-use-regular-GETTEXT-unconditionally.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    glib # AM_GLIB_GNU_GETTEXT
+    autoreconfHook
+    gettext
     intltool
     libtool
     pkg-config

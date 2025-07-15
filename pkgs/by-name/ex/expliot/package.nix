@@ -24,10 +24,11 @@ with py.pkgs;
 buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
-    repo = pname;
+    repo = "expliot";
     rev = version;
     hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };

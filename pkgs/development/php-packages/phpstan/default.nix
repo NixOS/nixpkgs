@@ -7,16 +7,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpstan";
-  version = "2.1.10";
+  version = "2.1.17";
 
   src = fetchFromGitHub {
     owner = "phpstan";
     repo = "phpstan-src";
     tag = finalAttrs.version;
-    hash = "sha256-CeIRc/37HnKQIzcGxiuy5nXopS+PopNSnLSJiA3Mx5I=";
+    hash = "sha256-F4K+9tmnonUdk7VtXVo0tYf4RgoNjzGmIteWkzMOkYE=";
   };
 
-  vendorHash = "sha256-QwZoEGE7oAm1Ha1EB/E1quMMSSTmsayOpO3JgGISQjE=";
+  vendorHash = "sha256-q83Gb2oujougRQVmeTOtdnVtP4IRghPUpo1kzbSlhiQ=";
   composerStrictValidation = false;
 
   doInstallCheck = true;
@@ -36,6 +36,6 @@ php.buildComposerProject2 (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "phpstan";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

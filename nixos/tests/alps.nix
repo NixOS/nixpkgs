@@ -28,8 +28,10 @@ in
         enableSubmission = true;
         enableSubmissions = true;
         tlsTrustedAuthorities = "${certs.ca.cert}";
-        sslCert = "${certs.${domain}.cert}";
-        sslKey = "${certs.${domain}.key}";
+        config.smtpd_tls_chain_files = [
+          "${certs.${domain}.key}"
+          "${certs.${domain}.cert}"
+        ];
       };
       services.dovecot2 = {
         enable = true;

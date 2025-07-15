@@ -9,37 +9,35 @@ pkgs: lib: self: super:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias:
-    if alias.recurseForDerivations or false
-    then lib.removeAttrs alias ["recurseForDerivations"]
-    else alias;
+  removeRecurseForDerivations =
+    alias:
+    if alias.recurseForDerivations or false then
+      lib.removeAttrs alias [ "recurseForDerivations" ]
+    else
+      alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias:
-    if lib.isDerivation alias then
-      lib.dontDistribute alias
-    else alias;
+  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
   # Make sure that we are not shadowing something from node-packages.nix.
-  checkInPkgs = n: alias:
-    if builtins.hasAttr n super
-    then throw "Alias ${n} is still in node-packages.nix"
-    else alias;
+  checkInPkgs =
+    n: alias:
+    if builtins.hasAttr n super then throw "Alias ${n} is still in node-packages.nix" else alias;
 
-  mapAliases = aliases:
-    lib.mapAttrs (n: alias:
-      removeDistribute
-        (removeRecurseForDerivations
-          (checkInPkgs n alias)))
-      aliases;
+  mapAliases =
+    aliases:
+    lib.mapAttrs (
+      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+    ) aliases;
 in
 
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
-  "@commitlint/config-conventional" = throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
+  "@commitlint/config-conventional" =
+    throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -161,7 +159,11 @@ mapAliases {
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
-  npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
+  npm = pkgs.nodejs.overrideAttrs (old: {
+    meta = old.meta // {
+      mainProgram = "npm";
+    };
+  }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   orval = throw "orval has been removed because it was broken"; # added 2025-03-23
@@ -171,6 +173,8 @@ mapAliases {
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
+  postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
+  inherit (pkgs) prettier; # added 2025-05-31
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) prisma; # added 2024-08-31
@@ -184,6 +188,7 @@ mapAliases {
   remod-cli = pkgs.remod; # added 2024-12-04
   "reveal.js" = throw "reveal.js was removed because it provides no executable"; # added 2025-03-23
   reveal-md = pkgs.reveal-md; # added 2023-07-31
+  rollup = throw "rollup has been removed because it was broken"; # added 2025-04-28
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
   inherit (pkgs) serverless; # Added 2023-11-29
@@ -269,6 +274,7 @@ mapAliases {
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-css-languageserver-bin = throw "vscode-css-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
+  inherit (pkgs) vscode-json-languageserver; # added 2025-06-19
   vscode-json-languageserver-bin = throw "vscode-json-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-language-server = self.vls; # added 2023-08-20

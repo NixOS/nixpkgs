@@ -1,6 +1,5 @@
 {
   curl,
-  esbuild,
   fetchFromGitHub,
   git,
   jq,
@@ -15,18 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.7";
+  version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WzmRz0wf/Ss90FmXXp6gaylC0k/k/QkFaFddlnLo+Xk=";
+    hash = "sha256-7JT8BMKUhIwYMkIwr2mD8IQLDpldcDtAKh6R1tbAKMw=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-    hash = "sha256-g9BSVUKpn74D9eIDj/lS1Y6w/+AnhCw++st4s4REn+A=";
+    fetcherVersion = 2;
+    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
   };
 
   nativeBuildInputs = [
@@ -36,20 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.overrideAttrs (
-        final: _: {
-          version = "0.25.0";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${final.version}";
-            hash = "sha256-L9jm94Epb22hYsU3hoq1lZXb5aFVD4FC4x2qNt0DljA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      )
-    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     VENCORD_HASH = "${finalAttrs.version}";
   };
@@ -67,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     cp -r dist/${lib.optionalString buildWebExtension "chromium-unpacked/"} $out
+    cp package.json $out # Presence is checked by Vesktop.
 
     runHook postInstall
   '';
@@ -96,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       FlafyDev
+      Gliczy
       NotAShelf
       Scrumplex
     ];

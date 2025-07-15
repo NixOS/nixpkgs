@@ -10,14 +10,14 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neovim-qt-unwrapped";
   version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "equalsraf";
     repo = "neovim-qt";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-r77tg3xVemHW/zDNA6dYerFjFaYDDeHsD68WhMfI70Q=";
   };
 
@@ -51,12 +51,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Neovim client library and GUI, in Qt5";
     homepage = "https://github.com/equalsraf/neovim-qt";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     mainProgram = "nvim-qt";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+    ];
     inherit (neovim.meta) platforms;
   };
-}
+})

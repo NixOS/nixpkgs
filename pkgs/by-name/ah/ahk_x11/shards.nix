@@ -6,17 +6,17 @@
   };
   cron_parser = {
     url = "https://github.com/kostya/cron_parser.git";
-    rev = "v0.4.0";
+    tag = "v0.4.0";
     sha256 = "17fgg2nvyx99v05l10h6cnxfr7swz8yaxhmnk4l47kg2spi8w90a";
   };
   future = {
     url = "https://github.com/crystal-community/future.cr.git";
-    rev = "v1.0.0";
+    tag = "v1.0.0";
     sha256 = "1mji2djkrf4vxgs432kgkzxx54ybzk636789k2vsws3sf14l74i8";
   };
   gi-crystal = {
     url = "https://github.com/hugopl/gi-crystal.git";
-    rev = "v0.22.1";
+    tag = "v0.22.1";
     sha256 = "1bwsr5i6cmvnc72qdnmq4v6grif1hahrc7s6js2ivdrfix72flyg";
   };
   gtk3 = {
@@ -26,7 +26,7 @@
   };
   harfbuzz = {
     url = "https://github.com/hugopl/harfbuzz.cr.git";
-    rev = "v0.2.0";
+    tag = "v0.2.0";
     sha256 = "06wgqxwyib5416yp53j2iwcbr3bl4jjxb1flm7z103l365par694";
   };
   notify = {
@@ -36,12 +36,12 @@
   };
   pango = {
     url = "https://github.com/hugopl/pango.cr.git";
-    rev = "v0.3.1";
+    tag = "v0.3.1";
     sha256 = "0xlf127flimnll875mcq92q7xsi975rrgdpcpmnrwllhdhfx9qmv";
   };
   tasker = {
     url = "https://github.com/spider-gazelle/tasker.git";
-    rev = "v2.1.4";
+    tag = "v2.1.4";
     sha256 = "0254sl279nrw5nz43dz5gm89ah1zrw5bvxfma81navpx5gfg9pyb";
   };
   x11 = {

@@ -27,6 +27,7 @@ in
     # The lessopen package pulls in Perl.
     less.lessopen = mkDefault null;
     command-not-found.enable = mkDefault false;
+    fish.generateCompletions = mkDefault false;
   };
 
   # This pulls in nixos-containers which depends on Perl.

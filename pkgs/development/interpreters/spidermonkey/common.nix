@@ -27,11 +27,10 @@
   nspr,
   readline,
   zlib,
-  libobjc,
   libiconv,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spidermonkey";
   inherit version;
 
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
       libiconv
     ];
 

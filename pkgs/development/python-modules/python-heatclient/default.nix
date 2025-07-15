@@ -82,6 +82,6 @@ buildPythonPackage rec {
     mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

@@ -6,6 +6,7 @@
   zlib,
   e2fsprogs,
   bzip2,
+  installShellFiles,
 }:
 
 let
@@ -23,21 +24,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-vr2+Hm6RIzdVvrQu8LStvv2Vc0VSWPAJ+zMVVseZs9A=";
   };
 
-  preConfigure = ''
-    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
-  '';
+  configureFlags = [
+    "--with-bash-completion-dir=${placeholder "out"}/share/bash-completion/completions"
+    # required for cross builds
+    "--host=${stdenv.hostPlatform.system}"
+  ];
 
-  patchPhase = ''
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
+  postPatch = ''
     substituteInPlace Makefile.in \
-      --replace "command -p mv" "mv"
+      --replace-fail "command -p mv" "mv"
     substituteInPlace configure \
-      --replace "command -p getconf PATH" "echo $PATH"
+      --replace-fail "command -p getconf PATH" "echo $PATH"
   '';
 
   postInstall = ''
-    # Install some handy-dandy shell completions
-    install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
+    # install third-party zsh completions (bash completions already available)
+    installShellCompletion --cmd tarsnap \
+      --zsh ${zshCompletion}
   '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs =
     [

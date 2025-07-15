@@ -1,10 +1,28 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
-  inherit (lib.types) bool enum nullOr port str submodule;
+  inherit (lib.options)
+    literalExpression
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    ;
+  inherit (lib.types)
+    bool
+    enum
+    nullOr
+    port
+    str
+    submodule
+    ;
   inherit (utils) genJqSecretsReplacementSnippet;
 
   cfg = config.services.scrutiny;
@@ -70,7 +88,10 @@ in
           };
 
           options.log.level = mkOption {
-            type = enum [ "INFO" "DEBUG" ];
+            type = enum [
+              "INFO"
+              "DEBUG"
+            ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
@@ -93,7 +114,8 @@ in
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
+          options.web.influxdb.tls.insecure_skip_verify =
+            mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
           options.web.influxdb.token = mkOption {
             type = nullOr str;
@@ -125,7 +147,7 @@ in
 
         schedule = mkOption {
           type = str;
-          default = "*:0/15";
+          default = "daily";
           description = ''
             How often to run the collector in systemd calendar format.
           '';
@@ -154,13 +176,16 @@ in
 
             options.api.endpoint = mkOption {
               type = str;
-              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
-              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
+              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}${cfg.settings.web.listen.basepath}";
+              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}''${config.services.scrutiny.settings.web.listen.basepath}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
             options.log.level = mkOption {
-              type = enum [ "INFO" "DEBUG" ];
+              type = enum [
+                "INFO"
+                "DEBUG"
+              ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
             };

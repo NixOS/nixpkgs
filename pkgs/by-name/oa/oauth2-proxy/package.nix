@@ -6,12 +6,12 @@
 
 buildGoModule rec {
   pname = "oauth2-proxy";
-  version = "7.8.1";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "oauth2-proxy";
     owner = "oauth2-proxy";
-    sha256 = "sha256-NU9/BLyTEWGqt9SJNbvF4kSG/op8TEpYV2A24/V29PM=";
+    sha256 = "sha256-ykC29q7/rTv7POGETMiypj9CQYdYVo7rjT5B+3nfj/U=";
     rev = "v${version}";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
     ./fix-tests-go-1.24.diff
   ];
 
-  vendorHash = "sha256-t/SJjh9bcsIevr3S0ysDlvtaIGzkks+qvfXF5/SEidE=";
+  vendorHash = "sha256-KIu/NSKaXLutlY8757haAlsyuHUZjkDZ6D10lJ08uCM=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   ldflags = [ "-X main.VERSION=${version}" ];
@@ -28,7 +28,7 @@ buildGoModule rec {
     description = "Reverse proxy that provides authentication with Google, Github, or other providers";
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = licenses.mit;
-    maintainers = teams.serokell.members;
+    teams = [ teams.serokell ];
     mainProgram = "oauth2-proxy";
   };
 }

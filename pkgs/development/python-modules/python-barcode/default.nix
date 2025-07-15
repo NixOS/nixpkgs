@@ -6,6 +6,7 @@
   setuptools-scm,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +27,10 @@ buildPythonPackage rec {
     images = [ pillow ];
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=barcode" "" \
-      --replace "--cov-report=term-missing:skip-covered" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.images;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ] ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 

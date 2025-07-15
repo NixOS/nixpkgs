@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "emlove";
-    repo = pname;
+    repo = "pykulersky";
     rev = version;
     hash = "sha256-BaGcsHlQpuEnUn8OgSUsJi2q89vFl7vpkinviKnUZJk=";
   };

@@ -163,11 +163,11 @@ stdenv.mkDerivation rec {
 
   passthru.linuxHeaders = linuxHeaders;
 
-  meta = with lib; {
+  meta = {
     description = "Efficient, small, quality libc implementation";
     homepage = "https://musl.libc.org/";
     changelog = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
       "armv5tel-linux"
@@ -190,7 +190,11 @@ stdenv.mkDerivation rec {
       "s390x-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [
+    badPlatforms = [
+      # On 64-bit POWER, musl is ELFv2-only
+      (lib.recursiveUpdate lib.systems.inspect.patterns.isPower64 lib.systems.inspect.patterns.isAbiElfv1)
+    ];
+    maintainers = with lib.maintainers; [
       thoughtpolice
       dtzWill
     ];

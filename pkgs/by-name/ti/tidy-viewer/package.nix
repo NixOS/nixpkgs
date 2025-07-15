@@ -24,12 +24,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=build_reader_can_create_reader_without_file_specified"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
     mainProgram = "tidy-viewer";
     homepage = "https://github.com/alexhallam/tv";
     changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

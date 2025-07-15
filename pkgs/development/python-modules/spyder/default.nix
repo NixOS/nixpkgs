@@ -13,6 +13,7 @@
   aiohttp,
   asyncssh,
   atomicwrites,
+  bcrypt,
   chardet,
   cloudpickle,
   cookiecutter,
@@ -27,6 +28,7 @@
   nbconvert,
   numpy,
   numpydoc,
+  packaging,
   pickleshare,
   psutil,
   pygithub,
@@ -56,12 +58,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.0a1";
+  version = "6.1.0a2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Yjii1YUmdWdrrSLe3trAoATJXt2bfjc0JX5CBMVIEq8=";
+    hash = "sha256-KbGfG9T3XkYXntIQx325mYb0Bh8c0idb+25awFlWD9s=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -70,10 +72,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "ipython"
+    "python-lsp-server"
+  ];
+
   dependencies = [
     aiohttp
     asyncssh
     atomicwrites
+    bcrypt
     chardet
     cloudpickle
     cookiecutter
@@ -88,6 +96,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    packaging
     pickleshare
     psutil
     pygithub
@@ -141,7 +150,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;

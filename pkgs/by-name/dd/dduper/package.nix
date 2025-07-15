@@ -5,6 +5,7 @@
   fetchFromGitHub,
   btrfs-progs,
   python3,
+  udevCheckHook,
 }:
 
 let
@@ -38,6 +39,12 @@ stdenv.mkDerivation rec {
     btrfsProgsPatched
     py3
   ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   patchPhase = ''
     substituteInPlace ./dduper --replace "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"

@@ -1,11 +1,10 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  runTest,
+  ...
 }:
 
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib)
     concatStringsSep
     maintainers
@@ -74,7 +73,7 @@ let
 in
 mapAttrs (
   test: testConfig:
-  (makeTest (
+  (runTest (
     let
       nodeName = testConfig.nodeName or test;
       calibreConfig = {

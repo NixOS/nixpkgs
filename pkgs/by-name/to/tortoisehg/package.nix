@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "tortoisehg";
   version = "6.9";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";

@@ -35,6 +35,7 @@ libeufinComponent:
           cfg.settings."libeufin-${libeufinComponent}db-postgres".CONFIG;
 
       bankPort = cfg.settings."${if isNexus then "nexus-httpd" else "libeufin-bank"}".PORT;
+      bankHost = lib.elemAt (lib.splitString "/" cfg.settings.libeufin-bank.BASE_URL) 2;
     in
     lib.mkIf cfg.enable {
       services.libeufin.settings = cfg.settings;
@@ -82,7 +83,7 @@ libeufinComponent:
                 args = lib.cli.toGNUCommandLineShell { } {
                   c = configFile;
                   inherit (account) username password name;
-                  payto_uri = "payto://x-taler-bank/bank:${toString bankPort}/${account.username}?receiver-name=${account.name}";
+                  payto_uri = "payto://x-taler-bank/${bankHost}/${account.username}?receiver-name=${account.name}";
                   exchange = lib.toLower account.username == "exchange";
                 };
               in
@@ -95,7 +96,9 @@ libeufinComponent:
             };
           in
           {
-            path = [ config.services.postgresql.package ];
+            path = [
+              (if cfg.createLocalDatabase then config.services.postgresql.package else pkgs.postgresql)
+            ];
             serviceConfig = {
               Type = "oneshot";
               DynamicUser = true;
@@ -120,8 +123,8 @@ libeufinComponent:
                   echo "Bank initialisation complete"
                 fi
               '';
-            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
-            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.service" ];
+            requires = lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
+            after = [ "network.target" ] ++ lib.optionals cfg.createLocalDatabase [ "postgresql.target" ];
           };
       };
 

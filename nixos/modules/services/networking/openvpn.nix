@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
 
   inherit (pkgs) openvpn;
 
-  makeOpenVPNJob = cfg: name:
+  makeOpenVPNJob =
+    cfg: name:
     let
 
       path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
@@ -28,32 +34,35 @@ let
         done
 
         ${cfg.up}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+        ${optionalString cfg.updateResolvConf "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
       '';
 
       downScript = ''
         export PATH=${path}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+        ${optionalString cfg.updateResolvConf "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
         ${cfg.down}
       '';
 
-      configFile = pkgs.writeText "openvpn-config-${name}"
-        ''
-          errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
-          ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
-        '';
+      configFile = pkgs.writeText "openvpn-config-${name}" ''
+        errors-to-stderr
+        ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
+        ${cfg.config}
+        ${optionalString (
+          cfg.up != "" || cfg.updateResolvConf
+        ) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
+        ${optionalString (
+          cfg.down != "" || cfg.updateResolvConf
+        ) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
+        ${optionalString (cfg.authUserPass != null) (
+          if isAttrs cfg.authUserPass then
+            "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+              ${cfg.authUserPass.username}
+              ${cfg.authUserPass.password}
+            ''}"
+          else
+            "auth-user-pass ${cfg.authUserPass}"
+        )}
+      '';
 
     in
     {
@@ -62,7 +71,11 @@ let
       wantedBy = optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
 
-      path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
+      path = [
+        pkgs.iptables
+        pkgs.iproute2
+        pkgs.net-tools
+      ];
 
       serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
@@ -73,9 +86,11 @@ let
     openvpn-restart = {
       wantedBy = [ "sleep.target" ];
       path = [ pkgs.procps ];
-      script = let
-        unitNames = map (n: "openvpn-${n}.service") (builtins.attrNames cfg.servers);
-      in "systemctl try-restart ${lib.escapeShellArgs unitNames}";
+      script =
+        let
+          unitNames = map (n: "openvpn-${n}.service") (builtins.attrNames cfg.servers);
+        in
+        "systemctl try-restart ${lib.escapeShellArgs unitNames}";
       description = "Sends a signal to OpenVPN process to trigger a restart after return from sleep";
     };
   };
@@ -134,80 +149,89 @@ in
         attribute name.
       '';
 
-      type = with types; attrsOf (submodule {
+      type =
+        with types;
+        attrsOf (submodule {
 
-        options = {
+          options = {
 
-          config = mkOption {
-            type = types.lines;
-            description = ''
-              Configuration of this OpenVPN instance.  See
-              {manpage}`openvpn(8)`
-              for details.
+            config = mkOption {
+              type = types.lines;
+              description = ''
+                Configuration of this OpenVPN instance.  See
+                {manpage}`openvpn(8)`
+                for details.
 
-              To import an external config file, use the following definition:
-              `config = "config /path/to/config.ovpn"`
-            '';
+                To import an external config file, use the following definition:
+                `config = "config /path/to/config.ovpn"`
+              '';
+            };
+
+            up = mkOption {
+              default = "";
+              type = types.lines;
+              description = ''
+                Shell commands executed when the instance is starting.
+              '';
+            };
+
+            down = mkOption {
+              default = "";
+              type = types.lines;
+              description = ''
+                Shell commands executed when the instance is shutting down.
+              '';
+            };
+
+            autoStart = mkOption {
+              default = true;
+              type = types.bool;
+              description = "Whether this OpenVPN instance should be started automatically.";
+            };
+
+            updateResolvConf = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Use the script from the update-resolv-conf package to automatically
+                update resolv.conf with the DNS information provided by openvpn. The
+                script will be run after the "up" commands and before the "down" commands.
+              '';
+            };
+
+            authUserPass = mkOption {
+              default = null;
+              description = ''
+                This option can be used to store the username / password credentials
+                with the "auth-user-pass" authentication method.
+
+                You can either provide an attribute set of `username` and `password`,
+                or the path to a file containing the credentials on two lines.
+
+                WARNING: If you use an attribute set, this option will put the credentials WORLD-READABLE into the Nix store!
+              '';
+              type = types.nullOr (
+                types.oneOf [
+                  types.singleLineStr
+                  (types.submodule {
+                    options = {
+                      username = mkOption {
+                        description = "The username to store inside the credentials file.";
+                        type = types.str;
+                      };
+
+                      password = mkOption {
+                        description = "The password to store inside the credentials file.";
+                        type = types.str;
+                      };
+                    };
+                  })
+                ]
+              );
+            };
           };
 
-          up = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is starting.
-            '';
-          };
-
-          down = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is shutting down.
-            '';
-          };
-
-          autoStart = mkOption {
-            default = true;
-            type = types.bool;
-            description = "Whether this OpenVPN instance should be started automatically.";
-          };
-
-          updateResolvConf = mkOption {
-            default = false;
-            type = types.bool;
-            description = ''
-              Use the script from the update-resolv-conf package to automatically
-              update resolv.conf with the DNS information provided by openvpn. The
-              script will be run after the "up" commands and before the "down" commands.
-            '';
-          };
-
-          authUserPass = mkOption {
-            default = null;
-            description = ''
-              This option can be used to store the username / password credentials
-              with the "auth-user-pass" authentication method.
-
-              WARNING: Using this option will put the credentials WORLD-READABLE in the Nix store!
-            '';
-            type = types.nullOr (types.submodule {
-
-              options = {
-                username = mkOption {
-                  description = "The username to store inside the credentials file.";
-                  type = types.str;
-                };
-
-                password = mkOption {
-                  description = "The password to store inside the credentials file.";
-                  type = types.str;
-                };
-              };
-            });
-          };
-        };
-
-      });
+        });
 
     };
 
@@ -219,12 +243,16 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf (cfg.servers != { }) {
 
-    systemd.services = (listToAttrs (mapAttrsToList (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers))
+    systemd.services =
+      (listToAttrs (
+        mapAttrsToList (
+          name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)
+        ) cfg.servers
+      ))
       // restartService;
 
     environment.systemPackages = [ openvpn ];

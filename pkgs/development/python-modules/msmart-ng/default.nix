@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "msmart-ng";
-  version = "2025.3.1";
+  version = "2025.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-msmart";
     tag = version;
-    hash = "sha256-hTYqRJn/ixseHHezfTOG0UzdQmnpn4hACijYOMtwtT8=";
+    hash = "sha256-4CqdAgWkpkZ4Kz/GfLBvZ/ogb/tb3/NPGSxOpyU9CIo=";
   };
 
   build-system = [
@@ -38,6 +38,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # broken in upstream CI as well
+    "test_properties_cascade"
+  ];
 
   disabledTestPaths = [
     # network access

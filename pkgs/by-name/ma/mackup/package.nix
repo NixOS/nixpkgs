@@ -29,13 +29,13 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   # Disabling tests failing on darwin due to a missing pgrep binary on procps
   disabledTests = [ "test_is_process_running" ];
 
   meta = {
-    description = "A tool to keep your application settings in sync (OS X/Linux)";
+    description = "Tool to keep your application settings in sync (OS X/Linux)";
     changelog = "https://github.com/lra/mackup/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/lra/mackup";

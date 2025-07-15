@@ -73,11 +73,12 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
     networkManagerPlugin = "VPN/nm-openconnect-service.name";
+    networkManagerRuntimeDeps = [ openconnect ];
   };
 
   meta = with lib; {
     description = "NetworkManager’s OpenConnect plugin";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = licenses.gpl2Plus;
   };
 }

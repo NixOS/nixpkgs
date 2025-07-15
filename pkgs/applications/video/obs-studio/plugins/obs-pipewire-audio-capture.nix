@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=./lib"
-    "-DCMAKE_INSTALL_DATADIR=./usr"
+    "-DCMAKE_INSTALL_DATADIR=./share"
   ];
 
   meta = with lib; {

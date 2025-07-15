@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pkg-config,
+  cmake,
   setuptools,
   igraph,
   texttable,
@@ -15,9 +15,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.8";
-
-  disabled = pythonOlder "3.8";
+  version = "0.11.9";
 
   pyproject = true;
 
@@ -29,20 +27,21 @@ buildPythonPackage rec {
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-FEp9kwUAPSAnGcAuxApAq1AXiT0klXuXE2M6xNVilRg=";
+    hash = "sha256-rmIICiIyEr5JCmkDAzcdisVaaKDraTQEquPHjK4d7oU=";
   };
 
   postPatch = ''
     rm -r vendor
-
-    # TODO remove starting with 0.11.9
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=64,<72.2.0" setuptools
   '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    setuptools
+  ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [ igraph ];
 

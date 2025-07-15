@@ -14,7 +14,7 @@
   gdk-pixbuf,
   pam,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "swaylock";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

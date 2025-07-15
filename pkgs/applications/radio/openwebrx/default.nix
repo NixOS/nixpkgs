@@ -1,7 +1,23 @@
-{ stdenv, lib, buildPythonPackage, buildPythonApplication, fetchFromGitHub
-, pkg-config, cmake, setuptools
-, libsamplerate, fftwFloat
-, rtl-sdr, soapysdr-with-plugins, csdr, pycsdr, pydigiham, direwolf, sox, wsjtx, codecserver
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  setuptools,
+  libsamplerate,
+  fftwFloat,
+  rtl-sdr,
+  soapysdr-with-plugins,
+  csdr,
+  pycsdr,
+  pydigiham,
+  direwolf,
+  sox,
+  wsjtx,
+  codecserver,
 }:
 
 let
@@ -9,6 +25,7 @@ let
   js8py = buildPythonPackage rec {
     pname = "js8py";
     version = "0.1.1";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jketterl";
@@ -17,13 +34,16 @@ let
       sha256 = "1j80zclg1cl5clqd00qqa16prz7cyc32bvxqz2mh540cirygq24w";
     };
 
-    pythonImportsCheck = [ "js8py" "test" ];
+    pythonImportsCheck = [
+      "js8py"
+      "test"
+    ];
 
     meta = with lib; {
       homepage = "https://github.com/jketterl/js8py";
       description = "Library to decode the output of the js8 binary of JS8Call";
       license = licenses.gpl3Only;
-      maintainers = teams.c3d2.members;
+      teams = [ teams.c3d2 ];
     };
   };
 
@@ -44,7 +64,8 @@ let
     ];
 
     buildInputs = [
-      libsamplerate fftwFloat
+      libsamplerate
+      fftwFloat
       csdr
       rtl-sdr
       soapysdr-with-plugins
@@ -55,7 +76,7 @@ let
       description = "Set of connectors that are used by OpenWebRX to interface with SDR hardware";
       license = licenses.gpl3Only;
       platforms = platforms.unix;
-      maintainers = teams.c3d2.members;
+      teams = [ teams.c3d2 ];
     };
   };
 
@@ -63,6 +84,7 @@ in
 buildPythonApplication rec {
   pname = "openwebrx";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";
@@ -85,7 +107,11 @@ buildPythonApplication rec {
     codecserver
   ];
 
-  pythonImportsCheck = [ "csdr" "owrx" "test" ];
+  pythonImportsCheck = [
+    "csdr"
+    "owrx"
+    "test"
+  ];
 
   passthru = {
     inherit js8py owrx_connector;
@@ -96,6 +122,6 @@ buildPythonApplication rec {
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     mainProgram = "openwebrx";
     license = licenses.gpl3Only;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
   };
 }

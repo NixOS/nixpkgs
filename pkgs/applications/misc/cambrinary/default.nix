@@ -36,6 +36,6 @@ buildPythonApplication {
     homepage = "https://github.com/xueyuanl/cambrinary";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

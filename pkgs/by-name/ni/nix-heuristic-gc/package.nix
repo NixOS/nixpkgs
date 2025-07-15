@@ -3,13 +3,14 @@
 {
   lib,
   fetchFromGitHub,
-  nix,
+  nixVersions,
   boost,
   python3Packages,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";
   version = "0.6.1";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";
@@ -19,12 +20,12 @@ python3Packages.buildPythonPackage rec {
 
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
-  NIX_SYSTEM = nix.stdenv.hostPlatform.system;
-  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev nix}/include/nix" ];
+  NIX_SYSTEM = nixVersions.nix_2_24.stdenv.hostPlatform.system;
+  NIX_CFLAGS_COMPILE = [ "-I${lib.getDev nixVersions.nix_2_24}/include/nix" ];
 
   buildInputs = [
     boost
-    nix
+    nixVersions.nix_2_24
     python3Packages.pybind11
     python3Packages.setuptools
   ];

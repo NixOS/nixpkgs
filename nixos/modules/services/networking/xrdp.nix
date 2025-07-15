@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -20,17 +25,17 @@ let
     chmod +x $out/startwm.sh
 
     substituteInPlace $out/xrdp.ini \
-      --replace "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
-      --replace "certificate=" "certificate=${cfg.sslCert}" \
-      --replace "key_file=" "key_file=${cfg.sslKey}" \
-      --replace LogFile=xrdp.log LogFile=/dev/null \
-      --replace EnableSyslog=true EnableSyslog=false
+      --replace-fail "#rsakeys_ini=" "rsakeys_ini=/run/xrdp/rsakeys.ini" \
+      --replace-fail "certificate=" "certificate=${cfg.sslCert}" \
+      --replace-fail "key_file=" "key_file=${cfg.sslKey}" \
+      --replace-fail LogFile=xrdp.log LogFile=/dev/null \
+      --replace-fail EnableSyslog=true EnableSyslog=false
 
     substituteInPlace $out/sesman.ini \
-      --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
-      --replace EnableSyslog=1 EnableSyslog=0 \
-      --replace startwm.sh $out/startwm.sh \
-      --replace reconnectwm.sh $out/reconnectwm.sh \
+      --replace-fail LogFile=xrdp-sesman.log LogFile=/dev/null \
+      --replace-fail EnableSyslog=true EnableSyslog=false \
+      --replace-fail startwm.sh $out/startwm.sh \
+      --replace-fail reconnectwm.sh $out/reconnectwm.sh \
 
     # Ensure that clipboard works for non-ASCII characters
     sed -i -e '/.*SessionVariables.*/ a\
@@ -55,7 +60,7 @@ in
 
       audio = {
         enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
-        package = mkPackageOption pkgs "pulseaudio-module-xrdp" {};
+        package = mkPackageOption pkgs "pulseaudio-module-xrdp" { };
       };
 
       port = mkOption {
@@ -122,8 +127,8 @@ in
         '';
         example = ''
           substituteInPlace $out/sesman.ini \
-            --replace LogLevel=INFO LogLevel=DEBUG \
-            --replace LogFile=/dev/null LogFile=/var/log/xrdp.log
+            --replace-fail LogLevel=INFO LogLevel=DEBUG \
+            --replace-fail LogFile=/dev/null LogFile=/var/log/xrdp.log
         '';
       };
     };
@@ -133,7 +138,7 @@ in
 
   config = lib.mkMerge [
     (mkIf cfg.audio.enable {
-      environment.systemPackages = [ cfg.audio.package ];  # needed for autostart
+      environment.systemPackages = [ cfg.audio.package ]; # needed for autostart
 
       services.pulseaudio.extraModules = [ cfg.audio.package ];
     })
@@ -197,18 +202,18 @@ in
           restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
           serviceConfig = {
             ExecStart = "${pkgs.xrdp}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
-            ExecStop  = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+            ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           };
         };
 
       };
 
       users.users.xrdp = {
-        description   = "xrdp daemon user";
-        isSystemUser  = true;
-        group         = "xrdp";
+        description = "xrdp daemon user";
+        isSystemUser = true;
+        group = "xrdp";
       };
-      users.groups.xrdp = {};
+      users.groups.xrdp = { };
 
       security.pam.services.xrdp-sesman = {
         allowNullPassword = true;

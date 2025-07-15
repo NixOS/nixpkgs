@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commit";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L8CI8SAGWhhJyTc8aMPV0s+UevEJGE7n1l7fFnTjdPw=";
+    hash = "sha256-yNzMFOd0IN5EUKG7ztCEbQzQ9RHc+D4iC1OiBauMSwE=";
     fetchSubmodules = true;
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "re.sonny.Commit";
     platforms = lib.platforms.linux;
   };

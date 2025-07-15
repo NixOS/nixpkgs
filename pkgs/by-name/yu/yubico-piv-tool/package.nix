@@ -2,7 +2,6 @@
   lib,
   check,
   cmake,
-  darwin,
   fetchFromGitHub,
   gengetopt,
   help2man,
@@ -47,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     zlib
-  ] ++ (if withApplePCSC then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ]);
+  ] ++ lib.optionals (!withApplePCSC) [ pcsclite ];
 
   cmakeFlags = [
     (lib.cmakeBool "GENERATE_MAN_PAGES" true)

@@ -145,14 +145,14 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 `diskSize` (Number; _optional_)
 
-: Controls the disk size (in megabytes) of the VM used to run the script specified in `runAsRoot`.
+: Controls the disk size in MiB (1024x1024 bytes) of the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 1024.
 
 `buildVMMemorySize` (Number; _optional_)
 
-: Controls the amount of memory (in megabytes) provisioned for the VM used to run the script specified in `runAsRoot`.
+: Controls the amount of memory in MiB (1024x1024 bytes) provisioned for the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 512.
@@ -235,7 +235,11 @@ The following package builds a Docker image that runs the `redis-server` executa
 The Docker image will have name `redis` and tag `latest`.
 
 ```nix
-{ dockerTools, buildEnv, redis }:
+{
+  dockerTools,
+  buildEnv,
+  redis,
+}:
 dockerTools.buildImage {
   name = "redis";
   tag = "latest";
@@ -253,7 +257,9 @@ dockerTools.buildImage {
   config = {
     Cmd = [ "/bin/redis-server" ];
     WorkingDir = "/data";
-    Volumes = { "/data" = { }; };
+    Volumes = {
+      "/data" = { };
+    };
   };
 }
 ```
@@ -286,7 +292,11 @@ It uses `runAsRoot` to create a directory and a file inside the image.
 This works the same as [](#ex-dockerTools-buildImage-extraCommands), but uses `runAsRoot` instead of `extraCommands`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -320,7 +330,11 @@ This works the same as [](#ex-dockerTools-buildImage-runAsRoot), but uses `extra
 Note that with `extraCommands`, we can't directly reference `/` and must create files and directories as if we were already on `/`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -350,7 +364,11 @@ dockerTools.buildImage {
 Note that using a value of `"now"` in the `created` attribute will break reproducibility.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -766,7 +784,11 @@ The closure of `config` is automatically included in the generated image.
 The following package shows a more compact way to create the same output generated in [](#ex-dockerTools-streamLayeredImage-hello).
 
 ```nix
-{ dockerTools, hello, lib }:
+{
+  dockerTools,
+  hello,
+  lib,
+}:
 dockerTools.streamLayeredImage {
   name = "hello";
   tag = "latest";
@@ -1547,11 +1569,15 @@ The Docker image generated will have a name like `hello-<version>-env` and tag `
 This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting point.
 
 ```nix
-{ dockerTools, cowsay, hello }:
+{
+  dockerTools,
+  cowsay,
+  hello,
+}:
 dockerTools.streamNixShellImage {
   tag = "latest";
   drv = hello.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       cowsay
     ];
   });

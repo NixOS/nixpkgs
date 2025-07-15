@@ -2,7 +2,7 @@
   autoPatchelfHook,
   cairo,
   dbus,
-  fetchurl,
+  requireFile,
   fontconfig,
   freetype,
   glib,
@@ -22,13 +22,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "ida-free";
-  version = "9.0sp1";
+  version = "9.1";
 
-  src = fetchurl {
-    url = "https://archive.org/download/ida-free-pc_90sp1_x64linux/ida-free-pc_90sp1_x64linux.run";
-    hash = "sha256-e5uCcJVn6xDwmVm14QCBUvNcB1MpVxNA2WcLyuK23vo=";
+  src = requireFile {
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/${version}/ida-free";
+    hash = "sha256-DIkxr9yD6yvziO8XHi0jt80189bXueRxmSFyq2LM0cg=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +84,7 @@ stdenv.mkDerivation rec {
 
     # IDA depends on quite some things extracted by the runfile, so first extract everything
     # into $out/opt, then remove the unnecessary files and directories.
-    IDADIR=$out/opt
+    IDADIR=$out/opt/${finalAttrs.pname}-${finalAttrs.version}
 
     # The installer doesn't honor `--prefix` in all places,
     # thus needing to set `HOME` here.
@@ -126,4 +127,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

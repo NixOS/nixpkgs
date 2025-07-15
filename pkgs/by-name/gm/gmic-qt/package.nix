@@ -100,7 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
-    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeFeature "GMIC_QT_HOST" (
+      if variant == "standalone" then
+        "none"
+      else if variant == "gimp" && gimp.majorVersion == "3.0" then
+        "gimp3"
+      else
+        variant
+    ))
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''

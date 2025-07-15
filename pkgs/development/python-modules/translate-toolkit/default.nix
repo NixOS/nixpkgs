@@ -1,73 +1,84 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools-scm,
-  lxml,
+
+  # dependencies
   cwcwidth,
-  pytestCheckHook,
+  lxml,
+
+  # tests
+  aeidon,
+  charset-normalizer,
+  cheroot,
+  fluent-syntax,
+  gettext,
   iniparse,
-  vobject,
   mistletoe,
   phply,
   pyparsing,
+  pytestCheckHook,
   ruamel-yaml,
-  cheroot,
-  fluent-syntax,
-  aeidon,
-  charset-normalizer,
   syrupy,
-  gettext,
+  vobject,
 }:
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.15.1";
+  version = "3.15.6";
 
   pyproject = true;
-  build-system = [ setuptools-scm ];
 
-  src = fetchPypi {
-    pname = "translate_toolkit";
-    inherit version;
-    hash = "sha256-Omapbrcv6+A5fGb34xLdlmoh3QAXN1+5VxoCRdyX9mM=";
+  src = fetchFromGitHub {
+    owner = "translate";
+    repo = "translate";
+    tag = version;
+    hash = "sha256-G6DzpOkyD2FiskHwOhOsgRrZCXQJ9ITjp6PVZd3j9f4=";
   };
 
+  build-system = [ setuptools-scm ];
+
   dependencies = [
-    lxml
     cwcwidth
+    lxml
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aeidon
+    charset-normalizer
+    cheroot
+    fluent-syntax
+    gettext
     iniparse
-    vobject
     mistletoe
     phply
     pyparsing
+    pytestCheckHook
     ruamel-yaml
-    cheroot
-    fluent-syntax
-    aeidon
-    charset-normalizer
     syrupy
-    gettext
+    vobject
   ];
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
+
     # Requires network
     "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${version}.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${src.tag}.html";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

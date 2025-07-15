@@ -132,7 +132,7 @@ let
             bintools = prevStage.darwin.binutils;
 
             isClang = true;
-            libc = prevStage.darwin.libSystem;
+            inherit (prevStage) libc;
             inherit (prevStage.llvmPackages) libcxx;
 
             inherit lib;
@@ -181,6 +181,7 @@ let
           inherit lib;
           stdenvNoCC = prevStage.ccWrapperStdenv or thisStdenv;
           curl = bootstrapTools;
+          inherit (config) rewriteURL;
         };
 
         inherit cc;
@@ -439,6 +440,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
                 (old: {
                   version = "boot";
+                  __intentionallyOverridingVersion = true; # to avoid a warning suggesting to provide src
                   passthru = (old.passthru or { }) // {
                     isFromBootstrapFiles = true;
                   };
@@ -479,6 +481,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                       isFromBootstrapFiles = true;
                       hardeningUnsupportedFlags = [
                         "fortify3"
+                        "pacret"
                         "shadowstack"
                         "stackclashprotection"
                         "zerocallusedregs"
@@ -579,7 +582,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isFromNixpkgs [
       (sdkPackagesNoCC prevStage)
-      { inherit (prevStage.darwin) binutils libSystem; }
+      {
+        inherit (prevStage.darwin) binutils libSystem;
+        inherit (prevStage) libc;
+      }
     ];
 
     stageFun prevStage {
@@ -596,6 +602,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         # Use libiconvReal with gettext to break an infinite recursion.
         gettext = super.gettext.override { libiconv = super.libiconvReal; };
+
+        # Disable grep’s tests for now due to impure locale updates in
+        # macOS 15.4 breaking them in the bootstrap.
+        gnugrep = super.gnugrep.overrideAttrs { doCheck = false; };
 
         # Disable tests because they use dejagnu, which fails to run.
         libffi = super.libffi.override { doCheck = false; };
@@ -1253,6 +1263,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.darwin.sigtool;
 
     assert isFromNixpkgs prevStage.darwin.libSystem;
+    assert isFromNixpkgs prevStage.libc;
     assert isFromNixpkgs prevStage.darwin.binutils-unwrapped;
 
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libgeos.org";
     license = licenses.lgpl21Only;
     mainProgram = "geosop";
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
     pkgConfigModules = [ "geos" ];
     changelog = "https://github.com/libgeos/geos/releases/tag/${finalAttrs.finalPackage.version}";
   };

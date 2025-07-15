@@ -92,11 +92,11 @@ buildPythonPackage rec {
     pytest-rerunfailures
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Follow github CI
     "docs/examples/"
   ];

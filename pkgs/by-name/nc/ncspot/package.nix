@@ -7,7 +7,6 @@
   fetchFromGitHub,
   libpulseaudio,
   libxcb,
-  ncspot,
   ncurses,
   nix-update-script,
   openssl,
@@ -15,7 +14,7 @@
   portaudio,
   python3,
   rustPlatform,
-  testers,
+  versionCheckHook,
   ueberzug,
   withALSA ? stdenv.hostPlatform.isLinux,
   withClipboard ? true,
@@ -32,19 +31,18 @@
   withTermion ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
-    tag = "v${version}";
-    hash = "sha256-4zeBTi1WBy9tXowsehUo4qou6bhznWPeCXFg+R3akho=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FSMQv2443oPQjMSv68ppfI2ZTUG79b+GcXmHNAmjPZk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-c16qw2khbMXTA8IbYQnMKqivO63DwyAWKfV2P1aD7dU=";
+  cargoHash = "sha256-Qjsn3U9KZr5qZliJ/vbudfkH1uOng1N5c8dAyH+Y5vQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
@@ -83,15 +81,15 @@ rustPlatform.buildRustPackage rec {
     install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/ncspot.svg
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = ncspot; };
-    updateScript = nix-update-script { };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
     homepage = "https://github.com/hrkfdn/ncspot";
-    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
+    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       liff
@@ -99,4 +97,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ncspot";
   };
-}
+})

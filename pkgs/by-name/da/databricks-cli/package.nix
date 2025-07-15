@@ -4,25 +4,37 @@
   fetchFromGitHub,
   gitMinimal,
   python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.244.0";
+  version = "0.259.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-TGbmGAS3hS9m6CNTtHQ0N3Fz6Ei+ry06enfYtWK/xOw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-UzfLtGwiyEnHRn54qAwcqMXag8k8GjpB5BGMYh/93O8=";
   };
 
-  vendorHash = "sha256-W1tAFLSy5rX07Dkj+r+T6whbuTevpxxtakG2caUdWJQ=";
+  # Otherwise these tests fail asserting that the version is 0.0.0-dev
+  postPatch = ''
+    substituteInPlace bundle/deploy/terraform/init_test.go \
+      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
+  '';
+
+  vendorHash = "sha256-veFhCZkkLnC6hVuHPiB+OjqsvUcxkp3B59lQikgjFbE=";
 
   excludedPackages = [
     "bundle/internal"
     "acceptance"
     "integration"
+  ];
+
+  ldflags = [
+    "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -38,6 +50,11 @@ buildGoModule rec {
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
+      "TestWorkspaceVerifyProfileForHost"
+      "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
+      "TestWorkspaceResolveProfileFromHost"
+      "TestWorkspaceResolveProfileFromHost/no_config_file"
+      "TestBundleConfigureDefault"
       # Use uv venv which doesn't work with nix
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"
@@ -60,15 +77,28 @@ buildGoModule rec {
     git remote add origin https://github.com/databricks/cli.git
   '';
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/databricks";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Databricks CLI";
     mainProgram = "databricks";
     homepage = "https://github.com/databricks/cli";
-    changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
-    license = licenses.databricks;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/databricks/cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.databricks;
+    maintainers = with lib.maintainers; [
       kfollesdal
       taranarmo
     ];
   };
-}
+})

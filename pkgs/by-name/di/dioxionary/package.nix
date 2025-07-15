@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxionary";
-  version = "1.1.4";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "vaaandark";
     repo = "dioxionary";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Kex5o518L7v5EAhlr4BGoT7LynTe5JmDU8Urn0H3vA=";
+    hash = "sha256-xIieWhT/a5dZ+UPfsMWtgwru5nkUdzr8/0pOiqCSnqo=";
     # enable fetchSubmodules since the tests require dictionaries from the submodules
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-3Cny2OtEoevlUilL0/xtYbyHcuBsFGEFZG6EX35PL+M=";
+  cargoHash = "sha256-YFx8V86awxVUX83bNLHRP6nIBZGHck/0ywriBgVqvxY=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [

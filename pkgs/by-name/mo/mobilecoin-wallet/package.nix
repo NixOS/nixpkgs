@@ -6,10 +6,10 @@
 
 let
   pname = "mobilecoin-wallet";
-  version = "1.9.1";
+  version = "1.9.2";
   src = fetchurl {
     url = "https://github.com/mobilecoinofficial/desktop-wallet/releases/download/v${version}/MobileCoin.Wallet-${version}.AppImage";
-    hash = "sha256-UCBQRcGFHMQlLGvChrrMmM0MYv7AZtlkngFK4ptIPU0=";
+    hash = "sha256-JfG+eHsPFXZKi9Vjbw7CPvhmeMvfPWSDS65Ey4Lb8iQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 

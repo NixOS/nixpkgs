@@ -34,12 +34,12 @@ update_homepage_dashboard_source() {
     local version; version="$1"
     echo "Updating homepage-dashboard source"
 
-    old_hash="$(nix eval --json --impure --expr "(import $nixpkgs/default.nix {}).homepage-dashboard.src.outputHash" | jq -r)"
     old_version="$(nix eval --json --impure --expr "(import $nixpkgs/default.nix {}).homepage-dashboard.version" | jq -r)"
-    new_hash="$(nix-build --impure --expr "let src = (import $nixpkgs/default.nix {}).homepage-dashboard.src; in (src.overrideAttrs or (f: src // f src)) (_: { version = \"$version\"; outputHash = \"\"; outputHashAlgo = \"sha256\"; })" 2>&1 | tr -s ' ' | grep -Po "got: \K.+$")" || true
-
-    sed -i "s|${old_hash}|${new_hash}|g" package.nix
     sed -i "s|${old_version}|${version}|g" package.nix
+
+    old_hash="$(nix eval --json --impure --expr "(import $nixpkgs/default.nix {}).homepage-dashboard.src.outputHash" | jq -r)"
+    new_hash="$(nix-build --impure --expr "let src = (import $nixpkgs/default.nix {}).homepage-dashboard.src; in (src.overrideAttrs or (f: src // f src)) (_: { version = \"$version\"; outputHash = \"\"; outputHashAlgo = \"sha256\"; })" 2>&1 | tr -s ' ' | grep -Po "got: \K.+$")" || true
+    sed -i "s|${old_hash}|${new_hash}|g" package.nix
 }
 
 # Update the hash of the homepage-dashboard pnpm dependencies in the Nix expression.

@@ -16,7 +16,6 @@
   libsecret,
   openssl,
   sqlite,
-  darwin,
   gettext,
 }:
 
@@ -32,8 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-yEpaQa9hKOq0k9MurihbFM4tDB//TPCJdOgKA9tyqVc=";
   };
 
@@ -48,18 +46,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      gtk4
-      libadwaita
-      libsecret
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    gdk-pixbuf
+    gtk4
+    libadwaita
+    libsecret
+    openssl
+    sqlite
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     GETTEXT_DIR = gettext;

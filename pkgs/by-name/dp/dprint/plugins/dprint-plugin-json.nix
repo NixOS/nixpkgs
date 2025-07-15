@@ -1,7 +1,7 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
   description = "JSON/JSONC code formatter.";
-  hash = "sha256-Sw+HkUb4K2wrLuQRZibr8gOCR3Rz36IeId4Vd4LijmY=";
+  hash = "sha256-uFcFLi9aYsBrAqkhFmg9GI+LKiV19LxdNjxQ85EH9To=";
   initConfig = {
     configExcludes = [ "**/*-lock.json" ];
     configKey = "json";
@@ -9,6 +9,6 @@ mkDprintPlugin {
   };
   pname = "dprint-plugin-json";
   updateUrl = "https://plugins.dprint.dev/dprint/json/latest.json";
-  url = "https://plugins.dprint.dev/json-0.19.4.wasm";
-  version = "0.19.4";
+  url = "https://plugins.dprint.dev/json-0.20.0.wasm";
+  version = "0.20.0";
 }

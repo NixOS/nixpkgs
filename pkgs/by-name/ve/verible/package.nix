@@ -16,8 +16,8 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "6ca6e91cb9fa2d224f61b8a4a2a7fd6b1211e388";
-    hash = "sha256-LRD8sGbISp2LXjpg4cpbUHG2a1JbKLA7z3vSvqqXMGo=";
+    rev = "bac7a5dc8b5535d7b36d0405f76badfba77c84c2";
+    hash = "sha256-TXooqzqfvf1twldfrs0m8QR3AJkUCIyBS36TFTwN4Eg=";
   };
 in
 buildBazelPackage rec {
@@ -26,8 +26,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2025-01-02";
-  GIT_VERSION = "v0.0-3894-g0a842c85";
+  GIT_DATE = "2025-03-30";
+  GIT_VERSION = "v0.0-3956-ge12a194d";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -38,7 +38,7 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    hash = "sha256-FWeEIWvrjE8ESGFUWDPtd9gLkhMDtgkw6WbXViDxQQA=";
+    hash = "sha256-/RZqBNmyBZI6CO2ffS6p8T4wse1MKytNMphXFdkTOWQ=";
   };
 
   bazel = bazel_6;
@@ -51,9 +51,9 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
-        x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
-        aarch64-darwin = "sha256-OwkPUK8cEpBKB0uZOVExz6T14Pzol4aG8/MmGPV5X1o=";
+        aarch64-linux = "sha256-ErhBpmXhtiZbBWy506rLp4TQh5oXJQ44lw25jlVkjUM=";
+        x86_64-linux = "sha256-d8CYiqpL7rM3VvEqHSBvtgF2WLyH23jSvK7w4ChTtgU=";
+        aarch64-darwin = "sha256-lHMbziDzQpmXvsW25SgjQUkPRIRYv6TJIPTAEvhSfuA=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

@@ -13,7 +13,7 @@
 # files.
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.2.2";
   pname = "mpfr";
 
   src = fetchurl {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
       "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
     ];
-    hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
+    hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
 
   outputs = [
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
+
+  hardeningDisable = [
+    # causes tests tset_ld & tsprintf to fail
+    "trivialautovarinit"
+  ];
 
   configureFlags =
     lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"

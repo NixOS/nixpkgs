@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cewler";
-  version = "1.2.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roys";
     repo = "cewler";
     rev = "v${version}";
-    hash = "sha256-lVI3p6YMugQ3yKHFNxISmUY7XZMuX/TXvVUoZfIeJog=";
+    hash = "sha256-Od9O71122jVwqZ5ntoBQQtyNQjt2RRbZT8DzWFPUN84=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

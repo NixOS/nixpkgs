@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xaos";
-  version = "4.3.3";
+  version = "4.3.4";
   outputs = [
     "out"
     "man"
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "xaos-project";
     repo = "XaoS";
     tag = "release-${version}";
-    hash = "sha256-EUhh1j0OVpCggpKcUJTRJOMKKy3ZF5Fdrk9yuXc2uEY=";
+    hash = "sha256-vOFwZbdbcrcJLHUa1QzxzadPcx5GF5uNPg+MZ7NbAPc=";
   };
 
   nativeBuildInputs = [

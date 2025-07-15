@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "marko";
-  version = "2.1.2";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frostming";
     repo = "marko";
     tag = "v${version}";
-    hash = "sha256-KqdBYmlVs00atXy7MSsriRBnL7w13io2oFZ0IyJ2Om4=";
+    hash = "sha256-syHuGAYA/s8jtlxBUt3aVPe55s2bdpzidBf1JvsI604=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ++ optional-dependencies.codehilite;
 
   meta = {
-    changelog = "https://github.com/frostming/marko/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/frostming/marko/blob/${src.tag}/CHANGELOG.md";
     description = "Markdown parser with high extensibility";
     homepage = "https://github.com/frostming/marko";
     license = lib.licenses.mit;

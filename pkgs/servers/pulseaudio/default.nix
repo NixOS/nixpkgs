@@ -20,6 +20,7 @@
   sbc,
   bluez5,
   udev,
+  udevCheckHook,
   openssl,
   fftwFloat,
   soxr,
@@ -61,10 +62,6 @@
   # Whether to build only the library.
   libOnly ? false,
 
-  AudioUnit,
-  Cocoa,
-  CoreServices,
-  CoreAudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -114,6 +111,7 @@ stdenv.mkDerivation rec {
       perlPackages.perl
       perlPackages.XMLParser
       m4
+      udevCheckHook
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ glib ]
     # gstreamer plugin discovery requires wrapping
@@ -133,12 +131,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       glib
       dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioUnit
-      Cocoa
-      CoreServices
-      CoreAudio
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
       libintl
@@ -238,6 +230,9 @@ stdenv.mkDerivation rec {
 
   # tests fail on Darwin because of timeouts
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  doInstallCheck = true;
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';

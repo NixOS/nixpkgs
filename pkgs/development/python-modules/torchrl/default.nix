@@ -17,12 +17,26 @@
   torch,
 
   # optional-dependencies
-  ale-py,
-  gym,
-  pygame,
-  torchsnapshot,
+  # atari
   gymnasium,
+  # checkpointing
+  torchsnapshot,
+  # gym-continuous
   mujoco,
+  # llm
+  accelerate,
+  datasets,
+  einops,
+  immutabledict,
+  langdetect,
+  nltk,
+  playwright,
+  protobuf,
+  safetensors,
+  sentencepiece,
+  transformers,
+  vllm,
+  # offline-data
   h5py,
   huggingface-hub,
   minari,
@@ -32,7 +46,9 @@
   scikit-learn,
   torchvision,
   tqdm,
+  # rendering
   moviepy,
+  # utils
   git,
   hydra-core,
   tensorboard,
@@ -48,14 +64,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.7.2";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-hcCZSASAp9jbOhbFLJndridYn76R99K+LxRxQl3uaxM=";
+    hash = "sha256-afaWDX5lIAoGTfrBSqrktYoA1S4hv6ogBaKYHc8dQ6E=";
   };
 
   build-system = [
@@ -73,15 +89,25 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    atari = [
-      ale-py
-      gym
-      pygame
-    ];
+    atari = gymnasium.optional-dependencies.atari;
     checkpointing = [ torchsnapshot ];
     gym-continuous = [
       gymnasium
       mujoco
+    ];
+    llm = [
+      accelerate
+      datasets
+      einops
+      immutabledict
+      langdetect
+      nltk
+      playwright
+      protobuf
+      safetensors
+      sentencepiece
+      transformers
+      vllm
     ];
     offline-data = [
       h5py
@@ -131,14 +157,49 @@ buildPythonPackage rec {
     ]
     ++ optional-dependencies.atari
     ++ optional-dependencies.gym-continuous
+    ++ optional-dependencies.llm
     ++ optional-dependencies.rendering;
 
   disabledTests =
     [
+      # Require network
+      "test_create_or_load_dataset"
+      "test_from_text_env_tokenizer"
+      "test_from_text_env_tokenizer_catframes"
+      "test_from_text_rb_slicesampler"
+      "test_generate"
+      "test_get_dataloader"
+      "test_get_scores"
+      "test_preproc_data"
+      "test_prompt_tensordict_tokenizer"
+      "test_reward_model"
+      "test_tensordict_tokenizer"
+      "test_transform_compose"
+      "test_transform_model"
+      "test_transform_no_env"
+      "test_transform_rb"
+
+      # ray.exceptions.RuntimeEnvSetupError: Failed to set up runtime environment
+      "TestRayCollector"
+
       # torchrl is incompatible with gymnasium>=1.0
       # https://github.com/pytorch/rl/discussions/2483
       "test_resetting_strategies"
       "test_torchrl_to_gym"
+      "test_vecenvs_nan"
+
+      # gym.error.VersionNotFound: Environment version `v5` for environment `HalfCheetah` doesn't exist.
+      "test_collector_run"
+      "test_transform_inverse"
+
+      # OSError: Unable to synchronously create file (unable to truncate a file which is already open)
+      "test_multi_env"
+      "test_simple_env"
+
+      # ImportWarning: Ignoring non-library in plugin directory:
+      # /nix/store/cy8vwf1dacp3xfwnp9v6a1sz8bic8ylx-python3.12-mujoco-3.3.2/lib/python3.12/site-packages/mujoco/plugin/libmujoco.so.3.3.2
+      "test_auto_register"
+      "test_info_dict_reader"
 
       # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
       "test_vecenvs_env"
@@ -180,14 +241,21 @@ buildPythonPackage rec {
       "test_vecnorm_parallel_auto"
     ];
 
+  disabledTestPaths = [
+    # ERROR collecting test/smoke_test.py
+    # import file mismatch:
+    # imported module 'smoke_test' has this __file__ attribute:
+    #   /build/source/test/llm/smoke_test.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/test/smoke_test.py
+    "test/llm"
+  ];
+
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # torhcrl is not compatible with our current version of gymnasium (>=1.0)
-    # https://github.com/pytorch/rl/pull/2473
-    broken = true;
   };
 }

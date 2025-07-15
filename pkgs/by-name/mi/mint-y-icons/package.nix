@@ -49,6 +49,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

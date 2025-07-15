@@ -32,6 +32,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytrainer";
@@ -40,12 +41,13 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [
     sqlalchemy
     python-dateutil
     matplotlib
     lxml
-    setuptools
     requests
     gdal
   ];
@@ -87,7 +89,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
-        --replace 'sys.prefix' "\"$out\""
+        --replace-fail 'sys.prefix' "\"$out\""
   '';
 
   checkPhase = ''

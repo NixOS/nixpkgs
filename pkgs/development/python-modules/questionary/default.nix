@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tmbo";
-    repo = pname;
+    repo = "questionary";
     tag = version;
     hash = "sha256-HiQsOkG3oK+hnyeFjebnVASxpZhUPGBGz69JvPO43fM=";
   };

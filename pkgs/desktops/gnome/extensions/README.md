@@ -1,6 +1,6 @@
 # GNOME Shell extensions
 
-All extensions are packaged automatically. They can be found in the `pkgs.gnomeXYExtensions` for XY being a GNOME version. The package names are the extension’s UUID, which can be a bit unwieldy to use. `pkgs.gnomeExtensions` is a set of manually curated extensions that match the current `gnome.gnome-shell` versions. Their name is human-friendly, compared to the other extensions sets. Some of its extensions are manually packaged.
+All extensions are packaged automatically. They can be found in the `pkgs.gnomeXYExtensions` for XY being a GNOME version. The package names are the extension’s UUID, which can be a bit unwieldy to use. `pkgs.gnomeExtensions` is a set of manually curated extensions that match the current `pkgs.gnome-shell` versions. Their name is human-friendly, compared to the other extensions sets. Some of its extensions are manually packaged.
 
 ## Automatically packaged extensions
 
@@ -8,19 +8,24 @@ The actual packages are created by `buildGnomeExtension.nix`, provided the corre
 
 ### Extensions updates
 
-For everyday updates,
+#### For everyday updates,
 
 1. Run `update-extensions.py`.
 2. Update `extensionRenames.nix` according to the comment at the top.
 
-For GNOME updates,
+#### To package the extensions for new GNOME version,
 
-1. Add a new `gnomeXYExtensions` set
-2. Remove old ones for GNOME versions we don’t want to support any more
-3. Update `supported_versions` in `./update-extensions.py` and re-run it
-4. Change `gnomeExtensions` to the new version
-5. Update `./extensionsRenames.nix` accordingly
-6. Update `all-packages.nix` accordingly (grep for `gnomeExtensions`)
+1. Add a new `gnomeXYExtensions` set in `default.nix`.
+2. Update `all-packages.nix` accordingly. (grep for `gnomeExtensions`)
+3. Update `supported_versions` in `update-extensions.py`.
+4. Follow the [For everyday updates](#for-everyday-updates) section.
+
+#### For GNOME updates,
+
+1. Follow the [To package the extensions for new GNOME version](#to-package-the-extensions-for-new-gnome-version) section if required.
+2. Update `versions_to_merge` variable in `./update-extensions.py`.
+3. Run `update-extensions.py --skip-fetch`, and update `extensionRenames.nix` according to the comment at the top.
+4. Update `gnomeExtensions` in `default.nix` to the new versions.
 
 ## Manually packaged extensions
 

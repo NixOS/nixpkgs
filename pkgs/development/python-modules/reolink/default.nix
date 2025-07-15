@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
-    repo = pname;
+    repo = "reolink";
     tag = "v${version}";
     hash = "sha256-DZcTfmzO9rBhhRN2RkgoPwUPE+LPPeZgc8kmhYU9V2I=";
   };
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # https://github.com/fwestenberg/reolink/issues/83
   doCheck = false;
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   disabledTests = [
     # Tests require network access

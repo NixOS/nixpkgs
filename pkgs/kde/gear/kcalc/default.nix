@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qt5compat,
   gmp,
+  libmpc,
   mpfr,
   kdoctools,
 }:
@@ -11,6 +12,7 @@ mkKdeDerivation {
   extraBuildInputs = [
     qt5compat
     gmp
+    libmpc
     mpfr
     kdoctools
   ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "huertatipografica";
     repo = "Alegreya-Sans";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0xz5lq9fh0pj02ifazhddzh792qkxkz1z6ylj26d93wshc90jl5g";
   };
 

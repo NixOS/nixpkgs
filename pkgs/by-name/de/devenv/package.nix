@@ -6,7 +6,6 @@
   rustPlatform,
   testers,
   cachix,
-  sqlx-cli,
   nixVersions,
   openssl,
   pkg-config,
@@ -15,19 +14,22 @@
 }:
 
 let
-  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
-    version = "2.24-devenv";
-    src = fetchFromGitHub {
-      owner = "domenkozar";
+  devenv_nix =
+    (nixVersions.git.overrideSource (fetchFromGitHub {
+      owner = "cachix";
       repo = "nix";
-      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
-      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
-    };
-    doCheck = false;
-    doInstallCheck = false;
-  });
+      rev = "afa41b08df4f67b8d77a8034b037ac28c71c77df";
+      hash = "sha256-IDB/oh/P63ZTdhgSkey2LZHzeNhCdoKk+4j7AaPe1SE=";
+    })).overrideAttrs
+      (old: {
+        version = "2.30-devenv";
+        doCheck = false;
+        doInstallCheck = false;
+        # do override src, but the Nix way so the warning is unaware of it
+        __intentionallyOverridingVersion = true;
+      });
 
-  version = "1.4.1";
+  version = "1.7";
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -36,30 +38,19 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    rev = "v${version}";
-    hash = "sha256-OjdnHKQ+eWA8YvPUpl3xxyaNK91c9sMebqXgVdN8Lm4=";
+    tag = "v${version}";
+    hash = "sha256-LzMVgB8izls/22g69KvWPbuQ8C7PRT9PobbvdV3/raI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Z7xf1fuXi2Lx005rQwWa7ZNw8nJGz1z33KPnX/pxO3E=";
+  cargoHash = "sha256-k/UrnRTI+Z09kdN7PYNOg9+GnumqOdm36F31CKZCGMU=";
 
   buildAndTestSubdir = "devenv";
-
-  # Force sqlx to use the prepared queries
-  SQLX_OFFLINE = true;
-  # A local database to use for preparing queries
-  DATABASE_URL = "sqlite:nix-eval-cache.db";
-
-  preBuild = ''
-    cargo sqlx database setup --source devenv-eval-cache/migrations
-    cargo sqlx prepare --workspace
-  '';
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
-    sqlx-cli
   ];
 
   buildInputs = [ openssl ];

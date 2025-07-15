@@ -10,8 +10,6 @@
   publicsuffix-list,
   pythonOlder,
   libiconv,
-  CoreFoundation,
-  Security,
   pytestCheckHook,
   toml,
 }:
@@ -46,8 +44,7 @@ buildPythonPackage rec {
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-fetJX6HQxRZ/Az7rJeU9S+s8ttgNPnJEvTLfzGt4xjk=";
   };
 
@@ -62,8 +59,6 @@ buildPythonPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      CoreFoundation
-      Security
     ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";

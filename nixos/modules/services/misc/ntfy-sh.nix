@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ntfy-sh;
 
@@ -102,7 +107,7 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
-          # Upstream Recommandation
+          # Upstream Recommendation
           LimitNOFILE = 20500;
         };
       };

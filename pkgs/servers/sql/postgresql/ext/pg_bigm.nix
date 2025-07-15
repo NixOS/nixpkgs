@@ -5,14 +5,14 @@
   postgresqlBuildExtension,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_bigm";
   version = "1.2-20240606";
 
   src = fetchFromGitHub {
     owner = "pgbigm";
     repo = "pg_bigm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Uy1DmGZR4WdtRUvNdZ5b9zBHJUb9idcEzW20rkreBs=";
   };
 
@@ -25,4 +25,4 @@ postgresqlBuildExtension rec {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };
-}
+})

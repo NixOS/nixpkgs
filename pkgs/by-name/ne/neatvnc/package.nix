@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, aml
-, ffmpeg
-, gnutls
-, libjpeg_turbo
-, libgbm
-, pixman
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  aml,
+  ffmpeg,
+  gnutls,
+  libjpeg_turbo,
+  libgbm,
+  pixman,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
@@ -59,8 +60,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/any1/neatvnc";
     changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

@@ -23,6 +23,7 @@
 }:
 buildPythonPackage rec {
   version = "4.6.11";
+  format = "setuptools";
   pname = "pytest";
 
   src = fetchPypi {
@@ -95,7 +96,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [
-      domenkozar
       lovek323
       madjar
       lsix

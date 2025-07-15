@@ -1,8 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   git,
+  gitMinimal,
+  nodejs,
+  writableTmpDirAsHomeHook,
+  yarn-berry_3,
   jupyter-server,
   hatch-jupyter-builder,
   hatch-nodejs-version,
@@ -10,63 +14,66 @@
   jupyterlab,
   nbdime,
   nbformat,
+  packaging,
   pexpect,
   pytest-asyncio,
   pytest-jupyter,
   pytest-tornasync,
   pytestCheckHook,
-  pythonOlder,
   traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.50.2";
+  version = "0.51.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "jupyterlab_git";
-    inherit version;
-    hash = "sha256-zu/chWMsr0maBItDRFnQO15iFmWAHp23GXvUhvXTNDM=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab-git";
+    tag = "v${version}";
+    hash = "sha256-YQWS+/GfQzkQ/n0xBq+K8lJ9tjvIRJxa3w3AzNARpDo=";
   };
 
   nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src;
+    hash = "sha256-9GmQv4UYH+uRPgAZed6IJC+7uMKhlXvokVwd248yi/4=";
+  };
+
+  build-system = [
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyter-server
     nbdime
-    git
     nbformat
+    packaging
     pexpect
     traitlets
   ];
 
+  propagatedBuildInputs = [ git ];
+
   nativeCheckInputs = [
-    jupyterlab
+    gitMinimal
     pytest-asyncio
     pytest-jupyter
     pytest-tornasync
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTestPaths = [
     "jupyterlab_git/tests/test_handlers.py"
-    # PyPI doesn't ship all required files for the tests
-    "jupyterlab_git/tests/test_config.py"
-    "jupyterlab_git/tests/test_integrations.py"
-    "jupyterlab_git/tests/test_remote.py"
-    "jupyterlab_git/tests/test_settings.py"
   ];
 
   disabledTests = [

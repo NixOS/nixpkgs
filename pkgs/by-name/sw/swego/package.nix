@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "swego";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     tag = "v${version}";
-    hash = "sha256-JILdtmTdDZzcjsDfH0rZo4HpTp26EPP8WKPbHhQeNN8=";
+    hash = "sha256-28PU7jAVnWfRbFmTE2pmwJO1Zi+ceyFrzY5MiRt+91Y=";
   };
 
   vendorHash = "sha256-w2OhZq7vaVDVoRfnWPH0bFO85yGTFcO6KpDo5ulTifo=";

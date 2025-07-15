@@ -4,6 +4,8 @@
   fetchFromGitHub,
   SDL,
   SDL_mixer,
+  libGL,
+  libGLU,
   autoreconfHook,
   gitUpdater,
 }:
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     SDL_mixer
+    libGL
+    libGLU
   ];
 
   strictDeps = true;

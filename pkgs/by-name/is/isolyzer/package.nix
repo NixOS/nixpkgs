@@ -7,18 +7,24 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "isolyzer";
   version = "1.4.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KBNLresearch";
-    repo = pname;
+    repo = "isolyzer";
     tag = version;
     sha256 = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     six
   ];
+
+  pythonImportsCheck = [ "isolyzer" ];
 
   meta = with lib; {
     homepage = "https://github.com/KBNLresearch/isolyzer";

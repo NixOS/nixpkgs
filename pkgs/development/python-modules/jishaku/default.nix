@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Gorialis";
-    repo = pname;
+    repo = "jishaku";
     tag = version;
     hash = "sha256-+J8Tr8jPN9K3eHLOuJTaP3We5A1kiyn9/yI1KChbuMY=";
   };

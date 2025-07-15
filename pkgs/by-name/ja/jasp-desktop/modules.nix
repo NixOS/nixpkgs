@@ -165,6 +165,12 @@ let
       src = jasp-src;
       sourceRoot = "${jasp-src.name}/Modules/${name}";
       propagatedBuildInputs = deps;
+
+      # some packages have a .Rprofile that tries to activate renv
+      # we disable this by removing .Rprofile
+      postPatch = ''
+        rm -f .Rprofile
+      '';
     };
 in
 {
@@ -228,6 +234,20 @@ in
       jaspBase
       jaspGraphs
       jaspSem
+    ];
+    jaspBFF = buildJaspModule "jaspBFF" [
+      BFF
+      jaspBase
+      jaspGraphs
+    ];
+    jaspBfpack = buildJaspModule "jaspBfpack" [
+      BFpack
+      bain
+      ggplot2
+      stringr
+      coda
+      jaspBase
+      jaspGraphs
     ];
     jaspBsts = buildJaspModule "jaspBsts" [
       Boom
@@ -305,6 +325,7 @@ in
       conting'
       multibridge
       ggplot2
+      interp
       jaspBase
       jaspGraphs
       plyr
@@ -353,6 +374,8 @@ in
       ggforce
       tidyr
       igraph
+      HDInterval
+      metafor
     ];
     jaspMachineLearning = buildJaspModule "jaspMachineLearning" [
       kknn
@@ -375,6 +398,7 @@ in
       jaspBase
       jaspGraphs
       MASS
+      mclust
       mvnormalTest
       neuralnet
       network
@@ -385,6 +409,7 @@ in
       ROCR
       Rtsne
       signal
+      VGAM
     ];
     jaspMetaAnalysis = buildJaspModule "jaspMetaAnalysis" [
       dplyr
@@ -406,6 +431,12 @@ in
       metamisc
       ggmcmc
       pema
+      clubSandwich
+      CompQuadForm
+      sp
+      dfoptim
+      nleqslv
+      patchwork
     ];
     jaspMixedModels = buildJaspModule "jaspMixedModels" [
       afex
@@ -459,6 +490,8 @@ in
       BART
       EBMAforecast
       imputeTS
+      scoringRules
+      scoringutils
     ];
     jaspProcess = buildJaspModule "jaspProcess" [
       blavaan
@@ -543,6 +576,7 @@ in
       lme4
       MASS
       psych
+      mirt
     ];
     jaspRobustTTests = buildJaspModule "jaspRobustTTests" [
       RoBTT
@@ -553,16 +587,17 @@ in
     jaspSem = buildJaspModule "jaspSem" [
       forcats
       ggplot2
-      jaspBase
-      jaspGraphs
       lavaan
       cSEM
       reshape2
+      jaspBase
+      jaspGraphs
       semPlot
       semTools
       stringr
       tibble
       tidyr
+      SEMsens
     ];
     jaspSummaryStatistics = buildJaspModule "jaspSummaryStatistics" [
       BayesFactor
@@ -579,7 +614,7 @@ in
     ];
     jaspSurvival = buildJaspModule "jaspSurvival" [
       survival
-      survminer
+      ggsurvfit
       jaspBase
       jaspGraphs
     ];
@@ -592,6 +627,12 @@ in
       logspline
       plotrix
       plyr
+    ];
+    jaspTestModule = buildJaspModule "jaspTestModule" [
+      jaspBase
+      jaspGraphs
+      svglite
+      stringi
     ];
     jaspTimeSeries = buildJaspModule "jaspTimeSeries" [
       jaspBase

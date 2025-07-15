@@ -12,6 +12,13 @@ pnpmConfigHook() {
       exit 1
     fi
 
+    fetcherVersion=1
+    if [[ -e "${pnpmDeps}/.fetcher-version" ]]; then
+      fetcherVersion=$(cat "${pnpmDeps}/.fetcher-version")
+    fi
+
+    echo "Using fetcherVersion: $fetcherVersion"
+
     echo "Configuring pnpm store"
 
     export HOME=$(mktemp -d)
@@ -44,11 +51,23 @@ pnpmConfigHook() {
 
     runHook prePnpmInstall
 
-    pnpm install \
+    if ! pnpm install \
         --offline \
         --ignore-scripts \
         "${pnpmInstallFlags[@]}" \
         --frozen-lockfile
+    then
+        echo
+        echo "ERROR: pnpm failed to install dependencies"
+        echo
+        echo "If you see ERR_PNPM_NO_OFFLINE_TARBALL above this, follow these to fix the issue:"
+        echo '1. Set pnpmDeps.hash to "" (empty string)'
+        echo "2. Build the derivation and wait for it to fail with a hash mismatch"
+        echo "3. Copy the 'got: sha256-' value back into the pnpmDeps.hash field"
+        echo
+
+        exit 1
+    fi
 
 
     echo "Patching scripts"

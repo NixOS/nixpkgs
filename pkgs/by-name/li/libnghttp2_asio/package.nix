@@ -5,12 +5,12 @@
   cmake,
   nghttp2,
   openssl,
-  boost,
+  boost186,
 }:
 
 stdenv.mkDerivation {
   pname = "libnghttp2_asio";
-  version = "unstable-2022-08-11";
+  version = "0-unstable-2022-08-11";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost186
     nghttp2
     openssl
   ];

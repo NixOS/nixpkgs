@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vpelletier";
     repo = "python-libusb1";
     tag = version;
-    hash = "sha256-RPuSpkEsACbDkaG+nRuWAckvH/RStJgQWbfgTPY4OvQ=";
+    hash = "sha256-nytxew6KogpEpSnRtmY0UNH+07x0k0XLZ/MRC9NSpDg=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "usb1/testUSB1.py" ];
+  enabledTestPaths = [ "usb1/testUSB1.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/vpelletier/python-libusb1";

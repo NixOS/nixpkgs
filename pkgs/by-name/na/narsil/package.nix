@@ -8,22 +8,21 @@
   enableSdl2 ? true,
   SDL2,
   SDL2_image,
-  SDL2_sound,
   SDL2_mixer,
   SDL2_ttf,
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "7c20b01e055491e86a44201504e8d36873ef1822";
+  version = "1.4.0-62-g781c0f9c3";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
-    rev = version;
-    hash = "sha256-6J9WCWXhKiTRLiH08DTGzAXe8QZFQOLYJkfNVONgWU0=";
+    tag = version;
+    hash = "sha256-FdQqvxj7K5wcF6eeqj18H8MVkytkNiB5fxrzyt/EnZ4=";
   };
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableSdl2 [
       SDL2
       SDL2_image
-      SDL2_sound
       SDL2_mixer
       SDL2_ttf
     ];

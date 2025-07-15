@@ -16,18 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.1.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-ouZPbgZMnm0GCSfuIkIA4fv1k4TOsSH49stMn9IQBBs=";
+    hash = "sha256-p1KAgDNA2bI/6MSLxcSfHlzFKoe5KrRTKPTNVJNGfDM=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Mc6T13opLui4qSzwbamU8b2kp3doouY77CPvL2B3QNI=";
+    fetcherVersion = 1;
+    hash = "sha256-OPfs9WiUehKPaAqqgMOiIELoCPVBFYpNKeesfmA8Db0=";
   };
 
   nativeBuildInputs = [

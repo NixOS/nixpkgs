@@ -20,17 +20,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.1.2";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-s6N+uyAoWrmsu7DhNw5iO7OY7TCH8OZ48j/6OwBjmD0=";
+    hash = "sha256-+clSdCMe48XJQZf20FAR1Vq/BrKTdTW6jnjiTqT7vW4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-/fxFqs5lDzOhatc6KBc7Zwsq3A7N5AOanGOebttr1l8=";
+    hash = "sha256-A3NX1zj9+9qCLTkfca3v8Rr8oc/zL/Ruknjl3g1aMG4=";
   };
 
   cargoRoot = "settings/rust";
@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cargo
     rustc
-
     rustPlatform.cargoSetupHook
     pkg-config
   ];
+
   buildInputs = [
     boost
     openssl
@@ -67,14 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) pdns-recursor ncdns;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "i686-linux" # a 64-bit time_t is needed
     ];
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 })

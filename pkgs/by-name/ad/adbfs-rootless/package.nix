@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mount Android phones on Linux with adb, no root required";
     mainProgram = "adbfs";
     inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

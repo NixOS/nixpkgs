@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-RhB0Ht6vyDxYwDGS+A9HZL9ySIjWlhdB4S+gHxvQQBg=";
   };
 
-  sourceRoot = "source/pyobjc-framework-Cocoa";
+  sourceRoot = "${src.name}/pyobjc-framework-Cocoa";
 
   build-system = [ setuptools ];
 

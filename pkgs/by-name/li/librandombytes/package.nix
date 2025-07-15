@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";
-    description = "A simple API for applications generating fresh randomness";
+    description = "Simple API for applications generating fresh randomness";
     changelog = "https://randombytes.cr.yp.to/download.html";
     license = with lib.licenses; [
       # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html

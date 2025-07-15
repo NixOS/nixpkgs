@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.5.5pre";
   src = fetchFromGitHub {
     owner = "moretension";
-    repo = pname;
+    repo = "duti";
     rev = "fe3d3dc411bcea6af7a8cbe53c0e08ed5ecacdb2";
     sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
   };

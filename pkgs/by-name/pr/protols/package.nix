@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protols";
-  version = "0.11.1";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "coder3101";
     repo = "protols";
     tag = version;
-    hash = "sha256-A2fa1rZvxVpJ6X0s0wTDROarGX5Fxp6zKK9cWiag7TQ=";
+    hash = "sha256-3XTFKqUPXW7Zm9IruePxq8uY1H/axuE1h22cqQj/YGg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Pvz15q9yGqcJecOvDWXQQCEDXuSEJbJyZ8Arj8Xbyh4=";
+  cargoHash = "sha256-19CNMaDVI804ekxrmUjbx9WmqsG91rviLTsvFtN+D/o=";
 
   meta = {
     description = "Protocol Buffers language server written in Rust";

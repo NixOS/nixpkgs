@@ -2,6 +2,7 @@
   lib,
   stdenv,
   replaceVarsWith,
+  udevCheckHook,
 }:
 
 # Provides a facility to hook into rfkill changes.
@@ -37,6 +38,12 @@ let
 in
 stdenv.mkDerivation {
   name = "rfkill-udev";
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
   dontBuild = true;

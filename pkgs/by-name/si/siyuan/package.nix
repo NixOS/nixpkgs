@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
@@ -35,20 +35,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.26";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hkvlodf2zBT/+ohmxLrinbBiluCmSsGRKnw4ZrdFcAg=";
+    hash = "sha256-Dqdooc1fhBxPDsdFXjUcsVkiXWHWGypyq8qJLd30tEA=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-NJPb5nJWDTiQ5H/RPDA0IHMaWvzlNNXUA2WkpG2lk8I=";
+    vendorHash = "sha256-LXW3k3wsszJ0Ep8JyGhe9jvlH2FA0a3GCrmDrzJ34Wk=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -75,6 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     tags = [ "fts5" ];
   };
 
+  # this should contain a 'packages' key, but it doesn't...
+  # we can remove it because it's not needed to build
+  postPatch = ''
+    rm pnpm-workspace.yaml
+  '';
+
   nativeBuildInputs = [
     nodejs
     pnpm.configHook
@@ -88,8 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
+      postPatch
       ;
-    hash = "sha256-nmkoGsrF75k9AWFlBhIj+vO4e3eW1dJN+y2VWokKe4s=";
+    fetcherVersion = 1;
+    hash = "sha256-eSf4mpKBm1G4K9+V6VXEiPrIVQMyru7o9BGVIUycQaQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";

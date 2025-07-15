@@ -30,14 +30,14 @@
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.2.86";
+  version = "1.3.2";
 
   src = fetchFromGitLab {
     domain = "git.ryujinx.app";
     owner = "Ryubing";
     repo = "Ryujinx";
     tag = version;
-    hash = "sha256-Goxg2+zaKaqbGv5q/ril4TBtfTbPEYEwQQ/M6NlEpus=";
+    hash = "sha256-6BCDFd0nU96OgI5lqf4fbyNkG4PS5P4raHVbvBAhB5A=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin [
@@ -96,12 +96,12 @@ buildDotnetModule rec {
     "Ryujinx"
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optional stdenv.hostPlatform.isLinux [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
     "--set SDL_VIDEODRIVER x11"
   ];
 
-  preInstall = lib.optionalString stdenv.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
@@ -128,8 +128,8 @@ buildDotnetModule rec {
   passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
-    homepage = "https://github.com/Ryubing/Ryujinx";
-    changelog = "https://github.com/Ryubing/Ryujinx/wiki/Changelog";
+    homepage = "https://ryujinx.app";
+    changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
@@ -143,7 +143,7 @@ buildDotnetModule rec {
     maintainers = with maintainers; [
       jk
       artemist
-      kekschen
+      willow
     ];
     platforms = [
       "x86_64-linux"

@@ -1,38 +1,34 @@
 {
     "testing": {
-        "version": "6.14-rc7",
-        "hash": "sha256:0bw3xip9qg4zr42vx28iai954g5a1wprrrkr81zn7x7vv3ayjvya"
+        "version": "6.16-rc6",
+        "hash": "sha256:03sz5gbnz1s763nlq2sbqk3bmjca24hq2n9wrpqhy6gyrd11s22f"
     },
     "6.1": {
-        "version": "6.1.132",
-        "hash": "sha256:1l5vrc8an6h0fcnfmqb6pmal686imxbllcvlkqah19fg7wnv3dyx"
+        "version": "6.1.145",
+        "hash": "sha256:0qrkcrqb0migsrq6xl1idyz8n6vjbdk74z4sc9na97b6n5vp0r9i"
     },
     "5.15": {
-        "version": "5.15.179",
-        "hash": "sha256:0vqk4wd0cacigz42gigdzbj415hcdn2k2m01yr7k8pcv3rxs86ck"
+        "version": "5.15.188",
+        "hash": "sha256:1nfcrdwa2mgih57ch9kh8gc6jl950a7vpqgr56xk1b02303km5f4"
     },
     "5.10": {
-        "version": "5.10.235",
-        "hash": "sha256:1k7iq4np3pflkq3d71ya8xs5czhslhy2iha4ls9lma81269y6fwm"
+        "version": "5.10.239",
+        "hash": "sha256:1nzhl1y6avfl77fyqwjwy3qc6679gp92k0d3aarscrdydcml5yid"
     },
     "5.4": {
-        "version": "5.4.291",
-        "hash": "sha256:0vpgb3lmhgv5iw9b1z0kqr6vdv44if49marfp5858z3a8yj69bdk"
+        "version": "5.4.295",
+        "hash": "sha256:1adn0pbk8y1zp1yrz83ch6h4wypm2qvbnx4xig3sls2nfgvmi0f4"
     },
     "6.6": {
-        "version": "6.6.85",
-        "hash": "sha256:0abmgc5rg7hx18ykwsl6xl72gzaf3wbn5bkvh4kcsa1lrbscrfjy"
+        "version": "6.6.98",
+        "hash": "sha256:1raxyhvv0yay3k1izwcqdbq9322nflflfzcn9d1jrhmb032k8si9"
     },
     "6.12": {
-        "version": "6.12.21",
-        "hash": "sha256:1iyn8qif6xfz04z698ib2dvmam54pyxzsign8sbdj9505sdf66lx"
+        "version": "6.12.38",
+        "hash": "sha256:1k0gcwavn5iws3z1as39227i2hnc62qnfddjfqy7k7ymhf6zldgh"
     },
-    "6.13": {
-        "version": "6.13.9",
-        "hash": "sha256:1ci78x5dfjm3nlv4m2j02wl7ax82l47xwnr4k6j9n4dn53qa7rsk"
-    },
-    "6.14": {
-        "version": "6.14",
-        "hash": "sha256:0w3nqh02vl8f2wsx3fmsvw1pdsnjs5zfqcmv2w2vnqdiwy1vd552"
+    "6.15": {
+        "version": "6.15.6",
+        "hash": "sha256:1z5l0b59q56qj6s56cxzv43lhfx9z9sp4vfziw60fz97ak4qdd9b"
     }
 }

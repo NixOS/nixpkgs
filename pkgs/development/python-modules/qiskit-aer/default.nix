@@ -127,7 +127,7 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--timeout=30"
     "--durations=10"
   ];

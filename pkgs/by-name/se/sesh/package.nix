@@ -5,18 +5,21 @@
 }:
 buildGoModule rec {
   pname = "sesh";
-  version = "2.13.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "joshmedeski";
     repo = "sesh";
     rev = "v${version}";
-    hash = "sha256-YFvUYacuvyzNXwY+y9kI4tPlrlojDuZpR7VaTGdVqb8=";
+    hash = "sha256-3kD7t3lgkxrK53cL+5i9DB5w1hIYA4J/MiauLZ1Z7KQ=";
   };
 
-  vendorHash = "sha256-3wNp1meUoUFPa2CEgKjuWcu4I6sxta3FPFvCb9QMQhQ=";
+  vendorHash = "sha256-r6n0xZbOvqDU63d3WrXenvV4x81iRgpOS2h73xSlVBI=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "Smart session manager for the terminal";

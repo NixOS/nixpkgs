@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "adaptivecpp";
-  version = "24.10.0";
+  version = "25.02.0";
 
   src = fetchFromGitHub {
     owner = "AdaptiveCpp";
     repo = "AdaptiveCpp";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZwHDiwv1ybC+2UhiOe2f7fnfqcul+CD9Uta8PT9ICr4=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-vXfw8+xn3/DYxUKp3QGdQ8sEbDwyk+8jDCyuvQOXigc=";
   };
 
   # do not use old FindCUDA cmake module
@@ -162,14 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdaptiveCpp/AdaptiveCpp";
     description = "Multi-backend implementation of SYCL for CPUs and GPUs";
     mainProgram = "acpp";
-    maintainers = with maintainers; [ yboettcher ];
-    # Broken with current nixpkgs ROCm 6.0.2
-    # Works with updated ROCm, see https://github.com/NixOS/nixpkgs/pull/367695
-    broken = rocmSupport && strings.versionOlder rocmPackages.clr.version "6.3.1";
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ yboettcher ];
+    license = lib.licenses.bsd2;
   };
 })

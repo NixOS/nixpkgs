@@ -22,19 +22,19 @@
   gdbuspp,
   cmake,
   git,
+  nix-update-script,
   enableSystemdResolved ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  # also update openvpn3-core
-  version = "24";
+  version = "24.1";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     tag = "v${version}";
-    hash = "sha256-e3NRLrznTEolTzMO+kGEh48MCrcEr8p7JG3hG889aK4=";
+    hash = "sha256-E6SBVPHmejXB18RuNCNq62yWOJslZfIjVbNUdRIk5Sw=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lpthread";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenVPN 3 Linux client";

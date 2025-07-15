@@ -21,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   # if the package has dependencies, mitmCache must be set
   mitmCache = gradle.fetchDeps {
@@ -72,11 +75,12 @@ The first is to add the derivation arguments required for getting the
 package. Using the pdftk example above:
 
 ```nix
-{ lib
-, stdenv
-, gradle
-# ...
-, pdftk
+{
+  lib,
+  stdenv,
+  gradle,
+  # ...
+  pdftk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   wrapQtAppsHook,
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.5.1";
+  version = "4.5.2-unstable-2025-07-03";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ha3rBILekycHiPdcaPNsbvlF289NzFs9srP3unOuJRg=";
+    rev = "0ff2476af4e16286ee9f7cf2322715273a0117e0";
+    sha256 = "sha256-0ixQfAyAyRmuIrlPosCV/VucKJYYvxjL2o4pkVb5Sd8=";
   };
 
   cmakeFlags = [

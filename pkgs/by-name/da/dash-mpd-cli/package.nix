@@ -8,6 +8,7 @@
   ffmpeg,
   libxslt,
   shaka-packager,
+  nix-update-script,
 }:
 
 let
@@ -24,13 +25,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.25";
+  version = "0.2.27";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xC/U48QyVn9K8Do1909XS7j9aY+ia0gd5cMdfipIds4=";
+    hash = "sha256-s8Wu9DOjfQDm4OONtocJCiklEZ775tFyzKIbKm3WfDc=";
   };
 
   patches = [
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QHfon0795XNtG3jCVv56EIA1pPToWUiopKWI3cA7Vg0=";
+  cargoHash = "sha256-ycHKgQFgl8THoXT+3ccV8AC56VudHzObyTCu333MmT4=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -58,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest";

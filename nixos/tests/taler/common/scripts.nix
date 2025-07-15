@@ -7,7 +7,7 @@
 
 let
   cfgNodes = pkgs.callPackage ./nodes.nix { inherit lib; };
-  bankConfig = nodes.bank.config.environment.etc."libeufin/libeufin.conf".source;
+  bankConfig = nodes.bank.environment.etc."libeufin/libeufin.conf".source;
 
   inherit (cfgNodes) CURRENCY FIAT_CURRENCY;
 in
@@ -68,6 +68,31 @@ in
               + command
           )
 
+      # https://docs.taler.net/core/api-corebank.html#authentication
+      def create_token(machine, username, password):
+          """Create a read-write bank access token for a user"""
+          response = succeed(machine, [
+              "curl -X POST",
+              f"-u {username}:{password}",
+              "-H 'Content-Type: application/json'",
+              """
+              --data '{ "scope": "readwrite" }'
+              """,
+              f"-sSfL 'http://bank:8082/accounts/{username}/token'"
+          ])
+          return json.loads(response)["access_token"]
+
+
+      # Basic auth is deprecated, so exchange credentials must be set at
+      # runtime because it requires a token from the bank.
+      def create_exchange_auth(token: str):
+          template = f"""
+          [exchange-accountcredentials-test]
+          WIRE_GATEWAY_URL = http://bank:8082/accounts/exchange/taler-wire-gateway/
+          WIRE_GATEWAY_AUTH_METHOD = BEARER
+          TOKEN = "{token}"
+          """
+          return "\n".join([line.strip() for line in template.splitlines()])
 
       def verify_balance(balanceWanted: str):
           """Compare Taler CLI wallet balance with expected amount"""
@@ -84,14 +109,14 @@ in
               client.succeed(f"echo Withdraw successfully made. New balance: {balanceWanted}")
 
 
-      def verify_conversion(regionalWanted: str):
+      def verify_conversion(regionalWanted: str, accessToken: str):
           """Compare converted Libeufin Nexus funds with expected regional currency"""
           # Get transaction details
           response = json.loads(
               succeed(bank, [
                   "curl -sSfL",
+                  f"-H 'Authorization: Bearer {accessToken}'",
                   # TODO: get exchange from config?
-                  "-u exchange:exchange",
                   "http://bank:8082/accounts/exchange/transactions"
               ])
           )

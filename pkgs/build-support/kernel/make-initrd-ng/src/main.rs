@@ -5,8 +5,11 @@ use std::fs;
 use std::hash::Hash;
 use std::iter::FromIterator;
 use std::os::unix;
+use std::os::unix::fs::PermissionsExt;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
+
+use libc::umask;
 
 use eyre::Context;
 use goblin::{elf::Elf, Object};
@@ -186,27 +189,6 @@ fn copy_file<
 
     if let Ok(Object::Elf(e)) = Object::parse(&contents) {
         add_dependencies(source, e, &contents, &dlopen, queue)?;
-
-        // Make file writable to strip it
-        let mut permissions = fs::metadata(&target)
-            .wrap_err_with(|| format!("failed to get metadata for {:?}", target))?
-            .permissions();
-        permissions.set_readonly(false);
-        fs::set_permissions(&target, permissions)
-            .wrap_err_with(|| format!("failed to set readonly flag to false for {:?}", target))?;
-
-        // Strip further than normal
-        if let Ok(strip) = env::var("STRIP") {
-            if !Command::new(strip)
-                .arg("--strip-all")
-                .arg(OsStr::new(&target))
-                .output()?
-                .status
-                .success()
-            {
-                println!("{:?} was not successfully stripped.", OsStr::new(&target));
-            }
-        }
     };
 
     Ok(())
@@ -334,6 +316,9 @@ fn main() -> eyre::Result<()> {
         })?;
     let output = &args[2];
     let out_path = Path::new(output);
+
+    // The files we create should not be writable.
+    unsafe { umask(0o022) };
 
     let mut queue = NonRepeatingQueue::<StorePath>::new();
 

@@ -170,11 +170,11 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = lib.licenses.apple-psl20;
     mainProgram = "ld";
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
   };
 })

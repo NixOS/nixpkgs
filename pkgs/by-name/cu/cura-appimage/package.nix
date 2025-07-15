@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cura-appimage";
-  version = "5.10.0";
+  version = "5.10.1";
 
   # Give some good names so the intermediate packages are easy
   # to recognise by name in the Nix store.
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Ultimaker/Cura/releases/download/${version}/Ultimaker-Cura-${version}-linux-X64.AppImage";
-    hash = "sha256-8Km249t0m4YnOsyXyjJJD0y4n9kUCrA/AcsqBcrVf5Q=";
+    hash = "sha256-c89GkgfOSY4hriY66GUCgBYiiJJspM9Fg07lne+KXgw=";
   };
 
   appimageContents = appimageTools.extract {

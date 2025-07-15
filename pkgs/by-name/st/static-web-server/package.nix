@@ -2,26 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.36.0";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
     rev = "v${version}";
-    hash = "sha256-TE0V9Ai7lLb1TBtusDV+ACuPO8/1VUjeVZzA4XoL3VQ=";
+    hash = "sha256-haQYouLUaDkYo9c0CA07twaEohgmSa2hn8xJevEVNFU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uGEn+UvHse4tGOAQGzEoFpJxqbXM0u4IrXmMVgKz8z4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-1e3of8qC1cJ9ZZt1mrfe10wjkLzUICS25TDu+HfkTyU=";
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''
@@ -37,15 +33,15 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) static-web-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       misilelab
     ];

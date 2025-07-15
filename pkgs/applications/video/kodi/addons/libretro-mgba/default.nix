@@ -32,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "mGBA for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

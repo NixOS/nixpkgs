@@ -2,14 +2,34 @@
   lib,
   stdenv,
   fetchurl,
+  pkgsStatic,
   python3,
   docutils,
   bzip2,
   zlib,
   jitterentropy,
   darwin,
+  esdm,
+  tpm2-tss,
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
+
+  # build ESDM RNG plugin
+  withEsdm ? false,
+  # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
+  withTpm2 ? false,
+  policy ? null,
 }:
+
+assert lib.assertOneOf "policy" policy [
+  # no explicit policy is given. The defaults by the library are used
+  null
+  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
+  "bsi"
+  # only allow NIST approved algorithms in FIPS 140
+  "fips140"
+  # only allow "modern" algorithms
+  "modern"
+];
 
 let
   common =
@@ -51,15 +71,14 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin (
-          with darwin.apple_sdk.frameworks;
-          [
-            CoreServices
-            Security
-          ]
-        )
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+          tpm2-tss
+        ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           jitterentropy
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
+          esdm
         ];
 
       buildTargets =
@@ -84,8 +103,21 @@ let
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
         ]
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
+          "--with-tpm2"
+        ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           "--enable-modules=jitter_rng"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
+          "--enable-modules=esdm_rng"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
+          "--module-policy=${policy}"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
+          "--enable-module=ffi"
+          "--enable-module=shake"
         ];
 
       configurePhase = ''
@@ -107,6 +139,10 @@ let
 
       doCheck = true;
 
+      passthru.tests = lib.optionalAttrs (lib.versionAtLeast version "3") {
+        static = pkgsStatic.botan3;
+      };
+
       meta = with lib; {
         description = "Cryptographic algorithms library";
         homepage = "https://botan.randombit.net";
@@ -114,6 +150,7 @@ let
         maintainers = with maintainers; [
           raskin
           thillux
+          nikstur
         ];
         platforms = platforms.unix;
         license = licenses.bsd2;
@@ -122,8 +159,8 @@ let
 in
 {
   botan3 = common {
-    version = "3.6.1";
-    hash = "sha256-fLhXXYjSMsdxdHadf54ku0REQWBYWYbuvWbnScuakIk=";
+    version = "3.8.1";
+    hash = "sha256-sDloHUuGGi9YU3Rti6gG9VPiOGntctie2/o8Pb+hfmg=";
   };
 
   botan2 = common {

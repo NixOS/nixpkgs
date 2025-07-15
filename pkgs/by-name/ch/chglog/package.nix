@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "chglog";
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "chglog";
     tag = "v${version}";
-    hash = "sha256-i7KJB5EWq1khP4oxxXGH2tYLJ9s6MAWd1Ndfk7LV0Vc=";
+    hash = "sha256-PULQNe7V18NMxmIgvId1cFU1DuSbNeDk4cB1aMx3OHc=";
   };
 
-  vendorHash = "sha256-EyA440J3QLQI+NvSZrksjIlmNOIOt1YO/5ZZMTV/GIs=";
+  vendorHash = "sha256-kw6vOxqBvHfD5ooJsufX2xpUCFKWzThKzpBBNKL60Ko=";
 
   ldflags = [
     "-s"

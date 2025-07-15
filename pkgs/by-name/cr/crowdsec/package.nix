@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.6";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
-    repo = pname;
+    repo = "crowdsec";
     tag = "v${version}";
-    hash = "sha256-yregZUHdwfg/MJ9ndeHzpo4md9Qq+BAF0gHGC80+Mp0=";
+    hash = "sha256-Gu4Ds9o4CsimMoKqJV2weAQYH34Z7GN3rPbhbtoVuHU=";
   };
 
-  vendorHash = "sha256-XTKOApMagrcHlgdGascIJzRZxjd+IBVhEyF+FiszOkQ=";
+  vendorHash = "sha256-xUzYHVhqyMUQQH5ICkwgaDiFi/L4exROjvJNWS2j9ZU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -62,7 +62,7 @@ buildGoModule rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://crowdsec.net/";
     changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
     description = "CrowdSec is a free, open-source and collaborative IPS";
@@ -77,8 +77,8 @@ buildGoModule rec {
       etc.) while the aggressive IP can be sent to CrowdSec for curation before
       being shared among all users to further improve everyone's security.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
       urandom
     ];

@@ -1,0 +1,65 @@
+diff --git a/crates/algorithm/src/operator.rs b/crates/algorithm/src/operator.rs
+index 7de8d07..c496dcd 100644
+--- a/crates/algorithm/src/operator.rs
++++ b/crates/algorithm/src/operator.rs
+@@ -672,7 +672,7 @@ impl Operator for Op<VectOwned<f32>, L2> {
+                 use std::iter::zip;
+                 let dims = vector.dims();
+                 let t = zip(&code.1, centroid.slice())
+-                    .map(|(&sign, &num)| std::hint::select_unpredictable(sign, num, -num))
++                    .map(|(&sign, &num)| sign.select_unpredictable(num, -num))
+                     .sum::<f32>()
+                     / (dims as f32).sqrt();
+                 let sum_of_x_2 = code.0.dis_u_2;
+@@ -763,7 +763,7 @@ impl Operator for Op<VectOwned<f32>, Dot> {
+                 use std::iter::zip;
+                 let dims = vector.dims();
+                 let t = zip(&code.1, centroid.slice())
+-                    .map(|(&sign, &num)| std::hint::select_unpredictable(sign, num, -num))
++                    .map(|(&sign, &num)| sign.select_unpredictable(num, -num))
+                     .sum::<f32>()
+                     / (dims as f32).sqrt();
+                 let sum_of_x_2 = code.0.dis_u_2;
+@@ -854,7 +854,7 @@ impl Operator for Op<VectOwned<f16>, L2> {
+                 use std::iter::zip;
+                 let dims = vector.dims();
+                 let t = zip(&code.1, centroid.slice())
+-                    .map(|(&sign, &num)| std::hint::select_unpredictable(sign, num, -num).to_f32())
++                    .map(|(&sign, &num)| sign.select_unpredictable(num, -num).to_f32())
+                     .sum::<f32>()
+                     / (dims as f32).sqrt();
+                 let sum_of_x_2 = code.0.dis_u_2;
+@@ -945,7 +945,7 @@ impl Operator for Op<VectOwned<f16>, Dot> {
+                 use std::iter::zip;
+                 let dims = vector.dims();
+                 let t = zip(&code.1, centroid.slice())
+-                    .map(|(&sign, &num)| std::hint::select_unpredictable(sign, num, -num).to_f32())
++                    .map(|(&sign, &num)| sign.select_unpredictable(num, -num).to_f32())
+                     .sum::<f32>()
+                     / (dims as f32).sqrt();
+                 let sum_of_x_2 = code.0.dis_u_2;
+diff --git a/crates/simd/src/rotate.rs b/crates/simd/src/rotate.rs
+index 7a211e5..0fcd955 100644
+--- a/crates/simd/src/rotate.rs
++++ b/crates/simd/src/rotate.rs
+@@ -31,18 +31,17 @@ pub fn givens(lhs: &mut [f32], rhs: &mut [f32]) {
+ pub mod flip {
+     #[crate::multiversion("v4", "v3", "v2", "a2")]
+     pub fn flip(bits: &[u64; 1024], result: &mut [f32]) {
+-        use std::hint::select_unpredictable;
+         let result: &mut [u32] = unsafe { std::mem::transmute(result) };
+         let (slice, remainder) = result.as_chunks_mut::<64>();
+         let n = slice.len();
+         assert!(n <= 1024);
+         for i in 0..n {
+             for j in 0..64 {
+-                slice[i][j] ^= select_unpredictable((bits[i] & (1 << j)) != 0, 0x80000000, 0);
++                slice[i][j] ^= ((bits[i] & (1 << j)) != 0).select_unpredictable(0x80000000, 0);
+             }
+         }
+         for j in 0..remainder.len() {
+-            remainder[j] ^= select_unpredictable((bits[n] & (1 << j)) != 0, 0x80000000, 0);
++            remainder[j] ^= ((bits[n] & (1 << j)) != 0).select_unpredictable(0x80000000, 0);
+         }
+     }
+ }

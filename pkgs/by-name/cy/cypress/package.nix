@@ -1,45 +1,47 @@
-{ alsa-lib
-, autoPatchelfHook
-, fetchzip
-, gtk2
-, gtk3
-, lib
-, buildPackages
-, makeShellWrapper
-, libgbm
-, nss
-, stdenv
-, udev
-, unzip
-, xorg
-, darwin
+{
+  alsa-lib,
+  autoPatchelfHook,
+  fetchzip,
+  gtk2,
+  gtk3,
+  lib,
+  buildPackages,
+  makeShellWrapper,
+  libgbm,
+  nss,
+  stdenv,
+  udev,
+  unzip,
+  xorg,
 }:
 
 let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-1W13AfXVRWTmDSRdsaPfSSJNlf59JXdI92tXBbYwdDI=";
+      hash = "sha256-VkKC4ifUEB+2SJWwUrff7t5Yh6j1d7O7o2T8WJtK4rc=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
+      hash = "sha256-zOM3mKwWzt42LP1c5pS/GIQOj35fTORYEwrLmsf46jw=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+      hash = "sha256-z/HtHiOv/gAq+L4TpI3ibSTpDUGT6UV5uT1mMlbeFuA=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-glJscAp0oHS1pqBt6fsQm0I5anl2HQ5YawIJuPG33II=";
+      hash = "sha256-g28b9fRsv+nsZ8TMFmp8b0K9kXnYpj+1s+vhaUHqG5E=";
     };
   };
   inherit (stdenv.hostPlatform) system;
-  binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
+  binary =
+    availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
   inherit (binary) platform hash;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.17.0";
+  version = "14.5.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -62,27 +64,12 @@ in stdenv.mkDerivation rec {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (with xorg; [
-    libXScrnSaver
-    libXdamage
-    libXtst
-    libxshmfence
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     nss
-    gtk2
     alsa-lib
     gtk3
     libgbm
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-    CoreServices
-    CoreMedia
-    CoreAudio
-    AudioToolbox
-    AVFoundation
-    Foundation
-    ApplicationServices
-  ]);
+  ];
 
   runtimeDependencies = lib.optional stdenv.hostPlatform.isLinux (lib.getLib udev);
 
@@ -97,11 +84,16 @@ in stdenv.mkDerivation rec {
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
-    ${if stdenv.hostPlatform.isDarwin then ''
-      ln -s $out/opt/cypress/Cypress.app/Contents/MacOS/Cypress $out/bin/cypress
-    '' else ''
-      ln -s $out/opt/cypress/Cypress $out/bin/cypress
-    ''}
+    ${
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          ln -s $out/opt/cypress/Cypress.app/Contents/MacOS/Cypress $out/bin/cypress
+        ''
+      else
+        ''
+          ln -s $out/opt/cypress/Cypress $out/bin/cypress
+        ''
+    }
     runHook postInstall
   '';
 
@@ -131,6 +123,11 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = lib.attrNames availableBinaries;
-    maintainers = with maintainers; [ tweber mmahut Crafter ];
+    maintainers = with maintainers; [
+      tweber
+      mmahut
+      Crafter
+      jonhermansen
+    ];
   };
 }

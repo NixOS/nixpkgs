@@ -34,11 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       apacheHttpd
-      (python3.withPackages (ps: with ps; [
-        distutils
-        packaging
-        setuptools
-      ]))
+      (python3.withPackages (
+        ps: with ps; [
+          distutils
+          packaging
+          setuptools
+        ]
+      ))
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libintl
@@ -56,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mod_python";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

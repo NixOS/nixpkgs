@@ -102,7 +102,7 @@ buildPythonPackage rec {
     ]
     ++ fakeredis.optional-dependencies.lua
     ++ optional-dependencies.optional;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests =
     [
@@ -110,6 +110,8 @@ buildPythonPackage rec {
       "test_get_pareto_front_plot"
       # too narrow time limit
       "test_get_timeline_plot_with_killed_running_trials"
+      # times out under load
+      "test_optimize_with_progbar_timeout"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # ValueError: Failed to start Kaleido subprocess. Error stream

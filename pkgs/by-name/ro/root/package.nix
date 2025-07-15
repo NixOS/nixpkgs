@@ -2,7 +2,8 @@
   stdenv,
   lib,
   callPackage,
-  fetchgit,
+  fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   makeWrapper,
   writeText,
@@ -29,7 +30,7 @@
   xz,
   man,
   openssl,
-  pcre,
+  pcre2,
   nlohmann_json,
   pkg-config,
   procps,
@@ -51,7 +52,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.06";
+  version = "6.36.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -59,16 +60,20 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-p5nWMtrlux7Ifq5uvARqEiaMaEnyqIN5IcEY/FG2z/M=";
+    hash = "sha256-lK/I3vkoQmeaEwonUhvmbiq9qjdiCIjmHYKKQ/xLAaI=";
   };
 
-  clad_src = fetchgit {
-    url = "https://github.com/vgvassilev/clad";
+  clad_src = fetchFromGitHub {
+    owner = "vgvassilev";
+    repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.7";
-    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
+    rev = "refs/tags/v1.9";
+    hash = "sha256-TKCRAfwdTp/uDH7rk9EE4z2hwqBybklHhhYH6hQFYpg=";
   };
+
+  # ROOT requires a patched version of clang
+  clang = (callPackage ./clang-root.nix { });
 
   nativeBuildInputs = [
     makeWrapper
@@ -81,6 +86,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     [
+      clang
       davix
       fftw
       ftgl
@@ -99,7 +105,7 @@ stdenv.mkDerivation rec {
       patchRcPathCsh
       patchRcPathFish
       patchRcPathPosix
-      pcre
+      pcre2
       python3.pkgs.numpy
       tbb
       xrootd
@@ -118,6 +124,20 @@ stdenv.mkDerivation rec {
       xorg.libXext
     ];
 
+  patches = [
+    # Backport that can be removed once ROOT is updated to 6.38.00
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/8f21acb893977bc651a4c4fe5c4fa020a48d31de.patch";
+      hash = "sha256-xo3BbaJRyW4Wy2eVuX1bY3FFH7Jm3vN2ZojMsVNIK2I=";
+    })
+    # Revert because it introduces usage of the xcrun executable from xcode:
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/6bd0dbad38bb524491c5109bc408942246db8b50.patch";
+      hash = "sha256-D7LZWJnGF9DtKcM8EF3KILU81cqTcZolW+HMe3fmXTw=";
+      revert = true;
+    })
+  ];
+
   preConfigure =
     ''
       for path in builtins/*; do
@@ -128,18 +148,12 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-        --replace-fail 'add_clang_symlink(''${link} clang)' ""
-
       patchShebangs cmake/unix/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
-      # Just like in libpng/12.nix to build the builtin libpng on macOS
-      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
-        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString
@@ -154,20 +168,17 @@ stdenv.mkDerivation rec {
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
       "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DClang_DIR=${clang}/lib/cmake/clang"
+      "-Dbuiltin_clang=OFF"
       "-Dbuiltin_llvm=OFF"
       "-Dfail-on-missing=ON"
       "-Dfftw3=ON"
       "-Dfitsio=OFF"
       "-Dgnuinstall=ON"
       "-Dmathmore=ON"
-      "-Dmysql=OFF"
-      "-Dpgsql=OFF"
       "-Dsqlite=OFF"
       "-Dvdt=OFF"
     ]
-    ++ lib.optional (
-      (!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)
-    ) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
       # fatal error: could not build module '_Builtin_intrinsics'

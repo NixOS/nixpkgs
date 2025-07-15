@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "fairseq";
     rev = "v${version}";
     hash = "sha256-XX/grU5ljQCwx33miGoFc/7Uj9fZDtmhm4Fz7L4U+Bc=";
   };
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pytestFlagsArray = [ "--import-mode append" ];
+  pytestFlags = [ "--import-mode=append" ];
 
   disabledTests = [
     # this test requires xformers
@@ -120,5 +120,6 @@ buildPythonPackage rec {
     platforms = platforms.linux;
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ happysalada ];
+    broken = true; # requires numpy1 which is incompatible with sacrebleu depending on numpy2
   };
 }

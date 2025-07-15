@@ -1,30 +1,34 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, buildGoModule
-, glib
-, pkg-config
-, cairo
-, gtk3
-, xcur2png
-, libX11
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  buildGoModule,
+  glib,
+  pkg-config,
+  cairo,
+  gtk3,
+  xcur2png,
+  libX11,
+  zlib,
 }:
 
 buildGoModule rec {
   pname = "nwg-look";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${version}";
-    hash = "sha256-oP+qcOu03ZKQRdvPKCRVL187QP3gAg2dyvRO94N7+GE=";
+    hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
   };
 
-  vendorHash = "sha256-KzAozP9pfqoFOgK+/xmwsI0m2QWAVW/b+hoWHlQoVX0=";
+  vendorHash = "sha256-8ooWJTOC4fmuu+/Dy7JOaGSO5YlsMfKcf2lyv2ojJIw=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -5,7 +5,7 @@
   fetchurl,
   makeBinaryWrapper,
   # use specific electron since it has to load a compiled module
-  electron_34,
+  electron_36,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
@@ -15,7 +15,7 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.92.4";
+  version = "0.95.0";
 
   triliumSource = os: arch: sha256: {
     url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${os}-${arch}.zip";
@@ -26,10 +26,10 @@ let
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.sha256 = "12z6r38ab8jrjgic370q5v1y17m9brj38gfqdg05drf7a25xam8r";
-  aarch64-linux.sha256 = "0zsc7c7q07zml91sqvwgz8x3vql1mlhvb7msf7vx22w94dypzivf";
-  x86_64-darwin.sha256 = "09ipqfr77xqlgbzh2dvlidm532isg8jj8iwawjldq74ncbv8m5h0";
-  aarch64-darwin.sha256 = "031nz4f3rdjg3cyvadax4shchr7liyrzsn3ab6whsp3mhnb9wr9l";
+  x86_64-linux.sha256 = "1lykzd1spvl6x6xm2qhw5bzcs9pbcars686gwbirscr53fb7q841";
+  aarch64-linux.sha256 = "0bxrsj1g8dgg9rd6s0aj9jm2w6nk9yn6b1xgiab8kn298p3iqz64";
+  x86_64-darwin.sha256 = "16cv52c6jn5ah5ccdfxffwrmf6vz8d4q4rj0v5ny4m0g0al78isg";
+  aarch64-darwin.sha256 = "0v388frd4skpilxn8i5isd9xgn0qs9zszfs3h75q3qpx4xz355ps";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.sha256;
@@ -100,22 +100,18 @@ let
       cp -r ./* "$out/share/trilium/"
       rm $out/share/trilium/{*.so*,trilium,chrome_crashpad_handler,chrome-sandbox}
 
-      # Rebuild the ASAR archive, hardcoding the resourcesPath
+      # Rebuild the ASAR archive to patchelf native module.
       tmp=$(mktemp -d)
       asar extract $out/share/trilium/resources/app.asar $tmp
       rm $out/share/trilium/resources/app.asar
 
-      for f in "src/services/utils.js"; do
-        substituteInPlace $tmp/$f \
-          --replace-fail "process.resourcesPath" "'$out/share/trilium/resources'"
-      done
       autoPatchelf $tmp
-      cp $tmp/src/public/icon.png $out/share/icons/hicolor/512x512/apps/trilium.png
+      cp $tmp/public/assets/icon.png $out/share/icons/hicolor/512x512/apps/trilium.png
 
       asar pack $tmp/ $out/share/trilium/resources/app.asar
       rm -rf $tmp
 
-      makeWrapper ${lib.getExe electron_34} $out/bin/trilium \
+      makeWrapper ${lib.getExe electron_36} $out/bin/trilium \
         "''${gappsWrapperArgs[@]}" \
         --set-default ELECTRON_IS_DEV 0 \
         --add-flags $out/share/trilium/resources/app.asar

@@ -13,22 +13,24 @@
   openssl,
   xorg,
   libGL,
+  libxkbcommon,
+  wayland,
   withGui ? false, # build GUI version
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
-  version = "0.5.7";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
     tag = "v${version}";
-    hash = "sha256-ldGbEsKK2l7d3V7pWtDij0tS2fPrNhvxdIw8N8GvqaY=";
+    hash = "sha256-n2h+sgqNZhFgUa4MFp501W4YPtlWN94GhP9Rlu5plBA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-fOG01cTwbBddSKCC7YObcbxYRIs548HtPnIYF7lvKwg=";
+  cargoHash = "sha256-ffqTzu8/ra6SwvqDne/g9EgISGlEBSleEGn6gQ/DWAY=";
 
   # Tests require network access
   doCheck = false;
@@ -59,6 +61,8 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
       xorg.libxcb
       libGL
+      libxkbcommon
+      wayland
     ];
 
   buildNoDefaultFeatures = true;
@@ -96,6 +100,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ AngryAnt ];
-    mainProgram = "rusty-psn";
+    mainProgram = if withGui then "rusty-psn-gui" else "rusty-psn";
   };
 }

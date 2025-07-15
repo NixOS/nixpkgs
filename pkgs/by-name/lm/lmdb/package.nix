@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       ln -s lmdb.pc "$dev/lib/pkgconfig/liblmdb.pc"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightning memory-mapped database";
     longDescription = ''
       LMDB is an ultra-fast, ultra-compact key-value embedded data store
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://symas.com/lmdb/";
     changelog = "https://git.openldap.org/openldap/openldap/-/blob/LMDB_${version}/libraries/liblmdb/CHANGES";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       vcunat
     ];
-    license = licenses.openldap;
-    platforms = platforms.all;
+    license = lib.licenses.openldap;
+    platforms = lib.platforms.all;
   };
 }

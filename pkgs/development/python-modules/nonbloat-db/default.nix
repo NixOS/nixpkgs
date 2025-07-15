@@ -14,7 +14,7 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytest-randomly,
   faker,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytest-randomly
     faker

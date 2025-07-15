@@ -20,14 +20,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = version;
-    hash = "sha256-n1hCM7Sp0t2bOJEzErEd1PS/Xc7c+KDmJ4PjQuuF140=";
+    hash = "sha256-1RRizsHY6q1ruofTkRZ4sSN4k6Hoo+sG85w2zz+7yL8=";
   };
 
   postPatch = ''
@@ -45,6 +45,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
+    sphinxcontrib-jquery
     guzzle-sphinx-theme
 
     # shell completions
@@ -78,6 +79,13 @@ python.pkgs.buildPythonApplication rec {
     ''--prefix PATH ':' "${openssh}/bin"''
   ];
 
+  preInstallSphinx = ''
+    # remove invalid outputs for manpages
+    rm .sphinx/man/man/_static/jquery.js
+    rm .sphinx/man/man/_static/_sphinx_javascript_frameworks_compat.js
+    rmdir .sphinx/man/man/_static/
+  '';
+
   postInstall = ''
     installShellCompletion --cmd borg \
       --bash scripts/shell_completions/bash/borg \
@@ -93,7 +101,7 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-skip"
     "--pyargs"
     "borg.testsuite"
@@ -113,8 +121,6 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
-    # https://github.com/borgbackup/borg/issues/6573
-    "test_basic_functionality"
   ];
 
   preCheck = ''

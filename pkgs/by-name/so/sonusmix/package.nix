@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
+    mainProgram = "sonusmix";
   };
 }

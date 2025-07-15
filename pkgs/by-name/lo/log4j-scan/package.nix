@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "log4j-scan";
   version = "unstable-2021-12-18";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "fullhunt";
-    repo = pname;
+    repo = "log4j-scan";
     rev = "070fbd00f0945645bd5e0daa199a554ef3884b95";
     sha256 = "sha256-ORSc4KHyAMjuA7QHReDh6SYY5yZRunBBN1+lkCayqL4=";
   };
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   installPhase = ''
     runHook preInstall
 
-    install -vD ${pname}.py $out/bin/${pname}
+    install -vD log4j-scan.py $out/bin/log4j-scan
     install -vD headers.txt headers-large.txt -t $out/share
 
     runHook postInstall

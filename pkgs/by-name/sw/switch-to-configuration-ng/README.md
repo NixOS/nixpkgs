@@ -1,6 +1,8 @@
 # switch-to-configuration-ng
 
-This program is a reimplementation of [switch-to-configuration](/nixos/modules/system/activation/switch-to-configuration.pl) in Rust. The goal is to be compatible in as many ways as possible to the original implementation, at least as long as the original is still in nixpkgs. Any behavioral modifications to this program should also be implemented in the original, and vice versa.
+This program implements the switching/updating of NixOS systems. It starts with the exising running configuration at `/run/current-system` and handles the migration to a new configuration, built from a NixOS configuration's `config.system.build.toplevel` derivation.
+
+For more information on what happens during a switch, see [what-happens-during-a-system-switch](../../../../nixos/doc/manual/development/what-happens-during-a-system-switch.chapter.md).
 
 ## Build in a devshell
 

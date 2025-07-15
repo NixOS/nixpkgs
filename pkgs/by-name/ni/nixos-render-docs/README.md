@@ -75,3 +75,17 @@ In case this identifier is renamed, the mapping would change into:
   ]
 }
 ```
+
+## Rendering multiple pages
+
+The `include` directive accepts an argument `into-file` to specify the file into which the imported markdown should be rendered to. We can use this argument to set up multipage rendering of the manuals.
+
+For example
+
+~~~
+```{=include=} appendix html:into-file=//release-notes.html
+release-notes/release-notes.md
+```
+~~~
+
+will render the release notes into a `release-notes.html` file, instead of making it a section within the default `index.html`.

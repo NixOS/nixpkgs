@@ -1,0 +1,17 @@
+diff --git a/extension.js b/extension.js
+index c608441..2b25335 100644
+--- a/extension.js
++++ b/extension.js
+@@ -9,7 +9,11 @@ import Atk from 'gi://Atk';
+ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+-import GMenu from 'gi://GMenu';
++
++import GIRepository from 'gi://GIRepository';
++GIRepository.Repository.prepend_search_path('@gmenu_path@');
++const {default: GMenu} = await import('gi://GMenu');
++
+ import GObject from 'gi://GObject';
+ import Gtk from 'gi://Gtk';
+ import Meta from 'gi://Meta';

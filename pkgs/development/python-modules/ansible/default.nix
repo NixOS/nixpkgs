@@ -15,6 +15,7 @@
   textfsm,
   ttp,
   xmltodict,
+  passlib,
 
   # optionals
   withJunos ? false,
@@ -23,7 +24,7 @@
 
 let
   pname = "ansible";
-  version = "11.3.0";
+  version = "11.7.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -33,7 +34,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kLQJ9jDcbVWCJECaOUgxTt4bzabbLQPBdwjO9hF6YQM=";
+    hash = "sha256-+d83xx1Af2W8ucXAbJkY4pfZ6nS1za9ZJsTJqp5E218=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -47,6 +48,7 @@ buildPythonPackage {
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
+      passlib
       jxmlease
       ncclient
       netaddr
@@ -92,6 +94,9 @@ buildPythonPackage {
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

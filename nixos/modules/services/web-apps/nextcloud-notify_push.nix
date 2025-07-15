@@ -164,7 +164,7 @@ in
         nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
           proxyPass = "http://unix:${cfg.socketPath}";
           proxyWebsockets = true;
-          recommendedProxySettings = true;
+          recommendedProxySettings = lib.mkDefault true;
           extraConfig = # nginx
             ''
               # disable in case it was configured on a higher level

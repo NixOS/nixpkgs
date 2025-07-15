@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sscg";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "sscg";
     tag = "sscg-${finalAttrs.version}";
-    hash = "sha256-NzS9EV7DyQzPt4mvuEMs3zKRaQnyKzLNxmeheY7WHm4=";
+    hash = "sha256-e9/ruYBn206J0snQSo5uS9mvWmNh9AaZdZshSADEd4M=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater { rev-prefix = "sscg-"; };

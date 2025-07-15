@@ -132,41 +132,39 @@ in
       {
 
         # coming from https://github.com/windmill-labs/windmill/blob/main/init-db-as-superuser.sql
-        # modified to not grant priviledges on all tables
+        # modified to not grant privileges on all tables
         # create role windmill_user and windmill_admin only if they don't exist
-        postgresql.postStart = lib.mkIf cfg.database.createLocally (
-          lib.mkAfter ''
-                  $PSQL -tA <<"EOF"
-            DO $$
-            BEGIN
-                IF NOT EXISTS (
-                    SELECT FROM pg_catalog.pg_roles
-                    WHERE rolname = 'windmill_user'
-                ) THEN
-                    CREATE ROLE windmill_user;
-                    GRANT ALL PRIVILEGES ON DATABASE ${cfg.database.name} TO windmill_user;
-                ELSE
-                  RAISE NOTICE 'Role "windmill_user" already exists. Skipping.';
-                END IF;
-                IF NOT EXISTS (
-                    SELECT FROM pg_catalog.pg_roles
-                    WHERE rolname = 'windmill_admin'
-                ) THEN
-                  CREATE ROLE windmill_admin WITH BYPASSRLS;
-                  GRANT windmill_user TO windmill_admin;
-                ELSE
-                  RAISE NOTICE 'Role "windmill_admin" already exists. Skipping.';
-                END IF;
-                GRANT windmill_admin TO windmill;
-            END
-            $$;
-            EOF
-          ''
-        );
+        postgresql.postStart = lib.mkIf cfg.database.createLocally ''
+          psql -tA <<"EOF"
+          DO $$
+          BEGIN
+              IF NOT EXISTS (
+                  SELECT FROM pg_catalog.pg_roles
+                  WHERE rolname = 'windmill_user'
+              ) THEN
+                  CREATE ROLE windmill_user;
+                  GRANT ALL PRIVILEGES ON DATABASE ${cfg.database.name} TO windmill_user;
+              ELSE
+                RAISE NOTICE 'Role "windmill_user" already exists. Skipping.';
+              END IF;
+              IF NOT EXISTS (
+                  SELECT FROM pg_catalog.pg_roles
+                  WHERE rolname = 'windmill_admin'
+              ) THEN
+                CREATE ROLE windmill_admin WITH BYPASSRLS;
+                GRANT windmill_user TO windmill_admin;
+              ELSE
+                RAISE NOTICE 'Role "windmill_admin" already exists. Skipping.';
+              END IF;
+              GRANT windmill_admin TO windmill;
+          END
+          $$;
+          EOF
+        '';
 
         windmill-server = {
           description = "Windmill server";
-          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = serviceConfig // {
@@ -183,7 +181,7 @@ in
 
         windmill-worker = {
           description = "Windmill worker";
-          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = serviceConfig // {
@@ -201,7 +199,7 @@ in
 
         windmill-worker-native = {
           description = "Windmill worker native";
-          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+          after = [ "network.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = serviceConfig // {

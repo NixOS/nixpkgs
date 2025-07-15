@@ -26,7 +26,6 @@
   vulkan-loader,
   glslang,
   spirv-tools,
-  gtest,
   glew,
 }:
 let
@@ -34,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.1.2";
+  version = "10.4.0";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-0N4nzGcmHrWkIFHEREtSBCTHPBE4UI8RmCuRsehX1YU=";
+    hash = "sha256-SSf9W+1yl7ExHsifbVM5IN4OfZvMdz62xMfdb++38II=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -58,9 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     glslang # for glslangValidator
     python3
   ];
-
-  nativeCheckInputs = [ gtest ];
-  checkInputs = [ gtest ];
 
   buildInputs = [
     curl
@@ -98,10 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
 
-  doCheck = true;
-  checkTarget = "run_tests";
-
-  __darwinAllowLocalNetworking = true; # for tests
+  # Since we are not building the server executable, the `run_tests` Makefile target
+  # will not be generated.
+  #
+  # See https://github.com/sjrc6/TaterClient-ddnet/blob/V10.4.0/CMakeLists.txt#L3088
+  doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "sphinxcontrib-serializinghtml is a sphinx extension which outputs \"serialized\" HTML files (json and pickle)";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-serializinghtml";
     license = licenses.bsd2;
-    maintainers = teams.sphinx.members;
+    teams = [ teams.sphinx ];
   };
 }

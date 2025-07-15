@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.9.0";
+  version = "4.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cloudtools";
-    repo = pname;
+    repo = "troposphere";
     tag = version;
-    hash = "sha256-1Qq1vV3DsslnwJq0d0MZ9bCadYD08gxLsM3tQmti4Pw=";
+    hash = "sha256-AC54tUJZ0aV16p06Fabss60AC/BF3QBeOQPvnbuyRqQ=";
   };
 
   propagatedBuildInputs = [ cfn-flip ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to create AWS CloudFormation descriptions";
     homepage = "https://github.com/cloudtools/troposphere";
-    changelog = "https://github.com/cloudtools/troposphere/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/cloudtools/troposphere/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jlesquembre ];
   };

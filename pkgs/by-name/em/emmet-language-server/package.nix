@@ -20,6 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-hh5PEtmSHPs6QBgwWHS0laGU21e82JckIP3mB/P9/vE=";
   };
 
@@ -52,8 +53,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/emmet-language-server}
     mv {node_modules,dist} $out/lib/emmet-language-server
+
+    chmod +x $out/lib/emmet-language-server/dist/index.js
+    patchShebangs $out/lib/emmet-language-server/dist/index.js
     ln -s $out/lib/emmet-language-server/dist/index.js $out/bin/emmet-language-server
-    chmod +x $out/bin/emmet-language-server
 
     runHook postInstall
   '';

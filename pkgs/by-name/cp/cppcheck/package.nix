@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -117,10 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      joachifm
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ joachifm ];
     platforms = lib.platforms.unix;
   };
 })

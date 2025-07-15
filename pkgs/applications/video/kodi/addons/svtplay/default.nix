@@ -26,7 +26,7 @@ buildKodiAddon rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
 
     broken = true; # no release for kodi 21
   };

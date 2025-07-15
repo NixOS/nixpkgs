@@ -6,25 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svdtools";
-  version = "0.4.5";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-XwgDjSn19qbmh/yX4h5vG0C4rTRxd9tT1ZzUm1Y1ckg=";
+    hash = "sha256-2GemBVTRvYC5bvlYgJKmDJM78ZoE63B1QwV8cfSHYPg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-h99NTKW1Re680GNsmKTW35OpJVlfYFj05QVZ9rHXgYY=";
+  cargoHash = "sha256-sn+Z3/p4Ek/wxwTj6uwDBFP1hFNGDb2EZ7MO0zvPjPk=";
 
-  meta = with lib; {
+  meta = {
     description = "Tools to handle vendor-supplied, often buggy SVD files";
     mainProgram = "svdtools";
     homepage = "https://github.com/stm32-rs/svdtools";
     changelog = "https://github.com/stm32-rs/svdtools/blob/v${version}/CHANGELOG-rust.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

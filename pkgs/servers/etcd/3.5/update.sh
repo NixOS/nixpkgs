@@ -1,25 +1,33 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq nix-prefetch
+#!nix-shell -i bash -p curl gnugrep gnused jq nurl
 
 set -x -eu -o pipefail
 
+MAJOR_VERSION=3
+MINOR_VERSION=5
+
 ETCD_PATH="$(dirname "$0")"
-ETCD_VERSION_MAJOR_MINOR="$(basename $ETCD_PATH)"
-ETCD_PKG_NAME=etcd_$(echo $ETCD_VERSION_MAJOR_MINOR | sed 's/[.]/_/g')
+ETCD_VERSION_MAJOR_MINOR=${MAJOR_VERSION}.${MINOR_VERSION}
+ETCD_PKG_NAME=etcd_${MAJOR_VERSION}_${MINOR_VERSION}
 NIXPKGS_PATH="$(git rev-parse --show-toplevel)"
+
+LATEST_TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} \
+    --silent https://api.github.com/repos/etcd-io/etcd/releases \
+    | jq -r 'map(select(.prerelease == false))' \
+    | jq -r 'map(.tag_name)' \
+    | grep "v${ETCD_VERSION_MAJOR_MINOR}." \
+    | sed 's|[", ]||g' \
+    | sort -rV | head -n1 )
+
+LATEST_VERSION=$(echo ${LATEST_TAG} | sed 's/^v//')
 
 OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_PATH {}; \
     $ETCD_PKG_NAME.version or (builtins.parseDrvName $ETCD_PKG_NAME.name).version" | tr -d '"')"
 
-LATEST_TAG=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --silent https://api.github.com/repos/etcd-io/etcd/releases \
-    | jq -r 'map(.tag_name)' | grep $ETCD_VERSION_MAJOR_MINOR | sed 's|[", ]||g' | sort -rV | head -n1)
-
-LATEST_VERSION=$(echo ${LATEST_TAG} | sed 's/^v//')
-
 if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     echo "Attempting to update etcd from $OLD_VERSION to $LATEST_VERSION"
     ETCD_SRC_HASH=$(nix-prefetch-url --quiet --unpack https://github.com/etcd-io/etcd/archive/refs/tags/${LATEST_TAG}.tar.gz)
-    ETCD_SRC_HASH=$(nix hash to-sri --type sha256 $ETCD_SRC_HASH)
+    ETCD_SRC_HASH=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $ETCD_SRC_HASH)
 
     setKV () {
         sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "$ETCD_PATH/default.nix"
@@ -37,8 +45,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
         setKV $PKG_KEY $EMPTY_HASH
 
         set +e
-        VENDOR_HASH=$(nix-prefetch -I nixpkgs=$NIXPKGS_PATH "{ sha256 }: \
-            (import $NIXPKGS_PATH/. {}).$ETCD_PKG_NAME.passthru.$INNER_PKG.goModules.overrideAttrs (_: { vendorHash = sha256; })")
+        VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_PATH}/. {}).$ETCD_PKG_NAME.passthru.$INNER_PKG.goModules")
         set -e
 
         if [ -n "${VENDOR_HASH:-}" ]; then
@@ -59,7 +66,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
         git add "$ETCD_PATH"/default.nix
         git commit -m "$ETCD_PKG_NAME: $OLD_VERSION -> $LATEST_VERSION
 
-Release: https://github.com/etcd-io/etcd/releases/tag/v$LATEST_VERSION"
+Release: https://github.com/etcd-io/etcd/releases/tag/$LATEST_TAG"
     fi
 
 else

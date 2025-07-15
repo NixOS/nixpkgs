@@ -20,7 +20,7 @@ py.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "healthchecks";
-    repo = pname;
+    repo = "healthchecks";
     tag = "v${version}";
     sha256 = "sha256-78Ku7yYhgIZ+uIMPKkExIXUOKmfiRMjEiBm2SugyD+s=";
   };

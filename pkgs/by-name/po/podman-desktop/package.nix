@@ -1,35 +1,67 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, copyDesktopItems
-, electron_34
-, nodejs
-, pnpm_9
-, makeDesktopItem
-, darwin
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  copyDesktopItems,
+  electron_37,
+  nodejs,
+  pnpm_10,
+  makeDesktopItem,
+  darwin,
+  nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
+  gnugrep,
 }:
 
 let
-  electron = electron_34;
+  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.17.1";
+  version = "1.20.1";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "podman-desktop-dependencies-updater";
+      runtimeInputs = [
+        nix
+        jq
+        gnugrep
+      ];
+      runtimeEnv = {
+        PNAME = "podman-desktop";
+        PKG_FILE = builtins.toString ./package.nix;
+      };
+      text = ''
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+        sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
+      '';
+    }))
+    (nix-update-script {
+      # Changing the pnpm version requires updating `pnpmDeps.hash`.
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7lqBS5iasLGsF3+2fZ19ksCOK3VvNFuBMdZs94vP3PI=";
+    hash = "sha256-diqlooa4SsFtmzl3A25PEaV0ALnghoj7htBGRgXn6As=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BLzNETlvLqXAzPhTXOIQmwHhXudMxoNQ8WOlpsaKo6I=";
+    fetcherVersion = 1;
+    hash = "sha256-8lNmCLfuAkXK1Du4iYYasRTozZf0HoAttf8Dfc6Jglw=";
   };
 
   patches = [
@@ -39,19 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # Don't attempt to sign the darwin app bundle.
-  # It's impure and may fail in some restricted environments.
-  CSC_IDENTITY_AUTO_DISCOVERY = lib.optionals stdenv.hostPlatform.isDarwin "false";
-
-  nativeBuildInputs = [
-    nodejs
-    pnpm_9.configHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    [
+      nodejs
+      pnpm_10.configHook
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      copyDesktopItems
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.autoSignDarwinBinariesHook
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -60,35 +91,43 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     pnpm build
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
     ./node_modules/.bin/electron-builder \
       --dir \
       --config .electron-builder.config.cjs \
+      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv dist/mac*/Podman\ Desktop.app $out/Applications
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mkdir -p "$out/share/lib/podman-desktop"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv dist/mac*/Podman\ Desktop.app $out/Applications
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir -p "$out/share/lib/podman-desktop"
+      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
-    install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
+      install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
-      --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --inherit-argv0
-  '' + ''
+      makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+        --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --inherit-argv0
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
@@ -105,11 +144,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A graphical tool for developing on containers and Kubernetes";
+    description = "Graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ booxter panda2134 ];
+    maintainers = with lib.maintainers; [
+      booxter
+      panda2134
+    ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";
   };

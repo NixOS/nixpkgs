@@ -1,14 +1,21 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, nix-update-script, go }:
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  go,
+}:
 
 buildGoModule rec {
   pname = "jx";
-  version = "3.11.66";
+  version = "3.11.97";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-Ejm5Y1xyh9/d79PYYMeKQVtAhT9knFCVcwNAWoBk840=";
+    sha256 = "sha256-UhtYX6InyCIP83+cVTjUImqm7oFuL4vU9wVlEM11fZw=";
   };
 
   vendorHash = "sha256-8I4yTzLAL7E0ozHcBZDNsJLHkTh+SjT0SjDSECGRYIc=";
@@ -32,7 +39,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
@@ -43,8 +50,8 @@ buildGoModule rec {
       Environments on Pull Requests using using Cloud Native pipelines
       from Tekton.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -28,19 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.6";
+  version = "1.12.8";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-1ztA95PiCGL1oD6zVfsEhwrwGNID13/NcyZDD3eHYv0=";
+    hash = "sha256-ktfTqCid/0aYAp5HPB7niZ1sw+zMNmd5mhZrXRbMGyk=";
   };
-
-  patches = [
-    # Without this patch, the build fails to find `GOOGLE_PROTOBUF_VERIFY_VERSION`
-    # The patch has been included upstream, it need to be removed in the next release.
-    ./add-missing-include.patch
-  ];
 
   outputs = [
     "out"

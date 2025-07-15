@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mousepad";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "mousepad";
     tag = "mousepad-${finalAttrs.version}";
-    hash = "sha256-6ddPma6B4hNgtILavJFz/wtSzLViABkluZ5BTXpbcEE=";
+    hash = "sha256-5ywpQY4KUnjFCLSAXQo3huzZf94YHK9SLmkkNtfx4Ho=";
   };
 
   strictDeps = true;
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.xfce.org/apps/mousepad";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mousepad";
-    maintainers = lib.teams.xfce.members;
+    teams = [ lib.teams.xfce ];
     platforms = lib.platforms.linux;
   };
 })

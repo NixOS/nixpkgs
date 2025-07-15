@@ -99,10 +99,18 @@ let
   isGeneric =
     (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
     || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV;
 
   target =
-    if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+    if
+      (
+        stdenv.hostPlatform.isBSD
+        || stdenv.hostPlatform != stdenv.buildPlatform
+        # https://issues.chromium.org/issues/359039635
+        || stdenv.hostPlatform.isLoongArch64
+      )
+    then
       (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
     else
       null;
@@ -123,13 +131,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.15.0";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "webmproject";
-    repo = pname;
+    repo = "libvpx";
     rev = "v${version}";
-    hash = "sha256-ewkx1okhpa05jn4DyN8pkl6UJoz4Ymw4jRe6GN1lWuA=";
+    hash = "sha256-1F5Zlue2DY1yJXwfDfGeh3KcFTQVo9voHcGkgItKgh0=";
   };
 
   postPatch = ''
@@ -250,12 +258,12 @@ stdenv.mkDerivation rec {
     ffmpeg = ffmpeg.override { withVpx = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "WebM VP8/VP9 codec SDK";
     homepage = "https://www.webmproject.org/";
     changelog = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
   };
 }

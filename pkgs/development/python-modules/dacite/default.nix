@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "dacite";
-  version = "1.8.1";
+  version = "1.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "konradhalas";
-    repo = pname;
+    repo = "dacite";
     tag = "v${version}";
-    hash = "sha256-lvObQ+jyBH2s4GOwyDXEAYmG7ZGQN9WDqL8ftNItPCQ=";
+    hash = "sha256-mAPqWvBpkTbtzHpwtCSDXMNkoc8/hbRH3OIEeK2yStU=";
   };
 
   postPatch = ''

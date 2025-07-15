@@ -6,7 +6,6 @@
   httpx,
   libiconv,
   nettle,
-  PCSC,
   pcsclite,
   pkg-config,
   pytestCheckHook,
@@ -30,8 +29,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-V1z16GKaSQVjp+stWir7kAO2wsnOYPdhKi4KzIKmKx8=";
   };
 
@@ -53,7 +51,6 @@ buildPythonPackage rec {
     [ nettle ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
       libiconv
     ];
 

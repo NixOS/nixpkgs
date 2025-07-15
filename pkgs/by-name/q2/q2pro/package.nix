@@ -11,8 +11,10 @@
   curl,
   SDL2,
   openalSoft,
+  libGL,
   libogg,
   libvorbis,
+  libX11,
   libXi,
   wayland,
   wayland-protocols,
@@ -28,20 +30,20 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "q2pro";
-  version = "0-unstable-2025-03-20";
+  version = "0-unstable-2025-05-03";
 
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    rev = "ef4001c596344aea179fc673a07de53fc0ab6a9d";
-    hash = "sha256-PTNxh7UGKT1GZk8Rbub2l6EBLBy+n46AiS4BAyDALX8=";
+    rev = "aba81ef8bc277e9a4e11733a449a29d07ea28c7a";
+    hash = "sha256-5iUvHmqhB8X9ylTMS1va4qTnPCRPI4yOg2L0Qp2d9hE=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "3724"; # git rev-list --count ${src.rev}
-  SOURCE_DATE_EPOCH = "1742479264"; # git show -s --format=%ct ${src.rev}
+  revCount = "3817"; # git rev-list --count ${src.rev}
+  SOURCE_DATE_EPOCH = "1746223027"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs =
     [
@@ -61,8 +63,10 @@ stdenv.mkDerivation (finalAttrs: rec {
       libjpeg
       curl
       SDL2
+      libGL
       libogg
       libvorbis
+      libX11
       ffmpeg
       openalSoft
     ]
@@ -86,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.mesonEnable "windows-crash-dumps" false)
   ];
 
-  internalVersion = "r${revCount}~${builtins.substring 0 8 src.rev}";
+  internalVersion = "r${finalAttrs.revCount}~${builtins.substring 0 8 finalAttrs.src.rev}";
   postPatch = ''
-    echo '${internalVersion}' > VERSION
+    echo '${finalAttrs.internalVersion}' > VERSION
   '';
 
   postInstall =
@@ -101,13 +105,13 @@ stdenv.mkDerivation (finalAttrs: rec {
       makeWrapper $out/bin/q2pro-unwrapped $out/bin/q2pro \
         --prefix ${ldLibraryPathEnvName} : "${lib.makeLibraryPath finalAttrs.buildInputs}"
 
-      install -D ${src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
+      install -D ${finalAttrs.src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   preVersionCheck = ''
-    export version='${internalVersion}'
+    export version='${finalAttrs.internalVersion}'
   '';
   doInstallCheck = true;
 

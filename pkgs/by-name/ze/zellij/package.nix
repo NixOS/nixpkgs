@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij";
-  version = "0.42.1";
+  version = "0.42.2";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EK+eQfNhfVxjIsoyj43tcRjHDT9O8/n7hUz24BC42nw=";
+    hash = "sha256-O7BZlPSBWy+q349NYCUsw4Rb5X3xyl5Ar+a/uQPQhZY=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0+cU2C6zjVv2G8h7oK0ztMDdukVR6QRzN81/SfLZapY=";
+  cargoHash = "sha256-Vo3bshaHjy2F2WFGgaIDEFFAh0e5VPp2G4fETgIH484=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -92,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       abbe
       pyrox0
       matthiasbeyer
+      ryan4yin
     ];
     mainProgram = "zellij";
   };

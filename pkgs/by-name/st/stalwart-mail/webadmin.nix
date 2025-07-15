@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "webadmin";
-  version = "0.1.24";
+  version = "0.1.28";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
     tag = "v${version}";
-    hash = "sha256-KtCSP7PP1LBTcP1LFdEmom/4G8or87oA6ml6MXOhATk=";
+    hash = "sha256-OgZ2qs84zVM2zNmBQSPnb9Uy4mahzNC81vbWM9wmrn4=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VXbFQLMtqypQlisirKhlfu9PYgmEryJx85GRqlRslNY=";
+  cargoHash = "sha256-rcgeSdCGIRvpz2xZPw0I753+D3zm9AYbtuUdMSp2I94=";
 
   postPatch = ''
     # Using local tailwindcss for compilation

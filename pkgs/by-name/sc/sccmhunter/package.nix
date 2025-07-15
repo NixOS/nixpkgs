@@ -1,25 +1,27 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  # Pinned to Python 3.12 because future-1.0.0 is not supported for Python 3.13:
+  # error: future-1.0.0 not supported for interpreter python3.13
+  python312Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "sccmhunter";
-  version = "1.0.8";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
-    rev = "v.1.0.8";
-    hash = "sha256-WCrC9YdiTx1qwsnylFK/6pjdwErimjcsJ0gSHegvkzo=";
+    rev = "v${version}";
+    hash = "sha256-h7P+ry4J26Hm1s9U37t1EDWBaYRL32WA3sk8caA1edg=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with python312Packages; [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     cmd2
     cryptography
     impacket

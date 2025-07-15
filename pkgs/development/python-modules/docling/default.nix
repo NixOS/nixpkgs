@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,6 +7,7 @@
   poetry-core,
 
   # dependencies
+  accelerate,
   beautifulsoup4,
   certifi,
   docling-core,
@@ -23,7 +23,7 @@
   openpyxl,
   pandas,
   pillow,
-  pyarrow,
+  pluggy,
   pydantic,
   pydantic-settings,
   pylatexenc,
@@ -35,6 +35,8 @@
   rtree,
   scipy,
   tesserocr,
+  tqdm,
+  transformers,
   typer,
 
   # optional dependencies
@@ -50,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.28.2";
+  version = "2.31.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-YCZhLrukuQ0Y/4h7v6CfD0oMAfcbioqfs5mU9ImtnNM=";
+    hash = "sha256-a2PZORT4Umf6AI3yEDDcUD0tm22Ahzm7Dwij/5ZUjNs=";
   };
 
   build-system = [
@@ -65,6 +67,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    accelerate
     beautifulsoup4
     certifi
     docling-core
@@ -80,7 +83,7 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pillow
-    pyarrow
+    pluggy
     pydantic
     pydantic-settings
     pylatexenc
@@ -92,6 +95,8 @@ buildPythonPackage rec {
     rtree
     scipy
     tesserocr
+    tqdm
+    transformers
     typer
   ];
 
@@ -162,25 +167,6 @@ buildPythonPackage rec {
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"
-  ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    "tests/test_backend_csv.py"
-    "tests/test_backend_html.py"
-    "tests/test_backend_jats.py"
-    "tests/test_backend_msexcel.py"
-    "tests/test_backend_msword.py"
-    "tests/test_backend_pptx.py"
-    "tests/test_cli.py"
-    "tests/test_code_formula.py"
-    "tests/test_document_picture_classifier.py"
-    "tests/test_e2e_conversion.py"
-    "tests/test_e2e_ocr_conversion.py"
-    "tests/test_interfaces.py"
-    "tests/test_invalid_input.py"
-    "tests/test_legacy_format_transform.py"
-    "tests/test_options.py"
   ];
 
   meta = {

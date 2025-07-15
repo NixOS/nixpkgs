@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.94";
+  version = "0.3.149";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-eCAnOoP5YQL/UCKex/lGiY28JswJTBmg+AIRrrDaAmc=";
+    hash = "sha256-9kzyQH5oJr8e0yYgTi7wBmnYRjyeiFffJccuPiAF5JQ=";
   };
 
-  vendorHash = "sha256-OokZuh6wzu7xWu//T87n0tbFC3L+MpEJWkSaFJJJUVI=";
+  vendorHash = "sha256-G+RT2teg1+AoLJRjYKnQtVcGH3sbtrxhklQfGMIod+0=";
 
   subPackages = [ "." ];
 
@@ -77,7 +77,6 @@ buildGoModule rec {
       jsierles
       techknowlogick
       RaghavSood
-      teutat3s
     ];
     mainProgram = "flyctl";
   };

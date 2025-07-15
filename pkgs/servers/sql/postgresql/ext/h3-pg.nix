@@ -11,13 +11,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "h3-pg";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "zachasme";
     repo = "h3-pg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2xp9gssPMTroLT/1Me0VWvtIPyouIk9MW0Rp13uYBEw=";
+    hash = "sha256-kTh0Y0C2pNB5Ul1rp77ets/5VeU1zw1WasGHkOaDMh8=";
   };
 
   postPatch =

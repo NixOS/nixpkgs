@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nrr";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "ryanccn";
     repo = "nrr";
     rev = "v${version}";
-    hash = "sha256-9QoYkYuN9kbcjgjn+7CuqKOKrVaPu8U2W/4KB+M04hg=";
+    hash = "sha256-RBKFDm6MpK2lDCUvbX0EFEuOASKtHM+5QknWM0A6AKE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ZAGR7Slpt3uUWO7g4GFr7tn8/fYeAxPYZivKAhLkar4=";
+  cargoHash = "sha256-DiapeSFfsmox+Utx9uW/8/veEQcnWmoaETLNyffpv64=";
 
   env = lib.optionalAttrs enableLTO {
     CARGO_PROFILE_RELEASE_LTO = "fat";

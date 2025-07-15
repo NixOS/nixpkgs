@@ -12,7 +12,6 @@
   withNcurses ? (!withEmscripten),
   ncurses,
   static ? withEmscripten,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional withEmscripten emscripten
     ++ lib.optional withCurl curl
-    ++ lib.optional withNcurses ncurses
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional withNcurses ncurses;
 
   postPatch =
     ''
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://imtui.ggerganov.com";
     changelog = "https://github.com/ggerganov/imtui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

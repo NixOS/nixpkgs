@@ -35,11 +35,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"
@@ -95,10 +94,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${version}/NEWS";
-    license = licenses.mit;
-    maintainers = [ maintainers.c0bw3b ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.c0bw3b ];
     mainProgram = "psl";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libpsl" ];
   };
 }

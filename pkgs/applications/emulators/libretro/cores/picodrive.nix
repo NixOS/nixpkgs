@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "picodrive";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2025-05-31";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "picodrive";
-    rev = "752c266491ae8775dab9a98dbd94472f42b9b16f";
-    hash = "sha256-l9qYOUyQzyleWeQv74rEOEwOk6iyH43WVIUHcC6Aw2Y=";
+    rev = "975cdafb613e84e305f87b43e70d1e19df7e60e0";
+    hash = "sha256-hRM3DtaTVz35QEkUrPoNXHdS7TgazWIFKU1e+jjfigg=";
     fetchSubmodules = true;
   };
 

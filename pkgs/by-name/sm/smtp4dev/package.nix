@@ -8,19 +8,19 @@
   fetchNpmDeps,
   dotnetCorePackages,
 }:
-let
-  version = "3.6.1";
+
+buildDotnetModule (finalAttrs: {
+  pname = "smtp4dev";
+  version = "3.8.6";
+
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
-    tag = version;
-    hash = "sha256-T6ci7+xbzpOrNr8hpDCwk5qe01L2Ho5V1oM7Hhd8bgg=";
+    tag = finalAttrs.version;
+    hash = "sha256-k4nerh4cVVcFQF7a4Wvcfhefa3SstEOASk+0soN0n9k=";
   };
-  npmRoot = "Rnwood.Smtp4dev/ClientApp";
-in
-buildDotnetModule {
-  inherit version src npmRoot;
-  pname = "smtp4dev";
+
+  patches = [ ./smtp4dev-npm-packages.patch ];
 
   nativeBuildInputs = [
     nodejs
@@ -29,9 +29,12 @@ buildDotnetModule {
     stdenv.cc # c compiler is needed for compiling npm-deps
   ];
 
+  npmRoot = "Rnwood.Smtp4dev/ClientApp";
+
   npmDeps = fetchNpmDeps {
-    src = "${src}/${npmRoot}";
-    hash = "sha256-/Z6sBxA2ReHlEbz0zJjlpn6IwzHDQiXN5ixEV1/iCJI=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-Uj0EnnsA+QHq5KHF2B93OG8rwxYrV6sEgMTbd43ttCA=";
+    postPatch = "cd ${finalAttrs.npmRoot}";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -44,6 +47,8 @@ buildDotnetModule {
     mv $out/bin/Rnwood.Smtp4dev $out/bin/smtp4dev
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Fake smtp email server for development and testing";
     homepage = "https://github.com/rnwood/smtp4dev";
@@ -52,7 +57,8 @@ buildDotnetModule {
     maintainers = with lib.maintainers; [
       rucadi
       jchw
+      defelo
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

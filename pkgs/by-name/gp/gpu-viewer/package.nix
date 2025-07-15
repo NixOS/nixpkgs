@@ -29,14 +29,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.12";
+  version = "3.15";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
     repo = "gpu-viewer";
     tag = "v${version}";
-    hash = "sha256-wVgAAKqlf5mtj2u+DsRPvYeVta7wAr+eCXVM1c/l6bo=";
+    hash = "sha256-fZsieETJqLbqq3UWtxRtOk5DpxHaTZfYeOLsBTlUtuo=";
   };
 
   nativeBuildInputs = [

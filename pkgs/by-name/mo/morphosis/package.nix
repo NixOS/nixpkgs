@@ -20,15 +20,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "morphosis";
-  version = "1.4.1";
+  version = "48.2";
   pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "morphosis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZpxenBqC5qr7yNwjld0u7gSBQfL7Kpa4FWE9gkzG0hg=";
+    tag = version;
+    hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
   };
 
   strictDeps = true;

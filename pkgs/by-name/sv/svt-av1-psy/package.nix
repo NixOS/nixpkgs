@@ -6,18 +6,19 @@
   nasm,
   cpuinfo,
   libdovi,
+  hdr10plus,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1-psy";
-  version = "2.3.0-B-unstable-2025-02-02";
+  version = "3.0.2-unstable-2025-04-21";
 
   src = fetchFromGitHub {
     owner = "psy-ex";
     repo = "svt-av1-psy";
-    rev = "ec65071b65ee70078229182ce6e1d0f6a4aa1a47";
-    hash = "sha256-98u7J9tqrnc+MbryjWO2r9iuAy6QjJbbq0/o4xRLzhI=";
+    rev = "3745419c40267d294202b52f48f069aff56cdb78";
+    hash = "sha256-iAw2FiEsBGB4giWqzo1EJZok26WSlq7brq9kJubnkAQ=";
   };
 
   cmakeBuildType = "Release";
@@ -31,21 +32,26 @@ stdenv.mkDerivation (finalAttrs: {
         )
       )
       {
-        USE_EXTERNAL_CPUINFO = true;
         LIBDOVI_FOUND = true;
-        # enable when libhdr10plus is available
-        # LIBHDR10PLUS_RS_FOUND = true;
+        LIBHDR10PLUS_RS_FOUND = true;
       };
 
-  nativeBuildInputs = [
-    cmake
-    nasm
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      nasm
+    ];
 
-  buildInputs = [
-    cpuinfo
-    libdovi
-  ];
+  buildInputs =
+    [
+      libdovi
+      hdr10plus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      cpuinfo
+    ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "master";
@@ -68,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ johnrtitor ];
+    mainProgram = "SvtAv1EncApp";
   };
 })

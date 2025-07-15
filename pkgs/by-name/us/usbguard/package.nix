@@ -16,18 +16,21 @@
   libqb,
   libseccomp,
   polkit,
-  protobuf,
+  protobuf_29,
   audit,
   libsodium,
 }:
 
+let
+  protobuf = protobuf_29;
+in
 stdenv.mkDerivation rec {
   version = "1.1.3";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
-    repo = pname;
+    repo = "usbguard";
     rev = "usbguard-${version}";
     hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
     fetchSubmodules = true;

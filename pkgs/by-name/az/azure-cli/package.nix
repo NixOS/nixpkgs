@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.70.0";
+  version = "2.75.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
-    rev = "azure-cli-${version}";
-    hash = "sha256-vvX/LkG8qA53AxVlvq7FSTqbVblvE5xbDq4V0SINCAk=";
+    tag = "azure-cli-${version}";
+    hash = "sha256-u6umAqRUfiACt23mxTtfosLdxKSPvDVJMkVjPCtxr24=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -142,6 +142,7 @@ py.pkgs.toPythonApplication (
   py.pkgs.buildAzureCliPackage rec {
     pname = "azure-cli";
     inherit version src;
+    format = "setuptools";
 
     sourceRoot = "${src.name}/src/azure-cli";
 
@@ -168,6 +169,7 @@ py.pkgs.toPythonApplication (
         azure-keyvault-certificates
         azure-keyvault-keys
         azure-keyvault-secrets
+        azure-keyvault-securitydomain
         azure-mgmt-advisor
         azure-mgmt-apimanagement
         azure-mgmt-appconfiguration
@@ -473,7 +475,8 @@ py.pkgs.toPythonApplication (
       sourceProvenance = [ lib.sourceTypes.fromSource ];
       license = lib.licenses.mit;
       mainProgram = "az";
-      maintainers = with lib.maintainers; [ katexochen ] ++ lib.teams.stridtech.members;
+      maintainers = with lib.maintainers; [ katexochen ];
+      teams = [ lib.teams.stridtech ];
       platforms = lib.platforms.all;
     };
   }

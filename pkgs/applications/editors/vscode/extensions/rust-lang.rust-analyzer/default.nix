@@ -10,8 +10,6 @@
   esbuild,
   pkg-config,
   libsecret,
-  stdenv,
-  darwin,
   setDefaultServerPath ? true,
 }:
 
@@ -39,18 +37,13 @@ let
     buildInputs = [
       pkgsBuildBuild.libsecret
     ];
-    nativeBuildInputs =
-      [
-        jq
-        moreutils
-        esbuild
-        # Required by `keytar`, which is a dependency of `vsce`.
-        pkg-config
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.Security
-      ];
+    nativeBuildInputs = [
+      jq
+      moreutils
+      esbuild
+      # Required by `keytar`, which is a dependency of `vsce`.
+      pkg-config
+    ];
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     installPhase = ''

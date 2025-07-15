@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://commons.apache.org/proper/commons-math/";
     description = "Library of lightweight, self-contained mathematics and statistics components";
-    maintainers = with lib.maintainers; [ copumpkin ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;

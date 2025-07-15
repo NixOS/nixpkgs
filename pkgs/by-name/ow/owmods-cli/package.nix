@@ -12,7 +12,6 @@
   mono,
   wrapWithMono ? true,
   openssl,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,10 +40,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   env = {
@@ -66,14 +61,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";
     homepage = "https://github.com/ow-mods/ow-mod-man/tree/main/owmods_cli";
     downloadPage = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     changelog = "https://github.com/ow-mods/ow-mod-man/releases/tag/cli_v${version}";
     mainProgram = "owmods";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       bwc9876
       spoonbaker
       locochoco

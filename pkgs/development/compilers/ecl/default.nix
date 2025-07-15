@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "https://common-lisp.net/project/ecl/";
     license = licenses.mit;
     mainProgram = "ecl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };

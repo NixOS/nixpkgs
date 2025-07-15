@@ -90,7 +90,7 @@ in
           }
         '';
         example.require-ipfs.paths = [ "/ipfs" ];
-        example.require-ipfs.onFeatures = [ "ifps" ];
+        example.require-ipfs.onFeatures = [ "ipfs" ];
       };
     extraWrapperArgs = lib.mkOption {
       type = with lib.types; listOf str;

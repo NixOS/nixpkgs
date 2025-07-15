@@ -16,14 +16,15 @@
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
+  libxml2,
 }:
 stdenv.mkDerivation rec {
   pname = "binaryninja-free";
-  version = "4.2.6455";
+  version = "5.0.7486";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20241209150225/https://cdn.binary.ninja/installers/binaryninja_free_linux.zip";
-    hash = "sha256-NOVuLmko8iYcJ/0fr0DNw7xPEC8EhT/SzcFWtNmjlYI=";
+    url = "https://web.archive.org/web/20250526111956/https://cdn.binary.ninja/installers/binaryninja_free_linux.zip";
+    hash = "sha256-iZjIgokwnHJaY6OgrnDcto3Un5g42MqTWXKo6OL1Rcs=";
   };
 
   icon = fetchurl {
@@ -66,6 +67,12 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
+  preFixup = ''
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/
@@ -80,6 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    changelog = "https://binary.ninja/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
     description = "Interactive decompiler, disassembler, debugger";
     homepage = "https://binary.ninja/";
     license = {

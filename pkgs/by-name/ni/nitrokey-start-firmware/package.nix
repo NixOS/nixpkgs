@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gcc-arm-embedded,
+  gcc-arm-embedded-13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-certdo"
   ];
 
-  nativeBuildInputs = [ gcc-arm-embedded ];
+  nativeBuildInputs = [ gcc-arm-embedded-13 ];
 
   enableParallelBuilding = true;
 

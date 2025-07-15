@@ -60,9 +60,8 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   # Upstream did not adapt to pytest 8 yet.
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn8Warning"
   ];
 
   passthru = {
@@ -73,12 +72,12 @@ localPython.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://aws-encryption-sdk-cli.readthedocs.io/";
     changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${version}/CHANGELOG.rst";
     description = "CLI wrapper around aws-encryption-sdk-python";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "aws-encryption-cli";
-    maintainers = with maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

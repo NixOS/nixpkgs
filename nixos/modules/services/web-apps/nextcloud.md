@@ -56,6 +56,37 @@ it's needed to add them to
 Auto updates for Nextcloud apps can be enabled using
 [`services.nextcloud.autoUpdateApps`](#opt-services.nextcloud.autoUpdateApps.enable).
 
+## `nextcloud-occ` {#module-services-nextcloud-occ}
+
+The management command [`occ`](https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html) can be
+invoked by using the `nextcloud-occ` wrapper that's globally available on a system with Nextcloud enabled.
+
+It requires elevated permissions to become the `nextcloud` user. Given the way the privilege
+escalation is implemented, parameters passed via the environment to Nextcloud (e.g. `OC_PASS`) are
+currently ignored.
+
+Custom service units that need to run `nextcloud-occ` either need elevated privileges
+or the systemd configuration from `nextcloud-setup.service` (recommended):
+
+```nix
+{ config, ... }: {
+  systemd.services.my-custom-service = {
+    script = ''
+      nextcloud-occ …
+    '';
+    serviceConfig = {
+      inherit (config.systemd.services.nextcloud-cron.serviceConfig)
+        User
+        LoadCredential
+        KillMode;
+    };
+  };
+}
+```
+
+Please note that the options required are subject to change. Please make sure to read the
+release notes when upgrading.
+
 ## Common problems {#module-services-nextcloud-pitfalls-during-upgrade}
 
   - **General notes.**
@@ -180,6 +211,16 @@ Auto updates for Nextcloud apps can be enabled using
     services.nextcloud.phpOptions."realpath_cache_size" = "0";
     ```
 
+  - **Empty Files on chunked uploads**
+
+    Due to a limitation of PHP-FPM, Nextcloud is unable to handle chunked
+    uploads. See upstream issue
+    [nextcloud/server#7995](https://github.com/nextcloud/server/issues/7995)
+    for details.
+
+    A workaround is to disable chunked uploads with
+    {option}`nextcloud.nginx.enableFastcgiRequestBuffering`.
+
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
 By default, `nginx` is used as reverse-proxy for `nextcloud`.
@@ -241,7 +282,20 @@ This can be configured with the [](#opt-services.nextcloud.phpExtraExtensions) s
 
 Alternatively, extra apps can also be declared with the [](#opt-services.nextcloud.extraApps) setting.
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
-that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
+that are managed by Nix:
+
+```nix
+{ config, pkgs, ... }: {
+  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; [
+    inherit user_oidc calendar contacts;
+  ];
+}
+```
+
+Keep in mind that this is essentially a mirror of the apps from the appstore, but managed in
+nixpkgs. This is by no means a curated list of apps that receive special testing on each update.
+
+If you want automatic updates it is recommended that you use web interface to install apps.
 
 ## Known warnings {#module-services-nextcloud-known-warnings}
 

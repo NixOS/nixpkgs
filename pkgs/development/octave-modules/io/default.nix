@@ -9,11 +9,11 @@
 
 buildOctavePackage rec {
   pname = "io";
-  version = "2.6.4";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-p0pAC70ZIn9sB8WFiS3oec165S2CDaH2nxo+PolFL1o=";
+    sha256 = "sha256-SqSEaLNpeTS/jIVOJ9uriCdgXp3U/jflaDQmXmEwum8=";
   };
 
   buildInputs = [
@@ -24,13 +24,13 @@ buildOctavePackage rec {
     unzip
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/io/index.html";
-    license = with licenses; [
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/io/";
+    license = with lib.licenses; [
       gpl3Plus
       bsd2
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Input/Output in external formats";
   };
 }

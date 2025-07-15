@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     description = "Next-generation RTS that takes the genre to a planetary scale";
     license = lib.licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

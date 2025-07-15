@@ -45,7 +45,6 @@ postgresqlBuildExtension (finalAttrs: {
       SELECT * FROM finish();
       ROLLBACK;
     '';
-    failureHook = "postgresqlStop";
     checkPhase = ''
       runHook preCheck
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
@@ -62,7 +61,7 @@ postgresqlBuildExtension (finalAttrs: {
       as well as the ability to integrate with other TAP-emitting test frameworks.
       It can also be used in the xUnit testing style.
     '';
-    maintainers = with lib.maintainers; [ willibutz ];
+    maintainers = [ ];
     homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
     license = lib.licenses.mit;

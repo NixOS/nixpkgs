@@ -13,6 +13,7 @@
   libpng,
   SDL2,
   libGL,
+  libX11,
   openal,
   zlib,
 }:
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
     libjpeg
     SDL2
     libGL
+    libX11
     openal
     zlib
     libpng
@@ -85,7 +87,6 @@ stdenv.mkDerivation {
     homepage = "http://www.warsow.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
-      astsmtl
       abbradar
     ];
     platforms = platforms.linux;

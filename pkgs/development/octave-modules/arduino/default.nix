@@ -23,11 +23,11 @@ buildOctavePackage rec {
     arduino-core-unwrapped
   ];
 
-  meta = with lib; {
+  meta = {
     name = "Octave Arduino Toolkit";
-    homepage = "https://octave.sourceforge.io/arduino/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+    homepage = "https://gnu-octave.github.io/packages/arduino/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Basic Octave implementation of the matlab arduino extension, allowing communication to a programmed arduino board to control its hardware";
   };
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
-    repo = pname;
+    repo = "qtawesome";
     tag = "v${version}";
     hash = "sha256-VjUlP+5QU9ApD09UNvF48b0gepCUpVO6U6zYaKm0KoE=";
   };

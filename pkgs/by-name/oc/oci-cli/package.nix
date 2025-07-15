@@ -25,19 +25,23 @@ in
 
 py.pkgs.buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.53.0";
-  format = "setuptools";
+  version = "3.62.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
-    repo = pname;
+    repo = "oci-cli";
     tag = "v${version}";
-    hash = "sha256-7PCKnYHUeuQ8/mtDFUoP8ay0dR1Gq3HxRG9Ws+uM39Q=";
+    hash = "sha256-Y1bkBdmgmaiHHizGJkBINXN/pL/DEcjIwFq8XjoK5Kc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  build-system = with py.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with py.pkgs; [
     arrow
     certifi
     click
@@ -55,6 +59,7 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "click"
     "PyYAML"
     "cryptography"
     "oci"

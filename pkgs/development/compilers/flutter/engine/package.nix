@@ -37,7 +37,6 @@
   pkg-config,
   ninja,
   python312,
-  python39,
   gitMinimal,
   version,
   flutterVersion,
@@ -58,7 +57,7 @@ let
 
   constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 
-  python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
+  python3 = python312;
 
   src = callPackage ./source.nix {
     inherit

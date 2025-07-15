@@ -8,7 +8,6 @@
   openssl,
   stdenv,
   curl,
-  darwin,
 }:
 
 {
@@ -28,7 +27,6 @@ rustPlatform.buildRustPackage {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   nativeCheckInputs = [ nodejs_latest ];

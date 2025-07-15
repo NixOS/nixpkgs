@@ -6,7 +6,7 @@
   copyDesktopItems,
   autoPatchelfHook,
 
-  # Upstream is officialy built with Electron 18
+  # Upstream is officially built with Electron 18
   # (but it works with latest Electron with minor changes, see HACK below)
   electron,
   asar,

@@ -7,9 +7,6 @@
   pkg-config,
   wrapQtAppsHook,
   SDL2,
-  CoreMedia,
-  VideoToolbox,
-  VideoDecodeAcceleration,
   boost,
   bullet,
   # Please unpin this on the next OpenMW release.
@@ -98,27 +95,21 @@ stdenv.mkDerivation rec {
   # If not set, OSG plugin .so files become shell scripts on Darwin.
   dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  buildInputs =
-    [
-      SDL2
-      boost
-      bullet'
-      ffmpeg_6
-      libXt
-      luajit
-      lz4
-      mygui
-      openal
-      osg'
-      recastnavigation
-      unshield
-      yaml-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreMedia
-      VideoDecodeAcceleration
-      VideoToolbox
-    ];
+  buildInputs = [
+    SDL2
+    boost
+    bullet'
+    ffmpeg_6
+    libXt
+    luajit
+    lz4
+    mygui
+    openal
+    osg'
+    recastnavigation
+    unshield
+    yaml-cpp
+  ];
 
   cmakeFlags =
     [

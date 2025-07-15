@@ -7,10 +7,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kube-hunter";
   version = "0.6.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "kube-hunter";
     tag = "v${version}";
     sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };

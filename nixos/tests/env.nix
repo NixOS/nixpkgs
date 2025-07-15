@@ -1,31 +1,34 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "environment";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ nequissimus ];
   };
 
-  nodes.machine = { pkgs, lib, ... }: lib.mkMerge [
-    {
-      boot.kernelPackages = pkgs.linuxPackages;
-      environment.etc.plainFile.text = ''
-        Hello World
-      '';
-      environment.etc."folder/with/file".text = ''
-        Foo Bar!
-      '';
+  nodes.machine =
+    { pkgs, lib, ... }:
+    lib.mkMerge [
+      {
+        boot.kernelPackages = pkgs.linuxPackages;
+        environment.etc.plainFile.text = ''
+          Hello World
+        '';
+        environment.etc."folder/with/file".text = ''
+          Foo Bar!
+        '';
 
-      environment.sessionVariables = {
-        TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
-        NIXCON = "awesome";
-        SHOULD_NOT_BE_SET = "oops";
-      };
-    }
-    {
-      environment.sessionVariables = {
-        SHOULD_NOT_BE_SET = lib.mkForce null;
-      };
-    }
-  ];
+        environment.sessionVariables = {
+          TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
+          NIXCON = "awesome";
+          SHOULD_NOT_BE_SET = "oops";
+        };
+      }
+      {
+        environment.sessionVariables = {
+          SHOULD_NOT_BE_SET = lib.mkForce null;
+        };
+      }
+    ];
 
   testScript = ''
     machine.succeed('[ -L "/etc/plainFile" ]')
@@ -41,4 +44,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert "awesome" in machine.succeed("echo ''${NIXCON}")
     machine.fail("printenv SHOULD_NOT_BE_SET")
   '';
-})
+}

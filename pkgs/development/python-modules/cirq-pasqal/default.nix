@@ -13,12 +13,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "requests~=2.18" "requests"
-  '';
-
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "requests"
+  ];
 
   dependencies = [
     cirq-core

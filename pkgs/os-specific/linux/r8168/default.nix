@@ -1,23 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
-  version = "8.053.00";
+  version = "8.055.00";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
   # [1] https://www.realtek.com/Download/List?cate_id=584
-  # I've verified manually (`diff -r`) that the source code for version 8.053.00
+  # I've verified manually (`diff -r`) that the source code for version 8.055.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "0bHGs8jyWd+ZiixOoNkBqhS9RjDpRp3vveAgk1YuOWU=";
+    sha256 = "sha256-qL64+jlF1biWaYc5Ga/fjz8ZY3u72bcKVtDpiozHb1g=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -54,6 +61,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ];
-    broken = lib.versionAtLeast kernel.modDirVersion "6.9";
+    broken = lib.versionAtLeast kernel.modDirVersion "6.13";
   };
 }

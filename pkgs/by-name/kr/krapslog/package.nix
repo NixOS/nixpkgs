@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "krapslog";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "acj";
     repo = "krapslog-rs";
     rev = version;
-    sha256 = "sha256-wRziLNMwLZBCn330FNC9x6loCCyuC+31Kh51ZI/j1Cc=";
+    sha256 = "sha256-c/Zh4fOsSKY0XopaklRbFEh4QM5jjUcj0zhAx5v9amI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Mv0wTuTWCsBGjlr4BhLezBOCtgQ0qq2kwLcZxU1nREM=";
+  cargoHash = "sha256-cXK7YZ9i/eKXTHPYnJcvcKyzFlZDnqmCBrEa75Mxfqc=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 

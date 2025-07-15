@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/geonames";
     changelog = "https://gitlab.com/ubports/development/core/geonames/-/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.all;
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1

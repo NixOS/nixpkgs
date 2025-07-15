@@ -21,12 +21,13 @@
   openpyxl,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.6.2";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,13 +36,8 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${version}";
-    hash = "sha256-Bs1pxiO5VX/lrd3M6sy+qPSR/K7fxMYNrU+GIXhNY2g=";
+    hash = "sha256-Ovrr1U7VuuGKDNSBSCyYSz3DNpaJrA57ccl4AFdzC5E=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=skrf" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -78,6 +74,7 @@ buildPythonPackage rec {
     openpyxl
     networkx
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   # test_calibration.py generates a divide by zero error on darwin

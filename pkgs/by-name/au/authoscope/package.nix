@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   installShellFiles,
   libcap,
@@ -31,15 +29,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libcap
-      zlib
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libcap
+    zlib
+    openssl
+  ];
 
   postInstall = ''
     installManPage docs/${pname}.1

@@ -23,7 +23,6 @@
   dht,
   libnatpmp,
   libiconv,
-  Foundation,
   # Build options
   enableGTK3 ? false,
   gtkmm3,
@@ -229,7 +228,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       mit
     ];
-    maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.unix;
   };
 })

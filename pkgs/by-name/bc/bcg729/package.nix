@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
       --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Opensource implementation of both encoder and decoder of the ITU G729 Annex A/B speech codec";
     homepage = "https://linphone.org/technical-corner/bcg729";
     changelog = "https://gitlab.linphone.org/BC/public/bcg729/raw/${version}/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ c0bw3b ];
+    platforms = lib.platforms.all;
   };
 }

@@ -6,17 +6,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";
-  version = "0.13.5";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
     rev = "srgn-v${version}";
-    hash = "sha256-S6Wc79LY6WKtjDw/Ob3v4ETRI8Zxjrx9BDNKn79M1j4=";
+    hash = "sha256-ZWjpkClhac4VD4b/Veffb5FHGvh+oeTu3ukaOux6MG0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4BravWJRtZxC34JjbH26HY7mDdDFPryQZC4e4jOZ1fQ=";
+  cargoHash = "sha256-d/wFD0kxWNOsYaY4G5P9iM85dSo0UZGSte5AqOosM2g=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A code surgeon for precise text and code transplantation";
+    description = "Code surgeon for precise text and code transplantation";
     license = licenses.mit;
-    maintainers = with maintainers; [ caralice ];
+    maintainers = with maintainers; [ magistau ];
     mainProgram = "srgn";
     homepage = "https://github.com/${src.owner}/${src.repo}/";
     downloadPage = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.rev}";

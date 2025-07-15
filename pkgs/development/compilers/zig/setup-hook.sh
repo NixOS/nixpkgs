@@ -16,7 +16,7 @@ function zigBuildPhase {
         zigBuildFlags zigBuildFlagsArray
 
     echoCmd 'zig build flags' "${flagsArray[@]}"
-    zig build "${flagsArray[@]}"
+    TERM=dumb zig build "${flagsArray[@]}" --verbose
 
     runHook postBuild
 }
@@ -29,7 +29,7 @@ function zigCheckPhase {
         zigCheckFlags zigCheckFlagsArray
 
     echoCmd 'zig check flags' "${flagsArray[@]}"
-    zig build test "${flagsArray[@]}"
+    TERM=dumb zig build test "${flagsArray[@]}" --verbose
 
     runHook postCheck
 }
@@ -48,7 +48,7 @@ function zigInstallPhase {
     fi
 
     echoCmd 'zig install flags' "${flagsArray[@]}"
-    zig build install "${flagsArray[@]}"
+    TERM=dumb zig build install "${flagsArray[@]}" --verbose
 
     runHook postInstall
 }

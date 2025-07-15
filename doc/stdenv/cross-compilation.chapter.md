@@ -15,7 +15,13 @@ Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs
 In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
 
 ```nix
-{ stdenv, fooDep, barDep, ... }: {
+{
+  stdenv,
+  fooDep,
+  barDep,
+  ...
+}:
+{
   # ...stdenv.buildPlatform...
 }
 ```
@@ -169,11 +175,13 @@ e.g.
 
 ```nix
 {
-  nativeBuildInputs = [
-    meson
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 }
 ```
 

@@ -17,9 +17,7 @@
   bison,
   autoconf,
   libiconv,
-  libobjc,
   libunwind,
-  Foundation,
   buildEnv,
   bundler,
   bundix,
@@ -121,9 +119,7 @@ let
           bundler,
           bundix,
           libiconv,
-          libobjc,
           libunwind,
-          Foundation,
           makeBinaryWrapper,
           buildRubyGem,
           defaultGemConfig,
@@ -185,9 +181,7 @@ let
             ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
             ++ ops stdenv.hostPlatform.isDarwin [
               libiconv
-              libobjc
               libunwind
-              Foundation
             ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
@@ -213,7 +207,7 @@ let
               # When using a baseruby, ruby always sets "libdir" to the build
               # directory, which nix rejects due to a reference in to /build/ in
               # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compliation.
+              # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
             ];
 
@@ -222,9 +216,7 @@ let
           cargoDeps =
             if yjitSupport then
               rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) src;
-                sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
-                allowGitDependencies = false;
+                inherit (finalAttrs) src cargoRoot;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -425,25 +417,25 @@ in
   mkRuby = generic;
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "6" "";
-    hash = "sha256-DQ2vuFnnZ2NDJXGjEJ0VN9l2JmvjCDRFZR3Gje7SXCI=";
+    version = rubyVersion "3" "1" "7" "";
+    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "6" "";
-    hash = "sha256-2ctl7N8/GGaWOfJji2M3ntb7sX2Trk5ybU6yv2ikg3A=";
+    version = rubyVersion "3" "2" "8" "";
+    hash = "sha256-d6zdjPu+H45XO15lNuA8UQPfmJ3AX6aMcPARgzw1YHU=";
     cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "6" "";
-    hash = "sha256-jcSP/68nD4bxAZBT8o5R5NpMzjKjZ2CgYDqa7mfX/Y0=";
+    version = rubyVersion "3" "3" "8" "";
+    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "2" "";
-    hash = "sha256-QTKKwh8r/dfeazVl708N11QzVNN+lvFXoVUqa9DrNks=";
+    version = rubyVersion "3" "4" "4" "";
+    hash = "sha256-oFl7/fMS4BDv0e/6qNfx14MxRv3BeVDKqBWP+j3L+oU=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 }

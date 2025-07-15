@@ -10,7 +10,7 @@
   libxslt,
   perl,
   perlPackages,
-  box2d,
+  box2d_2,
   gettext,
   zlib,
   libjpeg,
@@ -101,6 +101,7 @@
   libetonyek,
   liborcus,
   libpng,
+  libxcrypt,
   langs ? [
     "ar"
     "ca"
@@ -201,12 +202,14 @@ let
     optionalString
     ;
 
-  notoSubset = suffixes: runCommand "noto-fonts-subset" {} ''
-    mkdir -p "$out/share/fonts/noto/"
-    ${concatMapStrings (x: ''
-      cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
-    '') suffixes}
-  '';
+  notoSubset =
+    suffixes:
+    runCommand "noto-fonts-subset" { } ''
+      mkdir -p "$out/share/fonts/noto/"
+      ${concatMapStrings (x: ''
+        cp "${noto-fonts}/share/fonts/noto/NotoSans${x}["*.[ot]tf "$out/share/fonts/noto/"
+      '') suffixes}
+    '';
 
   fontsConf = makeFontsConf {
     fontDirectories = [
@@ -222,7 +225,7 @@ let
       libertine-g
       # Font priority issues in some tests in Still
       noto-fonts-lgc-plus
-      (if variant == "fresh" then noto-fonts else (notoSubset ["Arabic"]))
+      (if variant == "fresh" then noto-fonts else (notoSubset [ "Arabic" ]))
       noto-fonts-cjk-sans
     ];
   };
@@ -341,6 +344,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
       ./readd-explicit-zlib-link.patch
+
+      # Backport patch to fix build with Poppler 25.05
+      # FIXME: conditionalize/remove as upstream updates
+      (fetchpatch2 {
+        url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+        includes = [ "sdext/*" ];
+        hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+      })
     ]
     ++ lib.optionals (lib.versionOlder version "24.8") [
       (fetchpatch2 {
@@ -351,7 +362,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (variant == "collabora") [
       ./fix-unpack-collabora.patch
-      ./skip-broken-sentence-breaking-rules.patch
     ];
 
   postPatch = ''
@@ -369,16 +379,34 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    bison
-    fontforge
-    gdb
-    jdk21
-    libtool
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      ant
+      autoconf
+      automake
+      bison
+      flex
+      fontforge
+      gdb
+      gettext
+      gperf
+      icu
+      jdk21
+      libmysqlclient
+      libtool
+      libxml2
+      libxslt
+      perl
+      perlPackages.ArchiveZip
+      perlPackages.IOCompress
+      pkg-config
+      python311
+      unzip
+      zip
+    ]
+    ++ optionals kdeIntegration [
+      qtbase
+    ];
 
   buildInputs =
     finalAttrs.passthru.gst_packages
@@ -388,14 +416,11 @@ stdenv.mkDerivation (finalAttrs: {
       # propagated libpng
       # See: https://www.mail-archive.com/libreoffice@lists.freedesktop.org/msg334080.html
       (libpng.override { apngSupport = false; })
-      perlPackages.ArchiveZip
       coinmp
-      perlPackages.IOCompress
       abseil-cpp
-      ant
       bluez5
       boost
-      box2d
+      box2d_2
       cairo
       clucene_core_2
       cppunit
@@ -405,15 +430,12 @@ stdenv.mkDerivation (finalAttrs: {
       dbus-glib
       expat
       file
-      flex
       fontconfig
       freetype
       getopt
-      gettext
       glib
       glm
       adwaita-icon-theme
-      gperf
       gpgme
       graphite2
       gtk3
@@ -424,6 +446,7 @@ stdenv.mkDerivation (finalAttrs: {
       lcms2
       libGL
       libGLU
+      libtool
       xorg.libX11
       xorg.libXaw
       xorg.libXdmcp
@@ -445,7 +468,6 @@ stdenv.mkDerivation (finalAttrs: {
       liblangtag
       libmspack
       libmwaw
-      libmysqlclient
       libodfgen
       liborcus
       xorg.libpthreadstubs
@@ -457,6 +479,7 @@ stdenv.mkDerivation (finalAttrs: {
       libwpd
       libwpg
       libwps
+      libxcrypt
       libxml2
       xorg.libxshmfence
       libxslt
@@ -472,17 +495,14 @@ stdenv.mkDerivation (finalAttrs: {
       openldap
       openssl
       pam
-      perl
       poppler
       libpq
       python311
       sane-backends
       unixODBC
-      unzip
       util-linux
       which
       xmlsec
-      zip
       zlib
     ]
     ++ optionals kdeIntegration [
@@ -611,7 +631,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-gtk3-kde5"
     ]
     ++ (
-      if variant == "fresh" then
+      if variant == "fresh" || variant == "collabora" then
         [
           "--with-system-rhino"
           "--with-rhino-jar=${rhino}/share/java/js.jar"
@@ -681,6 +701,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Wrapping is done in ./wrapper.nix
   dontWrapQtApps = true;
+
+  strictDeps = true;
 
   passthru = {
     inherit srcs;

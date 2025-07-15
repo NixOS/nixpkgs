@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "2.0.5";
+  version = "2.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     tag = version;
-    hash = "sha256-WqU25I1DxBqZAXd2+sNMUv/HOL4towlGTnFnpCGmMgY=";
+    hash = "sha256-8vUipdkIelRtKwMw63oUBDN/GUI0gegMGQaqDyXAOTQ=";
   };
 
   patches = [
@@ -78,8 +78,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_pca_inverse_transform"
-    # test hangs
+    # these tests hang
     "test_keypoint_remap_methods"
+    "test_multiprocessing_support"
   ];
 
   pythonImportsCheck = [ "albumentations" ];
@@ -87,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast image augmentation library and easy to use wrapper around other libraries";
     homepage = "https://github.com/albumentations-team/albumentations";
-    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${version}";
+    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

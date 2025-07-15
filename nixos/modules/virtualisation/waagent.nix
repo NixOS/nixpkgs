@@ -67,7 +67,7 @@ let
         convert =
           attrs:
           pipe (recurse [ ] attrs) [
-            # Filter out null values and emoty lists
+            # Filter out null values and empty lists
             (filter (kv: kv.value != null && kv.value != [ ]))
             # Transform to Key=Value form, then concatenate
             (map (kv: "${kv.name}=${transform kv.value}"))
@@ -174,7 +174,7 @@ let
           type = types.int;
           default = 0;
           description = ''
-            Specifies the size of the swap file in megabytes.
+            Specifies the size of the swap file in MiB (1024×1024 bytes).
 
             This configuration has no effect if resource disk is managed by cloud-init.
           '';
@@ -228,11 +228,11 @@ let
         };
       };
 
-      AutoUpdate.Enable = lib.mkOption {
+      AutoUpdate.UpdateToLatestVersion = lib.mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether or not to enable autoupdate for goal state processing.
+          Whether or not to enable auto-update of the Extension Handler.
         '';
       };
     };
@@ -351,7 +351,7 @@ in
           parted
 
           # for hostname
-          nettools
+          net-tools
           # for pidof
           procps
           # for useradd, usermod

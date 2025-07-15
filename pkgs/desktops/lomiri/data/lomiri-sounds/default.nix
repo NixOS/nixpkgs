@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cc-by-sa-30
       cc-by-40
     ];
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.all;
     pkgConfigModules = [
       "lomiri-sounds"

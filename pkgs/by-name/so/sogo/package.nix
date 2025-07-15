@@ -1,26 +1,58 @@
-{ lib, clangStdenv, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oath-toolkit
-, gnustep-make
-, gnustep-base
-, enableActiveSync ? false
-, libwbxml }:
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  lndir,
+  libxcrypt,
+  openssl,
+  openldap,
+  sope,
+  libmemcached,
+  curl,
+  libsodium,
+  libytnef,
+  libzip,
+  pkg-config,
+  nixosTests,
+  oath-toolkit,
+  gnustep-make,
+  gnustep-base,
+  enableActiveSync ? false,
+  libwbxml,
+}:
 
 clangStdenv.mkDerivation rec {
   pname = "sogo";
-  version = "5.11.2";
+  version = "5.12.1";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sogo";
     rev = "SOGo-${version}";
-    hash = "sha256-c+547x7ugYoLMgGVLcMmmb9rzquRJOv8n+Js2CuE7I0=";
+    hash = "sha256-BBFo8h0YnE/qHbAwu+vHX+eu9f4WXMs1gQT2nAxiPgc=";
   };
 
-  nativeBuildInputs = [ makeWrapper python3 pkg-config ];
-  buildInputs = [ gnustep-base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
-    ++ lib.optional enableActiveSync libwbxml;
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    gnustep-base
+    sope
+    openssl
+    libmemcached
+    curl
+    libsodium
+    libytnef
+    libzip
+    openldap
+    oath-toolkit
+    libxcrypt
+  ] ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
@@ -77,7 +109,10 @@ clangStdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ jceb ];

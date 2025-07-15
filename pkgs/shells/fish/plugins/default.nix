@@ -1,86 +1,97 @@
-{ lib, newScope, config }:
+{
+  lib,
+  newScope,
+  config,
+}:
 
-lib.makeScope newScope (self: with self; {
-  async-prompt = callPackage ./async-prompt.nix { };
+lib.makeScope newScope (
+  self:
+  with self;
+  {
+    async-prompt = callPackage ./async-prompt.nix { };
 
-  autopair = callPackage ./autopair.nix { };
+    autopair = callPackage ./autopair.nix { };
 
-  bang-bang = callPackage ./bang-bang.nix { };
+    bang-bang = callPackage ./bang-bang.nix { };
 
-  bobthefish = callPackage ./bobthefish.nix { };
+    bobthefish = callPackage ./bobthefish.nix { };
 
-  bobthefisher = callPackage ./bobthefisher.nix { };
+    bobthefisher = callPackage ./bobthefisher.nix { };
 
-  buildFishPlugin = callPackage ./build-fish-plugin.nix { };
+    buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
-  colored-man-pages = callPackage ./colored-man-pages.nix { };
+    colored-man-pages = callPackage ./colored-man-pages.nix { };
 
-  clownfish = callPackage ./clownfish.nix { };
+    clownfish = callPackage ./clownfish.nix { };
 
-  bass = callPackage ./bass.nix { };
+    bass = callPackage ./bass.nix { };
 
-  done = callPackage ./done.nix { };
+    done = callPackage ./done.nix { };
 
-  exercism-cli-fish-wrapper = callPackage ./exercism-cli-fish-wrapper.nix { };
+    exercism-cli-fish-wrapper = callPackage ./exercism-cli-fish-wrapper.nix { };
 
-  fifc = callPackage ./fifc.nix { };
+    fifc = callPackage ./fifc.nix { };
 
-  fish-bd = callPackage ./fish-bd.nix { };
+    fishbang = callPackage ./fishbang.nix { };
 
-  # Fishtape 2.x and 3.x aren't compatible,
-  # but both versions are used in the tests of different other plugins.
-  fishtape = callPackage ./fishtape.nix { };
-  fishtape_3 = callPackage ./fishtape_3.nix { };
+    fish-bd = callPackage ./fish-bd.nix { };
 
-  fish-you-should-use = callPackage ./fish-you-should-use.nix { };
+    # Fishtape 2.x and 3.x aren't compatible,
+    # but both versions are used in the tests of different other plugins.
+    fishtape = callPackage ./fishtape.nix { };
+    fishtape_3 = callPackage ./fishtape_3.nix { };
 
-  foreign-env = callPackage ./foreign-env { };
+    fish-you-should-use = callPackage ./fish-you-should-use.nix { };
 
-  forgit = callPackage ./forgit.nix { };
+    foreign-env = callPackage ./foreign-env { };
 
-  fzf = callPackage ./fzf.nix { };
+    forgit = callPackage ./forgit.nix { };
 
-  fzf-fish = callPackage ./fzf-fish.nix { };
+    fzf = callPackage ./fzf.nix { };
 
-  github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
+    fzf-fish = callPackage ./fzf-fish.nix { };
 
-  git-abbr = callPackage ./git-abbr.nix { };
+    github-copilot-cli-fish = callPackage ./github-copilot-cli-fish.nix { };
 
-  grc = callPackage ./grc.nix { };
+    git-abbr = callPackage ./git-abbr.nix { };
 
-  gruvbox = callPackage ./gruvbox.nix { };
+    grc = callPackage ./grc.nix { };
 
-  humantime-fish = callPackage ./humantime-fish.nix { };
+    gruvbox = callPackage ./gruvbox.nix { };
 
-  hydro = callPackage ./hydro.nix { };
+    humantime-fish = callPackage ./humantime-fish.nix { };
 
-  macos = callPackage ./macos.nix { };
+    hydro = callPackage ./hydro.nix { };
 
-  nvm = callPackage ./nvm.nix { };
+    macos = callPackage ./macos.nix { };
 
-  pisces = callPackage ./pisces.nix { };
+    nvm = callPackage ./nvm.nix { };
 
-  plugin-git = callPackage ./plugin-git.nix { };
+    pisces = callPackage ./pisces.nix { };
 
-  plugin-sudope = callPackage ./plugin-sudope.nix { };
+    plugin-git = callPackage ./plugin-git.nix { };
 
-  puffer = callPackage ./puffer.nix { };
+    plugin-sudope = callPackage ./plugin-sudope.nix { };
 
-  pure = callPackage ./pure.nix { };
+    puffer = callPackage ./puffer.nix { };
 
-  sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
+    pure = callPackage ./pure.nix { };
 
-  spark = callPackage ./spark.nix { };
+    sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
 
-  sponge = callPackage ./sponge.nix { };
+    spark = callPackage ./spark.nix { };
 
-  tide = callPackage ./tide.nix { };
+    sponge = callPackage ./sponge.nix { };
 
-  transient-fish = callPackage ./transient-fish.nix { };
+    tide = callPackage ./tide.nix { };
 
-  wakatime-fish = callPackage ./wakatime-fish.nix { };
+    transient-fish = callPackage ./transient-fish.nix { };
 
-  z = callPackage ./z.nix { };
-} // lib.optionalAttrs config.allowAliases {
-  autopair-fish = self.autopair; # Added 2023-03-10
-})
+    wakatime-fish = callPackage ./wakatime-fish.nix { };
+
+    z = callPackage ./z.nix { };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    autopair-fish = self.autopair; # Added 2023-03-10
+  }
+)

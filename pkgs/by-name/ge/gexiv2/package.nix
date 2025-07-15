@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.3";
+  version = "0.14.5";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IeZNLFbpszPUT+8/KkslZT2SLEGazZcvqW+raVIX4sg=";
+    sha256 = "CRPFPaq6sfGrWGr9VbtVNweW8rirzG43ZAq3cErZnOE=";
   };
 
   nativeBuildInputs =
@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "GObject wrapper around the Exiv2 photo metadata library";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 }

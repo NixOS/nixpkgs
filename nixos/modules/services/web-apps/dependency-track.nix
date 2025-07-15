@@ -509,17 +509,35 @@ in
       upstreams.dependency-track.servers."localhost:${toString cfg.port}" = { };
       virtualHosts.${cfg.nginx.domain} = {
         locations = {
-          "/".alias = "${cfg.package.frontend}/dist/";
+          "/" = {
+            alias = "${cfg.package.frontend}/dist/";
+            index = "index.html";
+            tryFiles = "$uri $uri/ /index.html";
+            extraConfig = ''
+              location ~ (index\.html)$ {
+                add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+                add_header Pragma "no-cache";
+                add_header Expires 0;
+              }
+            '';
+          };
           "/api".proxyPass = "http://dependency-track";
-          "= /static/config.json".alias = frontendConfigFile;
+          "= /static/config.json" = {
+            alias = frontendConfigFile;
+            extraConfig = ''
+              add_header Cache-Control "max-age=0, no-cache, no-store, must-revalidate";
+              add_header Pragma "no-cache";
+              add_header Expires 0;
+            '';
+          };
         };
       };
     };
 
     systemd.services.dependency-track-postgresql-init = lib.mkIf cfg.database.createLocally {
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [ "dependency-track.service" ];
-      bindsTo = [ "postgresql.service" ];
+      bindsTo = [ "postgresql.target" ];
       path = [ config.services.postgresql.package ];
       serviceConfig = {
         Type = "oneshot";
@@ -554,7 +572,7 @@ in
           if cfg.database.createLocally then
             [
               "dependency-track-postgresql-init.service"
-              "postgresql.service"
+              "postgresql.target"
             ]
           else
             [ ];

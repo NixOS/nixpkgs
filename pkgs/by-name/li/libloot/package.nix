@@ -18,13 +18,13 @@
   gtest,
   icu,
   spdlog,
-  tbb_2021_11,
+  tbb_2021,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libloot";
-  version = "0.24.5";
+  version = "0.25.5";
   # Note: don't forget to also update the package versions in the passthru section
 
   outputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "loot";
     repo = "libloot";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-SAnbp34DlGsq4nfaRHfCTGRSGQtv/rRgngvwma2tc7Q=";
+    hash = "sha256-l8AdqJ0lZH4rBcf4WV3ju+sIHYam6USXCXTqyRPzgeo=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     icu
     (spdlog.override { fmt = fmt_11; })
-    tbb_2021_11
+    tbb_2021
 
     finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder
@@ -102,10 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Due to storage size concerns of `glibcLocales`, we skip this
         "CompareFilenames.shouldBeCaseInsensitiveAndLocaleInvariant"
         "NormalizeFilename.shouldCaseFoldStringsAndBeLocaleInvariant"
-
-        # Some filesystem related test fail because they assume `std::filesystem::equivalent` works with non-existent paths
-        "Filesystem.equivalentShouldNotRequireThatBothPathsExist"
-        "Filesystem.equivalentShouldBeCaseSensitive"
       ];
     in
     "-${builtins.concatStringsSep ":" disabledTests}";
@@ -116,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     testing-plugins = fetchFromGitHub {
       owner = "Ortham";
       repo = "testing-plugins";
-      rev = "refs/tags/1.6.2";
+      tag = "1.6.2";
       hash = "sha256-3Aa98EwqpuGA3YlsRF8luWzXVEFO/rs6JXisXdLyIK4=";
     };
 
@@ -141,17 +137,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     libloadorder = finalAttrs.passthru.buildRustFFIPackage rec {
       pname = "libloadorder";
-      version = "18.1.3";
+      version = "18.3.0";
 
       src = fetchFromGitHub {
         owner = "Ortham";
         repo = "libloadorder";
-        rev = "refs/tags/${version}";
-        hash = "sha256-qJ7gC4BkrXJiVcyA1BqlJSRzgc/7VmNBHtDq0ouJoTU=";
+        tag = version;
+        hash = "sha256-/8WOEt9dxKFTTZbhf5nt81jo/yHuALPxh/IwAOehi9w=";
       };
 
       useFetchCargoVendor = true;
-      cargoHash = "sha256-m3lyABr7tU0AeC6EZomBw1X722ezQg/cjSZh/ZhkiBw=";
+      cargoHash = "sha256-re/cKqf/CAD7feNIEuou4ZP8BNkArd5CvREx1610jig=";
 
       lang = "c++";
       header = "libloadorder.hpp";
@@ -164,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
       src = fetchFromGitHub {
         owner = "Ortham";
         repo = "esplugin";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-ygjSyixg+9HFFNV/G+w+TxGFTrjlWxlDt8phpCE8xyQ=";
       };
 
@@ -177,17 +173,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     loot-condition-interpreter = finalAttrs.passthru.buildRustFFIPackage rec {
       pname = "loot-condition-interpreter";
-      version = "4.0.2";
+      version = "5.3.0";
 
       src = fetchFromGitHub {
         owner = "loot";
         repo = "loot-condition-interpreter";
-        rev = "refs/tags/${version}";
-        hash = "sha256-yXbe7ByYHvFpokRpV2pz2SX0986dpk5IpehwDUhoZKg=";
+        tag = version;
+        hash = "sha256-MvadQ4cWpzNgF/lUW5Jb758DvfRPGZ7s1W4MbO7nbIw=";
       };
 
       useFetchCargoVendor = true;
-      cargoHash = "sha256-d3JBpYI4XMkDnufvdyZkgtp7H4amMzM0dBEO6t9efGE=";
+      cargoHash = "sha256-m/vRnAJyMQOosxnjSUgHIY1RCkdB5+HFVqqzYVEpgOI=";
 
       lang = "c";
       header = "loot_condition_interpreter.h";
@@ -198,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
       src = fetchFromGitHub {
         owner = "loot";
         repo = "yaml-cpp";
-        rev = "refs/tags/${version}";
+        tag = version;
         hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
       };
     };

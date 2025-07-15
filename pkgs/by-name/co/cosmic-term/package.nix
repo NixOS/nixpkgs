@@ -10,26 +10,28 @@
   freetype,
   libinput,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-sdeRkT6UcyBKIFnJZn3aGf8LZQimqVPqtXo7RtwUs5M=";
+    hash = "sha256-leCKdnlevfLiPJkloWCpOjkHaSf7+EYdobZRZ/Jis+4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Qznkqp+zWpP/ok2xG7U5lYBW0qo4+ARnm8hgxU20ha0=";
+  cargoHash = "sha256-Re9t25tkwmrvXB9GmPSVG+QDUZmk5rwrrY2ntlB3Tdw=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
   env = {
-    VERGEN_GIT_COMMIT_DATE = "2025-02-21";
+    VERGEN_GIT_COMMIT_DATE = "2025-04-20";
     VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
@@ -57,24 +59,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-term"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "unstable"
-      "--version-regex"
-      "epoch-(.*)"
-    ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      ahoneybun
-      nyabinary
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-term";
   };

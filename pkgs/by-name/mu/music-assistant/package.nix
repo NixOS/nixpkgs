@@ -16,13 +16,13 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.34";
+        version = "1.1.45";
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
-          hash = "sha256-UxokPUnYET1XyRok0FH7e8G3RpCMvOigY4huw6Tfllo=";
+          hash = "sha256-R1KkMe9dVl5J1DjDsFhSYVebpiqBkXZSqkLrd7T8gFg=";
         };
 
         postPatch = ''
@@ -42,16 +42,20 @@ let
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
+assert
+  (lib.elem "airplay" providers)
+  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
+
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.4.4";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-rxXEsR4EfJZp3OFGHcSRaJp1egt2OT15P8V35v35KmU=";
+    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
   };
 
   patches = [
@@ -154,6 +158,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "music_assistant" ];
 
+  postFixup = ''
+    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
+    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
+  '';
+
   passthru = {
     inherit
       python
@@ -164,7 +173,7 @@ python.pkgs.buildPythonApplication rec {
     tests = nixosTests.music-assistant;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
@@ -173,8 +182,8 @@ python.pkgs.buildPythonApplication rec {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "mass";
   };
 }

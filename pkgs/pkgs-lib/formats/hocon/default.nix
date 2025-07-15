@@ -113,10 +113,13 @@ in
                 path
                 str
               ]);
+
+              includeType = addCheck attrs (x: (x._type or null) == "include");
             in
             (oneOf [
               atomType
-              (listOf atomType)
+              (addCheck (listOf atomType) (lib.all atomType.check))
+              (addCheck (listOf includeType) (lib.all includeType.check))
               (attrsOf type')
             ])
             // {

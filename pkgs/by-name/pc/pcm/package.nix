@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "202502";
 
   src = fetchFromGitHub {
-    owner = "opcm";
+    owner = "intel";
     repo = "pcm";
     rev = version;
     hash = "sha256-U6V3LX+JlVL9MRFBP3xpYwPQ6Y7pnJ4F/7dpKG3Eyuw=";

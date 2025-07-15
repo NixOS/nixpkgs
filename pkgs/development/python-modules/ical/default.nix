@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "9.0.2";
+  version = "10.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "ical";
     tag = version;
-    hash = "sha256-+kks/RZ0Wc40WCr2gdZ14Rr8y92NtEluPFJi3wwut64=";
+    hash = "sha256-T58A2oBDD97C5Jz5WlbAJYOnoJzP+jAryKb5Oim4TuU=";
   };
 
   build-system = [ setuptools ];
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ical" ];
 

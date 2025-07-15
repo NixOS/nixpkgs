@@ -1,5 +1,4 @@
 {
-  stdenv,
   bashInteractive,
   buildPythonPackage,
   cryptography,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   preCheck = "HOME=$TOP/tmp";
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     mainProgram = "osc";

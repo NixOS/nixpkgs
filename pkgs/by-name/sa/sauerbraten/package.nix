@@ -8,9 +8,11 @@
   copyDesktopItems,
 
   # buildInputs
+  libGL,
   SDL2,
   SDL2_image,
   SDL2_mixer,
+  xorg,
   zlib,
 
   makeDesktopItem,
@@ -33,9 +35,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libGL
     SDL2
     SDL2_image
     SDL2_mixer
+    xorg.libX11
     zlib
   ];
 
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
     cp -r "../docs/"* $out/share/doc/sauerbraten/
     cp sauer_client sauer_server $out/share/sauerbraten/
     cp -r ../packages ../data $out/share/sauerbraten/
-    ln -s $out/share/sauerbraten/cube.png $out/share/icon/sauerbraten.png
+    ln -s $out/share/sauerbraten/data/cube.png $out/share/icon/sauerbraten.png
 
     makeWrapper $out/share/sauerbraten/sauer_server $out/bin/sauerbraten_server \
       --chdir "$out/share/sauerbraten"

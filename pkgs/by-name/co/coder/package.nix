@@ -1,12 +1,13 @@
-{ lib
-, channel ? "stable"
-, fetchurl
-, installShellFiles
-, makeBinaryWrapper
-, terraform
-, stdenvNoCC
-, unzip
-, nixosTests
+{
+  lib,
+  channel ? "stable",
+  fetchurl,
+  installShellFiles,
+  makeBinaryWrapper,
+  terraform,
+  stdenvNoCC,
+  unzip,
+  nixosTests,
 }:
 
 let
@@ -14,21 +15,21 @@ let
 
   channels = {
     stable = {
-      version = "2.19.1";
+      version = "2.23.2";
       hash = {
-        x86_64-linux = "sha256-w8yET4jpuNn/DswFlJ8QpKS5YjI9gs0OTmQ0D1f5JZE=";
-        x86_64-darwin = "sha256-2ttVjvemACsRLoRE7wMmgsUUDM2AFNo5lXG1kCL8Ae8=";
-        aarch64-linux = "sha256-8BJrMj0s2MzgCueWlWsGKntEkBwW7rBYZF+5O3lVLN0=";
-        aarch64-darwin = "sha256-9v0OzQMGq92lNKsOevpE1jjwto+ETgfmVmK5p+JdVBI=";
+        x86_64-linux = "sha256-nFb4G4PQdrxwXHpialI0g3CszOdNt8xnSEZCAsFADAo=";
+        x86_64-darwin = "sha256-XHivHFYxTmjR+vkkR4632ZjKqKVVb6MwSSPy0rzuLLo=";
+        aarch64-linux = "sha256-DNuEeiTkGlDyOrFMuApSASs51bRYleoPQN9eMyY7c78=";
+        aarch64-darwin = "sha256-A1sF3RFAQrkPU8GMOXmpzzY3CXjKwOeA6f/dZtuetZc=";
       };
     };
     mainline = {
-      version = "2.20.0";
+      version = "2.24.1";
       hash = {
-        x86_64-linux = "sha256-Vk2Qhk4eNf9Akwza0QNuAc/lh2BtU0sd6QSS2IIyZo4=";
-        x86_64-darwin = "sha256-TVQYQOqJj9gnTt5HaVVjyr7sBPD3mAPpy5vNw9RJ7dc=";
-        aarch64-linux = "sha256-hBp7lVaJk30KD8eQ4ehoI1/DW28SWQisGtY4lJNVETw=";
-        aarch64-darwin = "sha256-pvFZELrXk1bf5nfbDskY3bpSCv22Ls0Leo11Dgu/dfI=";
+        x86_64-linux = "sha256-gqQlyA1LtWYpeBHupbFTFLD0KmF1P61JgrokCtqTDiI=";
+        x86_64-darwin = "sha256-iiCMCs7Det/ebTRo69FDqUW76cHnzgtl0gxRfAYMnho=";
+        aarch64-linux = "sha256-Qxc+GQ2xmKkgJkoMi4gtauTen1wvU5UD/faY13xnuHI=";
+        aarch64-darwin = "sha256-0wRRpLhqosd4n0JhFe4/4/odUTMGwf74bYFBJ6rlTw4=";
       };
     };
   };
@@ -41,19 +42,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     url =
       let
-        systemName = {
-          x86_64-linux = "linux_amd64";
-          aarch64-linux = "linux_arm64";
-          x86_64-darwin = "darwin_amd64";
-          aarch64-darwin = "darwin_arm64";
-        }.${system};
+        systemName =
+          {
+            x86_64-linux = "linux_amd64";
+            aarch64-linux = "linux_arm64";
+            x86_64-darwin = "darwin_amd64";
+            aarch64-darwin = "darwin_arm64";
+          }
+          .${system};
 
-        ext = {
-          x86_64-linux = "tar.gz";
-          aarch64-linux = "tar.gz";
-          x86_64-darwin = "zip";
-          aarch64-darwin = "zip";
-        }.${system};
+        ext =
+          {
+            x86_64-linux = "tar.gz";
+            aarch64-linux = "tar.gz";
+            x86_64-darwin = "zip";
+            aarch64-darwin = "zip";
+          }
+          .${system};
       in
       "https://github.com/coder/coder/releases/download/v${finalAttrs.version}/coder_${finalAttrs.version}_${systemName}.${ext}";
   };
@@ -96,7 +101,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "coder";
-    maintainers = with lib.maintainers; [ ghuntley kylecarbs urandom ];
+    maintainers = with lib.maintainers; [
+      ghuntley
+      kylecarbs
+      urandom
+    ];
   };
 
   passthru = {

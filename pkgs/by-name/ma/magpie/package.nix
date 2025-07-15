@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
     changelog = "https://github.com/BuddiesOfBudgie/magpie/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "libmagpie-0"

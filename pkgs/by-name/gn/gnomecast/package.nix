@@ -13,6 +13,7 @@ with python3Packages;
 buildPythonApplication {
   pname = "gnomecast";
   version = "unstable-2022-04-23";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "keredson";

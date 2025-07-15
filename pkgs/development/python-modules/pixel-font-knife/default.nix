@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-knife";
-  version = "0.0.11";
+  version = "0.0.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     pname = "pixel_font_knife";
     inherit version;
-    hash = "sha256-tm5cAaeUBL9vbdvq73N2HCytlwYe0Q2Tovo+6XU59GQ=";
+    hash = "sha256-zF2NKR8/8EhtzxwJFKfP6EZf58QXmbut81kfpLqDDV8=";
   };
 
   build-system = [ hatchling ];

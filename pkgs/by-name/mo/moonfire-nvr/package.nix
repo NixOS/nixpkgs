@@ -8,7 +8,6 @@
   sqlite,
   testers,
   moonfire-nvr,
-  darwin,
   nodejs,
   pnpm_9,
 }:
@@ -33,6 +32,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/ui";
+      fetcherVersion = 1;
       hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
     };
     installPhase = ''
@@ -59,17 +59,10 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      ncurses
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-      ]
-    );
+  buildInputs = [
+    ncurses
+    sqlite
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/ui

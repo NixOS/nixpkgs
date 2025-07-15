@@ -120,7 +120,7 @@ buildRebar3 {
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license = licenses.asl20;
-    maintainers = teams.beam.members;
+    teams = [ teams.beam ];
     platforms = platforms.unix;
   };
 }

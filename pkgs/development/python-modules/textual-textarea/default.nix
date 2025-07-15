@@ -13,6 +13,8 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  tree-sitter-python,
+  tree-sitter-sql,
 }:
 
 buildPythonPackage rec {
@@ -46,17 +48,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    tree-sitter-python
+    tree-sitter-sql
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
 
-  disabledTestPaths = [
+  disabledTests = [
+    # AssertionError: assert Selection(sta...), end=(0, 6)) == Selection(sta...), end=(1, 0))
     # https://github.com/tconbeer/textual-textarea/issues/296
-    "tests/functional_tests/test_textarea.py"
+    "test_keys"
   ];
 
   meta = {
-    description = "A text area (multi-line input) with syntax highlighting for Textual";
+    description = "Text area (multi-line input) with syntax highlighting for Textual";
     homepage = "https://github.com/tconbeer/textual-textarea";
     changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${version}";
     license = lib.licenses.mit;

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit-tests/" ];
+  enabledTestPaths = [ "tests/unit-tests/" ];
 
   pythonImportsCheck = [ "teamcity" ];
 

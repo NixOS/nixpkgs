@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  python3,
+  python,
   systemd,
   pandoc,
   kmod,
@@ -14,6 +14,7 @@
   btrfs-progs,
   libseccomp,
   replaceVars,
+  udevCheckHook,
 
   # Python packages
   setuptools,
@@ -21,7 +22,6 @@
   wheel,
   buildPythonApplication,
   pytestCheckHook,
-  pefile,
 
   # Optional dependencies
   withQemu ? false,
@@ -46,7 +46,7 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (_: [ pefile ]);
+  pythonWithPefile = python.withPackages (ps: [ ps.pefile ]);
 
   deps =
     [
@@ -66,7 +66,7 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "25.3";
+  version = "25.3-unstable-2025-04-01";
   format = "pyproject";
 
   outputs = [
@@ -77,15 +77,15 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    tag = "v${version}";
-    hash = "sha256-CTOVFZORLrVqehhPCgOoEaU3fhwu8fO8jGDNLxoELgE=";
+    rev = "21850673a7f75125d516268ce379dae776dd816a";
+    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
   };
 
   patches =
     [
       (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
         UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
-        PYTHON_PEFILE = "${python3pefile}/bin/python3.12";
+        PYTHON_PEFILE = lib.getExe pythonWithPefile;
         NIX_PATH = toString (lib.makeBinPath deps);
         MKOSI_SANDBOX = null; # will be replaced in postPatch
       })
@@ -111,6 +111,7 @@ buildPythonApplication rec {
     setuptools
     setuptools-scm
     wheel
+    udevCheckHook
   ];
 
   dependencies = deps;

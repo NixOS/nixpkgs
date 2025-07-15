@@ -195,6 +195,7 @@ let
     with python.pkgs;
     buildPythonPackage {
       pname = "ceph-common";
+      format = "setuptools";
       inherit src version;
 
       sourceRoot = "ceph-${version}/src/python-common";
@@ -243,9 +244,12 @@ let
           };
           cargoRoot = "src/_bcrypt";
           cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit src;
-            sourceRoot = "${pname}-${version}/${cargoRoot}";
-            name = "${pname}-${version}";
+            inherit
+              pname
+              version
+              src
+              cargoRoot
+              ;
             hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
           };
         });
@@ -356,10 +360,10 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.1";
+  version = "19.2.2";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-QEX3LHxySVgLBg21iQga1DnyQsXFi6593e+WSjgT/h8=";
+    hash = "sha256-7FD9LJs25VzUCRIBm01Cm3ss1YLTN9YLwPZnHSMd8rs=";
   };
 in
 rec {
@@ -389,6 +393,14 @@ rec {
       # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
       # * <https://github.com/ceph/ceph/pull/60999>
       ./boost-1.86-PyModule.patch
+
+      # TODO: Remove with Ceph >= 19.2.3
+      (fetchpatch2 {
+        name = "ceph-squid-client-disallow-unprivileged-users-to-escalate-root-privileges.patch";
+        url = "https://github.com/ceph/ceph/commit/380da5049e8ea7c35f34022fba24d3e2d4db6dd8.patch?full_index=1";
+        hash = "sha256-hVJ1v/n2YCJLusw+DEyK12MG73sJ/ccwbSc+2pLRxvw=";
+      })
+
     ];
 
     nativeBuildInputs = [

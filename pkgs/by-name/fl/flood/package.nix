@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nixosTests
-, pnpm_9
-, nix-update-script
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nixosTests,
+  pnpm_9,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -21,6 +22,7 @@ buildNpmPackage rec {
   npmDeps = pnpmDeps;
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-E2VxRcOMLvvCQb9gCAGcBTsly571zh/HWM6Q1Zd2eVw=";
   };
 
@@ -35,7 +37,11 @@ buildNpmPackage rec {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thiagokokada winter ners ];
+    maintainers = with maintainers; [
+      thiagokokada
+      winter
+      ners
+    ];
     mainProgram = "flood";
   };
 }

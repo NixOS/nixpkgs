@@ -46,7 +46,7 @@ makeSetupHook {
   substitutions = {
     fallbackXdgDirs = "${lib.optionalString includeSettings "${targetPackages.cosmic-settings}/share:"}${targetPackages.cosmic-icons}/share";
 
-    cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
+    cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [
@@ -76,10 +76,6 @@ makeSetupHook {
 
   meta = {
     description = "Setup hook for configuring and wrapping applications based on libcosmic";
-    maintainers = with lib.maintainers; [
-      HeitorAugustoLN
-      nyabinary
-      thefossguy
-    ];
+    teams = [ lib.teams.cosmic ];
   };
 } ./libcosmic-app-hook.sh

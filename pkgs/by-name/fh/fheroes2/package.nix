@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.1.6";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-CowCP+gZuGSXWbALYBkmyn+RlDgOGho/Px34GutrBX0=";
+    hash = "sha256-REZBez5R10kifIAnuoTxoyFlcfv5JufjX3mkItD6US4=";
   };
 
   nativeBuildInputs = [ imagemagick ];
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       On linux, the data can be placed in ~/.local/share/fheroes2 folder.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.karolchmist ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

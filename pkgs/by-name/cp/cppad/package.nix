@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "CppAD";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-rAKD/PAjepDchvrJp7iLYw5doNq8Af1oVh61gfMcNYI=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A C++ Algorithmic Differentiation Package";
+    description = "C++ Algorithmic Differentiation Package";
     homepage = "https://github.com/coin-or/CppAD";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [

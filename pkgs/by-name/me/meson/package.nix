@@ -10,18 +10,20 @@
   pkg-config,
   python3,
   replaceVars,
+  writeShellScriptBin,
   zlib,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.7.0";
+  version = "1.8.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-nvaq+9evQSj/ahK68nj8FckG4nA1gs2DqcZxFEFH1iU=";
+    hash = "sha256-xH3JPlXXkLKKT8Gay6qHG/JXTT1UcUCQaSC65Vxhfl0=";
   };
 
   patches = [
@@ -66,12 +68,34 @@ python3.pkgs.buildPythonApplication rec {
     ./007-freebsd-pkgconfig-path.patch
   ];
 
+  postPatch =
+    if python3.isPyPy then
+      ''
+        substituteInPlace mesonbuild/modules/python.py \
+          --replace-fail "PythonExternalProgram('python3', mesonlib.python_command)" \
+                         "PythonExternalProgram('${python3.meta.mainProgram}', mesonlib.python_command)"
+        substituteInPlace mesonbuild/modules/python3.py \
+          --replace-fail "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, 'python3')" \
+                         "state.environment.lookup_binary_entry(mesonlib.MachineChoice.HOST, '${python3.meta.mainProgram}')"
+        substituteInPlace "test cases"/*/*/*.py "test cases"/*/*/*/*.py \
+          --replace-quiet '#!/usr/bin/env python3' '#!/usr/bin/env pypy3' \
+          --replace-quiet '#! /usr/bin/env python3' '#!/usr/bin/env pypy3'
+        chmod +x "test cases"/*/*/*.py "test cases"/*/*/*/*.py
+      ''
+    else
+      null;
+
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    ninja
-    pkg-config
-  ];
+  nativeCheckInputs =
+    [
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals python3.isPyPy [
+      # Several tests hardcode python3.
+      (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
+    ];
 
   checkInputs =
     [
@@ -116,9 +140,15 @@ python3.pkgs.buildPythonApplication rec {
         # pch doesn't work quite right on FreeBSD, I think
         ''test cases/common/13 pch''
       ]
+      ++ lib.optionals python3.isPyPy [
+        # fails for unknown reason
+        ''test cases/python/4 custom target depends extmodule''
+      ]
     ))
     ++ [
-      ''HOME="$TMPDIR" python ./run_project_tests.py''
+      ''HOME="$TMPDIR" ${
+        if python3.isPyPy then python3.interpreter else "python"
+      } ./run_project_tests.py''
       "runHook postCheck"
     ]
   );

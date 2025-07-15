@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, pkg-config
-, cmake
-, extra-cmake-modules
-, wayland-scanner
-, cairo
-, pango
-, expat
-, fribidi
-, fmt
-, wayland
-, systemd
-, wayland-protocols
-, json_c
-, isocodes
-, xkeyboard_config
-, enchant
-, gdk-pixbuf
-, libGL
-, libuuid
-, libselinux
-, libXdmcp
-, libsepol
-, libxkbcommon
-, libthai
-, libdatrie
-, xcbutilkeysyms
-, pcre
-, xcbutil
-, xcbutilwm
-, xcb-imdkit
-, libxkbfile
-, nixosTests
-, gettext
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  pkg-config,
+  buildPackages,
+  cmake,
+  extra-cmake-modules,
+  wayland-scanner,
+  cairo,
+  pango,
+  expat,
+  fribidi,
+  fmt,
+  wayland,
+  systemd,
+  wayland-protocols,
+  json_c,
+  isocodes,
+  xkeyboard_config,
+  enchant,
+  gdk-pixbuf,
+  libGL,
+  libuuid,
+  libselinux,
+  libXdmcp,
+  libsepol,
+  libxkbcommon,
+  libthai,
+  libdatrie,
+  xcbutilkeysyms,
+  xcbutil,
+  xcbutilwm,
+  xcb-imdkit,
+  libxkbfile,
+  nixosTests,
+  gettext,
 }:
 let
   enDictVer = "20121020";
@@ -67,7 +68,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -88,13 +88,16 @@ stdenv.mkDerivation rec {
     libsepol
     libXdmcp
     libxkbcommon
-    pcre
     xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
   ];
 
   strictDeps = true;

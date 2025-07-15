@@ -1,21 +1,23 @@
-{ lib
-, fetchFromGitHub
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, pango
-, python3Packages
-, wrapGAppsHook3
-, youtube-dl
-, glib
-, ffmpeg
-, aria2
+{
+  lib,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  pango,
+  python3Packages,
+  wrapGAppsHook3,
+  youtube-dl,
+  glib,
+  ffmpeg,
+  aria2,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
   version = "2.5.100";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";

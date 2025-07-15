@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -34,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.12.0";
+  version = "5.2.14.0";
 
   outputs = [
     "out"
@@ -45,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-r5bZgcnY7O1U28tkSnSJur3/Z/llabGe7mlIMA8ZGls=";
+    hash = "sha256-dCeTOJrOjnGvRhY8u8mMOgm/mbUoTbYqzjiAkbIlSo0=";
   };
 
   nativeBuildInputs =

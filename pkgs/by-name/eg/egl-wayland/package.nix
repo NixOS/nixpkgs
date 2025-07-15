@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, eglexternalplatform
-, pkg-config
-, meson
-, ninja
-, wayland-scanner
-, libGL
-, libX11
-, libdrm
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  eglexternalplatform,
+  pkg-config,
+  meson,
+  ninja,
+  wayland-scanner,
+  libGL,
+  libX11,
+  libdrm,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.18";
+  version = "1.1.19";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "Nvidia";
     repo = "egl-wayland";
     rev = version;
-    hash = "sha256-Vu0XPcFKQJ+nypNMX1tw17whVWceZ0YlqvEEmEbTQaU=";
+    hash = "sha256-xQZTmZQqFY7oXHx+g+PKbwCYCPdpUrFnyMZyL2Q/faE=";
   };
 
   postPatch = ''

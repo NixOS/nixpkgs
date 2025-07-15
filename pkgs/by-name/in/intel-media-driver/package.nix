@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "24.4.4";
+  version = "25.1.4";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    hash = "sha256-vZIWH/YBrUMmXu/JBBeGPOsn7pZUDaU8O6vgoekGhVU=";
+    hash = "sha256-kRMBOQpGWVrOvQ2RoYZzoYAfB2r7UqesiaTajjw+SLA=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     inherit (pkgsi686Linux) intel-media-driver;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Intel Media Driver for VAAPI — Broadwell+ iGPUs";
     longDescription = ''
       The Intel Media Driver for VAAPI is a new VA-API (Video Acceleration API)
@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/intel/media-driver";
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

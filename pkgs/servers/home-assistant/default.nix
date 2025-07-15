@@ -117,24 +117,13 @@ let
         };
       });
 
-      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "EuleMitKeule";
-          repo = "eq3btsmart";
-          tag = version;
-          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
-        };
-        build-system = with self; [ poetry-core ];
-      });
-
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
-        version = "1.1.0";
+        version = "1.7.0";
         src = fetchFromGitHub {
           owner = "googleapis";
           repo = "python-genai";
           tag = "v${version}";
-          hash = "sha256-CszKr2dvo0dLMAD/FZHSosCczeAFDD0xxKysGNv4RxM=";
+          hash = "sha256-vmrFPE7H9s9varrP0s6WK4opoU1hREH7rVVjrKiXY5E=";
         };
       });
 
@@ -151,38 +140,12 @@ let
         ];
       });
 
-      # acme and thus hass-nabucasa doesn't support josepy v2
-      # https://github.com/certbot/certbot/issues/10185
-      josepy = super.josepy.overridePythonAttrs (old: rec {
-        version = "1.15.0";
-        src = fetchFromGitHub {
-          owner = "certbot";
-          repo = "josepy";
-          tag = "v${version}";
-          hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
-        };
-        dependencies = with self; [
-          pyopenssl
-          cryptography
-        ];
-      });
-
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
+      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
-      pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
-        version = "2.5.9";
-        src = fetchFromGitHub {
-          owner = "vilppuvuorinen";
-          repo = "pymelcloud";
-          rev = "33a827b6cd0b34f276790faa49bfd0994bb7c2e4"; # 2.5.x branch
-          sha256 = "sha256-Q3FIo9YJwtWPHfukEBjBANUQ1N1vr/DMnl1dgiN7vYg=";
+          tag = "v${version}";
+          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
       });
 
@@ -206,6 +169,25 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+        };
+      });
+
+      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
+        version = "4.15.16";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          tag = version;
+          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
+        };
       });
 
       # Pinned due to API changes in 0.1.0
@@ -271,28 +253,6 @@ let
         };
       });
 
-      pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (old: rec {
-        version = "0.2.1";
-        src = fetchFromGitHub {
-          owner = "freekode";
-          repo = "pyopenweathermap";
-          tag = "v${version}";
-          hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
-        };
-      });
-
-      pyrail = super.pyrail.overridePythonAttrs (rec {
-        version = "0.0.3";
-        src = fetchPypi {
-          pname = "pyrail";
-          inherit version;
-          hash = "sha256-XxcVcRXMjYAKevANAqNJkGDUWfxDaLqgCL6XL9Lhsf4=";
-        };
-        env.CI_JOB_ID = version;
-        build-system = [ self.setuptools ];
-        dependencies = [ self.requests ];
-      });
-
       # snmp component does not support pysnmp 7.0+
       pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
         version = "6.2.6";
@@ -343,15 +303,6 @@ let
         doCheck = false;
       });
 
-      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -360,6 +311,16 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
+        };
+      });
+
+      wolf-comm = super.wolf-comm.overridePythonAttrs (rec {
+        version = "0.0.23";
+        src = fetchFromGitHub {
+          owner = "janrothkegel";
+          repo = "wolf-comm";
+          tag = version;
+          hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
         };
       });
 
@@ -393,7 +354,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.3.4";
+  hassVersion = "2025.7.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -404,7 +365,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.11";
+  disabled = python.pythonOlder "3.13";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -414,46 +375,20 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-g1t9xAjrSSePyAloTQ2qwxAGEXJUTWX2zIZmAvlGGa8=";
+    hash = "sha256-KaepdkW1PLbWf7yl90ZqmZ6OIgZlRcaw2pSf2wTev+Q=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIh8FMTKZVEZ/zC+Av8fykTpz9kkXgZZfnsuOZbgP0M=";
+    hash = "sha256-Gmq42r4O6mNNXaVwTlC3UjeAsu8TOm417WCm/2E3I6E=";
   };
 
   build-system = with python.pkgs; [
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "aiozoneinfo"
-    "attrs"
-    "bcrypt"
-    "ciso8601"
-    "cryptography"
-    "fnv-hash-fast"
-    "hass-nabucasa"
-    "httpx"
-    "jinja2"
-    "orjson"
-    "pillow"
-    "propcache"
-    "pyjwt"
-    "pyopenssl"
-    "pyyaml"
-    "requests"
-    "securetar"
-    "sqlalchemy"
-    "typing-extensions"
-    "ulid-transform"
-    "urllib3"
-    "uv"
-    "voluptuous-openapi"
-    "yarl"
-  ];
+  pythonRelaxDeps = true;
 
   # extract translations from pypi sdist
   prePatch = ''
@@ -465,6 +400,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -474,18 +412,21 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
-    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==78.1.1" setuptools
   '';
 
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
     aiohttp-cors
     aiohttp-fast-zlib
     aiozoneinfo
+    annotatedyaml
     astral
     async-interrupt
     atomicwrites-homeassistant
@@ -498,20 +439,28 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    ha-ffmpeg
     hass-nabucasa
+    hassil
     home-assistant-bluetooth
+    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
+    mutagen
+    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
+    pymicro-vad
     pyopenssl
+    pyspeex-noise
     python-slugify
+    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -525,7 +474,9 @@ python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
+    webrtc-models
     yarl
+    zeroconf
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
     pyotp
     pyqrcode
@@ -545,7 +496,6 @@ python.pkgs.buildPythonApplication rec {
       pytest-aiohttp
       pytest-freezer
       pytest-mock
-      pytest-rerunfailures
       pytest-socket
       pytest-timeout
       pytest-unordered
@@ -570,15 +520,18 @@ python.pkgs.buildPythonApplication rec {
   pytestFlagsArray = [
     # assign tests grouped by file to workers
     "--dist loadfile"
-    # retry racy tests that end in "RuntimeError: Event loop is closed"
-    "--reruns 3"
-    "--only-rerun RuntimeError"
     # enable full variable printing on error
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
     # checks whether pip is installed
     "--deselect=tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
+    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "--deselect=tests/helpers/test_event.py::test_track_time_interval_name"
     # tests are located in tests/
     "tests"
   ];
@@ -634,7 +587,7 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/home-assistant/core/releases/tag/${src.tag}";
     description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
     platforms = platforms.linux;
     mainProgram = "hass";
   };

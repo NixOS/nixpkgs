@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2025.3.0";
+  version = "2025.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-z4dRGNoqwIEOwaz5U0DqCh/chZtopiLNvvvfl0bJxxI=";
+    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
   };
 
   build-system = [
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
-    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
+    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turnon";
-  version = "2.3.4";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-eKJRyQMZOa/QRUW0VQ0EkXbJSMcYHfCC9wTs0YEB1yo=";
+    hash = "sha256-fRDyfgS+jLGFJTYIEXJ27cCM9knfbIjlGpYNU4OyoJ0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SjENjQjdg5Vrpd911QOcH9lmW7+BACaN4a/oGb2miI4=";
+  cargoHash = "sha256-Bg3+PX5/BlqeN3EEFzBX42Dw4BbyKHlN1dnQSHnEz+c=";
 
   doCheck = true;
 

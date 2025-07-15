@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   openssl,
   libiconv,
@@ -17,20 +18,28 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.127.1";
+  version = "1.133.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-DNUKbb+d3BBp8guas6apQ4yFeXCc0Ilijtbt1hZkap4=";
+    hash = "sha256-SCpLM/4sxE9xA781tgjrNNXpScCQOtgKnZKq64eCay8=";
   };
 
+  patches = [
+    # Skip broken HTML preview test case with libxml >= 2.14
+    # https://github.com/element-hq/synapse/pull/18413
+    (fetchpatch {
+      url = "https://github.com/element-hq/synapse/commit/8aad32965888476b4660bf8228d2d2aa9ccc848b.patch";
+      hash = "sha256-EUEbF442nOAybMI8EL6Ee0ib3JqSlQQ04f5Az3quKko=";
+    })
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wI3vOfR5UpVFls2wPfgeIEj2+bmWdL3pDSsKfT+ysw8=";
+    inherit pname version src;
+    hash = "sha256-qgQU041VlAFFgEg2RhbK6g+aike+HN0FYuvHYtufzW8=";
   };
 
   postPatch = ''
@@ -181,11 +190,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://matrix.org";
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.agpl3Plus;
-    maintainers = with lib.maintainers; teams.matrix.members ++ [ sumnerevans ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sumnerevans ];
+    teams = [ lib.teams.matrix ];
   };
 }

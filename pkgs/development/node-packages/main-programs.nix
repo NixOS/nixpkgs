@@ -34,13 +34,10 @@
   lua-fmt = "luafmt";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
-  postcss-cli = "postcss";
-  prettier = "prettier";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  vscode-json-languageserver = "vscode-json-languageserver";
 }

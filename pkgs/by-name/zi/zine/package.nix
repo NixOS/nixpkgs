@@ -4,8 +4,6 @@
   fetchCrate,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,20 +27,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple and opinionated tool to build your own magazine";
     homepage = "https://github.com/zineland/zine";
     changelog = "https://github.com/zineland/zine/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       dit7ya
       figsoda
     ];

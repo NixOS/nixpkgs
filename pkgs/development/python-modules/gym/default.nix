@@ -74,6 +74,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
   disabledTests =
     [
       # TypeError: Converting from sequence to b2Vec2, expected int/float arguments index 0

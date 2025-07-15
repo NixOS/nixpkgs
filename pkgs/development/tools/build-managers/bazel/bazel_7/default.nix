@@ -34,7 +34,6 @@
   python3,
   # Apple dependencies
   cctools,
-  libcxx,
   libtool,
   sigtool,
   # Allow to independently override the jdks used to build and run respectively
@@ -324,11 +323,11 @@ stdenv.mkDerivation rec {
       # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
       # toolchain registered by default uses the local_jdk, making the selection
       # unambiguous.
-      # This toolchain has the advantage that it can use any ambiant java jdk,
+      # This toolchain has the advantage that it can use any ambient java jdk,
       # not only a given, fixed version. It allows bazel to work correctly in any
       # environment where JAVA_HOME is set to the right java version, like inside
       # nix derivations.
-      # However, this patch breaks bazel hermeticity, by picking the ambiant java
+      # However, this patch breaks bazel hermeticity, by picking the ambient java
       # version instead of the more hermetic remote_jdk prebuilt binaries that
       # rules_java provide by default. It also requires the user to have a
       # JAVA_HOME set to the exact version required by the project.
@@ -348,7 +347,7 @@ stdenv.mkDerivation rec {
       # guarantee that it will always run in any nix context.
       #
       # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-      # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+      # NIX_BUILD_TOP env var to conditionally disable sleep features inside the
       # sandbox.
       #
       # If you want to investigate the sandbox profile path,
@@ -406,7 +405,7 @@ stdenv.mkDerivation rec {
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
         # for CLang 16 compatibility in external/upb dependency
         export NIX_CFLAGS_COMPILE+=" -Wno-gnu-offsetof-extensions"
 
@@ -527,7 +526,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
+    teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     inherit platforms;
   };
@@ -554,7 +553,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       cctools
-      libcxx
     ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.

@@ -6,7 +6,6 @@
   pipInstallHook,
   blessed,
   docutils,
-  libcxx,
   llvm,
   pytestCheckHook,
   typesentry,
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "h2oai";
-    repo = pname;
+    repo = "datatable";
     rev = "9522f0833d3e965656396de4fffebd882d39c25d";
     hash = "sha256-lEXQwhx2msnJkkRrTkAwYttlYTISyH/Z7dSalqRrOhI=";
   };
@@ -53,10 +52,10 @@ buildPythonPackage rec {
   ];
 
   LLVM = llvm;
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # test suite is very cpu intensive, only run small subset to ensure package is working as expected
-  pytestFlagsArray = [ "tests/test-sets.py" ];
+  enabledTestPaths = [ "tests/test-sets.py" ];
 
   disabledTests = [
     # skip tests which are irrelevant to our installation or use way too much memory

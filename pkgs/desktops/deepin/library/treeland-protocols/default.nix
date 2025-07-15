@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
       asl20
     ];
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

@@ -8,16 +8,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.2.0";
+  version = "8.3.1";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-MFzpeiWeqJ0MG8ouwRkYXD1e6Nsxshmz1NSzCIBRjZ0=";
+    hash = "sha256-Vn2PyALaRrE+jJRdZzW+jjCm3f2GfpgrQcFGB7kr4EM=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     cookiecutter
     requests
     pyyaml
@@ -82,6 +85,7 @@ python3Packages.buildPythonApplication rec {
       lib.strings.replaceStrings [ "." ] [ "-" ] version
     }";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members ++ (with lib.maintainers; [ ilyakooo0 ]);
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
+    teams = [ lib.teams.lomiri ];
   };
 }

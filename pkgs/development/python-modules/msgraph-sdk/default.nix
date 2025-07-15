@@ -12,21 +12,18 @@
   microsoft-kiota-serialization-multipart,
   microsoft-kiota-serialization-text,
   msgraph-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "msgraph-sdk";
-  version = "1.26.0";
+  version = "1.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
     tag = "v${version}";
-    hash = "sha256-zCnv+1/rQzo1+Kya8y8M9hljrygT9ZhHstpm14FL9mE=";
+    hash = "sha256-1oz+2UQhBjRj2F243GNxmUfknVJFL/V2+jpqKZTDmDw=";
   };
 
   build-system = [ flit-core ];

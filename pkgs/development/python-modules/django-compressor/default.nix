@@ -34,6 +34,12 @@ buildPythonPackage rec {
     hash = "sha256-wdikii7k2LfyPEEeucl+LYjbGKGLocnoF41fW4NmqCI=";
   };
 
+  patches = [
+    # https://github.com/django-compressor/django-compressor/issues/1279
+    # https://github.com/django-compressor/django-compressor/pull/1296
+    ./bs4-4.13-compat.patch
+  ];
+
   build-system = [
     setuptools
   ];

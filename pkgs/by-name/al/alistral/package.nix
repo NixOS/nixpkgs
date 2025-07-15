@@ -10,26 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
-  version = "0.5.5";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DrHoVAIPD/F6pY04QXVilXiwD/nWzeVquuHzRiq2sRY=";
+    hash = "sha256-qVVQs0BV/M+rhs+qFiK9nHCKXq+dco6RuBgaUURVpts=";
   };
 
-  # remove if updating to rust 1.85
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]'\
-      --replace-fail 'rust-version = "1.85.0"' ""
-  '';
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Jyus5L0z0Z6Qf9vBcO6/h+py0JNKG1FS6qXONUM26BM=";
-
-  env.RUSTC_BOOTSTRAP = 1;
+  cargoHash = "sha256-Uv4T65ByYsfmH5OPN0ZdTs7DAOZd9RLfPrT3fBsfXuw=";
 
   nativeBuildInputs = [
     pkg-config

@@ -12,6 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-keysign";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -60,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

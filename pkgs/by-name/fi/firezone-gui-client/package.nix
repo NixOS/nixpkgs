@@ -1,5 +1,6 @@
 {
   lib,
+  rust,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -24,12 +25,12 @@
   copyDesktopItems,
 }:
 let
-  version = "1.4.9";
+  version = "1.5.1";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gui-client-${version}";
-    hash = "sha256-nOf7+48WUzQ7VmP7PFo07ZhtgyG7VOI/Hb/rXyBU5o0=";
+    hash = "sha256-KozSy44Opx6cukA0QTXeMpI3fP49iyabFzPLIJckOZ4=";
   };
 
   frontend = stdenvNoCC.mkDerivation rec {
@@ -39,9 +40,12 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version;
       src = "${src}/rust/gui-client";
-      hash = "sha256-9ywC920EF6UxkXHs+0WWaU8fr5J35/C+0nNGbSVHESE=";
+      fetcherVersion = 1;
+      hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
     };
     pnpmRoot = "rust/gui-client";
+
+    env.GITHUB_SHA = version;
 
     nativeBuildInputs = [
       pnpm_9.configHook
@@ -52,8 +56,7 @@ let
       runHook preBuild
 
       cd $pnpmRoot
-      cp node_modules/flowbite/dist/flowbite.min.js src/
-      pnpm tailwindcss -i src/input.css -o src/output.css
+      node ./node_modules/flowbite-react/dist/cli/bin.js patch
       node --max_old_space_size=1024000 ./node_modules/vite/bin/vite.js build
 
       runHook postBuild
@@ -73,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   inherit version src;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ltxyI3Xoute0/HHXYU4XdFjcQ9zSLx6ZzAZFEjDk6zw=";
+  cargoHash = "sha256-TDP1Z4MeQaSER8MGnCEQfIhRsakaSCeJ7boUMBYkkI0=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
   RUSTFLAGS = "--cfg system_certs";
@@ -102,6 +105,9 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     rm .cargo/config.toml
     ln -s ${frontend} gui-client/dist
+
+    substituteInPlace gui-client/src-tauri/tauri.conf.json \
+      --replace-fail '../../target' '../../target/${rust.envVars.rustHostPlatformSpec}'
   '';
 
   # Tries to compile apple specific crates due to workspace dependencies,
@@ -162,5 +168,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-gui-client";
+    platforms = lib.platforms.linux;
   };
 }

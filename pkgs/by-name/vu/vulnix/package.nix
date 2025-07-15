@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
   version = "1.11.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -28,8 +29,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     freezegun
-    pytest
-    pytest-cov
+    pytestCheckHook
+    pytest-cov-stub
   ];
 
   propagatedBuildInputs =
@@ -48,7 +49,7 @@ python3Packages.buildPythonApplication rec {
 
   postBuild = "make -C doc";
 
-  checkPhase = "py.test src/vulnix";
+  pytestFlagsArray = [ "src/vulnix" ];
 
   postInstall = ''
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst

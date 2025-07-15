@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "buildbox";
-  version = "1.3.7";
+  version = "1.3.21";
 
   src = fetchFromGitLab {
     owner = "BuildGrid";
     repo = "buildbox/buildbox";
     tag = finalAttrs.version;
-    hash = "sha256-US0qJrKoAYR4rMmolC8jx7IpQ2PiHZy7L2bog+I3G48=";
+    hash = "sha256-gZ4PnaIiMPh18Yy2120yIEaQaFpzGNnWXzS7Uw+n/+k=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    makeWrapper $out/bin/buildbox-run-bubblewrap $out/bin/buildbox-run --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
+    wrapProgram $out/bin/buildbox-run --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
   '';
 
   meta = {

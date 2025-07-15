@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.242.0";
+  version = "2.244.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     tag = "v${version}";
-    hash = "sha256-86FnB/HJ43RxFuezzbNADUVsifV0+HHVR0yfb+aQZ8M=";
+    hash = "sha256-T4E1zoZBDUbvnpndhUGYeIG845i5SvpOeYI3VSThUeU=";
   };
 
   build-system = [
@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "importlib-metadata"
     "numpy"
     "omegaconf"
+    "packaging"
     "protobuf"
   ];
 

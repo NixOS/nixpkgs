@@ -1,11 +1,37 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
   texinfo,
   versionCheckHook,
 }:
 
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # tahoe-lafs is incompatible with magic-wormhole >= 0.19.0
+      # TODO: unpin, when https://tahoe-lafs.org/trac/tahoe-lafs/ticket/4180 is fixed
+      magic-wormhole = super.magic-wormhole.overridePythonAttrs (oldAttrs: rec {
+        version = "0.18.0";
+
+        src = fetchFromGitHub {
+          owner = "magic-wormhole";
+          repo = "magic-wormhole";
+          tag = version;
+          hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
+        };
+
+        nativeCheckInputs = lib.filter (
+          input: (input.pname or null) != "pytest-twisted"
+        ) oldAttrs.nativeCheckInputs;
+
+        pytestFlagsArray = null;
+      });
+    };
+  };
+  python3Packages = python.pkgs;
+in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
   version = "1.20.0";

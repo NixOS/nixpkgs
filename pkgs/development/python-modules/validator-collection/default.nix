@@ -3,58 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  alabaster,
-  attrs,
-  babel,
-  certifi,
-  cffi,
-  chardet,
-  colorama,
-  coverage,
-  docutils,
-  filelock,
-  html5lib,
-  idna,
-  imagesize,
-  isort,
-  jinja2,
+  simplejson,
   jsonschema,
-  lazy-object-proxy,
-  markupsafe,
-  mccabe,
-  more-itertools,
-  packaging,
-  pkginfo,
-  pluggy,
-  py,
-  py-cpuinfo,
-  pycparser,
   pyfakefs,
-  pygments,
-  pyparsing,
-  pytest,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pytz,
-  readme-renderer,
-  requests,
-  requests-toolbelt,
-  restview,
-  six,
-  snowballstemmer,
-  sphinx,
-  sphinx-rtd-theme,
-  sphinx-tabs,
-  sphinxcontrib-websupport,
-  toml,
   pytestCheckHook,
-  tox,
-  tqdm,
-  twine,
-  urllib3,
-  virtualenv,
-  webencodings,
-  wrapt,
   pythonOlder,
 }:
 
@@ -74,61 +26,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  # listed in setup.py, the requirements.txt is _full_ of dev junk
   dependencies = [
-    alabaster
-    attrs
-    babel
-    certifi
-    cffi
-    chardet
-    colorama
-    coverage
-    docutils
-    filelock
-    html5lib
-    idna
-    imagesize
-    isort
-    jinja2
     jsonschema
-    lazy-object-proxy
-    markupsafe
-    mccabe
-    more-itertools
-    packaging
-    pkginfo
-    pluggy
-    py
-    py-cpuinfo
-    pycparser
-    pyfakefs
-    pygments
-    pyparsing
-    pytest
-    pytest-benchmark
-    pytest-cov-stub
-    pytz
-    readme-renderer
-    requests
-    requests-toolbelt
-    restview
-    six
-    snowballstemmer
-    sphinx
-    sphinx-rtd-theme
-    sphinx-tabs
-    sphinxcontrib-websupport
-    toml
-    tox
-    tqdm
-    twine
-    urllib3
-    virtualenv
-    webencodings
-    wrapt
+    simplejson # optional but preferred
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyfakefs
+  ];
 
   pythonImportsCheck = [ "validator_collection" ];
 

@@ -1,68 +1,75 @@
 {
   lib,
   stdenv,
-  testers,
-  versionCheckHook,
-  nix-update-script,
   rustPlatform,
   fetchFromGitHub,
   protobuf,
-  restate,
-  pkg-config,
+
+  # nativeBuildInputs
+  cmake,
   openssl,
   perl,
-  cmake,
-  cacert,
+  pkg-config,
+
+  # buildInputs
   rdkafka,
+
+  # tests
+  cacert,
+  versionCheckHook,
+
+  # passthru
+  testers,
+  restate,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.1.6";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
-    tag = "v${version}";
-    hash = "sha256-uDNPIL9Ox5rwWVzqWe74elHPGy6lSvWR1S7HsY6ATjc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0p3pH2lQnb3oOsGtKP8olVUefobGa3DsnB2LMx06+no=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-z7VAKU4bi6pX2z4jCKWDfQt8FFLN7ugnW2LOy6IHz/w=";
+  cargoHash = "sha256-9EeS599rZLLKkdBS1bTX7y7CTmeTBlgHZ8c0WBlbZmk=";
 
   env = {
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
-    VERGEN_GIT_COMMIT_DATE = "2024-12-23";
-    VERGEN_GIT_SHA = "v${version}";
+    VERGEN_GIT_SHA = "v${finalAttrs.version}";
 
     # rustflags as defined in the upstream's .cargo/config.toml
     RUSTFLAGS =
       let
         target = stdenv.hostPlatform.config;
-        targetFlags = rec {
+        targetFlags = lib.fix (self: {
           build = [
             "-C force-unwind-tables"
-            "-C debug-assertions"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
+            "--cfg tokio_taskdump"
           ];
 
-          "aarch64-unknown-linux-gnu" = build ++ [
+          "aarch64-unknown-linux-gnu" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
           ];
 
-          "x86_64-unknown-linux-musl" = build ++ [
+          "x86_64-unknown-linux-musl" = self.build ++ [
             "-C link-self-contained=yes"
           ];
 
-          "aarch64-unknown-linux-musl" = build ++ [
+          "aarch64-unknown-linux-musl" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
             "-C link-self-contained=yes"
           ];
-        };
+        });
       in
       lib.concatStringsSep " " (lib.attrsets.attrByPath [ target ] targetFlags.build targetFlags);
 
@@ -71,13 +78,17 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    pkg-config
+    cmake
     openssl
     perl
+    pkg-config
     rustPlatform.bindgenHook
-    cmake
   ];
-  buildInputs = [ rdkafka ];
+
+  buildInputs = [
+    rdkafka
+  ];
+
   nativeCheckInputs = [
     cacert
   ];
@@ -86,12 +97,23 @@ rustPlatform.buildRustPackage rec {
   # Feature resolution seems to be failing due to this https://github.com/rust-lang/cargo/issues/7754
   auditable = false;
 
+  checkFlags = [
+    # Error: deadline has elapsed
+    "--skip replicated_loglet"
+
+    # TIMEOUT [ 180.006s]
+    "--skip fast_forward_over_trim_gap"
+
+    # TIMEOUT (could be related to https://github.com/restatedev/restate/issues/3043)
+    "--skip restatectl_smoke_test"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -111,11 +133,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "Restate is a platform for developing distributed fault-tolerant applications.";
+    description = "Platform for developing distributed fault-tolerant applications";
     homepage = "https://restate.dev";
-    changelog = "https://github.com/restatedev/restate/releases/tag/v${version}";
+    changelog = "https://github.com/restatedev/restate/releases/tag/v${finalAttrs.version}";
     mainProgram = "restate";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ myypo ];
   };
-}
+})

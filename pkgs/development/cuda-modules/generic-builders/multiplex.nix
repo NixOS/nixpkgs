@@ -1,13 +1,17 @@
 {
-  # callPackage-provided arguments
   lib,
-  cudaVersion,
-  flags,
+  cudaLib,
+  cudaMajorMinorVersion,
+  redistSystem,
   stdenv,
-  # Expected to be passed by the caller
-  mkVersionedPackageName,
-  # pname :: String
+  # Builder-specific arguments
+  # Short package name (e.g., "cuda_cccl")
+  # pname : String
   pname,
+  # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
+  # Also known as the Redistributable Name.
+  # redistName : String,
+  redistName,
   # releasesModule :: Path
   # A path to a module which provides a `releases` attribute
   releasesModule,
@@ -17,32 +21,14 @@
   # and the package description (which NVIDIA's manifest calls the "name").
   # It's also used for fetching the source, but we override that since we can't
   # re-use that portion of the functionality (different URLs, etc.).
-  # The featureRelease is used to populate meta.platforms (by way of looking at the attribute names)
-  # and to determine the outputs of the package.
-  # shimFn :: {package, redistArch} -> AttrSet
+  # The featureRelease is used to populate meta.platforms (by way of looking at the attribute names), determine the
+  # outputs of the package, and provide additional package-specific constraints (e.g., min/max supported CUDA versions,
+  # required versions of other packages, etc.).
+  # shimFn :: {package, redistSystem} -> AttrSet
   shimsFn ? (throw "shimsFn must be provided"),
-  # fixupFn :: Path
-  # A path (or nix expression) to be evaluated with callPackage and then
-  # provided to the package's overrideAttrs function.
-  # It must accept at least the following arguments:
-  # - final
-  # - cudaVersion
-  # - mkVersionedPackageName
-  # - package
-  # - ...
-  fixupFn ? (throw "fixupFn must be provided"),
 }:
 let
-  inherit (lib)
-    attrsets
-    lists
-    modules
-    strings
-    ;
-
-  inherit (stdenv) hostPlatform;
-
-  evaluatedModules = modules.evalModules {
+  evaluatedModules = lib.modules.evalModules {
     modules = [
       ../modules
       releasesModule
@@ -53,62 +39,65 @@ let
   # - Releases: ../modules/${pname}/releases/releases.nix
   # - Package: ../modules/${pname}/releases/package.nix
 
-  # FIXME: do this at the module system level
-  propagatePlatforms = lib.mapAttrs (
-    redistArch: packages: map (p: { inherit redistArch; } // p) packages
-  );
+  # Check whether a package supports our CUDA version.
+  # satisfiesCudaVersion :: Package -> Bool
+  satisfiesCudaVersion =
+    package:
+    lib.versionAtLeast cudaMajorMinorVersion package.minCudaVersion
+    && lib.versionAtLeast package.maxCudaVersion cudaMajorMinorVersion;
 
-  # All releases across all platforms
-  # See ../modules/${pname}/releases/releases.nix
-  releaseSets = propagatePlatforms evaluatedModules.config.${pname}.releases;
+  # FIXME: do this at the module system level
+  propagatePlatforms = lib.mapAttrs (redistSystem: lib.map (p: { inherit redistSystem; } // p));
+
+  # Releases for all platforms and all CUDA versions.
+  allReleases = propagatePlatforms evaluatedModules.config.${pname}.releases;
+
+  # Releases for all platforms and our CUDA version.
+  allReleases' = lib.mapAttrs (_: lib.filter satisfiesCudaVersion) allReleases;
+
+  # Packages for all platforms and our CUDA versions.
+  allPackages = lib.concatLists (lib.attrValues allReleases');
+
+  packageOlder = p1: p2: lib.versionOlder p1.version p2.version;
+  packageSupportedPlatform = p: p.redistSystem == redistSystem;
 
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: Package -> String
-  computeName = { version, ... }: mkVersionedPackageName pname version;
+  computeName = { version, ... }: cudaLib.mkVersionedName pname (lib.versions.majorMinor version);
 
-  # Check whether a package supports our CUDA version and platform.
-  # isSupported :: Package -> Bool
-  isSupported =
-    package:
-    redistArch == package.redistArch
-    && strings.versionAtLeast cudaVersion package.minCudaVersion
-    && strings.versionAtLeast package.maxCudaVersion cudaVersion;
-
-  # Get all of the packages for our given platform.
-  # redistArch :: String
-  # Value is `"unsupported"` if the platform is not supported.
-  redistArch = flags.getRedistArch hostPlatform.system;
-
-  preferable =
-    p1: p2: (isSupported p2 -> isSupported p1) && (strings.versionAtLeast p1.version p2.version);
-
-  # All the supported packages we can build for our platform.
-  # perSystemReleases :: List Package
-  allReleases = lib.pipe releaseSets [
-    (lib.attrValues)
-    (lists.flatten)
-    (lib.groupBy (p: lib.versions.majorMinor p.version))
-    (lib.mapAttrs (_: builtins.sort preferable))
-    (lib.mapAttrs (_: lib.take 1))
-    (lib.attrValues)
-    (lib.concatMap lib.trivial.id)
-  ];
-
-  newest = builtins.head (builtins.sort preferable allReleases);
-
-  # A function which takes the `final` overlay and the `package` being built and returns
-  # a function to be consumed via `overrideAttrs`.
-  overrideAttrsFixupFn =
-    final: package:
-    final.callPackage fixupFn {
-      inherit
-        final
-        cudaVersion
-        mkVersionedPackageName
-        package
-        ;
-    };
+  # The newest package for each major-minor version, with newest first.
+  # newestPackages :: List Package
+  newestPackages =
+    let
+      newestForEachMajorMinorVersion = lib.foldl' (
+        newestPackages: package:
+        let
+          majorMinorVersion = lib.versions.majorMinor package.version;
+          existingPackage = newestPackages.${majorMinorVersion} or null;
+        in
+        newestPackages
+        // {
+          ${majorMinorVersion} =
+            # Only keep the existing package if it is newer than the one we are considering or it is supported on the
+            # current platform and the one we are considering is not.
+            if
+              existingPackage != null
+              && (
+                packageOlder package existingPackage
+                || (!packageSupportedPlatform package && packageSupportedPlatform existingPackage)
+              )
+            then
+              existingPackage
+            else
+              package;
+        }
+      ) { } allPackages;
+    in
+    # Sort the packages by version so the newest is first.
+    # NOTE: builtins.sort requires a strict weak ordering, so we must use versionOlder rather than versionAtLeast.
+    # See https://github.com/NixOS/nixpkgs/commit/9fd753ea84e5035b357a275324e7fd7ccfb1fc77.
+    lib.sort (lib.flip packageOlder) (lib.attrValues newestForEachMajorMinorVersion);
 
   extension =
     final: _:
@@ -118,27 +107,24 @@ let
       buildPackage =
         package:
         let
-          shims = final.callPackage shimsFn {
-            inherit package;
-            inherit (package) redistArch;
-          };
+          shims = final.callPackage shimsFn { inherit package redistSystem; };
           name = computeName package;
           drv = final.callPackage ./manifest.nix {
-            inherit pname;
-            redistName = pname;
+            inherit pname redistName;
             inherit (shims) redistribRelease featureRelease;
           };
-          fixedDrv = drv.overrideAttrs (overrideAttrsFixupFn final package);
         in
-        attrsets.nameValuePair name fixedDrv;
+        lib.nameValuePair name drv;
 
       # versionedDerivations :: AttrSet Derivation
-      versionedDerivations = builtins.listToAttrs (lists.map buildPackage allReleases);
+      versionedDerivations = builtins.listToAttrs (lib.map buildPackage newestPackages);
 
       defaultDerivation = {
-        ${pname} = (buildPackage newest).value;
+        ${pname} = (buildPackage (lib.head newestPackages)).value;
       };
     in
-    versionedDerivations // defaultDerivation;
+    # NOTE: Must condition on the length of newestPackages to avoid non-total function lib.head aborting if
+    # newestPackages is empty.
+    lib.optionalAttrs (lib.length newestPackages > 0) (versionedDerivations // defaultDerivation);
 in
 extension

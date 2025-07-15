@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "partclone";
-  version = "0.3.34";
+  version = "0.3.37";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = version;
-    sha256 = "sha256-VxHxg5O/ox97rgRvY+KJJx35DVruack2Nu7JKwysruc=";
+    sha256 = "sha256-VqPCj2DjWux17vgLb13AJd0EAHkqRGdIL0aPxkT3JlY=";
   };
 
   nativeBuildInputs = [

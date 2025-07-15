@@ -12,8 +12,6 @@
   desktop-file-utils,
   libsoup_3,
   json-glib,
-  geoclue2,
-  geocode-glib,
   libgee,
   gtk3,
   pantheon,
@@ -45,8 +43,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libsoup_3
     json-glib
-    geoclue2
-    geocode-glib
     libgee
     glib
     gtk3

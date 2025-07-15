@@ -68,5 +68,6 @@ mkKdeDerivation {
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ macronova ];
+    teams = [ ];
   };
 }

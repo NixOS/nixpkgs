@@ -61,7 +61,7 @@ buildPythonPackage rec {
   __impureHostDeps = [ "/System/Library/Fonts" ];
 
   postCheck = ''
-    export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
+    export LANG=${if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
   '';
 
   meta = with lib; {

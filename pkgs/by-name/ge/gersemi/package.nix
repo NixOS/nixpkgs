@@ -6,16 +6,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gersemi";
-  version = "0.19.2";
+  version = "0.20.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
     tag = version;
-    hash = "sha256-lQafcZLTF/6SHC/NL1UnuilascjwqH4sX+kmCYHFDrw=";
+    hash = "sha256-6lBUP+xi0owlD33TLTOlaIFBcfWTnsniK/9cQdo/ND4=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     appdirs
     colorama
     lark

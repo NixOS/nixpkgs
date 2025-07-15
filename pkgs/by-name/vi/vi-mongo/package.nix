@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "vi-mongo";
-  version = "0.1.22";
+  version = "0.1.29";
 
   src = fetchFromGitHub {
     owner = "kopecmaciej";
     repo = "vi-mongo";
     tag = "v${version}";
-    hash = "sha256-OKeflsr823Z9KBgymJG2Z9C4OFxdbW8LzVCWLahMJ0s=";
+    hash = "sha256-hxQPqTQ+U6ebTv6HZReiWMeP8RoyjQC0pA3Qug1MSFo=";
   };
 
-  vendorHash = "sha256-rKXrmK0ns3FB6EGyCJ2nYrCUsQ7yPm8dmzJioiVzHIc=";
+  vendorHash = "sha256-QoYjNzWWNrEDS4Xq1NF77iqX5WTNxnVV1UJiYq2slhw=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,7 @@ buildGoModule rec {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

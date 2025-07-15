@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
-    repo = pname;
+    repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-IKd5n8+U6+0dgV4PbLcPaormXCX4srGcXmvYSrnCt60=";
+    sha256 = "sha256-RlTscoStJQ0vjrrk14xHRsMZOJt8eJSqinc4rY/lW4k=";
   };
 
   nativeBuildInputs = [

@@ -80,6 +80,7 @@ let
               home = "/var/lib/redis";
               linger = type == "healthy";
               createHome = true;
+              uid = 2342;
               subUidRanges = [
                 {
                   count = 65536;

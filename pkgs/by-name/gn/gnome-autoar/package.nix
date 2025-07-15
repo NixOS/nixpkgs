@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.lgpl21Plus;
     description = "Library to integrate compressed files management with GNOME";
   };

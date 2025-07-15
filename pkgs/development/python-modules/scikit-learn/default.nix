@@ -79,6 +79,12 @@ buildPythonPackage rec {
     [
       # Skip test_feature_importance_regression - does web fetch
       "test_feature_importance_regression"
+
+      # Fail due to new deprecation warnings in scipy
+      # FIXME: reenable when fixed upstream
+      "test_logistic_regression_path_convergence_fail"
+      "test_linalg_warning_with_newton_solver"
+      "test_newton_cholesky_fallback_to_lbfgs"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # doesn't seem to produce correct results?

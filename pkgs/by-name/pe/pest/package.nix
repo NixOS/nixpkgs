@@ -24,6 +24,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://pestphp.com";
     license = lib.licenses.mit;
     mainProgram = "pest";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

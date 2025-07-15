@@ -38,8 +38,8 @@
   alsa-lib,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  browserSupport ? false, # FIXME: broken
-  libcef,
+  browserSupport ? true,
+  cef-binary,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   withFdk ? true,
@@ -60,21 +60,35 @@
   libvpl,
   qrcodegencpp,
   nix-update-script,
+  extra-cmake-modules,
 }:
 
 let
   inherit (lib) optional optionals;
 
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "138.0.17";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+    gitRevision = "ac9b751";
+    chromiumVersion = "138.0.7204.97";
+
+    srcHash =
+      {
+        aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
+        x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.2";
+  version = "31.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-I8VExGFr0thEaT8vHvdNwck7AYSpdpfLVPjij1Utt0E=";
+    hash = "sha256-espGKoKldgjWoCEE+Xor7+N5N86HvWCf0V18tb8GaC8=";
     fetchSubmodules = true;
   };
 
@@ -94,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       wrapGAppsHook3
       wrapQtAppsHook
+      extra-cmake-modules
     ]
     ++ optional scriptingSupport swig
     ++ optional cudaSupport autoAddDriverRunpath;
@@ -140,20 +155,12 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       libdrm
     ]
-    ++ optional browserSupport libcef
+    ++ optional browserSupport cef
     ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
-    mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
-    for i in ${libcef}/share/cef/*; do
-      ln -s $i cef/Release/
-      ln -s $i cef/Resources/
-    done
-    ln -s ${libcef}/lib/*.so* cef/Release/
-    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
-    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    ln -s ${libcef}/include cef/
+    ln -s ${cef} cef
   '';
 
   postPatch = ''
@@ -215,8 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.optionalString browserSupport ''
       # Link cef components again after patchelfing other libs
-      ln -s ${libcef}/lib/* $out/lib/obs-plugins/
-      ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
+      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-plugins/
     '')
   ];
 

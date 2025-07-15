@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.40.1";
+  version = "0.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${version}";
-    hash = "sha256-rddjRBofI5M28wvlBwH2VwuIgmulThxbfxiJSOCNkPY=";
+    hash = "sha256-M3su+bDFuvmNEDVK+poWfxwbpsw/0L1/R6Z4CL0mvZ4=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests =
     [
@@ -50,19 +50,22 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/test_pane.py:113: AssertionError
       "test_capture_pane_start"
+      # assert (1740973920.500444 - 1740973919.015309) <= 1.1
+      "test_retry_three_times"
+      "test_function_times_out_no_raise"
+      # assert False
+      "test_retry_three_times_no_raise_assert"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_test.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
 
   pythonImportsCheck = [ "libtmux" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typed scripting library / ORM / API wrapper for tmux";
     homepage = "https://libtmux.git-pull.com/";
     changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
   };
 }

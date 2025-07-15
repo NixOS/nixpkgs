@@ -13,25 +13,26 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.26.0";
+  version = "2.29.0";
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Lo4KFBNcY8tmBuCmEr2XV0IUZtxXHmbXPNLkov/QSU0=";
+    hash = "sha256-AJ22q6yWc1hPkqssXMxQqD6QUeJ6hbx52xWHhKsmuP0=";
   };
+
   buildInputs = [
     boost
     nix
     curl
     nlohmann_json
   ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    # nlohmann_json can be only discovered via cmake files
-    cmake
   ];
 
   # Since this package is intimately tied to a specific Nix release, we

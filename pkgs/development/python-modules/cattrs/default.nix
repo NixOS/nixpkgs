@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "24.1.2";
+  version = "24.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = "cattrs";
     tag = "v${version}";
-    hash = "sha256-LSP8a/JduK0h9GytfbN7/CjFlnGGChaa3VbbCHQ3AFE=";
+    hash = "sha256-yrrb2Lvq7zMzeOLr8wwxVsKmPYEZxzDKR2mnCMNuHdE=";
   };
 
   patches = [

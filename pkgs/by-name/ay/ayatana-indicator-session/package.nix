@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-session";
-  version = "24.5.0";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-session";
     tag = finalAttrs.version;
-    hash = "sha256-p4nu7ZgnEjnnxNqyZIg//YcssnQcCY7GFDbpGIu1dz0=";
+    hash = "sha256-jqcgQTsC4VBit3wwtKKTdEG71CUPJpeMtpzikE4IGhE=";
   };
 
   postPatch = ''
@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests.vm = nixosTests.ayatana-indicators;
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-session;
+    };
     updateScript = gitUpdater { };
   };
 

@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lockbook";
-  version = "0.9.20";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = version;
-    hash = "sha256-nIh5xgdtaUvc5RbS24GGUHxY41lnL2xdkDs0TD/N2Gw=";
+    hash = "sha256-akCtnPLJupoo7n3Vfyl37fjCmK4dHB0bt92rie6k0dQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CuUg5QT1s5TJd409O9YD3A3bMNUnfY6MrCIUrzS50j8=";
+  cargoHash = "sha256-xH3GIwh3zaLbpZqvzM+KM+K14fWj241RTwUM7dWRCKA=";
 
   doCheck = false; # there are no cli tests
   cargoBuildFlags = [

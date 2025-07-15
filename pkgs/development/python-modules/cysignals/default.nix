@@ -52,7 +52,7 @@ buildPythonPackage rec {
     description = "Interrupt and signal handling for Cython";
     mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.lgpl3Plus;
   };
 }

@@ -31,6 +31,7 @@
   gtk-doc,
   libxslt,
   enableDaemon ? true,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
       shared-mime-info
       vala
       wrapGAppsNoGuiHook
+      udevCheckHook
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -116,6 +118,8 @@ stdenv.mkDerivation rec {
       polkit
     ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
@@ -136,7 +140,8 @@ stdenv.mkDerivation rec {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
+    maintainers = [ maintainers.marcweber ];
+    teams = [ teams.freedesktop ];
     platforms = platforms.linux;
   };
 }

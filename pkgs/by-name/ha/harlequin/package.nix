@@ -11,21 +11,21 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "2.0.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
-    hash = "sha256-IUzN+rWL69TUUS9npcmfSAPqy/8SYNusNAN/muCMqNI=";
+    hash = "sha256-uHzhAI8ppp6aoveMPcLCQX2slhbor5Qy+IoTui+RP7M=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "pyarrow"
     "textual"
-    "syrupy"
+    "tree-sitter-sql"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
@@ -41,6 +41,7 @@ python3Packages.buildPythonApplication rec {
       numpy
       packaging
       platformdirs
+      pyarrow
       questionary
       rich-click
       sqlfmt
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
       textual-fastdatatable
       textual-textarea
       tomlkit
+      tree-sitter-sql
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
@@ -90,7 +92,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "The SQL IDE for Your Terminal";
+    description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
     changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
     license = lib.licenses.mit;

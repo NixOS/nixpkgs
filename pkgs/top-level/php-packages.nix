@@ -31,7 +31,6 @@
   openldap,
   openssl_1_1,
   openssl,
-  overrideSDK,
   pam,
   pcre2,
   bison,
@@ -206,7 +205,7 @@ lib.makeScope pkgs.newScope (
           meta = {
             description = "PHP upstream extension: ${name}";
             inherit (php.meta)
-              maintainers
+              teams
               homepage
               license
               platforms
@@ -284,18 +283,15 @@ lib.makeScope pkgs.newScope (
 
         couchbase = callPackage ../development/php-packages/couchbase { };
 
-        datadog_trace = callPackage ../development/php-packages/datadog_trace {
-          buildPecl = buildPecl.override {
-            stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-          };
-          inherit (pkgs) darwin;
-        };
+        datadog_trace = callPackage ../development/php-packages/datadog_trace { };
 
         decimal = callPackage ../development/php-packages/decimal { };
 
         ds = callPackage ../development/php-packages/ds { };
 
         event = callPackage ../development/php-packages/event { };
+
+        excimer = callPackage ../development/php-packages/excimer { };
 
         gnupg = callPackage ../development/php-packages/gnupg { };
 
@@ -312,6 +308,8 @@ lib.makeScope pkgs.newScope (
 
         ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
 
+        luasandbox = callPackage ../development/php-packages/luasandbox { };
+
         mailparse = callPackage ../development/php-packages/mailparse { };
 
         maxminddb = callPackage ../development/php-packages/maxminddb { };
@@ -324,9 +322,7 @@ lib.makeScope pkgs.newScope (
 
         memprof = callPackage ../development/php-packages/memprof { };
 
-        mongodb = callPackage ../development/php-packages/mongodb {
-          inherit (pkgs) darwin;
-        };
+        mongodb = callPackage ../development/php-packages/mongodb { };
 
         msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -360,7 +356,7 @@ lib.makeScope pkgs.newScope (
                 sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
               '';
 
-              meta.maintainers = lib.teams.php.members;
+              meta.teams = [ lib.teams.php ];
             };
 
         pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
@@ -383,9 +379,7 @@ lib.makeScope pkgs.newScope (
 
         smbclient = callPackage ../development/php-packages/smbclient { };
 
-        snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
-          inherit (pkgs) darwin;
-        };
+        snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
 
         spx = callPackage ../development/php-packages/spx { };
 
@@ -395,6 +389,8 @@ lib.makeScope pkgs.newScope (
 
         swoole = callPackage ../development/php-packages/swoole { };
 
+        systemd = callPackage ../development/php-packages/systemd { };
+
         tideways = callPackage ../development/php-packages/tideways { };
 
         uuid = callPackage ../development/php-packages/uuid { };
@@ -402,6 +398,8 @@ lib.makeScope pkgs.newScope (
         uv = callPackage ../development/php-packages/uv { };
 
         vld = callPackage ../development/php-packages/vld { };
+
+        wikidiff2 = callPackage ../development/php-packages/wikidiff2 { };
 
         xdebug = callPackage ../development/php-packages/xdebug { };
 
@@ -428,7 +426,15 @@ lib.makeScope pkgs.newScope (
                 configureFlags = [ "--with-bz2=${bzip2.dev}" ];
               }
               { name = "calendar"; }
-              { name = "ctype"; }
+              {
+                name = "ctype";
+                postPatch =
+                  lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast php.version "8.2")
+                    # Broken test on aarch64-darwin
+                    ''
+                      rm ext/ctype/tests/lc_ctype_inheritance.phpt
+                    '';
+              }
               {
                 name = "curl";
                 buildInputs = [ curl ];
@@ -640,7 +646,7 @@ lib.makeScope pkgs.newScope (
               {
                 name = "pdo_pgsql";
                 internalDeps = [ php.extensions.pdo ];
-                configureFlags = [ "--with-pdo-pgsql=${lib.getDev libpq}" ];
+                configureFlags = [ "--with-pdo-pgsql=${libpq.pg_config}" ];
                 doCheck = false;
               }
               {
@@ -655,7 +661,7 @@ lib.makeScope pkgs.newScope (
                 buildInputs = [
                   pcre2
                 ];
-                configureFlags = [ "--with-pgsql=${lib.getDev libpq}" ];
+                configureFlags = [ "--with-pgsql=${libpq.pg_config}" ];
                 doCheck = false;
               }
               {

@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hydrus";
-  version = "612";
+  version = "627";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     tag = "v${version}";
-    hash = "sha256-zRaabW1QwNNgA3F84CFSDbxyALV74T3t8u8WdL8GwG0=";
+    hash = "sha256-7zV+sQ22hrvCqMk7ePlAhSYG2495pEAyZYrep3NYoXE=";
   };
 
   nativeBuildInputs = [
@@ -162,7 +162,7 @@ python3Packages.buildPythonApplication rec {
     description = "Danbooru-like image tagging and searching system for the desktop";
     license = lib.licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
-    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/v${version}";
+    changelog = "https://github.com/hydrusnetwork/hydrus/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [
       dandellion
       evanjs

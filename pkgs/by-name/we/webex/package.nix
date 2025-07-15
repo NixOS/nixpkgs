@@ -57,11 +57,11 @@
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "45.2.0.31846";
+  version = "45.6.1.32593";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250225153039/Webex_ubuntu.7z";
-    sha256 = "88b6031d3ea885b750a9e44e3f7b98634e3ecdfb5ca1672ea840ea16a97386ab";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250617170507/Webex_ubuntu.7z";
+    sha256 = "a024d8b9c40309a291d2070123935077579ae5aa9b60366e7aaa52fa818122b0";
   };
 
   nativeBuildInputs = [
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     version=$(jq -r '.version' <<< "$manifest")
     hash=$(jq -r '.checksum' <<< "$manifest")
 
-    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/applications/networking/instant-messengers/webex/default.nix
+    update-source-version ${pname} "$version" "$hash" "$url" --file=./pkgs/by-name/we/webex/package.nix
   '';
 
   meta = with lib; {

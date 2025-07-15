@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     ++ (with python3Packages; [
       pytestCheckHook
     ]);
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Create video contact sheets";

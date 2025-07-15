@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
     license = licenses.bsd2;
-    maintainers = teams.sphinx.members;
+    teams = [ teams.sphinx ];
   };
 }

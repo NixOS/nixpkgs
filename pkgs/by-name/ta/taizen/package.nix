@@ -6,8 +6,6 @@
   pkg-config,
   ncurses,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -35,14 +33,10 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    ncurses
+    openssl
+  ];
 
   meta = with lib; {
     description = "curses based mediawiki browser";

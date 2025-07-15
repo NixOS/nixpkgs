@@ -18,8 +18,8 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "9ac7062b1860d895fb5a8cbf58c3e9ef8f674b5f";
-      hash = "sha256-uOgUtF8gaEgcxFK9WAoAhv4GoS8P23IoUxHZZVZdpPk=";
+      rev = "76bb24329e8bf5f39704eb10d21b9a80befa7c81";
+      hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
@@ -36,26 +36,26 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "66f7f51b7e069d0a03a21157fa60b24aece69aeb";
-      hash = "sha256-/xd0GnXoW8vclIk8aKAziQwDx6AdlBmZD48p8aCX6TQ=";
+      rev = "81044ec13df7608d0d9d86aff2ef9805fc69bed1";
+      hash = "sha256-W0uonGzjDaN2RbY2U+Kl1a5/nrEZ9T9W426f+a7NUzY=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "6910c9d9165801d8827d628cb72eb7ea9dd538c5";
-      hash = "sha256-01PK9LxqHno89gypd7ze5gDP4V3en2J5g6JZRqohDB0=";
+      rev = "52eb8108c5bdec04579160ae17225d66034bd723";
+      hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
     };
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
-      hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
+      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
+      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
-      hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
+      rev = "c7bee59d068a69f427b1273e71cdc5bc455a5bdd";
+      hash = "sha256-RnuaRrWMQ1rFfb/nxE0ukIoBf2AMG5pRyFmKmvsJ/U8=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
@@ -66,8 +66,8 @@ let
     tinyxml2 = fetchFromGitHub {
       owner = "leethomason";
       repo = "tinyxml2";
-      rev = "9a89766acc42ddfa9e7133c7d81a5bda108a0ade";
-      hash = "sha256-YGAe4+Ttv/xeou+9FoJjmQCKgzupTYdDhd+gzvtz/88=";
+      rev = "e6caeae85799003f4ca74ff26ee16a789bc2af48";
+      hash = "sha256-GpFFWl7/1XF1vTOxUrEo27T4Kc6oaUMvhGp9xLQfmWg=";
     };
     marchingcubecpp = fetchFromGitHub {
       owner = "aparis69";
@@ -132,7 +132,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.3.0";
+  version = "3.3.4";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-6Mb50WD5ZQksKoG4FH3+iyy9qBqa1fKUPyt6McNDkGg=";
+    hash = "sha256-nssmGJRrk1BECmeU4OEs/jLK3MdA6ytIJ9Yqaiuf0Aw=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -184,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };
 

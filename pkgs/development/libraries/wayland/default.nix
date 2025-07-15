@@ -105,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
-    mainProgram = "wayland-scanner";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
       clients as well as a library implementation of the protocol.
@@ -118,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      primeos
       codyopel
       qyliss
     ];

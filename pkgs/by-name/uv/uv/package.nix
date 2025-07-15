@@ -8,9 +8,7 @@
   rust-jemalloc-sys,
 
   # nativeBuildInputs
-  cmake,
   installShellFiles,
-  pkg-config,
 
   buildPackages,
   versionCheckHook,
@@ -20,29 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.6.10";
+  version = "0.7.20";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-IvHMueDY8sT+hLaySOwZ6sI3Jcb1Ht1Wpfzv17NCfI8=";
+    hash = "sha256-DHad9vDkqmsUE9mfYJef7+Y25ryLWTRyGSe9hC+O/2U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YNeZt4Zcw0hiYiKwtuEHk5OuH041iILtFyY88/4Db3w=";
+  cargoHash = "sha256-WmJlYBaPHKm5yrypESNyJS4PoOx93MxHh6D7w2rw23A=";
 
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-    pkg-config
-  ];
-
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package"
@@ -64,9 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -83,7 +73,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+      prince213
+    ];
     mainProgram = "uv";
   };
 })

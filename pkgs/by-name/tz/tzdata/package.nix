@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2025a";
+  version = "2025b";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-TV/Lxyx8RQ6/4LZZvQ8cAvv1L9f1F6nqE/5xwh618NA=";
+      hash = "sha256-EYEEEzRfx4BQF+J+qfpIhf10zWGykRcRrQOPXSjXFHQ=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-EZZ51Z92SB614D09KkfXhw1ZLzmZVJrxidvTHy6/UGE=";
+      hash = "sha256-Bfj+2zUl7nDUnIfT+ueKig265P6HqlZcZc2plIrhNew=";
     })
   ];
 
@@ -57,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS+=-DHAVE_SETENV=0"
       "CFLAGS+=-DHAVE_SYMLINK=0"
       "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      "CFLAGS+=-DNETBSD_INSPIRED=0"
+      "CFLAGS+=-DSTD_INSPIRED=0"
+      "CFLAGS+=-DUSE_TIMEX_T=1"
+      "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
+      "CFLAGS+=-DEXTERN_TIMEOFF=1"
     ];
 
   enableParallelBuilding = true;

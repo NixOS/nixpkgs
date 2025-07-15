@@ -1,28 +1,32 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "bubble-card";
-  version = "2.4.0";
-
-  dontBuild = true;
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "Clooos";
     repo = "Bubble-Card";
     rev = "v${version}";
-    hash = "sha256-Hn6jH7lT+bjkOM/iRCmD1B8l6ZRqjNTmVMj4IN7ixE4=";
+    hash = "sha256-a9IfVrP6fGiNf+g3HhG8i2VsP7Y7mjJTr7MYvJJUR9U=";
   };
+
+  npmDepsHash = "sha256-NSHsw/+dmdc2+yo4/NgT0YMMrCuL8JjRR6MSJ5xQTiE=";
+
+  preBuild = ''
+    rm -rf dist
+  '';
+
+  npmBuildScript = "dist";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    install -m0644 dist/bubble-card.js $out
-    install -m0644 dist/bubble-pop-up-fix.js $out
+    cp -rv dist $out
 
     runHook postInstall
   '';

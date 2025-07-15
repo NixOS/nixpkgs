@@ -4,38 +4,35 @@
   fetchFromGitHub,
   stdenv,
   pkg-config,
-  openssl,
   oniguruma,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "is-fast";
-  version = "0.8.5";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "Magic-JD";
     repo = "is-fast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6gMXYOgPlVaN5UM+U55Jtbva8/i9BFghBaqboqTwdPg=";
+    hash = "sha256-jMRoGGvyKgtu4j9alF9aXfNA/1WOa24CTI0bWZo44Ag=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EQdO4K3AQL0BR9hnoViiCMhDbcg2db8Ho2Ilvysr1dU=";
+  cargoHash = "sha256-UzB6lKXPbN/iUZ2e/ApxTdnu7/nYhvvSIUwGxSopNZ4=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    oniguruma
-  ];
+  buildInputs = [ oniguruma ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Error creating config directory: Operation not permitted (os error 1)

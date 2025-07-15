@@ -27,6 +27,6 @@ buildPecl rec {
     '';
     license = licenses.lgpl2Plus;
     homepage = "http://pinba.org/";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

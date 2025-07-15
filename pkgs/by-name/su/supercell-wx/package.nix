@@ -24,9 +24,9 @@
   gtest,
   glm,
   qt6,
-  tbb_2021_11,
+  tbb_2021,
   tracy,
-  substituteAll,
+  replaceVars,
   python3,
 }:
 let
@@ -50,12 +50,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
-  version = "0.4.8";
+  version = "0.4.9";
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
     rev = "refs/tags/v${finalAttrs.version}-release";
-    sha256 = "sha256-gKR5Mfzw5B4f4/dWintlbDHX3q+d1RmFE+MNp5uSSuc=";
+    sha256 = "sha256-3fVUxbGosN4Y4h8BJXUV7DNv7VZTma+IsV94+Zt8DCA=";
     fetchSubmodules = true;
   };
 
@@ -94,9 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # These are for Nix compatibility {{{
     ./patches/use-find-package.patch # Replace some vendored dependencies with Nix provided versions
-    (substituteAll {
+    (replaceVars ./patches/skip-git-versioning.patch {
       # Skip tagging build with git version, and substitute it with the src revision (still uses current year timestamp)
-      src = ./patches/skip-git-versioning.patch;
       rev = finalAttrs.src.rev;
     })
     # Prevents using some Qt scripts that seemed to break the install step. Fixes missing link to some targets.
@@ -131,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     aws-sdk-cpp
     howard-hinnant-date
     boost
-    tbb_2021_11
+    tbb_2021
     glew
     geos
     spdlog

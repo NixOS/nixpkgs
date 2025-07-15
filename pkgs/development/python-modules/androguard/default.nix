@@ -39,8 +39,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = pname;
+    repo = "androguard";
+    owner = "androguard";
     tag = "v${version}";
     sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
   };
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  pytestFlagsArray = [ "--verbose" ];
+  pytestFlags = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

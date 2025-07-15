@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Collection of Python deprecation patterns and strategies that help you collect your technical debt in a non-destructive manner";
     homepage = "https://github.com/openstack/debtcollector";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

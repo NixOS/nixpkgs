@@ -9,10 +9,8 @@
   autoPatchelfHook,
 
   # dependencies
-  aiosignal,
   click,
   filelock,
-  frozenlist,
   jsonschema,
   msgpack,
   packaging,
@@ -66,13 +64,13 @@
 
 let
   pname = "ray";
-  version = "2.44.0";
+  version = "2.47.1";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.14";
 
   src =
     let
@@ -80,35 +78,35 @@ buildPythonPackage rec {
       platforms = {
         aarch64-darwin = "macosx_11_0_arm64";
         aarch64-linux = "manylinux2014_aarch64";
-        x86_64-darwin = "macosx_10_15_x86_64";
+        x86_64-darwin = "macosx_12_0_x86_64";
         x86_64-linux = "manylinux2014_x86_64";
       };
       # ./pkgs/development/python-modules/ray/prefetch.sh
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp39 = "sha256-Ucy9W/gEXWnx+NL4WpL2aoKBjz2S1wx3xmJ1eYHDDZ8=";
-          cp310 = "sha256-tP29SytbReQT3Bahmkq/UADTbDxYVJCNykaXMj/11+E=";
-          cp311 = "sha256-hk8KabPNfKTrcEP3953JzotxosmC7ux/EX9I8oRrcTw=";
-          cp312 = "sha256-DWWsUjgB5Ao5e79VL0BoZ7uUad0mEEbKY83C7DEQ24c=";
+          cp310 = "sha256-hKlrRyAXWgAAUhpI63qpFfO0Gbtc1hctje4AXD8juBM=";
+          cp311 = "sha256-SJYSKWFLK1alNb5RDIq8dumamqf6GVtclJvQxsaa9Ao=";
+          cp312 = "sha256-Pq6u7Du+LKZJPlMMMEc9hLhYCnrDJWu5GD2MY971qS8=";
+          cp313 = "sha256-JSpHHor7kYsQXNv/tMvrsBQ7qtdaBsj/zeJ6wxdXnMs=";
         };
         aarch64-linux = {
-          cp39 = "sha256-Lxj0j8N95kAxXZNgECbfqiPwr0y6jwd9sT8dd+mR2a8=";
-          cp310 = "sha256-qZ+7mtLBryIYcNhrio49WcGKVROt3p1wiKSiddxZ2n8=";
-          cp311 = "sha256-wzcjfnqKHYcC3PZ+CpjqjNTsA1fSiL8IFviZDCWNi8M=";
-          cp312 = "sha256-KpEeaZ5IOsSHkRC2CLBrNeYCGRwOe5cybKSXxcqv5qg=";
+          cp310 = "sha256-b8ffhle432hLd8LRtkMTetdFqhwSreNHQ/BsynkAPfA=";
+          cp311 = "sha256-21/2UukDXwPGXhdCpwa3ZRn26KZ0TMAFOWBTrIdm/EY=";
+          cp312 = "sha256-zU5+tHVIc2S1IJljsXzv7ct/vTqBb9tt736lM+vXJCQ=";
+          cp313 = "sha256-1u1tGC4l1vdxedx3vJenScgXZbE8tnGkbbMgMCk4lmM=";
         };
         x86_64-darwin = {
-          cp39 = "sha256-4373wSlDArrp2SFoCi2jR5iMHh4qmCo+coktEa4A4j4=";
-          cp310 = "sha256-YyeQwyfmkxp6jMrd6P06+utzrTgvh99N1HpSyov+BRw=";
-          cp311 = "sha256-++SDLLLvz8BJPqR0K0gosesNq8/t+H9kvmvh0M6HTGk=";
-          cp312 = "sha256-U9x16itP2GnqSmzKneXgKqJPLw0Y4KCLinZasr5l3Rw=";
+          cp310 = "sha256-fAOh42bTqGilX4wvco9c41rIXd8JOsgdDBo1vxwlw3c=";
+          cp311 = "sha256-/uuh5xXP2HN9OtzSAY0M2rt8YIT6Swk+Y45sfULzyVY=";
+          cp312 = "sha256-5tnHjlOsicq7xAVq7P7FPFBsaS4xMq+drpQdYYDvRi8=";
+          cp313 = "sha256-5XiSn1iz8MWcdUSpbYZOJieCOLdV0TzRmueYBwyEjlc=";
         };
         aarch64-darwin = {
-          cp39 = "sha256-Ef62eG+CAQRke2aiklRVNsA36Cl/FP4BI0t7JN2PJzk=";
-          cp310 = "sha256-XfvyazCuw35dRCXGYBReVSApmohVMkaG4vF/yGAb9Mg=";
-          cp311 = "sha256-Uzcifcn4CEKAwpRWmIokTKm0zg+8c4XXMHASD0fkaXk=";
-          cp312 = "sha256-OY6b4ZPJf3NK8Bnw76zh9FyUGVuW7MSmR61gdlDfVyw=";
+          cp310 = "sha256-NqMJMOjSZecI35bzf28fVIT0uXCQ1QWRL5kuBFpp0xA=";
+          cp311 = "sha256-pkDUR+Dmz2P4W5IgyIPsArsrjkCpwdhO+gEnlcdpumg=";
+          cp312 = "sha256-MiBJxFRs9n5e/a2Qw3HFUIrLsZPlqq9AOBA8bFzh9Xg=";
+          cp313 = "sha256-jNYl1GnOFTkeXx9E3fjdMLI4D5F2A/oBcmYSKaywAR8=";
         };
       };
     in
@@ -127,9 +125,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    aiosignal
     filelock
-    frozenlist
     jsonschema
     msgpack
     packaging
@@ -139,10 +135,22 @@ buildPythonPackage rec {
     watchfiles
   ];
 
-  optional-dependencies = rec {
-    adag = cgraph;
-    air = lib.unique (data ++ serve ++ tune ++ train);
-    all = lib.flatten (builtins.attrValues optional-dependencies);
+  optional-dependencies = lib.fix (self: {
+    adag = self.cgraph;
+    air = lib.unique (self.data ++ self.serve ++ self.tune ++ self.train);
+    all = lib.unique (
+      self.adag
+      ++ self.air
+      ++ self.cgraph
+      ++ self.client
+      ++ self.data
+      ++ self.default
+      ++ self.observability
+      ++ self.rllib
+      ++ self.serve
+      ++ self.train
+      ++ self.tune
+    );
     cgraph = [
       cupy
     ];
@@ -190,16 +198,16 @@ buildPythonPackage rec {
         uvicorn
         watchfiles
       ]
-      ++ default
+      ++ self.default
     );
     serve-grpc = lib.unique (
       [
         grpcio
         pyopenssl
       ]
-      ++ serve
+      ++ self.serve
     );
-    train = tune;
+    train = self.tune;
     tune = [
       fsspec
       pandas
@@ -207,7 +215,7 @@ buildPythonPackage rec {
       requests
       tensorboardx
     ];
-  };
+  });
 
   postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}

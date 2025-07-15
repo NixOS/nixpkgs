@@ -2,22 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
+  nix-update-script,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dezoomify-rs";
-  version = "2.13.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
     tag = "v${version}";
-    hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
+    hash = "sha256-gx/h9i+VPU0AtpQEkN/zCLmeyaW5wSUCfdY52hPwm3Q=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-v5hlG/VnRyU4lR84IXal5GmrAyfxJTjmwzRKRcfaSIY=";
+  cargoHash = "sha256-Jh1a5DW25a4wzuZbOAoTn/crp/ioLsmq3jDiqIctCCM=";
 
   checkFlags = [
     # Tests failing due to networking errors in Nix build environment

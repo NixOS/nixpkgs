@@ -12,7 +12,7 @@
   gitSupport ? false,
   git,
   docutilsSupport ? false,
-  python,
+  python3,
   docutils,
   monotoneSupport ? false,
   monotone,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       CryptSSLeay
     ])
     ++ lib.optionals docutilsSupport [
-      (python.withPackages (pp: with pp; [ pygments ]))
+      (python3.withPackages (pp: with pp; [ pygments ]))
       docutils
     ]
     ++ lib.optionals gitSupport [ git ]

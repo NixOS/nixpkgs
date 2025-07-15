@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
@@ -16,19 +17,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "sensor-state-data";
     tag = "v${version}";
     hash = "sha256-9GdBKUhueis8pnQP5ZNxvEyRXVGINTueVzLOR4xx5mU=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "sensor_state_data" ];
 

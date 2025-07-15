@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
       licenses.lgpl2
     ];
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

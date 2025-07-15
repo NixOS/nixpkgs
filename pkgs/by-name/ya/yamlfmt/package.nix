@@ -6,36 +6,40 @@
   yamlfmt,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yamlfmt";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
-    tag = "v${version}";
-    hash = "sha256-4PCwMLwFtCK55k7b6CgpPOKsxLdeU55DxYEDbYDWVYg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EYOtxb2Xq4bQpWbITmPieVMqJz3/2chgNirZEjiyjAY=";
   };
 
-  vendorHash = "sha256-eOuLgNCxrI2HIFBwLAYRl6PwW/1hihQ0QsTtG1sxCL8=";
+  vendorHash = "sha256-Cy1eBvKkQ90twxjRL2bHTk1qNFLQ22uFrOgHKmnoUIQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
   ];
+
+  # Test failure in vendored yaml package, see:
+  # https://github.com/google/yamlfmt/issues/256
+  checkFlags = [ "-run=!S/TestNodeRoundtrip" ];
 
   passthru.tests.version = testers.testVersion {
     package = yamlfmt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible command line tool or library to format yaml files";
     homepage = "https://github.com/google/yamlfmt";
-    changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sno2wman ];
+    changelog = "https://github.com/google/yamlfmt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "yamlfmt";
   };
-}
+})

@@ -33,6 +33,7 @@
   libdrm,
   libpng,
   libuuid,
+  libsecret,
   libX11,
   libxcb,
   libxkbcommon,
@@ -130,6 +131,7 @@ let
             git
             ps
             usbutils
+            libsecret
           ]
         }" \
         --prefix LD_LIBRARY_PATH : "${
@@ -142,6 +144,7 @@ let
             libXi
             libXrender
             libXtst
+            libsecret
 
             # No crash, but attempted to load at startup
             e2fsprogs
@@ -323,12 +326,19 @@ let
           # source-code itself).
           platforms = [ "x86_64-linux" ];
           maintainers =
-            with lib.maintainers;
             rec {
-              stable = [
+              stable = with lib.maintainers; [
                 alapshin
-                johnrtitor
-                numinit
+              ];
+              beta = stable;
+              canary = stable;
+              dev = stable;
+            }
+            ."${channel}";
+          teams =
+            rec {
+              stable = with lib.teams; [
+                android
               ];
               beta = stable;
               canary = stable;
