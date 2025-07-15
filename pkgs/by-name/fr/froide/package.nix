@@ -51,10 +51,16 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [ ./django_42_storages.patch ];
 
-  # Relax dependency pinning
-  # Channels: https://github.com/okfde/froide/issues/995
   pythonRelaxDeps = [
+    # Relax dependency pinning
+    # Channels: https://github.com/okfde/froide/issues/995
     "channels"
+    "django-celery-beat"
+    "django-leaflet"
+    "django"
+    "pikepdf"
+    "pypdf"
+    "reportlab"
   ];
 
   build-system = [ python.pkgs.setuptools ];
