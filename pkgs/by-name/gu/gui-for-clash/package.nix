@@ -44,6 +44,7 @@ let
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
       hash = "sha256-5tz1FItH9AvZhJjka8i5Kz22yf/tEmRPkDhz6iswZzc=";
+      fetcherVersion = 1;
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";

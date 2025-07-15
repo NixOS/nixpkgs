@@ -23,6 +23,7 @@ rec {
 
   ppc64-elfv1 = {
     config = "powerpc64-unknown-linux-gnuabielfv1";
+    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
   };
   ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";

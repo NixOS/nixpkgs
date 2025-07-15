@@ -47,7 +47,7 @@ let
       extraPatches =
         [
           # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-          ./no-buildconfig.patch
+          (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
         ]
         ++ lib.optionals (lib.versionOlder version "139") [
           # clang-19 fixes for char_traits build issue
@@ -95,8 +95,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "139.0.2";
-    sha512 = "edb20c692674dc5c3ba70673f7dd03710bf7ac0ce2be614a7a4b3d2b40b20b4974aab2a621dd5b43720c412a590c08f8b78abeb9b61f288f3217c6a04cc1e8ff";
+    version = "140.0.1";
+    sha512 = "fbef1d0228c49fc9c11425b6be03bb7e44e6abc6f2027ee23317270ca2c6b0a935bb41b38667acf014bd9e1166cbe62754f1e919e04f2355dc4c833e015c78b8";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";

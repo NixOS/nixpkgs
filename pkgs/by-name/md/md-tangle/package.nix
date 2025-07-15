@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "md-tangle";
   version = "1.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   # By some strange reason, fetchPypi fails miserably
   src = fetchFromGitHub {
@@ -17,9 +17,13 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-PkOKSsyY8uwS4mhl0lB+KGeUvXfEc7PUDHZapHMYv4c=";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   # Pure Python application, uses only standard modules and comes without
   # testing suite
   doCheck = false;
+
+  pythonImportsCheck = [ "md_tangle" ];
 
   meta = with lib; {
     homepage = "https://github.com/joakimmj/md-tangle/";

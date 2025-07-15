@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   fetchurl,
 }:
 
@@ -74,6 +75,13 @@ stdenv.mkDerivation rec {
       name = "sphinx-8.2-update.patch";
       url = "https://github.com/sagemath/sage/pull/39737/commits/4e485497fb5e20a056ffd2178360b88f482447d8.patch";
       hash = "sha256-oIcFeol0SW5dE/iE6mbYyas3kXIjOwsG1k+h99R94x8=";
+    })
+
+    # https://github.com/sagemath/sage/pull/40285, landed in 10.7.beta7
+    (fetchpatch2 {
+      name = "scipy-1.16-update.patch";
+      url = "https://github.com/sagemath/sage/commit/d0cbe9d353722580f98a327694f1a361c9b83ccd.patch?full_index=1";
+      hash = "sha256-uV2nttxCKDsNqMf1O+lUmuoiDrx7/CfiS00JBb9kiM8=";
     })
   ];
 

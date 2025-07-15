@@ -74,6 +74,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "ipython"
+    "python-lsp-server"
   ];
 
   dependencies = [

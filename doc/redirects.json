@@ -2756,32 +2756,52 @@
   "cuda": [
     "index.html#cuda"
   ],
-  "adding-a-new-cuda-release": [
-    "index.html#adding-a-new-cuda-release"
-  ],
-  "updating-cuda-redistributables": [
-    "index.html#updating-cuda-redistributables"
-  ],
-  "updating-cutensor": [
-    "index.html#updating-cutensor"
-  ],
-  "updating-supported-compilers-and-gpus": [
-    "index.html#updating-supported-compilers-and-gpus"
-  ],
-  "updating-the-cuda-toolkit": [
-    "index.html#updating-the-cuda-toolkit"
-  ],
-  "updating-the-cuda-package-set": [
-    "index.html#updating-the-cuda-package-set"
+  "cuda-contributing": [
+    "index.html#cuda-contributing"
   ],
   "cuda-docker-podman": [
     "index.html#cuda-docker-podman"
   ],
-  "specifying-what-devices-to-expose-to-the-container": [
+  "cuda-package-set-maintenance": [
+    "index.html#cuda-package-set-maintenance",
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "cuda-passthru-testers": [
+    "index.html#cuda-passthru-testers"
+  ],
+  "cuda-passthru-tests": [
+    "index.html#cuda-passthru-tests"
+  ],
+  "cuda-specifying-what-devices-to-expose-to-the-container": [
+    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
     "index.html#specifying-what-devices-to-expose-to-the-container"
   ],
-  "using-docker-compose": [
+  "cuda-updating-redistributables": [
+    "index.html#cuda-updating-redistributables",
+    "index.html#updating-cuda-redistributables"
+  ],
+  "cuda-updating-cutensor": [
+    "index.html#cuda-updating-cutensor",
+    "index.html#updating-cutensor"
+  ],
+  "cuda-updating-supported-compilers-and-gpus": [
+    "index.html#cuda-updating-supported-compilers-and-gpus",
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "cuda-updating-the-cuda-package-set": [
+    "index.html#cuda-updating-the-cuda-package-set",
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-updating-the-cuda-toolkit": [
+    "index.html#cuda-updating-the-cuda-toolkit",
+    "index.html#updating-the-cuda-toolkit"
+  ],
+  "cuda-using-docker-compose": [
+    "index.html#cuda-using-docker-compose",
     "index.html#using-docker-compose"
+  ],
+  "cuda-writing-tests": [
+    "index.html#cuda-writing-tests"
   ],
   "cuelang": [
     "index.html#cuelang"
@@ -3027,7 +3047,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
@@ -3326,6 +3346,12 @@
   ],
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
+  ],
+  "javascript-pnpm-fetcherVersion": [
+    "index.html#javascript-pnpm-fetcherVersion"
+  ],
+  "javascript-pnpm-fetcherVersion-versionHistory": [
+    "index.html#javascript-pnpm-fetcherVersion-versionHistory"
   ],
   "javascript-yarn": [
     "index.html#javascript-yarn"

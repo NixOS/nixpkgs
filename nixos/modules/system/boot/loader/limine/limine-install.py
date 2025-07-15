@@ -274,7 +274,7 @@ def install_bootloader() -> None:
     profiles = [('system', get_gens())]
 
     for profile in get_profiles():
-        profiles += (profile, get_gens(profile))
+        profiles += [(profile, get_gens(profile))]
 
     timeout = config('timeout')
     editor_enabled = 'yes' if config('enableEditor') else 'no'

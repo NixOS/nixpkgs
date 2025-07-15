@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polymake";
-  version = "4.13";
+  version = "4.14";
 
   src = fetchurl {
     # "The minimal version is a packager friendly version which omits
     # the bundled sources of cdd, lrs, libnormaliz, nauty and jReality."
     url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${version}-minimal.tar.bz2";
-    sha256 = "sha256-862s0GO56mDV6cN8YYP127dFiwyzSR66Pvw48gxWXOs=";
+    sha256 = "sha256-4nZncZpZECwbJ/X5j6g807QUf2MpKUBZLyFxUd79v40=";
   };
 
   nativeBuildInputs = [

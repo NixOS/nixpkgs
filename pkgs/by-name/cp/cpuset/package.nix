@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "cpuset";
   version = "1.6.2";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lpechacek";
@@ -15,6 +15,10 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-fW0SXNI10pb6FTn/2TOqxP9qlys0KL/H9m//NjslUaY=";
   };
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   makeFlags = [ "prefix=$(out)" ];
 

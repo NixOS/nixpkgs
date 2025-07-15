@@ -39,6 +39,7 @@
   zstd,
   withLibcap ? true,
   libcap,
+  buildPackages,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -59,6 +60,10 @@ in
 stdenv.mkDerivation {
   pname = "perf-linux";
   inherit (kernel) version src;
+
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   patches =
     lib.optionals (lib.versionAtLeast kernel.version "5.10" && lib.versionOlder kernel.version "6.13")

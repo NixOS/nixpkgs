@@ -9,14 +9,17 @@
 python3Packages.buildPythonApplication rec {
   pname = "flent";
   version = "2.2.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-BPwh3oWIY1YEI+ecgi9AUiX4Ka/Y5dYikwmfvvNB+eg=";
   };
 
-  build-system = [ python3Packages.sphinx ];
+  build-system = with python3Packages; [
+    setuptools
+    sphinx
+  ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 

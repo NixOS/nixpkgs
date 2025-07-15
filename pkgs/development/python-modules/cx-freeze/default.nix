@@ -55,6 +55,8 @@ buildPythonPackage rec {
 
   buildInputs = [ ncurses ];
 
+  pythonRelaxDeps = [ "setuptools" ];
+
   pythonRemoveDeps = [ "patchelf" ];
 
   dependencies =

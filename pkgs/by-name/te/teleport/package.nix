@@ -21,8 +21,8 @@
 
   withRdpClient ? true,
 
-  version ? "17.5.3",
-  hash ? "sha256-VyuzSk388Dumm65+Gadu/SddVN7uUS3du5RGPm4xI6g=",
+  version ? "17.5.4",
+  hash ? "sha256-ojRIyPTrSG3/xuqdaUNrN4s5HP3E8pvzjG8h+qFEYrc=",
   vendorHash ? "sha256-IHXwCp1MdcEKJhIs9DNf77Vd93Ai2as7ROlh6AJT9+Q=",
   extPatches ? [ ],
   cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
@@ -74,6 +74,7 @@ let
     pnpmDeps = pnpm_10.fetchDeps {
       inherit src pname version;
       hash = pnpmHash;
+      fetcherVersion = 1;
     };
 
     nativeBuildInputs = [

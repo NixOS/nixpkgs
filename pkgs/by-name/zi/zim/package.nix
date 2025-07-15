@@ -19,7 +19,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "zim";
   version = "0.76.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
@@ -35,6 +35,8 @@ python3Packages.buildPythonApplication rec {
     gtk3
     adwaita-icon-theme
   ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     pyxdg

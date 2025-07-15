@@ -7,8 +7,9 @@
   postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "timescaledb_toolkit";
   version = "1.21.0";

@@ -108,7 +108,6 @@ let
       grantleetheme = callPackage ./grantleetheme { };
       gwenview = callPackage ./gwenview { };
       incidenceeditor = callPackage ./incidenceeditor.nix { };
-      itinerary = callPackage ./itinerary.nix { };
       juk = callPackage ./juk.nix { };
       kaccounts-integration = callPackage ./kaccounts-integration.nix { };
       kaccounts-providers = callPackage ./kaccounts-providers.nix { };
@@ -271,7 +270,6 @@ let
       krecorder = callPackage ./krecorder.nix { };
       ktrip = callPackage ./ktrip.nix { };
       kweather = callPackage ./kweather.nix { };
-      neochat = callPackage ./neochat.nix { };
       plasmatube = callPackage ./plasmatube { };
       qmlkonsole = callPackage ./qmlkonsole.nix { };
       telly-skout = callPackage ./telly-skout.nix { };

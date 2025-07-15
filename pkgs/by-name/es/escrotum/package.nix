@@ -9,11 +9,10 @@
   wrapGAppsHook3,
 }:
 
-with python3Packages;
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "escrotum";
   version = "unstable-2020-12-07";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Roger";
@@ -32,7 +31,11 @@ buildPythonApplication {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pygobject3
     xcffib
     pycairo

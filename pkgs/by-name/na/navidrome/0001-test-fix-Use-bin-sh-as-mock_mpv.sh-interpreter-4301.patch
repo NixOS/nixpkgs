@@ -1,0 +1,28 @@
+From 1a260f75baabc304ea398aa67d203dd9aee11525 Mon Sep 17 00:00:00 2001
+From: Chris Moultrie <821688+tebriel@users.noreply.github.com>
+Date: Wed, 2 Jul 2025 21:12:22 -0400
+Subject: [PATCH] test(fix): Use /bin/sh as mock_mpv.sh interpreter - 4301
+
+Not all systems have bash at `/bin/bash`. `/bin/sh` is POSIX and should
+be present on all systems making this much more portable. No bash
+features are currently used in the script so this change should be safe.
+---
+ core/playback/mpv/mpv_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/playback/mpv/mpv_test.go b/core/playback/mpv/mpv_test.go
+index 08432bef..20c02501 100644
+--- a/core/playback/mpv/mpv_test.go
++++ b/core/playback/mpv/mpv_test.go
+@@ -372,7 +372,7 @@ goto loop
+ `
+ 	} else {
+ 		scriptExt = ".sh"
+-		scriptContent = `#!/bin/bash
++		scriptContent = `#!/bin/sh
+ echo "$0"
+ for arg in "$@"; do
+     echo "$arg"
+-- 
+2.49.0
+

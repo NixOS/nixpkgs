@@ -318,13 +318,6 @@ in
           Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
         '';
       }
-      {
-        assertion = !(cfg.enable && config.environment.memoryAllocator.provider == "graphene-hardened");
-        message = ''
-          Chrony doesn't work with the graphene-hardened memory allocator set by
-          `environment.memoryAllocator.provider`.
-        '';
-      }
     ];
   };
 }

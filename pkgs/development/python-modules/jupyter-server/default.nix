@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-nURrhpe09zN6G3zcrEB3i6vdk7phS21oqxwMkY8cQIQ=";
+    hash = "sha256-ZdS0T98ty73+CqGs5KhC1Kr3RqK3sWgTTVqu01Yht/Y=";
   };
 
   build-system = [
@@ -86,14 +86,12 @@ buildPythonPackage rec {
     flaky
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
     # 19 failures on python 3.13:
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffff2a0cc70>
     # TODO: Can probably be removed at the next update
-    "-W"
-    "ignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
 
   preCheck = ''

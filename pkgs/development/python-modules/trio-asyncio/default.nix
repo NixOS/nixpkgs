@@ -41,12 +41,10 @@ buildPythonPackage rec {
     sniffio
   ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
-    "-W"
-    "ignore::RuntimeWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::RuntimeWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

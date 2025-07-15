@@ -92,20 +92,23 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.4";
+  version = "0.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-N74XBQahUIj0rKJI0emtNvGlG9uYkeHqweppp8fUSLU=";
+    hash = "sha256-c8Wp/bP5KHDN/i2bMyiOQgnHDw8tPbg4IZIQ5Ut4SIo=";
   };
 
   build-system = with python.pkgs; [
     pdm-backend
   ];
 
+  pythonRelaxDeps = [
+    "posthog"
+  ];
   dependencies =
     with python.pkgs;
     [

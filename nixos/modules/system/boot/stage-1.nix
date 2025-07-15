@@ -768,7 +768,7 @@ in
             source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
           ) (attrValues config.boot.initrd.secrets);
         message = ''
-          boot.loader.initrd.secrets values must be unquoted paths when
+          boot.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd
           secrets, e.g.:
 

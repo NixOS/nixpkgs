@@ -16,6 +16,23 @@ let
   py = python3.override {
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+      (
+
+        self: super: {
+          # fix tornado.httputil.HTTPInputError: Multiple host headers not allowed
+          tornado = super.tornado.overridePythonAttrs (oldAttrs: {
+            version = "6.4.2";
+            format = "setuptools";
+            pyproject = null;
+            src = fetchFromGitHub {
+              owner = "tornadoweb";
+              repo = "tornado";
+              tag = "v6.4.2";
+              hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
+            };
+            doCheck = false;
+          });
+        })
       # Built-in dependency
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {

@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-xBonUzA4+1zbViEsKap6CaG6ZRldW1LjNYIB+FmVRFs=";
+    fetcherVersion = 1;
   };
 
   # CMake (webkit extension)

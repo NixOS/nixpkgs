@@ -67,11 +67,7 @@
   zlib,
 
   # Boolean flags
-
-  # FIXME: Native compilation breaks build and runtime on macOS 15.4;
-  # see <https://github.com/NixOS/nixpkgs/issues/395169>.
-  withNativeCompilation ?
-    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin,
+  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
   srcRepo ? true,
   withAcl ? false,

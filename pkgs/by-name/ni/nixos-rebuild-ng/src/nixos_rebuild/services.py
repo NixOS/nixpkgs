@@ -118,13 +118,34 @@ def _get_system_attr(
     return attr
 
 
+def _rollback_system(
+    action: Action,
+    args: argparse.Namespace,
+    target_host: Remote | None,
+    profile: Profile,
+) -> Path:
+    match action:
+        case Action.SWITCH | Action.BOOT:
+            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+        case Action.TEST | Action.BUILD:
+            maybe_path_to_config = nix.rollback_temporary_profile(
+                profile,
+                target_host,
+                sudo=args.sudo,
+            )
+            if maybe_path_to_config:
+                path_to_config = maybe_path_to_config
+            else:
+                raise NixOSRebuildError("could not find previous generation")
+
+    return path_to_config
+
+
 def _build_system(
     attr: str,
     action: Action,
-    args: argparse.Namespace,
     build_host: Remote | None,
     target_host: Remote | None,
-    profile: Profile,
     flake: Flake | None,
     build_attr: BuildAttr,
     build_flags: Args,
@@ -134,24 +155,11 @@ def _build_system(
     flake_common_flags: Args,
 ) -> Path:
     dry_run = action == Action.DRY_BUILD
-    no_link = action in (Action.SWITCH, Action.BOOT)
+    # actions that we will not add a /result symlink in CWD
+    no_link = action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE)
 
-    match (action, args.rollback, build_host, flake):
-        case (Action.SWITCH | Action.BOOT, True, _, _):
-            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
-        case (Action.TEST | Action.BUILD, True, _, _):
-            maybe_path_to_config = nix.rollback_temporary_profile(
-                profile,
-                target_host,
-                sudo=args.sudo,
-            )
-            if maybe_path_to_config:  # kinda silly but this makes mypy happy
-                path_to_config = maybe_path_to_config
-            else:
-                raise NixOSRebuildError("could not find previous generation")
-        case (_, True, _, _):
-            raise NixOSRebuildError(f"--rollback is incompatible with '{action}'")
-        case (_, False, Remote(_), Flake(_)):
+    match (build_host, flake):
+        case (Remote(_), Flake(_)):
             path_to_config = nix.build_remote_flake(
                 attr,
                 flake,
@@ -161,14 +169,14 @@ def _build_system(
                 | {"no_link": no_link, "dry_run": dry_run},
                 copy_flags=copy_flags,
             )
-        case (_, False, None, Flake(_)):
+        case (None, Flake(_)):
             path_to_config = nix.build_flake(
                 attr,
                 flake,
                 flake_build_flags=flake_build_flags
                 | {"no_link": no_link, "dry_run": dry_run},
             )
-        case (_, False, Remote(_), None):
+        case (Remote(_), None):
             path_to_config = nix.build_remote(
                 attr,
                 build_attr,
@@ -177,26 +185,19 @@ def _build_system(
                 instantiate_flags=build_flags,
                 copy_flags=copy_flags,
             )
-        case (_, False, None, None):
+        case (None, None):
             path_to_config = nix.build(
                 attr,
                 build_attr,
                 build_flags=build_flags | {"no_out_link": no_link, "dry_run": dry_run},
             )
-        case never:
-            # should never happen, but mypy is not smart enough to
-            # handle this with assert_never
-            # https://github.com/python/mypy/issues/16650
-            # https://github.com/python/mypy/issues/16722
-            raise AssertionError(f"expected code to be unreachable, but got: {never}")
 
-    if not args.rollback:
-        nix.copy_closure(
-            path_to_config,
-            to_host=target_host,
-            from_host=build_host,
-            copy_flags=copy_flags,
-        )
+    nix.copy_closure(
+        path_to_config,
+        to_host=target_host,
+        from_host=build_host,
+        copy_flags=copy_flags,
+    )
 
     return path_to_config
 
@@ -290,23 +291,31 @@ def build_and_activate_system(
         common_flags=common_flags,
         flake_common_flags=flake_common_flags,
     )
-    path_to_config = _build_system(
-        attr,
-        action=action,
-        args=args,
-        build_host=build_host,
-        target_host=target_host,
-        profile=profile,
-        flake=flake,
-        build_attr=build_attr,
-        build_flags=build_flags,
-        common_flags=common_flags,
-        copy_flags=copy_flags,
-        flake_build_flags=flake_build_flags,
-        flake_common_flags=flake_common_flags,
-    )
+
+    if args.rollback:
+        path_to_config = _rollback_system(
+            action=action,
+            args=args,
+            target_host=target_host,
+            profile=profile,
+        )
+    else:
+        path_to_config = _build_system(
+            attr=attr,
+            action=action,
+            build_host=build_host,
+            target_host=target_host,
+            flake=flake,
+            build_attr=build_attr,
+            build_flags=build_flags,
+            common_flags=common_flags,
+            copy_flags=copy_flags,
+            flake_build_flags=flake_build_flags,
+            flake_common_flags=flake_common_flags,
+        )
+
     _activate_system(
-        path_to_config,
+        path_to_config=path_to_config,
         action=action,
         args=args,
         target_host=target_host,

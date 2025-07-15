@@ -43,16 +43,6 @@ let
 
   cfg = config.services.postgresql;
 
-  # ensure that
-  #   services.postgresql = {
-  #     enableJIT = true;
-  #     package = pkgs.postgresql_<major>;
-  #   };
-  # works.
-  basePackage = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
-
-  postgresql = if cfg.extensions == [ ] then basePackage else basePackage.withPackages cfg.extensions;
-
   toStr =
     value:
     if true == value then
@@ -72,13 +62,13 @@ let
   );
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" { } ''
-    ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
+    ${cfg.finalPackage}/bin/postgres -D${configFile} -C config_file >/dev/null
     touch $out
   '';
 
   groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
 
-  extensionNames = map getName postgresql.installedExtensions;
+  extensionNames = map getName cfg.finalPackage.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
 in
 
@@ -143,7 +133,18 @@ in
       finalPackage = mkOption {
         type = types.package;
         readOnly = true;
-        default = postgresql;
+        default =
+          let
+            # ensure that
+            #   services.postgresql = {
+            #     enableJIT = true;
+            #     package = pkgs.postgresql_<major>;
+            #   };
+            # works.
+            withJit = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
+            withJitAndPackages = if cfg.extensions == [ ] then withJit else withJit.withPackages cfg.extensions;
+          in
+          withJitAndPackages;
         defaultText = "with config.services.postgresql; package.withPackages extensions";
         description = ''
           The postgresql package that will effectively be used in the system.
@@ -635,6 +636,20 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    warnings = (
+      let
+        unstableState =
+          if lib.hasInfix "beta" cfg.package.version then
+            "in beta"
+          else if lib.hasInfix "rc" cfg.package.version then
+            "a release candidate"
+          else
+            null;
+      in
+      lib.optional (unstableState != null)
+        "PostgreSQL ${lib.versions.major cfg.package.version} is currently ${unstableState}, and is not advised for use in production environments."
+    );
 
     assertions = map (
       { name, ensureDBOwnership, ... }:

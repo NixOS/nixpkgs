@@ -14150,10 +14150,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.65";
+    version = "1.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-C3pJZaLJrW+nwDawloHHtEWyB1j6qYNnsmZZz2L+Axg=";
+      hash = "sha256-GOkdcI+Ah6JvvL+zsKYe0UcdKks855jecwTzBIGkZ+k=";
     };
     buildInputs = [
       DateManip
@@ -38660,8 +38660,9 @@ with self;
       XMLNamespaceSupport
       XMLSAXBase
     ];
-    postInstall = ''
-      perl -MXML::SAX -e "XML::SAX->add_parser(q(XML::SAX::PurePerl))->save_parsers()"
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail "\$(PERL)" "${lib.getExe buildPackages.perl}"
     '';
     meta = {
       description = "Simple API for XML";

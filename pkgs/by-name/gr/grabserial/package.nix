@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "grabserial";
   version = "2.1.8";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tbird20d";
@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-XHI5r4OkJUtMuH83jKvNttEpKpqARjxj9SDLzhSPxSc=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   dependencies = [ python3Packages.pyserial ];
 

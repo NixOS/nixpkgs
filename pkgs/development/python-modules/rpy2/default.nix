@@ -89,8 +89,6 @@ buildPythonPackage rec {
     simplegeneric
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   # https://github.com/rpy2/rpy2/issues/1111
   disabledTests = [
     "test_parse_incomplete_error"

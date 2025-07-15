@@ -31,6 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   versionCheckProgramArg = "--version";
 
+  cargoBuildFlags = [
+    # don't install the `mgf_dev`
+    "--bin"
+    "mergiraf"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

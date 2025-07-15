@@ -4,20 +4,21 @@
   buildGoModule,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9O+INXJhNwgwwvC0751ifdHmxbD0qI5A3LdDb4Krk/o=";
+    hash = "sha256-y4NS9IoGknHOKLJtAZBbruwRTqjUmQTKtEYNlixwyL8=";
   };
 
-  vendorHash = "sha256-Xe/qrlqg6DpCNmsO/liTKjWIaY3KznkOQdXSSoJVZq4=";
+  vendorHash = "sha256-dWcf4X8/Wy/TULdT6PbiMaOd1d+haBlnII+6VKazrD4=";
 
   overrideModAttrs = old: {
     # https://gitlab.com/cznic/libc/-/merge_requests/10
@@ -54,6 +55,8 @@ buildGoModule (finalAttrs: {
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";

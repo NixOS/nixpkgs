@@ -38,7 +38,7 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
-  version = "1.8.49";
+  version = "1.8.51";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "51743dfd01dff6179e2d8f7095729caa4e2222e9";
-    hash = "sha256-duD8a/fppkmaKrvkHnbSxRnCLS60aNVcgaYyCoHzKgE=";
+    rev = "bb474a201baa798784d696d2d9d762a9d2807f96";
+    hash = "sha256-Jd2ojDDwO/7W54QjnKLlc1ecqTfJEFPRtT50rNlukKA=";
   };
 
   buildInputs = [

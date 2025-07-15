@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "labelImg";
   version = "1.8.6";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "HumanSignal";
@@ -17,8 +17,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-RJxCtiDOePajlrjy9cpKETSKsWlH/Dlu1iFMj2aO4XU=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    pyqt5
+  nativeBuildInputs = [
     qt5.wrapQtAppsHook
   ];
 
@@ -29,6 +28,11 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/heartexlabs/labelImg/commit/5c38b6bcddce895d646e944e3cddcb5b43bf8b8b.patch";
       hash = "sha256-BmbnJS95RBfoNQT0E6JDJ/IZfBa+tv1C69+RVOSFdRA=";
     })
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+    pyqt5
   ];
 
   dependencies = with python3Packages; [
@@ -50,6 +54,8 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  pythonImportsCheck = [ "labelImg" ];
 
   meta = {
     description = "Graphical image annotation tool and label object bounding boxes in images";

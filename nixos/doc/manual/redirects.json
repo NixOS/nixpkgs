@@ -1,4 +1,13 @@
 {
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
@@ -616,6 +625,9 @@
   ],
   "module-services-nextcloud-httpd": [
     "index.html#module-services-nextcloud-httpd"
+  ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
   ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"

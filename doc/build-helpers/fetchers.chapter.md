@@ -840,7 +840,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 

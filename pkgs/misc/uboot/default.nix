@@ -32,10 +32,10 @@
 }@pkgs:
 
 let
-  defaultVersion = "2025.01";
+  defaultVersion = "2025.07";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-ze99UHyT8bvZ8BXqm8IfoHQmhIFAVQGUWrxvhU1baG8=";
+    hash = "sha256-D5M/bFpCaJW/MG6T5qxTxghw5LVM2lbZUhG+yZ5jvsc=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -44,7 +44,7 @@ let
     ncurses # tools/kwboot
     libuuid # tools/mkeficapsule
     gnutls # tools/mkeficapsule
-    openssl # tools/mkimage
+    openssl # tools/mkimage and tools/env/fw_printenv
   ];
 
   buildUBoot = lib.makeOverridable (
@@ -71,9 +71,7 @@ let
 
         src = if src == null then defaultSrc else src;
 
-        patches = [
-          ./0001-configs-rpi-allow-for-bigger-kernels.patch
-        ] ++ extraPatches;
+        patches = extraPatches;
 
         postPatch = ''
           ${lib.concatMapStrings (script: ''
@@ -177,6 +175,7 @@ in
       "HOST_TOOLS_ALL=y"
       "NO_SDL=1"
       "cross_tools"
+      "envtools"
     ];
 
     outputs = [
@@ -186,13 +185,20 @@ in
 
     postInstall = ''
       installManPage doc/*.1
+
+      # from u-boot's tools/env/README:
+      # "You should then create a symlink from fw_setenv to fw_printenv. They
+      # use the same program and its function depends on its basename."
+      ln -s $out/bin/fw_printenv $out/bin/fw_setenv
     '';
+
     filesToInstall = [
       "tools/dumpimage"
       "tools/fdtgrep"
       "tools/kwboot"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/env/fw_printenv"
     ];
 
     pythonScriptsToInstall = {
@@ -214,7 +220,10 @@ in
 
   ubootAmx335xEVM = buildUBoot {
     defconfig = "am335x_evm_defconfig";
-    extraMeta.platforms = [ "armv7l-linux" ];
+    extraMeta = {
+      platforms = [ "armv7l-linux" ];
+      broken = true; # too big, exceeds memory size
+    };
     filesToInstall = [
       "MLO"
       "u-boot.img"
@@ -454,6 +463,19 @@ in
 
   ubootOrangePi5 = buildUBoot {
     defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [
+      "u-boot.itb"
+      "idbloader.img"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootOrangePi5Max = buildUBoot {
+    defconfig = "orangepi-5-max-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
     ROCKCHIP_TPL = rkbin.TPL_RK3588;
@@ -744,13 +766,6 @@ in
   };
 
   ubootRockPro64 = buildUBoot {
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
-        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
-      })
-    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -773,7 +788,10 @@ in
 
   ubootSheevaplug = buildUBoot {
     defconfig = "sheevaplug_defconfig";
-    extraMeta.platforms = [ "armv5tel-linux" ];
+    extraMeta = {
+      platforms = [ "armv5tel-linux" ];
+      broken = true; # too big, exceeds partition size
+    };
     filesToInstall = [ "u-boot.kwb" ];
   };
 

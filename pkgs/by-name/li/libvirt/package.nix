@@ -22,6 +22,7 @@
   libxslt,
   makeWrapper,
   meson,
+  nftables,
   ninja,
   openssh,
   perl,
@@ -91,6 +92,7 @@ let
       iptables
       kmod
       lvm2
+      nftables
       numactl
       numad
       openssh
@@ -115,14 +117,14 @@ assert enableZfs -> isLinux;
 stdenv.mkDerivation rec {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "11.4.0";
+  version = "11.5.0";
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-0bOX95Ly8d1/XZan/EyxI6JaACJvOu9QsTkFNQTreqI=";
+    hash = "sha256-wp/igqlyGqJiMCxcXFmPQgVDarVhR87Qlvuct+Eb8zA=";
   };
 
   patches =

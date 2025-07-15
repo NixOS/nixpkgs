@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/deepin-qt6integration/-/raw/e85e6836919d8e8424e800d7d4c8681bb23c29f9/qt-6.9.patch";
       hash = "sha256-GJH25cOEcA5Zep6FABwlRXU7HfpgMXNJzsbmWQdzx+Y=";
     })
+    (fetchpatch {
+      name = "missing-include.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/deepin-qt6integration/-/raw/300e6ac2a166ce214d64c9b16acc57d31de0604a/missing-include.patch";
+      hash = "sha256-IFSfnIFcXAcmzfAOId2ew+YUHxHK6+JfJ/t96FR7rhk=";
+    })
   ];
 
   nativeBuildInputs = [

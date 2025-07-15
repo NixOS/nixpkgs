@@ -9,6 +9,7 @@
 
   # dependencies
   addict,
+  distutils,
   matplotlib,
   numpy,
   opencv4,
@@ -73,6 +74,7 @@ buildPythonPackage rec {
 
   dependencies = [
     addict
+    distutils
     matplotlib
     numpy
     opencv4

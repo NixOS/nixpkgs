@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -23,7 +23,6 @@
   pkg-config,
   python3Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  ifcSupport ? false,
   stdenv,
   swig,
   vtk,
@@ -35,27 +34,23 @@
   nix-update-script,
 }:
 let
-  pythonDeps =
-    with python3Packages;
-    [
-      boost
-      gitpython # for addon manager
-      matplotlib
-      opencamlib
-      pivy
-      ply # for openSCAD file support
-      py-slvs
-      pybind11
-      pycollada
-      pyside6
-      python
-      pyyaml # (at least for) PyrateWorkbench
-      scipy
-      shiboken6
-    ]
-    ++ lib.optionals ifcSupport [
-      ifcopenshell
-    ];
+  pythonDeps = with python3Packages; [
+    boost
+    gitpython # for addon manager
+    ifcopenshell
+    matplotlib
+    opencamlib
+    pivy
+    ply # for openSCAD file support
+    py-slvs
+    pybind11
+    pycollada
+    pyside6
+    python
+    pyyaml # (at least for) PyrateWorkbench
+    scipy
+    shiboken6
+  ];
 
   freecad-utils = callPackage ./freecad-utils.nix { };
 in
@@ -119,11 +114,15 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
       })
+      # https://github.com/FreeCAD/FreeCAD/pull/22221
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/3d2b7dc9c7ac898b30fe469b7cbd424ed1bca0a2.patch?full_index=1";
+        hash = "sha256-XCQdv/+dYdJ/ptA2VKrD63qYILyaP276ISMkmWLtT30=";
+      })
     ];
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DBUILD_DRAWING=ON"
       "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DINSTALL_TO_SITEPACKAGES=OFF"

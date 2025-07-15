@@ -46,5 +46,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     homepage = "https://github.com/euclio/vim-markdown-composer/";
+    # rust build error
+    broken = true;
   };
 }

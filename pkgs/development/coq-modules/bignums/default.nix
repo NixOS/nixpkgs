@@ -2,6 +2,8 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   stdlib,
   version ? null,
@@ -9,7 +11,7 @@
 
 (mkCoqDerivation {
   pname = "bignums";
-  owner = "coq";
+  owner = "rocq-community";
   inherit version;
   defaultVersion =
     let
@@ -17,11 +19,12 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "9.0" "9.0") "9.0.0+rocq${coq.coq-version}")
+      (case (range "9.0" "9.1") "9.0.0+rocq${coq.coq-version}")
       (case (range "8.13" "8.20") "9.0.0+coq${coq.coq-version}")
       (case (range "8.6" "8.17") "${coq.coq-version}.0")
     ] null;
 
+  release."9.0.0+rocq9.1".sha256 = "sha256-MSjlfJs3JOakuShOj+isNlus0bKlZ+rkvzRoKZQK5RQ=";
   release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";
   release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";
   release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
@@ -59,16 +62,25 @@
     # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
     lib.optionalAttrs
       (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      {
-        configurePhase = ''
-          echo no configuration
-        '';
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          echo installing nothing
-        '';
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.bignums ];
-      }
+      (
+        let
+          case = case: out: { inherit case out; };
+          rp = lib.switch coq.coq-version [
+            (case (lib.versions.isEq "9.0") rocqPackages_9_0)
+            (case (lib.versions.isEq "9.1") rocqPackages_9_1)
+          ] rocqPackages;
+        in
+        {
+          configurePhase = ''
+            echo no configuration
+          '';
+          buildPhase = ''
+            echo building nothing
+          '';
+          installPhase = ''
+            echo installing nothing
+          '';
+          propagatedBuildInputs = o.propagatedBuildInputs ++ [ rp.bignums ];
+        }
+      )
   )

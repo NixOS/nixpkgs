@@ -16,6 +16,15 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with versions;
     switch
       [
@@ -23,13 +32,7 @@ mkCoqDerivation {
         metacoq.version
       ]
       [
-        {
-          cases = [
-            (range "8.17" "9.0")
-            (range "1.3.1" "1.3.4")
-          ];
-          out = "0.1.1";
-        }
+        (case (range "8.17" "9.0") (range "1.3.1" "1.3.4") "0.1.1")
       ]
       null;
 

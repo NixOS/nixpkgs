@@ -577,11 +577,14 @@ in
 
     config = {
       dbtype = mkOption {
-        type = types.enum [
-          "sqlite"
-          "pgsql"
-          "mysql"
-        ];
+        type = types.nullOr (
+          types.enum [
+            "sqlite"
+            "pgsql"
+            "mysql"
+          ]
+        );
+        default = null;
         description = "Database type.";
       };
       dbname = mkOption {
@@ -983,6 +986,23 @@ in
           directive and header.
         '';
       };
+      enableFastcgiRequestBuffering = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to buffer requests against fastcgi requests. This is a workaround
+          for `PUT` requests with the `Transfer-Encoding: chunked` header set and
+          an unspecified `Content-Length`. Without request buffering for these requests,
+          Nextcloud will create files with zero bytes length as described in
+          [nextcloud/server#7995](https://github.com/nextcloud/server/issues/7995).
+
+          ::: {.note}
+          Please keep in mind that upstream suggests to not enable this as it might
+          lead to timeouts on large files being uploaded as described in the
+          [administrator manual](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/big_file_upload_configuration.html#nginx).
+          :::
+        '';
+      };
     };
 
     cli.memoryLimit = mkOption {
@@ -1084,6 +1104,17 @@ in
             unset `services.nextcloud.config.dbpassFile` and
             `services.nextcloud.config.dbhost` to use socket authentication
             instead of password.
+          '';
+        }
+        {
+          assertion = cfg.config.dbtype != null;
+          message = ''
+            `services.nextcloud.config.dbtype` must be set explicitly (pgsql, mysql, or sqlite)
+
+            Before 25.05, it used to default to sqlite but that is not recommended by upstream.
+            Either set it to sqlite as it used to be, or convert to another type as described
+            in the official db conversion page:
+            https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
           '';
         }
       ];
@@ -1462,7 +1493,7 @@ in
               fastcgi_param front_controller_active true;
               fastcgi_pass unix:${fpm.socket};
               fastcgi_intercept_errors on;
-              fastcgi_request_buffering off;
+              fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };

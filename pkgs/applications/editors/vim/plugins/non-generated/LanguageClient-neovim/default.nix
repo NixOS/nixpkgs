@@ -48,5 +48,7 @@ vimUtils.buildVimPlugin {
     homepage = "https://github.com/autozimu/LanguageClient-neovim/";
     changelog = "https://github.com/autozimu/LanguageClient-neovim/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    # Rust build error
+    broken = true;
   };
 }

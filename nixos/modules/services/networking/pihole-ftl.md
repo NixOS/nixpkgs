@@ -22,6 +22,7 @@ Example configuration:
 {
   services.pihole-ftl = {
     enable = true;
+    openFirewallDNS = true;
     openFirewallDHCP = true;
     queryLogDeleter.enable = true;
     lists = [

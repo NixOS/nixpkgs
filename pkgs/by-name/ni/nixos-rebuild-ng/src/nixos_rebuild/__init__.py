@@ -281,7 +281,7 @@ def execute(argv: list[str]) -> None:
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
+        nix.upgrade_channels(args.upgrade_all, args.sudo)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is

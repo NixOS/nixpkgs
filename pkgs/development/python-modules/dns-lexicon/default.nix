@@ -76,7 +76,7 @@ buildPythonPackage rec {
     pytest-vcr
   ] ++ optional-dependencies.full;
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTestPaths = [
     # Needs network access

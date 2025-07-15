@@ -7,15 +7,16 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "polygon-cli";
   version = "1.1.11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-gEz3kcXbXj9dXnMCx0Q8TjCQemXvJne9EwFsPt14xV4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     requests
     prettytable
     colorama
@@ -23,6 +24,8 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "polygon_cli" ];
 
   meta = {
     description = "Command-line tool for polygon.codeforces.com";

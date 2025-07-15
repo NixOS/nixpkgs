@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.11";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-lIi3ouZVkSh7lEMB8x+WjXcX/5vGswmJ46vtZiyH4eg=";
+    hash = "sha256-T/Z5ghfju7w8cza+7afoPq+/AzAawpsiNtpmoPExdkM=";
   };
 
   outputs = [

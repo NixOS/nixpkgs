@@ -45,5 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/neomutt/lsp-tree-sitter";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ doronbehar ];
+    # https://github.com/neomutt/lsp-tree-sitter/issues/4
+    broken = true;
   };
 }

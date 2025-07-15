@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     hash = "sha256-laTyxRh54x3iopGVgoFtcgaV7R6IKux1O/+tzGEy0Fg=";
+    fetcherVersion = 1;
   };
 
   nativeBuildInputs = [

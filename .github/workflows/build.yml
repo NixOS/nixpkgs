@@ -28,16 +28,20 @@ jobs:
           - runner: ubuntu-24.04
             system: x86_64-linux
             builds: [shell, manual-nixos, lib-tests]
+            desc: shell, docs, lib
           - runner: ubuntu-24.04-arm
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
+            desc: shell, docs
           - runner: macos-13
             system: x86_64-darwin
             builds: [shell]
+            desc: shell
           - runner: macos-14
             system: aarch64-darwin
             builds: [shell]
-    name: ${{ matrix.system }}
+            desc: shell
+    name: '${{ matrix.system }}: ${{ matrix.desc }}'
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

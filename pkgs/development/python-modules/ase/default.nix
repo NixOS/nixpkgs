@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchFromGitLab,
   buildPythonPackage,
   isPy27,
   fetchPypi,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.25.0";
+  version = "3.25.0-unstable-2025-06-24";
   pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-N0z4yp/liPBdboVto8nBfvJi3JaAJ7Ix1EkzQUDJYsI=";
+  src = fetchFromGitLab {
+    owner = "ase";
+    repo = "ase";
+    rev = "4e22dabfbe7ae2329e50260ca1b6f08a83527ac3";
+    hash = "sha256-ehMyVtPxfTxT8T418VyLGnUEyYip4LPTTaGL0va7qgM=";
   };
 
   build-system = [ setuptools ];
@@ -62,10 +63,6 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # AssertionError: assert (1 != 0) == False
-    # TypeError: list indices must be integers or slices, not numpy.bool
-    "test_long"
-
     "test_fundamental_params"
     "test_ase_bandstructure"
     "test_imports"

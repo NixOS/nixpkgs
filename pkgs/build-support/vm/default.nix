@@ -317,7 +317,7 @@ rec {
   # A bash script fragment that produces a disk image at `destination`.
   createEmptyImage =
     {
-      # Disk image size in MiB
+      # Disk image size in MiB (1024*1024 bytes)
       size,
       # Name that will be written to ${destination}/nix-support/full-name
       fullName,
@@ -358,11 +358,11 @@ rec {
     will build the derivation `patchelf' inside a VM.  The attribute
     `preVM' can optionally contain a shell command to be evaluated
     *before* the VM is started (i.e., on the host).  The attribute
-    `memSize' specifies the memory size of the VM in megabytes,
-    defaulting to 512.  The attribute `diskImage' can optionally
-    specify a file system image to be attached to /dev/sda.  (Note
-    that currently we expect the image to contain a filesystem, not a
-    full disk image with a partition table etc.)
+    `memSize' specifies the memory size of the VM in MiB (1024*1024
+    bytes), defaulting to 512.  The attribute `diskImage' can
+    optionally specify a file system image to be attached to /dev/sda.
+    (Note that currently we expect the image to contain a filesystem,
+    not a full disk image with a partition table etc.)
 
     If the build fails and Nix is run with the `-K' option, a script
     `run-vm' will be left behind in the temporary build directory
@@ -1230,7 +1230,7 @@ rec {
     `extraPackages' specifies the names of additional packages from
     the distribution that should be included in the image; `packages'
     allows the entire set of packages to be overridden; and `size'
-    sets the size of the disk in megabytes.  E.g.,
+    sets the size of the disk in MiB (1024*1024 bytes).  E.g.,
     `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
     size = 8192; }' builds an 8 GiB image containing Firefox in
     addition to the default packages.

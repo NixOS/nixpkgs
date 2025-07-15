@@ -223,7 +223,9 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ./src/manage.py $out/bin/pretix-manage
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Trim packages size
     rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
@@ -246,9 +248,8 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "--reruns"
-    "3"
+  pytestFlags = [
+    "--reruns=3"
   ];
 
   disabledTests = [

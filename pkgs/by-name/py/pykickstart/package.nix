@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pykickstart";
   version = "3.65";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pykickstart";
@@ -34,6 +34,8 @@ python3Packages.buildPythonApplication rec {
   # All checks are for RedHat's weird translation library.
   # Can't package it and not really necessary so disable them.
   doCheck = false;
+
+  pythonImportsCheck = [ "pykickstart" ];
 
   meta = {
     description = "Python package to interact with Kickstart files commonly found in the RPM world";

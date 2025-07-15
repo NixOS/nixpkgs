@@ -296,6 +296,20 @@ in
 
     enableLmtp = mkEnableOption "starting the LMTP listener (when Dovecot is enabled)";
 
+    hasNewUnitName = mkOption {
+      type = types.bool;
+      default = true;
+      readOnly = true;
+      internal = true;
+      description = ''
+        Inspectable option to confirm that the dovecot module uses the new
+        `dovecot.service` name, instead of `dovecot2.service`.
+
+        This is a helper added for the nixos-mailserver project and can be
+        removed after branching off nixos-25.11.
+      '';
+    };
+
     protocols = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -714,6 +728,7 @@ in
           "CAP_CHOWN"
           "CAP_DAC_OVERRIDE"
           "CAP_FOWNER"
+          "CAP_KILL" # Required for child process management
           "CAP_NET_BIND_SERVICE"
           "CAP_SETGID"
           "CAP_SETUID"
@@ -722,7 +737,7 @@ in
         ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
+        NoNewPrivileges = false; # e.g for sendmail
         OOMPolicy = "continue";
         PrivateTmp = true;
         ProcSubset = "pid";
@@ -741,6 +756,7 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK" # e.g. getifaddrs in sieve handling
           "AF_UNIX"
         ];
         RestrictNamespaces = true;
@@ -816,6 +832,12 @@ in
       {
         assertion = cfg.sieve.scripts != { } -> (cfg.mailUser != null && cfg.mailGroup != null);
         message = "dovecot requires mailUser and mailGroup to be set when `sieve.scripts` is set";
+      }
+      {
+        assertion = config.systemd.services ? dovecot2 == false;
+        message = ''
+          Your configuration sets options on the `dovecot2` systemd service. These have no effect until they're migrated to the `dovecot` service.
+        '';
       }
     ];
 

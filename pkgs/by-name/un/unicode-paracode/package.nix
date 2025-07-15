@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "unicode";
   version = "2.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garabik";
@@ -20,30 +20,30 @@ python3Packages.buildPythonApplication rec {
   };
 
   ucdtxt = fetchurl {
-    url = "https://www.unicode.org/Public/15.0.0/ucd/UnicodeData.txt";
-    sha256 = "sha256-gG6a7WUDcZfx7IXhK+bozYcPxWCLTeD//ZkPaJ83anM=";
+    url = "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt";
+    sha256 = "sha256-/1jlgjvQlRZlZKAG5H0RETCBPc+L8jTvefpRqHDttI8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   postFixup = ''
     substituteInPlace "$out/bin/.unicode-wrapped" \
-      --replace "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
+      --replace-fail "/usr/share/unicode/UnicodeData.txt" "$ucdtxt"
   '';
 
   postInstall = ''
     installManPage paracode.1 unicode.1
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Display unicode character properties";
     homepage = "https://github.com/garabik/unicode";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.woffs ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.woffs ];
+    platforms = lib.platforms.all;
   };
 }

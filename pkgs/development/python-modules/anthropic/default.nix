@@ -88,9 +88,8 @@ buildPythonPackage rec {
     "tests/lib/test_bedrock.py"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

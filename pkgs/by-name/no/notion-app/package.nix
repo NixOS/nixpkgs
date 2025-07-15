@@ -5,7 +5,9 @@
   unzip,
 }:
 let
-  info = (lib.importJSON ./info.json)."${stdenvNoCC.hostPlatform.parsed.cpu.name}-darwin";
+  info =
+    (lib.importJSON ./info.json)."${stdenvNoCC.hostPlatform.parsed.cpu.name}-darwin"
+      or (throw "Unsupported CPU architecture: ${stdenvNoCC.hostPlatform.parsed.cpu.name}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "notion-app";

@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.33.1";
+  version = "0.33.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     tag = version;
-    hash = "sha256-rcoZZ4fd6ATBL+aG1Lqvch6wnKtGmEYdCBd9F2danoE=";
+    hash = "sha256-lYmKhNMXLnEesnNNCWyx5hyS3l2UwTiJH/uTdy2XTb4=";
   };
 
   build-system = with python3Packages; [ setuptools ];

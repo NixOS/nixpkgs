@@ -13,18 +13,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.3.8";
+  version = "2.3.9";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-QBc0avci232UIxzTKlS0pjL7cCuvwAFgw6dSwdtYAtU=";
+    hash = "sha256-j9MlvE2upocwC5xxroms3am6tqJX30sSw7PFNw8Ofog=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NQXXR6b1XZDihVoRNFJLXtMNjlzOIzkc4rthwx0A7AE=";
+  cargoHash = "sha256-1x3F2TqNlqwfPUvLwU8ac4aEeEwpIy5gEyxRBC0Q5YM=";
 
   nativeBuildInputs = [
     pkg-config

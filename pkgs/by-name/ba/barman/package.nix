@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  file,
   python3Packages,
   rsync,
   versionCheckHook,
@@ -29,6 +30,12 @@ python3Packages.buildPythonApplication rec {
       hash = "sha256-0aqyjsEabxLf4dpC4DeepmypAl7QfCedh7vy98iVifU=";
     })
   ];
+
+  # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
+  postPatch = ''
+    substituteInPlace barman/encryption.py \
+      --replace-fail '"file"' '"${lib.getExe file}"'
+  '';
 
   build-system = with python3Packages; [
     distutils

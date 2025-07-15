@@ -16,8 +16,7 @@ rustPlatform.buildRustPackage {
   sourceRoot = "${src-service.name}";
 
   patches = [
-    # FIXME: remove until upstream fix these
-    # https://github.com/clash-verge-rev/clash-verge-rev/issues/3428
+    # I want to keep these patches because it's not harmful.
 
     # Patch: Restrict bin_path in spawn_process to be under the clash-verge-service directory.
     # This prevents arbitrary code execution by ensuring only trusted binaries from the Nix store are allowed to run.
@@ -26,6 +25,10 @@ rustPlatform.buildRustPackage {
     # Patch: Add validation to prevent overwriting existing files.
     # This mitigates arbitrary file overwrite risks by ensuring a file does not already exist before writing.
     ./0002-core-prevent-overwriting-existing-file-by-validating.patch
+
+    # Patch: move IPC directory from /tmp to /run/clash-verge-rev/service.lock
+    # This allows we enable ProtectSystem="strict" and PrivateTmp
+    ./0003-IPC-move-path-to-run-clash-verge-rev-service.sock.patch
   ];
 
   nativeBuildInputs = [

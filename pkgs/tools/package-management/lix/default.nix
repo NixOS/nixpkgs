@@ -13,6 +13,7 @@
   editline,
   ncurses,
   clangStdenv,
+  nixpkgs-review,
   nix-direnv,
   nix-fast-build,
   colmena,
@@ -90,6 +91,10 @@ let
           # that `nix-eval-jobs` can be built against the correct `lix` version.
           lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
             stdenv = lixStdenv;
+          };
+
+          nixpkgs-review = nixpkgs-review.override {
+            nix = self.lix;
           };
 
           nix-direnv = nix-direnv.override {
@@ -238,14 +243,14 @@ lib.makeExtensible (self: {
     attrName = "git";
 
     lix-args = rec {
-      version = "2.94.0-pre-20250624_${builtins.substring 0 12 src.rev}";
+      version = "2.94.0-pre-20250704_${builtins.substring 0 12 src.rev}";
 
       src = fetchFromGitea {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = "42e2bd045c9e51a59fdab038dc4e6f9e86c4922c";
-        hash = "sha256-BsY8kpwQML9/036g9C+No7lhzqmn4ZTlIsuo92SVSJk=";
+        rev = "362bfd827f522b57062e4ebcb465bb51941632a4";
+        hash = "sha256-4CVRbeYExqIDpFH+QMZb5IeUGkP6kA/zHSuExYoZygk=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {

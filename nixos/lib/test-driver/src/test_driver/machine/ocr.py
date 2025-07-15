@@ -104,7 +104,9 @@ def _preprocess_screenshot(screenshot_path: Path, negate: bool = False) -> Path:
 
     if negate:
         magick_args.append("-negate")
-        out_file = out_file.with_suffix(".negative")
+        out_file = out_file.with_name(f"{out_file.stem}.negative.png")
+    else:
+        out_file = out_file.with_name(f"{out_file.stem}.positive.png")
 
     magick_args += [
         "-gamma",
@@ -112,7 +114,6 @@ def _preprocess_screenshot(screenshot_path: Path, negate: bool = False) -> Path:
         "-blur",
         "1x65535",
     ]
-    out_file = out_file.with_suffix(".png")
 
     ret = subprocess.run(
         ["magick", "convert"] + magick_args + [screenshot_path, out_file],

@@ -7,8 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "inql";
   version = "4.0.6";
-  format = "setuptools";
-
+  format = "pyproject";
   src = fetchFromGitHub {
     owner = "doyensec";
     repo = "inql";
@@ -19,10 +18,14 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # To set the version a full git checkout would be needed
     substituteInPlace setup.py \
-      --replace "version=version()," "version='${version}',"
+      --replace-fail "version=version()," "version='${version}',"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     stickytape
   ];
 

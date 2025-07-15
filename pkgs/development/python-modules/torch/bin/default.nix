@@ -17,7 +17,6 @@
 
   # dependencies
   filelock,
-  future,
   jinja2,
   networkx,
   numpy,
@@ -87,7 +86,6 @@ buildPythonPackage {
 
   dependencies = [
     filelock
-    future
     jinja2
     networkx
     numpy

@@ -2,6 +2,8 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   stdlib,
   coq-elpi,
@@ -19,7 +21,7 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
-        (case (range "8.20" "9.0") "1.9.1")
+        (case (range "8.20" "9.1") "1.9.1")
         (case (range "8.19" "8.20") "1.8.0")
         (case (range "8.18" "8.20") "1.7.1")
         (case (range "8.16" "8.18") "1.6.0")
@@ -77,16 +79,25 @@ hb.overrideAttrs (
   //
     lib.optionalAttrs
       (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      {
-        configurePhase = ''
-          echo no configuration
-        '';
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          echo installing nothing
-        '';
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.hierarchy-builder ];
-      }
+      (
+        let
+          case = case: out: { inherit case out; };
+          rp = lib.switch coq.coq-version [
+            (case "9.0" rocqPackages_9_0)
+            (case "9.1" rocqPackages_9_1)
+          ] rocqPackages;
+        in
+        {
+          configurePhase = ''
+            echo no configuration
+          '';
+          buildPhase = ''
+            echo building nothing
+          '';
+          installPhase = ''
+            echo installing nothing
+          '';
+          propagatedBuildInputs = o.propagatedBuildInputs ++ [ rp.hierarchy-builder ];
+        }
+      )
 )

@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
   version = "0.9.3.11.15";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coderholic";
@@ -21,7 +21,9 @@ python3Packages.buildPythonApplication rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     dnspython
     netifaces
     psutil

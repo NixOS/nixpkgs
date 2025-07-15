@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   callPackage,
   python3Packages,
   fetchFromGitHub,
@@ -8,7 +9,7 @@
   esptool,
   git,
   inetutils,
-  stdenv,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -43,9 +44,8 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-3Xcxn12QKQg0jxdOPP7y01YaikvxmPPX9JL2JBvdsUM=";
   };
 
-  build-systems = with python.pkgs; [
+  build-system = with python.pkgs; [
     setuptools
-    argcomplete
   ];
 
   nativeBuildInputs = [
@@ -123,14 +123,17 @@ python.pkgs.buildPythonApplication rec {
   # Needed for tests
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3Packages; [
-    hypothesis
-    mock
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      hypothesis
+      mock
+      pytest-asyncio
+      pytest-cov-stub
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ [ versionCheckHook ];
 
   disabledTests = [
     # race condition, also visible in upstream tests
@@ -157,10 +160,6 @@ python.pkgs.buildPythonApplication rec {
     export PATH=$PATH:$out/bin
   '';
 
-  postCheck = ''
-    $out/bin/esphome --help > /dev/null
-  '';
-
   postInstall =
     let
       argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
@@ -171,6 +170,10 @@ python.pkgs.buildPythonApplication rec {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "--version";
 
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "distroav";
-  version = "6.0.0";
+  version = "6.1.1";
 
   nativeBuildInputs = [
     cmake
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "DistroAV";
     repo = "DistroAV";
     tag = version;
-    hash = "sha256-pr/5XCLo5fzergIQrYFC9o9K+KuP4leDk5/oRe5ct9Q=";
+    hash = "sha256-nbXh6bjpiKbvuntZSnuTWWpmhfAcep7Krjjq8FvbENk=";
   };
 
   # Modify plugin-main.cpp file to fix ndi libs path

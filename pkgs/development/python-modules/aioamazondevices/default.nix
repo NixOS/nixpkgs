@@ -1,11 +1,10 @@
 {
   aiohttp,
-  babel,
   beautifulsoup4,
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
-  httpx,
+  langcodes,
   lib,
   orjson,
   poetry-core,
@@ -16,24 +15,23 @@
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
-  version = "3.1.14";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
-    hash = "sha256-xCXzNeUIw2UxBcOMgab1lpN9/0RGLZAwgtHkZhwqxxY=";
+    hash = "sha256-TpsRYL608hAcFhqBwqsstFUdq0BLlNjD9YdGeio8BNs=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    babel
     beautifulsoup4
     colorlog
-    httpx
+    langcodes
     orjson
     yarl
   ];

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "http_message_signatures" ];
 
