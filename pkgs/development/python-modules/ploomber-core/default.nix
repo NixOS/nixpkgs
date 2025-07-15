@@ -6,18 +6,19 @@
   pyyaml,
   posthog,
   pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ploomber-core";
-  version = "0.2.25";
+  version = "0.2.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "core";
     tag = version;
-    hash = "sha256-QUEnWFhf42ppoXoz3H/2SHtoPZOi6lbopsrbmEAk+1U=";
+    hash = "sha256-4lAsO+igyb/JXmZsgDgUUrgw3EyhdrliD9LlQqxhBMM=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     posthog
+    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
