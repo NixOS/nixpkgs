@@ -6,14 +6,14 @@
   chromium,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "resumed";
   version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "rbardini";
     repo = "resumed";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-K9F6ZxtqAQSc5Dqeoysish+xeRqDcDG/6Ynx7bTJfl8=";
   };
 
@@ -39,4 +39,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ ambroisie ];
     mainProgram = "resumed";
   };
-}
+})
