@@ -121,6 +121,7 @@ in
 
     users.users.spamd = {
       description = "Spam Assassin Daemon";
+      home = "/var/lib/spamassassin";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
