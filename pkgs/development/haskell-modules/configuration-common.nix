@@ -638,10 +638,10 @@ with haskellLib;
       (
         lib.pipe
           (super.cachix.override {
-            nix = self.hercules-ci-cnix-store.nixPackage;
+            nix = self.hercules-ci-cnix-store.nixPackage.override { withAWS = false; };
           })
           [
-            (addBuildTool self.hercules-ci-cnix-store.nixPackage)
+            (addBuildTool self.hercules-ci-cnix-store.nixPackage.override { withAWS = false; })
             (addBuildTool pkgs.buildPackages.pkg-config)
             (addBuildDepend self.hnix-store-nar)
           ]
