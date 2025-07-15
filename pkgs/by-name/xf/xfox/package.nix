@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
   ];
   postPatch = ''
-    substituteInPlace setup.py --replace "evdev-binary" "evdev"
+    substituteInPlace setup.py --replace-fail "evdev-binary" "evdev"
   '';
   meta = {
     description = "Tool to remap gamepads to act as a virtual xbox gamepad.";
