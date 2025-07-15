@@ -334,6 +334,7 @@ in
         enable = useBuCellServDB;
         text = mkCellServDB cfg.roles.backup.cellServDB;
         target = "openafs/backup/CellServDB";
+        mode = "0644";
       };
     };
 
