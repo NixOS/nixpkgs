@@ -220,11 +220,6 @@ with pkgs;
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
 
-  stripJavaArchivesHook = makeSetupHook {
-    name = "strip-java-archives-hook";
-    propagatedBuildInputs = [ strip-nondeterminism ];
-  } ../build-support/setup-hooks/strip-java-archives.sh;
-
   ensureNewerSourcesHook =
     { year }:
     makeSetupHook
