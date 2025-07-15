@@ -74,7 +74,6 @@ let
     "systemd"
     "postgres"
     "url-preview"
-    "user-search"
   ];
 
   wantedExtras =
@@ -84,7 +83,6 @@ let
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
-    ++ lib.optional (cfg.settings ? user_directory) "user-search"
     ++ lib.optional (cfg.settings.url_preview_enabled) "url-preview"
     ++ lib.optional (cfg.settings.database.name == "psycopg2") "postgres";
 
@@ -674,7 +672,6 @@ in
               "sentry"       # Error tracking and performance metrics
               "systemd"      # Provide the JournalHandler used in the default log_config
               "url-preview"  # Support for oEmbed URL previews
-              "user-search"  # Support internationalized domain names in user-search
             ]
           '';
           description = ''
