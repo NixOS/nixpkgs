@@ -157,5 +157,9 @@ in
   configHook = makeSetupHook {
     name = "pnpm-config-hook";
     propagatedBuildInputs = [ pnpm ];
+    substitutions = {
+      npmArch = stdenvNoCC.targetPlatform.node.arch;
+      npmPlatform = stdenvNoCC.targetPlatform.node.platform;
+    };
   } ./pnpm-config-hook.sh;
 }

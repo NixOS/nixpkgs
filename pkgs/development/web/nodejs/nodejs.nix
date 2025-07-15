@@ -70,30 +70,6 @@ let
       "freebsd"
     else
       throw "unsupported os ${platform.uname.system}";
-  destCPU =
-    let
-      platform = stdenv.hostPlatform;
-    in
-    if platform.isAarch then
-      "arm" + lib.optionalString platform.is64bit "64"
-    else if platform.isMips32 then
-      "mips" + lib.optionalString platform.isLittleEndian "le"
-    else if platform.isMips64 && platform.isLittleEndian then
-      "mips64el"
-    else if platform.isPower then
-      "ppc" + lib.optionalString platform.is64bit "64"
-    else if platform.isx86_64 then
-      "x64"
-    else if platform.isx86_32 then
-      "ia32"
-    else if platform.isS390x then
-      "s390x"
-    else if platform.isRiscV64 then
-      "riscv64"
-    else if platform.isLoongArch64 then
-      "loong64"
-    else
-      throw "unsupported cpu ${platform.uname.processor}";
   destARMFPU =
     let
       platform = stdenv.hostPlatform;
@@ -258,7 +234,7 @@ let
           # --cross-compiling flag enables use of CC_host et. al
           (if canExecute || canEmulate then "--no-cross-compiling" else "--cross-compiling")
           "--dest-os=${destOS}"
-          "--dest-cpu=${destCPU}"
+          "--dest-cpu=${stdenv.hostPlatform.node.arch}"
         ]
         ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
         ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
