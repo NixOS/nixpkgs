@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       lensfun
       lerc
       libaom
-      libavif
+      #libavif # TODO re-enable once cmake files are fixed (#425306)
       libdatrie
       libepoxy
       libexif
