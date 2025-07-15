@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -16,6 +17,8 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-7Wdf8NaizgIExeX+Kc8wn5f20al0bnxRpFoPy6p40jw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";
