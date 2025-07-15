@@ -1,4 +1,4 @@
-This change bypasses all the code that attempts to see which C++11 features are enabled in your specific C++11 compiler.  C++14 is required for gtest 1.13+.
+This change bypasses all the code that attempts to see which C++11 features are enabled in your specific C++11 compiler.  C++17 is required for gtest 1.17+.
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 902233e676ee..49ac8a1010a4 100644
 --- a/CMakeLists.txt
@@ -20,7 +20,7 @@ index 902233e676ee..49ac8a1010a4 100644
 -    ENDIF()
 +    SET(TINS_HAVE_CXX11 ON)
 +    MESSAGE(STATUS "Using C++11 features")
-+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
++    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
  ELSE(LIBTINS_ENABLE_CXX11)
      MESSAGE(
          WARNING
