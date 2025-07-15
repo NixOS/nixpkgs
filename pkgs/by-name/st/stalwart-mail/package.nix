@@ -113,6 +113,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   left: [1, 2, 2]
     #  right: [1, 2, 3]
     "--skip=smtp::queue::retry::queue_retry"
+    # thread 'smtp::queue::virtualq::virtual_queue' panicked at /build/source/crates/store/src/dispatch/store.rs:548:14:
+    # called `Result::unwrap()` on an `Err` value: Error(Event { inner: Store(MysqlError), keys: [(Reason, String("Input/output error: Input/output error: Connection refused (os error 111)")), (CausedBy, String("crates/store/src/dispatch/store.rs:301"))] })
+    "--skip=smtp::queue::virtualq::virtual_queue"
     # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
     "--skip=store::store_tests"
     # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
