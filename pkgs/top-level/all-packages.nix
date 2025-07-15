@@ -204,25 +204,6 @@ with pkgs;
 
   aider-chat-full = aider-chat.withOptional { withAll = true; };
 
-  autoreconfHook = callPackage (
-    {
-      makeSetupHook,
-      autoconf,
-      automake,
-      gettext,
-      libtool,
-    }:
-    makeSetupHook {
-      name = "autoreconf-hook";
-      propagatedBuildInputs = [
-        autoconf
-        automake
-        gettext
-        libtool
-      ];
-    } ../build-support/setup-hooks/autoreconf.sh
-  ) { };
-
   autoreconfHook264 = autoreconfHook.override {
     autoconf = autoconf264;
     automake = automake111x;
