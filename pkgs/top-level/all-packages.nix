@@ -216,17 +216,6 @@ with pkgs;
     autoconf = autoconf271;
   };
 
-  autoPatchelfHook = makeSetupHook {
-    name = "auto-patchelf-hook";
-    propagatedBuildInputs = [
-      auto-patchelf
-      bintools
-    ];
-    substitutions = {
-      hostPlatform = stdenv.hostPlatform.config;
-    };
-  } ../build-support/setup-hooks/auto-patchelf.sh;
-
   appimageTools = callPackage ../build-support/appimage { };
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
