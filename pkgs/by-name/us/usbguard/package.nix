@@ -25,14 +25,14 @@ let
   protobuf = protobuf_29;
 in
 stdenv.mkDerivation rec {
-  version = "1.1.3";
+  version = "1.1.4";
   pname = "usbguard";
 
   src = fetchFromGitHub {
     owner = "USBGuard";
     repo = "usbguard";
     rev = "usbguard-${version}";
-    hash = "sha256-8y8zaKJfoIXc9AvG1wi3EzZA7BR2wVFLuOyD+zpBY0s=";
+    hash = "sha256-PDuYszdG6BK4fkAHWWBct1d7tnwwe+5XOw+xmSPoPCY=";
     fetchSubmodules = true;
   };
 
