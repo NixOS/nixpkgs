@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2db7493..80957dd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -44,6 +44,8 @@ ExternalProject_Add(espeak_ng_external
+         ${ESPEAKNG_STATIC_LIB}
+         ${UCD_STATIC_LIB}
+     UPDATE_DISCONNECTED TRUE
++    DOWNLOAD_COMMAND ""
++    UPDATE_COMMAND ""
+ )
+
+ include_directories(
