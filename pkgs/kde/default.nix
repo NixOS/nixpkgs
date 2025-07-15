@@ -3,7 +3,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
-  libsForQt5,
   qt6Packages,
   cmark,
   gpgme,
@@ -38,6 +37,8 @@ let
           inherit (v) version;
         }
       ) allUrls;
+
+      debugAlias = set: lib.dontRecurseIntoAttrs (lib.filterAttrs (k: v: !v.meta.broken) set);
     in
     (
       qt6Packages
@@ -46,6 +47,11 @@ let
       // plasma
       // {
         inherit sources;
+
+        # Aliases to simplify test-building entire package sets
+        frameworks = debugAlias frameworks;
+        gear = debugAlias gear;
+        plasma = debugAlias plasma;
 
         mkKdeDerivation = self.callPackage (import ./lib/mk-kde-derivation.nix self) { };
 
@@ -61,9 +67,6 @@ let
 
         # Alias to match metadata
         kquickimageeditor = self.kquickimageedit;
-
-        # Alias because it's just data
-        plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
@@ -82,10 +85,12 @@ let
         oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
+        plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
+        dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };
         karousel = self.callPackage ./third-party/karousel { };
         koi = self.callPackage ./third-party/koi { };
         krohnkite = self.callPackage ./third-party/krohnkite { };

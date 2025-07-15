@@ -5,6 +5,10 @@
   ...
 }:
 let
+  inherit (lib)
+    mkOption
+    types
+    ;
 
   cfg = config.services.postfix;
   user = cfg.user;
@@ -13,7 +17,7 @@ let
 
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != "" || cfg.extraAliases != "";
   haveCanonical = cfg.canonical != "";
-  haveTransport = cfg.transport != "" || (cfg.enableSlowDomains && cfg.slowDomains != [ ]);
+  haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
   haveLocalRecipients = cfg.localRecipients != null;
 
@@ -47,7 +51,11 @@ let
           );
       mkEntry = name: value: "${escape name} =${mkVal value}";
     in
-    lib.concatStringsSep "\n" (lib.mapAttrsToList mkEntry cfg.config) + "\n" + cfg.extraConfig;
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.config)
+    )
+    + "\n"
+    + cfg.extraConfig;
 
   masterCfOptions =
     {
@@ -319,20 +327,13 @@ let
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   canonicalFile = pkgs.writeText "postfix-canonical" cfg.canonical;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
-  transportFile = pkgs.writeText "postfix-transport" (
-    lib.optionalString (cfg.enableSlowDomains && cfg.slowDomains != [ ]) (
-      lib.concatMapStrings (domain: ''
-        ${domain} slow:
-      '') cfg.slowDomains
-    )
-    + cfg.transport
-  );
   localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (
     lib.concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients
   );
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCfContent;
+  transportFile = pkgs.writeText "postfix-transport" cfg.transport;
   headerChecksFile = pkgs.writeText "postfix-header-checks" headerChecks;
 
 in
@@ -557,32 +558,6 @@ in
         '';
       };
 
-      enableSlowDomains = lib.mkEnableOption "slow domains feature for rate limiting specific domains";
-
-      slowDomains = lib.mkOption {
-        type = with lib.types; listOf str;
-        default = [ ];
-        example = [
-          "orange.fr"
-          "gmail.com"
-        ];
-        description = "List of domains to be rate-limited using the slow transport.";
-      };
-
-      slowDomainsConfig = {
-        defaultDestinationRateDelay = lib.mkOption {
-          type = lib.types.str;
-          default = "5s";
-          description = "Default rate delay for destinations.";
-        };
-
-        defaultDestinationConcurrencyLimit = lib.mkOption {
-          type = lib.types.int;
-          default = 3;
-          description = "Concurrency limit for slow destinations.";
-        };
-      };
-
       aliasMapType = lib.mkOption {
         type =
           with lib.types;
@@ -597,16 +572,60 @@ in
       };
 
       config = lib.mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            bool
-            int
-            str
-            (listOf str)
-          ]);
+        type = lib.types.submodule {
+          freeformType =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+                (listOf str)
+              ])
+            );
+          options = {
+            smtpd_tls_chain_files = mkOption {
+              type = with types; listOf path;
+              default = [ ];
+              example = [
+                "/var/lib/acme/mail.example.com/privkey.pem"
+                "/var/lib/acme/mail.example.com/fullchain.pem"
+              ];
+              description = ''
+                List of paths to the server private keys and certificates.
+
+                ::: {.caution}
+                The order of items matters and a private key must always be followed by the corresponding certificate.
+                :::
+
+                <https://www.postfix.org/postconf.5.html#smtpd_tls_chain_files>
+              '';
+            };
+
+            smtpd_tls_security_level = mkOption {
+              type = types.enum [
+                "none"
+                "may"
+                "encrypt"
+              ];
+              default = if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none";
+              defaultText = lib.literalExpression ''
+                if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none"
+              '';
+              example = "may";
+              description = ''
+                The server TLS security level. Enable TLS by configuring at least `may`.
+
+                <https://www.postfix.org/postconf.5.html#smtpd_tls_security_level>
+              '';
+            };
+          };
+        };
+
         description = ''
           The main.cf configuration file as key value set.
+
+          Null values will not be rendered.
         '';
         example = {
           mail_owner = "postfix";
@@ -630,18 +649,6 @@ in
         description = ''
           File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
         '';
-      };
-
-      sslCert = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "SSL certificate to use.";
-      };
-
-      sslKey = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "SSL key to use.";
       };
 
       recipientDelimiter = lib.mkOption {
@@ -887,7 +894,7 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+                ${pkgs.postfix}/bin/postmap -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -1007,21 +1014,6 @@ in
           // lib.optionalAttrs (cfg.tlsTrustedAuthorities != "") {
             smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
             smtp_tls_security_level = lib.mkDefault "may";
-          }
-          // lib.optionalAttrs (cfg.sslCert != "") {
-            smtp_tls_cert_file = cfg.sslCert;
-            smtp_tls_key_file = cfg.sslKey;
-
-            smtp_tls_security_level = lib.mkDefault "may";
-
-            smtpd_tls_cert_file = cfg.sslCert;
-            smtpd_tls_key_file = cfg.sslKey;
-
-            smtpd_tls_security_level = lib.mkDefault "may";
-          }
-          // lib.optionalAttrs cfg.enableSlowDomains {
-            default_destination_rate_delay = cfg.slowDomainsConfig.defaultDestinationRateDelay;
-            default_destination_concurrency_limit = cfg.slowDomainsConfig.defaultDestinationConcurrencyLimit;
           };
 
         services.postfix.masterConfig =
@@ -1113,14 +1105,6 @@ in
                 lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
             };
           }
-          // lib.optionalAttrs cfg.enableSlowDomains {
-            slow = {
-              command = "smtp";
-              type = "unix";
-              private = true;
-              maxproc = 2;
-            };
-          }
           // lib.optionalAttrs cfg.enableSmtp {
             smtp_inet = {
               name = "smtp";
@@ -1172,7 +1156,7 @@ in
       (lib.mkIf haveCanonical {
         services.postfix.mapFiles.canonical = canonicalFile;
       })
-      (lib.mkIf (haveTransport || (cfg.enableSlowDomains && cfg.slowDomains != [ ])) {
+      (lib.mkIf haveTransport {
         services.postfix.mapFiles.transport = transportFile;
       })
       (lib.mkIf haveVirtual {
@@ -1193,6 +1177,12 @@ in
   imports = [
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
       "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "sslCert" ]
+      "services.postfix.sslCert was removed. Use services.postfix.config.smtpd_tls_chain_files for the server certificate, or services.postfix.config.smtp_tls_chain_files for the client certificate."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "sslKey" ]
+      "services.postfix.sslKey was removed. Use services.postfix.config.smtpd_tls_chain_files for server private key, or services.postfix.config.smtp_tls_chain_files for the client private key."
     )
 
     (lib.mkChangedOptionModule

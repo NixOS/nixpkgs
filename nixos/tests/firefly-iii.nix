@@ -105,7 +105,7 @@ in
     fireflySqlite.succeed("systemctl start firefly-iii-cron.service")
     fireflyPostgresql.wait_for_unit("phpfpm-firefly-iii.service")
     fireflyPostgresql.wait_for_unit("nginx.service")
-    fireflyPostgresql.wait_for_unit("postgresql.service")
+    fireflyPostgresql.wait_for_unit("postgresql.target")
     fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
     fireflyPostgresql.succeed("systemctl start firefly-iii-cron.service")
     fireflyMysql.wait_for_unit("phpfpm-firefly-iii.service")

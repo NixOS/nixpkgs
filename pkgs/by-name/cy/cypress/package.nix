@@ -19,19 +19,19 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-1W13AfXVRWTmDSRdsaPfSSJNlf59JXdI92tXBbYwdDI=";
+      hash = "sha256-VkKC4ifUEB+2SJWwUrff7t5Yh6j1d7O7o2T8WJtK4rc=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
+      hash = "sha256-zOM3mKwWzt42LP1c5pS/GIQOj35fTORYEwrLmsf46jw=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+      hash = "sha256-z/HtHiOv/gAq+L4TpI3ibSTpDUGT6UV5uT1mMlbeFuA=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-glJscAp0oHS1pqBt6fsQm0I5anl2HQ5YawIJuPG33II=";
+      hash = "sha256-g28b9fRsv+nsZ8TMFmp8b0K9kXnYpj+1s+vhaUHqG5E=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.17.0";
+  version = "14.5.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -64,20 +64,12 @@ stdenv.mkDerivation rec {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
-    [
-      libXScrnSaver
-      libXdamage
-      libXtst
-      libxshmfence
-      nss
-      gtk2
-      alsa-lib
-      gtk3
-      libgbm
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    nss
+    alsa-lib
+    gtk3
+    libgbm
+  ];
 
   runtimeDependencies = lib.optional stdenv.hostPlatform.isLinux (lib.getLib udev);
 
@@ -135,6 +127,7 @@ stdenv.mkDerivation rec {
       tweber
       mmahut
       Crafter
+      jonhermansen
     ];
   };
 }

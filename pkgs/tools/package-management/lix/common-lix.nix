@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -86,6 +87,8 @@ assert lib.assertMsg (
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
 
   confDir,
   stateDir,
@@ -128,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We don't want the underlying GCC neither!
     stdenv.cc.cc.stdenv.cc.cc
   ];
+  __structuredAttrs = true;
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
@@ -139,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.pytest
         p.pytest-xdist
         p.python-frontmatter
+        p.toml
       ]))
       pkg-config
       flex
@@ -169,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
       doxygen
     ]
     ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals pastaFod [ passt ]
     ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
@@ -388,5 +394,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })

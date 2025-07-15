@@ -126,7 +126,7 @@ stdenv.mkDerivation (
       wrapProgramShell $out/opt/${name}/${pname} \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
         --suffix PATH : ${xdg-utils}/bin \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
         "''${gappsWrapperArgs[@]}"
     '';
   }

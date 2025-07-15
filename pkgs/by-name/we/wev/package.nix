@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       X11 tool xev.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "wev";
   };

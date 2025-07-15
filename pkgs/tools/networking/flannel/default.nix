@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "flannel";
-  version = "0.26.7";
+  version = "0.27.1";
   rev = "v${version}";
 
-  vendorHash = "sha256-cD5NDK0jb1dKhNRiYTaU36TM3CdkwScZ24AtkaEja4k=";
+  vendorHash = "sha256-FR9jeHVZS87Tlv1jtO4h5ZDqKIRLfa4xGlpCj1IWoXU=";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "flannel-io";
     repo = "flannel";
-    sha256 = "sha256-RuahJrJaqguyXOr46KLw04To+TDjpVsLCJ0U/yz+1nI=";
+    sha256 = "sha256-xmKXemr/qSLsBOwLhJIewF7Iu/ERpZX8kUFgotz4Yyw=";
   };
 
   ldflags = [ "-X github.com/flannel-io/flannel/pkg/version.Version=${rev}" ];

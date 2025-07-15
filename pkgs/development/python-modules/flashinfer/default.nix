@@ -31,6 +31,7 @@ let
 
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -77,6 +78,7 @@ buildPythonPackage {
   preConfigure = ''
     export FLASHINFER_ENABLE_AOT=1
     export TORCH_NVCC_FLAGS="--maxrregcount=64"
+    export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
   TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;

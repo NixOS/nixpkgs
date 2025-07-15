@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/amboar/culvert";
-    description = "A Test and Debug Tool for BMC AHB Interfaces ";
+    description = "Test and Debug Tool for BMC AHB Interfaces ";
     mainProgram = "culvert";
     license = licenses.asl20;
     maintainers = [ maintainers.baloo ];

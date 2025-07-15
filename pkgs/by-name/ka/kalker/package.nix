@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   env.CARGO_FEATURE_USE_SYSTEM_LIBS = "1";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kalker.strct.net";
     changelog = "https://github.com/PaddiM8/kalker/releases/tag/v${version}";
     description = "Command line calculator";
@@ -57,8 +57,8 @@ rustPlatform.buildRustPackage rec {
       A command line calculator that supports math-like syntax with user-defined
       variables, functions, derivation, integration, and complex numbers
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       lovesegfault
     ];

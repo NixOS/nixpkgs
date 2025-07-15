@@ -52,6 +52,10 @@ buildPythonPackage rec {
     "websockets"
   ];
 
+  pythonRemoveDeps = [
+    "mlx-vlm" # not yet avainable on nixpkgs
+  ];
+
   dependencies =
     [
       docling

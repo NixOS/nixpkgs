@@ -11,6 +11,7 @@
   numpy,
   pymanopt,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   scikit-learn,
   scipy,
@@ -79,11 +80,13 @@ buildPythonPackage rec {
       );
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov-report= --cov=ot" "" \
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
 

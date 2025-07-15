@@ -44,6 +44,8 @@ with haskellLib;
 #
 # To avoid this, we use `intersectAttrs` here so we never add packages that are not present
 # in the parent package set (`super`).
+
+# To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 self: super:
 builtins.intersectAttrs super {
 
@@ -155,6 +157,9 @@ builtins.intersectAttrs super {
   streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
   threadscope = enableSeparateBinOutput super.threadscope;
+
+  # Binary may be used separately for e.g. editor integrations
+  cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
@@ -404,6 +409,8 @@ builtins.intersectAttrs super {
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
 
+  lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
+
   safe-exceptions = overrideCabal (drv: {
     # Fix strictDeps build error "could not execute: hspec-discover"
     testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
@@ -594,6 +601,11 @@ builtins.intersectAttrs super {
       pkgs.libjpeg
     ];
   }) super.fltkhs;
+
+  # Select dependency discovery method and provide said dependency
+  jpeg-turbo = enableCabalFlag "pkgconfig" (
+    addPkgconfigDepends [ pkgs.libjpeg_turbo ] super.jpeg-turbo
+  );
 
   # https://github.com/skogsbaer/hscurses/pull/26
   hscurses = addExtraLibrary pkgs.ncurses super.hscurses;
@@ -1431,6 +1443,7 @@ builtins.intersectAttrs super {
     fourmolu
     fourmolu_0_14_0_0
     fourmolu_0_16_0_0
+    fourmolu_0_18_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1663,6 +1676,8 @@ builtins.intersectAttrs super {
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
+
+  jsaddle-warp = addTestToolDepends [ pkgs.nodejs ] super.jsaddle-warp;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass

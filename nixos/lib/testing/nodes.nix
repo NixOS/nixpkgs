@@ -3,6 +3,7 @@ testModuleArgs@{
   lib,
   hostPkgs,
   nodes,
+  options,
   ...
 }:
 
@@ -72,6 +73,9 @@ let
       testModuleArgs.config.extraBaseModules
     ];
   };
+
+  # TODO (lib): Dedup with run.nix, add to lib/options.nix
+  mkOneUp = opt: f: lib.mkOverride (opt.highestPrio - 1) (f opt.value);
 
 in
 
@@ -232,6 +236,24 @@ in
         }
       ))
     ];
+
+    # Docs: nixos/doc/manual/development/writing-nixos-tests.section.md
+    /**
+      See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
+    */
+    passthru.extendNixOS =
+      {
+        module,
+        specialArgs ? { },
+      }:
+      config.passthru.extend {
+        modules = [
+          {
+            extraBaseModules = module;
+            node.specialArgs = mkOneUp options.node.specialArgs (_: specialArgs);
+          }
+        ];
+      };
 
   };
 }

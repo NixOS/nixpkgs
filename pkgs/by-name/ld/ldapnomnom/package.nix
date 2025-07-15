@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to anonymously bruteforce usernames from Domain controllers";
     homepage = "https://github.com/lkarlslund/ldapnomnom";
     changelog = "https://github.com/lkarlslund/ldapnomnom/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ldapnomnom";
   };
 }

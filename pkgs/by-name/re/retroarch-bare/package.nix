@@ -26,6 +26,7 @@
   libgbm,
   nixosTests,
   nvidia_cg_toolkit,
+  pipewire,
   pkg-config,
   python3,
   qt5,
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
       libv4l
       libxkbcommon
       libgbm
+      pipewire
       udev
     ];
 

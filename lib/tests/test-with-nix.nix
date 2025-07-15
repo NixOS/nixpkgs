@@ -3,9 +3,10 @@
 
   IMPORTANT:
   This is used by the github.com/NixOS/nix CI.
+  This is used by Lix's CI (see flake.nix in the Lix repo).
 
   Try not to change the interface of this file, or if you need to, ping the
-  Nix maintainers for help. Thank you!
+  Nix AND Lix maintainers (`nix eval -f . lib.teams.lix`) for help. Thank you!
 */
 {
   pkgs,

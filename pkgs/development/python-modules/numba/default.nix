@@ -4,6 +4,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   buildPythonPackage,
   setuptools,
@@ -32,7 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0";
+  version = "0.61.2";
   pname = "numba";
   pyproject = true;
 
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-d09armWFI55fqyYCzZNVOq6f5b8BTk0s8fjU0OGrNgo=";
+    hash = "sha256-Qa2B5pOWrLb/1V3PSyiwS1x9ueXwDKRhDMDecBCAN+8=";
   };
 
   postPatch = ''
@@ -60,13 +61,9 @@ buildPythonPackage rec {
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
 
     substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.2"' \
-        'max_numpy_run_version = "3"'
+      --replace-fail 'max_numpy_run_version = "2.3"' 'max_numpy_run_version = "2.4"'
     substituteInPlace numba/__init__.py \
-      --replace-fail \
-        'numpy_version > (2, 1)' \
-        'numpy_version >= (3, 0)'
+      --replace-fail "numpy_version > (2, 2)" "numpy_version > (2, 3)"
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
@@ -90,12 +87,20 @@ buildPythonPackage rec {
     llvmlite
   ];
 
-  patches = lib.optionals cudaSupport [
-    (replaceVars ./cuda_path.patch {
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-    })
-  ];
+  patches =
+    [
+      (fetchpatch2 {
+        url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
+        includes = [ "numba/core/bytecode.py" ];
+        hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
+      })
+    ]
+    ++ lib.optionals cudaSupport [
+      (replaceVars ./cuda_path.patch {
+        cuda_toolkit_path = cudatoolkit;
+        cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+      })
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

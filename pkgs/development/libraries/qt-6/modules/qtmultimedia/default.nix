@@ -62,14 +62,10 @@ qtModule {
       gst-vaapi
     ];
 
-  patches =
-    [
-      ./fix-qtgui-include-incorrect-case.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./windows-no-uppercase-libs.patch
-      ./windows-resolve-function-name.patch
-    ];
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    ./windows-no-uppercase-libs.patch
+    ./windows-resolve-function-name.patch
+  ];
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"

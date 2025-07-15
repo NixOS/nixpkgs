@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-regf";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.regf";
     tag = version;
-    hash = "sha256-ONE8dX2AHSboDzSFQ+7ZkIqVmQW3J8QyeOr8ZKrlvqI=";
+    hash = "sha256-O2BKOzv0nFQ8rCgTCgYowQTptR1asuJBroqTNeDIIak=";
   };
 
   nativeBuildInputs = [

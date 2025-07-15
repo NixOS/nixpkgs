@@ -11,7 +11,6 @@
   fetchFromGitHub,
   isPyPy,
   libiconv,
-  libxcrypt,
   openssl,
   pkg-config,
   pretend,
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "44.0.2"; # Also update the hash in vectors.nix
+  version = "45.0.4"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,12 +31,12 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-nXwW6v+U47/+CmjhREHcuQ7QQi/b26gagWBQ3F16DuQ=";
+    hash = "sha256-rKgMUVj5IdeWIdLWQ4E6zhC6dwJMi+BRHCh2JG73Zgc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-HbUsV+ABE89UvhCRZYXr+Q/zRDKUy+HgCVdQFHqaP4o=";
+    hash = "sha256-dKwNnWBzBM9QEcRbbvkNhFJnFxFakqZ/MS7rqE8/tNQ=";
   };
 
   postPatch = ''
@@ -56,8 +55,7 @@ buildPythonPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+    ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
@@ -71,7 +69,7 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ optional-dependencies.ssh;
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks

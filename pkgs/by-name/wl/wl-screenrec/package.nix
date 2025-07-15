@@ -1,30 +1,34 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  installShellFiles,
   libdrm,
   ffmpeg_6,
   wayland,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wl-screenrec";
-  version = "0.1.4-unstable-2024-07-28";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "russelltg";
     repo = "wl-screenrec";
-    rev = "b817accf1d4f2373cb6f466f760de35e5b8626bd";
-    hash = "sha256-07O2YM9dOHWzriM2+uiBWjEt2hKAuXtRtnKBuzb02Us=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O3DNiLiZ1Rh5vesJX+cLv6cVcOVVUfWX914034R3ASQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nwABNqJNqgBVwD860lSu9mcEgty/GbSYmPys3xp535Q=";
+  cargoHash = "sha256-shby6XE8xg5gqBoWlQn/Q0E+AmbyC8hFRp+EaBYS3Fs=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -35,12 +39,21 @@ rustPlatform.buildRustPackage {
 
   doCheck = false; # tests use host compositor, etc
 
-  meta = with lib; {
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wl-screenrec \
+      --bash <($out/bin/wl-screenrec --generate-completions bash) \
+      --fish <($out/bin/wl-screenrec --generate-completions fish) \
+      --zsh <($out/bin/wl-screenrec --generate-completions zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High performance wlroots screen recording, featuring hardware encoding";
     homepage = "https://github.com/russelltg/wl-screenrec";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "wl-screenrec";
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with lib.maintainers; [ colemickens ];
   };
-}
+})

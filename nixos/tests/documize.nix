@@ -18,8 +18,8 @@
       };
 
       systemd.services.documize-server = {
-        after = [ "postgresql.service" ];
-        requires = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
+        requires = [ "postgresql.target" ];
       };
 
       services.postgresql = {

@@ -92,7 +92,7 @@ let
           '';
         };
         systemd.services.powerdns-admin = {
-          after = [ "postgresql.service" ];
+          after = [ "postgresql.target" ];
           serviceConfig.BindPaths = "/run/postgresql";
         };
 

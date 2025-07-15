@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A Qt6 QML provider for hypr* apps";
+    description = "Qt6 QML provider for hypr* apps";
     homepage = "https://github.com/hyprwm/hyprland-qt-support";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

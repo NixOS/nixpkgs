@@ -10,6 +10,7 @@
   json-glib,
   libuev,
   gobject-introspection,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -38,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libuev
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Functions useful in mobile related, glib based projects";

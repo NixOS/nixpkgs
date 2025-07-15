@@ -38,6 +38,7 @@
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     wrapGAppsHook3
     python3
+    udevCheckHook
   ];
 
   buildInputs =
@@ -124,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
       patchShebangs $f
     done
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {

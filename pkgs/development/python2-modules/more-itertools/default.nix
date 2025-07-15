@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "more-itertools";
   version = "5.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

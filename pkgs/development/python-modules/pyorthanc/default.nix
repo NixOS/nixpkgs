@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyorthanc";
-  version = "1.20.0";
+  version = "1.21.0";
 
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "gacou54";
     repo = "pyorthanc";
     tag = "v${version}";
-    hash = "sha256-AWYu/JVL1Hs/aEZXgSRc/y4rN22VRrgn6pINDTogPPs=";
+    hash = "sha256-293H5hQ+6eknzKNsZpVKoTcrKzbHfJE4C+SyxAOLphY=";
   };
 
   build-system = [ poetry-core ];

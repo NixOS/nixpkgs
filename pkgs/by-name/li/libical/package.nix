@@ -117,11 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libical/libical";
     description = "Open Source implementation of the iCalendar protocols";
-    changelog = "https://github.com/libical/libical/raw/v${version}/ReleaseNotes.txt";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
+    changelog = "https://github.com/libical/libical/raw/v${finalAttrs.version}/ReleaseNotes.txt";
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
   };
 })

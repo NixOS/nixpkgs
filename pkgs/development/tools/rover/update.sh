@@ -24,7 +24,7 @@ rover_tar_url="https://github.com/apollographql/rover/archive/refs/tags/${rover_
 } < <(nix-prefetch-url "$rover_tar_url" --unpack --type sha256 --print-path)
 
 # Convert hash to SRI representation
-rover_sri_hash=$(nix hash to-sri --type sha256 "$rover_hash")
+rover_sri_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$rover_hash")
 
 # Update rover version.
 sed --in-place \

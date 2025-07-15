@@ -25,17 +25,19 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ overrides ];
+  dependencies = [
+    overrides
+    pydantic
+  ];
 
   pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
-    pydantic
     pytestCheckHook
     pyyaml
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   # Temp fix for test incompatibility with Python 3.13
   disabledTests = [

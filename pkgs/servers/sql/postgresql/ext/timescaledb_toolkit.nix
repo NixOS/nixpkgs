@@ -7,8 +7,9 @@
   postgresql,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "timescaledb_toolkit";
   version = "1.21.0";
@@ -23,6 +24,10 @@
   useFetchCargoVendor = true;
   cargoHash = "sha256-kyUpfNEXJ732VO6JDxU+dIoL57uWzG4Ff03/GnvsxLE=";
   buildAndTestSubdir = "extension";
+
+  postInstall = ''
+    cargo run --manifest-path ./tools/post-install/Cargo.toml -- --dir "$out"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

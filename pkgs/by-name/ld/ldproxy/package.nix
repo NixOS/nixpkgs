@@ -24,14 +24,14 @@ rustPlatform.buildRustPackage rec {
   # cf: https://github.com/esp-rs/embuild/tree/v0.31.4/ldproxy
   buildAndTestSubdir = "ldproxy";
 
-  meta = with lib; {
+  meta = {
     description = "Linker Proxy: a simple tool to forward linker arguments to the actual linker executable";
     homepage = "https://github.com/esp-rs/embuild";
     changelog = "https://github.com/esp-rs/embuild/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ vpochapuis ];
+    maintainers = with lib.maintainers; [ vpochapuis ];
   };
 }

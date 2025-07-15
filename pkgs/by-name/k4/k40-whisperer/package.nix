@@ -6,6 +6,7 @@
   fetchzip,
   inkscape,
   lib,
+  udevCheckHook,
   udevGroup ? "k40",
 }:
 
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pc6iqBQUoI0dsrf+2dA1ZbxX+4Eks/lVgMGC4SR+oFI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    udevCheckHook
+  ];
 
   patchPhase = ''
     substituteInPlace svg_reader.py \
@@ -43,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = "";
+
+  doInstallCheck = true;
 
   installPhase = ''
     mkdir -p $out

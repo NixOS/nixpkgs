@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.3.7";
+  version = "4.3.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "platformdirs";
     repo = "platformdirs";
     tag = version;
-    hash = "sha256-E3qwAczUzJOYO4IDul9uO6K6wowOtYpQ7Q76TA+lIho=";
+    hash = "sha256-ePaEpsBkTomRX+RJsed8aJtefl5WCW/N9IT8ae4+ln4=";
   };
 
   build-system = [

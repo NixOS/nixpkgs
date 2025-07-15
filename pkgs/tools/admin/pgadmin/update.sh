@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_3 yarn-berry_3.yarn-berry-fetcher
+#!nix-shell -i bash -p curl wget jq common-updater-scripts yarn-berry_4 yarn-berry_4.yarn-berry-fetcher
 
 set -eu -o pipefail
 
@@ -41,6 +41,7 @@ pushd $TMPDIR
 wget -c $url
 tar -xzf "pgadmin4-$newest_version.tar.gz"
 cd "pgadmin4-$newest_version/web"
+patch -u yarn.lock ${scriptDir}/mozjpeg.patch
 
 printf "Will now generate the hash. This will download the packages to the nix store and also take some time\n"
 yarn-berry-fetcher missing-hashes yarn.lock

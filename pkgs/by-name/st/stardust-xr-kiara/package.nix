@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A 360-degree app shell / DE for Stardust XR using Niri";
+    description = "360-degree app shell / DE for Stardust XR using Niri";
     homepage = "https://stardustxr.org/";
     license = lib.licenses.mit;
     mainProgram = "kiara";

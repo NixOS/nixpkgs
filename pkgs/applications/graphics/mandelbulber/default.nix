@@ -2,6 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommand,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
   libpng,
   gsl,
   libsndfile,
@@ -15,15 +18,15 @@
 assert withOpenCL -> opencl-clhpp != null;
 assert withOpenCL -> ocl-icd != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mandelbulber";
-  version = "2.32";
+  version = "2.33";
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
-    rev = version;
-    sha256 = "sha256-amNNRuuk7qtcyXUVLEW71yEETExgKw48HeQQyxbi8BE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-3PPgH9E+k2DFm8ib1bmvTsllQ9kYi3oLDwPHcs1Otac=";
   };
 
   nativeBuildInputs = [
@@ -45,12 +48,24 @@ stdenv.mkDerivation rec {
       ocl-icd
     ];
 
-  sourceRoot = "${src.name}/mandelbulber2";
+  sourceRoot = "${finalAttrs.src.name}/mandelbulber2";
 
   qmakeFlags = [
     "SHARED_PATH=${placeholder "out"}"
     (if withOpenCL then "qmake/mandelbulber-opencl.pro" else "qmake/mandelbulber.pro")
   ];
+
+  passthru = {
+    tests = {
+      test = runCommand "mandelbulber2-test" {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          writableTmpDirAsHomeHook
+        ];
+      } "mandelbulber2 --test && touch $out";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "3D fractal rendering engine";
@@ -61,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ kovirobi ];
   };
-}
+})

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   testers,
+  nix-update-script,
 }:
 let
   tools = [
@@ -15,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfsprogs";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rolbBLdE98jqlKC06fTo6eJU3abKzgB3QIlaw4bza9U=";
+    hash = "sha256-GhhuielfFvcpe9hL3fUcg2xlwFrzjiUS/ZLn0jkfkh8=";
   };
 
   postPatch = ''
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       apfs = nixosTests.apfs;
     }
     // versionTests;
+
+  passthru.updateScript = nix-update-script { };
 
   strictDeps = true;
 

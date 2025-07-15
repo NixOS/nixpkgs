@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

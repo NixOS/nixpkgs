@@ -36,7 +36,10 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/minio/mc";
     description = "Replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
-    maintainers = with maintainers; [ bachp ];
+    maintainers = with maintainers; [
+      bachp
+      ryan4yin
+    ];
     mainProgram = "mc";
     license = licenses.asl20;
   };

@@ -61,10 +61,9 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
@@ -89,7 +88,7 @@ buildPythonPackage rec {
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ asl20 ];
   };
 }

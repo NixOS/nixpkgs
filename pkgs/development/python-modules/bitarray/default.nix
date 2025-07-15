@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "3.4.1";
+  version = "3.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5fqIcyu8+1Q37lVOGPhCqPbIa+c2VrBYDuFG/Tcxdsk=";
+    hash = "sha256-3d+yvwhrZq7BwBENxGZCtxYfWHpkQc/nTanjI5dfYvA=";
   };
 
   build-system = [ setuptools ];

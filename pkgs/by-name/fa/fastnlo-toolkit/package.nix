@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -21,7 +21,7 @@ buildGoModule rec {
   # Tests fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Fast HTTP enumerator";
     mainProgram = "monsoon";
     longDescription = ''
@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
     changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

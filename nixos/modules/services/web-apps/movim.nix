@@ -165,9 +165,9 @@ let
   fpm = config.services.phpfpm.pools.${pool};
   phpExecutionUnit = "phpfpm-${pool}";
 
-  dbService =
+  dbUnit =
     {
-      "postgresql" = "postgresql.service";
+      "postgresql" = "postgresql.target";
       "mariadb" = "mysql.service";
     }
     .${cfg.database.type};
@@ -843,8 +843,8 @@ in
         requiredBy = [ "${phpExecutionUnit}.service" ];
         before = [ "${phpExecutionUnit}.service" ];
         wants = [ "local-fs.target" ];
-        requires = lib.optional cfg.database.createLocally dbService;
-        after = lib.optional cfg.database.createLocally dbService;
+        requires = lib.optional cfg.database.createLocally dbUnit;
+        after = lib.optional cfg.database.createLocally dbUnit;
 
         serviceConfig =
           {
@@ -899,8 +899,8 @@ in
         requiredBy = [ "movim.service" ];
         before = [ "movim.service" ] ++ lib.optional (webServerService != null) webServerService;
         wants = [ "network.target" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
-        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbUnit;
+        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbUnit;
       };
 
       services.movim = {
@@ -915,14 +915,14 @@ in
             "movim-data-setup.service"
             "${phpExecutionUnit}.service"
           ]
-          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional cfg.database.createLocally dbUnit
           ++ lib.optional (webServerService != null) webServerService;
         after =
           [
             "movim-data-setup.service"
             "${phpExecutionUnit}.service"
           ]
-          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional cfg.database.createLocally dbUnit
           ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";

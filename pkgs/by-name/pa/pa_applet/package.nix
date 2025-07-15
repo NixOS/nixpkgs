@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     description = "";
     mainProgram = "pa-applet";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

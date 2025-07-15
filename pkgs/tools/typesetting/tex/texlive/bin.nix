@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
   fetchFromGitHub,
   fetchpatch,
   buildPackages,
@@ -135,19 +136,12 @@ let
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
-    # FIXME revert to official tarballs for TeX-Live 2025
-    #src = fetchurl {
-    #  urls = [
-    #    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0312-source.tar.xz"
-    #          "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0312-source.tar.xz"
-    #  ];
-    #  hash = "sha256-e22HzwFmFnD6xFyTEmvtl7mEMTntUQ+XXQR+qTi2/pY=";
-    #};
-    src = fetchFromGitHub {
-      owner = "TeX-Live";
-      repo = "texlive-source";
-      rev = "refs/tags/svn70897";
-      hash = "sha256-ZCoZAO0qGWPWW72BJOi5P7/A/qEm+SY3PQyLbx+e3pY=";
+    src = fetchurl {
+      urls = [
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+        "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0308-source.tar.xz"
+      ];
+      hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     };
 
     prePatch =
@@ -250,16 +244,6 @@ rec {
     __structuredAttrs = true;
 
     inherit (common) binToOutput src prePatch;
-
-    patches = [
-      (fetchpatch {
-        # do not create extractbb -> xdvipdfmx link
-        name = "extractbb-separate-package.patch";
-        url = "https://github.com/TeX-Live/texlive-source/commit/e48aafd2889281e5e9082cf2e4815a906b9a68ec.patch";
-        hash = "sha256-Rh0PJeUgKUfmgZ+WXnTteM5A0vXPEajKzZBU7AoE7Vs";
-        excludes = [ "texk/dvipdfm-x/ChangeLog" ];
-      })
-    ];
 
     outputs = [
       "out"
@@ -406,16 +390,20 @@ rec {
         url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=lua_fixed_hash.patch;msg=45";
         sha256 = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
       })
-      # Fixes texluajitc crashes on aarch64, backport of the upstream fix
-      # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
-      # to the version vendored by texlive (2.1.0-beta3)
-      (fetchpatch {
-        name = "luajit-fix-aarch64-linux.patch";
-        url = "https://raw.githubusercontent.com/void-linux/void-packages/30253fbfc22cd93d97ec53df323778a3aab82754/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
-        hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
-        stripLen = 1;
-        extraPrefix = "libs/luajit/LuaJIT-src/";
-      })
+      # The original LuaJIT version number used here is 2.1.1736781742.
+      # The patch number in this is the unix epoch timestamp of the commit used.
+      # TexLive already truncates the patch number to the last 5 digits (81742
+      # in this case), however, this number will roll over every 1.1 days (1e5
+      # seconds), making it non-monotonic.
+      # Furthermore, the nix-darwin linker requires version numbers to be <=
+      # 1023.
+      # We therefore opt to choose a 3-digit sequence from the unix epoch that
+      # gives a good tradeoff between when it will roll over, and how often it
+      # will actually change: digits 9-7 (counting from the right, i.e., 736 in
+      # this case) yields a number that changes every 11.6 days (1e6 seconds,
+      # it is unlikely texlive will be updated on a shorter interval), and will
+      # stay stable for 31.7 years (1e9 seconds).
+      ./truncate-luajit-version-number.patch
     ];
 
     hardeningDisable = [ "format" ];
@@ -523,11 +511,7 @@ rec {
         "tie"
         "web"
       ];
-    postInstall =
-      common.moveBins
-      + ''
-        rm "${placeholder "ptex"}"/bin/{pbibtex,pdvitype,ppltotf,ptftopl}
-      '';
+    postInstall = common.moveBins;
   };
 
   chktex = stdenv.mkDerivation {
@@ -550,35 +534,42 @@ rec {
     enableParallelBuilding = true;
   };
 
-  # the LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately
-  # the sources used by TL are stored in the source TL repo
-  # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
-  context = stdenv.mkDerivation rec {
-    pname = "luametatex";
-    version = "2.11.02";
+  # The LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately.
+  # For details on how TeX Live packages ConTeXt, see
+  # https://github.com/gucci-on-fleek/context-packaging
+  context =
+    let
+      # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
+      # https://github.com/gucci-on-fleek/context-packaging
+      context_packaging_release = "2025-06-12-14-21-B";
+    in
+    stdenv.mkDerivation rec {
+      pname = "luametatex";
+      version = "2.11.07";
 
-    src = fetchurl {
-      name = "luametatex-${version}.tar.xz";
-      url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=70384&view=co";
-      hash = "sha256-o7esoBBTTYEstkd7l34BWxew3fIRdVcFiGxrT1/KP1o=";
-    };
+      src = fetchzip {
+        name = "luametatex.src.zip";
+        url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
+        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        stripRoot = false;
+      };
 
-    enableParallelBuilding = true;
-    nativeBuildInputs = [
-      cmake
-      ninja
-    ];
-
-    meta = with lib; {
-      description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
-      homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-      license = licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [
-        apfelkuchen6
-        xworld21
+      enableParallelBuilding = true;
+      nativeBuildInputs = [
+        cmake
+        ninja
       ];
+
+      meta = with lib; {
+        description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+        homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
+        license = licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
+          apfelkuchen6
+          xworld21
+        ];
+      };
     };
-  };
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
@@ -704,7 +695,7 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-egUACsP2vwYx2uvSCZ8H/jLU9f17Siz8gFWwCNSXsIQ=";
+        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;

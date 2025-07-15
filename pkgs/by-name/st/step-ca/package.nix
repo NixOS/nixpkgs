@@ -58,13 +58,13 @@ buildGoModule rec {
 
   passthru.tests.step-ca = nixosTests.step-ca;
 
-  meta = with lib; {
+  meta = {
     description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "step-ca";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cmcdragonkai
       techknowlogick
     ];

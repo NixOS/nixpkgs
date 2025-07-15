@@ -46,13 +46,13 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security risk analysis tool for Kubernetes resources";
     mainProgram = "kubesec";
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];

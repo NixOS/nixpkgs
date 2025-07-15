@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.2.9";
+  version = "5.2.12";
 
   src =
     let
@@ -44,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-iooZSiIkHfd3jSk+Pk0E7s/g51UzbyqyP8qnfes3mts=";
-        aarch64-linux = "sha256-zLkEMOJhckIM0qPCKBNUgFwYiF1YjJU4wKmiLJ1pzNg=";
+        x86_64-linux = "sha256-hpzvu4SyVLXhQ5wbh5hyx+8tM19SxkKZvlMVhzhDCW4=";
+        aarch64-linux = "sha256-s567NOTzTItfOdsABIzYoF8iYSpwDsDzbnLZhUSfT8o=";
       };
     };
 

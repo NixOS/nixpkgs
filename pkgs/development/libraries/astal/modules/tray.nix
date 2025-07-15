@@ -1,10 +1,13 @@
 {
   buildAstalModule,
   json-glib,
+  appmenu-glib-translator,
 }:
 buildAstalModule {
   name = "tray";
-  buildInputs = [ json-glib ];
+  buildInputs = [
+    json-glib
+    appmenu-glib-translator
+  ];
   meta.description = "Astal module for StatusNotifierItem";
-  meta.broken = true; # https://github.com/NixOS/nixpkgs/issues/337630
 }

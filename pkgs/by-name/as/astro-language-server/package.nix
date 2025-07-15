@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       prePnpmInstall
       ;
     hash = "sha256-tlpk+wbLjJqt37lu67p2A2RZAR1ZfnZFiYoqIQwvWPQ=";
+    fetcherVersion = 1;
   };
 
   nativeBuildInputs = [
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "The Astro language server";
+    description = "Astro language server";
     homepage = "https://github.com/withastro/language-tools";
     changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
     license = lib.licenses.mit;

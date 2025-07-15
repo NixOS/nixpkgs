@@ -39,6 +39,7 @@ mapAliases (
     airline = vim-airline;
     alternative = a-vim; # backwards compat, added 2014-10-21
     bats = bats-vim;
+    blueballs-neovim = throw "`blueballs-neovim` has been removed"; # added 2025-06-17
     BufOnly = BufOnly-vim;
     calendar = calendar-vim;
     coffee-script = vim-coffee-script;
@@ -75,6 +76,7 @@ mapAliases (
     floating-nvim = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
     ghc-mod-vim = ghcmod-vim;
     ghcmod = ghcmod-vim;
+    gleam-vim = throw "gleam.vim has been removed: its code was merged into vim."; # Added 2025-06-10
     goyo = goyo-vim;
     Gist = vim-gist;
     gitgutter = vim-gitgutter;

@@ -134,9 +134,9 @@ in
               fi
             done
 
-            for exe in $out/bin/${meta.mainProgram}*; do
-              if [[ -x "$exe" ]]; then
-                substituteInPlace $(realpath "$exe") --replace-warn '${ide.outPath}' $out
+            for exe in $out/${rootDir}/bin/*; do
+              if [ -x "$exe" ] && ( file "$exe" | grep -q 'text' ); then
+                substituteInPlace "$exe" --replace-quiet '${ide}' $out
               fi
             done
           )

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
+  pytestCheckHook,
   nix-update-script,
 
   # build-system
@@ -19,17 +19,26 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-language-pack";
-  version = "0.7.3";
+  version = "0.8.0";
   pyproject = true;
 
-  # Using the GitHub sources necessitates fetching the treesitter grammar parsers by using a vendored script:
-  # https://github.com/Goldziher/tree-sitter-language-pack/blob/main/scripts/clone_vendors.py
+  # Using the GitHub sources necessitates fetching the treesitter grammar parsers by using a vendored script.
   # The pypi archive has the benefit of already vendoring those dependencies which makes packaging easier on our side
+  # See: https://github.com/Goldziher/tree-sitter-language-pack/blob/main/scripts/clone_vendors.py
   src = fetchPypi {
     pname = "tree_sitter_language_pack";
     inherit version;
-    hash = "sha256-SROctgfYE1LTOtGOV1IPwQV6AJlVyczO1WYHzBjmo/0=";
+    hash = "sha256-Sar+Mi61nvTURXV3IQ+yDBjFU1saQrjnU6ppntO/nu0=";
   };
+
+  # Upstream bumped the setuptools and typing-extensions dependencies, but we can still use older versions
+  # since the newer ones aren’t packaged in nixpkgs. We can't use pythonRelaxDepsHook here because it runs
+  # in postBuild, while the dependency check occurs during the build phase.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=80.9.0" "setuptools>=78.1.0" \
+      --replace-fail "typing-extensions>=4.14.0" "typing-extensions>=4.13.2"
+  '';
 
   build-system = [
     cython
@@ -44,38 +53,18 @@ buildPythonPackage rec {
     tree-sitter-yaml
   ];
 
-  prePatch = ''
-    # Remove the packaged bindings, which only work on Linux and prevent the build from succeeding
-    # https://github.com/Goldziher/tree-sitter-language-pack/issues/46
-    rm -rf tree_sitter_language_pack/bindings/*.so
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "tree_sitter_language_pack"
     "tree_sitter_language_pack.bindings"
   ];
 
-  # No tests in the pypi archive, we add a test to check that all bindings can be imported
-  checkPhase = ''
-    runHook preCheck
-
-    cat <<EOF > test-import-bindings.py
-    import sys
-    import os
-    if (cwd := os.getcwd()) in sys.path:
-      # remove current working directory from sys.path, use PYTHONPATH instead
-      sys.path.remove(cwd)
-
-    from typing import get_args
-    from tree_sitter_language_pack import SupportedLanguage, get_binding
-
-    for lang in get_args(SupportedLanguage):
-      get_binding(lang)
-    EOF
-
-    ${python.interpreter} test-import-bindings.py
-
-    runHook postCheck
+  preCheck = ''
+    # make sure import the built version, not the source one
+    rm -r tree_sitter_language_pack
   '';
 
   passthru.updateScript = nix-update-script { };

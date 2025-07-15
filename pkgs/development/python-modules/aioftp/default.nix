@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.25.1";
+  version = "0.25.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TS+wt30/2kKCz/zQW6cFZ9iUDNn97t8QvfeIoAEggBY=";
+    hash = "sha256-hALv4NR4O5xNZ4dEbV4Cer55eWlR8ickG9LF2PPgnQs=";
   };
 
   build-system = [ setuptools ];

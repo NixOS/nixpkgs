@@ -44,16 +44,19 @@ let
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
       };
-      extraPatches = [
-        # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-        ./no-buildconfig.patch
-        # clang-19 fixes for char_traits build issue
-        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
-        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
-        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
-        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
-        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
-      ];
+      extraPatches =
+        [
+          # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+          (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
+        ]
+        ++ lib.optionals (lib.versionOlder version "139") [
+          # clang-19 fixes for char_traits build issue
+          # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
+          # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
+          # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
+          ./0001-Removed-lookup-against-basic_string-uint8_t.patch
+          ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
+        ];
 
       extraPassthru = {
         icu73 = icu73';
@@ -92,8 +95,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "138.0.1";
-    sha512 = "2e71ee537292ec1a49237e93c43ed4c1a9eae58becfc7fa9ca0daf1e982c38704cb6d44e92b1bf7b45c5b8c27b23eb3aa7f48b375580f49ee60884dadc5d85b5";
+    version = "140.0.1";
+    sha512 = "fbef1d0228c49fc9c11425b6be03bb7e44e6abc6f2027ee23317270ca2c6b0a935bb41b38667acf014bd9e1166cbe62754f1e919e04f2355dc4c833e015c78b8";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -106,8 +109,8 @@ rec {
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "128.11.0esr";
-    sha512 = "33de73db2d5ab5152ff11c1947317081259f4e7644631b5e6b9c3b192b4473a5ae6fe897b27b3c8e240ff8c606ffaa8cc14e169c34a94b8de6e64b0c5f0f6810";
+    version = "128.12.0esr";
+    sha512 = "4566ae8347e959612a288524753416f5b730757f10a067b6eb11139055cc1fc5d63d49636e798e9b77588896c8dbc0f2acc189ebd29d95a5166e7bc8f2c35e30";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-BSXbFKR4AOKhssj+m5PIfgaoeRVDK+KRkApi8FUa8jg=";
 
-  meta = with lib; {
+  meta = {
     description = "Rust implementation of the Starlark language";
     homepage = "https://github.com/facebook/starlark-rust";
     changelog = "https://github.com/facebook/starlark-rust/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "starlark";
   };
 }

@@ -51,6 +51,9 @@
   libpulseaudio,
   xdg-utils,
   wayland,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs,
 }:
 
 {
@@ -255,6 +258,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
     )
 
     # Fix the desktop link

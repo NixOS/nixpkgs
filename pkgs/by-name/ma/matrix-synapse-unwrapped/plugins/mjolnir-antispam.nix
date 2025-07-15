@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
   version = "1.10.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matrix-org";

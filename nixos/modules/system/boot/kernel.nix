@@ -13,9 +13,23 @@ let
   inherit (config.boot.kernel) features randstructSeed;
   inherit (config.boot.kernelPackages) kernel;
 
+  modulesTypeDesc = ''
+    This can either be a list of modules, or an attrset. In an
+    attrset, names that are set to `true` represent modules that will
+    be included. Note that setting these names to `false` does not
+    prevent the module from being loaded. For that, use
+    {option}`boot.blacklistedKernelModules`.
+  '';
+
   kernelModulesConf = pkgs.writeText "nixos.conf" ''
     ${concatStringsSep "\n" config.boot.kernelModules}
   '';
+
+  # A list of attrnames is coerced into an attrset of bools by
+  # setting the values to true.
+  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
+    enabledList: lib.genAttrs enabledList (_attrName: true)
+  ) (types.attrsOf types.bool);
 
 in
 
@@ -188,20 +202,23 @@ in
     };
 
     boot.kernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+      type = attrNamesToTrue;
+      default = { };
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
         {option}`boot.initrd.availableKernelModules` or
         {option}`boot.initrd.kernelModules`.
+
+        ${modulesTypeDesc}
       '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.availableKernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
+      type = attrNamesToTrue;
+      default = { };
       example = [
         "sata_nv"
         "ext3"
@@ -220,13 +237,21 @@ in
         modules for PCI devices are loaded when they match the PCI ID
         of a device in your system).  To force a module to be loaded,
         include it in {option}`boot.initrd.kernelModules`.
+
+        ${modulesTypeDesc}
       '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.kernelModules = mkOption {
-      type = types.listOf types.str;
-      default = [ ];
-      description = "List of modules that are always loaded by the initrd.";
+      type = attrNamesToTrue;
+      default = { };
+      description = ''
+        Set of modules that are always loaded by the initrd.
+
+        ${modulesTypeDesc}
+      '';
+      apply = mods: lib.attrNames (lib.filterAttrs (_: v: v) mods);
     };
 
     boot.initrd.includeDefaultModules = mkOption {
@@ -236,6 +261,24 @@ in
         This option, if set, adds a collection of default kernel modules
         to {option}`boot.initrd.availableKernelModules` and
         {option}`boot.initrd.kernelModules`.
+      '';
+    };
+
+    boot.initrd.allowMissingModules = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the initrd can be built even though modules listed in
+        {option}`boot.initrd.kernelModules` or
+        {option}`boot.initrd.availableKernelModules` are missing from
+        the kernel. This is useful when combining configurations that
+        include a lot of modules, such as
+        {option}`hardware.enableAllHardware`, with kernels that don't
+        provide as many modules as typical NixOS kernels.
+
+        Note that enabling this is discouraged. Instead, try disabling
+        individual modules by setting e.g.
+        `boot.initrd.availableKernelModules.foo = lib.mkForce false;`
       '';
     };
 

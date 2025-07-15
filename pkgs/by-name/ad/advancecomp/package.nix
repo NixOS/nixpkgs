@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "advancecomp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MwXdXT/ZEvTcYV4DjhCUFflrPKBFu0fk5PmaWt4MMOU=";
   };
 

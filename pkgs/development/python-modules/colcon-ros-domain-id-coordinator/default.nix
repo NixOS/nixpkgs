@@ -4,7 +4,7 @@
   colcon,
   fetchFromGitHub,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-repeat,
   pytest-rerunfailures,
   scspell,
@@ -30,7 +30,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-repeat
     pytest-rerunfailures
     scspell

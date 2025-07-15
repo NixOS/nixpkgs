@@ -10,11 +10,14 @@
   libpng,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  buildExamples ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvncserver";
-  version = "0.9.14";
+  version = "0.9.15";
 
   outputs = [
     "out"
@@ -24,8 +27,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "LibVNC";
     repo = "libvncserver";
-    rev = "LibVNCServer-${version}";
-    sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
+    tag = "LibVNCServer-${finalAttrs.version}";
+    hash = "sha256-a3acEjJM+ZA9jaB6qZ/czjIfx/L3j71VjJ6mtlqYcSw=";
   };
 
   patches = [
@@ -38,8 +41,19 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "WITH_EXAMPLES" buildExamples)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
   ];
+
+  # This test checks if using the **installed** headers works.
+  # As it doesn't set the include paths correctly, and we have nixpkgs-review to check if
+  # packages continue to build, patching it would serve no purpose, so we can just remove the test entirely.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_test(NAME includetest COMMAND' '# add_test(NAME includetest COMMAND'
+  '';
 
   buildInputs =
     [
@@ -56,6 +70,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  doCheck = enableShared;
+
   meta = with lib; {
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
@@ -63,4 +79,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
-}
+})

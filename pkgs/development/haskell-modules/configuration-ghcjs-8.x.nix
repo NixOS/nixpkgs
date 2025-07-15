@@ -122,9 +122,6 @@ self: super:
 
   temporary = dontCheck super.temporary;
 
-  # 2 tests fail, related to time precision
-  time-compat = dontCheck super.time-compat;
-
   # TODO: The tests have a TH error, which has been fixed in ghc
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15481 but somehow the issue is
   # still present here https://github.com/glguy/th-abstraction/issues/53

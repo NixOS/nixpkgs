@@ -24,7 +24,7 @@ updateHash()
   echo "Updating the hash for the \`${system}\` system..."
   url="https://whisparr.servarr.com/v1/update/nightly/updatefile?runtime=netcore&version=${version}&arch=${arch}&os=${os}"
   hash=$(nix-prefetch-url --type sha256 --name "whisparr-$system-$version.tar.gz" "$url")
-  sriHash="$(nix hash to-sri --type sha256 "$hash")"
+  sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$hash")"
 
   sed -i "s#$hashKey = \"[a-zA-Z0-9\/+-=]*\"#$hashKey = \"$sriHash\"#" "$dirname/package.nix"
 }

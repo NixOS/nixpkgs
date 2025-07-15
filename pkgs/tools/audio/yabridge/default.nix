@@ -98,6 +98,8 @@ multiStdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
+    ./libyabridge-drop-32-bit-support.patch
+
     # Hard code bitbridge & runtime dependencies
     (replaceVars ./hardcode-dependencies.patch {
       libdbus = dbus.lib;

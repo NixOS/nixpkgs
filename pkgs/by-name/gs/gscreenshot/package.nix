@@ -20,6 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "gscreenshot";
   version = "3.9.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thenaterhood";

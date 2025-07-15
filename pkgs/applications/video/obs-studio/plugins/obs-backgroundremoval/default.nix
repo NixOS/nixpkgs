@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     obs-studio
     onnxruntime
-    opencv
+    opencv.cxxdev
     qt6.qtbase
     curl
   ];

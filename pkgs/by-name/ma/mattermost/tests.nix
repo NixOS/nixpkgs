@@ -8,7 +8,7 @@
   mariadb,
   redis,
   curl,
-  nettools,
+  net-tools,
   runtimeShell,
 }:
 
@@ -30,7 +30,7 @@ mattermost.overrideAttrs (
       mariadb
       redis
       curl
-      nettools
+      net-tools
       gotestsum
     ];
 
@@ -145,9 +145,12 @@ mattermost.overrideAttrs (
         "TestRunServerNoSystemd"
 
         # Appear to be broken.
-        "TestSessionStore/MySQL/SessionGetWithDeviceId"
-        "TestSessionStore/MySQL/GetMobileSessionMetadata"
-        "TestSessionStore/MySQL/GetSessionsWithActiveDeviceIds"
+        "TestSessionStore/MySQL"
+        "TestAccessControlPolicyStore/MySQL"
+        "TestAttributesStore/MySQL"
+        "TestBasicAPIPlugins"
+
+        "TestRunExportJobE2EByType"
         "TestUpdateTeam"
         "TestSyncSyncableRoles"
       ]

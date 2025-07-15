@@ -11,6 +11,7 @@
 buildPythonApplication rec {
   pname = "termdown";
   version = "1.18.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trehn";

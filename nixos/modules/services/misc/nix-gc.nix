@@ -88,6 +88,8 @@ in
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       serviceConfig.Type = "oneshot";
       startAt = lib.optionals cfg.automatic cfg.dates;
+      # do not start and delay when switching
+      restartIfChanged = false;
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {

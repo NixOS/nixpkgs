@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.6.1";
+  version = "2025.12.1";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yNPAJX7OxxQLXDm3s7Hx5QA9fxy1qbAMp4LKYVqxMVM=";
+    hash = "sha256-5M/sKoCFVGW4VcOPzL8dVhTuo+esjINPXw76fnO7OEw=";
     fetchSubmodules = true;
   };
 
@@ -131,6 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
 
+  postInstall = ''
+    mv "$out/cmake" "$dev/cmake"
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/slangc";
   versionCheckProgramArg = "-v";
@@ -142,8 +146,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A shading language that makes it easier to build and maintain large shader codebases in a modular and extensible fashion";
+    description = "Shading language that makes it easier to build and maintain large shader codebases in a modular and extensible fashion";
     homepage = "https://github.com/shader-slang/slang";
+    changelog = "https://github.com/shader-slang/slang/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       llvm-exception

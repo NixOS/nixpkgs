@@ -119,13 +119,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         # pg_dump
         path = [ config.services.postgresql.package ];
 
-        requires = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/odoo";

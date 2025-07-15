@@ -4,7 +4,7 @@
   pythonOlder,
   pytestCheckHook,
   buildPythonPackage,
-  cython_0,
+  cython,
   mecab,
   setuptools-scm,
   ipadic,
@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "fugashi";
-  version = "1.3.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "1.5.1";
+  format = "pyproject";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "polm";
     repo = "fugashi";
     tag = "v${version}";
-    hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
+    hash = "sha256-rkQskRz7lgVBrqBeyj9kWO2/7POrZ0TaM+Z7mhpZLvM=";
   };
 
   nativeBuildInputs = [
-    cython_0
+    cython
     mecab
     setuptools-scm
   ];

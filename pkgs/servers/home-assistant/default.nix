@@ -117,17 +117,6 @@ let
         };
       });
 
-      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "EuleMitKeule";
-          repo = "eq3btsmart";
-          tag = version;
-          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
-        };
-        build-system = with self; [ poetry-core ];
-      });
-
       google-genai = super.google-genai.overridePythonAttrs (old: rec {
         version = "1.7.0";
         src = fetchFromGitHub {
@@ -149,18 +138,6 @@ let
         dependencies = with self; [
           requests
         ];
-      });
-
-      # Pinned due to home-assistant still needing 1.10.0 version
-      # Remove this when home-assistant updates the jellyfin-apiclient-python version
-      jellyfin-apiclient-python = super.jellyfin-apiclient-python.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.0";
-        src = fetchFromGitHub {
-          owner = "jellyfin";
-          repo = "jellyfin-apiclient-python";
-          tag = "v${version}";
-          hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
-        };
       });
 
       mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
@@ -326,15 +303,6 @@ let
         doCheck = false;
       });
 
-      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -386,7 +354,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.3";
+  hassVersion = "2025.7.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -407,13 +375,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-qqPO7dr+Sb1RKYoOV7MhT2E1FcW7lAKTTB0T+UzLwzk=";
+    hash = "sha256-KaepdkW1PLbWf7yl90ZqmZ6OIgZlRcaw2pSf2wTev+Q=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-8WusUfZEyoBPltVrDpDQVkbIFEHn1GGdA4Pt0Zb1+Fo=";
+    hash = "sha256-Gmq42r4O6mNNXaVwTlC3UjeAsu8TOm417WCm/2E3I6E=";
   };
 
   build-system = with python.pkgs; [
@@ -432,6 +400,9 @@ python.pkgs.buildPythonApplication rec {
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
+    # Copy default blueprints without preserving permissions
+    ./patches/default-blueprint-permissions.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -448,6 +419,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -558,6 +530,8 @@ python.pkgs.buildPythonApplication rec {
     "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
     "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "--deselect=tests/helpers/test_event.py::test_track_time_interval_name"
     # tests are located in tests/
     "tests"
   ];

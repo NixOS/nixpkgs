@@ -18,16 +18,16 @@
 
 buildGo124Module rec {
   pname = "navidrome";
-  version = "0.56.1";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-Vq8qfBqxF/PVRtYYTsFydnJ7z/IuoNUWRWTLy/RM6xg=";
+    hash = "sha256-KTgh+dA2YYPyNdGr2kYEUlYeRwNnEcSQlpQ7ZTbAjP0=";
   };
 
-  vendorHash = "sha256-E7Q3wxUd5JAwERBKD2NZaVyj1kszOxvxeDY0s/fEDfY=";
+  vendorHash = "sha256-/WeEimHCEQbTbCZ+4kXVJdHAa9PJEk1bG1d2j3V9JKM=";
 
   npmRoot = "ui";
 
@@ -64,6 +64,11 @@ buildGo124Module rec {
   postPatch = ''
     patchShebangs ui/bin/update-workbox.sh
   '';
+
+  patches = [
+    # Until https://github.com/navidrome/navidrome/pull/4302 is released
+    ./0001-test-fix-Use-bin-sh-as-mock_mpv.sh-interpreter-4301.patch
+  ];
 
   preBuild = ''
     make buildjs

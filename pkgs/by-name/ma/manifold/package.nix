@@ -6,7 +6,7 @@
   clipper2,
   gtest,
   glm,
-  tbb_2021_11,
+  tbb_2021,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     glm
-    tbb_2021_11
+    tbb_2021
     clipper2
   ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkPhase = ''
-    test/manifold_test
+    test/manifold_test --gtest_filter=-CrossSection.RoundOffset
   '';
 
   meta = {

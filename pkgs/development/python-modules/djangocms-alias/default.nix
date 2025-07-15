@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "djangocms-alias";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "django-cms";
     repo = "djangocms-alias";
     tag = version;
-    hash = "sha256-q5iNTnoPto7jgxF/46I0oA8NYFBbDafsRUFmKMFoQM4=";
+    hash = "sha256-0lIhPgI+HbAKX9wEpZ/v40OHvN6WWK9ehFxIcpzdcq8=";
   };
 
   build-system = [ setuptools ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lean enterprise content management powered by Django";
     homepage = "https://django-cms.org";
-    changelog = "https://github.com/django-cms/django-cms/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-cms/djangocms-alias/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.onny ];
   };

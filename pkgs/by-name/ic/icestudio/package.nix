@@ -102,7 +102,9 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 

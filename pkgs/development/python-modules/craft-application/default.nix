@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "5.3.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-6iD35ql3/vUzILh5VMWiFwBKPoGPfCUgEKD4g7s55Y0=";
+    hash = "sha256-xWGcKJY5ov6SN8CCRK33rVDsDcvKtEnv7Zy9VBLJYYc=";
   };
 
   postPatch = ''
@@ -102,7 +102,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_application" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests =
     [
@@ -127,12 +127,21 @@ buildPythonPackage rec {
       "test_process_grammar_build_for"
       "test_process_grammar_platform"
       "test_process_grammar_default"
+      "test_create_craft_manifest"
+      "test_create_project_manifest"
+      "test_from_packed_artifact"
+      "test_teardown_session_create_manifest"
     ];
 
-  disabledTestPaths = [
-    # These tests assert outputs of commands that assume Ubuntu-related output.
-    "tests/unit/services/test_lifecycle.py"
-  ];
+  disabledTestPaths =
+    [
+      # These tests assert outputs of commands that assume Ubuntu-related output.
+      "tests/unit/services/test_lifecycle.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # Hard-coded assumptions around use of "amd64" arch strings.
+      "tests/unit/services/test_project.py"
+    ];
 
   passthru.updateScript = nix-update-script { };
 

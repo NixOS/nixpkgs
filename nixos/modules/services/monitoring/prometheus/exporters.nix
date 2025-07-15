@@ -86,6 +86,7 @@ let
         "libvirt"
         "lnd"
         "mail"
+        "mailman3"
         "mikrotik"
         "modemmanager"
         "mongodb"
@@ -589,6 +590,6 @@ in
 
   meta = {
     doc = ./exporters.md;
-    maintainers = [ maintainers.willibutz ];
+    maintainers = [ ];
   };
 }

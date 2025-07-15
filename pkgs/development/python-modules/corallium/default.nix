@@ -11,14 +11,14 @@
 }:
 buildPythonPackage rec {
   pname = "corallium";
-  version = "0.3.3";
+  version = "2.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = pname;
-    rev = version;
-    hash = "sha256-fZzm3o8EwegNG+sYn8lbPz60NMyA/OzGFUf/J/lbGbI=";
+    tag = version;
+    hash = "sha256-0P8qmX+1zigL4jaA4TTuqAzFkyhQUfdGmPLxkFnT0qE=";
   };
 
   build-system = [

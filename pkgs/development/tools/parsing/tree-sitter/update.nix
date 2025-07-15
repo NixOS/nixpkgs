@@ -488,6 +488,10 @@ let
       orga = "norgate-av";
       repo = "tree-sitter-netlinx";
     };
+    "tree-sitter-crystal" = {
+      orga = "crystal-lang-tools";
+      repo = "tree-sitter-crystal";
+    };
   };
 
   allGrammars =

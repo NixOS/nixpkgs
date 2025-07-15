@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
@@ -17,17 +18,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HYPzgynCeWDRRNyACHqnzkjn6uZWS0TDHuJE9STJxbQ=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+BlLVnvI2qBfwEtyxmZFNhR9MEzs0/a1Ce6ALOKtoPU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    for shell in {ba,fi,z}sh; do
-      $out/bin/rustic completions $shell > rustic.$shell
-    done
-
-    installShellCompletion rustic.{ba,fi,z}sh
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rustic \
+      --bash <($out/bin/rustic completions bash) \
+      --fish <($out/bin/rustic completions fish) \
+      --zsh <($out/bin/rustic completions zsh)
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
     changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/CHANGELOG.md";
-    description = "fast, encrypted, deduplicated backups powered by pure Rust";
+    description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = [

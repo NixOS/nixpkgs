@@ -1,4 +1,13 @@
 {
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
@@ -50,11 +59,26 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-firefox-syncserver-clients": [
+    "index.html#module-services-firefox-syncserver-clients"
+  ],
+  "module-services-firefox-syncserver-clients-android": [
+    "index.html#module-services-firefox-syncserver-clients-android"
+  ],
+  "module-services-firefox-syncserver-clients-desktop": [
+    "index.html#module-services-firefox-syncserver-clients-desktop"
+  ],
   "module-services-opencloud": [
     "index.html#module-services-opencloud"
   ],
   "module-services-opencloud-basic-usage": [
     "index.html#module-services-opencloud-basic-usage"
+  ],
+  "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
+    "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
+  ],
+  "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
+    "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
   ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
@@ -79,6 +103,9 @@
   ],
   "sec-contributing-development-env": [
     "index.html#sec-contributing-development-env"
+  ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
   ],
   "sec-mattermost": [
     "index.html#sec-mattermost"
@@ -536,6 +563,18 @@
   "module-services-youtrack-upgrade-2022_3-2023_1": [
     "index.html#module-services-youtrack-upgrade-2022_3-2023_1"
   ],
+  "module-services-szurubooru": [
+    "index.html#module-services-szurubooru"
+  ],
+  "module-services-szurubooru-basic-usage": [
+    "index.html#module-services-szurubooru-basic-usage"
+  ],
+  "module-services-szurubooru-reverse-proxy-configuration": [
+    "index.html#module-services-szurubooru-reverse-proxy-configuration"
+  ],
+  "module-services-szurubooru-extra-config": [
+    "index.html#module-services-szurubooru-extra-config"
+  ],
   "module-services-suwayomi-server": [
     "index.html#module-services-suwayomi-server"
   ],
@@ -586,6 +625,9 @@
   ],
   "module-services-nextcloud-httpd": [
     "index.html#module-services-nextcloud-httpd"
+  ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
   ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"
@@ -742,6 +784,15 @@
   ],
   "module-services-davis-basic-usage": [
     "index.html#module-services-davis-basic-usage"
+  ],
+  "module-services-draupnir": [
+    "index.html#module-services-draupnir"
+  ],
+  "module-services-draupnir-setup": [
+    "index.html#module-services-draupnir-setup"
+  ],
+  "module-services-draupnir-setup-ems": [
+    "index.html#module-services-draupnir-setup-ems"
   ],
   "module-services-castopod": [
     "index.html#module-services-castopod"
@@ -1046,18 +1097,6 @@
   "module-services-taskserver-manual-ca-management": [
     "index.html#module-services-taskserver-manual-ca-management"
   ],
-  "module-services-sourcehut": [
-    "index.html#module-services-sourcehut"
-  ],
-  "module-services-sourcehut-basic-usage": [
-    "index.html#module-services-sourcehut-basic-usage"
-  ],
-  "module-services-sourcehut-configuration": [
-    "index.html#module-services-sourcehut-configuration"
-  ],
-  "module-services-sourcehut-httpd": [
-    "index.html#module-services-sourcehut-httpd"
-  ],
   "module-services-gitlab": [
     "index.html#module-services-gitlab"
   ],
@@ -1277,22 +1316,14 @@
   "module-services-postgres-initializing-extra-permissions": [
     "index.html#module-services-postgres-initializing-extra-permissions"
   ],
-  "module-services-postgres-initializing-extra-permissions-superuser": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser"
-  ],
   "module-services-postgres-initializing-extra-permissions-superuser-post-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
-    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-post-start",
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser",
+    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user"
   ],
-  "module-services-postgres-initializing-extra-permissions-service-user-pre-start": [
-    "index.html#module-services-postgres-initializing-extra-permissions-service-user-pre-start"
-  ],
-  "module-services-postgres-initializing-extra-permissions-service-user-oneshot": [
+  "module-services-postgres-initializing-extra-permissions-superuser-oneshot": [
+    "index.html#module-services-postgres-initializing-extra-permissions-superuser-oneshot",
     "index.html#module-services-postgres-initializing-extra-permissions-service-user-oneshot"
   ],
   "module-services-postgres-authentication": [
@@ -1300,6 +1331,9 @@
   ],
   "module-services-postgres-authentication-user-mapping": [
     "index.html#module-services-postgres-authentication-user-mapping"
+  ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
   ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
@@ -1448,6 +1482,21 @@
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
   ],
+  "module-services-networking-pihole-ftl": [
+    "index.html#module-services-networking-pihole-ftl"
+  ],
+  "module-services-networking-pihole-ftl-administration": [
+    "index.html#module-services-networking-pihole-ftl-administration"
+  ],
+  "module-services-networking-pihole-ftl-configuration": [
+    "index.html#module-services-networking-pihole-ftl-configuration"
+  ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
+  ],
   "ch-profiles": [
     "index.html#ch-profiles"
   ],
@@ -1501,6 +1550,9 @@
   ],
   "sect-nixos-systemd-nixos": [
     "index.html#sect-nixos-systemd-nixos"
+  ],
+  "sect-nixos-systemd-custom-services": [
+    "index.html#sect-nixos-systemd-custom-services"
   ],
   "sect-nixos-systemd-template-units": [
     "index.html#sect-nixos-systemd-template-units"
@@ -1999,6 +2051,13 @@
   ],
   "sec-release-25.11-incompatibilities": [
     "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-incompatibilities-sourcehut-removed": [
+    "release-notes.html#sec-release-25.11-incompatibilities-sourcehut-removed",
+    "index.html#module-services-sourcehut",
+    "index.html#module-services-sourcehut-basic-usage",
+    "index.html#module-services-sourcehut-configuration",
+    "index.html#module-services-sourcehut-httpd"
   ],
   "sec-release-25.11-notable-changes": [
     "release-notes.html#sec-release-25.11-notable-changes"

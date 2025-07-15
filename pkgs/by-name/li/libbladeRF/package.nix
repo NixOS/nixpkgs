@@ -49,10 +49,12 @@ stdenv.mkDerivation rec {
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
 
-  # Let us avoid nettools as a dependency.
+  # Let us avoid net-tools as a dependency.
   postPatch = ''
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
+
+  doInstallCheck = true;
 
   cmakeFlags =
     [

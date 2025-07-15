@@ -112,10 +112,6 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    # "toolz"
-  ];
-
   dependencies = [
     atpublic
     parsy
@@ -144,6 +140,7 @@ buildPythonPackage rec {
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
+    "--benchmark-disable"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
   ];
@@ -170,6 +167,12 @@ buildPythonPackage rec {
 
     # AssertionError: value does not match the expected value in snapshot ibis/backends/tests/snapshots/test_sql/test_rewrite_context/sqlite/out.sql
     "test_rewrite_context"
+
+    # Assertion error comparing a calculated version string with the actual (during nixpkgs-review)
+    "test_builtin_scalar_noargs"
+
+    # duckdb ParserError: syntax error at or near "AT"
+    "test_90"
   ];
 
   # patch out tests that check formatting with black
@@ -351,6 +354,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/ibis-project/ibis";
     changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [
+      cpcloud
+      sarahec
+    ];
   };
 }

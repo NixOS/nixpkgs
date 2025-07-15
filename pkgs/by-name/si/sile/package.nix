@@ -20,7 +20,7 @@
   libiconv,
   # FONTCONFIG_FILE
   makeFontsConf,
-  gentium,
+  gentium-plus,
 
   # passthru.tests
   runCommand,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
-      gentium
+      gentium-plus
     ];
   };
   strictDeps = true;

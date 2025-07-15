@@ -58,12 +58,12 @@ buildGoModule {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility that provides an API platform for validating, querying and managing BOM data";
     homepage = "https://github.com/CycloneDX/sbom-utility";
     changelog = "https://github.com/CycloneDX/sbom-utility/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thillux ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thillux ];
     mainProgram = "sbom-utility";
   };
 }

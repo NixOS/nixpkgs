@@ -38,7 +38,7 @@
   enablePlugin ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), # Whether to support user-supplied plug-ins
   name ? "gcc",
   libcCross ? null,
-  threadsCross ? null, # for MinGW
+  threadsCross ? { }, # for MinGW
   withoutTargetLibc ? false,
   flex,
   gnused ? null,
@@ -49,6 +49,7 @@
     !enablePlugin
     || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   nukeReferences,
+  sanitiseHeaderPathsHook,
   callPackage,
   majorMinorVersion,
   apple-sdk,
@@ -179,6 +180,7 @@ let
       pkgsBuildTarget
       profiledCompiler
       reproducibleBuild
+      sanitiseHeaderPathsHook
       staticCompiler
       stdenv
       targetPackages
@@ -427,6 +429,10 @@ pipe
           ++ optionals (!atLeast12) [
             "fortify3"
             "trivialautovarinit"
+          ]
+          ++ optionals (!atLeast13) [
+            "strictflexarrays1"
+            "strictflexarrays3"
           ]
           ++ optional (
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")

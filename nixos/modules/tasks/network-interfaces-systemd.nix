@@ -76,7 +76,13 @@ let
 
   interfaceNetworks = mkMerge (
     forEach interfaces (i: {
-      netdevs = mkIf i.virtual ({
+      links = mkIf i.wakeOnLan.enable {
+        "40-${i.name}" = {
+          matchConfig.name = i.name;
+          linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+        };
+      };
+      netdevs = mkIf i.virtual {
         "40-${i.name}" = {
           netdevConfig = {
             Name = i.name;
@@ -86,7 +92,7 @@ let
             User = i.virtualOwner;
           };
         };
-      });
+      };
       networks."40-${i.name}" = {
         name = mkDefault i.name;
         DHCP = mkForce (
@@ -164,6 +170,9 @@ let
           // optionalAttrs (i.mtu != null) {
             MTUBytes = toString i.mtu;
           };
+        bridgeConfig = optionalAttrs i.proxyARP {
+          ProxyARP = i.proxyARP;
+        };
       };
     })
   );

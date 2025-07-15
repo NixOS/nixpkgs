@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       --replace 'python_env.append' '#'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reusable library for GPU-accelerated video/image rendering primitives";
     longDescription = ''
       Reusable library for GPU-accelerated image/view processing primitives and
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://code.videolan.org/videolan/libplacebo";
     changelog = "https://code.videolan.org/videolan/libplacebo/-/tags/v${version}";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.all;
   };
 }

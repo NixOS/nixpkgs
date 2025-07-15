@@ -116,6 +116,7 @@ let
       cp usr/lib/x86_64-linux-gnu/libtiff.so.5 $out/lib/libtiff.so.5
       cp usr/lib/x86_64-linux-gnu/libwebp.so.6 $out/lib/libwebp.so.6
       cp usr/lib/x86_64-linux-gnu/libxkbfile.so.1.0.2 $out/lib/libxkbfile.so.1
+      cp usr/lib/x86_64-linux-gnu/libxml2.so.2 $out/lib/libxml2.so.2
       cp usr/lib/x86_64-linux-gnu/libxslt.so.1.1.34 $out/lib/libxslt.so.1
 
       runHook postInstall
@@ -152,6 +153,9 @@ buildFHSEnv {
 
     # db files should have write access.
     chmod --recursive 750 "$PLEX_DB"
+
+    # These environment variables sometimes silently cause plex to crash.
+    unset QT_QPA_PLATFORM QT_STYLE_OVERRIDE
 
     set -o allexport
     ${lib.toShellVars extraEnv}

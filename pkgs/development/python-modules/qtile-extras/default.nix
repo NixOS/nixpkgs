@@ -10,6 +10,7 @@
   pulseaudio,
   pytest-asyncio,
   pytest-lazy-fixture,
+  pytest-rerunfailures,
   pytestCheckHook,
   python-dateutil,
   qtile,
@@ -20,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.31.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${version}";
-    hash = "sha256-87xdSw4JKQyb/jpfTUkFDjHvKgPKzu+rKLGeaAzP8NI=";
+    hash = "sha256-NMbgSStXJV8fVtula1cyIwFlD8WrO8kBnOphDxbig04=";
   };
 
   build-system = [ setuptools-scm ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytest-rerunfailures
     pytestCheckHook
     python-dateutil
     qtile
@@ -87,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ arjan-s ];
   };

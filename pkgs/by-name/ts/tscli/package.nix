@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "tscli";
-  version = "0.0.7";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = "tscli";
     tag = "v${version}";
-    hash = "sha256-o08ynbx+Pclme+xS00jx7096D2jHnvJg28UISZayxKY=";
+    hash = "sha256-+1meGROQvprReWSJMKutFcTjhw0YcIekDHml/A+RbN4=";
   };
 
-  vendorHash = "sha256-+4PFwEib/8o+1mk5SOkIZkK7W1elIFToU1DI9P8s1Y8=";
+  vendorHash = "sha256-FmJoKADhcHk5mWjcXxXb7VszZhFfGWmBKUGxUjvA64U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A CLI tool to interact with the Tailscale API";
+    description = "CLI tool to interact with the Tailscale API";
     homepage = "https://github.com/jaxxstorm/tscli";
     changelog = "https://github.com/jaxxstorm/tscli/releases/tag/${src.tag}/CHANGELOG.md";
     mainProgram = "tscli";

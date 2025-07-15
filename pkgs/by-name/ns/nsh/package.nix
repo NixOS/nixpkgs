@@ -20,16 +20,16 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line shell like fish, but POSIX compatible";
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
     license = [
-      licenses.cc0 # or
-      licenses.mit
+      lib.licenses.cc0 # or
+      lib.licenses.mit
     ];
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with lib.maintainers; [ cafkafk ];
   };
 
   passthru = {

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
   gmp,
   openssl,
   pkg-config,
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    boost
     gmp
     openssl
   ];

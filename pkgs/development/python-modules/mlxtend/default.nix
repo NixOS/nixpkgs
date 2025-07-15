@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-sv" ];
+  pytestFlags = [ "-sv" ];
 
   disabledTests = [
     # Type changed in numpy2 test should be updated

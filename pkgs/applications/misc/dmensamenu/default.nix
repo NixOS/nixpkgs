@@ -10,6 +10,7 @@
 buildPythonApplication rec {
   pname = "dmensamenu";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dotlambda";

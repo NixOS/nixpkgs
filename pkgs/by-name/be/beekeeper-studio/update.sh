@@ -16,5 +16,5 @@ fi
 
 nix-update beekeeper-studio --version "$latestVersion" || true
 
-hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url "$(nix eval -f . --raw beekeeper-studio.src.url --system aarch64-linux)"))
+hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url "$(nix eval -f . --raw beekeeper-studio.src.url --system aarch64-linux)"))
 update-source-version beekeeper-studio $latestVersion $hash --system=aarch64-linux --ignore-same-version

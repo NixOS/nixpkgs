@@ -41,6 +41,7 @@
   cubeb,
   useDiscordRichPresence ? true,
   rapidjson,
+  enableSSE42 ? true, # Disable if your hardware doesn't support SSE 4.2 (mainly CPUs before 2011)
 }:
 let
   inherit (lib)
@@ -51,11 +52,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2121.1";
+  version = "2122.1";
 
   src = fetchzip {
     url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jadQsuU1SfvUc5DO5XqZXTe53U9XGOHScDGx66Oh18Q=";
+    hash = "sha256-RQ8dgD09cWyVWGSLzHz1oJOKia1OKr2jHqYwKaVGfxE=";
   };
 
   nativeBuildInputs = [
@@ -142,10 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
+    (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
   meta = {
-    description = "An open-source 3DS emulator project based on Citra";
+    description = "Open-source 3DS emulator project based on Citra";
     homepage = "https://github.com/azahar-emu/azahar";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arthsmn ];

@@ -16,6 +16,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-ifdCFcMH6SrhKQK/TJJ5lJafSfAUzd6ZT5ANUzJGwxI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov" ""
-  '';
-
   outputs = [
     "out"
     "doc"
@@ -50,7 +46,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorzero ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [
     "gpiozero"

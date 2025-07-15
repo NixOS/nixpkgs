@@ -17,6 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
   version = "2.5.100";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";

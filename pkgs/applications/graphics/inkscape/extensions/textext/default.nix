@@ -22,6 +22,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
   version = "1.11.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "textext";

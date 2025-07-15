@@ -15922,7 +15922,7 @@ lib.makeScope pkgs.newScope (self: {
       meta = {
         hydraPlatforms = [ ];
         # darwin cannot find libpango.dylib
-        broken = stdenv.isDarwin;
+        broken = stdenv.hostPlatform.isDarwin;
       };
     }
   );
@@ -39541,7 +39541,7 @@ lib.makeScope pkgs.newScope (self: {
       meta = {
         hydraPlatforms = [ ];
         # darwin cannot find libpango.dylib
-        broken = stdenv.isDarwin;
+        broken = stdenv.hostPlatform.isDarwin;
       };
     }
   );

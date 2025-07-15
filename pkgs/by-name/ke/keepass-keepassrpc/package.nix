@@ -22,7 +22,6 @@ let
       platforms = [ "x86_64-linux" ];
       license = licenses.gpl2;
       maintainers = with maintainers; [
-        mjanczyk
         svsdep
         mgregoire
       ];

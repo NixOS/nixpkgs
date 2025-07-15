@@ -6,7 +6,7 @@
   scikit-learn,
   pandas,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   pytz,
 }:
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     pytz
   ];

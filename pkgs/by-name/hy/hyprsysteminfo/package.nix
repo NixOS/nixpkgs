@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A tiny qt6/qml application to display information about the running system";
+    description = "Tiny qt6/qml application to display information about the running system";
     homepage = "https://github.com/hyprwm/hyprsysteminfo";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];

@@ -190,9 +190,9 @@ It must be one of the following:
 	trusted user in the Nix daemon. This can be achieved by using the
 	_nix.settings.trusted-users_ NixOS option. Examples values for that
 	option are described in the “Remote builds” chapter in the Nix manual,
-	(i.e. ‘--builders "ssh://bigbrother x86_64-linux"‘). By specifying an
+	(i.e. ‘--builders "ssh://bigbrother x86_64-linux"’). By specifying an
 	empty string existing builders specified in /etc/nix/machines can be
-	ignored: ‘--builders ""‘ for example when they are not reachable due to
+	ignored: ‘--builders ""’ for example when they are not reachable due to
 	network connectivity.
 
 *--profile-name* _name_, *-p* _name_
@@ -200,7 +200,7 @@ It must be one of the following:
 	track of the current and previous system configurations, use
 	_/nix/var/nix/profiles/system-profiles/name_. When you use GRUB 2, for
 	every system profile created with this flag, NixOS will create a submenu
-	named “NixOS - Profile _name_“ in GRUB's boot menu, containing the
+	named “NixOS - Profile _name_” in GRUB's boot menu, containing the
 	current and previous configurations of this profile.
 
 	For instance, if you want to test a configuration file named _test.nix_
@@ -209,7 +209,7 @@ It must be one of the following:
 		$ nixos-rebuild switch -p test -I nixos-config=./test.nix
 
 	The new configuration will appear in the GRUB 2 submenu “NixOS - Profile
-	‘test’“.
+	‘test’”.
 
 *--specialisation* _name_, *-c* _name_
 	Activates given specialisation; when not specified, switching and testing
@@ -306,7 +306,7 @@ Builder options:
 
 *--verbose,*  *-v*,  *--quiet*,  *--log-format*,  *--no-build-output*, *-Q*,
 *--max-jobs*, *-j*, *--cores*, *--keep-going*, *-k*, *--keep-failed*, *-K*,
-*--fallback*, *--incllude*, *-I*, *--option*, *--repair*, *--builders*,
+*--fallback*, *--include*, *-I*, *--option*, *--repair*, *--builders*,
 *--print-build-logs*, *-L*, *--show-trace*
 
 See the Nix manual, *nix flake lock --help* or *nix-build --help* for details.

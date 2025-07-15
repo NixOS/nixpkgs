@@ -8,37 +8,37 @@
   getmac,
   intelhex,
   paho-mqtt,
+  pyserial-asyncio-fast,
   pyserial,
-  pyserial-asyncio,
   pytest-sugar,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.24.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.25.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theolind";
     repo = "pymysensors";
-    rev = version;
-    hash = "sha256-3t9YrSJf02kc5CuTqPBc/qNJV7yy7Vke4WqhtuOaAYo=";
+    tag = version;
+    hash = "sha256-ndvn3mQ4fchL4NiUQLpYn7HMKeuEBT09HQvnJy14jPI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     awesomeversion
     click
     crcmod
     getmac
     intelhex
     pyserial
-    pyserial-asyncio
+    pyserial-asyncio-fast
     voluptuous
   ];
 
@@ -56,9 +56,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";
-    mainProgram = "pymysensors";
     homepage = "https://github.com/theolind/pymysensors";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/theolind/pymysensors/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pymysensors";
   };
 }

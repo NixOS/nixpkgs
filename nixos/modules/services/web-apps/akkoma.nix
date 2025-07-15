@@ -1231,7 +1231,7 @@ in
       requiredBy = [ "akkoma.service" ];
       after = [
         "akkoma-config.service"
-        "postgresql.service"
+        "postgresql.target"
       ];
       before = [ "akkoma.service" ];
 
@@ -1269,7 +1269,7 @@ in
           "akkoma-config.target"
           "network.target"
           "network-online.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         confinement.packages = mkIf isConfined runtimeInputs;

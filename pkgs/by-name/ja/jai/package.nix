@@ -37,7 +37,7 @@ let
     ];
   };
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   buildFHSEnv {
     inherit meta pname version;
     targetPkgs = pkgs: [ pkgs.zlib ];

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchNpmDeps,
   fetchurl,
-  httplz,
   binaryen,
   gzip,
   nodejs,
@@ -88,30 +87,11 @@ rustPlatform.buildRustPackage rec {
 
     # patch a build-time dependency download
     (
-      realpath $cargoDepsCopy/* | grep lindera-unidic # debug for when version number changes
-      cd $cargoDepsCopy/lindera-unidic-0.32.2
-      #oldHash=$(sha256sum build.rs | cut -d " " -f 1)
+      patch -d $cargoDepsCopy/lindera-assets-*/ -p1 < ${./lindera-assets-support-file-paths.patch}
 
-      # serve lindera-unidic on localhost vacant port
-      httplz_port="${
-        if stdenv.buildPlatform.isDarwin then
-          ''$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')''
-        else
-          "34567"
-      }"
-      mkdir .lindera-http-plz
-      ln -s ${lindera-unidic-src} .lindera-http-plz/unidic-mecab-2.1.2.tar.gz
-      httplz --port "$httplz_port" -- .lindera-http-plz/ &
-      echo $! >$TMPDIR/.httplz_pid
-
-      # file:// does not work
-      substituteInPlace build.rs --replace-fail \
-          "https://dlwqk3ibdg1xh.cloudfront.net/unidic-mecab-2.1.2.tar.gz" \
-          "http://localhost:$httplz_port/unidic-mecab-2.1.2.tar.gz"
-
-      # not needed with useFetchCargoVendor=true, but kept in case it is required again
-      #newHash=$(sha256sum build.rs | cut -d " " -f 1)
-      #substituteInPlace .cargo-checksum.json --replace-fail $oldHash $newHash
+      substituteInPlace $cargoDepsCopy/lindera-unidic-*/build.rs --replace-fail \
+          "${lindera-unidic-src.url}" \
+          "file://${lindera-unidic-src}"
     )
   '';
 
@@ -126,7 +106,6 @@ rustPlatform.buildRustPackage rec {
       rustc.llvmPackages.lld
       wasm-bindgen-cli_0_2_92
       wasm-pack
-      httplz
     ]
     ++ lib.optionals stdenv.buildPlatform.isDarwin [
       python3
@@ -160,11 +139,6 @@ rustPlatform.buildRustPackage rec {
       cd pagefind_ui/modular
       npm run build
     )
-  '';
-
-  # the file is also fetched during checkPhase
-  preInstall = ''
-    kill ${lib.optionalString stdenv.hostPlatform.isDarwin "-9"} $(cat $TMPDIR/.httplz_pid)
   '';
 
   buildFeatures = [ "extended" ];

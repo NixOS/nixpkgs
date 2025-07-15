@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/stargazer.{bash,zsh,fish}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and easy to use Gemini server";
     mainProgram = "stargazer";
     homepage = "https://sr.ht/~zethra/stargazer/";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";
-    maintainers = with maintainers; [ gaykitty ];
+    maintainers = with lib.maintainers; [ gaykitty ];
   };
 }

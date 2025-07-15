@@ -47,7 +47,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src =
     let
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      sha256 = "sha256-OzPqET4NHdyXk4dNWUnOwsc4b2bkq/sc75rsIoRsPOE=";
+      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
     };
 
   outputs = [

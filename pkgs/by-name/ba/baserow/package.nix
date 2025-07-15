@@ -22,7 +22,7 @@ let
 
         src = fetchFromGitLab {
           owner = "bramw";
-          repo = pname;
+          repo = "baserow_premium";
           rev = "refs/tags/${version}";
           hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
         };
@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitLab {
     owner = "bramw";
-    repo = pname;
+    repo = "baserow";
     rev = "refs/tags/${version}";
     hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
   };

@@ -8,13 +8,13 @@
   nix-update-script,
 }:
 let
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
     tag = "v${version}";
-    hash = "sha256-fOOo+UnrbQJFWyqjpiFwhytlPoPRnUlGswQdZb3/ws0=";
+    hash = "sha256-RTY/uGviyHlO+ZmLwOC5BabKr+kRDAXGZNdS9fVRPWA=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {
@@ -22,7 +22,9 @@ let
     inherit version src;
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-vkybRuym1yibaw943Gs9luYLdYEp4tgvA8e4maATiTY=";
+    cargoHash = "sha256-j+zk0UMjvaVgsdF5iaRVO4Puf/XtGu08Cs92jKPaM1g=";
+
+    env.RUSTC_BOOTSTRAP = 1;
 
     nativeBuildInputs = [
       pkg-config

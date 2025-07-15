@@ -16,7 +16,7 @@
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
-  withCoreText ? false,
+  withCoreText ? stdenv.hostPlatform.isDarwin, # withCoreText is required for macOS
   withIcu ? false, # recommended by upstream as default, but most don't needed and it's big
   withGraphite2 ? true, # it is small and major distros do include it
   python3,
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "10.2.0";
+  version = "11.2.1";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Yg40aPrsLqhoXTLEalhGm4UO9jBAs1Zc3gWVmCW0gic=";
+    hash = "sha256-CTcUyFSKKFCUaF8L3JmeIC1ma1nus98v+SGraLgzakk=";
   };
 
   postPatch =

@@ -1,5 +1,6 @@
 {
   buildPgrxExtension,
+  cargo-pgrx_0_12_6,
   postgresql,
   fetchFromGitHub,
   lib,
@@ -31,6 +32,7 @@ buildPgrxExtension (finalAttrs: {
   ];
 
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;

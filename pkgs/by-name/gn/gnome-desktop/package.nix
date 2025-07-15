@@ -28,9 +28,9 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop";
-  version = "44.1";
+  version = "44.3";
 
   outputs = [
     "out"
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rnylXcngiRSZl0FSOhfSnOIjkVYmvSRioSC/lvR6eas=";
+    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major finalAttrs.version}/gnome-desktop-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-QO+pqo1Q7/7ZIno9cGceMuncNeIPMxyrO1YpdZePT40=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     teams = [ teams.gnome ];
   };
-}
+})

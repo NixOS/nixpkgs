@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxker";
-  version = "0.10.3";
+  version = "0.10.5";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-2xLTR5+0xtyYhc5+gYG78EMP/B5Vk6ZqEGsZwM2bAok=";
+    hash = "sha256-PRV++3s25xqrfVQ8stXBfc8fpAEzFNNeyJI2MrYbWy8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-d6jaOtB6S8R6cdqLUnuPhDP6q9Hl6FTieFEiBibiDDE=";
+  cargoHash = "sha256-V72uikTto8M9BM0qQINHQ4HGFhXIf+JvzArhM/wg1wc=";
 
   passthru.updateScript = nix-update-script { };
 

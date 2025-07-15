@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = "airthings-ble";
     tag = version;
-    hash = "sha256-RKvQ3w3unDk/U6dz3r0Pn3ppVA6ZGxUoyuVk5jbI8jc=";
+    hash = "sha256-eZjMRely3UxcnjPB6DQDBOKdP+2kFCe/5fchiX+rcEM=";
   };
 
   build-system = [ poetry-core ];

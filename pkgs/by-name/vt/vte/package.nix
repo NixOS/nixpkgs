@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.80.1";
+  version = "0.80.3";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DNvQ6YOv2dIuBl4yOnQxYAcr9ktFPgCxXtvm8tzdpGw=";
+    hash = "sha256-Lllv0/vqu3FTFmIiTnH2osN/aEQmE21ihUYnJ2709pk=";
   };
 
   patches = [
@@ -164,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [
-      astsmtl
       antono
     ];
     teams = [ teams.gnome ];

@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8Iqg2coFsPQY3ws5MEC1LhTu+Z1lXeI3ccjgoBS454o=";
+    hash = "sha256-c3NyYDz+Ha5jHTpXLw9xsY+h0NjW9Uvpyn2PStmahKA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a5YI6bOo/rsi9hZO1BcVMjJtdrYq2aHqxtlO3F+P+8s=";
+  cargoHash = "sha256-/FSV/avsg7kbgtinmKBb0+gemLFZdSE+A+tfLvtfNas=";
 
   buildInputs = [ libunwind ];
 

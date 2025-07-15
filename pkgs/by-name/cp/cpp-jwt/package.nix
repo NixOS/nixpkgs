@@ -10,17 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-jwt";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "arun11299";
     repo = "cpp-jwt";
     rev = "v${version}";
-    sha256 = "sha256-5hVsFanTCT/uLLXrnb2kMvmL6qs9RXVkvxdWaT6m4mk=";
+    sha256 = "sha256-l1FevNhGX7vouKmGh/ypCcmZQLMpHJ4JFUp5dnNMEwg=";
   };
-
-  # fix reported version
-  patches = [ ./fix-version.patch ];
 
   cmakeFlags = [
     "-DCPP_JWT_USE_VENDORED_NLOHMANN_JSON=OFF"

@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "1.84.1";
+  version = "1.84.3";
 in
 buildGoModule {
   pname = "tailscale";
@@ -38,7 +38,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-rEfBoRKOM1DnMfgEkPI6wzzMwGIOUhowJRlaAQ8QZjY=";
+    hash = "sha256-0HvUNpyi6xzS3PtbgMvh6bLRhV77CZRrVSKGMr7JtbE=";
   };
 
   vendorHash = "sha256-QBYCMOWQOBCt+69NtJtluhTZIOiBWcQ78M9Gbki6bN0=";
@@ -224,6 +224,7 @@ buildGoModule {
       jk
       mfrw
       pyrox0
+      ryan4yin
     ];
   };
 }

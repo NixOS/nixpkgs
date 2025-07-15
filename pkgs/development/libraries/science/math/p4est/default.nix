@@ -72,6 +72,6 @@ stdenv.mkDerivation {
     homepage = "https://www.p4est.org/";
     downloadPage = "https://github.com/cburstedde/p4est.git";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.cburstedde ];
+    maintainers = [ ];
   };
 }

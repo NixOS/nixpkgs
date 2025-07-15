@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   validatePkgConfig,
   testers,
@@ -28,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/sammycage/plutosvg/pull/29
     ./0001-Emit-correct-pkg-config-file-if-paths-are-absolute.patch
+    # https://github.com/sammycage/plutosvg/pull/31
+    (fetchpatch {
+      url = "https://github.com/sammycage/plutosvg/commit/17d60020e0b24299fae0e7df37637448b3b51488.patch";
+      hash = "sha256-hY25ttsLQwvtQmDeOGSoCVDy34GUA0tNai/L3wpmPUo=";
+    })
   ];
 
   nativeBuildInputs = [

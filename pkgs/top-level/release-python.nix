@@ -12,6 +12,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -49,7 +50,7 @@ let
   );
 
   jobs = {
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    # for pkgs.formats tests, which rely on remarshal
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     tested = pkgs.releaseTools.aggregate {

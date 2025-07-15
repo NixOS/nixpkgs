@@ -217,12 +217,12 @@ ps.buildPythonApplication rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
     changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       cafkafk
       pbsds
     ];

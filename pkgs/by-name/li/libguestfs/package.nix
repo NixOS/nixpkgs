@@ -35,6 +35,7 @@
   jansson,
   getopt,
   perlPackages,
+  python3,
   ocamlPackages,
   libtirpc,
   appliance ? null,
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       gperf
       makeWrapper
       pkg-config
+      python3
+      python3.pkgs.pycodestyle
       qemu
       zstd
     ]
@@ -103,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     libapparmor
     perlPackages.ModuleBuild
+    python3
     libtirpc
     zstd
     ocamlPackages.ocamlbuild
@@ -120,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-install-daemon"
     "--disable-appliance"
     "--with-distro=NixOS"
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
     "--with-readline"
     "CPPFLAGS=-I${lib.getDev libxml2}/include/libxml2"
     "INSTALL_OCAMLLIB=${placeholder "out"}/lib/ocaml"

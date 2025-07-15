@@ -30,6 +30,9 @@
         port = 8002;
         settings.ipp.responseHeaders."X-NixOS" = "Rules";
       };
+
+      # TODO: Remove when PostgreSQL 17 is supported.
+      services.postgresql.package = pkgs.postgresql_16;
     };
 
   testScript = ''

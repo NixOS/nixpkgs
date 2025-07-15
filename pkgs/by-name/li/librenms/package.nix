@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.5.0";
+  version = "25.6.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    sha256 = "sha256-I1bHEFWGgwHq1U8Ipbm9tu7t6ikfMG+EIPjCsLAP/tk=";
+    sha256 = "sha256-8LL0D1vIThjZ5RBIQ6INAuXz0bbhOBEZMFYhv3OX1c8=";
   };
 
-  vendorHash = "sha256-bt7DXkQ3Jgab4L9fB8qInbHvlRxFfkzP+F8DVQ9qWJ4=";
+  vendorHash = "sha256-9ndmr1cs6+p2EThs8UQkNsSFHd/1wxbPOgw2rX5ZivU=";
 
   php = phpPackage;
 
@@ -77,7 +77,7 @@ phpPackage.buildComposerProject2 rec {
     patch -p1 -d $out -i ${./broken-binary-paths.diff}
 
     substituteInPlace \
-      $out/misc/config_definitions.json \
+      $out/resources/definitions/config_definitions.json \
       --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
       --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
       --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \

@@ -13,7 +13,6 @@
   pkg-config,
   python3Packages,
   readline,
-  systemdMinimal,
   udev,
   # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
@@ -23,15 +22,16 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.80";
+  version = "5.83";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pNC8oymWkfBtW9l3O4VGOCBKUaUCbEKwrX8cbPFrRZo=";
+    hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
   };
 
   buildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.pygments
     python3Packages.wrapPython
+    udevCheckHook
   ];
 
   outputs = [
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     ''
       substituteInPlace tools/hid2hci.rules \
-        --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+        --replace-fail /sbin/udevadm ${udev}/bin/udevadm \
         --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
     ''
     +
@@ -121,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   postInstall =
     let

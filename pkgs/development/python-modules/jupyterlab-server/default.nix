@@ -67,9 +67,8 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

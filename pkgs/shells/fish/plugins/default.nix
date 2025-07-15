@@ -32,6 +32,8 @@ lib.makeScope newScope (
 
     fifc = callPackage ./fifc.nix { };
 
+    fishbang = callPackage ./fishbang.nix { };
+
     fish-bd = callPackage ./fish-bd.nix { };
 
     # Fishtape 2.x and 3.x aren't compatible,

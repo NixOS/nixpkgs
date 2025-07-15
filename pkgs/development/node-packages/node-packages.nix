@@ -63785,56 +63785,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  vscode-json-languageserver = nodeEnv.buildNodePackage {
-    name = "vscode-json-languageserver";
-    packageName = "vscode-json-languageserver";
-    version = "1.3.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vscode-json-languageserver/-/vscode-json-languageserver-1.3.4.tgz";
-      sha512 = "+ghebnslXk6fVDySBrT0BVqozLDdmKY/qxgkDD4JtOQcU2vXc3e7jh7YyMxvuvE93E9OLvBqUrvajttj8xf3BA==";
-    };
-    dependencies = [
-      sources."agent-base-4.3.0"
-      sources."debug-3.1.0"
-      sources."es6-promise-4.2.8"
-      sources."es6-promisify-5.0.0"
-      sources."http-proxy-agent-2.1.0"
-      sources."https-proxy-agent-2.2.4"
-      sources."jsonc-parser-3.3.1"
-      sources."ms-2.0.0"
-      sources."request-light-0.4.0"
-      (
-        sources."vscode-json-languageservice-4.2.1"
-        // {
-          dependencies = [
-            sources."vscode-nls-5.2.0"
-          ];
-        }
-      )
-      sources."vscode-jsonrpc-6.0.0"
-      sources."vscode-languageserver-7.0.0"
-      (
-        sources."vscode-languageserver-protocol-3.16.0"
-        // {
-          dependencies = [
-            sources."vscode-languageserver-types-3.16.0"
-          ];
-        }
-      )
-      sources."vscode-languageserver-textdocument-1.0.12"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-nls-4.1.2"
-      sources."vscode-uri-3.1.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JSON language server";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   wavedrom-cli = nodeEnv.buildNodePackage {
     name = "wavedrom-cli";
     packageName = "wavedrom-cli";

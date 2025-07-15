@@ -25,14 +25,14 @@ let
     hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jvanbruegge
       risson
     ];
@@ -43,7 +43,7 @@ let
     pname = "authentik-website-deps";
     inherit src version meta;
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
     outputHashMode = "recursive";
@@ -75,7 +75,7 @@ let
       substituteInPlace package.json --replace-fail 'cross-env ' ""
     '';
 
-    sourceRoot = "source/website";
+    sourceRoot = "${src.name}/website";
 
     buildPhase = ''
       runHook preBuild
@@ -159,17 +159,8 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5;
-
-      django-tenants = prev.django-tenants.overrideAttrs {
-        version = "3.7.0-unstable-2025-03-14";
-        src = fetchFromGitHub {
-          owner = "rissson";
-          repo = "django-tenants";
-          rev = "156e53a6f5902d74b73dd9d0192fffaa2587a740";
-          hash = "sha256-xmhfPgCmcFr5axVV65fCq/AcV8ApRVvFVEpq3cQSVqo=";
-        };
-      };
+      # https://github.com/goauthentik/authentik/pull/14709
+      django = final.django_5_1;
 
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.

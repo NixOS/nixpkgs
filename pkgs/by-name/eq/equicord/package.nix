@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-fjfzBy1Z7AUKA53yjjCQ6yasHc5QMaOBtXtXA5fNK5s=";
+    fetcherVersion = 1;
   };
 
   nativeBuildInputs = [
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The other cutest Discord client mod";
+    description = "Other cutest Discord client mod";
     homepage = "https://github.com/Equicord/Equicord";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;

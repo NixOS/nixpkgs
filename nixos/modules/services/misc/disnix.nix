@@ -77,7 +77,7 @@ in
           [ "dbus.service" ]
           ++ lib.optional config.services.httpd.enable "httpd.service"
           ++ lib.optional config.services.mysql.enable "mysql.service"
-          ++ lib.optional config.services.postgresql.enable "postgresql.service"
+          ++ lib.optional config.services.postgresql.enable "postgresql.target"
           ++ lib.optional config.services.tomcat.enable "tomcat.service"
           ++ lib.optional config.services.svnserve.enable "svnserve.service"
           ++ lib.optional config.services.mongodb.enable "mongodb.service"

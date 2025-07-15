@@ -24,9 +24,7 @@
   ruby,
   zip,
 }:
-
 oldTlpdb:
-
 let
   tlpdbVersion = tlpdb."00texlive.config";
 
@@ -54,13 +52,11 @@ let
   );
 
   orig = removeFormatLinks (removeAttrs oldTlpdb [ "00texlive.config" ]);
-
 in
 lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context-texlive.scriptsFolder = "context-texlive/stubs-mkiv/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -431,22 +427,6 @@ lib.recursiveUpdate orig rec {
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
   '';
 
-  # readd functions moved to 'tools.pm' not shipped to CTAN
-  eolang.postUnpack =
-    let
-      patch = fetchpatch {
-        name = "eolang-without-tools-pm.patch";
-        url = "https://github.com/objectionary/eolang.sty/commit/2c3bf97dd85e1748b2028ffa056a75c0d9432f88.patch";
-        includes = [ "eolang.pl" ];
-        hash = "sha256-ZQtGjqzfhX5foRWuiWQaomN8nOOEj394HdCDrb2sdzA=";
-      };
-    in
-    ''
-      if [[ -d "$out"/scripts/eolang ]] ; then
-        patch -d "$out/scripts/eolang" -i "${patch}"
-      fi
-    '';
-
   # find files in script directory, not binary directory
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
@@ -473,6 +453,21 @@ lib.recursiveUpdate orig rec {
   # find files in script directory, not in binary directory
   minted.postFixup = ''
     substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
+  '';
+
+  # find files in source container, fix incompatibilities with snobol4
+  texaccents.postFixup = ''
+    sed -i '1s!$! -I${tl.texaccents.texsource}/source/support/texaccents!' "$out"/bin/*
+  '';
+  texaccents.postUnpack = ''
+    if [[ -f "$out"/source/support/texaccents/grepl.inc ]] ; then
+      sed -i 's!^-include "repl.inc"!-include "repl.sno"!' "$out"/source/support/texaccents/grepl.inc
+    elif [[ -f "$out"/scripts/texaccents/texaccents.sno ]] ; then
+      sed -i -e 's!^-include "host.inc"!-include "host.sno"!' \
+        -e 's/host(2,2)/host(2,host(3))/g' \
+        -e 's/host(2,3)/host(2,host(3) + 1)/g' \
+        "$out"/scripts/texaccents/texaccents.sno
+    fi
   '';
 
   # flag lua dependency
@@ -520,6 +515,13 @@ lib.recursiveUpdate orig rec {
   '';
 
   #### dependency changes
+
+  # Since 2025 OpTeX is based on luahbtex
+  optex.deps = (orig.optex.deps or [ ]) ++ [ "luahbtex" ];
+
+  # Since the packaging change for ConTeXt, context-legacy is missing the xetex dependency
+  context-legacy.deps = (orig.context-legacy.deps or [ ]) ++ [ "xetex" ];
+
   # it seems to need it to transform fonts
   xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
 
@@ -533,6 +535,14 @@ lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
+
+  # FIXME: remove when https://github.com/borisveytsman/crossrefware/pull/17 is merged and included on CTAN
+  # Typo introduced in https://github.com/borisveytsman/crossrefware/commit/1e67e9773b3d3be983be156e2200478bc263dd93
+  crossrefware.postUnpack = ''
+    if [[ -f "$out"/scripts/crossrefware/ltx2crossrefxml.pl ]] ; then
+      sed -i 's/use IO::file;/use IO::File;/' "$out"/scripts/crossrefware/ltx2crossrefxml.pl
+    fi
+  '';
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   luajittex.binfiles = lib.optionals (

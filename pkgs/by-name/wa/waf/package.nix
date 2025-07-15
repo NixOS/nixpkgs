@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waf";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = "waf-${finalAttrs.version}";
-    hash = "sha256-cZ8tt17m1KUGxYPJf+cHf9j8rzNCrGyY8rcZcSvebyY=";
+    hash = "sha256-srBBRe7OLNM86OVJYYk6A0EYJi+rdJ/xG7f+YBdrclE=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -D waf "$out"/bin/waf
-    wrapProgram "$out"/bin/waf --set PYTHONPATH "$out"/${python3.sitePackages}
+    wrapProgram "$out"/bin/waf --prefix PYTHONPATH : "$out"/${python3.sitePackages}
     mkdir -p "$out"/${python3.sitePackages}/
     cp -r waflib "$out"/${python3.sitePackages}/
     runHook postInstall

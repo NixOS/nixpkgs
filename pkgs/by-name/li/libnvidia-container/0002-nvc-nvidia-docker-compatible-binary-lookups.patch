@@ -9,7 +9,7 @@ This patch maintains compatibility with NixOS' `virtualisation.docker.enableNvid
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/src/nvc_info.c b/src/nvc_info.c
-index cf4b1905fd2127c28ee16649501be122d3be5261..cdfa19721bc913d8e2adb96d106cd65ee6111623 100644
+index 5eaef61ada5e955ab11c6a4eb8429c50468e3370..cac87500213e961e603494ac842d02522fc46a5e 100644
 --- a/src/nvc_info.c
 +++ b/src/nvc_info.c
 @@ -249,10 +249,13 @@ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_d

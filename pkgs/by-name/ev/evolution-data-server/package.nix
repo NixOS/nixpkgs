@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.56.1";
+  version = "3.56.2";
 
   outputs = [
     "out"
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
-    hash = "sha256-ZGzAA32j+fKVeUxjfZU5StdvjJvuImi+LEGD4ncgwTc=";
+    hash = "sha256-307CmVDymnbqxvvg+BTEjSzvfT/bkFACpKiD3XYc6Tw=";
   };
 
   patches = [
@@ -197,12 +197,12 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
     changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.lgpl2Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.linux; # requires libuuid
+    license = lib.licenses.lgpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux; # requires libuuid
   };
 }

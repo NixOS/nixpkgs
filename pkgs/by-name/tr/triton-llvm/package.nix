@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkgsBuildBuild,
   pkg-config,
   cmake,
@@ -65,7 +64,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "19.1.0-rc1"; # One of the tags at https://github.com/llvm/llvm-project/commit/10dc3a8e916d73291269e5e2b82dd22681489aa1
+  version = "21.0.0-git"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   outputs =
     [
@@ -78,23 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
       "man"
     ];
 
-  # See https://github.com/triton-lang/triton/blob/main/python/setup.py
-  # and https://github.com/ptillet/triton-llvm-releases/releases
+  # See https://github.com/triton-lang/triton/blob/main/cmake/llvm-hash.txt
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "10dc3a8e916d73291269e5e2b82dd22681489aa1";
-    hash = "sha256-9DPvcFmhzw6MipQeCQnr35LktW0uxtEL8axMMPXIfWw=";
+    rev = "a66376b0dc3b2ea8a84fda26faca287980986f78";
+    hash = "sha256-7xUPozRerxt38UeJxA8kYYxOQ4+WzDREndD2+K0BYkU=";
   };
-  patches = [
-    # glibc-2.40 support
-    # [llvm-exegesis] Use correct rseq struct size #100804
-    # https://github.com/llvm/llvm-project/issues/100791
-    (fetchpatch {
-      url = "https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch";
-      hash = "sha256-QKa+kyXjjGXwTQTEpmKZx5yYjOyBX8A8NQoIYUaGcIw=";
-    })
-  ];
 
   nativeBuildInputs =
     [

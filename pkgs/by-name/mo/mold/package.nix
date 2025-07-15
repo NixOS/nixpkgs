@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb_2022_0,
+  tbb_2022,
   zlib,
   zstd,
 
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.39.1";
+  version = "2.40.2";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uC6oakFfF0tpSiBeps5IO41Khk7VyCMSZhVh2Gmwlyc=";
+    hash = "sha256-Db2IxHCQWb6JdJROi+nOi0pV4zb+8/TcFrJWUCdH6N8=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      tbb_2022_0
+      tbb_2022
       zlib
       zstd
     ]
@@ -130,9 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
-    maintainers = with lib.maintainers; [
-      azahi
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ azahi ];
   };
 })

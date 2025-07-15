@@ -34,6 +34,7 @@ in
             enable = true;
             settings.DefaultAction = "deny";
             settings.ProcMonitorMethod = m;
+            settings.LogLevel = 0;
           };
         }
       ) monitorMethods
@@ -46,6 +47,7 @@ in
             enable = true;
             settings.DefaultAction = "deny";
             settings.ProcMonitorMethod = m;
+            settings.LogLevel = 0;
             rules = {
               curl = {
                 name = "curl";

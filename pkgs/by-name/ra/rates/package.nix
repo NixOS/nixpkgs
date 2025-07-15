@@ -25,15 +25,15 @@ rustPlatform.buildRustPackage rec {
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool that brings currency exchange rates right into your terminal";
     homepage = "https://github.com/lunush/rates";
     changelog = "https://github.com/lunush/rates/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "rates";
   };
 }

@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
   pythonOlder,
@@ -29,8 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"' \
-      --replace-fail 'addopts = "--cov"' ""
+      --replace-fail '"0.0.0"' '"${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-freezer
     pytestCheckHook
     syrupy

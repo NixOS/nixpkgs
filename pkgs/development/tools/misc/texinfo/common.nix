@@ -7,12 +7,10 @@
   libintl,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
-  gnulib,
   gawk,
   freebsd,
   glibcLocales,
   libiconv,
-  xz,
 
   # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
@@ -56,16 +54,9 @@ stdenv.mkDerivation {
 
   patches = patches ++ optional crossBuildTools ./cross-tools-flags.patch;
 
-  postPatch =
-    ''
-      patchShebangs tp/maintain/regenerate_commands_perl_info.pl
-    ''
-    # This patch is needed for IEEE-standard long doubles on
-    # powerpc64; it does not apply cleanly to texinfo 5.x or
-    # earlier.  It is merged upstream in texinfo 6.8.
-    + optionalString (version == "6.7") ''
-      patch -p1 -d gnulib < ${gnulib.passthru.longdouble-redirect-patch}
-    '';
+  postPatch = ''
+    patchShebangs tp/maintain/regenerate_commands_perl_info.pl
+  '';
 
   env =
     {
@@ -147,7 +138,5 @@ stdenv.mkDerivation {
 
   meta = meta // {
     branch = version;
-    # see comment above in patches section
-    broken = stdenv.hostPlatform.isPower64 && versionOlder version "6.0";
   };
 }

@@ -37,11 +37,11 @@ python3.pkgs.buildPythonPackage {
     "acltoolkit"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ACL abuse swiss-knife";
     mainProgram = "acltoolkit";
     homepage = "https://github.com/zblurx/acltoolkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

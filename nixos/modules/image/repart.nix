@@ -161,8 +161,9 @@ in
       # Generated with `uuidgen`. Random but fixed to improve reproducibility.
       default = "0867da16-f251-457d-a9e8-c31f9a3c220b";
       description = ''
-        A UUID to use as a seed. You can set this to `null` to explicitly
+        A UUID to use as a seed. You can set this to `random` to explicitly
         randomize the partition UUIDs.
+        See {manpage}`systemd-repart(8)` for more information.
       '';
     };
 

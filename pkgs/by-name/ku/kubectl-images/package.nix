@@ -21,12 +21,12 @@ buildGoModule rec {
     mv $out/bin/cmd $out/bin/kubectl-images
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Show container images used in the cluster";
     mainProgram = "kubectl-images";
     homepage = "https://github.com/chenjiandongx/kubectl-images";
     changelog = "https://github.com/chenjiandongx/kubectl-images/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
   };
 }

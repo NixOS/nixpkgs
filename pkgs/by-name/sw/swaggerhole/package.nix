@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "swaggerhole";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Liodeus";
@@ -17,7 +17,9 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-3HmIpn1A86PXZRL+SqMdr84O16hW1mCUWHKnOVolmx8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     requests
     whispers
   ];

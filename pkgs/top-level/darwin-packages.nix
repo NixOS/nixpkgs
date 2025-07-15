@@ -6,7 +6,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   stdenv,
-  preLibcCrossHeaders,
   config,
 }:
 
@@ -57,7 +56,7 @@ makeScopeWithSplicing' {
       };
 
       binutils = pkgs.wrapBintoolsWith {
-        libc = if stdenv.targetPlatform != stdenv.hostPlatform then pkgs.libcCross else pkgs.stdenv.cc.libc;
+        inherit (targetPackages) libc;
         bintools = self.binutils-unwrapped;
       };
 
@@ -88,7 +87,7 @@ makeScopeWithSplicing' {
       };
 
       binutilsNoLibc = pkgs.wrapBintoolsWith {
-        libc = preLibcCrossHeaders;
+        libc = targetPackages.preLibcHeaders;
         bintools = self.binutils-unwrapped;
       };
 
@@ -171,6 +170,7 @@ makeScopeWithSplicing' {
         xcode_16_1
         xcode_16_2
         xcode_16_3
+        xcode_16_4
         xcode
         requireXcode
         ;

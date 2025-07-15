@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
       versionPolicy = "odd-unstable";
     };
     networkManagerPlugin = "VPN/nm-openconnect-service.name";
+    networkManagerRuntimeDeps = [ openconnect ];
   };
 
   meta = with lib; {

@@ -125,13 +125,13 @@ stdenv.mkDerivation rec {
     command = "w3m -version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://w3m.sourceforge.net/";
     changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
     description = "Text-mode web browser";
-    maintainers = with maintainers; [ anthonyroussel ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "w3m";
   };
 }

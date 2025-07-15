@@ -17,8 +17,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "24.1.0";
-  sha256 = "c8171b2aeccb28c8c5347f273a25adae172fb2a65bc8c975bc22ec58949d0eaf";
+  version = "24.3.0";
+  sha256 = "eb688ef8a63fda9ebc0b5f907609a46e26db6d9aceefc0832009a98371e992ed";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -52,11 +52,11 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
 
-      # Can be removed after https://github.com/NixOS/nixpkgs/pull/403958.
+      # Fix for flaky test
+      # TODO: remove when included in a release
       (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/9aa57bf8dab2dbfb8b6974fe71d5dbe6daf66244.patch?full_index=1";
-        hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
-        revert = true;
+        url = "https://github.com/nodejs/node/commit/cd685fe3b6b18d2a1433f2635470513896faebe6.patch?full_index=1";
+        hash = "sha256-KA7WBFnLXCKx+QVDGxFixsbj3Y7uJkAKEUTeLShI1Xo=";
       })
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [

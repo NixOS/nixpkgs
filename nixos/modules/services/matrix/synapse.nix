@@ -124,12 +124,13 @@ let
   genLogConfigFile =
     logName:
     format.generate "synapse-log-${logName}.yaml" (
-      cfg.log
-      // optionalAttrs (cfg.log ? handlers.journal) {
-        handlers.journal = cfg.log.handlers.journal // {
-          SYSLOG_IDENTIFIER = logName;
-        };
-      }
+      attrsets.recursiveUpdate cfg.log (
+        optionalAttrs (cfg.log ? handlers.journal) {
+          handlers.journal = cfg.log.handlers.journal // {
+            SYSLOG_IDENTIFIER = logName;
+          };
+        }
+      )
     );
 
   toIntBase8 =
@@ -1438,7 +1439,7 @@ in
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1450,13 +1451,13 @@ in
               partOf = [ "matrix-synapse.target" ];
               wantedBy = [ "matrix-synapse.target" ];
               unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              requires = optional hasLocalPostgresDB "postgresql.target";
             }
           else
             {
               wants = [ "network-online.target" ];
-              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
+              requires = optional hasLocalPostgresDB "postgresql.target";
               wantedBy = [ "multi-user.target" ];
             };
         baseServiceConfig = {

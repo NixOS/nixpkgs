@@ -9,14 +9,14 @@
   pkgsBuildHost,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glog";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 

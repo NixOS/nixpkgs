@@ -5,6 +5,7 @@
   setuptools,
   packaging,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
 }:
 
@@ -22,7 +23,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
       --replace "--disable-socket" ""
   '';
 
@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
 

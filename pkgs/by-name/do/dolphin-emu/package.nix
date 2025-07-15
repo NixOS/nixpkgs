@@ -7,6 +7,7 @@
   cmake,
   pkg-config,
   qt6,
+  wrapGAppsHook3,
   # darwin-only
   xcbuild,
 
@@ -53,13 +54,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2503a";
+  version = "2506";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-1IqrQi2aBUFpa3n/WI7nF1wqBPyyfpv02YIFfX/911w=";
+    hash = "sha256-JEp1rc5nNJY4GfNCR2Vi4ctQ14p+LZWuFPFirv6foUM=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       pkg-config
       qt6.wrapQtAppsHook
+      wrapGAppsHook3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild # for plutil
@@ -156,6 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
+  doInstallCheck = true;
+
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
@@ -166,6 +170,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ./Binaries/Dolphin.app $out/Applications
       ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
     '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests = {

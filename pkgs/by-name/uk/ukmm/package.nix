@@ -9,6 +9,8 @@
   libglvnd,
   libxkbcommon,
   openssl,
+  makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
@@ -30,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -69,6 +72,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    install -Dm444 assets/ukmm.png  $out/share/icons/hicolor/256x256/apps/ukmm.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ukmm";
+      exec = "ukmm %u";
+      mimeTypes = [ "x-scheme-handler/bcml" ];
+      icon = "ukmm";
+      desktopName = "UKMM";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      comment = "Breath of the Wild Mod Manager";
+    })
+  ];
 
   meta = with lib; {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";

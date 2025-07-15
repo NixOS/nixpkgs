@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gpac.wp.imt.fr";
     license = licenses.lgpl21;
     maintainers = with maintainers; [
-      bluescreen303
       mgdelacroix
     ];
     platforms = platforms.unix;

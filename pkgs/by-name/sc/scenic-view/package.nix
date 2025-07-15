@@ -21,7 +21,7 @@ let
 
   src = fetchFromGitHub {
     owner = "JonathanGiles";
-    repo = pname;
+    repo = "scenic-view";
     rev = version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
@@ -29,9 +29,9 @@ let
   gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = pname;
-    exec = pname;
+    name = "scenic-view";
+    desktopName = "scenic-view";
+    exec = "scenic-view";
     comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
     mimeTypes = [
       "application/java"
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp build/libs/scenicview.jar $out/share/${pname}/${pname}.jar
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} --add-flags "-jar $out/share/${pname}/${pname}.jar"
+    mkdir -p $out/bin $out/share/scenic-view
+    cp build/libs/scenicview.jar $out/share/scenic-view/scenic-view.jar
+    makeWrapper ${jdk}/bin/java $out/bin/scenic-view --add-flags "-jar $out/share/scenic-view/scenic-view.jar"
 
     runHook postInstall
   '';

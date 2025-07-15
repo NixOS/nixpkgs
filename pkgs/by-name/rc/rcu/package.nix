@@ -11,13 +11,16 @@
   gnutar,
   libsForQt5,
   makeDesktopItem,
-  nettools,
+  net-tools,
   protobuf,
-  python3Packages,
+  python312Packages,
   system-config-printer,
   wget,
 }:
 
+let
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
   version = "4.0.24";
@@ -153,7 +156,7 @@ python3Packages.buildPythonApplication rec {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       --prefix PATH : ${
         lib.makeBinPath [
-          nettools
+          net-tools
           system-config-printer
         ]
       }

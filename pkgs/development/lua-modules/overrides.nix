@@ -39,6 +39,7 @@
   mariadb,
   mpfr,
   neovim-unwrapped,
+  oniguruma,
   openldap,
   openssl,
   pcre,
@@ -50,6 +51,7 @@
   tree-sitter,
   unbound,
   unzip,
+  versionCheckHook,
   vimPlugins,
   yajl,
   zip,
@@ -379,6 +381,15 @@ in
     ];
   });
 
+  lrexlib-oniguruma = prev.lrexlib-oniguruma.overrideAttrs (oa: {
+    externalDeps = [
+      {
+        name = "ONIG";
+        dep = oniguruma;
+      }
+    ];
+  });
+
   lrexlib-pcre = prev.lrexlib-pcre.overrideAttrs (oa: {
     externalDeps = [
       {
@@ -577,9 +588,13 @@ in
       installShellFiles
       lua
       unzip
+      versionCheckHook
     ];
     # cmake is just to compile packages with "cmake" buildType, not luarocks itself
     dontUseCmakeConfigure = true;
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip
@@ -949,6 +964,21 @@ in
     })
   ) { };
 
+  rocks-dev-nvim = prev.rocks-dev-nvim.overrideAttrs (oa: {
+
+    # E5113: Error while calling lua chunk [...] pl.path requires LuaFileSystem
+    doCheck = luaOlder "5.2";
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
+      busted spec
+      runHook postCheck
+    '';
+  });
+
   rtp-nvim = prev.rtp-nvim.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -974,6 +1004,18 @@ in
       runHook preCheck
       busted --lua=nlua
       runHook postCheck
+    '';
+  });
+
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      installShellFiles
+    ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd sofa \
+        --bash <($out/bin/sofa --completion bash) \
+        --fish <($out/bin/sofa --completion fish) \
+        --zsh <($out/bin/sofa --completion zsh)
     '';
   });
 

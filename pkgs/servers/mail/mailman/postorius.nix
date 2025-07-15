@@ -10,6 +10,7 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "postorius";
   version = "1.3.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

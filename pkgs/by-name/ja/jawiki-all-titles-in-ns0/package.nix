@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "jawiki-all-titles-in-ns0";
-  version = "0-unstable-2025-05-01";
+  version = "0-unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "musjj";
     repo = "jawiki-archive";
-    rev = "11011d2a5a27251a75a0ce822ed05fa9be7bf878";
-    hash = "sha256-ZTCW14kHfewzCJuT6afGgSi3ZwC4cGiqecEma8Fj2mk=";
+    rev = "38c36995d4e80adfc41e4937c406717a29f3b315";
+    hash = "sha256-i+Q6tMxSrA3xeDabUijDcO0L/bZhOFzRn7ErDW/iiiY=";
   };
 
   installPhase = ''

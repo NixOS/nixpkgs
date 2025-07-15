@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "django-app-helper";
-  version = "3.3.4";
+  version = "3.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "nephila";
     repo = "django-app-helper";
     tag = version;
-    hash = "sha256-4nFg8B1uxGJVY1jcGr0e2Oi14lqXcFOi0HJ+ogE2ikg=";
+    hash = "sha256-gnTEzmQ4h4FWc2+s68VW/yVAkKFdj4U2VMkJKTAnQOM=";
   };
 
   build-system = [ setuptools ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Helper for Django applications development";
     homepage = "https://django-app-helper.readthedocs.io";
-    changelog = "https://github.com/nephila/django-app-helper/releases/tag/${version}";
+    changelog = "https://github.com/nephila/django-app-helper/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.onny ];
   };

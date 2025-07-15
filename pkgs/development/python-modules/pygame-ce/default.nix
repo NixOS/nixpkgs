@@ -11,6 +11,8 @@
   cython,
   ninja,
   meson-python,
+  pyproject-metadata,
+  nix-update-script,
 
   fontconfig,
   freetype,
@@ -29,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.5.3";
+  version = "2.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +40,7 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
-    hash = "sha256-Vl9UwCknbMHdsB1wwo/JqybWz3UbAMegIcO0GpiCxig=";
+    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -65,8 +67,10 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      # "pyproject-metadata!=0.9.1" was pinned due to https://github.com/pygame-community/pygame-ce/pull/3395
       # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
       substituteInPlace pyproject.toml \
+        --replace-fail '"pyproject-metadata!=0.9.1",' '"pyproject-metadata",' \
         --replace-fail '"meson<=1.7.0",' '"meson",' \
         --replace-fail '"meson-python<=0.17.1",' '"meson-python",' \
         --replace-fail '"ninja<=1.12.1",' "" \
@@ -92,6 +96,7 @@ buildPythonPackage rec {
     setuptools
     ninja
     meson-python
+    pyproject-metadata
   ];
 
   buildInputs = [
@@ -153,6 +158,8 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     inherit pygame-gui;

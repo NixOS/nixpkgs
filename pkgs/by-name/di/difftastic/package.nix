@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "difftastic";
-  version = "0.63.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = "difftastic";
     tag = finalAttrs.version;
-    hash = "sha256-BxWCSkSeDyiiGBY2u0ahPrIhYq2lbujoPPtZGq/OkI0=";
+    hash = "sha256-XMvysYO6Kji9cbfGayB6wPVuNp0j2uXLHfZ9H+dBLt0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-kIqaZ8truDivMV6uo1+j9bmXQReREZjHSr89ZvVDWCw=";
+  cargoHash = "sha256-1u3oUbqhwHXD90ld70pjK2XPJe5hpUbJtU78QpIjAE8=";
 
   # skip flaky tests
   checkFlags = [ "--skip=options::tests::test_detect_display_width" ];

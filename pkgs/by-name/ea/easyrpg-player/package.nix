@@ -2,59 +2,54 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  asciidoctor,
   cmake,
   doxygen,
   pkg-config,
-  freetype,
+  alsa-lib,
+  flac,
+  fluidsynth,
   fmt,
+  freetype,
   glib,
   harfbuzz,
+  lhasa,
+  libdecor,
   liblcf,
   libpng,
   libsndfile,
+  libsysprof-capture,
   libvorbis,
-  libxmp,
   libXcursor,
   libXext,
   libXi,
   libXinerama,
+  libxmp,
   libXrandr,
   libXScrnSaver,
   libXxf86vm,
   mpg123,
+  nlohmann_json,
   opusfile,
-  pcre,
+  pcre2,
   pixman,
-  SDL2,
+  sdl3,
   speexdsp,
   wildmidi,
   zlib,
-  libdecor,
-  alsa-lib,
-  asciidoctor,
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyrpg-player";
-  version = "0.8";
+  # liblcf needs to be updated before this.
+  version = "0.8.1.1";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
     rev = version;
-    hash = "sha256-t0sa9ONVVfsiTy+us06vU2bMa4QmmQeYxU395g0WS6w=";
+    hash = "sha256-fYSpFhqETkQhRK1/Uws0fWWdCr35+1J4vCPX9ZiQ3ZA=";
   };
-
-  patches = [
-    # Fixed compatibility with fmt > 9
-    # Remove when version > 0.8
-    (fetchpatch {
-      name = "0001-Fix-building-with-fmtlib-10.patch";
-      url = "https://github.com/EasyRPG/Player/commit/ab6286f6d01bada649ea52d1f0881dde7db7e0cf.patch";
-      hash = "sha256-GdSdVFEG1OJCdf2ZIzTP+hSrz+ddhTMBvOPjvYQHy54=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -67,21 +62,27 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
+      flac # needed by libsndfile
+      fluidsynth
       fmt
       freetype
       glib
       harfbuzz
+      lhasa
       liblcf
       libpng
       libsndfile
+      libsysprof-capture # needed by glib
       libvorbis
       libxmp
       mpg123
+      nlohmann_json
       opusfile
-      pcre
+      pcre2 # needed by glib
       pixman
-      SDL2
+      sdl3
       speexdsp
+      wildmidi
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -94,11 +95,12 @@ stdenv.mkDerivation rec {
       libXScrnSaver
       libXxf86vm
       libdecor
-      wildmidi # until packaged on Darwin
     ];
 
   cmakeFlags = [
     "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}"
+    # TODO: remove the below once SDL3 becomes default next major release
+    "-DPLAYER_TARGET_PLATFORM=SDL3"
   ];
 
   makeFlags = [
@@ -116,14 +118,13 @@ stdenv.mkDerivation rec {
     ln -s $out/{Applications/EasyRPG\ Player.app/Contents/MacOS,bin}/EasyRPG\ Player
   '';
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
   enableParallelChecking = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.all;
     mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";

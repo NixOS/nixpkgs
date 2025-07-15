@@ -21,8 +21,7 @@ let
       inherit name;
       meta.maintainers = [
         lib.maintainers.flokli
-        lib.teams.helsinki-systems.members
-      ];
+      ] ++ lib.teams.helsinki-systems.members;
 
       nodes = {
         machine =

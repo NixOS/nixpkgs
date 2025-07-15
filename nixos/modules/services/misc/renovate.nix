@@ -61,6 +61,27 @@ in
       };
       default = { };
     };
+    environment = mkOption {
+      type =
+        with types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
+      description = ''
+        Extra environment variables to export to the Renovate process
+        from the systemd unit configuration.
+
+        See https://docs.renovatebot.com/config-overview for available environment variables.
+      '';
+      example = {
+        LOG_LEVEL = "debug";
+      };
+      default = { };
+    };
     runtimePackages = mkOption {
       type = with types; listOf package;
       description = "Packages available to renovate.";
@@ -82,14 +103,22 @@ in
       description = ''
         Renovate's global configuration.
         If you want to pass secrets to renovate, please use {option}`services.renovate.credentials` for that.
+
+        See https://docs.renovatebot.com/config-overview for available settings.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    services.renovate.settings = {
-      cacheDir = "/var/cache/renovate";
-      baseDir = "/var/lib/renovate";
+    services.renovate = {
+      settings = {
+        cacheDir = "/var/cache/renovate";
+        baseDir = "/var/lib/renovate";
+      };
+      environment = {
+        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
+        HOME = "/var/lib/renovate";
+      };
     };
 
     systemd.services.renovate = {
@@ -101,6 +130,7 @@ in
         config.systemd.package
         pkgs.git
       ] ++ cfg.runtimePackages;
+      inherit (cfg) environment;
 
       serviceConfig = {
         User = "renovate";
@@ -145,11 +175,6 @@ in
         )}
         exec ${lib.escapeShellArg (lib.getExe cfg.package)}
       '';
-
-      environment = {
-        RENOVATE_CONFIG_FILE = generateConfig "renovate-config.json" cfg.settings;
-        HOME = "/var/lib/renovate";
-      };
     };
   };
 }

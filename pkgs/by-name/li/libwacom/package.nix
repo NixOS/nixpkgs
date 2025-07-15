@@ -7,6 +7,7 @@
   glib,
   pkg-config,
   udev,
+  udevCheckHook,
   libevdev,
   libgudev,
   python3,
@@ -15,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.15.0";
+  version = "2.16.1";
 
   outputs = [
     "out"
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-fc7ymkyIJ5BvrPxJg7Vw1h1mBy+icr+5kVDecODxRLQ=";
+    hash = "sha256-YP6z+2HyIRmIAJIdJMbVTQA0rf3EXBZvlCdM4jrmHXM=";
   };
 
   postPatch = ''
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests are in the `tests` pass-through derivation because one of them is flaky, frequently causing build failures.
   # See https://github.com/NixOS/nixpkgs/issues/328140
   doCheck = false;
+  doInstallCheck = true;
 
   nativeCheckInputs = [
     valgrind

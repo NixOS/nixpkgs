@@ -55,12 +55,12 @@ class Remote:
             if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
                 logger.warning(
                     f"detected option '{o}' in NIX_SSHOPTS. SSH's TTY may "
-                    + "cause issues, it is recommended to remove this option"
+                    "cause issues, it is recommended to remove this option"
                 )
                 if not ask_sudo_password:
                     logger.warning(
                         "if you want to prompt for sudo password use "
-                        + "'--ask-sudo-password' option instead"
+                        "'--ask-sudo-password' option instead"
                     )
 
 
@@ -161,7 +161,7 @@ def run_wrapper(
         if sudo and remote and remote.sudo_password is None:
             logger.error(
                 "while running command with remote sudo, did you forget to use "
-                + "--ask-sudo-password?"
+                "--ask-sudo-password?"
             )
         raise
 

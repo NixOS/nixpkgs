@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flit-core,
   pytestCheckHook,
   six,
@@ -10,15 +10,17 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "10.6.0";
-  format = "pyproject";
+  version = "10.7.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LNf60QCcMcyftqA1EIUJ5lR1R6enODdPEL1JoJ6z7js=";
+  src = fetchFromGitHub {
+    owner = "more-itertools";
+    repo = "more-itertools";
+    tag = "v${version}";
+    hash = "sha256-4ZzuWVRrihhEoYRDAoYLZINR11iHs0sXF/bRm6gQoEA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   propagatedBuildInputs = [ six ];
 
@@ -32,6 +34,7 @@ buildPythonPackage rec {
     homepage = "https://more-itertools.readthedocs.org";
     changelog = "https://more-itertools.readthedocs.io/en/stable/versions.html";
     description = "Expansion of the itertools module";
+    downloadPage = "https://github.com/more-itertools/more-itertools";
     license = licenses.mit;
     maintainers = [ ];
   };

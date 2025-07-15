@@ -43,6 +43,8 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  doInstallCheck = true;
+
   nativeBuildInputs =
     [
       cmake

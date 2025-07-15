@@ -18,7 +18,10 @@ let
     '';
 in
 {
-  meta.maintainers = [ maintainers.bachp ];
+  meta.maintainers = with maintainers; [
+    bachp
+    ryan4yin
+  ];
 
   options.services.minio = {
     enable = mkEnableOption "Minio Object Storage";

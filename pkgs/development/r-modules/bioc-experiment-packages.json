@@ -555,6 +555,12 @@
       "sha256": "0rmp259r5n0dqf8zn9wwfqlcbdan1qs3ni0f4izv4nj3mym435y9",
       "depends": ["ExperimentHub", "S4Vectors", "SummarizedExperiment"]
     },
+    "Hiiragi2013": {
+      "name": "Hiiragi2013",
+      "version": "1.44.2",
+      "sha256": "0kl423kr19ai4kz7a5dv3d0swgzp3911pgxyp8qf8kgy952a1rr1",
+      "depends": ["Biobase", "KEGGREST", "MASS", "RColorBrewer", "affy", "boot", "clue", "cluster", "genefilter", "geneplotter", "gplots", "gtools", "lattice", "latticeExtra", "mouse4302_db", "xtable"]
+    },
     "HumanAffyData": {
       "name": "HumanAffyData",
       "version": "1.34.0",
@@ -905,8 +911,8 @@
     },
     "ProteinGymR": {
       "name": "ProteinGymR",
-      "version": "1.2.0",
-      "sha256": "0li7kra2p2hg77x2jsy96dz0q052lf05kr9y4v3r35p62rzhnc35",
+      "version": "1.2.1",
+      "sha256": "1xwva9gnfldgx2bw62zwz3wlc84k4jlnybq81nr0xqa6xdr9fycl",
       "depends": ["AnnotationHub", "ComplexHeatmap", "ExperimentHub", "bio3d", "circlize", "dplyr", "forcats", "ggExtra", "ggdist", "gghalves", "ggplot2", "htmltools", "lifecycle", "pals", "purrr", "queryup", "r3dmol", "rlang", "spdl", "stringr", "tidyr", "tidyselect"]
     },
     "PtH2O2lipids": {
@@ -2471,8 +2477,8 @@
     },
     "systemPipeRdata": {
       "name": "systemPipeRdata",
-      "version": "2.12.0",
-      "sha256": "04xxwdcznxdhxhmn73b9njj0mrd5bn3bwznnx5wf3p5qkfdckl9g",
+      "version": "2.12.2",
+      "sha256": "12vxhm096gwy026gnh1ql1749gpxdsch70x3bc2a2pcnc74kk2hf",
       "depends": ["BiocGenerics", "Biostrings", "jsonlite", "remotes"]
     },
     "tartare": {
@@ -2630,13 +2636,6 @@
       "version": "1.8.0",
       "sha256": "1r2kshwi8iajk0rwzkccdw389ffvkzivg82f4bri3xw0sq57fm50",
       "depends": ["AnnotationDbi", "Biobase", "GGBase", "illuminaHumanv1_db", "snpStats"],
-      "broken": true
-    },
-    "Hiiragi2013": {
-      "name": "Hiiragi2013",
-      "version": "1.41.0",
-      "sha256": "0z8ns2qsnng3kvzcris3hxggy1jmzrl8jwy0ndf6sbn1cqj1pnkl",
-      "depends": ["Biobase", "KEGGREST", "MASS", "RColorBrewer", "affy", "boot", "clue", "cluster", "genefilter", "geneplotter", "gplots", "gtools", "lattice", "latticeExtra", "mouse4302_db", "xtable"],
       "broken": true
     },
     "MAQCsubsetAFX": {

@@ -6,11 +6,12 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,10 +20,12 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     tag = version;
-    hash = "sha256-k88+9FpB/aBun73SnsN6GsBceSUekT8Ig1XBt3hO4ok=";
+    hash = "sha256-b3Z1NsYKp0CecUq8kaC/j3xR/ZZHDIw4MhUeadizz88=";
   };
 
-  nativeBuildInputs = [ flit-scm ];
+  build-system = [ flit-scm ];
+
+  dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

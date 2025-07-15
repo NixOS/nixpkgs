@@ -25,6 +25,7 @@ let
   js8py = buildPythonPackage rec {
     pname = "js8py";
     version = "0.1.1";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jketterl";
@@ -83,6 +84,7 @@ in
 buildPythonApplication rec {
   pname = "openwebrx";
   version = "1.2.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";

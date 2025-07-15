@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libpulseaudio
     openssl
-  ] ++ lib.optionals stdenv.isLinux [ alsa-lib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 

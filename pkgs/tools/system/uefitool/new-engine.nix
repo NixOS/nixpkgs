@@ -10,10 +10,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uefitool";
-  version = "A71";
+  version = "A72";
 
   src = fetchFromGitHub {
-    hash = "sha256-NRlrKm5+eED6oyvFRSEhn0EUbMsPJtuFAyv3vgY/IUI=";
+    hash = "sha256-sVosxqUUvkZwJIY9FZ9N6xoDyBpSgTLFUmD4B9ymTHs=";
     owner = "LongSoft";
     repo = "uefitool";
     tag = finalAttrs.version;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     zip
     wrapQtAppsHook
   ];
-  patches = lib.optionals stdenv.isDarwin [ ./bundle-destination.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./bundle-destination.patch ];
 
   meta = {
     description = "UEFI firmware image viewer and editor";

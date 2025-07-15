@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to convert hadolint diagnostics into SARIF";
+    description = "CLI tool to convert hadolint diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];

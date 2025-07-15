@@ -188,7 +188,6 @@ stdenv.mkDerivation rec {
     inherit license;
 
     maintainers = with maintainers; [
-      bluescreen303
       offline
     ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;

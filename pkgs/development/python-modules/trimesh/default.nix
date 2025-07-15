@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -9,11 +8,28 @@
   numpy,
   lxml,
   trimesh,
+
+  # optional deps
+  colorlog,
+  manifold3d,
+  charset-normalizer,
+  jsonschema,
+  networkx,
+  svg-path,
+  pycollada,
+  shapely,
+  xxhash,
+  rtree,
+  httpx,
+  scipy,
+  pillow,
+  mapbox-earcut,
+  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.10";
+  version = "4.6.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,14 +38,14 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-tlIsRZLmnRCqVHcLQOh6Jmne3rZGS95QudnvJHMu1qs=";
+    hash = "sha256-IOtdeYLrHj96av6wKupvmO39Zo5oIiCzQeqy0MnEvj0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ numpy ];
 
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = {
     easy =
       [
         colorlog
@@ -64,7 +80,7 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
   pythonImportsCheck = [
     "trimesh"

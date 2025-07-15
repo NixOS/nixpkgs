@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage {
     src
     postPatch
     cargoHash
-    useFetchCargoVendor
     meta
     ;
 

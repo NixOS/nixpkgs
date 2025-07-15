@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
     # Backport Python 3.11 fix to v5 from v6.26
     # https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc
     ./root5-python311-fix.patch
+
+    # Backport Python 3.13 fix to v5 from v6.25
+    # https://github.com/root-project/root/commit/9aa67a863482eef8cf50850b9ac3724e35f58781
+    ./python313-PyCFunction_Call.patch
   ];
 
   # https://github.com/root-project/root/issues/13216

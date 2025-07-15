@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ipylab";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   # This needs to be fetched from Pypi, as we rely on the nodejs build to be skipped,
   # which only happens if ipylab/labextension/style.js is present.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xPB0Sx+W1sRgW5hqpZ68zWRFG/cclIOgGat6UsVlYXA=";
+    hash = "sha256-85hYpNnvbsuC+O/uufa1oBo6ZNTzxPKl/i1YrllN4hI=";
   };
 
   build-system = [

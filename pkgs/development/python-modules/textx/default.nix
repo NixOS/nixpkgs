@@ -85,7 +85,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -108,7 +108,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -128,7 +128,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -148,7 +148,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 
@@ -168,7 +168,7 @@ let
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX sub-command for testing";
-      homepage = textx.homepage + "tree/${version}/" + pathToSourceRoot;
+      homepage = textx.meta.homepage + "tree/${version}/" + pathToSourceRoot;
     };
   };
 in

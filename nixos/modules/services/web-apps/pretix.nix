@@ -533,7 +533,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''
@@ -574,7 +574,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

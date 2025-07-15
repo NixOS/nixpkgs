@@ -6,6 +6,7 @@
   atpublic,
   pdm-pep517,
   pytestCheckHook,
+  pytest-cov-stub,
   sybil,
 }:
 
@@ -22,11 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=flufl --cov-report=term --cov-report=xml" ""
-  '';
-
   nativeBuildInputs = [ pdm-pep517 ];
 
   propagatedBuildInputs = [ atpublic ];
@@ -35,6 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     sybil
   ];
 

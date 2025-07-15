@@ -73,9 +73,8 @@ buildPythonPackage rec {
     parameterized
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   preCheck =
@@ -95,6 +94,9 @@ buildPythonPackage rec {
     [
       # requires network access
       "test_gen_check_output"
+      # broken on Python 3.13.4
+      # FIXME: remove this when fixed upstream
+      "test_simple_format[pep_701]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails on darwin

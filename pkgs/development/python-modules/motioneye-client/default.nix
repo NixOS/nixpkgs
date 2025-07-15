@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -27,8 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"' \
-      --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
+      --replace 'aiohttp = "^3.8.1,!=3.8.2,!=3.8.3"' 'aiohttp = "*"'
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -37,6 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ];

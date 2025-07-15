@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm0755 src/{c2enc,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
+    install -Dm0755 src/{c2enc,c2dec,c2sim,freedv_rx,freedv_tx,cohpsk_*,fdmdv_*,fsk_*,ldpc_*,ofdm_*} -t $out/bin/
   '';
 
   postFixup =
@@ -84,8 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
-    # generate_codebook only built for host platform
-    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     pkgConfigModules = [ "codec2" ];
   };
 })

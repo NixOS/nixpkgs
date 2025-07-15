@@ -20,12 +20,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Commandline diceware, with or without dice, written in Rustlang";
     homepage = "https://gitlab.com/yuvallanger/rusty-diceware";
     changelog = "https://gitlab.com/yuvallanger/rusty-diceware/-/blob/v${version}/CHANGELOG.md?ref_type=heads";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "diceware";
   };
 }

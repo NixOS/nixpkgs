@@ -10,6 +10,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";
   version = "0.6.1";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";

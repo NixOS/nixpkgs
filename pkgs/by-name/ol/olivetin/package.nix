@@ -49,7 +49,7 @@ buildGoModule (
       '';
 
       outputHashMode = "recursive";
-      outputHash = "sha256-KygZ7NqkfhczYy1YMR824Om4NTq06+KHa/jvmsCty3s=";
+      outputHash = "sha256-3CtcjqjPmK//f15aTE4bUA+moaXNz+AeWiopqWf9qq8=";
     };
 
     webui = buildNpmPackage {
@@ -81,18 +81,18 @@ buildGoModule (
 
   {
     pname = "olivetin";
-    version = "2025.6.1";
+    version = "2025.7.13";
 
     src = fetchFromGitHub {
       owner = "OliveTin";
       repo = "OliveTin";
       tag = finalAttrs.version;
-      hash = "sha256-Bd+zxVEhP7LZk74Mfai/MkML1pKlPBKm4kh4jAkC/kQ=";
+      hash = "sha256-/KylnGxamyhrvLNHAIcBUcDWU+Agizg7tlMOv6qnpCI=";
     };
 
     modRoot = "service";
 
-    vendorHash = "sha256-8rPJoB75de2Y56iyIwdI9HPk7OlCgfMPy28TW1i7+sU=";
+    vendorHash = "sha256-mI17WV+U4wbcZhSymX4NnxwvHqQNehubrvH9CxXe4/o=";
 
     ldflags = [
       "-s"

@@ -20,19 +20,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "incus-ui-canonical";
-  version = "0.15.3";
+  version = "0.17.1.0";
 
   src = fetchFromGitHub {
     owner = "zabbly";
     repo = "incus-ui-canonical";
     # only use tags prefixed by incus- they are the tested fork versions
     tag = "incus-${version}";
-    hash = "sha256-FsDdALcIXJFo0ScOA8YEzulefp8IfOSi2ZClrtcPo24=";
+    hash = "sha256-dAYcput4qGLQT6G10O52UUrQ7HN9kXQFgZlm5QN4xI0=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-nZyk/ZrTAOyL+A3oMUHY52PIffVZxMG2tvh4FM/A+w0=";
+    hash = "sha256-or/lPf6pamFVJnSWU9CLTss9s6amMNd9A7H8CAFJ6RU=";
   };
 
   patchPhase = ''

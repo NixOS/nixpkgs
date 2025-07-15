@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-pg8u+1C68ilg0uhszQnsN1bRbniJd39yQHujerQx+mI=";
 
-  meta = with lib; {
+  meta = {
     description = "Format json into table view";
     mainProgram = "tv";
     homepage = "https://github.com/uzimaru0000/tv";
     changelog = "https://github.com/uzimaru0000/tv/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

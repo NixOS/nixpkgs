@@ -69,14 +69,20 @@ let
         mkdir $out/plugins
         ${lib.optionalString (plugins != { }) ''
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (name: value: "ln -s ${value} $out/plugins/${name}") plugins
+            lib.mapAttrsToList (
+              name: value:
+              "ln -s ${value} $out/plugins/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
+            ) plugins
           )}
         ''}
 
         mkdir $out/flavors
         ${lib.optionalString (flavors != { }) ''
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (name: value: "ln -s ${value} $out/flavors/${name}") flavors
+            lib.mapAttrsToList (
+              name: value:
+              "ln -s ${value} $out/flavors/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
+            ) flavors
           )}
         ''}
 

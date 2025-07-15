@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "terramate";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
     rev = "v${version}";
-    hash = "sha256-NN7M4ZJ67YwguDzSHkluW1wbwVbn+7otMQm+ot2el5I=";
+    hash = "sha256-op8mwCofnktV+kkvh4mO5tfLrynlxGbQzOxq6JR7HbE=";
   };
 
-  vendorHash = "sha256-Ldl4TGmfMLk9DJgoVUYCpjX5TyAwZyCSrOKdb6uo4eM=";
+  vendorHash = "sha256-u9eXi7FjMsXm0H0y7Gs/Wu2I8tp4rRLxtjUxrrHJkEU=";
 
   # required for version info
   nativeBuildInputs = [ git ];
@@ -35,12 +35,12 @@ buildGoModule rec {
     "./e2etests/core"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Adds code generation, stacks, orchestration, change detection, data sharing and more to Terraform";
     homepage = "https://github.com/terramate-io/terramate";
     changelog = "https://github.com/terramate-io/terramate/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       dit7ya
       asininemonkey
     ];

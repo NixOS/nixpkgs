@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "3.0.3";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AuHau";
     repo = "toggl-cli";
     tag = "v${version}";
-    hash = "sha256-x73gs0L+/m1cJPRkzZfna5KxU2KNjsqeUCyFo2JjkdE=";
+    hash = "sha256-d/0w6VCth1TszolqkaWxHs6SLNiRg3sZj3H4CY+yPdw=";
   };
 
   env.PBR_VERSION = version;

@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.5";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-0r5Dlbj1A7Dr9LLYHbkMNalwUKNY7iH+YqDftm5dVSI=";
+    hash = "sha256-zJ4tN8JahxzqN1ILKNUyIHsMFnD7EPxU1oBx9j9SQ6I=";
   };
 
   patches = [
@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     libuuid
     popt
   ] ++ lib.optional (!withInternalArgon2) libargon2;
+
+  enableParallelBuilding = true;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.

@@ -2,26 +2,27 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
   stdenv,
 }:
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.24.2";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    hash = "sha256-BFezzZpkF88xYsOcn3pI2zsH+OTRLvuwqa3CaU9Fk44=";
+    hash = "sha256-bp8pYWS3Vpg0R2Xfe5agDTENzLGu9r43BgORa8VrP+Y=";
   };
+
+  patches = [
+    ./disable-fortify.diff
+  ];
 
   vendorHash = null;
 
   subPackages = [ "cmd/dlv" ];
-
-  nativeBuildInputs = [ makeWrapper ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -38,10 +39,6 @@ buildGoModule rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
-    # fortify source breaks build since delve compiles with -O0
-    wrapProgram $out/bin/dlv \
-      --prefix disableHardening " " fortify
-
     # add symlink for vscode golang extension
     # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
     ln $out/bin/dlv $out/bin/dlv-dap

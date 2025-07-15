@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "time_decode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Timestamp and date decoder";
     homepage = "https://github.com/digitalsleuth/time_decode";
     changelog = "https://github.com/digitalsleuth/time_decode/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "time-decode";
   };
 }

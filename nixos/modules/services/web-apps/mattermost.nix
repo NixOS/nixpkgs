@@ -840,7 +840,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = mkMerge [
           [ "network.target" ]
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.service" ])
+          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
           (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
         ];
         requires = after;
@@ -946,7 +946,7 @@ in
         ];
 
         unitConfig.JoinsNamespaceOf = mkMerge [
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.service" ])
+          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
           (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
         ];
       };

@@ -1,84 +1,118 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq gnupg
+#!nix-shell -i bash -p jq curl
 #shellcheck shell=bash
-
 set -euo pipefail
+
+# For Linux version checks we rely on Repology API to check 1Password managed Arch User Repository.
+REPOLOGY_PROJECT_URI="https://repology.org/api/v1/project/1password"
+
+# For Darwin version checks we query the same endpoint 1Password 8 for Mac queries.
+# This is the base URI. For stable channel an additional path of "N", for beta channel, "Y" is required.
+APP_UPDATES_URI_BASE="https://app-updates.agilebits.com/check/2/99/aarch64/OPM8/en/0/A1"
+
+CURL=(
+  "curl" "--silent" "--show-error" "--fail"
+  "--proto" "=https" # enforce https
+  "--tlsv1.2" # do not accept anything below tls 1.2
+  "-H" "user-agent: nixpkgs#_1password-gui update.sh" # repology requires a descriptive user-agent
+)
+
+JQ=(
+  "jq"
+  "--raw-output"
+  "--exit-status" # exit non-zero if no output is produced
+)
+
+
+read_local_versions() {
+  local channel="$1"
+
+  while IFS='=' read -r key value; do
+    local_versions["${key}"]="${value}"
+  done < <(jq -r --arg channel "${channel}" '
+    .[$channel] | to_entries[] | .key as $os | .value.version as $version |
+    "\($channel)/\($os)=\($version)"
+  ' sources.json)
+}
+
+read_remote_versions() {
+  local channel="$1"
+
+  if [[ ${channel} == "stable" ]]; then
+    remote_versions["stable/linux"]=$(
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
+        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password" and .status == "newest") | .version'
+    )
+
+    remote_versions["stable/darwin"]=$(
+      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/N" \
+        | "${JQ[@]}" 'select(.available == "1") | .version'
+    )
+  else
+    remote_versions["beta/linux"]=$(
+      # AUR version string uses underscores instead of dashes for betas.
+      # We fix that with a `sub` in jq query.
+      "${CURL[@]}" "${REPOLOGY_PROJECT_URI}" \
+        | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password-beta") | .version | sub("_"; "-")'
+    )
+
+    remote_versions["beta/darwin"]=$(
+      "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" \
+        | "${JQ[@]}" 'select(.available == "1") | .version'
+    )
+  fi
+}
+
+render_versions_json() {
+  local key value
+
+  for key in "${!local_versions[@]}"; do
+    value="${local_versions[${key}]}"
+    echo "${key}"
+    echo "${value}"
+  done \
+    | jq -nR 'reduce inputs as $i ({}; . + { $i: input })'
+}
+
 
 cd -- "$(dirname "${BASH_SOURCE[0]}")"
 
-mk_url() {
-  local \
-    base_url="https://downloads.1password.com" \
-    os="$1" \
-    channel="$2" \
-    arch="$3" \
-    version="$4"
+attr_path=${UPDATE_NIX_ATTR_PATH}
+case "${attr_path}" in
+  _1password-gui) channel="stable" ;;
+  _1password-gui-beta) channel="beta" ;;
+  *)
+    echo "Unknown attribute path ${attr_path}" >&2
+    exit 1
+esac
 
-  if [[ ${os} == "linux" ]]; then
-    if [[ ${arch} == "x86_64" ]]; then
-      ext="x64.tar.gz"
-    else
-      ext="arm64.tar.gz"
-    fi
-    url="${base_url}/${os}/tar/${channel}/${arch}/1password-${version}.${ext}"
-  else
-    ext="${arch}.zip"
-    url="${base_url}/mac/1Password-${version}-${ext}"
+declare -A local_versions remote_versions
+declare -a new_version_available=()
+read_local_versions "${channel}"
+read_remote_versions "${channel}"
+for i in "${!remote_versions[@]}"; do
+  if [[ "${local_versions[$i]}" != "${remote_versions[$i]}" ]]; then
+    old_version="${local_versions[$i]}"
+    new_version="${remote_versions[$i]}"
+    new_version_available+=("$i/$new_version")
   fi
-
-  echo "${url}"
-}
-
-cleanup() {
-  if [[ -d ${TMP_GNUPGHOME-} ]]; then
-    rm -r "${TMP_GNUPGHOME}"
-  fi
-
-  if [[ -f ${JSON_HEAP-} ]]; then
-    rm "${JSON_HEAP}"
-  fi
-}
-
-trap cleanup EXIT
-
-# Get channel versions from versions.json
-declare -A versions
-while IFS='=' read -r key value; do
-  versions["${key}"]="${value}"
-done < <(jq -r 'to_entries[] | "\(.key)=\(.value)"' versions.json)
-
-TMP_GNUPGHOME=$(mktemp -dt 1password-gui.gnupghome.XXXXXX)
-export GNUPGHOME="${TMP_GNUPGHOME}"
-gpg --no-default-keyring --keyring trustedkeys.kbx \
-  --keyserver keyserver.ubuntu.com \
-  --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22
-
-JSON_HEAP=$(mktemp -t 1password-gui.jsonheap.XXXXXX)
-for channel in stable beta; do
-  for os in linux darwin; do
-    for arch in x86_64 aarch64; do
-      version="${versions[${channel}-${os}]}"
-      url=$(mk_url ${os} ${channel} ${arch} ${version})
-      nix store prefetch-file --json "${url}" | jq "
-        {
-          \"${channel}\": {
-             \"${arch}-${os}\": {
-               \"url\": \"${url}\",
-               \"hash\": .hash,
-               \"storePath\": .storePath
-             }
-           }
-        }" >> "${JSON_HEAP}"
-
-      # For some reason 1Password PGP signs only Linux binaries.
-      if [[ ${os} == "linux" ]]; then
-         gpgv \
-           $(nix store prefetch-file --json "${url}.sig" | jq -r .storePath) \
-           $(jq -r --slurp ".[-1].[].[].storePath" "${JSON_HEAP}")
-      fi
-    done
-  done
 done
 
-# Combine heap of hash+url objects into a single JSON object.
-jq --slurp 'reduce .[] as $x ({}; . * $x) | del (.[].[].storePath)' "${JSON_HEAP}" > sources.json
+if [[ ${#new_version_available[@]} -eq 0 ]]; then
+  # up to date
+  exit
+fi
+
+./update-sources.py "${new_version_available[@]}"
+cat <<EOF
+[
+  {
+    "attrPath": "${attr_path}",
+    "oldVersion": "${old_version}",
+    "newVersion": "${new_version}",
+    "files": [
+      "$PWD/sources.json"
+    ]
+  }
+]
+EOF

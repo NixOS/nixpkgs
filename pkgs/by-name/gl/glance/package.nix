@@ -9,18 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "glance";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = "glance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o2Yom40HbNKe3DMMxz0Mf2gG8zresgU52Odpj2H7ZPU=";
+    hash = "sha256-4su8CGtS4wqWcQ3yTvZiUHOnTMLICS3XIG8kS+bJ3LQ=";
   };
 
-  patches = [ ./update_purego.patch ];
-
-  vendorHash = "sha256-esPtCg63A40mX9hADOhEa+NjNk+9MI/0qZG3uE91qxg=";
+  vendorHash = "sha256-Ek1LVCSEJzoI0nVu6zVsSbd/Jzv6/pyMIm991ebvkZY=";
 
   ldflags = [
     "-s"

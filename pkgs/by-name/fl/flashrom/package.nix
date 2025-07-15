@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm644 $NIX_BUILD_TOP/$sourceRoot/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules

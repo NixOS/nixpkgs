@@ -24,12 +24,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Next-generation crawling and spidering framework";
     homepage = "https://github.com/projectdiscovery/katana";
     changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "katana";
   };
 }

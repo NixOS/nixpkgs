@@ -1,28 +1,28 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
   fixup-yarn-lock,
   makeWrapper,
   nodejs,
   writableTmpDirAsHomeHook,
-  stdenv,
   yarn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaml-language-server";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "yaml-language-server";
-    tag = version;
-    hash = "sha256-YGPktMZxYi6eihCDc8JIfN/Ht2uu3wGKoKPJWlDKu+g=";
+    tag = finalAttrs.version;
+    hash = "sha256-HBhoadWIebeuHZXSdnFiPMSmDla77yhrTNMdz8si88c=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-2OVxvvijnfB8Bytgoaybyx4p66nD/aahtyjxLf8womE=";
   };
 
@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    changelog = "https://github.com/redhat-developer/yaml-language-server/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/redhat-developer/yaml-language-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Language Server for YAML Files";
     homepage = "https://github.com/redhat-developer/yaml-language-server";
     license = lib.licenses.mit;
     mainProgram = "yaml-language-server";
     maintainers = [ ];
   };
-}
+})

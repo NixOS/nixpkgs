@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-CpVci0nw/6Y6uyQX6iRV9E7uXzdZ2fzYIelYxsc+tI0=";
 
-  meta = with lib; {
+  meta = {
     description = "Npm scripts runner written in Rust";
     mainProgram = "dum";
     homepage = "https://github.com/egoist/dum";
     changelog = "https://github.com/egoist/dum/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

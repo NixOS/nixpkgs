@@ -705,8 +705,8 @@ in
         pgsql = config.services.postgresql;
       in
       lib.mkIf databaseActuallyCreateLocally {
-        after = [ "postgresql.service" ];
-        bindsTo = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
+        bindsTo = [ "postgresql.target" ];
         wantedBy = [ "discourse.service" ];
         partOf = [ "discourse.service" ];
         path = [
@@ -732,16 +732,16 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "redis-discourse.service"
-        "postgresql.service"
-        "discourse-postgresql.service"
+        "postgresql.target"
+        "discourse-postgresql.target"
       ];
       bindsTo =
         [
           "redis-discourse.service"
         ]
         ++ lib.optionals (cfg.database.host == null) [
-          "postgresql.service"
-          "discourse-postgresql.service"
+          "postgresql.target"
+          "discourse-postgresql.target"
         ];
       path = cfg.package.runtimeDeps ++ [
         postgresqlPackage

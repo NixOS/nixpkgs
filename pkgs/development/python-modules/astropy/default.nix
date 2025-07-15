@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
 
@@ -62,6 +61,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-OS/utEOyQ3zUwuBkGmXg8VunkeFI6bHl7X3n38s45GA=";
   };
+
+  patches = [
+    ./test_z_at_value_numpyvectorize.patch
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
@@ -142,7 +145,7 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd "$out"
   '';
-  pytestFlagsArray = [
+  pytestFlags = [
     "--hypothesis-profile=ci"
   ];
   postCheck = ''

@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nuclei-templates";
-  version = "10.2.2";
+  version = "10.2.4";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei-templates";
     tag = "v${version}";
-    hash = "sha256-FWOfh/W2Hy01Z7oEItLtWidbvEfwVBDU9KAaCoFO0AI=";
+    hash = "sha256-RBZjtKkUk+kOob2VBFh1rPrVuUsIBMAetUhMClOZY6s=";
   };
 
   installPhase = ''
@@ -25,12 +25,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Templates for the nuclei engine to find security vulnerabilities";
     homepage = "https://github.com/projectdiscovery/nuclei-templates";
     changelog = "https://github.com/projectdiscovery/nuclei-templates/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.all;
   };
 }

@@ -9,6 +9,7 @@
 
   # dependencies
   deprecated,
+  einops,
   matplotlib,
   nibabel,
   numpy,
@@ -28,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.6";
+  version = "0.20.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-240MM9w0AdhaUp70JrkmKGQI1abrFrbfybCF4wYX8fg=";
+    hash = "sha256-kZCbQGIkWmlXl25UviPrSDo0swCjWnvTTkBnxGI0Y7U=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   dependencies = [
     deprecated
+    einops
     humanize
     nibabel
     numpy

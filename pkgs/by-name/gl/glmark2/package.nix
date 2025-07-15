@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for binary in $out/bin/glmark2*; do
       wrapProgram $binary \
-        --set LD_LIBRARY_PATH ${libGL}/lib
+        --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
     done
   '';
 

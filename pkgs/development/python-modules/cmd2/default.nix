@@ -7,37 +7,26 @@
   fetchPypi,
   glibcLocales,
   gnureadline,
-  importlib-metadata,
   pyperclip,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
-  typing-extensions,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.5.11";
+  version = "2.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MKDThQIfvkpBFmcoReVpW75W62gvkJYGZ3Y5T5VKdCk=";
+    hash = "sha256-ZQpYkr8psjPT1ndbXjzIE2SM/w15E09weYH2a6rtn0I=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Fake the impure dependencies pbpaste and pbcopy
-    mkdir bin
-    echo '#!${stdenv.shell}' > bin/pbpaste
-    echo '#!${stdenv.shell}' > bin/pbcopy
-    chmod +x bin/{pbcopy,pbpaste}
-    export PATH=$(realpath bin):$PATH
-  '';
 
   build-system = [ setuptools-scm ];
 
@@ -48,7 +37,7 @@ buildPythonPackage rec {
     wcwidth
   ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   nativeCheckInputs = [
     glibcLocales

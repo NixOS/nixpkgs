@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oci2git";
-  version = "0.1.4";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Virviil";
     repo = "oci2git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vz4OqRg7CYliAswQWtzEWUb7Z10fwxDhYrvQ3q4ZtPA=";
+    hash = "sha256-+y2sWYoEuGGOYBk3E1b+2G9eF0mGSABHi92cCm+v590=";
   };
 
-  cargoHash = "sha256-Aj93f+L4h1FxHpWehD11sTPXTFsg2B9rJ96mSJ/VVQ4=";
+  cargoHash = "sha256-khl56908go19CV2XlwzH5xE4BNzQW8U7D6ce9OZgovA=";
 
   nativeBuildInputs = [
     pkg-config

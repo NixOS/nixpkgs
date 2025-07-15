@@ -11,18 +11,18 @@
 let
   pname = "1password";
 
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-  hostOs = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
-  version = versions."${channel}-${hostOs}" or (throw "unknown channel-os ${channel}-${hostOs}");
-
+  hostOs = stdenv.hostPlatform.parsed.kernel.name;
+  hostArch = stdenv.hostPlatform.parsed.cpu.name;
   sources = builtins.fromJSON (builtins.readFile ./sources.json);
 
+  sourcesChan = sources.${channel} or (throw "unsupported channel ${channel}");
+  sourcesChanOs = sourcesChan.${hostOs} or (throw "unsupported OS ${hostOs}");
+  sourcesChanOsArch =
+    sourcesChanOs.sources.${hostArch} or (throw "unsupported architecture ${hostArch}");
+
+  inherit (sourcesChanOs) version;
   src = fetchurl {
-    inherit
-      (sources.${channel}.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"))
-      url
-      hash
-      ;
+    inherit (sourcesChanOsArch) url hash;
   };
 
   meta = {
@@ -37,7 +37,12 @@ let
       sebtm
       bdd
     ];
-    platforms = builtins.attrNames sources.${channel};
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "1password";
   };
 

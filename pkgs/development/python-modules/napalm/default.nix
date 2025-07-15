@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -45,6 +46,16 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/napalm-automation/napalm/commit/7e509869f7cb56892380629d1cb5f99e3e2c6190.patch";
+      hash = "sha256-vJDACa5SmSJ/rcmKEow4Prqju/jYcCrzGpTdEYsAPq0=";
+      includes = [
+        "napalm/ios/ios.py"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

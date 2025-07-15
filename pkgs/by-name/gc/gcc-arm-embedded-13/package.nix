@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./info-fix.patch
   ];
 
-  nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     makeBinaryWrapper
     darwin.sigtool
   ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find $out -type f | while read f; do
         patchelf "$f" > /dev/null 2>&1 || continue
         patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
         } "$f" || true
       done
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
       find "$out" -executable -type f | while read executable; do
         ( \
           install_name_tool \

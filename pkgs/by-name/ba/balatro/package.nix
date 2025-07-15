@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = requireFile {
     name = "Balatro-${finalAttrs.version}.exe";
     url = "https://store.steampowered.com/app/2379780/Balatro/";
-    # Use `nix hash file --sri --type sha256` to get the correct hash
+    # Use `nix --extra-experimental-features nix-command hash file --sri --type sha256` to get the correct hash
     hash = "sha256-DXX+FkrM8zEnNNSzesmHiN0V8Ljk+buLf5DE5Z3pP0c=";
   };
 

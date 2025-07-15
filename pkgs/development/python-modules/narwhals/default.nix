@@ -69,9 +69,8 @@ buildPythonPackage rec {
     "test_unary_two_elements"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

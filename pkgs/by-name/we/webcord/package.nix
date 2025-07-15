@@ -80,7 +80,7 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A Discord and SpaceBar electron-based client implemented without Discord API";
+    description = "Discord and SpaceBar electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";

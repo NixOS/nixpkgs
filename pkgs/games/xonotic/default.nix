@@ -64,7 +64,6 @@ let
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      astsmtl
       zalakain
     ];
     platforms = lib.platforms.linux;

@@ -8,6 +8,7 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -16,6 +17,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
   version = "1.1.14";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
@@ -33,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     gobject-introspection
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -56,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
-    pytest-cov
+    pytest-cov-stub
   ];
 
   # the -cli symlink is just to maintain compabilility with older versions where

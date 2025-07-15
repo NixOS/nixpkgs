@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to remotely dump secrets from the Windows registry";
     homepage = "https://github.com/jfjallid/go-secdump";
     changelog = "https://github.com/jfjallid/go-secdump/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "go-secdump";
     platforms = lib.platforms.linux;
   };

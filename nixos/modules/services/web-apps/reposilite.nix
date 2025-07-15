@@ -398,7 +398,7 @@ in
       after =
         [ "network.target" ]
         ++ (lib.optional useMySQL "mysql.service")
-        ++ (lib.optional usePostgres "postgresql.service");
+        ++ (lib.optional usePostgres "postgresql.target");
 
       script =
         lib.optionalString (cfg.keyPasswordFile != null && cfg.settings.keyPassword == null) ''

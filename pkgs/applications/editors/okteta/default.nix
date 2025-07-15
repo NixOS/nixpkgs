@@ -19,11 +19,11 @@
 
 mkDerivation rec {
   pname = "okteta";
-  version = "0.26.21";
+  version = "0.26.22";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-tuYvcfcxdX1nzTR603rEYIgXLEjnZH3mDRJUD/BVRJs=";
+    sha256 = "sha256-vi7XhMj/PaMeK4V6FxU7Yi7XyWMaOBUenafZPpaP+n0=";
   };
 
   nativeBuildInputs = [

@@ -21,8 +21,8 @@ let
   pname = "photoprism";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "photoprism";
+    repo = "photoprism";
     rev = version;
     hash = "sha256-tJA1Q8kcX4UYDCV+rmHyd5gfEU8WkoaqNfx1/0Iy3l8=";
   };
@@ -54,7 +54,7 @@ let
     hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
-  assets_path = "$out/share/${pname}";
+  assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;

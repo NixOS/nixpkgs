@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/puddinging/rime-cli";
     changelog = "https://github.com/puddinging/rime-cli/releases/tag/v${version}";
     description = "Command line tool to add customized vocabulary for Rime IME";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "rime-cli";
   };
 }

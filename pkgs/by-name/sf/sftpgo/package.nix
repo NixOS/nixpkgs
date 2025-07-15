@@ -48,7 +48,7 @@ buildGoModule rec {
 
   passthru.tests = nixosTests.sftpgo;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/drakkan/sftpgo";
     changelog = "https://github.com/drakkan/sftpgo/releases/tag/v${version}";
     description = "Fully featured and highly configurable SFTP server";
@@ -59,11 +59,14 @@ buildGoModule rec {
       local filesystem, encrypted local filesystem, S3 (compatible) Object Storage,
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       unfreeRedistributable
     ]; # Software is AGPLv3, web UI is unfree
-    maintainers = with maintainers; [ thenonameguy ];
+    maintainers = with lib.maintainers; [
+      thenonameguy
+      ryan4yin
+    ];
     mainProgram = "sftpgo";
   };
 }

@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool suite for hunting suspicious targets, expose domains and phishing discovery";
     homepage = "https://github.com/HuntDownProject/HEDnsExtractor";
     changelog = "https://github.com/HuntDownProject/HEDnsExtractor/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hednsextractor";
   };
 }

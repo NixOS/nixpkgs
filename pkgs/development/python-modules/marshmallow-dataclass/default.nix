@@ -38,10 +38,9 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [

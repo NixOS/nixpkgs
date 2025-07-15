@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       fi
 
       DOWNLOAD_URL="https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_$NEW_VERSION_DATE.tar.gz"
-      NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
+      NIX_HASH=$(nix --extra-experimental-features nix-command hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
 
       update-source-version "dynamodb-local" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
     '';

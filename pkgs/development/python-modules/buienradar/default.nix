@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_readdata3"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--snapshot-warn-unused"
   ];
 

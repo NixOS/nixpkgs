@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.23.1";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-aKyuOA/N5QPv6NoN6OFNSFMuN4+8XMpglVtoDFDJZBs=";
+    hash = "sha256-S5y717M3rGGO39TOh1X5yePvdcF6ct1Jk51/bbM6X6M=";
   };
 
   build-system = [
@@ -116,9 +116,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
-    "tests/core/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
+    "tests/pandas/test_docs_setting_column_widths.py" # tests doc generation, requires sphinx
     "tests/modin" # requires modin, not in nixpkgs
-    "tests/mypy/test_static_type_checking.py" # some typing failures
+    "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
   ];
 

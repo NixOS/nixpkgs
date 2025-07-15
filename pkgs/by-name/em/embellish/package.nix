@@ -15,6 +15,7 @@
   gjs,
   gnome-autoar,
   libsoup_3,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "embellish";
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-autoar
     libsoup_3
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "User-friendly application designed for managing Nerd Fonts on your system";

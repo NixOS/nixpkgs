@@ -28,7 +28,7 @@ buildDotnetModule rec {
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
-  meta = with lib; {
+  meta = {
     description = "Vehicle service records and maintainence tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
@@ -37,9 +37,9 @@ buildDotnetModule rec {
     '';
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lyndeno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lyndeno ];
     mainProgram = "CarCareTracker";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -19,6 +19,7 @@
   procps,
   gtksourceview4,
   bash,
+  udevCheckHook,
   nixosTests,
   # Change the default log level to debug for easier debugging of package issues
   withDebugLogLevel ? false,
@@ -38,6 +39,7 @@ in
 (buildPythonApplication rec {
   pname = "input-remapper";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
@@ -65,6 +67,7 @@ in
     glib
     gobject-introspection
     pygobject3
+    udevCheckHook
   ] ++ maybeXmodmap;
 
   dependencies = [

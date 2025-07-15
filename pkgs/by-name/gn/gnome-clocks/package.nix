@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://apps.gnome.org/Clocks/";
-    description = "A simple and elegant clock application for GNOME";
+    description = "Simple and elegant clock application for GNOME";
     longDescription = ''
       A simple and elegant clock application. It includes world clocks, alarms,
       a stopwatch, and timers.

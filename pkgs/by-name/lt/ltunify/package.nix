@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -17,6 +18,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-9avri/2H0zv65tkBsIi9yVxx3eVS9oCkVCCFdjXqSgI=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   makeFlags = [
     "DESTDIR=$(out)"

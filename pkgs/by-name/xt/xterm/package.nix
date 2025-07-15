@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "397";
+  version = "400";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-Lpt0K5y6ROzsWAdOUTI39s1tWSPxc3yzak5WJfSuhmI=";
+    hash = "sha256-7thOzAXvpj1YnFoqP1qUfhS3mNA7U0LMaINxD2SPGgY=";
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do

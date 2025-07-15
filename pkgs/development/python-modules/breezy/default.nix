@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.10";
+  version = "3.3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = "breezy";
     rev = "brz-${version}";
-    hash = "sha256-AzMDab8SUJ8JJukqxVsqf7HdCTcVMLyFFTInPwAmSqs=";
+    hash = "sha256-V/SnzpslFGjISg+YxViFa+Lpnn0+9enPA3xmvwfXnUM=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };

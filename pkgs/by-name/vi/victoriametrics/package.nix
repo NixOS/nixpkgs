@@ -9,18 +9,17 @@
   withVmAuth ? true, # HTTP proxy for authentication
   withBackupTools ? true, # vmbackup, vmrestore
   withVmctl ? true, # vmctl is used to migrate time series
-  withVictoriaLogs ? true, # logs server
 }:
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.117.1";
+  version = "1.121.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y3Ai5e9bJnGlWfxOMWMhesJ/eHrklSbR+YmR1EgzFS0=";
+    hash = "sha256-hCZU6O3synVayg253Cbsonzad3ZBMx1B/yJwBJzU+X0=";
   };
 
   vendorHash = null;
@@ -43,12 +42,6 @@ buildGoModule (finalAttrs: {
     ++ lib.optionals withBackupTools [
       "app/vmbackup"
       "app/vmrestore"
-    ]
-    ++ lib.optionals withVictoriaLogs [
-      "app/victoria-logs"
-      "app/vlinsert"
-      "app/vlselect"
-      "app/vlstorage"
     ];
 
   postPatch = ''
@@ -78,8 +71,11 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) victoriametrics;
+  passthru = {
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {

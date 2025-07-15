@@ -12,7 +12,6 @@
   cargo-auditable,
   buildPackages,
   rustc,
-  libiconv,
   windows,
 }:
 
@@ -23,6 +22,7 @@ lib.extendMkDerivation {
     "depsExtraArgs"
     "cargoUpdateHook"
     "cargoLock"
+    "useFetchCargoVendor"
   ];
 
   extendDrvArgs =
@@ -135,10 +135,7 @@ lib.extendMkDerivation {
           cargo
         ];
 
-      buildInputs =
-        buildInputs
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-        ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
 

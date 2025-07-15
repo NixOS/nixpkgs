@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.23.2";
+  version = "0.23.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     tag = "v${version}";
-    hash = "sha256-ThAYxOgYa7IQEbizdH2b2oTulJu9oX9V/7v4o8vxXQM=";
+    hash = "sha256-7wjNOwrTXhieUI7Etn6AdiNedoPKSIADtC7dc4Bdlxc=";
   };
 
   build-system = [

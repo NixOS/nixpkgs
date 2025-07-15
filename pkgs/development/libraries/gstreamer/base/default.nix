@@ -153,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!enableX11) [
       "-Dx11=disabled"
       "-Dxi=disabled"
+      "-Dxshm=disabled"
       "-Dxvideo=disabled"
     ]
     # TODO How to disable Wayland?

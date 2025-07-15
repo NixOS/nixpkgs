@@ -13,6 +13,7 @@ let
   pyparsing = buildPythonPackage rec {
     pname = "pyparsing";
     version = "2.4.7";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "pyparsing";

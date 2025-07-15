@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       "-Wno-error=cpp"

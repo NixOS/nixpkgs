@@ -19,14 +19,14 @@ let
     }:
     stdenv.mkDerivation rec {
       inherit pname;
-      version = "3.48.0";
+      version = "3.50.1";
 
       # nixpkgs-update: no auto update
       src =
         assert version == sqlite.version;
         fetchurl {
           url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
-          hash = "sha256-LXsDK2/f6MRCqoCfhQaHqB0GOB3uzXvjMSYB0oYS5kA=";
+          hash = "sha256-kJBZd3PGCknK67PBrFfbYm+sTZfLUYkIFai1KaTZw9w=";
         };
 
       nativeBuildInputs = [ unzip ];

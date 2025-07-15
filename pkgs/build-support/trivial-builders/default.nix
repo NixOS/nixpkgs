@@ -671,8 +671,8 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -1037,6 +1037,7 @@ rec {
             "tag"
             "url"
             "outputHash"
+            "outputHashAlgo"
           ] src
         );
       in
@@ -1061,7 +1062,7 @@ rec {
         // (optionalAttrs (extraPassthru != { } || src ? passthru) {
           passthru = extraPassthru // src.passthru or { };
         })
-        # Forward any additional arguments to the derviation
+        # Forward any additional arguments to the derivation
         // (removeAttrs args [
           "src"
           "name"

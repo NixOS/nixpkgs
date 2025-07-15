@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.61";
+  version = "0.2.63";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
     tag = version;
-    hash = "sha256-uOTsfXYXlbOXoP55AJ7QRBebOR7B441p5jkSiRyqQtI=";
+    hash = "sha256-yIkMhG5RxBNwdp8Cq5OzqZfOKABULe5irexHHHArZzM=";
   };
 
   build-system = [ setuptools ];

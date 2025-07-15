@@ -59,13 +59,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.44.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-cLN1G/Rp1Euc6pp0V/Xd4qmo3x0b+rnNU8PDP5j/PTE=";
+    hash = "sha256-xe86u40zW1+2O4s6e64HlpxiaLIRpjgKLPNnSEGlioQ=";
   };
 
   outputs = [
@@ -245,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
-    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+    substituteInPlace completions/fastfetch.{bash,fish,zsh} --replace-fail python3 '${python3.interpreter}'
   '';
 
   postInstall =
@@ -265,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
+    description = "Actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

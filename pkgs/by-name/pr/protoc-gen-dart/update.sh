@@ -25,6 +25,7 @@ src="$(nix-build --no-link "$NIXPKGS_DIR" -A protoc-gen-dart.src)/protoc_plugin"
 cp $src/pubspec.* .
 
 if ! test -f pubspec.lock; then
+  sed -i '/resolution: workspace/d' pubspec.yaml
   dart pub update
 fi
 

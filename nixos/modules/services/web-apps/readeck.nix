@@ -69,6 +69,7 @@ in
         ExecStart = "${lib.getExe cfg.package} serve -config ${configFile}";
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
+        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = true;

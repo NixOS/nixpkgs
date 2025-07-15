@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   mock,
   six,
   isPyPy,
@@ -21,8 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "rednose = 1" "" \
-      --replace-fail "--cov=sure" ""
+      --replace "rednose = 1" ""
   '';
 
   build-system = [ setuptools ];
@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     mock
   ];
 

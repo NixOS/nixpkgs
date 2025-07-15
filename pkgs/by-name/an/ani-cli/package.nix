@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R/YQ02ctTcAEzrVyWlaCHi1YW82iPrMBbbMNP21r0p8=";
   };
 

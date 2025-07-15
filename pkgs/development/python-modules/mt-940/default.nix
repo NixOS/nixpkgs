@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   pyyaml,
   setuptools,
@@ -22,16 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-t6FOMu+KcEib+TZAv5uVAzvrUSt/k/RQn28jpdAY5Y0=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-    sed -i "/--no-cov/d" pytest.ini
-  '';
-
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pyyaml
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "mt940" ];

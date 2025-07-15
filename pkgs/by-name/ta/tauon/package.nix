@@ -33,12 +33,14 @@ let
   lynxpresence = python3Packages.buildPythonPackage rec {
     pname = "lynxpresence";
     version = "4.4.1";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
       hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
     };
+
+    build-system = with python3Packages; [ setuptools ];
 
     doCheck = false; # tests require internet connection
     pythonImportsCheck = [ "lynxpresence" ];
@@ -156,13 +158,13 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 extra/tauonmb{,-symbolic}.svg $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux desktop music player from the future";
     mainProgram = "tauon";
     homepage = "https://tauonmusicbox.rocks/";
     changelog = "https://github.com/Taiko2k/Tauon/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ jansol ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ jansol ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

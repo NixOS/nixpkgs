@@ -32,7 +32,7 @@ buildGoModule rec {
 
   postInstall = ''
     rm -f $out/bin/AndroidNDKBuild
-    ln -s $out/bin/BaiduPCS-Go $out/bin/baidupcs-go
+    ln -s $out/bin/BaiduPCS-Go $out/bin/baidupcs-go || true
   '';
 
   postVersionCheck = ''

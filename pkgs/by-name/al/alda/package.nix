@@ -10,12 +10,12 @@
 }:
 let
   pname = "alda";
-  version = "2.3.1";
+  version = "2.3.2";
   src = fetchFromGitHub {
     owner = "alda-lang";
     repo = "alda";
     tag = "release-${version}";
-    hash = "sha256-//VfegK8wkGKSpvtsNTEQqbVJkcucNiamoNIXaEBLb8=";
+    hash = "sha256-qOEYBWU9xL62MyLSsJ0wtNea2eRhd/3ZT27j3gmNzQI=";
   };
   license = lib.licenses.epl20;
 

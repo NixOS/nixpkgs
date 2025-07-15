@@ -25,7 +25,7 @@ let
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = config.system.modulesTree;
     firmware = config.hardware.firmware;
-    allowMissing = false;
+    allowMissing = config.boot.initrd.allowMissingModules;
     inherit (config.boot.initrd) extraFirmwarePaths;
   };
 
@@ -768,7 +768,7 @@ in
             source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
           ) (attrValues config.boot.initrd.secrets);
         message = ''
-          boot.loader.initrd.secrets values must be unquoted paths when
+          boot.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd
           secrets, e.g.:
 
@@ -783,7 +783,14 @@ in
     ];
 
     system.build = mkMerge [
-      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+      {
+        inherit
+          bootStage1
+          initialRamdiskSecretAppender
+          extraUtils
+          modulesClosure
+          ;
+      }
 
       # generated in nixos/modules/system/boot/systemd/initrd.nix
       (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })

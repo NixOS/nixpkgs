@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "megatools";
-  version = "1.11.1";
+  version = "1.11.4";
 
   src = fetchgit {
-    url = "https://megous.com/git/megatools";
+    url = "https://xff.cz/git/megatools";
     rev = version;
-    sha256 = "sha256-AdvQqaRTsKTqdfNfFiWtA9mIPVGuui+Ru9TUARVG0+Q=";
+    hash = "sha256-pF87bphrlI0VYFXD8RMztGr+NqBSL6np/cldCbHiK7A=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +42,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for Mega.co.nz";
-    homepage = "https://megatools.megous.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
-    platforms = platforms.unix;
+    homepage = "https://xff.cz/megatools/";
+    changelog = "https://xff.cz/megatools/builds/NEWS";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      viric
+      vji
+    ];
+    platforms = lib.platforms.unix;
   };
 }

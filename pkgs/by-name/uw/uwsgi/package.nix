@@ -4,7 +4,7 @@
   lib,
   pkg-config,
   jansson,
-  pcre,
+  pcre2,
   libxcrypt,
   expat,
   zlib,
@@ -80,13 +80,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.29";
+  version = "2.0.30";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     tag = finalAttrs.version;
-    hash = "sha256-WlbvvAu+A0anPItnG8RnWrXm450/xbOloPzUd2L9TuU=";
+    hash = "sha256-I03AshxZyxrRmtYUH1Q+B6ISykjYRMGG+ZQSHRS7vDs=";
   };
 
   patches = [
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       jansson
-      pcre
+      pcre2
       libxcrypt
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [

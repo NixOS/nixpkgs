@@ -35,13 +35,13 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/hetznercloud/cli/releases/tag/v${version}";
     description = "Command-line interface for Hetzner Cloud, a provider for cloud virtual private servers";
     mainProgram = "hcloud";
     homepage = "https://github.com/hetznercloud/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zauberpony
       techknowlogick
     ];

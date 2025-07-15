@@ -21,12 +21,13 @@
   gmobile,
   umockdev,
   feedbackd-device-themes,
+  udevCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.2";
+  version = "0.8.3";
 
   outputs = [
     "out"
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "agx";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Hd+kHLr+d1+mg9BbD1pCfVZuwmf7Hk02xmDTmR3foh4=";
+    hash = "sha256-ypKD9n9dC+0J+HFtL43mCky/ZXu4bgejYzw7nHHPAm4=";
   };
 
   depsBuildBuild = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -97,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
         done
     fi
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

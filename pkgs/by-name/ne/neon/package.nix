@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit compressionSupport sslSupport; };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP and WebDAV client library";
     mainProgram = "neon-config";
     homepage = "https://notroj.github.io/neon/";
     changelog = "https://github.com/notroj/${pname}/blob/${version}/NEWS";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
 }

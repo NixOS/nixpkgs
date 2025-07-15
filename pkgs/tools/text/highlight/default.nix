@@ -15,13 +15,13 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.15";
+    version = "4.16";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      hash = "sha256-CpbVm5Z9cKPQdOzBNOXsgrX3rfC6DTVE7xfmOAshbEs=";
+      hash = "sha256-SAOlW2IaYY2GzQ+1FClqm62pcxdtf1cow2R4MRS/2Vg=";
     };
 
     enableParallelBuilding = true;
@@ -76,7 +76,7 @@ let
       mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ willibutz ];
+      maintainers = [ ];
     };
   };
 

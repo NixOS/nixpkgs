@@ -23,11 +23,11 @@ let
 in
 appimageTools.wrapType2 rec {
   pname = "xnviewmp";
-  version = "1.8.8";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://download.xnview.com/old_versions/XnView_MP/XnView_MP-${version}.glibc2.17-x86_64.AppImage";
-    hash = "sha256-zPlb2r+oKNq1iv8dAWE/wbXtKAf3A+XOsSOkciHM6OA=";
+    hash = "sha256-lj6yLxg6VsNq4/3nZG8QuYYL+N+XRlpaN1Lmi307b8Q=";
   };
 
   nativeBuildInputs = [

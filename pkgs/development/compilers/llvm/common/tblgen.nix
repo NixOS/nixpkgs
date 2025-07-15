@@ -7,6 +7,7 @@
   ninja,
   patches ? [ ],
   python3,
+  updateAutotoolsGnuConfigScriptsHook,
   release_version,
   runCommand,
   src ? null,
@@ -55,11 +56,11 @@ let
     else
       src;
 
-  self = stdenv.mkDerivation (finalAttrs: rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
 
     src = src';
-    sourceRoot = "${src.name}/llvm";
+    sourceRoot = "${finalAttrs.src.name}/llvm";
 
     postPatch = ''
       (
@@ -76,6 +77,10 @@ let
       cmake
       ninja
       python3
+
+      # while this is not an autotools build, it still includes a config.guess
+      # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
+      updateAutotoolsGnuConfigScriptsHook
     ];
 
     cmakeFlags = [

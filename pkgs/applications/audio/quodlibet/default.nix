@@ -7,6 +7,7 @@
   gettext,
   gobject-introspection,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 
   # runtime
   adwaita-icon-theme,
@@ -43,10 +44,9 @@
   python3,
   xvfb-run,
 }:
-
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.6.0-unstable-2024-08-08";
+  version = "4.7.1";
   pyproject = true;
 
   outputs = [
@@ -57,13 +57,20 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "quodlibet";
     repo = "quodlibet";
-    rev = "3dcf31dfc8db9806d1f73a47fdabc950d35ded1d";
-    hash = "sha256-8qWuxTvMF6ksDkbZ6wRLPCJK1cSqgGMPac/ht6qVpnA=";
+    tag = "release-${version}";
+    hash = "sha256-xr3c1e4tjw2YHuKbvNeUPBIFdHEcpztqXjHVDSSxYlo=";
   };
 
-  patches = [ ./fix-gdist-python-3.12.patch ];
+  # Fix "E   ModuleNotFoundError: No module named 'distutils'" in Python 3.12 or newer
+  patches = [ ./fix-gdist-python-3.12-and-newer.patch ];
 
   build-system = [ python3.pkgs.setuptools ];
+
+  postPatch = ''
+    # Fix "FileExistsError: File already exists: /nix/store/<...>-quodlibet-4.7.1/bin/quodlibet"
+    substituteInPlace pyproject.toml \
+      --replace-fail 'quodlibet = "quodlibet.main:main"' ""
+  '';
 
   nativeBuildInputs =
     [
@@ -118,7 +125,8 @@ python3.pkgs.buildPythonApplication {
     ++ lib.optionals withMusicBrainzNgs [ musicbrainzngs ]
     ++ lib.optionals withPahoMqtt [ paho-mqtt ]
     ++ lib.optionals withPypresence [ pypresence ]
-    ++ lib.optionals withSoco [ soco ];
+    ++ lib.optionals withSoco [ soco ]
+    ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
   nativeCheckInputs =
     [
@@ -127,6 +135,7 @@ python3.pkgs.buildPythonApplication {
       glibcLocales
       hicolor-icon-theme
       xvfb-run
+      writableTmpDirAsHomeHook
     ]
     ++ (with python3.pkgs; [
       polib
@@ -152,7 +161,6 @@ python3.pkgs.buildPythonApplication {
 
   preCheck = ''
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-    export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS"
   '';
 
@@ -167,10 +175,10 @@ python3.pkgs.buildPythonApplication {
   '';
 
   preFixup = lib.optionalString (kakasi != null) ''
-    gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
+    gappsWrapperArgs+=(--prefix PATH : ${lib.getBin kakasi})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     longDescription = ''
       Quod Libet is a GTK-based audio player written in Python, using
@@ -186,8 +194,8 @@ python3.pkgs.buildPythonApplication {
       & internet radio, and all major audio formats.
     '';
     homepage = "https://quodlibet.readthedocs.io/en/latest";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       coroa
       pbogdan
     ];

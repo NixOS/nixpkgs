@@ -8,16 +8,16 @@
 }:
 buildNpmPackage rec {
   pname = "send";
-  version = "3.4.25";
+  version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
     tag = "v${version}";
-    hash = "sha256-2XeChKJi57auIf9aSe2JlP55tiE8dmrCBtUfCkziYi8=";
+    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  npmDepsHash = "sha256-DY+4qOzoURx8xmemhutxcNxg0Tv2u6tyJHK5RhBjo8w=";
+  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

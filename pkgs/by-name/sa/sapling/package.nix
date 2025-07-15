@@ -97,6 +97,7 @@ let
 in
 # Builds the main `sl` binary and its Python extensions
 python311Packages.buildPythonApplication {
+  format = "setuptools";
   pname = "sapling";
   inherit src version;
 

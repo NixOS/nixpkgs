@@ -311,12 +311,17 @@ stdenv.mkDerivation {
                     -i {} \;
     ''
     +
-      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-        find . -name package.conf.in \
-            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-      ''
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -341,6 +346,15 @@ stdenv.mkDerivation {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''

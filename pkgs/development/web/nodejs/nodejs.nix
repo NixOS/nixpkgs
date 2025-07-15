@@ -428,6 +428,9 @@ let
                 "test-debugger-random-port-with-inspect-port"
                 "test-debugger-launch"
                 "test-debugger-pid"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-wasi"
               ]
               ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
                 # These tests fail on x86_64-darwin (even without sandbox).
@@ -435,10 +438,13 @@ let
                 "test-fs-readv"
                 "test-fs-readv-sync"
                 "test-vm-memleak"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-tick-processor-arguments"
+                "test-set-raw-mode-reset-signal"
               ]
-              ++ lib.optional (
-                stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 && majorVersion == "20"
-              ) "test-tick-processor-arguments" # flaky
+              # Those are annoyingly flaky, but not enough to be marked as such upstream.
+              ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             )
           }"
         ];
@@ -479,7 +485,7 @@ let
           ''}
 
           # install the missing headers for node-gyp
-          # TODO: add dev output and use propagatedBuildInputs instead of copying headers.
+          # TODO: use propagatedBuildInputs instead of copying headers.
           cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
 
           # assemble a static v8 library and put it in the 'libv8' output
@@ -510,6 +516,9 @@ let
           Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
           Cflags: -I$libv8/include
           EOF
+        ''
+        + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+          cp -r $out/include $dev/include
         '';
 
       passthru.tests = {

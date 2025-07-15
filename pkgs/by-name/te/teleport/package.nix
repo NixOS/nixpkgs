@@ -21,12 +21,12 @@
 
   withRdpClient ? true,
 
-  version ? "17.4.8",
-  hash ? "sha256-BMiV4xMDy/21B2kl/vkXD14LKQ9t/qj6K8HFnU9Td7w=",
-  vendorHash ? "sha256-/JP0/4fFdCuDFLQ+mh7CQNMJ4n3yDNyvnLfbmRl/TBA=",
+  version ? "17.5.4",
+  hash ? "sha256-ojRIyPTrSG3/xuqdaUNrN4s5HP3E8pvzjG8h+qFEYrc=",
+  vendorHash ? "sha256-IHXwCp1MdcEKJhIs9DNf77Vd93Ai2as7ROlh6AJT9+Q=",
   extPatches ? [ ],
   cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
-  pnpmHash ? "sha256-TZb1nABTbR+SPgykc/KMRkHW7oLawem6KWmdOFAbLbk=",
+  pnpmHash ? "sha256-YwftGEQTEI8NvFTFLMJHhYkvaIIP9+bskCQCp5xuEtY=",
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -74,6 +74,7 @@ let
     pnpmDeps = pnpm_10.fetchDeps {
       inherit src pname version;
       hash = pnpmHash;
+      fetcherVersion = 1;
     };
 
     nativeBuildInputs = [

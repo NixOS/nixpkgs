@@ -119,7 +119,7 @@ let
           ''
             ${luaRcContent}
           ''
-          + lib.optionalString (neovimRcContent' != null) ''
+          + lib.optionalString (neovimRcContent' != "") ''
             vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
           ''
           + lib.concatStringsSep "\n" luaPluginRC;
