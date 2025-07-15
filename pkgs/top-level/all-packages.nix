@@ -373,10 +373,6 @@ with pkgs;
 
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
-  dieHook = makeSetupHook {
-    name = "die-hook";
-  } ../build-support/setup-hooks/die.sh;
-
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
