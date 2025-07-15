@@ -64,7 +64,7 @@
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
-  withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
+  withDavs2 ? withFullDeps && stdenv.hostPlatform.isx86 && withGPL, # AVS2 decoder
   withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin, # IIDC-1394 grabbing (ieee 1394)
   withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # libdrm support
   withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
@@ -155,7 +155,7 @@
   withX264 ? withHeadlessDeps && withGPL, # H.264/AVC encoder
   withX265 ? withHeadlessDeps && withGPL, # H.265/HEVC encoder
   withXavs ? withFullDeps && withGPL, # AVS encoder
-  withXavs2 ? withFullDeps && withGPL, # AVS2 encoder
+  withXavs2 ? withFullDeps && stdenv.hostPlatform.isx86 && withGPL, # AVS2 encoder
   withXcb ? withXcbShm || withXcbxfixes || withXcbShape, # X11 grabbing using XCB
   withXcbShape ? withFullDeps, # X11 grabbing shape rendering
   withXcbShm ? withFullDeps, # X11 grabbing shm communication
