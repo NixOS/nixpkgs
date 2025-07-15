@@ -4,6 +4,8 @@
   fetchFromGitHub,
   gtk3,
   jdupes,
+  adwaita-icon-theme,
+  libsForQt5,
   hicolor-icon-theme,
 }:
 
@@ -23,7 +25,11 @@ stdenvNoCC.mkDerivation rec {
     jdupes
   ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    libsForQt5.breeze-icons
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
