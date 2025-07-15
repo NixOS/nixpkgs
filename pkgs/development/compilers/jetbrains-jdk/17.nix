@@ -27,6 +27,7 @@
   libgbm,
   wayland,
   udev,
+  fontconfig,
 }:
 
 assert debugBuild -> withJcef;
@@ -59,9 +60,16 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     hash = "sha256-a7cJF2iCW/1GK0/GmVbaY5pYcn3YtZy5ngFkyAGRhu0=";
   };
 
-  BOOT_JDK = openjdk17-bootstrap.home;
-  # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-  SOURCE_DATE_EPOCH = 1715809405;
+  env = {
+    BOOT_JDK = openjdk17-bootstrap.home;
+    # run `git log -1 --pretty=%ct` in jdk repo for new value on update
+    SOURCE_DATE_EPOCH = 1715809405;
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU (toString [
+      "-Wno-error=format-overflow"
+      "-Wno-error=template-id-cdtor"
+      "-Wno-error=calloc-transposed-args"
+    ]);
+  };
 
   patches = [ ];
 
@@ -77,7 +85,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -e "s/SOURCE_DATE_EPOCH=.*//" \
         -e "s/export SOURCE_DATE_EPOCH//" \
         -i jb/project/tools/common/scripts/common.sh
-    sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_${arch}.sh
+    substituteInPlace jb/project/tools/linux/scripts/mkimages_${arch}.sh --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${configureFlags[*]}"
     sed \
         -e "s/create_image_bundle \"jb/#/" \
         -e "s/echo Creating /exit 0 #/" \
@@ -133,20 +141,20 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         libgbm
         wayland
         udev
+        fontconfig
       ]
     }"
-    for output in $outputs; do
+    for output in ${lib.concatStringsSep " " oldAttrs.outputs}; do
       if [ "$output" = debug ]; then continue; fi
       LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
     done
     # Add the local library paths to remove dependencies on the bootstrap
-    for output in $outputs; do
+    for output in ${lib.concatStringsSep " " oldAttrs.outputs}; do
       if [ "$output" = debug ]; then continue; fi
       OUTPUTDIR=$(eval echo \$$output)
       BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
       echo "$BINLIBS" | while read i; do
         patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
-        patchelf --shrink-rpath "$i" || true
       done
     done
   '';
