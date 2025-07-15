@@ -194,13 +194,6 @@ with pkgs;
     in
     recurseIntoAttrs arrayUtilitiesPackages;
 
-  addBinToPathHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "add-bin-to-path-hook";
-    } ../build-support/setup-hooks/add-bin-to-path.sh
-  ) { };
-
   aider-chat-with-playwright = aider-chat.withOptional { withPlaywright = true; };
 
   aider-chat-with-browser = aider-chat.withOptional { withBrowser = true; };
