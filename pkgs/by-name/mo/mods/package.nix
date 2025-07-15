@@ -1,11 +1,14 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
   gitUpdater,
   testers,
   mods,
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 buildGoModule (finalAttrs: {
@@ -21,7 +24,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-L+4vkh7u6uMm5ICMk8ke5RVY1oYeKMYWVYYq9YqpKiw=";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals (installManPages || installShellCompletions) [
     installShellFiles
   ];
 
@@ -46,16 +49,20 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  postInstall = ''
-    export HOME=$(mktemp -d)
-    $out/bin/mods man > mods.1
-    $out/bin/mods completion bash > mods.bash
-    $out/bin/mods completion fish > mods.fish
-    $out/bin/mods completion zsh > mods.zsh
-
-    installManPage mods.1
-    installShellCompletion mods.{bash,fish,zsh}
-  '';
+  postInstall =
+    ''
+      export HOME=$(mktemp -d)
+    ''
+    + lib.optionalString installManPages ''
+      $out/bin/mods man > ./mods.1
+      installManPage ./mods.1
+    ''
+    + lib.optionalString installShellCompletions ''
+      installShellCompletion --cmd mods \
+        --bash <($out/bin/mods completion bash) \
+        --fish <($out/bin/mods completion fish) \
+        --zsh <($out/bin/mods completion zsh)
+    '';
 
   meta = {
     description = "AI on the command line";
