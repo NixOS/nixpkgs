@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     aiofiles
     cachetools
-    casbin
+    pycasbin
     click
     colorama
     cryptography
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       azure-storage-blob
       boto3
       botocore
-      casbin
+      pycasbin
       colorama
       cudo-compute
       docker
@@ -169,7 +169,7 @@ python3Packages.buildPythonApplication rec {
       ray
     ];
     server = [
-      casbin
+      pycasbin
       passlib
       pyjwt
       sqlalchemy-adapter
