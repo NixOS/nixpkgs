@@ -6,7 +6,7 @@ let
   cfg = config.services.picom;
 in {
   options.services.picom = {
-    enable = mkEnableOption "picom, a compositor for X11";
+    enable = mkEnableOption "Whether or not to enable Picom as the X.org composite manager.";
 
     package = mkOption {
       type = types.package;
