@@ -123,6 +123,8 @@ resholve.mkDerivation rec {
           "cannot:libexec/bats-core/bats-exec-file"
           "cannot:libexec/bats-core/bats-exec-suite"
           "cannot:libexec/bats-core/bats-gather-tests"
+
+          "cannot:${procps}/bin/ps"
         ]
         ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
           # checked invocations for exec
