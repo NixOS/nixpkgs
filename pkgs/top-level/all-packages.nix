@@ -794,10 +794,6 @@ with pkgs;
 
   inherit (lib.systems) platforms;
 
-  setJavaClassPath = makeSetupHook {
-    name = "set-java-classpath-hook";
-  } ../build-support/setup-hooks/set-java-classpath.sh;
-
   fixDarwinDylibNames = makeSetupHook {
     name = "fix-darwin-dylib-names-hook";
     substitutions = { inherit (darwin.binutils) targetPrefix; };
