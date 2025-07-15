@@ -11,8 +11,6 @@
   cpio,
   gperf,
   cdrkit,
-  flex,
-  bison,
   qemu,
   pcre2,
   augeas,
@@ -29,10 +27,9 @@
   db,
   gmp,
   readline,
-  file,
   numactl,
   libapparmor,
-  jansson,
+  json_c,
   getopt,
   perlPackages,
   python3,
@@ -48,11 +45,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
-  version = "1.54.1";
+  version = "1.56.1";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor finalAttrs.version}-stable/libguestfs-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-bj/GrBkmdfe8KEClYbs2o209Wo36f4jqL1P4z2AqF34=";
+    hash = "sha256-nK3VUK4xLy/+JDt3N9P0bVa+71Ob7IODyoyw0/32LvU=";
   };
 
   strictDeps = true;
@@ -60,10 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       autoreconfHook
       removeReferencesTo
-      bison
       cdrkit
       cpio
-      flex
       getopt
       gperf
       makeWrapper
@@ -86,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcrypt
     ncurses
-    jansson
+    json_c
     pcre2
     augeas
     libxml2
@@ -100,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvirt
     gmp
     readline
-    file
     hivex
     db
     numactl
@@ -111,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     ocamlPackages.ocamlbuild
     ocamlPackages.ocaml_libvirt
-    ocamlPackages.ounit
     ocamlPackages.augeas
     ocamlPackages.ocamlbuild
   ] ++ lib.optional javaSupport jdk;
@@ -194,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     homepage = "https://libguestfs.org/";
+    changelog = "https://libguestfs.org/guestfs-release-notes-${lib.versions.majorMinor finalAttrs.version}.1.html";
     maintainers = with lib.maintainers; [
       offline
       lukts30
