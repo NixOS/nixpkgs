@@ -667,10 +667,6 @@ with pkgs;
       inherit url;
     };
 
-  copyDesktopItems = makeSetupHook {
-    name = "copy-desktop-items-hook";
-  } ../build-support/setup-hooks/copy-desktop-items.sh;
-
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
   copyPkgconfigItems = makeSetupHook {
