@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.4.8";
+  version = "3.5.1";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-vJhCoYiYv6yw7RJSxP68x+ePoTn9J/3Ho+MNnZNWEZs=";
+    hash = "sha256-+Z62imfH1Uhmt3Bq8kXoe6Bg1BmgYkdLRW07yNSr29E=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus

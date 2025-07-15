@@ -57,9 +57,12 @@ buildPythonPackage rec {
     export AWS_DEFAULT_REGION=us-east-1
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests"
-    ''-m "not slow"''
+  ];
+
+  disabledTestMarks = [
+    "slow"
   ];
 
   disabledTests = [

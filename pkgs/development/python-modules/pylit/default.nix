@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test" ];
+  enabledTestPaths = [ "test" ];
 
   meta = {
     homepage = "https://codeberg.org/milde/pylit";
