@@ -17,18 +17,18 @@ let
 in
 {
   options.services.cloudflare-ddns = {
-    enable = mkEnableOption (mdDoc "Cloudflare Dynamic DNS service");
+    enable = mkEnableOption "Cloudflare Dynamic DNS service";
 
-    package = mkOption {
+    package = mkPackageOption {
       type = types.package;
       default = pkgs.cloudflare-ddns;
       defaultText = literalExpression "pkgs.cloudflare-ddns";
-      description = mdDoc "The cloudflare-ddns package to use.";
+      description = "The cloudflare-ddns package to use.";
     };
 
     credentialsFile = mkOption {
       type = types.path;
-      description = mdDoc ''
+      description = ''
         Path to a file containing the Cloudflare API authentication token.
         The file content should be in the format `CLOUDFLARE_API_TOKEN=YOUR_SECRET_TOKEN`.
         The service user `${cfg.user}` needs read access to this file.
@@ -42,7 +42,7 @@ in
     domains = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = mdDoc ''
+      description = ''
         List of domain names (FQDNs) to manage. Wildcards like `*.example.com` are supported.
         These domains will be managed for both IPv4 and IPv6 unless overridden by
         `ip4Domains` or `ip6Domains`, or if the respective providers are disabled.
@@ -57,7 +57,7 @@ in
     ip4Domains = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = mdDoc ''
+      description = ''
         Explicit list of domains to manage only for IPv4. If set, overrides `domains` for IPv4.
         Corresponds to the `IP4_DOMAINS` environment variable.
       '';
@@ -67,7 +67,7 @@ in
     ip6Domains = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = mdDoc ''
+      description = ''
         Explicit list of domains to manage only for IPv6. If set, overrides `domains` for IPv6.
         Corresponds to the `IP6_DOMAINS` environment variable.
       '';
@@ -77,7 +77,7 @@ in
     wafLists = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = mdDoc ''
+      description = ''
         List of WAF IP Lists to manage, in the format `account-id/list-name`.
         (Experimental feature as of cloudflare-ddns 1.14.0).
       '';
@@ -88,7 +88,7 @@ in
       ipv4 = mkOption {
         type = types.str;
         default = "cloudflare.trace";
-        description = mdDoc ''
+        description = ''
           IP detection provider for IPv4. Common values: `cloudflare.trace`, `cloudflare.doh`, `local`, `url:URL`, `none`.
           Use `none` to disable IPv4 updates.
           See cloudflare-ddns documentation for all options.
@@ -97,7 +97,7 @@ in
       ipv6 = mkOption {
         type = types.str;
         default = "cloudflare.trace";
-        description = mdDoc ''
+        description = ''
           IP detection provider for IPv6. Common values: `cloudflare.trace`, `cloudflare.doh`, `local`, `url:URL`, `none`.
           Use `none` to disable IPv6 updates.
           See cloudflare-ddns documentation for all options.
@@ -108,7 +108,7 @@ in
     updateCron = mkOption {
       type = types.str;
       default = "@every 5m";
-      description = mdDoc ''
+      description = ''
         Cron expression for how often to check and update IPs.
         Use "@once" to run only once and then exit.
       '';
@@ -118,13 +118,13 @@ in
     updateOnStart = mkOption {
       type = types.bool;
       default = true;
-      description = mdDoc "Whether to perform an update check immediately on service start.";
+      description = "Whether to perform an update check immediately on service start.";
     };
 
     deleteOnStop = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whether to delete the managed DNS records and clear WAF lists when the service is stopped gracefully.
         Warning: Setting this to true with `updateCron = "@once"` will cause immediate deletion.
       '';
@@ -133,7 +133,7 @@ in
     cacheExpiration = mkOption {
       type = types.str;
       default = "6h";
-      description = mdDoc ''
+      description = ''
         Duration for which API responses (like Zone ID, Record IDs) are cached.
         Uses Go's duration format (e.g., "6h", "1h30m").
       '';
@@ -142,7 +142,7 @@ in
     ttl = mkOption {
       type = types.int;
       default = 1;
-      description = mdDoc ''
+      description = ''
         Time To Live (TTL) for the DNS records in seconds.
         Must be 1 (for automatic) or between 30 and 86400.
       '';
@@ -151,7 +151,7 @@ in
     proxied = mkOption {
       type = types.str;
       default = "false";
-      description = mdDoc ''
+      description = ''
         Whether the managed DNS records should be proxied through Cloudflare ('orange cloud').
         Accepts boolean values (`true`, `false`) or a domain expression.
         See cloudflare-ddns documentation for expression syntax (e.g., "is(a.com) || sub(b.org)").
@@ -162,45 +162,45 @@ in
     recordComment = mkOption {
       type = types.str;
       default = "";
-      description = mdDoc "Comment to add to managed DNS records.";
+      description = "Comment to add to managed DNS records.";
     };
 
     wafListDescription = mkOption {
       type = types.str;
       default = "";
-      description = mdDoc "Description for managed WAF lists (used when creating or verifying lists).";
+      description = "Description for managed WAF lists (used when creating or verifying lists).";
     };
 
     detectionTimeout = mkOption {
       type = types.str;
       default = "5s";
-      description = mdDoc "Timeout for detecting the public IP address.";
+      description = "Timeout for detecting the public IP address.";
     };
 
     updateTimeout = mkOption {
       type = types.str;
       default = "30s";
-      description = mdDoc "Timeout for updating records via the Cloudflare API.";
+      description = "Timeout for updating records via the Cloudflare API.";
     };
 
     healthchecks = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc "URL for Healthchecks.io monitoring endpoint (optional).";
+      description = "URL for Healthchecks.io monitoring endpoint (optional).";
       example = "https://hc-ping.com/your-uuid";
     };
 
     uptimeKuma = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = mdDoc "URL for Uptime Kuma push monitor endpoint (optional).";
+      description = "URL for Uptime Kuma push monitor endpoint (optional).";
       example = "https://status.example.com/api/push/tag?status=up&msg=OK&ping=";
     };
 
     shoutrrr = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = mdDoc "List of Shoutrrr notification service URLs (optional).";
+      description = "List of Shoutrrr notification service URLs (optional).";
       example = [
         "discord://token@id"
         "gotify://host/token"
@@ -210,13 +210,13 @@ in
     user = mkOption {
       type = types.str;
       default = "cloudflare-ddns";
-      description = mdDoc "User account under which the service runs.";
+      description = "User account under which the service runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = "cloudflare-ddns";
-      description = mdDoc "Group under which the service runs.";
+      description = "Group under which the service runs.";
     };
 
   };
