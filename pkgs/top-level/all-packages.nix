@@ -1515,10 +1515,6 @@ with pkgs;
 
   ### APPLICATIONS/FILE-MANAGERS
 
-  doublecmd = callPackage ../by-name/do/doublecmd/package.nix {
-    inherit (libsForQt5) libqtpas wrapQtAppsHook;
-  };
-
   vifm-full = vifm.override {
     mediaSupport = true;
     inherit lib udisks2 python3;
