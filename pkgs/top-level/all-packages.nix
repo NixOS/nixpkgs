@@ -267,13 +267,6 @@ with pkgs;
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
 
-  updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
-    name = "update-autotools-gnu-config-scripts-hook";
-    substitutions = {
-      gnu_config = gnu-config;
-    };
-  } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
-
   gogUnpackHook = makeSetupHook {
     name = "gog-unpack-hook";
     propagatedBuildInputs = [
