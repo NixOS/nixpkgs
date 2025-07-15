@@ -12,6 +12,8 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -82,6 +84,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
