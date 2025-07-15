@@ -48,11 +48,6 @@ let
     };
 in
 {
-  imports = [
-    (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
-    (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
-  ];
-
   options = {
     services.searx = {
       enable = mkOption {
@@ -89,7 +84,12 @@ in
       };
 
       settings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.submodule {
+          freeformType = settingType;
+          imports = [
+            (mkRenamedOptionModule [ "redis" ] [ "valkey" ])
+          ];
+        };
         default = { };
         example = literalExpression ''
           {
@@ -231,6 +231,11 @@ in
     };
   };
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
+    (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
+  ];
+
   config = mkIf cfg.enable {
     environment = {
       etc = {
@@ -277,7 +282,6 @@ in
         settings = {
           # merge NixOS settings with defaults settings.yml
           use_default_settings = mkDefault true;
-          redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
           server.base_url = lib.mkIf cfg.configureNginx "http${
             lib.optionalString (lib.any lib.id (
               with config.services.nginx.virtualHosts."${cfg.domain}";
@@ -289,6 +293,7 @@ in
             )) "s"
           }://${cfg.domain}/";
           ui.static_use_hash = true;
+          valkey.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
         };
       };
 

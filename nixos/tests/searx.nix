@@ -17,22 +17,25 @@
           SEARX_SECRET_KEY = somesecret
         '';
 
-        settings.server = {
-          port = "8080";
-          bind_address = "0.0.0.0";
-          secret_key = "@SEARX_SECRET_KEY@";
+        settings = {
+          engines = [
+            {
+              name = "wolframalpha";
+              api_key = "@WOLFRAM_API_KEY@";
+              engine = "wolframalpha_api";
+            }
+            {
+              name = "startpage";
+              shortcut = "start";
+            }
+          ];
+          plugins = { };
+          server = {
+            port = "8080";
+            bind_address = "0.0.0.0";
+            secret_key = "@SEARX_SECRET_KEY@";
+          };
         };
-        settings.engines = [
-          {
-            name = "wolframalpha";
-            api_key = "@WOLFRAM_API_KEY@";
-            engine = "wolframalpha_api";
-          }
-          {
-            name = "startpage";
-            shortcut = "start";
-          }
-        ];
       };
 
     };
@@ -43,8 +46,10 @@
     {
       services.searx = {
         enable = true;
-        # searx refuses to run if unchanged
-        settings.server.secret_key = "somesecret";
+        settings = {
+          plugins = { };
+          server.secret_key = "somesecret";
+        };
 
         configureNginx = true;
         domain = "localhost";
