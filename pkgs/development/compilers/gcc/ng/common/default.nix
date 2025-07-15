@@ -127,10 +127,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
-          "-B${targetGccPackages.libatomic}/lib"
+        nixSupport.cc-cflags = gccPackages.gfortranNoLibgfortran.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -142,11 +139,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
-          "-B${targetGccPackages.libatomic}/lib"
-        ];
+        inherit (gccPackages.gcc) nixSupport;
       };
 
       gcc = wrapCCWith rec {
@@ -156,9 +149,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibatomic.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libatomic}/lib"
         ];
       };
@@ -200,8 +191,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibc.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libssp}/lib"
         ];
       };
@@ -217,9 +207,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibssp.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libatomic}/lib"
         ];
       };
