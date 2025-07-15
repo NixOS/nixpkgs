@@ -1,5 +1,8 @@
 {
   lib,
+  callPackage,
+  coreutils,
+  gnugrep,
   stdenv,
   fetchurl,
   pkg-config,
@@ -16,17 +19,6 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
-
-  # for update.nix
-  writeScript,
-  common-updater-scripts,
-  bash,
-  coreutils,
-  curl,
-  gnugrep,
-  gnupg,
-  gnused,
-  nix,
 }:
 
 let
@@ -121,20 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.tor = nixosTests.tor;
-    updateScript = import ./update.nix {
-      inherit lib;
-      inherit
-        writeScript
-        common-updater-scripts
-        bash
-        coreutils
-        curl
-        gnupg
-        gnugrep
-        gnused
-        nix
-        ;
-    };
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = {
