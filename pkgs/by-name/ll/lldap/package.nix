@@ -3,28 +3,30 @@
   fetchFromGitHub,
   lib,
   lldap,
+  makeWrapper,
   nixosTests,
   rustPlatform,
   rustc,
-  wasm-bindgen-cli_0_2_95,
+  wasm-bindgen-cli_0_2_100,
   wasm-pack,
   which,
 }:
 
 let
 
-  commonDerivationAttrs = rec {
+  commonDerivationAttrs = {
     pname = "lldap";
-    version = "0.6.1";
+    version = "unstable-2025-08-13";
 
     src = fetchFromGitHub {
-      owner = "lldap";
+      owner = "ibizaman";
       repo = "lldap";
-      rev = "v${version}";
-      hash = "sha256-iQ+Vv9kx/pWHoa/WZChBK+FD2r1avzWWz57bnnzRjUg=";
+      rev = "220c25f1abdc0c62f8ef3a41f25a3f4044094318";
+      hash = "sha256-hByibduVbG+6uB0oUcgc+UzyR5WLieaRJ+61q8DCca0=";
     };
 
-    cargoHash = "sha256-qXYgr9uRswuo9hwVROUX9KUKpkzR0VEcXImbdyOgxsY=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-SO7+HiiXNB/KF3fjzSMeiTPjRQq/unEfsnplx4kZv9c=";
 
   };
 
@@ -35,7 +37,7 @@ let
 
       nativeBuildInputs = [
         wasm-pack
-        wasm-bindgen-cli_0_2_95
+        wasm-bindgen-cli_0_2_100
         binaryen
         which
         rustc
@@ -68,12 +70,10 @@ rustPlatform.buildRustPackage (
       "lldap_set_password"
     ];
 
-    patches = [
-      ./0001-parameterize-frontend-location.patch
-    ];
-
-    postPatch = ''
-      substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
+    nativeBuildInputs = [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/lldap \
+        --set LLDAP_ASSETS_PATH ${frontend}
     '';
 
     passthru = {
@@ -89,7 +89,10 @@ rustPlatform.buildRustPackage (
       changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
       license = licenses.gpl3Only;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ bendlas ];
+      maintainers = with maintainers; [
+        bendlas
+        ibizaman
+      ];
       mainProgram = "lldap";
     };
   }
