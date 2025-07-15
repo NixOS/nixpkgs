@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildAndTestSubdir = "harper-ls";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-aOajrh2NZShP1vXSUEDzY1ULTeMs8dY+BDIspCi1BfY=";
 
   passthru.updateScript = nix-update-script { };

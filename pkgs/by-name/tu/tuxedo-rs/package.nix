@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EkTLL7thZ/bBpY7TwfEsPOjJxzQ3vpxDi+sYPNAK6og=";
 
   nativeInstallCheckInputs = [

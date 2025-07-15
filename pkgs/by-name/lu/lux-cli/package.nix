@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   buildAndTestSubdir = "lux-cli";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-rQ4zJQSlIUC63a4UdkA6+Y63vvkZ7TyXV0EWXzXmjPM=";
 
   nativeInstallCheckInputs = [

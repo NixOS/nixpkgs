@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libusb1
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mZy1iVyjUFeed5fnj1ASEJ+raAe2D0V8TO84fd0RuXM=";
 
   postInstall = ''

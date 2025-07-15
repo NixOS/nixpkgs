@@ -53,7 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libX11
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-2/zzE6JzhqeBYLiRkx5ELaW150rk1bMTrpxSw/wxNes=";
 
   postInstall = lib.optionalString (bins != [ ]) ''

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
     rev = "0f3181ab23066aa69aa4fec387a7e16578078179";
     hash = "sha256-HKPCX0bmXkB3LwvgE1li3dlWTgpW5CXuWZNq3mFY6FY=";
   };
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-vwnMfY8xYrH3pWl8YMb7Jedu1gEOcAKPChClboJJSsw=";
 
   requiredSystemFeatures = [ "big-parallel" ]; # for fat LTO from upstream

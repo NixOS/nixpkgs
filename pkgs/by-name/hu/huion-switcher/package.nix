@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     udevCheckHook
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-yj55FMdf91ZG95yuMt3dQFhUjYM0/sUfFKB+W+5xEfo=";
 
   postInstall = ''

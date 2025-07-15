@@ -36,8 +36,6 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    useFetchCargoVendor = true;
-
     cargoHash = "sha256-DDHBLQWscORg4+0CX5c2wmrhm2t7wOpotZFB+85w+EA=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
