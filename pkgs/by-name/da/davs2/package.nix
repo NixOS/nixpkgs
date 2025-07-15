@@ -63,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "davs2";
     pkgConfigModules = [ "davs2" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.x86;
   };
 })
