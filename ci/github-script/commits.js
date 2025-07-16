@@ -70,6 +70,7 @@ module.exports = async function ({ github, context, core }) {
         __dirname,
         'range-diff',
         '--no-color',
+        '--ignore-all-space',
         '--no-notes',
         // 100 means "any change will be reported"; 0 means "no change will be reported"
         '--creation-factor=100',
@@ -119,7 +120,7 @@ module.exports = async function ({ github, context, core }) {
 
     const results = await Promise.all(commits.map(handle))
 
-    // Log all results without truncation and with better highlighting to the job log.
+    // Log all results without truncation, with better highlighting and all whitespace changes to the job log.
     results.forEach(({ sha, commit, severity, message, colored_diff }) => {
       core.startGroup(`Commit ${sha}`)
       core.info(`Author: ${commit.author.name} ${commit.author.email}`)
