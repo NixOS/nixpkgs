@@ -427,7 +427,7 @@ in
 
     services.postfix = lib.mkIf cfg.provision.localMail.enable {
       enable = true;
-      config = {
+      settings.main = {
         myhostname = cfg.provision.localMail.hostname;
         myorigin = cfg.provision.localMail.hostname;
         mydestination = cfg.provision.localMail.hostname;
