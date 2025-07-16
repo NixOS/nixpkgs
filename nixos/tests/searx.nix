@@ -1,9 +1,12 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   name = "searx";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ rnhmjoj ];
+  meta = with lib.maintainers; {
+    maintainers = [
+      SuperSandro2000
+      _999eagle
+    ];
   };
 
   # basic setup: searx running the built-in webserver
