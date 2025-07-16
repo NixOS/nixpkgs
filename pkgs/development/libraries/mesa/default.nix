@@ -218,9 +218,6 @@ stdenv.mkDerivation {
     # is ignored when freedreno is not being built.
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
-    # Enable Intel RT stuff when available
-    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
-
     # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
