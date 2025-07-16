@@ -8175,6 +8175,8 @@ self: super: with self; {
     }
   );
 
+  libscanbuild = callPackage ../development/python-modules/libscanbuild { };
+
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
     (
