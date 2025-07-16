@@ -13,12 +13,6 @@ in
           ip = config.networking.primaryIPAddress;
           dnsname = "${config.networking.hostName}.${config.networking.domain}";
         }) nodes;
-        "grand.central.org" = [
-          {
-            ip = "1.1.1.1";
-            dnsname = "one.grand.central.org";
-          }
-        ];
       };
     in
     {
@@ -34,7 +28,15 @@ in
         };
         services.openafsClient = {
           enable = true;
-          inherit cellName cellServDB;
+          inherit cellName;
+          cellServDB = cellServDB // {
+            "grand.central.org" = [
+              {
+                ip = "1.1.1.1";
+                dnsname = "one.grand.central.org";
+              }
+            ];
+          };
         };
         services.openafsServer = {
           enable = true;
