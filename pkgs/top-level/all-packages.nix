@@ -796,10 +796,6 @@ with pkgs;
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
-  enableGCOVInstrumentation = makeSetupHook {
-    name = "enable-gcov-instrumentation-hook";
-  } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
-
   makeGCOVReport = makeSetupHook {
     name = "make-gcov-report-hook";
     propagatedBuildInputs = [
