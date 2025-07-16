@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -34,6 +35,16 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-xtouCq8nkvXxgZ0jX4VuTU41xxrAkXqWEpZg/vms4Zo=";
   };
+
+  patches = [
+    # Fix tests with latest aiohttp
+    # FIXME: remove in next release
+    (fetchpatch {
+      url = "https://github.com/StevenLooman/async_upnp_client/commit/6ea1515890d588d353a9c263eca8fbf6571fbbec.diff";
+      includes = [ "async_upnp_client/*" ];
+      hash = "sha256-6DA+mIz76UE0xA0SSTGvhaf0dVAKT61ucsDeJDPoGAY=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "async-timeout"
