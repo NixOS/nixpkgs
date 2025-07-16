@@ -78,6 +78,20 @@ import ../make-test-python.nix (
             disabled = testChart // {
               enable = false;
             };
+            # chart with values set via YAML file
+            values-file = testChart // {
+              # Remove unsafeDiscardStringContext workaround when Nix can convert a string to a path
+              # https://github.com/NixOS/nix/issues/12407
+              values = /.
+              + builtins.unsafeDiscardStringContext (
+                builtins.toFile "k3s-test-chart-values.yaml" ''
+                  runCommand: "echo 'Hello, file!'"
+                  image:
+                    repository: test.local/test
+                    tag: local
+                ''
+              );
+            };
             # advanced chart that should get installed in the "test" namespace with a custom
             # timeout and overridden values
             advanced = testChart // {
@@ -117,18 +131,22 @@ import ../make-test-python.nix (
         # check existence/absence of chart manifest files
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/hello.yaml")
         machine.succeed("test ! -e /var/lib/rancher/k3s/server/manifests/disabled.yaml")
+        machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
         advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
         assert advancedManifest["spec"]["timeout"] == "69s", f"unexpected value for spec.timeout: {advancedManifest["spec"]["timeout"]}"
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)
+        machine.wait_until_succeeds("kubectl wait --for=condition=complete job/values-file", timeout=180)
         machine.wait_until_succeeds("kubectl -n test wait --for=condition=complete job/advanced", timeout=180)
         # check output of test jobs
         hello_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=hello")
+        values_file_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=values-file")
         advanced_output = machine.succeed("kubectl -n test logs -l batch.kubernetes.io/job-name=advanced")
         # strip the output to remove trailing whitespaces
         assert hello_output.rstrip() == "Hello, world!", f"unexpected output of hello job: {hello_output}"
+        assert values_file_output.rstrip() == "Hello, file!", f"unexpected output of values file job: {values_file_output}"
         assert advanced_output.rstrip() == "advanced hello", f"unexpected output of advanced job: {advanced_output}"
       '';
   }
