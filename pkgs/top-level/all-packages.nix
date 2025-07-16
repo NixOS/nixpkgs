@@ -10644,10 +10644,10 @@ with pkgs;
       };
 
   aggregateModules =
-    modules:
+    modules: kernelVersion: depmodConfig:
     callPackage ../os-specific/linux/kmod/aggregator.nix {
       inherit (buildPackages) kmod;
-      inherit modules;
+      inherit modules kernelVersion depmodConfig;
     };
 
   nushell = callPackage ../shells/nushell { };
