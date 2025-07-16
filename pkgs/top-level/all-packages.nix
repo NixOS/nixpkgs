@@ -796,16 +796,6 @@ with pkgs;
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
-  desktopToDarwinBundle = makeSetupHook {
-    name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [
-      writeDarwinBundle
-      librsvg
-      imagemagick
-      (onlyBin python3Packages.icnsutil)
-    ];
-  } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
-
   keepBuildTree = makeSetupHook {
     name = "keep-build-tree-hook";
   } ../build-support/setup-hooks/keep-build-tree.sh;
