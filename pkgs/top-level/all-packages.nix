@@ -9537,15 +9537,7 @@ with pkgs;
   apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
   apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
 
-  darwinMinVersionHook =
-    deploymentTarget:
-    makeSetupHook {
-      name = "darwin-deployment-target-hook-${deploymentTarget}";
-      substitutions = {
-        darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
-        deploymentTarget = lib.escapeShellArg deploymentTarget;
-      };
-    } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
+  darwinMinVersionHook = callPackage ../os-specific/darwin/darwin-min-version-hook { };
 
   ### DEVELOPMENT / TESTING TOOLS
 
