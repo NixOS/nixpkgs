@@ -76,11 +76,6 @@
   },
   {
     "pname": "Microsoft.ClearScript.V8.Native.win-x64",
-    "version": "7.4.3",
-    "hash": "sha256-8lRSVozrki7h64MIgP6v0VWEV1fR1op+hjHd8S4nJ88="
-  },
-  {
-    "pname": "Microsoft.ClearScript.V8.Native.win-x64",
     "version": "7.4.5",
     "hash": "sha256-WF4K7g1w510viiXHJJjKQrsD/mvb99tF76yBCljN1Qw="
   },
