@@ -13,7 +13,7 @@ import ./make-test-python.nix {
         enable = true;
         enableSubmission = true;
         enableSubmissions = true;
-        config = {
+        settings.main = {
           smtp_tls_CAfile = "${certs.ca.cert}";
           smtpd_tls_chain_files = [
             certs.${domain}.key

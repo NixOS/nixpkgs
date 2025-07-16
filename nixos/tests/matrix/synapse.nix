@@ -187,7 +187,7 @@ in
           # blackhole transport
           transport = "example.com discard:silently";
 
-          config = {
+          settings.main = {
             myhostname = "${mailerDomain}";
             # open relay for subnet
             mynetworks_style = "subnet";

@@ -1077,7 +1077,7 @@ in
     services.postfix = lib.mkIf cfg.mail.incoming.enable {
       enable = true;
 
-      config = {
+      settings.main = {
         smtpd_recipient_restrictions = "check_policy_service unix:private/discourse-policy";
         append_dot_mydomain = lib.mkDefault false;
         compatibility_level = "2";
@@ -1097,7 +1097,7 @@ in
       transport = ''
         ${cfg.hostname} discourse-mail-receiver:
       '';
-      masterConfig = {
+      settings.master = {
         "discourse-mail-receiver" = {
           type = "unix";
           privileged = true;

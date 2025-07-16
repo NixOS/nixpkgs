@@ -107,7 +107,7 @@ in
 
       services.postfix = {
         enable = true;
-        config = {
+        settings.main = {
           compatibility_level = "2";
           mydestination = [ clientDomain ];
           myhostname = clientDomain;
