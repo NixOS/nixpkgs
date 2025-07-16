@@ -71,6 +71,7 @@ module.exports = async function ({ github, context, core }) {
         'range-diff',
         '--no-color',
         '--no-notes',
+        // 100 means "any change will be reported"; 0 means "no change will be reported"
         '--creation-factor=100',
         `${original_sha}~..${original_sha}`,
         `${sha}~..${sha}`,
