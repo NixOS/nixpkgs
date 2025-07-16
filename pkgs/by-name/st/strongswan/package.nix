@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   autoreconfHook,
   perl,
@@ -86,6 +87,20 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
+    # Fixes for gettext 0.25
+    (fetchpatch2 {
+      url = "https://github.com/strongswan/strongswan/commit/7ec0101250bf2ac3da7a576cbb4204fceb2ef10c.patch?full_index=1";
+      excludes = [ "scripts/test.sh" ];
+      hash = "sha256-ATd/oj6/1vrtZdwMs45rA2MGtH2viumyucVj0LZ8Nnc=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/strongswan/strongswan/commit/e8e5e2d4419a686c5a2c064648618ec281089b2e.patch?full_index=1";
+      hash = "sha256-p98LSX8jjsDK/GZTovj/salmQ8T+txEV3vKD+wTUvsM=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/strongswan/strongswan/commit/2b3a5172d89c513ed28d21bb406c1b4ef0ac787a.patch?full_index=1";
+      hash = "sha256-xqp2Lq4pp3Uu0nVC/fl4E5mpJqCNgyZXP2g/Y2wShhI=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

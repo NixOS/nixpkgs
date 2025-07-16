@@ -6,6 +6,7 @@
   ninja,
   zlib,
   zstd,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [

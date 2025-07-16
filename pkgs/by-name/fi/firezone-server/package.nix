@@ -34,8 +34,8 @@ beamPackages.mixRelease rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version;
     src = "${src}/apps/web/assets";
-    hash = "sha256-ejyBppFtKeyVhAWmssglbpLleOnbw9d4B+iM5Vtx47A=";
     fetcherVersion = 1;
+    hash = "sha256-ejyBppFtKeyVhAWmssglbpLleOnbw9d4B+iM5Vtx47A=";
   };
   pnpmRoot = "apps/web/assets";
 

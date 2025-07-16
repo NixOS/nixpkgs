@@ -85,8 +85,8 @@ buildPythonPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
     fetcherVersion = 1;
+    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
   };
 
   pythonRelaxDeps = [

@@ -40,8 +40,8 @@ let
         src
         sourceRoot
         ;
-      hash = "sha256-TbdRJqLdNI7wchUsx2Kw1LlDyv50XlCiKyn6rhZyN1U=";
       fetcherVersion = 1;
+      hash = "sha256-TbdRJqLdNI7wchUsx2Kw1LlDyv50XlCiKyn6rhZyN1U=";
     };
 
     postBuild = ''

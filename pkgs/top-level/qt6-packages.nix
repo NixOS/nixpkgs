@@ -117,6 +117,8 @@ makeScopeWithSplicing' {
         wlroots = pkgs.wlroots_0_18;
       };
 
+      qwt = callPackage ../development/libraries/qwt/default.nix { };
+
       qxlsx = callPackage ../development/libraries/qxlsx { };
 
       qzxing = callPackage ../development/libraries/qzxing { };

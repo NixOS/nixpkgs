@@ -3409,6 +3409,8 @@ self: super: with self; {
 
   dctorch = callPackage ../development/python-modules/dctorch { };
 
+  ddgs = callPackage ../development/python-modules/ddgs { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
@@ -4307,6 +4309,8 @@ self: super: with self; {
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
   drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
+
+  drf-pydantic = callPackage ../development/python-modules/drf-pydantic { };
 
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 

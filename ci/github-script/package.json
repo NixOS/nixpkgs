@@ -1,9 +1,9 @@
 {
   "private": true,
-  "type": "module",
   "dependencies": {
     "@actions/artifact": "2.3.2",
     "@actions/github": "6.0.1",
-    "bottleneck": "2.19.5"
+    "bottleneck": "2.19.5",
+    "commander": "14.0.0"
   }
 }

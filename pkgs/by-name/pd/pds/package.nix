@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-KyHa7pZaCgyqzivI0Y7E6Y4yBRllYdYLnk1s0o0dyHY=";
     fetcherVersion = 1;
+    hash = "sha256-KyHa7pZaCgyqzivI0Y7E6Y4yBRllYdYLnk1s0o0dyHY=";
   };
 
   buildPhase = ''
