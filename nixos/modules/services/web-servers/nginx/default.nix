@@ -171,14 +171,6 @@ let
           quic_bpf on;
         ''}
 
-        ${optionalString cfg.experimentalZstdSettings ''
-          zstd on;
-          zstd_comp_level 9;
-          zstd_min_length 256;
-          zstd_static on;
-          zstd_types ${lib.concatStringsSep " " compressMimeTypes};
-        ''}
-
         ${cfg.config}
 
         ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
@@ -250,7 +242,7 @@ let
               ''
             }
 
-            ${optionalString cfg.recommendedZstdSettings ''
+            ${optionalString cfg.experimentalZstdSettings ''
               zstd on;
               zstd_comp_level 9;
               zstd_min_length 256;
