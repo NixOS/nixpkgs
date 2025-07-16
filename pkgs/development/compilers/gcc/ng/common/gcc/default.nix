@@ -23,7 +23,6 @@
   gmp,
   libmpc,
   mpfr,
-  libelf,
   perl,
   texinfo,
   which,
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
       gmp
       libmpc
       mpfr
-      libelf
     ]
     ++ lib.optional (isl != null) isl
     ++ lib.optional (zlib != null) zlib;
