@@ -17,14 +17,14 @@
 
 let
   pname = "plausible";
-  version = "2.1.5";
+  version = "3.0.1";
   mixEnv = "ce";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    hash = "sha256-4gwK/AxzhsU0vgvKgIXrOyQLCgZMeZyKjj7PWbUmJ+8=";
+    hash = "sha256-DQIRsqkH2zgIkb3yezuJEKJ99PS031GJ+bDAeHMLNUY=";
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/assets/package-lock.json
       sed -ie '
@@ -46,7 +46,7 @@ let
     pname = "${pname}-assets";
     inherit version;
     src = "${src}/assets";
-    npmDepsHash = "sha256-Rf1+G9F/CMK09KEh022vHe02FADJtARKX4QEVbmvSqk=";
+    npmDepsHash = "sha256-hPbKEC8DE/gb483COG/ZbTuEP8Y44Fs7ppHMpXphCjg=";
     dontNpmBuild = true;
     installPhase = ''
       runHook preInstall
@@ -59,7 +59,7 @@ let
     pname = "${pname}-tracker";
     inherit version;
     src = "${src}/tracker";
-    npmDepsHash = "sha256-ng0YpBZc0vcg5Bsr1LmgXtzNCtNV6hJIgLt3m3yRdh4=";
+    npmDepsHash = "sha256-kfqJVUw3xnMT0sOkc5O42CwBxPQXiYnOQ5WpdZwzxfE";
     dontNpmBuild = true;
     installPhase = ''
       runHook preInstall
@@ -75,7 +75,7 @@ let
       src
       mixEnv
       ;
-    hash = "sha256-edQ8byeV0WUaYDYMnmrstC6L2jztidR/JikGZLpX3WE=";
+    hash = "sha256-caCbuMEDsLcxm8xehWEJiaTfgl435crBfnQFQpzGsLY";
   };
 
   mjmlNif = rustPlatform.buildRustPackage {
