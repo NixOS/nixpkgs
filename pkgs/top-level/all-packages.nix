@@ -15463,6 +15463,21 @@ with pkgs;
   };
 
   inherit
+    (callPackage ./rocq-packages.nix {
+      inherit (ocaml-ng)
+        ocamlPackages_4_14
+        ;
+    })
+    mkRocqPackages
+    rocqPackages_9_0
+    rocq-core_9_0
+    rocqPackages_9_1
+    rocq-core_9_1
+    rocqPackages
+    rocq-core
+    ;
+
+  inherit
     (callPackage ./coq-packages.nix {
       inherit (ocaml-ng)
         ocamlPackages_4_05
@@ -15470,6 +15485,11 @@ with pkgs;
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
+        ;
+      inherit
+        rocqPackages_9_0
+        rocqPackages_9_1
+        rocqPackages
         ;
     })
     mkCoqPackages
@@ -15511,21 +15531,6 @@ with pkgs;
     coq_9_1
     coqPackages
     coq
-    ;
-
-  inherit
-    (callPackage ./rocq-packages.nix {
-      inherit (ocaml-ng)
-        ocamlPackages_4_14
-        ;
-    })
-    mkRocqPackages
-    rocqPackages_9_0
-    rocq-core_9_0
-    rocqPackages_9_1
-    rocq-core_9_1
-    rocqPackages
-    rocq-core
     ;
 
   coq-kernel = callPackage ../applications/editors/jupyter-kernels/coq { };
