@@ -19,7 +19,6 @@ For new packages please briefly describe the package or provide a link to its ho
   - [NixOS test(s)] (look inside [nixos/tests])
   - and/or [package tests]
   - or, for functions and "core" functionality, tests in [lib/tests] or [pkgs/test]
-  - made sure NixOS tests are [linked] to the relevant packages
 - [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage]
 - [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
 - Nixpkgs Release Notes (or backporting 25.05 Nixpkgs Release notes)
@@ -31,7 +30,6 @@ For new packages please briefly describe the package or provide a link to its ho
 
 [NixOS test(s)]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
 [package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
-[linked]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#linking-nixos-module-tests-to-a-package
 [nixpkgs-review usage]: https://github.com/Mic92/nixpkgs-review#usage
 
 [CONTRIBUTING.md]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md
