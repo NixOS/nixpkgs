@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-gtk-theme";
-    rev = version;
+    tag = version;
     sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
   };
 

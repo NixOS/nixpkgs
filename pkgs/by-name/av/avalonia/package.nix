@@ -51,7 +51,7 @@ stdenvNoCC.mkDerivation (
       src = fetchFromGitHub {
         owner = "AvaloniaUI";
         repo = "Avalonia";
-        rev = version;
+        tag = version;
         fetchSubmodules = true;
         hash = "sha256-b7K8h2hqkLnXj3YIaRKUqlbWsDNhfWCEqH1W8K0lP6g=";
       };
