@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.14.4-unstable-2025-06-20";
+  version = "2.14.5";
 
   outputs =
     [
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libxml2";
-    rev = "356542324fa439de544b5e419b91ae68d42c306c"; # some bugfixes right behind 2.14.4
-    hash = "sha256-0jo08ECX+oP7Ekjgw3ZgOh+fSiNjlbjoZc4p3PqomJA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vxKlw8Kz+fgUP6bhWG2+4346WJVzqG0QvPG/BT7RftQ=";
   };
 
   patches = [
