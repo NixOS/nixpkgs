@@ -20,6 +20,15 @@ in
         description = "Domain name under which the derper server is reachable.";
       };
 
+      enableNginx = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable nginx reverse proxy for derper.
+          When enabled, nginx will proxy requests to the derper service.
+        '';
+      };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -61,12 +70,12 @@ in
 
   config = lib.mkIf cfg.enable {
     networking.firewall = lib.mkIf cfg.openFirewall {
-      # port 80 and 443 are opened by nginx already
+      # port 80 and 443 are opened by nginx already when enableNginx is true
       allowedUDPPorts = [ cfg.stunPort ];
     };
 
     services = {
-      nginx = {
+      nginx = lib.mkIf cfg.enableNginx {
         enable = true;
         virtualHosts."${cfg.domain}" = {
           addSSL = true; # this cannot be forceSSL as derper sends some information over port 80, too.
