@@ -16,7 +16,7 @@ buildGoModule rec {
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-KrNP3JMkyTo6hghLLGWerH1Oz3HsnTI5jCfqRbp6AR8=";
+    hash = "sha256-JbWt6d1cX3F2lmivjszcxcyE+wKYk+Sy03xhb4E3oHw=";
   };
 
   # tarball contains multiple files/directories
