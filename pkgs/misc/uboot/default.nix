@@ -114,7 +114,7 @@ let
         configurePhase = ''
           runHook preConfigure
 
-          make ${defconfig}
+          make -j$NIX_BUILD_CORES $makeFlags ${defconfig}
 
           cat $extraConfigPath >> .config
 
