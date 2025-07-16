@@ -37,6 +37,8 @@ self: super: with self; {
 
   abjad = callPackage ../development/python-modules/abjad { };
 
+  abnf = callPackage ../development/python-modules/abnf { };
+
   about-time = callPackage ../development/python-modules/about-time { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
