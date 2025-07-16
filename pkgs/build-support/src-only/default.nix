@@ -50,7 +50,8 @@ let
     ];
     separateDebugInfo = false;
 
-    dontUnpack = false;
+    dontUnpack = lib.warnIf (args.dontUnpack or false
+    ) "srcOnly: derivation has dontUnpack set, overriding" false;
 
     dontInstall = false;
     installPhase = "cp -pr --reflink=auto -- . $out";
@@ -59,4 +60,4 @@ let
   stdenv = args.stdenv or (lib.warn "srcOnly: stdenv not provided, using stdenvNoCC" stdenvNoCC);
   drv = stdenv.mkDerivation (args // argsToOverride);
 in
-lib.warnIf (args.dontUnpack or false) "srcOnly: derivation has dontUnpack set, overriding" drv
+drv
