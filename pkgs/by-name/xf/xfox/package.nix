@@ -13,10 +13,10 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-gbcJ02ZaPqiCo0VHnVOYzrWR00dQXgKavFTgP+6rS34=";
   };
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.setuptools ];
+  dependencies = [
     python3Packages.evdev
     python3Packages.libevdev
-    python3Packages.setuptools
   ];
   postPatch = ''
     substituteInPlace setup.py --replace-fail "evdev-binary" "evdev"
