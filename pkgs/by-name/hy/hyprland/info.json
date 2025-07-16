@@ -1,7 +1,7 @@
 {
   "branch": "main",
-  "commit_hash": "9958d297641b5c84dcff93f9039d80a5ad37ab00",
-  "commit_message": "version: bump to 0.49.0",
-  "date": "2025-05-08",
-  "tag": "v0.49.0"
+  "commit_hash": "c4a4c341568944bd4fb9cd503558b2de602c0213",
+  "commit_message": "version: bump to 0.50.0",
+  "date": "2025-07-16",
+  "tag": "v0.50.0"
 }
