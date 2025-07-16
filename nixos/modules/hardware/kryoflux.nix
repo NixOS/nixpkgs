@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.programs.kryoflux;
+  cfg = config.hardware.kryoflux;
 
 in
 {
-  options.programs.kryoflux = {
+  options.hardware.kryoflux = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
