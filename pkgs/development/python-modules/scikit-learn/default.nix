@@ -23,7 +23,7 @@
 }:
 
 buildPythonPackage rec {
-  _structuredAttrs = true;
+  __structuredAttrs = true;
 
   pname = "scikit-learn";
   version = "1.6.1";
