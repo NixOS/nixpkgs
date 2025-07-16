@@ -33,22 +33,14 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.7.2";
+  version = "9.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-1nWpFGRBS49uzKl7m/4YWFI+3lvm2zKByYpR9llxsgY=";
+    hash = "sha256-xS9h8QGm6PH8rx0qXmvolDpH9fy8ma7HlBVbQo5pX4Q=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
-
-  patches = [
-    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
-    # These are needed to fix building on Darwin (technically the first is not
-    # required, but the second doesn't apply without it).
-    ./darwin-patch-1.patch
-    ./darwin-patch-2.patch
-  ];
 
   nativeBuildInputs = [
     cmake

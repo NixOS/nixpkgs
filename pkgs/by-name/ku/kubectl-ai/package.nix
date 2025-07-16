@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-ai";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "kubectl-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W3HY47ALhUl79TvLc8MMAZ1ixYnWkNF931dvzL9T8Jg=";
+    hash = "sha256-dQ6ct7f0iAFTFCjaxKvFlCoqm5U45XQrvWNMsz9lBac=";
   };
 
-  vendorHash = "sha256-ixuSGh7HvS2POs2J8sNBObtbiZqegftCAE2JEVBR/Hc=";
+  vendorHash = "sha256-tYBWGbdHB4vsBlFqE7mLmO5n30qxfEXPOG0YqU8sZsY=";
 
   # Build the main command
   subPackages = [ "cmd" ];

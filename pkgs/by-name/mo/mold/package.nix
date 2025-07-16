@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.40.1";
+  version = "2.40.2";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-161ATZkgoipFMRcI4x4TNqxbyWxM75Cmo/rL4Hn1JFQ=";
+    hash = "sha256-Db2IxHCQWb6JdJROi+nOi0pV4zb+8/TcFrJWUCdH6N8=";
   };
 
   nativeBuildInputs = [
@@ -130,9 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
-    maintainers = with lib.maintainers; [
-      azahi
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ azahi ];
   };
 })

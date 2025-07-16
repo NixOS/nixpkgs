@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.5.0";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-wdJl7DrSm1Jht0KEqZ9+qjqlkE+Y6oBdzEHTCgIGJ84=";
+    hash = "sha256-fkzDVMO0huAuJDJIt0dyNGnRD6Go7XZ/YRv/JMtlbss=";
     domain = "gitlab.postmarketos.org";
   };
 

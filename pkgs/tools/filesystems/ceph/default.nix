@@ -195,6 +195,7 @@ let
     with python.pkgs;
     buildPythonPackage {
       pname = "ceph-common";
+      format = "setuptools";
       inherit src version;
 
       sourceRoot = "ceph-${version}/src/python-common";

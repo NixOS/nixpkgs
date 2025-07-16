@@ -39,7 +39,12 @@ let
       cppSupport = !mpiSupport;
     };
     catalyst = catalyst.override {
-      inherit mpi mpiSupport pythonSupport;
+      inherit
+        mpi
+        mpiSupport
+        python3Packages
+        pythonSupport
+        ;
     };
     mpi4py = python3Packages.mpi4py.override { inherit mpi; };
   };
@@ -171,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelChecking = false;
+
+  enabledTestPaths = [
+    "../testing/adios2/python/Test*.py"
+  ];
 
   __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck && mpiSupport;
 

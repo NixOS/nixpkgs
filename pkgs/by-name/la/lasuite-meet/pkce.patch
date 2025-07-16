@@ -1,0 +1,20 @@
+--- a/meet/settings.py
++++ b/meet/settings.py
+@@ -430,6 +430,17 @@ class Base(Configuration):
+     OIDC_RP_SCOPES = values.Value(
+         "openid email", environ_name="OIDC_RP_SCOPES", environ_prefix=None
+     )
++    OIDC_USE_PKCE = values.BooleanValue(
++        default=False, environ_name="OIDC_USE_PKCE", environ_prefix=None
++    )
++    OIDC_PKCE_CODE_CHALLENGE_METHOD = values.Value(
++        default="S256",
++        environ_name="OIDC_PKCE_CODE_CHALLENGE_METHOD",
++        environ_prefix=None,
++    )
++    OIDC_PKCE_CODE_VERIFIER_SIZE = values.IntegerValue(
++        default=64, environ_name="OIDC_PKCE_CODE_VERIFIER_SIZE", environ_prefix=None
++    )
+     LOGIN_REDIRECT_URL = values.Value(
+         None, environ_name="LOGIN_REDIRECT_URL", environ_prefix=None
+     )

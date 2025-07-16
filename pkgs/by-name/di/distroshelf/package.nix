@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "distroshelf";
-  version = "1.0.8";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "DistroShelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UZP/VohgYUe6Ly89oD9WlYyiAfQmTK1lXnf5TipoiNI=";
+    hash = "sha256-pNGIwmw75c7Q+lXZBSZnAnIqJqYOPIA9cpAlzv/HjJU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

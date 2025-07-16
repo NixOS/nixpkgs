@@ -38,6 +38,7 @@ buildGo123Module {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
+    fetcherVersion = 1;
     hash = "sha256-6Q+tIY5dl5jCQyv1F8btLdJg0oEUGs0Wyu/joVdVhf8=";
   };
   pnpmRoot = "../frontend";

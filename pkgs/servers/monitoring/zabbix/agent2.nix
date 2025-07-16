@@ -7,6 +7,7 @@
   libiconv,
   openssl,
   pcre,
+  pcre2,
   zlib,
 }:
 
@@ -36,7 +37,7 @@ import ./versions.nix (
     buildInputs = [
       libiconv
       openssl
-      pcre
+      (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
       zlib
     ];
 

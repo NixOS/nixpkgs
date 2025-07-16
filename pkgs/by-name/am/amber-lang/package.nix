@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "amber";
     maintainers = with maintainers; [
       cafkafk
-      uncenter
       aleksana
     ];
     platforms = platforms.unix;

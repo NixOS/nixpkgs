@@ -6,6 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication {
+  pyproject = true;
   pname = "opensnitch-ui";
 
   inherit (opensnitch) src version;
@@ -17,12 +18,16 @@ python3Packages.buildPythonApplication {
   '';
 
   nativeBuildInputs = [
-    python3Packages.pyqt5
     qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt5.qtwayland
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+    pyqt5
   ];
 
   dependencies = with python3Packages; [
@@ -57,6 +62,8 @@ python3Packages.buildPythonApplication {
 
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
+
+  pythonImportsCheck = [ "opensnitch" ];
 
   meta = {
     description = "Application firewall";

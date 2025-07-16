@@ -10,13 +10,13 @@
 buildKodiBinaryAddon rec {
   pname = "screensaver-asteroids";
   namespace = "screensaver.asteroids";
-  version = "22.0.2";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-Ri9dgdhJbHybdUkZeRE7X7SQMaV2JZCm7znAyDEa470=";
+    hash = "sha256-cepo7amJn6y1J9hVSt35VgOz/ixT7l/UfjtmHOajBrw=";
   };
 
   extraNativeBuildInputs = [ pkg-config ];

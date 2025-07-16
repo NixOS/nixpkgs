@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zashboard";
-  version = "1.94.2";
+  version = "1.96.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bG4fa6lsOsHYly6ORDx9WzUjgW5liY8hgUblYicbXXY=";
+    hash = "sha256-3sY3C4iNqVPhbwWCzGRRJ9pDfewPq7q70kMrXuqZQpc=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-aiSZS6FEs7kqGXxC9Tx6Rngv3qrPMi5gOuh5Z3/oZyc=";
   };
 

@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
     ./add-config-path-env-var.patch
     ./respect-xml-catalog-files-var.patch
     ./specify-localedir.patch
+
+    ./gettext-0.25.patch
   ];
 
   postPatch =

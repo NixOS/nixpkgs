@@ -18,6 +18,7 @@
 python3Packages.buildPythonApplication {
   pname = "ranger";
   version = "1.9.3-unstable-2025-06-04";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ranger";

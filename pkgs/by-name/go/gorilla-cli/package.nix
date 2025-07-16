@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gorilla-cli";
   version = "0.0.9";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gorilla-llm";
@@ -19,7 +19,11 @@ python3.pkgs.buildPythonApplication rec {
 
   disabled = python3.pythonOlder "3.6";
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     requests
     halo
     prompt-toolkit

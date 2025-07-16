@@ -9,6 +9,7 @@
 python3Packages.buildPythonPackage {
   pname = "edl";
   version = "3.52.1-unstable-2025-06-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bkerler";

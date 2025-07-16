@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oils-for-unix";
-  version = "0.29.0";
+  version = "0.33.0";
 
   src = fetchurl {
     url = "https://oils.pub/download/oils-for-unix-${version}.tar.gz";
-    hash = "sha256-NP21Px29K4dC73TNOkbYer/NoY0NZF8pdixP3bmis6w=";
+    hash = "sha256-GwqJAx0cTUMCxR4lPX+80diwEx/L1xM3I5E3Z2Cuk4Y=";
   };
 
   postPatch = ''

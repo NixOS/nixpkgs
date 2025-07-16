@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     tag = "v${version}";
-    hash = "sha256-VrPc3i1VYuThKdQn/wimNzMHNmPIAdTxbh2tuJb4YJY=";
+    hash = "sha256-4IkjW8HX21uBEHFtb3qETxco6FfDMgLbG1BDHWwvn58=";
   };
 
   build-system = [

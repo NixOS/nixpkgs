@@ -3,21 +3,23 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tslib";
   version = "1.23";
-  hash = "sha256-2YJDADh/WCksAEIjngAdji98YGmwjpvxSBZkxAwFc7k=";
 
   src = fetchFromGitHub {
     owner = "libts";
     repo = "tslib";
-    rev = finalAttrs.version;
-    sha256 = finalAttrs.hash;
+    tag = finalAttrs.version;
+    hash = "sha256-2YJDADh/WCksAEIjngAdji98YGmwjpvxSBZkxAwFc7k=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Touchscreen access library";
@@ -25,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = with lib.teams; [ ngi ];
   };
 })

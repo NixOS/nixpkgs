@@ -6,7 +6,7 @@
   gmp,
   zlib,
   iproute2,
-  nettools,
+  net-tools,
   pkg-config,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set dev $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
-    sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
+    sed -e 's@/sbin/ifconfig@${net-tools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
   meta = with lib; {

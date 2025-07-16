@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.06.0-146";
+  version = "2025.07.0-204";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,18 +30,18 @@ stdenv.mkDerivation {
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
-        hash = "sha256-V9ADtOskxEbGZryXD/6aiUDeTvqPzoY372f/Vo5195s=";
+        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
+        hash = "sha256-f1EQw6fKH4pgVG7+YcLPv6FawJ2TN507hYLD0pn+PlM=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-FiCTF5Bmfp4id9HXuB4luSGT9A7OoquaRW/QIh0A3ZY=";
+        url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-SxjQPZ2wUmSIYOxBB6AS6Ue7ajXzMkY32nHdkZkNhBA=";
       }
     else
       fetchurl {
-        url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-FnNoLV9uqgUeumYpHtRJuHrFA6mL65KI4jru7Ebq0/o=";
+        url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
+        hash = "sha256-f27LC4+SXnkyePw/fw8r9JYsOQKVoIiFkAet/QtwbNg=";
       };
 
   buildInputs =

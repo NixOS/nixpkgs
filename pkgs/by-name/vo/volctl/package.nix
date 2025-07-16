@@ -14,6 +14,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "volctl";
   version = "0.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buzz";

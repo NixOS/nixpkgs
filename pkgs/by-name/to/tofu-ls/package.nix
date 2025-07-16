@@ -3,26 +3,25 @@
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tofu-ls";
-  version = "0.0.2";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "tofu-ls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ioUhESBnGhVxeJQ+0lZ4tjfCWbc3mS2o584EXuXIqso=";
+    hash = "sha256-zOdZjbzTfVM8Nu3cn2qJokC1gwvRVFEabOa2t9SI1AU=";
   };
 
-  vendorHash = "sha256-rUvqIebAhnR9b/RAiW8Md/D8NgDDKro1XodXSCtstjA=";
+  vendorHash = "sha256-CD3x52rHmxOfYZ++/C4xGi8aNzl4lS3Ev24sTcJe1FQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.rawVersion=${finalAttrs.version}'"
   ];
 
   checkFlags =
@@ -46,9 +45,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru = {
-    updateScript = unstableGitUpdater { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OpenTofu Language Server";

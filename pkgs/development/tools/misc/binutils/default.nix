@@ -38,6 +38,9 @@ let
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 
+  # gas is disabled for some targets via noconfigdirs in configure.
+  targetHasGas = !stdenv.targetPlatform.isDarwin;
+
   # gas isn't multi-target, even with --enable-targets=all, so we do
   # separate builds of just gas for each target.
   #
@@ -45,7 +48,9 @@ let
   # additional targets here as required.
   allGasTargets =
     allGasTargets'
-    ++ lib.optional (!lib.elem targetPlatform.config allGasTargets') targetPlatform.config;
+    ++ lib.optional (
+      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+    ) targetPlatform.config;
   allGasTargets' = [
     "aarch64-unknown-linux-gnu"
     "alpha-unknown-linux-gnu"
@@ -328,6 +333,8 @@ stdenv.mkDerivation (finalAttrs: {
           $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
           install-exec-bindir
       done
+    ''
+    + lib.optionalString (withAllTargets && targetHasGas) ''
       ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
     '';
 

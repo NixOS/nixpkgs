@@ -4,29 +4,20 @@
   buildGoModule,
   versionCheckHook,
   nix-update-script,
-  fetchpatch,
 }:
 
 buildGoModule rec {
   pname = "minio-warp";
-  version = "1.1.4";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-KOhBSxR9P3Q6DpC8QCRaiw6Y51OyHLRlhr0WmXE74PI=";
+    hash = "sha256-WdzvbJKxJmU6C7IGkVjp/0rfPZB37hMmVkpJHTUnvyw=";
   };
 
-  patches = [
-    # upstream ships a broken go.sum file in the release and fixes it one commit later ..
-    (fetchpatch {
-      url = "https://github.com/minio/warp/commit/c830e94367efce6e6d70c337d490a3b6eba5e558.patch";
-      hash = "sha256-LXkgwpTPe4WvU+nAsYfjs38uXiBoeoavnxliw8nweRQ=";
-    })
-  ];
-
-  vendorHash = "sha256-duEd5uss6mS2aTOTsI3dzZV2TEDHyKN5QKWb4Tt5+7s=";
+  vendorHash = "sha256-u87ekur9iThUxufJ9jJHlHu8t5lvlnfVZqsf5Ag1+r8=";
 
   # See .goreleaser.yml
   ldflags = [

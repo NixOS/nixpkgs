@@ -170,6 +170,9 @@ in
   # Regular overrides
 
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
+    checkInputs = with self; [
+      snacks-nvim
+    ];
     dependencies = with self; [
       telescope-nvim
       vim-fugitive
@@ -758,14 +761,12 @@ in
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
-      ruby
     ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
         --replace-fail '/bin/bash' 'bash' \
         --replace-fail xcrun ""
       make build
-      rm ruby/command-t/ext/command-t/*.o
     '';
   };
 
@@ -1508,6 +1509,10 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  jdd-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   jedi-vim = super.jedi-vim.overrideAttrs {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -1632,6 +1637,7 @@ in
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    checkInputs = [ self.snacks-nvim ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
@@ -1654,6 +1660,7 @@ in
       "leetcode.picker.language.fzf"
       "leetcode.picker.question.fzf"
       "leetcode.picker.question.init"
+      "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
@@ -2908,6 +2915,10 @@ in
     '';
   };
 
+  plantuml-nvim = super.plantuml-nvim.overrideAttrs {
+    dependencies = [ self.LibDeflate-nvim ];
+  };
+
   playground = super.playground.overrideAttrs {
     dependencies = with self; [
       # we need the 'query' grammar to make
@@ -4036,7 +4047,10 @@ in
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
-    dependencies = [ self.nui-nvim ];
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
   };
 
   xmake-nvim = super.xmake-nvim.overrideAttrs {

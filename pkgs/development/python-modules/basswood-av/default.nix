@@ -4,19 +4,10 @@
   fetchFromGitHub,
   setuptools,
   pkg-config,
-  cython,
+  cython_3_1,
   ffmpeg,
 }:
 
-let
-  cython' = cython.overrideAttrs (oldAttrs: rec {
-    version = "3.1.0";
-    src = oldAttrs.src.override {
-      tag = version;
-      hash = "sha256-3/C0+ygGgNvw75ZN02Q70TLFa1U4jVgWQDG5FGWErTg=";
-    };
-  });
-in
 buildPythonPackage rec {
   pname = "basswood-av";
   version = "15.2.1";
@@ -31,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    cython'
+    cython_3_1
   ];
 
   nativeBuildInputs = [ pkg-config ];

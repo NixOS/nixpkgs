@@ -19,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
+  patches = [
+    # https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/merge_requests/16
+    ./gettext-0.25.patch
+  ];
+
   postPatch = ''
     substituteInPlace Makefile.am \
       --replace-fail 'libraries = $(LIBINTL)' 'libraries = $(LIBICONV) $(LIBINTL)'
@@ -31,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     docbook_xml_dtd_43
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-liconv" else null;
 
   preFixup = ''
     # fallback values need to be last

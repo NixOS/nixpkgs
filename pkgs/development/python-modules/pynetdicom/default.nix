@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "3.0.2";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pynetdicom";
     tag = "v${version}";
-    hash = "sha256-0ylx0EMPfvXxT7kQJYK+gsAFb/bkfRPDiC7Z7s/PvTk=";
+    hash = "sha256-CiCP5H0RVbbeNQKO/GpP/hZ6nBE5Q9Wp+/b/wHehIpA=";
   };
 
   build-system = [ flit-core ];

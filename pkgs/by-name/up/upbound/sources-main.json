@@ -8,38 +8,38 @@
   "fetchurlAttrSet": {
     "docker-credential-up": {
       "aarch64-darwin": {
-        "hash": "sha256-EPJXlxa4Vx7jzdX5/ekIer/EKTAFuqWBcAp4mYyS+JA=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/docker-credential-up/darwin_arm64.tar.gz"
+        "hash": "sha256-9X6D0WI9Vru/M3oQ/yK0AJjth6MTGfxeEf5Axx2rAlc=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/docker-credential-up/darwin_arm64.tar.gz"
       },
       "aarch64-linux": {
-        "hash": "sha256-cM8F+Qyg34ypdIusI2jFOzoxM3B+tLRyvmqdeUSpz0c=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/docker-credential-up/linux_arm64.tar.gz"
+        "hash": "sha256-g7AzAp4cdJIsZ3mtkYF2MzlLHgwauFORaIkQ6mdwkuI=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/docker-credential-up/linux_arm64.tar.gz"
       },
       "x86_64-darwin": {
-        "hash": "sha256-jvBe0GEDNMj3HlbMBFcwS1CA2y3QnDkYgv943GW0tLs=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/docker-credential-up/darwin_amd64.tar.gz"
+        "hash": "sha256-8F7r3o3e3Mo+GDicS+5Hg6qNz5B+Tt8OHcosHzpZUQM=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/docker-credential-up/darwin_amd64.tar.gz"
       },
       "x86_64-linux": {
-        "hash": "sha256-c/tjuO3j+pYFlyGRAeA3jJLit4sZqreEzMa0LRxnTv0=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/docker-credential-up/linux_amd64.tar.gz"
+        "hash": "sha256-3TduM86fAb3cIFhb8SNrAFisu9RjQ7H0gtd7csJfSb0=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/docker-credential-up/linux_amd64.tar.gz"
       }
     },
     "up": {
       "aarch64-darwin": {
-        "hash": "sha256-ecNGveGSxYsKFGkAqWNkpr8RKquL1k+/8LsZBNEgWq8=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/up/darwin_arm64.tar.gz"
+        "hash": "sha256-xLIdYSR+ILRY2qf5lPMroxZDvDEfDYxrz3cX4ZI0+h0=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/up/darwin_arm64.tar.gz"
       },
       "aarch64-linux": {
-        "hash": "sha256-70c9eE+SewPICRPzIdOmAj503xB/cL5ud2sQc4uJkJQ=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/up/linux_arm64.tar.gz"
+        "hash": "sha256-nUOTdWTUJe8eyHTIF4b/00Q9J0Qb4QaAIdAz90h4yHo=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/up/linux_arm64.tar.gz"
       },
       "x86_64-darwin": {
-        "hash": "sha256-DQZNsUYLM97zo7ua5xmxSqkxbC91qqLe49yI6X9ELbM=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/up/darwin_amd64.tar.gz"
+        "hash": "sha256-qn2cfprwaLP7chMcWN+zw8+G/tHGNlJtPMX6iB9XjCY=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/up/darwin_amd64.tar.gz"
       },
       "x86_64-linux": {
-        "hash": "sha256-WmsFhA5fteS3+12wPAGym0TZHax+v3zicbh+48aaW0Q=",
-        "url": "https://cli.upbound.io/main/v0.39.0-43.g3cca6045/bundle/up/linux_amd64.tar.gz"
+        "hash": "sha256-AAmdDWW0MmLYP5viRJ0BpXIVpmU7R6iSN5hwGm6HIuc=",
+        "url": "https://cli.upbound.io/main/v0.39.0-115.gbdd4b5af/bundle/up/linux_amd64.tar.gz"
       }
     }
   },
@@ -49,5 +49,5 @@
     "x86_64-darwin",
     "x86_64-linux"
   ],
-  "version": "0.39.0-43.g3cca6045"
+  "version": "0.39.0-115.gbdd4b5af"
 }

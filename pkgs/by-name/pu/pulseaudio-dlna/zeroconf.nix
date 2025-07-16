@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "zeroconf";
   version = "0.19.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

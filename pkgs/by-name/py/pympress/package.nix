@@ -16,6 +16,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
   version = "1.8.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cimbali";
@@ -62,6 +63,8 @@ python3Packages.buildPythonApplication rec {
     ];
 
   doCheck = false; # there are no tests
+
+  pythonImportsCheck = [ "pympress" ];
 
   meta = {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";

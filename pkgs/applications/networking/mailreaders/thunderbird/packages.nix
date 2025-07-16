@@ -47,7 +47,7 @@ let
       extraPatches =
         [
           # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-          ./no-buildconfig.patch
+          (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
         ]
         ++ lib.optionals (lib.versionOlder version "139") [
           # clang-19 fixes for char_traits build issue
@@ -95,8 +95,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "139.0.2";
-    sha512 = "edb20c692674dc5c3ba70673f7dd03710bf7ac0ce2be614a7a4b3d2b40b20b4974aab2a621dd5b43720c412a590c08f8b78abeb9b61f288f3217c6a04cc1e8ff";
+    version = "140.0.1";
+    sha512 = "fbef1d0228c49fc9c11425b6be03bb7e44e6abc6f2027ee23317270ca2c6b0a935bb41b38667acf014bd9e1166cbe62754f1e919e04f2355dc4c833e015c78b8";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -109,8 +109,8 @@ rec {
   thunderbird-128 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "128.11.1esr";
-    sha512 = "8fd99f68895b543bdc5bba38d7720f0e48e2a82c9fe5e8ca15534e3918cc40b5b2911666dbbbda0a7911783a03a0d8f7371ea353fd67416baca1e1dffdd25c44";
+    version = "128.12.0esr";
+    sha512 = "4566ae8347e959612a288524753416f5b730757f10a067b6eb11139055cc1fc5d63d49636e798e9b77588896c8dbc0f2acc189ebd29d95a5166e7bc8f2c35e30";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

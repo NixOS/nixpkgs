@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   # Temp fix for test incompatibility with Python 3.13
   disabledTests = [

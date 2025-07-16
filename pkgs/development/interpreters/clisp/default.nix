@@ -130,10 +130,16 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  postInstall = lib.optionalString (withModules != [ ]) (
-    ''bash ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
-    + lib.concatMapStrings (x: " " + x) withModules
-  );
+  postInstall = lib.optionalString (withModules != [ ]) ''
+    bash ./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full \
+      ${lib.concatMapStrings (x: " " + x) withModules}
+
+    find "$out"/lib/clisp*/full -type l -name "*.o" | while read -r symlink; do
+      if [[ "$(readlink "$symlink")" =~ (.*\/builddir\/)(.*) ]]; then
+        ln -sf "../''${BASH_REMATCH[2]}" "$symlink"
+      fi
+    done
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-O0 -falign-functions=${
     if stdenv.hostPlatform.is64bit then "8" else "4"

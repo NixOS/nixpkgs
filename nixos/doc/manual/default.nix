@@ -245,6 +245,7 @@ rec {
           --revision ${escapeShellArg revision} \
           ${optionsJSON}/${common.outputPath}/options.json \
           $out/share/man/man5/configuration.nix.5
+        compressManPages $out
       '';
 
 }

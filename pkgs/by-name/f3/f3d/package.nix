@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.1.0";
+  version = "3.2.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -33,17 +33,8 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-QJQlZXUZyWhpYteHoIsGOj1jdf3Lpy/BMXopeto4IRo=";
+    hash = "sha256-p1Cqam3sYDXJCU1A2sC/fV1ohxS3FGiVrxeGooNXVBQ=";
   };
-
-  patches = [
-    # https://github.com/f3d-app/f3d/pull/2155
-    (fetchpatch {
-      name = "add-missing-include.patch";
-      url = "https://github.com/f3d-app/f3d/commit/3814f3356d888ce59bbe6eda0293c2de73b0c89a.patch";
-      hash = "sha256-TeV8byIxX6PBEW06/sS7kHaSS99S88WiyzjHZ/Zh5x4=";
-    })
-  ];
 
   nativeBuildInputs =
     [

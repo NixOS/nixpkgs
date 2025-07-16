@@ -6,7 +6,7 @@
   nixosTests,
   postgresqlTestHook,
   postgresql,
-  yarn-berry_3,
+  yarn-berry_4,
   nodejs,
   autoconf,
   automake,
@@ -22,14 +22,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.3";
-  yarnHash = "sha256-T6RKWuAAoJgbzJKef4ioOoUDtoGM9s9BFqxFdy5EtyQ=";
+  version = "9.5";
+  yarnHash = "sha256-i3WCEpcZepB7K0A4QgjoLfkO7icew/8usJCo4DkWT6I=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-4uupF1dw6OE/briAI5PWiQ7h6RPx1sUqf8PB8cJsNSU=";
+    hash = "sha256-5FwYkdhpg/2Cidi2qiFhhsQYbIwsp80K3MNxw5rp4ww=";
   };
 
   mozjpeg-bin = fetchFromGitHub {
@@ -59,7 +59,7 @@ in
 pythonPackages.buildPythonApplication rec {
   inherit pname version src;
 
-  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     # mozjpeg fails to build on darwin due to a hardocded path
     # this has been fixed upstream on master but no new version
     # has been released. We therefore point yarn to upstream
@@ -154,11 +154,11 @@ pythonPackages.buildPythonApplication rec {
     export LD=$CC
     export HOME=$(mktemp -d)
     export YARN_ENABLE_SCRIPTS=1
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn config set enableTelemetry false
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn config set enableGlobalCache false
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn config set enableTelemetry false
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn config set enableGlobalCache false
     export npm_config_nodedir="${srcOnly nodejs}"
     export npm_config_node_gyp="${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js"
-    YARN_IGNORE_PATH=1 ${yarn-berry_3.yarn-berry-offline}/bin/yarn install --inline-builds
+    YARN_IGNORE_PATH=1 ${yarn-berry_4.yarn-berry-offline}/bin/yarn install --inline-builds
     )
     yarn webpacker
     cp -r * ../pip-build/pgadmin4
@@ -185,8 +185,8 @@ pythonPackages.buildPythonApplication rec {
     cython
     pip
     sphinx
-    yarn-berry_3
-    yarn-berry_3.yarnBerryConfigHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
 
     # for building mozjpeg2
@@ -247,7 +247,6 @@ pythonPackages.buildPythonApplication rec {
     azure-identity
     sphinxcontrib-youtube
     dnspython
-    speaklater3
     google-auth-oauthlib
     google-api-python-client
     keyring

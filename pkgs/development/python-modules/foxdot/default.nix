@@ -10,6 +10,7 @@
 buildPythonPackage rec {
   pname = "foxdot";
   version = "0.8.12";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "FoxDot";

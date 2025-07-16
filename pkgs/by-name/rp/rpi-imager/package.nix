@@ -77,6 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_TELEMETRY" false)
     ];
 
+  qtWrapperArgs = [
+    "--unset QT_QPA_PLATFORMTHEME"
+    "--unset QT_STYLE_OVERRIDE"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;

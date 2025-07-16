@@ -327,18 +327,54 @@ Dependency propagation takes cross compilation into account, meaning that depend
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| `host → target`     | attribute name      | offset   |
-| ------------------- | ------------------- | -------- |
-| `build --> build`   | `depsBuildBuild`    | `-1, -1` |
-| `build --> host`    | `nativeBuildInputs` | `-1, 0`  |
-| `build --> target`  | `depsBuildTarget`   | `-1, 1`  |
-| `host --> host`     | `depsHostHost`      | `0, 0`   |
-| `host --> target`   | `buildInputs`       | `0, 1`   |
-| `target --> target` | `depsTargetTarget`  | `1, 1`   |
+| `host → target`     | attribute name      | offset   | typical purpose                               |
+| ------------------- | ------------------- | -------- | --------------------------------------------- |
+| `build --> build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
+| `build --> host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
+| `build --> target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
+| `host --> host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
+| `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
+| `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
 Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
-We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules below. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+
+**Definitions:**
+
+`dep(h_offset, t_offset, X, Y)`
+:    Package X has a direct dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `nativeBuildInputs = [ Y ]` means `dep(-1, 0, X, Y)`.
+
+`propagated-dep(h_offset, t_offset, X, Y)`
+:    Package X has a propagated dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `depsBuildTargetPropagated = [ Y ]` means `propagated-dep(-1, 1, X, Y)`.
+
+`mapOffset(h, t, i) = offs`
+:    In a package X with a dependency on Y in a position with host offset `h` and target offset `t`, Y's transitive dependency Z in a position with offset `i` is mapped to offset `offs` in X.
+
+
+::: {.example}
+# Truth table of `mapOffset(h, t, i)`
+
+`x` means that the dependency was discarded because `h + i ∉ {-1, 0, 1}`.
+
+<!-- This is written as an ascii art table because the CSS was introducing so much space it was unreadable and doesn't support double lines -->
+
+```
+  h |   t  || i=-1 |  i=0 |  i=1
+----|------||------|------|-----
+ -1 |  -1  ||   x  |  -1  |  -1
+ -1 |   0  ||   x  |  -1  |   0
+ -1 |   1  ||   x  |  -1  |   1
+  0 |   0  ||  -1  |   0  |   0
+  0 |   1  ||  -1  |   0  |   1
+  1 |   1  ||   0  |   1  |   x
+```
+
+:::
 
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -372,7 +408,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the host offset: `t = h + 1`. That means that:
+Some explanation of this monstrosity is in order. In the common case of `nativeBuildInputs` or `buildInputs`, the target offset of a dependency is one greater than the host offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -383,7 +419,11 @@ let f(h, h + 1, i) = i + h
 
 This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
 
-Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
+Because of the bounds checks, the uncommon cases are `h = t` (`depsBuildBuild`, etc) and `h + 2 = t` (`depsBuildTarget`).
+
+In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package.
+
+In the other case, `h + 1` (0) is skipped over between the host (-1) and target (1) offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependency’s offset is 0.
 
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
@@ -1415,7 +1455,7 @@ This setup hook checks for, reports, and (by default) fails builds when "broken"
 This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
 
 ::: {.note}
-The hook only considers symlinks with targets inside the Nix store.
+The hook only considers symlinks with targets inside the Nix store or $TMPDIR directory (typically /nix/store and /build in the builder environment, the later being where build is executed).
 :::
 
 ::: {.note}

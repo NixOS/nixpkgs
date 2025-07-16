@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "dynamips";
     maintainers = with lib.maintainers; [
-      primeos
       anthonyroussel
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

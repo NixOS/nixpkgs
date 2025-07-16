@@ -15,7 +15,6 @@
   kdsingleapplication,
   ## darwin only
   libinotify-kqueue,
-  sparkleshare,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libinotify-kqueue
-      sparkleshare
     ];
 
   passthru.updateScript = nix-update-script { };

@@ -211,7 +211,7 @@ let
         else if format != null then
           format
         else
-          "setuptools";
+          throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.`";
 
       withDistOutput = withDistOutput' format';
 
@@ -268,11 +268,12 @@ let
 
       isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
+      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+
     in
     (cleanAttrs attrs)
     // {
-
-      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
+      inherit name;
 
       inherit catchConflicts;
 

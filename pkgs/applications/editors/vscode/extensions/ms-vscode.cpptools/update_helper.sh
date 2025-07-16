@@ -58,7 +58,7 @@ make_trapped_tmpdir
 unzip -q -d "$tmpDir" "$cpptoolsZipStorePath"
 
 cpptoolsStorePath="$(nix add-to-store -n "$extStoreName" "$tmpDir")"
-cpptoolsSha256="$(nix hash-path --base32 --type sha512 "$cpptoolsStorePath")"
+cpptoolsSha256="$(nix --extra-experimental-features nix-command hash path --base32 --type sha512 "$cpptoolsStorePath")"
 echo "cpptoolsStorePath='$cpptoolsStorePath'"
 echo "cpptoolsSha256='$cpptoolsSha256'"
 

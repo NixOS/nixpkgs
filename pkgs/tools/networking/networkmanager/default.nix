@@ -40,7 +40,6 @@
   docbook_xml_dtd_412,
   docbook_xml_dtd_42,
   docbook_xml_dtd_43,
-  openconnect,
   curl,
   meson,
   mesonEmulatorHook,
@@ -61,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.52.0";
+  version = "1.52.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NW8hoV2lHkIY/U0P14zqYeBnsRFqJc3e5K+d8FBi6S0=";
+    hash = "sha256-ixIsc0k6cvK65SfBJc69h3EWcbkDUtvisXiKupV1rG8=";
   };
 
   outputs = [
@@ -130,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       inherit
         iputils
-        openconnect
         ethtool
         gnused
         ;

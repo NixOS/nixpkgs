@@ -2,6 +2,8 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
   rocqPackages,
   stdlib,
   coq-elpi,
@@ -14,20 +16,21 @@ let
     owner = "math-comp";
     inherit version;
     defaultVersion =
+      let
+        case = case: out: { inherit case out; };
+      in
       with lib.versions;
-      lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-        lib.mapAttrsToList (out: case: { inherit case out; }) {
-          "1.9.1" = range "8.20" "9.0";
-          "1.8.0" = range "8.19" "8.20";
-          "1.7.1" = range "8.18" "8.20";
-          "1.6.0" = range "8.16" "8.18";
-          "1.5.0" = range "8.15" "8.18";
-          "1.4.0" = range "8.15" "8.17";
-          "1.2.0" = range "8.13" "8.14";
-          "1.1.0" = range "8.12" "8.13";
-          "0.10.0" = isEq "8.11";
-        }
-      )) null;
+      lib.switch coq.coq-version [
+        (case (range "8.20" "9.1") "1.9.1")
+        (case (range "8.19" "8.20") "1.8.0")
+        (case (range "8.18" "8.20") "1.7.1")
+        (case (range "8.16" "8.18") "1.6.0")
+        (case (range "8.15" "8.18") "1.5.0")
+        (case (range "8.15" "8.17") "1.4.0")
+        (case (range "8.13" "8.14") "1.2.0")
+        (case (range "8.12" "8.13") "1.1.0")
+        (case (isEq "8.11") "0.10.0")
+      ] null;
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     release."1.8.1".sha256 = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";
     release."1.8.0".sha256 = "sha256-4s/4ZZKj5tiTtSHGIM8Op/Pak4Vp52WVOpd4l9m19fY=";
@@ -76,16 +79,25 @@ hb.overrideAttrs (
   //
     lib.optionalAttrs
       (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      {
-        configurePhase = ''
-          echo no configuration
-        '';
-        buildPhase = ''
-          echo building nothing
-        '';
-        installPhase = ''
-          echo installing nothing
-        '';
-        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.hierarchy-builder ];
-      }
+      (
+        let
+          case = case: out: { inherit case out; };
+          rp = lib.switch coq.coq-version [
+            (case "9.0" rocqPackages_9_0)
+            (case "9.1" rocqPackages_9_1)
+          ] rocqPackages;
+        in
+        {
+          configurePhase = ''
+            echo no configuration
+          '';
+          buildPhase = ''
+            echo building nothing
+          '';
+          installPhase = ''
+            echo installing nothing
+          '';
+          propagatedBuildInputs = o.propagatedBuildInputs ++ [ rp.hierarchy-builder ];
+        }
+      )
 )

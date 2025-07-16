@@ -22,7 +22,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "blivet-gui";
   version = "2.6.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
@@ -46,6 +46,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [ gtk3 ];
+
+  build-system = [
+    python3.pkgs.setuptools
+  ];
 
   dependencies = [
     python3.pkgs.blivet

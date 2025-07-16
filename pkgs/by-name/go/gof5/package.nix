@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gof5";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "kayrus";
     repo = "gof5";
     rev = "v${version}";
-    sha256 = "10qh7rj8s540ghjdvymly53vny3n0qd0z0ixy24n026jjhgjvnpl";
+    sha256 = "sha256-tvahwd/UBKGYOXIgGwN98P4udcf6Bqrsy9mZ/3YVkvM=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-kTdAjNYp/qQnUhHaCD6Hn1MlMpUsWaRxTSHWSUf6Uz8=";
 
   # The tests are broken and apparently you need to uncomment some lines in the
   # code in order for it to work.

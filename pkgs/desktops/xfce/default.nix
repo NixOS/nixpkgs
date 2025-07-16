@@ -33,9 +33,9 @@ makeScopeWithSplicing' {
 
       libxfce4windowing = callPackage ./core/libxfce4windowing { };
 
-      thunar = callPackage ./core/thunar {
-        thunarPlugins = [ ];
-      };
+      thunar-unwrapped = callPackage ./core/thunar { };
+
+      thunar = callPackage ./core/thunar/wrapper.nix { };
 
       thunar-volman = callPackage ./core/thunar-volman { };
 
@@ -169,7 +169,7 @@ makeScopeWithSplicing' {
 
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
-      thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
+      thunar-bare = self.thunar-unwrapped; # added 2019-11-04
 
       xfce4-datetime-plugin = throw ''
         xfce4-datetime-plugin has been removed: this plugin has been merged into the xfce4-panel's built-in clock

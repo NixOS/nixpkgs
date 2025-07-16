@@ -99,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.192.6";
+  version = "0.194.3";
 
   outputs =
     [ "out" ]
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XLAzY9pXEfynyNkdnEJ0E/E6jLphirLgjBuXQpeK8yc=";
+    hash = "sha256-KF83XTCOWi78Uq720YSpJ6+JzllhqJQKLCqzq2WFS/U=";
   };
 
   patches = [
@@ -138,7 +138,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4kVfJmW36Q3Nb8AOmfNDmZLoZ9UZfj0MmznnIKdr+lU=";
+  cargoHash = "sha256-gSM3Qd87rhtG/oPLe3b1ItJmz9G4AEJY5h81lTz9Kl0=";
 
   nativeBuildInputs =
     [
@@ -230,6 +230,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     [
       # Flaky: unreliably fails on certain hosts (including Hydra)
       "--skip=zed::tests::test_window_edit_state_restoring_enabled"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: unreliably fails on certain hosts (including Hydra)
+      "--skip=zed::open_listener::tests::test_open_workspace_with_directory"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Fails on certain hosts (including Hydra) for unclear reason

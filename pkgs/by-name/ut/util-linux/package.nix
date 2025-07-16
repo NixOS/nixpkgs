@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalPackage: rec {
       ./fix-darwin-build.patch
       # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
       ./fix-mount-regression.patch
+      # https://github.com/util-linux/util-linux/pull/3530
+      ./libmount-subdir-remove-unused-code.patch
+      ./libmount-subdir-restrict-for-real-mounts-only.patch
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       (fetchurl {
@@ -202,18 +205,6 @@ stdenv.mkDerivation (finalPackage: rec {
     '';
 
   passthru = {
-    # TODO (#409339): Remove this hack. We had to add it to avoid a mass rebuild
-    # for the 25.05 release to fix Kubernetes. Once the staging cycle referenced
-    # in the above PR completes, this passthru and all consumers of it should go away.
-    withPatches = finalPackage.overrideAttrs (prev: {
-      patches = lib.unique (
-        prev.patches or [ ]
-        ++ [
-          ./fix-mount-regression.patch
-        ]
-      );
-    });
-
     updateScript = gitUpdater {
       # No nicer place to find latest release.
       url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";

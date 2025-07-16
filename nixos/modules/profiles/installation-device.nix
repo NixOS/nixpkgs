@@ -69,9 +69,7 @@ with lib;
         with `passwd` (prefix with `sudo` for "root"), or add your public key to
         /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
 
-        If you need a wireless connection, type
-        `sudo systemctl start wpa_supplicant` and configure a
-        network using `wpa_cli`. See the NixOS manual for details.
+        To set up a wireless connection, run `nmtui`.
       ''
       + optionalString config.services.xserver.enable ''
 
@@ -89,10 +87,8 @@ with lib;
       settings.PermitRootLogin = mkDefault "yes";
     };
 
-    # Enable wpa_supplicant, but don't start it by default.
-    networking.wireless.enable = mkDefault true;
-    networking.wireless.userControlled.enable = true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [ ];
+    # Provide networkmanager for easy network configuration.
+    networking.networkmanager.enable = true;
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't

@@ -7,13 +7,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2025-05-23";
+  version = "0-unstable-2025-06-19";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "62fd38af2f6536bb19ecc78a4dd0f0e1245c0939";
-    hash = "sha256-JG8XCXEdjVERQ9f6ZsYCLXVGN85qPWCQhS2svJYW390=";
+    rev = "35962223fbd4c1a924b4ccfb8c7ad81fe2863b86";
+    hash = "sha256-2WgqKQBZRMqUyWq0qm+d8TUT/iAQ1LZjhllBKqimp+Q=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-KDXC2/1GcJL6qH+L/FzzQCA7kJigtKOfxVDLv5qXYao=";
 
-  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/62fd38af2f6536bb19ecc78a4dd0f0e1245c0939
+  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/35962223fbd4c1a924b4ccfb8c7ad81fe2863b86
   postPatch = ''
     substituteInPlace tests/main.rs --replace-fail \
       'const TEST_BINARY: &str = "target/debug/nufmt";' \

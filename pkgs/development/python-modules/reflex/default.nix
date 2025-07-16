@@ -125,6 +125,9 @@ buildPythonPackage rec {
     "test_state_with_invalid_yield"
     # tries to run bun or npm
     "test_output_system_info"
+    # Comparison with magic string
+    # TODO Recheck on next update as it appears to be fixed in 8.0.x
+    "test_background_task_no_block"
   ];
 
   disabledTestPaths = [

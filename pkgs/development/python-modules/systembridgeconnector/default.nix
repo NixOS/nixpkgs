@@ -63,7 +63,7 @@ buildPythonPackage rec {
     "test_wait_for_response_timeout"
   ];
 
-  pytestFlagsArray = [ "--snapshot-warn-unused" ];
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";

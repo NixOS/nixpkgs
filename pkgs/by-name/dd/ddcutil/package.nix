@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
-    hash = "sha256-7Qx58cWCafSRuNyhcdSSuf7xM0JzcOG6UFiWa5K5VS4=";
+    hash = "sha256-cch2DDg91fohgXg5uGuYUKxtVY4TPi1v6ojfrwREiuY=";
   };
 
   nativeBuildInputs = [

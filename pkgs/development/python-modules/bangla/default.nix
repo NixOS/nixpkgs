@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "bangla";
-  version = "0.0.2";
+  version = "0.0.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F8j9UBMhZgB31atqebdGu6cfnkk573isDZp1171xXag=";
+    hash = "sha256-rX2/rUUf9g4otYMNX0LDPXSIDRbIE8xRl95NamHzRwQ=";
   };
 
   pythonImportsCheck = [ "bangla" ];

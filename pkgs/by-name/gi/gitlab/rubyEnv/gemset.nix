@@ -3886,10 +3886,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "02gakdhvpl777b41i8cgkrj7gk0jlq4fza9hjksp2r7ryji0vyjn";
+      sha256 = "11ink0ayf14qgs3msn5a7dpg49vm3ck2415r64nfk1i8xv286hsz";
       type = "gem";
     };
-    version = "1.72.0";
+    version = "1.63.0";
   };
   grpc-google-iam-v1 = {
     dependencies = [

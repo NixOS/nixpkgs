@@ -20,6 +20,7 @@
 buildPythonPackage rec {
   pname = "oslo-metrics";
   version = "0.11.0";
+  format = "setuptools";
 
   src = fetchFromGitea {
     domain = "opendev.org";

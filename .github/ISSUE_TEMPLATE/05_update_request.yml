@@ -39,7 +39,6 @@ body:
         - "Please select a version."
         - "- Unstable (25.11)"
         - "- Stable (25.05)"
-        - "- Previous Stable (24.11)"
       default: 0
     validations:
       required: true

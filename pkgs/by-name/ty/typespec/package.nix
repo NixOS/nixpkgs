@@ -38,6 +38,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       postPatch
       ;
+    fetcherVersion = 1;
     hash = "sha256-9RQZ2ycu78W3Ie6MLpo6x7Sa/iYsUdq5bYed56mOPxs=";
   };
 

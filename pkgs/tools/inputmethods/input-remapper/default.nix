@@ -39,6 +39,7 @@ in
 (buildPythonApplication rec {
   pname = "input-remapper";
   version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";

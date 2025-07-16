@@ -532,7 +532,7 @@ in
           # required for services generated with writeShellScript and friends
           pkgs.runtimeShell
           # some tools like xfs still want the sh symlink
-          "${pkgs.bash}/bin"
+          "${pkgs.bashNonInteractive}/bin"
 
           # so NSS can look up usernames
           "${pkgs.glibc}/lib/libnss_files.so.2"

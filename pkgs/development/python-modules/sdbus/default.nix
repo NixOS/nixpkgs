@@ -11,6 +11,7 @@ let
   version = "0.14.0";
 in
 buildPythonPackage {
+  format = "setuptools";
   inherit pname version;
 
   nativeBuildInputs = [ pkg-config ];

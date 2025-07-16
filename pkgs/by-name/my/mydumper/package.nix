@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.19.3-1";
+  version = "0.19.3-3";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-96AFq6wEALRRqD6+n/XMOAus3v9GX/eZOVZQdgUtf+w=";
+    hash = "sha256-CrjI6jwktBxKn7hgL8+pCikbtCFUK6z90Do9fWmLZlQ=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };

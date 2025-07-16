@@ -18,7 +18,9 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = { };
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
     overlays = [ ];
   };
 

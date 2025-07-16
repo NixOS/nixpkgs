@@ -47,6 +47,7 @@ let
       pyopenssl
       crcmod
       numpy
+      grpcio
     ]
     ++ lib.optional (with-gce) google-compute-engine
   );

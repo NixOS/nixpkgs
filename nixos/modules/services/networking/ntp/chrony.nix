@@ -92,7 +92,7 @@ in
         default =
           config.environment.memoryAllocator.provider != "graphene-hardened"
           && config.environment.memoryAllocator.provider != "graphene-hardened-light";
-        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
+        defaultText = lib.literalExpression ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
         description = ''
           Whether to add the `-m` flag to lock memory.
         '';
@@ -316,13 +316,6 @@ in
           Unless you are very sure the former isn't what you want, please remove
           `rtcsync` from `services.chrony.extraConfig`.
           Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
-        '';
-      }
-      {
-        assertion = !(cfg.enable && config.environment.memoryAllocator.provider == "graphene-hardened");
-        message = ''
-          Chrony doesn't work with the graphene-hardened memory allocator set by
-          `environment.memoryAllocator.provider`.
         '';
       }
     ];

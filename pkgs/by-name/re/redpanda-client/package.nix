@@ -7,12 +7,12 @@
   stdenv,
 }:
 let
-  version = "25.1.5";
+  version = "25.1.7";
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "redpanda";
     rev = "v${version}";
-    sha256 = "sha256-K0MYcxz5EE9PAJZby3VcI3lpRaOfZDJoD6YwCbSw49I=";
+    sha256 = "sha256-GRWLEzf0YfSk96oDCuthMNmu0C1KJCk10Uz7eApS4mk=";
   };
 in
 buildGoModule rec {

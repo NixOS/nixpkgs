@@ -26,7 +26,7 @@
 
   apple-sdk_11,
   boost187,
-  electron_34,
+  electron_36,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,7 +45,7 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
@@ -211,6 +211,7 @@ stdenv.mkDerivation rec {
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
     ./fix-darwin.patch
+    ./bump-node-abi.patch
   ];
 
   postPatch = ''
@@ -241,7 +242,11 @@ stdenv.mkDerivation rec {
     name = "rstudio-${version}-npm-deps";
     inherit src;
     postPatch = "cd ${npmRoot}";
-    hash = "sha256-ispV6FJdtOELtFNIZDn1lKbwvO/iTO8mrZ8nIOs2uhs=";
+    patches = [
+      # needed for support for electron versions above electron_34
+      ./bump-node-abi.patch
+    ];
+    hash = "sha256-64PJPUE/xwdQdxVGiKzy8ADnxXH/qGQtFMib0unZpoA=";
   };
 
   preConfigure =

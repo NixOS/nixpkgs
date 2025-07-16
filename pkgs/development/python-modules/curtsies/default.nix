@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "curtsies";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-br4zIVvXyShRpQYEnHIMykz1wZLBZlwdepigTEcCdg4=";
+    hash = "sha256-ECoP+/lSEk8b4iL9aYnaTsfM4E5J9hMAnl9UrTdhiCU=";
   };
 
   nativeBuildInputs = [ setuptools ];

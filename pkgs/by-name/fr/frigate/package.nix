@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-rnsc2VXaypIPVtYQHTGe9lg7PuAyjfjz4aeATmFzp5s=";
+    hash = "sha256-YJFtMVCTtp8h9a9RmkcoZSQ+nIKb5o/4JVynVslkx78=";
   };
 
   frigate-web = callPackage ./web.nix {

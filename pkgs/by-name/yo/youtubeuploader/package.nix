@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "youtubeuploader";
-  version = "1.24.4";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "porjo";
     repo = "youtubeuploader";
     tag = "v${version}";
-    hash = "sha256-93VqB8tnl5o6YRY2cNBF/uARrJI6ywNg83lXGMxtgYM=";
+    hash = "sha256-hffi1/+j5u8/7kOaEGcE0iSMWt3nPmNaE2lg0WBu/BM=";
   };
 
-  vendorHash = "sha256-FgAfUcgY2dY8Jj3YcxrIGOpzQeAAICELeKL+scblZq0=";
+  vendorHash = "sha256-wVfJnN9QgF7c2aI3OghfJW9Z6McZ+irgMRSkWvVi1DM=";
 
   passthru.updateScript = nix-update-script { };
 

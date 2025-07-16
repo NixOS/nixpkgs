@@ -55,7 +55,7 @@ buildPythonPackage rec {
     cd $TMP
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "uarray"
   ];

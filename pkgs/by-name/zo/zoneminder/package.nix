@@ -246,6 +246,6 @@ stdenv.mkDerivation rec {
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

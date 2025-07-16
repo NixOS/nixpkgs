@@ -707,7 +707,7 @@ in
       before = [ "phpfpm-mediawiki.service" ];
       after =
         optional (cfg.database.type == "mysql" && cfg.database.createLocally) "mysql.service"
-        ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.service";
+        ++ optional (cfg.database.type == "postgres" && cfg.database.createLocally) "postgresql.target";
       script = ''
         if ! test -e "${stateDir}/secret.key"; then
           tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 64 > ${stateDir}/secret.key
@@ -754,7 +754,7 @@ in
       ) "mysql.service"
       ++ optional (
         cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres"
-      ) "postgresql.service";
+      ) "postgresql.target";
 
     users.users.${user} = {
       inherit group;

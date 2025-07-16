@@ -24,6 +24,7 @@
 buildPythonPackage ({
   pname = "buildbot_worker";
   inherit (buildbot) src version;
+  format = "setuptools";
 
   postPatch = ''
     cd worker

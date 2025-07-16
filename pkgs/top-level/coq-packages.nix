@@ -102,6 +102,7 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       ExtLib = callPackage ../development/coq-modules/ExtLib { };
       extructures = callPackage ../development/coq-modules/extructures { };
+      fcsl-pcm = callPackage ../development/coq-modules/fcsl-pcm { };
       flocq = callPackage ../development/coq-modules/flocq { };
       fourcolor = callPackage ../development/coq-modules/fourcolor { };
       gaia = callPackage ../development/coq-modules/gaia { };
@@ -311,6 +312,7 @@ rec {
   coq_8_19 = mkCoq "8.19";
   coq_8_20 = mkCoq "8.20";
   coq_9_0 = mkCoq "9.0";
+  coq_9_1 = mkCoq "9.1";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -329,6 +331,7 @@ rec {
   coqPackages_8_19 = mkCoqPackages coq_8_19;
   coqPackages_8_20 = mkCoqPackages coq_8_20;
   coqPackages_9_0 = mkCoqPackages coq_9_0;
+  coqPackages_9_1 = mkCoqPackages coq_9_1;
 
   coqPackages = recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;

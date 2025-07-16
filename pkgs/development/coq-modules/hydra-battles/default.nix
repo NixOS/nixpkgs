@@ -19,13 +19,14 @@
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
-    lib.switch coq.coq-version (lib.lists.sort (x: y: isLe x.out y.out) (
-      lib.mapAttrsToList (out: case: { inherit case out; }) {
-        "0.9" = range "8.13" "8.16";
-        "0.4" = range "8.11" "8.12";
-      }
-    )) null;
+    lib.switch coq.coq-version [
+      (case (range "8.13" "8.16") "0.9")
+      (case (range "8.11" "8.12") "0.4")
+    ] null;
 
   useDune = true;
 

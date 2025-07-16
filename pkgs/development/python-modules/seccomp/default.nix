@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "libseccomp";
   version = libseccomp.version;
+  format = "setuptools";
   src = libseccomp.pythonsrc;
 
   VERSION_RELEASE = version; # used by build system

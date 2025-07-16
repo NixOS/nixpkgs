@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   keybinder3,
   nodejs,
   pnpm_9,
@@ -22,13 +22,13 @@
 }:
 
 let
-  version = "2.0.0-beta.2";
+  version = "2.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-PPB9eRXit89lwkLCN86+Un/msMqnFAulJxEGi+7Fa/c=";
+    hash = "sha256-z/fVRs5mflBhkeTazK9zg5WTYqDpqiXWEcNepEHg2k8=";
   };
 
   metaCommon = {
@@ -38,7 +38,7 @@ let
     maintainers = with lib.maintainers; [ emaryn ];
   };
 
-  ui-flutter = flutter327.buildFlutterApplication {
+  ui-flutter = flutter332.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -74,6 +74,7 @@ let
         src
         sourceRoot
         ;
+      fetcherVersion = 1;
       hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
     };
 
@@ -153,7 +154,7 @@ buildGoModule {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-MKxMHABeKotErM+PEhWxeQmPcHH4jJSGWa8wzj42hoE=";
+  vendorHash = "sha256-PW8upRPhv4UDnXvI+0b61c4jKkTrxzFuobF7x+qxY74=";
 
   proxyVendor = true;
 

@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ZConfig" ];
 
-  pytestFlagsArray = [ "-s" ];
+  pytestFlags = [ "-s" ];
 
   meta = {
     description = "Structured Configuration Library";

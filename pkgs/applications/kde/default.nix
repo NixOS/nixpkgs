@@ -108,7 +108,6 @@ let
       grantleetheme = callPackage ./grantleetheme { };
       gwenview = callPackage ./gwenview { };
       incidenceeditor = callPackage ./incidenceeditor.nix { };
-      itinerary = callPackage ./itinerary.nix { };
       juk = callPackage ./juk.nix { };
       kaccounts-integration = callPackage ./kaccounts-integration.nix { };
       kaccounts-providers = callPackage ./kaccounts-providers.nix { };
@@ -218,7 +217,6 @@ let
       ktimer = callPackage ./ktimer.nix { };
       ktnef = callPackage ./ktnef.nix { };
       ktorrent = callPackage ./ktorrent.nix { };
-      ktouch = callPackage ./ktouch.nix { };
       kturtle = callPackage ./kturtle.nix { };
       kwalletmanager = callPackage ./kwalletmanager.nix { };
       kwave = callPackage ./kwave.nix { };
@@ -272,7 +270,6 @@ let
       krecorder = callPackage ./krecorder.nix { };
       ktrip = callPackage ./ktrip.nix { };
       kweather = callPackage ./kweather.nix { };
-      neochat = callPackage ./neochat.nix { };
       plasmatube = callPackage ./plasmatube { };
       qmlkonsole = callPackage ./qmlkonsole.nix { };
       telly-skout = callPackage ./telly-skout.nix { };
@@ -280,6 +277,7 @@ let
     }
     // lib.optionalAttrs config.allowAliases {
       k3b = throw "libsForQt5.k3b has been dropped in favor of kdePackages.k3b";
+      ktouch = throw "ktouch has been dropped due keyboard layout issues";
     };
 
 in

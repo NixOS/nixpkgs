@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "falcon-cors";
   version = "1.1.7";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lwcolton";

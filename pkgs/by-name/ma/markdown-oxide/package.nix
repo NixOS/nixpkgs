@@ -5,17 +5,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-oxide";
-  version = "0.25.2";
+  version = "0.25.4";
 
   src = fetchFromGitHub {
     owner = "Feel-ix-343";
     repo = "markdown-oxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LXFZAMxg2Mlatwx7d4ozofr7H9nrqDxai9U/oB4vkqA=";
+    hash = "sha256-wS75Etj6NAMt/wlWB1yLGetM+OsgyeCo0dqHkrjUsQI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-VEYwLTWnFMO6qH9qsO4/oiNeIHgoEZAF+YjeVgFOESQ=";
+  cargoHash = "sha256-W+4WmWfqNuh3kmqE9X6CQ5/kTqMoUqyuIFCRiZa6Kc4=";
 
   meta = {
     description = "Markdown LSP server inspired by Obsidian";

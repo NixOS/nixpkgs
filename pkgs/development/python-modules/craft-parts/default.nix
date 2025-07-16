@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.12.0";
+  version = "2.16.0";
 
   pyproject = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-mm5s7lHbU9SJsS9wTkXkJpmVsGG0qVXIeaQ+TiGz/7o=";
+    hash = "sha256-JuFx5Ap2ioYsc20E5Ho4z+/DFs7d+OBF3XLlOOZ10Zk=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)

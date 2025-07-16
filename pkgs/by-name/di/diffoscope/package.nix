@@ -106,11 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "298";
+  version = "301";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-GakldHALDu1TXg/b0qEQD7NNK3Ljk2yQXnv5+Sr+rNw=";
+    hash = "sha256-piTdP812LgcxvvgvUOKUrkxVXCbclyQW8dp84beT7H4=";
   };
 
   outputs = [
@@ -259,7 +260,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Always show more information when tests fail
     "-vv"
   ];

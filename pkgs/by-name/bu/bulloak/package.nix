@@ -47,7 +47,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   # provide the list of solc versions to the `svm-rs-builds` dependency
-  SVM_RELEASES_LIST_JSON = solc-versions.${stdenv.hostPlatform.system};
+  SVM_RELEASES_LIST_JSON =
+    solc-versions.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
     description = "Solidity test generator based on the Branching Tree Technique";

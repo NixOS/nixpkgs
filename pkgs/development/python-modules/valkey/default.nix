@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
@@ -31,8 +32,6 @@ buildPythonPackage rec {
   pname = "valkey";
   version = "6.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
@@ -78,19 +77,32 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not onlycluster and not ssl'" ];
 
-  disabledTests = [
-    # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
-    "test_get_from_cache"
-    "test_cache_decode_response"
-    # Expects another valkey instance on port 6380 *shrug*
-    "test_psync"
+  disabledTests =
+    [
+      # valkey.sentinel.MasterNotFoundError: No master found for 'valkey-py-test'
+      "test_get_from_cache"
+      "test_cache_decode_response"
+      # Expects another valkey instance on port 6380 *shrug*
+      "test_psync"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      #  OSError: AF_UNIX path too long
+      "test_uds_connect"
+      "test_network_connection_failure"
+    ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: Can't get local object 'TestMultiprocessing.test_valkey_client.<locals>.target'
+    "tests/test_multiprocessing.py"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/valkey-io/valkey-py";
     changelog = "https://github.com/valkey-io/valkey-py/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

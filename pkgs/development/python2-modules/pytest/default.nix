@@ -23,6 +23,7 @@
 }:
 buildPythonPackage rec {
   version = "4.6.11";
+  format = "setuptools";
   pname = "pytest";
 
   src = fetchPypi {

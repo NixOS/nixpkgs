@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsr";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchgit {
     url = "https://tangled.sh/@rockorager.dev/lsr";
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       "src"
       "docs"
     ];
-    hash = "sha256-+5VHY02AHFtV405OGk5PR/2tl/3qDQHDrOUghZbx5ks=";
+    hash = "sha256-VeB0R/6h9FXSzBfx0IgpGlBz16zQScDSiU7ZvTD/Cds=";
   };
 
   postPatch = ''

@@ -443,6 +443,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
     hash = "...";
   };
 })
@@ -558,6 +559,41 @@ set `prePnpmInstall` to the right commands to run. For example:
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
 
+#### PNPM `fetcherVersion` {#javascript-pnpm-fetcherVersion}
+
+This is the version of the output of `pnpm.fetchDeps`, if you haven't set it already, you can use `1` with your current hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 1;
+    hash = "..."; # you can use your already set hash here
+  };
+}
+```
+
+After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 2;
+    hash = "..."; # clear this hash and generate a new one
+  };
+}
+```
+
+This variable ensures that we can make changes to the output of `pnpm.fetchDeps` without breaking existing hashes.
+Changes can include workarounds or bug fixes to existing PNPM issues.
+
+##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
+
+- 1: Initial version, nothing special
+- 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 
 ### Yarn {#javascript-yarn}
 

@@ -7,17 +7,18 @@
   openssl,
   pam,
   openssh,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pam_rssh";
-  version = "1.2.0-rc2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "z4yx";
     repo = "pam_rssh";
     rev = "v${version}";
-    hash = "sha256-sXTSICVYSmwr12kRWuhVcag8kY6VAFdCqbe6LtYs4hU=";
+    hash = "sha256-VxbaxqyIAwmjjbgfTajqwPQC3bp7g/JNVNx9yy/3tus=";
     fetchSubmodules = true;
   };
 
@@ -66,11 +67,16 @@ rustPlatform.buildRustPackage rec {
     ssh-add $HOME/.ssh/id_rsa
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
     homepage = "https://github.com/z4yx/pam_rssh";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [
+      kranzes
+      xyenon
+    ];
   };
 }

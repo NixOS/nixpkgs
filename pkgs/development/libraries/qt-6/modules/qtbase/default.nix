@@ -269,6 +269,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"
       "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
+      # This is only used for the min version check, which we disabled above.
+      # When this variable is not set, cmake tries to execute xcodebuild
+      # to query the version.
+      "-DQT_INTERNAL_XCODE_VERSION=0.1"
     ]
     ++ lib.optionals isCrossBuild [
       "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"

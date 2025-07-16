@@ -14,14 +14,15 @@
 
 buildPythonPackage rec {
   pname = "azure-multiapi-storage";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RfFd+1xL2ouWJ3NLXMcsRfQ215bi4ha+iCOcYXjND3E=";
+    pname = "azure_multiapi_storage";
+    inherit version;
+    hash = "sha256-INTvVn+1ysQHKRyI0Q4p43Ynyyj2BiBPVMcfaAEDCyg=";
   };
 
   build-system = [ setuptools ];

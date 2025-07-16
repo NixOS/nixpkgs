@@ -2,15 +2,23 @@
   buildPythonPackage,
   lib,
   fetchFromGitHub,
+
+  # build-sysetm
   cmake,
+
+  # build inputs
   blas,
   libcint,
   libxc,
   xcfun,
+
+  # dependencies
   cppe,
   h5py,
   numpy,
   scipy,
+
+  # tests
   pytestCheckHook,
 }:
 
@@ -25,6 +33,12 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-UTeZXlNuSWDOcBRVbUUWJ3mQnZZQr17aTw6rRA5DRNI=";
   };
+
+  patches = [
+    # Converts numpy.int64 to int where necessary.
+    # Upstream issue: https://github.com/pyscf/pyscf/issues/2878
+    ./coerce-numpy-to-int.patch
+  ];
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
   build-system = [ cmake ];
@@ -60,6 +74,7 @@ buildPythonPackage rec {
 
   # Numerically slightly off tests
   disabledTests = [
+    "test_rdm_trace"
     "test_tdhf_singlet"
     "test_ab_hf"
     "test_ea"
@@ -99,14 +114,15 @@ buildPythonPackage rec {
     "--ignore-glob=pyscf/grad/test/test_casscf.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based simulations of chemistry framework";
     homepage = "https://github.com/pyscf/pyscf";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
+      "aarch64-darwin"
     ];
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

@@ -310,7 +310,6 @@ in
 
               Restart = "always";
               RestartSec = 10;
-              StartLimitBurst = 5;
               UMask = "007";
               LimitNOFILE = "100000";
 
@@ -340,6 +339,9 @@ in
                 "@system-service"
                 "~@privileged"
               ];
+            };
+            unitConfig = {
+              StartLimitBurst = 5;
             };
           }
         ))

@@ -90,6 +90,7 @@ in
 buildPythonApplication rec {
   pname = "xpra";
   version = "6.3";
+  format = "setuptools";
 
   stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 

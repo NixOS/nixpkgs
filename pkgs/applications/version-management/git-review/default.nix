@@ -11,6 +11,7 @@
 buildPythonApplication rec {
   pname = "git-review";
   version = "2.5.0";
+  format = "setuptools";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
   jsonschema,
   pytestCheckHook,
   python-dateutil,
@@ -27,12 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-+oKhKn+wUnvKlNymY/vtXn0cHBMyawBNhOQRu0tYC/M=";
   };
 
-  pythonRelaxDeps = [ "future" ];
-
   build-system = [ setuptools ];
 
   dependencies = [
-    future
     jsonschema
     python-dateutil
     requests

@@ -225,14 +225,14 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.14.2";
-    hash = "sha256-cZehL0UHlJMVMkadT/IaWeosHNWaPsP4nANcPEIKaZk=";
+    version = "8.14.3";
+    hash = "sha256-vXEQIhNJMGCVbsIp2Ua+7lcVjb2J0OYrkbyg+ixfNTE=";
     defaultJava = jdk21;
   };
 
   gradle_7 = gen {
-    version = "7.6.5";
-    hash = "sha256-uBL+wO230n4K41lViHuylUU2+j5E7a9IEVDaBY4VTZo=";
+    version = "7.6.6";
+    hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
     defaultJava = jdk17;
   };
 

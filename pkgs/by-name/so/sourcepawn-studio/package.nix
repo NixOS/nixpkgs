@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sourcepawn-studio";
-  version = "8.1.6";
+  version = "8.1.7";
 
   src = fetchFromGitHub {
     owner = "Sarrus1";
     repo = "sourcepawn-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XDvVOY1BueavFe9pHMGLDZRaKbDq78xQAUMPVNKG04M=";
+    hash = "sha256-f7mBsBITBmgoGfiAzdQpZQnSY/9WYJ91uCJxCu755tU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-o4mGOsoayR39gyV5Jit3ZEkdDllqNklfaHs0Oxw+tDc=";
+  cargoHash = "sha256-NQHetE5z8pgTtPjbc9PK3X4FEw7fL7n+ZGyzmQ5JBPM=";
 
   nativeBuildInputs = [ pkg-config ];
 

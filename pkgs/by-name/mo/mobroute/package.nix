@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "mobroute";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mobroute";
     rev = "v${version}";
-    hash = "sha256-eMLn9Px6jO88CQWpwFF7JK1UPHoEbhDXoU2G1aYe2dw=";
+    hash = "sha256-qQmOvo8fVZfAE0XzX1YPhfzXrBXEWwRkNNnhLQFd4ec=";
   };
-  vendorHash = "sha256-fMIa9HCfK6YDb0V0RhzomwuSqPhlwLBHJRjQV96cY8g=";
+  vendorHash = "sha256-HcHPQq9KmqSB5RdmZDFR6BXsVoJ4XfBMClS8hR8weCU=";
 
   buildInputs = [ sqlite ];
   tags = [
