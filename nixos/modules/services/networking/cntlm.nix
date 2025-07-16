@@ -8,27 +8,33 @@ let
 
   cfg = config.services.cntlm;
 
-  needsPassNTLMv2 = builtins.elem cfg.authType ["NTLMv2"];
-  needsPassNT = builtins.elem cfg.authType ["NTLM2SR" "NT" "NTLM"];
-  needsPassLM = builtins.elem cfg.authType ["NTLM" "LM"];
+  needsPassNTLMv2 = builtins.elem cfg.authType [ "NTLMv2" ];
+  needsPassNT = builtins.elem cfg.authType [
+    "NT"
+    "NTLM"
+    "NTLM2SR"
+  ];
+  needsPassLM = builtins.elem cfg.authType [
+    "LM"
+    "NTLM"
+  ];
 
-  buildConfig =
-    pkgs.runCommandNoCC "cntlm.conf" {} ''
-      set -euo pipefail
-      cat ${configPrelude} >$out
-      GENERATED=$(echo "${cfg.password}" | ${pkgs.cntlm}/bin/cntlm \
-        -u ${cfg.username} -d ${cfg.domain} -H)
+  buildConfig = pkgs.runCommandNoCC "cntlm.conf" { } ''
+    set -euo pipefail
+    cat ${configPrelude} >$out
+    GENERATED=$(echo "${cfg.password}" | ${pkgs.cntlm}/bin/cntlm \
+      -u ${cfg.username} -d ${cfg.domain} -H)
 
-      ${lib.optionalString needsPassNTLMv2 ''
-        echo "$GENERATED" | grep 'PassNTLMv2 ' >>$out
-      ''}
-      ${lib.optionalString needsPassNT ''
-        echo "$GENERATED" | grep 'PassNT ' >>$out
-      ''}
-      ${lib.optionalString needsPassLM ''
-        echo "$GENERATED" | grep 'PassLM ' >>$out
-      ''}
-    '';
+    ${lib.optionalString needsPassNTLMv2 ''
+      echo "$GENERATED" | grep 'PassNTLMv2 ' >>$out
+    ''}
+    ${lib.optionalString needsPassNT ''
+      echo "$GENERATED" | grep 'PassNT ' >>$out
+    ''}
+    ${lib.optionalString needsPassLM ''
+      echo "$GENERATED" | grep 'PassLM ' >>$out
+    ''}
+  '';
 
   configPrelude = pkgs.writeText "cntlm-prelude.conf" ''
     # Cntlm Authentication Proxy Configuration
@@ -46,11 +52,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  configFile =
-    if cfg.configFile != null then
-      cfg.configFile
-    else
-      buildConfig;
+  configFile = if cfg.configFile != null then cfg.configFile else buildConfig;
 in
 {
   imports = [
@@ -77,11 +79,11 @@ in
 
     authType = lib.mkOption {
       type = lib.types.enum [
-        "NTLMv2"
-        "NTLM2SR"
+        "LM"
         "NT"
         "NTLM"
-        "LM"
+        "NTLM2SR"
+        "NTLMv2"
       ];
       description = "Authentication type for the ntlm proxy";
     };
