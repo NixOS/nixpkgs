@@ -1,33 +1,42 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
   openssl,
-  versionCheckHook,
+  git,
+  installShellFiles,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-rRe0JFEO5ixxrZYDL8kxXDOH0n7lqabkXNNaSlNnQDg=";
+    hash = "sha256-EPK7FX7mP6+nhYMs22zjAclZ9067lOo+BoBYckdnq/E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QIZ3V4NUo1VxJN3cwdQf3S0zwePnwdKKfch0jlIJacU=";
+  cargoHash = "sha256-69bvdxHdFnWYvCH0PW+KMZI5HDuarFndNlf75Iw5Dno=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
+
   buildInputs = [
     openssl
+  ];
+
+  nativeCheckInputs = [
+    git
   ];
 
   checkFlags = [
@@ -35,8 +44,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=retries_on_early_close" # Requires network access
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd codex \
+      --bash <($out/bin/codex completion bash) \
+      --fish <($out/bin/codex completion fish) \
+      --zsh <($out/bin/codex completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script {
