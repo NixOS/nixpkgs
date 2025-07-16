@@ -15,6 +15,7 @@
   requests,
   setuptools,
   six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
