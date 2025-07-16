@@ -38,27 +38,25 @@
 attrs:
 let
   args = attrs.drvAttrs or attrs;
-  name = args.name or "${args.pname}-${args.version}";
+  argsToOverride = {
+    name = "${args.name or "${args.pname}-${args.version}"}-source";
+
+    outputs = [ "out" ];
+
+    phases = [
+      "unpackPhase"
+      "patchPhase"
+      "installPhase"
+    ];
+    separateDebugInfo = false;
+
+    dontUnpack = false;
+
+    dontInstall = false;
+    installPhase = "cp -pr --reflink=auto -- . $out";
+  };
+
   stdenv = args.stdenv or (lib.warn "srcOnly: stdenv not provided, using stdenvNoCC" stdenvNoCC);
-  drv = stdenv.mkDerivation (
-    args
-    // {
-      name = "${name}-source";
-
-      outputs = [ "out" ];
-
-      phases = [
-        "unpackPhase"
-        "patchPhase"
-        "installPhase"
-      ];
-      separateDebugInfo = false;
-
-      dontUnpack = false;
-
-      dontInstall = false;
-      installPhase = "cp -pr --reflink=auto -- . $out";
-    }
-  );
+  drv = stdenv.mkDerivation (args // argsToOverride);
 in
 lib.warnIf (args.dontUnpack or false) "srcOnly: derivation has dontUnpack set, overriding" drv
