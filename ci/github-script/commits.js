@@ -179,9 +179,14 @@ module.exports = async function ({ github, context, core }) {
         }
 
         core.summary.addRaw('<details><summary>Show diff</summary>')
-        core.summary.addRaw('\n\n```diff', true)
-        core.summary.addRaw(truncated.join('\n'), true)
-        core.summary.addRaw('```', true)
+        core.summary.addCodeBlock(
+          truncated
+            .join('\n')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;'),
+          'diff',
+        )
         core.summary.addRaw('</details>')
       }
 
