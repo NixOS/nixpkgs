@@ -9,7 +9,6 @@
   limesuite,
   libiio,
   libbladeRF,
-  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
   qt5,
@@ -20,14 +19,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.9.8";
+  version = "2.9.8-unstable-2025-07-07";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = "urh";
-    tag = "v${version}";
-    hash = "sha256-r3d80dzGwgf5Tuwt1IWGcmNbblwBNKTKKm+GGx1r2HE=";
+    rev = "9061187d326f39de126dd1b8cc943aa33c36ae8d";
+    hash = "sha256-MjgEa33geZ8Icn7H/Zxvux6rMnSOFcMuwG5n/5cwuMI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5
-    numpy_1
+    numpy
     psutil
     cython
     pyzmq
