@@ -17,7 +17,7 @@ in
 {
   composerRepositoryHook = makeSetupHook {
     name = "composer-repository-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
       cacert
     ];
@@ -28,7 +28,7 @@ in
 
   composerInstallHook = makeSetupHook {
     name = "composer-install-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
       cacert
     ];
@@ -42,7 +42,7 @@ in
 
   composerWithPluginVendorHook = makeSetupHook {
     name = "composer-with-plugin-vendor-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
       cacert
     ];
