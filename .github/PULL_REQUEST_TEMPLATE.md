@@ -1,21 +1,18 @@
 
 <!--
-^ Please summarise the changes you have done and explain why they are necessary here ^
-
-For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
-For new packages please briefly describe the package or provide a link to its homepage.
+Please summarise your changes and explain why they are necessary here.
 -->
 
 ## Things done
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!-- Please check what applies. Not all of these are hard requirements. -->
 
 - Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
   - [ ] x86_64-darwin
   - [ ] aarch64-darwin
-- Tested, as applicable:
+- Tested:
   - [ ] [NixOS tests] in [nixos/tests].
   - [ ] [Package tests] at `passthru.tests`.
   - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
