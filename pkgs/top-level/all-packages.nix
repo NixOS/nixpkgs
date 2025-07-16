@@ -201,27 +201,15 @@ with pkgs;
     } ../build-support/setup-hooks/add-bin-to-path.sh
   ) { };
 
-  aider-chat = with python312Packages; toPythonApplication aider-chat;
+  aider-chat-with-playwright = aider-chat.withOptional { withPlaywright = true; };
 
-  aider-chat-with-playwright =
-    with python312Packages;
-    toPythonApplication (aider-chat.withOptional { withPlaywright = true; });
+  aider-chat-with-browser = aider-chat.withOptional { withBrowser = true; };
 
-  aider-chat-with-browser =
-    with python312Packages;
-    toPythonApplication (aider-chat.withOptional { withBrowser = true; });
+  aider-chat-with-help = aider-chat.withOptional { withHelp = true; };
 
-  aider-chat-with-help =
-    with python312Packages;
-    toPythonApplication (aider-chat.withOptional { withHelp = true; });
+  aider-chat-with-bedrock = aider-chat.withOptional { withBedrock = true; };
 
-  aider-chat-with-bedrock =
-    with python312Packages;
-    toPythonApplication (aider-chat.withOptional { withBedrock = true; });
-
-  aider-chat-full =
-    with python312Packages;
-    toPythonApplication (aider-chat.withOptional { withAll = true; });
+  aider-chat-full = aider-chat.withOptional { withAll = true; };
 
   autoreconfHook = callPackage (
     {

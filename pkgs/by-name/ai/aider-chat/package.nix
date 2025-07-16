@@ -1,139 +1,29 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
+  python312Packages,
   fetchFromGitHub,
   replaceVars,
   gitMinimal,
   portaudio,
   playwright-driver,
-  pythonOlder,
-  pythonAtLeast,
-  setuptools-scm,
-  aiohappyeyeballs,
-  aiohttp,
-  aiosignal,
-  annotated-types,
-  anyio,
-  attrs,
-  backoff,
-  beautifulsoup4,
-  cachetools,
-  certifi,
-  cffi,
-  charset-normalizer,
-  click,
-  configargparse,
-  diff-match-patch,
-  diskcache,
-  distro,
-  filelock,
-  flake8,
-  frozenlist,
-  fsspec,
-  gitdb,
-  gitpython,
-  google-ai-generativelanguage,
-  google-generativeai,
-  grep-ast,
-  h11,
-  hf-xet,
-  httpcore,
-  httpx,
-  huggingface-hub,
-  idna,
-  importlib-resources,
-  jinja2,
-  jiter,
-  json5,
-  jsonschema,
-  jsonschema-specifications,
-  litellm,
-  markdown-it-py,
-  markupsafe,
-  mccabe,
-  mdurl,
-  multidict,
-  networkx,
-  numpy,
-  openai,
-  oslex,
-  packaging,
-  pathspec,
-  pexpect,
-  pillow,
-  prompt-toolkit,
-  psutil,
-  ptyprocess,
-  pycodestyle,
-  pycparser,
-  pydantic,
-  pydantic-core,
-  pydub,
-  pyflakes,
-  pygments,
-  pypandoc,
-  pyperclip,
-  python-dotenv,
-  pyyaml,
-  referencing,
-  regex,
-  requests,
-  rich,
-  rpds-py,
-  scipy,
-  shtab,
-  smmap,
-  sniffio,
-  sounddevice,
-  socksio,
-  soundfile,
-  soupsieve,
-  tiktoken,
-  tokenizers,
-  tqdm,
-  tree-sitter,
-  tree-sitter-language-pack,
-  typing-extensions,
-  typing-inspection,
-  urllib3,
-  watchfiles,
-  wcwidth,
-  yarl,
-  zipp,
-  pip,
-  mixpanel,
-  monotonic,
-  posthog,
-  propcache,
-  python-dateutil,
-  pytestCheckHook,
-  greenlet,
-  playwright,
-  pyee,
-  streamlit,
-  llama-index-core,
-  llama-index-embeddings-huggingface,
-  torch,
-  nltk,
-  boto3,
   nix-update-script,
 }:
 
 let
-  aider-nltk-data = nltk.dataDir (d: [
+  # dont support python 3.13 (Aider-AI/aider#3037)
+  python3Packages = python312Packages;
+
+  aider-nltk-data = python3Packages.nltk.dataDir (d: [
     d.punkt-tab
     d.stopwords
   ]);
 
   version = "0.85.1";
-  aider-chat = buildPythonPackage {
+  aider-chat = python3Packages.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
     pyproject = true;
-
-    # dont support python 3.13 (Aider-AI/aider#3037)
-    disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
     src = fetchFromGitHub {
       owner = "Aider-AI";
@@ -144,9 +34,9 @@ let
 
     pythonRelaxDeps = true;
 
-    build-system = [ setuptools-scm ];
+    build-system = with python3Packages; [ setuptools-scm ];
 
-    dependencies = [
+    dependencies = with python3Packages; [
       aiohappyeyeballs
       aiohttp
       aiosignal
@@ -251,13 +141,13 @@ let
     buildInputs = [ portaudio ];
 
     nativeCheckInputs = [
-      pytestCheckHook
+      python3Packages.pytestCheckHook
       gitMinimal
     ];
 
     patches = [
       (replaceVars ./fix-flake8-invoke.patch {
-        flake8 = lib.getExe flake8;
+        flake8 = lib.getExe python3Packages.flake8;
       })
     ];
 
@@ -308,7 +198,7 @@ let
       export AIDER_ANALYTICS="false"
     '';
 
-    optional-dependencies = {
+    optional-dependencies = with python3Packages; {
       playwright = [
         greenlet
         playwright
