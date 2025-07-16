@@ -44,11 +44,6 @@ buildPgrxExtension (finalAttrs: {
     })
     # Add feature flags needed for features not yet stabilised in rustc stable
     ./0002-add-feature-flags.diff
-    # The select_predictable function has been moved from std::bool to std::hint before it has been stabilized.
-    # This move isn't present in rustc 1.87, but upstream is using nightly so they have already updated their code.
-    # This patch changes the code to use the function on std::bool instead.
-    # See https://github.com/rust-lang/rust/pull/139726
-    ./0003-select_unpredictable-on-bool.diff
   ];
 
   buildInputs = lib.optionals (useSystemJemalloc) [
