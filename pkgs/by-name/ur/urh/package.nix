@@ -20,7 +20,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "urh";
   version = "2.9.8-unstable-2025-07-07";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jopohl";
@@ -28,6 +28,8 @@ python3Packages.buildPythonApplication rec {
     rev = "9061187d326f39de126dd1b8cc943aa33c36ae8d";
     hash = "sha256-MjgEa33geZ8Icn7H/Zxvux6rMnSOFcMuwG5n/5cwuMI=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
@@ -46,7 +48,7 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optional USRPSupport uhd
     ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pyqt5
     numpy
     psutil
@@ -87,11 +89,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }
