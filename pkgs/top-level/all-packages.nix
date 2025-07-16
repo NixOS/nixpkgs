@@ -16343,10 +16343,6 @@ with pkgs;
 
   fts = if stdenv.hostPlatform.isMusl then musl-fts else null;
 
-  bsdSetupHook = makeSetupHook {
-    name = "bsd-setup-hook";
-  } ../os-specific/bsd/setup-hook.sh;
-
   freebsd = callPackage ../os-specific/bsd/freebsd { };
 
   netbsd = callPackage ../os-specific/bsd/netbsd { };
