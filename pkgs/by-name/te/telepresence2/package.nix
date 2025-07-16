@@ -1,11 +1,67 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   buildGoModule,
   fuse,
+  pkgs,
 }:
 
 let
+  telepresenceAttrs = {
+    owner = "telepresenceio";
+    repo = "telepresence";
+    version = "2.22.4";
+    rev = "v${telepresenceAttrs.version}";
+    srcHash = "sha256-ECuu6uMsY5vZVrMJknnd5IH0BZ2yVBTKIIC/Q8RARs8=";
+    vendorHash = "sha256-+l+Dtyq+9u+Lc6yF++KnX2DixVVfPX+oFUn3lq6B/1U=";
+    fileHash = "sha256-ECuu6uMsY5vZVrMJknnd5IH0BZ2yVBTKIIC/Q8RARs8=";
+  };
+
+  fetchFileFromGitHub =
+    {
+      owner,
+      repo,
+      rev,
+      filePath,
+      hash,
+    }:
+    let
+      fetched = fetchFromGitHub {
+        owner = owner;
+        repo = repo;
+        rev = rev;
+        hash = hash;
+      };
+    in
+    pkgs.runCommand "fetch-file" { inherit fetched; } ''
+      mkdir -p $out
+      cp ${fetched}/${filePath} $out/${filePath}
+    '';
+
+  telepresenceGoMod = fetchFileFromGitHub {
+    owner = telepresenceAttrs.owner;
+    repo = telepresenceAttrs.repo;
+    rev = telepresenceAttrs.rev;
+    filePath = "go.mod";
+    hash = telepresenceAttrs.fileHash;
+  };
+
+  goModContents = builtins.readFile "${telepresenceGoMod}/go.mod";
+
+  # Extract the k8s.io/client-go version using builtins.match
+  # This regex looks for a line like: k8s.io/client-go v0.33.2
+  k8sClientGoMatch = builtins.match "k8s\\.io/client-go[[:space:]]+v0\\.([0-9]+\\.[0-9]+\\.[0-9]+)" goModContents;
+
+  # Derive K8S_VERSION by replacing v0.x.y with v1.x.y
+  k8sVersion = if k8sClientGoMatch != null then "v1.${k8sClientGoMatch [ 1 ]}" else "v1.33.2";
+
+  # Fetch the _definitions.json based on K8S_VERSION
+  k8sDefsJson = fetchurl {
+    url = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/${k8sVersion}-standalone/_definitions.json";
+    hash = "sha256-lU3mcjwwf7ZLek+5S6XnLS/qpPbcPAbwcWDjYf+8dYU=";
+  };
+
   fuseftp = buildGoModule rec {
     pname = "go-fuseftp";
     version = "0.6.6";
@@ -28,35 +84,39 @@ let
 
     subPackages = [ "pkg/main" ];
   };
+
 in
 buildGoModule rec {
-  pname = "telepresence2";
-  version = "2.23.3";
+  pname = telepresenceAttrs.repo;
+  version = telepresenceAttrs.version;
 
   src = fetchFromGitHub {
-    owner = "telepresenceio";
-    repo = "telepresence";
-    rev = "v${version}";
-    hash = "sha256-T0ywV3wg1t15yF7YoXMt2If+CVKr/GI6nsgXYaVILeo=";
+    owner = telepresenceAttrs.owner;
+    repo = telepresenceAttrs.repo;
+    rev = telepresenceAttrs.rev;
+    hash = telepresenceAttrs.srcHash;
   };
 
   propagatedBuildInputs = [
     fuseftp
   ];
 
-  # telepresence depends on fuseftp existing as a built binary, as it gets embedded
-  # CGO gets disabled to match their build process as that is how it's done upstream
   preBuild = ''
     cp ${fuseftp}/bin/main ./pkg/client/remotefs/fuseftp.bits
+
+    mkdir -p charts/telepresence-oss
+
+    cp ${k8sDefsJson} charts/telepresence-oss/k8s-defs.json
+
     export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-hO+Zw7l1ktDJe1RMjyFEvYPaUdafEYgEeeYAXJtL43E=";
+  vendorHash = telepresenceAttrs.vendorHash;
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${telepresenceAttrs.rev}"
   ];
 
   subPackages = [ "cmd/telepresence" ];
