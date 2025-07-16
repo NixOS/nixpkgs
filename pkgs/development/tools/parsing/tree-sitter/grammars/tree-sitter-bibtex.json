@@ -1,13 +1,12 @@
 {
   "url": "https://github.com/latex-lsp/tree-sitter-bibtex",
-  "rev": "8d04ed27b3bc7929f14b7df9236797dab9f3fa66",
-  "date": "2025-04-19T10:23:36+02:00",
-  "path": "/nix/store/cfx6c2nl3vmm29phi5l7yg4mq8hapqji-tree-sitter-bibtex",
-  "sha256": "0pjjk23a3gyz0rpgy99qkal9gs65i15k8bsc37s87x94dxdcdrah",
-  "hash": "sha256-UOXGWm8k9YP0GUwvNEuIxeiXqJo4Jf9uBt+/oYaYUl4=",
+  "rev": "ccfd77db0ed799b6c22c214fe9d2937f47bc8b34",
+  "date": "2021-03-26T15:53:50+01:00",
+  "path": "/nix/store/pg00zy53rni7znda2vbyyhkkclgja3kq-tree-sitter-bibtex",
+  "sha256": "0m7f3dkqbmy8x1bhl11m8f4p6n76wfvh99rp46zrqv39355nw1y2",
+  "hash": "sha256-wgduSxlpbJy/ITenBLfj5lhziUM1BApX6MjXhWcb7lQ=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "fetchTags": false,
   "leaveDotGit": false
 }
