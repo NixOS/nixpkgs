@@ -7482,11 +7482,6 @@ with pkgs;
       if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
   };
 
-  xcbuildHook = makeSetupHook {
-    name = "xcbuild-hook";
-    propagatedBuildInputs = [ xcbuild ];
-  } ../by-name/xc/xcbuild/setup-hook.sh;
-
   xcodebuild = xcbuild;
 
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
