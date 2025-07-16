@@ -1,26 +1,27 @@
 {
   lib,
+  stdenv,
+
   pythonPackages,
+  qmake,
   qscintilla,
   qtbase,
-  qmake,
-  qtmacextras,
-  stdenv,
+  qtmacextras ? null,
 }:
 
 let
+  qtVersion = lib.versions.major qtbase.version;
+  pyQtPackage = pythonPackages."pyqt${qtVersion}";
+
   inherit (pythonPackages)
-    buildPythonPackage
     isPy3k
     python
     sip
-    sipbuild
-    pyqt5
     pyqt-builder
     ;
 in
-buildPythonPackage {
-  pname = "qscintilla-qt5";
+pythonPackages.buildPythonPackage {
+  pname = "qscintilla-qt${qtVersion}";
   version = qscintilla.version;
   src = qscintilla.src;
   format = "pyproject";
@@ -34,17 +35,21 @@ buildPythonPackage {
     qscintilla
     pythonPackages.setuptools
   ];
+
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
+
+  propagatedBuildInputs = [
+    pyQtPackage
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
 
   dontWrapQtApps = true;
 
   postPatch =
     ''
       cd Python
-      cp pyproject-qt5.toml pyproject.toml
+      cp pyproject-qt${qtVersion}.toml pyproject.toml
       echo '[tool.sip.project]' >> pyproject.toml
-      echo 'sip-include-dirs = [ "${pyqt5}/${python.sitePackages}/PyQt5/bindings"]' \
+      echo 'sip-include-dirs = [ "${pyQtPackage}/${python.sitePackages}/PyQt${qtVersion}/bindings"]' \
          >> pyproject.toml
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -75,7 +80,7 @@ buildPythonPackage {
   # Checked using pythonImportsCheck
   doCheck = false;
 
-  pythonImportsCheck = [ "PyQt5.Qsci" ];
+  pythonImportsCheck = [ "PyQt${qtVersion}.Qsci" ];
 
   meta = with lib; {
     description = "Python binding to QScintilla, Qt based text editing control";
