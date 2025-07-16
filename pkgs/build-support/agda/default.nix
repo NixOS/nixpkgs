@@ -65,10 +65,10 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${Agda.bin}/bin/agda $out/bin/agda \
+        makeWrapper ${lib.getExe Agda} $out/bin/agda \
           --add-flags "--with-compiler=${ghc}/bin/ghc" \
           --add-flags "--library-file=${library-file}"
-        ln -s ${Agda.bin}/bin/agda-mode $out/bin/agda-mode
+        ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
       '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
