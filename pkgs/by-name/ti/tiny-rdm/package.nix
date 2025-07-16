@@ -95,7 +95,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/tiny-craft/tiny-rdm";
     mainProgram = "tiny-rdm";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

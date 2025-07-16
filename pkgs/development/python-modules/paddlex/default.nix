@@ -91,7 +91,7 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
     changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
