@@ -177,8 +177,9 @@ in
       };
       passthru = {
         tests = {
-          basic = objprint.overridePythonAttrs (previousPythonAttrs: {
-            pname = "test-pytestCheckHook-basic-${previousPythonAttrs.pname}";
+          # Test Python package objprint
+          objprint = objprint.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-objprint-${previousPythonAttrs.pname}";
           });
           disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTests-${previousPythonAttrs.pname}";
