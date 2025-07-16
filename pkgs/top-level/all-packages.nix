@@ -818,10 +818,6 @@ with pkgs;
     name = "separate-debug-info-hook";
   } ../build-support/setup-hooks/separate-debug-info.sh;
 
-  useOldCXXAbi = makeSetupHook {
-    name = "use-old-cxx-abi-hook";
-  } ../build-support/setup-hooks/use-old-cxx-abi.sh;
-
   validatePkgConfig = makeSetupHook {
     name = "validate-pkg-config";
     propagatedBuildInputs = [
