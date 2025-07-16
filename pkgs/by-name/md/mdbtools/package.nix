@@ -10,6 +10,7 @@
   autoreconfHook,
   txt2man,
   which,
+  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,10 @@ stdenv.mkDerivation rec {
     glib
     readline
   ];
+
+  postUnpack = ''
+    cp -v ${gettext}/share/gettext/m4/lib-{link,prefix,ld}.m4 source/m4
+  '';
 
   enableParallelBuilding = true;
 
