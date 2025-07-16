@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   tt-rss,
 }:
 
@@ -12,9 +13,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Elv1zz";
     repo = "ttrss_plugin-markasread";
-    tag = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IDCwlxWIchfIq4KmpCF6plFuM+BNQtDS0s8fkwwNqCQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Elv1zz/ttrss_plugin-markasread/pull/8.patch";
+      hash = "sha256-nOyjmiSB5jyfTtTK9ZsLJQwaY4Fvet9lFUD0TD1Ptk8=";
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/markasread
