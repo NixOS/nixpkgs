@@ -10,38 +10,30 @@
   };
 
   # basic setup: searx running the built-in webserver
-  nodes.base =
-    { ... }:
-    {
-      services.searx = {
-        enable = true;
-        environmentFile = pkgs.writeText "secrets" ''
-          WOLFRAM_API_KEY  = sometoken
-          SEARX_SECRET_KEY = somesecret
-        '';
+  nodes.base = {
+    services.searx = {
+      enable = true;
+      environmentFile = pkgs.writeText "secrets" ''
+        SEARX_SECRET_KEY = somesecret
+      '';
 
-        settings = {
-          engines = [
-            {
-              name = "wolframalpha";
-              api_key = "@WOLFRAM_API_KEY@";
-              engine = "wolframalpha_api";
-            }
-            {
-              name = "startpage";
-              shortcut = "start";
-            }
-          ];
-          plugins = { };
-          server = {
-            port = "8080";
-            bind_address = "0.0.0.0";
-            secret_key = "@SEARX_SECRET_KEY@";
-          };
+      settings = {
+        engines = [
+          {
+            name = "startpage";
+            shortcut = "start";
+          }
+        ];
+        plugins = { };
+        server = {
+          port = "8080";
+          bind_address = "0.0.0.0";
+          secret_key = "@SEARX_SECRET_KEY@";
         };
       };
-
     };
+
+  };
 
   # fancy setup: run in uWSGI and use nginx as proxy
   nodes.fancy =
@@ -87,7 +79,6 @@
 
     with subtest("Environment variables have been substituted"):
         base.succeed("grep -q somesecret /run/searx/settings.yml")
-        base.succeed("grep -q sometoken /run/searx/settings.yml")
         base.copy_from_vm("/run/searx/settings.yml")
 
     with subtest("Basic setup is working"):
