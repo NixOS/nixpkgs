@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "itables";
-  version = "2.4.3";
+  version = "2.4.4";
 
   # itables has 4 different node packages, each with their own
   # package-lock.json, and partially depending on each other.
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # the source tarball from pypi, which includes the javascript bundle already.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lv+GdI6jHszdbsPG09QDGMaFGp5GD1/SPdrgsvhlqfU=";
+    hash = "sha256-KeK3cff9OrcLnSI0YVtXPaMl5hCDJpfphmgMzANqr1s=";
   };
 
   pyproject = true;
