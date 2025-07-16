@@ -2,6 +2,7 @@
   lib,
   callPackage,
   fetchFromGitLab,
+  fetchpatch2,
 }:
 
 let
@@ -19,6 +20,11 @@ let
         # same as upstream patch but fixed conflict and added required import:
         # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
         ./CVE-2025-6021.patch
+        (fetchpatch2 {
+          name = "CVE-2025-49794-49796.patch";
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/f7ebc65f05bffded58d1e1b2138eb124c2e44f21.patch";
+          hash = "sha256-k+IGq6pbv9EA7o+uDocEAUqIammEjLj27Z+2RF5EMrs=";
+        })
       ];
       freezeUpdateScript = true;
       extraMeta = {
