@@ -13,6 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "basiliskii";
   version = "unstable-2022-09-30";
 
+  # This src is also used to build pkgs/os-specific/linux/sheep-net
+  # Therefore changes to it may effect the sheep-net package
   src = fetchFromGitHub {
     owner = "kanjitalk755";
     repo = "macemu";
