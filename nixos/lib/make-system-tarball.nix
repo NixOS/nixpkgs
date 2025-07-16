@@ -41,6 +41,10 @@ stdenv.mkDerivation {
   name = "tarball";
   __structuredAttrs = true;
 
+  # the tarball will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
   buildCommandPath = ./make-system-tarball.sh;
   nativeBuildInputs = extraInputs;
 
