@@ -796,14 +796,6 @@ with pkgs;
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
-  makeGCOVReport = makeSetupHook {
-    name = "make-gcov-report-hook";
-    propagatedBuildInputs = [
-      lcov
-      enableGCOVInstrumentation
-    ];
-  } ../build-support/setup-hooks/make-coverage-analysis-report.sh;
-
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
