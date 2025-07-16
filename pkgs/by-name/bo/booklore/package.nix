@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  nixosTests,
   fetchFromGitHub,
   buildNpmPackage,
   gradle,
@@ -74,6 +75,8 @@ let
 
       runHook postInstall
     '';
+
+    passthru.tests = nixosTests.booklore;
 
     meta = {
       description = "BookLore is a web app for hosting, managing, and exploring books, with support for PDFs, eBooks, reading progress, metadata, and stats";
