@@ -814,10 +814,6 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
-  separateDebugInfo = makeSetupHook {
-    name = "separate-debug-info-hook";
-  } ../build-support/setup-hooks/separate-debug-info.sh;
-
   #package writers
   writers = callPackage ../build-support/writers { };
 
