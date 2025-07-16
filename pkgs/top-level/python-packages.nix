@@ -2506,6 +2506,8 @@ self: super: with self; {
 
   cinemagoer = callPackage ../development/python-modules/cinemagoer { };
 
+  cint = callPackage ../development/python-modules/cint { };
+
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
