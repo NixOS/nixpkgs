@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Apply fix for: https://www.virtualbox.org/ticket/22397
-  patches = [ ./guest-additions-aarch64-fix.patch ];
+  patches = if stdenv.hostPlatform.isAarch64 then [ ./guest-additions-aarch64-fix.patch ] else [ ];
 
   postPatch = ''
     set -x
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig @' \
       -i AutoConfig.kmk
-    sed -e 's@arch/${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86"}/@@' \
+    sed -e 's@arch/x86/@@' \
       -i Config.kmk
 
     export USER=nix
