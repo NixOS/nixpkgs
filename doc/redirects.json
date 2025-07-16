@@ -20,9 +20,6 @@
   "cuda": [
     "index.html#cuda"
   ],
-  "cuda-configuring-cuda-package-sets": [
-    "index.html#cuda-configuring-cuda-package-sets"
-  ],
   "cuda-configuring-nixpkgs-for-cuda": [
     "index.html#cuda-configuring-nixpkgs-for-cuda"
   ],
@@ -34,6 +31,13 @@
   ],
   "cuda-extending-cuda-package-sets": [
     "index.html#cuda-extending-cuda-package-sets"
+  ],
+  "cuda-modifying-cuda-package-sets": [
+    "index.html#cuda-modifying-cuda-package-sets",
+    "index.html#cuda-configuring-cuda-package-sets"
+  ],
+  "cuda-nixpkgs-cuda-variants": [
+    "index.html#cuda-nixpkgs-cuda-variants"
   ],
   "cuda-package-set-maintenance": [
     "index.html#cuda-package-set-maintenance",
@@ -68,6 +72,9 @@
   "cuda-updating-the-cuda-toolkit": [
     "index.html#cuda-updating-the-cuda-toolkit",
     "index.html#updating-the-cuda-toolkit"
+  ],
+  "cuda-user-guide": [
+    "index.html#cuda-user-guide"
   ],
   "cuda-using-cudapackages": [
     "index.html#cuda-using-cudapackages"
