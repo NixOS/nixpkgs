@@ -118,10 +118,9 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   # We copy the compiled header files to the dev output
   # These are needed for the rust schedulers
-  preInstall = ''
-    mkdir -p ${placeholder "dev"}/libbpf ${placeholder "dev"}/bpftool
-    cp -r libbpf/* ${placeholder "dev"}/libbpf/
-    cp -r bpftool/* ${placeholder "dev"}/bpftool/
+  postFixup = ''
+    mkdir -p ${placeholder "dev"}
+    cp -r libbpf ${placeholder "dev"}
   '';
 
   outputs = [
