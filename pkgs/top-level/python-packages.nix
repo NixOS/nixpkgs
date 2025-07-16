@@ -144,8 +144,6 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
-  aider-chat = callPackage ../development/python-modules/aider-chat { };
-
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   ailment = callPackage ../development/python-modules/ailment { };
