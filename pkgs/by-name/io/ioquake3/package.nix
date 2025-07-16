@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ioquake3";
-  version = "0-unstable-2025-05-15";
+  version = "0-unstable-2025-07-14";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "8d2c2b42a55598d99873203194d13161ec2789c6";
-    hash = "sha256-OszPRlS5NTvajDZhtGw2wa275O8YodkIgiBz3POouYs=";
+    rev = "abc448faec08a03134b70fadd6d76d57c1dde1e7";
+    hash = "sha256-33yeT5AwB0Hh5BjqpzEqwtOL5P4UAoRAyD/Yo31Dk1s=";
   };
 
   nativeBuildInputs = [
