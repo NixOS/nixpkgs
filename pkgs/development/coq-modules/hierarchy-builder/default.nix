@@ -2,9 +2,6 @@
   lib,
   mkCoqDerivation,
   coq,
-  rocqPackages_9_0,
-  rocqPackages_9_1,
-  rocqPackages,
   stdlib,
   coq-elpi,
   version ? null,
@@ -21,7 +18,7 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
-        (case (range "8.20" "9.1") "1.9.1")
+        (case (range "8.20" "8.20") "1.9.1")
         (case (range "8.19" "8.20") "1.8.0")
         (case (range "8.18" "8.20") "1.7.1")
         (case (range "8.16" "8.18") "1.6.0")
@@ -60,44 +57,28 @@ let
       license = licenses.mit;
     };
   };
+  hb2 = hb.overrideAttrs (
+    o:
+    lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev") {
+      buildPhase = "make build";
+    }
+    // (
+      if lib.versions.isGe "1.1.0" o.version || o.version == "dev" then
+        { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
+      else
+        { installFlags = [ "VFILES=structures.v" ] ++ o.installFlags; }
+    )
+    // lib.optionalAttrs (o.version != null && o.version == "1.8.1") {
+      propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
+    }
+  );
 in
-hb.overrideAttrs (
-  o:
-  lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev") {
-    buildPhase = "make build";
+# this is just a wrapper for rocqPackages.hierarchy-builder for Rocq >= 9.0
+if coq.rocqPackages ? hierarchy-builder then
+  coq.rocqPackages.hierarchy-builder.override {
+    inherit version;
+    inherit (coq.rocqPackages) rocq-core;
+    rocq-elpi = coq-elpi;
   }
-  // (
-    if lib.versions.isGe "1.1.0" o.version || o.version == "dev" then
-      { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
-    else
-      { installFlags = [ "VFILES=structures.v" ] ++ o.installFlags; }
-  )
-  // lib.optionalAttrs (o.version != null && o.version == "1.8.1") {
-    propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
-  }
-  # this is just a wrapper for rocqPackages.hierarchy-builder for Rocq >= 9.0
-  //
-    lib.optionalAttrs
-      (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
-      (
-        let
-          case = case: out: { inherit case out; };
-          rp = lib.switch coq.coq-version [
-            (case "9.0" rocqPackages_9_0)
-            (case "9.1" rocqPackages_9_1)
-          ] rocqPackages;
-        in
-        {
-          configurePhase = ''
-            echo no configuration
-          '';
-          buildPhase = ''
-            echo building nothing
-          '';
-          installPhase = ''
-            echo installing nothing
-          '';
-          propagatedBuildInputs = o.propagatedBuildInputs ++ [ rp.hierarchy-builder ];
-        }
-      )
-)
+else
+  hb2
