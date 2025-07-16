@@ -122,13 +122,10 @@ let
     rootPaths = [ config.system.build.toplevel ] ++ (lib.optional includeChannel channelSources);
   };
 
-  modulesTree = pkgs.aggregateModules (
-    with config.boot;
-    [
-      kernelPackages.kernel
-      kernelPackages.${pkgs.zfs.kernelModuleAttribute}
-    ]
-  );
+  modulesTree = pkgs.aggregateModules (with config.boot; [
+    kernelPackages.kernel
+    kernelPackages.${pkgs.zfs.kernelModuleAttribute}
+  ]) config.boot.kernelPackages.kernel.version null;
 
   tools = lib.makeBinPath (
     with pkgs;
