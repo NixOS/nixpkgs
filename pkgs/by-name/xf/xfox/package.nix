@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pxlman";
     repo = "xfox";
     tag = "v${version}";
-    sha256 = "sha256-gbcJ02ZaPqiCo0VHnVOYzrWR00dQXgKavFTgP+6rS34=";
+    hash = "sha256-gbcJ02ZaPqiCo0VHnVOYzrWR00dQXgKavFTgP+6rS34=";
   };
   propagatedBuildInputs = [
     python3Packages.evdev
