@@ -8,14 +8,14 @@
   mods,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mods";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wzLYkcgUWPzghJEhYRh7HH19Rqov1RJAxdgp3AGnOTY=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   # These tests require internet access.
@@ -67,4 +67,4 @@ buildGoModule rec {
     ];
     mainProgram = "mods";
   };
-}
+})
