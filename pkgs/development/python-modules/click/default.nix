@@ -3,8 +3,8 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  importlib-metadata,
   pytestCheckHook,
+  less,
 
   # large-rebuild downstream dependencies and applications
   flask,
@@ -17,26 +17,60 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.8";
+  version = "8.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
+    hash = "sha256-3FfLKwpfkiGfY2+H2fQoZwLBqfPlV46xw2Bc4YEsyps=";
   };
 
   build-system = [ flit-core ];
-  dependencies = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    less
+  ];
 
   disabledTests = [
     # test fails with filename normalization on zfs
     "test_file_surrogates"
+    # for some reason the tests fail to execute cat, even though they run with less just fine,
+    # even adding coreutils to nativeCheckInputs explicitly does not change anything
+    "test_echo_via_pager[test0-cat]"
+    "test_echo_via_pager[test0-cat ]"
+    "test_echo_via_pager[test0- cat ]"
+    "test_echo_via_pager[test1-cat]"
+    "test_echo_via_pager[test1-cat ]"
+    "test_echo_via_pager[test1- cat ]"
+    "test_echo_via_pager[test2-cat]"
+    "test_echo_via_pager[test2-cat ]"
+    "test_echo_via_pager[test2- cat ]"
+    "test_echo_via_pager[test3-cat]"
+    "test_echo_via_pager[test3-cat ]"
+    "test_echo_via_pager[test3- cat ]"
+    "test_echo_via_pager[test4-cat]"
+    "test_echo_via_pager[test4-cat ]"
+    "test_echo_via_pager[test4- cat ]"
+    "test_echo_via_pager[test5-cat]"
+    "test_echo_via_pager[test5-cat ]"
+    "test_echo_via_pager[test5- cat ]"
+    "test_echo_via_pager[test6-cat]"
+    "test_echo_via_pager[test6-cat ]"
+    "test_echo_via_pager[test6- cat ]"
+    "test_echo_via_pager[test7-cat]"
+    "test_echo_via_pager[test7-cat ]"
+    "test_echo_via_pager[test7- cat ]"
+    "test_echo_via_pager[test8-cat]"
+    "test_echo_via_pager[test8-cat ]"
+    "test_echo_via_pager[test8- cat ]"
+    "test_echo_via_pager[test9-cat]"
+    "test_echo_via_pager[test9-cat ]"
+    "test_echo_via_pager[test9- cat ]"
   ];
 
   passthru.tests = {
