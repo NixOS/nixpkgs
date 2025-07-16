@@ -1049,6 +1049,7 @@ mapAliases {
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libgpgerror = throw "'libgpgerror' has been renamed to/replaced by 'libgpg-error'"; # Converted to throw 2024-10-17
   libgrss = throw "'libgrss' has been removed as it was archived upstream and had no users in nixpkgs"; # Added 2025-04-17
+  libguestfs-appliance = lib.warnOnInstantiate "'libguestfs-appliance' has been renamed to 'libguestfs-appliance-fedora'; also consider using 'libguestfs-appliance-debian' instead" libguestfs-appliance-fedora; # Added 2025-04-28
   libheimdal = heimdal; # Added 2022-11-18
   libhttpseverywhere = throw "'libhttpseverywhere' has been removed due to lack of upstream maintenance. It was no longer used in nixpkgs."; # Added 2025-04-17
   libiconv-darwin = darwin.libiconv;
