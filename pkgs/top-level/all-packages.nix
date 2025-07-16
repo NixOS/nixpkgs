@@ -3568,8 +3568,6 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
-  kcollectd = kdePackages.callPackage ../tools/misc/kcollectd { };
-
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
 
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
