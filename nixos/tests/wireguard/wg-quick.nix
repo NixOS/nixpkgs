@@ -18,9 +18,6 @@ import ../make-test-python.nix (
   in
   {
     name = "wg-quick";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ d-xo ];
-    };
 
     nodes = {
       peer0 = peer {
