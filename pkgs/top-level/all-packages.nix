@@ -796,10 +796,6 @@ with pkgs;
 
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
-  moveBuildTree = makeSetupHook {
-    name = "move-build-tree-hook";
-  } ../build-support/setup-hooks/move-build-tree.sh;
-
   enableGCOVInstrumentation = makeSetupHook {
     name = "enable-gcov-instrumentation-hook";
   } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
