@@ -37,6 +37,47 @@ in
       '';
     };
 
+    adminPasswordFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to a file containing the default admin password.
+      '';
+    };
+
+    resetAdminPassword = mkOption {
+      type = types.nullOr (
+        types.oneOf [
+          types.bool
+          (types.enum [ "always" ])
+        ]
+      );
+      default = false;
+      description = ''
+        Force reset of the admin password.
+
+        Break glass in case of emergency: if you lost the admin password, you
+        can set this to true to force a reset of the admin password to the value
+        of `adminPasswordFile`.
+
+        Alternatively, you can set it to `"always"` to reset every time the server starts
+        which makes for a more declarative configuration.
+
+        The difference between `true` and `"always"` is the former is intended for a one time fix
+        while the latter is intended for a declarative workflow. In practice, the result
+        is the same: the password gets reset. The only practical difference is the former
+        outputs a warning message while the latter outputs an info message.
+      '';
+    };
+
+    jwtSecretFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to a file containing the default admin password.
+      '';
+    };
+
     settings = mkOption {
       description = ''
         Free-form settings written directly to the `lldap_config.toml` file.
@@ -108,6 +149,29 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.adminPasswordFile == null || cfg.resetAdminPassword != false;
+        message = ''
+          The default admin password is set declaratively with `adminPasswordFile` option but the `resetAdminPassword` is set to `false`.
+          This means the admin password can be changed through the UI and will drift from the one defined in your nix config.
+          Please set the `resetAdminPassword` option to `true` or `"always"`.
+        '';
+      }
+    ];
+
+    services.lldap.environment = {
+      LLDAP_JWT_SECRET_FILE = lib.mkIf (cfg.jwtSecretFile != null) cfg.jwtSecretFile;
+      LLDAP_LDAP_USER_PASS_FILE = lib.mkIf (cfg.adminPasswordFile != null) cfg.adminPasswordFile;
+      LLDAP_FORCE_LDAP_USER_PASS_RESET =
+        if builtins.isString cfg.resetAdminPassword then
+          cfg.resetAdminPassword
+        else if cfg.resetAdminPassword then
+          "true"
+        else
+          "false";
+    };
+
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
