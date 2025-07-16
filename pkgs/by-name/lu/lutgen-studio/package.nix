@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lutgen-studio";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
     tag = "lutgen-studio-v${version}";
-    hash = "sha256-Oog3qv+Pvo/Ib/fpoIcrExVkkcZj+tX8unH9LZod3YM=";
+    hash = "sha256-ViL40kif/AI/5/WX6VjUrqQc9KABEIX9AH27L+uLMVk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+8Sq6Jk914U0Vyr8cKLX++AF41j0R7y76ZG96SZJtxM=";
+  cargoHash = "sha256-SqTSmYShl4dXUFaE2Mn7dvArvFUg/36woZuQQi+Ps3s=";
 
   cargoBuildFlags = [
     "--bin"
