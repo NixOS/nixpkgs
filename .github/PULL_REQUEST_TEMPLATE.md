@@ -10,26 +10,26 @@ For new packages please briefly describe the package or provide a link to its ho
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-- Built on platform(s)
+- Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
   - [ ] x86_64-darwin
   - [ ] aarch64-darwin
-- [ ] Tested, as applicable:
-  - [NixOS test(s)] (look inside [nixos/tests])
-  - and/or [package tests]
-  - or, for functions and "core" functionality, tests in [lib/tests] or [pkgs/test]
-- [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage]
-- [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
-- Nixpkgs Release Notes (or backporting 25.05 Nixpkgs Release notes)
-  - [ ] (Package updates) Added a release notes entry if the change is major or breaking
-- NixOS Release Notes (or backporting 25.05 NixOS Release notes)
-  - [ ] (Module updates) Added a release notes entry if the change is significant
-  - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
-- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other contributing documentation in corresponding paths.
+- Tested, as applicable:
+  - [ ] [NixOS tests] in [nixos/tests].
+  - [ ] [Package tests] at `passthru.tests`.
+  - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
+- [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
+- [ ] Tested basic functionality of all binary files, usually in `./result/bin/`.
+- Nixpkgs Release Notes
+  - [ ] Package update: when the change is major or breaking.
+- NixOS Release Notes
+  - [ ] Module addition: when adding a new NixOS module.
+  - [ ] Module update: when the change is significant.
+- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and others READMEs.
 
-[NixOS test(s)]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
-[package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
+[NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
+[Package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
 [nixpkgs-review usage]: https://github.com/Mic92/nixpkgs-review#usage
 
 [CONTRIBUTING.md]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md
