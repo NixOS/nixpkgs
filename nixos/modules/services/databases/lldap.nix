@@ -102,12 +102,83 @@ in
             default = "sqlite://./users.db?mode=rwc";
             example = "postgres://postgres-user:password@postgres-server/my-database";
           };
+
+          ldap_user_pass_file = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Path to a file containing the default admin password.
+
+              If you want to update the default admin password through this setting,
+              you must set `force_ldap_user_pass_reset` to `true`.
+              Otherwise changing this setting will have no effect
+              unless this is the very first time LLDAP is started and its database is still empty.
+            '';
+          };
+
+          force_ldap_user_pass_reset = mkOption {
+            type = types.oneOf [
+              types.bool
+              (types.enum [ "always" ])
+            ];
+            default = false;
+            description = ''
+              Force reset of the admin password.
+
+              Set this setting to `"always"` to update the admin password when `ldap_user_pass_file` changes.
+              Setting to `"always"` also means any password update in the UI will be overwritten next time the service restarts.
+
+              The difference between `true` and `"always"` is the former is intended for a one time fix
+              while the latter is intended for a declarative workflow. In practice, the result
+              is the same: the password gets reset. The only practical difference is the former
+              outputs a warning message while the latter outputs an info message.
+            '';
+          };
+
+          jwt_secret_file = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Path to a file containing the JWT secret.
+            '';
+          };
         };
       };
+
+      # TOML does not allow null values, so we use null to omit those fields
+      apply = lib.filterAttrsRecursive (_: v: v != null);
+    };
+
+    silenceForceUserPassResetWarning = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Disable warning when the admin password is set declaratively with the `ldap_user_pass_file` setting
+        but the `force_ldap_user_pass_reset` is set to `false`.
+
+        This can lead to the admin password to drift from the one given declaratively.
+        If that is okay for you and you want to silence the warning, set this option to `true`.
+      '';
     };
   };
 
   config = lib.mkIf cfg.enable {
+    warnings =
+      lib.optionals
+        (
+          (cfg.settings.ldap_user_pass_file or null) != null
+          && cfg.settings.force_ldap_user_pass_reset == false
+          && cfg.silenceForceUserPassResetWarning == false
+        )
+        [
+          ''
+            lldap: The default admin password is declared with the setting `ldap_user_pass_file`, but `force_ldap_user_pass_reset` is set to `false`.
+            This means the admin password can be changed through the UI and will drift from the one defined in your nix config.
+            It also means changing the setting `ldap_user_pass_file` will have no effect on the admin password.
+            Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
+          ''
+        ];
+
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
