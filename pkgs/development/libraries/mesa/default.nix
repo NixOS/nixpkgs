@@ -26,6 +26,7 @@
   ninja,
   pkg-config,
   python3Packages,
+  runCommand,
   rust-bindgen,
   rust-cbindgen,
   rustPlatform,
@@ -115,40 +116,27 @@
 }:
 
 let
-  rustDeps = [
-    {
-      pname = "paste";
-      version = "1.0.14";
-      hash = "sha256-+J1h7New5MEclUBvwDQtTYJCHKKqAEOeQkuKy+g0vEc=";
-    }
-    {
-      pname = "proc-macro2";
-      version = "1.0.86";
-      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
-    }
-    {
-      pname = "quote";
-      version = "1.0.33";
-      hash = "sha256-VWRCZJO0/DJbNu0/V9TLaqlwMot65YjInWT9VWg57DY=";
-    }
-    {
-      pname = "syn";
-      version = "2.0.68";
-      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
-    }
-    {
-      pname = "unicode-ident";
-      version = "1.0.12";
-      hash = "sha256-KX8NqYYw6+rGsoR9mdZx8eT1HIPEUUyxErdk2H/Rlj8=";
-    }
+  rustDeps = lib.importJSON ./wraps.json;
+
+  fetchDep =
+    dep:
+    fetchCrate {
+      inherit (dep) pname version hash;
+      unpack = false;
+    };
+
+  toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
+
+  packageCacheCommand = lib.pipe rustDeps [
+    (builtins.map fetchDep)
+    (builtins.map toCommand)
+    (lib.concatStringsSep "\n")
   ];
 
-  copyRustDep = dep: ''
-    cp -R --no-preserve=mode,ownership ${fetchCrate dep} subprojects/${dep.pname}-${dep.version}
-    cp -R subprojects/packagefiles/${dep.pname}/* subprojects/${dep.pname}-${dep.version}/
+  packageCache = runCommand "mesa-rust-package-cache" { } ''
+    mkdir -p $out
+    ${packageCacheCommand}
   '';
-
-  copyRustDeps = lib.concatStringsSep "\n" (builtins.map copyRustDep rustDeps);
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -175,8 +163,6 @@ stdenv.mkDerivation {
         exit 42
       fi
     done
-
-    ${copyRustDeps}
   '';
 
   outputs = [
@@ -209,6 +195,8 @@ stdenv.mkDerivation {
     PATH=${lib.getDev llvmPackages.libllvm}/bin:$PATH
   '';
 
+  env.MESON_PACKAGE_CACHE_DIR = packageCache;
+
   mesonFlags = [
     "--sysconfdir=/etc"
 
@@ -222,13 +210,6 @@ stdenv.mkDerivation {
     (lib.mesonEnable "glvnd" true)
     (lib.mesonEnable "gbm" true)
     (lib.mesonBool "libgbm-external" true)
-
-    (lib.mesonBool "gallium-nine" false) # Direct3D9 in Wine, largely supplanted by DXVK
-
-    # Only used by xf86-video-vmware, which has more features than VMWare's KMS driver,
-    # so we're keeping it for now. Should be removed when that's no longer the case.
-    # See: https://github.com/NixOS/nixpkgs/pull/392492
-    (lib.mesonEnable "gallium-xa" true)
 
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
@@ -247,15 +228,16 @@ stdenv.mkDerivation {
     (lib.mesonBool "gallium-rusticl" true)
     (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
-    # meson auto_features enables this, but we do not want it
-    (lib.mesonEnable "android-libbacktrace" false)
-    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
-
     # Enable more sensors in gallium-hud
     (lib.mesonBool "gallium-extra-hud" true)
 
     # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
+
+    # meson auto_features enables these, but we do not want them
+    (lib.mesonEnable "gallium-mediafoundation" false) # Windows only
+    (lib.mesonEnable "android-libbacktrace" false) # Android only
+    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
   ]
   ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
