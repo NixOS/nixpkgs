@@ -1789,6 +1789,8 @@ let
         };
       };
 
+      ethersync.ethersync = callPackage ./ethersync.ethersync { };
+
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
       ExiaHuang.dictionary = buildVscodeMarketplaceExtension {
