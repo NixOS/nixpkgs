@@ -8,6 +8,7 @@
   fetchpatch,
 
   buildPackages,
+  autoPatchelfHook,
   pkg-config,
   autoconf,
   lndir,
@@ -242,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
   ]
   ++ lib.optionals atLeast11 [
@@ -422,8 +424,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = if atLeast17 then [ "images" ] else [ "all" ];
 
-  separateDebugInfo = atLeast11;
-  __structuredAttrs = atLeast11;
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   # -j flag is explicitly rejected by the build system:
   #     Error: 'make -jN' is not supported, use 'make JOBS=N'
@@ -621,26 +623,17 @@ stdenv.mkDerivation (finalAttrs: {
       EOF
     '';
 
-  postFixup = ''
-    # Build the set of output library directories to rpath against
-    LIBDIRS=""
-    for output in $(getAllOutputNames); do
-      if [ "$output" = debug ]; then continue; fi
-      LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | ${
-        if atLeast17 then "sort -u" else "sort | uniq"
-      } | tr '\n' ':'):$LIBDIRS"
-    done
-    # Add the local library paths to remove dependencies on the bootstrap
-    for output in $(getAllOutputNames); do
-      if [ "$output" = debug ]; then continue; fi
-      OUTPUTDIR=$(eval echo \$$output)
-      BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
-      echo "$BINLIBS" | while read i; do
-        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
-        patchelf --shrink-rpath "$i" || true
-      done
-    done
-  '';
+  # If binaries in the jre output have RPATH dependencies on libraries from the out output, Nix will
+  # detect a cyclic reference and abort the build.
+  # To fix that, we need to patch the binaries from each output in separate auto-patchelf executions.
+  dontAutoPatchelf = true;
+  postFixup =
+    ''
+      autoPatchelf -- $out
+    ''
+    + lib.optionalString (!atLeast11) ''
+      autoPatchelf -- $jre
+    '';
 
   # TODO: The OpenJDK 8 derivation got this wrong.
   disallowedReferences = [
