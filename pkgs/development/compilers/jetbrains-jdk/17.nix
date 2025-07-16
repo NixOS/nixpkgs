@@ -77,13 +77,14 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -e "s/SOURCE_DATE_EPOCH=.*//" \
         -e "s/export SOURCE_DATE_EPOCH//" \
         -i jb/project/tools/common/scripts/common.sh
-    sed -i "s/STATIC_CONF_ARGS/STATIC_CONF_ARGS \$configureFlags/" jb/project/tools/linux/scripts/mkimages_${arch}.sh
+    sed -i "s|STATIC_CONF_ARGS|STATIC_CONF_ARGS $configureFlags|" jb/project/tools/linux/scripts/mkimages_${arch}.sh
     sed \
         -e "s/create_image_bundle \"jb/#/" \
         -e "s/echo Creating /exit 0 #/" \
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
+    export BOOT_JDK
     ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
       if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
     }
