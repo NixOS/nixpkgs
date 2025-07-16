@@ -818,13 +818,6 @@ with pkgs;
     name = "separate-debug-info-hook";
   } ../build-support/setup-hooks/separate-debug-info.sh;
 
-  writableTmpDirAsHomeHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "writable-tmpdir-as-home-hook";
-    } ../build-support/setup-hooks/writable-tmpdir-as-home.sh
-  ) { };
-
   useOldCXXAbi = makeSetupHook {
     name = "use-old-cxx-abi-hook";
   } ../build-support/setup-hooks/use-old-cxx-abi.sh;
