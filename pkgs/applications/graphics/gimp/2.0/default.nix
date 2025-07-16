@@ -89,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./force-enable-libheif.patch
   ];
 
+  # error: possibly undefined macro: AM_NLS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/nls.m4 m4macros
+  '';
+
   nativeBuildInputs =
     [
       autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
