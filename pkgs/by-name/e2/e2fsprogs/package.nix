@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
       "--disable-e2initrd-helper"
     ];
 
+  NIX_LDFLAGS =
+    if stdenv.hostPlatform.isStatic then "-lz -lbz2 -llzma -lcrypto -lxml2 -lzstd" else null;
+
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
 
