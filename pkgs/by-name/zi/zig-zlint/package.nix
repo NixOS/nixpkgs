@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-zlint";
-  version = "0.7.6";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     name = "zlint"; # tests expect this
     owner = "DonIsaac";
     repo = "zlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0FhugmrNHCEpIWX7oL1vZ8heikpo/mok7ciTgSdOpg=";
+    hash = "sha256-vacpJ3R9uB+rAM7pmLNDx7WThjzN9Fs8k0VbC9XYWak=";
   };
 
   nativeBuildInputs = [
