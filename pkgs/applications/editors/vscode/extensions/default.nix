@@ -1115,7 +1115,7 @@ let
             publisher = "Continue";
             version = "1.1.49";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
         buildInputs = [ (lib.getLib stdenv.cc.cc) ];
         meta = {
@@ -1387,7 +1387,7 @@ let
             publisher = "devsense";
             version = "1.41.14332";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
         nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -1788,6 +1788,8 @@ let
           hash = "sha256-pZK/QNomQoFRsL6LRIKvWQj8/SYo2ZdVU47Gsmb9MXo=";
         };
       };
+
+      ethersync.ethersync = callPackage ./ethersync.ethersync { };
 
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
@@ -2453,8 +2455,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.54";
-          hash = "sha256-CzhDStBa/LB/bzgzrFCUEcVDeBluWJPblneUbHdIcRE=";
+          version = "1.1.57";
+          hash = "sha256-UJn+RFBlQXmPqKkFIBiD4AblnX4s0O2IK747fG+UC/0=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -3334,7 +3336,7 @@ let
             publisher = "ms-dotnettools";
             version = "2.2.3";
           }
-          // sources.${stdenv.system};
+          // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
         buildInputs = [
           (lib.getLib stdenv.cc.cc)

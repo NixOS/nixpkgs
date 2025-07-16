@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   buildPackages,
   cmake,
   zlib,
@@ -25,7 +26,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.72.0"; # N.B: if you change this, please update:
+  version = "1.73.1"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -38,19 +39,28 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-3ZFQ59zoxNlS5tdm5Bt8EyKyp+9HEpYvLlWarErIR6g=";
+    hash = "sha256-VAr+f+xqZfrP4XfCnZ9KxVTO6pHQe9gB2DgaQuen840=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      # armv6l support, https://github.com/grpc/grpc/pull/21341
-      name = "grpc-link-libatomic.patch";
-      url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
-      hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
-    })
-    # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./dynamic-lookup-darwin.patch);
+  patches =
+    [
+      (fetchpatch {
+        # armv6l support, https://github.com/grpc/grpc/pull/21341
+        name = "grpc-link-libatomic.patch";
+        url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
+        hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
+      })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
+      ./dynamic-lookup-darwin.patch
+      # https://github.com/grpc/grpc/issues/39170
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/rdhafidh/vcpkg/0ae97b7b81562bd66ab99d022551db1449c079f9/ports/grpc/00017-add-src-upb.patch";
+        hash = "sha256-0zaJqeCM90DTtUR6xCUorahUpiJF3D/KODYkUXQh2ok=";
+      })
+    ];
 
   nativeBuildInputs = [
     cmake

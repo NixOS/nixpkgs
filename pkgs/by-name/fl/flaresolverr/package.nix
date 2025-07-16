@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with maintainers; [ ];
     inherit (undetected-chromedriver.meta) platforms;
   };
 })

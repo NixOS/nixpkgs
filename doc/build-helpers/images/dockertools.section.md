@@ -145,14 +145,14 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 `diskSize` (Number; _optional_)
 
-: Controls the disk size (in megabytes) of the VM used to run the script specified in `runAsRoot`.
+: Controls the disk size in MiB (1024x1024 bytes) of the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 1024.
 
 `buildVMMemorySize` (Number; _optional_)
 
-: Controls the amount of memory (in megabytes) provisioned for the VM used to run the script specified in `runAsRoot`.
+: Controls the amount of memory in MiB (1024x1024 bytes) provisioned for the VM used to run the script specified in `runAsRoot`.
   This attribute is ignored if `runAsRoot` is `null`.
 
   _Default value:_ 512.

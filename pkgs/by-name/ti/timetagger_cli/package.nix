@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "timetagger_cli";
   version = "25.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "almarklein";
@@ -16,13 +16,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-UklsHcVyCpWDHOxu+oB8RvwY+laEBFnDyjejS/GzgHE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     requests
     toml
+    dateparser
   ];
 
   # Project has no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "timetagger_cli" ];
 
   meta = with lib; {
     description = "Track your time from the command-line";

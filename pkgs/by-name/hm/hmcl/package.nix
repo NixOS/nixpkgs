@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.6.13";
+  version = "3.6.14";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
     url = "https://github.com/HMCL-dev/HMCL/releases/download/release-${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-rqfesqt3yYDU6koDLFbE9FJpA6iNzDTNG6lWGA2bBYo=";
+    hash = "sha256-8AviAYAMm74uJeMvgESPNHbT5b91mDTxDgLYh+8VHb8=";
   };
 
   icon = fetchurl {

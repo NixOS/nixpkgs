@@ -170,6 +170,9 @@ in
   # Regular overrides
 
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
+    checkInputs = with self; [
+      snacks-nvim
+    ];
     dependencies = with self; [
       telescope-nvim
       vim-fugitive
@@ -1506,7 +1509,7 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
-  jdd-nvim = super.lazyjj-nvim.overrideAttrs {
+  jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
 
@@ -4044,7 +4047,10 @@ in
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
-    dependencies = [ self.nui-nvim ];
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
   };
 
   xmake-nvim = super.xmake-nvim.overrideAttrs {

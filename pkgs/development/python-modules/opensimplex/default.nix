@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tests/test_opensimplex.py" ];
+  enabledTestPaths = [ "tests/test_opensimplex.py" ];
   pythonImportsCheck = [ "opensimplex" ];
 
   meta = with lib; {

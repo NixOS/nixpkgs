@@ -51,17 +51,28 @@ buildGoModule rec {
       btrfs-progs
     ];
 
-  buildPhase = ''
-    runHook preBuild
-    patchShebangs .
-    make bin/skopeo completions docs
-    runHook postBuild
-  '';
+  buildPhase =
+    ''
+      runHook preBuild
+      patchShebangs .
+      make bin/skopeo docs
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      make completions
+    ''
+    + ''
+      runHook postBuild
+    '';
 
   installPhase =
     ''
       runHook preInstall
-      PREFIX=${placeholder "out"} make install-binary install-completions install-docs
+      PREFIX=${placeholder "out"} make install-binary install-docs
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      PREFIX=${placeholder "out"} make install-completions
+    ''
+    + ''
       install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''

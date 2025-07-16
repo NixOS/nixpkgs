@@ -144,8 +144,6 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
-  aider-chat = callPackage ../development/python-modules/aider-chat { };
-
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -3207,12 +3205,12 @@ self: super: with self; {
   cython_0 = callPackage ../development/python-modules/cython/0.nix { };
 
   cython_3_1 = cython.overridePythonAttrs rec {
-    version = "3.1.1";
+    version = "3.1.2";
     src = pkgs.fetchFromGitHub {
       owner = "cython";
       repo = "cython";
       tag = version;
-      hash = "sha256-KdRYPH3Do3KntgqLGIUSeD6DjmXNdFjI2ZSszzMjF6k=";
+      hash = "sha256-lP8ILCzAZuoPzFhCqGXwIpifN8XoWz93SJ7c3XVe69Y=";
     };
   };
 
@@ -3408,6 +3406,8 @@ self: super: with self; {
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   dctorch = callPackage ../development/python-modules/dctorch { };
+
+  ddgs = callPackage ../development/python-modules/ddgs { };
 
   ddt = callPackage ../development/python-modules/ddt { };
 
@@ -3969,6 +3969,8 @@ self: super: with self; {
 
   django-pwa = callPackage ../development/python-modules/django-pwa { };
 
+  django-pydantic-field = callPackage ../development/python-modules/django-pydantic-field { };
+
   django-q2 = callPackage ../development/python-modules/django-q2 { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
@@ -4308,6 +4310,8 @@ self: super: with self; {
 
   drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
 
+  drf-pydantic = callPackage ../development/python-modules/drf-pydantic { };
+
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
@@ -4423,6 +4427,8 @@ self: super: with self; {
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
   dyn = callPackage ../development/python-modules/dyn { };
+
+  dynaconf = callPackage ../development/python-modules/dynaconf { };
 
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
@@ -5049,6 +5055,8 @@ self: super: with self; {
   fickling = callPackage ../development/python-modules/fickling { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
+
+  fido2_2 = callPackage ../development/python-modules/fido2/2.nix { };
 
   fields = callPackage ../development/python-modules/fields { };
 
@@ -6621,6 +6629,8 @@ self: super: with self; {
 
   html2image = callPackage ../development/python-modules/html2image { };
 
+  html2pdf4doc = callPackage ../development/python-modules/html2pdf4doc { };
+
   html2text = callPackage ../development/python-modules/html2text { };
 
   html5-parser = callPackage ../development/python-modules/html5-parser { };
@@ -7390,10 +7400,7 @@ self: super: with self; {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
-  jsonnet = buildPythonPackage {
-    inherit (pkgs.jsonnet) name src;
-    format = "setuptools";
-  };
+  jsonnet = callPackage ../development/python-modules/jsonnet { };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
@@ -7799,6 +7806,8 @@ self: super: with self; {
   langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
 
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
+
+  langchain-google-genai = callPackage ../development/python-modules/langchain-google-genai { };
 
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
@@ -10655,6 +10664,8 @@ self: super: with self; {
 
   openai = callPackage ../development/python-modules/openai { };
 
+  openai-agents = callPackage ../development/python-modules/openai-agents { };
+
   openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openaiauth = callPackage ../development/python-modules/openaiauth { };
@@ -11193,6 +11204,8 @@ self: super: with self; {
   pasimple = callPackage ../development/python-modules/pasimple { };
 
   passlib = callPackage ../development/python-modules/passlib { };
+
+  password-entropy = callPackage ../development/python-modules/password-entropy { };
 
   paste = callPackage ../development/python-modules/paste { };
 
@@ -13162,6 +13175,8 @@ self: super: with self; {
 
   pymetar = callPackage ../development/python-modules/pymetar { };
 
+  pymetasploit3 = callPackage ../development/python-modules/pymetasploit3 { };
+
   pymeteireann = callPackage ../development/python-modules/pymeteireann { };
 
   pymeteoclimatic = callPackage ../development/python-modules/pymeteoclimatic { };
@@ -14936,6 +14951,8 @@ self: super: with self; {
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
 
+  pyvers = callPackage ../development/python-modules/pyvers { };
+
   pyversasense = callPackage ../development/python-modules/pyversasense { };
 
   pyvesync = callPackage ../development/python-modules/pyvesync { };
@@ -15138,7 +15155,11 @@ self: super: with self; {
 
   qscintilla = self.qscintilla-qt5;
 
-  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
+  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla {
+    pythonPackages = self;
+  };
+
+  qscintilla-qt6 = pkgs.qt6Packages.callPackage ../development/python-modules/qscintilla {
     pythonPackages = self;
   };
 
@@ -16737,6 +16758,8 @@ self: super: with self; {
 
   speaklater3 = callPackage ../development/python-modules/speaklater3 { };
 
+  specfile = callPackage ../development/python-modules/specfile { };
+
   spectra = callPackage ../development/python-modules/spectra { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
@@ -17026,6 +17049,10 @@ self: super: with self; {
   sqlite-migrate = callPackage ../development/python-modules/sqlite-migrate { };
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
+
+  sqlite-vec = callPackage ../development/python-modules/sqlite-vec {
+    sqlite-vec-c = pkgs.sqlite-vec;
+  };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
@@ -17354,9 +17381,13 @@ self: super: with self; {
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
+  svgdigitizer = callPackage ../development/python-modules/svgdigitizer { };
+
   svgelements = callPackage ../development/python-modules/svgelements { };
 
   svglib = callPackage ../development/python-modules/svglib { };
+
+  svgpathtools = callPackage ../development/python-modules/svgpathtools { };
 
   svgutils = callPackage ../development/python-modules/svgutils { };
 
@@ -18328,7 +18359,7 @@ self: super: with self; {
 
   txrequests = callPackage ../development/python-modules/txrequests { };
 
-  txtai = callPackage ../development/python-modules/txtai { };
+  txtai = callPackage ../development/python-modules/txtai { sqlite-vec-c = pkgs.sqlite-vec; };
 
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
@@ -19044,6 +19075,8 @@ self: super: with self; {
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
+  urwid-satext = callPackage ../development/python-modules/urwid-satext { };
+
   urwidgets = callPackage ../development/python-modules/urwidgets { };
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
@@ -19665,7 +19698,9 @@ self: super: with self; {
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
-  xformers = callPackage ../development/python-modules/xformers { };
+  xformers = callPackage ../development/python-modules/xformers {
+    inherit (pkgs.llvmPackages) openmp;
+  };
 
   xgboost = callPackage ../development/python-modules/xgboost { inherit (pkgs) xgboost; };
 

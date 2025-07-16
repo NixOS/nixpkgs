@@ -120,6 +120,14 @@
         };
 
         package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = ''
+            Extra arguments to be passed to nvidia-ctk.
+          '';
+        };
       };
 
     };
@@ -241,6 +249,7 @@
                 device-name-strategy
                 discovery-mode
                 mounts
+                extraArgs
                 ;
               nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
               nvidia-driver = config.hardware.nvidia.package;

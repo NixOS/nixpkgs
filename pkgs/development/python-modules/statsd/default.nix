@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "statsd/tests.py" ];
+  enabledTestPaths = [ "statsd/tests.py" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ ];

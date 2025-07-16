@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test_handshakes_offline.py" ];
+  enabledTestPaths = [ "tests/test_handshakes_offline.py" ];
 
   pythonImportsCheck = [ "consonance" ];
 

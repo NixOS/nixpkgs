@@ -295,6 +295,7 @@ rec {
         dontStrip = true;
         env = (args.env or { }) // {
           NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+          NIX_RUSTFLAGS = toString (args.env.NIX_RUSTFLAGS or "") + " -g -C opt-level=0 -C strip=none";
         };
       });
     });

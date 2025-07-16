@@ -5,12 +5,12 @@
 }:
 buildGoModule rec {
   pname = "lsh";
-  version = "1.3.3";
+  version = "1.4.0";
   src = fetchFromGitHub {
     owner = "latitudesh";
     repo = "lsh";
     rev = "v${version}";
-    sha256 = "0YpjG4u+wb4LRWzfTddKFwut0MBzEch+HZijmZiVXpE=";
+    sha256 = "sha256-yYjCxH92GyFl4Gf4hH97E3EiMQ6WvWIItVI4U54JdaM=";
   };
   vendorHash = "sha256-ogdyzfayleka4Y8x74ZtttD7MaeCl1qP/rQi9x0tMto=";
   subPackages = [ "." ];

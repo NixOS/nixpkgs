@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [ "--dynamic-linking" ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "yara" ];
 

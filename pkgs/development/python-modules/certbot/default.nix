@@ -61,10 +61,9 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];

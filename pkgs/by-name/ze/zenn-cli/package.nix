@@ -24,7 +24,9 @@ let
   go-turbo = stdenv.mkDerivation {
     pname = "go-turbo";
     version = go-turbo-version;
-    src = go-turbo-srcs.${stdenv.hostPlatform.system};
+    src =
+      go-turbo-srcs.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     nativeBuildInputs = [ autoPatchelfHook ];
     dontBuild = true;
     installPhase = ''
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-AjdXclrNl1AHJ4LXq9I5Rk6KGyDaWXW187o2uLwRy/o=";
   };
 

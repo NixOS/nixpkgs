@@ -13,7 +13,7 @@ let
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
     version = "2024.11.04";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "intelxed";
@@ -21,6 +21,8 @@ let
       tag = "v${version}";
       hash = "sha256-iQVykBG3tEPxI1HmqBkvO1q+K8vi64qBfVC63/rcTOk=";
     };
+
+    build-system = with python3Packages; [ setuptools ];
 
     meta = {
       description = "Python-based build system used for building XED";

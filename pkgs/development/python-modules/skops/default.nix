@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     streamlit
   ];
-  pytestFlagsArray = [ "skops" ];
+  enabledTestPaths = [ "skops" ];
   disabledTests = [
     # flaky
     "test_base_case_works_as_expected"

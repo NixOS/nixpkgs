@@ -152,6 +152,7 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Fatal Python error: Aborted
       # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+      # https://github.com/materialsproject/pymatgen/issues/4452
       "test_angle"
       "test_as_dict_from_dict"
       "test_attributes"
@@ -170,12 +171,17 @@ buildPythonPackage rec {
 
       # attempt to insert nil object from objects[1]
       "test_timer_10_2_7"
+      "test_timer"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crash when running the pmg command
     # Critical error: required built-in appearance SystemAppearance not found
     "tests/cli/test_pmg_plot.py"
+
+    # attempt to insert nil object from objects[1]
+    # https://github.com/materialsproject/pymatgen/issues/4452
+    "tests/io/abinit/test_abitimer.py"
   ];
 
   meta = {

@@ -8,6 +8,7 @@
 let
   inherit (lib)
     hasPrefix
+    literalExpression
     mkEnableOption
     mkIf
     mkMerge
@@ -23,6 +24,8 @@ let
 in
 
 {
+  meta.maintainers = pkgs.postfix-tlspol.meta.maintainers;
+
   options.services.postfix-tlspol = {
     enable = mkEnableOption "postfix-tlspol";
 
@@ -90,9 +93,15 @@ in
           };
 
           dns = {
-            server = mkOption {
+            address = mkOption {
               type = types.str;
-              default = "127.0.0.1:53";
+              default = if config.networking.resolvconf.useLocalResolver then "127.0.0.1:53" else null;
+              defaultText = literalExpression ''
+                if config.networking.resolvconf.useLocalResolver then
+                  "127.0.0.1:53"
+                else
+                  null
+              '';
               description = ''
                 IP and port to your DNS resolver
 
@@ -173,7 +182,7 @@ in
         description = "Postfix DANE/MTA-STS TLS policy socketmap service";
         documentation = [ "https://github.com/Zuplu/postfix-tlspol" ];
 
-        reloadTriggers = [ configFile ];
+        restartTriggers = [ configFile ];
 
         # https://github.com/Zuplu/postfix-tlspol/blob/main/init/postfix-tlspol.service
         serviceConfig = {

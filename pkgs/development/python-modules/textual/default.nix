@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "3.7.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-G8cS/WZp/6CWRMdPTtKmdUkXdxLVQXxbJnF4/4/VbpM=";
+    hash = "sha256-rVDr4Snp5qnErxWRM9yoxnzzX8gg8nD3RbBkL1rmgqI=";
   };
 
   build-system = [ poetry-core ];
@@ -77,15 +77,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-
-    # Fail since tree-sitter-markdown was updated to 0.5.0
-    # ValueError: Incompatible Language version 15. Must be between 13 and 14
-    # https://github.com/Textualize/textual/issues/5868
-    "test_setting_builtin_language_via_attribute"
-    "test_setting_builtin_language_via_constructor"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Some tests in groups require state from previous tests
     # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
     "--dist=loadgroup"
@@ -101,5 +95,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
+    # https://github.com/Textualize/textual/issues/5868
+    broken = true;
   };
 }

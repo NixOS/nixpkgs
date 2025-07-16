@@ -605,7 +605,7 @@ in
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
   goatcounter = runTest ./goatcounter.nix;
-  go-camo = handleTest ./go-camo.nix { };
+  go-camo = runTest ./go-camo.nix;
   go-neb = runTest ./go-neb.nix;
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;
@@ -649,10 +649,22 @@ in
   harmonia = runTest ./harmonia.nix;
   headscale = runTest ./headscale.nix;
   healthchecks = runTest ./web-apps/healthchecks.nix;
-  hbase2 = handleTest ./hbase.nix { package = pkgs.hbase2; };
-  hbase_2_5 = handleTest ./hbase.nix { package = pkgs.hbase_2_5; };
-  hbase_2_4 = handleTest ./hbase.nix { package = pkgs.hbase_2_4; };
-  hbase3 = handleTest ./hbase.nix { package = pkgs.hbase3; };
+  hbase2 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase2;
+  };
+  hbase_2_5 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase_2_5;
+  };
+  hbase_2_4 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase_2_4;
+  };
+  hbase3 = runTest {
+    imports = [ ./hbase.nix ];
+    _module.args.getPackage = pkgs: pkgs.hbase3;
+  };
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
   homebox = runTest ./homebox.nix;
@@ -912,7 +924,7 @@ in
   mysql-backup = handleTest ./mysql/mysql-backup.nix { };
   mysql-replication = handleTest ./mysql/mysql-replication.nix { };
   n8n = runTest ./n8n.nix;
-  nagios = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix { };
+  nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
   nar-serve = runTest ./nar-serve.nix;
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
@@ -1014,6 +1026,7 @@ in
   nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
+  nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = runTest ./noto-fonts.nix;
@@ -1067,6 +1080,7 @@ in
   openvscode-server = runTest ./openvscode-server.nix;
   open-webui = runTest ./open-webui.nix;
   openvswitch = runTest ./openvswitch.nix;
+  optee = handleTestOn [ "aarch64-linux" ] ./optee.nix { };
   orangefs = runTest ./orangefs.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
@@ -1260,9 +1274,9 @@ in
   sane = runTest ./sane.nix;
   sanoid = runTest ./sanoid.nix;
   saunafs = runTest ./saunafs.nix;
-  scaphandre = handleTest ./scaphandre.nix { };
+  scaphandre = runTest ./scaphandre.nix;
   schleuder = runTest ./schleuder.nix;
-  scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
+  scion-freestanding-deployment = runTest ./scion/freestanding-deployment;
   scrutiny = runTest ./scrutiny.nix;
   scx = runTest ./scx/default.nix;
   sddm = import ./sddm.nix { inherit runTest; };
@@ -1319,7 +1333,7 @@ in
   stratis = handleTest ./stratis { };
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
-  stunnel = handleTest ./stunnel.nix { };
+  stunnel = import ./stunnel.nix { inherit runTest; };
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
   sunshine = runTest ./sunshine.nix;
@@ -1364,7 +1378,7 @@ in
   systemd-initrd-luks-tpm2 = runTest ./systemd-initrd-luks-tpm2.nix;
   systemd-initrd-luks-unl0kr = runTest ./systemd-initrd-luks-unl0kr.nix;
   systemd-initrd-modprobe = runTest ./systemd-initrd-modprobe.nix;
-  systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix { };
+  systemd-initrd-networkd = import ./systemd-initrd-networkd.nix { inherit runTest; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
   systemd-initrd-networkd-openvpn = handleTestOn [
     "x86_64-linux"
@@ -1386,9 +1400,7 @@ in
   systemd-networkd = runTest ./systemd-networkd.nix;
   systemd-networkd-bridge = runTest ./systemd-networkd-bridge.nix;
   systemd-networkd-dhcpserver = runTest ./systemd-networkd-dhcpserver.nix;
-  systemd-networkd-dhcpserver-static-leases =
-    handleTest ./systemd-networkd-dhcpserver-static-leases.nix
-      { };
+  systemd-networkd-dhcpserver-static-leases = runTest ./systemd-networkd-dhcpserver-static-leases.nix;
   systemd-networkd-ipv6-prefix-delegation =
     handleTest ./systemd-networkd-ipv6-prefix-delegation.nix
       { };
@@ -1516,7 +1528,7 @@ in
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
   vm-variant = handleTest ./vm-variant.nix { };
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
-  vscodium = discoverTests (import ./vscodium.nix);
+  vscodium = import ./vscodium.nix { inherit runTest; };
   vsftpd = runTest ./vsftpd.nix;
   waagent = runTest ./waagent.nix;
   wakapi = runTest ./wakapi.nix;
@@ -1555,7 +1567,10 @@ in
   xterm = runTest ./xterm.nix;
   xxh = runTest ./xxh.nix;
   yarr = runTest ./yarr.nix;
-  ydotool = handleTest ./ydotool.nix { };
+  ydotool = import ./ydotool.nix {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;

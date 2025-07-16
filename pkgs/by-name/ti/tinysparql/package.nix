@@ -26,7 +26,6 @@
   libsoup_3,
   json-glib,
   avahi,
-  systemd,
   dbus,
   man-db,
   writeText,
@@ -75,22 +74,17 @@ stdenv.mkDerivation (finalAttrs: {
       mesonEmulatorHook
     ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      sqlite
-      icu
-      libsoup_3
-      libuuid
-      json-glib
-      avahi
-      libstemmer
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
-    ];
+  buildInputs = [
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup_3
+    libuuid
+    json-glib
+    avahi
+    libstemmer
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -100,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags =
     [
       "-Ddocs=true"
+      "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
       (lib.mesonEnable "introspection" withIntrospection)
       (lib.mesonEnable "vapi" withIntrospection)
     ]
@@ -114,10 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       [
         "--cross-file=${crossFile}"
       ]
-    )
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dsystemd_user_services=false"
-    ];
+    );
 
   doCheck = true;
 

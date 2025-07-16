@@ -331,6 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ] ++ (lib.optional (!buildLibsOnly) "man");
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   hardeningDisable =
     [

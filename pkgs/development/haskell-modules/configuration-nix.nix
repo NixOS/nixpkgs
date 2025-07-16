@@ -158,6 +158,9 @@ builtins.intersectAttrs super {
 
   threadscope = enableSeparateBinOutput super.threadscope;
 
+  # Binary may be used separately for e.g. editor integrations
+  cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
@@ -598,6 +601,11 @@ builtins.intersectAttrs super {
       pkgs.libjpeg
     ];
   }) super.fltkhs;
+
+  # Select dependency discovery method and provide said dependency
+  jpeg-turbo = enableCabalFlag "pkgconfig" (
+    addPkgconfigDepends [ pkgs.libjpeg_turbo ] super.jpeg-turbo
+  );
 
   # https://github.com/skogsbaer/hscurses/pull/26
   hscurses = addExtraLibrary pkgs.ncurses super.hscurses;
@@ -1354,6 +1362,8 @@ builtins.intersectAttrs super {
     # very useful.
     # Flag added in Agda 2.6.4.1, was always enabled before
     (enableCabalFlag "debug")
+    # Set the main program
+    (overrideCabal { mainProgram = "agda"; })
     # Split outputs to reduce closure size
     enableSeparateBinOutput
   ];
@@ -1435,6 +1445,7 @@ builtins.intersectAttrs super {
     fourmolu
     fourmolu_0_14_0_0
     fourmolu_0_16_0_0
+    fourmolu_0_18_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1667,6 +1678,8 @@ builtins.intersectAttrs super {
     (addBuildDepend pkgs.lerc)
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
+
+  jsaddle-warp = addTestToolDepends [ pkgs.nodejs ] super.jsaddle-warp;
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass

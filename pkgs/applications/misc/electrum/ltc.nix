@@ -159,7 +159,7 @@ python3.pkgs.buildPythonApplication {
   ];
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
-  pytestFlagsArray = [ "electrum_ltc/tests" ];
+  enabledTestPaths = [ "electrum_ltc/tests" ];
 
   disabledTests = [
     "test_loop" # test tries to bind 127.0.0.1 causing permission error

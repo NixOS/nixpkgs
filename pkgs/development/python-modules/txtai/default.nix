@@ -24,7 +24,7 @@
   hnswlib,
   pgvector,
   sqlalchemy,
-  sqlite-vec,
+  sqlite-vec-c,
   # api
   aiohttp,
   fastapi,
@@ -103,7 +103,7 @@ let
     hnswlib
     pgvector
     sqlalchemy
-    sqlite-vec
+    sqlite-vec-c
   ];
   api = [
     aiohttp

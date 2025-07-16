@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_platforms" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Attempts to get distro information, and expects "ubuntu-ish"

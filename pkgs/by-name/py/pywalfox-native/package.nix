@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "pywalfox-native";
   version = "2.7.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Frewacom";
@@ -14,6 +14,8 @@ python3.pkgs.buildPythonApplication {
     rev = "7ecbbb193e6a7dab424bf3128adfa7e2d0fa6ff9";
     hash = "sha256-i1DgdYmNVvG+mZiFiBmVHsQnFvfDFOFTGf0GEy81lpE=";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   pythonImportsCheck = [ "pywalfox" ];
 

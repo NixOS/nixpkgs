@@ -101,13 +101,13 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "570.123.18";
-    persistencedVersion = "550.142";
-    settingsVersion = "550.142";
-    sha256_64bit = "sha256-GoBNatVpits13a3xsJSUr9BFG+5xrUDROfHmvss2cSY=";
-    openSha256 = "sha256-AYl8En0ZAZXWlJ8J8LKbPvAEKX+y65L1aq4Hm+dJScs=";
-    settingsSha256 = "sha256-Wk6IlVvs23cB4s0aMeZzSvbOQqB1RnxGMv3HkKBoIgY=";
-    persistencedSha256 = "sha256-yQFrVk4i2dwReN0XoplkJ++iA1WFhnIkP7ns4ORmkFA=";
+    version = "570.123.19";
+    persistencedVersion = "570.169";
+    settingsVersion = "570.169";
+    sha256_64bit = "sha256-K1ElpoTBjlLUG7slBrAhKqnEjUFwupiF7TS/8ogCf7c=";
+    openSha256 = "sha256-uGH2lnnADf5AGl5ShcbCOULsCIWtJlbxgHiz7I2efVE=";
+    settingsSha256 = "sha256-0E3UnpMukGMWcX8td6dqmpakaVbj4OhhKXgmqz77XZc=";
+    persistencedSha256 = "sha256-dttFu+TmbFI+mt1MbbmJcUnc1KIJ20eHZDR7YzfWmgE=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";
 
     broken = kernel.kernelAtLeast "6.15";

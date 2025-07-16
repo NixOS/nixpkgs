@@ -91,7 +91,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "niworkflows" ];
+  enabledTestPaths = [ "niworkflows" ];
 
   disabledTests = [
     # try to download data:

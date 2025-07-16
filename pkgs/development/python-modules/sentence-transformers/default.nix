@@ -100,6 +100,10 @@ buildPythonPackage rec {
     "test_trainer"
     "test_trainer_invalid_column_names"
     "test_trainer_multi_dataset_errors"
+
+    # Assertion error: Sparse operations take too long
+    # (namely, load-sensitive test)
+    "test_performance_with_large_vectors"
   ];
 
   disabledTestPaths =

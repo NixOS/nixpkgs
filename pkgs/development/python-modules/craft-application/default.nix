@@ -102,7 +102,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_application" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests =
     [

@@ -170,6 +170,7 @@ let
       "aarch64" = "AArch64";
     }
     .${llvmStdenv.targetPlatform.parsed.cpu.name}
+      or (throw "Unsupported CPU architecture: ${llvmStdenv.targetPlatform.parsed.cpu.name}")
   }";
   # -ffat-lto-objects = emit LTO object files that are compatible with non-LTO-supporting builds too
   # FatLTO objects are a special type of fat object file that contain LTO compatible IR in addition to generated object code,
@@ -348,6 +349,8 @@ rec {
           };
           # Ensure we don't leak refs to compiler that was used to bootstrap this LLVM
           disallowedReferences = (old.disallowedReferences or [ ]) ++ disallowedRefsForToolchain;
+          # Enable structured attrs for separateDebugInfo, because it is required with disallowedReferences set
+          __structuredAttrs = true;
           requiredSystemFeatures = (old.requiredSystemFeatures or [ ]) ++ [ "big-parallel" ];
           # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
           cmakeFlags =

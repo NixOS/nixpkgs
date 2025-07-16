@@ -23,15 +23,14 @@
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
   version = "5.15.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
     hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    distutils-extra
+  nativeBuildInputs = [
     gobject-introspection
     intltool
     wrapGAppsHook3
@@ -50,7 +49,12 @@ python3Packages.buildPythonApplication rec {
     wmctrl
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    distutils-extra
+  ];
+
+  dependencies = with python3Packages; [
     mock
     dbus-python
     pygobject3
@@ -101,6 +105,8 @@ python3Packages.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  pythonImportsCheck = [ "ulauncher" ];
 
   # do not double wrap
   dontWrapGApps = true;

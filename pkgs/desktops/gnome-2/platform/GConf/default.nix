@@ -8,7 +8,7 @@
   ORBit2,
   libxml2,
   polkit,
-  python3,
+  python312,
   intltool,
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
-    python3
+    python312
     glib
   ];
 

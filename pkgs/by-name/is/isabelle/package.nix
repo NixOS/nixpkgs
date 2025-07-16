@@ -4,7 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   coreutils,
-  nettools,
+  net-tools,
   java,
   scala_3,
   polyml,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     veriT
     vampire'
     eprover-ho
-    nettools
+    net-tools
   ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];

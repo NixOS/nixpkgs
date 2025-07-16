@@ -17,11 +17,11 @@ assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.10.3";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-iwhwiXrFrGfe1Wjc+t9Flpz6imvrD9YK8qnq3Coycqo=";
+    hash = "sha256-JOkckSOkbFToNx86OiUC8RmPKJP7+/Wa+VvBwhSZsA4=";
   };
 
   outputs = [
@@ -69,10 +69,22 @@ stdenv.mkDerivation rec {
     "build"
   ];
 
-  postConfigure = ''
-    sed -i configure \
-        -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
-  '';
+  postConfigure =
+    ''
+      sed -i configure \
+          -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
+    ''
+    # The cipher/simd-common-riscv.h wasn't added to the release tarball, please remove this hack on next version update
+    # https://dev.gnupg.org/T7647
+    + lib.optionalString stdenv.hostPlatform.isRiscV ''
+      cp ${
+        fetchurl {
+          url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob_plain;f=cipher/simd-common-riscv.h;h=8381000f9ac148c60a6963a1d9ec14a3fee1c576;hb=81ce5321b1b79bde6dfdc3c164efb40c13cf656b";
+          hash = "sha256-Toe15YLAOYULnLc2fGMMv/xzs/q1t3LsyiqtL7imc+8=";
+          name = "simd-common-riscv.h";
+        }
+      } cipher/simd-common-riscv.h
+    '';
 
   enableParallelBuilding = true;
 

@@ -23,12 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
   ];
 
-  inherit (hdr10plus_tool)
-    src
-    useFetchCargoVendor
-    cargoDeps
-    cargoHash
-    ;
+  inherit (hdr10plus_tool) src cargoDeps cargoHash;
 
   nativeBuildInputs = [ cargo-c ];
   buildInputs = [ fontconfig ];

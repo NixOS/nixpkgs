@@ -16,8 +16,8 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2025.1.1.13"; # "Android Studio Narwhal | 2025.1.1"
-    sha256Hash = "sha256-MEUqYZd/Ny2spzFqbZ40j2H4Tg6pHQGWqkpRrVtbwO8=";
+    version = "2025.1.1.14"; # "Android Studio Narwhal | 2025.1.1 Patch 1"
+    sha256Hash = "sha256-rTZOvLl1Lqc0zXNiTmVoMnLEAwWOEDW5MJg8ysiiyBo=";
   };
   betaVersion = {
     version = "2025.1.1.12"; # "Android Studio Narwhal | 2025.1.1 RC 2"

@@ -92,7 +92,7 @@ There are a few special NixOS options for test VMs:
 
 `virtualisation.memorySize`
 
-:   The memory of the VM in megabytes.
+:   The memory of the VM in MiB (1024×1024 bytes).
 
 `virtualisation.vlans`
 

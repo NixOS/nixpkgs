@@ -19,7 +19,7 @@
   locale,
   ncurses,
   netcat,
-  nettools,
+  net-tools,
   pihole-ftl,
   procps,
   resholve,
@@ -119,7 +119,7 @@
         locale
         ncurses
         netcat
-        nettools
+        net-tools
         pihole-ftl
         procps
         sqlite

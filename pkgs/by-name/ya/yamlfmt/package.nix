@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "yamlfmt";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "yamlfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ORVT70KXW/eatcQkDdpqb7LK6NbUr389zFDyYHy6Cxs=";
+    hash = "sha256-EYOtxb2Xq4bQpWbITmPieVMqJz3/2chgNirZEjiyjAY=";
   };
 
   vendorHash = "sha256-Cy1eBvKkQ90twxjRL2bHTk1qNFLQ22uFrOgHKmnoUIQ=";

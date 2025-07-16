@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test" ];
+  enabledTestPaths = [ "test" ];
 
   # Tests fail: ModuleNotFoundError: No module named '_test_common'
   doCheck = false;

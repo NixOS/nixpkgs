@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "ktop";
-  version = "0.3.7";
+  version = "0.4.1";
   excludedPackages = [ ".ci" ];
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
-    hash = "sha256-oxyEkDY53HjBgjWRajlcg+8Kx092lyLkPgOJleioO7o=";
+    hash = "sha256-5iFFYTZq5DcMYVnW90MKVDchVXzjXOPd5BeYcrqL9pQ=";
   };
 
-  vendorHash = "sha256-MLIcTHWo7lsqtAqH8naSvpS013t8KBVPRbch+CfeUNk=";
+  vendorHash = "sha256-qNrjyMMsFE2FmIJc46fYq08b3XFFZeLlspth5anjMm8=";
   ldflags = [
     "-s"
     "-w"
