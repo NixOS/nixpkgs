@@ -2634,7 +2634,7 @@
         "version": "36.7.1"
     },
     "37": {
-        "chrome": "138.0.7204.97",
+        "chrome": "138.0.7204.100",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2644,15 +2644,15 @@
                     "version": "2025-05-21"
                 }
             },
-            "version": "138.0.7204.97"
+            "version": "138.0.7204.100"
         },
         "chromium_npm_hash": "sha256-8d5VTHutv51libabhxv7SqPRcHfhVmGDSOvTSv013rE=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-jBRcCFsjel8zBJfcgrYy59SzyYphm01zscYtGo0YFhM=",
+                    "hash": "sha256-No95HLCZzwbnG1vSTl/e1hftLDBo6CYIb2qTPs9AobU=",
                     "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "138.0.7204.97",
+                    "tag": "138.0.7204.100",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2691,10 +2691,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-iJiKkKLDbcXnWDi0ZHq6xHB65cm1GsU1gffCPQSNc3Q=",
+                    "hash": "sha256-xd96/h+3ECAN6pooHU5tcAsL7bcLHrifWreP+lRFfJk=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v37.2.1"
+                    "tag": "v37.2.2"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2988,8 +2988,8 @@
             },
             "src/third_party/devtools-frontend/src": {
                 "args": {
-                    "hash": "sha256-7ygnGBAeiLxwbTx5s7LRs9+ZOe06tr8VFcSY5cVHnS4=",
-                    "rev": "f8dfe8b36e516cef8a5a169e88d16480d8abdc68",
+                    "hash": "sha256-XkyJFRxo3ZTBGfKdTwSIo14SLNPQAKQvY4lEX03j6LM=",
+                    "rev": "a6dbe06dafbad00ef4b0ea139ece1a94a5e2e6d8",
                     "url": "https://chromium.googlesource.com/devtools/devtools-frontend"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3961,9 +3961,9 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "10n86jnzcq8kh0nk29ljw9wi1fgj13f07h92b009i1dryagliyrs",
+        "electron_yarn_hash": "167apz9905pfmvq1i34dzcjbzmg3i8jbm27al2xs9lka0rr2qr07",
         "modules": "136",
         "node": "22.17.0",
-        "version": "37.2.1"
+        "version": "37.2.2"
     }
 }
