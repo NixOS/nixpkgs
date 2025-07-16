@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   glib,
   freetype,
@@ -42,6 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
     hash = "sha256-sssTvTUZBMuQOPkH3A3uCuBxJwYSQv41VrJ5XE6XSPw=";
   };
+
+  patches = [
+    (fetchpatch {
+      # CVE-2024-56732
+      url = "https://github.com/harfbuzz/harfbuzz/commit/1767f99e2e2196c3fcae27db6d8b60098d3f6d26.patch";
+      hash = "sha256-fsb0sHZrPx+CCuXqbMwwqsGUdSaHoMjet/2IKzsXyb4=";
+    })
+  ];
 
   postPatch =
     ''
