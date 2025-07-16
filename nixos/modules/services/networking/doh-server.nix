@@ -155,7 +155,7 @@ in
       after = [
         "network.target"
       ] ++ lib.optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
-      wants = lib.optional (cfg.useACMEHost != null) "acme-finished-${cfg.useACMEHost}.target";
+      wants = lib.optional (cfg.useACMEHost != null) "acme-${cfg.useACMEHost}.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
