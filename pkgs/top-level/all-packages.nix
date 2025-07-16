@@ -818,10 +818,6 @@ with pkgs;
     name = "separate-debug-info-hook";
   } ../build-support/setup-hooks/separate-debug-info.sh;
 
-  setupDebugInfoDirs = makeSetupHook {
-    name = "setup-debug-info-dirs-hook";
-  } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
-
   writableTmpDirAsHomeHook = callPackage (
     { makeSetupHook }:
     makeSetupHook {
