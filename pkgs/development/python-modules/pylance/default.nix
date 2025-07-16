@@ -129,6 +129,10 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
     "test_merge_insert_large"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Build hangs after all the tests are run due to a torch subprocess not exiting
+    "test_multiprocess_loading"
   ];
 
   meta = {
