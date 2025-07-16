@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
+      # Temporarily disabled, see https://github.com/KhronosGroup/Vulkan-Tools/issues/1130
+      # FIXME: remove when fixed upstream
+      "-DBUILD_CUBE=OFF"
       # Don't build the mock ICD as it may get used instead of other drivers, if installed
       "-DBUILD_ICD=OFF"
       # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
