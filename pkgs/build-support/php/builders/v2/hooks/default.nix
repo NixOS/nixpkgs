@@ -3,7 +3,6 @@
   makeSetupHook,
   jq,
   writeShellApplication,
-  moreutils,
   cacert,
   buildPackages,
 }:
@@ -20,7 +19,6 @@ in
     name = "composer-vendor-hook.sh";
     propagatedBuildInputs = [
       jq
-      moreutils
       cacert
     ];
     substitutions = {
@@ -32,7 +30,6 @@ in
     name = "composer-install-hook.sh";
     propagatedBuildInputs = [
       jq
-      moreutils
       cacert
     ];
     substitutions = {
