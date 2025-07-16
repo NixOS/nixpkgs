@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
@@ -30,12 +32,17 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd gibo \
-      --bash <($out/bin/gibo completion bash) \
-      --fish <($out/bin/gibo completion fish) \
-      --zsh <($out/bin/gibo completion zsh)
-  '';
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd gibo \
+        --bash <(${emulator} $out/bin/gibo completion bash) \
+        --fish <(${emulator} $out/bin/gibo completion fish) \
+        --zsh <(${emulator} $out/bin/gibo completion zsh)
+    ''
+  );
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
