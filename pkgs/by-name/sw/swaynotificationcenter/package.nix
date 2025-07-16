@@ -31,6 +31,7 @@
   xvfb-run,
   sassc,
   pantheon,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -93,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     command = "${xvfb-run}/bin/xvfb-run swaync --version";
   };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple notification daemon with a GUI built for Sway";
