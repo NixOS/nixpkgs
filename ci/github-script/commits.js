@@ -1,12 +1,14 @@
-module.exports = async function ({ github, context, core }) {
+module.exports = async function ({ github, context, core, dry }) {
   const { execFileSync } = require('node:child_process')
-  const { readFile, writeFile } = require('node:fs/promises')
+  const { readFile } = require('node:fs/promises')
   const { join } = require('node:path')
   const { classify } = require('../supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
 
   await withRateLimit({ github, core }, async (stats) => {
     stats.prs = 1
+
+    const pull_number = context.payload.pull_request.number
 
     const job_url =
       context.runId &&
@@ -17,7 +19,7 @@ module.exports = async function ({ github, context, core }) {
         })
       ).data.jobs[0].html_url +
         '?pr=' +
-        context.payload.pull_request.number
+        pull_number
 
     async function handle({ sha, commit }) {
       // Using the last line with "cherry" + hash, because a chained backport
@@ -115,7 +117,7 @@ module.exports = async function ({ github, context, core }) {
 
     const commits = await github.paginate(github.rest.pulls.listCommits, {
       ...context.repo,
-      pull_number: context.payload.pull_request.number,
+      pull_number,
     })
 
     const results = await Promise.all(commits.map(handle))
@@ -131,8 +133,46 @@ module.exports = async function ({ github, context, core }) {
     })
 
     // Only create step summary below in case of warnings or errors.
-    if (results.every(({ severity }) => severity == 'info')) return
-    else process.exitCode = 1
+    // Also clean up older reviews, when all checks are good now.
+    if (results.every(({ severity }) => severity == 'info')) {
+      if (!dry) {
+        await Promise.all(
+          (
+            await github.paginate(github.rest.pulls.listReviews, {
+              ...context.repo,
+              pull_number,
+            })
+          )
+            .filter((review) => review.user.login == 'github-actions[bot]')
+            .map(async (review) => {
+              if (review.state == 'CHANGES_REQUESTED') {
+                await github.rest.pulls.dismissReview({
+                  ...context.repo,
+                  pull_number,
+                  review_id: review.id,
+                  message: 'All cherry-picks are good now, thank you!',
+                })
+              }
+              await github.graphql(
+                `mutation($node_id:ID!) {
+                  minimizeComment(input: {
+                    classifier: RESOLVED,
+                    subjectId: $node_id
+                  })
+                  { clientMutationId }
+                }`,
+                { node_id: review.node_id },
+              )
+            }),
+        )
+      }
+      return
+    }
+
+    // In the case of "error" severity, we also fail the job.
+    // Those should be considered blocking and not be dismissable via review.
+    if (results.some(({ severity }) => severity == 'error'))
+      process.exitCode = 1
 
     core.summary.addRaw(
       await readFile(join(__dirname, 'check-cherry-picks.md'), 'utf-8'),
@@ -198,9 +238,48 @@ module.exports = async function ({ github, context, core }) {
         `\n\n_Hint: The full diffs are also available in the [runner logs](${job_url}) with slightly better highlighting._`,
       )
 
-    // Write to disk temporarily for next step in GHA.
-    await writeFile('review.md', core.summary.stringify())
-
+    const body = core.summary.stringify()
     core.summary.write()
+
+    const pendingReview = (
+      await github.paginate(github.rest.pulls.listReviews, {
+        ...context.repo,
+        pull_number,
+      })
+    ).find(
+      (review) =>
+        review.user.login == 'github-actions[bot]' &&
+        // If a review is still pending, we can just update this instead
+        // of posting a new one.
+        (review.state == 'CHANGES_REQUESTED' ||
+          // No need to post a new review, if an older one with the exact
+          // same content had already been dismissed.
+          review.body == body),
+    )
+
+    if (dry) {
+      if (pendingReview)
+        core.info('pending review found: ' + pendingReview.html_url)
+      else core.info('no pending review found')
+    } else {
+      // Either of those two requests could fail for very long comments. This can only happen
+      // with multiple commits all hitting the truncation limit for the diff. If you ever hit
+      // this case, consider just splitting up those commits into multiple PRs.
+      if (pendingReview) {
+        await github.rest.pulls.updateReview({
+          ...context.repo,
+          pull_number,
+          review_id: pendingReview.id,
+          body,
+        })
+      } else {
+        await github.rest.pulls.createReview({
+          ...context.repo,
+          pull_number,
+          event: 'REQUEST_CHANGES',
+          body,
+        })
+      }
+    }
   })
 }
