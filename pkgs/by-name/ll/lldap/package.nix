@@ -19,10 +19,10 @@ let
     version = "unstable-2025-07-16";
 
     src = fetchFromGitHub {
-      owner = "lldap";
+      owner = "ibizaman";
       repo = "lldap";
-      rev = "78337bce722c3573d9fc6eafe345a3dbce4b9119";
-      hash = "sha256-/djLboAQwK/KQ0u9vzoOdDHwh/BQSvMa8lQkABn10Cw=";
+      rev = "93922b7b0f7f8ac294151ec61b9b21e50e504ab5";
+      hash = "sha256-p2PUaaD6OrQ+eCkcDZd6x61gERQFQSDEkxwl2s6y8rY=";
     };
 
     useFetchCargoVendor = true;
