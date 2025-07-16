@@ -801,10 +801,6 @@ with pkgs;
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
-  findXMLCatalogs = makeSetupHook {
-    name = "find-xml-catalogs-hook";
-  } ../build-support/setup-hooks/find-xml-catalogs.sh;
-
   wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
     isGraphical = true;
   };
