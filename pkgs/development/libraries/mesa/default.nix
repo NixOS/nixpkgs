@@ -45,62 +45,53 @@
   enablePatentEncumberedCodecs ? true,
   withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
 
-  galliumDrivers ?
-    [
-      "asahi" # Apple AGX, built on non-aarch64 for cross tools
-      "d3d12" # WSL emulated GPU (aka Dozen)
-      "iris" # new Intel (Broadwell+)
-      "llvmpipe" # software renderer
-      "nouveau" # Nvidia
-      "panfrost" # ARM Mali Midgard and up (T/G series), built on non-ARM for cross tools
-      "r300" # very old AMD
-      "r600" # less old AMD
-      "radeonsi" # new AMD (GCN+)
-      "softpipe" # older software renderer
-      "svga" # VMWare virtualized GPU
-      "virgl" # QEMU virtualized GPU (aka VirGL)
-      "zink" # generic OpenGL over Vulkan, experimental
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) [
-      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "lima" # ARM Mali 4xx
-      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      "tegra" # Nvidia Tegra SoCs
-      "v3d" # Broadcom VC5 (Raspberry Pi 4)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "crocus" # Intel legacy, x86 only
-      "i915" # Intel extra legacy, x86 only
-    ],
+  # We enable as many drivers as possible here, to build cross tools
+  # and support emulation use cases (emulated x86_64 on aarch64, etc)
+  galliumDrivers ? [
+    "asahi" # Apple AGX
+    "crocus" # Intel legacy
+    "d3d12" # WSL emulated GPU (aka Dozen)
+    "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "i915" # Intel extra legacy
+    "iris" # new Intel (Broadwell+)
+    "lima" # ARM Mali 4xx
+    "llvmpipe" # software renderer
+    "nouveau" # Nvidia
+    "panfrost" # ARM Mali Midgard and up (T/G series)
+    "r300" # very old AMD
+    "r600" # less old AMD
+    "radeonsi" # new AMD (GCN+)
+    "softpipe" # older software renderer
+    "svga" # VMWare virtualized GPU
+    "tegra" # Nvidia Tegra SoCs
+    "v3d" # Broadcom VC5 (Raspberry Pi 4)
+    "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    "virgl" # QEMU virtualized GPU (aka VirGL)
+    "zink" # generic OpenGL over Vulkan, experimental
+  ],
   vulkanDrivers ?
     [
       "amd" # AMD (aka RADV)
-      "asahi" # Apple AGX, built on non-aarch64 for cross tools
+      "asahi" # Apple AGX
+      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+      "gfxstream" # Android virtualized GPU
+      "imagination-experimental" # PowerVR Rogue (currently N/A)
+      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
       "intel" # new Intel (aka ANV)
       "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
       "nouveau" # Nouveau (aka NVK)
+      "panfrost" # ARM Mali Midgard and up (T/G series)
       "swrast" # software renderer (aka Lavapipe)
     ]
-    ++
-      lib.optionals
-        (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
-        [
-          # QEMU virtualized GPU (aka VirGL)
-          # Requires ATOMIC_INT_LOCK_FREE == 2.
-          "virtio"
-        ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "imagination-experimental" # PowerVR Rogue (currently N/A)
-      "panfrost" # ARM Mali Midgard and up (T/G series)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
-    ],
+    ++ lib.optionals
+      (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
+      [
+        # QEMU virtualized GPU (aka VirGL)
+        # Requires ATOMIC_INT_LOCK_FREE == 2.
+        "virtio"
+      ],
   eglPlatforms ? [
     "x11"
     "wayland"
@@ -154,6 +145,9 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+
+    # Merged upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/36231
+    ./gfxstream.patch
   ];
 
   postPatch = ''
