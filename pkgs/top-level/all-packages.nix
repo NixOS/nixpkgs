@@ -2214,7 +2214,7 @@ with pkgs;
   };
 
   hyprland = callPackage ../by-name/hy/hyprland/package.nix {
-    stdenv = gcc14Stdenv;
+    stdenv = gcc15Stdenv;
   };
 
   hyprpolkitagent = callPackage ../by-name/hy/hyprpolkitagent/package.nix {
