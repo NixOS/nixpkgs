@@ -340,6 +340,11 @@ in
 
 {
 
+  meta.maintainers = with lib.maintainers; [
+    dotlambda
+    hexa
+  ];
+
   ###### interface
 
   options = {
