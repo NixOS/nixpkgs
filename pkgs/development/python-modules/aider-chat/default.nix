@@ -264,6 +264,7 @@ let
     disabledTestPaths = [
       # Tests require network access
       "tests/scrape/test_scrape.py"
+      "tests/basic/test_repomap.py"
       # Expected 'mock' to have been called once
       "tests/help/test_help.py"
     ];
@@ -273,6 +274,7 @@ let
         # Tests require network
         "test_urls"
         "test_get_commit_message_with_custom_prompt"
+        "test_cmd_tokens_output"
         # FileNotFoundError
         "test_get_commit_message"
         # Expected 'launch_gui' to have been called once
