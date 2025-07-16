@@ -818,14 +818,6 @@ with pkgs;
     name = "separate-debug-info-hook";
   } ../build-support/setup-hooks/separate-debug-info.sh;
 
-  validatePkgConfig = makeSetupHook {
-    name = "validate-pkg-config";
-    propagatedBuildInputs = [
-      findutils
-      pkg-config
-    ];
-  } ../build-support/setup-hooks/validate-pkg-config.sh;
-
   #package writers
   writers = callPackage ../build-support/writers { };
 
