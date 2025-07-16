@@ -14,19 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.12.4";
+  version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x5tbLoNGBT3tS+QXn0piFMM8+uqoQt8gfQJap1TyLmQ=";
+    hash = "sha256-7JT8BMKUhIwYMkIwr2mD8IQLDpldcDtAKh6R1tbAKMw=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-    fetcherVersion = 1;
-    hash = "sha256-hO6QKRr4jTfesRDAEGcpFeJmGTGLGMw6EgIvD23DNzw=";
+    fetcherVersion = 2;
+    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       FlafyDev
+      Gliczy
       NotAShelf
       Scrumplex
     ];
