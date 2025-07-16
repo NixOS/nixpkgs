@@ -11,7 +11,7 @@ in
       services.postfix = {
         enable = true;
         enableSubmission = true;
-        config = {
+        settings.main = {
           mydomain = domain;
           destination = domain;
           smtp_tls_CAfile = "${certs.ca.cert}";

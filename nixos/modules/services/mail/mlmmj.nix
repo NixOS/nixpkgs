@@ -120,11 +120,11 @@ in
 
     services.postfix = {
       enable = true;
-      config = {
+      settings.main = {
         recipient_delimiter = "+";
         propagate_unmatched_extensions = "virtual";
       };
-      masterConfig.mlmmj = {
+      settings.master.mlmmj = {
         type = "unix";
         private = true;
         privileged = true;
