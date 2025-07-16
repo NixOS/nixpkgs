@@ -13,11 +13,12 @@ module.exports = async function ({ github, context, core, dry }) {
     const job_url =
       context.runId &&
       (
-        await github.rest.actions.listJobsForWorkflowRun({
+        await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
           ...context.repo,
           run_id: context.runId,
+          per_page: 100,
         })
-      ).data.jobs[0].html_url +
+      ).find(({ name }) => name == 'Check / cherry-pick').html_url +
         '?pr=' +
         pull_number
 
