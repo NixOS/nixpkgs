@@ -6,21 +6,45 @@ in
   inherit name;
 
   nodes = {
+    # Host1 is a fresh install of tuwunel
     host1 = {
-      services.matrix-conduit = {
+      services.matrix-tuwunel = {
         enable = true;
-        package = pkgs.matrix-tuwunel;
         settings.global = {
           server_name = name;
-          address = "0.0.0.0";
+          address = [ "0.0.0.0" ];
           allow_registration = true;
           yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = true;
         };
         extraEnvironment.RUST_BACKTRACE = "yes";
       };
-      systemd.services.conduit.serviceConfig.ExecStart = lib.mkForce "${pkgs.matrix-tuwunel}/bin/tuwunel";
       networking.firewall.allowedTCPPorts = [ 6167 ];
     };
+
+    # Host2 was upgraded from the matrix-conduit service
+    host2 = {
+      users.users.conduit = {
+        group = "conduit";
+        home = "/var/lib/matrix-conduit";
+        isSystemUser = true;
+      };
+      users.groups.conduit = { };
+      services.matrix-tuwunel = {
+        enable = true;
+        user = "conduit";
+        group = "conduit";
+        stateDirectory = "matrix-conduit";
+        settings.global = {
+          server_name = name;
+          address = [ "0.0.0.0" ];
+          allow_registration = true;
+          yes_i_am_very_very_sure_i_want_an_open_registration_server_prone_to_abuse = true;
+        };
+        extraEnvironment.RUST_BACKTRACE = "yes";
+      };
+      networking.firewall.allowedTCPPorts = [ 6167 ];
+    };
+
     client =
       { pkgs, ... }:
       {
@@ -28,11 +52,12 @@ in
           (pkgs.writers.writePython3Bin "do_test" { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
             import asyncio
             import nio
+            import sys
 
 
-            async def main() -> None:
+            async def main(host) -> None:
                 # Connect to server
-                client = nio.AsyncClient("http://host1:6167", "alice")
+                client = nio.AsyncClient(f"http://{host}:6167", "alice")
 
                 # Register as user alice
                 response = await client.register("alice", "my-secret-password")
@@ -82,7 +107,7 @@ in
 
 
             if __name__ == "__main__":
-                asyncio.run(main())
+                asyncio.run(main(sys.argv[1]))
           '')
         ];
       };
@@ -91,12 +116,17 @@ in
   testScript = ''
     start_all()
 
-    with subtest("start tuwunel"):
-          host1.wait_for_unit("conduit.service")
+    with subtest("start tuwunel on host1"):
+          host1.wait_for_unit("tuwunel.service")
           host1.wait_for_open_port(6167)
 
-    with subtest("ensure messages can be exchanged"):
-          client.succeed("do_test >&2")
+    with subtest("start tuwunel on host2"):
+          host1.wait_for_unit("tuwunel.service")
+          host1.wait_for_open_port(6167)
+
+    with subtest("ensure messages can be sent to servers"):
+          client.succeed("do_test host1 >&2")
+          client.succeed("do_test host2 >&2")
   '';
 
   meta.maintainers = with lib.maintainers; [
