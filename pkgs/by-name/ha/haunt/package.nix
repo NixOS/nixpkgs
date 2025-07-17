@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  callPackage,
   guile,
   guile-commonmark,
   guile-reader,
@@ -32,8 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     guile-reader
   ];
 
-  # Test suite is non-deterministic in later versions
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = ''
     wrapProgram $out/bin/haunt \
@@ -42,9 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      expectVersion = callPackage ./tests/001-test-version.nix { };
-    };
   };
 
   meta = {
