@@ -19,7 +19,8 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-kUg0zGnajvol4nIjp28vMWAFuVPkR5E2x9uThvB7bmg=";
 
   # If https://github.com/CyferShepard/Jellystat/pull/346 is ever merged, this can be removed
-  patches = [ ./js-port.patch ];
+  # Required for the ability to configure a port in the systemd-service / nixos module
+  patches = [ ./js-port-env-var.patch ];
 
   preInstall = ''
     mkdir $out
