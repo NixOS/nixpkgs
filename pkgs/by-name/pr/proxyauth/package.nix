@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxyauth";
-  version = "0.7.12";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "ProxyAuth";
     repo = "ProxyAuth";
     tag = finalAttrs.version;
-    hash = "sha256-P0sAbcaf0jP+d8YjHlNKqf7H5iv/hEr/IQbCE7cgeiQ=";
+    hash = "sha256-cVjD91tBCGyslLsYUSP1Gy7KuMQZDVxQXU7fQkWeWyM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Yxyg82rQaMgsnWOWE+DmrCzBBpgsicL2Qj6AB+7tv44=";
+  cargoHash = "sha256-YhFOh60D014Tb/Gi3u+tpmXbaaIFIB5HU4X8rhWPV40=";
 
   nativeBuildInputs = [
     pkg-config
