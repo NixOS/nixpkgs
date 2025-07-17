@@ -6290,7 +6290,8 @@
       ];
     "vegehub" =
       ps: with ps; [
-      ]; # missing inputs: vegehub
+        vegehub
+      ];
     "velbus" =
       ps: with ps; [
         aiousbwatcher
@@ -7679,6 +7680,7 @@
     "vacuum"
     "vallox"
     "valve"
+    "vegehub"
     "velbus"
     "velux"
     "venstar"
