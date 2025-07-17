@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "0.1.28";
+  version = "0.1.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-zB27doGkWch3e1Lc0Q3TurQeplV7vOdzJ+G+MFZI3Og=";
+    hash = "sha256-dvAPKNsj8ZnH0eLofbkE09hXL1g8YdViX8sQ/9+4L7k=";
   };
 
   sourceRoot = "source/src/backend";
@@ -28,8 +28,6 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
-    # Add PKCE option
-    ./pkce.patch
   ];
 
   build-system = with python.pkgs; [ setuptools ];
