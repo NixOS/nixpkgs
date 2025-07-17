@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
     # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
     ./xml-attr-extra.patch
+    # same as upstream patch but fixed conflict and added required import:
+    # https://gitlab.gnome.org/GNOME/libxml2/-/commit/acbbeef9f5dcdcc901c5f3fa14d583ef8cfd22f0.diff
+    ./CVE-2025-6021.patch
   ];
 
   strictDeps = true;
