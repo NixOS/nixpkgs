@@ -16,12 +16,11 @@
   xorg,
   opencascade-occt,
   llvmPackages,
-  python ? null,
+  python3Packages,
   enablePython ? false,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
-assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
@@ -31,6 +30,14 @@ stdenv.mkDerivation rec {
     url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
     hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ]
+  ++ lib.optional (
+    enablePython && stdenv.buildPlatform == stdenv.hostPlatform
+  ) python3Packages.pythonImportsCheckHook;
 
   buildInputs = [
     blas
@@ -54,8 +61,7 @@ stdenv.mkDerivation rec {
     xorg.libSM
     xorg.libICE
   ]
-  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-  ++ lib.optional enablePython python;
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   patches = [
     (fetchpatch {
@@ -76,18 +82,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_OPENMP=ON"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    gfortran
-  ];
+  doCheck = true;
 
-  postFixup = lib.optionalString enablePython ''
-    mkdir -p $out/lib/python${python.pythonVersion}/site-packages
-    mv $out/lib/gmsh.py $out/lib/python${python.pythonVersion}/site-packages
-    mv $out/lib/*.dist-info $out/lib/python${python.pythonVersion}/site-packages
+  postInstall = lib.optionalString enablePython ''
+    mkdir -p $out/${python3Packages.python.sitePackages}
+    mv $out/lib/gmsh.py $out/${python3Packages.python.sitePackages}
+    mv $out/lib/*.dist-info $out/${python3Packages.python.sitePackages}
   '';
 
-  doCheck = true;
+  pythonImportsCheck = [ "gmsh" ];
 
   meta = {
     description = "Three-dimensional finite element mesh generator";
