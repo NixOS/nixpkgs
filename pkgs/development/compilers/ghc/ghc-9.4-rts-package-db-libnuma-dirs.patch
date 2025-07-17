@@ -1,4 +1,4 @@
-From f9625ba94522bec93b4c5d46ee5fd97f537a7dfa Mon Sep 17 00:00:00 2001
+From a0b547f41939304adfc0c430314c342dd69306ae Mon Sep 17 00:00:00 2001
 From: sterni <sternenseemann@systemli.org>
 Date: Thu, 17 Jul 2025 21:21:29 +0200
 Subject: [PATCH] rts: record libnuma include and lib dirs in package conf
@@ -16,11 +16,14 @@ While the make build system knows when to link against libnuma, it won't
 enforce its specific directories by adding them to rts.conf in the
 package db. This commit implements this retroactively for the make build
 system, modeled after how make does the same sort of thing for Libdw.
+The Libdw logic also affects the bindist configure file in
+distrib/configure.ac which isn't replicate since we don't need it.
 ---
  mk/config.mk.in     | 4 ++++
  rts/ghc.mk          | 8 ++++++++
  rts/package.conf.in | 5 +++--
- 3 files changed, 15 insertions(+), 2 deletions(-)
+ rts/rts.cabal.in    | 1 +
+ 4 files changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/mk/config.mk.in b/mk/config.mk.in
 index 2ff2bea9b6..d95f927dbd 100644
@@ -80,6 +83,18 @@ index cb5a436f5c..9e5ae48adb 100644
  #endif
  
  includes:               Rts.h
+diff --git a/rts/rts.cabal.in b/rts/rts.cabal.in
+index a8882268ac..debf2ba0a0 100644
+--- a/rts/rts.cabal.in
++++ b/rts/rts.cabal.in
+@@ -154,6 +154,7 @@ library
+     include-dirs: include
+                   @FFIIncludeDir@
+                   @LibdwIncludeDir@
++                  @LibNumaIncludeDir@
+     includes: Rts.h
+     install-includes: Cmm.h HsFFI.h MachDeps.h Rts.h RtsAPI.h Stg.h
+                       ghcautoconf.h ghcconfig.h ghcplatform.h ghcversion.h
 -- 
-2.49.0
+2.50.0
 
