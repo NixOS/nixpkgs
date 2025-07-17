@@ -9,6 +9,7 @@
   guile-reader,
   makeBinaryWrapper,
   pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
