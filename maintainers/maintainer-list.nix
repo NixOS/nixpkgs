@@ -7553,6 +7553,12 @@
     name = "Zhenbo Li";
     matrix = "@zhenbo:matrix.org";
   };
+  enk-it = {
+    email = "gladysh.danil@gmail.com";
+    github = "enk-it";
+    githubId = 107684176;
+    name = "Gladysh Daniil";
+  };
   enorris = {
     name = "Eric Norris";
     email = "erictnorris@gmail.com";
