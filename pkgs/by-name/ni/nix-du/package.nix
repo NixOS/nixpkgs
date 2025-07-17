@@ -25,13 +25,13 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
   nativeCheckInputs = [
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     graphviz
   ];
 
   buildInputs = [
     boost
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     nlohmann_json
   ];
 
