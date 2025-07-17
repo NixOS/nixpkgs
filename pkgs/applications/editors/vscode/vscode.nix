@@ -1,7 +1,7 @@
 {
+  lib,
   stdenv,
   stdenvNoCC,
-  lib,
   callPackage,
   fetchurl,
   nixosTests,
@@ -34,24 +34,24 @@ let
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
-  sha256 =
+  hash =
     {
-      x86_64-linux = "1zc64d1n84kzwmwh8m3j897di5955qlm7glnpjvl8g7q70b4rdax";
-      x86_64-darwin = "04ycsad1khxjmiph9fk9449w942m8gmq65amwkf8jxqzn0rybh76";
-      aarch64-linux = "0lhqmp59vccs35fksgvdgvw82b0mr9b2wlyafxlwb8pk2q0l0xga";
-      aarch64-darwin = "1axzsk6xqlzs3j9irjxp5f4fbdxyi4fffhdk89h45q3zkw8m9m4i";
-      armv7l-linux = "1rv3a8xj7iv1d8mfikpj58n398ww5cndbyvgy5328nj7dh6azrsw";
+      x86_64-linux = "sha256-rUAu69aUjLQsDT5hK8E5yWiMdVfNFqwx9aA8op1ZYj8=";
+      x86_64-darwin = "sha256-BOrLjZsA9QFtcsvgsohZbCRRRqTHhn043HHIpl40kPA=";
+      aarch64-linux = "sha256-DBthRZDeJF6xksMWGvXIC7vdTkQCyjt+oHUI+FbLBrU=";
+      aarch64-darwin = "sha256-TWa2jMRBR0a0SOUkrnZw6Ej3cRGdZd0Gw5Obt11M45k=";
+      armv7l-linux = "sha256-SYrXdEzIYG/2ih3vqCTfIo+6jTvMJe+rIOzNQXfd+es=";
     }
     .${system} or throwSystem;
 in
 callPackage ./generic.nix rec {
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.101.0";
+  version = "1.102.1";
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   # This is used for VS Code - Remote SSH test
-  rev = "dfaf44141ea9deb3b4096f7cd6d24e00c147a4b1";
+  rev = "7adae6a56e34cb64d08899664b814cf620465925";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
@@ -61,7 +61,7 @@ callPackage ./generic.nix rec {
   src = fetchurl {
     name = "VSCode_${version}_${plat}.${archive_fmt}";
     url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
-    inherit sha256;
+    inherit hash;
   };
 
   # We don't test vscode on CI, instead we test vscodium
@@ -75,7 +75,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "0rjd4f54k58k97gxvnivwj52aha5s8prws1izvmg43vphhfvk014";
+      hash = "sha256-EP5xCkCSMROB60OmDFWVWF9qHqW8pjKWPh6mSUU5E7A=";
     };
     stdenv = stdenvNoCC;
   };
@@ -91,7 +91,7 @@ callPackage ./generic.nix rec {
 
   hasVsceSign = true;
 
-  meta = with lib; {
+  meta = {
     description = ''
       Open source source code editor developed by Microsoft for Windows,
       Linux and macOS
@@ -106,8 +106,8 @@ callPackage ./generic.nix rec {
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       eadwu
       synthetica
       bobby285271

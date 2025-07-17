@@ -15,28 +15,52 @@
 let
 
   python = python3Packages.python.override {
-    packageOverrides = self: super: { django = super.django.override { withGdal = true; }; };
+    packageOverrides = self: super: {
+      django_5 = super.django_5.override { withGdal = true; };
+      django = super.django_5;
+      # custom python module part of froide
+      dogtail = super.buildPythonPackage {
+        pname = "dogtail";
+        version = "0-unstable-2024-11-27";
+        pyproject = true;
+
+        src = fetchFromGitHub {
+          owner = "okfde";
+          repo = "dogtail";
+          rev = "d2f341cab0f05ef4e193f0158fe5a64aadc5bae6";
+          hash = "sha256-2lQZgvFXAz6q/3NpBcwckUologWxKmwXI0ZG5nylajg=";
+        };
+
+        build-system = with super; [ setuptools ];
+      };
+    };
   };
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "froide";
-  version = "0-unstable-2025-04-25";
+  version = "0-unstable-2025-07-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okfde";
     repo = "froide";
-    rev = "9e4838fc5f17a0506af42ad5fd1ebc66cff4b92a";
-    hash = "sha256-0EC6oCaiK7gw5ikemskiK3qOlflGHzlG4giDQNj9tBQ=";
+    rev = "362bddb5a8fdfe762d59cdebd29016568c9531b2";
+    hash = "sha256-c8I/FvXQSkAeacxMQJCpCMKFueNEnLI4R0ElqRbVbNg=";
   };
 
   patches = [ ./django_42_storages.patch ];
 
-  # Relax dependency pinning
-  # Channels: https://github.com/okfde/froide/issues/995
   pythonRelaxDeps = [
+    # Relax dependency pinning
+    # Channels: https://github.com/okfde/froide/issues/995
     "channels"
+    "django-celery-beat"
+    "django-leaflet"
+    "django"
+    "pikepdf"
+    "pypdf"
+    "reportlab"
   ];
 
   build-system = [ python.pkgs.setuptools ];
@@ -48,11 +72,9 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
-    bleach
     celery
     celery-singleton
     channels
-    coreapi
     dj-database-url
     django
     django-celery-beat
@@ -63,9 +85,6 @@ python.pkgs.buildPythonApplication rec {
     django-elasticsearch-dsl
     django-filingcabinet
     django-filter
-    # Project discontinued upstream
-    # https://github.com/okfde/froide/issues/893
-    django-fsm
     django-json-widget
     django-leaflet
     django-mfa3
@@ -86,6 +105,7 @@ python.pkgs.buildPythonApplication rec {
     geoip2
     icalendar
     markdown
+    nh3
     phonenumbers
     pillow
     pikepdf
@@ -104,7 +124,7 @@ python.pkgs.buildPythonApplication rec {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-IeuQoiI/r9AKLZgKkZx0C+qE9ueWuC39Y77MB08zSAc=";
+    hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
   };
 
   postBuild = ''
@@ -114,7 +134,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     cp -r build manage.py $out/${python.sitePackages}/froide/
     makeWrapper $out/${python.sitePackages}/froide/manage.py $out/bin/froide \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "${python3Packages.makePythonPath dependencies}" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
@@ -129,6 +149,7 @@ python.pkgs.buildPythonApplication rec {
 
   checkInputs = with python.pkgs; [
     beautifulsoup4
+    pytest-asyncio
     pytest-factoryboy
     time-machine
   ];
@@ -156,6 +177,9 @@ python.pkgs.buildPythonApplication rec {
     "test_bouncing_email"
     "test_multiple_partial"
     "test_logfile_rotation"
+    # Test hangs
+    "test_collapsed_menu"
+    "test_make_request_logged_out_with_existing_account"
   ];
 
   preCheck =
