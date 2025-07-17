@@ -12133,8 +12133,6 @@ with pkgs;
 
   gauche = callPackage ../development/interpreters/gauche { };
 
-  gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
-
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
