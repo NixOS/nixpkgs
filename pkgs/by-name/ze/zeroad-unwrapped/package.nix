@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
-    hash = "sha256-qpSFcAl1DV9h2/AWvBUOO9y9s6zfyK0gtzq4tD6aG6Y=";
+    hash = "sha256-oKU1XutZaNJPKDdwc2FQ2XTa/sugd1TUZicH3BcBa/s=";
   };
 
   nativeBuildInputs = [
@@ -101,10 +101,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rootdir_env.patch
-    # Fix build script when using system premake
-    # https://gitea.wildfiregames.com/0ad/0ad/pulls/7571
-    # FIXME: Remove with next package update
-    ./fix-build-script.patch
   ];
 
   configurePhase = ''
