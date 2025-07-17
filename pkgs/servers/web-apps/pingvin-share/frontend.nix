@@ -37,6 +37,9 @@ buildNpmPackage {
     downloadPage = "https://github.com/stonith404/pingvin-share/releases";
     changelog = "https://github.com/stonith404/pingvin-share/releases/tag/v${version}";
     license = licenses.bsd2;
+    knownVulnerabilities = [
+      "On June 29, 2025, the pingvin-share project officially ceased development"
+    ];
     maintainers = with maintainers; [ ratcornu ];
   };
 }
