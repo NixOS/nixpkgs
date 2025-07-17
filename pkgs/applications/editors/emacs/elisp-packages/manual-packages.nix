@@ -15,6 +15,12 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  eaf.withApps =
+    enabledApps:
+    callPackage ./manual-packages/eaf {
+      inherit enabledApps;
+    };
+
   elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
