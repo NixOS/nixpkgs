@@ -19171,6 +19171,8 @@ self: super: with self; {
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
 
+  vegehub = callPackage ../development/python-modules/vegehub { };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
