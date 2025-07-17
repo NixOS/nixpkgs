@@ -76,12 +76,8 @@ in
 
     javaArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
-      example = lib.literalExpression ''[ "-Xmx16G" ] '';
-      description = ''
-        Java options passed to JVM. Configuring this is usually not necessary, but for small systems
-        it can be useful to tweak the JVM heap size.
-      '';
+      default = [ "-Xmx4G" ];
+      description = "Java options passed to JVM";
     };
 
     database = {

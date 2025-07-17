@@ -1,54 +1,67 @@
 {
   coq,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
+  rocqPackages,
   mkCoqDerivation,
   lib,
   version ? null,
-}:
+}@args:
+(mkCoqDerivation {
 
-let
-  derivation = mkCoqDerivation {
+  pname = "stdlib";
+  repo = "stdlib";
+  owner = "coq";
+  opam-name = "coq-stdlib";
 
-    pname = "stdlib";
-    repo = "stdlib";
-    owner = "coq";
-    opam-name = "coq-stdlib";
+  inherit version;
+  defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
+    with lib.versions;
+    lib.switch coq.coq-version [
+      (case (isLe "9.1") "9.0.0")
+      # the < 9.0 above is artificial as stdlib was included in Coq before
+    ] null;
+  releaseRev = v: "V${v}";
 
-    inherit version;
-    defaultVersion =
+  release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
+
+  configurePhase = ''
+    echo no configuration
+  '';
+  buildPhase = ''
+    echo building nothing
+  '';
+  installPhase = ''
+    echo installing nothing
+  '';
+
+  meta = {
+    description = "Compatibility metapackage for Coq Stdlib library after the Rocq renaming";
+    license = lib.licenses.lgpl21Only;
+  };
+
+}).overrideAttrs
+  (
+    o:
+    # stdlib is already included in Coq <= 8.20
+    if coq.version != null && coq.version != "dev" && lib.versions.isLt "8.21" coq.version then
+      {
+        installPhase = ''
+          touch $out
+        '';
+      }
+    else
       let
         case = case: out: { inherit case out; };
+        rp = lib.switch coq.coq-version [
+          (case "9.0" rocqPackages_9_0)
+          (case "9.1" rocqPackages_9_1)
+        ] rocqPackages;
       in
-      with lib.versions;
-      lib.switch coq.coq-version [
-        (case (isLe "9.1") "9.0.0")
-        # the < 9.0 above is artificial as stdlib was included in Coq before
-      ] null;
-    releaseRev = v: "V${v}";
-
-    release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
-
-    configurePhase = ''
-      echo no configuration
-    '';
-    buildPhase = ''
-      echo building nothing
-    '';
-    installPhase = ''
-      echo installing nothing
-      touch $out
-    '';
-
-    meta = {
-      description = "Compatibility metapackage for Coq Stdlib library after the Rocq renaming";
-      license = lib.licenses.lgpl21Only;
-    };
-  };
-in
-# this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
-if coq.rocqPackages ? stdlib then
-  coq.rocqPackages.stdlib.override {
-    inherit version;
-    inherit (coq.rocqPackages) rocq-core;
-  }
-else
-  derivation
+      {
+        propagatedBuildInputs = [ rp.stdlib ];
+      }
+  )

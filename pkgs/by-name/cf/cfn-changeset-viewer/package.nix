@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "cfn-changeset-viewer";
-  version = "0.2.1";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "cfn-changeset-viewer";
     tag = version;
-    hash = "sha256-PPMmU5GMxxzBiTNAv/Rbtvkl5QK1BZjW4TJLT7xlpw4=";
+    hash = "sha256-ONgjU07wyC1NoNtTsQO5LbVQiC8gsHqsyYv3Upc0hWQ=";
   };
 
   npmDepsHash = "sha256-ICaGtofENMaAjk/KGRn8RgpMAICSttx4AIcbi1HsW8Q=";

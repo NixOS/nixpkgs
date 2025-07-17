@@ -3,40 +3,34 @@
   python3,
   fetchFromGitHub,
   nixosTests,
-  fetchPypi,
 }:
 let
   python = python3.override {
     self = python3;
     packageOverrides = self: super: {
       django = super.django_5_2;
-      django-csp = super.django-csp.overridePythonAttrs rec {
-        version = "4.0";
-        src = fetchPypi {
-          inherit version;
-          pname = "django_csp";
-          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
-        };
-      };
     };
   };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-docs";
-  version = "3.4.1";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-QAWwyFp9l+C0XfVu975zjiv61e/S2nYKkUSv4/p7gxw=";
+    hash = "sha256-SLTNkK578YhsDtVBS4vH0E/rXx+rXZIyXMhqwr95QEA=";
   };
 
   sourceRoot = "source/src/backend";
 
   patches = [
+    # Support for $ENVIRONMENT_VARIABLE_FILE to be able to pass secret files
+    # See: https://github.com/suitenumerique/docs/pull/912
+    ./environment_variables.patch
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
   ];
@@ -51,7 +45,6 @@ python.pkgs.buildPythonApplication rec {
     django-configurations
     django-cors-headers
     django-countries
-    django-csp
     django-extensions
     django-filter
     django-lasuite

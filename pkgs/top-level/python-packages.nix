@@ -4059,8 +4059,6 @@ self: super: with self; {
 
   django-vite = callPackage ../development/python-modules/django-vite { };
 
-  django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
-
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django-webpush = callPackage ../development/python-modules/django-webpush { };

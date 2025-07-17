@@ -5,7 +5,7 @@
 }:
 
 let
-  pListText = lib.generators.toPlist { escape = true; } {
+  pListText = lib.generators.toPlist { } {
     CFBundleDevelopmentRegion = "English";
     CFBundleExecutable = "$name";
     CFBundleIconFile = "$icon";
