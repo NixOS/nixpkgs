@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "plopp";
-  version = "25.06.0";
+  version = "25.07.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -103,6 +103,11 @@ buildPythonPackage rec {
             };
       };
   };
+
+  pytestFlagsArray = [
+    # https://github.com/scipp/plopp/issues/472
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [
     "plopp"
