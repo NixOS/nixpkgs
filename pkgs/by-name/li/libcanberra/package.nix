@@ -12,6 +12,7 @@
   gst_all_1,
   libvorbis,
   libcap,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   withAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
@@ -45,10 +46,8 @@ stdenv.mkDerivation rec {
     ])
     ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
     ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      systemd
-    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap
+    ++ lib.optional withSystemd systemd
     ++ lib.optional withAlsa alsa-lib;
 
   configureFlags =
