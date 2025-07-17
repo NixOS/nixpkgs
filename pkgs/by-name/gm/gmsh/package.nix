@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  makeDesktopItem,
+  copyDesktopItems,
   cmake,
   blas,
   lapack,
@@ -22,12 +24,12 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmsh";
   version = "4.13.1";
 
   src = fetchurl {
-    url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
+    url = "https://gmsh.info/src/gmsh-${finalAttrs.version}-source.tgz";
     hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (
     enablePython && stdenv.buildPlatform == stdenv.hostPlatform
-  ) python3Packages.pythonImportsCheckHook;
+  ) python3Packages.pythonImportsCheckHook
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     blas
@@ -84,11 +87,36 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = lib.optionalString enablePython ''
-    mkdir -p $out/${python3Packages.python.sitePackages}
-    mv $out/lib/gmsh.py $out/${python3Packages.python.sitePackages}
-    mv $out/lib/*.dist-info $out/${python3Packages.python.sitePackages}
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gmsh";
+      exec = "gmsh";
+      comment = finalAttrs.meta.description;
+      desktopName = "Gmsh";
+      genericName = "3D Mesh Generator";
+      categories = [
+        "Science"
+        "Math"
+      ];
+      icon = "gmsh";
+    })
+  ];
+
+  postInstall =
+    let
+      logo = fetchurl {
+        url = "https://salsa.debian.org/science-team/gmsh/-/raw/d2d8b4e3488c7b0f51879f809f624b537b4bd28f/debian/gmsh.svg";
+        hash = "sha256-p69Cju3bn1ShWmESOSOmJj0x3IYDGI9oD25SFTh2GLo=";
+      };
+    in
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ${logo} $out/share/icons/hicolor/scalable/apps/gmsh.svg
+    ''
+    + lib.optionalString enablePython ''
+      mkdir -p $out/${python3Packages.python.sitePackages}
+      mv $out/lib/gmsh.py $out/${python3Packages.python.sitePackages}
+      mv $out/lib/*.dist-info $out/${python3Packages.python.sitePackages}
+    '';
 
   pythonImportsCheck = [ "gmsh" ];
 
@@ -98,4 +126,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gmsh.info/";
     license = lib.licenses.gpl2Plus;
   };
-}
+})
