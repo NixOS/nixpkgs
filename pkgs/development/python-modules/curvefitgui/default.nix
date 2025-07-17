@@ -2,8 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # depedencies
   numpy,
   scipy,
   pyqt5,
@@ -27,9 +31,11 @@ buildPythonPackage {
     hash = "sha256-oK0ROKxh/91OrHhuufG6pvc2EMBeMP8R5O+ED2thyW8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     pyqt5
