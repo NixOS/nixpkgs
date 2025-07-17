@@ -57,14 +57,14 @@
   withML ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.3";
+  version = "2.6.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OdH6cQ2dYvbeLh9ljaqmdr02VN2qbvNUXbPNCEkNzxc=";
+    hash = "sha256-YKWkKyYB10UacaGDO+Q6LhPmhAmsbrP+vlY6uWBI8KA=";
     fetchSubmodules = true;
   };
 
@@ -260,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-N03IGTtF78PCo4kf0Sdtzv6f8z47ohg8g3YIXtINRjU=";
+        vendorHash = "sha256-aOFmfBcBjnTfFHfMNemSJHbnMnhBojYrGe21zDxPxME=";
         doCheck = false;
         proxyVendor = true;
 
