@@ -4913,6 +4913,8 @@ self: super: with self; {
 
   fido2 = callPackage ../development/python-modules/fido2 { };
 
+  fido2_2 = callPackage ../development/python-modules/fido2/2.nix { };
+
   fields = callPackage ../development/python-modules/fields { };
 
   file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
