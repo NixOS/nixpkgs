@@ -7652,6 +7652,8 @@ self: super: with self; {
 
   keeper-secrets-manager-core = callPackage ../development/python-modules/keeper-secrets-manager-core { };
 
+  keepercommander = callPackage ../development/python-modules/keepercommander { };
+
   keepkey = callPackage ../development/python-modules/keepkey { };
 
   keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
