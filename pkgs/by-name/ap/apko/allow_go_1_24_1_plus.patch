@@ -1,0 +1,41 @@
+diff --git a/go.mod b/go.mod
+index 8d65576..023d1e6 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,6 +1,10 @@
+ module chainguard.dev/apko
+ 
+-go 1.24.5
++go 1.24.1
++
++toolchain go1.24.4
++
++replace chainguard.dev/sdk v0.1.36 => chainguard.dev/sdk v0.1.34
+ 
+ require (
+ 	chainguard.dev/sdk v0.1.36
+diff --git a/go.sum b/go.sum
+index 25dcdf1..0a8714b 100644
+--- a/go.sum
++++ b/go.sum
+@@ -1,7 +1,7 @@
+ chainguard.dev/go-grpc-kit v0.17.11 h1:m4ZL2yg6sSrdPA593qVh9KHTZ+XOmLwqv3Jt5vT0FuU=
+ chainguard.dev/go-grpc-kit v0.17.11/go.mod h1:aYlrvAscMZBtVIA7bykUWfbjhL2fDoUCECHvopC2xWY=
+-chainguard.dev/sdk v0.1.36 h1:YzxE7ZccR32spQ3i8boN6eDEYlvhV17r8fdpI9vdOgE=
+-chainguard.dev/sdk v0.1.36/go.mod h1:4HOnG9fVNC9ruzkJLMWWUNM1iVxxBL+bKqj0STERbcs=
++chainguard.dev/sdk v0.1.34 h1:zyjsvF0WwdrOGAzhr4o6pDr+Xo71hlhvIzjHSff82Ks=
++chainguard.dev/sdk v0.1.34/go.mod h1:H5m0z1Z0mNK1gPu8/b2u6JxQGhZ5JqpK1ahvh/BQgl0=
+ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+ cloud.google.com/go/auth v0.16.2 h1:QvBAGFPLrDeoiNjyfVunhQ10HKNYuOwZ5noee0M5df4=
+ cloud.google.com/go/auth v0.16.2/go.mod h1:sRBas2Y1fB1vZTdurouM0AzuYQBMZinrUYL8EufhtEA=
+@@ -472,8 +472,8 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C
+ gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+ gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+ gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+-gotest.tools/v3 v3.5.2 h1:7koQfIKdy+I8UTetycgUqXWSDwpgv193Ka+qRsmBY8Q=
+-gotest.tools/v3 v3.5.2/go.mod h1:LtdLGcnqToBH83WByAAi/wiwSFCArdFIUV/xxN4pcjA=
++gotest.tools/v3 v3.0.3 h1:4AuOwCGf4lLR9u3YOe2awrHygurzhO/HeQ6laiA6Sx0=
++gotest.tools/v3 v3.0.3/go.mod h1:Z7Lb0S5l+klDB31fvDQX8ss/FlKDxtlFlw3Oa8Ymbl8=
+ honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+ honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
