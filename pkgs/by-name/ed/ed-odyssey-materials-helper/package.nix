@@ -3,26 +3,29 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk23,
+  jdk24,
   makeWrapper,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.178";
+  version = "2.199";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
+    hash = "sha256-1d5OzhAFo0s5xshJCdfWufo5Xb0UtHzUPdR6fwuaGYQ=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +52,11 @@ stdenv.mkDerivation rec {
     # remove "new version available" popup
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
+
+    for f in build.gradle */build.gradle; do
+      substituteInPlace $f \
+        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+    done
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -56,9 +64,17 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk24}"
+    "--stacktrace"
+  ];
 
   gradleBuildTask = "application:jpackage";
+
+  env = {
+    # The source no longer contains this, so this has been extracted from the binary releases
+    SENTRY_DSN = "https://1aacf97280717f749dfc93a1713f9551@o4507814449774592.ingest.de.sentry.io/4507814504759376";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -84,8 +100,12 @@ stdenv.mkDerivation rec {
           glib
           libXtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
