@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/caribou/-/commit/d41c8e44b12222a290eaca16703406b113a630c6.patch";
       hash = "sha256-yIsEqSflpAdQPAB6eNr6fctxzyACu7N1HVfMIdCQou0=";
     })
+    # Fix build with gettext 0.25
+    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [

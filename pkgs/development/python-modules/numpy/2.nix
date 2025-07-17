@@ -62,7 +62,7 @@ buildPythonPackage rec {
   version = "2.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
