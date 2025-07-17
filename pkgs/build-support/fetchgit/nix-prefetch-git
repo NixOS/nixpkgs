@@ -214,8 +214,8 @@ checkout_ref(){
 init_submodules(){
     # shallow with leaveDotGit will change hashes
     [[ -z "$deepClone" ]] && [[ -z "$leaveDotGit" ]] && \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress
 }
 
 clone(){
