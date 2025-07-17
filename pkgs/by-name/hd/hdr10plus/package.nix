@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "hdr10plus";
-  version = "2.1.3";
+  version = "2.1.4";
 
   outputs = [
     "out"
