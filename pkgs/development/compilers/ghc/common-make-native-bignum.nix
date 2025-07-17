@@ -305,6 +305,17 @@ stdenv.mkDerivation (
 
         # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
         ./docs-sphinx-7.patch
+
+        # Correctly record libnuma's library and include directories in the
+        # package db. This fixes linking whenever stdenv and propagation won't
+        # quite pass the correct -L flags to the linker, e.g. when using GHC
+        # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
+        (
+          if lib.versionAtLeast version "9.4" then
+            ./ghc-9.4-rts-package-db-libnuma-dirs.patch
+          else
+            ./ghc-8.10-9.2-rts-package-db-libnuma-dirs.patch
+        )
       ]
 
       # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first

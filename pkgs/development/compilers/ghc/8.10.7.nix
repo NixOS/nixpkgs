@@ -368,6 +368,12 @@ stdenv.mkDerivation (
           sha256 = "1rmv3132xhxbka97v0rx7r6larx5f5nnvs4mgm9q3rmgpjyd1vf9";
           includes = [ "libraries/ghci/ghci.cabal.in" ];
         })
+
+        # Correctly record libnuma's library and include directories in the
+        # package db. This fixes linking whenever stdenv and propagation won't
+        # quite pass the correct -L flags to the linker, e.g. when using GHC
+        # outside of stdenv/nixpkgs or build->build compilation in pkgsStatic.
+        ./ghc-8.10-9.2-rts-package-db-libnuma-dirs.patch
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Make Block.h compile with c++ compilers. Remove with the next release
