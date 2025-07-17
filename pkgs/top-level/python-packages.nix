@@ -19926,6 +19926,8 @@ self: super: with self; {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
+  zarr_2 = callPackage ../development/python-modules/zarr_2 { };
+
   zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
