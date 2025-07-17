@@ -6,7 +6,6 @@
   callPackage,
   newScope,
   recurseIntoAttrs,
-  ocamlPackages_4_05,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -269,7 +268,6 @@ let
     callPackage ../applications/science/logic/coq {
       inherit
         version
-        ocamlPackages_4_05
         ocamlPackages_4_09
         ocamlPackages_4_10
         ocamlPackages_4_12
@@ -295,8 +293,6 @@ rec {
     in
     self.filterPackages (!coq.dontFilter or false);
 
-  coq_8_5 = mkCoq "8.5";
-  coq_8_6 = mkCoq "8.6";
   coq_8_7 = mkCoq "8.7";
   coq_8_8 = mkCoq "8.8";
   coq_8_9 = mkCoq "8.9";
@@ -314,8 +310,6 @@ rec {
   coq_9_0 = mkCoq "9.0";
   coq_9_1 = mkCoq "9.1";
 
-  coqPackages_8_5 = mkCoqPackages coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
