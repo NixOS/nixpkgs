@@ -333,6 +333,7 @@
   ./programs/vim.nix
   ./programs/virt-manager.nix
   ./programs/vivid.nix
+  ./programs/vscode.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/dwl.nix
