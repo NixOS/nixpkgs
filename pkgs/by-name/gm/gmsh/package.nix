@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  makeDesktopItem,
+  copyDesktopItems,
   cmake,
   blas,
   lapack,
@@ -22,19 +24,22 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmsh";
   version = "4.13.1";
 
   src = fetchurl {
-    url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
+    url = "https://gmsh.info/src/gmsh-${finalAttrs.version}-source.tgz";
     hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    gfortran
-  ] ++ lib.optional enablePython python3Packages.pythonImportsCheckHook;
+  nativeBuildInputs =
+    [
+      cmake
+      gfortran
+    ]
+    ++ lib.optional enablePython python3Packages.pythonImportsCheckHook
+    ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs =
     [
@@ -82,11 +87,30 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = lib.optionalString enablePython ''
-    mkdir -p $out/${python3Packages.python.sitePackages}
-    mv $out/lib/gmsh.py $out/${python3Packages.python.sitePackages}
-    mv $out/lib/*.dist-info $out/${python3Packages.python.sitePackages}
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gmsh";
+      exec = "gmsh";
+      comment = finalAttrs.meta.description;
+      desktopName = "Gmsh";
+      genericName = "3D Mesh Generator";
+      categories = [
+        "Science"
+        "Math"
+      ];
+      icon = "gmsh";
+    })
+  ];
+
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ${./gmsh.svg} $out/share/icons/hicolor/scalable/apps/gmsh.svg
+    ''
+    + lib.optionalString enablePython ''
+      mkdir -p $out/${python3Packages.python.sitePackages}
+      mv $out/lib/gmsh.py $out/${python3Packages.python.sitePackages}
+      mv $out/lib/*.dist-info $out/${python3Packages.python.sitePackages}
+    '';
 
   pythonImportsCheck = [ "gmsh" ];
 
@@ -96,4 +120,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gmsh.info/";
     license = lib.licenses.gpl2Plus;
   };
-}
+})
