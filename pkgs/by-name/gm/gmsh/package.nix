@@ -57,8 +57,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
   ++ lib.optional enablePython python;
 
-  enableParallelBuilding = true;
-
   patches = [
     (fetchpatch {
       url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/7d5094fb0a5245cb435afd3f3e8c35e2ecfe70fd.patch";
