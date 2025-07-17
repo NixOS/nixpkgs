@@ -73,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-r7PYKr5cDDNNMtM3ogNLsucPFTwP/uoC7McijyLl4kU=";
       excludes = [ "runtest.c" ]; # tests were rewritten in C and are on schematron for 2.13.x, meaning this does not apply
     })
+    # same as upstream, fixed conflicts
+    # https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
+    ./CVE-2025-6170.patch
   ];
 
   strictDeps = true;
