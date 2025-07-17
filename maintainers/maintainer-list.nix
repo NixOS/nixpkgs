@@ -22701,7 +22701,7 @@
     githubId = 11613056;
     name = "Scott Dier";
   };
-  sdubey-ks = {
+  sdubey = {
     email = "sdubey@keepersecurity.com";
     github = "sdubey-ks";
     githubId = 221318348;
