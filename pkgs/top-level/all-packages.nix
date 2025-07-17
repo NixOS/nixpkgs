@@ -5901,6 +5901,13 @@ with pkgs;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
 
+      llvmPackages_21 = llvmPackagesSet."21";
+      clang_21 = llvmPackages_21.clang;
+      lld_21 = llvmPackages_21.lld;
+      lldb_21 = llvmPackages_21.lldb;
+      llvm_21 = llvmPackages_21.llvm;
+      bolt_21 = llvmPackages_21.bolt;
+
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_12
@@ -5926,6 +5933,12 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    llvmPackages_21
+    clang_21
+    lld_21
+    lldb_21
+    llvm_21
+    bolt_21
     mkLLVMPackages
     ;
 
