@@ -33,7 +33,7 @@ jobs:
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
             desc: shell, docs
-          - runner: macos-13
+          - runner: macos-14
             system: x86_64-darwin
             builds: [shell]
             desc: shell
@@ -65,7 +65,8 @@ jobs:
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: nix-build untrusted/ci -A shell
+        run: |
+          nix-build untrusted/ci -A shell --argstr system ${{ matrix.system }}
 
       - name: Build NixOS manual
         if: |
