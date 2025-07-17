@@ -7,6 +7,7 @@
   zig,
   makeWrapper,
   unstableGitUpdater,
+  nixosTests,
 }:
 
 let
@@ -75,7 +76,10 @@ ocamlPackages.buildDunePackage rec {
 
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    tests = { inherit (nixosTests) owi; };
+  };
 
   meta = {
     description = "Symbolic execution for Wasm, C, C++, Rust and Zig";

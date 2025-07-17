@@ -1073,6 +1073,7 @@ in
   open-web-calendar = runTest ./web-apps/open-web-calendar.nix;
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix { };
   orthanc = runTest ./orthanc.nix;
+  owi = runTest ./owi.nix;
   owncast = runTest ./owncast.nix;
   outline = runTest ./outline.nix;
   i18n = runTest ./i18n.nix;
