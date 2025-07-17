@@ -6868,6 +6868,8 @@ with pkgs;
 
   automake117x = callPackage ../development/tools/misc/automake/automake-1.17.x.nix { };
 
+  automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
+
   bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_6;
