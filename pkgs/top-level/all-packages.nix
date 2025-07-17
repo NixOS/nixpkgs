@@ -12511,8 +12511,6 @@ with pkgs;
     inherit (python3Packages) pygments;
   };
 
-  hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
-
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
