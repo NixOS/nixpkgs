@@ -13069,6 +13069,8 @@ self: super: with self; {
 
   pylibrespot-java = callPackage ../development/python-modules/pylibrespot-java { };
 
+  pylibsrtp = callPackage ../development/python-modules/pylibsrtp { };
+
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 
   pylint = callPackage ../development/python-modules/pylint { };
