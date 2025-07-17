@@ -20,7 +20,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace main.go \
-      --replace-fail "replaceme" "${version}"
+      --replace-fail "version_replaceme" "${version}"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
