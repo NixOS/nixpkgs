@@ -1,10 +1,6 @@
 { lib, ... }:
 let
   inherit (lib) options types;
-in
-options.mkOption {
-  description = "Package in the manifest";
-  example = (import ./release.nix { inherit lib; }).linux-x86_64;
   type = types.submodule {
     options = {
       relative_path = options.mkOption {
@@ -29,4 +25,5 @@ options.mkOption {
       };
     };
   };
-}
+in
+type
