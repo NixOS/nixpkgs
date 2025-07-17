@@ -519,6 +519,14 @@ stdenv.mkDerivation (
           # Fails in sandbox
           substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
+      +
+        # https://github.com/llvm/llvm-project/issues/149616
+        optionalString stdenv.hostPlatform.isLoongArch64 ''
+          substituteInPlace unittests/tools/llvm-exegesis/X86/SnippetRepetitorTest.cpp \
+            --replace-fail \
+              "TEST_F(X86SnippetRepetitorTest, Loop)" \
+              "TEST_F(X86SnippetRepetitorTest, DISABLED_Loop)"
+        ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
       ''
