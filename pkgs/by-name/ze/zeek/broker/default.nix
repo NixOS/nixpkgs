@@ -66,9 +66,14 @@ stdenv.mkDerivation rec {
     ./0001-Fix-include-path-in-exported-CMake-targets.patch
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
-  '';
+  postPatch =
+    # tests/benchmark/broker-benchmark.cc:138:12: error: 'sort' is not a member of 'std'; did you mean 'qsort'?
+    ''
+      sed -i "1i #include <algorithm>" tests/benchmark/broker-benchmark.cc
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
+    '';
 
   nativeBuildInputs = [
     cmake
