@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "naja";
-  version = "0.1.16";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "najaeda";
     repo = "naja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MwMpxmmr8fJN49RkRguiEEwPVUIm+OcNFjEixpjn9UY=";
+    hash = "sha256-vfP/xusfY11bk0GsIZcW38rXPMgutTDgTNjO40Uz1bU=";
     fetchSubmodules = true;
   };
 
