@@ -8780,7 +8780,9 @@ self: super: with self; {
     callPackage ../development/python-modules/marionette-harness/manifestparser.nix
       { };
 
-  manifold3d = callPackage ../development/python-modules/manifold3d { };
+  manifold3d = callPackage ../development/python-modules/manifold3d {
+    inherit (pkgs.manifold.passthru) tbb;
+  };
 
   manim = callPackage ../development/python-modules/manim { };
 
