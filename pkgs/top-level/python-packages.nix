@@ -10458,6 +10458,8 @@ self: super: with self; {
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
+  numcodecs_0_15 = callPackage ../development/python-modules/numcodecs_0_15 { };
+
   numdifftools = callPackage ../development/python-modules/numdifftools { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
