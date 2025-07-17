@@ -71,6 +71,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       dit7ya
       caarlos0
+      delafthi
     ];
     mainProgram = "mods";
   };
