@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -18,11 +17,6 @@ buildPythonPackage {
   pname = "curvefitgui";
   version = "0-unstable-2021-08-25";
   pyproject = true;
-  # For some reason, importing the main module makes the whole python
-  # interpreter crash! This needs further investigation, possibly the problem
-  # is with one of the dependencies.. See upstream report:
-  # https://github.com/moosepy/curvefitgui/issues/2
-  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "moosepy";
