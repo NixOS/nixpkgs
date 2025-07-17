@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       rycee
       sikmir
+      starsep
     ];
     platforms = lib.platforms.all;
     mainProgram = "josm";
