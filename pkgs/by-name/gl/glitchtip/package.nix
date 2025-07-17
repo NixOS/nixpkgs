@@ -2,7 +2,6 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchpatch,
   fetchPypi,
   callPackage,
   stdenv,
@@ -61,6 +60,9 @@ let
       orjson
       psycopg
       pydantic
+      # undocumented on django-allauth side
+      # https://codeberg.org/allauth/django-allauth/issues/4493
+      pyyaml
       sentry-sdk
       symbolic
       user-agents
@@ -84,24 +86,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.5";
+  version = "5.0.9";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
+    hash = "sha256-yRXrcwE5DDJpDiX4XB18ezrLn62AV4w/ASvrOoKD6p4=";
   };
-
-  patches = [
-    # update symbolic
-    (fetchpatch {
-      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/merge_requests/1642.patch";
-      excludes = [ "uv.lock" ];
-      hash = "sha256-6x1W/79DBPVQdAFWAozK2TXUoj/oArEuNMrARIeWtIY=";
-    })
-  ];
 
   propagatedBuildInputs = pythonPackages;
 
