@@ -345,23 +345,14 @@ stdenv.mkDerivation (
           ]
       )
 
-      # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
-      ++ lib.optionals (lib.versionOlder version "9.4") [
+      ++ lib.optionals (lib.versionAtLeast version "9.2") [
+        # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
+        # Can be removed if the Cabal library included with ghc backports the linked fix
         (fetchpatch {
-          url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
-          sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
-          extraPrefix = "utils/haddock/";
+          url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
           stripLen = 1;
-        })
-      ]
-
-      ++ lib.optionals (lib.versionOlder version "9.4.6") [
-        # Fix docs build with sphinx >= 6.0
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-        (fetchpatch {
-          name = "ghc-docs-sphinx-6.0.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-          sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+          extraPrefix = "libraries/Cabal/";
+          sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
         })
       ]
 
@@ -376,14 +367,36 @@ stdenv.mkDerivation (
         })
       ]
 
-      ++ lib.optionals (lib.versionAtLeast version "9.2") [
-        # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
-        # Can be removed if the Cabal library included with ghc backports the linked fix
+      # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+      ++ lib.optionals (lib.versionOlder version "9.4") [
         (fetchpatch {
-          url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
+          url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+          sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+          extraPrefix = "utils/haddock/";
           stripLen = 1;
-          extraPrefix = "libraries/Cabal/";
-          sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
+        })
+      ]
+
+      # Fixes stack overrun in rts which crashes an process whenever
+      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+      # TODO: patch doesn't apply for < 9.4, but may still be necessary?
+      ++ lib.optionals (lib.versionAtLeast version "9.4") [
+        (fetchpatch {
+          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+        })
+      ]
+
+      ++ lib.optionals (lib.versionOlder version "9.4.6") [
+        # Fix docs build with sphinx >= 6.0
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+        (fetchpatch {
+          name = "ghc-docs-sphinx-6.0.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+          sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
         })
       ]
 
@@ -406,21 +419,7 @@ stdenv.mkDerivation (
           else
             ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
         )
-      ]
-
-      # Fixes stack overrun in rts which crashes an process whenever
-      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
-      # TODO: patch doesn't apply for < 9.4, but may still be necessary?
-      ++ lib.optionals (lib.versionAtLeast version "9.4") [
-        (fetchpatch {
-          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
-          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
-        })
       ];
-
 
     postPatch = "patchShebangs .";
 
