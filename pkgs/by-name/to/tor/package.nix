@@ -1,5 +1,8 @@
 {
   lib,
+  callPackage,
+  coreutils,
+  gnugrep,
   stdenv,
   fetchurl,
   pkg-config,
@@ -16,17 +19,6 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
-
-  # for update.nix
-  writeScript,
-  common-updater-scripts,
-  bash,
-  coreutils,
-  curl,
-  gnugrep,
-  gnupg,
-  gnused,
-  nix,
 }:
 
 let
@@ -90,13 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
     [ "--enable-gpl" ]
     ++
-      # cross compiles correctly but needs the following
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
-    ++
-      # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
-      lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-        "--disable-seccomp"
-      ];
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -126,20 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.tor = nixosTests.tor;
-    updateScript = import ./update.nix {
-      inherit lib;
-      inherit
-        writeScript
-        common-updater-scripts
-        bash
-        coreutils
-        curl
-        gnupg
-        gnugrep
-        gnused
-        nix
-        ;
-    };
+    updateScript = callPackage ./update.nix { };
   };
 
   meta = {

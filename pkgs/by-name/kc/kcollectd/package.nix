@@ -2,29 +2,20 @@
   lib,
   fetchFromGitLab,
   stdenv,
-  wrapQtAppsHook,
-  qtbase,
   cmake,
-  kconfig,
-  kio,
-  kiconthemes,
-  kxmlgui,
-  ki18n,
-  kguiaddons,
-  extra-cmake-modules,
   boost,
   shared-mime-info,
   rrdtool,
-  breeze-icons,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kcollectd";
   version = "0.12.2";
   src = fetchFromGitLab {
     owner = "aerusso";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kcollectd";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-35zb5Kx0tRP5l0hILdomCu2YSQfng02mbyyAClm4uZs=";
   };
 
@@ -32,26 +23,31 @@ stdenv.mkDerivation rec {
     substituteInPlace kcollectd/rrd_interface.cc --replace-fail 'char *arg[] =' 'const char *arg[] ='
   '';
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-    cmake
-    extra-cmake-modules
-    shared-mime-info
-  ];
+  nativeBuildInputs =
+    [
+      shared-mime-info
+      cmake
+    ]
+    ++ (with kdePackages; [
+      wrapQtAppsHook
+      extra-cmake-modules
+    ]);
 
-  buildInputs = [
-    qtbase
-    kconfig
-    kio
-    kxmlgui
-    kiconthemes
-    ki18n
-    kguiaddons
-    boost
-    rrdtool
-    # otherwise some buttons are blank
-    breeze-icons
-  ];
+  buildInputs =
+    [
+      boost
+      rrdtool
+    ]
+    ++ (with kdePackages; [
+      qtbase
+      kconfig
+      kio
+      kxmlgui
+      kiconthemes
+      ki18n
+      kguiaddons
+      breeze-icons
+    ]);
 
   meta = with lib; {
     description = "Graphical frontend to collectd";
@@ -61,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "kcollectd";
   };
-}
+})

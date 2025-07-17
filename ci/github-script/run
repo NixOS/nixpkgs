@@ -1,12 +1,13 @@
 #!/usr/bin/env -S node --import ./run
 import { execSync } from 'node:child_process'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { closeSync, mkdtempSync, openSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { program } from 'commander'
+import * as core from '@actions/core'
 import { getOctokit } from '@actions/github'
 
-async function run(action, owner, repo, pull_number, dry) {
+async function run(action, owner, repo, pull_number, dry = true) {
   const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
 
   const github = getOctokit(token)
@@ -19,38 +20,35 @@ async function run(action, owner, repo, pull_number, dry) {
     })).data
   }
 
-  const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
-  try {
-    process.env.GITHUB_WORKSPACE = tmp
-    process.chdir(tmp)
+  process.env['INPUT_GITHUB-TOKEN'] = token
 
-    await action({
-      github,
-      context: {
-        payload,
-        repo: {
-          owner,
-          repo,
-        },
+  closeSync(openSync('step-summary.md', 'w'))
+  process.env.GITHUB_STEP_SUMMARY = 'step-summary.md'
+
+  await action({
+    github,
+    context: {
+      payload,
+      repo: {
+        owner,
+        repo,
       },
-      core: {
-        getInput() {
-          return token
-        },
-        error: console.error,
-        info: console.log,
-        notice: console.log,
-        setFailed(msg) {
-          console.error(msg)
-          process.exitCode = 1
-        },
-      },
-      dry,
-    })
-  } finally {
-    rmSync(tmp, { recursive: true })
-  }
+    },
+    core,
+    dry,
+  })
 }
+
+program
+  .command('commits')
+  .description('Check commit structure of a pull request.')
+  .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
+  .argument('<pr>', 'Number of the Pull Request to check')
+  .action(async (owner, repo, pr) => {
+    const commits = (await import('./commits.js')).default
+    run(commits, owner, repo, pr)
+  })
 
 program
   .command('labels')
@@ -61,7 +59,14 @@ program
   .option('--no-dry', 'Make actual modifications')
   .action(async (owner, repo, pr, options) => {
     const labels = (await import('./labels.js')).default
-    run(labels, owner, repo, pr, options.dry)
+    const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
+    try {
+      process.env.GITHUB_WORKSPACE = tmp
+      process.chdir(tmp)
+      run(labels, owner, repo, pr, options.dry)
+    } finally {
+      rmSync(tmp, { recursive: true })
+    }
   })
 
 await program.parse()
