@@ -222,15 +222,16 @@ let
     passthru = {
       withOptional =
         {
-          withPlaywright ? false,
-          withBrowser ? false,
-          withHelp ? false,
-          withBedrock ? false,
           withAll ? false,
+          withPlaywright ? withAll,
+          withBrowser ? withAll,
+          withHelp ? withAll,
+          withBedrock ? withAll,
           ...
         }:
         aider-chat.overridePythonAttrs (
           {
+            pname,
             dependencies,
             makeWrapperArgs,
             propagatedBuildInputs ? [ ],
@@ -238,20 +239,27 @@ let
           }:
 
           {
+            pname =
+              pname
+              + lib.optionalString withPlaywright "-playwright"
+              + lib.optionalString withBrowser "-browser"
+              + lib.optionalString withHelp "-help"
+              + lib.optionalString withBedrock "-bedrock";
+
             dependencies =
               dependencies
-              ++ lib.optionals (withAll || withPlaywright) aider-chat.optional-dependencies.playwright
-              ++ lib.optionals (withAll || withBrowser) aider-chat.optional-dependencies.browser
-              ++ lib.optionals (withAll || withHelp) aider-chat.optional-dependencies.help
-              ++ lib.optionals (withAll || withBedrock) aider-chat.optional-dependencies.bedrock;
+              ++ lib.optionals withPlaywright aider-chat.optional-dependencies.playwright
+              ++ lib.optionals withBrowser aider-chat.optional-dependencies.browser
+              ++ lib.optionals withHelp aider-chat.optional-dependencies.help
+              ++ lib.optionals withBedrock aider-chat.optional-dependencies.bedrock;
 
             propagatedBuildInputs =
               propagatedBuildInputs
-              ++ lib.optionals (withAll || withPlaywright) [ playwright-driver.browsers ];
+              ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
 
             makeWrapperArgs =
               makeWrapperArgs
-              ++ lib.optionals (withAll || withPlaywright) [
+              ++ lib.optionals withPlaywright [
                 "--set"
                 "PLAYWRIGHT_BROWSERS_PATH"
                 "${playwright-driver.browsers}"
@@ -259,7 +267,7 @@ let
                 "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
                 "true"
               ]
-              ++ lib.optionals (withAll || withHelp) [
+              ++ lib.optionals withHelp [
                 "--set"
                 "NLTK_DATA"
                 "${aider-nltk-data}"
