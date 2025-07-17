@@ -687,6 +687,7 @@ in
     imports = [ ./odoo.nix ];
     _module.args.package = pkgs.odoo16;
   };
+  oku = runTest ./oku.nix;
   oncall = runTest ./web-apps/oncall.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
