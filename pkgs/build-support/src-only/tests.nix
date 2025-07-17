@@ -10,14 +10,31 @@
 }:
 
 let
+  # Extract (effective) arguments passed to stdenv.mkDerivation and compute the
+  # arguments we would need to pass to srcOnly manually in order to get the same
+  # as `srcOnly drv`, i.e. the arguments passed to stdenv.mkDerivation plus the
+  # used stdenv itself.
+  getEquivAttrs =
+    drv:
+    let
+      drv' = drv.overrideAttrs (
+        _finalAttrs: prevAttrs: {
+          passthru = prevAttrs.passthru // {
+            passedAttrs = prevAttrs;
+          };
+        }
+      );
+    in
+    drv'.passedAttrs // { inherit (drv') stdenv; };
+
   emptySrc = srcOnly emptyDirectory;
   zlibSrc = srcOnly zlib;
 
   # It can be invoked in a number of ways. Let's make sure they're equivalent.
-  zlibSrcDrvAttrs = srcOnly zlib.drvAttrs;
+  zlibSrcEquiv = srcOnly (getEquivAttrs zlib);
   # zlibSrcFreeform = # ???;
   helloSrc = srcOnly hello;
-  helloSrcDrvAttrs = srcOnly hello.drvAttrs;
+  helloSrcEquiv = srcOnly (getEquivAttrs hello);
 
   # The srcOnly <drv> invocation leaks a lot of attrs into the srcOnly derivation,
   # so for comparing with the freeform invocation, we need to make a selection.
@@ -59,12 +76,12 @@ in
 runCommand "srcOnly-tests"
   {
     moreTests = [
-      (testers.testEqualDerivation "zlibSrcDrvAttrs == zlibSrc" zlibSrcDrvAttrs zlibSrc)
+      (testers.testEqualDerivation "zlibSrcEquiv == zlibSrc" zlibSrcEquiv zlibSrc)
       # (testers.testEqualDerivation
       #   "zlibSrcFreeform == zlibSrc"
       #   zlibSrcFreeform
       #   zlibSrc)
-      (testers.testEqualDerivation "helloSrcDrvAttrs == helloSrc" helloSrcDrvAttrs helloSrc)
+      (testers.testEqualDerivation "helloSrcEquiv == helloSrc" helloSrcEquiv helloSrc)
       (testers.testEqualDerivation "helloDrvSimpleSrcFreeform == helloDrvSimpleSrc"
         helloDrvSimpleSrcFreeform
         helloDrvSimpleSrc
