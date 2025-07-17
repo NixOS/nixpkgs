@@ -437,15 +437,17 @@ in
         serviceConfig = {
           RuntimeDirectory = "cloudflared-tunnel-${name}";
           RuntimeDirectoryMode = "0400";
-          LoadCredential = [
-            (lib.optional (tunnel.credentialsFile != null) ("credentials.json:${tunnel.credentialsFile}"))
-          ] ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
+          LoadCredential = lib.concatLists [
+            (lib.optional (tunnel.credentialsFile != null) "credentials.json:${tunnel.credentialsFile}")
+            (lib.optional (tunnel.tokenFile != null) "credentials.json:${tunnel.tokenFile}")
+            (lib.optional (certFile != null) "cert.pem:${certFile}")
+          ];
 
           ExecStart =
             if tunnel.token != null then
               "${cfg.package}/bin/cloudflared tunnel run --token ${lib.escapeShellArg tunnel.token}"
             else if tunnel.tokenFile != null then
-              "${cfg.package}/bin/cloudflared tunnel run --token-file ${lib.escapeShellArg tunnel.token}"
+              ''${cfg.package}/bin/cloudflared tunnel run --token-file "$CREDENTIALS_DIRECTORY/credentials.json"''
             else
               "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
@@ -461,8 +463,9 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
+    anpin
     bbigras
     bn
-    anpin
+    hey2022
   ];
 }
