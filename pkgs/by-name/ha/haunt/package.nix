@@ -6,7 +6,7 @@
   guile,
   guile-commonmark,
   guile-reader,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
