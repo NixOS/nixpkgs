@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dbb7163CdqHY7/FJY2yWBFRudT+hTFT6fO4sFgt6C/A=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   postPatch = ''
     substituteInPlace config/Makefile.in \
       --replace-fail '+camlp4' '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
@@ -56,6 +60,9 @@ stdenv.mkDerivation rec {
     # https://github.com/ygrek/mldonkey/issues/117
     // lib.optionalAttrs stdenv.cc.isClang {
       CXXFLAGS = "-std=c++98";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_LDFLAGS = "-liconv";
     };
 
   meta = {
