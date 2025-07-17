@@ -2214,7 +2214,7 @@ with pkgs;
   };
 
   hyprland = callPackage ../by-name/hy/hyprland/package.nix {
-    stdenv = gcc14Stdenv;
+    stdenv = gcc15Stdenv;
   };
 
   hyprpolkitagent = callPackage ../by-name/hy/hyprpolkitagent/package.nix {
@@ -7231,15 +7231,6 @@ with pkgs;
   );
 
   flow = callPackage ../development/tools/analysis/flow { };
-
-  framac = callPackage ../by-name/fr/framac/package.nix {
-    ocamlPackages = ocaml-ng.ocamlPackages_5_2;
-    why3 = why3.override {
-      version = "1.7.2";
-      coqPackages = coqPackages_8_18;
-      ocamlPackages = ocaml-ng.ocamlPackages_5_2;
-    };
-  };
 
   fswatch = callPackage ../development/tools/misc/fswatch {
     autoreconfHook = buildPackages.autoreconfHook269;
