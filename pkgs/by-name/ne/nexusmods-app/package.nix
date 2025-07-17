@@ -2,13 +2,13 @@
   _7zz,
   avalonia,
   buildDotnetModule,
-  callPackage,
   desktop-file-utils,
   dotnetCorePackages,
   fetchgit,
   imagemagick,
   lib,
   xdg-utils,
+  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -23,16 +23,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.16.4";
+  version = "0.13.4";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9Xy5SWwjVWYlbt33meVGFDF96Cx66DXOyECEF47/kSo=";
+    hash = "sha256-Ub6HjZChOhRUDYQ2TAnrwOtrW6ahP+k74vCAmLkYABA=";
     fetchSubmodules = true;
   };
-
-  gameHashes = callPackage ./game-hashes { };
 
   enableParallelBuilding = false;
 
@@ -65,18 +63,9 @@ buildDotnetModule (finalAttrs: {
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
 
-    # Specify a fixed date to improve build reproducibility
-    echo "1970-01-01T00:00:00Z" >buildDate.txt
-    substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
-      --replace-fail '$(BaseIntermediateOutputPath)buildDate.txt' "$(realpath buildDate.txt)"
-
-    # Use a pinned version of the game hashes db
-    substituteInPlace src/NexusMods.Games.FileHashes/NexusMods.Games.FileHashes.csproj \
-      --replace-fail '$(BaseIntermediateOutputPath)games_hashes_db.zip' "$gameHashes"
-
-    # Use a vendored version of the nexus API's games.json data
-    substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
-      --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+    # Assertion assumes version is set to 0.0.1
+    substituteInPlace tests/NexusMods.Telemetry.Tests/TrackingDataSenderTests.cs \
+      --replace-fail 'cra_ct=v0.0.1' 'cra_ct=v${finalAttrs.version}'
   '';
 
   makeWrapperArgs = [
@@ -138,7 +127,6 @@ buildDotnetModule (finalAttrs: {
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
-    "--property:Version=${finalAttrs.version}"
     "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
@@ -148,14 +136,22 @@ buildDotnetModule (finalAttrs: {
     "RequiresNetworking!=True"
   ];
 
-  disabledTests = [
-    # Fails attempting to fetch SMAPI version data from github:
-    # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
-    "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
-  ]
-  ++ lib.optionals (!_7zz.meta.unfree) [
-    "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-  ];
+  disabledTests =
+    [
+      # Fails attempting to download game hashes DB from github:
+      # HttpRequestException : Resource temporarily unavailable (github.com:443)
+      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
+
+      # Fails attempting to fetch SMAPI version data from github:
+      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
+    ]
+    ++ lib.optionals (!_7zz.meta.unfree) [
+      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+    ];
 
   doInstallCheck = true;
 
@@ -191,12 +187,12 @@ buildDotnetModule (finalAttrs: {
     };
   };
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

@@ -6,7 +6,6 @@
   deprecated,
   hatchling,
   importlib-metadata,
-  typing-extensions,
   opentelemetry-test-utils,
   pytestCheckHook,
   writeScript,
@@ -15,7 +14,7 @@
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.34.0";
+    version = "1.31.1";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -25,7 +24,7 @@ let
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       tag = "v${version}";
-      hash = "sha256-fAXcS2VyDMk+UDW3ru5ZvwzXjydsY1uFcT2GvZuiGWw=";
+      hash = "sha256-/HXPZLcTDTGnwOMt+IfmlMCua75oEzj99u6i9s+nBwI=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
@@ -35,7 +34,6 @@ let
     dependencies = [
       deprecated
       importlib-metadata
-      typing-extensions
     ];
 
     pythonRelaxDeps = [ "importlib-metadata" ];

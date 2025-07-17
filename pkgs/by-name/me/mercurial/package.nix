@@ -65,17 +65,18 @@ let
       lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs = [
-      makeWrapper
-      gettext
-      installShellFiles
-      setuptools
-    ]
-    ++ lib.optionals rustSupport [
-      rustPlatform.cargoSetupHook
-      cargo
-      rustc
-    ];
+    nativeBuildInputs =
+      [
+        makeWrapper
+        gettext
+        installShellFiles
+        setuptools
+      ]
+      ++ lib.optionals rustSupport [
+        rustPlatform.cargoSetupHook
+        cargo
+        rustc
+      ];
     buildInputs = [ docutils ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
@@ -113,18 +114,18 @@ let
       mercurial-tests = makeTests { flags = "--with-hg=$MERCURIAL_BASE/bin/hg"; };
     };
 
-    meta = {
+    meta = with lib; {
       description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
-      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor version}";
-      license = lib.licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [
+      changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [
         lukegb
         euxane
         techknowlogick
       ];
-      platforms = lib.platforms.unix;
+      platforms = platforms.unix;
       mainProgram = "hg";
     };
   };

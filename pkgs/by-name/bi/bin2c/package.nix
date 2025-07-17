@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "bin2c";
-  version = "0-unstable-2020-05-30";
+  version = "unstable-2020-05-30";
 
   src = fetchFromGitHub {
     owner = "adobe";

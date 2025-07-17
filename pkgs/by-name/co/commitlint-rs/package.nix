@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "commitlint-rs";
-  version = "0.2.3";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "KeisukeYamashita";
     repo = "commitlint-rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rNCMvIVJ/aOTNMyAmwX3Ir6IjHf6wxZ1XlGIWp7omkQ=";
+    hash = "sha256-9az7AJ4NXmisRZiCFTdHQBVatgEIdRuKU6ZEKVHEgnQ=";
   };
 
-  cargoHash = "sha256-+MPHEkL5/+yR5+aKTDTaVO9D/v2xccwSo7clo20H1G0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qTJ7/3jIqDXSu6H16YZJqtc/AqMIb4t7SulTtcVbKMI=";
 
   passthru = {
     tests.version = testers.testVersion { package = commitlint-rs; };

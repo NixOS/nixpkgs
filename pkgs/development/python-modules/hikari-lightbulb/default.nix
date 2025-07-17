@@ -2,30 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  setuptools,
+  wheel,
   hikari,
   croniter,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "hikari-lightbulb";
-  version = "3.1.1";
+  version = "2.3.5.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tandemdude";
     repo = "hikari-lightbulb";
     tag = version;
-    hash = "sha256-hsd7K7VFXndQ3tE8UkIcFXADgG/Kjd2oNWdFvwAwUtw=";
+    hash = "sha256-sxBrOgMgUcPjqtNuuq5+NfyxR5V812dfHnGoO9DhdXU=";
   };
 
-  build-system = [ flit-core ];
-
-  dependencies = [
-    hikari
-    typing-extensions
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
+
+  propagatedBuildInputs = [ hikari ];
 
   optional-dependencies = {
     crontrigger = [ croniter ];
@@ -34,7 +34,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lightbulb" ];
 
   meta = with lib; {
-    broken = true; # missing linkd and confspec dependencies
     description = "Command handler for Hikari, the Python Discord API wrapper library";
     longDescription = ''
       Lightbulb is designed to be an easy to use command handler library that integrates with the Discord API wrapper library for Python, Hikari.

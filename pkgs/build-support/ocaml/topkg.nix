@@ -42,8 +42,7 @@ lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.m
         findlib
         ocamlbuild
         topkg
-      ]
-      ++ nativeBuildInputs;
+      ] ++ nativeBuildInputs;
       buildInputs = [ topkg ] ++ buildInputs;
 
       meta = (args.meta or { }) // {

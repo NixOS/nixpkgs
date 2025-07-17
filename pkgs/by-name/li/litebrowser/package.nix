@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "litebrowser";
-  version = "0-unstable-2024-02-25";
+  version = "unstable-2024-02-25";
 
   src = fetchFromGitHub {
     owner = "litehtml";

@@ -12,12 +12,11 @@
   oslo-utils,
   pbr,
   prettytable,
-  python-openstackclient,
   python-swiftclient,
   pythonOlder,
   pyyaml,
-  requests-mock,
   requests,
+  requests-mock,
   setuptools,
   sphinxHook,
   stestr,
@@ -26,20 +25,18 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "4.3.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "python_heatclient";
-    inherit version;
-    hash = "sha256-itp863fyXw2+OuLjMoowRhrblP+/NrDCqrwszkg7dfA=";
+    inherit pname version;
+    hash = "sha256-1oSZzmcDEwThBbF8M/nvY//axJLyQUxDAVOYIsLr9w0=";
   };
 
   build-system = [
     openstackdocstheme
-    python-openstackclient
     setuptools
     sphinxHook
   ];

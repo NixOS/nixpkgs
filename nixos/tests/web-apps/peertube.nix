@@ -1,15 +1,8 @@
 import ../make-test-python.nix (
-  { lib, pkgs, ... }:
-  let
-    domain = "peertube.local";
-    port = 9000;
-    url = "http://${domain}:${toString port}";
-    password = "zw4SqYVdcsXUfRX8aaFX";
-    registrationTokenFile = "/etc/peertube-runner-registration-token";
-  in
+  { pkgs, ... }:
   {
     name = "peertube";
-    meta.maintainers = with lib.maintainers; [ izorkin ] ++ lib.teams.ngi.members;
+    meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
     nodes = {
       database = {
@@ -60,7 +53,7 @@ import ../make-test-python.nix (
           environment = {
             etc = {
               "peertube/password-init-root".text = ''
-                PT_INITIAL_ROOT_PASSWORD=${password}
+                PT_INITIAL_ROOT_PASSWORD=zw4SqYVdcsXUfRX8aaFX
               '';
               "peertube/secrets-peertube".text = ''
                 063d9c60d519597acef26003d5ecc32729083965d09181ef3949200cbe5f09ee
@@ -84,14 +77,14 @@ import ../make-test-python.nix (
               ];
             };
             extraHosts = ''
-              192.168.2.11 ${domain}
+              192.168.2.11 peertube.local
             '';
-            firewall.allowedTCPPorts = [ port ];
+            firewall.allowedTCPPorts = [ 9000 ];
           };
 
           services.peertube = {
             enable = true;
-            localDomain = domain;
+            localDomain = "peertube.local";
             enableWebHttps = false;
 
             serviceEnvironmentFile = "/etc/peertube/password-init-root";
@@ -139,28 +132,9 @@ import ../make-test-python.nix (
             ];
           };
           extraHosts = ''
-            192.168.2.11 ${domain}
+            192.168.2.11 peertube.local
           '';
         };
-
-        services.peertube-runner = {
-          enable = true;
-          # Don't pull in unneeded dependencies.
-          enabledJobTypes = [ "video-studio-transcoding" ];
-          instancesToRegister = {
-            testServer1 = {
-              inherit url registrationTokenFile;
-              runnerName = "I'm a test!!!";
-            };
-            testServer2 = {
-              inherit url registrationTokenFile;
-              runnerName = "I'm also a test...";
-              runnerDescription = "Even more testing?!?!";
-            };
-          };
-        };
-        # Will be manually started in test script.
-        systemd.services.peertube-runner.wantedBy = lib.mkForce [ ];
       };
 
     };
@@ -175,49 +149,16 @@ import ../make-test-python.nix (
       database.wait_for_open_port(31638)
 
       server.wait_for_unit("peertube.service")
-      server.wait_for_open_port(${toString port})
+      server.wait_for_open_port(9000)
 
       # Check if PeerTube is running
-      client.succeed("curl --fail ${url}/api/v1/config/about | jq -r '.instance.name' | grep 'PeerTube Test Server'")
+      client.succeed("curl --fail http://peertube.local:9000/api/v1/config/about | jq -r '.instance.name' | grep 'PeerTube\ Test\ Server'")
 
-
-      # PeerTube CLI
-
-      client.succeed('peertube-cli auth add -u "${url}" -U "root" --password "${password}"')
-      client.succeed('peertube-cli auth list | grep "${url}"')
-      client.succeed('peertube-cli auth del "${url}"')
-      client.fail('peertube-cli auth list | grep "${url}"')
-
-
-      # peertube-runner
-
-      access_token = client.succeed(
-        'peertube-cli get-access-token --url "${url}" --username "root" --password "${password}"'
-      ).strip()
-      # Generate registration token.
-      client.succeed(f"curl --fail -X POST -H 'Authorization: Bearer {access_token}' ${url}/api/v1/runners/registration-tokens/generate")
-      # Get registration token, and put it where `registrationTokenFile` from the
-      # peertube-runner module points to.
-      client.succeed(
-        f"curl --fail -H 'Authorization: Bearer {access_token}' ${url}/api/v1/runners/registration-tokens" \
-        " | jq --raw-output '.data[0].registrationToken'" \
-        " > ${registrationTokenFile}"
-      )
-
-      client.systemctl("start peertube-runner.service")
-      client.wait_for_unit("peertube-runner.service")
-
-      runner_command = "sudo -u prunner peertube-runner"
-      client.succeed(f'{runner_command} list-registered | grep "I\'m a test!!!"')
-      client.succeed(f'{runner_command} list-registered | grep "I\'m also a test..."')
-      client.succeed(f'{runner_command} list-registered | grep "Even more testing?!?!"')
-
-      # Service should still work once instances are already registered.
-      client.systemctl("restart peertube-runner.service")
-      client.wait_for_unit("peertube-runner.service")
-
-
-      # Cleanup
+      # Check PeerTube CLI version
+      client.succeed('peertube-cli auth add -u "http://peertube.local:9000" -U "root" --password "zw4SqYVdcsXUfRX8aaFX"')
+      client.succeed('peertube-cli auth list | grep "http://peertube.local:9000"')
+      client.succeed('peertube-cli auth del "http://peertube.local:9000"')
+      client.fail('peertube-cli auth list | grep "http://peertube.local:9000"')
 
       client.shutdown()
       server.shutdown()

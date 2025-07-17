@@ -8,20 +8,26 @@
   libarchive,
   openssl,
   pacman,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "paru";
-  version = "2.1.0";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
-    tag = "v${version}";
-    hash = "sha256-i99f2ngYhfVCKpImJ8L7u2T2FgOt7Chp8DHDbrNh1kw=";
+    rev = "v${version}";
+    hash = "sha256-VFIeDsIuPbWGf+vio5i8qGUBB+spP/7SwYwmQkMjtL8=";
   };
 
-  cargoHash = "sha256-USIceRh24WGV0TIrpuyHs4thjaghpxqZmk2uVKBxlm4=";
+  cargoPatches = [
+    ./cargo-lock.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3tKoL2I6DHrRodhWFOi3mSxk2P5SxCush/Hz9Dpyo3U=";
 
   nativeBuildInputs = [
     gettext
@@ -34,6 +40,11 @@ rustPlatform.buildRustPackage rec {
     libarchive
     openssl
     pacman
+  ];
+
+  # https://github.com/Morganamilo/paru/issues/1154#issuecomment-2002357898
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "generate"
   ];
 
   postBuild = ''

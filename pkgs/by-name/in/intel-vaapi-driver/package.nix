@@ -41,8 +41,7 @@ stdenv.mkDerivation {
   configureFlags = [
     (lib.enableFeature enableGui "x11")
     (lib.enableFeature enableGui "wayland")
-  ]
-  ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
+  ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -52,18 +51,19 @@ stdenv.mkDerivation {
     wayland-scanner
   ];
 
-  buildInputs = [
-    intel-gpu-tools
-    libdrm
-    libva
-  ]
-  ++ lib.optionals enableGui [
-    libX11
-    libXext
-    libGL
-    wayland
-  ]
-  ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
+  buildInputs =
+    [
+      intel-gpu-tools
+      libdrm
+      libva
+    ]
+    ++ lib.optionals enableGui [
+      libX11
+      libXext
+      libGL
+      wayland
+    ]
+    ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
 

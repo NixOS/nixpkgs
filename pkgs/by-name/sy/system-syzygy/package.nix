@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-H/iG6vsmtpBGYBBqNQG5EpyZaUtfXfVaHv4fkxwqrD0=";
 
   postInstall = ''

@@ -1,6 +1,5 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
@@ -8,13 +7,12 @@
 
   # dependencies
   alembic,
+  buildPythonPackage,
   cachetools,
   click,
   cloudpickle,
-  cryptography,
   databricks-sdk,
   docker,
-  fastapi,
   flask,
   gitpython,
   graphene,
@@ -36,7 +34,6 @@
   scipy,
   sqlalchemy,
   sqlparse,
-  uvicorn,
 
   # tests
   aiohttp,
@@ -47,6 +44,7 @@
   botocore,
   catboost,
   datasets,
+  fastapi,
   google-cloud-storage,
   httpx,
   jwt,
@@ -67,19 +65,20 @@
   tensorflow,
   torch,
   transformers,
+  uvicorn,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "3.3.1";
+  version = "2.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-5zObSnGx7+cCrqRfvcnprQN05NqVBCeWcAZEE1Jpeuo=";
+    hash = "sha256-kgohENAx5PpLQ9pBfl/zSq65l/DqJfufBf0gWR1WJHY=";
   };
 
   pythonRelaxDeps = [
@@ -98,10 +97,8 @@ buildPythonPackage rec {
     cachetools
     click
     cloudpickle
-    cryptography
     databricks-sdk
     docker
-    fastapi
     flask
     gitpython
     graphene
@@ -125,7 +122,6 @@ buildPythonPackage rec {
     shap
     sqlalchemy
     sqlparse
-    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
@@ -139,6 +135,7 @@ buildPythonPackage rec {
     botocore
     catboost
     datasets
+    fastapi
     google-cloud-storage
     httpx
     jwt

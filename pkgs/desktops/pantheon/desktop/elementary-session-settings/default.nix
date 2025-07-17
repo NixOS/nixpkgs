@@ -21,15 +21,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  # Allow disabling x11 session
-  # nixpkgs-update: no auto update
-  version = "8.0.1-unstable-2025-09-15";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "session-settings";
-    rev = "e708fd49356f145acd926d30683012d9488f0f9d";
-    hash = "sha256-wb9UUrEtwtmqtfNS2YPli99ZeY17UdJFQijTKs8mHn4=";
+    rev = version;
+    sha256 = "sha256-4B7lUjHEa4LdKrmsFCB3iFIsdVd/rgwmtQUAgAj3rXs=";
   };
 
   /*
@@ -58,10 +56,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmimeapps-list=false"
+    "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
-    # https://github.com/elementary/session-settings/issues/91
-    "-Dx11=false"
     "--sysconfdir=${placeholder "out"}/etc"
+    "-Dwayland=true"
   ];
 
   postInstall = ''
@@ -71,7 +69,7 @@ stdenv.mkDerivation rec {
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     # absolute path patched sessions
-    substituteInPlace $out/share/wayland-sessions/pantheon-wayland.desktop \
+    substituteInPlace $out/share/{xsessions/pantheon.desktop,wayland-sessions/pantheon-wayland.desktop} \
       --replace-fail "Exec=gnome-session" "Exec=${gnome-session}/bin/gnome-session" \
       --replace-fail "TryExec=io.elementary.wingpanel" "TryExec=${wingpanel}/bin/io.elementary.wingpanel"
   '';
@@ -80,6 +78,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
 
     providedSessions = [
+      "pantheon"
       "pantheon-wayland"
     ];
   };

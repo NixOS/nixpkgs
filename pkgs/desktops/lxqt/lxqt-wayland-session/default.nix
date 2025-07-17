@@ -60,8 +60,6 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  passthru.providedSessions = [ "lxqt-wayland" ];
-
   meta = {
     homepage = "https://github.com/lxqt/lxqt-wayland-session";
     description = "Files needed for the LXQt Wayland Session";

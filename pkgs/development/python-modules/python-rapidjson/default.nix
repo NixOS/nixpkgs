@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
   rapidjson,
   pytestCheckHook,
   pytz,
@@ -10,15 +11,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.21";
+  version = "1.20";
   pname = "python-rapidjson";
+  disabled = pythonOlder "3.8";
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     tag = "v${version}";
-    hash = "sha256-qpq7gNdWDSNTVTqV1rnRffap0VrlHOr4soAY/SXqd1k=";
+    hash = "sha256-xIswmHQMl5pAqvcTNqeuO3P6MynKt3ahzUgGQroaqmw=";
   };
 
   patches = [
@@ -36,11 +39,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
-  meta = {
-    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.tag}/CHANGES.rst";
+  meta = with lib; {
+    changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.rev}/CHANGES.rst";
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

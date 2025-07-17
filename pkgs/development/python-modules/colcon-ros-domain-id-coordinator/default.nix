@@ -13,7 +13,7 @@
 }:
 buildPythonPackage {
   pname = "colcon-ros-domain-id-coordinator";
-  version = "0.2.4";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -46,7 +46,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "Extension for colcon-core to coordinate ROS_DOMAIN_ID values across multiple terminals";
+    description = "An extension for colcon-core to coordinate ROS_DOMAIN_ID values across multiple terminals";
     homepage = "https://github.com/colcon/colcon-ros-domain-id-coordinator";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

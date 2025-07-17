@@ -28,15 +28,16 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    libjpeg
-    libvpx
-    openh264
-  ]
-  ++ lib.optionals withPulse [
-    libpulseaudio
-    libvorbis
-  ];
+  buildInputs =
+    [
+      libjpeg
+      libvpx
+      openh264
+    ]
+    ++ lib.optionals withPulse [
+      libpulseaudio
+      libvorbis
+    ];
 
   meta = with lib; {
     description = "Library allowing Optional async readback OpenGL frame buffer with optional audio recording";

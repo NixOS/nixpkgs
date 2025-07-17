@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Dictd-compatible version of WordNet";
+    description = "dictd-compatible version of WordNet";
 
     longDescription = ''
       WordNet® is a large lexical database of English. This package makes

@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "4.1.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
     rev = "v${version}";
-    hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
+    hash = "sha256-Z4prbaPYRdN/fPdBwDz7D3/gKybh2ulA3UM1LZGeAK0=";
   };
 
   enableParallelBuilding = true;
@@ -65,13 +65,14 @@ stdenv.mkDerivation rec {
     libbsd
     libuuid
   ];
-  propagatedBuildInputs = [
-    protobufc
-  ]
-  ++ (with python3.pkgs; [
-    python
-    python3.pkgs.protobuf
-  ]);
+  propagatedBuildInputs =
+    [
+      protobufc
+    ]
+    ++ (with python3.pkgs; [
+      python
+      python3.pkgs.protobuf
+    ]);
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \

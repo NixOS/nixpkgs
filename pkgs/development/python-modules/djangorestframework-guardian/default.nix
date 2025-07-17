@@ -2,38 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  django,
   django-guardian,
   djangorestframework,
-  pytest-django,
-  pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-guardian";
-  version = "0.4.0";
-  pyproject = true;
+  version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rpkilby";
     repo = "django-rest-framework-guardian";
     rev = version;
-    hash = "sha256-7SaKyWoLen5DAwSyrWeA4rEmjXMcPwJ7LM7WYxk+IKs=";
+    hash = "sha256-jl/VEl1pUHU8J1d5ZQSGJweNJayIGw1iVAmwID85fqw=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    chmod +x manage.py
+    patchShebangs manage.py
+  '';
 
-  dependencies = [
+  propagatedBuildInputs = [
     django-guardian
     djangorestframework
   ];
 
-  nativeCheckInputs = [
-    pytest-django
-    pytestCheckHook
-  ];
-
-  env.DJANGO_SETTINGS_MODULE = "tests.settings";
+  checkPhase = ''
+    ./manage.py test
+  '';
 
   pythonImportsCheck = [ "rest_framework_guardian" ];
 
@@ -42,5 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
     license = licenses.bsd3;
     maintainers = [ ];
+    # unmaintained, last compatible version is 3.x, use djangorestframework-guardian2 instead
+    broken = lib.versionAtLeast django.version "4";
   };
 }

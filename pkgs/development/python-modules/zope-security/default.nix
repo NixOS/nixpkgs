@@ -58,8 +58,7 @@ buildPythonPackage rec {
     unittestCheckHook
     zope-exceptions
     zope-testing
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Import process is too complex and some tests fail
   preCheck = ''

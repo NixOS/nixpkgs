@@ -41,8 +41,7 @@ buildPythonPackage rec {
     httpx-socks
     python-socks
     rencode
-  ]
-  ++ python-socks.optional-dependencies.asyncio;
+  ] ++ python-socks.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     proxy-py

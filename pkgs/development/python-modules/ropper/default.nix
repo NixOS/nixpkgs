@@ -4,7 +4,6 @@
   fetchFromGitHub,
   capstone,
   filebytes,
-  keystone-engine,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ropper";
-  version = "1.13.13";
+  version = "1.13.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sashs";
     repo = "Ropper";
-    tag = "v${version}";
-    hash = "sha256-MOAbACLDdeKCMV4K/n1rAQlxDN0JoDIiUF6Zr3yPw8o=";
+    rev = "v${version}";
+    hash = "sha256-yuHJ+EpglumEAXEu0iJKIXK1ouW1yptNahM9Wmk7AW4=";
   };
 
   build-system = [ setuptools ];
@@ -31,20 +30,15 @@ buildPythonPackage rec {
     filebytes
   ];
 
-  optional-dependencies = {
-    ropchain = [ keystone-engine ];
-  };
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ropper" ];
 
   meta = with lib; {
     description = "Show information about files in different file formats";
+    mainProgram = "ropper";
     homepage = "https://scoding.de/ropper/";
-    changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];
-    mainProgram = "ropper";
   };
 }

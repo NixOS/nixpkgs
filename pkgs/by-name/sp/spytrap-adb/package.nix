@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-t5MNgsuH5FVEjUP9FFxbjXs5BVim0ZyfNKUTQOjKpqg=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-VoUzAHTxJLeyi60ftuOkI6PAuLUsSsQSUjk9rcGz86A=";
 
   env.SPYTRAP_ADB_BINARY = lib.getExe' android-tools "adb";

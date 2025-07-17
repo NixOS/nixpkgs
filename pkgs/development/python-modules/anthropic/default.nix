@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
 
   # build-system
   hatch-fancy-pypi-readme,
@@ -32,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.62.0";
+  version = "0.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-EVLSC6ClHnmGqMoefMXj3M4dh812ZN5t9nF3gfCLyCo=";
+    hash = "sha256-2IdsWNQdp4Cr6xP1MDnj5EN/jyGcxuc5bTKg349DpI8=";
   };
 
   postPatch = ''
@@ -81,11 +80,6 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_copy_build_request"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Hangs
-    # https://github.com/anthropics/anthropic-sdk-python/issues/1008
-    "test_get_platform"
   ];
 
   disabledTestPaths = [

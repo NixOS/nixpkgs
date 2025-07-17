@@ -39,7 +39,6 @@
   x690,
 
   # tests
-  cookiecutter,
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
@@ -50,14 +49,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "3.2.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${version}";
-    hash = "sha256-unJpJjoS0C9TKsvk9/fQO8jiIOGbgfJopeXR5FcIq/g=";
+    hash = "sha256-AdW19Zf5TZ6hChXbW9dLGcMpFTQOT1wrPzEqaSfWzDE=";
   };
 
   postPatch = ''
@@ -96,7 +95,6 @@ buildPythonPackage rec {
     click-command-tree
     click-option-group
     colorama
-    cookiecutter
     crcmod
     cryptography
     deepmerge
@@ -124,7 +122,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spsdk" ];
 
   nativeCheckInputs = [
-    cookiecutter
     ipykernel
     pytest-notebook
     pytestCheckHook
@@ -137,13 +134,10 @@ buildPythonPackage rec {
   disabledTests = [
     # Missing rotk private key
     "test_general_notebooks"
-
-    # Attempts to access /run
-    "test_nxpimage_famode_export_cli"
   ];
 
   meta = {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/v${version}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = lib.licenses.bsd3;

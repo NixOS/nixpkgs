@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.32.1";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v2SMY0KGFwwybsiMu1W1wBWdyoDEFF3hWd4LeaT8Nts=";
+    hash = "sha256-lkicEaQLHloa10A7rySDX7UpOFsDzOSL1xepL5bymd0=";
     fetchSubmodules = true;
   };
 
@@ -31,25 +31,26 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    kdePackages.qtkeychain
-    libqalculate
-    libarchive
-    muparser
-  ]
-  ++ (with qt6; [
-    qt5compat
-    qtbase
-    qtdeclarative
-    qtscxml
-    qtsvg
-    qttools
-    qtwayland
-  ])
-  ++ (with python3Packages; [
-    python
-    pybind11
-  ]);
+  buildInputs =
+    [
+      kdePackages.qtkeychain
+      libqalculate
+      libarchive
+      muparser
+    ]
+    ++ (with qt6; [
+      qt5compat
+      qtbase
+      qtdeclarative
+      qtscxml
+      qtsvg
+      qttools
+      qtwayland
+    ])
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;

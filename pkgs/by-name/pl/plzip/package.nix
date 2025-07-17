@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       _360ied
+      ehmry
     ];
     mainProgram = "plzip";
   };

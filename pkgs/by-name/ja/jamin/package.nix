@@ -27,18 +27,19 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    fftwFloat
-    gtk2
-    ladspaPlugins
-    libjack2
-    liblo
-    libxml2
-  ]
-  ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]);
+  buildInputs =
+    [
+      fftwFloat
+      gtk2
+      ladspaPlugins
+      libjack2
+      liblo
+      libxml2
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ]);
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:

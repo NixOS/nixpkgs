@@ -1,49 +1,46 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   gettext,
   pkg-config,
   which,
   glib,
-  gtk3,
-  wrapGAppsHook3,
-  withGui ? true,
+  gtk2,
+  enableSoftening ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-
+stdenv.mkDerivation rec {
   pname = "dvdisaster";
-  version = "0.79.10-pl5";
+  version = "0.79.10";
 
-  src = fetchFromGitHub {
-    owner = "speed47";
-    repo = "dvdisaster";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lWvZDB08lZb87l4oEbrdtc6Me4mWHiW3DFNXYoYR3a0=";
+  src = fetchurl {
+    url = "https://dvdisaster.jcea.es/downloads/${pname}-${version}.tar.bz2";
+    hash = "sha256-3Qqf9i8aSL9z2uJvm8P/QOPp83nODC3fyLL1iBIgf+g=";
   };
 
   nativeBuildInputs = [
     gettext
     pkg-config
     which
-    wrapGAppsHook3
   ];
-
   buildInputs = [
     glib
-  ]
-  ++ lib.optionals withGui [
-    gtk3
+    gtk2
   ];
 
-  patches = [
-    ./md5sum.patch
+  patches = lib.optionals enableSoftening [
+    ./encryption.patch
+    ./dvdrom.patch
+    ./gcc14-fix.patch
   ];
 
   postPatch = ''
     patchShebangs ./
     sed -i 's/dvdisaster48.png/dvdisaster/' contrib/dvdisaster.desktop
+    substituteInPlace scripts/bash-based-configure \
+      --replace 'if (make -v | grep "GNU Make") > /dev/null 2>&1 ;' \
+                'if make -v | grep "GNU Make" > /dev/null 2>&1 ;'
   '';
 
   configureFlags = [
@@ -51,13 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--docdir=share/doc"
     "--with-nls=yes"
     "--with-embedded-src-path=no"
-  ]
-  ++ lib.optionals (!withGui) [
-    "--with-gui=no"
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
+  ] ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
 
-  enableParallelBuilding = true;
+  # fatal error: inlined-icons.h: No such file or directory
+  enableParallelBuilding = false;
 
   doCheck = true;
   checkPhase = ''
@@ -66,16 +60,25 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$TMP"/{log,regtest}
     substituteInPlace common.bash \
-      --replace-fail /dev/shm "$TMP/log" \
-      --replace-fail /var/tmp "$TMP"
+      --replace /dev/shm "$TMP/log" \
+      --replace /var/tmp "$TMP"
 
-    ./runtests.sh
+    for test in *.bash; do
+      case "$test" in
+      common.bash)
+        echo "Skipping $test"
+        continue ;;
+      *)
+        echo "Running $test"
+        ./"$test"
+      esac
+    done
 
     popd
     runHook postCheck
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postInstall = ''
     rm -f $out/bin/dvdisaster-uninstall.sh
     mkdir -pv $out/share/applications
     cp contrib/dvdisaster.desktop $out/share/applications/
@@ -87,29 +90,18 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  # Tests are heavily CPU-bound
-  requiredSystemFeatures = [ "big-parallel" ];
-
-  meta = {
-    homepage = "https://github.com/speed47/dvdisaster";
-    changelog = "https://github.com/speed47/dvdisaster/blob/v${finalAttrs.version}/CHANGELOG";
-    description = "Data loss/scratch/aging protection for CD/DVD media (unofficial version)";
+  meta = with lib; {
+    homepage = "https://dvdisaster.jcea.es/";
+    description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
       Dvdisaster provides a margin of safety against data loss on CD and
       DVD media caused by scratches or aging media. It creates error correction
       data which is used to recover unreadable sectors if the disc becomes
       damaged at a later time.
-
-      This version is built on top of the latest upstream version (2021),
-      it is backwards compatible with it, and adds a list of improvements,
-      such as BD-R support, CLI-only mode, and more.
     '';
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.matteopacini ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ ];
     mainProgram = "dvdisaster";
-    # Tests are not parallelized, and take a long time to run (1-3 hours, depending on CPU)
-    # Max observed time: ~4 hours on a "big-parallel" builder
-    timeout = 4 * 60 * 60;
   };
-})
+}

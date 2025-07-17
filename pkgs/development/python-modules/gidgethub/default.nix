@@ -31,8 +31,7 @@ buildPythonPackage rec {
   dependencies = [
     uritemplate
     pyjwt
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     pytestCheckHook

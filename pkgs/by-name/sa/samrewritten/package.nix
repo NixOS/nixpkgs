@@ -1,59 +1,52 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
-  nix-update-script,
-
-  # Deps
-  gdk-pixbuf,
-  glib,
-  graphene,
-  gtk4,
-  openssl,
-  pango,
+  unstableGitUpdater,
+  curl,
+  gtkmm3,
+  glibmm,
+  gnutls,
+  yajl,
   pkg-config,
-  wrapGAppsHook4,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
-  version = "20250802.1";
+  version = "202008-unstable-2025-03-11";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
-    tag = finalAttrs.version;
-    hash = "sha256-41fBafFmYW8uGICpIJtSnXDP+KV3uVInxm0op40V/tc=";
+    # The latest release is too old, use latest commit instead
+    rev = "cac0291f3e4465135f5cf7d5b99fdb005fb23ade";
+    hash = "sha256-+f/j2q1lJ3yp3/BBgnK9kS4P3ULQ5onQPAcUV12LYnI=";
   };
 
-  cargoHash = "sha256-Px/TlR3BhiFCv73v06VNq0/W0bQM/ORRE/9ndv5hbpY=";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  # Tests require network access and a running Steam client. Skipping.
-  doCheck = false;
-
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook4
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gdk-pixbuf
-    glib
-    graphene
-    gtk4
-    openssl
-    pango
+    curl
+    gtkmm3
+    glibmm
+    gnutls
+    yajl
   ];
 
-  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+  postInstall = ''
+    substituteInPlace $out/share/applications/samrewritten.desktop \
+      --replace-fail "Exec=/usr/bin/samrewritten" "Exec=samrewritten"
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "Modern Steam achievements manager for Windows and Linux";
+    description = "Steam Achievement Manager For Linux. Rewritten in C++";
     mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
     changelog = "https://github.com/PaulCombal/SamRewritten/releases";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ludovicopiero ];
     platforms = [ "x86_64-linux" ];
   };

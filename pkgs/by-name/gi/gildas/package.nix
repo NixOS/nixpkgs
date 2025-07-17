@@ -24,8 +24,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "sep25a";
-  version = "20250901_a";
+  srcVersion = "jul25a";
+  version = "20250701_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    hash = "sha256-W2l2n6W8L5Gr7taw9ZUvVVp9sZvjne56sjtUU91U0oE=";
+    hash = "sha256-t64lcbdrPXu4II5IGyd9Un6yJGrH+wqKRt5jmr/F5y4=";
   };
 
   nativeBuildInputs = [
@@ -54,13 +54,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patches = [
-    ./wrapper.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./clang.patch
-    ./cpp-darwin.patch
-  ];
+  patches =
+    [ ./wrapper.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./clang.patch
+      ./cpp-darwin.patch
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
@@ -68,15 +67,11 @@ stdenv.mkDerivation rec {
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
   configurePhase = ''
-    runHook preConfigure
-
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
-
-    runHook postConfigure
   '';
 
   userExec = "astro class greg mapping sic";

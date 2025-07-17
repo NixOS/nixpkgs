@@ -112,17 +112,13 @@
 
       (sqlite:with-transaction db
         (dolist (line releases-lines)
-          (destructuring-bind (project http-url size md5 sha1 prefix &rest asds)
+          (destructuring-bind (project url size md5 sha1 prefix &rest asds)
               (str:words line)
-            ;; quicklisp does not support TLS
-            ;; https://github.com/quicklisp/quicklisp-client/issues/167
-            ;; but since we fetch systems using nix we can adapt the url.
-            (let ((url (str:replace-first "http://" "https://" http-url)))
-              (sql-query
-               "insert or ignore into quicklisp_release values(?,?,?,?,?,?,?)"
-               project url size md5 sha1 prefix (json:stringify (coerce
-                                                                 asds
-                                                                 'vector)))))))
+            (sql-query
+             "insert or ignore into quicklisp_release values(?,?,?,?,?,?,?)"
+             project url size md5 sha1 prefix (json:stringify (coerce
+                                                               asds
+                                                               'vector))))))
 
       ;; Weed out circular dependencies from the package graph.
       (sqlite:with-transaction db

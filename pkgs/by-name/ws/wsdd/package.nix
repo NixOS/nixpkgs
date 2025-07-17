@@ -8,14 +8,14 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wsdd";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = "wsdd";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-i3+Mw1l/kTRQT/CxRKvaEfdEh2qcEQp1Wa90Vk3JUMM=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     tests.samba-wsdd = nixosTests.samba-wsdd;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
     description = "Web Service Discovery (WSD) host daemon for SMB/Samba";
-    maintainers = with lib.maintainers; [ izorkin ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ izorkin ];
+    license = licenses.mit;
+    platforms = platforms.all;
     mainProgram = "wsdd";
   };
-})
+}

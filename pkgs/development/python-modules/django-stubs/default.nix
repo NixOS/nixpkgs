@@ -1,36 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  django-stubs-ext,
   django,
-  fetchFromGitHub,
-  hatchling,
-  redis,
+  django-stubs-ext,
+  fetchPypi,
   mypy,
-  pytest-mypy-plugins,
-  oracledb,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   tomli,
   types-pytz,
   types-pyyaml,
-  types-redis,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.2.2";
+  version = "5.2.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "typeddjango";
-    repo = "django-stubs";
-    tag = version;
-    hash = "sha256-kF5g0/rkMQxYTfSrTqzZ6BuqGlE42K/AVhc1/ARc+/c=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    pname = "django_stubs";
+    inherit version;
+    hash = "sha256-B+JcLTy/9b5UAif/N3GcyJ8hXfqqpesDinWwG7+7JyI=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<79.0.0" setuptools
+  '';
+
+  build-system = [ setuptools ];
 
   dependencies = [
     django
@@ -38,33 +40,15 @@ buildPythonPackage rec {
     types-pytz
     types-pyyaml
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
-    oracle = [ oracledb ];
-    redis = [
-      redis
-      types-redis
-    ];
   };
 
   nativeCheckInputs = [
-    pytest-mypy-plugins
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  disabledTests = [
-    # AttributeError: module 'django.contrib.auth.forms' has no attribute 'SetUnusablePasswordMixin'
-    "test_find_classes_inheriting_from_generic"
-  ];
-
-  disabledTestPaths = [
-    # Skip type checking
-    "tests/typecheck/"
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "django-stubs" ];
 
@@ -73,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/typeddjango/django-stubs";
     changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ elohmeier ];
   };
 }

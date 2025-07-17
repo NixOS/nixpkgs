@@ -21,23 +21,23 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.6";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-y4v8FdQkB5Si3SYkchFG9fAU4ZhabAMcPkDcLEWW+6k=";
+    hash = "sha256-gFlca9XdRNv2CI3jfMiWejcmGGzabP0VGs4vlvFs72o=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
     # revision determined by the upstream commit hash in julec-ir/README.md
-    rev = "aebbd12c0f89f6a04f856f3e23d5ea39741c3e0f";
+    rev = "4a3bf4fc84b53aa607855df6635d95d3e310f7ad";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-7eDOYMmCEfW+0zZpESY1+ql3hWZZ/Q75lKT0nBQPktE=";
+    hash = "sha256-Wl5AYRGYcQpj/R9nynxNC5r1HK1EmImwkLokdZfp9sE=";
   };
 
   dontConfigure = true;
@@ -65,10 +65,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       -Wno-everything \
       -fwrapv \
       -ffloat-store \
-      -fno-fast-math \
-      -fno-rounding-math \
-      -ffp-contract=fast \
-      -fexcess-precision=standard \
       -DNDEBUG \
       -fomit-frame-pointer \
       -fno-strict-aliasing \

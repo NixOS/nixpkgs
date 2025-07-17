@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-groq";
-  version = "0.3.8";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-groq==${version}";
-    hash = "sha256-mlkNKzVX4VUQ9+/rB0fD4HfwjbCA9Yp4DJkMT+ExJ1c=";
+    hash = "sha256-KsKT7+jpTTiSVMZWcIwW7+1BCL7rpZHg/OX3PNLI6As=";
   };
 
   sourceRoot = "${src.name}/libs/partners/groq";
@@ -54,12 +54,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_groq" ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "langchain-groq==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-groq==";
   };
 
   meta = {

@@ -6,7 +6,6 @@
   # nativeBuildInputs
   binaryen,
   lld,
-  llvmPackages,
   pkg-config,
   protobuf,
   rustfmt,
@@ -32,15 +31,16 @@
     "map_view"
   ],
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.25.1";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-YppVNVfVqOATLCoUvpeYYrhivKBb6f4G1JCG1Bl+cjc=";
+    hash = "sha256-4+vx4BMGJpdN6k+UxAx2unO4maxoUd9uP9Q3mYjpyF4=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -49,7 +49,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-jUn7b6t5hS7KjdymxTTP8mKLT671QgKrv7R9uiOkmJU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lmIe/QH8+/2LgaObbEvRgThP82AAnmGzf2SPfHExHks=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];
@@ -99,25 +100,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nasm
   ];
 
-  # NOTE: Without setting these environment variables the web-viewer
-  # preBuild step uses the nix wrapped CC which doesn't support
-  # multiple targets including wasm32-unknown-unknown. These are taken
-  # from the following issue discussion in the rust ring crate:
-  # https://github.com/briansmith/ring/discussions/2581#discussioncomment-14096969
-  env =
-    let
-      inherit (llvmPackages) clang-unwrapped;
-      majorVersion = lib.versions.major clang-unwrapped.version;
-
-      # resource dir + builtins from the unwrapped clang
-      resourceDir = "${lib.getLib clang-unwrapped}/lib/clang/${majorVersion}";
-      includeDir = "${lib.getLib llvmPackages.libclang}/lib/clang/${majorVersion}/include";
-    in
-    {
-      CC_wasm32_unknown_unknown = lib.getExe clang-unwrapped;
-      CFLAGS_wasm32_unknown_unknown = "-isystem ${includeDir} -resource-dir ${resourceDir}";
-    };
-
   buildInputs = [
     freetype
     glib
@@ -125,8 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

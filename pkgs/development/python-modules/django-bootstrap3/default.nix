@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  uv-build,
+  hatchling,
 
   # dependencies
   django,
@@ -16,17 +16,17 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "25.2";
+  version = "25.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     tag = "v${version}";
-    hash = "sha256-TaB2PeBjmCNFuEZ+To2Q3C6zlFCaaTB70LxQWWb5AEo=";
+    hash = "sha256-gRDU2IDE6cOVBJzdOs8Ww9mItMy/2DPMYusC0TCTqkI=";
   };
 
-  build-system = [ uv-build ];
+  build-system = [ hatchling ];
 
   dependencies = [ django ];
 

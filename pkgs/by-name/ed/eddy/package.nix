@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eddy";
-  version = "3.7.1";
+  version = "3.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "obdasystems";
-    repo = "eddy";
+    repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
+    sha256 = "sha256-ywAxlXuKoTXfJSzSsvVXxhycVEklIPQfUogs8QJ8DGQ=";
   };
 
   propagatedBuildInputs = [

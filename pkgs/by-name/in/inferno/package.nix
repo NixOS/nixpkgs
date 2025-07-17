@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "inferno";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-D72rkTnUgLJRHFEDoUwQDLQJAPGyqmxhf6hmNJGUl+U=";
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-Gc31yyspU7RYDQDpVvq+UhMnE7t4HQ65fSGu9eDN6C0=";
 
   # skip flaky tests

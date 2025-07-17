@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/VcDevel/Vc";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

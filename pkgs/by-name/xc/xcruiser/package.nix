@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xcruiser.sourceforge.net/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; linux;
     mainProgram = "xcruiser";
   };

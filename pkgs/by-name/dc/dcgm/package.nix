@@ -3,33 +3,28 @@
   stdenv,
   fetchFromGitHub,
   autoAddDriverRunpath,
-  catch2_3,
+  catch2,
   cmake,
-  ctestCheckHook,
-  coreutils,
-  mpi,
-  mpiCheckPhaseHook,
   ninja,
+  cudaPackages_11,
   cudaPackages_12,
-  boost186,
-  fmt_10,
+  boost,
+  fmt_9,
   git,
   jsoncpp,
   libevent,
-  lshw,
   plog,
   python3,
-  replaceVars,
   symlinkJoin,
   tclap_1_4,
-  util-linux,
   yaml-cpp,
 }:
 let
-  # DCGM can depend on multiple versions of CUDA at the same time.
+  # DCGM depends on 2 different versions of CUDA at the same time.
   # The runtime closure, thankfully, is quite small as it does not
   # include the CUDA libraries.
   cudaPackageSets = [
+    cudaPackages_11
     cudaPackages_12
   ];
 
@@ -72,28 +67,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
+  version = "3.3.9"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "DCGM";
-    # No tag for 4.3.1 yet.
-    #tag = "v${version}";
-    rev = "1477d8785e899ab3450fdff2b486102e9bed096b";
-    hash = "sha256-FebqG28aodENGLNBBbiGpckzzeuP+y44dCALtYnN1yU=";
+    tag = "v${version}";
+    hash = "sha256-PysxuN5WT7GB0oOvT5ezYeOau6AMVDDWE5HOAcmqw/Y=";
   };
 
   patches = [
-    ./remove-cuda-11.patch
+    ./fix-includes.patch
     ./dynamic-libs.patch
-    (replaceVars ./fix-paths.patch {
-      inherit coreutils;
-      inherit util-linux;
-      inherit lshw;
-      inherit mpi;
-      inherit (stdenv) shell;
-      dcgm_out = null;
-    })
   ];
 
   hardeningDisable = [ "all" ];
@@ -114,37 +99,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Header-only
-    boost186
-    catch2_3
+    boost
+    catch2
     plog.dev
     tclap_1_4
 
-    fmt_10
+    fmt_9
     yaml-cpp
     jsoncpp
     libevent
-  ];
-
-  nativeCheckInputs = [
-    mpi
-    ctestCheckHook
-    mpiCheckPhaseHook
-  ];
-
-  disabledTests = [
-    # Fail due to lack of `/sys` in the sandbox.
-    "DcgmModuleSysmon::PauseResume Module resumed after initialization"
-    "DcgmModuleSysmon PauseResume Module rejects invalid messages"
-    "DcgmModuleSysmon PauseResume Module accepts valid messages"
-    "DcgmModuleSysmon Watches"
-    "DcgmModuleSysmon maxSampleAge"
-    "DcgmModuleSysmon::CalculateCoreUtilization"
-    "DcgmModuleSysmon::ParseProcStatCpuLine"
-    "DcgmModuleSysmon::ParseThermalFileContentsAndStore"
-    "DcgmModuleSysmon::PopulateTemperatureFileMap"
-    "DcgmModuleSysmon::ReadCoreSpeed"
-    "DcgmModuleSysmon::ReadTemperature"
-    "Sysmon: initialize module"
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
@@ -154,17 +117,30 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   doCheck = true;
-  dontUseNinjaCheck = true;
 
-  postPatch = ''
-    while read -r -d "" file; do
-      substituteInPlace "$file" --replace-quiet @dcgm_out@ "$out"
-    done < <(find . '(' -name '*.h' -or -name '*.cpp' ')' -print0)
+  checkPhase = ''
+    runHook preCheck
+
+    ctest -j $NIX_BUILD_CORES --output-on-failure --exclude-regex ${
+      lib.escapeShellArg (
+        lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
+          "DcgmModuleSysmon Watches"
+          "DcgmModuleSysmon maxSampleAge"
+          "DcgmModuleSysmon::CalculateCoreUtilization"
+          "DcgmModuleSysmon::ParseProcStatCpuLine"
+          "DcgmModuleSysmon::ParseThermalFileContentsAndStore"
+          "DcgmModuleSysmon::PopulateTemperatureFileMap"
+          "DcgmModuleSysmon::ReadCoreSpeed"
+          "DcgmModuleSysmon::ReadTemperature"
+          "Sysmon: initialize module"
+        ]
+      )
+    }
+
+    runHook postCheck
   '';
 
   disallowedReferences = lib.concatMap getCudaPackages cudaPackageSets;
-
-  __structuredAttrs = true;
 
   meta = with lib; {
     description = "Data Center GPU Manager (DCGM) is a daemon that allows users to monitor NVIDIA data-center GPUs";

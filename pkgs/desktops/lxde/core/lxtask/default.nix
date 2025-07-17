@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lxtask";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxtask";
-    tag = finalAttrs.version;
+    rev = version;
     hash = "sha256-BI50jV/17jGX91rcmg98+gkoy35oNpdSSaVDLyagbIc=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://lxde.sourceforge.net/";
     description = "Lightweight and desktop independent task manager";
     mainProgram = "lxtask";
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       Desktop Environment, it's totally desktop independent and only
       requires pure GTK.
     '';
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.romildo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
-})
+}

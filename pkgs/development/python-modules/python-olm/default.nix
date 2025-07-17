@@ -41,7 +41,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = {
     inherit (olm.meta) license maintainers;

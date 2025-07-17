@@ -68,8 +68,7 @@ stdenv.mkDerivation rec {
     libwebsockets'
     openssl
     uthash
-  ]
-  ++ lib.optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)

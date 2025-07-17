@@ -1,32 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
   libavif,
   pillow,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pillow-avif-plugin";
-  version = "1.5.2";
+  version = "1.4.6";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "fdintino";
-    repo = "pillow-avif-plugin";
-    tag = "v${version}";
-    hash = "sha256-gdDVgVNympxlTzj1VUqO+aU1/xWNjDm97a0biOTlKtA=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-hVz1DQP2/Bbh/V42SzzqC3n0v5DTn/ISOWlzXYUeCLo=";
   };
 
-  build-system = [ setuptools ];
-
+  nativeBuildInputs = [ setuptools ];
   buildInputs = [ libavif ];
-
-  dependencies = [ pillow ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ pillow ];
 
   meta = {
     description = "Pillow plugin that adds support for AVIF files";

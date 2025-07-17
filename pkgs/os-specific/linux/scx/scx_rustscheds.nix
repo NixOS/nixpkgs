@@ -7,6 +7,7 @@
   zlib,
   zstd,
   scx-common,
+  scx,
   protobuf,
   libseccomp,
 }:
@@ -14,7 +15,14 @@ rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";
   inherit (scx-common) version src;
 
+  useFetchCargoVendor = true;
   inherit (scx-common.versionInfo.scx) cargoHash;
+
+  # Copy compiled headers and libs from scx.cscheds
+  postPatch = ''
+    mkdir libbpf
+    cp -r ${scx.cscheds.dev}/libbpf/* libbpf/
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -30,11 +38,17 @@ rustPlatform.buildRustPackage {
 
   env = {
     BPF_CLANG = lib.getExe llvmPackages.clang;
+    BPF_EXTRA_CFLAGS_PRE_INCL = lib.concatStringsSep " " [
+      "-I${scx.cscheds.dev}/libbpf/src/usr/include"
+      "-I${scx.cscheds.dev}/libbpf/include/uapi"
+      "-I${scx.cscheds.dev}/libbpf/include/linux"
+    ];
     RUSTFLAGS = lib.concatStringsSep " " [
       "-C relocation-model=pic"
       "-C link-args=-lelf"
       "-C link-args=-lz"
       "-C link-args=-lzstd"
+      "-L ${scx.cscheds.dev}/libbpf/src"
     ];
   };
 
@@ -50,7 +64,6 @@ rustPlatform.buildRustPackage {
     "--skip=compat::tests::test_struct_has_field"
     "--skip=cpumask"
     "--skip=topology"
-    "--skip=proc_data::tests::test_thread_operations"
   ];
 
   meta = scx-common.meta // {

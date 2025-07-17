@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   configurePhase = ''
-    runHook preConfigure
-
     ${lib.getExe' buildPackages.stdenv.cc "cc"} setup/tool.c -o setup_t
     ./setup_t -t lx64 > setup.sh
 
@@ -33,8 +31,6 @@ stdenv.mkDerivation rec {
     substituteInPlace setup.sh --replace 'strip --strip-unneeded' '${stdenv.cc.targetPrefix}strip --strip-unneeded'
 
     sh < ./setup.sh
-
-    runHook postConfigure
   '';
 
   installPhase = ''
@@ -47,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Miniature early Macintosh emulator (fork from erichelgeson)";
+    description = "miniature early Macintosh emulator (fork from erichelgeson)";
     homepage = "https://github.com/erichelgeson/minivmac";
     license = licenses.gpl2;
     maintainers = [ maintainers.flokli ];

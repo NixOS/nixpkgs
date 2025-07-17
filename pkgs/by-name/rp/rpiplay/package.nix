@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "rpiplay";
-  version = "0-unstable-2021-06-14";
+  version = "unstable-2021-06-14";
 
   src = fetchFromGitHub {
     owner = "FD-";

@@ -26,14 +26,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libsecret
-    readline
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libedit
-    ncurses
-  ];
+  buildInputs =
+    [
+      libsecret
+      readline
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libedit
+      ncurses
+    ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

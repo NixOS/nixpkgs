@@ -31,7 +31,9 @@ Xcode.
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcodeenv.composeXcodeWrapper {
   version = "9.2";
@@ -63,7 +65,9 @@ executing the `xcodeenv.buildApp {}` function:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcodeenv.buildApp {
   name = "MyApp";
@@ -103,7 +107,7 @@ The above function takes a variety of parameters:
 It also possible to adjust the `xcodebuild` parameters. This is only needed in
 rare circumstances. In most cases the default values should suffice:
 
-* `target` specifies which `xcodebuild` target to build. By default it takes the target
+* Specifies which `xcodebuild` target to build. By default it takes the target
   that has the same name as the app.
 * The `configuration` parameter can be overridden if desired. By default, it
   will do a debug build for the simulator and a release build for real devices.
@@ -120,7 +124,7 @@ In addition, you need to set the following parameters:
 
 * `certificateFile` refers to a P12 certificate file.
 * `certificatePassword` specifies the password of the P12 certificate.
-* `provisioningProfile` refers to the provisioning profile needed to sign the app
+* `provisioningProfile` refers to the provision profile needed to sign the app
 * `signMethod` should refer to `ad-hoc` for signing the app with an ad-hoc
   certificate, `enterprise` for enterprise certificates and `app-store` for App
   store certificates.
@@ -157,7 +161,9 @@ instances:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcode.simulateApp {
   name = "simulate";
@@ -189,7 +195,9 @@ app in the requested simulator instance:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
+  xcodeenv = import ./xcodeenv {
+    inherit (pkgs) stdenv;
+  };
 in
 xcode.simulateApp {
   name = "simulate";

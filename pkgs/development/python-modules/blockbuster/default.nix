@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "blockbuster";
-  version = "1.5.25";
+  version = "1.5.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
     tag = "v${version}";
-    hash = "sha256-1+Q1IdJXqLAy7kIcVU38TC3dtMeWAn7YOLyGrjCkxD0=";
+    hash = "sha256-AxRnP8/fIae5ovWQVpfs3ZLIIkxXqVZmuhGjPTX5B/g=";
   };
 
   build-system = [ hatchling ];

@@ -23,7 +23,7 @@ buildGoModule rec {
     description = "Simulate massive Kubernetes clusters with low resource usage locally without kubelet";
     homepage = "https://kwok.sigs.k8s.io";
     changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${version}";
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }

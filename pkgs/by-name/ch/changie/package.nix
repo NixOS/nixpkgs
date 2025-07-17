@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +7,16 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.22.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
     rev = "v${version}";
-    hash = "sha256-JXVrOZKm8whmc3LkCDsbZkNcYMgiolp9dgnZFPYCtAs=";
+    hash = "sha256-tq29L9YlzhjbHkUfE0ZZhSrH+rcAwgYjcEAUjP/lHm8=";
   };
 
-  vendorHash = "sha256-bUopfHd6/0dd3OuxQMW9ZNsZtVqnRSDRqZLkfaQq12I=";
+  vendorHash = "sha256-nAwBVa+UssbfFbcOWFcsWUllBTeW89xPcgS+ofXDPf0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +28,7 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd changie \
       --bash <($out/bin/changie completion bash) \
       --fish <($out/bin/changie completion fish) \

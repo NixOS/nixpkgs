@@ -24,17 +24,14 @@
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
       nix.settings.sandbox = false;
-      virtualisation.emptyDiskImages = [
-        {
-          size = 4096;
-          driveConfig.deviceExtraOpts.serial = "deferred";
-        }
-      ];
+      virtualisation.emptyDiskImages = [ 4096 ];
+      boot.initrd.postDeviceCommands = ''
+        ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb
+      '';
       virtualisation.fileSystems = {
-        "/deferred" = {
-          device = "/dev/disk/by-id/virtio-deferred";
+        "/efi" = {
+          device = "/dev/disk/by-label/EFISYS";
           fsType = "vfat";
-          autoFormat = true;
           options = [ "noauto" ];
         };
       };
@@ -90,9 +87,10 @@
 
       # Test deferred mount
       with subtest("Deferred mounts work"):
-          machine.fail("mountpoint -q /deferred")  # was deferred
-          machine.systemctl("start deferred.mount")
-          machine.succeed("mountpoint -q /deferred")  # now mounted
+          machine.fail("mountpoint -q /efi")  # was deferred
+          machine.execute("mkdir -p /efi")
+          machine.succeed("mount /dev/disk/by-label/EFISYS /efi")
+          machine.succeed("mountpoint -q /efi")  # now mounted
 
 
       # Test Nix dæmon usage

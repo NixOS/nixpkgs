@@ -23,5 +23,4 @@ self: super: {
   fetchs3 = args: super.fetchs3 ({ preferLocalBuild = false; } // args);
   fetchsvn = args: super.fetchsvn ({ preferLocalBuild = false; } // args);
   fetchurl = args: super.fetchurl ({ preferLocalBuild = false; } // args);
-  mkNugetSource = args: super.mkNugetSource ({ preferLocalBuild = false; } // args);
 }

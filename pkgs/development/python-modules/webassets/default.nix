@@ -68,6 +68,6 @@ buildPythonPackage rec {
     mainProgram = "webassets";
     homepage = "https://github.com/miracle2k/webassets/";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ abbradar ];
   };
 }

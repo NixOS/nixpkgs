@@ -6,7 +6,6 @@
   expiringdict,
   fetchFromGitHub,
   hatchling,
-  importlib-resources,
   pem,
   publicsuffixlist,
   pyleri,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "5.10.12";
+  version = "5.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = version;
-    hash = "sha256-XbBdBef3+kt26XP5GDH5rgHYGh8xIjHUUVOcdeVICLs=";
+    hash = "sha256-mdEfVfqK277A8QUc8rpLxS2pfdyg4Z5XqWpWkh9mFLk=";
   };
 
   pythonRelaxDeps = [ "xmltodict" ];
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     cryptography
     dnspython
     expiringdict
-    importlib-resources
     pem
     publicsuffixlist
     pyleri

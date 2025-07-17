@@ -2,24 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_13,
 }:
-let
-  zig = zig_0_14;
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "glsl_analyzer";
-  version = "1.6.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nolanderc";
     repo = "glsl_analyzer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-UDAbSRGaismUHQy4s+gygDzrrHu1G5PObRBWnua6bDA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AIzk05T8JZn8HWSI6JDFUIYl4sutd3HR3Zb+xmJll0g=";
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_13.hook
   ];
 
   postPatch = ''

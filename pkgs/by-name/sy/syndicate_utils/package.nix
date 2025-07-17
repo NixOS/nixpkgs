@@ -31,6 +31,7 @@ buildNimSbom (finalAttrs: {
   meta = finalAttrs.src.meta // {
     description = "Utilities for the Syndicated Actor Model";
     homepage = "https://git.syndicate-lang.org/ehmry/syndicate_utils";
+    maintainers = [ lib.maintainers.ehmry ];
     license = lib.licenses.unlicense;
   };
 }) ./sbom.json

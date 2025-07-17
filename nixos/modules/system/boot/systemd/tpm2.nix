@@ -64,12 +64,11 @@
           "systemd-tpm2-setup-early.service"
         ];
 
-        boot.initrd.availableKernelModules = [
-          "tpm-tis"
-        ]
-        ++ lib.optional (
-          !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)
-        ) "tpm-crb";
+        boot.initrd.availableKernelModules =
+          [ "tpm-tis" ]
+          ++ lib.optional (
+            !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)
+          ) "tpm-crb";
         boot.initrd.systemd.storePaths = [
           pkgs.tpm2-tss
           "${cfg.package}/lib/systemd/systemd-tpm2-setup"

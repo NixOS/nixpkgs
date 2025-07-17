@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.40.1";
+  version = "0.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-rO8Qhd1PEDy01Ji8uhxr1oLGU+WyYxgw1sLNCt/gaak=";
+    hash = "sha256-7bUKDo7l/xZhw6o6nimQKyjucB8uB80wOGUr0V++Q28=";
     leaveDotGit = true;
   };
 
@@ -45,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
       lxml
       mashumaro
       mergedeep
-      oras
       orjson
       packageurl-python
       pytest-snapshot
@@ -61,15 +60,14 @@ python3.pkgs.buildPythonApplication rec {
     ++ xsdata.optional-dependencies.lxml
     ++ xsdata.optional-dependencies.soap;
 
-  nativeCheckInputs = [
-    git
-  ]
-  ++ (with python3.pkgs; [
-    jsonschema
-    pytest-mock
-    pytest-unordered
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      jsonschema
+      pytest-mock
+      pytest-unordered
+      pytestCheckHook
+    ]);
 
   pythonImportsCheck = [ "vunnel" ];
 
@@ -78,8 +76,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_status"
     # TypeError
     "test_parser"
-    # Test require network access
-    "test_rhel_provider_supports_ignore_hydra_errors"
   ];
 
   meta = {

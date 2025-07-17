@@ -2,7 +2,6 @@
   config,
   pkgs,
   lib,
-  utils,
   ...
 }:
 let
@@ -24,13 +23,7 @@ let
     "${cfg.package}/bin/victoria-logs"
     "-storageDataPath=/var/lib/${cfg.stateDir}"
     "-httpListenAddr=${cfg.listenAddress}"
-  ]
-  ++ lib.optionals (cfg.basicAuthUsername != null) [
-    "-httpAuth.username=${cfg.basicAuthUsername}"
-  ]
-  ++ lib.optionals (cfg.basicAuthPasswordFile != null) [
-    "-httpAuth.password=file://%d/basic_auth_password"
-  ];
+  ] ++ cfg.extraOptions;
 in
 {
   options.services.victorialogs = {
@@ -51,26 +44,13 @@ in
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };
-    basicAuthUsername = lib.mkOption {
-      default = null;
-      type = lib.types.nullOr lib.types.str;
-      description = ''
-        Basic Auth username used to protect VictoriaLogs instance by authorization
-      '';
-    };
-
-    basicAuthPasswordFile = lib.mkOption {
-      default = null;
-      type = lib.types.nullOr lib.types.str;
-      description = ''
-        File that contains the Basic Auth password used to protect VictoriaLogs instance by authorization
-      '';
-    };
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [ ];
       example = literalExpression ''
         [
+          "-httpAuth.username=username"
+          "-httpAuth.password=file:///abs/path/to/file"
           "-loggerLevel=WARN"
         ]
       '';
@@ -81,16 +61,6 @@ in
     };
   };
   config = mkIf cfg.enable {
-
-    assertions = [
-      {
-        assertion =
-          (cfg.basicAuthUsername == null && cfg.basicAuthPasswordFile == null)
-          || (cfg.basicAuthUsername != null && cfg.basicAuthPasswordFile != null);
-        message = "Both basicAuthUsername and basicAuthPasswordFile must be set together to enable basicAuth functionality, or neither should be set.";
-      }
-    ];
-
     systemd.services.victorialogs = {
       description = "VictoriaLogs logs database";
       wantedBy = [ "multi-user.target" ];
@@ -98,14 +68,8 @@ in
       startLimitBurst = 5;
 
       serviceConfig = {
-        ExecStart = lib.concatStringsSep " " [
-          (escapeShellArgs startCLIList)
-          (utils.escapeSystemdExecArgs cfg.extraOptions)
-        ];
+        ExecStart = escapeShellArgs startCLIList;
         DynamicUser = true;
-        LoadCredential = lib.optional (
-          cfg.basicAuthPasswordFile != null
-        ) "basic_auth_password:${cfg.basicAuthPasswordFile}";
         RestartSec = 1;
         Restart = "on-failure";
         RuntimeDirectory = "victorialogs";

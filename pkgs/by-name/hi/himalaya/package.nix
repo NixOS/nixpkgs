@@ -45,13 +45,14 @@ rustPlatform.buildRustPackage {
     rev = "v${version}";
   };
 
+  useFetchCargoVendor = true;
+
   buildNoDefaultFeatures = noDefaultFeatures;
   buildFeatures = features;
 
   nativeBuildInputs = [
     pkg-config
-  ]
-  ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
+  ] ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs =
     [ ]

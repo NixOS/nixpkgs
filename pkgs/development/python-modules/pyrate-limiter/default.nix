@@ -4,6 +4,8 @@
   fetchFromGitHub,
   filelock,
   poetry-core,
+  postgresql,
+  postgresqlTestHook,
   psycopg,
   psycopg-pool,
   pytestCheckHook,
@@ -15,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "3.9.0";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
     tag = "v${version}";
-    hash = "sha256-CAN3OWxXQaAzrh2q6z0OxPs4i02L/g2ISYFdUMHsHpg=";
+    hash = "sha256-oNwFxH75TJm0iJSbLIO8SlIih72ImlHIhUW7GjOEorw=";
   };
 
   postPatch = ''
@@ -46,20 +48,14 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-xdist
     redisTestHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  disabledTests = [
-    # hangs
-    "test_limiter_01"
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
   meta = with lib; {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
-    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
   };

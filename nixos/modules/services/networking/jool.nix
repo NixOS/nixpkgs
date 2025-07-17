@@ -102,8 +102,7 @@ let
         ExecStartPre = "${pkgs.kmod}/bin/modprobe jool";
         ExecStart = "${jool-cli}/bin/jool file handle ${nat64Conf name}";
         ExecStop = "${jool-cli}/bin/jool -f ${nat64Conf name} instance remove";
-      }
-      // hardening;
+      } // hardening;
     };
   };
 
@@ -119,8 +118,7 @@ let
         ExecStartPre = "${pkgs.kmod}/bin/modprobe jool_siit";
         ExecStart = "${jool-cli}/bin/jool_siit file handle ${siitConf name}";
         ExecStop = "${jool-cli}/bin/jool_siit -f ${siitConf name} instance remove";
-      }
-      // hardening;
+      } // hardening;
     };
   };
 

@@ -36,10 +36,6 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  configureFlags = [
-    "--with-boost=${boost.dev}"
-  ];
-
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;

@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     description = "Serve 9P from Unix";
     homepage = "http://p9f.org/magic/man2html?man=u9fs&sect=4";
     license = licenses.dtoa;
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;
     mainProgram = "u9fs";
   };

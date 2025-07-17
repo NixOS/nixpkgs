@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "2.1.0";
+  version = "2.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tWPVhRy7DgsQ+7YYm6h+BhLSLlpvOgBKRXOrWziqqn0=";
+    hash = "sha256-TKk09l31exDQ/KtfDDnp3MuTV3/58ivvmCZd2/EvivE=";
   };
 
   build-system = [ setuptools ];

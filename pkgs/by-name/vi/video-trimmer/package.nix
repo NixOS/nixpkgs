@@ -35,12 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3ycc4jXneGsz9Jp9Arzf224JPAKM+PxUkitWcIXre8Y=";
   };
 
-  postPatch = ''
-    substituteInPlace build-aux/cargo.sh --replace-fail \
-      'cp "$CARGO_TARGET_DIR"/' \
-      'cp "$CARGO_TARGET_DIR"/${stdenv.hostPlatform.rust.cargoShortTarget}/'
-  '';
-
   nativeBuildInputs = [
     pkg-config
     meson
@@ -65,9 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good # for scaletempo and webm
     gst_all_1.gst-plugins-bad
   ];
-
-  # For https://gitlab.gnome.org/YaLTeR/video-trimmer/-/blob/cf64e8dea345bcd991db29a3f862a9277c71fe81/build-aux/cargo.sh#L19
-  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   doCheck = true;
 

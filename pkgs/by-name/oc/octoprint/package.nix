@@ -92,14 +92,14 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.3";
+          version = "1.11.2";
           format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-AyRi9aQXLFggBzc6WH2kvRPkJu1ANX/++GdCJRNhY/A=";
+            hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
           };
 
           propagatedBuildInputs =
@@ -210,8 +210,7 @@ let
 
           disabledTests = [
             "test_check_setup" # Why should it be able to call pip?
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
+          ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_set_external_modification" ];
           disabledTestPaths = [
             "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
           ];
@@ -231,6 +230,7 @@ let
             mainProgram = "octoprint";
             license = licenses.agpl3Only;
             maintainers = with maintainers; [
+              abbradar
               WhittlesJr
               gador
             ];

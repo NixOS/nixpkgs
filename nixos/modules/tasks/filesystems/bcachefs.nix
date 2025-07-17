@@ -7,7 +7,6 @@
 }:
 
 let
-  cfg = config.boot.bcachefs;
   cfgScrub = config.services.bcachefs.autoScrub;
 
   bootFs = lib.filterAttrs (
@@ -112,7 +111,7 @@ let
       deviceUnit = mkDeviceUnit device;
       mountUnit = mkMountUnit (prefix + fs.mountPoint);
       extractProperty =
-        prop: options: (map (lib.removePrefix prop) (builtins.filter (lib.hasPrefix prop) options));
+        prop: options: (map (lib.removePrefix "${prop}=") (builtins.filter (lib.hasPrefix prop) options));
       normalizeUnits =
         unit:
         if lib.hasPrefix "/dev/" unit then
@@ -121,10 +120,8 @@ let
           mkMountUnit unit
         else
           unit;
-      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires=" fs.options);
-      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants=" fs.options);
-      requiredMounts = extractProperty "x-systemd.requires-mounts-for=" fs.options;
-      wantedMounts = extractProperty "x-systemd.wants-mounts-for=" fs.options;
+      requiredUnits = map normalizeUnits (extractProperty "x-systemd.requires" fs.options);
+      wantedUnits = map normalizeUnits (extractProperty "x-systemd.wants" fs.options);
     in
     {
       name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
@@ -139,15 +136,11 @@ let
         bindsTo = [ deviceUnit ];
         requires = requiredUnits;
         wants = wantedUnits;
-        unitConfig = {
-          RequiresMountsFor = requiredMounts;
-          WantsMountsFor = wantedMounts;
-        };
         conflicts = [ "shutdown.target" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecCondition = "${cfg.package}/bin/bcachefs unlock -c \"${device}\"";
+          ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
           Restart = "on-failure";
           RestartMode = "direct";
           # Ideally, this service would lock the key on stop.
@@ -156,7 +149,7 @@ let
         };
         script =
           let
-            unlock = ''${cfg.package}/bin/bcachefs unlock "${device}"'';
+            unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
             unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
           in
           if useClevis fs then
@@ -197,10 +190,6 @@ let
 in
 
 {
-  options.boot.bcachefs.package = lib.mkPackageOption pkgs "bcachefs-tools" { } // {
-    description = "Configured Bcachefs userspace package.";
-  };
-
   options.services.bcachefs.autoScrub = {
     enable = lib.mkEnableOption "regular bcachefs scrub";
 
@@ -231,16 +220,14 @@ in
     lib.mkMerge [
       {
         inherit assertions;
-
-        # Bcachefs upstream recommends using the latest kernel
-        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-
         # needed for systemd-remount-fs
-        system.fsPackages = [ cfg.package ];
-        services.udev.packages = [ cfg.package ];
+        system.fsPackages = [ pkgs.bcachefs-tools ];
+        # FIXME: Remove this line when the LTS (default) kernel is at least version 6.7
+        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+        services.udev.packages = [ pkgs.bcachefs-tools ];
 
         systemd = {
-          packages = [ cfg.package ];
+          packages = [ pkgs.bcachefs-tools ];
           services = lib.mapAttrs' (mkUnits "") (
             lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems
           );
@@ -249,25 +236,26 @@ in
 
       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
         inherit assertions;
-        boot.initrd.availableKernelModules = [
-          "bcachefs"
-          "sha256"
-        ]
-        ++ lib.optionals (config.boot.kernelPackages.kernel.kernelOlder "6.15") [
-          # chacha20 and poly1305 are required only for decryption attempts
-          # kernel 6.15 uses kernel api libraries for poly1305/chacha20: 4bf4b5046de0ef7f9dc50f3a9ef8a6dcda178a6d
-          # kernel 6.16 removes poly1305: ceef731b0e22df80a13d67773ae9afd55a971f9e
-          "poly1305"
-          "chacha20"
-        ];
+        boot.initrd.availableKernelModules =
+          [
+            "bcachefs"
+            "sha256"
+          ]
+          ++ lib.optionals (config.boot.kernelPackages.kernel.kernelOlder "6.15") [
+            # chacha20 and poly1305 are required only for decryption attempts
+            # kernel 6.15 uses kernel api libraries for poly1305/chacha20: 4bf4b5046de0ef7f9dc50f3a9ef8a6dcda178a6d
+            # kernel 6.16 removes poly1305: ceef731b0e22df80a13d67773ae9afd55a971f9e
+            "poly1305"
+            "chacha20"
+          ];
         boot.initrd.systemd.extraBin = {
           # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
-          "bcachefs" = "${cfg.package}/bin/bcachefs";
-          "mount.bcachefs" = "${cfg.package}/bin/mount.bcachefs";
+          "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
+          "mount.bcachefs" = "${pkgs.bcachefs-tools}/bin/mount.bcachefs";
         };
         boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          copy_bin_and_libs ${cfg.package}/bin/bcachefs
-          copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
+          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
+          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/mount.bcachefs
         '';
         boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/bcachefs version
@@ -323,7 +311,7 @@ in
             scrubTimer =
               fs:
               let
-                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
+                fs' = utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "regular bcachefs scrub timer on ${fs}";
@@ -343,7 +331,7 @@ in
             scrubService =
               fs:
               let
-                fs' = if fs == "/" then "root" else utils.escapeSystemdPath fs;
+                fs' = utils.escapeSystemdPath fs;
               in
               lib.nameValuePair "bcachefs-scrub-${fs'}" {
                 description = "bcachefs scrub on ${fs}";
@@ -357,7 +345,7 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe cfg.package} data scrub ${fs}";
+                script = "${lib.getExe pkgs.bcachefs-tools} data scrub ${fs}";
 
                 serviceConfig = {
                   Type = "oneshot";

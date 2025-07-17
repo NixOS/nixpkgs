@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.7.0";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VPwPf1cQ7jGx9aGv4sjdwu945Nlh3ZqgH9dxtFxiMP4=";
+    hash = "sha256-yjZ2Pq6ODEWhBveq4yx8bbWYG557JBFH84TdNr6bHkw=";
   };
 
   hardeningDisable = [ "format" ];
@@ -30,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
     wrapGAppsHook3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
   buildInputs = [
     libqalculate
     gtk3

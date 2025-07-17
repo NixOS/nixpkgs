@@ -21,8 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyjwt
     djangorestframework
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   # requires setting up a django instance
   doCheck = false;

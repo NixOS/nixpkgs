@@ -1,69 +1,56 @@
 {
-  lib,
-  stdenv,
-  buildGoModule,
+  curl,
   fetchurl,
-
-  # buildInputs
-  libogg,
+  lib,
+  genericUpdater,
+  go,
+  perl,
+  stdenv,
+  writeShellScript,
+  zstd,
+  pkg-config,
   opusfile,
   sox,
-
-  # nativeBuildInputs
   makeWrapper,
-  perl,
-  pkg-config,
-  zstd,
-
-  # updateScript
-  curl,
-  genericUpdater,
-  writeShellScript,
 }:
 
-buildGoModule (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vors";
-  version = "5.0.0";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "http://www.vors.stargrave.org/download/vors-${finalAttrs.version}.tar.zst";
-    hash = "sha256-DpwnhfexF/yw2emn1xrhKbGNbk9Z6wm5A2azQSAdmpA=";
+    hash = "sha256-ZRQI96j0n00eh1qxO8NgJeOQPU9bfzHoHa45xQNuzv8=";
   };
 
-  vendorHash = null;
   buildInputs = [
-    libogg
+    go
     opusfile
     sox
   ];
 
   nativeBuildInputs = [
-    makeWrapper
-    perl
-    pkg-config
     zstd
-  ];
-
-  subPackages = [
-    "cmd/vad"
-    "cmd/keygen"
-    "cmd/server"
-    "cmd/client"
+    pkg-config
+    perl
+    makeWrapper
   ];
 
   preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 
-  preBuild = ''
+  buildPhase = ''
+    runHook preBuild
     ./mk-non-static
     mkdir -p ./local/lib # Required to prevent building libopusfile
+    ./build
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 "$GOPATH"/bin/client "$out"/bin/vors-client
-    install -Dm755 "$GOPATH"/bin/keygen "$out"/bin/vors-keygen
-    install -Dm755 "$GOPATH"/bin/server "$out"/bin/vors-server
-    install -Dm755 "$GOPATH"/bin/vad "$out"/bin/vors-vad
+    mkdir -p "$out"/bin
+    cp -f bin/* "$out"/bin
+    chmod 755 "$out"/bin/*
     runHook postInstall
   '';
 
@@ -83,7 +70,7 @@ buildGoModule (finalAttrs: {
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Very simple and usable multi-user VoIP solution";
-    downloadPage = "http://www.vors.stargrave.org/INSTALL.html";
+    downloadPage = "http://www.vors.stargrave.org/Install.html";
     homepage = "http://www.vors.stargrave.org/";
     license = lib.licenses.gpl3Only;
     longDescription = ''

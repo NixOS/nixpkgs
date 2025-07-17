@@ -15,7 +15,7 @@
   alsa-lib,
   cups,
   libgbm,
-  systemdLibs,
+  systemd,
   openssl,
   libglvnd,
 }:
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   runtimeDependencies = [
-    systemdLibs
+    (lib.getLib systemd)
   ];
 
   meta = {
@@ -100,7 +100,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kb";
-  version = "0.1.8";
-  pyproject = true;
+  version = "0.1.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gnebbia";
     repo = "kb";
-    tag = "v${version}";
-    hash = "sha256-X2yFQYH4nqI5CqPtKFHq3+V/itqTpUho9en4WEIRjQM=";
+    rev = "v${version}";
+    hash = "sha256-K8EAqZbl2e0h03fFwaKIclZTZARDQp1tRo44znxwW0I=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
       (e.g., images, pdf, videos and others).
     '';
     homepage = "https://github.com/gnebbia/kb";
-    changelog = "https://github.com/gnebbia/kb/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gnebbia/kb/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wesleyjrz ];
     mainProgram = "kb";

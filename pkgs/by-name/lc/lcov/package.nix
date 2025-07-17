@@ -18,18 +18,17 @@ let
     perlPackages.GD
     perlPackages.JSONXS
     perlPackages.PathTools
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perlPackages.MemoryProcess ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ perlPackages.MemoryProcess ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcov";
-  version = "2.3.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-msttwM5QlSkeruKoVwZYpymz5JOJRb6QoSeF19AkEGI=";
+    hash = "sha256-31318or9AQ7iyu9DNQEvf5jaDzrneOOqOXu0HF1eag4=";
   };
 
   nativeBuildInputs = [

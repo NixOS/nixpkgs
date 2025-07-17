@@ -61,8 +61,7 @@ let
         php-embed.extensions.session
         php-embed.extensions.session.dev
         php-embed.unwrapped.dev
-      ]
-      ++ php-embed.unwrapped.buildInputs;
+      ] ++ php-embed.unwrapped.buildInputs;
     })
   ];
 
@@ -101,19 +100,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    jansson
-    pcre2
-    libxcrypt
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    expat
-    zlib
-  ]
-  ++ lib.optional withPAM pam
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional withCap libcap
-  ++ lib.concatMap (x: x.inputs) needed;
+  buildInputs =
+    [
+      jansson
+      pcre2
+      libxcrypt
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      expat
+      zlib
+    ]
+    ++ lib.optional withPAM pam
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional withCap libcap
+    ++ lib.concatMap (x: x.inputs) needed;
 
   basePlugins = lib.concatStringsSep "," (
     lib.optional withPAM "pam" ++ lib.optional withSystemd "systemd_logger"
@@ -185,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+      abbradar
       schneefux
       globin
     ];

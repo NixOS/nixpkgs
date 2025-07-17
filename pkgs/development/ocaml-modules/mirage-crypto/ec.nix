@@ -28,13 +28,14 @@ buildDunePackage {
   buildInputs = [
     dune-configurator
   ];
-  propagatedBuildInputs = [
-    mirage-crypto
-    mirage-crypto-rng
-  ]
-  ++ lib.optionals withFreestanding [
-    ocaml-freestanding
-  ];
+  propagatedBuildInputs =
+    [
+      mirage-crypto
+      mirage-crypto-rng
+    ]
+    ++ lib.optionals withFreestanding [
+      ocaml-freestanding
+    ];
 
   doCheck = true;
   checkInputs = [

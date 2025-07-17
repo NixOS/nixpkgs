@@ -35,7 +35,8 @@
   pkgsi686Linux,
   virtualgl,
   libglvnd,
-  autoreconfHook,
+  automake111x,
+  autoconf,
   # The below should only be non-null in a x86_64 system. On a i686
   # system the above nvidia_x11 and virtualgl will be the i686 packages.
   # TODO: Confusing. Perhaps use "SubArch" instead of i686?
@@ -53,13 +54,12 @@
 }:
 
 let
-  nvidia_x11s = [
-    nvidia_x11
-  ]
-  ++ lib.optional nvidia_x11.useGLVND libglvnd
-  ++ lib.optionals (nvidia_x11_i686 != null) (
-    [ nvidia_x11_i686 ] ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686
-  );
+  nvidia_x11s =
+    [ nvidia_x11 ]
+    ++ lib.optional nvidia_x11.useGLVND libglvnd
+    ++ lib.optionals (nvidia_x11_i686 != null) (
+      [ nvidia_x11_i686 ] ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686
+    );
 
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
@@ -124,6 +124,10 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
+    # Don't use a special group, just reuse wheel.
+    substituteInPlace configure \
+      --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
+
     # Apply configuration options
     substituteInPlace conf/xorg.conf.nvidia \
       --subst-var nvidiaDeviceOptions
@@ -144,7 +148,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     help2man
-    autoreconfHook
+    automake111x
+    autoconf
   ];
 
   # The order of LDPATH is very specific: First X11 then the host
@@ -154,17 +159,16 @@ stdenv.mkDerivation rec {
   # includes the acceleration driver. As this is used for the X11
   # server, which runs under the host architecture, this does not
   # include the sub architecture components.
-  configureFlags = [
-    "--with-udev-rules=$out/lib/udev/rules.d"
-    # Don't use a special group, just reuse wheel.
-    "CONF_GID=wheel"
-    # see #10282
-    #"CONF_PRIMUS_LD_PATH=${primusLibs}"
-  ]
-  ++ lib.optionals useNvidia [
-    "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
-    "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
-  ];
+  configureFlags =
+    [
+      "--with-udev-rules=$out/lib/udev/rules.d"
+      # see #10282
+      #"CONF_PRIMUS_LD_PATH=${primusLibs}"
+    ]
+    ++ lib.optionals useNvidia [
+      "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
+      "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
+    ];
 
   CFLAGS = [
     "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""
@@ -182,7 +186,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     license = licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
   };
 }

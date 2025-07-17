@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mirrorbits";
-  version = "0.6.1";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "etix";
     repo = "mirrorbits";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PqPE/PgIyQylbYoABC/saxLF83XjgRAS0QimragJ8P8=";
+    hash = "sha256-99eOfVSlGIEzNm+0gI/y0+UPd+dnZiGzaHlkqUNtO1U=";
   };
 
   postPatch = ''

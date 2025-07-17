@@ -25,7 +25,6 @@
   pixman,
   proj,
   sqlite,
-  xz,
   zstd,
 }:
 
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     pixman
     proj
     sqlite
-    xz # liblzma
     zstd
   ];
 
@@ -91,6 +89,6 @@ stdenv.mkDerivation rec {
       mpl11
     ];
     platforms = platforms.unix;
-    teams = [ teams.geospatial ];
+    maintainers = with maintainers; [ sikmir ];
   };
 }

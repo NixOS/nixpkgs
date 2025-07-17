@@ -17,19 +17,20 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.2.1";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
     tag = "v${version}";
-    hash = "sha256-8AM2wbPX54UaMO4MzLOV0TljLTAPOqR9gUbtT2McNjs=";
+    hash = "sha256-/atuMJVgvY4kgvrB+LuQZmJuSK4O8TJdguC7NCiRS2Y=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=61,<72" "setuptools"
+      --replace-fail "setuptools>=61,<72" "setuptools" \
+      --replace-fail "numpy<2" "numpy"
   '';
 
   build-system = [
@@ -37,6 +38,10 @@ buildPythonPackage rec {
     pip
     pkgconfig
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
   ];
 
   dependencies = [
@@ -53,7 +58,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python language bindings for preCICE";
     homepage = "https://github.com/precice/python-bindings";
-    changelog = "https://github.com/precice/python-bindings/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/precice/python-bindings/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };

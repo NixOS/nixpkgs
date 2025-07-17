@@ -4,13 +4,18 @@
   exiv2,
   fetchFromGitHub,
   libraw,
+  libsForQt5,
   kdePackages,
-  qt6,
   libtiff,
   opencv4,
   pkg-config,
   stdenv,
+  qtVersion ? 5,
 }:
+let
+  myQt = if qtVersion == 5 then libsForQt5 else kdePackages;
+  inherit (myQt) wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
   version = "3.21.1";
@@ -31,11 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gcRc4KoWJQ5BirhLuk+c+5HwBeyQtlJ3iyX492DXeVk=";
   };
 
-  outputs = [
-    "out"
-  ]
-  # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
+  outputs =
+    [ "out" ]
+    # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
@@ -48,26 +52,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qt6.wrapQtAppsHook
+    wrapQtAppsHook
     pkg-config
   ];
 
-  buildInputs = [
-    exiv2
-    libraw
-    libtiff
-    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
-    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
-    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
-    (lib.getOutput "cxxdev" opencv4)
-
-    kdePackages.kimageformats
-    qt6.qtbase
-    qt6.qtimageformats
-    qt6.qtsvg
-    qt6.qttools
-    kdePackages.quazip
-  ];
+  buildInputs =
+    [
+      exiv2
+      libraw
+      libtiff
+      # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+      # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+      # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+      (lib.getOutput "cxxdev" opencv4)
+    ]
+    ++ (with myQt; [
+      kimageformats
+      qtbase
+      qtimageformats
+      qtsvg
+      qttools
+      quazip
+    ]);
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -117,6 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
       mindavi
       ppenguin
     ];
-    inherit (qt6.qtbase.meta) platforms;
+    inherit (myQt.qtbase.meta) platforms;
   };
 })

@@ -1,6 +1,7 @@
 {
   lib,
   backendStdenv,
+  cudaOlder,
   setupCudaHook,
 }:
 prevAttrs: {
@@ -34,6 +35,13 @@ prevAttrs: {
           '$(TOP)/$(_TARGET_DIR_)/include' \
           "''${!outputDev}/include"
     ''
+    # Additional patching required pre-CUDA 12.5.
+    + lib.optionalString (cudaOlder "12.5") ''
+      substituteInPlace bin/nvcc.profile \
+        --replace-fail \
+          '$(TOP)/$(_NVVM_BRANCH_)' \
+          "''${!outputBin}/nvvm"
+    ''
     + ''
       cat << EOF >> bin/nvcc.profile
 
@@ -49,9 +57,11 @@ prevAttrs: {
   # Entries here will be in nativeBuildInputs when cuda_nvcc is in nativeBuildInputs.
   propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [ setupCudaHook ];
 
-  postInstall = prevAttrs.postInstall or "" + ''
-    moveToOutput "nvvm" "''${!outputBin}"
-  '';
+  postInstall =
+    prevAttrs.postInstall or ""
+    + ''
+      moveToOutput "nvvm" "''${!outputBin}"
+    '';
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
   allowFHSReferences = true;

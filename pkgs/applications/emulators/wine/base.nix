@@ -13,7 +13,6 @@
   bison,
   flex,
   fontforge,
-  gettext,
   makeWrapper,
   pkg-config,
   nixosTests,
@@ -94,7 +93,6 @@ stdenv.mkDerivation (
     strictDeps = true;
 
     nativeBuildInputs =
-      with supportFlags;
       [
         bison
         flex
@@ -102,8 +100,7 @@ stdenv.mkDerivation (
         makeWrapper
         pkg-config
       ]
-      ++ lib.optional gettextSupport gettext
-      ++ lib.optionals mingwSupport (
+      ++ lib.optionals supportFlags.mingwSupport (
         mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
       );
 
@@ -119,6 +116,7 @@ stdenv.mkDerivation (
         ++ lib.optional stdenv.hostPlatform.isLinux pkgs.libcap
         ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue
         ++ lib.optional cupsSupport pkgs.cups
+        ++ lib.optional gettextSupport pkgs.gettext
         ++ lib.optional dbusSupport pkgs.dbus
         ++ lib.optional cairoSupport pkgs.cairo
         ++ lib.optional odbcSupport pkgs.unixODBC
@@ -278,12 +276,13 @@ stdenv.mkDerivation (
 
     # https://bugs.winehq.org/show_bug.cgi?id=43530
     # https://github.com/NixOS/nixpkgs/issues/31989
-    hardeningDisable = [
-      "bindnow"
-      "stackclashprotection"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
-    ++ lib.optional (supportFlags.mingwSupport) "format";
+    hardeningDisable =
+      [
+        "bindnow"
+        "stackclashprotection"
+      ]
+      ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
+      ++ lib.optional (supportFlags.mingwSupport) "format";
 
     passthru = {
       inherit pkgArches;

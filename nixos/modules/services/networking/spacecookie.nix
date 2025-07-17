@@ -14,8 +14,7 @@ let
     listen = {
       inherit (cfg) port;
     };
-  }
-  // cfg.settings;
+  } // cfg.settings;
 
   format = pkgs.formats.json { };
 

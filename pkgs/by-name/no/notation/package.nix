@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -34,7 +33,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd notation \
       --bash <($out/bin/notation completion bash) \
       --fish <($out/bin/notation completion fish) \
@@ -50,7 +49,7 @@ buildGoModule (finalAttrs: {
     description = "CLI tool to sign and verify OCI artifacts and container images";
     homepage = "https://notaryproject.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "notation";
   };
 })

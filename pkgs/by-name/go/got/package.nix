@@ -25,32 +25,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.118.1";
+  version = "0.115";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-d8E4eR7eb6nFNQeHEf977Un+VNhsGGsIIMumXLCbplA=";
+    hash = "sha256-rfC8HMN0dH34+1Jbd3uPEtG/1uiTdSKBkilhssiJiec=";
   };
 
   nativeBuildInputs = [
     pkg-config
     bison
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    libressl
-    libbsd
-    libevent
-    libuuid
-    libmd
-    zlib
-    ncurses
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libossp_uuid
-    apple-sdk_15
-  ];
+  buildInputs =
+    [
+      libressl
+      libbsd
+      libevent
+      libuuid
+      libmd
+      zlib
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libossp_uuid
+      apple-sdk_15
+    ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via

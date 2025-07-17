@@ -75,7 +75,7 @@ else
 
     meta = {
       homepage = "http://cairographics.org/cairo-ocaml";
-      description = "Ocaml bindings for cairo library";
+      description = "ocaml bindings for cairo library";
       license = lib.licenses.gpl2;
       inherit (ocaml.meta) platforms;
     };

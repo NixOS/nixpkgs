@@ -13,7 +13,7 @@ pkgs.mkShell {
 
   packages = [
     pkgs.bash
-    pkgs.nixfmt
+    pkgs.nixfmt-rfc-style
   ];
 
   EMACS2NIX = src;

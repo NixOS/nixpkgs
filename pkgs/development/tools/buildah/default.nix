@@ -12,18 +12,19 @@
   libapparmor,
   libselinux,
   libseccomp,
-  versionCheckHook,
+  testers,
+  buildah,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "buildah";
-  version = "1.41.4";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8I8njiMayfpodX2rj8MqYIhah3lvMgOY+agwlPYPij0=";
+    rev = "v${version}";
+    hash = "sha256-+LHS+Syyy/jsk5G16qBhvv+/kjEACnxjl2q9YrrdPYE=";
   };
 
   outputs = [
@@ -44,16 +45,17 @@ buildGoModule (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gpgme
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    btrfs-progs
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
-  ];
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -71,16 +73,20 @@ buildGoModule (finalAttrs: {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  passthru.tests.version = testers.testVersion {
+    package = buildah;
+    command = ''
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
+      buildah --version
+    '';
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Tool which facilitates building OCI images";
     mainProgram = "buildah";
     homepage = "https://buildah.io/";
-    changelog = "https://github.com/containers/buildah/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    teams = [ lib.teams.podman ];
+    changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
+    license = licenses.asl20;
+    teams = [ teams.podman ];
   };
-})
+}

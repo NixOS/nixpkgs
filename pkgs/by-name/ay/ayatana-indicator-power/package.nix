@@ -51,19 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    libayatana-common
-    libnotify
-    librda
-    systemd
-  ]
-  ++ (with lomiri; [
-    cmake-extras
-    deviceinfo
-    lomiri-schemas
-    lomiri-sounds
-  ]);
+  buildInputs =
+    [
+      glib
+      libayatana-common
+      libnotify
+      librda
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      deviceinfo
+      lomiri-schemas
+      lomiri-sounds
+    ]);
 
   nativeCheckInputs = [
     dbus

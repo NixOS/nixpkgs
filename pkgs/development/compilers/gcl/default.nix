@@ -19,6 +19,11 @@
   libXmu,
 }:
 
+assert stdenv ? cc;
+assert stdenv.cc.isGNU;
+assert stdenv.cc ? libc;
+assert stdenv.cc.libc != null;
+
 stdenv.mkDerivation rec {
   pname = "gcl";
   version = "2.6.14";

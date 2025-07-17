@@ -5,7 +5,7 @@
   version,
 
   autoPatchelfHook,
-  flutter332,
+  flutter327,
   gtkmm3,
   keybinder3,
   lib,
@@ -15,7 +15,7 @@
   protoc-gen-dart,
   qt6,
 }:
-flutter332.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version;
   pname = "multipass-gui";
   src = multipass_src;
@@ -25,9 +25,9 @@ flutter332.buildFlutterApplication {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
-    dartssh2 = "sha256-9XrxxOamy0uS7kUz6mwWwp4yIBHLX/GSoyxMk/Wwa+4=";
+    dartssh2 = "sha256-2pypKwurziwGLZYuGaxlS2lzN3UvJp3bRTvvYYxEqRI=";
     hotkey_manager_linux = "sha256-aO0h94YZvgV/ggVupNw8GjyZsnXrq3qTHRDtuhNv3oI=";
-    tray_menu = "sha256-TAlRW7VkZWAoHAVlrPeDqS3BsqhQTyCekYQ2b4AEqjU=";
+    tray_menu = "sha256-riiAiBEms+9ARog8i+MR1fto1Yqx+gwbBWyNbNq6VTM=";
     window_size = "sha256-71PqQzf+qY23hTJvcm0Oye8tng3Asr42E2vfF1nBmVA=";
     xterm = "sha256-h8vIonTPUVnNqZPk/A4ZV7EYCMyM0rrErL9ZOMe4ZBE=";
   };
@@ -49,11 +49,6 @@ flutter332.buildFlutterApplication {
   ];
 
   preBuild = ''
-    # Temporary fix which can be removed in the next release.
-    # Already addressed upstream, but part of a larger patch
-    # that did not trivially apply.
-    substituteInPlace lib/main.dart --replace-fail 'TabBarTheme(' 'TabBarThemeData('
-
     mkdir -p lib/generated
 
     # Generate the Dart gRPC code for the Multipass GUI.

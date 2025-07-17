@@ -740,7 +740,8 @@ in
         ++ optional usingAwg kernel.amneziawg;
       boot.kernelModules = optional usingWg "wireguard" ++ optional usingAwg "amneziawg";
       environment.systemPackages =
-        optional usingWg pkgs.wireguard-tools ++ optional usingAwg pkgs.amneziawg-tools;
+        optional usingWg pkgs.wireguard-tools
+        ++ optional usingAwg pkgs.amneziawg-tools;
 
       systemd.services = mkIf (!cfg.useNetworkd) (
         (mapAttrs' generateInterfaceUnit cfg.interfaces)

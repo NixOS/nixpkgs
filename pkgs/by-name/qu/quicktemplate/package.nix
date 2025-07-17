@@ -20,6 +20,7 @@ buildGoModule rec {
     homepage = "https://github.com/valyala/quicktemplate";
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = licenses.mit;
+    maintainers = with maintainers; [ Madouura ];
     mainProgram = "qtc";
   };
 }

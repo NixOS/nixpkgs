@@ -31,8 +31,6 @@ args@{
   # and `urls` can be specified, not both.
   url ? "",
   urls ? [ ],
-  # Metadata
-  meta ? { },
   # The rest of the arguments are just forwarded to `fetchurl`.
   ...
 }:
@@ -73,7 +71,6 @@ let
       "classifier"
       "repos"
       "url"
-      "meta"
     ]
     // {
       urls = urls_;
@@ -82,7 +79,7 @@ let
   );
 in
 stdenv.mkDerivation {
-  inherit pname version meta;
+  inherit pname version;
   dontUnpack = true;
   # By moving the jar to $out/share/java we make it discoverable by java
   # packages packages that mention this derivation in their buildInputs.

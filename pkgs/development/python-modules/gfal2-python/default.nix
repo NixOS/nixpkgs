@@ -38,8 +38,7 @@ buildPythonPackage rec {
     inherit gfal2;
     tests = {
       inherit gfal2-util;
-    }
-    // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
+    } // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
   };
   meta = with lib; {
     description = "Python binding for gfal2";

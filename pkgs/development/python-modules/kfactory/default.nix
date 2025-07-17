@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "1.12.1";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
     tag = "v${version}";
-    hash = "sha256-C7ner1jkMCHI8/sRiw82l+THhAIWhwJuZ/ctJ9V76Us=";
+    hash = "sha256-/dhlAcrqQP/YeKGhnBAVMEy80X3yShn65ywoZMRU/ZM=";
   };
 
   build-system = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "KLayout API implementation of gdsfactory";
     homepage = "https://github.com/gdsfactory/kfactory";
-    changelog = "https://github.com/gdsfactory/kfactory/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gdsfactory/kfactory/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
   };

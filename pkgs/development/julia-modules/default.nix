@@ -11,7 +11,6 @@
 
   # Artifacts dependencies
   fetchurl,
-  gcc,
   glibc,
   pkgs,
   stdenv,
@@ -80,9 +79,7 @@ let
     PythonCall = [ "PyCall" ];
   };
 
-  # Invoke Julia resolution logic to determine the full dependency closure. Also
-  # gather information on the Julia standard libraries, which we'll need to
-  # generate a Manifest.toml.
+  # Invoke Julia resolution logic to determine the full dependency closure
   packageOverridesRepoified = lib.mapAttrs util.repoifySimple packageOverrides;
   closureYaml = callPackage ./package-closure.nix {
     inherit
@@ -92,9 +89,6 @@ let
       packageImplications
       ;
     packageOverrides = packageOverridesRepoified;
-  };
-  stdlibInfos = callPackage ./stdlib-infos.nix {
-    inherit julia;
   };
 
   # Generate a Nix file consisting of a map from dependency UUID --> package info with fetchgit call:
@@ -187,27 +181,6 @@ let
           "${dependencyUuidToRepoYaml}" \
           "$out"
       '';
-  project =
-    runCommand "julia-project"
-      {
-        buildInputs = [
-          (python3.withPackages (
-            ps: with ps; [
-              toml
-              pyyaml
-            ]
-          ))
-          git
-        ];
-      }
-      ''
-        python ${./python}/project.py \
-          "${closureYaml}" \
-          "${stdlibInfos}" \
-          '${lib.generators.toJSON { } overridesOnly}' \
-          "${dependencyUuidToRepoYaml}" \
-          "$out"
-      '';
 
   # Next, deal with artifacts. Scan each artifacts file individually and generate a Nix file that
   # produces the desired Overrides.toml.
@@ -247,7 +220,7 @@ let
         ;
     }
     // lib.optionalAttrs (!stdenv.targetPlatform.isDarwin) {
-      inherit gcc glibc;
+      inherit glibc;
     }
   );
   overridesJson = writeTextFile {
@@ -262,7 +235,8 @@ let
           "$out"
       '';
 
-  # Build a Julia project and depot under $out/project and $out/depot respectively
+  # Build a Julia project and depot. The project contains Project.toml/Manifest.toml, while the
+  # depot contains package build products (including the precompiled libraries, if precompile=true)
   projectAndDepot = callPackage ./depot.nix {
     inherit
       closureYaml
@@ -273,8 +247,12 @@ let
       precompile
       ;
     julia = juliaWrapped;
-    inherit project;
     registry = minimalRegistry;
+    packageNames =
+      if makeTransitiveDependenciesImportable then
+        lib.mapAttrsToList (uuid: info: info.name) dependencyUuidToInfo
+      else
+        packageNames;
   };
 
 in
@@ -298,9 +276,7 @@ runCommand "julia-${julia.version}-env"
       inherit artifactsNix;
       inherit overridesJson;
       inherit overridesToml;
-      inherit project;
       inherit projectAndDepot;
-      inherit stdlibInfos;
     };
   }
   (

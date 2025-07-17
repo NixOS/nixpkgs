@@ -25,7 +25,6 @@
   tenacity,
   textx,
   toml,
-  tzdata,
   wrapt,
   wurlitzer,
   xdg-base-dirs,
@@ -36,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.72.1";
+  version = "0.69.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${version}";
-    hash = "sha256-6BUdF2l/C0Zim7ei/t4DKs4RUIDMWikhZmhattYrXmg=";
+    hash = "sha256-uVcoGIfxz+jKirnE3giST/v20eA5pq+LHgrsRb5b+Lc=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +67,6 @@ buildPythonPackage rec {
     tenacity
     textx
     toml
-    tzdata
     wrapt
     wurlitzer
     xdg-base-dirs
@@ -110,7 +108,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    # missing utitools dependency
-    broken = true && stdenv.hostPlatform.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

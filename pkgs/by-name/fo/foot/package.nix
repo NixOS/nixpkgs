@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.24.0";
+  version = "1.23.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     tag = version;
-    hash = "sha256-uex2p28rKBwnqPjO1Pen1GA3a9mEnrcpIb1oIUJv/Lk=";
+    hash = "sha256-B7EKEIb6qA9UTRq0jdj1ShLhnldU0pwQPlkq6JrHWmI=";
   };
 
   separateDebugInfo = true;
@@ -113,17 +113,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    wayland-scanner
-    meson
-    ninja
-    ncurses
-    scdoc
-    pkg-config
-  ]
-  ++ lib.optionals (compilerName == "clang") [
-    stdenv.cc.cc.libllvm.out
-  ];
+  nativeBuildInputs =
+    [
+      wayland-scanner
+      meson
+      ninja
+      ncurses
+      scdoc
+      pkg-config
+    ]
+    ++ lib.optionals (compilerName == "clang") [
+      stdenv.cc.cc.libllvm.out
+    ];
 
   buildInputs = [
     tllist

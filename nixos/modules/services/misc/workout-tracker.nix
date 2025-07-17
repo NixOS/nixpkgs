@@ -67,8 +67,7 @@ in
         WT_BIND = "${cfg.address}:${toString cfg.port}";
         WT_DATABASE_DRIVER = "sqlite";
         WT_DSN = "./database.db";
-      }
-      // cfg.settings;
+      } // cfg.settings;
       serviceConfig = {
         ExecStart = lib.getExe cfg.package;
         DynamicUser = true;

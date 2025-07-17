@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Python implementation of the Encoding for Robust Immutable Storage (ERIS)";
     homepage = "https://eris.codeberg.page/python-eris/";
     license = [ lib.licenses.agpl3Plus ];
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

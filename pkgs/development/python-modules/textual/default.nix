@@ -29,32 +29,32 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-awieNrdyORLxQU52rmon/jftzt/A4+HMbMpa6V0HaG8=";
+    hash = "sha256-rVDr4Snp5qnErxWRM9yoxnzzX8gg8nD3RbBkL1rmgqI=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    markdown-it-py
-    platformdirs
-    rich
-    typing-extensions
-  ]
-  ++ markdown-it-py.optional-dependencies.plugins
-  ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies =
+    [
+      markdown-it-py
+      platformdirs
+      rich
+      typing-extensions
+    ]
+    ++ markdown-it-py.optional-dependencies.plugins
+    ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ]
-    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
@@ -95,5 +95,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
+    # https://github.com/Textualize/textual/issues/5868
+    broken = true;
   };
 }

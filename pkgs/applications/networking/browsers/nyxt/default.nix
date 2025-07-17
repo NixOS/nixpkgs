@@ -28,7 +28,6 @@
   xclip,
   wl-clipboard,
   nix-update-script,
-  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -105,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) nyxt; };
   };
 
   meta = with lib; {

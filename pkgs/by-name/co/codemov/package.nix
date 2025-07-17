@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "0-unstable-2023-08-08";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "sloganking";
@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-nOqh8kXS5mx0AM4NvIcwvC0lAZRHsQwrxI0c+9PeroU=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-lelmkdbqKRjSkJIkF5TWJ6LyCTo2j11hZf9QxIPBoOo=";
 
   cargoPatches = [
@@ -51,11 +52,11 @@ rustPlatform.buildRustPackage {
       }
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Create a video of how a git repository's code changes over time";
     homepage = "https://github.com/sloganking/codemov";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "codemov";
   };
 }

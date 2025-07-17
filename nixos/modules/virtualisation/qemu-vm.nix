@@ -20,17 +20,25 @@ let
 
   cfg = config.virtualisation;
 
+  opt = options.virtualisation;
+
   qemu = cfg.qemu.package;
 
   hostPkgs = cfg.host.pkgs;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
-  driveOptions =
+  driveOpts =
     { ... }:
     {
 
       options = {
+
+        file = mkOption {
+          type = types.str;
+          description = "The file image used for this drive.";
+        };
+
         driveExtraOpts = mkOption {
           type = types.attrsOf types.str;
           default = { };
@@ -186,7 +194,6 @@ let
           -L ${nixStoreFilesystemLabel} \
           -U eb176051-bd15-49b7-9e6b-462e0b467019 \
           -T 0 \
-          --hard-dereference \
           --tar=f \
           "$TMPDIR"/store.img
 
@@ -291,9 +298,7 @@ let
 
     ${lib.pipe cfg.emptyDiskImages [
       (lib.imap0 (
-        idx:
-        { size, ... }:
-        ''
+        idx: size: ''
           test -e "empty${builtins.toString idx}.qcow2" || ${qemu}/bin/qemu-img create -f qcow2 "empty${builtins.toString idx}.qcow2" "${builtins.toString size}M"
         ''
       ))
@@ -471,21 +476,7 @@ in
     };
 
     virtualisation.emptyDiskImages = mkOption {
-      type = types.listOf (
-        types.coercedTo types.ints.positive (size: { inherit size; }) (
-          types.submodule {
-            options.size = mkOption {
-              type = types.ints.positive;
-              description = "The size of the disk in MiB";
-            };
-            options.driveConfig = mkOption {
-              type = lib.types.submodule driveOptions;
-              default = { };
-              description = "Drive configuration to pass to {option}`virtualisation.qemu.drives`";
-            };
-          }
-        )
-      );
+      type = types.listOf types.ints.positive;
       default = [ ];
       description = ''
         Additional disk images to provide to the VM. The value is
@@ -837,18 +828,7 @@ in
       };
 
       drives = mkOption {
-        type = types.listOf (
-          types.submodule {
-            imports = [ driveOptions ];
-
-            options = {
-              file = mkOption {
-                type = types.str;
-                description = "The file image used for this drive.";
-              };
-            };
-          }
-        );
+        type = types.listOf (types.submodule driveOpts);
         description = "Drives passed to qemu.";
       };
 
@@ -1205,7 +1185,8 @@ in
     '';
 
     boot.initrd.availableKernelModules =
-      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
+      optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1329,16 +1310,10 @@ in
           driveExtraOpts.format = "raw";
         }
       ])
-      (imap0 (
-        idx: imgCfg:
-        lib.mkMerge [
-          {
-            file = "$(pwd)/empty${toString idx}.qcow2";
-            driveExtraOpts.werror = "report";
-          }
-          imgCfg.driveConfig
-        ]
-      ) cfg.emptyDiskImages)
+      (imap0 (idx: _: {
+        file = "$(pwd)/empty${toString idx}.qcow2";
+        driveExtraOpts.werror = "report";
+      }) cfg.emptyDiskImages)
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
@@ -1362,8 +1337,7 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
-          ]
-          ++ lib.optional (tag == "nix-store") "cache=loose";
+          ] ++ lib.optional (tag == "nix-store") "cache=loose";
         };
       in
       lib.mkMerge [

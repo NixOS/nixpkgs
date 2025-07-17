@@ -55,8 +55,7 @@ lib.extendMkDerivation {
     {
       env = {
         LC_ALL = "en_US.UTF-8";
-      }
-      // env;
+      } // env;
 
       inherit dontUnpack strictDeps __structuredAttrs;
 
@@ -99,13 +98,11 @@ lib.extendMkDerivation {
 
       passthru = {
         inherit graalvmDrv;
-      }
-      // passthru;
+      } // passthru;
 
       meta = {
         # default to graalvm's platforms
         inherit (graalvmDrv.meta) platforms;
-      }
-      // meta;
+      } // meta;
     };
 }

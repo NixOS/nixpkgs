@@ -59,11 +59,7 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   configurePhase = ''
-    runHook preConfigure
-
     ./configure
-
-    runHook postConfigure
   '';
 
   buildPhase = ''

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
-  writableTmpDirAsHomeHook,
   go-task,
 }:
 
@@ -13,25 +12,22 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.3.1";
+    version = "1.2.2";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
       tag = "v${version}";
-      hash = "sha256-vUa/Mgztyu5jKVIIhp+Cg79n+ulN94mlfVpxecRb6PA=";
+      hash = "sha256-zP0N9QfyaKCFP413S2rlrWwqVdfhdcxAgcxsAO/mfpE=";
     };
 
-    nativeBuildInputs = [
-      installShellFiles
-      writableTmpDirAsHomeHook
-    ];
+    nativeBuildInputs = [ installShellFiles ];
 
     nativeCheckInputs = [ go-task ];
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-msv+ZG6uabTtPDVcRksRd8UTSpoztMKw3YGxvhJr26w=";
+    vendorHash = "sha256-BOB9K5N4ELLWdSHCNdFYCypbEyoZz2dOz9wouwP7AHw=";
 
     postPatch =
       let
@@ -64,14 +60,15 @@ let
       "-w"
       "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
       "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export HOME="$(mktemp -d)"
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
         --fish <($out/bin/arduino-cli completion fish)
+      unset HOME
     '';
 
     meta = {

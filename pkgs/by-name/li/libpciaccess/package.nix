@@ -29,13 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs = [
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isNetBSD [
-    netbsd.libarch
-    netbsd.libpci
-  ];
+  buildInputs =
+    [ zlib ]
+    ++ lib.optionals stdenv.hostPlatform.isNetBSD [
+      netbsd.libarch
+      netbsd.libpci
+    ];
 
   mesonFlags = [
     (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")

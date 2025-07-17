@@ -5,7 +5,6 @@
   sqlite,
   libtensorflow,
   withTensorflow ? false,
-  nixosTests,
 }:
 buildGoModule rec {
   pname = "snips-sh";
@@ -23,10 +22,8 @@ buildGoModule rec {
 
   buildInputs = [ sqlite ] ++ (lib.optional withTensorflow libtensorflow);
 
-  passthru.tests = nixosTests.snips-sh;
-
   meta = {
-    description = "Passwordless, anonymous SSH-powered pastebin with a human-friendly TUI and web UI";
+    description = "passwordless, anonymous SSH-powered pastebin with a human-friendly TUI and web UI";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     homepage = "https://snips.sh";

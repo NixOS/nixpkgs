@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "genie-partner-sdk";
-  version = "1.0.11";
+  version = "1.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "genie_partner_sdk";
-    hash = "sha256-eNeN+mtpPzY6p0iVo/ot0eLza/aeJP70PxNHx7/MVoY=";
+    hash = "sha256-JxsUaC7WgspUU9ngIc4GOjFr/lHjD2+5YlcLXtJH6LE=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "genie_partner_sdk" ];
 
-  meta = {
-    description = "SDK to interact with the AladdinConnect (or OHD) partner API";
+  meta = with lib; {
+    description = "An SDK to interact with the AladdinConnect (or OHD) partner API";
     homepage = "https://github.com/Genie-Garage/aladdin-python-sdk";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jamiemagee ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jamiemagee ];
   };
 }

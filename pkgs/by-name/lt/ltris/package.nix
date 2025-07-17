@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ltris";
-  version = "2.0.4";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/ltris2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-SCFQSV+dh7sTnVrxq+xwMDg8N/2z51pF6brWfq15jto=";
+    hash = "sha256-+w8WTASYj/AWcBg9W3dmZ0cyCmlZNhDZ0l/WwhRfJRk=";
   };
 
   buildInputs = [
@@ -28,8 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru.updateScript = directoryListingUpdater {
-    pname = "ltris2";
-    inherit (finalAttrs) version;
+    inherit (finalAttrs) pname version;
     url = "https://lgames.sourceforge.io/LTris/";
     extraRegex = "(?!.*-win(32|64)).*";
   };

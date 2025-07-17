@@ -4,7 +4,9 @@
   fetchFromGitLab,
   testers,
   gitUpdater,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   pkg-config,
   libpng,
 }:
@@ -26,9 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    libtool
     pkg-config
   ];
+
+  preConfigure = "autoreconf --install";
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "kajiki";
-  version = "1.0.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jackrosenthal";
     repo = "kajiki";
     tag = "v${version}";
-    hash = "sha256-5qsRxKeWCndi2r1HaIX/bm92oOWU4J4eM9aud6ai8ZQ=";
+    hash = "sha256-EbXe4Jh2IKAYw9GE0kFgKVv9c9uAOiFFYaMF8CGaOfg=";
   };
 
   propagatedBuildInputs = [ linetable ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     description = "Module provides fast well-formed XML templates";
     mainProgram = "kajiki";
     homepage = "https://github.com/nandoflorestan/kajiki";
-    changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/${src.tag}";
+    changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

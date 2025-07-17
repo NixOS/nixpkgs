@@ -35,14 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [
-    libusb-compat-0_1
-    ncurses
-  ]
-  ++ lib.optionals usePython [
-    python
-    swig
-  ];
+  buildInputs =
+    [
+      libusb-compat-0_1
+      ncurses
+    ]
+    ++ lib.optionals usePython [
+      python
+      swig
+    ];
 
   propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 

@@ -16,21 +16,22 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "iqtree";
     repo = "iqtree2";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-8d5zqZIevv3bnq7z7Iyo/x8i445y1RAFtRMeK8s/ieQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-    eigen
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      boost
+      eigen
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
 
   meta = with lib; {
     homepage = "http://www.iqtree.org/";

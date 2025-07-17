@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swappy";
-  version = "1.8.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "jtheoof";
     repo = "swappy";
     rev = "v${version}";
-    hash = "sha256-rPe567ajk/umfZ2HHm+pRxpbMOTyUmqd+22kwDSFMTc=";
+    hash = "sha256-/XPvy98Il4i8cDl9vH6f0/AZmiSqseSXnen7HfMqCDo=";
   };
 
   nativeBuildInputs = [

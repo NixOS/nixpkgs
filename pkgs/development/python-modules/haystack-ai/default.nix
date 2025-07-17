@@ -91,14 +91,14 @@
 
 buildPythonPackage rec {
   pname = "haystack-ai";
-  version = "2.16.1";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
     tag = "v${version}";
-    hash = "sha256-Z5T5X92Hig7nW1fUc8b+LuegJlIZbMfyjJ0PnVudPew=";
+    hash = "sha256-h/4KskpzO3+e6aLQlBb8yitmfdbdc+J6Hz6TMs8bnr8=";
   };
 
   nativeBuildInputs = [

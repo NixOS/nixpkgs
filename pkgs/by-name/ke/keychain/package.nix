@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keychain";
-  version = "2.9.6";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "funtoo";
     repo = "keychain";
     rev = version;
-    sha256 = "sha256-R70W8/tE4suGgiSqkJ1RJ0fJ3C+exdoVesXtvxPORVo=";
+    sha256 = "sha256-mKYDSCaDYXUIiDi9EGkAu8gW4sEcUtR8mJ2LW4FFycQ=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Manage SSH and GPG keys in a convenient and secure manner";
+    description = "Keychain management tool";
     longDescription = ''
       Keychain helps you to manage SSH and GPG keys in a convenient and secure
       manner. It acts as a frontend to ssh-agent and ssh-add, but allows you

@@ -6,8 +6,6 @@
     machine =
       { pkgs, ... }:
       {
-        systemd.services.technitium-dns-server.serviceConfig.Restart = lib.mkForce "no";
-
         services.technitium-dns-server = {
           enable = true;
           openFirewall = true;

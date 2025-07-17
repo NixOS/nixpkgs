@@ -32,15 +32,16 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
-  buildInputs = [
-    alsa-lib
-    dbus
-    libjack2
-  ]
-  ++ (with python3Packages; [
-    python
-    dbus-python
-  ]);
+  buildInputs =
+    [
+      alsa-lib
+      dbus
+      libjack2
+    ]
+    ++ (with python3Packages; [
+      python
+      dbus-python
+    ]);
 
   postInstall = ''
     wrapProgram $out/bin/a2j_control --set PYTHONPATH $PYTHONPATH

@@ -27,8 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     arpeggio
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook

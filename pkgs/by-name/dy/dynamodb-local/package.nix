@@ -86,6 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     mainProgram = "dynamodb-local";
     maintainers = with maintainers; [
+      shyim
       martinjlowm
     ];
     platforms = platforms.all;

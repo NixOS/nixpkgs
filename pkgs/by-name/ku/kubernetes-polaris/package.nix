@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kubernetes-polaris";
-  version = "10.1.1";
+  version = "9.6.4";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
     rev = version;
-    sha256 = "sha256-1viEKPU+V+VqFDnrtjSTvNLtgE3TB1ijKv1YOz6AAUo=";
+    sha256 = "sha256-ymChgk3r1m4B6jiX3cL+vo4KzmvzsjUxA0t/MjfYvrU=";
   };
 
-  vendorHash = "sha256-4eznwhNf3anhs+GlZGrHJWAproej0dO2NbzfhJeReNY=";
+  vendorHash = "sha256-F7QGVowpwRyHxvgKYtuSqH2A/IH2Bvxr3vU78PNN0Z0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +27,7 @@ buildGoModule rec {
     "-X main.Commit=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd polaris \
       --bash <($out/bin/polaris completion bash) \
       --fish <($out/bin/polaris completion fish) \

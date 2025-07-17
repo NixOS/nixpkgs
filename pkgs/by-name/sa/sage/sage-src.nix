@@ -34,24 +34,25 @@ stdenv.mkDerivation rec {
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
-  nixPatches = [
-    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
-    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
-    ./patches/sphinx-docbuild-subprocesses.patch
+  nixPatches =
+    [
+      # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+      # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+      ./patches/sphinx-docbuild-subprocesses.patch
 
-    # After updating smypow to (https://github.com/sagemath/sage/issues/3360)
-    # we can now set the cache dir to be within the .sage directory. This is
-    # not strictly necessary, but keeps us from littering in the user's HOME.
-    ./patches/sympow-cache.patch
-  ]
-  ++ lib.optionals (stdenv.cc.isClang) [
-    # https://github.com/NixOS/nixpkgs/pull/264126
-    # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
-    ./patches/silence-linker.patch
+      # After updating smypow to (https://github.com/sagemath/sage/issues/3360)
+      # we can now set the cache dir to be within the .sage directory. This is
+      # not strictly necessary, but keeps us from littering in the user's HOME.
+      ./patches/sympow-cache.patch
+    ]
+    ++ lib.optionals (stdenv.cc.isClang) [
+      # https://github.com/NixOS/nixpkgs/pull/264126
+      # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
+      ./patches/silence-linker.patch
 
-    # Stack overflows during doctests; this does not change functionality.
-    ./patches/disable-singular-doctest.patch
-  ];
+      # Stack overflows during doctests; this does not change functionality.
+      ./patches/disable-singular-doctest.patch
+    ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
@@ -81,20 +82,6 @@ stdenv.mkDerivation rec {
       name = "scipy-1.16-update.patch";
       url = "https://github.com/sagemath/sage/commit/d0cbe9d353722580f98a327694f1a361c9b83ccd.patch?full_index=1";
       hash = "sha256-uV2nttxCKDsNqMf1O+lUmuoiDrx7/CfiS00JBb9kiM8=";
-    })
-
-    # https://github.com/sagemath/sage/pull/40156, landed in 10.7.beta5
-    (fetchpatch2 {
-      name = "cython-3.1-update.patch";
-      url = "https://github.com/sagemath/sage/commit/5ea8db28977ec113aec3c4c4b208d1783e3937a7.patch?full_index=1";
-      hash = "sha256-5DPPxMuidPpVHrjK8j0UVZzuwiVy9vQzFd6hBYwNAok=";
-    })
-
-    # https://github.com/sagemath/sage/pull/40175, landed in 10.7.beta8
-    (fetchpatch2 {
-      name = "rpy2-3.6-update.patch";
-      url = "https://github.com/sagemath/sage/commit/db2d8db99d9a7dfa1972d534ecd89e3d2ba5c55b.patch?full_index=1";
-      hash = "sha256-6Bk0uGlKFsiDsgv+ljMC1YnmAT+g+he6aFNkpvw2on0=";
     })
   ];
 

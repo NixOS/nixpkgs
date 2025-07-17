@@ -57,8 +57,6 @@ let
 in
 rec {
 
-  inherit mkDictFromChromium;
-
   # ENGLISH
 
   en_US = en-us;
@@ -91,14 +89,5 @@ rec {
     shortName = "fr-fr";
     dictFileName = "fr-FR-3-0.bdic";
     shortDescription = "French (France)";
-  };
-
-  # SWEDISH
-
-  sv_SE = sv-se;
-  sv-se = mkDictFromChromium {
-    shortName = "sv-se";
-    dictFileName = "sv-SE-3-0.bdic";
-    shortDescription = "Swedish (Sweden)";
   };
 }

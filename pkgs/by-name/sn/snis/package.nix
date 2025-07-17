@@ -14,9 +14,6 @@ buildEnv {
     snis-assets
   ];
 
-  # Basic assets are also distributed in the main repo
-  ignoreCollisions = true;
-
   pathsToLink = [
     "/"
     "/bin"

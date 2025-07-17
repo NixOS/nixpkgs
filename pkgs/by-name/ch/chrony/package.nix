@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.8";
+  version = "4.7";
 
   src = fetchurl {
     url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-M+qOsqTa6qUG6Pyv1dbYkCftby8GCWRcbxSbVg0wFwY=";
+    hash = "sha256-wN5BqMBR5dMrEBtfcBS5jKl4sY5ZLzDOaEC21GAtlHs=";
   };
 
   outputs = [
@@ -28,23 +28,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    gnutls
-    libedit
-    texinfo
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libcap
-    libseccomp
-    pps-tools
-  ];
+  buildInputs =
+    [
+      gnutls
+      libedit
+      texinfo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+      libseccomp
+      pps-tools
+    ];
 
   configureFlags = [
     "--enable-ntp-signd"
     "--sbindir=$(out)/bin"
     "--chronyrundir=/run/chrony"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
 
   patches = [
     # Cleanup the installation script

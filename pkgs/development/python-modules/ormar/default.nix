@@ -49,17 +49,18 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    databases
-    psycopg2
-    pydantic
-    sqlalchemy
-    psycopg2
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      databases
+      psycopg2
+      pydantic
+      sqlalchemy
+      psycopg2
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
   optional-dependencies = {
     postgresql = [ asyncpg ];
@@ -88,8 +89,7 @@ buildPythonPackage rec {
     httpx
     nest-asyncio
     pytest-asyncio
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 

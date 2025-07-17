@@ -45,7 +45,7 @@ buildPythonPackage rec {
     "test_initialize_method_cache_valid_types"
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "getmac" ];
 

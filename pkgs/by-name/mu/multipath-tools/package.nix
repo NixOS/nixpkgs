@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multipath-tools";
-  version = "0.12.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     tag = finalAttrs.version;
-    hash = "sha256-Jeiy1bM7vuy2+r/0W1nAhgsncyV6QHdlV55aepAxHAg=";
+    hash = "sha256-H5DY15On3mFwUHQhmC9s2thm0TUUIZbXM/Ot2FPL41Y=";
   };
 
   nativeBuildInputs = [

@@ -73,9 +73,7 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  # Condition on darwin to avoid breaking eval for darwin in CI,
-  # even though darwin is not supported anyway.
-  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
+  adapters = [
     stdenvAdapters.useMoldLinker
   ];
 
@@ -91,14 +89,14 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.51.0";
+  version = "0.50.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aZCTbfKkxsEinY5V7R0NYuuitKLYc8ig8T91+yDMGJ0=";
+    hash = "sha256-mXpj4jmQ4vwVPnsqqoQj87ZY2b1C4TFQlSOhYrjXeDI=";
   };
 
   postPatch = ''

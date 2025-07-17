@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
     libsndfile
     mpg123
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   meta = {
     description = "GZDoom's music system as a standalone library";

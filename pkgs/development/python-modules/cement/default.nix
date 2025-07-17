@@ -56,8 +56,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     requests
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cement" ];
 

@@ -38,7 +38,6 @@ python3Packages.buildPythonApplication rec {
         ropebwt2
       ]
     }"
-    "--set PYTHONPATH $PYTHONPATH"
   ];
 
   meta = {

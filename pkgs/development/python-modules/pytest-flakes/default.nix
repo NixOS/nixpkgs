@@ -35,6 +35,6 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-flakes";
-    description = "Pytest plugin to check source code with pyflakes";
+    description = "pytest plugin to check source code with pyflakes";
   };
 }

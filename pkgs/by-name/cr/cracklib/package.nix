@@ -1,82 +1,70 @@
+let
+  version = "2.10.0";
+in
 {
   stdenv,
   lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  zlib,
-  bash,
   buildPackages,
-  nix-update-script,
-  pkgsCross,
-  pkgsStatic,
+  fetchurl,
+  zlib,
+  gettext,
+  fetchpatch2,
+  lists ? [
+    (fetchurl {
+      url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
+      hash = "sha256-JDLo/bSLIijC2DUl+8Q704i2zgw5cxL6t68wvuivPpY=";
+    })
+  ],
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "cracklib";
-  version = "2.10.3";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "cracklib";
-    repo = "cracklib";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ORpJje4TGw1STtvRiNEwUwSDbLXdS+WgXGlc1Wtf/gw=";
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    hash = "sha256-cAw5YMplCx6vAhfWmskZuBHyB1o4dGd7hMceOG3V51Y=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  outputs = [
-    "bin"
-    "out"
-    "dev"
-    "man"
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fixes build failure on Darwin due to missing byte order functions.
+    # https://github.com/cracklib/cracklib/pull/96
+    (fetchpatch2 {
+      url = "https://github.com/cracklib/cracklib/commit/dff319e543272c1fb958261cf9ee8bb82960bc40.patch";
+      hash = "sha256-QaWpEVV6l1kl4OIkJAqkXPVThbo040Rv9X2dY/+syqs=";
+      stripLen = 1;
+    })
   ];
 
-  strictDeps = true;
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [
-    autoreconfHook
-  ]
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.cracklib ];
-
+  nativeBuildInputs = lib.optional (
+    stdenv.hostPlatform != stdenv.buildPlatform
+  ) buildPackages.cracklib;
   buildInputs = [
     zlib
-    bash
+    gettext
   ];
 
-  configureFlags = [
-    "--without-python"
-  ];
-
-  postInstall =
-    # For cross compilation use the tools from nativeBuildInputs. Otherwise use
-    # the ones in the util directory of the source tree.
+  postPatch =
     lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      PATH=$PATH:util
+      chmod +x util/cracklib-format
+      patchShebangs util
+
     ''
     + ''
-      cracklib-format $out/share/cracklib/cracklib-small \
-      | cracklib-packer $out/share/cracklib/pw_dict
+      ln -vs ${toString lists} dicts/
     '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests = {
-      cross =
-        let
-          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
-        in
-        pkgsCross.${systemString}.cracklib;
-      static = pkgsStatic.cracklib;
-    };
-  };
+  postInstall = ''
+    make dict-local
+  '';
+  doInstallCheck = true;
+  installCheckTarget = "test";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/cracklib/cracklib";
-    description = "Password checking library";
-    changelog = "https://github.com/cracklib/cracklib/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ lovek323 ];
-    platforms = lib.platforms.unix;
+    description = "Library for checking the strength of passwords";
+    license = licenses.lgpl21; # Different license for the wordlist: http://www.openwall.com/wordlists
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
   };
-})
+}

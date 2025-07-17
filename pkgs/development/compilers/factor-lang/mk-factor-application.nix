@@ -85,8 +85,7 @@ in
     nativeBuildInputs = [
       makeWrapper
       (lib.hiPrio finalAttrs.wrapped-factor)
-    ]
-    ++ attrs.nativeBuildInputs or [ ];
+    ] ++ attrs.nativeBuildInputs or [ ];
 
     buildInputs = (lib.optional enableUI gdk-pixbuf) ++ attrs.buildInputs or [ ];
 
@@ -132,13 +131,11 @@ in
 
     passthru = {
       vocab = finalAttrs.src;
-    }
-    // attrs.passthru or { };
+    } // attrs.passthru or { };
 
     meta = {
       platforms = wrapped-factor.meta.platforms;
       mainProgram = finalAttrs.binName;
-    }
-    // attrs.meta or { };
+    } // attrs.meta or { };
   }
 )

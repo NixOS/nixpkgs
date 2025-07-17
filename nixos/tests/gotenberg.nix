@@ -7,9 +7,6 @@
   nodes.machine = {
     services.gotenberg = {
       enable = true;
-      # fail the service if any of those does not come up
-      chromium.autoStart = true;
-      libreoffice.autoStart = true;
     };
   };
 

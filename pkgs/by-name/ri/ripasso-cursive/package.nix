@@ -9,7 +9,6 @@
   installShellFiles,
   pkg-config,
   python3,
-  writableTmpDirAsHomeHook,
 
   # buildInputs
   libgpg-error,
@@ -20,17 +19,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   version = "0.7.0";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    tag = "release-${finalAttrs.version}";
+    tag = "release-${version}";
     hash = "sha256-j98X/+UTea4lCtFfMpClnfcKlvxm4DpOujLc0xc3VUY=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-4/87+SOUXLoOxd3a4Kptxa98mh/BWlEhK55uu7+Jrec=";
 
   patches = [
@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     python3
     rustPlatform.bindgenHook
-    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -55,6 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     xorg.libxcb
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the darwin sandbox with:
@@ -79,4 +82,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ sgo ];
     platforms = lib.platforms.unix;
   };
-})
+}

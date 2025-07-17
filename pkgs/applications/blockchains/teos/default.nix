@@ -30,6 +30,7 @@ in
     pname = "teos";
     inherit version src;
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "teos";
@@ -52,6 +53,7 @@ in
     pname = "teos-watchtower-plugin";
     inherit version src;
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "watchtower-plugin";

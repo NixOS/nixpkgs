@@ -9,7 +9,6 @@
 
   # runtime
   packaging,
-  platformdirs,
 
   # tests
   pytestCheckHook,
@@ -17,23 +16,22 @@
 
 let
   pname = "findpython";
-  version = "0.7.0";
+  version = "0.6.3";
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-izFkfHY1J3mjwaCAZpm2jmp73AtcLd2a8qB6DUDGc9w=";
+    hash = "sha256-WGPqVVVtiq3Gk0gaFKxPNiSVJxnvwcVZGrsLSp6WXJQ=";
   };
 
-  build-system = [ pdm-backend ];
+  nativeBuildInputs = [ pdm-backend ];
 
-  dependencies = [
-    packaging
-    platformdirs
-  ];
+  propagatedBuildInputs = [ packaging ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

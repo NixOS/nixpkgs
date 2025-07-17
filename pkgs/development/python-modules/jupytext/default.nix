@@ -76,8 +76,7 @@ buildPythonPackage rec {
     nbformat
     packaging
     pyyaml
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     jupyter-client

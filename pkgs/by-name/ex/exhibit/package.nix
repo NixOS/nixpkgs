@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     pygobject3
-    f3d
+    f3d_egl
   ];
 
   dontWrapGApps = true;

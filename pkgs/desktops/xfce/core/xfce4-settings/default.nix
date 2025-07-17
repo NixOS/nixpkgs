@@ -27,39 +27,41 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.20.2";
+  version = "4.20.1";
 
-  sha256 = "sha256-hx1ilXPcwWWDwNR/k2b+9vR5aCv9UlPR0d42OE6JxEk=";
+  sha256 = "sha256-9BFO1cN0etDHJzkGHl5GKL2qzJTlpaP/qfvfz6KWaMI=";
 
   nativeBuildInputs = [
     wayland-scanner
   ];
 
-  buildInputs = [
-    exo
-    garcon
-    glib
-    gtk3
-    gtk-layer-shell
-    libnotify
-    libX11
-    libXext
-    libxfce4ui
-    libxfce4util
-    libxklavier
-    wlr-protocols
-    xf86inputlibinput
-    xfconf
-  ]
-  ++ lib.optionals withUpower [ upower ]
-  ++ lib.optionals withColord [ colord ];
+  buildInputs =
+    [
+      exo
+      garcon
+      glib
+      gtk3
+      gtk-layer-shell
+      libnotify
+      libX11
+      libXext
+      libxfce4ui
+      libxfce4util
+      libxklavier
+      wlr-protocols
+      xf86inputlibinput
+      xfconf
+    ]
+    ++ lib.optionals withUpower [ upower ]
+    ++ lib.optionals withColord [ colord ];
 
-  configureFlags = [
-    "--enable-pluggable-dialogs"
-    "--enable-sound-settings"
-  ]
-  ++ lib.optionals withUpower [ "--enable-upower-glib" ]
-  ++ lib.optionals withColord [ "--enable-colord" ];
+  configureFlags =
+    [
+      "--enable-pluggable-dialogs"
+      "--enable-sound-settings"
+    ]
+    ++ lib.optionals withUpower [ "--enable-upower-glib" ]
+    ++ lib.optionals withColord [ "--enable-colord" ];
 
   meta = with lib; {
     description = "Settings manager for Xfce";

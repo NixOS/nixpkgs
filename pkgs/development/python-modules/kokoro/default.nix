@@ -36,8 +36,7 @@ buildPythonPackage {
     numpy
     torch
     transformers
-  ]
-  ++ misaki.optional-dependencies.en; # kokoro depends on misaki[en]
+  ] ++ misaki.optional-dependencies.en; # kokoro depends on misaki[en]
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -2,19 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  absl-py,
+  fetchpatch,
   chex,
-  jax,
   jaxlib,
   numpy,
   tensorflow-probability,
-
-  # tests
   dm-haiku,
   pytest-xdist,
   pytestCheckHook,
@@ -22,24 +14,27 @@
 
 buildPythonPackage rec {
   pname = "distrax";
-  version = "0.1.7";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "distrax";
     tag = "v${version}";
-    hash = "sha256-R6rGGNzup3O6eZ2z4vygYWTjroE/Irt3aog8Op+0hco=";
+    hash = "sha256-A1aCL/I89Blg9sNmIWQru4QJteUTN6+bhgrEJPmCrM0=";
   };
 
-  build-system = [
-    flit-core
+  patches = [
+    # TODO: remove at the next release (already on master)
+    (fetchpatch {
+      name = "fix-jax-0.6.0-compat";
+      url = "https://github.com/google-deepmind/distrax/commit/c02708ac46518fac00ab2945311e0f2ee32c672c.patch";
+      hash = "sha256-hFNXKoA1b5I6dzhwTRXp/SnkHv89GI6tYwlnBBHwG78=";
+    })
   ];
 
   dependencies = [
-    absl-py
     chex
-    jax
     jaxlib
     numpy
     tensorflow-probability

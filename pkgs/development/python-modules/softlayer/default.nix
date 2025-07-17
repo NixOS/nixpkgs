@@ -22,25 +22,28 @@
   sphinx,
   testtools,
   tkinter,
-  writableTmpDirAsHomeHook,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.2.7";
+  version = "6.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "softlayer";
     repo = "softlayer-python";
     tag = "v${version}";
-    hash = "sha256-mlC4o39Ol1ALguc9KGpxB0M0vhWz4LG2uwhW8CBrVgg=";
+    hash = "sha256-qBhnHFFlP4pqlN/SETXEqYyre/ap60wHe9eCfyiB+kA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "rich"
+  ];
 
   dependencies = [
     click
@@ -60,14 +63,21 @@ buildPythonPackage rec {
     sphinx
     testtools
     tkinter
-    writableTmpDirAsHomeHook
     zeep
   ];
 
-  disabledTestPaths = [
-    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
-    "tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
+  # Otherwise soap_tests.py will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+    "--deselect=tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
+  ];
+
+  disabledTestPaths = [
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
   ];
@@ -77,7 +87,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };

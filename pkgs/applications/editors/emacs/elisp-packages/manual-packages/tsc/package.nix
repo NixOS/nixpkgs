@@ -21,6 +21,7 @@ let
       hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
     };
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
 
     sourceRoot = "${src.name}/core";

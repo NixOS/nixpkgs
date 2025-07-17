@@ -7,9 +7,18 @@
   libtheora,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "theora";
-  inherit (ogg) version src;
+  version = "0.4.1";
+
+  duneVersion = "3";
+
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "ocaml-theora";
+    rev = "v${version}";
+    hash = "sha256-2FXB5BOBRQhnpEmdlYBdZZXuXW9K+1cu7akJQDuDAMc=";
+  };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [

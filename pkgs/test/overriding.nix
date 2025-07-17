@@ -312,11 +312,12 @@ in
 stdenvNoCC.mkDerivation {
   name = "test-overriding";
   passthru = { inherit tests; };
-  buildCommand = ''
-    touch $out
-  ''
-  + lib.concatMapAttrsStringSep "\n" (
-    name: t:
-    "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
-  ) tests;
+  buildCommand =
+    ''
+      touch $out
+    ''
+    + lib.concatMapAttrsStringSep "\n" (
+      name: t:
+      "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
+    ) tests;
 }

@@ -34,8 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
-  ]
-  ++ lib.optionals isPyPy [ tzdata ];
+  ] ++ lib.optionals isPyPy [ tzdata ];
 
   disabledTests = [
     # fails on days switching from and to daylight saving time in EST

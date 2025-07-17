@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zchunk";
-  version = "1.5.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = "zchunk";
     rev = finalAttrs.version;
-    hash = "sha256-TE3qNXHm6s1N7F1Rm2CcWFkyz6nywJktKJ3GL0tf2t8=";
+    hash = "sha256-X8qywx55TUVEOfYJMV5ARwyUdMjmN4hTmJQ6Upq5zyI=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];
 
   outputs = [
     "out"

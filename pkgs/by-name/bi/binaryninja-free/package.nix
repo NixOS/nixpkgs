@@ -18,13 +18,13 @@
   xcbutilwm,
   libxml2,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "binaryninja-free";
-  version = "5.1.8005";
+  version = "5.0.7486";
 
   src = fetchurl {
-    url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-vXR0TXcQwEoYz1qiGO3TYajUt+QR9wfV0es6yTZvYLs=";
+    url = "https://web.archive.org/web/20250526111956/https://cdn.binary.ninja/installers/binaryninja_free_linux.zip";
+    hash = "sha256-iZjIgokwnHJaY6OgrnDcto3Un5g42MqTWXKo6OL1Rcs=";
   };
 
   icon = fetchurl {
@@ -81,15 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     ln -s $out/binaryninja $out/bin/binaryninja
 
-    install -Dm644 ${finalAttrs.icon} $out/share/icons/hicolor/256x256/apps/binaryninja.png
+    install -Dm644 ${icon} $out/share/icons/hicolor/256x256/apps/binaryninja.png
 
     runHook postInstall
   '';
 
   meta = {
-    changelog = "https://binary.ninja/changelog/#${
-      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
-    }";
+    changelog = "https://binary.ninja/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
     description = "Interactive decompiler, disassembler, debugger";
     homepage = "https://binary.ninja/";
     license = {
@@ -101,4 +99,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ scoder12 ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}

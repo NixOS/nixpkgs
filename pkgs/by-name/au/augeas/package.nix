@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "augeas";
-    tag = "release-${version}";
+    rev = "release-${version}";
     fetchSubmodules = true;
     hash = "sha256-U5tm3LDUeI/idHtL2Zy33BigkyvHunXPjToDC59G9VE=";
   };

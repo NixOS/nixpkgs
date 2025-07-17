@@ -13,24 +13,22 @@
   gdk-pixbuf,
   librsvg,
   nix-update-script,
-  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.14-3";
+  version = "0.1.13-hotfix-2";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xycHf/3szP0NkSylAOxSQbaxt7Wc52Qg9N7g/YT+vT8=";
+    hash = "sha256-5ERCusCDf+GCwmJc5BrEK8Kn5ClMOILBStv17vyS7MQ=";
   };
 
   nativeBuildInputs = [
     pkg-config
     glib
-    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -45,14 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     librsvg
   ];
 
-  cargoHash = "sha256-Ci/k4g0Zrtzx2IhKt5MjLtim/2qZA4wLIO3AtQ+TkpY=";
+  cargoHash = "sha256-F2jXCJnj2kGPANXSzx65DfKxKgXtwR0xRNFZie6PYx0=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight and efficient application launcher for Wayland built with Rust and GTK4";
     homepage = "https://github.com/Skxxtz/sherlock";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.cc-by-nc-40;
     mainProgram = "sherlock";
     maintainers = with lib.maintainers; [ agvantibo ];
   };

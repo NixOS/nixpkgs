@@ -2,6 +2,9 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "ccache";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ehmry ];
+    };
 
     nodes.machine =
       { ... }:

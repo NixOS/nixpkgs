@@ -1,5 +1,5 @@
 {
-  stdenv,
+  gcc13Stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -17,7 +17,7 @@
   file included in the tarball
 */
 
-stdenv.mkDerivation {
+gcc13Stdenv.mkDerivation {
   pname = "cnijfilter";
 
   /*
@@ -50,8 +50,6 @@ stdenv.mkDerivation {
     libpng
     ghostscript
   ];
-
-  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
 
   patches = [
     ./patches/missing-include.patch

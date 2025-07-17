@@ -5,7 +5,6 @@
   meson,
   ninja,
   appstream,
-  gtksourceview5,
   desktop-file-utils,
   gobject-introspection,
   wrapGAppsHook4,
@@ -18,18 +17,17 @@
   webp-pixbuf-loader,
   libsoup_3,
   bash,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.9.0";
+  version = "1.6.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-iDldzS7LLJ/+CfKBpD50LW/YrZ2xb8aqZI9Bs1AOcCM=";
+    hash = "sha256-OfSqjxNfIk3dQZp4T6W1aL24FGEQKlFLGT+mV1+GR5o=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +42,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtksourceview5
     libadwaita
     libportal-gtk4
     libsoup_3
@@ -57,6 +54,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    substituteInPlace $out/share/gradia/gradia/ui/image_exporters.py --replace-fail "/bin/bash" "${lib.getExe bash}"
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
@@ -70,8 +68,6 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Make your screenshots ready for the world";

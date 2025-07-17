@@ -1,28 +1,25 @@
 {
-  lib,
   buildPythonPackage,
   callPackage,
   factory-boy,
   fetchFromGitHub,
-  setuptools,
+  lib,
   wagtail,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
-  version = "4.3.0";
-  pyproject = true;
+  version = "4.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "wagtail-factories";
     owner = "wagtail";
-    tag = "v${version}";
-    hash = "sha256-Rbu8D0vmUyF76YzF1QSQC5c0s12GxRrHNuUhMxcZdQY=";
+    tag = version;
+    sha256 = "sha256-jo8VwrmxHBJnORmuR6eTLrf/eupNL2vhXcw81EzfTxM=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     factory-boy
     wagtail
   ];
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Factory boy classes for wagtail";
     homepage = "https://github.com/wagtail/wagtail-factories";
-    changelog = "https://github.com/wagtail/wagtail-factories/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/wagtail/wagtail-factories/blob/${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ sephi ];
   };

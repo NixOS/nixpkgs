@@ -55,8 +55,7 @@ buildPythonPackage rec {
     moto
     mypy-boto3-ebs
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # https://github.com/RhinoSecurityLabs/dsnap/issues/26
   # ImportError: cannot import name 'mock_iam' from 'moto'

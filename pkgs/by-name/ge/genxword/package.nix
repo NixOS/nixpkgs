@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "genxword";
-  version = "2.2.0";
-  pyproject = true;
+  version = "2.1.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "riverrun";
     repo = "genxword";
-    tag = "v${version}";
-    hash = "sha256-vzzkXfMnkeTFQmTNAfCIKqVVNm1I6GSfRV1lwGmLj6Y=";
+    rev = "v${version}";
+    sha256 = "17h8saja45bv612yk0pra9ncbp2mjnx5n10q25nqhl765ks4bmb5";
   };
 
   nativeBuildInputs = [
@@ -50,11 +50,10 @@ python3.pkgs.buildPythonApplication rec {
   # there are no tests
   doCheck = false;
 
-  meta = {
-    homepage = "https://github.com/riverrun/genxword";
+  meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Crossword generator";
-    license = lib.licenses.gpl3Plus;
-    mainProgram = "genxword";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

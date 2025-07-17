@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-fjhLA+utQdgR75wg+/N4VwASW6+YBHglRPj14sPHmGA=";
 
   checkFlags = [

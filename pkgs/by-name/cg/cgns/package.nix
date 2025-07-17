@@ -32,14 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs = [
-    hdf5
-  ]
-  ++ lib.optionals withTools [
-    tk
-    xorg.libXmu
-    libGLU
-  ];
+  buildInputs =
+    [
+      hdf5
+    ]
+    ++ lib.optionals withTools [
+      tk
+      xorg.libXmu
+      libGLU
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "CGNS_ENABLE_FORTRAN" true)

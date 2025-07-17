@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "jdd";
-  version = "0.4.5";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "mahyarmirrashed";
     repo = "jdd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3keJrKbR3+J3z22W8Xoabz9YhvjRRBBMo59l/eJo7Hs=";
+    hash = "sha256-7iHoLv3DeqjXvcB7Nih+TMKwWYuausIP2Nhv00pfz0A=";
   };
 
-  vendorHash = "sha256-KEg5X2wHx7KPHEL1zJd/DeDnR69FyB6pajpHIYdep2k=";
+  vendorHash = "sha256-qwrmiVvmsi1uxHVIKuoMBPUK/Y5aYdUR3fUa5tOpNRY=";
 
   ldflags = [ "-X=main.version=${finalAttrs.version}" ];
 

@@ -61,19 +61,11 @@ def symlink_parents(p: Path) -> List[Path]:
     return out
 
 
-def get_required_system_features(parsed_drv: dict) -> List[str]:
-    # Newer versions of Nix (since https://github.com/NixOS/nix/pull/13263) store structuredAttrs
-    # in the derivation JSON output.
-    if "structuredAttrs" in parsed_drv:
-        return parsed_drv["structuredAttrs"].get("requiredSystemFeatures", [])
-
-    # Older versions of Nix store structuredAttrs in the env as a JSON string.
-    drv_env = parsed_drv.get("env", {})
+def get_strings(drv_env: dict, name: str) -> List[str]:
     if "__json" in drv_env:
-        return list(json.loads(drv_env["__json"]).get("requiredSystemFeatures", []))
-
-    # Without structuredAttrs, requiredSystemFeatures is a space-separated string in env.
-    return drv_env.get("requiredSystemFeatures", "").split()
+        return list(json.loads(drv_env["__json"]).get(name, []))
+    else:
+        return drv_env.get(name, "").split()
 
 
 def validate_mounts(pattern: Pattern) -> List[Tuple[PathString, PathString, bool]]:
@@ -148,7 +140,8 @@ def entrypoint():
     )
 
     parsed_drv = parsed_drv[canon_drv_path]
-    required_features = get_required_system_features(parsed_drv)
+    drv_env = parsed_drv.get("env", {})
+    required_features = get_strings(drv_env, "requiredSystemFeatures")
     required_features = list(filter(known_features.__contains__, required_features))
 
     patterns: List[Pattern] = list(

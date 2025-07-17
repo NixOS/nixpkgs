@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-fast-syntax-highlighting";
-  version = "1.56";
+  version = "1.55";
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = "fast-syntax-highlighting";
     rev = "v${version}";
-    sha256 = "sha256-caVMOdDJbAwo8dvKNgwwidmxOVst/YDda7lNx2GvOjY=";
+    sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
   };
 
   strictDeps = true;

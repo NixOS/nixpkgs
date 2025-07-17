@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "textual-slider";
-  version = "0.2.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "TomJGooding";

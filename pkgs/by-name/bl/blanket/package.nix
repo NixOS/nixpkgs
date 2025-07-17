@@ -18,13 +18,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
-  version = "0.8.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "blanket";
-    tag = version;
-    hash = "sha256-LnHL/1DJXiKx9U+JkT4Wjx1vtTmKLpzZ8q6uLT5a2MY=";
+    rev = version;
+    hash = "sha256-mY7c5i0me7mMbD8c6eGJeaZpR8XI5QVL4n3M+j15Z1c=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,13 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
-  pyproject = false;
+  format = "other";
+
+  postPatch = ''
+    patchShebangs build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
+  '';
 
   dontWrapGApps = true;
 
@@ -63,7 +69,6 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Listen to different sounds";
-    changelog = "https://github.com/rafaelmardojai/blanket/releases/tag/${version}";
     homepage = "https://github.com/rafaelmardojai/blanket";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";

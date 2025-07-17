@@ -1,36 +1,31 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   testers,
-  gitUpdater,
-  autoreconfHook,
-  util-macros,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-util";
   version = "1.4.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    group = "xorg";
-    owner = "font";
-    repo = "util";
-    tag = "font-util-${finalAttrs.version}";
-    hash = "sha256-cv6Whex1s4+J7Ue4IOHdO9WtrarTgSpLEghWpbUl+0o=";
+  src = fetchurl {
+    url = "mirror://xorg/individual/font/font-util-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XJ9kEjwZSxUP7okEmZFoc4bm/zbvKve4C6U++vNozJU=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    util-macros
-  ];
-
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "font-util-";
-      ignoredVersions = "1_0_1";
-    };
+    updateScript = writeScript "update-${finalAttrs.pname}" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts
+
+      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+        --url https://xorg.freedesktop.org/releases/individual/font/ \
+        | sort -V | tail -n1)"
+
+      update-source-version ${finalAttrs.pname} "$version"
+    '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

@@ -5,12 +5,11 @@
   pythonOlder,
   pytestCheckHook,
   setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "html2text";
-  version = "2025.4.15";
+  version = "2024.2.26";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,13 +18,10 @@ buildPythonPackage rec {
     owner = "Alir3z4";
     repo = "html2text";
     tag = version;
-    hash = "sha256-SMdILvCVXMe3Tlf3kK54VfEKsQ/KvpBZK3xZ4zVwcfo=";
+    hash = "sha256-1CLkTFR+/XQ428WjMF7wliyAG6CB+n8JSsLDdLHPO7I=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -34,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Turn HTML into equivalent Markdown-structured text";
     homepage = "https://github.com/Alir3z4/html2text/";
-    changelog = "https://github.com/Alir3z4/html2text/blob/${src.tag}/ChangeLog.rst";
+    changelog = "https://github.com/Alir3z4/html2text/blob/${src.rev}/ChangeLog.rst";
     license = licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "html2text";

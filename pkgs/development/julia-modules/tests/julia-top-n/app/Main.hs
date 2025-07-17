@@ -12,8 +12,8 @@
 
 module Main (main) where
 
+import Control.Exception
 import Control.Monad
-import Control.Monad.IO.Class
 import Data.Aeson as A hiding (Options, defaultOptions)
 import qualified Data.Aeson.Key             as A
 import qualified Data.Aeson.KeyMap          as HM
@@ -24,14 +24,12 @@ import Data.Text as T hiding (count)
 import qualified Data.Vector as V
 import qualified Data.Yaml as Yaml
 import GHC.Generics
-import Options.Applicative hiding (info)
+import Options.Applicative
 import System.Exit
 import System.FilePath
-import Test.Sandwich
-import UnliftIO.Exception
+import Test.Sandwich hiding (info)
 import UnliftIO.MVar
 import UnliftIO.Process
-import UnliftIO.QSem
 
 
 data Args = Args {
@@ -69,15 +67,13 @@ main = do
     Left err -> throwIO $ userError ("Couldn't decode names and counts YAML file: " <> show err)
     Right x -> pure x
 
-  runSandwichWithCommandLineArgs' defaultOptions argsParser $ parallel $ do
+  runSandwichWithCommandLineArgs' defaultOptions argsParser $ do
     miscTests args
 
     describe ("Building environments for top " <> show topN <> " Julia packages") $
-      introduce "Introduce parallel semaphore" parallelSemaphore (liftIO $ newQSem parallelism) (const $ return ()) $
-      parallel $
-      forM_ (L.take topN namesAndCounts) $ \(NameAndCount {..}) ->
-      around "Claim semaphore" claimRunSlot $
-      testExpr args name [i|#{juliaAttr}.withPackages ["#{name}"]|]
+      parallelN parallelism $
+        forM_ (L.take topN namesAndCounts) $ \(NameAndCount {..}) ->
+          testExpr args name [i|#{juliaAttr}.withPackages ["#{name}"]|]
 
 miscTests :: Args -> SpecFree ctx IO ()
 miscTests args@(Args {..}) = describe "Misc tests" $ do
@@ -93,9 +89,6 @@ miscTests args@(Args {..}) = describe "Misc tests" $ do
                                       };
                                     }) [ "HelloWorld" ]|]
 
-  describe "misc cases" $ do
-    testExpr args "Optimization" [iii|(#{juliaAttr}.withPackages) [ "Optimization" "OptimizationOptimJL" ]|]
-
 -- * Low-level
 
 testExpr :: Args -> Text -> String -> SpecFree ctx IO ()
@@ -105,9 +98,7 @@ testExpr _args name expr = do
       let cp = proc "nix" ["build", "--impure", "--no-link", "--json", "--expr", [i|with import ../../../../. {}; #{expr}|]]
       output <- readCreateProcessWithLogging cp ""
       juliaPath <- case A.eitherDecode (BL8.pack output) of
-        Right (A.Array ((V.!? 0) -> Just (A.Object (aesonLookup "outputs" -> Just (A.Object (aesonLookup "out" -> Just (A.String t))))))) -> do
-          info [i|built: #{t}|]
-          pure (JuliaPath ((T.unpack t) </> "bin" </> "julia"))
+        Right (A.Array ((V.!? 0) -> Just (A.Object (aesonLookup "outputs" -> Just (A.Object (aesonLookup "out" -> Just (A.String t))))))) -> pure (JuliaPath ((T.unpack t) </> "bin" </> "julia"))
         x -> expectationFailure ("Couldn't parse output: " <> show x)
 
       getContext julia >>= flip modifyMVar_ (const $ return (Just juliaPath))
@@ -122,8 +113,3 @@ testExpr _args name expr = do
   where
     aesonLookup :: Text -> HM.KeyMap v -> Maybe v
     aesonLookup = HM.lookup . A.fromText
-
-claimRunSlot :: (HasParallelSemaphore ctx) => ExampleT ctx IO a -> ExampleT ctx IO ()
-claimRunSlot f = do
-  s <- getContext parallelSemaphore
-  bracket_ (liftIO $ waitQSem s) (liftIO $ signalQSem s) (void f)

@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "Vorbis audio compression reference implementation";
     homepage = "https://xiph.org/vorbis/";
     license = licenses.bsd3;
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;
   };
 }

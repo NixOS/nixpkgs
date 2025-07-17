@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   openssl,
@@ -26,7 +25,7 @@
 
 let
   pname = "vector";
-  version = "0.49.0";
+  version = "0.48.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -35,42 +34,36 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = "vector";
     rev = "v${version}";
-    hash = "sha256-sow1BFJgwOOajJ7dTmoUNJ3OpI9/73Uigrcb1CIBOE8=";
+    hash = "sha256-qgf3aMZc1cgPlsAzgtaXLUx99KwN5no1amdkwFVyl4Y=";
   };
 
-  cargoHash = "sha256-a7923ubtads5ZLjc+27RHtPFKmgv0aMOxiSrvIVr5VA=";
+  cargoHash = "sha256-t8mfZpLrzrxj1WUpJPqZWyfBf9XobcqZY/hAeVGzhcM=";
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    perl
-    git
-    rustPlatform.bindgenHook
-  ]
-  # Provides the mig command used by the build scripts
-  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
-  buildInputs = [
-    oniguruma
-    openssl
-    protobuf
-    rdkafka
-    zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rust-jemalloc-sys
-    libiconv
-    coreutils
-    zlib
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "1.89-mismatched-lifetime-syntaxes.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/vectordotdev/vector/pull/23645.patch";
-      hash = "sha256-2ADlF4/Z1uR3LR6608lA4tseh+MnHb097PACD/Nq6/0=";
-    })
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      perl
+      git
+      rustPlatform.bindgenHook
+    ]
+    # Provides the mig command used by the build scripts
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+  buildInputs =
+    [
+      oniguruma
+      openssl
+      protobuf
+      rdkafka
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rust-jemalloc-sys
+      libiconv
+      coreutils
+      zlib
+    ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
   # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.

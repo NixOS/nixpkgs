@@ -39,8 +39,7 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -56,13 +55,10 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlags = [
+  pytestFlagsArray = [
+    "--ignore=tests/test_install_all_packages.py"
     # start local pypi server and use in tests
     "--net-pypiserver"
-  ];
-
-  disabledTestPaths = [
-    "tests/test_install_all_packages.py"
   ];
 
   disabledTests = [

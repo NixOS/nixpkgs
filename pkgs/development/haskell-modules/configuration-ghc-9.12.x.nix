@@ -16,6 +16,8 @@ in
 with haskellLib;
 
 {
+  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
+
   # Disable GHC core libraries
   array = null;
   base = null;
@@ -76,7 +78,7 @@ with haskellLib;
   tagged = doDistribute self.tagged_0_8_9;
   time-compat = doDistribute self.time-compat_1_9_8;
   extensions = doDistribute self.extensions_0_1_0_3;
-  doctest = doDistribute self.doctest_0_24_2; # see :/doctest_0_24_2 =/ below
+  doctest = doDistribute self.doctest_0_24_0;
   ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
   ghc-lib = doDistribute self.ghc-lib_9_12_2_20250421;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
@@ -112,11 +114,6 @@ with haskellLib;
     self.syb
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
-  timezone-series = doJailbreak super.timezone-series; # time <1.14
-  timezone-olson = doJailbreak super.timezone-olson; # time <1.14
-  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
-  dbus = doJailbreak super.dbus; # template-haskell <2.23
-  xmobar = doJailbreak super.xmobar; # base <4.21
 
   #
   # Test suite issues
@@ -126,23 +123,25 @@ with haskellLib;
 
   relude = dontCheck super.relude;
 
-  doctest_0_24_2 = overrideCabal (drv: {
+  doctest_0_24_0 = overrideCabal (drv: {
     testFlags = drv.testFlags or [ ] ++ [
       # These tests require cabal-install (would cause infinite recursion)
       "--skip=/Cabal.Options"
       "--skip=/Cabal.Paths/paths"
       "--skip=/Cabal.ReplOptions" # >= 0.23
     ];
-  }) super.doctest_0_24_2;
+  }) super.doctest_0_24_0;
 
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
 
   # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
   alex = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export alex_datadir="$(pwd)/data"
-    '';
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        export alex_datadir="$(pwd)/data"
+      '';
   }) super.alex;
 
   # https://github.com/sjakobi/newtype-generics/pull/28/files
@@ -176,5 +175,5 @@ with haskellLib;
   };
 
   # Allow Cabal 3.14
-  hpack = doDistribute self.hpack_0_38_1;
+  hpack = doDistribute self.hpack_0_38_0;
 }

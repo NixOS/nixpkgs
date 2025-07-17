@@ -350,8 +350,7 @@ runCommandLocal name
 
       meta = {
         mainProgram = executableName;
-      }
-      // meta;
+      } // meta;
     }
   )
   ''

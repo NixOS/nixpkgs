@@ -4,7 +4,6 @@
 {
   config,
   lib,
-  utils,
   pkgs,
   ...
 }:
@@ -786,11 +785,7 @@ in
     # specified on the kernel command line, created in the stage 1
     # init script.
     "/iso" = lib.mkImageMediaOverride {
-      device =
-        if config.boot.initrd.systemd.enable then
-          "/dev/disk/by-label/${config.isoImage.volumeID}"
-        else
-          "/dev/root";
+      device = "/dev/root";
       neededForBoot = true;
       noCheck = true;
     };
@@ -799,11 +794,10 @@ in
     # image) to make this a live CD.
     "/nix/.ro-store" = lib.mkImageMediaOverride {
       fsType = "squashfs";
-      device = "${lib.optionalString config.boot.initrd.systemd.enable "/sysroot"}/iso/nix-store.squashfs";
+      device = "/iso/nix-store.squashfs";
       options = [
         "loop"
-      ]
-      ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
+      ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
       neededForBoot = true;
     };
 
@@ -814,11 +808,18 @@ in
     };
 
     "/nix/store" = lib.mkImageMediaOverride {
-      overlay = {
-        lowerdir = [ "/nix/.ro-store" ];
-        upperdir = "/nix/.rw-store/store";
-        workdir = "/nix/.rw-store/work";
-      };
+      fsType = "overlay";
+      device = "overlay";
+      options = [
+        "lowerdir=/nix/.ro-store"
+        "upperdir=/nix/.rw-store/store"
+        "workdir=/nix/.rw-store/work"
+      ];
+      depends = [
+        "/nix/.ro-store"
+        "/nix/.rw-store/store"
+        "/nix/.rw-store/work"
+      ];
     };
   };
 
@@ -864,12 +865,11 @@ in
 
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
-    boot.loader.grub.enable = lib.mkImageMediaOverride false;
+    boot.loader.grub.enable = false;
 
     environment.systemPackages = [
       grubPkgs.grub2
-    ]
-    ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
+    ] ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
     system.extraDependencies = [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -880,9 +880,9 @@ in
     # UUID of the USB stick.  It would be nicer to write
     # `root=/dev/disk/by-label/...' here, but UNetbootin doesn't
     # recognise that.
-    boot.kernelParams = lib.optionals (!config.boot.initrd.systemd.enable) [
-      "boot.shell_on_fail"
+    boot.kernelParams = [
       "root=LABEL=${config.isoImage.volumeID}"
+      "boot.shell_on_fail"
     ];
 
     fileSystems = config.lib.isoFileSystems;
@@ -899,50 +899,11 @@ in
       "overlay"
     ];
 
-    boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
-      emergencyAccess = true;
-
-      # Most of util-linux is not included by default.
-      initrdBin = [ config.boot.initrd.systemd.package.util-linux ];
-      services.copytoram = {
-        description = "Copy ISO contents to RAM";
-        requiredBy = [ "initrd.target" ];
-        before = [
-          "${utils.escapeSystemdPath "/sysroot/nix/.ro-store"}.mount"
-          "initrd-switch-root.target"
-        ];
-        unitConfig = {
-          RequiresMountsFor = "/sysroot/iso";
-          ConditionKernelCommandLine = "copytoram";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-        path = [
-          pkgs.coreutils
-          config.boot.initrd.systemd.package.util-linux
-        ];
-        script = ''
-          device=$(findmnt -n -o SOURCE --target /sysroot/iso)
-          fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
-          mkdir -p /tmp-iso
-          mount --bind --make-private /sysroot/iso /tmp-iso
-          umount /sysroot/iso
-          mount -t tmpfs -o size="$fsSize" tmpfs /sysroot/iso
-          cp -r /tmp-iso/* /sysroot/iso/
-          umount /tmp-iso
-          rm -r /tmp-iso
-        '';
-      };
-    };
-
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
-    isoImage.storeContents = [
-      config.system.build.toplevel
-    ]
-    ++ lib.optional config.isoImage.includeSystemBuildDependencies config.system.build.toplevel.drvPath;
+    isoImage.storeContents =
+      [ config.system.build.toplevel ]
+      ++ lib.optional config.isoImage.includeSystemBuildDependencies config.system.build.toplevel.drvPath;
 
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
@@ -995,16 +956,12 @@ in
           target = "/EFI";
         }
         {
-          source = config.isoImage.efiSplashImage;
-          target = "/EFI/BOOT/efi-background.png";
-        }
-      ]
-      ++ lib.optionals (config.isoImage.makeEfiBootable && !config.boot.initrd.systemd.enable) [
-        # http://www.supergrubdisk.org/wiki/Loopback.cfg
-        # This feature will be removed, and thus is not supported by systemd initrd
-        {
           source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/BOOT/grub.cfg") + "/grub";
           target = "/boot/grub";
+        }
+        {
+          source = config.isoImage.efiSplashImage;
+          target = "/EFI/BOOT/efi-background.png";
         }
       ]
       ++ lib.optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [

@@ -74,4 +74,6 @@ in
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
   };
+
+  __attrsFailEvaluation = true;
 }

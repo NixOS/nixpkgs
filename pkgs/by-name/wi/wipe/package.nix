@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wipe.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.abbradar ];
     mainProgram = "wipe";
   };
 }

@@ -31,13 +31,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    joblib
-    lz4
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    distutils
-  ];
+  dependencies =
+    [
+      joblib
+      lz4
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      distutils
+    ];
 
   pythonImportsCheck = [ "mtcnn" ];
 

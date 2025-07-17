@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   ffmpeg-headless,
+  librespot,
   nixosTests,
   replaceVars,
   providers ? [ ],
@@ -47,14 +48,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.8";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-7Q+BYw7wnT7QdqrDjagaxupzD0iKTc26z4TfxNtugdA=";
+    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
   };
 
   patches = [
@@ -62,9 +63,9 @@ python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
-
-    # Look up librespot from PATH at runtime
-    ./librespot.patch
+    (replaceVars ./librespot.patch {
+      librespot = lib.getExe librespot;
+    })
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
@@ -94,16 +95,10 @@ python.pkgs.buildPythonApplication rec {
     "zeroconf"
   ];
 
-  pythonRemoveDeps = [
-    # no runtime dependency resolution
-    "uv"
-  ];
-
   dependencies =
     with python.pkgs;
     [
       aiohttp
-      chardet
       mashumaro
       orjson
     ]
@@ -154,13 +149,11 @@ python.pkgs.buildPythonApplication rec {
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs);
 
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # blocks in poll()
-    "tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "tests/core/test_server_base.py::test_start_and_stop_server"
-    "tests/core/test_server_base.py::test_events"
-    # not compatible with the required py-subsonic version
-    "tests/providers/opensubsonic/test_parsers.py"
+    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
+    "--deselect=tests/core/test_server_base.py::test_events"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

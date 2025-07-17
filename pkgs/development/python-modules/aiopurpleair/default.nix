@@ -15,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
-  version = "2025.08.1";
-  pyproject = true;
+  version = "2023.12.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aiopurpleair";
     tag = version;
-    hash = "sha256-VmKIIgfZFk9z8WORDHA4ibL4FZchiRrT6L0rCkxosoc=";
+    hash = "sha256-2Ngo2pvzwcgQvpyW5Q97VQN/tGSVhVJwRj0DMaPn+O4=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     pydantic
     certifi
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the PurpleAir API";
     homepage = "https://github.com/bachya/aiopurpleair";
-    changelog = "https://github.com/bachya/aiopurpleair/releases/tag/${src.tag}";
-    license = licenses.mit;
+    changelog = "https://github.com/bachya/aiopurpleair/releases/tag/${version}";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -35,7 +35,8 @@
   gperf,
   withGrpc ? true,
   grpc,
-  protobuf,
+  # see https://github.com/syslog-ng/syslog-ng/pull/5263
+  protobuf_29,
 }:
 let
   python-deps =
@@ -70,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    tag = "syslog-ng-${finalAttrs.version}";
+    rev = "syslog-ng-${finalAttrs.version}";
     hash = "sha256-/hLrUwJhA0jesOl7gmWHfTVO2M7IG8QNPRzc/TIGTH4=";
     fetchSubmodules = true;
   };
@@ -87,32 +88,33 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.setuptools
   ];
 
-  buildInputs = [
-    libcap
-    curl
-    openssl
-    eventlog
-    glib
-    py
-    systemd
-    riemann_c_client
-    protobufc
-    libnet
-    json_c
-    libuuid
-    libivykis
-    mongoc
-    rabbitmq-c
-    libesmtp
-    pcre2
-    paho-mqtt-c
-    hiredis
-    rdkafka
-  ]
-  ++ (lib.optionals withGrpc [
-    protobuf
-    grpc
-  ]);
+  buildInputs =
+    [
+      libcap
+      curl
+      openssl
+      eventlog
+      glib
+      py
+      systemd
+      riemann_c_client
+      protobufc
+      libnet
+      json_c
+      libuuid
+      libivykis
+      mongoc
+      rabbitmq-c
+      libesmtp
+      pcre2
+      paho-mqtt-c
+      hiredis
+      rdkafka
+    ]
+    ++ (lib.optionals withGrpc [
+      protobuf_29
+      grpc
+    ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -129,8 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ]
-  ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
+  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
   outputs = [
     "out"

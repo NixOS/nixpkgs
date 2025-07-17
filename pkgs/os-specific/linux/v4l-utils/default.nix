@@ -19,10 +19,10 @@
   withUtils ? true,
   withGUI ? true,
   alsa-lib,
+  qt5compat,
+  qtbase,
   libGLU,
-  qt6Packages,
-  linuxHeaders,
-  buildPackages,
+  wrapQtAppsHook,
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, QT)
@@ -41,35 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wc9UnC7DzznrXse/FXMTSeYbJqIbXpY5IttCIzO64Zc=";
   };
 
-  patches = [
-    # Has been submitted upstream, but can't fetchurl/fetchpatch
-    # because patch doesn't know how to decode quoted-printable.
-    # https://lore.kernel.org/all/4dgJekVdP7lLqOQ6JNW05sRHSkRmLLMMQnEn8NGUHPoHDn4SBkaGlHUW89vkJJu3IeFDAh3p6mlplTJJlWJx8V4rr62-hd83quCJ2sIuqoA=@protonmail.com/
-    ./musl.patch
-  ];
-
-  outputs = [
-    "out"
-  ]
-  ++ lib.optional withUtils "lib"
-  ++ [
-    "doc"
-    "dev"
-  ];
+  outputs =
+    [ "out" ]
+    ++ lib.optional withUtils "lib"
+    ++ [
+      "doc"
+      "dev"
+    ];
 
   mesonFlags = [
     (lib.mesonBool "v4l-utils" withUtils)
-    (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
     (lib.mesonEnable "qv4l2" withQt)
     (lib.mesonEnable "qvidcap" withQt)
-    (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isGnu [
     (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
-  ]
-  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # BPF support fail to cross compile, unable to find `linux/lirc.h`
-    (lib.mesonOption "bpf" "disabled")
+    (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
   ];
 
   postFixup = ''
@@ -85,22 +70,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     udevCheckHook
-  ]
-  ++ lib.optional withQt qt6Packages.wrapQtAppsHook;
+  ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [
-    json_c
-    libbpf
-    libelf
-    udev
-  ]
-  ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
-  ++ lib.optionals withQt [
-    alsa-lib
-    qt6Packages.qt5compat
-    qt6Packages.qtbase
-    libGLU
-  ];
+  buildInputs =
+    [
+      json_c
+      libbpf
+      libelf
+      udev
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+    ++ lib.optionals withQt [
+      alsa-lib
+      qt5compat
+      qtbase
+      libGLU
+    ];
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -117,12 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace \
       meson.build \
       --replace-fail "get_option('datadir') / 'locale'" "get_option('localedir')"
-  '';
-
-  # Meson unable to find moc/uic/rcc in case of cross-compilation
-  # https://github.com/mesonbuild/meson/issues/13018
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    export PATH=${buildPackages.qt6Packages.qtbase}/libexec:$PATH
   '';
 
   enableParallelBuilding = true;

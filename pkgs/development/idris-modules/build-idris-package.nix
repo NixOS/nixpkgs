@@ -49,8 +49,7 @@ stdenv.mkDerivation (
     buildInputs = [
       idris-with-packages
       gmp
-    ]
-    ++ extraBuildInputs;
+    ] ++ extraBuildInputs;
     propagatedBuildInputs = allIdrisDeps;
 
     # Some packages use the style

@@ -46,9 +46,11 @@ in
   overrideAttrs-preserves-enabled-extensions =
     let
       customPhp = (php.withExtensions ({ all, ... }: [ all.imagick ])).overrideAttrs (attrs: {
-        postInstall = attrs.postInstall or "" + ''
-          touch "$out/oApee-was-here"
-        '';
+        postInstall =
+          attrs.postInstall or ""
+          + ''
+            touch "$out/oApee-was-here"
+          '';
       });
     in
     runTest "php-test-overrideAttrs-preserves-enabled-extensions" ''
@@ -72,18 +74,22 @@ in
         (
           pkg:
           pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-first"
-            '';
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-first"
+              '';
           })
         )
 
         (
           pkg:
           pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-second"
-            '';
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-second"
+              '';
           })
         )
       ];
@@ -102,18 +108,22 @@ in
         (
           pkg:
           pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-first"
-            '';
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-first"
+              '';
           })
         )
 
         (
           pkg:
           pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-second"
-            '';
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-second"
+              '';
           })
         )
       ];

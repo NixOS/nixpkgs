@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "1.2.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-g5ugvnnFUXBfYFN1Z5+m9HTVSZ5KS9HGkIte3lKi/sA=";
+    hash = "sha256-Cl2IbFfw6TH904Y63YQnXS/mDEuUB6AdCoRT4G+W0hU=";
   };
 
   patches = [
@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [
     "-x"
     "spotlessApply"
-    "-DDISABLE_ADDITIONAL_FEATURES=true"
   ];
 
   doCheck = true;
@@ -52,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
-    makeWrapper ${lib.getExe jre} $out/bin/Stirling-PDF \
-      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
+    install -Dm644 build/libs/Stirling-PDF-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
+    makeWrapper ${jre}/bin/java $out/bin/Stirling-PDF \
+        --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
 
     runHook postInstall
   '';
@@ -65,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     mainProgram = "Stirling-PDF";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = jre.meta.platforms;

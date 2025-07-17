@@ -62,8 +62,7 @@ buildPythonPackage rec {
     readme = [
       docutils
       pyproject-parser
-    ]
-    ++ pyproject-parser.optional-dependencies.readme;
+    ] ++ pyproject-parser.optional-dependencies.readme;
   };
 
   nativeCheckInputs = [

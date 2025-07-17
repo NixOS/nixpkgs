@@ -75,26 +75,26 @@ buildPythonPackage rec {
     sip
     which
     wxGTK
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    wxGTK
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    libGL
-    libGLU
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
-    libglvnd
-    libgbm
-    webkitgtk_4_1
-    xorgproto
-  ];
+  buildInputs =
+    [
+      wxGTK
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      libGL
+      libGLU
+      libSM
+      libXinerama
+      libXtst
+      libXxf86vm
+      libglvnd
+      libgbm
+      webkitgtk_4_1
+      xorgproto
+    ];
 
   propagatedBuildInputs = [
     numpy
@@ -136,10 +136,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = with licenses; [
-      lgpl2Plus
-      wxWindowsException31
-    ];
+    license = licenses.wxWindows;
     maintainers = with maintainers; [ hexa ];
   };
 }

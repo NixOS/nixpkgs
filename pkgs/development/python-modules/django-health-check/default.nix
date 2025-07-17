@@ -6,33 +6,29 @@
   django-storages,
   django,
   fetchFromGitHub,
-  flit-core,
-  flit-scm,
   gitMinimal,
   mock,
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
   redis,
+  setuptools-scm,
   sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.20.0";
+  version = "3.18.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = "django-health-check";
     tag = version;
-    hash = "sha256-qgABCDWKGYZ67sKvCozUQfmYcKWMpEVNLxInTnIaojk=";
+    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
   };
 
-  build-system = [
-    flit-core
-    flit-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   buildInputs = [
     sphinx
@@ -62,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/KristianOellegaard/django-health-check";
-    changelog = "https://github.com/revsys/django-health-check/releases/tag/${src.tag}";
+    changelog = "https://github.com/revsys/django-health-check/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

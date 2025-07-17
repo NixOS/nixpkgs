@@ -13,13 +13,13 @@ stdenv.mkDerivation {
   # as ssdfs-utils, not ssdfs-tools.
   pname = "ssdfs-utils";
   # The version is taken from `configure.ac`, there are no tags.
-  version = "4.61";
+  version = "4.56";
 
   src = fetchFromGitHub {
     owner = "dubeyko";
     repo = "ssdfs-tools";
-    rev = "b53ac1d92d4eedbcddd245143a1d70e872bc4b6b";
-    hash = "sha256-PEmYVZowNyg9rvh26y6lWo17HMqSYABQgMYYVRXo/Nw=";
+    rev = "300d57aabcf7d6208ee863463e7947005efa70e9";
+    hash = "sha256-X2LTt1iVyRX+Zli/KePu5Ryf6Fz2/hcDDWyaL9qp/vI=";
   };
 
   strictDeps = true;

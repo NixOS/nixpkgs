@@ -24,23 +24,12 @@
 #, aacSupport ? false, TODO: neroAacEnc
 }:
 
-let
-  runtimeDeps =
-    lib.optional mp3Support lame
-    ++ lib.optional oggSupport vorbis-tools
-    ++ lib.optional flacSupport flac
-    ++ lib.optional opusSupport opusTools
-    ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
-    ++ [ cdparanoia ];
-in
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   version = "3.0.1";
   pname = "asunder";
   src = fetchurl {
-    url = "http://littlesvr.ca/asunder/releases/asunder-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+    url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
   };
 
   nativeBuildInputs = [
@@ -53,18 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
     libcddb
   ];
 
+  runtimeDeps =
+    lib.optional mp3Support lame
+    ++ lib.optional oggSupport vorbis-tools
+    ++ lib.optional flacSupport flac
+    ++ lib.optional opusSupport opusTools
+    ++ lib.optional wavpackSupport wavpack
+    ++ lib.optional monkeysAudioSupport monkeysAudio
+    ++ [ cdparanoia ];
+
   postInstall = ''
     wrapProgram "$out/bin/asunder" \
       --prefix PATH : "${lib.makeBinPath runtimeDeps}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Graphical Audio CD ripper and encoder for Linux";
     mainProgram = "asunder";
     homepage = "http://littlesvr.ca/asunder/index.php";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ mudri ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ mudri ];
+    platforms = platforms.linux;
 
     longDescription = ''
       Asunder is a graphical Audio CD ripper and encoder for Linux. You can use
@@ -72,4 +70,4 @@ stdenv.mkDerivation (finalAttrs: {
       WavPack, Musepack, AAC, and Monkey's Audio files.
     '';
   };
-})
+}

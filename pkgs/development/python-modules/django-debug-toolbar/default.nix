@@ -16,11 +16,13 @@
   html5lib,
   jinja2,
   pygments,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "6.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,13 +31,8 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-ZNevSqEpTdk0cZeMzOpbtatEiV9SAsVUlRb9YddcAGY=";
+    hash = "sha256-Q0joSIFXhoVmNQ+AfESdEWUGY1xmJzr4iR6Ak54YM7c=";
   };
-
-  postPatch = ''
-    # not actually used and we don't have django-template-partials packaged
-    sed -i "/template_partials/d" tests/settings.py
-  '';
 
   build-system = [ hatchling ];
 
@@ -70,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ yuu ];
   };
 }

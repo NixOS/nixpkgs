@@ -11,7 +11,6 @@
   matplotlib,
   numpy,
   pandas,
-  pywavelets,
   requests,
   scikit-learn,
   scipy,
@@ -23,19 +22,18 @@
   plotly,
   pytest-cov-stub,
   pytestCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "neurokit2";
-  version = "0.2.12";
+  version = "0.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neuropsychology";
     repo = "NeuroKit";
     tag = "v${version}";
-    hash = "sha256-gn02l0vYl+/7hXp4gFVlgblxC4dewXckW3JL3wPC89Y=";
+    hash = "sha256-e/B1JvO6uYZ6iVskFvxZLSSXi0cPep9bBZ0JXZTVS28=";
   };
 
   postPatch = ''
@@ -51,7 +49,6 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
-    pywavelets
     requests
     scikit-learn
     scipy
@@ -64,7 +61,6 @@ buildPythonPackage rec {
     astropy
     coverage
     pytestCheckHook
-    writableTmpDirAsHomeHook
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -108,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Toolbox for Neurophysiological Signal Processing";
     homepage = "https://github.com/neuropsychology/NeuroKit";
-    changelog = "https://github.com/neuropsychology/NeuroKit/releases/tag/${src.tag}";
+    changelog = "https://github.com/neuropsychology/NeuroKit/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };

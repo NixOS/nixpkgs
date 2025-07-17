@@ -9,13 +9,14 @@
 
 runCommand "netlify-cli-test"
   {
-    nativeBuildInputs = [
-      netlify-cli
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
+    nativeBuildInputs =
+      [
+        netlify-cli
+        curl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.ps
+      ];
     meta.timeout = 600;
   }
   ''

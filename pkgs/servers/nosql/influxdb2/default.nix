@@ -43,15 +43,13 @@ let
       # https://github.com/influxdata/flux/pull/5542
       ./fix-unsigned-char.patch
     ];
-    # Don't fail on warnings
+    # Don't fail on missing code documentation
     postPatch = ''
-      substituteInPlace flux/Cargo.toml \
-        --replace-fail 'default = ["strict", ' 'default = ['
-      substituteInPlace flux-core/Cargo.toml \
-        --replace-fail 'default = ["strict"]' 'default = []'
+      substituteInPlace flux-core/src/lib.rs \
+        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
     '';
     sourceRoot = "${src.name}/libflux";
-
+    useFetchCargoVendor = true;
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -63,15 +61,16 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall = ''
-      mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace-fail /out $out
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-    '';
+    postInstall =
+      ''
+        mkdir -p $out/include $out/pkgconfig
+        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+          --replace-fail /out $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+      '';
   };
 in
 buildGoModule {
@@ -138,6 +137,6 @@ buildGoModule {
     description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

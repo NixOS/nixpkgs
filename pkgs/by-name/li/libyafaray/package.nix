@@ -46,8 +46,7 @@ stdenv.mkDerivation {
     openexr
     swig
     zlib
-  ]
-  ++ lib.optional withPython python3;
+  ] ++ lib.optional withPython python3;
 
   meta = with lib; {
     description = "Free, open source raytracer";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-neptune";
-  version = "0.4.1";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_graph_stores_neptune";
     inherit version;
-    hash = "sha256-plwDD8NBcYqedEoCeYqEZn1kDQZjDpg94jRZJBPjdU8=";
+    hash = "sha256-IqY4dEWcbM9371vuZ7C9NlDux9O/j6wF7Hcc4aiBiIE=";
   };
 
   build-system = [ hatchling ];

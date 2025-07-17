@@ -17,5 +17,6 @@ buildNimPackage (finalAttrs: {
     description = "Base45 library for Nim";
     license = lib.licenses.unlicense;
     mainProgram = "base45";
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 })

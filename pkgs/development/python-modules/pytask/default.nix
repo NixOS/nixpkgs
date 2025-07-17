@@ -25,7 +25,7 @@
 }:
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.5";
+  version = "0.5.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-0e1pJzoszTW8n+uFJlEeYstvHf4v+I2Is7oEHJ1qV7o=";
+    hash = "sha256-YJouWQ9Edj27nD72m7EDSH9TXcrsu6X+pGDo5fgGU5U=";
   };
 
   build-system = [
@@ -52,8 +52,7 @@ buildPythonPackage rec {
     rich
     sqlalchemy
     universal-pathlib
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -79,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Workflow management system that facilitates reproducible data analyses";
     homepage = "https://github.com/pytask-dev/pytask";
-    changelog = "https://github.com/pytask-dev/pytask/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytask-dev/pytask/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ erooke ];
   };

@@ -37,10 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C language binding for wxWidgets";
     homepage = "https://wiki.haskell.org/WxHaskell";
-    license = with lib.licenses; [
-      lgpl2Plus
-      wxWindowsException31
-    ];
+    license = lib.licenses.wxWindows;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = wxGTK32.meta.platforms;
   };

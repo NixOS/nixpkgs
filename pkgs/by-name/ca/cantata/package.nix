@@ -16,7 +16,7 @@
   withLame ? false,
   lame,
   withMusicbrainz ? false,
-  libmusicbrainz,
+  libmusicbrainz5,
 
   withTaglib ? true,
   taglib_1,
@@ -129,7 +129,7 @@ let
     {
       names = [ "MUSICBRAINZ" ];
       enable = withMusicbrainz;
-      pkgs = [ libmusicbrainz ];
+      pkgs = [ libmusicbrainz5 ];
     }
     {
       names = [ "ONLINE_SERVICES" ];
@@ -187,8 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qtwayland
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
-  ]
-  ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
+  ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake

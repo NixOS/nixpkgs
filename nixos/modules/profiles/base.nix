@@ -45,9 +45,6 @@
     # Some compression/archiver tools.
     pkgs.unzip
     pkgs.zip
-
-    # Some utilities
-    pkgs.jq
   ];
 
   # Include support for various filesystems and tools to create / manipulate them.

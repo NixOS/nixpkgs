@@ -54,8 +54,7 @@ let
       gmp
       clang
       chez
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
 
     postInstall = ''
       wrapProgram $out/bin/pack \
@@ -72,7 +71,7 @@ let
     '';
 
     meta = {
-      description = "Idris2 Package Manager with Curated Package Collections";
+      description = "An Idris2 Package Manager with Curated Package Collections";
       mainProgram = "pack";
       homepage = "https://github.com/stefan-hoeck/idris2-pack";
       license = lib.licenses.bsd3;

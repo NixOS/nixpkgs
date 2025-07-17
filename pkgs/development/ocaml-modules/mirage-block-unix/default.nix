@@ -41,5 +41,6 @@ buildDunePackage rec {
     description = "MirageOS disk block driver for Unix";
     homepage = "https://github.com/mirage/mirage-block-unix";
     license = licenses.isc;
+    maintainers = with maintainers; [ ehmry ];
   };
 }

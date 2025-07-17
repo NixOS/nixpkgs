@@ -1,74 +1,56 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  copyPkgconfigItems,
-  makePkgconfigItem,
+  fetchurl,
   picosat,
 }:
 
 stdenv.mkDerivation rec {
   pname = "aiger";
-  version = "1.9.20";
+  version = "1.9.9";
 
-  src = fetchFromGitHub {
-    owner = "arminbiere";
-    repo = "aiger";
-    tag = "rel-${version}";
-    hash = "sha256-ggkxITuD8phq3VF6tGc/JWQGBhTfPxBdnRobKswYVa4=";
+  src = fetchurl {
+    url = "https://fmv.jku.at/aiger/${pname}-${version}.tar.gz";
+    sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
   };
+
+  patches = [
+    # Fix implicit declaration of `isatty`, which is an error with newer versions of clang.
+    ./fix-missing-header.patch
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ copyPkgconfigItems ];
-
-  pkgconfigItems = [
-    (makePkgconfigItem {
-      name = "aiger";
-      inherit version;
-      cflags = [ "-I\${includedir}" ];
-      libs = [
-        "-L\${libdir}"
-        "-laiger"
-      ];
-      variables = {
-        includedir = "@includedir@";
-        libdir = "@libdir@";
-      };
-      inherit (meta) description;
-    })
-  ];
-
-  env = {
-    # copyPkgconfigItems will substitute these in the pkg-config file
-    includedir = "${placeholder "dev"}/include";
-    libdir = "${placeholder "lib"}/lib";
-  };
-
   configurePhase = ''
-    runHook preConfigure
-
     # Set up picosat, so we can build 'aigbmc'
     mkdir ../picosat
     ln -s ${picosat}/include/picosat/picosat.h ../picosat/picosat.h
     ln -s ${picosat}/lib/picosat.o             ../picosat/picosat.o
     ln -s ${picosat}/share/picosat.version     ../picosat/VERSION
     ./configure.sh
-
-    runHook postConfigure
   '';
 
-  postBuild = ''
-    $AR rcs libaiger.a aiger.o
-  '';
+  installPhase = ''
+    mkdir -p $out/bin $dev/include $lib/lib
 
-  installFlags = [ "PREFIX=${placeholder "out"}" ];
-  postInstall = ''
-    # test that installing picosat in configurePhase suceeded
-    test -f $out/bin/aigbmc
+    # Do the installation manually, as the Makefile has odd
+    # cyrillic characters, and this is easier than adding
+    # a whole .patch file.
+    BINS=( \
+      aigand aigdd aigflip aigfuzz aiginfo aigjoin   \
+      aigmiter aigmove aignm aigor aigreset aigsim   \
+      aigsplit aigstrip aigtoaig aigtoblif aigtocnf  \
+      aigtodot aigtosmv aigunconstraint aigunroll    \
+      andtoaig bliftoaig smvtoaig soltostim wrapstim \
+      aigbmc aigdep
+    )
 
-    install -m 444 -Dt $lib/lib libaiger.a
-    install -m 444 -Dt $dev/include aiger.h
+    for x in ''${BINS[*]}; do
+      install -m 755 -s $x $out/bin/$x
+    done
+
+    cp -v aiger.o $lib/lib
+    cp -v aiger.h $dev/include
   '';
 
   outputs = [

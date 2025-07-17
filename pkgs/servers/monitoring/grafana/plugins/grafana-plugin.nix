@@ -56,13 +56,11 @@ stdenvNoCC.mkDerivation (
         ./update-grafana-plugin.sh
         pname
       ];
-    }
-    // passthru;
+    } // passthru;
 
     meta = {
       homepage = "https://grafana.com/grafana/plugins/${pname}";
-    }
-    // meta;
+    } // meta;
   }
   // (builtins.removeAttrs args [
     "zipHash"

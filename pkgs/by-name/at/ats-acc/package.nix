@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "ats-acc";
-  version = "0-unstable-2018-10-21";
+  version = "unstable-2018-10-21";
 
   src = fetchFromGitHub {
     owner = "sparverius";

@@ -14,11 +14,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-uV0umUoJkYgmjWjv8GMnk5TRRbCCJS1ut3VV1HvkaAw=";
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-zDgAGOuK0Jkmm554qZsaA/ABFhuupJ+WToO8HSPp7Xc=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:

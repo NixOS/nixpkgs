@@ -5,7 +5,6 @@
   pandoc,
   installShellFiles,
 }:
-
 python3Packages.buildPythonPackage rec {
   pname = "autotrash";
   version = "0.4.7";
@@ -18,20 +17,13 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-qMU3jjBL5+fd9vKX5BIqES5AM8D/54aBOmdHFiBtfEo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
-
   build-system = [ python3Packages.poetry-core ];
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
-
   postBuild = "make -C doc autotrash.1";
-
   postInstall = "installManPage doc/autotrash.1";
 
   pythonImportsCheck = [ "autotrash" ];
@@ -41,7 +33,6 @@ python3Packages.buildPythonPackage rec {
     description = "Tool to automatically purge old trashed files";
     license = lib.licenses.gpl3Plus;
     homepage = "https://bneijt.nl/pr/autotrash";
-    changelog = "https://github.com/bneijt/autotrash/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [
       sigmanificient
       mithicspirit

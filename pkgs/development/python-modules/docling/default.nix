@@ -30,7 +30,7 @@
   pypdfium2,
   python-docx,
   python-pptx,
-  rapidocr,
+  rapidocr-onnxruntime,
   requests,
   rtree,
   scipy,
@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.47.1";
+  version = "2.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-U82hGvWXkKwZ4um0VevVoYiIfzswu5hLDYvxtqJqmHU=";
+    hash = "sha256-GD052HCqBLs+KUkOUOVdlXxS6+PD2pthGtz+zdQ6QnM=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     pypdfium2
     python-docx
     python-pptx
-    rapidocr
+    rapidocr-onnxruntime
     requests
     rtree
     scipy
@@ -101,8 +101,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "lxml"
-    "pypdfium2"
     "pillow"
   ];
 
@@ -112,7 +110,7 @@ buildPythonPackage rec {
     ];
     rapidocr = [
       onnxruntime
-      rapidocr
+      rapidocr-onnxruntime
     ];
     tesserocr = [
       tesserocr
@@ -169,8 +167,6 @@ buildPythonPackage rec {
     "test_confidence"
     "test_e2e_webp_conversions"
     "test_asr_pipeline_conversion"
-    "test_threaded_pipeline"
-    "test_pipeline_comparison"
 
     # AssertionError: pred_itxt==true_itxt
     "test_e2e_valid_csv_conversions"

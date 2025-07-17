@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nemomobile/qtdbusextended";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    maintainers = with maintainers; [ rewine ];
   };
 }

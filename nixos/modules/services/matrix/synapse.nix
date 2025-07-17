@@ -74,6 +74,7 @@ let
     "systemd"
     "postgres"
     "url-preview"
+    "user-search"
   ];
 
   wantedExtras =
@@ -83,6 +84,7 @@ let
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
+    ++ lib.optional (cfg.settings ? user_directory) "user-search"
     ++ lib.optional (cfg.settings.url_preview_enabled) "url-preview"
     ++ lib.optional (cfg.settings.database.name == "psycopg2") "postgres";
 
@@ -672,6 +674,7 @@ in
               "sentry"       # Error tracking and performance metrics
               "systemd"      # Provide the JournalHandler used in the default log_config
               "url-preview"  # Support for oEmbed URL previews
+              "user-search"  # Support internationalized domain names in user-search
             ]
           '';
           description = ''
@@ -925,35 +928,36 @@ in
 
                 listeners = mkOption {
                   type = types.listOf (listenerType false);
-                  default = [
-                    {
-                      port = 8008;
-                      bind_addresses = [ "127.0.0.1" ];
+                  default =
+                    [
+                      {
+                        port = 8008;
+                        bind_addresses = [ "127.0.0.1" ];
+                        type = "http";
+                        tls = false;
+                        x_forwarded = true;
+                        resources = [
+                          {
+                            names = [ "client" ];
+                            compress = true;
+                          }
+                          {
+                            names = [ "federation" ];
+                            compress = false;
+                          }
+                        ];
+                      }
+                    ]
+                    ++ lib.optional hasWorkers {
+                      path = "/run/matrix-synapse/main_replication.sock";
                       type = "http";
-                      tls = false;
-                      x_forwarded = true;
                       resources = [
                         {
-                          names = [ "client" ];
-                          compress = true;
-                        }
-                        {
-                          names = [ "federation" ];
+                          names = [ "replication" ];
                           compress = false;
                         }
                       ];
-                    }
-                  ]
-                  ++ lib.optional hasWorkers {
-                    path = "/run/matrix-synapse/main_replication.sock";
-                    type = "http";
-                    resources = [
-                      {
-                        names = [ "replication" ];
-                        compress = false;
-                      }
-                    ];
-                  };
+                    };
                   description = ''
                     List of ports that Synapse should listen on, their purpose and their configuration.
 
@@ -1321,83 +1325,84 @@ in
     };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = clientListener != null;
+    assertions =
+      [
+        {
+          assertion = clientListener != null;
+          message = ''
+            At least one listener which serves the `client` resource via HTTP is required
+            by synapse in `services.matrix-synapse.settings.listeners` or in one of the workers!
+          '';
+        }
+        {
+          assertion = hasWorkers -> cfg.settings.redis.enabled;
+          message = ''
+            Workers for matrix-synapse require configuring a redis instance. This can be done
+            automatically by setting `services.matrix-synapse.configureRedisLocally = true`.
+          '';
+        }
+        {
+          assertion =
+            let
+              main = cfg.settings.instance_map.main;
+              listener = lib.findFirst (
+                listener:
+                (
+                  lib.hasAttr "port" main && listener.port or null == main.port
+                  || lib.hasAttr "path" main && listener.path or null == main.path
+                )
+                && listenerSupportsResource "replication" listener
+                && (
+                  lib.hasAttr "host" main
+                  && lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
+                  || lib.hasAttr "path" main
+                )
+              ) null cfg.settings.listeners;
+            in
+            hasWorkers -> (cfg.settings.instance_map ? main && listener != null);
+          message = ''
+            Workers for matrix-synapse require setting `services.matrix-synapse.settings.instance_map.main`
+            to any listener configured in `services.matrix-synapse.settings.listeners` with a `"replication"`
+            resource.
+
+            This is done by default unless you manually configure either of those settings.
+          '';
+        }
+        {
+          assertion = cfg.enableRegistrationScript -> clientListener.path == null;
+          message = ''
+            The client listener on matrix-synapse is configured to use UNIX domain sockets.
+            This configuration is incompatible with the `register_new_matrix_user` script.
+
+            Disable  `services.matrix-synapse.enableRegistrationScript` to continue.
+          '';
+        }
+      ]
+      ++ (map (listener: {
+        assertion = (listener.path == null) != (listener.bind_addresses == null);
         message = ''
-          At least one listener which serves the `client` resource via HTTP is required
-          by synapse in `services.matrix-synapse.settings.listeners` or in one of the workers!
+          Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
         '';
-      }
-      {
-        assertion = hasWorkers -> cfg.settings.redis.enabled;
-        message = ''
-          Workers for matrix-synapse require configuring a redis instance. This can be done
-          automatically by setting `services.matrix-synapse.configureRedisLocally = true`.
-        '';
-      }
-      {
+      }) cfg.settings.listeners)
+      ++ (map (listener: {
         assertion =
+          listener.path != null
+          -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
+        message =
           let
-            main = cfg.settings.instance_map.main;
-            listener = lib.findFirst (
-              listener:
-              (
-                lib.hasAttr "port" main && listener.port or null == main.port
-                || lib.hasAttr "path" main && listener.path or null == main.path
-              )
-              && listenerSupportsResource "replication" listener
-              && (
-                lib.hasAttr "host" main
-                && lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
-                || lib.hasAttr "path" main
-              )
-            ) null cfg.settings.listeners;
+            formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
           in
-          hasWorkers -> (cfg.settings.instance_map ? main && listener != null);
+          ''
+            Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
+            ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
+          '';
+      }) cfg.settings.listeners)
+      ++ (map (listener: {
+        assertion = listener.path == null || listener.type == "http";
         message = ''
-          Workers for matrix-synapse require setting `services.matrix-synapse.settings.instance_map.main`
-          to any listener configured in `services.matrix-synapse.settings.listeners` with a `"replication"`
-          resource.
-
-          This is done by default unless you manually configure either of those settings.
+          Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
         '';
-      }
-      {
-        assertion = cfg.enableRegistrationScript -> clientListener.path == null;
-        message = ''
-          The client listener on matrix-synapse is configured to use UNIX domain sockets.
-          This configuration is incompatible with the `register_new_matrix_user` script.
-
-          Disable  `services.matrix-synapse.enableRegistrationScript` to continue.
-        '';
-      }
-    ]
-    ++ (map (listener: {
-      assertion = (listener.path == null) != (listener.bind_addresses == null);
-      message = ''
-        Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
-      '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion =
-        listener.path != null
-        -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
-      message =
-        let
-          formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
-        in
-        ''
-          Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
-          ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
-        '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion = listener.path == null || listener.type == "http";
-      message = ''
-        Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
-      '';
-    }) cfg.settings.listeners);
+      }) cfg.settings.listeners);
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
       enabled = true;
@@ -1489,13 +1494,14 @@ in
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
             ProtectSystem = "strict";
-            ReadWritePaths = [
-              cfg.dataDir
-              cfg.settings.media_store_path
-            ]
-            ++ (map (listener: dirOf listener.path) (
-              filter (listener: listener.path != null) cfg.settings.listeners
-            ));
+            ReadWritePaths =
+              [
+                cfg.dataDir
+                cfg.settings.media_store_path
+              ]
+              ++ (map (listener: dirOf listener.path) (
+                filter (listener: listener.path != null) cfg.settings.listeners
+              ));
             RemoveIPC = true;
             RestrictAddressFamilies = [
               "AF_INET"
@@ -1512,8 +1518,7 @@ in
               "~@privileged"
             ];
           };
-        }
-        // targetConfig;
+        } // targetConfig;
         genWorkerService =
           name: workerCfg:
           let

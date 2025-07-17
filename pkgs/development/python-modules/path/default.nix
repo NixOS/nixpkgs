@@ -11,19 +11,15 @@
 
 buildPythonPackage rec {
   pname = "path";
-  version = "17.1.1";
+  version = "17.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lfy/7ItNlg80acUqzxMxE8KovxKse5jWKfqRr4ckjUI=";
+    hash = "sha256-1B4F7U+h1PbXAt88HgoaJV17VEKHQyRWRV3HxR5fmOk=";
   };
-
-  postPatch = ''
-    sed -i "/coherent\.licensed/d" pyproject.toml
-  '';
 
   nativeBuildInputs = [
     setuptools

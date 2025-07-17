@@ -33,7 +33,9 @@ lib.makeScope pkgs.newScope (
 
     #### DESKTOP
 
-    gtksourceview = callPackage ./desktop/gtksourceview { };
+    gtksourceview = callPackage ./desktop/gtksourceview {
+      autoreconfHook = pkgs.autoreconfHook269;
+    };
 
   }
 )

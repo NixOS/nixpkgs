@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dQ3wzBTjteqk9rju+FMAO+ydimnGu24Y2DEDLX/P+1A=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-X/O1Lg1llyRz+d5MC1xO4qKU1+mDIlZhgj6qQ9kLH4k=";
 
   # Package requires a non reproducible submodule

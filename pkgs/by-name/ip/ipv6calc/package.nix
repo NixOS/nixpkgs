@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "4.4.0";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = "ipv6calc";
     rev = version;
-    sha256 = "sha256-+u+7XdW0bS3nE5djdy7I1/NHZdXU9QKukZAvTkWsCK0=";
+    sha256 = "sha256-s+B549Ni0AnvAeHD9VnDB67j3quFlqzF1pV/fpvCnlM=";
   };
 
   buildInputs = [
@@ -37,24 +37,25 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = [
-    "--prefix=${placeholder "out"}"
-    "--libdir=${placeholder "out"}/lib"
-    "--datadir=${placeholder "out"}/share"
-    "--disable-bundled-getopt"
-    "--disable-bundled-md5"
-    "--disable-dynamic-load"
-    "--enable-shared"
-  ]
-  ++ lib.optionals (libmaxminddb != null) [
-    "--enable-mmdb"
-  ]
-  ++ lib.optionals (geolite-legacy != null) [
-    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ]
-  ++ lib.optionals (ip2location-c != null) [
-    "--enable-ip2location"
-  ];
+  configureFlags =
+    [
+      "--prefix=${placeholder "out"}"
+      "--libdir=${placeholder "out"}/lib"
+      "--datadir=${placeholder "out"}/share"
+      "--disable-bundled-getopt"
+      "--disable-bundled-md5"
+      "--disable-dynamic-load"
+      "--enable-shared"
+    ]
+    ++ lib.optionals (libmaxminddb != null) [
+      "--enable-mmdb"
+    ]
+    ++ lib.optionals (geolite-legacy != null) [
+      "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+    ]
+    ++ lib.optionals (ip2location-c != null) [
+      "--enable-ip2location"
+    ];
 
   enableParallelBuilding = true;
 

@@ -1,38 +1,31 @@
 {
   lib,
-  async-timeout,
-  bleak,
   buildPythonPackage,
   fetchFromGitHub,
-  intelhex,
   poetry-core,
-  poetry-dynamic-versioning,
+  async-timeout,
+  bleak,
+  intelhex,
   pyserial,
+  smp,
   pytest-asyncio,
   pytestCheckHook,
-  smp,
 }:
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "5.1.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-/prS2w14yTT2t/CKDAVimh6lyXx4wRT3wQ1d18dhpSo=";
+    hash = "sha256-Z0glcCy3JsL45iT8Q82Vtxozi3hv6xaRJvJ3BkHX4PQ=";
   };
-
-  pythonRelaxDeps = [
-    "bleak"
-    "smp"
-  ];
 
   build-system = [
     poetry-core
-    poetry-dynamic-versioning
   ];
 
   dependencies = [
@@ -48,9 +41,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  patches = [ ./bleak-compat.patch ];
+  pythonRelaxDeps = [
+    "smp"
+  ];
 
-  pythonImportsCheck = [ "smpclient" ];
+  pythonImportsCheck = [
+    "smpclient"
+  ];
 
   meta = {
     description = "Simple Management Protocol (SMP) Client for remotely managing MCU firmware";

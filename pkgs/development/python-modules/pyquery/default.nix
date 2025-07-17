@@ -42,9 +42,9 @@ buildPythonPackage rec {
     }))
   ];
 
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # requires network
-    "tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+    "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
   ];
 
   disabledTests = [

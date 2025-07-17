@@ -21,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-09-12";
+  version = "0-unstable-2025-07-11";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "7c5d79ad62cda340cb8c80c99b921b7b7ffacf69";
-    hash = "sha256-q7q0pWT+wu5AUU1Qlbwq8Mqb+AzHKhaMCVUq/HNZfo8=";
+    rev = "24fad0622fc9404c69e83bab7738359c5be4988e";
+    hash = "sha256-5TomR72rn4q+5poQcN6EnanxeXKqJSqWVAoDAFN0lUc=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
   cargoHash = "sha256-NdzwYnD0yMEI2RZwwXl/evYx9zdBVMOUee+V7uq1cf0=";
+  useFetchCargoVendor = true;
 
   env = {
     ATTIC_DISTRIBUTOR = "nixpkgs";
-  }
-  // lib.optionalAttrs needNixInclude { NIX_INCLUDE_PATH = "${lib.getDev nix}/include"; };
+  } // lib.optionalAttrs needNixInclude { NIX_INCLUDE_PATH = "${lib.getDev nix}/include"; };
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.

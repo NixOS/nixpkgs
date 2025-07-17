@@ -26,13 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     python3Packages.wrapPython
   ];
-  buildInputs = [
-    mpi
-  ]
-  ++ (with python3Packages; [
-    python
-    plotly
-  ]);
+  buildInputs =
+    [ mpi ]
+    ++ (with python3Packages; [
+      python
+      plotly
+    ]);
   pythonPath = (with python3Packages; [ plotly ]);
 
   preConfigure = ''

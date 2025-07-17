@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "banks";
-  version = "2.2.0";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "masci";
     repo = "banks";
     tag = "v${version}";
-    hash = "sha256-lzU1SwgZ7EKCmpDtCp4jKDBIdZVB+S1s/Oh3GfZCmtg=";
+    hash = "sha256-aDcmrvrTNE+YfwFmcOvNBuCfzamvtkGE3EwybAucKuQ=";
   };
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -51,8 +51,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "banks" ];
 

@@ -2,26 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
   six,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "retrying";
-  version = "1.4.2";
-  pyproject = true;
+  version = "1.3.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0QLnXVPY0wuIVi1FNh1sbJNNoG+rMb2BwEIKy5eoujk=";
+    hash = "sha256-NF2oxXZb2YKx0ZFd65EC/T0fetFr2EqXALhfZNJOjz4=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ six ];
+  propagatedBuildInputs = [ six ];
 
   # doesn't ship tests in tarball
   doCheck = false;

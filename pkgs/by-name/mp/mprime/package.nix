@@ -31,12 +31,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mprime";
-  version = "30.19b21";
+  version = "30.8b15";
+
   src = fetchurl {
-    url = "https://download.mersenne.ca/gimps/v30/30.19/p95v${
+    url = "https://www.mersenne.org/ftp_root/gimps/p95v${
       lib.replaceStrings [ "." ] [ "" ] version
     }.source.zip";
-    hash = "sha256-vchDpUem+R3GcASj77zZmFivfbB17Nd7cYiyPlrCzio=";
+    hash = "sha256-CNYorZStHV0aESGX9LfLZ4oD5PFR2UOFLN1MiLaKw58=";
   };
 
   postPatch = ''
@@ -87,7 +88,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with maintainers; [ dstremur ];
     mainProgram = "mprime";
   };
 }

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gradle,
-  jdk21,
+  jdk17,
   fontconfig,
   libXinerama,
   libXrandr,
@@ -15,19 +15,17 @@
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
-  libglvnd,
-  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.14.1";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20250830";
-    hash = "sha256-m52oXJ+6tfTP8KE0+g5D67B7C0HVJRg65GWp7Vx2OQc=";
+    tag = "r20250530";
+    hash = "sha256-FTDZ4ztFv+pcyupI+tHr+VLrENSN6hqs13i1KJmreAM=";
   };
 
   postPatch = ''
@@ -47,15 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jdk21;
+  env.JAVA_HOME = jdk17;
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk21}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
 
   nativeBuildInputs = [
     gradle
-    jdk21
+    jdk17
     copyDesktopItems
-    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -68,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     lcms2
     alsa-lib
-    libglvnd
   ];
 
   doCheck = false;

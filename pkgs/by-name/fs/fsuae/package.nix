@@ -17,18 +17,17 @@
   stdenv,
   zip,
   zlib,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae";
-  version = "3.2.35";
+  version = "3.1.66";
 
   src = fetchFromGitHub {
     owner = "FrodeSolheim";
     repo = "fs-uae";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-e+Q+PC6Kpq3OBKsgoRvmu2p9dQfJeRCdFO1agXIGcU8=";
+    hash = "sha256-zPVRPazelmNaxcoCStB0j9b9qwQDTgv3O7Bg3VlW9ys=";
   };
 
   nativeBuildInputs = [
@@ -59,8 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     strip-nondeterminism --type zip $out/share/fs-uae/fs-uae.dat
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://fs-uae.net";
     description = "Accurate, customizable Amiga Emulator";
@@ -72,9 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae";
-    maintainers = with lib.maintainers; [
-      c4patino
-    ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

@@ -6,7 +6,6 @@
   pkg-config,
   fetchpatch,
   autoreconfHook,
-  gtk-doc,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    gtk-doc
   ];
   buildInputs = [ orc ];
 

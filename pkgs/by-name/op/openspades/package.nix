@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [
+      abbradar
       azahi
     ];
     # never built on aarch64-linux since first introduction in nixpkgs

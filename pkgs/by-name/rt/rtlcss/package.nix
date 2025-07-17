@@ -2,6 +2,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
+  ...
 }:
 
 buildNpmPackage rec {

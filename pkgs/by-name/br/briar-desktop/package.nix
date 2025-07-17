@@ -19,13 +19,13 @@ let
   '';
 
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "briar-desktop";
-  version = "0.6.4-beta";
+  version = "0.6.3-beta";
 
   src = fetchurl {
-    url = "https://desktop.briarproject.org/jars/linux/${finalAttrs.version}/briar-desktop-linux-${finalAttrs.version}.jar";
-    hash = "sha256-S7O625SWbgi4iby76Qe377NGiw4r9+VqgQh8kclKwMo=";
+    url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
+    hash = "sha256-8JX4cgRJZDCBlu5iVL7t5nZSZn8XTk3DU3rasViQgtg=";
   };
 
   dontUnpack = true;
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/{bin,lib}
-    cp ${finalAttrs.src} $out/lib/briar-desktop.jar
+    cp ${src} $out/lib/briar-desktop.jar
     makeWrapper ${openjdk}/bin/java $out/bin/briar-desktop \
       --add-flags "-jar $out/lib/briar-desktop.jar" \
       --prefix LD_LIBRARY_PATH : "${
@@ -58,17 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  # TODO: Add a custom update script
-  meta = {
+  meta = with lib; {
     description = "Decentralized and secure messenger";
     mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
       onny
       supinie
     ];
-    teams = with lib.teams; [ ngi ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}

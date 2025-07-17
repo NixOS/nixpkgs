@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qdocumentview";
     homepage = "https://gitlab.com/extraqt/qdocumentview";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
     platforms = lib.platforms.linux;
   };
 })

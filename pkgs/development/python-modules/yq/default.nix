@@ -6,7 +6,6 @@
   jq,
   pytestCheckHook,
   pyyaml,
-  setuptools,
   setuptools-scm,
   replaceVars,
   tomlkit,
@@ -16,7 +15,7 @@
 buildPythonPackage rec {
   pname = "yq";
   version = "3.4.3";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,12 +28,9 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     argcomplete
     pyyaml
     tomlkit
@@ -52,6 +48,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
     maintainers = with maintainers; [
+      womfoo
       SuperSandro2000
     ];
     mainProgram = "yq";

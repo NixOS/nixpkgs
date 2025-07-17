@@ -27,8 +27,7 @@ mkDerivation {
     "sys/kern"
     "sys/libkern"
     "sys/crypto"
-  ]
-  ++ extraSrc;
+  ] ++ extraSrc;
 
   outputs = [
     "out"

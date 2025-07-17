@@ -9,24 +9,16 @@
   callPackage,
 }:
 
-let
-  plugins = [
-    "ArchiSteamFarm.OfficialPlugins.ItemsMatcher"
-    "ArchiSteamFarm.OfficialPlugins.MobileAuthenticator"
-    "ArchiSteamFarm.OfficialPlugins.Monitoring"
-    "ArchiSteamFarm.OfficialPlugins.SteamTokenDumper"
-  ];
-in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.2.0.5";
+  version = "6.1.7.8";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-CNnSsFBeO3BHUbom0eytfz02Q7QBv8JEmHbgPSL7I3Y=";
+    hash = "sha256-bdjkYrfaC/5rKqRmKr+NVmCMU871WJFNRdh92i8GJF8=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
@@ -34,12 +26,7 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  projectFile = [
-    "ArchiSteamFarm"
-  ]
-  ++ plugins;
-  testProjectFile = "ArchiSteamFarm.Tests";
-
+  projectFile = "ArchiSteamFarm.sln";
   executable = "ArchiSteamFarm";
 
   enableParallelBuilding = false;
@@ -63,7 +50,7 @@ buildDotnetModule rec {
 
   doCheck = true;
 
-  installPhase = ''
+  preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -71,19 +58,20 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
+  '';
 
-    dotnetInstallPhase
-
+  postInstall = ''
     buildPlugin() {
       echo "Publishing plugin $1"
-      dotnetProjectFiles=("$1")
-      dotnetInstallPath="$out/lib/ArchiSteamFarm/plugins/$1"
-      dotnetInstallPhase
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        $dotnetFlags $dotnetInstallFlags
     }
 
-  ''
-  + lib.concatMapStrings (p: "buildPlugin ${p}\n") plugins
-  + ''
+    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
+    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
 
     chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
     wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm

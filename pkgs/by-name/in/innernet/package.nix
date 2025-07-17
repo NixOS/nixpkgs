@@ -12,39 +12,42 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.7.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
     tag = "v${version}";
-    hash = "sha256-9rw+hS4qwAL6adDzi2Hfl4TQBDWvPKjwpkbRCBKzwEY=";
+    hash = "sha256-dFMAzLvPO5xAfJqUXdiLf13uh5H5ay+CI9aop7Fhprk=";
   };
 
-  cargoHash = "sha256-MM6sYNmd/i8ba6WRLMsQWR3+KEc2o8Io+gAN9RjYj5E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gTFvxmnh+d1pNqG0sEHFpl0m9KKCQ78sai//iiJ0aGs=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     installShellFiles
   ];
 
-  buildInputs = [
-    sqlite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
-  postInstall = ''
-    installManPage doc/innernet-server.8.gz
-    installManPage doc/innernet.8.gz
-    installShellCompletion doc/innernet.completions.{bash,fish,zsh}
-    installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
-  ''
-  + (lib.optionalString stdenv.hostPlatform.isLinux ''
-    find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
-    find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
-  '');
+  postInstall =
+    ''
+      installManPage doc/innernet-server.8.gz
+      installManPage doc/innernet.8.gz
+      installShellCompletion doc/innernet.completions.{bash,fish,zsh}
+      installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
+    ''
+    + (lib.optionalString stdenv.hostPlatform.isLinux ''
+      find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
+      find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
+    '');
 
   passthru.tests = {
     serverVersion = testers.testVersion {

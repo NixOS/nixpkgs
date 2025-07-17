@@ -86,8 +86,7 @@ buildPythonPackage rec {
     psycopg2
     pytest-django
     pytestCheckHook
-  ]
-  ++ django-allauth.optional-dependencies.socialaccount;
+  ] ++ django-allauth.optional-dependencies.socialaccount;
 
   disabledTests = [
     # Test requires django with gdal

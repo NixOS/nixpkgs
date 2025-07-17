@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "iplotx";
-  version = "0.6.5";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabilab";
     repo = "iplotx";
     tag = version;
-    hash = "sha256-k/psY/xwNuG5/1pLmJOpC8U3Il4v2cicwTy+pR9ZNC8=";
+    hash = "sha256-3Nn/sz1yUaxhGFr0hMGoLEBF5pNs+tz/KpsGtKkYujo=";
   };
 
   build-system = [ hatchling ];
@@ -45,13 +45,11 @@ buildPythonPackage rec {
     export MPLCONFIGDIR=$(mktemp -d)
   '';
 
+  # These four tests result in an ImageComparisonFailure
   disabledTests = [
-    # These tests result in an ImageComparisonFailure
-    "test_complex"
-    "test_complex_rotatelabels"
-    "test_directed_graph"
-    "test_display_shortest_path"
     "test_labels"
+    "test_complex"
+    "test_display_shortest_path"
     "test_labels_and_colors"
   ];
 

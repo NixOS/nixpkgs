@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -11,37 +10,33 @@
   qt6,
   qtpy,
   pyqt6,
-  mesa,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.11.0";
-  pyproject = true;
+  version = "0.10.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "echo";
     tag = "v${version}";
-    sha256 = "sha256-Uikzn9vbLctiZ6W0uA6hNvr7IB/FhCcHk+JxBW7yrA4=";
+    sha256 = "sha256-RlTscoStJQ0vjrrk14xHRsMZOJt8eJSqinc4rY/lW4k=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
-  ];
-
-  nativeBuildInputs = [
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     qt6.qtconnectivity
     qt6.qtbase
     qt6.qttools
@@ -50,14 +45,11 @@ buildPythonPackage rec {
     qtpy
   ];
 
-  doCheck = lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook;
-
-  preCheck = ''
-    export QT_QPA_PLATFORM=offscreen
-  '';
+  # collecting ... qt.qpa.xcb: could not connect to display
+  # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
+  doCheck = false;
 
   nativeCheckInputs = [
-    mesa.llvmpipeHook
     pytestCheckHook
     pytest-cov-stub
   ];

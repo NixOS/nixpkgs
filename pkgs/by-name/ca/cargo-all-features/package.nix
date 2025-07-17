@@ -6,14 +6,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-all-features";
-  version = "1.11.0";
+  version = "1.10.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-pHwQq6/KGCIYm3Q63YbUit6yUjwEFnpBJCE6lpGBcZc=";
+    hash = "sha256-/w3Xd7PXUNtqzRYmUqJtth+GDuXSnsk1NiYCTYsHuAQ=";
   };
 
-  cargoHash = "sha256-tAwU7vJLp4KLzYAEbtSpNKbZBz+hBdAiIkUD/A5CpwI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OgVeAuC36mP8rv4+XHsrOe7KKnpQ/u0M3g91NE0u98A=";
 
   meta = with lib; {
     description = "Cargo subcommand to build and test all feature flag combinations";

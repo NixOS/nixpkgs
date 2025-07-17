@@ -19,7 +19,6 @@
   py,
   httpx,
   pyramid,
-  pytest-asyncio,
   pytestCheckHook,
   repoze-lru,
   setuptools,
@@ -74,14 +73,12 @@ buildPythonApplication rec {
     waitress
     py
     httpx
-  ]
-  ++ passlib.optional-dependencies.argon2;
+  ] ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
     beautifulsoup4
     nginx
     py
-    pytest-asyncio
     pytestCheckHook
     webtest
   ];
@@ -93,16 +90,12 @@ buildPythonApplication rec {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
-  pytestFlags = [
-    "-rfsxX"
-  ];
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "./test_devpi_server"
-  ];
-  disabledTestPaths = [
-    "test_devpi_server/test_nginx_replica.py"
-    "test_devpi_server/test_streaming_nginx.py"
-    "test_devpi_server/test_streaming_replica_nginx.py"
+    "-rfsxX"
+    "--ignore=test_devpi_server/test_nginx_replica.py"
+    "--ignore=test_devpi_server/test_streaming_nginx.py"
+    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
   ];
   disabledTests = [
     "root_passwd_hash_option"

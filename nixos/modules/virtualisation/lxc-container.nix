@@ -28,7 +28,9 @@
   options = { };
 
   config =
-
+    let
+      initScript = if config.boot.initrd.systemd.enable then "prepare-root" else "init";
+    in
     {
       boot.isContainer = true;
       boot.postBootCommands = ''
@@ -77,7 +79,7 @@
 
         contents = [
           {
-            source = config.system.build.toplevel + "/init";
+            source = config.system.build.toplevel + "/${initScript}";
             target = "/sbin/init";
           }
           # Technically this is not required for lxc, but having also make this configuration work with systemd-nspawn.
@@ -102,7 +104,7 @@
 
         pseudoFiles = [
           "/sbin d 0755 0 0"
-          "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/init"
+          "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/${initScript}"
           "/dev d 0755 0 0"
           "/proc d 0555 0 0"
           "/sys d 0555 0 0"
@@ -111,7 +113,7 @@
 
       system.build.installBootLoader = pkgs.writeScript "install-lxc-sbin-init.sh" ''
         #!${pkgs.runtimeShell}
-        ${pkgs.coreutils}/bin/ln -fs "$1/init" /sbin/init
+        ${pkgs.coreutils}/bin/ln -fs "$1/${initScript}" /sbin/init
       '';
 
       # networkd depends on this, but systemd module disables this for containers
@@ -120,7 +122,7 @@
       systemd.packages = [ pkgs.distrobuilder.generator ];
 
       system.activationScripts.installInitScript = lib.mkForce ''
-        ln -fs $systemConfig/init /sbin/init
+        ln -fs $systemConfig/${initScript} /sbin/init
       '';
     };
 }

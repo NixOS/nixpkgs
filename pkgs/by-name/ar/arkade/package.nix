@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +7,13 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.11.46";
+  version = "0.11.40";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    hash = "sha256-hQLp0LA/VuwYzd+yPeH09WRXBWmxuW4gba85BwmCATU=";
+    hash = "sha256-9jFfYCMAyf6RAz4CjkYYRC68VkqrWCXkVUA2kZm0g7s=";
   };
 
   env.CGO_ENABLED = 0;
@@ -43,7 +42,7 @@ buildGoModule rec {
     "-X github.com/alexellis/arkade/pkg.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd arkade \
       --bash <($out/bin/arkade completion bash) \
       --zsh <($out/bin/arkade completion zsh) \

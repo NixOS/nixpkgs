@@ -1,23 +1,18 @@
 {
   mkKdeDerivation,
-  pkg-config,
-  qtmultimedia,
   kconfigwidgets,
   kparts,
   kxmlgui,
-  ffmpeg,
+  phonon,
 }:
 mkKdeDerivation {
   pname = "dragon";
 
-  extraNativeBuildInputs = [ pkg-config ];
-
   extraBuildInputs = [
-    qtmultimedia
     kconfigwidgets
     kparts
     kxmlgui
-    ffmpeg
+    phonon
   ];
 
   meta.mainProgram = "dragon";

@@ -121,6 +121,8 @@ rec {
     buildLuaPackage rec {
       pname = "lua-pam";
       version = "unstable-2015-07-03";
+      # Needed for `disabled`, overridden in buildLuaPackage
+      name = "${pname}-${version}";
 
       src = fetchFromGitHub {
         owner = "devurandom";
@@ -145,9 +147,10 @@ rec {
         runHook postInstall
       '';
 
+      # The package does not build with lua 5.4 or luaJIT
+      disabled = luaAtLeast "5.4" || isLuaJIT;
+
       meta = with lib; {
-        # The package does not build with lua 5.4 or luaJIT
-        broken = luaAtLeast "5.4" || isLuaJIT;
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
         license = licenses.mit;

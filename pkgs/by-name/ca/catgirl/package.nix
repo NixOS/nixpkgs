@@ -2,30 +2,29 @@
   ctags,
   fetchurl,
   lib,
-  libretls,
-  openssl,
+  libressl,
   ncurses,
   pkg-config,
   stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "catgirl";
   version = "2.2a";
 
   src = fetchurl {
-    url = "https://git.causal.agency/catgirl/snapshot/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://git.causal.agency/catgirl/snapshot/${pname}-${version}.tar.gz";
     hash = "sha256-xtdgqu4TTgUlht73qRA1Q/coH95lMfvLQQhkcHlCl8I=";
   };
 
   # catgirl's configure script uses pkg-config --variable exec_prefix openssl
   # to discover the install location of the openssl(1) utility. exec_prefix
-  # is the "out" output of openssl in our case (where the libraries are
+  # is the "out" output of libressl in our case (where the libraries are
   # installed), so we need to fix this up.
   postConfigure = ''
-    substituteInPlace config.mk --replace-fail \
+    substituteInPlace config.mk --replace \
       "$($PKG_CONFIG --variable exec_prefix openssl)" \
-      "${lib.getBin openssl}"
+      "${lib.getBin libressl}"
   '';
 
   nativeBuildInputs = [
@@ -33,20 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libretls
-    openssl
+    libressl
     ncurses
   ];
   strictDeps = true;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.causal.agency/catgirl/about/";
+    license = licenses.gpl3Plus;
     description = "TLS-only terminal IRC client";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "catgirl";
-    maintainers = with lib.maintainers; [ xfnw ];
+    maintainers = with maintainers; [ xfnw ];
   };
-})
+}

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "9.5.5";
+  version = "8.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-Pwl6fCEBj+eUXYEf4wCTw1fpKZh3j4IVC6SW0Vqcmf4=";
+    hash = "sha256-ikNGBkDRyhX8yO/7DYMh1w4q3LCN7A7jsuqFsNQGsy4=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   doCheck = false; # tests require network access
 
-  pythonImportsCheck = [ "ddgs" ];
+  pythonImportsCheck = [ "duckduckgo_search" ];
 
   meta = {
     description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";

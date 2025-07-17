@@ -7,13 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-colorama";
-  version = "0.4.15.20250801";
+  version = "0.4.15.20240311";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "types_colorama";
-    inherit version;
-    hash = "sha256-AlZdE9aJY9EiN9PzMPXs1iKjF597WxTufxYUYnDDV/U=";
+    inherit pname version;
+    hash = "sha256-oo5/mNF9KxT7lWXTI4jkGfQQj1V6fZOaZjGZabK5nHo=";
   };
 
   nativeBuildInputs = [ setuptools ];

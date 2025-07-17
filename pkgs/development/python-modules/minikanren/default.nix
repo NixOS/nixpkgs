@@ -10,28 +10,21 @@
   py,
   pytestCheckHook,
   pytest-html,
-  setuptools,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "minikanren";
-  version = "1.0.5";
-  pyproject = true;
+  version = "1.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "kanren";
-    tag = "v${version}";
-    hash = "sha256-lCQ0mKT99zK5A74uoo/9bP+eFdm3MC43Fh8+P2krXrs=";
+    rev = "5aa9b1734cbb3fe072a7c72b46e1b72a174d28ac";
+    hash = "sha256-daAtREgm91634Q0mc0/WZivDiyZHC7TIRoGRo8hMnGE=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     toolz
     cons
     multipledispatch
@@ -55,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Relational programming in Python";
     homepage = "https://github.com/pythological/kanren";
-    changelog = "https://github.com/pythological/kanren/releases/tag/${src.tag}";
+    changelog = "https://github.com/pythological/kanren/releases";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
   };

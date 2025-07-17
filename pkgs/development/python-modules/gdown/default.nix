@@ -39,8 +39,7 @@ buildPythonPackage rec {
     tqdm
     setuptools
     six
-  ]
-  ++ requests.optional-dependencies.socks;
+  ] ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null

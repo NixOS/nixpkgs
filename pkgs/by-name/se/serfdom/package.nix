@@ -40,5 +40,6 @@ buildGoModule rec {
     '';
     homepage = "https://www.serf.io";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ pradeepchhetri ];
   };
 }

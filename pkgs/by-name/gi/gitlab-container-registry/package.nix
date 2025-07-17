@@ -1,23 +1,23 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitLab,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.27.0";
-  rev = "v${version}-gitlab-ahmed-master-test";
+  version = "4.24.0";
+  rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-lcM0HjseQ4N7rndDx95aC6MWb+Ggwz3UIhSvbC8oxus=";
+    hash = "sha256-GNL7L6DKIKEgDEZQkeHNOn4R5SnWnHvNoUIs2YLjoR8=";
   };
 
-  vendorHash = "sha256-ALPK9h5Isniis7QPz9DXokeBd+hWMDJ7ts9/sGNrFMk=";
+  vendorHash = "sha256-zisadCxyfItD/n7VGbtbvhl8MRHiqdw0Kkrg6ebgS/8=";
 
   checkFlags =
     let

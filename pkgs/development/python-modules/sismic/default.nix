@@ -11,9 +11,9 @@
 }:
 
 let
-  version = "1.6.10";
+  version = "1.6.8";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sismic";
   inherit version;
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "AlexandreDecan";
     repo = "sismic";
     tag = version;
-    hash = "sha256-FUjOn2b4nhHf2DfYbY+wsRMaVEG90nPgLlNbNTiq3fQ=";
+    hash = "sha256-0g39jJI3UIniJY/oHQMZ53GCOJIbqdVeOED9PWxlw6E=";
   };
 
   pythonRelaxDeps = [ "behave" ];
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/AlexandreDecan/sismic/releases/tag/${src.tag}";
+    changelog = "https://github.com/AlexandreDecan/sismic/releases/tag/${version}";
     description = "Sismic Interactive Statechart Model Interpreter and Checker";
     homepage = "https://github.com/AlexandreDecan/sismic";
     license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 }

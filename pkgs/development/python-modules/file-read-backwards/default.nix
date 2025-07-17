@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  mock,
   pythonOlder,
   setuptools,
-  pytest-mock,
-  pytestCheckHook,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "file-read-backwards";
-  version = "3.2.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "file_read_backwards";
     inherit version;
-    hash = "sha256-VHjTBeuuquj+PGWFok38MmIXAiRFCsyTITmPDSbN0Qk=";
+    hash = "sha256-vQRZO8GTigAyJL5FHV1zXx9EkOHnClaM6NMwu3ZSpoQ=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pytest-mock
-    pytestCheckHook
+    mock
+    unittestCheckHook
   ];
 
   pythonImportsCheck = [ "file_read_backwards" ];

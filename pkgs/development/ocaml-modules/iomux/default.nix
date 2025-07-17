@@ -8,13 +8,14 @@
 
 buildDunePackage rec {
   pname = "iomux";
-  version = "0.4";
+  version = "0.3";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/haesbaert/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-Hjk/rlWUdoSMXHBSUHaxEHDoBqVJ7rrghLBGqXcrqzU=";
+    sha256 = "zNJ3vVOv0BEpHLiC8Y610F87uiMlfYNo28ej0H+EU+c=";
   };
 
   buildInputs = [

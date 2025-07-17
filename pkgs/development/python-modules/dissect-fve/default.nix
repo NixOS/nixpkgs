@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-fve";
-  version = "4.2";
+  version = "4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +24,8 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.fve";
     tag = version;
-    hash = "sha256-OgagTnt4y6Fzd7jbsCgbkTzcsdnozImfdKI9ew9JaqI=";
+    hash = "sha256-xPjwyI134E0JWkM+S2ae9TuBGHMSrgyjooM9CGECqgg=";
   };
-
-  pythonRelaxDeps = [
-    "pycryptodome"
-  ];
 
   build-system = [
     setuptools

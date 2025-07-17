@@ -1,28 +1,28 @@
 {
   lib,
-  # Module requires Go 1.25, drop pin once buildGoModule uses Go >= 1.25.
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "bluetuith";
-  version = "0.2.5";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7SMGI8wIiu4i2kcKRsmLHM4tu7ZZK0usBXh5zFu94E=";
+    hash = "sha256-yXH/koNT4ec/SOZhSU01iPNAfD1MdMjM2+wNmjXWsrk=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-tEVzuhE0Di7edGa5eJHLLqOecCuoj02h91TsZiZU1PM=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
+    "-w"
     "-X github.com/darkhz/bluetuith/cmd.Version=${finalAttrs.version}@nixpkgs"
   ];
 

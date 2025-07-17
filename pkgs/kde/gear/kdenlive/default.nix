@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   replaceVars,
+  mediainfo,
   mlt,
   glaxnimate,
   ffmpeg-full,
@@ -11,7 +12,7 @@
   qtnetworkauth,
   qqc2-desktop-style,
   libv4l,
-  opentimelineio,
+  open-timeline-io,
   frei0r,
 }:
 mkKdeDerivation {
@@ -19,7 +20,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      inherit mlt glaxnimate;
+      inherit mediainfo mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];
@@ -43,7 +44,7 @@ mkKdeDerivation {
     ffmpeg-full
     libv4l
     mlt
-    opentimelineio
+    open-timeline-io
   ];
 
   qtWrapperArgs = [

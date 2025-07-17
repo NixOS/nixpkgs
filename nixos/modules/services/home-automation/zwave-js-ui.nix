@@ -100,7 +100,7 @@ in
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernalTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
         RemoveIPC = true;

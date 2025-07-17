@@ -16,7 +16,6 @@
 
   # tests
   dm-haiku,
-  equinox,
   flax,
   funsor,
   graphviz,
@@ -30,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.19.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-3kzaINsz1Mjk97ERQsQIYIBz7CVmXtVDn0edJFMHQWs=";
+    hash = "sha256-0X/ta2yfzjf3JnZYdUAzQmXvbsDpwFCJe/bArMSWQgU=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +51,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
-    equinox
     flax
     funsor
     graphviz
@@ -77,28 +75,29 @@ buildPythonPackage rec {
     "-Wignore::UserWarning"
   ];
 
-  disabledTests = [
-    # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
-    "test_mcmc_parallel_chain"
+  disabledTests =
+    [
+      # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
+      "test_mcmc_parallel_chain"
 
-    # AssertionError due to tolerance issues
-    "test_bijective_transforms"
-    "test_cpu"
-    "test_entropy_categorical"
-    "test_gaussian_model"
+      # AssertionError due to tolerance issues
+      "test_bijective_transforms"
+      "test_cpu"
+      "test_entropy_categorical"
+      "test_gaussian_model"
 
-    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
-    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    # E        Emitted warnings: [].
-    "test_laplace_approximation_warning"
+      # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+      # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+      # E        Emitted warnings: [].
+      "test_laplace_approximation_warning"
 
-    # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
-    "test_chain"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError: Not equal to tolerance rtol=0.06, atol=0
-    "test_functional_map"
-  ];
+      # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
+      "test_chain"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AssertionError: Not equal to tolerance rtol=0.06, atol=0
+      "test_functional_map"
+    ];
 
   disabledTestPaths = [
     # Require internet access

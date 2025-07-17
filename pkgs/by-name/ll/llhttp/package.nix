@@ -29,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   passthru.updateScript = nix-update-script {

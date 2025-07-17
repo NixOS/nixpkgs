@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.4";
+  version = "14.3";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-Jx/Q/RsCTy06kJfJeatqrEoTMz7wLZvPQ3bzFClvKWc=";
+    hash = "sha256-F8oIoG+SaHwhT7aA+iYp9/eWyGf6CiDIGm6Y2px0wlI=";
   };
 
   sourceRoot = ".";
@@ -72,6 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
     })
   ];
+
+  # https://freefilesync.org/forum/viewtopic.php?t=12163
+  postPatch = ''
+    substituteInPlace zen/socket.h zen/sys_error.h \
+      --replace-fail "#undef G_GNUC_UNUSED" ""
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems

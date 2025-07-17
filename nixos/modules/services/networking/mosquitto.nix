@@ -518,7 +518,6 @@ let
     pid_file = 1;
     queue_qos0_messages = 1;
     retain_available = 1;
-    retain_expiry_interval = 1;
     set_tcp_nodelay = 1;
     sys_interval = 1;
     upgrade_outgoing_qos = 1;
@@ -718,8 +717,7 @@ in
         ReadWritePaths = [
           cfg.dataDir
           "/tmp" # mosquitto_passwd creates files in /tmp before moving them
-        ]
-        ++ lib.filter path.check cfg.logDest;
+        ] ++ lib.filter path.check cfg.logDest;
         ReadOnlyPaths = map (p: "${p}") (
           cfg.includeDirs
           ++ lib.filter (v: v != null) (

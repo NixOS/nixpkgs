@@ -6,7 +6,6 @@
   boca,
   smooth,
   systemd,
-  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
     boca
     smooth
     systemd
-    wrapGAppsHook3
   ];
 
   makeFlags = [

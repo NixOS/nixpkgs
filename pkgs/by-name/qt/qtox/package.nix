@@ -59,8 +59,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qt6.qttools
     qt6.wrapQtAppsHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=v${version}"

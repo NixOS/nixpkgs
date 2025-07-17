@@ -15,6 +15,13 @@
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
+  # This version is kind of arbitrary, we use some features that were
+  # implemented in newer versions of Nix, but not necessary 2.18.
+  # However, Lix is a fork of Nix 2.18, so this looks like a good version
+  # to cut specific functionality.
+  # ATTN: This currently doesn't disambiguate between Nix and Lix, so using this
+  # in a conditional needs careful checking against both Nix implementations.
+  withNix218 ? lib.versionAtLeast nix.version "2.18",
   # passthru.tests
   nixosTests,
   nixVersions,
@@ -55,6 +62,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
+      --subst-var-by withNix218 ${lib.boolToString withNix218} \
       --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 
@@ -113,9 +121,9 @@ python3Packages.buildPythonApplication rec {
         with_nix_stable = nixos-rebuild-ng.override {
           nix = nixVersions.stable;
         };
-        with_nix_2_28 = nixos-rebuild-ng.override {
-          # oldest supported version in nixpkgs
-          nix = nixVersions.nix_2_28;
+        with_nix_2_3 = nixos-rebuild-ng.override {
+          # oldest / minimum supported version in nixpkgs
+          nix = nixVersions.nix_2_3;
         };
         with_lix_latest = nixos-rebuild-ng.override {
           nix = lixPackageSets.latest.lix;
@@ -134,17 +142,14 @@ python3Packages.buildPythonApplication rec {
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
         linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
-          export MYPY_CACHE_DIR="$(mktemp -d)"
           export RUFF_CACHE_DIR="$(mktemp -d)"
 
-          pushd ${src}
           echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy .
+          mypy ${src}
           echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check .
+          ruff check ${src}
           echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check .
-          popd
+          ruff format --check ${src}
 
           touch $out
         '';

@@ -16,8 +16,8 @@
     need both of these packages in their profile
     to support their use in yadm.
   */
-  # git-crypt,
-  # transcrypt,
+  # , git-crypt
+  # , transcrypt
   j2cli,
   esh,
   gnupg,
@@ -30,15 +30,15 @@
 
 resholve.mkDerivation rec {
   pname = "yadm";
-  version = "3.5.0";
+  version = "3.3.0";
 
   nativeBuildInputs = [ installShellFiles ];
 
   src = fetchFromGitHub {
-    owner = "yadm-dev";
+    owner = "TheLocehiliosan";
     repo = "yadm";
     rev = version;
-    hash = "sha256-hDo6zs70apNhKmuvR+eD51FzuTLj3SL/wHQXqLMD9QE=";
+    hash = "sha256-VQhfRtg9wtquJGjhB8fFQqHIJ5GViMfNQQep13ZH5SE=";
   };
 
   dontConfigure = true;
@@ -94,8 +94,7 @@ resholve.mkDerivation rec {
       };
       keep = {
         "$YADM_COMMAND" = true; # internal cmds
-        "$processor" = true; # dynamic, template-engine
-        "$log" = true; # dynamic level-specific loggers
+        "$template_cmd" = true; # dynamic, template-engine
         "$SHELL" = true; # probably user env? unsure
         "$hook_command" = true; # ~git hooks?
         "exec" = [ "$YADM_BOOTSTRAP" ]; # yadm bootstrap script
@@ -125,7 +124,7 @@ resholve.mkDerivation rec {
   };
 
   meta = {
-    homepage = "https://github.com/yadm-dev/yadm";
+    homepage = "https://github.com/TheLocehiliosan/yadm";
     description = "Yet Another Dotfiles Manager";
     longDescription = ''
       yadm is a dotfile management tool with 3 main features:
@@ -133,7 +132,7 @@ resholve.mkDerivation rec {
       * Provides a way to use alternate files on a specific OS or host.
       * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
-    changelog = "https://github.com/yadm-dev/yadm/blob/${version}/CHANGES";
+    changelog = "https://github.com/TheLocehiliosan/yadm/blob/${version}/CHANGES";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.unix;

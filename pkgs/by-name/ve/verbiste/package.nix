@@ -7,13 +7,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "verbiste";
-  version = "0.1.49";
+
+  version = "0.1.48";
 
   src = fetchurl {
-    url = "http://sarrazip.com/dev/verbiste-${finalAttrs.version}.tar.gz";
-    hash = "sha256-SnVhM8DronsajiNtrlOuFzJWBbpIb+bLLrK+mWZoP6U=";
+    url = "https://perso.b2b2c.ca/~sarrazip/dev/verbiste-${version}.tar.gz";
+    hash = "sha256-qp0OFpH4DInWjzraDI6+CeKh85JkbwVYHlJruIrGnBM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,11 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sarrazip.com/dev/verbiste.html";
     description = "French and Italian verb conjugator";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
   };
-})
+}

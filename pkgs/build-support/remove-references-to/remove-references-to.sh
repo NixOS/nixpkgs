@@ -2,6 +2,10 @@
 
 fixupHooks=()
 
+if [ -e @out@/nix-support/setup-hooks.sh ]; then
+    source @out@/nix-support/setup-hooks.sh
+fi
+
 # References to remove
 targets=()
 while getopts t: o; do
@@ -26,9 +30,8 @@ for target in "${targets[@]}" ; do
     sed -i -e "s|$target|eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee|g" "${regions[@]}"
 done
 
-if [[ -n "@signingUtils@" ]]; then
-    source "@signingUtils@"
-    for region in "${regions[@]}"; do
-        signIfRequired "$region"
+for region in "${regions[@]}"; do
+    for hook in "${fixupHooks[@]}"; do
+        eval "$hook" "$region"
     done
-fi
+done

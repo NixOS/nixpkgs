@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
-  autoreconfHook,
+  autoconf,
+  automake,
   docbook_xml_dtd_412,
   docbook_xsl,
   intltool,
@@ -16,26 +18,39 @@
   vala,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lxsession";
-  version = "0.5.6";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxsession";
-    tag = finalAttrs.version;
-    hash = "sha256-3RnRF4oMCtZbIraHVqEPnkviAkELq7uYqyHY0uCf/lU=";
+    rev = version;
+    sha256 = "17sqsx57ymrimm5jfmcyrp7b0nzi41bcvpxsqckmwbhl19g6c17d";
   };
 
+  patches = [
+    ./xmlcatalog_patch.patch
+
+    # lxsession compilation is broken upstream as of GCC 14
+    # https://sourceforge.net/p/lxde/bugs/973/
+    (fetchpatch {
+      name = "0001-Fix-build-on-GCC-14.patch";
+      url = "https://sourceforge.net/p/lxde/bugs/973/attachment/0001-Fix-build-on-GCC-14.patch";
+      hash = "sha256-lxF3HZy5uLK7Cfu8W1A03syZf7OWXpHiU2Fk+xBl39g=";
+    })
+  ];
+
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
+    docbook_xml_dtd_412
+    docbook_xsl
     intltool
     libxml2
     libxslt
     pkg-config
     wrapGAppsHook3
-    docbook_xml_dtd_412
-    docbook_xsl
   ];
 
   buildInputs = [
@@ -49,20 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-man"
     "--disable-buildin-clipboard"
     "--disable-buildin-polkit"
+    "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
   ];
 
-  postPatch = ''
-    mkdir -p m4
-  '';
+  preConfigure = "./autogen.sh";
 
-  patches = [ ./repect-xml-catalog-file-var.patch ];
-
-  meta = {
+  meta = with lib; {
     homepage = "https://wiki.lxde.org/en/LXSession";
     description = "Classic LXDE session manager";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.shamilton ];
-    platforms = lib.platforms.linux;
-    mainProgram = "lxsession";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.shamilton ];
+    platforms = platforms.linux;
   };
-})
+}

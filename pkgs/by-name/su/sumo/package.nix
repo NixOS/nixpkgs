@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.24.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
-    tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-xf7/hUJpl+XmXx5MmFzYu2geFNe7JVaxDrraoqLrSuk=";
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-yXXOCvlHAzGmNQeXyWQtmq1UdkQ6qt4L9noUii/voP4=";
     fetchSubmodules = true;
   };
 
@@ -48,38 +48,39 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs = [
-    bzip2
-    eigen
-    ffmpeg
-    fox_1_6
-    gdal
-    gl2ps
-    gpp
-    gtest
-    jdk
-    libGL
-    libGLU
-    libjpeg
-    libpng
-    libtiff
-    libxcrypt
-    openscenegraph
-    proj
-    python3Packages.setuptools
-    xercesc
-    zlib
-    python3
-  ]
-  ++ (with xorg; [
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXft
-    libXrandr
-    libXrender
-  ]);
+  buildInputs =
+    [
+      bzip2
+      eigen
+      ffmpeg
+      fox_1_6
+      gdal
+      gl2ps
+      gpp
+      gtest
+      jdk
+      libGL
+      libGLU
+      libjpeg
+      libpng
+      libtiff
+      libxcrypt
+      openscenegraph
+      proj
+      python3Packages.setuptools
+      xercesc
+      zlib
+      python3
+    ]
+    ++ (with xorg; [
+      libX11
+      libXcursor
+      libXext
+      libXfixes
+      libXft
+      libXrandr
+      libXrender
+    ]);
 
   meta = with lib; {
     description = "SUMO traffic simulator";

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Shell script that uploads images to imgur";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     homepage = "https://github.com/ram-on/imgurbash2";
     mainProgram = "imgurbash2";
   };

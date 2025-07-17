@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   cmake,
-  espeak-ng,
   fetchpatch,
   ffmpeg,
   fontconfig,
@@ -19,7 +18,6 @@
   libusb1,
   libwebp,
   nix-update-script,
-  onnxruntime,
   optipng,
   piper-tts,
   pkg-config,
@@ -38,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.10.0";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ByDUoF9C5FE8ZlQ/zP4H43b9+zUIsgah5/FO5mtXsMU=";
+    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
   };
 
   patches = [
@@ -57,8 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
     })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -70,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseQmakeConfigure = true;
   dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = true;
 
   nativeBuildInputs = [
     cmake
@@ -81,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    espeak-ng
     ffmpeg
     fontconfig
     hunspell
@@ -94,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
-    onnxruntime
+    piper-tts
     podofo_0_10
     poppler-utils
     qt6.qtbase
@@ -148,10 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
           ]
       ++ lib.optional unrarSupport unrardll
     ))
-    piper-tts
     xdg-utils
-  ]
-  ++ lib.optional speechSupport speechd-minimal;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
@@ -227,11 +220,6 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_qt'  # we don't include svg or webp support
       $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
       $ETN 'test_websocket_basic'  # flakey
-      # hangs with cuda enabled, also:
-      # eglInitialize: Failed to get system egl display
-      # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-      $ETN 'test_recipe_browser_webengine'
-
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )

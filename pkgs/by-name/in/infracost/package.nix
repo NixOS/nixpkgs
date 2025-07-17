@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,15 +7,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.42";
+  version = "0.10.38";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-o6QVD6zZUs8eGTavxBhlcdiiBgG8w5fiYsb3ohHh+Vg=";
+    sha256 = "sha256-cnZ7ASYm1IhlqskWMEWzaAG6XKEex7P3akjmYUjHSzc=";
   };
-  vendorHash = "sha256-So2D6FNX0SETgC1B0tKVDy0JlImHokJWB2roklonuMY=";
+  vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 
   ldflags = [
     "-s"
@@ -37,14 +36,13 @@ buildGoModule rec {
     # remove tests that require networking
     rm cmd/infracost/{breakdown,comment,diff,hcl,run,upload}_test.go
     rm cmd/infracost/comment_{azure_repos,bitbucket,github,gitlab}_test.go
-    rm internal/providers/terraform/hcl_provider_test.go
   '';
 
   checkFlags = [
     "-short"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     export INFRACOST_SKIP_UPDATE_CHECK=true
     installShellCompletion --cmd infracost \
       --bash <($out/bin/infracost completion --shell bash) \

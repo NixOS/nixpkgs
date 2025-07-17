@@ -47,7 +47,6 @@ buildRustPackage rec {
       url = "https://github.com/tectonic-typesetting/tectonic/commit/fbb145cd079497b8c88197276f92cb89685b4d54.patch";
       hash = "sha256-6FW5MFkOWnqzYX8Eg5DfmLaEhVWKYVZwodE4SGXHKV0=";
     })
-    ./tectonic-0.15-fix-dangerous_implicit_autorefs.patch
   ];
 
   cargoPatches = [
@@ -59,6 +58,7 @@ buildRustPackage rec {
     })
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-OMa89riyopKMQf9E9Fr7Qs4hFfEfjnDFzaSWFtkYUXE=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -72,16 +72,17 @@ buildRustPackage rec {
     openssl
   ];
 
-  postInstall = ''
-    # Makes it possible to automatically use the V2 CLI API
-    ln -s $out/bin/tectonic $out/bin/nextonic
-  ''
-  + lib.optionalString clangStdenv.hostPlatform.isLinux ''
-    substituteInPlace dist/appimage/tectonic.desktop \
-      --replace Exec=tectonic Exec=$out/bin/tectonic
-    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
-    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
-  '';
+  postInstall =
+    ''
+      # Makes it possible to automatically use the V2 CLI API
+      ln -s $out/bin/tectonic $out/bin/nextonic
+    ''
+    + lib.optionalString clangStdenv.hostPlatform.isLinux ''
+      substituteInPlace dist/appimage/tectonic.desktop \
+        --replace Exec=tectonic Exec=$out/bin/tectonic
+      install -D dist/appimage/tectonic.desktop -t $out/share/applications/
+      install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+    '';
 
   doCheck = true;
 

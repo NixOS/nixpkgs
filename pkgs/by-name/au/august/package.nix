@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "august";
-  version = "0-unstable-2023-08-13";
+  version = "unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "yoav-lavi";
@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-58DZMoRH9PBbM4sok/XbUcwSXBeqUAmFZpffdMKQ+dE=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-E1M/Soaz4+Gyxizc4VReZlfJB5gxrSz2ue3WI9fcNJA=";
 
   postInstall = ''

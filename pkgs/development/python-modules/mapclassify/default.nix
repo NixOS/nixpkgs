@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mapclassify";
-  version = "2.10.0";
+  version = "2.8.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pysal";
     repo = "mapclassify";
     tag = "v${version}";
-    hash = "sha256-OQpDrxa0zRPDAdyS6KP5enb/JZwbYoXTV8kUijV3tNM=";
+    hash = "sha256-VClkMOR8P9sX3slVjJ2xYYLVnvZuOgVYZiCGrBxoZEc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -48,16 +48,10 @@ buildPythonPackage rec {
 
   # requires network access
   disabledTestPaths = [
-    # this module does http requests *at import time*
     "mapclassify/tests/test_greedy.py"
-    # depends on remote data
     "mapclassify/tests/test_rgba.py"
-  ];
-
-  disabledTests = [
-    # depends on remote datasets
-    "test_legendgram_map"
-    "test_legendgram_most_recent_cmap"
+    # Abort trap: 6
+    "mapclassify/tests/test_mapclassify.py"
   ];
 
   pythonImportsCheck = [ "mapclassify" ];
@@ -65,7 +59,7 @@ buildPythonPackage rec {
   meta = {
     description = "Classification Schemes for Choropleth Maps";
     homepage = "https://pysal.org/mapclassify/";
-    changelog = "https://github.com/pysal/mapclassify/releases/tag/${src.tag}";
+    changelog = "https://github.com/pysal/mapclassify/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };

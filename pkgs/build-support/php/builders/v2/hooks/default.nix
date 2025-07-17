@@ -19,8 +19,6 @@ in
     name = "composer-vendor-hook.sh";
     propagatedNativeBuildInputs = [
       jq
-    ];
-    propagatedBuildInputs = [
       cacert
     ];
     substitutions = {
@@ -32,8 +30,6 @@ in
     name = "composer-install-hook.sh";
     propagatedNativeBuildInputs = [
       jq
-    ];
-    propagatedBuildInputs = [
       cacert
     ];
     substitutions = {

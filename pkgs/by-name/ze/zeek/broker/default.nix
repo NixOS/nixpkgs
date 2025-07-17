@@ -3,31 +3,32 @@
   lib,
   fetchFromGitHub,
   cmake,
-  prometheus-cpp,
   python3,
   caf,
   openssl,
 }:
 let
+  inherit (stdenv.hostPlatform) isStatic;
+
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "fd0696f9077933660f7da5f81978e86b3e967647";
-    hash = "sha256-21wZVwoOB05l/WX/VrVbSx+lFKFQ9MHWjQQD4weavFs=";
+    rev = "1be78cc8a889d95db047f473a0f48e0baee49f33";
+    hash = "sha256-zcXWP8CHx0RSDGpRTrYD99lHlqSbvaliXrtFowPfhBk=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
     repo = "zeek-3rdparty";
-    rev = "a6cc3c7603bb535cf3bec7442140e7126e0577a8";
-    hash = "sha256-yzhuTam9zOQ3MP7fk+ACN5P5tHtHXWbyQP73DwISIv8=";
+    rev = "eb87829547270eab13c223e6de58b25bc9a0282e";
+    hash = "sha256-AVaKcRjF5ZiSR8aPSLBzSTeWVwGWW/aSyQJcN0Yhza0=";
   };
   caf' = caf.overrideAttrs (old: {
-    version = "unstable-2024-09-14-zeek";
+    version = "unstable-2024-01-07-zeek";
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";
-      rev = "10afbbc5ee40263b258b7cf3f0e5abb436f79e89";
-      hash = "sha256-R22eKAFNP2VVA4eL6ycN6aHM0NgDHVll9aFNmOQ/pDc=";
+      rev = "e3048cdd13e085c97870a55eb1f9de04e25320f3";
+      hash = "sha256-uisoYXiZbFQa/TfWGRrCJ23MX4bg8Ds86ffC8sZSRNQ=";
     };
     cmakeFlags = old.cmakeFlags ++ [
       "-DCAF_ENABLE_TESTING=OFF"
@@ -35,9 +36,9 @@ let
     doCheck = false;
   });
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "zeek-broker";
-  version = "2.6.0-unstable-2025-04-23";
+  version = "6.2.0";
   outputs = [
     "out"
     "py"
@@ -48,8 +49,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "5b6cbb8c2d9124aa1fb0bea5799433138dc64cf9";
-    hash = "sha256-L6Z+ltX3tJEwZ05zEftrJlOhwbhs06MY9cEJDM2kcck=";
+    rev = "v${version}";
+    hash = "sha256-SG5TzozKvYc7qcEPJgiEtsxgzdZbbJt90lmuUbCPyv0=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty
@@ -61,6 +62,10 @@ stdenv.mkDerivation {
     touch $sourceRoot/bindings/python/3rdparty/pybind11/CMakeLists.txt
   '';
 
+  patches = [
+    ./0001-Fix-include-path-in-exported-CMake-targets.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
   '';
@@ -71,16 +76,14 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     openssl
-    prometheus-cpp
     python3.pkgs.pybind11
   ];
   propagatedBuildInputs = [ caf' ];
 
   cmakeFlags = [
     "-DCAF_ROOT=${caf'}"
-    "-DENABLE_STATIC_ONLY:BOOL=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
+    "-DENABLE_STATIC_ONLY:BOOL=${if isStatic then "ON" else "OFF"}"
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
-    "-Dprometheus-cpp_ROOT=${lib.getDev prometheus-cpp}"
   ];
 
   meta = with lib; {

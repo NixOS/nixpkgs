@@ -1,32 +1,26 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  pydantic,
-  pytest-asyncio,
+  setuptools,
   pytestCheckHook,
   stdenv,
   lib,
 }:
 buildPythonPackage rec {
   pname = "essentials";
-  version = "1.1.6";
+  version = "1.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials";
-    tag = "v${version}";
-    hash = "sha256-wOZ0y6sAPEy2MgcwmM9SjnULe6oWlVuNeC7Zl070CK4=";
+    rev = "v${version}";
+    hash = "sha256-WMHjBVkeSoQ4Naj1U7Bg9j2hcoErH1dx00BPKiom9T4=";
   };
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pydantic
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # time.sleep(0.01) can be up to 0.05s on darwin
@@ -36,12 +30,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "essentials" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/Neoteroi/essentials";
     description = "General purpose classes and functions";
-    changelog = "https://github.com/Neoteroi/essentials/releases/${src.tag}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
+    changelog = "https://github.com/Neoteroi/essentials/releases/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
       aldoborrero
       zimbatm
     ];

@@ -28,12 +28,13 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    requests
-    securesystemslib
-  ]
-  ++ securesystemslib.optional-dependencies.pynacl
-  ++ securesystemslib.optional-dependencies.crypto;
+  dependencies =
+    [
+      requests
+      securesystemslib
+    ]
+    ++ securesystemslib.optional-dependencies.pynacl
+    ++ securesystemslib.optional-dependencies.crypto;
 
   __darwinAllowLocalNetworking = true;
 

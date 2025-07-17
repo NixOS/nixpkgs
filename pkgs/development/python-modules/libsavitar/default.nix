@@ -36,6 +36,7 @@ buildPythonPackage rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [
+      abbradar
       orivej
     ];
   };

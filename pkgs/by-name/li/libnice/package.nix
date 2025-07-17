@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
     "out"
     "dev"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/libnice-${finalAttrs.version}.tar.gz";

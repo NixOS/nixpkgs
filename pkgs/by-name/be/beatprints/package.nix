@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "BeatPrints";
-  version = "1.1.5";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TrueMyst";
     repo = "BeatPrints";
     rev = "v${version}";
-    hash = "sha256-7h2MbU6wPqcRhWijdMyd7sTf3UVNCX+5JUNytKr5/EM=";
+    hash = "sha256-HtYPEnHbJarSC3P337l3IGagk62FgEohSAVyv6PBnIs=";
   };
 
   build-system = with python3Packages; [

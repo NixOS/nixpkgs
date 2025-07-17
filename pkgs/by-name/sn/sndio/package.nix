@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
     license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ Madouura ];
     platforms = lib.platforms.all;
   };
 })

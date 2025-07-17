@@ -40,8 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     # test_cli.py checks the output of running "glom"

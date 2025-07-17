@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
     "dev"
     "out"
     "man"
-  ]
-  ++ lib.optional pythonSupport "py";
+  ] ++ lib.optional pythonSupport "py";
 
   enableParallelBuilding = true;
 
@@ -49,8 +48,7 @@ stdenv.mkDerivation rec {
     mscgen
     asciidoc
     sourceHighlight
-  ]
-  ++ lib.optional pythonSupport swig;
+  ] ++ lib.optional pythonSupport swig;
 
   postBuild = lib.optionalString (pythonSupport) ''
     cd python

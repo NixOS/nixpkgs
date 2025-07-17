@@ -10,7 +10,7 @@
   spdlog,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "coeurl";
   version = "0.3.1";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "nheko.im";
     owner = "nheko-reborn";
     repo = "coeurl";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-NGplM5c/dMGSQbhKeuPOTWL8KsqvMd/76YuwCxnqNNE=";
   };
   postPatch = ''
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Simple async wrapper around CURL for C++";
     homepage = "https://nheko.im/nheko-reborn/coeurl";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rnhmjoj ];
   };
-})
+}

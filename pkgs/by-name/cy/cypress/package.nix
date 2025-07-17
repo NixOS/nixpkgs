@@ -19,19 +19,19 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-oCTpVD7W1NHWD0nJBrgtmWZZozbcJeAfr7mn/JjqdcM=";
+      hash = "sha256-VkKC4ifUEB+2SJWwUrff7t5Yh6j1d7O7o2T8WJtK4rc=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-MIUVhWkfKN5056jhHN31h4dBcTHJI0iX+I2RbkNI80I=";
+      hash = "sha256-zOM3mKwWzt42LP1c5pS/GIQOj35fTORYEwrLmsf46jw=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-8qvMsC+tRKK12jC2r1A54kS/PZ6q+sErvLvTkse6Kn4=";
+      hash = "sha256-z/HtHiOv/gAq+L4TpI3ibSTpDUGT6UV5uT1mMlbeFuA=";
     };
     x86_64-darwin = {
       platform = "darwin-x64";
-      hash = "sha256-cCLJloLcuCDgTEiMMJKY6rYiPPhZfFfqXFP5NAMhw4Q=";
+      hash = "sha256-g28b9fRsv+nsZ8TMFmp8b0K9kXnYpj+1s+vhaUHqG5E=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -41,7 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "14.5.4";
+  version = "14.5.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
@@ -52,16 +52,17 @@ stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [
-    unzip
-    makeShellWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
-    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
-    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-  ];
+  nativeBuildInputs =
+    [
+      unzip
+      makeShellWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     nss

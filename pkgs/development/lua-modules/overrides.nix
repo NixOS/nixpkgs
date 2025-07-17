@@ -59,7 +59,6 @@
   zziplib,
   writableTmpDirAsHomeHook,
   gitMinimal,
-  getopt,
 }:
 
 final: prev:
@@ -151,15 +150,13 @@ in
   });
 
   fzf-lua = prev.fzf-lua.overrideAttrs {
-    # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
-    # fzf-lua throws `address already in use` on darwin
+    # FIXME: Darwin flaky tests
+    # address already in use on second test run
     # Previewer transient failure
-    # UI tests fail either transiently or consistently in certain software/hardware configurations
-    doCheck = false;
+    doCheck = !stdenv.hostPlatform.isDarwin;
     checkInputs = [
       fd
       fzf
-      getopt
       ripgrep
     ];
     nativeCheckInputs = [
@@ -177,15 +174,18 @@ in
 
       # TODO: remove with new nvim-web-devicons release
       # Disabled devicons test because we have old version as dep and fzf-lua checks for a new icon
-      substituteInPlace tests/files_spec.lua \
+      substituteInPlace tests/file/ui_spec.lua \
         --replace-fail \
-          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
-          "T[\"files\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
+          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
+          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
 
       # TODO: Figure out why 2 files extra
-      substituteInPlace tests/screenshots/tests-files_spec.lua---files---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "  99" "101" \
-        --replace-fail "99" "101"
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
+        --replace-fail "112" "114"
+
+      # TODO: Figure out why 2 files extra
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
+        --replace-fail "111" "113"
 
       make test
 
@@ -455,7 +455,7 @@ in
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
         MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
       };
     };
     buildInputs = oa.buildInputs ++ [
@@ -783,11 +783,6 @@ in
     checkPhase = ''
       runHook preCheck
       export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
-
-      # TODO: Investigate if test infra issue or upstream issue
-      # Remove failing subprocess tests that require channel functionality
-      rm tests/unit/lib/subprocess_spec.lua
-
       nvim --headless -i NONE \
         --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory tests/ {sequential = true}"
@@ -1065,7 +1060,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-egmb4BTbORpTpVO50IcqbZU1Y0hioXLMkxxUAo05TIA=";
+      hash = "sha256-sO2q4cmkJc6T4iyJUWpBfr2ISycS1cXAIO0ibMfzyIE=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo

@@ -29,14 +29,13 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    python3
-  ]
-  ++ (with python3.pkgs; [
-    numpy
-    matplotlib
-  ])
-  ++ lib.optionals withRootSupport [ root ];
+  buildInputs =
+    [ python3 ]
+    ++ (with python3.pkgs; [
+      numpy
+      matplotlib
+    ])
+    ++ lib.optionals withRootSupport [ root ];
 
   propagatedBuildInputs = [ zlib ];
 

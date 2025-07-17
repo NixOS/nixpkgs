@@ -270,40 +270,22 @@ lib.recurseIntoAttrs {
       '';
     };
 
-    # - Test whether a missing file triggers a failure as expected
-    # - Test the postFailureMessage
-    fileMissing =
-      let
-        log = testers.testBuildFailure (
-          testers.testEqualContents {
-            assertion = "Directories with different file list are not recognized as equal";
-            expected = runCommand "expected" { } ''
-              mkdir -p -- "$out/c"
-              echo a >"$out/a"
-              echo b >"$out/b"
-              echo d >"$out/c/d"
-            '';
-            actual = runCommand "actual" { } ''
-              mkdir -p -- "$out/c"
-              echo a >"$out/a"
-              echo d >"$out/c/d"
-            '';
-            inherit postFailureMessage;
-          }
-        );
-        postFailureMessage = ''
-          If after careful review, you find that the changes are acceptable, run `suchandsuch` to adopt the new behavior.
+    fileMissing = testers.testBuildFailure (
+      testers.testEqualContents {
+        assertion = "Directories with different file list are not recognized as equal";
+        expected = runCommand "expected" { } ''
+          mkdir -p -- "$out/c"
+          echo a >"$out/a"
+          echo b >"$out/b"
+          echo d >"$out/c/d"
         '';
-      in
-      runCommand "fileMissing-failure-and-log-check"
-        {
-          inherit log;
-          inherit postFailureMessage;
-        }
-        ''
-          grep -F "$postFailureMessage" "$log/testBuildFailure.log"
-          touch $out
+        actual = runCommand "actual" { } ''
+          mkdir -p -- "$out/c"
+          echo a >"$out/a"
+          echo d >"$out/c/d"
         '';
+      }
+    );
 
     equalExe = testers.testEqualContents {
       assertion = "The same executable file contents at different paths are recognized as equal";

@@ -2,48 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  versionCheckHook,
+  testers,
+  scmpuff,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "scmpuff";
-  version = "0.6.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mroth";
     repo = "scmpuff";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-c8F7BgjbR/w2JH8lE2t93s8gj6cWbTQGIkgYTQp9R3U=";
+    rev = "v${version}";
+    sha256 = "sha256-+L0W+M8sZdUSCWj9Ftft1gkRRfWMHdxon2xNnotx8Xs=";
   };
 
-  vendorHash = "sha256-7xSMToc5rlxogS0N9H6siauu8i33zUA5/omqXAszDOg=";
+  vendorHash = "sha256-7WHVSEz3y1nxWfbxkzkfHhINLC8+snmWknHyUUpNy7c=";
 
   ldflags = [
     "-s"
     "-w"
-    # see .goreleaser.yml in the repository
-    "-X main.version=${finalAttrs.version}"
-    "-X main.commit=${finalAttrs.src.rev}"
-    "-X main.date=1970-01-01T00:00:00Z"
-    "-X main.builtBy=nixpkgs"
-    "-X main.treeState=clean"
+    "-X main.VERSION=${version}"
   ];
 
-  strictDeps = true;
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  passthru.tests.version = testers.testVersion {
+    package = scmpuff;
+    command = "scmpuff version";
+  };
 
   meta = with lib; {
-    description = "Numeric file shortcuts for common git commands";
+    description = "Add numbered shortcuts to common git commands";
     homepage = "https://github.com/mroth/scmpuff";
-    changelog = "https://github.com/mroth/scmpuff/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      cpcloud
-      christoph-heiss
-    ];
+    maintainers = with maintainers; [ cpcloud ];
     mainProgram = "scmpuff";
   };
-})
+}

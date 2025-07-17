@@ -21,7 +21,7 @@ buildPythonPackage {
   };
 
   meta = with lib; {
-    description = "Python-sdbus binds for NetworkManager";
+    description = "python-sdbus binds for NetworkManager";
     homepage = "https://github.com/python-sdbus/python-sdbus-networkmanager";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ camelpunch ];

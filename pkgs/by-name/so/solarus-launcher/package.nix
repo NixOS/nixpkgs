@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
   replaceVars,
   cmake,
   ninja,
@@ -14,23 +16,52 @@
   libvorbis,
   solarus,
   glm,
-  qt6,
-  qlementine,
-  qlementine-icons,
-  qtappinstancemanager,
+  qt6Packages,
+  kdePackages,
 }:
 
+let
+  qlementine-icons-src = fetchFromGitHub {
+    owner = "oclero";
+    repo = "qlementine-icons";
+    tag = "v1.8.0";
+    hash = "sha256-FPndzMEOQvYNYUbT2V6iDlwoYqOww38GW/T3zUID3g0=";
+  };
+
+  qlementine-src = fetchFromGitHub {
+    owner = "oclero";
+    repo = "qlementine";
+    tag = "v1.2.1";
+    hash = "sha256-CPQMmTXyUW+CyLjHYx+IdXY4I2mVPudOmAksjd+izPA=";
+  };
+
+  qtappinstancemanager-src = fetchFromGitHub {
+    owner = "oclero";
+    repo = "qtappinstancemanager";
+    tag = "v1.3.0";
+    hash = "sha256-/zvNR/RHNV19ZI8d+58sotWxY16q2a7wWIBuKO52H5M=";
+  };
+
+  inherit (qt6Packages)
+    qtbase
+    qttools
+    wrapQtAppsHook
+    ;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-launcher";
-  inherit (solarus) version;
+  version = "2.0.0";
 
-  src = solarus.src + "/launcher";
+  src = fetchFromGitLab {
+    owner = "solarus-games";
+    repo = "solarus-launcher";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zBJnHzYJyhfzP1m6TgMkDLRA3EXC1oG8PC0Jq/fC2+Q=";
+  };
 
   patches = [
     (replaceVars ./github-fetches.patch {
-      qlementine-src = qlementine.src;
-      qlementine-icons-src = qlementine-icons.src;
-      qtappinstancemanager-src = qtappinstancemanager.src;
+      inherit qlementine-src qlementine-icons-src qtappinstancemanager-src;
     })
   ];
 
@@ -38,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    qt6.qttools
-    qt6.wrapQtAppsHook
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -52,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     libmodplug
     libvorbis
     solarus
-    qt6.qtbase
-    qt6.qtsvg
+    qtbase
+    kdePackages.qtsvg
     glm
   ];
 

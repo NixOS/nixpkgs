@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "xmcp";
-  version = "0-unstable-2020-10-10";
+  version = "unstable-2020-10-10";
 
   src = fetchFromGitHub {
     owner = "blblapco";

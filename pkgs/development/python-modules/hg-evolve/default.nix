@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "hg-evolve";
-  version = "11.1.9";
+  version = "11.1.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hg_evolve";
     inherit version;
-    hash = "sha256-sypSfUqXQkmDSITJq/XHH82EGNIMvjgocc+3mLK+n0A=";
+    hash = "sha256-JIberZCiRmxPkn0P+Dsps42jHWhkA1hLKGXPlbb+APU=";
   };
 
   build-system = [ setuptools ];

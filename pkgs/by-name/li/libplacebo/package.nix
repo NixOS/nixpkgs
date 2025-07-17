@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -32,14 +31,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-ccoEFpp6tOFdrfMyE0JNKKMAdN4Q95tP7j7vzUj+lSQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "python-compat.patch";
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/12509c0f1ee8c22ae163017f0a5e7b8a9d983a17.patch";
-      hash = "sha256-RrlFu0xgLB05IVrzL2EViTPuATYXraM1KZMxnZCvgrk=";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -48,33 +39,35 @@ stdenv.mkDerivation rec {
     python3Packages.glad2
   ];
 
-  buildInputs = [
-    shaderc
-    lcms2
-    libGL
-    libX11
-    libunwind
-    libdovi
-    xxHash
-    vulkan-headers
-  ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-loader
-  ]
-  ++ lib.optionals (!stdenv.cc.isGNU) [
-    fast-float
-  ];
+  buildInputs =
+    [
+      shaderc
+      lcms2
+      libGL
+      libX11
+      libunwind
+      libdovi
+      xxHash
+      vulkan-headers
+    ]
+    ++ lib.optionals vulkanSupport [
+      vulkan-loader
+    ]
+    ++ lib.optionals (!stdenv.cc.isGNU) [
+      fast-float
+    ];
 
-  mesonFlags = [
-    (lib.mesonBool "demos" false) # Don't build and install the demo programs
-    (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
-    (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
-    (lib.mesonEnable "vk-proc-addr" vulkanSupport)
-    (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
-  ];
+  mesonFlags =
+    [
+      (lib.mesonBool "demos" false) # Don't build and install the demo programs
+      (lib.mesonEnable "d3d11" false) # Disable the Direct3D 11 based renderer
+      (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
+      (lib.mesonEnable "vk-proc-addr" vulkanSupport)
+      (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
+    ];
 
   postPatch = ''
     substituteInPlace meson.build \

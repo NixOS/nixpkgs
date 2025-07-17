@@ -3,6 +3,7 @@
   lib,
   gitUpdater,
   fetchFromGitHub,
+  fetchpatch,
   testers,
   cmake,
   pkg-config,
@@ -14,14 +15,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.8.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-W4/a7neFcaqdPIAWDk5TcIuIWZ76rC7xCk3beJVqE/E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
   };
+
+  patches = [
+    # Remove when version > 1.7.0
+    (fetchpatch {
+      name = "0001-wlcs-Fix-GCC14-compat.patch";
+      url = "https://github.com/canonical/wlcs/commit/5c812e560052e2cbff4c6d26439935020ddee52f.patch";
+      hash = "sha256-8YrVKhgpTYZi8n4dZ4pRWJoAcZtr9eaFMv0NNV7/kWU=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -48,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland Conformance Test Suite";
     longDescription = ''
       wlcs aspires to be a protocol-conformance-verifying test suite usable by Wayland
@@ -67,9 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/MirServer/wlcs";
     changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.linux;
     pkgConfigModules = [
       "wlcs"
     ];

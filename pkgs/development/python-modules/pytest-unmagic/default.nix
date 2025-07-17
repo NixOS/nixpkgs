@@ -3,21 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  gitUpdater,
   flit-core,
   pytest,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-unmagic";
-  version = "1.0.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "pytest-unmagic";
     tag = "v${version}";
-    hash = "sha256-XHeQuMCYHtrNF5+7e/eMzcvYukM+AobHCMRdzL+7KpU=";
+    hash = "sha256-5WnLjQ0RuwLBIZAbOJoQ0KBEnb7yUWTUFBKy+WgNctQ=";
   };
 
   build-system = [
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "unmagic" ];
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Pytest fixtures with conventional import semantics";

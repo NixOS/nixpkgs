@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "9.0.1";
+  version = "8.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-ISrmOumxOmCpelHFdKGFsRVtvPP+Fys8Db0SPsxgHWs=";
+    hash = "sha256-ajKe0pIUV2xwFi49MR4NK19G1DZ84e6oSJQIGlXq+Vo=";
   };
 
   build-system = [ poetry-core ];
@@ -52,8 +52,7 @@ buildPythonPackage rec {
     python-socketio
     requests
     typing-extensions
-  ]
-  ++ python-socketio.optional-dependencies.asyncio_client;
+  ] ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
     aioresponses
@@ -70,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/yalexs/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

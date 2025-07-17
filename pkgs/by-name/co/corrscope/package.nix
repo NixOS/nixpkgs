@@ -29,18 +29,19 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  buildInputs = [
-    ffmpeg
-  ]
-  ++ (
-    with qt6Packages;
+  buildInputs =
     [
-      qtbase
+      ffmpeg
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-  );
+    ++ (
+      with qt6Packages;
+      [
+        qtbase
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        qtwayland
+      ]
+    );
 
   dependencies = (
     with python3Packages;

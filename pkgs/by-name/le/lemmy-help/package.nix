@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "cli" ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-ZuLbdsZadEkY5M4LoHBn6gnKYklVbXpRa60EocYUH+A=";
 
   meta = {

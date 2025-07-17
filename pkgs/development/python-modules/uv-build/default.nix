@@ -35,7 +35,7 @@ buildPythonPackage {
   passthru.tests.built-by-uv = callPackage ./built-by-uv.nix { inherit (pkgs) uv; };
 
   meta = {
-    description = "Minimal build backend for uv";
+    description = "A minimal build backend for uv";
     homepage = "https://docs.astral.sh/uv/reference/settings/#build-backend";
     inherit (pkgs.uv.meta) changelog license;
     maintainers = with lib.maintainers; [ bengsparks ];

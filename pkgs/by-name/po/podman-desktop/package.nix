@@ -15,16 +15,14 @@
   nix,
   jq,
   gnugrep,
-  podman,
 }:
 
 let
   electron = electron_37;
-  appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.21.0";
+  version = "1.20.1";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -57,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wio+lETdsDhcZvluKV6gUqjT0lTE9nYL5TqPLCR4Kr0=";
+    hash = "sha256-diqlooa4SsFtmzl3A25PEaV0ALnghoj7htBGRgXn6As=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-yteFC4/raBdL4gjBtsGL/lVRpo11BuhS7Xm0mFgz3t4=";
+    hash = "sha256-8lNmCLfuAkXK1Du4iYYasRTozZf0HoAttf8Dfc6Jglw=";
   };
 
   patches = [
@@ -73,18 +71,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    pnpm_10.configHook
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-    makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    [
+      nodejs
+      pnpm_10.configHook
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      copyDesktopItems
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.autoSignDarwinBinariesHook
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -107,38 +105,29 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase =
-    let
-      commonWrapperArgs = "--prefix PATH : ${lib.makeBinPath [ podman ]}";
-    in
-    (
-      ''
-        runHook preInstall
+    ''
+      runHook preInstall
 
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        mkdir -p "$out/Applications"
-        mv dist/mac*/"${appName}.app" "$out/Applications"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv dist/mac*/Podman\ Desktop.app $out/Applications
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir -p "$out/share/lib/podman-desktop"
+      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
-        wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
-          ${commonWrapperArgs}
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        mkdir -p "$out/share/lib/podman-desktop"
-        cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
+      install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-        install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
+      makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+        --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --inherit-argv0
+    ''
+    + ''
 
-        makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
-          --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-          ${commonWrapperArgs} \
-          --inherit-argv0
-      ''
-      + ''
-
-        runHook postInstall
-      ''
-    );
+      runHook postInstall
+    '';
 
   # see: https://github.com/containers/podman-desktop/blob/main/.flatpak.desktop
   desktopItems = [
@@ -146,11 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
       name = "podman-desktop";
       exec = "podman-desktop %U";
       icon = "podman-desktop";
-      desktopName = appName;
+      desktopName = "Podman Desktop";
       genericName = "Desktop client for podman";
       comment = finalAttrs.meta.description;
       categories = [ "Utility" ];
-      startupWMClass = appName;
+      startupWMClass = "Podman Desktop";
     })
   ];
 
@@ -161,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       booxter
+      panda2134
     ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";

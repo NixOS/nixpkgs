@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.8.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${version}";
-    hash = "sha256-wQOphwG5/4Bfa+re3S0d7lS4CJlKRjrRqnFZKaTG70M=";
+    hash = "sha256-Ovrr1U7VuuGKDNSBSCyYSz3DNpaJrA57ccl4AFdzC5E=";
   };
 
   build-system = [ setuptools ];
@@ -78,11 +78,10 @@ buildPythonPackage rec {
   ];
 
   # test_calibration.py generates a divide by zero error on darwin
-  # and fails on Linux after updates of dependenceis
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = [
-    "skrf/calibration/tests/test_calibration.py"
-  ];
+  disabledTestPaths = lib.optional (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
+  ) "skrf/calibration/tests/test_calibration.py";
 
   pythonImportsCheck = [ "skrf" ];
 

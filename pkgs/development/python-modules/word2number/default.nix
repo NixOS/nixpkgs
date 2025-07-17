@@ -5,7 +5,6 @@
   setuptools-scm,
   future,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.13") [
+  dependencies = [
     future
   ];
 

@@ -23,17 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     sources."${version}-${stdenv.hostPlatform.system}"
       or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    cp -R . $out
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-    find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
-  ''
-  + ''
-    runHook postInstall
-  '';
+      cp -R . $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   dontStrip = true;
 
@@ -58,13 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
       testCompile =
         runCommand "dart-test-compile"
           {
-            nativeBuildInputs = [
-              finalAttrs.finalPackage
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isDarwin [
-              cctools
-              darwin.sigtool
-            ];
+            nativeBuildInputs =
+              [ finalAttrs.finalPackage ]
+              ++ lib.optionals stdenv.hostPlatform.isDarwin [
+                cctools
+                darwin.sigtool
+              ];
           }
           ''
             HELLO_MESSAGE="Hello, world!"

@@ -26,7 +26,6 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - .github/actions/*
               - .github/workflows/*
               - ci/**/*.*
 

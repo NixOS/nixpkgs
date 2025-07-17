@@ -13,21 +13,29 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons";
-  version = "2.15.0";
-  pyproject = true;
+  version = "2.13.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "allure_python_commons";
-    inherit version;
-    hash = "sha256-T2Oci7S3nfDZTxuqiHgsk5m+P0X9g5rlg6MUpdRRuXg=";
+    inherit pname version;
+    hash = "sha256-ojLnlVgR+Yjkmkwd1sFszn6bgdDqBCKx5WVNMlTiyvM=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
     pluggy
+    six
+    allure-python-commons-test
   ];
+
+  checkPhase = ''
+    ${python.interpreter} -m doctest ./src/utils.py
+    ${python.interpreter} -m doctest ./src/mapping.py
+  '';
 
   pythonImportsCheck = [
     "allure"

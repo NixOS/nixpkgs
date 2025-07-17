@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-cvGsRFaqeMdp2cxgfZZcB2r67Si2K6En4or9HVG4WwA=";
 
   buildFeatures = [ "completions" ];

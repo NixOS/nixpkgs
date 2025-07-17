@@ -19,14 +19,19 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.4";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Zagrios";
     repo = "bs-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YitQjhnadQrpdBOV2CUedRNm/RW7/rpXtS9PJTa9kUU=";
+    hash = "sha256-thqz6sFmov5py7mUBYUC6ANBgjnNFC1hfLEsaxJVYu8=";
   };
+
+  patches = [
+    # https://github.com/Zagrios/bs-manager/pull/870
+    ./use-steam-run-for-wine.patch
+  ];
 
   postPatch = ''
     # don't search for resources in electron's resource directory, but our own
@@ -38,13 +43,13 @@ buildNpmPackage (finalAttrs: {
     ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
   '';
 
-  npmDepsHash = "sha256-3NMqYD7S4wYjwYuGJOmq2/C82qtG1mImsR4crjFLe30=";
+  npmDepsHash = "sha256-VsCbz7ImDnJ0tonVhA4lOPA0w//tqF4hLhrReLUqYI8=";
 
   extraNpmDeps = fetchNpmDeps {
     name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/release/app";
-    hash = "sha256-UWsxty1kfxMr5fybtykrN2G+yiQ9dw/bbMwfcVLJgp4=";
+    hash = "sha256-JqDsv9kvYnbJdNwXN1EbppSrFVqr2cSnVhV2+8uw54g=";
   };
 
   makeCacheWritable = true;

@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "gohai";
-  version = "0-unstable-2022-04-12";
+  version = "unstable-2022-04-12";
 
   src = fetchFromGitHub {
     owner = "DataDog";

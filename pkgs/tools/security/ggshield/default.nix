@@ -39,19 +39,18 @@ python3.pkgs.buildPythonApplication rec {
     truststore
   ];
 
-  nativeCheckInputs = [
-    git
-  ]
-  ++ (with python3.pkgs; [
-    jsonschema
-    pyfakefs
-    pytest-factoryboy
-    pytest-mock
-    pytest-voluptuous
-    pytestCheckHook
-    snapshottest
-    vcrpy
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      jsonschema
+      pyfakefs
+      pytest-factoryboy
+      pytest-mock
+      pytest-voluptuous
+      pytestCheckHook
+      snapshottest
+      vcrpy
+    ]);
 
   pythonImportsCheck = [ "ggshield" ];
 

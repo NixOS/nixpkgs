@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "48.4";
+  version = "48.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-hFmuJqUHBMSsQW+a9GjI82wNOQjHt5f3rEkGUxYA6Y0=";
+    hash = "sha256-g6bGOlpiEMJ9d+xe2GJyTBWAuGlY9EZTlJaYhB/5Ldw=";
   };
 
   patches = [
@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       and uses duplicity as the backend.
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
-    changelog = "https://gitlab.gnome.org/World/deja-dup/-/releases/${finalAttrs.version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     teams = [ teams.gnome-circle ];

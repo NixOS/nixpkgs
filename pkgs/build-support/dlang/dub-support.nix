@@ -1,8 +1,5 @@
 { callPackage }:
-
 {
-  dub-to-nix = callPackage ./dub-to-nix { };
-  importDubLock = callPackage ./builddubpackage/import-dub-lock.nix { };
   buildDubPackage = callPackage ./builddubpackage { };
+  dub-to-nix = callPackage ./dub-to-nix { };
 }
-// import ./builddubpackage/hooks { inherit callPackage; }

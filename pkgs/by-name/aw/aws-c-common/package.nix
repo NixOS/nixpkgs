@@ -9,23 +9,24 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
   # nixpkgs-update: no auto update
-  version = "0.12.4";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
     rev = "v${version}";
-    hash = "sha256-hKCIPZlLPyH7D3Derk2onyqTzWGUtCx+f2+EKtAKlwA=";
+    hash = "sha256-sA6CsLLHh4Ce/+ffl4OhisMSgdrD+EmXvTNGSq7/vvk=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isRiscV [
-    "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isRiscV [
+      "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
+    ];
 
   # aws-c-common misuses cmake modules, so we need
   # to manually add a MODULE_PATH to its consumers

@@ -29,15 +29,16 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd" ];
 
-  buildInputs = [
-    libpcap
-  ]
-  ++ lib.optionals withDpi [
-    ndpi
-    libprotoident
-    libflowmanager
-    libtrace
-  ];
+  buildInputs =
+    [
+      libpcap
+    ]
+    ++ lib.optionals withDpi [
+      ndpi
+      libprotoident
+      libflowmanager
+      libtrace
+    ];
 
   ldflags = [
     "-s -w"

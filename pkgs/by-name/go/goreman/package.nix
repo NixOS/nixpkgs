@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Foreman clone written in go language";
+    description = "foreman clone written in go language";
     mainProgram = "goreman";
     homepage = "https://github.com/mattn/goreman";
     license = lib.licenses.mit;

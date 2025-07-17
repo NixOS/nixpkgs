@@ -6,7 +6,7 @@
 
   # nativeBuildInputs
   cmake,
-  qt6,
+  libsForQt5,
   pkg-config,
 
   # buildInputs
@@ -15,7 +15,6 @@
   libpcap,
   libusb1,
   llvmPackages,
-  nanoflann,
 
   # nativeBuildInputs
   boost,
@@ -33,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
-  version = "1.15.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     tag = "pcl-${finalAttrs.version}";
-    hash = "sha256-+KyaajJM0I5CAcr8AiOLC4TkGV3Gm73a0/X8LQWFZMI=";
+    hash = "sha256-UCuQMWGwe+YxeGj0Y6m5IT58NW2lAWN5RqyZnvyFSr4=";
   };
 
   strictDeps = true;
@@ -52,20 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qt6.wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     pkg-config
-  ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
     libXt
     libpcap
-    qt6.qtbase
+    libsForQt5.qtbase
     libusb1
-    nanoflann
-  ]
-  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   propagatedBuildInputs = [
     boost

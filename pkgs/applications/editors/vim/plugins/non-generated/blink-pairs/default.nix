@@ -21,6 +21,7 @@ let
     pname = "blink-pairs";
     inherit version src;
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-j+zk0UMjvaVgsdF5iaRVO4Puf/XtGu08Cs92jKPaM1g=";
 
     env.RUSTC_BOOTSTRAP = 1;

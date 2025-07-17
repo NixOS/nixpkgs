@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.7.4";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
     tag = version;
-    hash = "sha256-0gcrV1mlodnX79vZUVAIzJaOqM+WpIy0uH4Y/Cmu2lM=";
+    hash = "sha256-JGcVXM/kWsahGNh1llV4NB+/FLAh3hqFRbs3PyYqRnA=";
   };
 
   build-system = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
     homepage = "https://github.com/django-hijack/django-hijack";
-    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

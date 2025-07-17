@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "@GIT_REV@" $(cat GIT_REV)
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-31kEYwlDA6iYcwPZyQU4gM/VLfPNeYcDKhhBqzNp/QE=";
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -59,14 +60,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    bzip2
-    sdl3
-    zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    moltenvk
-  ];
+  buildInputs =
+    [
+      bzip2
+      sdl3
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+    ];
 
   # these are dlopen-ed during runtime
   runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux [

@@ -34,8 +34,7 @@ mkDerivation {
     "etc/master.passwd"
     "etc/shells"
     "include/paths.h"
-  ]
-  ++ extraSrc;
+  ] ++ extraSrc;
 
   outputs = [
     "out"

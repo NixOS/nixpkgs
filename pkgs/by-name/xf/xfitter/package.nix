@@ -43,22 +43,25 @@ stdenv.mkDerivation {
     gfortran
     pkg-config
   ];
-  buildInputs = [
-    apfel
-    apfelgrid
-    applgrid
-    blas
-    ceres-solver
-    lhapdf
-    lapack
-    libyaml
-    root
-    qcdnum
-    gsl
-    yaml-cpp
-    zlib
-  ]
-  ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+  buildInputs =
+    [
+      apfel
+      blas
+      ceres-solver
+      lhapdf
+      lapack
+      libyaml
+      root
+      qcdnum
+      gsl
+      yaml-cpp
+      zlib
+    ]
+    ++ lib.optionals ("5" == lib.versions.major root.version) [
+      apfelgrid
+      applgrid
+    ]
+    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
@@ -73,7 +76,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
+    description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
     license = licenses.gpl3;
     homepage = "https://www.xfitter.org/xFitter";
     platforms = platforms.unix;

@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "jsubfinder";
-  version = "0-unstable-2022-05-31";
+  version = "unstable-2022-05-31";
 
   src = fetchFromGitHub {
     owner = "ThreatUnkown";

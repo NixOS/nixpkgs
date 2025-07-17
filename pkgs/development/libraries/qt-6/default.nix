@@ -183,12 +183,13 @@ let
         makeSetupHook {
           name = "wrap-qt6-apps-hook";
           propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated = [
-            (onlyPluginsAndQml qtbase)
-          ]
-          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-            (onlyPluginsAndQml qtwayland)
-          ];
+          depsTargetTargetPropagated =
+            [
+              (onlyPluginsAndQml qtbase)
+            ]
+            ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+              (onlyPluginsAndQml qtwayland)
+            ];
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 

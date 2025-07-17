@@ -36,12 +36,9 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "ml_collections/"
-  ];
-
-  disabledTestPaths = [
-    "ml_collections/config_dict/examples/examples_test.py" # From github workflows
+    "--ignore=ml_collections/config_dict/examples/examples_test.py" # From github workflows
   ];
 
   pythonImportsCheck = [ "ml_collections" ];

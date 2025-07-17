@@ -6,6 +6,7 @@
   callPackage,
   newScope,
   recurseIntoAttrs,
+  ocamlPackages_4_05,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -29,6 +30,7 @@ let
     {
       inherit coq lib;
       coqPackages = self // {
+        __attrsFailEvaluation = true;
         recurseForDerivations = false;
       };
 
@@ -128,7 +130,6 @@ let
       json = callPackage ../development/coq-modules/json { };
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading { };
       LibHyps = callPackage ../development/coq-modules/LibHyps { };
-      libvalidsdp = self.validsdp.libvalidsdp;
       ltac2 = callPackage ../development/coq-modules/ltac2 { };
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
@@ -212,7 +213,6 @@ let
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
       unicoq = callPackage ../development/coq-modules/unicoq { };
-      validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (
         lib.optionalAttrs (lib.versions.range "8.16" "8.18" self.coq.version) {
           interval = self.interval.override { version = "4.9.0"; };
@@ -229,10 +229,6 @@ let
             version =
               with lib.versions;
               lib.switch self.coq.version [
-                {
-                  case = range "8.19" "8.20";
-                  out = "3.15";
-                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
@@ -251,7 +247,6 @@ let
           };
         })
       );
-      wasmcert = callPackage ../development/coq-modules/wasmcert { };
       waterproof = callPackage ../development/coq-modules/waterproof { };
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma { };
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
@@ -277,6 +272,7 @@ let
     callPackage ../applications/science/logic/coq {
       inherit
         version
+        ocamlPackages_4_05
         ocamlPackages_4_09
         ocamlPackages_4_10
         ocamlPackages_4_12
@@ -303,6 +299,8 @@ rec {
     in
     self.filterPackages (!coq.dontFilter or false);
 
+  coq_8_5 = mkCoq "8.5" { };
+  coq_8_6 = mkCoq "8.6" { };
   coq_8_7 = mkCoq "8.7" { };
   coq_8_8 = mkCoq "8.8" { };
   coq_8_9 = mkCoq "8.9" { };
@@ -320,6 +318,8 @@ rec {
   coq_9_0 = mkCoq "9.0" rocqPackages_9_0;
   coq_9_1 = mkCoq "9.1" rocqPackages_9_1;
 
+  coqPackages_8_5 = mkCoqPackages coq_8_5;
+  coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;

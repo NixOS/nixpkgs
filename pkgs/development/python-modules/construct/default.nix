@@ -47,15 +47,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "construct" ];
 
   disabledTests = [
     "test_benchmarks"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

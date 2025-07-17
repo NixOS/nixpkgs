@@ -66,8 +66,9 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "stem" ];
 
-  disabledTestMarks = [
-    "online"
+  pytestFlagsArray = [
+    "-m"
+    "'not online'"
   ];
 
   meta = {

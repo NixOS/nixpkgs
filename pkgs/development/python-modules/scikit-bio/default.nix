@@ -17,7 +17,6 @@
   biom-format,
   statsmodels,
   patsy,
-  array-api-compat,
 
   python,
   pytestCheckHook,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-bio";
-  version = "0.7.0";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
     tag = version;
-    hash = "sha256-M0P5DUAMlRTkaIPbxSvO99N3y5eTrkg4NMlkIpGr4/g=";
+    hash = "sha256-yZa9Kl7+Rk4FLQkZIxa9UIsIGAo6YI4UAiJYbhhPIaI=";
   };
 
   build-system = [
@@ -52,13 +51,17 @@ buildPythonPackage rec {
     biom-format
     statsmodels
     patsy
-    array-api-compat
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
   enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
+
+  disabledTestPaths = [
+    # don't know why, but this segfaults
+    "${placeholder "out"}/${python.sitePackages}/skbio/metadata/tests/test_intersection.py"
+  ];
 
   pythonImportsCheck = [ "skbio" ];
 

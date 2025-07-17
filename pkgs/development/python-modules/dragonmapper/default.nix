@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dragonmapper";
-  version = "0.3.0";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsroten";
     repo = "dragonmapper";
     tag = "v${version}";
-    hash = "sha256-3SRSu/9cpg2YcEuPFxBXg6KHgRSX5SiMAFbyE40m6ks=";
+    hash = "sha256-/02vcjcsUpQA1R1hcp34g/MSzNrKwuEyY5ERQQ5Vemw=";
   };
 
   build-system = [ hatchling ];

@@ -8,20 +8,25 @@
 
 buildGoModule (finalAttrs: {
   pname = "nvrh";
-  version = "0.1.23";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "nvrh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9pWeoFah8bxbngqETgi8uGbvUqKUhdiRHmOuxpPmJNs=";
+    hash = "sha256-5LkDbLKz4phSOsKqdzC/tMHqdXy+c5chBsXwWso/Wsk=";
   };
 
-  vendorHash = "sha256-DuGMlRdVUMKwghPQjVP3A+epnsA5a15jl84Y8LTPkTM=";
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.23.1" "go 1.22.7"
+  '';
 
   preBuild = ''
     cp manifest.json src/
   '';
+
+  vendorHash = "sha256-DuGMlRdVUMKwghPQjVP3A+epnsA5a15jl84Y8LTPkTM=";
 
   ldflags = [
     "-s"

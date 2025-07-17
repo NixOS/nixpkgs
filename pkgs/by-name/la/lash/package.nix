@@ -12,6 +12,8 @@
   readline,
 }:
 
+assert libuuid != null;
+
 stdenv.mkDerivation rec {
   pname = "lash";
   version = "0.5.4";
@@ -38,9 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
     readline
   ];
-  propagatedBuildInputs =
-    assert libuuid != null;
-    [ libuuid ];
+  propagatedBuildInputs = [ libuuid ];
   NIX_LDFLAGS = "-lm -lpthread -luuid";
 
   postInstall = ''

@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-kroki-preprocessor";
-  version = "0.2.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "joelcourtney";
     repo = "mdbook-kroki-preprocessor";
     rev = "v${version}";
-    hash = "sha256-rTXieHa/EIg69vUQE2FOD1Xb4cUVe5CvBiv9CnhHB3I=";
+    hash = "sha256-3BxIhJK0YWZBEbbNwMKixo1icEn+QKJwoskgIEaZcGQ=";
   };
 
-  cargoHash = "sha256-aTtjrCl13oOKqwPGiVlOfjGqAdBS94XGjcvn3bBWpa0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vOP/XvoHwJd34f+NGGCFJkEbefbbJjFcGTOFaCn9dj8=";
 
   nativeBuildInputs = [
     pkg-config

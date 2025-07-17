@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-unroll";
-  version = "0-unstable-2025-08-14";
+  version = "0-unstable-2024-11-04";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gm6k";
     repo = "git-unroll";
-    rev = "a66aad56af0440e1d6e807518af298264861b2c7";
-    hash = "sha256-Mpc2p+W8PqQ6Os9AJJJwvL00a4cjFKBUTBG5bF+IzL4=";
+    rev = "9243bb8a6a9f6875e21a5c64320b66f7fdaf9b3f";
+    hash = "sha256-1MjbB1EVgmU0HlUibrKOkjmxQ8wseocSJENiAqyHcjU=";
   };
 
   postPatch = ''

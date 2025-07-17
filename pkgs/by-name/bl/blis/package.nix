@@ -40,12 +40,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--enable-cblas"
-    "--blas-int-size=${blasIntSize}"
-  ]
-  ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
-  ++ [ withArchitecture ];
+  configureFlags =
+    [
+      "--enable-cblas"
+      "--blas-int-size=${blasIntSize}"
+    ]
+    ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+    ++ [ withArchitecture ];
 
   postPatch = ''
     patchShebangs configure build/flatten-headers.py

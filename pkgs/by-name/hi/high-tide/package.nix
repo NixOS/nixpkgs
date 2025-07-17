@@ -9,25 +9,22 @@
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
-  glib-networking,
   gst_all_1,
   libsecret,
   libportal,
-  alsa-utils,
-  pipewire,
   nix-update-script,
 }:
 
 python313Packages.buildPythonApplication rec {
   pname = "high-tide";
-  version = "1.1.0";
+  version = "0.1.7";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "high-tide";
     tag = "v${version}";
-    hash = "sha256-AHdv2eazUnxgw5D4SlIzWm/wnC26zedwiAGT0OzjdZs=";
+    hash = "sha256-QFa9K/iSPe3cIx90PzPCkJszrygON9ijukv4px3Rob8=";
   };
 
   nativeBuildInputs = [
@@ -39,29 +36,25 @@ python313Packages.buildPythonApplication rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    glib-networking
-    libadwaita
-    libportal
-    pipewire # provides a gstreamer plugin for pipewiresink
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    libsecret
-  ]);
+  buildInputs =
+    [
+      libadwaita
+      libportal
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      libsecret
+    ]);
 
-  dependencies = [
-    alsa-utils
-  ]
-  ++ (with python313Packages; [
+  dependencies = with python313Packages; [
     pygobject3
     tidalapi
     requests
     mpd2
     pypresence
-  ]);
+  ];
 
   dontWrapGApps = true;
 
@@ -75,7 +68,6 @@ python313Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "high-tide";
     maintainers = with lib.maintainers; [
-      drafolin
       nilathedragon
       nyabinary
       griffi-gh

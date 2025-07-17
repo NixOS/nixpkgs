@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PDF reader and note-taker for macOS";
+    description = "Skim is a PDF reader and note-taker for OS X";
     homepage = "https://skim-app.sourceforge.io/";
     license = licenses.bsd0;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

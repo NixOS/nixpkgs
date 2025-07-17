@@ -4,17 +4,14 @@
   edlib,
   cython,
   python,
-  setuptools,
 }:
 
 buildPythonPackage {
-  inherit (edlib)
-    pname
-    src
-    version
-    meta
-    ;
-  pyproject = true;
+  inherit (edlib) pname src meta;
+  version = "1.3.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   sourceRoot = "${edlib.src.name}/bindings/python";
 
@@ -22,14 +19,10 @@ buildPythonPackage {
     ln -s ${edlib.src}/edlib .
   '';
 
-  env.EDLIB_OMIT_README_RST = 1;
-  env.EDLIB_USE_CYTHON = 1;
+  EDLIB_OMIT_README_RST = 1;
+  EDLIB_USE_CYTHON = 1;
 
-  build-system = [
-    setuptools
-    cython
-  ];
-
+  nativeBuildInputs = [ cython ];
   buildInputs = [ edlib ];
 
   checkPhase = ''

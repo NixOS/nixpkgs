@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ryonakano/konbucase";
     description = "Case converting app suitable for coding or typing";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ galaxy ];
     platforms = lib.platforms.linux;
     mainProgram = "konbucase";
   };

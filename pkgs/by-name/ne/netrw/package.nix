@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional (checksumType == "mhash") libmhash ++ lib.optional (checksumType == "openssl") openssl;
+    lib.optional (checksumType == "mhash") libmhash
+    ++ lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [

@@ -18,12 +18,13 @@ runCommand (rstudio.name + "-wrapper")
     nativeBuildInputs = [ makeWrapper ];
     dontWrapQtApps = true;
 
-    buildInputs = [
-      R
-      rstudio
-    ]
-    ++ recommendedPackages
-    ++ packages;
+    buildInputs =
+      [
+        R
+        rstudio
+      ]
+      ++ recommendedPackages
+      ++ packages;
 
     # rWrapper points R to a specific set of packages by using a wrapper
     # (as in https://nixos.org/nixpkgs/manual/#r-packages) which sets

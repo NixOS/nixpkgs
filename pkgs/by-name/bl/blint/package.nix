@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
-  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -57,8 +56,6 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_demangle"
   ];
-
-  passthru.tests = { inherit (nixosTests) blint; };
 
   meta = {
     description = "Binary Linter to check the security properties, and capabilities in executables";

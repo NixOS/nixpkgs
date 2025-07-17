@@ -117,10 +117,8 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.package;
-        readOnly = true;
-        description = ''
-          Path to the configuration file of dnsmasq.
-        '';
+        default = dnsmasqConf;
+        internal = true;
       };
 
     };
@@ -131,14 +129,10 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.dnsmasq = {
-      settings = {
-        dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
-        conf-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
-        resolv-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
-      };
-
-      configFile = dnsmasqConf;
+    services.dnsmasq.settings = {
+      dhcp-leasefile = lib.mkDefault "${stateDir}/dnsmasq.leases";
+      conf-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-conf.conf");
+      resolv-file = lib.mkDefault (lib.optional cfg.resolveLocalQueries "/etc/dnsmasq-resolv.conf");
     };
 
     networking.nameservers = lib.optional cfg.resolveLocalQueries "127.0.0.1";
@@ -179,7 +173,7 @@ in
         touch ${stateDir}/dnsmasq.leases
         chown -R dnsmasq ${stateDir}
         ${lib.optionalString cfg.resolveLocalQueries "touch /etc/dnsmasq-{conf,resolv}.conf"}
-        dnsmasq --test -C ${cfg.configFile}
+        dnsmasq --test
       '';
       serviceConfig = {
         Type = "dbus";

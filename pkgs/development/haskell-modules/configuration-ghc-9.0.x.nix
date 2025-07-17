@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  haskellLib,
-}:
+{ pkgs, haskellLib }:
 
 with haskellLib;
 
@@ -12,6 +8,8 @@ let
 in
 
 self: super: {
+
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 9.0.x core libraries.
   array = null;
@@ -110,13 +108,7 @@ self: super: {
 
   doctest = dontCheck super.doctest;
 
-  haskell-language-server =
-    lib.throwIf config.allowAliases
-      "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version"
-      (markBroken super.haskell-language-server);
-
-  # test suite depends on vcr since hpack >= 0.38.1 which requires GHC2021
-  hpack_0_38_1 = dontCheck super.hpack_0_38_1;
+  haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute self.ghc-tags_1_5;
@@ -169,6 +161,8 @@ self: super: {
   ghc-exactprint = self.ghc-exactprint_0_6_4;
 
   retrie = dontCheck self.retrie_1_1_0_0;
+
+  apply-refact = self.apply-refact_0_9_3_0;
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;

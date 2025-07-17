@@ -7,18 +7,19 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage rec {
   pname = "evil-helix";
-  version = "20250915";
+  version = "20250601";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
-    tag = "release-${final.version}";
-    hash = "sha256-6kqKTZNS1RZwfxcFoa2uC7fUKcQ+KhT5KXusyCt59YQ=";
+    rev = "release-${version}";
+    hash = "sha256-bsl9ltPXEhkcnnHFAXQMyBCh1qd+UBV0XK2EcJOe+eg=";
   };
 
-  cargoHash = "sha256-Mf0nrgMk1MlZkSyUN6mlM5lmTcrOHn3xBNzmVGtApEU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-epI/Xvw0mgc1IoDXpACws7Lsbkj1Xdk7conzJlUqRxY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,4 +50,4 @@ rustPlatform.buildRustPackage (final: {
     mainProgram = "hx";
     maintainers = with lib.maintainers; [ thiagokokada ];
   };
-})
+}

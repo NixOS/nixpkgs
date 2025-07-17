@@ -11,24 +11,20 @@
 
 buildPythonPackage rec {
   pname = "rfc3161-client";
-  version = "1.0.4";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "rfc3161-client";
     tag = "v${version}";
-    hash = "sha256-/+vKpd7wLFa7BgczzI27fLykxq5q4q1PC3QpoAO2E7M=";
+    hash = "sha256-C5wz9sj5TmZudqtAlL3c8ffJ7XjJ+FuimRA0vWpm/A8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname;
-    hash = "sha256-jQsogV+qR0jAkHz/Slg9oBO/f96osU8YcjuaX4ZJQTk=";
+    hash = "sha256-EUQbdfR4xS6XBmIzBL4BF3NzDI2P6F8I4Khl2KOSSZ0=";
   };
-
-  pythonRelaxDeps = [
-    "cryptography"
-  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook

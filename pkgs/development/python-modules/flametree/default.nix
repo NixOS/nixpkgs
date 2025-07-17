@@ -6,23 +6,20 @@
   matplotlib,
   pandas,
   pytestCheckHook,
-  setuptools,
   weasyprint,
 }:
 
 buildPythonPackage rec {
   pname = "flametree";
-  version = "0.2.1";
-  pyproject = true;
+  version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "Flametree";
     tag = "v${version}";
-    hash = "sha256-5vtDfGmSX5niMXLnMqmafhq6D1gxhxVS3xbOAvQs3Po=";
+    hash = "sha256-4yU4u5OmVP3adz9DNsU0BtuQ7LZYqbOLxbuS48lksHM=";
   };
-
-  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     matplotlib
@@ -45,7 +42,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python file and zip operations made easy";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Flametree";
-    changelog = "https://github.com/Edinburgh-Genome-Foundry/Flametree/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

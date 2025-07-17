@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Plug-in for noise generation and noise effects for OBS";
+    description = "A plug-in for noise generation and noise effects for OBS.";
     homepage = "https://github.com/FiniteSingularity/obs-noise";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

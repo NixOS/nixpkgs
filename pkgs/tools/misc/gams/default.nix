@@ -8,6 +8,8 @@
   optgamsFile ? null,
 }:
 
+assert licenseFile != null;
+
 stdenv.mkDerivation rec {
   version = "25.0.2";
   pname = "gams";
@@ -21,7 +23,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase =
-    assert licenseFile != null;
     ''
       mkdir -p "$out/bin" "$out/share/gams"
       cp -a * "$out/share/gams"

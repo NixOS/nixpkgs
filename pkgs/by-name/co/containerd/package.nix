@@ -16,19 +16,18 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "2.1.4";
+  version = "2.1.3";
 
   outputs = [
     "out"
     "doc"
-  ]
-  ++ lib.optional withMan "man";
+  ] ++ lib.optional withMan "man";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     tag = "v${version}";
-    hash = "sha256-eC9mfB/FWDxOGucNizHBiRkhkEFDdSxu9vRnXZp5Tug=";
+    hash = "sha256-MqHcwomsVYbjziO0vIpGAcREChe5mbJVGsvM96bszLA=";
   };
 
   postPatch = "patchShebangs .";
@@ -39,8 +38,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     util-linux
-  ]
-  ++ lib.optional withMan go-md2man;
+  ] ++ lib.optional withMan go-md2man;
 
   buildInputs = lib.optional btrfsSupport btrfs-progs;
 
@@ -57,8 +55,7 @@ buildGoModule rec {
   installTargets = [
     "install"
     "install-doc"
-  ]
-  ++ lib.optional withMan "install-man";
+  ] ++ lib.optional withMan "install-man";
 
   buildPhase = ''
     runHook preBuild

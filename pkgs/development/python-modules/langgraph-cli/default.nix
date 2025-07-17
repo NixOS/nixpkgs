@@ -4,14 +4,10 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  poetry-core,
 
   # dependencies
   click,
-  langgraph,
-  langgraph-runtime-inmem,
-  langgraph-sdk,
-  python-dotenv,
 
   # testing
   pytest-asyncio,
@@ -24,39 +20,27 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.4.2";
+  version = "0.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-me9Qn7wwDsls419LOoRnYgIgmCblqLEFwNdH3I/tv0U=";
+    hash = "sha256-gSiyFjk1lXiCv7JpX4J00WAPoMv4VsXDuCswbFhP2kY=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    click
-    langgraph-sdk
-  ];
-
-  optional-dependencies = {
-    "inmem" = [
-      langgraph
-      langgraph-runtime-inmem
-      python-dotenv
-    ];
-  };
+  dependencies = [ click ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     docker-compose
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
@@ -71,27 +55,18 @@ buildPythonPackage rec {
     "test_config_to_compose_end_to_end"
     "test_config_to_compose_simple_config"
     "test_config_to_compose_watch"
-
-    # Tests that require docker
+    # Tests exit value, needs to happen in a passthru test
     "test_dockerfile_command_with_docker_compose"
-    "test_build_command_with_api_version_and_base_image"
-    "test_build_command_with_api_version"
-    "test_build_generate_proper_build_context"
-    "test_build_command_shows_wolfi_warning"
   ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "cli==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "cli==";
   };
 
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];

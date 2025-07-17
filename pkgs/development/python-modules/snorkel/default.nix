@@ -58,8 +58,7 @@ buildPythonPackage {
     dill
     dask
     spacy-models.en_core_web_sm
-  ]
-  ++ dask.optional-dependencies.distributed;
+  ] ++ dask.optional-dependencies.distributed;
 
   meta = with lib; {
     description = "System for quickly generating training data with weak supervision";

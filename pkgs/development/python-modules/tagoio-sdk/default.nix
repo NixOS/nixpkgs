@@ -3,39 +3,40 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  poetry-core,
   pytestCheckHook,
   python-dateutil,
   python-socketio,
+  pythonOlder,
   requests,
   requests-mock,
-  requests-toolbelt,
-  sseclient-py,
 }:
 
 buildPythonPackage rec {
   pname = "tagoio-sdk";
-  version = "5.0.3";
-  pyproject = true;
+  version = "4.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tago-io";
     repo = "sdk-python";
     tag = "v${version}";
-    hash = "sha256-PNPG1FUniwZhOKjynp4ba6kjGJmB/OW0F5b2ZOYaYwY=";
+    hash = "sha256-37/fg2vbwYPhYPvSJ2YxWAPrfspqTE3thIL/VR1+AkI=";
   };
 
   pythonRelaxDeps = [ "requests" ];
 
-  build-system = [ hatchling ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     python-dateutil
     python-socketio
     requests
-    requests-toolbelt
-    sseclient-py
   ];
 
   nativeCheckInputs = [
@@ -48,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with Tago.io";
     homepage = "https://github.com/tago-io/sdk-python";
-    changelog = "https://github.com/tago-io/sdk-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/tago-io/sdk-python/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

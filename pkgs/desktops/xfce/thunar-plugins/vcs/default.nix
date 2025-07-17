@@ -42,19 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    thunar
-    exo
-    libxfce4ui
-    libxfce4util
-    gtk3
-    glib
-  ]
-  ++ lib.optionals withSubversion [
-    apr
-    aprutil
-    subversion
-  ];
+  buildInputs =
+    [
+      thunar
+      exo
+      libxfce4ui
+      libxfce4util
+      gtk3
+      glib
+    ]
+    ++ lib.optionals withSubversion [
+      apr
+      aprutil
+      subversion
+    ];
 
   mesonFlags = [
     (lib.mesonEnable "svn" withSubversion)

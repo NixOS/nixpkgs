@@ -35,8 +35,7 @@ buildPythonPackage rec {
     setuptools
     mypy-extensions
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook

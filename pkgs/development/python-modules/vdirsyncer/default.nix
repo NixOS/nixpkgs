@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   click,
   click-log,
@@ -29,20 +28,25 @@
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.20.0";
+  version = "0.19.3";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/rGlM1AKlcFP0VVzOhBW/jWRklU9gsB8a6BPy/xAsS0=";
+    hash = "sha256-5DeFH+uYXew1RGVPj5z23RCbCwP34ZlWCGYDCS/+so8=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
+    wheel
   ];
 
-  dependencies = [
+  pythonRelaxDeps = [ "aiostream" ];
+
+  propagatedBuildInputs = [
     atomicwrites
     click
     click-log
@@ -76,12 +80,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
-  meta = {
+  meta = with lib; {
     description = "Synchronize calendars and contacts";
     homepage = "https://github.com/pimutils/vdirsyncer";
     changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ stephen-huan ];
+    license = licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "vdirsyncer";
   };
 }

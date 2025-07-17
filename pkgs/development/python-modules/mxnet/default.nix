@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
-  distutils,
-  graphviz,
-  numpy,
   pkgs,
-  python,
-  requests,
   setuptools,
+  distutils,
+  requests,
+  numpy,
+  graphviz,
+  python,
+  isPy3k,
 }:
 
 buildPythonPackage {
@@ -20,9 +21,9 @@ buildPythonPackage {
 
   dependencies = [
     distutils
-    graphviz
-    numpy
     requests
+    numpy
+    graphviz
   ];
 
   pythonRelaxDeps = [
@@ -31,6 +32,8 @@ buildPythonPackage {
   ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.mxnet ];
+
+  doCheck = !isPy3k;
 
   postPatch = ''
     # Required to support numpy >=1.24 where np.bool is removed in favor of just bool

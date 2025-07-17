@@ -56,8 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     geopandas
     pytestCheckHook
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTests = [
     # Require internet access

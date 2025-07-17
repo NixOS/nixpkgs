@@ -37,8 +37,7 @@ let
     "-DNO_OUTPUT_SYNC=1"
     # mes-libc doesn't define O_TMPFILE
     "-DO_TMPFILE=020000000"
-  ]
-  ++ config;
+  ] ++ config;
 
   /*
     Maintenance notes:

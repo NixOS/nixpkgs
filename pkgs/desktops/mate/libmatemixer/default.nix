@@ -29,16 +29,17 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs = [
-    glib
-  ]
-  ++ lib.optionals alsaSupport [
-    alsa-lib
-    udev
-  ]
-  ++ lib.optionals pulseaudioSupport [
-    libpulseaudio
-  ];
+  buildInputs =
+    [
+      glib
+    ]
+    ++ lib.optionals alsaSupport [
+      alsa-lib
+      udev
+    ]
+    ++ lib.optionals pulseaudioSupport [
+      libpulseaudio
+    ];
 
   configureFlags = lib.optional ossSupport "--enable-oss";
 

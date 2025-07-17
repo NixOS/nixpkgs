@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${libwifi} libs/libwifi
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-mry4l0a7DZOWkrChU40OVRCBjKwI39cyZtvEBA5tro0=";
 
   nativeBuildInputs = [

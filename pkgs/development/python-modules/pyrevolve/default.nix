@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyrevolve";
-  version = "2.2.6";
+  version = "2.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = pname;
-    tag = "v${version}";
-    hash = "sha256-jjiFOlxXjaa4L4IEtojeeS0jx4GsftAeIGBpJLhUcY4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fcIq/zuKO3W7K9N2E4f2Q6ZVcssZwN/n8o9cCOYmr3E=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/devitocodes/pyrevolve";
-    changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/${src.tag}";
+    changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/v${version}";
     description = "Python library to manage checkpointing for adjoints";
     license = licenses.epl10;
     maintainers = with maintainers; [ atila ];

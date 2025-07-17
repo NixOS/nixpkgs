@@ -67,11 +67,6 @@ buildPythonPackage rec {
     rm -rf ./blis
   '';
 
-  disabledTestPaths = [
-    # ImportError: cannot import name 'NO_CONJUGATE' from 'blis.cy'
-    "tests/test_dotv.py"
-  ];
-
   passthru = {
     tests = {
       numpy_1 = blis.overridePythonAttrs (old: {

@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/332957
   cargoPatches = [ ./time-crate.patch ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-gcPVbKcPkV0H+BpErTokvLKFxpSXhxNoptxOeuhH1FU=";
 
   nativeBuildInputs = [ pkg-config ];

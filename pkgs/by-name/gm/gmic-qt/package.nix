@@ -66,26 +66,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    cimg
-    curl
-    fftw
-    gmic
-    graphicsmagick
-    libjpeg
-    libpng
-    libtiff
-    openexr
-    zlib
-  ]
-  ++ (with libsForQt5; [
-    qtbase
-    qttools
-  ])
-  ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ]
-  ++ variants.${variant}.extraDeps;
+  buildInputs =
+    [
+      cimg
+      curl
+      fftw
+      gmic
+      graphicsmagick
+      libjpeg
+      libpng
+      libtiff
+      openexr
+      zlib
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qttools
+    ])
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ]
+    ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \

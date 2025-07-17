@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "smallwm";
-  version = "0-unstable-2020-02-28";
+  version = "unstable-2020-02-28";
 
   src = fetchFromGitHub {
     owner = "adamnew123456";

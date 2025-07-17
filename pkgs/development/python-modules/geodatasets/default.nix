@@ -38,9 +38,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTestMarks = [
+  pytestFlagsArray = [
     # disable tests which require network access
-    "request"
+    "-m 'not request'"
   ];
 
   pythonImportsCheck = [ "geodatasets" ];

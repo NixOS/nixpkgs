@@ -12,7 +12,6 @@
   gtk4,
   libadwaita,
   json-glib,
-  gexiv2,
   glib,
   glib-networking,
   gnome,
@@ -25,25 +24,25 @@
   libsecret,
   libwebp,
   libspelling,
-  webkitgtk_6_0,
   webp-pixbuf-loader,
   icu,
   gst_all_1,
-  clapper-enhancers,
   clapper-unwrapped,
-  clapperSupport ? true,
+  # clapper support is still experimental and has bugs.
+  # See https://github.com/GeopJr/Tuba/pull/931
+  clapperSupport ? false,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.10.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-t1L1TP1G6jr/jjhBYelidobzHSrjupgus19T+cMdj0I=";
+    hash = "sha256-SQrk6zsn3zZQTIruqVfjzs5cNyT2pAvM8XNI8SmyFM0=";
   };
 
   nativeBuildInputs = [
@@ -57,45 +56,42 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gexiv2
-    glib
-    glib-networking
-    gtksourceview5
-    json-glib
-    libxml2
-    libgee
-    libsoup_3
-    gtk4
-    libadwaita
-    libsecret
-    libwebp
-    libspelling
-    webkitgtk_6_0
-    icu
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-  ])
-  ++ lib.optionals clapperSupport [
-    clapper-unwrapped
-  ];
+  buildInputs =
+    [
+      glib
+      glib-networking
+      gtksourceview5
+      json-glib
+      libxml2
+      libgee
+      libsoup_3
+      gtk4
+      libadwaita
+      libsecret
+      libwebp
+      libspelling
+      icu
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+    ])
+    ++ lib.optionals clapperSupport [
+      clapper-unwrapped
+    ];
 
   mesonFlags = [
-    (lib.mesonEnable "clapper" clapperSupport)
+    (lib.mesonBool "clapper" clapperSupport)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default CLAPPER_ENHANCERS_PATH "${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}"
-    )
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   # Pull in WebP support for avatars from Misskey instances.
   # In postInstall to run before gappsWrapperArgsHook.
@@ -109,10 +105,6 @@ stdenv.mkDerivation rec {
       }
     }"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Browse the Fediverse";

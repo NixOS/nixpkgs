@@ -3,7 +3,6 @@
   adlfs,
   appdirs,
   buildPythonPackage,
-  databackend,
   fastparquet,
   fetchFromGitHub,
   fsspec,
@@ -22,24 +21,23 @@
   pyyaml,
   requests,
   s3fs,
-  setuptools-scm,
   setuptools,
-  typing-extensions,
+  setuptools-scm,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.9.1";
+  version = "0.8.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
+    hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
   };
 
   build-system = [
@@ -49,7 +47,6 @@ buildPythonPackage rec {
 
   dependencies = [
     appdirs
-    databackend
     fsspec
     humanize
     importlib-metadata
@@ -59,7 +56,6 @@ buildPythonPackage rec {
     pandas
     pyyaml
     requests
-    typing-extensions
     xxhash
   ];
 
@@ -75,8 +71,7 @@ buildPythonPackage rec {
     pytest-cases
     pytest-parallel
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pins" ];
 
@@ -93,7 +88,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to publishes data, models and other Python objects";
     homepage = "https://github.com/rstudio/pins-python";
-    changelog = "https://github.com/rstudio/pins-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/rstudio/pins-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

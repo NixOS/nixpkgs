@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Aeolus synthesizer instrument definitions";
+    description = "aeolus synthesizer instrument definitions";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
     license = licenses.lgpl3;
     platforms = platforms.linux;

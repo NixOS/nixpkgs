@@ -46,8 +46,8 @@ buildPythonPackage rec {
     "test/test_snapshot.py"
   ];
 
-  disabledTestMarks = [
-    "slow" # skip slow tests
+  pytestFlagsArray = [
+    ''-m "not slow"'' # skip slow tests
   ];
 
   __darwinAllowLocalNetworking = true;

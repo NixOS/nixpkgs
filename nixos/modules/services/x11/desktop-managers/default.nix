@@ -26,6 +26,7 @@ in
     ./xterm.nix
     ./phosh.nix
     ./xfce.nix
+    ./plasma5.nix
     ../../desktop-managers/plasma6.nix
     ./lumina.nix
     ./lxqt.nix
@@ -33,11 +34,12 @@ in
     ./retroarch.nix
     ./kodi.nix
     ./mate.nix
-    ../../desktop-managers/pantheon.nix
+    ./pantheon.nix
     ./surf-display.nix
     ./cde.nix
     ./cinnamon.nix
     ./budgie.nix
+    ./deepin.nix
     ../../desktop-managers/lomiri.nix
     ../../desktop-managers/cosmic.nix
     ../../desktop-managers/gnome.nix

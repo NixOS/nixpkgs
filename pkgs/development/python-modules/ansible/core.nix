@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -26,37 +25,38 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
-  # Additional packages to add to dependencies
-  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
-  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
-  version = "2.19.2";
+  version = "2.18.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-h/y7xJLtFutq2wN5uuCtv2nzzoioRA5+iODc76n4pUw=";
+    hash = "sha256-JbsgzhUWobcweDGyY872hAQ7NyBxFGa9nUFk5f1XZVc=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
   # the python interpreter again, as it would break execution of
   # connection plugins.
   postPatch = ''
+    substituteInPlace lib/ansible/executor/task_executor.py \
+      --replace "[python," "["
+
     patchShebangs --build packaging/cli-doc/build.py
 
     SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
-    WHEEL_PATTERN='"wheel[0-9 <>=.,]+"'
-    echo "Patching pyproject.toml"
-    # print replaced patterns to stdout
-    sed -r -i -e 's/'"$SETUPTOOLS_PATTERN"'/"setuptools"/w /dev/stdout' \
-      -e 's/'"$WHEEL_PATTERN"'/"wheel"/w /dev/stdout' pyproject.toml
+    PYPROJECT=$(cat pyproject.toml)
+    if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
+      echo "setuptools replace: ''${BASH_REMATCH[0]}"
+      echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
+    else
+      exit 2
+    fi
   '';
 
   nativeBuildInputs = [
@@ -87,9 +87,7 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ]
-  ++ lib.optionals windowsSupport [ pywinrm ]
-  ++ extraPackages python.pkgs;
+  ] ++ lib.optionals windowsSupport [ pywinrm ];
 
   pythonRelaxDeps = [ "resolvelib" ];
 

@@ -18,49 +18,47 @@
   withMDNS ? true,
   withDNS-SD ? false,
   avahi-compat,
-  tlsBackend ? "native-tls", # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "librespot";
-  version = "0.7.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
     rev = "v${version}";
-    hash = "sha256-gBMzvQxmy+GYzrOKWmbhl56j49BK8W8NYO2RrvS4mWI=";
+    sha256 = "sha256-dGQDRb7fgIkXelZKa+PdodIs9DxbgEMlVGJjK/hU3Mo=";
   };
 
-  cargoHash = "sha256-PiGIxMIA/RL+YkpG1f46zyAO5anx9Ii+anKrANCM+rk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SqvJSHkyd1IicT6c4pE96dBJNNodULhpyG14HRGVWCk=";
 
-  nativeBuildInputs = [
-    pkg-config
-    makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      rustPlatform.bindgenHook
+    ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optional withALSA alsa-lib
-  ++ lib.optional withDNS-SD avahi-compat
-  ++ lib.optional withPortAudio portaudio
-  ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs =
+    [ openssl ]
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withDNS-SD avahi-compat
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional withPulseAudio libpulseaudio;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    tlsBackend
-  ]
-  ++ lib.optional withRodio "rodio-backend"
-  ++ lib.optional withMDNS "with-libmdns"
-  ++ lib.optional withDNS-SD "with-dns-sd"
-  ++ lib.optional withALSA "alsa-backend"
-  ++ lib.optional withAvahi "with-avahi"
-  ++ lib.optional withPortAudio "portaudio-backend"
-  ++ lib.optional withPulseAudio "pulseaudio-backend";
+  buildFeatures =
+    lib.optional withRodio "rodio-backend"
+    ++ lib.optional withMDNS "with-libmdns"
+    ++ lib.optional withDNS-SD "with-dns-sd"
+    ++ lib.optional withALSA "alsa-backend"
+    ++ lib.optional withAvahi "with-avahi"
+    ++ lib.optional withPortAudio "portaudio-backend"
+    ++ lib.optional withPulseAudio "pulseaudio-backend";
 
   postFixup = lib.optionalString withALSA ''
     wrapProgram "$out/bin/librespot" \

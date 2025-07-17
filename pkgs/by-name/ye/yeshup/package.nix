@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "yeshup";
-  version = "0-unstable-2013-10-29";
+  version = "unstable-2013-10-29";
 
   src = fetchFromGitHub {
     owner = "RhysU";

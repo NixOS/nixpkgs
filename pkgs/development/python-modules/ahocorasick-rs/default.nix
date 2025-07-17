@@ -42,7 +42,7 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "ahocorasick_rs" ];
 

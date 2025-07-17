@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -83,56 +84,70 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.11.3";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3C/gJejqfdT5pVNej2KlIdbOKZbYJY7jUFTfLsRoeQk=";
+    hash = "sha256-8HcbA9Cj2i6DuqcJGiwqd6GkqbJP9oLdmA34g7kc/ng=";
   };
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    doxygen
-    graphviz
-    pkg-config
-    python3.pkgs.setuptools
-    python3.pkgs.wrapPython
-    swig
-  ]
-  ++ lib.optionals useJava [
-    ant
-    jdk
+  patches = [
+    # https://github.com/OSGeo/gdal/issues/12511
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/1dd320b086606958fe970457a0640bdc4c4d494a.patch";
+      hash = "sha256-SXlNjgR4q7i3PrFfh/wzEFMrSGHQuB+ecXbGJgsROe0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/6da26aec591656f97fd882b07d37c21aabd06373.patch";
+      hash = "sha256-s70j/S9YKGRqxwrabsV3ePeGSsnDh/ouGLtLEm+z0lU=";
+    })
   ];
 
-  cmakeFlags = [
-    "-DGDAL_USE_INTERNAL_LIBS=OFF"
-    "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
-    "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
-      lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
-    }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ]
-  ++ lib.optionals finalAttrs.doInstallCheck [
-    "-DBUILD_TESTING=ON"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-  ]
-  ++ lib.optionals (!useTiledb) [
-    "-DGDAL_USE_TILEDB=OFF"
-  ]
-  ++ lib.optionals (!useJava) [
-    # This is not strictly needed as the Java bindings wouldn't build anyway if
-    # ant/jdk were not available.
-    "-DBUILD_JAVA_BINDINGS=OFF"
-  ];
+  nativeBuildInputs =
+    [
+      bison
+      cmake
+      doxygen
+      graphviz
+      pkg-config
+      python3.pkgs.setuptools
+      python3.pkgs.wrapPython
+      swig
+    ]
+    ++ lib.optionals useJava [
+      ant
+      jdk
+    ];
+
+  cmakeFlags =
+    [
+      "-DGDAL_USE_INTERNAL_LIBS=OFF"
+      "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
+      "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
+      "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
+      "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
+        lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ]
+    ++ lib.optionals finalAttrs.doInstallCheck [
+      "-DBUILD_TESTING=ON"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    ]
+    ++ lib.optionals (!useTiledb) [
+      "-DGDAL_USE_TILEDB=OFF"
+    ]
+    ++ lib.optionals (!useJava) [
+      # This is not strictly needed as the Java bindings wouldn't build anyway if
+      # ant/jdk were not available.
+      "-DBUILD_JAVA_BINDINGS=OFF"
+    ];
 
   buildInputs =
     let
@@ -220,14 +235,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ nonDarwinDeps;
 
   pythonPath = [ python3.pkgs.numpy ];
-  postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
-  ''
-  + lib.optionalString useJava ''
-    cd $out/lib
-    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
-    cd -
-  '';
+  postInstall =
+    ''
+      wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    ''
+    + lib.optionalString useJava ''
+      cd $out/lib
+      ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+      cd -
+    '';
 
   enableParallelBuilding = true;
 
@@ -261,47 +277,48 @@ stdenv.mkDerivation (finalAttrs: {
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
   ];
-  disabledTests = [
-    # tests that attempt to make network requests
-    "test_jp2openjpeg_45"
-    # tests that require the full proj dataset which we don't package yet
-    # https://github.com/OSGeo/gdal/issues/5523
-    "test_transformer_dem_overrride_srs"
-    "test_osr_ct_options_area_of_interest"
-    # ZIP does not support timestamps before 1980
-    "test_sentinel2_zipped"
-    # tries to call unwrapped executable
-    "test_SetPROJAuxDbPaths"
-    # failing for unknown reason
-    # https://github.com/OSGeo/gdal/pull/10806#issuecomment-2362054085
-    "test_ogr_gmlas_billion_laugh"
-    # Flaky on hydra, collected in https://github.com/NixOS/nixpkgs/pull/327323.
-    "test_ogr_gmlas_huge_processing_time"
-    "test_ogr_gpkg_background_rtree_build"
-    "test_vsiaz_fake_write"
-    "test_vsioss_6"
-    # flaky?
-    "test_tiledb_read_arbitrary_array"
-    # tests for magic numbers, seem to change with different poppler versions,
-    # and architectures
-    "test_pdf_extra_rasters"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-    # likely precision-related expecting x87 behaviour
-    "test_jp2openjpeg_22"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # flaky on macos
-    "test_rda_download_queue"
-    # https://github.com/OSGeo/gdal/commit/fa0ac7544af837613e9831d4d2841dd6bf735e1f
-    "test_ogr_gpkg_arrow_stream_huge_array"
-  ]
-  ++ lib.optionals (lib.versionOlder proj.version "8") [
-    "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
-  ]
-  ++ lib.optionals (!usePoppler) [
-    "test_pdf_jpx_compression"
-  ];
+  disabledTests =
+    [
+      # tests that attempt to make network requests
+      "test_jp2openjpeg_45"
+      # tests that require the full proj dataset which we don't package yet
+      # https://github.com/OSGeo/gdal/issues/5523
+      "test_transformer_dem_overrride_srs"
+      "test_osr_ct_options_area_of_interest"
+      # ZIP does not support timestamps before 1980
+      "test_sentinel2_zipped"
+      # tries to call unwrapped executable
+      "test_SetPROJAuxDbPaths"
+      # failing for unknown reason
+      # https://github.com/OSGeo/gdal/pull/10806#issuecomment-2362054085
+      "test_ogr_gmlas_billion_laugh"
+      # Flaky on hydra, collected in https://github.com/NixOS/nixpkgs/pull/327323.
+      "test_ogr_gmlas_huge_processing_time"
+      "test_ogr_gpkg_background_rtree_build"
+      "test_vsiaz_fake_write"
+      "test_vsioss_6"
+      # flaky?
+      "test_tiledb_read_arbitrary_array"
+      # tests for magic numbers, seem to change with different poppler versions,
+      # and architectures
+      "test_pdf_extra_rasters"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+      # likely precision-related expecting x87 behaviour
+      "test_jp2openjpeg_22"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # flaky on macos
+      "test_rda_download_queue"
+      # https://github.com/OSGeo/gdal/commit/fa0ac7544af837613e9831d4d2841dd6bf735e1f
+      "test_ogr_gpkg_arrow_stream_huge_array"
+    ]
+    ++ lib.optionals (lib.versionOlder proj.version "8") [
+      "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+    ]
+    ++ lib.optionals (!usePoppler) [
+      "test_pdf_jpx_compression"
+    ];
   postCheck = ''
     popd # autotest
   '';

@@ -48,12 +48,8 @@
   (format t "Dumped nix file to ~a~%"
           (truename "imported.nix")))
 
-(defun run-nix-formatter ()
-  (uiop:run-program '("nixfmt" "imported.nix")))
-
 (defun main ()
   (format t "~%")
   (init-quicklisp)
   (run-importers)
-  (gen-nix-file)
-  (run-nix-formatter))
+  (gen-nix-file))

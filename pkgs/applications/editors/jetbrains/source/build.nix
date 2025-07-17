@@ -119,7 +119,7 @@ let
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
-
+    useFetchCargoVendor = true;
     cargoHash = restarterHash;
 
     # Allow static linking
@@ -162,11 +162,11 @@ let
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
-      runHook preBuild
+      runHook preInstall
 
       ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
 
-      runHook postBuild
+      runHook postInstall
     '';
     installPhase = ''
       runHook preInstall

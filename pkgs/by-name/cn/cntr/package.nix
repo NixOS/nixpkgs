@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-2tqPxbi8sKoEPq0/zQFsOrStEmQGlU8s81ohTfKeOmE=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-gWQ8seCuUSHuZUoNH9pnBTlzF9S0tHVLStnAiymLLbs=";
 
   passthru.tests = nixosTests.cntr;

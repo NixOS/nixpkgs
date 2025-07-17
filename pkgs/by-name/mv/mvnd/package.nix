@@ -1,8 +1,8 @@
 {
-  lib,
   fetchFromGitHub,
   graalvmPackages,
   installShellFiles,
+  lib,
   makeWrapper,
   maven,
   mvnd,
@@ -24,17 +24,18 @@ in
 
 maven.buildMavenPackage rec {
   pname = "mvnd";
-  version = "1.0.3";
+  version = "1.0.2";
   src = fetchFromGitHub {
     owner = "apache";
     repo = "maven-mvnd";
     rev = version;
-    sha256 = "sha256-vlJG2uDY93iri1X7SYPRufAIN4fhAjCd8gCeCdz/QDE=";
+    sha256 = "sha256-c1jD7m4cOdPWQEoaUMcNap2zvvX7H9VaWQv8JSgAnRU=";
   };
+  patches = [ ./patches/0001-update-groovy-for-compatibility-with-Java-24.patch ];
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-n6ZKEXDzyzMfUZt3WHkwCDB68gm30UGrFecffFy7ytA=";
+  mvnHash = "sha256-/Ful6v3hfm+0aa0vBQhqMK6VE+93L3o7pwZ6wmeXzQY=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce
@@ -43,25 +44,22 @@ maven.buildMavenPackage rec {
   ];
 
   mvnDepsParameters = mvnParameters;
-  mvnParameters = lib.concatStringsSep " " (
-    [
-      "-Dmaven.buildNumber.skip=true" # skip build number generation; requires a git repository
-      "-Drat.skip=true" # skip license checks; they require manaul approval and should have already been run upstream
-      "-Dspotless.skip=true" # skip formatting checks
+  mvnParameters = lib.concatStringsSep " " [
+    "-Dmaven.buildNumber.skip=true" # skip build number generation; requires a git repository
+    "-Drat.skip=true" # skip license checks; they require manaul approval and should have already been run upstream
+    "-Dspotless.skip=true" # skip formatting checks
 
-      # skip tests that fail in the sandbox
-      "-pl"
-      "!integration-tests"
-      "-Dtest=!org.mvndaemon.mvnd.client.OsUtilsTest,!org.mvndaemon.mvnd.cache.impl.CacheFactoryTest,!org.mvndaemon.mvnd.client.NoDaemonTest"
-      "-Dsurefire.failIfNoSpecifiedTests=false"
+    # skip tests that fail in the sandbox
+    "-pl"
+    "!integration-tests"
+    "-Dtest=!org.mvndaemon.mvnd.client.OsUtilsTest,!org.mvndaemon.mvnd.cache.impl.CacheFactoryTest"
+    "-Dsurefire.failIfNoSpecifiedTests=false"
 
-      "-Pnative"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # see `buildGraalvmNativeImage`
-      "-DbuildArgs=-H:-CheckToolchain"
-    ]
-  );
+    "-Pnative"
+    # propagate linker args required by the darwin build
+    # see `buildGraalvmNativeImage`
+    ''-Dgraalvm-native-static-opt="-H:-CheckToolchain $(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n)"''
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -79,26 +77,27 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  }
-  // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-    tests.version = testers.testVersion {
-      # `java` or `JAVA_HOME` is required to run mvnd
-      # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
-      package =
-        runCommand "mvnd"
-          {
-            inherit version;
-            nativeBuildInputs = [ makeWrapper ];
-          }
-          ''
-            mkdir -p $out/bin
-            makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
-              --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
-          '';
-    };
-  });
+  passthru =
+    {
+      updateScript = nix-update-script { };
+    }
+    // (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      tests.version = testers.testVersion {
+        # `java` or `JAVA_HOME` is required to run mvnd
+        # presumably the user already has a JDK installed if they're using maven; don't pull in an unnecessary runtime dependency
+        package =
+          runCommand "mvnd"
+            {
+              inherit version;
+              nativeBuildInputs = [ makeWrapper ];
+            }
+            ''
+              mkdir -p $out/bin
+              makeWrapper ${mvnd}/bin/mvnd $out/bin/mvnd \
+                --suffix PATH : ${lib.makeBinPath [ mvnJdk ]}
+            '';
+      };
+    });
 
   meta = {
     description = "Apache Maven Daemon";

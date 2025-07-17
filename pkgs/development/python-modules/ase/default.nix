@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitLab,
   buildPythonPackage,
+  isPy27,
+  fetchPypi,
   pythonAtLeast,
 
   # build-system
@@ -27,29 +29,30 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.26.0";
+  version = "3.25.0-unstable-2025-06-24";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "ase";
     repo = "ase";
-    tag = version;
-    hash = "sha256-1738NQPgOqSr2PZu1T2b9bL0V+ZzGk2jcWBhLF21VQs=";
+    rev = "4e22dabfbe7ae2329e50260ca1b6f08a83527ac3";
+    hash = "sha256-ehMyVtPxfTxT8T418VyLGnUEyYip4LPTTaGL0va7qgM=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    flask
-    matplotlib
-    numpy
-    pillow
-    psycopg2
-    scipy
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    tkinter
-  ];
+  dependencies =
+    [
+      flask
+      matplotlib
+      numpy
+      pillow
+      psycopg2
+      scipy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      tkinter
+    ];
 
   nativeCheckInputs = [
     addBinToPathHook
@@ -70,15 +73,13 @@ buildPythonPackage rec {
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
     "test_ipi_protocol" # flaky
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   pythonImportsCheck = [ "ase" ];
 
   meta = {
     description = "Atomic Simulation Environment";
-    homepage = "https://ase-lib.org/";
-    changelog = "https://ase-lib.org/releasenotes.html";
+    homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };

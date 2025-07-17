@@ -4,38 +4,36 @@
   fetchFromGitHub,
   libcap,
   libseccomp,
-  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ruri";
-  version = "3.9.1";
+  version = "3.8";
 
   src = fetchFromGitHub {
-    owner = "RuriOSS";
+    owner = "Moe-hacker";
     repo = "ruri";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-stM4hSLdSqmYUZ/XBD3Y1GylrrGRISlcy8LN07HREpQ=";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = false;
+    sha256 = "sha256-gf+WJPGeLbMntBk8ryTSsV9L4J3N4Goh9eWBIBj5FA4=";
   };
-
-  patches = [
-    ./cmake-install.patch
-  ];
 
   buildInputs = [
     libcap
     libseccomp
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 ruri $out/bin/ruri
+    runHook postInstall
+  '';
 
   meta = {
     description = "Self-contained Linux container implementation";
     homepage = "https://wiki.crack.moe/ruri";
     downloadPage = "https://github.com/Moe-hacker/ruri";
-    changelog = "https://github.com/Moe-hacker/ruri/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/Moe-hacker/ruri/releases/tag/v${finalAttrs.version}";
     mainProgram = "ruri";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

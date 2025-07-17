@@ -27,15 +27,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    zlib
-    (imlib2.override { inherit x11Support; })
-  ]
-  ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXext
-  ];
+  buildInputs =
+    [
+      ncurses
+      zlib
+      (imlib2.override { inherit x11Support; })
+    ]
+    ++ lib.optionals x11Support [
+      xorg.libX11
+      xorg.libXext
+    ];
 
   outputs = [
     "bin"
@@ -44,14 +45,15 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  configureFlags = [
-    (if x11Support then "--enable-x11" else "--disable-x11")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Suppresses a build failure building Cocoa support due to accessing private ivar `_running`,
-    # which no longer available.
-    (lib.enableFeature false "cocoa")
-  ];
+  configureFlags =
+    [
+      (if x11Support then "--enable-x11" else "--disable-x11")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Suppresses a build failure building Cocoa support due to accessing private ivar `_running`,
+      # which no longer available.
+      (lib.enableFeature false "cocoa")
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 

@@ -53,14 +53,14 @@ in
             let
               valueType =
                 with lib.types;
-                (attrsOf (oneOf [
+                oneOf [
                   bool
                   int
                   float
                   str
                   path
-                  (listOf valueType)
-                ]))
+                  (listOf (attrsOf valueType))
+                ]
                 // {
                   description = "uMurmur config value";
                 };
@@ -164,7 +164,7 @@ in
           };
         };
         default = { };
-        description = "Settings of uMurmur. For reference see <https://github.com/umurmur/umurmur/blob/master/umurmur.conf.example>";
+        description = "Settings of uMurmur. For reference see https://github.com/umurmur/umurmur/blob/master/umurmur.conf.example";
       };
 
       configFile = lib.mkOption rec {

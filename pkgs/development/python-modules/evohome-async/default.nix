@@ -55,8 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     syrupy
-  ]
-  ++ optional-dependencies.cli;
+  ] ++ optional-dependencies.cli;
 
   pythonImportsCheck = [ "evohomeasync2" ];
 

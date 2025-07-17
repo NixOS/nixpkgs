@@ -46,7 +46,9 @@ By default, synced data are stored in */var/lib/anki-sync-server/*ankiuser**.
 You can change the directory by using `services.anki-sync-server.baseDirectory`
 
 ```nix
-{ services.anki-sync-server.baseDirectory = "/home/anki/data"; }
+{
+  services.anki-sync-server.baseDirectory = "/home/anki/data";
+}
 ```
 
 By default, the server listen address {option}`services.anki-sync-server.host`

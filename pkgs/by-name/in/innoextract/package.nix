@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xz
     boost
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # Python is reported as missing during the build, however
   # including Python does not change the output.
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
     mainProgram = "innoextract";
   };

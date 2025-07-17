@@ -1,6 +1,5 @@
 {
   lib,
-  aiohttp,
   asdf-standard,
   asdf-transform-schemas,
   attrs,
@@ -17,7 +16,6 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  requests,
   semantic-version,
   setuptools,
   setuptools-scm,
@@ -25,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "4.3.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +32,7 @@ buildPythonPackage rec {
     owner = "asdf-format";
     repo = "asdf";
     tag = version;
-    hash = "sha256-sCjDZ/6KiFH9LbdDpco8z1xRgJe0dm0HVhpRbO51RDI=";
+    hash = "sha256-h7OkLq9+sW507Va22cF0eez6xrI7iIaLV5D7EZFWxJQ=";
   };
 
   build-system = [
@@ -55,13 +53,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiohttp
     fsspec
     lz4
     psutil
     pytest-remotedata
     pytestCheckHook
-    requests
   ];
 
   disabledTests = [

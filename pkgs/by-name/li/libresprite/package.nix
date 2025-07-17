@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LibreSprite";
     repo = "LibreSprite";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-jXjrA859hR46Cp5qi6Z1C+hLWCUR7yGlASOGlTveeW8=";
   };
@@ -46,26 +46,27 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs = [
-    curl
-    freetype
-    giflib
-    libjpeg
-    libpng
-    libwebp
-    libarchive
-    libX11
-    pixman
-    tinyxml-2
-    zlib
-    SDL2
-    SDL2_image
-    lua
-    # no v8 due to missing libplatform and libbase
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    xorg.libXi
-  ];
+  buildInputs =
+    [
+      curl
+      freetype
+      giflib
+      libjpeg
+      libpng
+      libwebp
+      libarchive
+      libX11
+      pixman
+      tinyxml-2
+      zlib
+      SDL2
+      SDL2_image
+      lua
+      # no v8 due to missing libplatform and libbase
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      xorg.libXi
+    ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"

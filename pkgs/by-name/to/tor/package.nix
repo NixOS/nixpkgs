@@ -19,7 +19,6 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
-  makeSetupHook,
 }:
 
 let
@@ -60,19 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libevent
-    openssl
-    zlib
-    xz
-    zstd
-    scrypt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libseccomp
-    systemd
-    libcap
-  ];
+  buildInputs =
+    [
+      libevent
+      openssl
+      zlib
+      xz
+      zstd
+      scrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+      systemd
+      libcap
+    ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -82,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
     [ "--enable-gpl" ]
     ++
-      # cross compiles correctly but needs the following
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -112,21 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    tests = {
-      inherit (nixosTests) tor;
-      proxyHook = callPackage ./proxy-hook-tests.nix {
-        tor = finalAttrs.finalPackage;
-      };
-    };
+    tests.tor = nixosTests.tor;
     updateScript = callPackage ./update.nix { };
-    proxyHook = makeSetupHook {
-      name = "tor-proxy-hook";
-      substitutions = {
-        grep = lib.getExe gnugrep;
-        tee = lib.getExe' coreutils "tee";
-        tor = lib.getExe finalAttrs.finalPackage;
-      };
-    } ./proxy-hook.sh;
   };
 
   meta = {

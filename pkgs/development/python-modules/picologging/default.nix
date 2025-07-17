@@ -57,7 +57,7 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     changelog = "https://github.com/microsoft/picologging/releases/tag/${version}";
-    description = "Optimized logging library for Python";
+    description = "optimized logging library for Python";
     license = lib.licenses.mit;
   };
 }

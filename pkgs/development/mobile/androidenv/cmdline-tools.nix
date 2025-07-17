@@ -17,8 +17,7 @@ deployAndroidPackage {
   inherit package os arch;
   nativeBuildInputs = [
     makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''

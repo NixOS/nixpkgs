@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-t3Lbqrcmh0XSOO+hc4UsWhKi4zToORFQo0A4G32aeOw=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-waQcxdVXZZ09wuLWUNL4nRUHF1rIDI8lAfYc/1bxMl0=";
 
   buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mpris" ];
@@ -28,12 +29,13 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   meta = {
     description = "Extremely simple lofi player";

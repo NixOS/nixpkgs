@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "2.0.2";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,8 +22,13 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "aiolyric";
     tag = version;
-    hash = "sha256-k0UE9SXHS8lPu3kC+tGtn99rCU2hq+fdCsp6f83+gv4=";
+    hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
 
   build-system = [
     incremental
@@ -43,16 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolyric" ];
 
-  disabledTestPaths = [
-    # _version file is no shipped
-    "tests/test__version.py"
-  ];
-
   meta = with lib; {
     description = "Python module for the Honeywell Lyric Platform";
     homepage = "https://github.com/timmo001/aiolyric";
-    changelog = "https://github.com/timmo001/aiolyric/releases/tag/${src.tag}";
-    license = licenses.mit;
+    changelog = "https://github.com/timmo001/aiolyric/releases/tag/v${version}";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

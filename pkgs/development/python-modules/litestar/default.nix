@@ -7,164 +7,107 @@
   hatchling,
 
   # dependencies
-  annotated-types,
   anyio,
   asyncpg,
-  attrs,
-  brotli,
   click,
   cryptography,
   fsspec,
   httpx,
   jinja2,
-  jsbeautifier,
   litestar-htmx,
   mako,
-  minijinja,
-  fast-query-parsers,
   msgspec,
   multidict,
-  multipart,
   picologging,
   polyfactory,
-  piccolo,
-  prometheus-client,
   psutil,
-  opentelemetry-instrumentation-asgi,
   psycopg,
-  pydantic-extra-types,
-  pydantic,
-  email-validator,
-  pyjwt,
   pyyaml,
   redis,
-  rich-click,
   rich,
-  structlog,
+  rich-click,
   time-machine,
+  trio,
   typing-extensions,
-  uvicorn,
-  # valkey,
 
   # tests
-  httpx-sse,
-  pytest-asyncio,
-  pytest-lazy-fixtures,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pytest-xdist,
   pytestCheckHook,
-  trio,
+  pytest-lazy-fixtures,
+  pytest-xdist,
+  pytest-mock,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-rerunfailures,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "litestar";
-  version = "2.17.0";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
     tag = "v${version}";
-    hash = "sha256-jUd0Nf3OmcKmO7DAXMqBXZPw3+heAQszcgE2xT+lAyA=";
+    hash = "sha256-PR2DVNRtILHs7XwVi9/ZCVRJQFqfGLn1x2gpYtYjHDo=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     anyio
     asyncpg
     click
-    fast-query-parsers
+    cryptography
     fsspec
     httpx
+    jinja2
     litestar-htmx
+    mako
     msgspec
     multidict
-    multipart
+    picologging
     polyfactory
     psutil
+    psycopg
     pyyaml
+    redis
     rich
     rich-click
+    time-machine
+    trio
     typing-extensions
   ];
 
-  optional-dependencies = {
-    annotated-types = [ annotated-types ];
-    attrs = [ attrs ];
-    brotli = [ brotli ];
-    cli = [
-      jsbeautifier
-      uvicorn
-    ];
-    cryptography = [ cryptography ];
-    htmx = [ litestar-htmx ];
-    jinja = [ jinja2 ];
-    jwt = [
-      cryptography
-      pyjwt
-    ];
-    mako = [ mako ];
-    minijinja = [ minijinja ];
-    opentelemetry = [ opentelemetry-instrumentation-asgi ];
-    piccolo = [ piccolo ];
-    picologging = [ picologging ];
-    polyfactory = [ polyfactory ];
-    prometheus = [ prometheus-client ];
-    pydantic = [
-      pydantic
-      email-validator
-      pydantic-extra-types
-    ];
-    redis = [ redis ] ++ redis.optional-dependencies.hiredis;
-    # sqlalchemy = [ advanced-alchemy ];
-    structlog = [ structlog ];
-    # valkey = [ valkey ] ++ valkey.optional-dependencies.libvalkey;
-    yaml = [ pyyaml ];
-  };
-
   nativeCheckInputs = [
-    httpx-sse
-    pytest-asyncio
-    pytest-lazy-fixtures
-    pytest-mock
-    pytest-rerunfailures
-    pytest-timeout
-    pytest-xdist
     pytestCheckHook
-    time-machine
-    trio
+    pytest-lazy-fixtures
+    pytest-xdist
+    pytest-mock
+    pytest-asyncio
+    pytest-timeout
+    pytest-rerunfailures
     versionCheckHook
   ];
-
   versionCheckProgramArg = "version";
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   enabledTestPaths = [
-    # Follow GitHub CI
+    # Follow github CI
     "docs/examples/"
   ];
 
-  disabledTests = [
-    # StartupError
-    "test_subprocess_async_client"
-  ];
-
   meta = {
-    description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
     homepage = "https://litestar.dev/";
-    changelog = "https://github.com/litestar-org/litestar/releases/tag/${src.tag}";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    changelog = "https://github.com/litestar-org/litestar/releases/tag/v${version}";
+    description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
     license = lib.licenses.mit;
     mainProgram = "litestar";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    platforms = lib.platforms.unix;
   };
 }

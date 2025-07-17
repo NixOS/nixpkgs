@@ -1,16 +1,10 @@
-{ pkgs, package, ... }:
+{ pkgs, ... }:
 {
   name = "clickhouse";
-  meta.maintainers = with pkgs.lib.maintainers; [
-    jpds
-    thevar1able
-  ];
+  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
 
   nodes.machine = {
-    services.clickhouse = {
-      enable = true;
-      inherit package;
-    };
+    services.clickhouse.enable = true;
     virtualisation.memorySize = 4096;
   };
 

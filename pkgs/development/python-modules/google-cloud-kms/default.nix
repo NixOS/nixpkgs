@@ -34,8 +34,7 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -58,9 +57,6 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "google-cloud-kms-v";
   };
-
-  # picks the wrong tag
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Cloud Key Management Service (KMS) API API client library";

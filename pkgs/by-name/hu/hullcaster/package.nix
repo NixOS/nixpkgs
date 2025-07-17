@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TaELX/xMxm7OTmVnvkgEmdhnVrIlxSNqlE73+I5qxCc=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-jso9ofchUjpsck0qJN3rfFVM1Y6C8APmhwNzapU7Mug=";
 
   # work around error: Could not create filepath: /homeless-shelter/.local/share

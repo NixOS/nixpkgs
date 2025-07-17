@@ -5,6 +5,7 @@
   fetchFromGitHub,
   poetry-core,
   charset-normalizer,
+  tomli,
   untokenize,
   mock,
   pytestCheckHook,
@@ -13,7 +14,10 @@
 buildPythonPackage rec {
   pname = "docformatter";
   version = "1.7.7";
-  pyproject = true;
+
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
@@ -25,14 +29,17 @@ buildPythonPackage rec {
   patches = [ ./test-path.patch ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'charset_normalizer = "^2.0.0"' 'charset_normalizer = ">=2.0.0"'
     substituteInPlace tests/conftest.py \
       --subst-var-by docformatter $out/bin/docformatter
   '';
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     charset-normalizer
+    tomli
     untokenize
   ];
 
@@ -41,10 +48,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Disable failing tests until https://github.com/PyCQA/docformatter/issues/274 is fixed upstream
   disabledTests = [
-    # AssertionError: assert 'utf_16' == 'latin-1'
-    # fixed by https://github.com/PyCQA/docformatter/pull/323
-    "test_detect_encoding_with_undetectable_encoding"
+    "test_do_format_code.py"
+    "test_docformatter.py"
   ];
 
   pythonImportsCheck = [ "docformatter" ];

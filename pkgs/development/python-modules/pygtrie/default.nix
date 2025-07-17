@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  ...
 }:
 buildPythonPackage rec {
   pname = "pygtrie";

@@ -14,8 +14,6 @@ lib.makeScope newScope (
 
     mopidy-bandcamp = callPackage ./bandcamp.nix { };
 
-    mopidy-listenbrainz = callPackage ./listenbrainz.nix { };
-
     mopidy-iris = callPackage ./iris.nix { };
 
     mopidy-jellyfin = callPackage ./jellyfin.nix { };

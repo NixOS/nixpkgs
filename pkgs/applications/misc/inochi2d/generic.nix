@@ -147,7 +147,6 @@ buildDubPackage (
       license = lib.licenses.bsd2;
       mainProgram = pname;
       maintainers = with lib.maintainers; [ tomasajt ];
-    }
-    // meta;
+    } // meta;
   }
 )

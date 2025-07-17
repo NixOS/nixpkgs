@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mikeoliphant";
     repo = "neural-amp-modeler-lv2";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-5BOZOocZWWSWawXJFMAgM0NR0s0CbkzDVr6fnvZMvd0=";
   };

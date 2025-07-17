@@ -7,27 +7,20 @@
   # at lib/node_modules/igir/node_modules/7zip-bin/linux/x64/7za
   autoPatchelfHook,
   stdenv,
-
-  libusb1,
-  libuv,
-  libz,
-  lz4,
-  sdl2-compat,
-  systemd,
 }:
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "4.2.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-t0iGQC3U95707n4iVLbWynh3CadOPFKBEoXPg4rNjVo=";
+    hash = "sha256-NG0ZP8LOm7fZVecErTuLOfbp1yvXwHnwPkWTBzUJXWE=";
   };
 
-  npmDepsHash = "sha256-qFgyqh3e2A6D+MaEUoV1jGRp1wJKvB8Dcr5XPrezlSk=";
+  npmDepsHash = "sha256-ADIEzr6PkGaJz27GKSVyTsrbz5zbud7BUb+OXPtP1Vo=";
 
   # I have no clue why I have to do this
   postPatch = ''
@@ -36,15 +29,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    libusb1
-    libuv
-    libz
-    lz4
-    sdl2-compat
-    systemd
-  ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # from lib/node_modules/igir/node_modules/@node-rs/crc32-linux-x64-musl/crc32.linux-x64-musl.node
   # Irrelevant to our use
@@ -56,7 +41,7 @@ buildNpmPackage rec {
     homepage = "https://igir.io";
     changelog = "https://github.com/emmercm/igir/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mjm ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

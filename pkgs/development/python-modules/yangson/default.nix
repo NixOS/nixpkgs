@@ -27,8 +27,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonRelaxDeps = [ "elementpath" ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yangson" ];

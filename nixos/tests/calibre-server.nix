@@ -79,8 +79,7 @@ mapAttrs (
       calibreConfig = {
         enable = true;
         libraries = [ "/var/lib/calibre-server" ];
-      }
-      // testConfig.calibreConfig or { };
+      } // testConfig.calibreConfig or { };
       librariesInitScript = path: ''
         ${nodeName}.execute("touch /tmp/test.epub")
         ${nodeName}.execute("zip -r /tmp/test.zip /tmp/test.epub")

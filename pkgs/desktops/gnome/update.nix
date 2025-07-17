@@ -104,8 +104,7 @@ in
     packageName
     packageVersion
     versionPolicy
-  ]
-  ++ upperBound;
+  ] ++ upperBound;
   supportedFeatures = [
     "commit"
   ];

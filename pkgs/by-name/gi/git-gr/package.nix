@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = [ "clap_mangen" ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
 
   OPENSSL_NO_VENDOR = true;

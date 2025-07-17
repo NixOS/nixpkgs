@@ -59,8 +59,7 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     uproot
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dask_awkward" ];
 

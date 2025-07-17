@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   sqlite,
@@ -33,7 +32,7 @@ buildGoModule rec {
     "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd expenses \
       --bash <($out/bin/expenses completion bash) \
       --zsh <($out/bin/expenses completion zsh) \

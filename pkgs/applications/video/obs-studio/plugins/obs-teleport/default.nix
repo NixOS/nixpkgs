@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "obs-teleport";
-  version = "0.7.5";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-teleport";
     rev = version;
-    sha256 = "sha256-r1CB9wzw1tuRHWpx5PXyuh1y3Tue34Wpgys7LSEh62s=";
+    sha256 = "sha256-mHHPlmUyR9NDdQHqw1YNgThGl/8DH/aiCE9rdZhrIK4=";
   };
 
-  vendorHash = "sha256-o7PL3qnZ13L8+7mVx2yyDIlw/0s+NHNwy9DaRZxVKLc=";
+  vendorHash = "sha256-U/5smUMpcVEFWB+xMxLKF9E6N7dyh67QoB+Afq5Ga2Q=";
 
   buildInputs = [
     libjpeg

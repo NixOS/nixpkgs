@@ -77,8 +77,7 @@ buildPythonPackage rec {
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ]
-    ++ self.asyncio;
+    ] ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];

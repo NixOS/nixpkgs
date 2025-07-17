@@ -15,7 +15,7 @@
   json_c,
   libmodulemd,
   librepo,
-  util-linux,
+  libsmartcols,
   libsolv,
   libxml2,
   libyaml,
@@ -25,7 +25,7 @@
   sphinx,
   sqlite,
   systemd,
-  versionCheckHook,
+  testers,
   toml11,
   zchunk,
   nix-update-script,
@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.17.0";
+  version = "5.2.14.0";
 
   outputs = [
     "out"
@@ -44,23 +44,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-bVXmpoM2ymLgqjv8+3syYhkIKSyW68eKzKhUWRfR1vY=";
+    hash = "sha256-dCeTOJrOjnGvRhY8u8mMOgm/mbUoTbYqzjiAkbIlSo0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    createrepo_c
-    doxygen
-    gettext
-    help2man
-    pkg-config
-    sphinx
-  ]
-  ++ (with python3Packages; [
-    breathe
-    sphinx-autoapi
-    sphinx-rtd-theme
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      createrepo_c
+      doxygen
+      gettext
+      help2man
+      pkg-config
+      sphinx
+    ]
+    ++ (with python3Packages; [
+      breathe
+      sphinx-autoapi
+      sphinx-rtd-theme
+    ]);
 
   buildInputs = [
     appstream
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     libmodulemd
     librepo
-    util-linux
+    libsmartcols
     libsolv
     libxml2
     libyaml
@@ -115,13 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true;
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
-  preVersionCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Next-generation RPM package management system";

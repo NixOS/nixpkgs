@@ -4,36 +4,26 @@
   fetchFromGitHub,
   nixosTests,
 }:
-buildGoModule rec {
-  subPackages = [ "cmd" ];
-  postInstall = ''
-    mv $out/bin/cmd $out/bin/script_exporter
-  '';
 
+buildGoModule rec {
   pname = "script_exporter";
-  version = "3.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = "ricoberger";
+    owner = "adhocteam";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-09WpxXPNk2Pza9RrD3OLru4aY0LR98KgsHK7It/qRgs=";
+    hash = "sha256-t/xgRalcHxEcT1peU1ePJUItD02rQdfz1uWpXDBo6C0=";
   };
 
-  postPatch = ''
-    # Patch out failing test assertion in handler_test.go
-    # Insert t.Skip at the start of TestHandler to skip it cleanly
-    sed -i '/func TestHandler/a\\    t.Skip("skipped in Nix build")' prober/handler_test.go
-  '';
-
-  vendorHash = "sha256-Rs7P7uVvfhWteiR10LeG4fWZqbNqDf3QQotgNvTMTX4=";
+  vendorHash = "sha256-Hs1SNpC+t1OCcoF3FBgpVGkhR97ulq6zYhi8BQlgfVc=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) script; };
 
   meta = with lib; {
     description = "Shell script prometheus exporter";
     mainProgram = "script_exporter";
-    homepage = "https://github.com/ricoberger/script_exporter";
+    homepage = "https://github.com/adhocteam/script_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;

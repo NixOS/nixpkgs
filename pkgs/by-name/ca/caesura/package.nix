@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Versatile command line tool for automated verifying and transcoding of all your torrents";
+    description = "versatile command line tool for automated verifying and transcoding of all your torrents";
     homepage = "https://github.com/RogueOneEcho/caesura";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ambroisie ];

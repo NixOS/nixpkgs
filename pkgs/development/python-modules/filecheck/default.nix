@@ -2,33 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "filecheck";
-  version = "1.0.3";
-  pyproject = true;
+  version = "0.0.24";
+  format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "AntonLydike";
-    repo = "filecheck";
+    owner = "mull-project";
+    repo = "FileCheck.py";
     tag = "v${version}";
-    hash = "sha256-oOGQIEPIHL4xQRVKOw+8Z8QSowXlavVnck+IOWA9qd8=";
+    hash = "sha256-VbMlCqGd3MVpj0jEKjSGC2L0s/3e/d53b+2eZcXZneo=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "filecheck" ];
 
   meta = with lib; {
-    changelog = "https://github.com/antonlydike/filecheck/releases/tag/${src.tag}";
-    homepage = "https://github.com/antonlydike/filecheck";
+    changelog = "https://github.com/mull-project/FileCheck.py/releases/tag/v${version}";
+    homepage = "https://github.com/mull-project/FileCheck.py";
     license = licenses.asl20;
-    description = "Python-native clone of LLVMs FileCheck tool";
+    description = "Python port of LLVM's FileCheck, flexible pattern matching file verifier";
     mainProgram = "filecheck";
     maintainers = with maintainers; [ yorickvp ];
   };

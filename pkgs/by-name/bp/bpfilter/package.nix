@@ -1,6 +1,5 @@
 {
   bison,
-  clangStdenv,
   cmake,
   cmocka,
   doxygen,
@@ -15,19 +14,19 @@
   nix-update-script,
   pkg-config,
   sphinx,
-  tinyxxd,
+  stdenv,
   zlib,
 }:
 
-clangStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpfilter";
-  version = "0.5.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "bpfilter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qL5wRm6QmfMa5L+oZc5E2kAVqvJfCt5fBxjmtWzb2kA=";
+    hash = "sha256-Z0L4sY944cj/rqfOwwjNWOU0tZDAsZ1ocf4/djHad2Q=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +38,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     lcov
     pkg-config
     sphinx
-    tinyxxd
 
     # bpfilter's cmake files requires this, even if we specify the version
     # we're using without needing to detect the version during the build.
@@ -65,9 +63,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
   ];
-
-  # invalid with -target bpf
-  hardeningDisable = [ "zerocallusedregs" ];
 
   preFixup = ''
     substituteInPlace $out/lib/systemd/system/bpfilter.service --replace-fail /usr/sbin/bpfilter $out/bin/bpfilter

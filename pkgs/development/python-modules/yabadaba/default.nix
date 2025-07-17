@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yabadaba";
-  version = "0.3.2";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "yabadaba";
     tag = "v${version}";
-    hash = "sha256-ZVV/2/RyDj707OEWcwFgQjJImgoiv91ZEutT3RBuWus=";
+    hash = "sha256-DpkJvi4w0aoD7RC2IFORy8uZ12TuLdcJxfLaSGyATac=";
   };
 
   build-system = [ setuptools ];

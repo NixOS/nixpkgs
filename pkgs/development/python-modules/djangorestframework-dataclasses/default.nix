@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   djangorestframework,
-  pytest-django,
-  pytestCheckHook,
   setuptools,
 }:
 
@@ -20,20 +18,21 @@ buildPythonPackage rec {
     hash = "sha256-nUkR5xTyeBv7ziJ6Mej9TKvMOa5/k+ELBqt4BVam/wk=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
     patchShebangs manage.py
   '';
 
-  build-system = [ setuptools ];
-
   dependencies = [ djangorestframework ];
 
-  nativeCheckInputs = [
-    pytest-django
-    pytestCheckHook
-  ];
+  checkPhase = ''
+    runHook preCheck
 
-  env.DJANGO_SETTINGS_MODULE = "tests.django_settings";
+    ./manage.py test
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "rest_framework_dataclasses" ];
 

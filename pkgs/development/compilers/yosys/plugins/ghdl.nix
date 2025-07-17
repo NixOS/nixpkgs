@@ -11,14 +11,15 @@
 
 stdenv.mkDerivation {
   pname = "yosys-ghdl";
-  version = "0-unstable-2025-05-23";
+  # This is not the latest commit, but it's the latest that builds with current stable ghdl 2.0.0
+  version = "2022.01.11";
   plugin = "ghdl";
 
   src = fetchFromGitHub {
     owner = "ghdl";
     repo = "ghdl-yosys-plugin";
-    rev = "1b97dc71377cea7e861be6625be4353c377a5fb5";
-    hash = "sha256-TFMUqIXJzgpnZ8cDlVb47btPqsCNJil0MN4Tdt83140=";
+    rev = "c9b05e481423c55ffcbb856fd5296701f670808c";
+    sha256 = "sha256-tT2+DXUtbJIBzBUBcyG2sz+3G+dTkciLVIczcRPr0Jw=";
   };
 
   buildInputs = [

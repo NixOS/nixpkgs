@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

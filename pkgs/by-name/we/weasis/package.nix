@@ -3,7 +3,6 @@
   stdenv,
   fetchzip,
   jdk24,
-  unzip,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -14,27 +13,21 @@ let
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
-    "aarch64-linux" = "linux-aarch64";
-    "x86_64-darwin" = "macosx-x86-64";
-    "aarch64-darwin" = "macosx-aarch64";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
-  version = "4.6.3";
+  version = "4.6.1";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
-    hash = "sha256-1dvBKxInuk8FpZjo59+LkIuEBTr57wkLaHfvvvT6bOg=";
+    hash = "sha256-poBMlSjaT4Mx4CV/19S7Dzk48RsgeKrBxl9KXRDzWrc=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ]
-  ++ lib.optional stdenv.isDarwin unzip;
+  nativeBuildInputs = [ copyDesktopItems ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -67,17 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-  ''
-  + lib.optionalString stdenv.isLinux ''
+
     mkdir -p $out/share/{applications,pixmaps}
+
     mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis.app $out/Applications/
-  ''
-  + ''
+
     runHook postInstall
   '';
 
@@ -91,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       epl20
     ];
     maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";
   };
 })

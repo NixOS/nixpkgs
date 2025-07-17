@@ -5,7 +5,6 @@
 }:
 
 let
-  # TODO: update aarch64 to use crx3
   targets = lib.genAttrs [
     "aarch64-linux"
     "x86_64-linux"

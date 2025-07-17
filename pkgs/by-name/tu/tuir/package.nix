@@ -7,14 +7,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "tuir";
-  version = "1.31.1";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "Chocimier";
     repo = "tuir";
     rev = "v${version}";
-    hash = "sha256-lUK6gXwvVjiYrJXMSFlzp07Yt+nSkU933J4vBJWOLlg=";
+    hash = "sha256-VYBtD3Ex6+iIRNvX6jF0b0iPvno41/58xCRydiyssvk=";
   };
 
   build-system = with python3Packages; [ setuptools ];

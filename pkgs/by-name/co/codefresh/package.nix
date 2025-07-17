@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "codefresh";
-  version = "0.89.2";
+  version = "0.88.5";
 
   src = fetchFromGitHub {
     owner = "codefresh-io";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cf3I+w0rVsjsu+m+vE/pOcASYTmsRi0yAQVpJkYbzUU=";
+    hash = "sha256-u0K3I65JDu6v4mE0EU6Rv6uJOmC6VuZbIVyreHPH9QE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-wD3BmWjrFGkNqUhbo2TrWLwgo2o2MiQn7X3fyDYt5dw=";
+    hash = "sha256-cMCJ/ANpHsEuO0SNtvf7zlS0HXp328oBP5aXnHSbpDI=";
   };
   nativeBuildInputs = [
     yarnConfigHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/codefresh-io/cli/releases/tag/v${finalAttrs.version}";
-    description = "CLI tool to interact with Codefresh services";
+    description = "Codefresh CLI tool to interact with Codefresh services";
     homepage = "https://github.com/codefresh-io/cli";
     license = lib.licenses.mit;
     mainProgram = "codefresh";

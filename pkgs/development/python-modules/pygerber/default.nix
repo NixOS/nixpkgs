@@ -92,7 +92,7 @@ buildPythonPackage rec {
     "test/gerberx3/test_language_server/tests.py"
   ];
 
-  pytestFlags = [ "--override-ini=required_plugins=" ];
+  pytestFlagsArray = [ "--override-ini required_plugins=''" ];
 
   pythonImportsCheck = [ "pygerber" ];
 

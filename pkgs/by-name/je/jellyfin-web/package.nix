@@ -42,12 +42,11 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs = [
-    pango
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    giflib
-  ];
+  buildInputs =
+    [ pango ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      giflib
+    ];
 
   installPhase = ''
     runHook preInstall

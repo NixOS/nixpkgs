@@ -23,21 +23,21 @@
   qtlocation,
   qtsvg,
   qttools,
-  qtpositioning,
+  qtwebengine,
   libXcomposite,
   bluez,
   writeScript,
 }:
 
 let
-  version = "6.0.5436";
+  version = "6.0.5231";
 
   subsurfaceSrc = (
     fetchFromGitHub {
       owner = "Subsurface";
       repo = "subsurface";
-      rev = "2d3f73c2e1dd5d1f42419708866e40d973989d24";
-      hash = "sha256-dB7KKXbQOmyzlzAKDlFTGJDa/XIKQeKsiCt+dPeP9EU=";
+      rev = "38a0050ac33566dfd34bf94cf1d7ac66034e4118";
+      hash = "sha256-6fNcBF/Ep2xs2z83ZQ09XNb/ZkhK1nUNLChV1x8qh0Y=";
       fetchSubmodules = true;
     }
   );
@@ -142,7 +142,7 @@ stdenv.mkDerivation {
     qtconnectivity
     qtsvg
     qttools
-    qtpositioning
+    qtwebengine
   ];
 
   nativeBuildInputs = [
@@ -167,7 +167,6 @@ stdenv.mkDerivation {
       pushd $tmpdir
       git clone -b current https://github.com/subsurface/subsurface.git
       cd subsurface
-      sed -i '1s/#!\/bin\/bash/#!\/usr\/bin\/env bash/' ./scripts/get-version.sh
       # this returns 6.0.????-local
       new_version=$(./scripts/get-version.sh | cut -d '-' -f 1)
       new_rev=$(git rev-list -1 HEAD)

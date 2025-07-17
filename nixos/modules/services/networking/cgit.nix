@@ -256,7 +256,9 @@ in
             (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
+                extraConfig = ''
+                  alias ${cfg.package}/cgit/${fileName};
+                '';
               }
             ))
             // {

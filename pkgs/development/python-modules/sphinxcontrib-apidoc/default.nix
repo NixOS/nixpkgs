@@ -8,13 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
-  version = "0.6.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "sphinxcontrib_apidoc";
-    inherit version;
-    hash = "sha256-MpuYENZpiPSOEnpr0YzI77vRzSC43rRpGjVzivSa2I0=";
+    inherit pname version;
+    hash = "sha256-Ze/NkiEqX4I3FfuV7gmLRYprsJpe5hfZ7T3q2XF3zVU=";
   };
 
   postPatch = ''

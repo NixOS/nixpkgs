@@ -8,12 +8,12 @@
   networkx,
   numpy,
   scipy,
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scikit-fuzzy";
-  version = "0.5.0";
+  version = "0.4.2-unstable-2023-09-14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-fuzzy";
     repo = "scikit-fuzzy";
-    tag = "v${version}";
-    hash = "sha256-02aIYBdbQXQD9S1R/gZZeKTn5LxloE0GGGRttxJnR/o=";
+    rev = "d7551b649f34c2f5e98836e9b502279226d3b225";
+    hash = "sha256-91Udm2dIaIwTVG6V1EqYA/4qryuS4APgaa7tIa3sSQE=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     networkx
     numpy
     scipy
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     matplotlib
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   preCheck = "rm -rf build";
@@ -45,7 +45,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/scikit-fuzzy/scikit-fuzzy";
     description = "Fuzzy logic toolkit for scientific Python";
-    changelog = "https://github.com/scikit-fuzzy/scikit-fuzzy/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ maintainers.bcdarwin ];
   };

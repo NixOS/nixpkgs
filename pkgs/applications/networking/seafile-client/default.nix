@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.14";
+  version = "9.0.12";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    hash = "sha256-ZMhU0uXAC3tH1e3ktiHhC5YCDwFOnILretPgjYYa9DQ=";
+    sha256 = "sha256-9ng8TsT211jAt2Vhv8fEIQGCtbQ6LQ6pCVFToVaK8LY=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     seafile-shared
     jansson
     libsearpc
-  ]
-  ++ lib.optional withShibboleth qtwebengine;
+  ] ++ lib.optional withShibboleth qtwebengine;
 
   cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 

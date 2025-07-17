@@ -57,41 +57,44 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ (with qtPackages; [
-    qmake
-    qttools
-    wrapQtAppsHook
-  ]);
-
-  buildInputs = [
-    rtaudio_6
-    rtmidi
-  ]
-  ++ (
-    with qtPackages;
+  nativeBuildInputs =
     [
-      qtbase
+      pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ]
-    ++ lib.optionals withQt6 [
-      qt5compat
-    ]
-  );
+    ++ (with qtPackages; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
-  qmakeFlags = [
-    "CONFIG+=system_rtaudio"
-    "CONFIG+=system_rtmidi"
-  ]
-  ++ lib.optionals stdenv.cc.isClang [
-    # Clang is extra-strict about some deprecations
-    # https://github.com/BambooTracker/BambooTracker/issues/506
-    "CONFIG+=no_warnings_are_errors"
-  ];
+  buildInputs =
+    [
+      rtaudio_6
+      rtmidi
+    ]
+    ++ (
+      with qtPackages;
+      [
+        qtbase
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        qtwayland
+      ]
+      ++ lib.optionals withQt6 [
+        qt5compat
+      ]
+    );
+
+  qmakeFlags =
+    [
+      "CONFIG+=system_rtaudio"
+      "CONFIG+=system_rtmidi"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # Clang is extra-strict about some deprecations
+      # https://github.com/BambooTracker/BambooTracker/issues/506
+      "CONFIG+=no_warnings_are_errors"
+    ];
 
   postConfigure = "make qmake_all";
 

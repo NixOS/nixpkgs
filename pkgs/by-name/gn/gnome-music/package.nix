@@ -31,13 +31,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "48.1";
+  version = "48.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${lib.versions.major version}/gnome-music-${version}.tar.xz";
-    hash = "sha256-QL9XMC2l2zNraIVS7dAU2/vitEUEGWYAcpTGwrDAeN4=";
+    hash = "sha256-jNqs0FJitjuxYIolrK1RboksMyIyNXy5t/aPLPuG1m4=";
   };
 
   nativeBuildInputs = [
@@ -53,30 +53,31 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk4
-    pango
-    glib
-    libmediaart
-    gnome-online-accounts
-    gdk-pixbuf
-    python3
-    grilo
-    grilo-plugins
-    libnotify
-    libsoup_3
-    libadwaita
-    gsettings-desktop-schemas
-    tinysparql
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]);
+  buildInputs =
+    [
+      gtk4
+      pango
+      glib
+      libmediaart
+      gnome-online-accounts
+      gdk-pixbuf
+      python3
+      grilo
+      grilo-plugins
+      libnotify
+      libsoup_3
+      libadwaita
+      gsettings-desktop-schemas
+      tinysparql
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]);
 
   pythonPath = with python3.pkgs; [
     pycairo

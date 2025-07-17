@@ -203,7 +203,6 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
-      meta.mainProgram = name;
     };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -345,26 +344,27 @@ rec {
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
-      text = ''
-        #!${runtimeShell}
-        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-      ''
-      + lib.optionalString (runtimeEnv != null) (
-        lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            ${lib.toShellVar name value}
-            export ${name}
-          '') runtimeEnv
+      text =
+        ''
+          #!${runtimeShell}
+          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+        ''
+        + lib.optionalString (runtimeEnv != null) (
+          lib.concatStrings (
+            lib.mapAttrsToList (name: value: ''
+              ${lib.toShellVar name value}
+              export ${name}
+            '') runtimeEnv
+          )
         )
-      )
-      + lib.optionalString (runtimeInputs != [ ]) ''
+        + lib.optionalString (runtimeInputs != [ ]) ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-      ''
-      + ''
+          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+        ''
+        + ''
 
-        ${text}
-      '';
+          ${text}
+        '';
 
       checkPhase =
         let

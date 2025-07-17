@@ -12,7 +12,6 @@
   pango,
   webkitgtk_6_0,
   nix-update-script,
-  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -56,10 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${finalAttrs.src}/data/hicolor $out/share/icons
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) oku; };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Browser for the Oku Network and Peer-to-peer sites";

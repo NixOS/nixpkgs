@@ -26,17 +26,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [
-    glew
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGLU
-    libGL
-    libglut
-    libXmu
-    libXext
-    libX11
-  ];
+  buildInputs =
+    [ glew ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+      libglut
+      libXmu
+      libXext
+      libX11
+    ];
 
   doCheck = false;
 

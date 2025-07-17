@@ -37,8 +37,6 @@ buildPythonPackage rec {
     grapheme
   ];
 
-  pythonRelaxDeps = [ "about_time" ];
-
   nativeCheckInputs = [
     click
     pytestCheckHook

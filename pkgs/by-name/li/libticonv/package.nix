@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-iconv"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
 
   meta = with lib; {
     changelog = "http://lpg.ticalc.org/prj_tilp/news.html";

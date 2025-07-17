@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Scriptable music files tags tool and editor";
     homepage = "https://github.com/kaworu/tagutil";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;
     mainProgram = "tagutil";
   };

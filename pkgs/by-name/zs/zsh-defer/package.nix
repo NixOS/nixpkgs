@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "zsh-defer";
-  version = "0-unstable-2022-06-13";
+  version = "unstable-2022-06-13";
 
   src = fetchFromGitHub {
     owner = "romkatv";

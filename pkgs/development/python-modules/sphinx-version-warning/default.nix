@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pythonOlder,
   setuptools,
   sphinx,
   sphinx-autoapi,
@@ -21,14 +22,12 @@ buildPythonPackage {
   version = "unstable-2019-08-10";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   outputs = [
     "out"
     "doc"
   ];
-
-  postPatch = ''
-    substituteInPlace docs/conf.py --replace-fail "sphinx-prompt" "sphinx_prompt"
-  '';
 
   src = fetchFromGitHub {
     owner = "humitos";
@@ -60,11 +59,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "versionwarning" ];
 
-  meta = {
+  meta = with lib; {
     description = "Sphinx extension to show a warning banner at the top of your documentation";
     homepage = "https://github.com/humitos/sphinx-version-warning";
-    changelog = "https://github.com/humitos/sphinx-version-warning/blob/master/CHANGELOG.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kaction ];
+    changelog = "https://github.com/humitos/sphinx-version-warning/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
   };
 }

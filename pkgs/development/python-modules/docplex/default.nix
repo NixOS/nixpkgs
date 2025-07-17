@@ -2,19 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  isPy27,
   setuptools,
+  futures ? null,
   docloud,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "docplex";
-  version = "2.30.251";
+  version = "2.29.245";
   pyproject = true;
 
+  # No source available from official repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZQMhn1tRJ1p+TnfKQzKQOw+Akl0gUDCkjT9qp8oNvyo=";
+    hash = "sha256-pCb+P6WQUPX+dzFfe6Hcfao1fH2NDtBmpYNWRx2FPko=";
   };
 
   postPatch = ''
@@ -24,14 +27,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     docloud
     requests
-  ];
+  ] ++ lib.optional isPy27 futures;
 
-  # PypI release does not include tests
   doCheck = false;
-
   pythonImportsCheck = [ "docplex" ];
 
   meta = with lib; {

@@ -10,6 +10,7 @@
   cryptography,
   docker,
   fetchFromGitHub,
+  fetchpatch,
   flask-cors,
   flask,
   freezegun,
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.9";
+  version = "5.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,8 +47,17 @@ buildPythonPackage rec {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-UbCSGpvS8Jvpe8iV1rVplSoGykHSup9pVTd3odbPq6Y=";
+    hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
   };
+
+  # Fix tests with botocore 1.38.32
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/getmoto/moto/commit/8dcaaca0eefdf9ac957650c1562317b6d07fadf9.diff";
+      hash = "sha256-5zaerJR1rsMZQLn8cXjS8RYiKlSQ6azp7dk7JzLp+7I=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -300,21 +310,19 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ]
-  ++ optional-dependencies.server;
+  ] ++ optional-dependencies.server;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
-  pytestFlags = [
-    # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist=loadscope"
-  ];
+  pytestFlagsArray = [
+    "-m"
+    "'not network and not requires_docker'"
 
-  disabledTestMarks = [
-    "network"
-    "requires_docker"
+    # Matches upstream configuration, presumably due to expensive setup/teardown.
+    "--dist"
+    "loadscope"
   ];
 
   disabledTests = [
@@ -354,6 +362,9 @@ buildPythonPackage rec {
     # Parameter validation fails
     "test_conditional_write"
 
+    # Requires newer botocore version
+    "test_dynamodb_with_account_id_routing"
+
     # Assumes too much about threading.Timer() behavior (that it honors the
     # timeout precisely and that the thread handler will complete in just 0.1s
     # from the requested timeout)
@@ -382,9 +393,6 @@ buildPythonPackage rec {
 
     # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
     "tests/test_workspaces/test_workspaces.py"
-
-    # Requires sagemaker client
-    "other_langs/tests_sagemaker_client/test_model_training.py"
   ];
 
   meta = {

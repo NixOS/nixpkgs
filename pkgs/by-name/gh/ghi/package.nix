@@ -6,30 +6,29 @@
   bundlerEnv,
   tree,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ghi";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "drazisil";
     repo = "ghi";
-    tag = version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-3V1lxI4VhP0jC3VSWyNS327gOCKowbbLB6ae1idpFFI=";
   };
 
-  rubyEnv = bundlerEnv {
+  env = bundlerEnv {
     name = "ghi";
-    gemfile = "${src}/Gemfile";
-    lockfile = "${src}/Gemfile.lock";
+
+    gemfile = "${finalAttrs.src}/Gemfile";
+    lockfile = "${finalAttrs.src}/Gemfile.lock";
     gemset = ./gemset.nix;
   };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "ghi";
-  inherit version src;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ rubyEnv.wrappedRuby ];
+  buildInputs = [ finalAttrs.env.wrappedRuby ];
 
   installPhase = ''
     mkdir -p $out/bin

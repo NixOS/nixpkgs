@@ -11,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-datalake-store";
-  version = "1.0.1";
+  version = "0.0.53";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "azure_datalake_store";
-    inherit version;
-    hash = "sha256-U2TURFqrFUocfLECFWKcPORs5ceqrxYHGJDAP65ToDU=";
+    inherit pname version;
+    hash = "sha256-BbbeYu4/KgpuaUHmkzt5K4AMPn9v/OL8MkvBmHV1c5M=";
   };
 
   propagatedBuildInputs = [

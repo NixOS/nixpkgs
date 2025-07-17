@@ -11,23 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sheldon";
-  version = "0.8.5";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "rossmacarthur";
     repo = "sheldon";
     rev = version;
-    hash = "sha256-zVwqVYaUY8LJhWENDiD89p/CzvsEVkpaPnYVyCJUf3s=";
+    hash = "sha256-CkcY4YVTguULE/4QGX72X3Jdi+z1XWo1M0J6ocCavCI=";
   };
 
-  cargoHash = "sha256-4TDDNqlcs7LTmL9uHBjE8SHft38juUJUj8sLCimnTyc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H2PQyfBaQ0jD69LMEi3kkgPWk0RkOI8b7ODGzks/gj0=";
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+    ];
   nativeBuildInputs = [
     installShellFiles
     pkg-config

@@ -5,7 +5,8 @@
 */
 {
   lib,
-  stdenv,
+  #, stdenv
+  gcc12Stdenv,
   fetchpatch,
   fetchurl,
   runCommand,
@@ -41,11 +42,12 @@
   biber-ms,
   makeFontsConf,
   useFixedHashes ? true,
-  extraMirrors ? [ ],
   recurseIntoAttrs,
-  nixfmt,
-  luajit,
+  nixfmt-rfc-style,
 }:
+let
+  stdenv = gcc12Stdenv;
+in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
@@ -91,7 +93,6 @@ let
           python3
           ruby
           zip
-          luajit
           ;
       };
     in
@@ -114,28 +115,25 @@ let
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
   mirrors =
-    extraMirrors
-    ++ (
-      if version.final then
-        [
-          # tlnet-final snapshot; used when texlive.tlpdb is frozen
-          # the TeX Live yearly freeze typically happens in mid-March
-          "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
-          "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
-        ]
-      else
-        [
-          # CTAN mirrors
-          "https://mirror.ctan.org/systems/texlive/tlnet"
-          # daily snapshots hosted by one of the texlive release managers;
-          # used for packages that in the meanwhile have been updated or removed from CTAN
-          # and for packages that have not reached yet the historic mirrors
-          # please note that this server is not meant for large scale deployment
-          # https://tug.org/pipermail/tex-live/2019-November/044456.html
-          # https://texlive.info/ MUST appear last (see tlpdbxz)
-          "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
-        ]
-    );
+    if version.final then
+      [
+        # tlnet-final snapshot; used when texlive.tlpdb is frozen
+        # the TeX Live yearly freeze typically happens in mid-March
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
+        "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
+      ]
+    else
+      [
+        # CTAN mirrors
+        "https://mirror.ctan.org/systems/texlive/tlnet"
+        # daily snapshots hosted by one of the texlive release managers;
+        # used for packages that in the meanwhile have been updated or removed from CTAN
+        # and for packages that have not reached yet the historic mirrors
+        # please note that this server is not meant for large scale deployment
+        # https://tug.org/pipermail/tex-live/2019-November/044456.html
+        # https://texlive.info/ MUST appear last (see tlpdbxz)
+        "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
+      ];
 
   tlpdbxz = fetchurl {
     urls =
@@ -153,7 +151,7 @@ let
         tl2nix = ./tl2nix.sed;
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt} > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt-rfc-style} > "$out"
       '';
 
   # map: name -> fixed-output hash

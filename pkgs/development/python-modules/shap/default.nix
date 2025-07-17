@@ -7,7 +7,6 @@
   writeText,
   catboost,
   cloudpickle,
-  cython,
   ipython,
   lightgbm,
   lime,
@@ -31,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.48.0";
+  version = "0.46.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,17 +39,15 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     tag = "v${version}";
-    hash = "sha256-eWZhyrFpEFlmTFPTHZng9V+uMRMXDVzFdgrqIzRQTws=";
+    hash = "sha256-qW36/Xw5oaYKmaMfE5euzkED9CKkjl2O55aO0OpCkfI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "cython>=3.0.11" cython \
       --replace-fail "numpy>=2.0" "numpy"
   '';
 
   build-system = [
-    cython
     numpy
     setuptools
     setuptools-scm
@@ -150,7 +147,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
-    changelog = "https://github.com/slundberg/shap/releases/tag/${src.tag}";
+    changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [
       evax

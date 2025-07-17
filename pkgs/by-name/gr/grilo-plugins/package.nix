@@ -9,12 +9,10 @@
   gettext,
   gperf,
   glib,
-  localsearch,
   sqlite,
   libarchive,
   libdmapsharing,
   libsoup_3,
-  librest_1_0,
   gnome,
   libxml2,
   lua5_4,
@@ -35,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.18";
+  version = "0.3.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jjznTucXw8Mi0MsPjfJrsJFAKKXQFuKAVf+0nMmkbF4=";
+    sha256 = "/m9Nvlhsa4uiQGOU4gLyLQCdZCqW6zpU8y9qIdCEzcs=";
   };
 
   patches = [
@@ -76,7 +74,6 @@ stdenv.mkDerivation rec {
     itstool
     gperf # for lua-factory
     glib # glib-compile-resources
-    localsearch
   ];
 
   buildInputs = [
@@ -91,7 +88,6 @@ stdenv.mkDerivation rec {
     libarchive
     libdmapsharing
     libsoup_3
-    librest_1_0
     gmime
     gom
     json-glib

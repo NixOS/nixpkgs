@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "2.2.0";
+  version = "2.1.0";
 
   pyproject = true;
 
@@ -26,12 +26,15 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     tag = version;
-    hash = "sha256-NXMBaY4sZT47Qi3XS5yuiXJEMKENghiXkLXnXHHYpRI=";
+    hash = "sha256-VjGoAsmdYyoU7ngU69HVNauEk2/vbcEz2tMCTmjheF4=";
   };
 
   postPatch = ''
     substituteInPlace craft_archives/__init__.py \
       --replace-fail "dev" "${version}"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
   pythonRelaxDeps = [

@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ]
-  ++ lib.optionals isx86 [ nasm ];
+  ] ++ lib.optionals isx86 [ nasm ];
 
   buildInputs = [
     zlib

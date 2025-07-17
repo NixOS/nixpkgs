@@ -3,7 +3,7 @@
   clangStdenv,
   cmake,
   fetchFromGitHub,
-  llvmPackages_18,
+  llvmPackages_13,
   # Libraries
   argparse,
   cling,
@@ -65,7 +65,6 @@ clangStdenv.mkDerivation rec {
   patches = [
     ./0001-Fix-bug-in-extract_filename.patch
     ./0002-Don-t-pass-extra-includes-configure-this-with-flags.patch
-    ./0003-Remove-unsupported-src-root-flag.patch
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -74,7 +73,7 @@ clangStdenv.mkDerivation rec {
     cling.unwrapped
     cppzmq
     libuuid
-    llvmPackages_18.llvm
+    llvmPackages_13.llvm
     ncurses
     openssl
     pugixml

@@ -53,8 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     range-v3
     spdlog
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   cmakeFlags = [
     (lib.cmakeBool "KEMAI_ENABLE_UPDATE_CHECK" false)

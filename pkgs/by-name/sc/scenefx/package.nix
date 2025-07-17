@@ -4,7 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
-  wlroots_0_19,
+  wlroots_0_18,
   scdoc,
   pkg-config,
   wayland,
@@ -14,8 +14,6 @@
   wayland-protocols,
   libGL,
   libgbm,
-  libxcb,
-  xcbutilwm,
   validatePkgConfig,
   testers,
   wayland-scanner,
@@ -23,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scenefx";
-  version = "0.4.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "wlrfx";
     repo = "scenefx";
     tag = finalAttrs.version;
-    hash = "sha256-XD5EcquaHBg5spsN06fPHAjVCb1vOMM7oxmjZZ/PxIE=";
+    hash = "sha256-BLIADMQwPJUtl6hFBhh5/xyYwLFDnNQz0RtgWO/Ua8s=";
   };
 
   strictDeps = true;
@@ -50,12 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
     libgbm
-    libxcb
-    xcbutilwm
     pixman
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots_0_18
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

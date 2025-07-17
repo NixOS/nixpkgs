@@ -34,10 +34,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    runHook preInstall
+    runHook preBuild
     mkdir -p $out/bin
     install hello-wayland $out/bin
-    runHook postInstall
+    runHook postBuild
   '';
 
   passthru.updateScript = unstableGitUpdater { };

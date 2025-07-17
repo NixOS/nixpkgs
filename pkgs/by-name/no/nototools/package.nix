@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nototools";
-  version = "0.3.2";
+  version = "0.2.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
     tag = "v${version}";
-    sha256 = "sha256-0se0YcnhDwwMbt2C4hep0T/JEidHfFRUnm2Sy7qr2uk=";
+    sha256 = "sha256-id4UhyWOFHrtmBZHhnaY2jHDIK0s7rcGBpg4QsBTLKs=";
   };
 
   build-system = with python3Packages; [

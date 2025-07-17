@@ -10,7 +10,6 @@
   numpy,
   pandas,
   pillow,
-  pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -48,7 +47,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     freezegun
     pytestCheckHook
     syrupy

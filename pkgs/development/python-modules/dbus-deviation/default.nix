@@ -4,6 +4,7 @@
   fetchPypi,
   lxml,
   setuptools,
+  setuptools-git,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,15 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "'setuptools_git >= 0.3'," "" \
-      --replace-fail "'sphinx'," ""
+    sed -i "/'sphinx',/d" setup.py
   '';
 
-  build-system = [ setuptools ];
-  dependencies = [ lxml ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-git
+  ];
+
+  propagatedBuildInputs = [ lxml ];
 
   pythonImportsCheck = [ "dbusdeviation" ];
 

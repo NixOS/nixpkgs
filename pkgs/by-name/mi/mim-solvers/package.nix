@@ -9,18 +9,17 @@
   python3Packages,
   pythonSupport ? false,
   stdenv,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.1.1";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1Mqu9Hfy65HUIOVG/gJBpSMlOwDWVcH+LrR8CaWz0BE=";
+    hash = "sha256-jUL/kyXKODpcCURG7e7/qNarvwm4+EnzZRL2Wix5Jbs=";
   };
 
   # eigenpy is not used without python support
@@ -33,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
   propagatedBuildInputs =
     lib.optionals pythonSupport [
@@ -48,21 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
       proxsuite
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isDarwin) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
-  )
-  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
-  );
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
+    )
+    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
+    );
 
   doCheck = true;
   pythonImportsCheck = [ "mim_solvers" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Numerical solvers used in the Machines in Motion Laboratory";

@@ -31,18 +31,17 @@
   xvfb-run,
   sassc,
   pantheon,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SwayNotificationCenter";
-  version = "0.12.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtcT2N08BVxVrzEd1Z/s5MXWHaHFt6PqBH4gdH6TEvs=";
+    hash = "sha256-F7fccUaQUSHHqXO0lvnW1H3Af2YTQwQ17rNFhprgFz4=";
   };
 
   # build pkg-config is required to locate the native `scdoc` input
@@ -94,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     command = "${xvfb-run}/bin/xvfb-run swaync --version";
   };
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple notification daemon with a GUI built for Sway";

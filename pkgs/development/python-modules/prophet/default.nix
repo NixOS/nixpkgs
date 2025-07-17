@@ -52,8 +52,7 @@ buildPythonPackage rec {
   optional-dependencies.parallel = [
     dask
     distributed
-  ]
-  ++ dask.optional-dependencies.dataframe;
+  ] ++ dask.optional-dependencies.dataframe;
 
   preCheck = ''
     # use the generated files from $out for testing

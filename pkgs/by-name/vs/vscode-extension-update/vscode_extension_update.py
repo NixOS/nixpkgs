@@ -7,8 +7,6 @@ import os
 import re
 import subprocess
 import sys
-from pathlib import Path
-from typing import Optional
 
 from loguru import logger
 
@@ -71,7 +69,7 @@ class VSCodeExtensionUpdater:
         logger.info(f"Extension Current Version: {self.current_version}")
 
     def execute_command(
-        self, commandline: list[str], env: Optional[dict[str, str]] = None
+        self, commandline: list[str], env: dict[str, str] = None
     ) -> str:
         """
         Executes a shell command and returns its output.
@@ -89,31 +87,16 @@ class VSCodeExtensionUpdater:
         """
         Retrieves a raw Nix attribute value.
         """
-        return self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "eval",
-            "--raw",
-            "-f",
-            ".",
-            attribute_path
-        ])
+        return self.execute_command(["nix", "eval", "--raw", "-f", ".", attribute_path])
 
     def get_nix_system(self) -> str:
         """
         Retrieves system from Nix.
         """
-        return self._get_nix_attribute("stdenv.hostPlatform.system")
+        return self._get_nix_attribute("system")
 
     def get_supported_nix_systems(self) -> list[str]:
-        nix_config = self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "config",
-            "show"
-        ])
+        nix_config = self.execute_command(["nix", "config", "show"])
         system = None
         extra_platforms = []
         for line in nix_config.splitlines():
@@ -133,31 +116,33 @@ class VSCodeExtensionUpdater:
         return "targetPlatform=" in source_url
 
     def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
-        url = self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "eval",
-            "--raw",
-            "-f",
-            ".",
-            f"{self.attribute_path}.src.url",
-            "--system",
-            system,
-        ])
-        sha256 = self.execute_command(["nix-prefetch-url", url])
-        return self.execute_command([
-            "nix",
-            "--extra-experimental-features",
-            "nix-command",
-            "hash",
-            "convert",
-            "--to",
-            "sri",
-            "--hash-algo",
-            "sha256",
-            sha256,
-        ])
+        url = self.execute_command(
+            [
+                "nix",
+                "eval",
+                "--raw",
+                "-f",
+                ".",
+                f"{self.attribute_path}.src.url",
+                "--system",
+                system,
+            ]
+        )
+        if "warning" not in url:
+            sha256 = self.execute_command(["nix-prefetch-url", url])
+            hash = self.execute_command(
+                [
+                    "nix",
+                    "hash",
+                    "convert",
+                    "--to",
+                    "sri",
+                    "--hash-algo",
+                    "sha256",
+                    sha256,
+                ]
+            )
+            return hash
 
     def get_target_platform(self, nix_system: str) -> str:
         """
@@ -200,16 +185,16 @@ class VSCodeExtensionUpdater:
         """
         try:
             return json.loads(
-                self.execute_command([
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command",
-                    "eval",
-                    "--json",
-                    "-f",
-                    ".",
-                    f"{self.attribute_path}.meta.platforms",
-                ])
+                self.execute_command(
+                    [
+                        "nix",
+                        "eval",
+                        "--json",
+                        "-f",
+                        ".",
+                        f"{self.attribute_path}.meta.platforms",
+                    ]
+                )
             )
         except subprocess.CalledProcessError:
             return []
@@ -276,12 +261,14 @@ class VSCodeExtensionUpdater:
                     engine_version_constraint
                 )
                 try:
-                    self.execute_command([
-                        "semver",
-                        self.target_vscode_version,
-                        "-r",
-                        engine_version_constraint,
-                    ])
+                    self.execute_command(
+                        [
+                            "semver",
+                            self.target_vscode_version,
+                            "-r",
+                            engine_version_constraint,
+                        ]
+                    )
                     logger.info(f"Compatible version found: {candidate_version}")
                     return candidate_version
                 except (ValueError, subprocess.CalledProcessError):
@@ -290,11 +277,13 @@ class VSCodeExtensionUpdater:
                     )
                 continue
             return candidate_version
-        logger.error("Error: not found compatible version.")
-        sys.exit(1)
+        else:
+            logger.error("Error: not found compatible version.")
+            sys.exit(1)
 
     def replace_version_symbol(self, version: str) -> str:
-        return re.sub(r"^\^", ">=", version)
+        version = re.sub(r"^\^", ">=", version)
+        return version
 
     def update_version_for_default_nix(self, content: str, new_version: str):
         target_name = self.attribute_path.removeprefix("vscode-extensions.")
@@ -337,7 +326,12 @@ class VSCodeExtensionUpdater:
         updated_content = (
             content[:brace_start] + new_block_text + content[block_end + 1 :]
         )
-        Path(self.override_filename).write_text(updated_content, encoding="utf-8")
+        with open(
+            self.override_filename,
+            "w",
+            encoding="utf-8",
+        ) as f:
+            f.write(updated_content)
 
     def run_nix_update(self, new_version: str, system: str) -> None:
         """
@@ -359,9 +353,9 @@ class VSCodeExtensionUpdater:
             if (
                 "pkgs/applications/editors/vscode/extensions/vscode-utils.nix"
                 in self.override_filename
-            ) and Path(
+            ) and os.path.exists(
                 "pkgs/applications/editors/vscode/extensions/default.nix"
-            ).exists():
+            ):
                 self.override_filename = (
                     "pkgs/applications/editors/vscode/extensions/default.nix"
                 )
@@ -371,17 +365,22 @@ class VSCodeExtensionUpdater:
             in self.override_filename
         ):
             with logger.catch(exception=(IOError, ValueError)):
-                content = Path(self.override_filename).read_text(encoding="utf-8")
+                with open(
+                    self.override_filename,
+                    "r",
+                    encoding="utf-8",
+                ) as f:
+                    content = f.read()
                 if content.count(self.current_version) > 1:
                     self.update_version_for_default_nix(content, new_version)
                     new_version = "skip"
         if system not in self.supported_nix_systems:
-            src_hash = self._get_nix_vscode_extension_src_hash(system)
+            hash = self._get_nix_vscode_extension_src_hash(system)
             update_command = [
                 "update-source-version",
                 self.attribute_path,
                 self.new_version,
-                src_hash,
+                hash,
                 f"--system={system}",
                 "--ignore-same-version",
                 "--ignore-same-hash",
@@ -413,12 +412,9 @@ class VSCodeExtensionUpdater:
             self.get_target_platform(self.nix_vscode_extension_platforms[0]),
         )
         try:
-            self.execute_command([
-                "semver",
-                self.current_version,
-                "-r",
-                f"<{self.new_version}",
-            ])
+            self.execute_command(
+                ["semver", self.current_version, "-r", f"<{self.new_version}"]
+            )
         except subprocess.CalledProcessError:
             logger.info("Already up to date or new version is older!")
             sys.exit(0)
@@ -427,12 +423,14 @@ class VSCodeExtensionUpdater:
             self.run_nix_update(version, system)
         if self.commit:
             self.execute_command(["git", "add", self.override_filename])
-            self.execute_command([
-                "git",
-                "commit",
-                "-m",
-                f"{self.attribute_path}: {self.current_version} -> {self.new_version}",
-            ])
+            self.execute_command(
+                [
+                    "git",
+                    "commit",
+                    "-m",
+                    f"{self.attribute_path}: {self.current_version} -> {self.new_version}",
+                ]
+            )
 
 
 if __name__ == "__main__":

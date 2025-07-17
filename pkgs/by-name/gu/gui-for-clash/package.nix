@@ -1,33 +1,33 @@
 {
   lib,
   stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  copyDesktopItems,
   nodejs,
-  pkg-config,
-  pnpm_10,
+  pnpm_9,
+  fetchFromGitHub,
+  buildGoModule,
   wails,
-  webkitgtk_4_1,
+  webkitgtk_4_0,
+  pkg-config,
+  libsoup_3,
+  autoPatchelfHook,
   makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
 let
   pname = "gui-for-clash";
-  version = "1.9.10";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-odASuy0zaXf6vvd5CRVtuuVIX1EgEO7GsMgXWUR+fxk=";
+    hash = "sha256-Ij9zyBzYpAfDEjJXqOiPxun+5e1T5j3juYudpvraBcQ=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
-    hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ ];
   };
@@ -35,23 +35,19 @@ let
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit pname version src;
 
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
     nativeBuildInputs = [
       nodejs
-      pnpm_10.configHook
+      pnpm_9.configHook
     ];
 
-    pnpmDeps = pnpm_10.fetchDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      fetcherVersion = 2;
-      hash = "sha256-AuBUneWOR9oCuj811iCB3l5dlpeKhxt6KrF7KDs27a0=";
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      sourceRoot = "${finalAttrs.src.name}/frontend";
+      fetcherVersion = 1;
+      hash = "sha256-5tz1FItH9AvZhJjka8i5Kz22yf/tEmRPkDhz6iswZzc=";
     };
+
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     buildPhase = ''
       runHook preBuild
@@ -78,24 +74,27 @@ in
 buildGoModule {
   inherit pname version src;
 
-  patches = [ ./xdg-path-and-restart-patch.patch ];
+  patches = [ ./bridge.patch ];
 
-  # As we need the $out reference, we can't use `replaceVars` here.
   postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace bridge/bridge.go \
-      --subst-var out
+      --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-UArCB5U2bF5HXFDU1oCfm+SaURe6e9gyCx+UjtWI/ug=";
+  vendorHash = "sha256-Coq8GtaIS7ClmOTFw6PSgGDFW/CpGpKPvXgNw8qz3Hs=";
 
   nativeBuildInputs = [
+    wails
+    pkg-config
     autoPatchelfHook
     copyDesktopItems
-    pkg-config
-    wails
   ];
 
-  buildInputs = [ webkitgtk_4_1 ];
+  buildInputs = [
+    webkitgtk_4_0
+    libsoup_3
+  ];
 
   preBuild = ''
     cp -r ${frontend} frontend/dist
@@ -104,7 +103,7 @@ buildGoModule {
   buildPhase = ''
     runHook preBuild
 
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_41 -o GUI.for.Clash
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.Clash
 
     runHook postBuild
   '';
@@ -125,7 +124,7 @@ buildGoModule {
     runHook preInstall
 
     install -Dm 0755 build/bin/GUI.for.Clash $out/bin/GUI.for.Clash
-    install -Dm 0644 build/appicon.png $out/share/icons/hicolor/256x256/apps/gui-for-clash.png
+    install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-clash.png
 
     runHook postInstall
   '';
@@ -134,8 +133,6 @@ buildGoModule {
     inherit frontend;
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regex"
-        "^v([0-9.]+)$"
         "--subpackage"
         "frontend"
       ];

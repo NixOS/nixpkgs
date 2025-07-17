@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.5.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OoQivDDoYtYYPsl5U4hJGE7b+IU/jrqWejiXY5Py4n4=";
+    hash = "sha256-e1dGiJeOLMFJ9oO7iMvKZHpg4XtrLJBpy8lECx5/iDE=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"

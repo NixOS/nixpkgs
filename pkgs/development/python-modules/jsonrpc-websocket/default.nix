@@ -5,7 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonrpc-base,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -34,15 +34,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--asyncio-mode=auto"
-  ];
-
-  enabledTestPaths = [
     "tests.py"
   ];
 

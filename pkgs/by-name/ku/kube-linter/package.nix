@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.7.6";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "kube-linter";
     rev = "v${version}";
-    sha256 = "sha256-wniDoImqawTdjkd/XnkeiUTMoz5WJNpRs1ZgM1Xy1hw=";
+    sha256 = "sha256-19roNwTRyP28YTIwkDDXlvsg7yY4vRLHUnBRREOe7iQ=";
   };
 
-  vendorHash = "sha256-ui6AECWJhYso3KDbX8EonML4wvbDs3cijG2yWb3KoKA=";
+  vendorHash = "sha256-wCYEgQ+mm50ESQOs7IivTUhjTDiaGETogLOHcJtNfaM=";
 
   excludedPackages = [ "tool-imports" ];
 
@@ -33,7 +32,7 @@ buildGoModule rec {
 
   checkFlags = [ "-skip=TestCreateContextsWithIgnorePaths" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kube-linter \
       --bash <($out/bin/kube-linter completion bash) \
       --fish <($out/bin/kube-linter completion fish) \

@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_refactor_action_sequence"
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-KR6BmYj3q9w0yGHFq9+l1x989XjiG3mkaZiyDGCYWPA=";
 
   nativeBuildInputs = [
@@ -59,8 +60,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ];
-
-  cargoBuildFlags = [ "-p lsp-ai" ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

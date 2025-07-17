@@ -93,7 +93,9 @@
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
     "https://mirrors.dotsrc.org/gcrypt/"
+    "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
     "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
+    "http://www.ring.gr.jp/pub/net/"
   ];
 
   # IBiblio (former metalab/sunsite)

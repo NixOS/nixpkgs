@@ -6,22 +6,22 @@
   boost,
   blas,
   gmp,
-  tbb_2022,
+  tbb_2021,
   gfortran,
 }:
 
 stdenv.mkDerivation rec {
   pname = "scipopt-papilo";
-  version = "2.4.3";
+  version = "2.4.2";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.3";
+  scipVersion = "9.2.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
     tag = "v${version}";
-    hash = "sha256-SsRAwidqvisoDODBLRatVWFw7wGeLUavmPXSlPmD7d8=";
+    hash = "sha256-/1AsAesUh/5YXeCU2OYopoG3SXAwAecPD88QvGkb2bY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     gmp
     gfortran
     boost
-    tbb_2022
+    tbb_2021
   ];
 
   cmakeFlags = [

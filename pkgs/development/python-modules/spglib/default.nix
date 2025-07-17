@@ -41,12 +41,13 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  dependencies = [
-    numpy
-  ]
-  ++ lib.optionals (pythonOlder "3.13") [
-    typing-extensions
-  ];
+  dependencies =
+    [
+      numpy
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      typing-extensions
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

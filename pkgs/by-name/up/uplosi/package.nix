@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -28,7 +27,7 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd uplosi \
       --bash <($out/bin/uplosi completion bash) \
       --fish <($out/bin/uplosi completion fish) \

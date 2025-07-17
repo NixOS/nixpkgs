@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://django-appconf.readthedocs.org/";
     changelog = "https://github.com/django-compressor/django-appconf/blob/v${version}/docs/changelog.rst";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ desiderius ];
   };
 }

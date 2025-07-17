@@ -73,8 +73,7 @@ rec {
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        }
-        // meta;
+        } // meta;
       }
       // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
     );
@@ -122,16 +121,11 @@ rec {
         xorg.xrandr
         which
         perl
-        xdg-user-dirs # flutter desktop apps
         xdg-utils
         iana-etc
         krb5
         gsettings-desktop-schemas
         hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
-
-        # libraries not on the upstream include list, but nevertheless expected
-        # by at least one appimage
-        libsecret # For bitwarden, appimage is x86_64 only
       ];
 
     # list of libraries expected in an appimage environment:
@@ -248,6 +242,8 @@ rec {
         at-spi2-core
         pciutils # for FreeCAD
         pipewire # immersed-vr wayland support
+
+        libsecret # For bitwarden
         libmpg123 # Slippi launcher
         brotli # TwitchDropsMiner
       ];

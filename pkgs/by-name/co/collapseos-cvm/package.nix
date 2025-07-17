@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://collapseos.org/files/";
     homepage = "http://collapseos.org/";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "cos-serial";
   };
 }

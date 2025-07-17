@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   python,
   toPythonModule,
 
@@ -45,7 +46,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.26.3";
+  version = "1.26.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,7 +55,7 @@ buildPythonPackage rec {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = version;
-    hash = "sha256-djTbALLvdX2jOTGgoyUIBhiqJ6KzM+Dkb4M7d2eVoPM=";
+    hash = "sha256-Z+TO4MaLFmgNSRMTltY77bHnA5RHc4Ii45sDjJsFZto=";
   };
 
   # swig is not wrapped as Python package
@@ -124,11 +125,6 @@ buildPythonPackage rec {
     "test_4445"
     # Not a git repository, so git ls-files fails
     "test_open2"
-  ];
-
-  disabledTestPaths = [
-    # mad about markdown table formatting
-    "tests/test_tables.py::test_markdown"
   ];
 
   pythonImportsCheck = [

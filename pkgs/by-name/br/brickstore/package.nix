@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4sxPplZ1t8sSfwTCeeBtfU4U0gcE9FROt6dKvkfyO6Q=";
     fetchSubmodules = true;
   };

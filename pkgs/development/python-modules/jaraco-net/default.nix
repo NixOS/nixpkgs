@@ -66,8 +66,7 @@ buildPythonPackage rec {
     python-dateutil
     pathvalidate
     jsonpickle
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
 
   pythonImportsCheck = [ "jaraco.net" ];
 
@@ -77,8 +76,7 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     pytest-responses
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ net-tools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ net-tools ];
 
   disabledTestPaths = [
     # require networking

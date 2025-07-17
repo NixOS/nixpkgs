@@ -23,17 +23,18 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.20.2";
+  version = "4.20.1";
 
-  sha256 = "sha256-NsTrJ2271v8vMMyiEef+4Rs0KBOkSkKPjfoJdgQU0ds=";
+  sha256 = "sha256-CY9KCCbKBAuoYAJtPHlQj04dUuCZAovnyJsBgjzzQkI=";
 
-  nativeBuildInputs = [
-    perl
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala # vala bindings require GObject introspection
-  ];
+  nativeBuildInputs =
+    [
+      perl
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala # vala bindings require GObject introspection
+    ];
 
   buildInputs = [
     libICE

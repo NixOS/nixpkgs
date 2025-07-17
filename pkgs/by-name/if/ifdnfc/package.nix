@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "nfc-tools";
     repo = "ifdnfc";
-    rev = "0e48e8e107dc42f68fb472bb06d257503ad45b1d";
+    rev = "0e48e8e";
     sha256 = "1cxnvhhlcbm8h49rlw5racspb85fmwqqhd3gzzpzy68vrs0b37vg";
   };
   nativeBuildInputs = [

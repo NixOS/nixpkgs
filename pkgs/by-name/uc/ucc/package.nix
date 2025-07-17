@@ -40,13 +40,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.5.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNLpcVvOsBCR0+KL21JSdWZyt/Z8EjQQTiHJw5vzOOo=";
+    hash = "sha256-2OtMNI4teMnSBxsujf8LMrNOjqK/oJTrrmE2Awxgbd8=";
   };
 
   outputs = [
@@ -70,18 +70,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
-  ]
-  ++ optionals enableCuda [ cuda_nvcc ];
+  ] ++ optionals enableCuda [ cuda_nvcc ];
 
-  buildInputs = [
-    ucx
-  ]
-  ++ optionals enableCuda [
-    cuda_cccl
-    cuda_cudart
-    cuda_nvml_dev
-    nccl
-  ];
+  buildInputs =
+    [ ucx ]
+    ++ optionals enableCuda [
+      cuda_cccl
+      cuda_cudart
+      cuda_nvml_dev
+      nccl
+    ];
 
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable

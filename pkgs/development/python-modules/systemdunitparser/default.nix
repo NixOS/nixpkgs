@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "systemdunitparser";
-  version = "0.4";
+  version = "0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "systemdunitparser";
-    tag = version;
-    hash = "sha256-BlOj1rvRfh0SQ7io2N8MsMvAtWvXk0V6hYzlOSrr7hU=";
+    rev = version;
+    hash = "sha256-lcvXEieaifPUDhLdaz2FXaNdbw7wKR+x/kC+MMDT0tE=";
   };
 
   build-system = [

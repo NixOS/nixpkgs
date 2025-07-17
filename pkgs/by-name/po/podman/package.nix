@@ -16,6 +16,7 @@
   nixosTests,
   python3,
   makeWrapper,
+  runtimeShell,
   symlinkJoin,
   replaceVars,
   extraPackages ? [ ],
@@ -24,8 +25,7 @@
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
-  util-linuxMinimal,
-  nftables,
+  util-linux,
   iptables,
   iproute2,
   catatonit,
@@ -34,10 +34,8 @@
   netavark,
   passt,
   vfkit,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  coreutils,
-  runtimeShell,
+  testers,
+  podman,
 }:
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
@@ -45,10 +43,9 @@ let
   binPath = lib.makeBinPath (
     lib.optionals stdenv.hostPlatform.isLinux [
       fuse-overlayfs
-      util-linuxMinimal
+      util-linux
       iptables
       iproute2
-      nftables
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       vfkit
@@ -60,29 +57,30 @@ let
     name = "podman-helper-binary-wrapper";
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
-    paths = [
-      gvproxy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      aardvark-dns
-      catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-      netavark
-      passt
-      conmon
-      crun
-    ]
-    ++ extraRuntimes;
+    paths =
+      [
+        gvproxy
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        aardvark-dns
+        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+        netavark
+        passt
+        conmon
+        crun
+      ]
+      ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.6.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-i1AXjLg28VV5vHMdywlCHB9kIALXToVx/4ujaNe9Dc0=";
+    hash = "sha256-iLpJQC1v+jPeQNCjgtx3pPKsa6wLcrqtQkeG7qF3rWo=";
   };
 
   patches = [
@@ -127,6 +125,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
+    substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
@@ -164,27 +163,23 @@ buildGoModule rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
-    substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
-      --replace-fail sleep '${coreutils}/bin/sleep' \
-      --replace-fail /bin/sh '${runtimeShell}'
   '';
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
-  versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
-
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) podman;
-    # related modules
-    inherit (nixosTests)
-      podman-tls-ghostunnel
-      ;
-    oci-containers-podman = nixosTests.oci-containers.podman;
-  };
+  passthru.tests =
+    {
+      version = testers.testVersion {
+        package = podman;
+        command = "HOME=$TMPDIR podman --version";
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) podman;
+      # related modules
+      inherit (nixosTests)
+        podman-tls-ghostunnel
+        ;
+      oci-containers-podman = nixosTests.oci-containers.podman;
+    };
 
   meta = {
     homepage = "https://podman.io/";

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "0-unstable-2023-02-05";
+  version = "unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";

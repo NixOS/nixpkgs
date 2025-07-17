@@ -15,12 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
   };
 
-  postPatch = ''
-    substituteInPlace src/starfetch.cpp --replace-fail /usr/local/ $out/
-  ''
-  + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace makefile --replace-warn g++ clang++
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/starfetch.cpp --replace /usr/local/ $out/
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace makefile --replace g++ clang++
+    '';
 
   installPhase = ''
     runHook preInstall

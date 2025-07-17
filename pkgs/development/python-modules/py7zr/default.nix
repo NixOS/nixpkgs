@@ -15,24 +15,30 @@
   texttable,
   py-cpuinfo,
   pytest-benchmark,
-  pytest-httpserver,
   pytest-remotedata,
   pytest-timeout,
   pytestCheckHook,
-  requests,
 }:
 
 buildPythonPackage rec {
   pname = "py7zr";
-  version = "1.0.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = "py7zr";
     tag = "v${version}";
-    hash = "sha256-uV4zBQZlHfHgM/NiVSjI5I9wJRk9i4ihJn4B2R6XRuM=";
+    hash = "sha256-YR2cuHZWwqrytidAMbNvRV1/N4UZG8AMMmzcTcG9FvY=";
   };
+
+  postPatch =
+    # Replace inaccessible mirror (qt.mirrors.tds.net):
+    # upstream PR: https://github.com/miurahr/py7zr/pull/637
+    ''
+      substituteInPlace tests/test_concurrent.py \
+        --replace-fail 'http://qt.mirrors.tds.net/qt/' 'https://download.qt.io/'
+    '';
 
   build-system = [
     setuptools
@@ -54,14 +60,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     py-cpuinfo
     pytest-benchmark
-    pytest-httpserver
     pytest-remotedata
     pytest-timeout
     pytestCheckHook
-    requests
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [
     "py7zr"

@@ -18,23 +18,24 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.551";
+  version = "8.3.530";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = "${version}";
-    sha256 = "sha256-Yq2U3nU199CWnzdTRsqasgwU+tsGhc8KkQfbu/fgXFI=";
+    sha256 = "sha256-OQPOEDcU0BuGdI7+saOTntosa8+mQcGbZuwzIlvRBSk=";
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [
-    python3
-    git
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      python3
+      git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   buildInputs = [
     cairo

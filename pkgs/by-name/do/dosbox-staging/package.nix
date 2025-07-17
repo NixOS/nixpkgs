@@ -67,8 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     opusfile
     speexdsp
     zlib-ng
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   outputs = [
     "out"

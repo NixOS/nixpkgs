@@ -4,7 +4,6 @@
   gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -40,31 +39,20 @@ let
 in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
-  version = "0.3.16";
+  version = "0.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-EUDtCv86J4bznsTqNsdgj1IYkAu83cf+RydFTUb2NEE=";
+    hash = "sha256-TTGweGfav1uI2+87iUYc1Esmuor9sEZdZqSU2YVPCdQ=";
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
 
-  patches = [
-    # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
-    # https://github.com/ggml-org/llama.cpp/pull/15531
-    (fetchpatch {
-      url = "https://github.com/ggml-org/llama.cpp/pull/15531/commits/63a83ffefe4d478ebadff89300a0a3c5d660f56a.patch";
-      stripLen = 1;
-      extraPrefix = "vendor/llama.cpp/";
-      hash = "sha256-9LGnzviBgYYOOww8lhiLXf7xgd/EtxRXGQMredOO4qM=";
-    })
-  ];
-
   dontUseCmakeConfigure = true;
-  cmakeFlags = [
+  SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
     # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
     # -march=native* which is either a no-op (if cc-wrapper is able to ignore
     # it), or an attempt to build a non-reproducible binary.
@@ -73,14 +61,16 @@ buildPythonPackage rec {
     # -mcpu, breaking linux build as follows:
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
-    "-DGGML_NATIVE=off"
-    "-DGGML_BUILD_NUMBER=1"
-  ]
-  ++ lib.optionals cudaSupport [
-    "-DGGML_CUDA=on"
-    "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
-    "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
-  ];
+    [
+      "-DGGML_NATIVE=off"
+      "-DGGML_BUILD_NUMBER=1"
+    ]
+    ++ lib.optionals cudaSupport [
+      "-DGGML_CUDA=on"
+      "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
+      "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
+    ]
+  );
 
   enableParallelBuilding = true;
 

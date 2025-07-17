@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./link-against-ncurses.patch
     ./no-arch_only-6.3.patch
-  ]
-  ++ upstreamPatches;
+  ] ++ upstreamPatches;
 
   meta = with lib; {
     description = "Library for interactive line editing";

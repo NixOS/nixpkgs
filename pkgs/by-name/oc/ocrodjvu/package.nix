@@ -34,11 +34,12 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-  ]
-  ++ lib.optional withCuneiform cuneiform
-  ++ lib.optional withGocr gocr
-  ++ lib.optional withOcrad ocrad;
+  propagatedBuildInputs =
+    [
+    ]
+    ++ lib.optional withCuneiform cuneiform
+    ++ lib.optional withGocr gocr
+    ++ lib.optional withOcrad ocrad;
 
   dependencies = with python3Packages; [
     lxml

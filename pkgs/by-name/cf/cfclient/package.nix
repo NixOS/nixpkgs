@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "numpy"
     "pyqt6"
-    "pyzmq"
     "vispy"
   ];
 

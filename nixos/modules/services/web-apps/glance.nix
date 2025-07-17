@@ -237,5 +237,5 @@ in
   };
 
   meta.doc = ./glance.md;
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.drupol ];
 }

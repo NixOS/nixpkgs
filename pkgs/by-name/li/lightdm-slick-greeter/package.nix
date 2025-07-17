@@ -8,6 +8,7 @@
   python3,
   vala,
   wrapGAppsHook3,
+  xapp,
   lightdm,
   gtk3,
   pixman,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "2.2.2";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    hash = "sha256-32H2Q/JdT5v0xrdsZfSJobJ4Dxx63LPgbiB9OKIyc1U=";
+    sha256 = "sha256-YSSAFH6azXVk527CmZ6RM2hBdzziTdXeOmYZKusF/DQ=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    xapp
     lightdm
     gtk3
     pixman

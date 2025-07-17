@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
-  version = "0.3.0";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,13 +20,14 @@ buildPythonPackage rec {
     owner = "polkascan";
     repo = "py-bip39-bindings";
     tag = "v${version}";
-    hash = "sha256-jpBlupIjlH2LJkSm3tzxrH5wT2+eziugNMR4B01gSdE=";
+    hash = "sha256-CglVEvmZ8xYtjFPNhCyzToYrOvGe/Sw3zHAIy1HidzM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-qX4ydIT2+8dJQIVSYzO8Rg8PP61cu7ZjanPkmI34IUY=";
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook

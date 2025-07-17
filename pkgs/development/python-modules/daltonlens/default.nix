@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-git,
   numpy,
   pillow,
   pytestCheckHook,
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-T7fXlRdFtcVw5WURPqZhCmulUi1ZnCfCXgcLtTHeNas=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "setup_requires = setuptools_git" ""
-  '';
-
   build-system = [
     setuptools
+    setuptools-git
   ];
 
   dependencies = [

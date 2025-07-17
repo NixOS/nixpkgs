@@ -40,9 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  # 'yield' keyword is allowed in fixtures, but not in tests (test_naked_function)
-  doCheck = false;
-
   checkInputs = [
     mock
     pytestCheckHook

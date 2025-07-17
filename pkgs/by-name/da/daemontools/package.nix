@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
-    runHook preConfigure
-
     cd daemontools-${version}
 
     sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
@@ -50,8 +48,6 @@ stdenv.mkDerivation rec {
     sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
-
-    runHook postConfigure
   '';
 
   buildPhase = ''

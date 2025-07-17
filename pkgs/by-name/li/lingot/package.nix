@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     fftw
     fftwFloat
     json_c
-  ]
-  ++ lib.optional jackSupport libjack2;
+  ] ++ lib.optional jackSupport libjack2;
 
   configureFlags = lib.optional (!jackSupport) "--disable-jack";
 

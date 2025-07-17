@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   click,
+  future,
   httpretty,
   pytestCheckHook,
   requests,
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
+    future
     requests
     requests-kerberos
     six

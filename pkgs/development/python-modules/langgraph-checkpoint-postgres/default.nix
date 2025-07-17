@@ -5,7 +5,7 @@
   stdenvNoCC,
 
   # build system
-  hatchling,
+  poetry-core,
 
   # dependencies
   langgraph-checkpoint,
@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.23";
+  version = "2.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-QAzT8T3bf3R3gwI/iWDYYDz0SxgLZsP61oMk72dYz4s=";
+    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
   };
 
   postgresqlTestSetupPost = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/checkpoint-postgres";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     langgraph-checkpoint
@@ -58,7 +58,10 @@ buildPythonPackage rec {
     "psycopg-pool"
   ];
 
-  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
+  # Temporarily disabled until the following is solved:
+  # https://github.com/NixOS/nixpkgs/pull/425384
+  doCheck = false;
+  # doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -90,12 +93,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "checkpointpostgres==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpointpostgres==";
   };
 
   meta = {
@@ -104,6 +103,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      drupol
       sarahec
     ];
   };

@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-taggit";
     changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ desiderius ];
   };
 }

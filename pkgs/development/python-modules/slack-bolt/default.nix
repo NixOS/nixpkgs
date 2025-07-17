@@ -91,8 +91,7 @@ buildPythonPackage rec {
     docker
     pytest-asyncio
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$(mktemp -d)"

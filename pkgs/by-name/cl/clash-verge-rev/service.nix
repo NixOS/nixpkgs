@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = service-cargo-hash;
 }

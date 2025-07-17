@@ -14,6 +14,7 @@
   pkg-config,
   gnumake42,
   customOCamlPackages ? null,
+  ocamlPackages_4_05,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
@@ -34,6 +35,12 @@ let
   lib = import ../../../../build-support/coq/extra-lib.nix { inherit (args) lib; };
 
   release = {
+    "8.5pl1".sha256 = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
+    "8.5pl2".sha256 = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
+    "8.5pl3".sha256 = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
+    "8.6.0".sha256 = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
+    "8.6.0".rev = "V8.6";
+    "8.6.1".sha256 = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
     "8.7.0".sha256 = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
     "8.7.1".sha256 = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
     "8.7.2".sha256 = "0a0657xby8wdq4aqb2xsxp3n7pmc2w4yxjmrb2l4kccs1aqvaj4w";
@@ -70,7 +77,7 @@ let
     "8.20.0".sha256 = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
     "8.20.1".sha256 = "sha256-nRaLODPG4E3gUDzGrCK40vhl4+VhPyd+/fXFK/HC3Ig=";
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
-    "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
+    "9.1+rc1".sha256 = "sha256-GShKHQ9EdvyNe9WlkzF6KLYybc5dPeVrh4bpkVy6pY4=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -124,12 +131,15 @@ let
           case = lib.versions.range "8.7" "8.10";
           out = ocamlPackages_4_09;
         }
+        {
+          case = lib.versions.range "8.5" "8.6";
+          out = ocamlPackages_4_05;
+        }
       ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
-  ]
-  ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
+  ] ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -199,26 +209,24 @@ let
       '';
     };
 
-    nativeBuildInputs = [
-      pkg-config
-    ]
-    ++ ocamlNativeBuildInputs
-    ++ lib.optional buildIde copyDesktopItems
-    ++ lib.optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
-    ++ lib.optional (!coqAtLeast "8.6") gnumake42;
-    buildInputs = [
-      ncurses
-    ]
-    ++ lib.optionals buildIde (
-      if coqAtLeast "8.10" then
-        [
-          ocamlPackages.lablgtk3-sourceview3
-          glib
-          adwaita-icon-theme
-        ]
-      else
-        [ ocamlPackages.lablgtk ]
-    );
+    nativeBuildInputs =
+      [ pkg-config ]
+      ++ ocamlNativeBuildInputs
+      ++ lib.optional buildIde copyDesktopItems
+      ++ lib.optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
+      ++ lib.optional (!coqAtLeast "8.6") gnumake42;
+    buildInputs =
+      [ ncurses ]
+      ++ lib.optionals buildIde (
+        if coqAtLeast "8.10" then
+          [
+            ocamlPackages.lablgtk3-sourceview3
+            glib
+            adwaita-icon-theme
+          ]
+        else
+          [ ocamlPackages.lablgtk ]
+      );
 
     propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
@@ -256,12 +264,13 @@ let
 
     prefixKey = "-prefix ";
 
-    buildFlags = [
-      "revision"
-      "coq"
-    ]
-    ++ lib.optional buildIde "coqide"
-    ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
+    buildFlags =
+      [
+        "revision"
+        "coq"
+      ]
+      ++ lib.optional buildIde "coqide"
+      ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
     enableParallelBuilding = true;
 
     createFindlibDestdir = true;

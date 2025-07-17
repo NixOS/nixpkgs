@@ -492,8 +492,7 @@ in
             top.masterAddress
             apiserverServiceIP
             "127.0.0.1"
-          ]
-          ++ cfg.extraSANs;
+          ] ++ cfg.extraSANs;
           action = "systemctl restart kube-apiserver.service";
         };
         apiserverProxyClient = mkCert {

@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-setuid"
     "--enable-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
-  ]
-  ++ (lib.optional (pam != null) "--enable-pam");
+  ] ++ (lib.optional (pam != null) "--enable-pam");
 
   postPatch =
     let

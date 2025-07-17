@@ -24,23 +24,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.78.3";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BRNgNE7BR4mlCKS4sydxx7rrfy+s4bTpQkX9GbEfhTg=";
+    hash = "sha256-8V+q28hv7LDsS3SdH27PVHtnAneB55xYqFkhRapkcOI=";
   };
-
-  cargoHash = "sha256-T8kSQFTvwAYZad9rQRK6vY8vEiilEKv1+fd/1EBlxjI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-z8PbpE+kID+kOmlimuvxTrzoWpbWTKpP6HHnhZDATWM=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-e/WyQlea46qTx7x45QuYdlaShezHV5vuB3ptB2DRCVE=";
+    hash = "sha256-/DL3sQeeZO4l16/rx7BrWEUGUIAdHft+gO3oJ1WQJUE=";
   };
 
   nativeBuildInputs = [
@@ -70,9 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace node/build_node_bridge.py \
       --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
-                     "dst_base = '@signalapp+libsignal-client'" \
-      --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
-                     "objcopy = os.getenv('OBJCOPY', 'objcopy')"
+                     "dst_base = '@signalapp+libsignal-client'"
   '';
 
   buildPhase = ''

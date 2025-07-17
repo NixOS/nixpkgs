@@ -98,7 +98,13 @@ let
         else
           dotnet-sdk.meta.platforms;
 
-      hook = callPackage ./hook { inherit dotnet-runtime; };
+      inherit (callPackage ./hooks { inherit dotnet-sdk dotnet-runtime; })
+        dotnetConfigureHook
+        dotnetBuildHook
+        dotnetCheckHook
+        dotnetInstallHook
+        dotnetFixupHook
+        ;
 
       inherit (dotnetCorePackages) systemToDotnetRid;
     in
@@ -134,7 +140,11 @@ let
         ;
 
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-        hook
+        dotnetConfigureHook
+        dotnetBuildHook
+        dotnetCheckHook
+        dotnetInstallHook
+        dotnetFixupHook
 
         cacert
         makeWrapper

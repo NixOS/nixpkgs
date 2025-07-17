@@ -63,6 +63,7 @@ rustPlatform.buildRustPackage {
     cp -r ${web}/share/openobserve-ui web/dist
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-vfc6B+Uc8RXQD8vGC1yV9w5YAefkYJMpCH2frqjrSWk=";
 
   nativeBuildInputs = [

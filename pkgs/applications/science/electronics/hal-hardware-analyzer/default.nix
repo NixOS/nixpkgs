@@ -66,24 +66,25 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
-  buildInputs = [
-    qtbase
-    qtsvg
-    boost
-    rapidjson
-    igraph
-    nlohmann_json
-    spdlog
-    graphviz
-    verilator
-    z3
-    quazip
-  ]
-  ++ (with python3Packages; [
-    python
-    pybind11
-  ])
-  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      boost
+      rapidjson
+      igraph
+      nlohmann_json
+      spdlog
+      graphviz
+      verilator
+      z3
+      quazip
+    ]
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ])
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"

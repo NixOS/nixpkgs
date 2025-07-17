@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tkdiff";
-  version = "6.0";
+  version = "5.7";
 
   src = fetchzip {
     url = "mirror://sourceforge/tkdiff/tkdiff-${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.zip";
-    hash = "sha256-fBPeXL6G9LZZHIapj/lncNrUU02ocnqDOOJfvlKIyRA=";
+    hash = "sha256-ZndpolvaXoCAzR4KF+Bu7DJrXyB/C2H2lWp5FyzOc4M=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

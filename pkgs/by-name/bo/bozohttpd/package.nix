@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcrypt
     openssl
-  ]
-  ++ lib.optionals (luaSupport) [ lua ];
+  ] ++ lib.optionals (luaSupport) [ lua ];
 
   nativeBuildInputs = [
     bmake

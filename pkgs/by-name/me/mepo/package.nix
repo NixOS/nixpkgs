@@ -18,23 +18,23 @@
   util-linux,
   xwininfo,
   zenity,
-  zig_0_14,
+  zig_0_13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.3.4";
+  version = "1.3.3";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "mepo";
     rev = finalAttrs.version;
-    hash = "sha256-1NE8lADvcxWGi01kxYW2tCOhnVee+T76ITvwSj6M5DM=";
+    hash = "sha256-hEsQpTrj2WCoRgNWdhcUnQRzhI/6BydcbG9kRePstgg=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_14.hook
+    zig_0_13.hook
     makeWrapper
   ];
 

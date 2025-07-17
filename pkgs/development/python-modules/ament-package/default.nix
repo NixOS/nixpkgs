@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ament-package";
-  version = "0.18.1";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ament";
     repo = "ament_package";
     tag = version;
-    hash = "sha256-M2SSGmzxlOITNzWTZ92/PtTVGtKMU/IwJG0VMhzDLR8=";
+    hash = "sha256-+Jfj8mkvrpJnd3oPhOo2E5cvVO9ujez0mrpsj2taOOU=";
   };
 
   build-system = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Parser for the manifest files in the ament buildsystem";
+    description = "The parser for the manifest files in the ament buildsystem";
     homepage = "https://github.com/ament/ament_package";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

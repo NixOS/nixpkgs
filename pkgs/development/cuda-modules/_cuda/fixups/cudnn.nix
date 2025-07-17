@@ -1,15 +1,16 @@
 {
   cudaOlder,
+  cudatoolkit,
   cudaMajorMinorVersion,
   fetchurl,
   lib,
-  libcublas,
+  libcublas ? null, # cuDNN uses CUDA Toolkit on old releases, where libcublas is not available.
   patchelf,
   zlib,
 }:
 let
   inherit (lib)
-    attrsets
+    lists
     maintainers
     meta
     strings
@@ -32,10 +33,11 @@ finalAttrs: prevAttrs: {
       "CUDA version is too new" = cudaTooNew;
     };
 
-  buildInputs = prevAttrs.buildInputs or [ ] ++ [
-    zlib
-    (attrsets.getLib libcublas)
-  ];
+  buildInputs =
+    prevAttrs.buildInputs or [ ]
+    ++ [ zlib ]
+    ++ lists.optionals finalAttrs.passthru.useCudatoolkitRunfile [ cudatoolkit ]
+    ++ lists.optionals (!finalAttrs.passthru.useCudatoolkitRunfile) [ (libcublas.lib or null) ];
 
   # Tell autoPatchelf about runtime dependencies. *_infer* libraries only
   # exist in CuDNN 8.
@@ -53,6 +55,10 @@ finalAttrs: prevAttrs: {
           ${meta.getExe patchelf} $lib/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
         '';
 
+  passthru = prevAttrs.passthru or { } // {
+    useCudatoolkitRunfile = cudaOlder "11.3.999";
+  };
+
   meta = prevAttrs.meta or { } // {
     homepage = "https://developer.nvidia.com/cudnn";
     maintainers =
@@ -64,12 +70,15 @@ finalAttrs: prevAttrs: {
       ]);
     # TODO(@connorbaker): Temporary workaround to avoid changing the derivation hash since introducing more
     # brokenConditions would change the derivation as they're top-level and __structuredAttrs is set.
+    broken =
+      prevAttrs.meta.broken or false || (finalAttrs.passthru.useCudatoolkitRunfile && libcublas == null);
     teams = prevAttrs.meta.teams or [ ];
     license = {
       shortName = "cuDNN EULA";
       fullName = "NVIDIA cuDNN Software License Agreement (EULA)";
       url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
       free = false;
+      redistributable = !finalAttrs.passthru.useCudatoolkitRunfile;
     };
   };
 }

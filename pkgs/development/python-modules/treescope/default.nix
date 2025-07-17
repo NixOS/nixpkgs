@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "treescope";
-  version = "0.1.10";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "treescope";
     tag = "v${version}";
-    hash = "sha256-SfycwuI/B7S/rKkaqxtnJI26q89313pvj/Xsomg6qyA=";
+    hash = "sha256-rLrsG7psY3xkuvNtdRULiMWKzIiWZpJ7TVJhwTNGXRQ=";
   };
 
   build-system = [ flit-core ];

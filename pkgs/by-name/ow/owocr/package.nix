@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication {
     pyjson5 # Google Lens
     google-cloud-vision
     manga-ocr
-    rapidocr
+    rapidocr-onnxruntime
     requests # winRT OCR
   ];
 

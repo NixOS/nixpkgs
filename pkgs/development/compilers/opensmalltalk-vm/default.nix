@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchFromGitHub,
@@ -31,7 +30,7 @@ let
       src = fetchFromGitHub {
         owner = "OpenSmalltalk";
         repo = "opensmalltalk-vm";
-        tag = "202206021410";
+        rev = "202206021410";
         hash = "sha256-QqElPiJuqD5svFjWrLz1zL0Tf+pHxQ2fPvkVRn2lyBI=";
       };
     in
@@ -191,11 +190,7 @@ let
 
   platform = stdenv.targetPlatform.system;
 in
-if (!config.allowAliases && !(vmsByPlatform ? platform)) then
-  # Don't throw without aliases to not break CI.
-  null
-else
-  vmsByPlatform.${platform} or (throw (
-    "Unsupported platform ${platform}: only the following platforms are supported: "
-    + builtins.toString (builtins.attrNames vmsByPlatform)
-  ))
+vmsByPlatform.${platform} or (throw (
+  "Unsupported platform ${platform}: only the following platforms are supported: "
+  + builtins.toString (builtins.attrNames vmsByPlatform)
+))

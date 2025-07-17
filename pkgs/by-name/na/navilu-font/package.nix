@@ -31,5 +31,6 @@ stdenvNoCC.mkDerivation rec {
       description = "Kannada handwriting font";
       license = licenses.gpl3Plus;
       platforms = platforms.all;
+      maintainers = with maintainers; [ ehmry ];
     };
 }

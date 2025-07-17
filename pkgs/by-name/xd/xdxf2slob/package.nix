@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "xdxf2slob";
-  version = "0-unstable-2015-06-30";
+  version = "unstable-2015-06-30";
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -1,12 +1,11 @@
 {
+  fetchurl,
   lib,
   stdenv,
-  buildPackages,
-  fetchurl,
-  installShellFiles,
-  versionCheckHook,
-  autoPatchelfHook,
   zstd,
+  installShellFiles,
+  testers,
+  buck2, # for passthru.tests
 }:
 
 # NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
@@ -43,107 +42,128 @@ let
   # procued by GitHub Actions. this also includes the hash for a download of a
   # compatible buck2-prelude
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
-  archHashes = buildHashes.${stdenv.hostPlatform.system};
+
+  # our version of buck2; this should be a git tag
+  version = "2025-05-06";
 
   # map our platform name to the rust toolchain suffix
-  # NOTE (aseipp): must be synchronized with update.nu!
+  # NOTE (aseipp): must be synchronized with update.sh!
   platform-suffix =
     {
       x86_64-darwin = "x86_64-apple-darwin";
       aarch64-darwin = "aarch64-apple-darwin";
-      x86_64-linux = "x86_64-unknown-linux-gnu";
-      aarch64-linux = "aarch64-unknown-linux-gnu";
+      x86_64-linux = "x86_64-unknown-linux-musl";
+      aarch64-linux = "aarch64-unknown-linux-musl";
     }
-    .${stdenv.hostPlatform.system};
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  # the platform-specific, statically linked binary — which is also
+  # zstd-compressed
+  buck2-src =
+    let
+      name = "buck2-${version}-${platform-suffix}.zst";
+      hash = buildHashes."buck2-${stdenv.hostPlatform.system}";
+      url = "https://github.com/facebook/buck2/releases/download/${version}/buck2-${platform-suffix}.zst";
+    in
+    fetchurl { inherit name url hash; };
+
+  # rust-project, which is used to provide IDE integration Buck2 Rust projects,
+  # is part of the official distribution
+  rust-project-src =
+    let
+      name = "rust-project-${version}-${platform-suffix}.zst";
+      hash = buildHashes."rust-project-${stdenv.hostPlatform.system}";
+      url = "https://github.com/facebook/buck2/releases/download/${version}/rust-project-${platform-suffix}.zst";
+    in
+    fetchurl { inherit name url hash; };
+
+  # compatible version of buck2 prelude; this is exported via passthru.prelude
+  # for downstream consumers to use when they need to automate any kind of
+  # tooling
+  prelude-src =
+    let
+      prelude-hash = "48c249f8c7b99ff501d6e857754760315072b306";
+      name = "buck2-prelude-${version}.tar.gz";
+      hash = buildHashes."_prelude";
+      url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
+    in
+    fetchurl { inherit name url hash; };
+
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "buck2";
-  version = "unstable-${buildHashes.version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
-
+  version = "unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   srcs = [
-    # the platform-specific binary — which is also
-    # zstd-compressed
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
-      hash = archHashes.buck2;
-    })
-    # rust-project, which is used to provide IDE integration Buck2 Rust projects,
-    # is part of the official distribution
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/rust-project-${platform-suffix}.zst";
-      hash = archHashes.rust-project;
-    })
+    buck2-src
+    rust-project-src
   ];
-
-  unpackCmd = "unzstd $curSrc -o $(stripHash $curSrc)";
   sourceRoot = ".";
 
-  strictDeps = true;
   nativeBuildInputs = [
     installShellFiles
     zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
   ];
 
-  buildInputs = [
-    #225963
-    stdenv.cc.cc.libgcc or null
-  ];
+  doCheck = true;
+  dontConfigure = true;
+  dontStrip = true;
 
+  unpackPhase = ''
+    runHook preUnpack
+    unzstd ${buck2-src} -o ./buck2
+    unzstd ${rust-project-src} -o ./rust-project
+    runHook postUnpack
+  '';
+  buildPhase = ''
+    runHook preBuild
+    chmod +x ./buck2 && chmod +x ./rust-project
+    runHook postBuild
+  '';
+  checkPhase = ''
+    runHook preCheck
+    ./buck2 --version && ./rust-project --version
+    runHook postCheck
+  '';
   installPhase = ''
     runHook preInstall
-
-    install -D buck2* "$out/bin/buck2"
-    install -D rust-project* "$out/bin/rust-project"
-
+    mkdir -p $out/bin
+    install -D buck2 $out/bin/buck2
+    install -D rust-project $out/bin/rust-project
     runHook postInstall
   '';
-
-  # Have to put this at a weird stage because if it is put in
-  # postInstall, preFixup, or postFixup, autoPatchelf wouldn't
-  # have run yet
-  preInstallCheck =
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      installShellCompletion --cmd buck2 \
-        --bash <(${emulator} $out/bin/buck2 completion bash ) \
-        --fish <(${emulator} $out/bin/buck2 completion fish ) \
-        --zsh <(${emulator} $out/bin/buck2 completion zsh )
-    '';
-
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
-  # TODO: When --version returns a real output, remove this.
-  # Currently it just spits out a hash
-  preVersionCheck = "version=buck2";
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd buck2 \
+      --bash <( $out/bin/buck2 completion bash ) \
+      --fish <( $out/bin/buck2 completion fish ) \
+      --zsh <( $out/bin/buck2 completion zsh )
+  '';
 
   passthru = {
-    # compatible version of buck2 prelude; this is exported via passthru.prelude
-    # for downstream consumers to use when they need to automate any kind of
-    # tooling
-    prelude = fetchurl {
-      url = "https://github.com/facebook/buck2-prelude/archive/${buildHashes.preludeGit}.tar.gz";
-      hash = buildHashes.preludeFod;
-    };
+    prelude = prelude-src;
 
-    updateScript = ./update.nu;
+    updateScript = ./update.sh;
+    tests = testers.testVersion {
+      package = buck2;
+
+      # NOTE (aseipp): the buck2 --version command doesn't actually print out
+      # the given version tagged in the release, but a hash, but not the git
+      # hash; the entire version logic is bizarrely specific to buck2, and needs
+      # to be reworked the open source build to behave like expected. in the
+      # mean time, it *does* always print out 'buck2 <hash>...' so we can just
+      # match on "buck2"
+      version = "buck2";
+    };
   };
 
   meta = {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
-    changelog = "https://github.com/facebook/buck2/releases/tag/${lib.removePrefix "unstable-" finalAttrs.version}";
+    changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "buck2";
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       thoughtpolice
       lf-
@@ -156,4 +176,4 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
   };
-})
+}

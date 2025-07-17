@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.6.a1";
+  version = "1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kumaraditya303";
     repo = "aioshutil";
     tag = "v${version}";
-    hash = "sha256-KoKIlliWSbU8KY92SgFm4Wams87O22KVlE41q18Sk3I=";
+    hash = "sha256-hSUNx43sIUPs4YfQ+H39FXTpj3oCMUqRzDdHX2OdRdE=";
   };
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -36,7 +36,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous version of function of shutil module";
     homepage = "https://github.com/kumaraditya303/aioshutil";
-    changelog = "https://github.com/kumaraditya303/aioshutil/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

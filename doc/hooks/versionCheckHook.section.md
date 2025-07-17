@@ -15,7 +15,9 @@ You use it like this:
 stdenv.mkDerivation (finalAttrs: {
   # ...
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
 
   # ...

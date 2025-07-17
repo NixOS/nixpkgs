@@ -27,6 +27,8 @@ let
           cargoHash
           ;
 
+        useFetchCargoVendor = true;
+
         nativeBuildInputs = [ protobuf ];
 
         cargoBuildFlags = [

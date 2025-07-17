@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   meta = {
-    description = "Thunderbolt user-space components";
+    description = "Thunderbolt(TM) user-space components";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ryantrinkle ];
     homepage = "https://01.org/thunderbolt-sw";

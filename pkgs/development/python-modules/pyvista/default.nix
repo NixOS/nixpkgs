@@ -15,18 +15,15 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.46.3";
+  version = "0.45.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-RpgrsNMZmIfx3bb7W9xU6u4gJoAuDQ8Xx9C25TLp6PI=";
+    hash = "sha256-szI9kzJQOVCKcGTWj9Twq9i2DzbrHt/LmYBBfq6MBy8=";
   };
-
-  # remove this line once pyvista 0.46 is released
-  pythonRelaxDeps = [ "vtk" ];
 
   build-system = [ setuptools ];
 
@@ -46,6 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyvista" ];
 
   meta = with lib; {
+    broken = pythonAtLeast "3.13"; # segfault
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
     changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";

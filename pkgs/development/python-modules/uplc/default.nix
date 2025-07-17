@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Python implementation of untyped plutus language core";
     homepage = "https://github.com/OpShin/uplc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aciceri ];
+    maintainers = with maintainers; [ t4ccer ];
     mainProgram = "opshin";
   };
 }

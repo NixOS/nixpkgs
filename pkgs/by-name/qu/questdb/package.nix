@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "questdb";
-  version = "9.0.3";
+  version = "8.3.3";
 
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
-    hash = "sha256-/EkqBK/mero219VUylNLVGD1ZzxBMAYpJ7NcU7BC+aw=";
+    hash = "sha256-C3lhEgg9erAYSV4qU+xqPM1YbqCIj7mqmVzu+6BY+pI=";
   };
 
   nativeBuildInputs = [
@@ -24,8 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin $out/share/java
     cp questdb.sh $out/bin
-    cp env.sh $out/bin
-    cp print-hello.sh $out/bin
     cp questdb.jar $out/share/java
 
     ln -s $out/share/java/questdb.jar $out/bin
@@ -35,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "High-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
+    description = "high-performance, open-source SQL database for applications in financial services, IoT, machine learning, DevOps and observability";
     homepage = "https://questdb.io/";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.asl20;

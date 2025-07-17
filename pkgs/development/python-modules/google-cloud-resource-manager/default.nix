@@ -34,8 +34,7 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytest-asyncio

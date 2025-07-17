@@ -24,40 +24,40 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-O7Z7kzC0BU7FAF1UZC6LbXVIXPDertsAUNYwHAjkzPI=";
+    hash = "sha256-K+cR+0a/zRpOvMsX1ZljjJYYOXbHkyDGE9Q9vY1qJBg=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    rustc
-    cargo
-    rustPlatform.cargoSetupHook
-  ]
-  ++ lib.optionals withIntrospection [
-    vala
-    gi-docgen
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      rustc
+      cargo
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals withIntrospection [
+      vala
+      gi-docgen
+    ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-g2tsQ6q+sUxn3itu3IgZ5EGtDorPzhaO5B1hlEW5xzs=";
+    hash = "sha256-zGDmmRbaR2boaf9lLzvW/H7xgMo9uHTmlC0oNupLUos=";
   };
 
   buildInputs = [
     libseccomp
     lcms2
     gtk4
-  ]
-  ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ] ++ lib.optionals withIntrospection [ gobject-introspection ];
 
   propagatedBuildInputs = [
     libseccomp

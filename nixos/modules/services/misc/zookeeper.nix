@@ -19,7 +19,7 @@ let
     name = "zookeeper-conf";
     paths = [
       (pkgs.writeTextDir "zoo.cfg" zookeeperConfig)
-      (pkgs.writeTextDir "logback.xml" cfg.logging)
+      (pkgs.writeTextDir "log4j.properties" cfg.logging)
     ];
   };
 
@@ -71,27 +71,14 @@ in
     };
 
     logging = lib.mkOption {
-      description = "Zookeeper logging configuration, logback.xml.";
+      description = "Zookeeper logging configuration.";
       default = ''
-        <configuration>
-          <property name="zookeeper.console.threshold" value="INFO" />
-          <property name="zookeeper.log.dir" value="." />
-          <property name="zookeeper.log.file" value="zookeeper.log" />
-          <property name="zookeeper.log.threshold" value="INFO" />
-          <property name="zookeeper.log.maxfilesize" value="256MB" />
-          <property name="zookeeper.log.maxbackupindex" value="20" />
-          <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-              <pattern>%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n</pattern>
-            </encoder>
-            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-              <level>''${zookeeper.console.threshold}</level>
-            </filter>
-          </appender>
-          <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-          </root>
-        </configuration>
+        zookeeper.root.logger=INFO, CONSOLE
+        log4j.rootLogger=INFO, CONSOLE
+        log4j.logger.org.apache.zookeeper.audit.Log4jAuditLogger=INFO, CONSOLE
+        log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+        log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+        log4j.appender.CONSOLE.layout.ConversionPattern=[myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
       '';
       type = lib.types.lines;
     };

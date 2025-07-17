@@ -1,5 +1,4 @@
 {
-  assimp,
   fetchFromGitHub,
   ffmpeg,
   freetype,
@@ -11,6 +10,7 @@
   libGLU,
   libpng,
   makeWrapper,
+  nix-update-script,
   pkg-config,
   python3,
   SDL2,
@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renpy";
-  version = "8.4.1.25072401";
+  version = "8.3.7.25031702";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     tag = finalAttrs.version;
-    hash = "sha256-wJnMqUrRGWcsuZWdqbiUI/BD2sSRjJKEzsCOzSngoZM=";
+    hash = "sha256-QY6MMiagPVV+pCDM0FRD++r2fY3tD8qWmHj7fJKIxUQ=";
   };
 
   nativeBuildInputs = [
@@ -41,29 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
     python.pkgs.setuptools
   ];
 
-  buildInputs = [
-    assimp
-    ffmpeg
-    freetype
-    fribidi
-    glew
-    harfbuzz
-    libGL
-    libGLU
-    libpng
-    SDL2
-    zlib
-  ]
-  ++ (with python.pkgs; [
-    ecdsa
-    future
-    pefile
-    pygame-sdl2
-    python
-    requests
-    six
-    tkinter
-  ]);
+  buildInputs =
+    [
+      ffmpeg
+      freetype
+      fribidi
+      glew
+      harfbuzz
+      libGL
+      libGLU
+      libpng
+      SDL2
+      zlib
+    ]
+    ++ (with python.pkgs; [
+      ecdsa
+      future
+      pefile
+      pygame-sdl2
+      python
+      requests
+      six
+      tkinter
+    ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (
     [
@@ -87,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./shutup-erofs-errors.patch
-  ]
-  ++ lib.optional withoutSteam ./noSteam.patch;
+    ./5687.patch
+  ] ++ lib.optional withoutSteam ./noSteam.patch;
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}
@@ -98,20 +98,20 @@ stdenv.mkDerivation (finalAttrs: {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = "Tomorrowland"
+    version_name = '64bit Sensation'
     EOF
   '';
 
   buildPhase = ''
     runHook preBuild
-    ${python.pythonOnBuildForHost.interpreter} setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    ${python.pythonOnBuildForHost.interpreter} setup.py install_lib -d $out/${python.sitePackages}
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Visual Novel Engine";

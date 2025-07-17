@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "sse-starlette";
-  version = "3.0.2";
+  version = "2.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "sysid";
     repo = "sse-starlette";
     tag = "v${version}";
-    hash = "sha256-9NI6CUcK5AqITKxtCMz9Z1+Ke87u2y2E0LlwsFUDhgw=";
+    hash = "sha256-7FlyV+TsVKGFsecONPm/Z50cCnyuUsr6pimPdc4Cs6c=";
   };
 
   build-system = [ setuptools ];

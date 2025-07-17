@@ -1,14 +1,9 @@
 {
-  stdenv,
   lib,
   python3,
   fetchFromGitHub,
   nixosTests,
   fetchPypi,
-  fetchYarnDeps,
-  nodejs,
-  yarnBuildHook,
-  yarnConfigHook,
 }:
 let
   python = python3.override {
@@ -25,42 +20,19 @@ let
       };
     };
   };
-
-  version = "3.6.0";
-  src = fetchFromGitHub {
-    owner = "suitenumerique";
-    repo = "docs";
-    tag = "v${version}";
-    hash = "sha256-8bD+rBEN0GEQz3tiPEQYmf/mpijPefFmQchGhYkVBVY=";
-  };
-
-  mail-templates = stdenv.mkDerivation {
-    name = "lasuite-docs-${version}-mjml";
-    inherit src;
-
-    sourceRoot = "source/src/mail";
-
-    env.DOCS_DIR_MAILS = "${placeholder "out"}";
-
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-oyLs7Df+KGzqCW8uF/7uzcL6ecMx8kHMzpuHSSywwfw=";
-    };
-
-    nativeBuildInputs = [
-      nodejs
-      yarnConfigHook
-      yarnBuildHook
-    ];
-
-    dontInstall = true;
-  };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-docs";
+  version = "3.4.1";
   pyproject = true;
-  inherit version src;
+
+  src = fetchFromGitHub {
+    owner = "suitenumerique";
+    repo = "docs";
+    tag = "v${version}";
+    hash = "sha256-QAWwyFp9l+C0XfVu975zjiv61e/S2nYKkUSv4/p7gxw=";
+  };
 
   sourceRoot = "source/src/backend";
 
@@ -136,9 +108,6 @@ python.pkgs.buildPythonApplication rec {
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
-
-      mkdir -p $out/${python.sitePackages}/core/templates
-      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
     '';
 
   passthru.tests = {

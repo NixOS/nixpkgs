@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-scale-to-sound";
-  version = "1.2.5";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "obs-scale-to-sound";
     tag = version;
-    hash = "sha256-El5lwQfc33H9KvjttJyjakzRizjLoGz2MbkiRm4zm8E=";
+    hash = "sha256-N6OMufx4+WyLGnIZQNxwlPdlmsa+GoZhuDMS9NIbIGE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dimtpap/obs-scale-to-sound";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

@@ -5,16 +5,16 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "tempo";
-  version = "2.8.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-mROhsqbCwPulxtg3pHVZi8FmW9PrYzGPdE0ajVvzRBY=";
+    hash = "sha256-RzDOx2ZyA0ZntFD1ryfipsgPsxVmsdOusZ37RCnQQnM=";
   };
 
   vendorHash = null;
@@ -29,9 +29,9 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Version=${version}"
     "-X=main.Branch=<release>"
-    "-X=main.Revision=${finalAttrs.version}"
+    "-X=main.Revision=${version}"
   ];
 
   # tests use docker
@@ -41,9 +41,8 @@ buildGoModule (finalAttrs: {
 
   meta = with lib; {
     description = "High volume, minimal dependency trace storage";
-    changelog = "https://github.com/grafana/tempo/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
     maintainers = [ ];
   };
-})
+}

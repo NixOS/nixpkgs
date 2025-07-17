@@ -15,19 +15,18 @@
   coincurve,
   eth-hash,
   isPyPy,
-  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "eth-keys";
-  version = "0.7.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keys";
     tag = "v${version}";
-    hash = "sha256-H/s/D4f4tqP/WTil9uLmFw2Do9sEjMWwEreQEooeszQ=";
+    hash = "sha256-HyOfuzwldtqjjowW7HGdZ8RNMXNK3y2NrXUoeMlWJjs=";
   };
 
   build-system = [ setuptools ];
@@ -37,21 +36,19 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  nativeCheckInputs = [
-    asn1tools
-    factory-boy
-    hypothesis
-    pyasn1
-    pytestCheckHook
-    pydantic
-  ]
-  ++ optional-dependencies.coincurve
-  ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
-  ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
+  nativeCheckInputs =
+    [
+      asn1tools
+      factory-boy
+      hypothesis
+      pyasn1
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.coincurve
+    ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
+    ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_keys" ];
-
-  disabledTests = [ "test_install_local_wheel" ];
 
   optional-dependencies = {
     coincurve = [ coincurve ];

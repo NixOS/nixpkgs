@@ -2,33 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  meson,
-  ninja,
+  autoconf,
+  automake,
   gettext,
   gtk2,
+  intltool,
+  libtool,
   ncurses,
   openssl,
   pkg-config,
   readline,
-  nix-update-script,
-  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gftp";
-  version = "2.9.1b-unstable-2025-05-12";
+  version = "2.9.1b";
 
   src = fetchFromGitHub {
     owner = "masneyb";
     repo = "gftp";
-    rev = "48114635f7b7b1f9a5eda985021ea53b10a7a030";
-    hash = "sha256-unTsd2xX8Y71ItE3gYHoxUPgViK/xhZdx0IQYvDPaEc=";
+    rev = version;
+    hash = "sha256-0zdv2oYl24BXh61IGCWby/2CCkzNjLpDrAFc0J89Pw4=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types" # https://github.com/masneyb/gftp/issues/178
+  ];
+
   nativeBuildInputs = [
-    meson
-    ninja
+    autoconf
+    automake
     gettext
+    intltool
+    libtool
     pkg-config
   ];
 
@@ -39,14 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/masneyb/gftp";
     description = "GTK-based multithreaded FTP client for *nix-based machines";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.haylin ];
-    platforms = lib.platforms.unix;
-    mainProgram = "gftp";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
   };
-})
+}
+# TODO: report the hardeningDisable to upstream

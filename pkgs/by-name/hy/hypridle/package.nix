@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -16,15 +16,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.7";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YzRWE3rCnsY0WDRJcn4KvyWUoe+5zdkUYNIaHGP9BZ4=";
+    hash = "sha256-uChAGmceKS9F9jqs1xb58BLTVZLF+sFU00MWDEVfYLg=";
   };
 
   nativeBuildInputs = [

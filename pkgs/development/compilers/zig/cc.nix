@@ -14,7 +14,7 @@ in
 runCommand "zig-cc-${zig.version}"
   {
     pname = "zig-cc";
-    inherit (zig) version;
+    inherit (zig) version meta;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -24,10 +24,6 @@ runCommand "zig-cc-${zig.version}"
     };
 
     inherit zig;
-
-    meta = zig.meta // {
-      mainProgram = "${targetPrefix}clang";
-    };
   }
   ''
     mkdir -p $out/bin

@@ -26,20 +26,21 @@ let
   mkManifestTarget =
     name: if (lib.hasSuffix ".yaml" name || lib.hasSuffix ".yml" name) then name else name + ".yaml";
   # Produces a list containing all duplicate manifest names
-  duplicateManifests = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
-    builtins.attrNames cfg.manifests
-  );
+  duplicateManifests =
+    with builtins;
+    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.manifests);
   # Produces a list containing all duplicate chart names
-  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
-    builtins.attrNames cfg.charts
-  );
+  duplicateCharts =
+    with builtins;
+    lib.intersectLists (attrNames cfg.autoDeployCharts) (attrNames cfg.charts);
 
   # Converts YAML -> JSON -> Nix
   fromYaml =
     path:
-    builtins.fromJSON (
-      builtins.readFile (
-        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
+    with builtins;
+    fromJSON (
+      readFile (
+        pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ yq-go ]; } ''
           yq --no-colors --output-format json ${path} > $out
         ''
       )
@@ -82,8 +83,6 @@ let
         nativeBuildInputs = with pkgs; [
           kubernetes-helm
           cacert
-          # Helm requires HOME to refer to a writable dir
-          writableTmpDirAsHomeHook
         ];
       }
       ''
@@ -295,7 +294,7 @@ let
           description = ''
             Extra HelmChart field definitions that are merged with the rest of the HelmChart
             custom resource. This can be used to set advanced fields or to overwrite
-            generated fields. See <https://docs.k3s.io/helm#helmchart-field-definitions>
+            generated fields. See https://docs.k3s.io/helm#helmchart-field-definitions
             for possible fields.
           '';
         };
@@ -632,7 +631,7 @@ in
             finalImageTag = "21.1.2-debian-11-r0";
           })
 
-          config.services.k3s.package.airgap-images
+          config.services.k3s.package.airgapImages
         ]
       '';
       description = ''

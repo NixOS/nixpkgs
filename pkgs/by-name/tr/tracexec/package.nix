@@ -15,16 +15,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tracexec";
-  version = "0.13.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
-    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
+    tag = "v${version}";
+    hash = "sha256-j1zgHDO5bmJAXi9KvkHqenm/QfM9DmD9yNqF6TxJ9sY=";
   };
 
-  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
+  # remove if updating to rust 1.85
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]' \
+      --replace-fail 'rust-version = "1.85"' ""
+  '';
+
+  # remove if updating to rust 1.85
+  env.RUSTC_BOOTSTRAP = 1;
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XuuLuIeD/S60by/hg1fR+ML3PtIyX9JNrEvgGzI3UiM=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -41,14 +52,15 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  cargoBuildFlags = [
-    "--no-default-features"
-    "--features=recommended"
-  ]
-  # Remove RiscV64 specialisation when this is fixed:
-  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-  # * https://github.com/rust-vmm/seccompiler/pull/72
-  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags =
+    [
+      "--no-default-features"
+      "--features=recommended"
+    ]
+    # Remove RiscV64 specialisation when this is fixed:
+    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
+    # * https://github.com/rust-vmm/seccompiler/pull/72
+    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests

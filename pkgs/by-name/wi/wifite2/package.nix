@@ -68,8 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     john
     iw
     macchanger
-  ]
-  ++ pythonDependencies;
+  ] ++ pythonDependencies;
 
   nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 

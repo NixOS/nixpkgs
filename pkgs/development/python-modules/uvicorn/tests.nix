@@ -34,8 +34,7 @@ buildPythonPackage {
     a2wsgi
     watchgod
     wsproto
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  ] ++ uvicorn.optional-dependencies.standard;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

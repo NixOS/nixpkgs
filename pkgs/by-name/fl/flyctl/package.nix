@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   testers,
@@ -10,16 +9,16 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.172";
+  version = "0.3.157";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-jKzlKOdE+SrCzY81ciI9sKN0iiFZMsKp04A+1TV1+i0=";
+    hash = "sha256-R5hZLY7uKYfSQdSnYkCruobdHiUZfHshnb/oIYbCMEc=";
   };
 
-  vendorHash = "sha256-D6b+dLoE4IdhsmnWILe7Thkggq3p0ur4C3BOz7Cuk98=";
+  vendorHash = "sha256-OwxzdLXNPiQRq6mgvZaOs8tnNZQm0mYyzyPFUYcokb0=";
 
   subPackages = [ "." ];
 
@@ -54,7 +53,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd flyctl \
       --bash <($out/bin/flyctl completion bash) \
       --fish <($out/bin/flyctl completion fish) \

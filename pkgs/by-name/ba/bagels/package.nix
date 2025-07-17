@@ -65,13 +65,14 @@ python3Packages.buildPythonApplication rec {
     yarl
   ];
 
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ]
-  ++ (with python3Packages; [
-    freezegun
-    pytestCheckHook
-  ]);
+  nativeCheckInputs =
+    [
+      writableTmpDirAsHomeHook
+    ]
+    ++ (with python3Packages; [
+      freezegun
+      pytestCheckHook
+    ]);
 
   disabledTests = [
     # AssertionError: assert 1 == 0

@@ -63,14 +63,12 @@ lib.makeScope pkgs.newScope (
             gimp
             gimp.gtk
             glib
-          ]
-          ++ (attrs.buildInputs or [ ]);
+          ] ++ (attrs.buildInputs or [ ]);
 
           nativeBuildInputs = [
             pkg-config
             intltool
-          ]
-          ++ (attrs.nativeBuildInputs or [ ]);
+          ] ++ (attrs.nativeBuildInputs or [ ]);
 
           # Override installation paths.
           env = {
@@ -78,8 +76,7 @@ lib.makeScope pkgs.newScope (
               "${placeholder "out"}/${gimp.targetLibDir}";
             "PKG_CONFIG_GIMP_${pkgConfigMajorVersion}_0_GIMPDATADIR" =
               "${placeholder "out"}/${gimp.targetDataDir}";
-          }
-          // attrs.env or { };
+          } // attrs.env or { };
         }
       );
 

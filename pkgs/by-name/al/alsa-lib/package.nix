@@ -5,7 +5,6 @@
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
-  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,14 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = directoryListingUpdater {
-      url = "https://www.alsa-project.org/files/pub/lib/";
-    };
-  };
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
     mainProgram = "aserver";
@@ -54,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
     pkgConfigModules = [
       "alsa"
       "alsa-topology"
     ];
-    platforms = with lib.platforms; linux ++ freebsd;
-    maintainers = with lib.maintainers; [ l-as ];
+    platforms = platforms.linux ++ platforms.freebsd;
+    maintainers = with maintainers; [ l-as ];
   };
 })

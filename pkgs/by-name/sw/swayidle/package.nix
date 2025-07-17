@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland
     wayland-protocols
-  ]
-  ++ lib.optionals systemdSupport [ systemd ];
+  ] ++ lib.optionals systemdSupport [ systemd ];
 
   mesonFlags = [
     "-Dman-pages=enabled"
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "swayidle";
-    maintainers = with maintainers; [ wineee ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

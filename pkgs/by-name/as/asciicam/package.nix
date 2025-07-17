@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "asciicam";
-  version = "0-unstable-2022-06-25";
+  version = "unstable-2022-06-25";
 
   src = fetchFromGitHub {
     owner = "muesli";

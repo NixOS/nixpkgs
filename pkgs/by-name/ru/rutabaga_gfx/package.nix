@@ -26,8 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/zeWWL4Mdb/kIJ0J3nky5dastsZUOXm9YTXUjKCDJcY=";
   };
 
-  separateDebugInfo = true;
-
   nativeBuildInputs = [
     cargo
     meson
@@ -36,18 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
   ];
-  buildInputs = [
-    libiconv
-  ]
-  ++ lib.optionals withGfxstream (
-    [
-      aemu
-      gfxstream
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
-      libdrm
-    ]
-  );
+  buildInputs =
+    [ libiconv ]
+    ++ lib.optionals withGfxstream (
+      [
+        aemu
+        gfxstream
+      ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
+        libdrm
+      ]
+    );
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
@@ -71,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://crosvm.dev/book/appendix/rutabaga_gfx.html";
-    description = "Cross-platform abstraction for GPU and display virtualization";
+    description = "cross-platform abstraction for GPU and display virtualization";
     license = licenses.bsd3;
     maintainers = with maintainers; [ qyliss ];
     platforms = [

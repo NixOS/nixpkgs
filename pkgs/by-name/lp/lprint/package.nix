@@ -5,8 +5,6 @@
   pappl,
   cups,
   pkg-config,
-  # Enables support for untested printers. It makes sense to default this to true, as it's unlikely to result in any issues
-  enableExperimental ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +32,6 @@ stdenv.mkDerivation rec {
     cups
   ];
 
-  configureFlags = lib.optional enableExperimental "--enable-experimental";
-
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/lprint --help
@@ -44,11 +40,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Implements printing for a variety of common label and receipt printers connected via network or USB";
+    description = "LPrint implements printing for a variety of common label and receipt printers connected via network or USB";
     mainProgram = "lprint";
     homepage = "https://github.com/michaelrsweet/lprint";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = [ ];
   };
 }

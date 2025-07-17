@@ -3,7 +3,6 @@
   buildDunePackage,
   opam-format,
   curl,
-  patch,
 }:
 
 buildDunePackage {
@@ -11,10 +10,7 @@ buildDunePackage {
 
   inherit (opam-format) src version;
 
-  propagatedBuildInputs = [
-    opam-format
-    patch
-  ];
+  propagatedBuildInputs = [ opam-format ];
 
   configureFlags = [ "--disable-checks" ];
 

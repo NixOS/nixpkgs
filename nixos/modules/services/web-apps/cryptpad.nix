@@ -75,12 +75,12 @@ in
             description = "Address on which the Node.js server should listen";
           };
           httpPort = mkOption {
-            type = types.port;
+            type = types.int;
             default = 3000;
             description = "Port on which the Node.js server should listen";
           };
           websocketPort = mkOption {
-            type = types.port;
+            type = types.int;
             default = 3003;
             description = "Port for the websocket that needs to be separate";
           };

@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage {
   ];
 
   cargoHash = "sha256-iLGoc6CKZGlq9bw1sL0jCVm9lGa0i/BXiseU1USGjfQ=";
+  useFetchCargoVendor = true;
 
   meta = {
     description = "Command line tool for creating Embassy projects";

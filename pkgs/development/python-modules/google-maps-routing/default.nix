@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-maps-routing";
-  version = "3.31.3";
+  version = "0.6.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "google-maps-routing-v${version}";
+    hash = "sha256-VYkgkVrUgBiUEFF2J8ZFrh2Sw7h653stYxNcpYfRAj4=";
   };
 
   sourceRoot = "${src.name}/packages/google-maps-routing";
@@ -35,8 +35,7 @@ buildPythonPackage rec {
     proto-plus
     protobuf
     google-geo-type
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   pythonImportsCheck = [ "google.maps.routing_v2" ];
 

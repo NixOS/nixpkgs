@@ -34,7 +34,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
-  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
   meta = with lib; {
     description = "Terminals served by Tornado websockets";

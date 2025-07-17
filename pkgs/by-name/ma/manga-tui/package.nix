@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 let
-  version = "0.9.0";
+  version = "0.8.1";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -20,10 +20,11 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-Q+zTYdAaCztYYtSgHK1X7oE8Q7oHYpf+hAfGAzU4HoA=";
+    hash = "sha256-CAmXTAUlwdc4iGzXonoYPd1okqgA4hWgR9bnsPsuDus=";
   };
 
-  cargoHash = "sha256-FW+nrpFsQl38iqmhMyMmSvF/0W0iVy5+/Hyun8bWJP4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-viiL1LcBbWuKA+jgkAPc9gpI7wQu4UXfO5DSPm26ido=";
 
   nativeBuildInputs = [ pkg-config ];
 

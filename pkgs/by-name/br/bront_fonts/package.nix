@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "bront_fonts";
-  version = "0-unstable-2015-06-28";
+  version = "unstable-2015-06-28";
 
   src = fetchFromGitHub {
     owner = "chrismwendt";

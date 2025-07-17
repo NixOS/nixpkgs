@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "mplhep";
-  version = "0.4.1";
+  version = "0.3.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "mplhep";
     tag = "v${version}";
-    hash = "sha256-Sx/VR573Vhxfv043mVdMpu/v6Ukv/JrVXBlpbILqGsI=";
+    hash = "sha256-Xanj2AkFRq/zu2ntTHVt1QkikN0bYfRcBj6CBho15os=";
   };
 
   build-system = [
@@ -57,9 +57,10 @@ buildPythonPackage rec {
     uproot
   ];
 
-  disabledTestPaths = [
+  disabledTests = [
     # requires uproot4
-    "tests/test_inputs.py"
+    "test_inputs_uproot"
+    "test_uproot_versions"
   ];
 
   pythonImportsCheck = [ "mplhep" ];

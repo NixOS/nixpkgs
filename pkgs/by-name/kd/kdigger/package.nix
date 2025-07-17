@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = "kdigger";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-hpLhtTENtOBQjm+CZRAcx1BG9831JUFIsLL57wZIrso=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -42,7 +42,7 @@ buildGoModule rec {
     ldflags+=" -X github.com/quarkslab/kdigger/commands.GITCOMMIT=$(cat COMMIT)"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd kdigger \
       --bash <($out/bin/kdigger completion bash) \
       --fish <($out/bin/kdigger completion fish) \

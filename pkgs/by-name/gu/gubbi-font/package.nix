@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     description = "Kannada font";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ ehmry ];
   };
 }

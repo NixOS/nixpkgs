@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-cTgR1yp6TFwotm5VEG5e0O7R1zCMbQmcH2zmRmF7cjI=";
 
   cargoBuildFlags = [
@@ -37,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Object Storage for Collections";
+    description = "Bindle: Aggregate Object Storage";
     homepage = "https://github.com/deislabs/bindle";
     license = licenses.asl20;
     maintainers = [ ];

@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
+  useFetchCargoVendor = true;
   inherit cargoHash;
 
   nativeBuildInputs = [

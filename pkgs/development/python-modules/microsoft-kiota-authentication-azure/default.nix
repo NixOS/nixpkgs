@@ -12,12 +12,11 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.9.7";
+  version = "1.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-authentication-azure-v${version}";
-    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-FUfVkJbpD0X7U7DPzyoh+84Bk7C07iLT9dmbUeliFu8=";
   };
 
   sourceRoot = "${src.name}/packages/authentication/azure/";
@@ -48,10 +47,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_authentication_azure" ];
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-authentication-azure-v";
-  };
 
   meta = with lib; {
     description = "Kiota Azure authentication provider";

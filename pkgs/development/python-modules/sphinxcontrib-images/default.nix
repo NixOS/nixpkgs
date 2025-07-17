@@ -1,26 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   setuptools,
+  wheel,
   requests,
   sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-images";
-  version = "1.0.1";
+  version = "0.9.4";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "sphinx-contrib";
-    repo = "images";
-    tag = version;
-    hash = "sha256-olkczYxvdUgLZXmvA0SUXL2q+NL4tvUfRWBG7S05dQU=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-9sI30EMHk+ZdkdvdsTsfsmos+DgECp3utSESlp+8Sks=";
   };
 
   build-system = [
     setuptools
+    wheel
   ];
 
   dependencies = [

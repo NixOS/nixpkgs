@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtlocation,
-  qtspeech,
   qtwebview,
 }:
 mkKdeDerivation {
@@ -9,7 +8,6 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtlocation
-    qtspeech
     qtwebview
   ];
   meta.mainProgram = "neochat";

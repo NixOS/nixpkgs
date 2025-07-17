@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Simple Cairo Chart Library for GTK and Vala";
+    description = " A simple Cairo Chart Library for GTK and Vala";
     homepage = "https://github.com/dcharles525/Caroline";
     maintainers = with maintainers; [ grindhold ];
     license = licenses.mit;

@@ -1,10 +1,8 @@
 {
   lib,
-  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  runCommand,
   hatchling,
   argostranslate,
   flask,
@@ -17,7 +15,6 @@
   expiringdict,
   langdetect,
   lexilang,
-  libretranslate,
   ltpycld2,
   morfessor,
   appdirs,
@@ -29,19 +26,18 @@
   prometheus-client,
   polib,
   python,
-  xorg,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.7.3";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     tag = "v${version}";
-    hash = "sha256-eX/CZlHqUkarrilE4UoTMF8U/b7hn6F3nMxYnDPQ238=";
+    hash = "sha256-fzBVEJnj7sCkfNIIFZXHB0VQt94z0U9lbtW6+abAMpA=";
   };
 
   build-system = [
@@ -88,26 +84,6 @@ buildPythonPackage rec {
   env.HOME = "/tmp";
 
   pythonImportsCheck = [ "libretranslate" ];
-
-  passthru = {
-    static-compressed =
-      runCommand "libretranslate-data-compressed"
-        {
-          nativeBuildInputs = [
-            pkgs.brotli
-            xorg.lndir
-          ];
-        }
-        ''
-          mkdir -p $out/share/libretranslate/static
-          lndir ${libretranslate}/share/libretranslate/static $out/share/libretranslate/static
-
-          # Create static gzip and brotli files
-          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|ico|js|svg|ttf)' \
-            -exec gzip --best --keep --force {} ';' \
-            -exec brotli --best --keep --no-copy-stat {} ';'
-        '';
-  };
 
   meta = with lib; {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";

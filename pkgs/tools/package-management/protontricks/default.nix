@@ -7,6 +7,7 @@
   steam-run,
   fetchpatch2,
   setuptools-scm,
+  setuptools,
   vdf,
   pillow,
   winetricks,
@@ -18,14 +19,14 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.13.0";
-  pyproject = true;
+  version = "1.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = version;
-    hash = "sha256-6z6J31EBXf0FU3fWjjg3dX7OAOiN9Z3ONdKIweJiZBY=";
+    hash = "sha256-xNy7quksnZ6BnZk5Rz9kwwoC4xitmfnSe5Zj6gZO8S4=";
   };
 
   patches = [
@@ -45,24 +46,26 @@ buildPythonApplication rec {
     })
   ];
 
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  dependencies = [
+  propagatedBuildInputs = [
+    setuptools # implicit dependency, used to find data/icon_placeholder.png
     vdf
     pillow
   ];
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        winetricks
-        yad
-      ]
-    }"
-    # Steam Runtime does not work outside of steam-run, so don't use it
-    "--set STEAM_RUNTIME 0"
-  ]
-  ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+  makeWrapperArgs =
+    [
+      "--prefix PATH : ${
+        lib.makeBinPath [
+          winetricks
+          yad
+        ]
+      }"
+      # Steam Runtime does not work outside of steam-run, so don't use it
+      "--set STEAM_RUNTIME 0"
+    ]
+    ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

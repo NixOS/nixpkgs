@@ -37,6 +37,7 @@ appimageTools.wrapType2 {
     homepage = "https://sozi.baierouge.fr/";
     license = lib.licenses.mpl20;
     mainProgram = "sozi";
+    maintainers = with lib.maintainers; [ srghma ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

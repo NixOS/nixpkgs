@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apachetomcatscanner";
-  version = "3.8.0";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "ApacheTomcatScanner";
     tag = version;
-    hash = "sha256-gMyJClEE/i8AKHcSyvvMPwCooLwl/hvcRZgZqF59RUY=";
+    hash = "sha256-mzpJq0er13wcekTac3j4cnRokHh6Q0seM8vwZsM2tN8=";
   };
 
   # Posted a PR for discussion upstream that can be followed:

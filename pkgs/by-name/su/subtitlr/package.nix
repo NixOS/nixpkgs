@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +27,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd Subtitlr \
       --bash <($out/bin/Subtitlr completion bash) \
       --fish <($out/bin/Subtitlr completion fish) \

@@ -75,13 +75,11 @@ buildPythonPackage rec {
     psutil
     pydantic
     rich
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
   pythonRemoveDeps = [
     "nvidia-ml-py3"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -5,13 +5,12 @@
   pyheck,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dotwiz";
   version = "0.4.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -22,20 +21,21 @@ buildPythonPackage rec {
     hash = "sha256-ABmkwpJ40JceNJieW5bhg0gqWNrR6Wxj84nLCjKU11A=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyheck ];
+  propagatedBuildInputs = [ pyheck ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dotwiz" ];
 
-  disabledTestPaths = [ "benchmarks" ];
+  pytestFlagsArray = [
+    "--ignore=benchmarks"
+    "--ignore-glob=*integration*"
+  ];
 
   meta = with lib; {
     description = "Dict subclass that supports dot access notation";
     homepage = "https://github.com/rnag/dotwiz";
-    changelog = "https://github.com/rnag/dotwiz/blob/v${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/rnag/dotwiz/blob/v${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

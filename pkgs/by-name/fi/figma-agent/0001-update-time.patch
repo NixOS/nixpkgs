@@ -1,0 +1,59 @@
+From aaa07b6430c555a8c41f458ccf0eca2213e82317 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Sat, 28 Sep 2024 11:06:40 +0800
+Subject: [PATCH] update time
+
+---
+ Cargo.lock | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 282fe41..8b308d5 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -952,6 +952,12 @@ dependencies = [
+  "minimal-lexical",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "object"
+ version = "0.32.2"
+@@ -1313,12 +1319,13 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.31"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f657ba42c3f86e7680e53c8cd3af8abbe56b5491790b46e22e19c0d57463583e"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa",
++ "num-conv",
+  "powerfmt",
+  "serde",
+  "time-core",
+@@ -1333,10 +1340,11 @@ checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.16"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "26197e33420244aeb70c3e8c78376ca46571bc4e701e4791c2cd9f57dcb3a43f"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 
+-- 
+2.46.0
+

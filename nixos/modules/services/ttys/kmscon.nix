@@ -6,10 +6,9 @@
 }:
 let
   inherit (lib)
+    mapAttrs
     mkIf
-    mkEnableOption
     mkOption
-    mkPackageOption
     optional
     optionals
     types
@@ -28,17 +27,23 @@ in
 {
   options = {
     services.kmscon = {
-      enable = mkEnableOption ''
-        kmscon as the virtual console instead of gettys.
-        kmscon is a kms/dri-based userspace virtual terminal implementation.
-        It supports a richer feature set than the standard linux console VT,
-        including full unicode support, and when the video card supports drm
-        should be much faster
-      '';
+      enable = mkOption {
+        description = ''
+          Use kmscon as the virtual console instead of gettys.
+          kmscon is a kms/dri-based userspace virtual terminal implementation.
+          It supports a richer feature set than the standard linux console VT,
+          including full unicode support, and when the video card supports drm
+          should be much faster.
+        '';
+        type = types.bool;
+        default = false;
+      };
 
-      package = mkPackageOption pkgs "kmscon" { };
-
-      hwRender = mkEnableOption "3D hardware acceleration to render the console";
+      hwRender = mkOption {
+        description = "Whether to use 3D hardware acceleration to render the console.";
+        type = types.bool;
+        default = false;
+      };
 
       fonts = mkOption {
         description = "Fonts used by kmscon, in order of priority.";
@@ -63,8 +68,10 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkEnableOption "" // {
-        description = "Whether to configure keymap from xserver keyboard settings.";
+      useXkbConfig = mkOption {
+        description = "Configure keymap from xserver keyboard settings.";
+        type = types.bool;
+        default = false;
       };
 
       extraConfig = mkOption {
@@ -93,7 +100,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.packages = [ cfg.package ];
+    systemd.packages = [ pkgs.kmscon ];
 
     systemd.services."kmsconvt@" = {
       after = [
@@ -105,7 +112,7 @@ in
       serviceConfig.ExecStart = [
         ""
         ''
-          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
+          ${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
         ''
       ];
 

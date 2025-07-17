@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation {
   name = "androidenv-test-suite";
-  version = lib.substring 0 8 (builtins.hashFile "sha256" ./repo.json);
+  version = "1";
   buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
 
   buildCommand = ''

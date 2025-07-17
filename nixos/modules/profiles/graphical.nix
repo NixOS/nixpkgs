@@ -1,4 +1,4 @@
-# This module defines a NixOS configuration with the Plasma 6 desktop.
+# This module defines a NixOS configuration with the Plasma 5 desktop.
 # It's used by the graphical installation CD.
 
 { pkgs, ... }:
@@ -6,7 +6,7 @@
 {
   services.xserver = {
     enable = true;
-    desktopManager.plasma6.enable = true;
+    desktopManager.plasma5.enable = true;
   };
 
   services = {

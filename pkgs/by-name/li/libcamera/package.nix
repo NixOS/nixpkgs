@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.2";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
+    hash = "sha256-JV5sa/jiqubcenSeYC4jlB/RgGJt3o1HTIyy7U4Ljlg=";
   };
 
   outputs = [
@@ -57,41 +57,42 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa/ipa_*.so
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
   '';
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    udev
+      # hotplugging
+      udev
 
-    # pycamera
-    python3Packages.pybind11
+      # pycamera
+      python3Packages.pybind11
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
-  ++ lib.optionals withTracing [ lttng-ust ]
-  ++ lib.optionals withQcam [
-    libtiff
-    qt6.qtbase
-    qt6.qttools
-  ];
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt6.qtbase
+      qt6.qttools
+    ];
 
   nativeBuildInputs = [
     meson
@@ -105,8 +106,7 @@ stdenv.mkDerivation rec {
     graphviz
     doxygen
     openssl
-  ]
-  ++ lib.optional withQcam qt6.wrapQtAppsHook;
+  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
     "-Dv4l2=true"

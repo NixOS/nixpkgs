@@ -84,8 +84,7 @@ in
   options = {
     sshBackdoor = {
       enable = mkOption {
-        default = config.enableDebugHook;
-        defaultText = lib.literalExpression "config.enableDebugHook";
+        default = false;
         type = types.bool;
         description = "Whether to turn on the VSOCK-based access to all VMs. This provides an unauthenticated access intended for debugging.";
       };

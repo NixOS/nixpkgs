@@ -46,8 +46,7 @@ lib.fetchers.withNormalizedHash { } (
       "--depth=1"
       (optionalString createMirror "--mirror")
       (optionalString useArchive "--archive")
-    ]
-    ++ extraRepoInitFlags;
+    ] ++ extraRepoInitFlags;
 
     local_manifests = copyPathsToStore localManifests;
 

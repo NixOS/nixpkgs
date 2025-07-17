@@ -3,7 +3,6 @@
   buildPackages,
   stdenv,
   mkMesonExecutable,
-  writableTmpDirAsHomeHook,
 
   nix-fetchers,
   nix-fetchers-c,
@@ -26,18 +25,19 @@ mkMesonExecutable (finalAttrs: {
 
   workDir = ./.;
 
-  buildInputs = [
-    nix-fetchers
-    nix-store-test-support
-    rapidcheck
-    gtest
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
-    nix-fetchers-c
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "2.27") [
-    libgit2
-  ];
+  buildInputs =
+    [
+      nix-fetchers
+      nix-store-test-support
+      rapidcheck
+      gtest
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+      nix-fetchers-c
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.27") [
+      libgit2
+    ];
 
   mesonFlags = [
   ];
@@ -48,13 +48,18 @@ mkMesonExecutable (finalAttrs: {
         runCommand "${finalAttrs.pname}-run"
           {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
-            buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          ''
-            export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-            touch $out
-          '';
+          (
+            lib.optionalString stdenv.hostPlatform.isWindows ''
+              export HOME="$PWD/home-dir"
+              mkdir -p "$HOME"
+            ''
+            + ''
+              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              touch $out
+            ''
+          );
     };
   };
 

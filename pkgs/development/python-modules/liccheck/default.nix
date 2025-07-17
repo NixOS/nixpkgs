@@ -9,14 +9,13 @@
   python3-openid,
   pythonOlder,
   semantic-version,
-  setuptools,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "liccheck";
-  version = "0.9.3";
-  pyproject = true;
+  version = "0.9.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -24,12 +23,10 @@ buildPythonPackage rec {
     owner = "dhatim";
     repo = "python-license-check";
     tag = version;
-    hash = "sha256-ohq3ZsbZcyqhwmvaVF/+mo7lNde5gjbz8pwhzHi3SPY=";
+    hash = "sha256-2WJw5TVMjOr+GX4YV0nssOtQeYvDHBLnlWquJQWPL9I=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     configparser
     semantic-version
     toml
@@ -46,10 +43,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Check python packages from requirement.txt and report issues";
+    mainProgram = "liccheck";
     homepage = "https://github.com/dhatim/python-license-check";
-    changelog = "https://github.com/dhatim/python-license-check/releases/tag/${src.tag}";
+    changelog = "https://github.com/dhatim/python-license-check/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "liccheck";
   };
 }

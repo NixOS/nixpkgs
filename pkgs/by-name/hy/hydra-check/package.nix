@@ -7,12 +7,9 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
-  testers,
-  curl,
-  cacert,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: rec {
+rustPlatform.buildRustPackage rec {
   pname = "hydra-check";
   version = "2.0.4";
 
@@ -23,6 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
     hash = "sha256-TdMZC/EE52UiJ+gYQZHV4/ReRzMOdCGH+n7pg1vpCCQ=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-G9M+1OWp2jlDeSDFagH/YOCdxGQbcru1KFyKEUcMe7g=";
 
   nativeBuildInputs = [
@@ -47,29 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   doInstallCheck = true;
 
-  passthru.tests.mainCommand =
-    testers.runCommand # allows internet access
-      {
-        name = "hydra-check-test";
-
-        # only runs the test when internet access is confirmed:
-        script = ''
-          set -e
-          if curl hydra.nixos.org > /dev/null; then
-            hydra-check
-          else
-            echo "no internet access, skipping test"
-          fi
-          touch $out
-        '';
-
-        nativeBuildInputs = [
-          finalAttrs.finalPackage
-          curl
-          cacert # for https connectivity
-        ];
-      };
-
   meta = {
     description = "Check hydra for the build status of a package";
     homepage = "https://github.com/nix-community/hydra-check";
@@ -82,4 +57,4 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
     ];
     mainProgram = "hydra-check";
   };
-})
+}

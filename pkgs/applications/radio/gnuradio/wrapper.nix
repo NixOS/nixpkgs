@@ -37,7 +37,6 @@
   soapyaudio,
   soapybladerf,
   soapyhackrf,
-  soapyplutosdr,
   soapyremote,
   soapyrtlsdr,
   soapyuhd,
@@ -47,7 +46,6 @@
     soapyaudio
     soapybladerf
     soapyhackrf
-    soapyplutosdr
     soapyremote
     soapyrtlsdr
     soapyuhd

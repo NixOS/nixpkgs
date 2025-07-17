@@ -48,8 +48,7 @@ buildPythonPackage rec {
     rustworkx
     scikit-learn
     scipy
-  ]
-  ++ lib.optional withPyscf pyscf;
+  ] ++ lib.optional withPyscf pyscf;
 
   nativeCheckInputs = [
     pytestCheckHook

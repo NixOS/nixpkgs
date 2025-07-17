@@ -38,7 +38,8 @@ in
     services.tor.torsocks = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = config.services.tor.enable && config.services.tor.client.enable;
+        defaultText = lib.literalExpression "config.services.tor.enable && config.services.tor.client.enable";
         description = ''
           Whether to build `/etc/tor/torsocks.conf`
           containing the specified global torsocks configuration.

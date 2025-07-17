@@ -3,54 +3,45 @@
   stdenv,
   fetchgit,
   which,
-  SDL2,
-  SDL2_gfx,
-  SDL2_mixer,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_net,
+  SDL,
+  SDL_mixer,
+  SDL_image,
+  SDL_ttf,
+  SDL_net,
   python3,
-  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "tennix";
-  version = "1.3.4";
+  version = "1.3.1";
 
   src = fetchgit {
     url = "git://repo.or.cz/tennix.git";
-    tag = "tennix-${finalAttrs.version}";
-    hash = "sha256-siGfnpZPMYMTgYzaPVhNXEuA/OSWmEl891cLhvgGr7o=";
+    tag = "tennix-${version}";
+    hash = "sha256-U5+S1jEeg+7gdM1++dln6ePTqxZu2Zt0oUrH3DIlkgk=";
   };
 
   nativeBuildInputs = [ which ];
 
   buildInputs = [
     python3
-    SDL2
-    SDL2_gfx
-    SDL2_mixer
-    SDL2_image
-    SDL2_ttf
-    SDL2_net
+    SDL
+    SDL_mixer
+    SDL_image
+    SDL_ttf
+    SDL_net
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     ./configure --prefix $out
-
-    runHook postConfigure
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "tennix-"; };
-
-  meta = {
+  meta = with lib; {
     homepage = "https://icculus.org/tennix/";
     description = "Classic Championship Tour 2011";
     mainProgram = "tennix";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pSub ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
-})
+}

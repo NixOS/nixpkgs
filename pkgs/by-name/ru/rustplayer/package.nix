@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage {
     ./dynamic-lib.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-cfr5q44SzJ5iYm8cu/3+RkoPaoUklmOV/UbSdZZbu38=";
 
   nativeBuildInputs = [

@@ -73,20 +73,21 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    json-glib
-    isocodes
-    openssl
-    libgee
-    sqlite
-  ]
-  ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ]
-  ++ lib.optionals postgresSupport [
-    libpq
-  ];
+  buildInputs =
+    [
+      gtk3
+      json-glib
+      isocodes
+      openssl
+      libgee
+      sqlite
+    ]
+    ++ lib.optionals mysqlSupport [
+      libmysqlclient
+    ]
+    ++ lib.optionals postgresSupport [
+      libpq
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 

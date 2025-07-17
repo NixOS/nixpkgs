@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
 }:
 let
-  version = "2.15.0";
+  version = "2.14.0";
 in
-buildGoLatestModule {
+buildGoModule {
   pname = "wakapi";
   inherit version;
 
@@ -16,10 +16,10 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-tRLZV8vZEvPq5hsUhj5h3AtSGvYXm1SXc+w3CRZFIRU=";
+    hash = "sha256-7+T4jAZHgGFggTg3Teq0apQWIyJi3llEeLhO0igpcWY=";
   };
 
-  vendorHash = "sha256-912x6LwitYXdjWpP75Xoc56JXadeLQZuESSyLoaJcU0=";
+  vendorHash = "sha256-rjkFd31BS1ujD8K9s48Fm6Ok3Xbnm5uvlBTtYL0S4Gg=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];

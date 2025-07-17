@@ -42,7 +42,7 @@ let
 
     doInstallCheck = true;
     installCheckPhase = ''
-      runHook preInstallCheck
+      runHook preCheck
 
       # Smoke check: run a test notebook using Papermill by creating a simple kernelspec
       mkdir -p kernels/cpp17
@@ -61,7 +61,7 @@ let
         exit 1
       fi
 
-      runHook postInstallCheck
+      runHook postCheck
     '';
 
     passthru = (oldAttrs.passthru or { }) // {

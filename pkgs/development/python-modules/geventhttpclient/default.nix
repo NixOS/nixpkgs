@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   pythonImportsCheck = [ "geventhttpclient" ];
 

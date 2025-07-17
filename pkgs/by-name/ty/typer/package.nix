@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "typer";
-  version = "0-unstable-2023-02-08";
+  version = "unstable-2023-02-08";
 
   src = fetchFromGitHub {
     owner = "maaslalani";

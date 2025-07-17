@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-UjiGQSLiUMuYm62wF7Xwhp2MRzCaQ9pbBBkvHnuspVw=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-sdhyxJDUlb6+SJ/kvfqsplHOeCEbA3ls66eur3eeVVA=";
 
   # don't require qemu for aarch64-linux tests

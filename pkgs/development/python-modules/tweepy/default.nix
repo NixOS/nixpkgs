@@ -42,8 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     vcrpy
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "tweepy" ];
 

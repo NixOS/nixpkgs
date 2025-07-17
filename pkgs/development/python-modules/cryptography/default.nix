@@ -49,15 +49,13 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     pkg-config
     setuptools
-  ]
-  ++ lib.optionals (!isPyPy) [ cffi ];
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
@@ -69,8 +67,7 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ]
-  ++ optional-dependencies.ssh;
+  ] ++ optional-dependencies.ssh;
 
   pytestFlags = [ "--disable-pytest-warnings" ];
 

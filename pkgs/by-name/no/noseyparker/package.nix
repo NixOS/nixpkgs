@@ -19,18 +19,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-6GxkIxLEgbIgg4nSHvmRedm8PAPBwVxLQUnQzh3NonA=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-hVBHIm/12WU6g45QMxxuGk41B0kwThk7A84fOxArvno=";
-
-  # Fix error: failed to run custom build command for `vectorscan-rs-sys v0.0.5`
-  # Failed to get C++ compiler version: Os { code: 2, kind: NotFound, message: "No such file or directory" }
-  postPatch = ''
-    substituteInPlace $(find ../noseyparker-${version}-vendor -name "vectorscan-rs-sys*")/build.rs \
-      --replace-fail 'Command::new("c++")' 'Command::new("${stdenv.cc.targetPrefix}c++")'
-  '';
 
   checkFlags = [
     # These tests expect access to network to clone and use GitHub API
@@ -63,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  env.OPENSSL_NO_VENDOR = 1;
+  OPENSSL_NO_VENDOR = 1;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mkdir -p manpages

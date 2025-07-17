@@ -3,14 +3,16 @@
   stdenv,
   fetchurl,
   unzip,
+  ...
 }:
+
 stdenv.mkDerivation rec {
   pname = "shortcat";
-  version = "0.12.2";
+  version = "0.11.4";
 
   src = fetchurl {
     url = "https://files.shortcat.app/releases/v${version}/Shortcat.zip";
-    sha256 = "sha256-jmp9mBMYID0Zcu/o6ICYPS8QGHhSwcLz072jG3zR2mM=";
+    sha256 = "sha256-0uhAGU5y98oOLAlM7Uu4dWyK85RfNR5c8z3U7LHi8g8=";
   };
 
   sourceRoot = "Shortcat.app";
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://shortcat.app/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
-    maintainers = with lib.maintainers; [ t-monaghan ];
+    maintainers = [ ];
     license = licenses.unfreeRedistributable;
   };
 }

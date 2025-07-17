@@ -9,27 +9,27 @@ let
   cfg = config.services.chromadb;
   inherit (lib)
     mkEnableOption
-    mkPackageOption
     mkOption
     mkIf
     types
+    literalExpression
     ;
 in
 {
 
-  meta.maintainers = with lib.maintainers; [ ];
-
-  imports = [
-    (lib.mkRemovedOptionModule [ "services" "chromadb" "logFile" ] ''
-      ChromaDB has removed the --log-path parameter that logFile relied on.
-    '')
-  ];
+  meta.maintainers = with lib.maintainers; [ drupol ];
 
   options = {
     services.chromadb = {
       enable = mkEnableOption "ChromaDB, an open-source AI application database.";
 
-      package = mkPackageOption pkgs [ "python3Packages" "chromadb" ] { };
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.python3Packages.chromadb";
+        default = pkgs.python3Packages.chromadb;
+        defaultText = "pkgs.python3Packages.chromadb";
+        description = "ChromaDB package to use.";
+      };
 
       host = mkOption {
         type = types.str;
@@ -44,6 +44,14 @@ in
         default = 8000;
         description = ''
           Defined the port number to listen.
+        '';
+      };
+
+      logFile = mkOption {
+        type = types.path;
+        default = "/var/log/chromadb/chromadb.log";
+        description = ''
+          Specifies the location of file for logging output.
         '';
       };
 
@@ -73,7 +81,7 @@ in
         StateDirectory = "chromadb";
         WorkingDirectory = "/var/lib/chromadb";
         LogsDirectory = "chromadb";
-        ExecStart = "${lib.getExe cfg.package} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port}";
+        ExecStart = "${lib.getExe cfg.package} run --path ${cfg.dbpath} --host ${cfg.host} --port ${toString cfg.port} --log-path ${cfg.logFile}";
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";

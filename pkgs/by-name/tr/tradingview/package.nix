@@ -14,7 +14,6 @@
   libsecret,
   libxkbcommon,
   libgbm,
-  libGL,
   pango,
   sqlite,
   systemd,
@@ -24,12 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.12.0";
-  revision = "66";
+  version = "2.9.6";
+  revision = "63";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-ydk0/mJh4M02oIEfU3PKTwEO+nMpeJGuxQAly8WqJLx5GOQAb/J7VRB8IQpHHqWGeRfbwhantdZryQF8ngFJ/g==";
+    hash = "sha256-WmeGtR/rOzlgTpa1JZKskxre2ONtzppYsA/yhDhv5TI=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libxkbcommon
     libgbm
-    libGL
     pango
     sqlite
     systemd
@@ -73,19 +71,19 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share
     cp -r squashfs-root $out/share/tradingview
     rm -rf $out/share/tradingview/meta
-    substituteInPlace squashfs-root/meta/gui/tradingview.desktop \
+
+    install -Dm444 squashfs-root/meta/gui/tradingview.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/tradingview.desktop \
       --replace-fail \$\{SNAP}/meta/gui/icon.png tradingview
-    install -D --mode 644 squashfs-root/meta/gui/tradingview.desktop -t $out/share/applications
-    install -D --mode 644 squashfs-root/meta/gui/icon.png $out/share/icons/hicolor/512x512/apps/tradingview.png
+
+    mkdir $out/share/icons
+    cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png
+
     mkdir $out/bin
-    makeWrapper $out/share/tradingview/tradingview $out/bin/tradingview \
+    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    patchelf --add-needed libGL.so.1 $out/share/tradingview/tradingview
   '';
 
   passthru.updateScript = ./update.sh;

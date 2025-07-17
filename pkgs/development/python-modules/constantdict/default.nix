@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "constantdict";
-  version = "2025.3";
+  version = "2025.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiasdiener";
     repo = "constantdict";
     tag = "v${version}";
-    hash = "sha256-jX6g9xBteZOc/7Ob5N8eUSCycb6JoE5i38T52zknOTI=";
+    hash = "sha256-M3duCafyJk/W3KIqP43ErXr/EfCj6/Sin6eCaaxyI5g=";
   };
 
   build-system = [

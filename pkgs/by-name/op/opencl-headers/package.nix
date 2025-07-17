@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-headers";
-  version = "2025.07.22";
+  version = "2024.10.24";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-Headers";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XcDzBt4EAsip+5/lbZwPBO7/nDGAognUkJO/2Jg4OeY=";
+    sha256 = "sha256-KDlruE0IG8d+lAChxYyc6dg5XOvqCMrMyO69sdAzejA=";
   };
 
   nativeBuildInputs = [ cmake ];

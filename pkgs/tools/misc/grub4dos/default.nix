@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     # Needs a port to modern binutils:

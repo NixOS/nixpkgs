@@ -1,96 +1,57 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jsonschema,
+  fetchPypi,
+  poetry-core,
   numpy,
-  opencv-python-headless,
-  pillow,
   pydantic,
-  pydantic-extra-types,
-  requests,
+  jsonschema,
+  opencv-python-headless,
   sentencepiece,
-  tiktoken,
   typing-extensions,
-
-  # tests
-  click,
-  fastapi,
-  huggingface-hub,
-  openai,
-  pycountry,
-  pydantic-settings,
-  pytestCheckHook,
-  soundfile,
-  soxr,
-  uvicorn,
+  tiktoken,
+  pillow,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.8.4";
+  version = "1.5.6";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mistralai";
-    repo = "mistral-common";
-    tag = "v${version}";
-    hash = "sha256-HB6dsqiDSLhjyANk7ZT/cU98mjJamegAF0uKH8GfgM8=";
+  src = fetchPypi {
+    pname = "mistral_common";
+    inherit version;
+    hash = "sha256-TauSQwaEMhFKFfLEb/SRagViCnIrDfjetJ3POD+34r8=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [
+    "pillow"
+    "tiktoken"
+  ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
-    jsonschema
     numpy
-    opencv-python-headless
-    pillow
     pydantic
-    pydantic-extra-types
-    requests
+    jsonschema
+    opencv-python-headless
     sentencepiece
-    tiktoken
     typing-extensions
+    tiktoken
+    pillow
+    requests
   ];
+
+  doCheck = true;
 
   pythonImportsCheck = [ "mistral_common" ];
 
-  nativeCheckInputs = [
-    click
-    fastapi
-    huggingface-hub
-    openai
-    pycountry
-    pydantic-settings
-    pytestCheckHook
-    soundfile
-    soxr
-    uvicorn
-  ];
-
-  disabledTests = [
-    # Require internet
-    "test_download_gated_image"
-    "test_image_encoder_formats"
-    "test_image_processing"
-
-    # AssertionError: Regex pattern did not match.
-    "test_from_url"
-
-    # AssertionError, Extra items in the right set
-    "test_openai_chat_fields"
-  ];
-
-  meta = {
-    description = "Tools to help you work with Mistral models";
+  meta = with lib; {
+    description = "mistral-common is a set of tools to help you work with Mistral models.";
     homepage = "https://github.com/mistralai/mistral-common";
-    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bgamari ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bgamari ];
   };
 }

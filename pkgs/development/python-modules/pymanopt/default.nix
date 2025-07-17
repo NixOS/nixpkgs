@@ -57,10 +57,10 @@ buildPythonPackage rec {
     torch
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
     # FloatingPointError: divide by zero encountered in det
-    "tests/manifolds/test_positive_definite.py::TestMultiSpecialHermitianPositiveDefiniteManifold::test_retraction"
-    "tests/manifolds/test_positive_definite.py::TestSingleSpecialHermitianPositiveDefiniteManifold::test_retraction"
+    "--deselect=tests/manifolds/test_positive_definite.py::TestMultiSpecialHermitianPositiveDefiniteManifold::test_retraction"
+    "--deselect=tests/manifolds/test_positive_definite.py::TestSingleSpecialHermitianPositiveDefiniteManifold::test_retraction"
   ];
 
   meta = {

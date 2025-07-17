@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "libpass";
-  version = "1.9.1.post0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThirVondukr";
     repo = "passlib";
     tag = version;
-    hash = "sha256-4J18UktqllRA8DVdHL4AJUuAkjZRdUjiql9a71XXhCA=";
+    hash = "sha256-G6Fu1RjVb+OPdxt2hWpgAzTefRA41S0zV4hSvvCEWEA=";
   };
 
   build-system = [ hatchling ];
@@ -36,8 +36,7 @@ buildPythonPackage rec {
     pytest-archon
     pytest-xdist
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "passlib" ];
 

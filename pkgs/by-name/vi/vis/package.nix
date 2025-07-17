@@ -34,16 +34,17 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    ncurses
-    libtermkey
-    luaEnv
-    tre
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    acl
-    libselinux
-  ];
+  buildInputs =
+    [
+      ncurses
+      libtermkey
+      luaEnv
+      tre
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+      libselinux
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/vis \

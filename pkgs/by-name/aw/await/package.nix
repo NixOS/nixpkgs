@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "2.1.0";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
     rev = version;
-    hash = "sha256-p0rB1fPfBL1Vj4p7IZtmLhfB5LwwyRaiCVSeDZAXJAo=";
+    hash = "sha256-Yrit1WdWIfjwqbjvyjrPT3EqSSkooYX+uoOstbxy//I=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

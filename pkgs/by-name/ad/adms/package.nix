@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-maintainer-mode" ];
 
   meta = {
-    description = "Automatic device model synthesizer";
+    description = "automatic device model synthesizer";
     homepage = "https://github.com/Qucs/adms";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ disassembler ];

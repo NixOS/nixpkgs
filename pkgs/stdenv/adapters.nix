@@ -135,24 +135,22 @@ rec {
           else
             (mkDerivationSuper args).overrideAttrs (
               args:
-              (
-                if (args.__structuredAttrs or false) || (args ? env.NIX_CFLAGS_LINK) then
-                  {
-                    env = (args.env or { }) // {
-                      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
-                    };
-                  }
-                else
-                  {
-                    NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
-                  }
-              )
-              // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-                configureFlags = (args.configureFlags or [ ]) ++ [
-                  "--disable-shared" # brrr...
-                ];
-                cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DCMAKE_SKIP_INSTALL_RPATH=On" ];
-              }
+              if args ? env.NIX_CFLAGS_LINK then
+                {
+                  env = args.env // {
+                    NIX_CFLAGS_LINK = toString args.env.NIX_CFLAGS_LINK + " -static";
+                  };
+                }
+              else
+                {
+                  NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                }
+                // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+                  configureFlags = (args.configureFlags or [ ]) ++ [
+                    "--disable-shared" # brrr...
+                  ];
+                  cmakeFlags = (args.cmakeFlags or [ ]) ++ [ "-DCMAKE_SKIP_INSTALL_RPATH=On" ];
+                }
             )
         );
       }
@@ -423,6 +421,9 @@ rec {
         };
       });
     });
+
+  # `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
 
   withDefaultHardeningFlags =
     defaultHardeningFlags: stdenv:

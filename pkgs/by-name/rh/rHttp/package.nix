@@ -2,10 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  ...
 }:
 buildGoModule {
   pname = "rHttp";
-  version = "0-unstable-2024-04-28";
+  version = "unstable-2024-04-28";
 
   src = fetchFromGitHub {
     owner = "1buran";

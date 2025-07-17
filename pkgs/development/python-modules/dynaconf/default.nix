@@ -59,11 +59,6 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError: assert 42.1 == 'From development env'
-    "test_envless_load_file"
-  ];
-
   disabledTestPaths = [
     # import file mismatch
     # imported module 'app_test' has this __file__ attribute:
@@ -102,6 +97,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dynaconf/dynaconf/blob/${src.tag}/CHANGELOG.md";
     mainProgram = "dynaconf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
   };
 }

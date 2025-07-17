@@ -1,7 +1,8 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   makeBinaryWrapper,
+  runtimeShell,
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
@@ -9,18 +10,11 @@
   jdk23,
   dpkg,
   writeShellScript,
+  bash,
   tor,
   zip,
   gnupg,
   coreutils,
-
-  # Used by the bundled webcam-app
-  libv4l,
-
-  # Used by the testing package bisq2-webcam-app
-  callPackage,
-  socat,
-  unzip,
 }:
 
 let
@@ -39,34 +33,25 @@ let
   # A given release will be signed by either Alejandro Garcia or Henrik Jannsen
   # as indicated in the file
   # https://github.com/bisq-network/bisq2/releases/download/v${version}/signingkey.asc
-  publicKey = {
-    "E222AA02" = fetchurl {
-      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
-      hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
-    };
+  publicKey =
+    {
+      "E222AA02" = fetchurl {
+        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/E222AA02.asc";
+        hash = "sha256-31uBpe/+0QQwFyAsoCt1TUWRm0PHfCFOGOx1M16efoE=";
+      };
 
-    "387C8307" = fetchurl {
-      url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
-      hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
-    };
-  };
-
-  binPath = lib.makeBinPath [
-    coreutils
-    tor
-  ];
-
-  libraryPath = lib.makeLibraryPath [
-    stdenv.cc.cc
-    libv4l
-  ];
+      "387C8307" = fetchurl {
+        url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/387C8307.asc";
+        hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+      };
+    }
+    ."E222AA02";
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenvNoCC.mkDerivation rec {
   inherit version;
 
   pname = "bisq2";
 
-  # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
     hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
@@ -84,8 +69,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
       ln -s ${signature} ./signature.asc
-      gpg --import ${publicKey."E222AA02"}
-      gpg --import ${publicKey."387C8307"}
+      gpg --import ${publicKey}
       gpg --batch --verify signature.asc Bisq-${version}.deb
       popd
       mv $downloadedFile $out
@@ -153,11 +137,21 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2
-    wrapProgram $out/bin/bisq2 --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
+    wrapProgram $out/bin/bisq2 --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     install -D -m 777 ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq2-hidpi
     substituteAllInPlace $out/bin/bisq2-hidpi
-    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${binPath} --prefix LD_LIBRARY_PATH : ${libraryPath}
+    wrapProgram $out/bin/bisq2-hidpi --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        tor
+      ]
+    }
 
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
@@ -168,27 +162,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  # The bisq2.webcam-app package is for maintainers to test scanning QR codes.
-  passthru.webcam-app = callPackage ./webcam-app.nix {
-    inherit
-      jdk
-      libraryPath
-      ;
-    bisq2 = finalAttrs.finalPackage.out;
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
     mainProgram = "bisq2";
-    sourceProvenance = with lib.sourceTypes; [
+    sourceProvenance = with sourceTypes; [
       binaryBytecode
     ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emmanuelrosa ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ emmanuelrosa ];
+    platforms = [ "x86_64-linux" ];
   };
-})
+}

@@ -42,14 +42,12 @@ let
   instanceSettings = name: {
     freeformType =
       with lib.types;
-      attrsOf (
-        nullOr (oneOf [
-          int
-          str
-          path
-          package
-        ])
-      );
+      nullOr (oneOf [
+        int
+        str
+        path
+        package
+      ]);
     # override defaults:
     # inject instance name into paths,
     # also avoid conflicts between user names and special dirs

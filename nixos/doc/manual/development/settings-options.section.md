@@ -481,19 +481,12 @@ with some other related best practices. See the comments for
 explanations.
 
 ```nix
-{
-  options,
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ options, config, lib, pkgs, ... }:
 let
   cfg = config.services.foo;
   # Define the settings format used for this program
-  settingsFormat = pkgs.formats.json { };
-in
-{
+  settingsFormat = pkgs.formats.json {};
+in {
 
   options.services.foo = {
     enable = lib.mkEnableOption "foo service";
@@ -501,7 +494,7 @@ in
     settings = lib.mkOption {
       # Setting this type allows for correct merging behavior
       type = settingsFormat.type;
-      default = { };
+      default = {};
       description = ''
         Configuration for foo, see
         <link xlink:href="https://example.com/docs/foo"/>
@@ -535,9 +528,7 @@ in
 
     # We know that the `user` attribute exists because we set a default value
     # for it above, allowing us to use it without worries here
-    users.users.${cfg.settings.user} = {
-      isSystemUser = true;
-    };
+    users.users.${cfg.settings.user} = { isSystemUser = true; };
 
     # ...
   };
@@ -576,7 +567,7 @@ up in the manual.
       };
 
     };
-    default = { };
+    default = {};
     description = ''
       Configuration for Foo, see
       <link xlink:href="https://example.com/docs/foo"/>

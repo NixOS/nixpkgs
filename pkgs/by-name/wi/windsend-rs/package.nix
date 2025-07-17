@@ -1,44 +1,46 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
-  copyDesktopItems,
+  rustPlatform,
   pkg-config,
+  wayland,
+  openssl,
   glib,
   gtk3,
-  openssl,
-  wayland,
   xdotool,
-  makeDesktopItem,
   libayatana-appindicator,
+  makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "windsend-rs";
-  version = "1.5.5";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-u82VmMuc7+tbc1Qgs5lbyFlNTauJm6E9KFXPHBdTryA=";
+    tag = "v${version}";
+    hash = "sha256-A0cmjllyhKkYsMyjeuuMCax0uVnaDp9OwJPY7peDjPM=";
   };
 
-  cargoHash = "sha256-dn6O2cCOPInktrKrcZBwN2FwmKUjm3crCL6yhIPQj/Y=";
+  useFetchCargoVendor = true;
 
-  sourceRoot = "${finalAttrs.src.name}/windSend-rs";
+  cargoHash = "sha256-9zuD3korJGIcarBV0bSSV/g/Q0niWAMqgRfwpPXCuBU=";
+
+  sourceRoot = "${src.name}/windSend-rs";
 
   nativeBuildInputs = [
-    copyDesktopItems
     pkg-config
+    copyDesktopItems
   ];
 
   buildInputs = [
+    wayland
+    openssl
     glib
     gtk3
-    openssl
-    wayland
     xdotool
   ];
 
@@ -69,4 +71,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
-})
+}

@@ -30,20 +30,20 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
-  ]
-  ++ lib.optionals withPython [ cmake ];
-  buildInputs = [
-    libdrm
-    fmt
-    libevdev
-  ]
-  ++ lib.optionals withPython (
-    with python3Packages;
+  ] ++ lib.optionals withPython [ cmake ];
+  buildInputs =
     [
-      python
-      pybind11
+      libdrm
+      fmt
+      libevdev
     ]
-  );
+    ++ lib.optionals withPython (
+      with python3Packages;
+      [
+        python
+        pybind11
+      ]
+    );
 
   dontUseCmakeConfigure = true;
 

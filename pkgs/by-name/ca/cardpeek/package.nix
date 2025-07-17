@@ -42,8 +42,7 @@ stdenv.mkDerivation {
     lua5_2
     curl
     readline
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
   enableParallelBuilding = true;
 

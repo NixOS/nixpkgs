@@ -7,7 +7,6 @@ import contextlib
 import json
 import os
 import re
-import shlex
 import subprocess
 import sys
 import tempfile
@@ -236,11 +235,7 @@ async def run_update_script(
             f"UPDATE_NIX_PNAME={package['pname']}",
             f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
             f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
-            # Run all update scripts in the Nixpkgs development shell to get access to formatters and co.
-            "nix-shell",
-            nixpkgs_root + "/shell.nix",
-            "--run",
-            " ".join([ shlex.quote(s) for s in update_script_command ]),
+            *update_script_command,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
             cwd=worktree,

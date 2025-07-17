@@ -49,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtmultimedia
     qt6.qttools
     qt6.qt5compat
-  ]
-  ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
+  ] ++ lib.optionals textToSpeechSupport [ qt6.qtspeech ];
 
   meta = {
     description = "Cross-platform automation tool";

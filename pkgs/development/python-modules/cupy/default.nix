@@ -3,14 +3,16 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  cython,
+  cython_0,
   fastrlock,
   numpy,
+  wheel,
   pytestCheckHook,
   mock,
   setuptools,
   cudaPackages,
   addDriverRunpath,
+  pythonOlder,
   symlinkJoin,
 }:
 
@@ -56,8 +58,10 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.6.0";
-  pyproject = true;
+  version = "13.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   stdenv = cudaPackages.backendStdenv;
 
@@ -65,7 +69,7 @@ buildPythonPackage rec {
     owner = "cupy";
     repo = "cupy";
     tag = "v${version}";
-    hash = "sha256-nU3VL0MSCN+mI5m7C5sKAjBSL6ybM6YAk5lJiIDY0ck=";
+    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
     fetchSubmodules = true;
   };
 
@@ -79,14 +83,11 @@ buildPythonPackage rec {
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
-  build-system = [
-    cython
-    fastrlock
-    setuptools
-  ];
-
   nativeBuildInputs = [
+    setuptools
+    wheel
     addDriverRunpath
+    cython_0
     cudaPackages.cuda_nvcc
   ];
 
@@ -100,7 +101,7 @@ buildPythonPackage rec {
   NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
 
-  dependencies = [
+  propagatedBuildInputs = [
     fastrlock
     numpy
   ];
@@ -125,7 +126,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
-    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
+    changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [
       "aarch64-linux"

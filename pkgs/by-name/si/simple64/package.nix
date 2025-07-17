@@ -72,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildPhase = ''
-    runHook preBuild
+    runHook preInstall
 
     sh build.sh
 
-    runHook postBuild
+    runHook postInstall
   '';
 
   installPhase = ''

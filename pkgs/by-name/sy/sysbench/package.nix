@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmysqlclient
     luajit
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ libaio ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libaio ];
   depsBuildBuild = [ pkg-config ];
 
   src = fetchFromGitHub {

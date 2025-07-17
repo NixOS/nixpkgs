@@ -51,8 +51,7 @@ stdenv.mkDerivation rec {
     typescript
     fixup-yarn-lock
     makeWrapper
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

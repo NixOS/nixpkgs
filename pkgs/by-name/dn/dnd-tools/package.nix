@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "dnd-tools";
-  version = "0-unstable-2021-02-18";
+  version = "unstable-2021-02-18";
   format = "pyproject";
 
   src = fetchFromGitHub {

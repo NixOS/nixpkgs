@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dogedns";
-  version = "0.2.9";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "Dj-Codeman";
     repo = "doge";
     rev = "v${version}";
-    hash = "sha256-SeC/GZ1AeEqRzxWc4oJ6JOvXfn3/LRcQz9uWXXqdTqU=";
+    hash = "sha256-3wOka+MKSy2x3100eF0d9A5Jc0qFSNCiLsisHO1Uldc=";
   };
 
-  cargoHash = "sha256-vLdfmaIOSxNqs1Hq6NJMA8HDZas4E9rc+VHnFSlX/wg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9Qm93Hmxutmg3oCXSVrCUAYA2W4gXR/LPC5zZ34x5jQ=";
 
   patches = [
     # remove date info to make the build reproducible
@@ -42,8 +43,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pandoc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   postInstall = ''

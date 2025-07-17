@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-Nonid/5Jh0WIQV0G3fpmkW0bql6bvlcNJBMZ+6MTTPQ=";
 
   postInstall = ''

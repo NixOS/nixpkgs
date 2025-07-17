@@ -13,7 +13,7 @@
   pydantic,
   pyfakefs,
   pytest-aiohttp,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-httpserver,
   pytest-timeout,
   pytestCheckHook,
@@ -79,8 +79,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     pyfakefs
-    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
-    pytest-asyncio_0
+    pytest-aiohttp
+    pytest-asyncio
     pytest-httpserver
     pytest-timeout
     pytestCheckHook

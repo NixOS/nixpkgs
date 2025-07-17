@@ -16,14 +16,15 @@
   nixosTests,
   python3Packages,
   readline,
-  replaceVars,
+  stdenv,
   zip,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
   version = "0.35.0";
-  pyproject = false;
+
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -31,36 +32,12 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-eP/VEq7cPALi2oDKAZFQGQ3NExdmcBKyi6ddRZiYmbI=";
   };
+  format = "other";
 
-  patches = [
-    # This is needed until we fix
-    # https://github.com/NixOS/nixpkgs/issues/40427
-    ./fix-deadlock-detector-import.patch
-    # Quick & dirty fix for bashreadline
-    # https://github.com/NixOS/nixpkgs/issues/328743
-    ./bashreadline.py-remove-dependency-on-elftools.patch
-
-    (replaceVars ./absolute-ausyscall.patch {
-      ausyscall = lib.getExe' audit "ausyscall";
-    })
-  ];
-
-  build-system = [ python3Packages.setuptools ];
-
-  dependencies = [ python3Packages.netaddr ];
-
-  nativeBuildInputs = [
-    bison
-    cmake
-    flex
-    llvmPackages.llvm
-    makeWrapper
-    zip
-  ];
-
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.libclang
+  buildInputs = with llvmPackages; [
+    llvm
+    llvm.dev
+    libclang
     elfutils
     luajit
     netperf
@@ -70,18 +47,45 @@ python3Packages.buildPythonApplication rec {
     libbpf
   ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "BCC_KERNEL_MODULES_DIR" "/run/booted-system/kernel-modules/lib/modules")
-    (lib.cmakeFeature "REVISION" version)
-    (lib.cmakeBool "ENABLE_USDT" true)
-    (lib.cmakeBool "ENABLE_CPP_API" true)
-    (lib.cmakeBool "CMAKE_USE_LIBBPF_PACKAGE" true)
-    (lib.cmakeBool "ENABLE_LIBDEBUGINFOD" false)
+  patches = [
+    # This is needed until we fix
+    # https://github.com/NixOS/nixpkgs/issues/40427
+    ./fix-deadlock-detector-import.patch
+    # Quick & dirty fix for bashreadline
+    # https://github.com/NixOS/nixpkgs/issues/328743
+    ./bashreadline.py-remove-dependency-on-elftools.patch
   ];
 
+  propagatedBuildInputs = [ python3Packages.netaddr ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    llvmPackages.llvm.dev
+    makeWrapper
+    python3Packages.setuptools
+    zip
+  ];
+
+  cmakeFlags = [
+    "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
+    "-DREVISION=${version}"
+    "-DENABLE_USDT=ON"
+    "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
+    "-DENABLE_LIBDEBUGINFOD=OFF"
+  ];
+
+  # to replace this executable path:
+  # https://github.com/iovisor/bcc/blob/master/src/python/bcc/syscall.py#L384
+  ausyscall = "${audit}/bin/ausyscall";
+
   postPatch = ''
-    substituteInPlace src/python/bcc/libbcc.py \
-      --replace-fail "libbcc.so.0" "$out/lib/libbcc.so.0"
+    substituteAll ${./libbcc-path.patch} ./libbcc-path.patch
+    patch -p1 < libbcc-path.patch
+
+    substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
+    patch -p1 < absolute-ausyscall.patch
 
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
@@ -91,6 +95,10 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '/bin/bash' '${readline}/lib/libreadline.so'
   '';
 
+  preInstall = ''
+    # required for setuptool during install
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
+  '';
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -104,11 +112,11 @@ python3Packages.buildPythonApplication rec {
         ln -s $f $bin
       fi
       substituteInPlace "$f" \
-        --replace-quiet '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
-  '';
 
-  pythonImportsCheck = [ "bcc" ];
+    sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
+  '';
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"

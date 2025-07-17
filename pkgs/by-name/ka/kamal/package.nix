@@ -2,6 +2,7 @@
   lib,
   ruby,
   bundlerApp,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -12,7 +13,7 @@ bundlerApp {
   exes = [ "kamal" ];
 
   meta = with lib; {
-    description = "Deploy web apps anywhere";
+    description = "Kamal: Deploy web apps anywhere";
     homepage = "https://kamal-deploy.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ nathanruiz ];

@@ -32,7 +32,7 @@ let
   src = fetchFromGitHub {
     owner = pname;
     repo = "dragonfly";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-P6WMW/n+VezWDXGagT4B+ZYyCp8oufDV6MTrpKpLZcs=";
     fetchSubmodules = true;
   };

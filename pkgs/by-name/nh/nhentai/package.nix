@@ -1,67 +1,32 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
-  fetchPypi,
 }:
 
-let
-  python =
-    let
-      packageOverrides = self: super: {
-        iso8601 = super.iso8601.overridePythonAttrs (old: rec {
-          version = "1.1.0";
-          src = fetchPypi {
-            pname = "iso8601";
-            inherit version;
-            hash = "sha256-MoEee4He7iBj6m0ulPiBmobR84EeSdI2I6QfqDK+8D8=";
-          };
-        });
-        urllib3 = super.urllib3.overridePythonAttrs (old: rec {
-          version = "1.26.20";
-          src = fetchPypi {
-            pname = "urllib3";
-            inherit version;
-            hash = "sha256-QMLcDGgeR+uPkOfie/b/ffLmd0If1GdW2hFhw5ynDTI=";
-          };
-        });
-      };
-    in
-    python3.override {
-      inherit packageOverrides;
-      self = python;
-    };
-
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nhentai";
-  version = "0.5.25";
+  version = "0.5.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "RicterZ";
     repo = "nhentai";
     rev = version;
-    hash = "sha256-KwcaCeeGeR6qSfraSYyf4VEims9YWB6j3HmpT8XSePo=";
+    hash = "sha256-SjWIctAyczjYGP4buXQBA/RcrdikMSuSBtfhORNmXMc=";
   };
 
   # tests require a network connection
   doCheck = false;
 
-  pyproject = true;
-
-  build-system = with python.pkgs; [
-    poetry-core
-  ];
-
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     requests
-    soupsieve
-    beautifulsoup4
-    tabulate
+    img2pdf
     iso8601
-    urllib3
-    httpx
-    chardet
+    beautifulsoup4
+    soupsieve
+    tabulate
+    future
   ];
 
   meta = {

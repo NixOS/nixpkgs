@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.0.12";
+  version = "0.0.8";
 in
 buildGoModule {
   pname = "stunner";
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "jaxxstorm";
     repo = "stunner";
     tag = "v${version}";
-    hash = "sha256-f45MliWauAkUkffcoexRz+ZjWUYmhZ6yVKqqdC56V04=";
+    hash = "sha256-jZNM58aP2hBfuAIFjSCwdBkCbDA5KDTlZV8AkoWnhD4=";
   };
 
-  vendorHash = "sha256-tO61UBZxPBg6oFKOuMjPSb4EHZ9wPAyBsdQZb7DLdw0=";
+  vendorHash = "sha256-arWRaTqaN6Ji6MjTZdp8J7bs6NjbdY7YkueKMBdAAts=";
 
   ldflags = [
     "-X=main.Version=${version}"

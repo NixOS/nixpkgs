@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "reftools";
-  version = "0-unstable-2021-02-13";
+  version = "unstable-2021-02-13";
 
   src = fetchFromGitHub {
     owner = "davidrjenni";

@@ -16,7 +16,6 @@
   librsvg,
   squashfuse,
   xdg-utils-cxx,
-  xz, # for liblzma
   zlib,
 }:
 stdenv.mkDerivation rec {
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
     libarchive
     squashfuse
     xdg-utils-cxx
-    xz
   ];
 
   propagatedBuildInputs = [

@@ -45,11 +45,6 @@ buildPythonPackage rec {
     hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "cython~=3.0.2" cython
-  '';
-
   nativeBuildInputs = [
     cython
     gdal
@@ -89,7 +84,7 @@ buildPythonPackage rec {
     rm -r rasterio # prevent importing local rasterio
   '';
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # flaky
@@ -102,8 +97,7 @@ buildPythonPackage rec {
     "test_warp"
     "test_warpedvrt"
     "test_rio_warp"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
 

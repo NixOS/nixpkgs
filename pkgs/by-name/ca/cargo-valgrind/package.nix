@@ -8,16 +8,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";
-  version = "2.3.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
     tag = version;
-    sha256 = "sha256-oLnvDie6PUW5MVEMIcqfmwNkkfz25l+NABSKih4eSpI=";
+    sha256 = "sha256-gr/s2dYCFmhwfXT3tqWPFpXQK2QaAhL7Aqnn1A3KjJI=";
   };
 
-  cargoHash = "sha256-L927ViGgb5LchJRMd6cBks6K41xOYLNI1Q2kTKdYBgg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iNsGrbncZwCHXn/xuiI4Mw4F3FFWswEhwpIMI0xcFgU=";
 
   passthru = {
     updateScript = nix-update-script { };

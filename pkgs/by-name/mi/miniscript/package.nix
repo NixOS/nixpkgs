@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "miniscript";
-  version = "0-unstable-2023-03-16";
+  version = "unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "sipa";

@@ -1,43 +1,33 @@
 {
   lib,
   buildPythonPackage,
+  isPy27,
   fetchFromGitHub,
-  hatchling,
   django,
   redis,
   rq,
-  prometheus-client,
   sentry-sdk,
-  psycopg,
-  pytest-django,
-  pytestCheckHook,
-  redisTestHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-rq";
-  version = "3.1";
-  pyproject = true;
+  version = "3.0.1";
+  format = "setuptools";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "django-rq";
     tag = "v${version}";
-    hash = "sha256-TnOKgw52ykKcR0gHXcdYfv77js7I63PE1F3POdwJgvc=";
+    hash = "sha256-f4ilMKMWNr/NVKRhylr0fFiKFEKHXU/zIlPnq7fCYNs=";
   };
 
-  build-system = [ hatchling ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     django
     redis
     rq
+    sentry-sdk
   ];
-
-  optional-dependencies = {
-    prometheus = [ prometheus-client ];
-    sentry = [ sentry-sdk ];
-  };
 
   pythonImportsCheck = [ "django_rq" ];
 

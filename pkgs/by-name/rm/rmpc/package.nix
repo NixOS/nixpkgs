@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6hs0neoQf1h5IORJZp8R3ELLvYBXMr1iqc7ErSsGnUQ=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-xXH/MRQgT/Je/aOCZ26vdC3PtlosXLIrjbOHtnvf9os=";
 
   checkFlags = [
@@ -55,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     '';
     maintainers = with lib.maintainers; [
       donovanglover
-      faukah
+      bloxx12
     ];
     mainProgram = "rmpc";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

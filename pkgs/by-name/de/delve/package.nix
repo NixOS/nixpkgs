@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.25.2";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    hash = "sha256-CtOaaYxqa4GwfDQ1yuUwRQPy948Xyha046TLTaq526w=";
+    hash = "sha256-bp8pYWS3Vpg0R2Xfe5agDTENzLGu9r43BgORa8VrP+Y=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Debugger for the Go programming language";
+    description = "debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ vdemeester ];
     license = licenses.mit;

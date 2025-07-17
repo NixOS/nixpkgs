@@ -51,12 +51,13 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    zlib
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
-  ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
+    ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
 
   meta = {
     description = "Online backups for the truly paranoid";

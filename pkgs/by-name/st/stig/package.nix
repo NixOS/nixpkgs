@@ -10,14 +10,14 @@ python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.14.0a0";
+  version = "0.12.10a0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    hash = "sha256-wColVJBr5oGYpN0RCh716qxKuaEhKxfl95cktZl9zMk=";
+    sha256 = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
   };
 
   build-system = with python3Packages; [
@@ -35,11 +35,6 @@ python3Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  pythonRelaxDeps = [
-    # relax urwidtrees==1.0.3
-    "urwidtrees"
-  ];
-
   # According to the upstream author,
   # stig no longer has working tests
   # since asynctest (former test dependency) got abandoned.
@@ -52,10 +47,10 @@ python3Packages.buildPythonApplication rec {
     version = "stig version ${version}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

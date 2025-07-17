@@ -1,7 +1,6 @@
 {
   lib,
   buildDunePackage,
-  fetchpatch,
   rpclib,
   alcotest,
   ppxlib,
@@ -15,11 +14,7 @@ buildDunePackage {
   inherit (rpclib) version src;
 
   minimalOCamlVersion = "4.08";
-
-  patches = lib.optional (lib.versionAtLeast ppxlib.version "0.36") (fetchpatch {
-    url = "https://github.com/mirage/ocaml-rpc/commit/678b7c0e59f6add174f2a732861be21c3e9583d0.patch";
-    hash = "sha256-6Vl4/C02NQ/nPn+h9I/eT86R7GLZ/C8nSqBs4Ywzhwc=";
-  });
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     ppxlib

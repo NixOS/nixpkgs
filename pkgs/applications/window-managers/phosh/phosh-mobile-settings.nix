@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   nixosTests,
-  nix-update-script,
+  directoryListingUpdater,
   meson,
   ninja,
   pkg-config,
@@ -20,26 +20,11 @@
   json-glib,
   gsound,
   gmobile,
-  gnome-desktop,
-  libpulseaudio,
-  libportal,
-  libportal-gtk4,
-  glib,
 }:
 
-let
-  # Derived from subprojects/gvc.wrap
-  gvc = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libgnome-volume-control";
-    rev = "5f9768a2eac29c1ed56f1fbb449a77a3523683b6";
-    hash = "sha256-gdgTnxzH8BeYQAsvv++Yq/8wHi7ISk2LTBfU8hk12NM=";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.48.0";
+  version = "0.41.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -47,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = "phosh-mobile-settings";
     rev = "v${version}";
-    hash = "sha256-XnXwTjZnPlGNUmqizcIQdJ6SmrQ0dq9jNEhNsmDPzyM=";
+    hash = "sha256-t5qngjQcjPltUGbcZ+CF5FbZtZkV/cD3xUhuApQbKHo=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +42,6 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland-scanner
     wrapGAppsHook4
-    glib.dev
   ];
 
   buildInputs = [
@@ -71,25 +55,22 @@ stdenv.mkDerivation rec {
     json-glib
     gsound
     gmobile
-    gnome-desktop
-    libpulseaudio
-    libportal
-    libportal-gtk4
   ];
 
   postPatch = ''
-    ln -s ${gvc} subprojects/gvc
+    # There are no schemas to compile.
+    substituteInPlace meson.build \
+      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
   '';
 
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {
     tests.phosh = nixosTests.phosh;
-    updateScript = nix-update-script { };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = {
@@ -98,10 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
     changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      rvl
-      armelclo
-    ];
+    maintainers = with lib.maintainers; [ rvl ];
     platforms = lib.platforms.linux;
   };
 }

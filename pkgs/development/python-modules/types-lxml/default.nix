@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2025.03.30";
+  version = "2025.03.04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-+H1VOO72/zq0nITq2a+4wEarPqBdBF7wIfRShFBsLPw=";
+    hash = "sha256-dA9sspqEChHarwk2LrK2F7Ehri2ffjOlGk3nj4KFsfU=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];
@@ -55,8 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     typeguard
     urllib3
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "lxml-stubs" ];
 

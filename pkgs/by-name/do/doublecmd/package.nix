@@ -8,26 +8,27 @@
   glib,
   lazarus,
   libX11,
-  libsForQt5,
+  libqtpas,
+  wrapQtAppsHook,
   writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.28";
+  version = "1.1.26";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbDAWpJy4+7VNJkuY+LB27nQFbThUCaH+Bcsqdrlp5g=";
+    hash = "sha256-1rUAyI+Qe4I6F1T9KxMxHxedcARav6CE8W5qvWLu8Y0=";
   };
 
   nativeBuildInputs = [
     fpc
     getopt
     lazarus
-    libsForQt5.wrapQtAppsHook
+    wrapQtAppsHook
     writableTmpDirAsHomeHook
   ];
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     glib
     libX11
-    libsForQt5.libqtpas
+    libqtpas
   ];
 
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";

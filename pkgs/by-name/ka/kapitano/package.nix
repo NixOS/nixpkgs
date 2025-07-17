@@ -18,7 +18,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "kapitano";
-  version = "1.1.5";
+  version = "1.1.2";
   pyproject = false;
 
   src = fetchFromGitea {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zynequ";
     repo = "Kapitano";
     tag = version;
-    hash = "sha256-eX35ZR2O56NwoFnqGNZi2lNUpoBvaYZqFh69dQ+Eng0=";
+    hash = "sha256-914M0VRyuzDiITUT5sjt9vNaqshn4skz/FWWMxgPTdc=";
     fetchLFS = true;
   };
 

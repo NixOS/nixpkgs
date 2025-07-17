@@ -84,8 +84,7 @@ buildPythonPackage rec {
     scripttest
     mock
     hypothesis
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "escpos" ];
 

@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   separateDebugInfo = true;
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-Y07SJ54sw4CPCPq/LoueGBfHuZXu9F32yqMR6LBJ09I=";
 
   LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";

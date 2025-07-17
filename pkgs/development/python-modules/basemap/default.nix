@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "2.0.0";
+  version = "1.4.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     tag = "v${version}";
-    hash = "sha256-1T1FTcR99KbpqiYzrd2r5h1wTcygBEU7BLZXZ8uMthU=";
+    hash = "sha256-0rTGsphwLy2yGvhO7bcmFqdgysIXXkDBmURwRVw3ZHY=";
   };
 
   sourceRoot = "${src.name}/packages/basemap";

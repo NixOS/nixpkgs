@@ -26,7 +26,6 @@
   factory-boy,
   pillow,
   psycopg2,
-  pytest-asyncio,
   pytest-cov-stub,
   pytest-django,
   pytest-mock,
@@ -35,20 +34,15 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.65.1";
+  version = "0.60.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
     tag = "v${version}";
-    hash = "sha256-cX/eG6qWe/h9U4p1pMhhI+bZ5pLmiwGeYxNthKvdI6o=";
+    hash = "sha256-mMI/tPdt9XK6Lz7VmI3uDxcCjIuidUeGHjG+6AQLoeQ=";
   };
-
-  postPatch = ''
-    # django.core.exceptions.ImproperlyConfigured: You're using the staticfiles app without having set the required STATIC_URL setting.
-    echo 'STATIC_URL = "static/"' >> tests/django_settings.py
-  '';
 
   build-system = [
     poetry-core
@@ -66,25 +60,25 @@ buildPythonPackage rec {
     enum = [ django-choices-field ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs =
+    [
+      pytestCheckHook
 
-    django-guardian
-    django-model-utils
-    django-mptt
-    django-polymorphic
-    django-tree-queries
-    factory-boy
-    pillow
-    psycopg2
-    pytest-asyncio
-    pytest-cov-stub
-    pytest-django
-    pytest-mock
-    pytest-snapshot
-  ]
-  ++ optional-dependencies.debug-toolbar
-  ++ optional-dependencies.enum;
+      django-guardian
+      django-model-utils
+      django-mptt
+      django-polymorphic
+      django-tree-queries
+      factory-boy
+      pillow
+      psycopg2
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-snapshot
+    ]
+    ++ optional-dependencies.debug-toolbar
+    ++ optional-dependencies.enum;
 
   pythonImportsCheck = [ "strawberry_django" ];
 

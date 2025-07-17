@@ -49,7 +49,7 @@ in
 
     configpath = lib.mkOption {
       type = lib.types.str;
-      default = "https://ebus.github.io/";
+      default = "https://cfg.ebusd.eu/";
       description = ''
         Directory to read CSV config files from. This can be a local folder or a URL.
       '';

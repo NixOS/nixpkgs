@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optional withIntrospection "devdoc";
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -51,19 +50,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-  ]
-  ++ lib.optionals withIntrospection [
-    gi-docgen
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     glib
@@ -73,13 +73,14 @@ stdenv.mkDerivation rec {
     geocode-glib_2
   ];
 
-  mesonFlags = [
-    "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-    (lib.mesonBool "introspection" withIntrospection)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Dc_args=-D_DARWIN_C_SOURCE"
-  ];
+  mesonFlags =
+    [
+      "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
+      (lib.mesonBool "introspection" withIntrospection)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Dc_args=-D_DARWIN_C_SOURCE"
+    ];
 
   postPatch = ''
     patchShebangs --build build-aux/meson/gen_locations_variant.py

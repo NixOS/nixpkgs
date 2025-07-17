@@ -1,25 +1,25 @@
 {
   lib,
+  appdirs,
+  build,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
-  pythonOlder,
-  pyyaml,
-  platformdirs,
-  build,
-  psygnal,
+  magicgui,
+  napari, # reverse dependency, for tests
   pydantic,
-  tomli-w,
-  tomli,
+  pythonOlder,
+  pytomlpp,
+  pyyaml,
   rich,
   typer,
-  napari, # reverse dependency, for tests
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "napari-npe2";
-  version = "0.7.9";
+  version = "0.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = "npe2";
     tag = "v${version}";
-    hash = "sha256-q+vgzUuSSHFR64OajT/j/tLsNgSm3azQPCvDlrIvceM=";
+    hash = "sha256-J15CmJ1L173M54fCo4oTV9XP7946c0aHzLqKjTvzG0g=";
   };
 
   build-system = [
@@ -37,17 +37,15 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pyyaml
-    platformdirs
+    appdirs
     build
-    psygnal
+    magicgui
     pydantic
-    tomli-w
+    pytomlpp
+    pyyaml
     rich
     typer
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
+    tomli-w
   ];
 
   pythonImportsCheck = [ "npe2" ];
@@ -56,11 +54,11 @@ buildPythonPackage rec {
     inherit napari;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Plugin system for napari (the image visualizer)";
     homepage = "https://github.com/napari/npe2";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ SomeoneSerge ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "npe2";
   };
 }

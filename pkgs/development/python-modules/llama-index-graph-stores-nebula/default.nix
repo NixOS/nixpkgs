@@ -4,13 +4,13 @@
   fetchPypi,
   llama-index-core,
   nebula3-python,
-  hatchling,
+  poetry-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-graph-stores-nebula";
-  version = "0.5.0";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,10 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_graph_stores_nebula";
     inherit version;
-    hash = "sha256-BzArWYZIY1SRl1q48wAdAy+mWoId+lNbcsw9LQmmw7Q=";
+    hash = "sha256-0CooGtmDz9OAJ+B543eFbrFTzii5iXwmo0dV4c/E/es=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core

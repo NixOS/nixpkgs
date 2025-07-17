@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.8.16";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    hash = "sha256-2+Ya5i6V2QDzHsYR+Ro14u0VWR3wrQJHZRXBatGC8BA=";
+    hash = "sha256-7yw2SmwWsPBCH0LOaZSruYeZ5qL+njGuExy8+11Ni78=";
   };
 
-  vendorHash = "sha256-kEgg7zrT69X4yrsGtLyvnrGQ7+sXaEzdqd4Fz7rpFyg=";
+  vendorHash = "sha256-bwNuQPGjAQ9Afa2GuPWrW8ytfIvhsOYFKPt0zyfdZhU=";
   subPackages = [
     "cmd/earthly"
     "cmd/debugger"
@@ -26,17 +26,18 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.Version=v${version}"
-    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
-    "-X main.GitSha=v${version}"
-    "-X main.DefaultInstallationName=earthly"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-extldflags '-static'"
-  ];
+  ldflags =
+    [
+      "-s"
+      "-w"
+      "-X main.Version=v${version}"
+      "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
+      "-X main.GitSha=v${version}"
+      "-X main.DefaultInstallationName=earthly"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-extldflags '-static'"
+    ];
 
   tags = [
     "dfrunmount"

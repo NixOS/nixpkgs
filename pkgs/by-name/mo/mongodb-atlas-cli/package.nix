@@ -1,8 +1,7 @@
 {
-  stdenv,
-  fetchFromGitHub,
   lib,
   buildGoModule,
+  fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   testers,
@@ -13,14 +12,14 @@ buildGoModule rec {
   pname = "mongodb-atlas-cli";
   version = "1.46.2";
 
+  vendorHash = "sha256-z42tJJD/iK9GDnYxdeMYogaMviGABizxX9fdWL8vVik=";
+
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
-    tag = "refs/tags/atlascli/v${version}";
-    hash = "sha256-yg6GSG4TXPj4n8s4TK/i7NveJXMAQczONSrLn39PKVI=";
+    rev = "refs/tags/atlascli/v${version}";
+    sha256 = "sha256-yg6GSG4TXPj4n8s4TK/i7NveJXMAQczONSrLn39PKVI=";
   };
-
-  vendorHash = "sha256-z42tJJD/iK9GDnYxdeMYogaMviGABizxX9fdWL8vVik=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,9 +30,7 @@ buildGoModule rec {
     "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.Version=v${version}"
   ];
 
-  subPackages = [ "cmd/atlas" ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd atlas \
       --bash <($out/bin/atlas completion bash) \
       --fish <($out/bin/atlas completion fish) \
@@ -51,14 +48,10 @@ buildGoModule rec {
   };
 
   meta = {
+    homepage = "https://www.mongodb.com/try/download/shell";
     description = "CLI utility to manage MongoDB Atlas from the terminal";
-    homepage = "https://github.com/mongodb/mongodb-atlas-cli";
-    changelog = "https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-changelog/#atlas-cli-${version}";
+    maintainers = with lib.maintainers; [ aduh95 ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      aduh95
-      iamanaws
-    ];
     mainProgram = "atlas";
   };
 }

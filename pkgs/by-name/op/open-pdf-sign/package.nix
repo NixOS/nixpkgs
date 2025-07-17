@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.3.0";
+  version = "0.2.1";
   pname = "open-pdf-sign";
 
   src = fetchurl {
     url = "https://github.com/open-pdf-sign/open-pdf-sign/releases/download/v${finalAttrs.version}/open-pdf-sign.jar";
-    hash = "sha256-tGTWKw/xLhC1B+uogTUmWHUtHNNdE3BLuxToWvrduXs=";
+    hash = "sha256-jtaEystCiZUK93HkVPuWzAUISO4RMMxjMmFbooWZJGU=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Digitally sign PDF files from your commandline";
     homepage = "https://github.com/open-pdf-sign/open-pdf-sign";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "open-pdf-sign";

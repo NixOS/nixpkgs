@@ -6,15 +6,15 @@
 
 buildDunePackage rec {
   pname = "processor";
-  version = "0.1-unstable-2024-07-23";
+  version = "0.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "haesbaert";
     repo = "ocaml-processor";
-    rev = "74df5ab38773e5c4ad5c3a3f21f525d863731c17";
-    hash = "sha256-tWmgAsYfcpZUyxo7F+WIC3WOfAjDiuV74CscqEd93gk=";
+    tag = "v${version}";
+    hash = "sha256-eGSNYjVbUIUMelajqZYOd3gvmRKQ9UP3TfMflLR9i7k=";
   };
 
   doCheck = true;

@@ -6,15 +6,17 @@
 
 let
   font = "kanji-stroke-order";
+  version = "4.004";
 in
 stdenv.mkDerivation {
   pname = "${font}-font";
-  version = "4.005";
+  inherit version;
 
   src = fetchzip {
     # https://github.com/NixOS/nixpkgs/issues/60157
-    url = "https://drive.google.com/uc?export=download&id=1DKZEYA3PJ8ulLnjYDP5bxzJ3SWi59ghr#${font}.zip";
-    hash = "sha256-6mw72eoRIGzG2IoVnPo1G0i2Z2Ot8Q/WjaJ8tNDQbMk=";
+    url = "https://drive.google.com/uc?export=download&id=1snpD-IQmT6fGGQjEePHdDzE2aiwuKrz4#${font}.zip";
+    hash = "sha256-wQpurDS6APnpNMbMHofwW/UKeBF8FXeiCVx4wAOeRoE=";
+    stripRoot = false;
   };
 
   installPhase = ''
@@ -27,15 +29,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
-    homepage = "https://www.kanji.uk/";
+    homepage = "https://www.nihilist.org.uk/";
 
-    license = [ lib.licenses.bsd3 ];
-    maintainers = with lib.maintainers; [
+    license = [ licenses.bsd3 ];
+    maintainers = with maintainers; [
       ptrhlm
       stephen-huan
     ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

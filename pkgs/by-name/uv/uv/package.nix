@@ -18,16 +18,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.8.14";
+  version = "0.7.21";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-KG6WNaHbrPBasHdSdtWrnvzwMRrvpwukVSIZe3COrUA=";
+    hash = "sha256-xY7olVRb8xEvTB+VuUNoq29f37sms+JliU4L9dxsReU=";
   };
 
-  cargoHash = "sha256-Ow39kxnACXVbEtCPGJJ7SKdTFhYwd9IDPbYAsvNPOKw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JVmRRYAHXEGzayiEnWPYi3azVPqLI6z4D0gx395glFQ=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -61,25 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.uv-python = python3Packages.uv;
-
-    # Updating `uv` needs to be done on staging. Disabling r-ryantm update bot:
-    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
-    longDescription = ''
-      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
-
-      Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
-      as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
-      NixOS users can run into issues when managing Python projects.
-      See the Nixpkgs Reference Manual entry for `uv` for information on how to mitigate these issues:
-      https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
-
-      For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
-    '';
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
@@ -92,10 +79,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       prince213
     ];
     mainProgram = "uv";
-
-    # Builds on 32-bit platforms fails with "out of memory" since at least 0.8.6.
-    # We don't place this in `badPlatforms` because cross-compilation on 64-bit
-    # machine may work, e.g. `pkgsCross.gnu32.uv`.
-    broken = stdenv.buildPlatform.is32bit;
   };
 })

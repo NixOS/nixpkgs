@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  automake,
+  autoconf,
   intltool,
   pkg-config,
   gtk3,
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lxde";
     repo = "lxterminal";
     tag = finalAttrs.version;
-    hash = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
+    sha256 = "sha256-oDWh0U4QWJ84hTfq1oaAmDJM+IY0eJqOUey0qBgZN5U=";
   };
 
   configureFlags = [
@@ -34,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    automake
+    autoconf
     intltool
     pkg-config
     wrapGAppsHook3
@@ -54,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./respect-xml-catalog-files-var.patch
   ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   doCheck = true;
 

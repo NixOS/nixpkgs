@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
     libpng
     readline
     zlib
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 

@@ -23,17 +23,18 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4windowing";
-  version = "4.20.4";
+  version = "4.20.3";
 
-  sha256 = "sha256-8iLkljuGyJ4giVN5yuOFuTZsrdr8U3avTS/1aRSpaxc=";
+  sha256 = "sha256-l58cTz28UPSVfoIpjBCoSwcqdUJfG9e4UlhVYPyEeAs=";
 
-  nativeBuildInputs = [
-    python3
-    wayland-scanner
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      python3
+      wayland-scanner
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   buildInputs = [
     glib

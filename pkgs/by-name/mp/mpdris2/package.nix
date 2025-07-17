@@ -7,11 +7,11 @@
   gobject-introspection,
   intltool,
   libnotify,
-  python3Packages,
+  python3,
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
   version = "0.9.1";
   format = "other";
@@ -19,8 +19,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "mpDris2";
-    tag = version;
-    hash = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
+    rev = version;
+    sha256 = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
   };
 
   preConfigure = ''
@@ -40,28 +40,21 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     dbus-python
     mpd2
     mutagen
     pygobject3
   ];
 
-  # Python builder already uses makeWrapper, so we disable the hook
-  # and add its args to the existing ones for Python:
-  # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
-  dontWrapGApps = true;
-
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
-
   patches = [ ./fix-gettext-0.25.patch ];
 
-  meta = {
+  meta = with lib; {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
     mainProgram = "mpDris2";
   };
 }

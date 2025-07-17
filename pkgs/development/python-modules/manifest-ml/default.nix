@@ -84,16 +84,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # this file tries importing `deepspeed`, which is not yet packaged in nixpkgs
-    "tests/test_huggingface_api.py"
+    "--ignore=tests/test_huggingface_api.py"
   ];
 
   disabledTests = [

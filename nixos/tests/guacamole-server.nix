@@ -19,5 +19,5 @@
     machine.wait_for_open_port(4822)
   '';
 
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.drupol ];
 }

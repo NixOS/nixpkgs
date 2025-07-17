@@ -48,7 +48,9 @@ In the rare case you need to use icons from dependencies (e.g. when an app force
 
 ```nix
 {
-  buildInputs = [ pantheon.elementary-icon-theme ];
+  buildInputs = [
+    pantheon.elementary-icon-theme
+  ];
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.

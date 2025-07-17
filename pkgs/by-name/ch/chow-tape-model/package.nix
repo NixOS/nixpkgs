@@ -32,8 +32,14 @@
   pkg-config,
   python3,
   sqlite,
-  stdenv,
+  gcc11Stdenv,
+  webkitgtk_4_0,
 }:
+let
+  # JUCE version in submodules is incompatible with GCC12
+  # See here: https://forum.juce.com/t/build-fails-on-fedora-wrong-c-version/50902/2
+  stdenv = gcc11Stdenv;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chow-tape-model";
   version = "2.11.4";
@@ -41,15 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix the old JUCE submodule for GCC ≥ 12
-    ./fix-juce-gcc-12.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -86,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     python3
     sqlite
+    webkitgtk_4_0
   ];
 
   # Link-time-optimization fails without these

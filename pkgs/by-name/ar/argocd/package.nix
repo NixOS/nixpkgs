@@ -5,55 +5,29 @@
   installShellFiles,
   nix-update-script,
   stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
 }:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "3.1.6";
+  version = "2.14.11";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    hash = "sha256-RdqMkyQBJaAJv660bCe+C84BFQNu06t3AaYSz4aMlBA=";
-  };
-
-  ui = stdenv.mkDerivation {
-    pname = "${pname}-ui";
-    inherit version;
-    src = src + "/ui";
-
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/ui/yarn.lock";
-      hash = "sha256-ekhSPWzIgFhwSw0bIlBqu8LTYk3vuJ9VM8eHc3mnHGM=";
-    };
-
-    nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
-      nodejs
-    ];
-
-    postInstall = ''
-      mkdir -p $out
-      cp -r dist $out/dist
-    '';
+    hash = "sha256-KCU/WMytx4kOzlkZDwLfRRfutBtdk6UVBNdXOWC5kWc=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-oI0N6V8enziJK21VCgQ4KUOWqbC5TcZd3QnWiTTeTHQ=";
+  vendorHash = "sha256-Xm9J08pxzm3fPQjMA6NDu+DPJGsvtUvj+n/qrOZ9BE4=";
 
   # Set target as ./cmd per cli-local
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
   subPackages = [ "cmd" ];
 
   ldflags =
     let
-      packageUrl = "github.com/argoproj/argo-cd/v3/common";
+      packageUrl = "github.com/argoproj/argo-cd/v2/common";
     in
     [
       "-s"
@@ -67,17 +41,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preBuild = ''
-    cp -r ${ui}/dist ./ui
-    stat ./ui/dist/app/index.html # Sanity check
-  '';
-
   # set ldflag for kubectlVersion since it is needed for argo
   # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
   prePatch = ''
     export KUBECTL_VERSION=$(grep 'k8s.io/kubectl v' go.mod | cut -f 2 -d " " | cut -f 1 -d "=" )
     echo using $KUBECTL_VERSION
-    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
+    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v2/common.kubectlVersion=''${KUBECTL_VERSION}"
   '';
   installPhase = ''
     runHook preInstall

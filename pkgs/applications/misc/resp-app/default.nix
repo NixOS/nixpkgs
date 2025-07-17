@@ -58,8 +58,7 @@ mkDerivation rec {
     qttools
     snappy
     zstd
-  ]
-  ++ pythonPath;
+  ] ++ pythonPath;
 
   pythonPath = with python3Packages; [
     bitstring

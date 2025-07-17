@@ -18,7 +18,7 @@ let
     ;
 in
 {
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.drupol ];
 
   options = {
     services.tika = {

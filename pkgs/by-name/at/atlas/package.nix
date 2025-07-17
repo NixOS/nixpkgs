@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,19 +8,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlas";
-  version = "0.37.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9OX2CmL9/5LzIbYHQKvC/wRCifGq9Ycycvr3uYck94Q=";
+    hash = "sha256-USA3PiZcOF39LK45Xu0Oq/GJi3URMxJpBrUXxIsEkCY=";
   };
 
   modRoot = "cmd/atlas";
 
   proxyVendor = true;
-  vendorHash = "sha256-wIDPTgfpWD0E9Afi5NHvL684k7YPjYkQIpHotNZeneY=";
+  vendorHash = "sha256-G78KpERRAP4lVsy3ur2ejT6jA6K5T257FHLb7afC/7c=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd atlas \
       --bash <($out/bin/atlas completion bash) \
       --fish <($out/bin/atlas completion fish) \

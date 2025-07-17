@@ -45,12 +45,8 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=uninitialized"
-    # Needed with GCC 14
-    "-Wno-error=maybe-uninitialized"
-  ];
+  # Needed with GCC 12
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=uninitialized";
 
   postInstall = ''
     mkdir -p $out/share/osrm-backend

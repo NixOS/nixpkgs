@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-pro-firmware";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-q+kbEOLA05xR6weAWDA1hx4fVsaN9UNKiOXGxPRfXuI=";
     fetchSubmodules = true;
   };

@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     description = "Graphical small-internet client, supports gemini, http, https, gopher, finger";
     mainProgram = "kristall";
     homepage = "https://random-projects.net/projects/kristall.gemini";
+    maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl3Only;
     inherit (qtmultimedia.meta) platforms;
   };

@@ -1,30 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  cython,
-  fastcrc,
   fetchPypi,
+  future,
   lxml,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pymavlink";
-  version = "2.4.49";
-  pyproject = true;
+  version = "2.4.43";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-188Q1VktA4oYqpcnERd+u4i+IUPvzCWN9jCwUT6dosI=";
+    hash = "sha256-IcShujVcBXQtKvQVEFdtbgjboNd2AunqY1MxzQdV7nY=";
   };
 
-  build-system = [
-    cython
-    setuptools
-  ];
-
-  dependencies = [
-    fastcrc
+  propagatedBuildInputs = [
+    future
     lxml
   ];
 
@@ -39,7 +32,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python MAVLink interface and utilities";
     homepage = "https://github.com/ArduPilot/pymavlink";
-    changelog = "https://github.com/ArduPilot/pymavlink/releases/tag/${version}";
     license = with licenses; [
       lgpl3Plus
       mit

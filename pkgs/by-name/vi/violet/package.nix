@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "violet";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OBrEydVqhbxJZED8mUjV605kvtbXPqb35X1XeNBNvjg=";
     fetchSubmodules = true;
   };

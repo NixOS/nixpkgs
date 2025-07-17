@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "blocksruntime";
-  version = "0-unstable-2017-10-28";
+  version = "unstable-2017-10-28";
 
   src = fetchFromGitHub {
     owner = "mackyle";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   checkPhase = ''
     runHook preCheck
     ./checktests
-    runHook postCheck
+    runHook postChck
   '';
 
   doCheck = false; # hasdescriptor.c test fails, hrm.

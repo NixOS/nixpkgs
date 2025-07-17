@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.11.3";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "hvplot";
     tag = "v${version}";
-    hash = "sha256-V1KJtv1FCGITHdgxRWq1LWEgmWOU0N0iW60Wk0O5gC8=";
+    hash = "sha256-3zACW2RDRhdGi5RBPOVQJJHT78DwcgHaCHp27gIEnjA=";
   };
 
   build-system = [
@@ -92,7 +92,7 @@ buildPythonPackage rec {
   meta = {
     description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
-    changelog = "https://github.com/holoviz/hvplot/releases/tag/${src.tag}";
+    changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

@@ -42,12 +42,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--cross-prefix=${stdenv.cc.targetPrefix}"
-  ]
-  ++ lib.optionals (!enableX11) [
-    "--disable-x11"
-  ];
+  configureFlags =
+    [
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
+    ]
+    ++ lib.optionals (!enableX11) [
+      "--disable-x11"
+    ];
 
   makeFlags = [
     # is actually used as BUILD_CC

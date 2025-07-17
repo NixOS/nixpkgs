@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "vacuum-go";
-  version = "0.18.5";
+  version = "0.17.5";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vsdSRsfGXjWlYxl3a6cGWJ7IadLP7KIM3lFkUlboTj4=";
+    hash = "sha256-QBbpDV/hlzFgrmCsywH5CC43V2Rt0fwPkf6ZCgjqqUc=";
   };
 
-  vendorHash = "sha256-+GkxN20mZD/ZBTCjmjiDcEAJix2Ssn9HsNrUtQkrI18=";
+  vendorHash = "sha256-AjmET86E/xu6DTK07kMySWp5Z8W1RE/QPSe2B/IfDl0=";
 
   env.CGO_ENABLED = 0;
   ldflags = [

@@ -6,31 +6,26 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "xc";
-  version = "0.8.6";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "joerdav";
     repo = "xc";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Q17ldwHp1Wp/u0BkUZiA1pRJaFpo/5iDW011k9qkIEA=";
+    tag = "v${version}";
+    sha256 = "sha256-eaFHK7VsfLSgSJehv4urxq8qMPT+zzs2tRypz4q+MLc=";
   };
 
   vendorHash = "sha256-EbIuktQ2rExa2DawyCamTrKRC1yXXMleRB8/pcKFY5c=";
 
-  subPackages = [ "cmd/xc" ];
-
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${finalAttrs.version}"
+    "-X=main.version=${version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  versionCheckProgramArg = "-version";
-
   doInstallCheck = true;
   postInstallCheck = ''
     cp ${./example.md} example.md
@@ -47,11 +42,11 @@ buildGoModule (finalAttrs: {
     description = "Markdown defined task runner";
     mainProgram = "xc";
     homepage = "https://xcfile.dev/";
-    changelog = "https://github.com/joerdav/xc/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/joerdav/xc/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
       joerdav
     ];
   };
-})
+}

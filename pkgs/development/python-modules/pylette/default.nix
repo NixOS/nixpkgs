@@ -14,14 +14,14 @@
 }:
 buildPythonPackage rec {
   pname = "pylette";
-  version = "4.1.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qTipTip";
     repo = "Pylette";
     tag = version;
-    hash = "sha256-6OZeCcF47xjj266+IasJYub042R46KRaNXGCv+hlWdY=";
+    hash = "sha256-xIaNxSV7hxoaXDha0P+Mj40KY2fViFiw+uNpwXvdwnI=";
   };
 
   build-system = [

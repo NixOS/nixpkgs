@@ -14,7 +14,7 @@
 }:
 let
   # This package should be updated together with pkgs/by-name/tr/tractor/package.nix
-  version = "5.1.1";
+  version = "5.0.0";
 in
 python3Packages.buildPythonApplication {
 
@@ -28,8 +28,15 @@ python3Packages.buildPythonApplication {
     owner = "tractor";
     repo = "carburetor";
     tag = version;
-    hash = "sha256-mHuD9fxHTmTfEdAsiqTtFVzxXEjD8VIDNDKF2RjcAUg=";
+    hash = "sha256-Z67bqjogPz5sz6JwM68z1jsaqvRBAOMDeBLcyLo+QLY=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://framagit.org/tractor/carburetor/-/commit/620b70288942497abc20ad26c043b593f66e9e3b.diff";
+      hash = "sha256-oFKLjvu+fwgyU4FIUb2K8jwXOP34P3pEazOhofwveJw=";
+    })
+  ];
 
   build-system = [
     meson
@@ -55,8 +62,6 @@ python3Packages.buildPythonApplication {
   dontWrapGApps = true;
 
   preFixup = ''
-    substituteInPlace $out/share/applications/io.frama.tractor.carburetor.desktop \
-      --replace-fail "Exec=gapplication launch io.frama.tractor.carburetor" "Exec=$out/bin/carburetor"
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 

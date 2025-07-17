@@ -19,16 +19,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evcxr";
-  version = "0.21.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8dV+NNtU4HFerrgRyc1kO+MSsMTJJItTtJylEIN014g=";
+    sha256 = "sha256-vntXHKP3fk5+26fPHKUy3gqr1Bt9o/ypxyyvXOfdt3I=";
   };
 
-  cargoHash = "sha256-HJrEXt6O7qCNJ/xOh4kjmqKJ22EVwBTzV1S+q98k0VQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bV83OvHG7lQN3juVsPRurINCzxVPZd0yZ2YNtXXFU8I=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 

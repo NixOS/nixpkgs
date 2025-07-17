@@ -75,8 +75,7 @@ stdenv.mkDerivation (
         pluginPkgs = checkPlugins;
         functionDirs = checkFunctionDirs;
       })
-    ]
-    ++ nativeCheckInputs;
+    ] ++ nativeCheckInputs;
 
     checkPhase = ''
       export HOME=$(mktemp -d)  # fish wants a writable home

@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Cute, true multiplayer platform game with bunnies";
+    description = "cute, true multiplayer platform game with bunnies";
     homepage = "https://libregames.gitlab.io/jumpnbump/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ iblech ];

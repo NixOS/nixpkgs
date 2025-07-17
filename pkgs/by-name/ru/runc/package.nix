@@ -9,20 +9,19 @@
   libapparmor,
   libseccomp,
   libselinux,
-  stdenv,
-  makeBinaryWrapper,
+  makeWrapper,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "runc";
-  version = "1.3.1";
+  version = "1.1.15";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-B7x1J2ijM+/RWzPTldBNhvrGa/8de6Unl47lOS/KxXs=";
+    rev = "v${version}";
+    hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
   };
 
   vendorHash = null;
@@ -34,7 +33,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     go-md2man
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
     pkg-config
     which
   ];
@@ -45,15 +44,12 @@ buildGoModule (finalAttrs: {
     libapparmor
   ];
 
-  makeFlags = [
-    "BUILDTAGS+=seccomp"
-    "SHELL=${stdenv.shell}"
-  ];
+  makeFlags = [ "BUILDTAGS+=seccomp" ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make ${toString finalAttrs.makeFlags} runc man
+    make ${toString makeFlags} runc man
     runHook postBuild
   '';
 
@@ -77,4 +73,4 @@ buildGoModule (finalAttrs: {
     platforms = platforms.linux;
     mainProgram = "runc";
   };
-})
+}

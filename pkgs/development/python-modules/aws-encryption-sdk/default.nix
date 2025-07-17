@@ -4,7 +4,7 @@
   boto3,
   buildPythonPackage,
   cryptography,
-  fetchFromGitHub,
+  fetchPypi,
   mock,
   pytest-mock,
   pytestCheckHook,
@@ -15,16 +15,14 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "4.0.3";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "aws";
-    repo = "aws-encryption-sdk-python";
-    tag = "v${version}";
-    hash = "sha256-SlYXob61YLl96NKnmsGZTIU10bfwKYbhLsHjC/tXGI4=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-cyDcTPjY1am0yIo0O+k4NdoYdW4FMI01NlVL4MooiaU=";
   };
 
   build-system = [ setuptools ];
@@ -41,8 +39,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  enabledTestPaths = [ "test" ];
 
   disabledTestPaths = [
     # Tests require networking

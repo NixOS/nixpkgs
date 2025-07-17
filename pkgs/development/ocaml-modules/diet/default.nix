@@ -27,5 +27,6 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/ocaml-diet";
     description = "Simple implementation of Discrete Interval Encoding Trees";
     license = licenses.isc;
+    maintainers = with maintainers; [ ehmry ];
   };
 }

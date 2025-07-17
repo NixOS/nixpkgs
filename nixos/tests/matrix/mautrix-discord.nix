@@ -83,10 +83,6 @@ in
           8008
           8009
         ];
-
-        environment.systemPackages = [
-          pkgs.nettools
-        ];
       };
 
     client =

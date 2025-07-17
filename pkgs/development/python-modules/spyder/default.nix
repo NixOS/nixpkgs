@@ -123,8 +123,7 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
-  ]
-  ++ python-lsp-server.optional-dependencies.all;
+  ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;

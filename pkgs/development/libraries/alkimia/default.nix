@@ -2,14 +2,14 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  cmake,
   extra-cmake-modules,
   doxygen,
   graphviz,
   qtbase,
   qtwebengine,
   mpir,
-  libplasma,
+  kdelibs4support,
+  plasma-framework,
   knewstuff,
   kpackage,
   wrapQtAppsHook,
@@ -17,22 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alkimia";
-  version = "8.2.1";
+  version = "8.2.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "alkimia";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v5DfnnzOMsoCXr074ydXxBIrSsnbex6G/OqF6psTvPs=";
+    hash = "sha256-1unlpGTJaAMhYacMO2totq0JFNaYffgieJsYa18DtkY=";
   };
 
-  cmakeFlags = [
-    "-DBUILD_WITH_QT6=1"
-  ];
-
   nativeBuildInputs = [
-    cmake
     extra-cmake-modules
     doxygen
     graphviz
@@ -45,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     qtwebengine
-    libplasma
+    kdelibs4support
+    plasma-framework
     knewstuff
     kpackage
   ];

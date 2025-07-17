@@ -89,6 +89,8 @@ mkDerivation rec {
     homepage = "https://github.com/Ultimaker/Cura";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      abbradar
+    ];
   };
 }

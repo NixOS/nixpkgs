@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.11.0.post1";
+  version = "2.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "cramjam";
-    tag = "v${version}";
-    hash = "sha256-iYx/cPQpZVVPAH+HTiYH/E9tmdnHvKf3Cel4yZpXSIA=";
+    tag = version;
+    hash = "sha256-zM3EIo7KQYWK7W3LSGaY72iYQQcRB84opLqj/lrSwwY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-jLGCyrVHtauWhiDghtYgt5MhgOl8wNiM7TAQhrCk2xU=";
+    hash = "sha256-eMVUDF6DWNzdNfzWuwDF0UBbJ5wQU4/DHaNkP/k2SJ8=";
   };
 
   nativeBuildInputs = with rustPlatform; [

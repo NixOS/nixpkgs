@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
     inih
     wayland
     wayland-protocols
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 

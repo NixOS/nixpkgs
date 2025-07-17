@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     mainProgram = "thermald";
   };
 }

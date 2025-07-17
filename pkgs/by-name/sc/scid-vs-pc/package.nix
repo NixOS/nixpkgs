@@ -64,7 +64,6 @@ tcl.mkTclDerivation rec {
     description = "Chess database with play and training functionality";
     homepage = "https://scidvspc.sourceforge.net/";
     license = lib.licenses.gpl2Only;
-    mainProgram = "scid";
     maintainers = [ maintainers.paraseba ];
     platforms = lib.platforms.linux;
   };

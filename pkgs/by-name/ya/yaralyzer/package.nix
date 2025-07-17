@@ -2,20 +2,24 @@
   lib,
   python3,
   fetchFromGitHub,
-  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "1.0.9";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     tag = "v${version}";
-    hash = "sha256-OGMvDPwR4WFINKJpoP242Xhi3mhDzrUypClVGgIIHJI=";
+    hash = "sha256-HrYO7Fz9aLabx7nsilo/b/xe6OOzIq0P2PzVFtAPNEU=";
   };
+
+  pythonRelaxDeps = [
+    "python-dotenv"
+    "rich"
+  ];
 
   build-system = with python3.pkgs; [
     poetry-core
@@ -32,10 +36,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "yaralyzer"
   ];
-
-  passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
-  };
 
   meta = {
     description = "Tool to visually inspect and force decode YARA and regex matches";

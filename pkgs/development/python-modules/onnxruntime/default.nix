@@ -2,17 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
-  onnxruntime,
   autoPatchelfHook,
-
-  # buildInputs
-  oneDNN,
-  re2,
-
-  # dependencies
+  onnxruntime,
   coloredlogs,
   numpy,
   packaging,
+  oneDNN,
+  re2,
+
 }:
 
 # onnxruntime requires an older protobuf.
@@ -48,34 +45,38 @@ buildPythonPackage {
   ];
 
   # Libraries are not linked correctly.
-  buildInputs = [
-    oneDNN
-    re2
-    onnxruntime.protobuf
-
-    # https://github.com/NixOS/nixpkgs/pull/357656 patches the onnx lib to ${pkgs.onnxruntime}/lib
-    # but these files are copied into this package too. If the original non-python onnxruntime
-    # package is GC-ed, cuda support in this python package will break.
-    # Two options, rebuild onnxruntime twice with the different paths hard-coded, or just hold a runtime
-    # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.
-    onnxruntime
-  ]
-  ++ lib.optionals onnxruntime.passthru.cudaSupport (
-    with onnxruntime.passthru.cudaPackages;
+  buildInputs =
     [
-      libcublas # libcublasLt.so.XX libcublas.so.XX
-      libcurand # libcurand.so.XX
-      libcufft # libcufft.so.XX
-      cudnn # libcudnn.soXX
-      cuda_cudart # libcudart.so.XX
-      nccl # libnccl.so.XX
-    ]
-  );
+      oneDNN
+      re2
+      onnxruntime.protobuf
 
-  dependencies = [
+      # https://github.com/NixOS/nixpkgs/pull/357656 patches the onnx lib to ${pkgs.onnxruntime}/lib
+      # but these files are copied into this package too. If the original non-python onnxruntime
+      # package is GC-ed, cuda support in this python package will break.
+      # Two options, rebuild onnxruntime twice with the different paths hard-coded, or just hold a runtime
+      # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.
+      onnxruntime
+    ]
+    ++ lib.optionals onnxruntime.passthru.cudaSupport (
+      with onnxruntime.passthru.cudaPackages;
+      [
+        libcublas # libcublasLt.so.XX libcublas.so.XX
+        libcurand # libcurand.so.XX
+        libcufft # libcufft.so.XX
+        cudnn # libcudnn.soXX
+        cuda_cudart # libcudart.so.XX
+        nccl # libnccl.so.XX
+      ]
+    );
+
+  propagatedBuildInputs = [
     coloredlogs
+    # flatbuffers
     numpy
     packaging
+    # protobuf
+    # sympy
   ];
 
   meta = onnxruntime.meta;

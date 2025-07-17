@@ -354,8 +354,7 @@ in
         "listen.mode" = "0660";
         "listen.owner" = user;
         "listen.group" = group;
-      }
-      // cfg.poolConfig;
+      } // cfg.poolConfig;
     };
 
     services.nginx = {

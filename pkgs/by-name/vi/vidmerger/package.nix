@@ -3,21 +3,22 @@
   ffmpeg,
   rustPlatform,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "vidmerger";
-  version = "0.4.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "TGotwig";
     repo = "vidmerger";
-    tag = finalAttrs.version;
-    hash = "sha256-N/iX0EN5R4oG4XHhpd/VaihrEHv5uT+grAJ6/KfSORE=";
+    rev = version;
+    hash = "sha256-E3Y1UaYXl6NdCMM7IepqFzWNuHaMGLCN5BvQ/lxjFoc=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -30,18 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ffmpeg
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--generate-lockfile" ];
-  };
-
-  meta = {
+  meta = with lib; {
     description = "Merge video & audio files via CLI";
     homepage = "https://github.com/TGotwig/vidmerger";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       commons-clause
     ];
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    maintainers = with maintainers; [ ByteSudoer ];
     mainProgram = "vidmerger";
   };
-})
+}

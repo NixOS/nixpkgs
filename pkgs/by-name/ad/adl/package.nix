@@ -10,6 +10,7 @@
   perl,
   trackma,
   ueberzug,
+  ...
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "adl";

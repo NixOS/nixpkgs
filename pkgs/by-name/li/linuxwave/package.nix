@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "linuxwave";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-OuD5U/T3GuCQrzdhx01NXPSXD7pUAvLnNsznttJogz8=";
   };

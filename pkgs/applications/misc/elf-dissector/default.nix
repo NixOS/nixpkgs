@@ -47,6 +47,7 @@ stdenv.mkDerivation {
     description = "Tools for inspecting, analyzing and optimizing ELF files";
     license = licenses.gpl2;
     maintainers = with maintainers; [
+      ehmry
       philiptaron
     ];
   };

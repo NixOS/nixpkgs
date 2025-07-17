@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/rust/lon";
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-x+qxn0s64fPJpTG/d0PgzAdzMXegYdnsC1FFFuBpsaI=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];

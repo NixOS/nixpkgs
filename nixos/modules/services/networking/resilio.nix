@@ -37,12 +37,13 @@ let
       }
       // optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; }
       // optionalAttrs cfg.enableWebUI {
-        webui = {
-          listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}";
-        }
-        // (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; })
-        // (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; })
-        // (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
+        webui =
+          {
+            listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}";
+          }
+          // (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; })
+          // (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; })
+          // (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; });
       }
       // optionalAttrs (sharedFoldersRecord != [ ]) {
         shared_folders = sharedFoldersRecord;
@@ -113,7 +114,7 @@ in
       };
 
       listeningPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 0;
         example = 44444;
         description = ''
@@ -139,7 +140,7 @@ in
       };
 
       downloadLimit = mkOption {
-        type = types.ints.unsigned;
+        type = types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -148,7 +149,7 @@ in
       };
 
       uploadLimit = mkOption {
-        type = types.ints.unsigned;
+        type = types.int;
         default = 0;
         example = 1024;
         description = ''
@@ -166,7 +167,7 @@ in
       };
 
       httpListenPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 9000;
         description = ''
           HTTP port to bind on.

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "qingping-ble";
-  version = "1.0.1";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "qingping-ble";
     tag = "v${version}";
-    hash = "sha256-YESOD2wdSD9Z7cHgzQq3Dkem0yxerOBsX9rFNEbBZfo=";
+    hash = "sha256-5w3KGJLdHFv6kURKTz3YImZNjaETiVqbbJTJpBSLSo8=";
   };
 
   build-system = [ poetry-core ];

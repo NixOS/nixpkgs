@@ -78,8 +78,7 @@ mkAppleDerivation {
   configureFlags = [
     (lib.withFeatureAs true "pcap" (if stdenv.hostPlatform.isLinux then "linux" else "bpf"))
     (lib.enableFeature withRemote "remote")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.enableFeature false "universal") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.enableFeature false "universal") ];
 
   preConfigure = ''
     cd libpcap
@@ -90,8 +89,7 @@ mkAppleDerivation {
   nativeBuildInputs = [
     bison
     flex
-  ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ] ++ lib.optionals withBluez [ bluez.dev ];
 
   meta = {
     description = "Packet Capture Library (with Apple modifications)";

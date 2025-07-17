@@ -5,18 +5,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-
-  # build-system
-  scikit-build-core,
   setuptools,
-
-  # dependencies
   scipy,
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.47.0";
+  version = "0.46.0";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -62,7 +57,7 @@ buildPythonPackage {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-iUAeiNbPa3Q5jJ4lK2G0WvTKuipb0zO1mNe+wcRdnqs=";
+    hash = "sha256-q1ltNYO5Ex6F2bfCcsekdsWjzXoal7g4n/LIHVGuj+k=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
@@ -83,13 +78,10 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     cmake
-  ]
-  ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
 
   build-system = [
-    scikit-build-core
     setuptools
   ];
 
@@ -98,7 +90,7 @@ buildPythonPackage {
   cmakeFlags = [
     (lib.cmakeFeature "COMPUTE_BACKEND" (if cudaSupport then "cuda" else "cpu"))
   ];
-  CUDA_HOME = lib.optionalString cudaSupport "${cuda-native-redist}";
+  CUDA_HOME = "${cuda-native-redist}";
   NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
     "-I${cuda-native-redist}/include"
     "-L${cuda-native-redist}/lib"

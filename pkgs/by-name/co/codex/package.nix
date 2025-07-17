@@ -1,51 +1,39 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
   nix-update-script,
   pkg-config,
   openssl,
   versionCheckHook,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.40.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-IBYx362R2ueYNg7/vcjGa2kKAfGlPm6JcZ/A4XKtMT4=";
+    hash = "sha256-rRe0JFEO5ixxrZYDL8kxXDOH0n7lqabkXNNaSlNnQDg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-fWrZXXQfrm0L3epquDZUj0SuLRn3WiHX3nQA3d+xnUg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QIZ3V4NUo1VxJN3cwdQf3S0zwePnwdKKfch0jlIJacU=";
 
   nativeBuildInputs = [
-    installShellFiles
     pkg-config
   ];
+  buildInputs = [
+    openssl
+  ];
 
-  buildInputs = [ openssl ];
-
-  # NOTE: part of the test suite requires access to networking, local shells,
-  # apple system configuration, etc. since this is a very fast moving target
-  # (for now), with releases happening every other day, constantly figuring out
-  # which tests need to be skipped, or finding workarounds, was too burdensome,
-  # and in practice not adding any real value. this decision may be reversed in
-  # the future once this software stabilizes.
-  doCheck = false;
-
-  postInstall = lib.optionalString installShellCompletions ''
-    installShellCompletion --cmd codex \
-      --bash <($out/bin/codex completion bash) \
-      --fish <($out/bin/codex completion fish) \
-      --zsh <($out/bin/codex completion zsh)
-  '';
+  checkFlags = [
+    "--skip=keeps_previous_response_id_between_tasks" # Requires network access
+    "--skip=retries_on_early_close" # Requires network access
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

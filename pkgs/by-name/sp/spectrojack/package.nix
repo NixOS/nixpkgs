@@ -23,13 +23,9 @@ stdenv.mkDerivation rec {
     gtk2
   ];
   configurePhase = ''
-    runHook preConfigure
-
     sed -i 's/.*home.*/#&/' ./Makefile
     substituteInPlace ./Makefile \
       --replace "/usr/share" "$out/usr/share"
-
-    runHook postConfigure
   '';
   installPhase = ''
     install -Dm755 spectrojack $out/bin/spectrojack

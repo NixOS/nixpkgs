@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtspell";
-  version = "1.0.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "manisandro";
     repo = "qtspell";
     rev = "${version}";
-    hash = "sha256-OuEGY+0XJo3EUUcH8xAzlgE6zKPndBvG0arWhG/QO6Y=";
+    hash = "sha256-yaR3eCUbK2KTpvzO2G5sr+NEJ2mDnzJzzzwlU780zqU=";
   };
 
   nativeBuildInputs = [
@@ -30,14 +30,15 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs = [
-    enchant
-    qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    glib
-    llvmPackages.clang
-  ];
+  buildInputs =
+    [
+      enchant
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      glib
+      llvmPackages.clang
+    ];
 
   cmakeFlags = [ "-DQT_VER=6" ];
 

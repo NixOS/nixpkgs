@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  poetry-core,
 
   # dependencies
   httpx,
@@ -18,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.2.6";
+  version = "0.1.69";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "sdk==${version}";
-    hash = "sha256-UEVhzKDu2nMkhaCLD162xCBR+2e3ipSVakmlZAzhN3Q=";
+    hash = "sha256-MRs5crbUEak/fr17+lerGFY+xTm7sanUW1lZXbPBAeg=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     httpx
@@ -43,12 +43,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "sdk==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "sdk==";
   };
 
   meta = {

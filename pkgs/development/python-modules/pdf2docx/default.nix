@@ -47,13 +47,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "-v"
-  ];
-
-  enabledTestPaths = [
     "./test/test.py::TestConversion"
   ];
+
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 

@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.36.0";
+  version = "0.34.0";
   bootstrap = stdenv.mkDerivation {
     pname = "cyclone-bootstrap";
     inherit version;
@@ -16,7 +16,7 @@ let
       owner = "justinethier";
       repo = "cyclone-bootstrap";
       rev = "v${version}";
-      sha256 = "sha256-8WK4rsLK3gi9a6PKFaT3KRK256rEDTTO6QvqYrOtYDs=";
+      sha256 = "sha256-kJBPb0Ej32HveY/vdGpH2gyxSwq8Xq7muneFIw3Y7hM=";
     };
 
     enableParallelBuilding = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "justinethier";
     repo = "cyclone";
     rev = "v${version}";
-    sha256 = "sha256-5h8jZ8EBgiLLYH/j3p7CqsQGXHhjGtQfOnxPbFnT5WM=";
+    sha256 = "sha256-4U/uOTbFpPTC9BmO6Wkhy4PY8UCFVt5eHSGqrOlKT/U=";
   };
 
   enableParallelBuilding = true;
@@ -47,12 +47,10 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://justinethier.github.io/cyclone/";
     description = "Brand-new compiler that allows practical application development using R7RS Scheme";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
   };
 }

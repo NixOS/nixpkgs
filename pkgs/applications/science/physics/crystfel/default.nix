@@ -173,7 +173,7 @@ let
     version = "0.1.0";
     src = fetchFromGitHub {
       owner = "nexusformat";
-      repo = "HDF5-External-Filter-Plugins";
+      repo = pname;
       rev = "49e3b65eca772bca77af13ba047d8b577673afba";
       hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
@@ -229,31 +229,31 @@ stdenv.mkDerivation rec {
     doxygen
     opencl-headers
     makeWrapper
-  ]
-  ++ lib.optionals withGui [ wrapGAppsHook3 ];
-  buildInputs = [
-    hdf5
-    gsl
-    ncurses
-    msgpack
-    fftw
-    fdip
-    zeromq
-    ocl-icd
-    libccp4
-    mosflm
-    pinkIndexer
-    xgandalf
-    pandoc
-  ]
-  ++ lib.optionals withGui [
-    gtk3
-    gdk-pixbuf
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    argp-standalone
-  ]
-  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
+  ] ++ lib.optionals withGui [ wrapGAppsHook3 ];
+  buildInputs =
+    [
+      hdf5
+      gsl
+      ncurses
+      msgpack
+      fftw
+      fdip
+      zeromq
+      ocl-icd
+      libccp4
+      mosflm
+      pinkIndexer
+      xgandalf
+      pandoc
+    ]
+    ++ lib.optionals withGui [
+      gtk3
+      gdk-pixbuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      argp-standalone
+    ]
+    ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
   patches = [
     # on darwin at least, we need to link to a separate argp library;

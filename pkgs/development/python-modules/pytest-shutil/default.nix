@@ -6,9 +6,12 @@
 
   # build-time
   setuptools,
+  setuptools-git,
 
   # runtime
   pytest,
+  mock,
+  path,
   execnet,
   termcolor,
   six,
@@ -28,11 +31,14 @@ buildPythonPackage {
 
   build-system = [
     setuptools
+    setuptools-git
   ];
 
   buildInputs = [ pytest ];
 
   dependencies = [
+    mock
+    path
     execnet
     termcolor
     six
@@ -40,10 +46,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals isPyPy [
-    "test_run"
-    "test_run_integration"
-  ];
+  disabledTests =
+    [ "test_pretty_formatter" ]
+    ++ lib.optionals isPyPy [
+      "test_run"
+      "test_run_integration"
+    ];
 
   meta = with lib; {
     description = "Goodie-bag of unix shell and environment tools for py.test";

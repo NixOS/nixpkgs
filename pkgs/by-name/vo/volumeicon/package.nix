@@ -7,7 +7,6 @@
   pkg-config,
   gtk3,
   alsa-lib,
-  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,10 +30,6 @@ stdenv.mkDerivation rec {
     gtk3
     alsa-lib
   ];
-
-  # Work around regressions introduced by bad interaction between
-  # gettext >= 0.25 and autoconf (2.72 at the time of writing).
-  env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
 
   meta = with lib; {
     description = "Lightweight volume control that sits in your systray";

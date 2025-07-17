@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.16.1-1";
+  version = "3.15.4-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
-    hash = "sha256-GaO05zFurxnOOUjUpeR5j0lP4EYR/EgxFpdgwfYHG9M=";
+    hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
 
   patches = [ ./darwin-fixes.patch ];
@@ -43,18 +43,19 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    fftwFloat
-    zlib
-    wavpack
-    wxGTK32
-    yaml-cpp
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    udev
-  ]
-  ++ lib.optional jackaudioSupport libjack2;
+  buildInputs =
+    [
+      fftwFloat
+      zlib
+      wavpack
+      wxGTK32
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      udev
+    ]
+    ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags =
     lib.optionals (!jackaudioSupport) [

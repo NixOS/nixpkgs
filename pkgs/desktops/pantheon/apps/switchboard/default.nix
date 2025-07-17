@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "8.0.3";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-pVXcY/QSjgBcTr0sFQnPxICoQ0tpy2fEJ687zHEDXA0=";
+    sha256 = "sha256-iRxxXAUuSJzhX6uj1YeEzMUihWmrVZ6BFfayfteg/c8=";
   };
 
   nativeBuildInputs = [

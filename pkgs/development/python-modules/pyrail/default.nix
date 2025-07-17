@@ -26,8 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     mashumaro
-  ]
-  ++ mashumaro.optional-dependencies.orjson;
+  ] ++ mashumaro.optional-dependencies.orjson;
 
   pythonImportsCheck = [ "pyrail" ];
 

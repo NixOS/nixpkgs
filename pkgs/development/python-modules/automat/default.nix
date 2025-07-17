@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatch-vcs,
+  attrs,
   pytest-benchmark,
   pytestCheckHook,
-  setuptools,
+  setuptools-scm,
+  six,
 }:
 
 let
   automat = buildPythonPackage rec {
-    version = "25.4.16";
+    version = "24.8.1";
     format = "pyproject";
     pname = "automat";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ABdZGlR3Bm6Q0msOaW3cFDuq/Ye1iM+sgQC8a+ljTeA=";
+      hash = "sha256-s0Inz2P2MluK0jme3ngGdQg+Q5sgwyPTdjc9juYwbYg=";
     };
 
-    build-system = [
-      setuptools
-      hatch-vcs
+    nativeBuildInputs = [ setuptools-scm ];
+
+    propagatedBuildInputs = [
+      six
+      attrs
     ];
 
     nativeCheckInputs = [
@@ -29,7 +32,7 @@ let
       pytestCheckHook
     ];
 
-    pytestFlags = [ "--benchmark-disable" ];
+    pytestFlagsArray = [ "--benchmark-disable" ];
 
     # escape infinite recursion with twisted
     doCheck = false;

@@ -9,7 +9,7 @@
   libiconv,
   libffi,
   libxml2,
-  llvm,
+  llvm_14,
   ncurses,
   zlib,
 }:
@@ -99,7 +99,7 @@ in
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-oHyjzEqv88e2CHhWhKjUh6K0UflT9Y1JD//3oiE/UBQ=";
-    extraNativeBuildInputs = [ llvm ];
+    extraNativeBuildInputs = [ llvm_14 ];
     extraBuildInputs = [
       libffi
       libxml2.out

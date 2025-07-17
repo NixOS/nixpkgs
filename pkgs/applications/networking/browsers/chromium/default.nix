@@ -79,7 +79,13 @@ let
         pulseSupport
         ungoogled
         ;
-      gnChromium = buildPackages.gn.override upstream-info.deps.gn;
+      gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
+        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          inherit (upstream-info.deps.gn) rev hash;
+        };
+      });
     });
 
     browser = callPackage ./browser.nix {

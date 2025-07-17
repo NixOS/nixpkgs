@@ -3,31 +3,27 @@
   stdenv,
   fetchsvn,
   cmake,
-  pkg-config,
   libusb-compat-0_1,
-  libftdi1,
+  libftdi,
 }:
 
 # The xc3sprog project doesn't seem to make proper releases, they only put out
 # prebuilt binary subversion snapshots on sourceforge.
 
 stdenv.mkDerivation rec {
-  version = "795";
+  version = "787";
   pname = "xc3sprog";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xc3sprog/code/trunk";
-    sha256 = "sha256-E0MGwC3gIfl60gjGaSeSPTR5jJm9r8m7Et3402lek/w=";
+    sha256 = "1rfhms3i7375kdlg0sdg5k52ix3xv5llj2dr30vamyg7pk74y8rx";
     rev = version;
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     libusb-compat-0_1
-    libftdi1
+    libftdi
   ];
 
   cmakeFlags = [

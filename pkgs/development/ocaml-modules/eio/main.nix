@@ -20,10 +20,11 @@ buildDunePackage {
 
   dontStrip = true;
 
-  propagatedBuildInputs = [
-    eio_posix
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    eio_linux
-  ];
+  propagatedBuildInputs =
+    [
+      eio_posix
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      eio_linux
+    ];
 }

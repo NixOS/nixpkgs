@@ -70,8 +70,7 @@ let
         nativeBuildInputs = [
           idris2
           makeBinaryWrapper
-        ]
-        ++ attrs.nativeBuildInputs or [ ];
+        ] ++ attrs.nativeBuildInputs or [ ];
         buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [ ];
 
         env.IDRIS2_PACKAGE_PATH = libDirs propagatedIdrisLibraries;
@@ -84,8 +83,7 @@ let
 
         passthru = {
           inherit propagatedIdrisLibraries;
-        }
-        // (attrs.passthru or { });
+        } // (attrs.passthru or { });
 
         shellHook = ''
           export IDRIS2_PACKAGE_PATH="${finalAttrs.env.IDRIS2_PACKAGE_PATH}"

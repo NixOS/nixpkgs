@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZaaSuHWkhJx0q1CBAiRhwoLeeyyoAj6/vP3AJwybjAo=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-56Net4nNRndePhdsQPbmqiPHpOUGMmnQt6BuplQpvSU=";
 
   cargoPatches = [
@@ -38,12 +39,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libresolv
-  ];
+  buildInputs =
+    [ zstd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libresolv
+    ];
 
   nativeCheckInputs = [
     gitMinimal

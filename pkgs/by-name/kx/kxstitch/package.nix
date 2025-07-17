@@ -3,40 +3,35 @@
   lib,
   fetchgit,
   cmake,
+  extra-cmake-modules,
   imagemagick,
-  kdePackages,
-  pkg-config,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation {
   pname = "kxstitch";
-  version = "unstable-2025-08-16";
+  version = "unstable-2023-12-31";
 
   src = fetchgit {
     url = "https://invent.kde.org/graphics/kxstitch.git";
-    rev = "bfe934ffc2c2dfa1cc554bc4483a3285b027b00c";
-    hash = "sha256-B81nwInFWcQVDJU6VINII8crVPtV5zYBXADVVe+wCu4=";
+    rev = "4bb575dcb89e3c997e67409c8833e675962e101a";
+    hash = "sha256-pi+RpuT8YQYp1ogGtIgXpTPdYSFk19TUHTHDVyOcrMI=";
   };
 
-  buildInputs = with kdePackages; [
+  buildInputs = with libsForQt5; [
     qtbase
     kconfig
     kconfigwidgets
     kcompletion
     kio
-    ktextwidgets
-    kxmlgui
   ];
 
   nativeBuildInputs = [
     cmake
-    imagemagick
-    pkg-config
-  ]
-  ++ (with kdePackages; [
     extra-cmake-modules
-    wrapQtAppsHook
-  ]);
+    imagemagick
+    libsForQt5.wrapQtAppsHook
+  ];
 
   postInstall = ''
     install -D $src/org.kde.kxstitch.desktop $out/share/applications/org.kde.kxstitch.desktop

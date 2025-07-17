@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer-vaapi";
-  version = "1.26.5";
+  version = "1.26.0";
 
   outputs = [
     "out"
@@ -39,47 +39,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tC1E22PzGVpvMyluHq0ywU0B7ydFK3Bo8aLYZiT1Xqk=";
+    hash = "sha256-Vzkx1FX1qW9j23yNNdUTIrjSh4FujGp32Ez7ufoTUfE=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-    bzip2
-    wayland-scanner
-  ]
-  ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      python3
+      bzip2
+      wayland-scanner
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
-  buildInputs = [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    libva
-    wayland
-    wayland-protocols
-    libdrm
-    udev
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXv
-    xorg.libXrandr
-    xorg.libSM
-    xorg.libICE
-    nasm
-    libvpx
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libGL
-    libGLU
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_gstreamer
-  ];
+  buildInputs =
+    [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      libva
+      wayland
+      wayland-protocols
+      libdrm
+      udev
+      xorg.libX11
+      xorg.libXext
+      xorg.libXv
+      xorg.libXrandr
+      xorg.libSM
+      xorg.libICE
+      nasm
+      libvpx
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libGL
+      libGLU
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ];
 
   strictDeps = true;
 

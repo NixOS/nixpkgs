@@ -123,8 +123,7 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ]
-    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow

@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      abbradar
+    ];
     mainProgram = "CuraEngine";
   };
 }

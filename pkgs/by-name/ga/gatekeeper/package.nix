@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gatekeeper";
-  version = "3.20.1";
+  version = "3.19.3";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
     tag = "v${version}";
-    hash = "sha256-vChpVCw2La4cgNMDFnC7thU4jSmJ4LlOLVVeURNQ1+0=";
+    hash = "sha256-FQ5Q9S/YvJQaa2mUWXv8huTK89SZ31UaFbBCEduGsyg=";
   };
 
   vendorHash = null;
@@ -29,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/gator" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd gator \
       --bash <($out/bin/gator completion bash) \
       --fish <($out/bin/gator completion fish) \

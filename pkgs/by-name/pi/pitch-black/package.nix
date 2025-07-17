@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "pitch-black";
-  version = "0-unstable-2019-07-23";
+  version = "unstable-2019-07-23";
 
   src = fetchFromGitHub {
     repo = "pitch-black";

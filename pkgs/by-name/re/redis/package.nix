@@ -46,23 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    [ lua ]
+    ++ lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "AR=${stdenv.cc.targetPrefix}ar"
-    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-  ]
-  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags =
+    [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    ]
+    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -76,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     which
     tcl
     ps
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 

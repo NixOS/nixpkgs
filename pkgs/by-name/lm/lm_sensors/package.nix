@@ -53,8 +53,7 @@ stdenv.mkDerivation {
   buildInputs = [
     bash
     perl
-  ]
-  ++ lib.optional sensord rrdtool;
+  ] ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -69,8 +68,7 @@ stdenv.mkDerivation {
 
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ]
-  ++ lib.optional sensord "PROG_EXTRA=sensord";
+  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
 
   enableParallelBuilding = true;
 

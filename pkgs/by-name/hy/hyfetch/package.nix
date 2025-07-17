@@ -1,31 +1,44 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  makeWrapper,
+  python3Packages,
   pciutils,
-  versionCheckHook,
-  nix-update-script,
+  installShellFiles,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+python3Packages.buildPythonApplication rec {
   pname = "hyfetch";
-  version = "2.0.2";
+  version = "1.99.0";
+  pyproject = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
-    tag = finalAttrs.version;
-    hash = "sha256-Y9v2vrpTPlsgFRoo33NDVoyQSgUD/stKQLJXzUxFesA=";
+    tag = version;
+    hash = "sha256-GL1/V+LgSXJ4b28PfinScDrJhU9VDa4pVi24zWEzbAk=";
   };
 
-  cargoHash = "sha256-auOeH/1KtxS7a1APOtCMwNTdEQ976BL/jEKj2ADaakQ=";
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.typing-extensions
+  ];
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+  ];
+
+  # No test available
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "hyfetch"
   ];
 
   # NOTE: The HyFetch project maintains an updated version of neofetch renamed
@@ -35,14 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mv ./docs/neofetch.1 ./docs/neowofetch.1
     installManPage ./docs/hyfetch.1 ./docs/neowofetch.1
-
-    install -m 755 neofetch $out/bin/neowofetch
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd hyfetch \
-      --bash <($out/bin/hyfetch --bpaf-complete-style-bash) \
-      --fish <($out/bin/hyfetch --bpaf-complete-style-fish) \
-      --zsh <($out/bin/hyfetch --bpaf-complete-style-zsh)
   '';
 
   postFixup = ''
@@ -50,20 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ pciutils ]}
   '';
 
-  outputs = [
-    "out"
-    "man"
-  ];
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  versionCheckKeepEnvironment = [ "PATH" ];
-  doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "Neofetch with LGBTQ+ pride flags";
+    description = "neofetch with pride flags <3";
     longDescription = ''
       HyFetch is a command-line system information tool fork of neofetch.
       HyFetch displays information about your system next to your OS logo
@@ -73,15 +66,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       operating system or distribution you are running, what theme or
       icon set you are using, etc.
     '';
-    homepage = "https://github.com/hykilpikonna/hyfetch";
-    changelog = "https://github.com/hykilpikonna/hyfetch/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/hykilpikonna/HyFetch";
     license = lib.licenses.mit;
     mainProgram = "hyfetch";
     maintainers = with lib.maintainers; [
       yisuidenghua
       isabelroses
       nullcube
-      defelo
     ];
   };
-})
+}

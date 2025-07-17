@@ -55,14 +55,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     # pytest.PytestCacheWarning: could not create cache path /build/source/.pytest_cache/v/cache/nodeids: [Errno 13] Permission denied: '/build/source/pytest-cache-files-plraagdr'
-    "-pno:cacheprovider"
+    "-p"
+    "no:cacheprovider"
+    "$src/tests"
   ];
-
-  preCheck = ''
-    appendToVar enabledTestPaths "$src/tests"
-  '';
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,11 +1,11 @@
 {
   lib,
-  buildGoLatestModule,
+  buildGo124Module,
   fetchFromGitHub,
   replaceVars,
 }:
 
-buildGoLatestModule rec {
+buildGo124Module rec {
   pname = "govulncheck";
   version = "1.1.4";
 

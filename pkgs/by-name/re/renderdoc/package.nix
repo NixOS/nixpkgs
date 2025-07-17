@@ -6,7 +6,6 @@
   bison,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   libXdmcp,
   libglvnd,
   libpthreadstubs,
@@ -34,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.40";
+  version = "1.39";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-420UV9I+jJ8sLOQVhfGfkGPqAnN+kgPy8k0rZLt5X+Y=";
+    hash = "sha256-UFaZtSA3oYOYKuV2loh5tX1rLnoKgRypaJe6H+j/uHU=";
   };
 
   outputs = [
@@ -49,30 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/baldurk/renderdoc/issues/2945
-      # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
-      name = "devendor-pcre.patch";
-      url = "https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895.patch?full_index=1";
-      hash = "sha256-uQoSVmgU09tw7ccTnH1MrisDisTUbaXTelA1YdsYPlM=";
-      revert = true;
-    })
-  ];
-
-  buildInputs = [
-    libXdmcp
-    libpthreadstubs
-    python312Packages.pyside2
-    python312Packages.pyside2-tools
-    python312Packages.shiboken2
-    qt5.qtbase
-    qt5.qtsvg
-    vulkan-loader
-  ]
-  ++ lib.optionals waylandSupport [
-    wayland
-  ];
+  buildInputs =
+    [
+      libXdmcp
+      libpthreadstubs
+      python312Packages.pyside2
+      python312Packages.pyside2-tools
+      python312Packages.shiboken2
+      qt5.qtbase
+      qt5.qtsvg
+      vulkan-loader
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+    ];
 
   nativeBuildInputs = [
     addDriverRunpath

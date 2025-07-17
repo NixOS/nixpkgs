@@ -28,7 +28,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
       name = "vscode-xml";
       version = "0.29.0";
     }
-    // sources.${stdenvNoCC.hostPlatform.system} or { };
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
   passthru.updateScript = vscode-extension-update-script {
     extraArgs = [

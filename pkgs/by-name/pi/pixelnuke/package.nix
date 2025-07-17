@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelnuke";
-  version = "0-unstable-2019-05-19";
+  version = "unstable-2019-05-19";
 
   src = fetchFromGitHub {
     owner = "defnull";

@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage {
   src = yabridge.src;
   sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-VcBQxKjjs9ESJrE4F1kxEp4ah3j9jiNPq/Kdz/qPvro=";
 
   patches = [

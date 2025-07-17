@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     homepage = "https://www.kyoceradocumentsolutions.ru/index/service_support/download_center.false.driver.FS1040._.EN.html#";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    maintainers = [ maintainers.vanzef ];
     platforms = platforms.linux;
   };
 }

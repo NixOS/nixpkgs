@@ -24,11 +24,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-  ]
-  ++ lib.optionals scipySupport [ scipy ]
-  ++ lib.optionals scikitSupport [ scikit-learn ];
+  propagatedBuildInputs =
+    [
+      numpy
+    ]
+    ++ lib.optionals scipySupport [ scipy ]
+    ++ lib.optionals scikitSupport [ scikit-learn ];
 
   # checks req missing:
   #   pytest-allclose
@@ -42,6 +43,6 @@ buildPythonPackage rec {
     description = "Python library for creating and simulating large-scale brain models";
     homepage = "https://nengo.ai/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ arjix ];
   };
 }

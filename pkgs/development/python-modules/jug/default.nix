@@ -2,29 +2,28 @@
   lib,
   bottle,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   numpy,
   pytestCheckHook,
+  pythonOlder,
   pyyaml,
   redis,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jug";
-  version = "2.4.0";
-  pyproject = true;
+  version = "2.3.1";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "luispedro";
-    repo = "jug";
-    tag = "v${version}";
-    hash = "sha256-zERCY9JxceBmhJbytfsm/6rDwipqQ1XjzY/2QFsEEEg=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    pname = "Jug";
+    inherit version;
+    hash = "sha256-Y2TWqJi7GjmWUFpe1b150NgwRw9VKhCk5EoN5NDcPXU=";
   };
 
-  build-system = [ setuptools ];
-
-  dependenciesk = [ bottle ];
+  propagatedBuildInputs = [ bottle ];
 
   nativeCheckInputs = [
     numpy

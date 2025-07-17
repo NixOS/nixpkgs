@@ -40,8 +40,7 @@ let
               fromSource
               binaryBytecode # mitm cache
             ];
-          }
-          // args.meta;
+          } // args.meta;
         }
       );
     in

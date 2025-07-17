@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   buildDunePackage,
   js_of_ocaml,
   js_of_ocaml-ppx,
@@ -11,6 +12,14 @@ buildDunePackage {
   pname = "tyxml-lwd";
 
   inherit (lwd) version src;
+
+  # Compatibility with latest Tyxml (4.6.x)
+  patches = fetchpatch {
+    url = "https://github.com/let-def/lwd/commit/7f3364ec593b5ccf0d0294b97bcd1e28e4164691.patch";
+    hash = "sha256-W1HjExZxDKRwsrB9ZTkvHTMKO0K5iZl+FrNqPs6BPGU=";
+  };
+
+  minimalOCamlVersion = "4.08";
 
   buildInputs = [ js_of_ocaml-ppx ];
   propagatedBuildInputs = [

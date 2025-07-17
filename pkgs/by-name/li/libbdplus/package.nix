@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/developers/libbdplus.html";
     description = "Library to access BD+ protected Blu-Ray disks";
     license = licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = with platforms; unix;
   };
 }

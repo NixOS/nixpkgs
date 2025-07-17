@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "anyio"
     "attrs"
-    "python_dateutil"
+    "python-dateutil"
   ];
 
   build-system = [ setuptools ];

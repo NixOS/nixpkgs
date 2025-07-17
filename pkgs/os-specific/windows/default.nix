@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   stdenv,
   buildPackages,
   pkgs,
@@ -10,10 +9,16 @@
 }:
 
 lib.makeScope newScope (
-  self:
-  with self;
-  {
+  self: with self; {
+
+    cygwinSetup = callPackage ./cygwin-setup { };
+
     dlfcn = callPackage ./dlfcn { };
+
+    w32api = callPackage ./w32api { };
+
+    mingwrt = callPackage ./mingwrt { };
+    mingw_runtime = mingwrt;
 
     mingw_w64 = callPackage ./mingw-w64 {
       stdenv = stdenvNoLibc;
@@ -34,17 +39,14 @@ lib.makeScope newScope (
 
     mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 
+    mingw_w64_pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
+
     mcfgthreads = callPackage ./mcfgthreads { stdenv = crossThreadsStdenv; };
 
     npiperelay = callPackage ./npiperelay { };
 
-    pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
+    pthreads = callPackage ./pthread-w32 { };
 
     libgnurx = callPackage ./libgnurx { };
-
-    sdk = callPackage ./msvcSdk { };
-  }
-  // lib.optionalAttrs config.allowAliases {
-    mingw_w64_pthreads = lib.warn "windows.mingw_w64_pthreads is deprecated, windows.pthreads should be preferred" self.pthreads;
   }
 )

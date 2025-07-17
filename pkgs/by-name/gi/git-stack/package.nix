@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
-  version = "0.10.20";
+  version = "0.10.19";
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-stack";
     rev = "v${version}";
-    hash = "sha256-PULWvJ1sfLbTVOICl/ENPG76tOw+98Whgtc9obO+W6w=";
+    hash = "sha256-oJ24qNL0Lw0MC8+YHbnCW2Mbpu2N04e0QG3LpLbYH4M=";
   };
 
-  cargoHash = "sha256-n+kU6OLwsAjUVc1LPZpcn54FJroU09LNWmrar2oNyXI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kjyJeKeFtETowTehQEjN58YoqYFUBt9yQlRIcNY0hso=";
 
   buildInputs =
     [ ]

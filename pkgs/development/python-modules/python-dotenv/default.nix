@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "1.1.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theskumar";
     repo = "python-dotenv";
     tag = "v${version}";
-    hash = "sha256-GeN6/pnqhm7TTP+H9bKhJat6EwEl2EPl46mNSJWwFKk=";
+    hash = "sha256-jpSOChCUgJxrA5n+DNQX3dtFQ5Q6VG4g4pdWRIh+dOo=";
   };
 
   build-system = [ setuptools ];

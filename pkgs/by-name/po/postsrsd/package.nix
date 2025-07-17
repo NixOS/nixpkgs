@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     mainProgram = "postsrsd";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

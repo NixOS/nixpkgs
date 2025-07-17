@@ -1,9 +1,12 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p yq nix bash coreutils nix-update common-updater-scripts ripgrep flutter
 
-set -euo pipefail
+set -eou pipefail
 
-PACKAGE_DIR=$(realpath "$(dirname "$0")")
+PACKAGE_DIR="$(realpath "$(dirname "$0")")"
+cd "$PACKAGE_DIR"/..
+while ! test -f flake.nix; do cd ..; done
+NIXPKGS_DIR="$PWD"
 
 latestVersion=$(
     list-git-tags --url=https://github.com/doraemonkeys/WindSend |
@@ -12,21 +15,21 @@ latestVersion=$(
         tail -n1
 )
 
-currentVersion=$(nix eval --raw --file . windsend.version)
+currentVersion=$(nix-instantiate --eval -E "with import ./. {}; windsend.version or (lib.getVersion windsend)" | tr -d '"')
 
-[[ $currentVersion == $latestVersion ]] && {
+if [[ "$currentVersion" == "$latestVersion" ]]; then
     echo "package is up-to-date: $currentVersion"
     exit 0
-}
+fi
 
 nix-update --version=$latestVersion windsend
 
-src=$(nix build --no-link --print-out-paths .#windsend.src)
-source=$(mktemp -d)
-cp -r --no-preserve=mode "$src/"* "$source"
-pushd "$source/flutter/wind_send"
+export HOME="$(mktemp -d)"
+src="$(nix-build --no-link "$NIXPKGS_DIR" -A windsend.src)"
+tmp="$(mktemp -d)"
+cp --recursive --no-preserve=mode "$src"/* $tmp
+pushd "$tmp"/flutter/wind_send
 flutter pub get
-yq . pubspec.lock >"$PACKAGE_DIR/pubspec.lock.json"
+yq . pubspec.lock >"$PACKAGE_DIR"/pubspec.lock.json
 popd
-rm -rf "$source"
-./update-gitHashes.py
+rm -rf $tmp

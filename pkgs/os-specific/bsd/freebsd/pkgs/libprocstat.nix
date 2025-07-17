@@ -18,8 +18,7 @@ mkDerivation {
     "sys/contrib/pcg-c"
     "sys/opencrypto"
     "sys/crypto"
-  ]
-  ++ extraSrc;
+  ] ++ extraSrc;
 
   outputs = [
     "out"

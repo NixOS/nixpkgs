@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "wikitextparser";
-  version = "0.56.4";
+  version = "0.56.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "5j9";
     repo = "wikitextparser";
     rev = "v${version}";
-    hash = "sha256-xg2cWhfJXS7zUuzXPslFTZz6mY/Pvl2F2b7HNWV2c3I=";
+    hash = "sha256-g0Hvxw8evmCebM2joGT7XMnakVjDG74VJmZhlvUiQMU=";
   };
 
   nativeBuildInputs = [ setuptools ];

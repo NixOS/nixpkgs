@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "3.4.2";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-D/3yJ1KIXF1rv8iH4+HvfD6N94LzkZGRippZj8nk1nQ=";
+    hash = "sha256-ET0cygX/r/YXGWpPU01FnBoLRtjo1ddXEiVIva71aE8=";
   };
 
   sourceRoot = "${src.name}/source";
@@ -41,21 +41,19 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-    # needed for gstreamer https
-    glib-networking
-  ]
-  ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      libadwaita
+      # needed for gstreamer https
+      glib-networking
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
-  pythonRelaxDeps = [
-    "mpris_server"
-    "ytmusicapi"
-  ];
+  pythonRelaxDeps = [ "mpris_server" ];
 
   postInstall = ''
     make install prefix=$out

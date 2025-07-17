@@ -33,8 +33,7 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     pandas = [ pandas ];
@@ -45,8 +44,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-asyncio
-  ]
-  ++ optional-dependencies.pandas;
+  ] ++ optional-dependencies.pandas;
 
   disabledTests = [
     # Test requires credentials

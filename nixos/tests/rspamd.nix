@@ -293,7 +293,7 @@ in
       };
       services.postfix = {
         enable = true;
-        settings.main.mydestination = [ "example.com" ];
+        destination = [ "example.com" ];
       };
       services.rspamd = {
         enable = true;

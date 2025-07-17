@@ -43,16 +43,17 @@ mapAttrs (
   channel: chromiumPkg:
   makeTest {
     name = "chromium-${channel}";
-    meta = {
-      maintainers = with maintainers; [
-        aszlig
-      ];
-    }
-    // optionalAttrs (chromiumPkg.meta ? timeout) {
-      # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
-      # Note: optionalAttrs is used since meta.timeout is not set for Google Chrome
-      inherit (chromiumPkg.meta) timeout;
-    };
+    meta =
+      {
+        maintainers = with maintainers; [
+          aszlig
+        ];
+      }
+      // optionalAttrs (chromiumPkg.meta ? timeout) {
+        # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+        # Note: optionalAttrs is used since meta.timeout is not set for Google Chrome
+        inherit (chromiumPkg.meta) timeout;
+      };
 
     enableOCR = true;
 

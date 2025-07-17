@@ -52,14 +52,15 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
-    python-dateutil
-    tzdata
-  ]
-  ++ lib.optional (!isPyPy) [ time-machine ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      python-dateutil
+      tzdata
+    ]
+    ++ lib.optional (!isPyPy) [ time-machine ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   pythonImportsCheck = [ "pendulum" ];
 
@@ -68,13 +69,12 @@ buildPythonPackage rec {
     pytz
   ];
 
-  disabledTestPaths = [
-    "tests/benchmarks"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
-    "tests/testing/test_time_travel.py"
-  ];
+  disabledTestPaths =
+    [ "tests/benchmarks" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
+      "tests/testing/test_time_travel.py"
+    ];
 
   meta = with lib; {
     description = "Python datetimes made easy";

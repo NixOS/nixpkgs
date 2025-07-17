@@ -17,16 +17,27 @@ let
   pythonEnv = python3.withPackages (ps: with ps; [ click ]);
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "sby";
-  version = "0.57";
+  version = "0.52";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vhgLP2twPPGsey5lzmt/zUFme4GjIdWgRyWoCHxLxRU=";
+    tag = "v${version}";
+    hash = "sha256-E/je1lHvYCpmRlwM17PWTQemSnz8azviKiz4t9z17UM=";
   };
+
+  nativeCheckInputs = [
+    python3
+    python3.pkgs.xmlschema
+    yosys
+    boolector
+    yices
+    z3
+    aiger
+    btor2tools
+  ];
 
   postPatch = ''
     patchShebangs --build \
@@ -43,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace-fail '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
-      --replace-fail ', "btormc"'             ', "${lib.getExe' boolector "btormc"}"' \
-      --replace-fail ', "aigbmc"'             ', "${lib.getExe' aiger "aigbmc"}"'
+      --replace-fail '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
+      --replace-fail ', "btormc"'             ', "${boolector}/bin/btormc"' \
+      --replace-fail ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
 
     substituteInPlace sbysrc/sby_core.py \
       --replace-fail '##yosys-program-prefix##' '"${yosys}/bin/"'
@@ -53,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '["${lib.getExe' btor2tools "btorsim"}", "--vcd"]'
+      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
   dontBuild = true;
@@ -68,17 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/sby
     runHook postInstall
   '';
-
-  nativeCheckInputs = [
-    python3
-    python3.pkgs.xmlschema
-    yosys
-    boolector
-    yices
-    z3
-    aiger
-    btor2tools
-  ];
 
   doCheck = true;
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sby";
     platforms = lib.platforms.all;
   };
-})
+}

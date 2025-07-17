@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.4.2";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-6tPSr28Ja7LuwWrcqSYLxxQj8e9XCgTWxzudjXOriBg=";
+    hash = "sha256-aRySSDNqxdu4kZRohvG/PmOK3Uipvnw9DctJ8h5vl2g=";
   };
 
-  vendorHash = "sha256-NGwCTEh1/5dJWOCSe18FZYYu8v7Mj6MWVEWyNNA1T68=";
+  vendorHash = "sha256-LLOUTml/mz7edCUy82k+S5PfpFovgUTQr0BoQQXiVGs=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -37,7 +37,7 @@ buildGoModule rec {
     description = "Cross-platform TUI database management tool written in Go";
     homepage = "https://github.com/jorgerojas26/lazysql";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kanielrkirby ];
     mainProgram = "lazysql";
   };
 }

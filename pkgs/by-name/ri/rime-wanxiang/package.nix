@@ -2,29 +2,54 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  librime,
+  rime-data,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "12.4.1";
+  version = "8.7.7";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
     repo = "rime_wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-Z4rHSWN784+djARztQK7b24pLk42kUwCm9mct3ojPM4=";
+    hash = "sha256-X64kxr93V0ilAefmQcJgMCegdzpoNoI0TuMdkYRG66I=";
   };
+
+  nativeBuildInputs = [
+    librime
+  ];
+
+  buildInputs = [
+    rime-data
+  ];
+
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    for s in *.schema.yaml; do
+        rime_deployer --compile "$s" . ${rime-data}/share/rime-data ./build
+    done
+
+    rm build/*.txt
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    rm -rf README.md .git* custom LICENSE
+    dst=$out/share/rime-data
+    mkdir -p $dst
 
+    rm -r .github custom LICENSE squirrel.yaml weasel.yaml *.md *.trime.yaml
     mv default.yaml wanxiang_suggested_default.yaml
 
-    mkdir -p $out/share
-    cp -r . $out/share/rime-data
+    cp -pr -t $dst *
 
     runHook postInstall
   '';

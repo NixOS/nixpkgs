@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "git-bars";
-  version = "0-unstable-2023-08-08";
+  version = "unstable-2023-08-08";
   format = "setuptools";
 
   src = fetchFromGitHub {

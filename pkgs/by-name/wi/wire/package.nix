@@ -4,18 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "wire";
-  version = "0.7.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "wire";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-pKWi5qRCSgWdGwEzoV0nx2t1HUODBaC6ELyf//+fPog=";
+    rev = "v${version}";
+    hash = "sha256-bV/bb577JzGF37HmvRprxr+GWcLLiFRisURwtGDbqko=";
   };
 
-  vendorHash = "sha256-pUzYfFrKV0M1j1P6DVIGCe6FaY+OPbn5VNLHP0Xu2R0=";
+  patches = [
+    # Bump the minimum version of Go required to compile packages in this module,
+    # as `golang.org/x/tools` requires go1.18 or later.
+    ./go-modules.patch
+  ];
+
+  vendorHash = "sha256-7IW97ZvCGlKCiVh8mKQutTdAxih7oFkXrKo4h3Pl9YY=";
 
   subPackages = [ "cmd/wire" ];
 
@@ -24,11 +30,11 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/wire";
     description = "Code generation tool that automates connecting components using dependency injection";
     mainProgram = "wire";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ svrana ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ svrana ];
   };
-})
+}

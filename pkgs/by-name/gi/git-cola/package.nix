@@ -14,36 +14,34 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.15.0";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-h3W7CsdJK1hid8Nmp1bvFwiHVS4UV/gziwtyZuxSxHY=";
+    hash = "sha256-FoCU10EKeNltYh7AEOR+98ryVA6rFVfCDMg5QUSpF0w=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
 
-  propagatedBuildInputs = [
-    git
-  ]
-  ++ (with python3Packages; [
-    setuptools
-    pyqt5
-    qtpy
-    send2trash
-    polib
-  ]);
+  propagatedBuildInputs =
+    [ git ]
+    ++ (with python3Packages; [
+      setuptools
+      pyqt5
+      qtpy
+      send2trash
+      polib
+    ]);
 
   nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
     python3Packages.setuptools-scm
     imagemagick
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   nativeCheckInputs = [
     git
@@ -56,8 +54,7 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

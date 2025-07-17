@@ -61,8 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     curl
     jansson
-  ]
-  ++ lib.optional enable9361 libad9361;
+  ] ++ lib.optional enable9361 libad9361;
 
   cmakeFlags = [
     "-DCMAKE_POLKIT_PREFIX=${placeholder "out"}"

@@ -110,11 +110,10 @@ stdenv.mkDerivation (self: {
   shouldInstallHeaders = self.shouldBuildTools;
   shouldInstallShortcut = self.shouldBuildTools && self.godotBuildPlatform != "server";
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optional self.shouldInstallManual "man"
-  ++ lib.optional self.shouldBuildTools "dev";
+  outputs =
+    [ "out" ]
+    ++ lib.optional self.shouldInstallManual "man"
+    ++ lib.optional self.shouldBuildTools "dev";
 
   builtGodotBinNamePattern =
     if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";

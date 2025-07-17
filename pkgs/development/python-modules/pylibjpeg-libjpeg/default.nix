@@ -11,7 +11,6 @@
   pydicom,
   pylibjpeg-data,
   pylibjpeg,
-  libjpeg-tools,
 }:
 
 let
@@ -26,15 +25,13 @@ let
       owner = "pydicom";
       repo = "pylibjpeg-libjpeg";
       tag = "v${self.version}";
-      hash = "sha256-P01pofPLTOa5ynsCkLnxiMzVfCg4tbT+/CcpPTeSViw=";
+      hash = "sha256-xqSA1cutTsH9k4l9CW96n/CURzkAyDi3PZylZeedVjA=";
+      fetchSubmodules = true;
     };
 
     postPatch = ''
       substituteInPlace pyproject.toml \
         --replace-fail 'poetry-core >=1.8,<2' 'poetry-core'
-      rmdir lib/libjpeg
-      cp -r ${libjpeg-tools.src} lib/libjpeg
-      chmod u+w lib/libjpeg
     '';
 
     build-system = [

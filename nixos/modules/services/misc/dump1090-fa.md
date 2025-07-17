@@ -9,8 +9,7 @@ When enabled, this module automatically creates a systemd service to start the `
 Exposing the integrated web interface is left to the user's configuration. Below is a minimal example demonstrating how to serve it using Nginx:
 
 ```nix
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   services.dump1090-fa.enable = true;
 
   services.nginx = {
@@ -23,4 +22,5 @@ Exposing the integrated web interface is left to the user's configuration. Below
     };
   };
 }
+
 ```

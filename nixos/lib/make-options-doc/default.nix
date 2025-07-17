@@ -59,6 +59,9 @@
   let
     # Evaluate a NixOS configuration
     eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+      # Overridden explicitly here, this would include all modules from NixOS otherwise.
+      # See: docs of eval-config.nix for more details
+      baseModules = [];
       modules = [
         ./module.nix
       ];

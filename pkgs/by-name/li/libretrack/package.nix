@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutterPackages-source,
   libappindicator,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutterPackages-source.v3_29.buildFlutterApplication rec {
   pname = "libretrack";
   version = "1.7.0";
 

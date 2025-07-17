@@ -18,17 +18,17 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.4";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    sparseCheckout = [ "mobile/apps/auth" ];
+    sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-VpxF6BMofCgMWcxsscbYC3uYse0QZyTBf84zN03leC4=";
+    hash = "sha256-bwLEOmdDiD7X2o9PshDBf+Y1s6KYT7xGhqCu4nNAchI=";
   };
 
-  sourceRoot = "${src.name}/mobile/apps/auth";
+  sourceRoot = "${src.name}/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -111,7 +111,6 @@ flutter324.buildFlutterApplication rec {
       schnow265
       zi3m5f
       gepbird
-      iedame
     ];
     mainProgram = "enteauth";
     platforms = [

@@ -102,24 +102,21 @@ let
           hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
         })
       ];
-      postPatch = ''
-        # Fix multiple definition errors by using C++17 instead of C++11
-        substituteInPlace CMakeLists.txt \
-          --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
-      '';
+      postPatch = "";
       postInstall = "";
 
-      cmakeFlags = [
-        "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
-        "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
-        "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isStatic [
-        "-DJPEGXL_STATIC=ON"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-        "-DJPEGXL_FORCE_NEON=ON"
-      ];
+      cmakeFlags =
+        [
+          "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
+          "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+          "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "-DJPEGXL_STATIC=ON"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+          "-DJPEGXL_FORCE_NEON=ON"
+        ];
     }
   );
   webkit-linux = stdenv.mkDerivation {
@@ -129,8 +126,8 @@ let
       stripRoot = false;
       hash =
         {
-          x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
-          aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
+          x86_64-linux = "sha256-lwH783B3/laqw0IdGBnVzvySRoF0AwZsSolaqUKmsM4=";
+          aarch64-linux = "sha256-qtvP0bc5rcZcz6SqigfdrjhTWEmvT4k11I1GW1Eoj/Q=";
         }
         .${system} or throwSystem;
     };
@@ -210,8 +207,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
-        aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
+        x86_64-darwin = "sha256-p1+Pk+Zhf2OPEmEWCEd0tA7CdoMcOgYp69SnQXufFJ0=";
+        aarch64-darwin = "sha256-tEfKvJuGe4htZLSOn94eKeBtWXYkjl73iJSY4BWJMKo=";
       }
       .${system} or throwSystem;
   };

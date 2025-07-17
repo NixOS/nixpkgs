@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ledfx";
-  version = "2.0.111";
+  version = "2.0.109";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b6WHulQa1er0DpMfeJLqqb4z8glUt1dHvvNigXgrf7Y=";
+    hash = "sha256-fSb3NBl1bYCfwDkWI7/KeFIVcXTPDKBbLe0sQhneX6A=";
   };
 
   pythonRelaxDeps = true;
@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     icmplib
     mss
     multidict
-    netifaces2
     numpy
     openrgb-python
     paho-mqtt

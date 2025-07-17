@@ -33,11 +33,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
-  version = "0.34.0";
+  version = "0.33.0";
 
   src = fetchurl {
     url = "https://github.com/wang-bin/mdk-sdk/releases/download/v${version}/mdk-sdk-linux.tar.xz";
-    hash = "sha256-qt17xZKuZIWmD8ck1IrHXa5i5tKElTYmbGQvqJTtTsY=";
+    hash = "sha256-d23Mq1uJg4LpbcxywOKZbwyUs3DIRtGrUZY1qBV85VE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Multimedia development kit";
+    description = "multimedia development kit";
     homepage = "https://github.com/wang-bin/mdk-sdk";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ orivej ];

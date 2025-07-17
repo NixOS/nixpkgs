@@ -17,6 +17,7 @@ let
     pname = "LanguageClient-neovim-bin";
     inherit version src;
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-1tfeowqvjEjMXIfrhr388YhlZrk3ns+Y/2odQnkLw7k=";
   };
 in

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "ytt";
-  version = "0.52.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
     rev = "v${version}";
-    sha256 = "sha256-fSrvsRZpXXvR6SpEigEMiP0lU5y+ddidHwtz+rmgSb4=";
+    sha256 = "sha256-lFq1cdLKnNy+GaJLap2b/zhRvK8CjYPl3CQx9FKEpUc=";
   };
 
   vendorHash = null;
@@ -28,7 +27,7 @@ buildGoModule rec {
     "-X carvel.dev/ytt/pkg/version.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ytt \
       --bash <($out/bin/ytt completion bash) \
       --fish <($out/bin/ytt completion fish) \

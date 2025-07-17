@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   python3Packages,
   fetchFromGitHub,
   pandoc,
@@ -22,9 +21,6 @@ python3Packages.buildPythonApplication rec {
     poetry-core
   ];
 
-  pythonRelaxDeps = [
-    "lxml"
-  ];
   dependencies = with python3Packages; [
     lxml
     pygls
@@ -35,11 +31,6 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     pandoc
     python3Packages.pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # TimeoutError
-    "test_hover"
   ];
 
   __darwinAllowLocalNetworking = true;

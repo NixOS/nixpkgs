@@ -7,27 +7,23 @@
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.4.0";
-  pyproject = true;
+  version = "1.3.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosignal";
-    tag = "v${version}";
-    hash = "sha256-b46/LGoCeL4mhbBPAiPir7otzKKrlKcEFzn8pG/foh0=";
+    rev = "v${version}";
+    hash = "sha256-CvNarJpSq8EKnt+PuSerMK/ZVbxL9rp7rQ4dkWykG1M=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ frozenlist ] ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
+  propagatedBuildInputs = [ frozenlist ];
 
   nativeCheckInputs = [
     pytest-asyncio

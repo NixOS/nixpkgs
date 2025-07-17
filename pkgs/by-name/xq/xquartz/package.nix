@@ -77,19 +77,20 @@ let
     sudo launchctl load -w /Library/LaunchAgents/$agentName
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
-  fontDirs = [
-    ttf_bitstream_vera
-    freefont_ttf
-    liberation_ttf
-    xorg.fontmiscmisc
-    xorg.fontcursormisc
-  ]
-  ++ lib.optionals unfreeFonts [
-    xorg.fontbhlucidatypewriter100dpi
-    xorg.fontbhlucidatypewriter75dpi
-    xorg.fontbh100dpi
-  ]
-  ++ extraFontDirs;
+  fontDirs =
+    [
+      ttf_bitstream_vera
+      freefont_ttf
+      liberation_ttf
+      xorg.fontmiscmisc
+      xorg.fontcursormisc
+    ]
+    ++ lib.optionals unfreeFonts [
+      xorg.fontbhlucidatypewriter100dpi
+      xorg.fontbhlucidatypewriter75dpi
+      xorg.fontbh100dpi
+    ]
+    ++ extraFontDirs;
   fontsConf = makeFontsConf {
     fontDirectories = fontDirs ++ [
       "/Library/Fonts"

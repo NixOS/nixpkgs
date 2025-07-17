@@ -5,7 +5,7 @@
 # executed last.
 {
   autoFixElfFiles,
-  cuda_compat,
+  cuda_compat ? null,
   makeSetupHook,
 }:
 makeSetupHook {

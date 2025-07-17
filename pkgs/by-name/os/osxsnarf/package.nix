@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   plan9port,
+  ...
 }:
 
 stdenv.mkDerivation rec {

@@ -9,20 +9,17 @@
   lxml,
   pytestCheckHook,
   youseedee,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "fontfeatures";
-  version = "1.9.0";
-
-  pyproject = true;
-  build-system = [ setuptools-scm ];
+  version = "1.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "fontfeatures";
+    pname = "fontFeatures";
     inherit version;
-    hash = "sha256-3PpUgaTXyFcthJrFaQqeUOvDYYFosJeXuRFnFrwp0R8=";
+    hash = "sha256-XLJD91IyUUjeSqdhWFfIqv9yISPcbU4bgRvXETSHOiY=";
   };
 
   propagatedBuildInputs = [

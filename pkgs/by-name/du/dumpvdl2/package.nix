@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     zeromq
     libacars
-  ]
-  ++ lib.optionals sdrplaySupport [ sdrplay ];
+  ] ++ lib.optionals sdrplaySupport [ sdrplay ];
 
   nativeBuildInputs = [
     cmake

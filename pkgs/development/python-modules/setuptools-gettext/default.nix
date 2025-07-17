@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/breezy-team/setuptools-gettext/releases/tag/v${version}";
-    description = "Setuptools plugin for building mo files";
+    description = "setuptools plugin for building mo files";
     homepage = "https://github.com/breezy-team/setuptools-gettext";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tomasajt ];

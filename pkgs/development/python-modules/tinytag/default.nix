@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tinytag";
-  version = "2.1.2";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinytag";
     repo = "tinytag";
     tag = version;
-    hash = "sha256-DyjFIaC7FwU5pvRfQgpBCc76dps287rcQ7mxggOZjdw=";
+    hash = "sha256-8+IXbLUevId4zusY6Nv55t/eRkYqGkf1cTZCMYSpuL8=";
   };
 
   build-system = [

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-nix-update "${UPDATE_NIX_ATTR_PATH}"
+nix-update "${UPDATE_NIX_ATTR_PATH}" --version=unstable
 
 src="$(nix-build -A "${UPDATE_NIX_ATTR_PATH}".src --no-out-link)"
 

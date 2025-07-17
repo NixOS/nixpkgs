@@ -66,7 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = [
     # AssertionError

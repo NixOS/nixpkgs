@@ -10,15 +10,15 @@
   libxkbcommon,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "wev";
-  version = "1.1.0";
+  version = "1.0.0-unstable-2022-09-14";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "wev";
-    rev = finalAttrs.version;
-    hash = "sha256-0ZA44dMDuVYfplfutOfI2EdPNakE9KnOuRfk+CEDCRk=";
+    rev = "83de8e931ab04ce3322a58b359d8effa7901b21c";
+    sha256 = "sha256-lNFgjRXO/ZbcXJF06DykPoJJ6/a8ZfVA6g95i+rNdWs=";
   };
 
   strictDeps = true;
@@ -39,16 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/wev";
     description = "Wayland event viewer";
     longDescription = ''
       This is a tool for debugging events on a Wayland window, analogous to the
       X11 tool xev.
     '';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wineee ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
     mainProgram = "wev";
   };
-})
+}

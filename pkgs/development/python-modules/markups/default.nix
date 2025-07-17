@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.1.1";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "retext-project";
     repo = "pymarkups";
     tag = version;
-    hash = "sha256-kQ1L8l/ONT4qOA/xfx85WyA7pDveaKoXWGZbljYxO/4=";
+    hash = "sha256-7/pXCSbVhLeX7PhacMQYwYMT7Og/tZplPPCvWDxJFck=";
   };
 
   build-system = [ setuptools ];
@@ -37,8 +37,7 @@ buildPythonPackage rec {
     python-markdown-math
     pyyaml
     textile
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

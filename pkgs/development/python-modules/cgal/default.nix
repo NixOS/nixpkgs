@@ -39,18 +39,19 @@ buildPythonPackage rec {
     swig
   ];
 
-  buildInputs = [
-    cgal
-    gmp
-    mpfr
-    boost
-    zlib
-    tbb
-    eigen
-  ]
-  ++ lib.optionals withLAS [
-    LAStools
-  ];
+  buildInputs =
+    [
+      cgal
+      gmp
+      mpfr
+      boost
+      zlib
+      tbb
+      eigen
+    ]
+    ++ lib.optionals withLAS [
+      LAStools
+    ];
 
   dependencies = [
     numpy

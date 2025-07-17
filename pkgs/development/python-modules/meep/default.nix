@@ -36,13 +36,13 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.31.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "meep";
     tag = "v${version}";
-    hash = "sha256-x5OMdV/LJfklcK1KlYS0pdotsXP/SYzF7AOW5DlJvq0=";
+    hash = "sha256-rXmOCkWm8SymhLiKNskSiS2bsHCmTlKMfLg5u3XniOk=";
   };
 
   format = "other";
@@ -73,19 +73,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  dependencies = [
-    numpy
-    scipy
-    matplotlib
-    h5py-mpi
-    cython
-    autograd
-    mpi4py
-  ]
-  ++ lib.optionals (!pythonOlder "3.12") [
-    setuptools # used in python/visualization.py
-    distutils
-  ];
+  dependencies =
+    [
+      numpy
+      scipy
+      matplotlib
+      h5py-mpi
+      cython
+      autograd
+      mpi4py
+    ]
+    ++ lib.optionals (!pythonOlder "3.12") [
+      setuptools # used in python/visualization.py
+      distutils
+    ];
 
   propagatedUserEnvPkgs = [ mpi ];
 

@@ -6,23 +6,25 @@
   makeBinaryWrapper,
   fetchFromGitHub,
   nix-update-script,
+  nvd,
   nix-output-monitor,
   buildPackages,
 }:
 let
   runtimeDeps = [
+    nvd
     nix-output-monitor
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.2.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6n5SVO8zsdVTD691lri7ZcO4zpqYFU8GIvjI6dbxkA8=";
+    hash = "sha256-v02NsZ589zzPq5xsCxyrG1/ZkFbbMkUthly50QdmYKo=";
   };
 
   strictDeps = true;
@@ -44,9 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       done
 
       installShellCompletion completions/*
-
-      cargo xtask man --out-dir gen
-      installManPage gen/nh.1
     ''
   );
 
@@ -55,7 +54,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-cxZsePgraYevuYQSi3hTU2EsiDyn1epSIcvGi183fIU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-R2S0gbT3DD/Dtx8edqhD0fpDqe8AJgyLmlPoNEKm4BA=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
+      drupol
       NotAShelf
       viperML
     ];

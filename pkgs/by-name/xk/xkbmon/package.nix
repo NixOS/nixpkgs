@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   libX11,
-  libxcb,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,10 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EWW6L6NojzXodDOET01LMcQT8/1JIMpOD++MCiM3j1Y=";
   };
 
-  buildInputs = [
-    libX11
-    libxcb
-  ];
+  buildInputs = [ libX11 ];
 
   installPhase = "install -D -t $out/bin xkbmon";
 

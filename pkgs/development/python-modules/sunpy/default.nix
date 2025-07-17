@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "7.0.1";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ZCG9CtTpgGGlqtXcl2epRBzFcbVvIMzZcXk5CQ5/+A=";
+    hash = "sha256-xgmmsbC7KGvUJ4mUD1T8t9aQDfz+IX31T4Wf9gguE9s=";
   };
 
   nativeBuildInputs = [
@@ -84,17 +84,18 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-astropy
-    pytest-mock
-    pytestCheckHook
-  ]
-  ++ optional-dependencies.asdf
-  ++ optional-dependencies.database
-  ++ optional-dependencies.image
-  ++ optional-dependencies.net
-  ++ optional-dependencies.timeseries;
+  nativeCheckInputs =
+    [
+      hypothesis
+      pytest-astropy
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.asdf
+    ++ optional-dependencies.database
+    ++ optional-dependencies.image
+    ++ optional-dependencies.net
+    ++ optional-dependencies.timeseries;
 
   postPatch = ''
     substituteInPlace setup.cfg \

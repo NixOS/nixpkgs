@@ -19,7 +19,9 @@ in
         };
       };
 
-      services.meilisearch.masterKeyFile = pkgs.writeText "meilisearch-key" meilisearchKey;
+      services.meilisearch.masterKeyEnvironmentFile = pkgs.writeText "meilisearch-key" ''
+        MEILI_MASTER_KEY=${meilisearchKey}
+      '';
     };
 
   testScript =
@@ -49,8 +51,5 @@ in
           machine.succeed("curl --fail http://localhost:3000")
     '';
 
-  meta.maintainers = with lib.maintainers; [
-    srxl
-    tmarkus
-  ];
+  meta.maintainers = with lib.maintainers; [ srxl ];
 }

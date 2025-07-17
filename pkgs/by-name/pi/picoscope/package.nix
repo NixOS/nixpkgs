@@ -63,7 +63,7 @@ let
       '';
       meta = shared_meta lib // {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        description = "Library for picotech oscilloscope software";
+        description = "library for picotech oscilloscope software";
       };
     }
   ) { };
@@ -96,7 +96,7 @@ let
         with lib;
         shared_meta lib
         // {
-          description = "Library for picotech oscilloscope ${name} series";
+          description = "library for picotech oscilloscope ${name} series";
         };
     };
 

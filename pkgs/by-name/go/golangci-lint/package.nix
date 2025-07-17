@@ -1,10 +1,5 @@
 {
-  # golangci-lint has historically required code changes to support new versions of
-  # go so always use the latest specific go version that golangci-lint supports
-  # rather than buildGoLatestModule.
-  # This can be bumped when the release notes of golangci-lint detail support for
-  # new version of go.
-  buildGo125Module,
+  buildGoModule,
   buildPackages,
   fetchFromGitHub,
   installShellFiles,
@@ -12,18 +7,18 @@
   stdenv,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.5.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7dHr7cd+yYofIb+yR2kKfj0k0onLH2W/YuxNor7zPeo=";
+    hash = "sha256-XpFbcyuARE4gvSsWoIXM+CMUiDeuIiM5dbGPt5ACLA8=";
   };
 
-  vendorHash = "sha256-QEYbFz7SJxLMblkNqaRLDn/PO+mtSPvNYiEUmZh0sLQ=";
+  vendorHash = "sha256-Dh+HTUM3uD/l2g4R0hFEtrzjlrOcZQf2S3ELXKWl01U=";
 
   subPackages = [ "cmd/golangci-lint" ];
 
@@ -34,7 +29,7 @@ buildGo125Module (finalAttrs: {
     "-w"
     "-X main.version=${finalAttrs.version}"
     "-X main.commit=v${finalAttrs.version}"
-    "-X main.date=1970-01-01T00:00:00Z"
+    "-X main.date=19700101-00:00:00"
   ];
 
   postInstall =

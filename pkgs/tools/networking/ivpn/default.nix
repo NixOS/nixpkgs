@@ -12,7 +12,6 @@
   iptables,
   gawk,
   util-linux,
-  nix-update-script,
 }:
 
 builtins.mapAttrs
@@ -22,7 +21,7 @@ builtins.mapAttrs
       attrs
       // rec {
         inherit pname;
-        version = "3.14.34";
+        version = "3.14.29";
 
         buildInputs = [
           wirelesstools
@@ -32,7 +31,7 @@ builtins.mapAttrs
           owner = "ivpn";
           repo = "desktop-app";
           tag = "v${version}";
-          hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
+          hash = "sha256-8JScty/sGyxzC2ojRpatHpCqEXZw9ksMortIhZnukoU=";
         };
 
         proxyVendor = true; # .c file
@@ -48,8 +47,6 @@ builtins.mapAttrs
           mv $out/bin/{${attrs.modRoot},${pname}}
         '';
 
-        passthru.updateScript = nix-update-script { };
-
         meta = {
           description = "Official IVPN Desktop app";
           homepage = "https://www.ivpn.net/apps";
@@ -57,7 +54,7 @@ builtins.mapAttrs
           license = lib.licenses.gpl3Only;
           maintainers = with lib.maintainers; [
             urandom
-            blenderfreaky
+            ataraxiasjel
           ];
           mainProgram = "ivpn";
         };
@@ -67,11 +64,11 @@ builtins.mapAttrs
   {
     ivpn = {
       modRoot = "cli";
-      vendorHash = "sha256-xZ1tMiv06fE2wtpDagKjHiVTPYWpj32hM6n/v9ZcgrE=";
+      vendorHash = "sha256-STbkFchrmxwWnSgEJ7RGKN3jGaCC0npL80YjlwUcs1g=";
     };
     ivpn-service = {
       modRoot = "daemon";
-      vendorHash = "sha256-DVKSCcEeE7vI8aOYuEwk22n0wtF7MMDOyAgYoXYadwI=";
+      vendorHash = "sha256-REIY3XPyMA2Loxo1mKzJMJwZrf9dQMOtnQOUEgN5LP8=";
       nativeBuildInputs = [ makeWrapper ];
 
       patches = [ ./permissions.patch ];

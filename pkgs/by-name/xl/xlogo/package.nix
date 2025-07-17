@@ -5,7 +5,7 @@
   xorg,
   autoreconfHook,
   pkg-config,
-  util-macros,
+  xorg-autoconf,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    util-macros
+    xorg-autoconf
     autoreconfHook
     pkg-config
   ];

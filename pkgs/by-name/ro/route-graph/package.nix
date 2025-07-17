@@ -26,14 +26,15 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ]
-  ++ (with python3.pkgs; [
-    scapy
-    typer
-    typing-extensions
-  ]);
+  propagatedBuildInputs =
+    [
+      graphviz
+    ]
+    ++ (with python3.pkgs; [
+      scapy
+      typer
+      typing-extensions
+    ]);
 
   # Project has no tests
   doCheck = false;

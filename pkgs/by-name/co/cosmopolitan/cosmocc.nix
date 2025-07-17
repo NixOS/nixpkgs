@@ -15,7 +15,7 @@ let
         };
 
         meta = cosmopolitan.meta // {
-          description = "Compilers for Cosmopolitan C/C++ programs";
+          description = "compilers for Cosmopolitan C/C++ programs";
         };
       }
       ''

@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   llama-index-core,
-  hatchling,
+  poetry-core,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-database";
-  version = "0.5.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,10 +17,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_database";
     inherit version;
-    hash = "sha256-9hMQJ0DdMIADJ5Mtjx7PIq6pOHjUmCceecuPev10d/8=";
+    hash = "sha256-BdZzn2T3EkR0N3C0uEF3kj1QV5Qnzut7yapAVxdc7C8=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [ llama-index-core ];
 

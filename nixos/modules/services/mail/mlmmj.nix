@@ -120,11 +120,8 @@ in
 
     services.postfix = {
       enable = true;
-      settings.main = {
-        recipient_delimiter = "+";
-        propagate_unmatched_extensions = "virtual";
-      };
-      settings.master.mlmmj = {
+      recipientDelimiter = "+";
+      masterConfig.mlmmj = {
         type = "unix";
         private = true;
         privileged = true;
@@ -142,6 +139,8 @@ in
       };
 
       extraAliases = concatMapLines (alias cfg.listDomain) cfg.mailLists;
+
+      extraConfig = "propagate_unmatched_extensions = virtual";
 
       virtual = concatMapLines (virtual cfg.listDomain) cfg.mailLists;
       transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;
@@ -166,8 +165,8 @@ in
       };
       preStart = ''
         ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-        ${lib.getExe' config.services.postfix.package "postmap"} /etc/postfix/virtual
-        ${lib.getExe' config.services.postfix.package "postmap"} /etc/postfix/transport
+        ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+        ${pkgs.postfix}/bin/postmap /etc/postfix/transport
       '';
     };
 

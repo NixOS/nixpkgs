@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_units";
-  version = "0.1.7";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "JosephTLyons";
     repo = "nu_plugin_units";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4donh0UlBbaEwgDxUECKTPWGLuAc9KUmrRty2Ob7ZMA=";
+    hash = "sha256-1KyuUaWN+OiGpo8Ohc/8B+nisdb8uT+T3qBu+JbaVYo=";
   };
 
-  cargoHash = "sha256-MjalDrjJTAHay9zcPhA8br2tOkkIzE4etL+yF5MKetY=";
+  cargoHash = "sha256-LYVwFM8znN96LwOwRnauehrucSqHnKNPoMzl2HRczww=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
@@ -30,5 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/JosephTLyons/nu_plugin_units";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    # "Plugin `units` is compiled for nushell version 0.104.0, which is not
+    # compatible with version 0.105.1"
+    broken = true;
   };
 })

@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
-  version = "1.21";
+  version = "1.20";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
     inherit version;
-    hash = "sha256-EllrOAUW9ONJ0sUHfL7BYIaKTXeHjw8KF5as9l4W/cE=";
+    hash = "sha256-TRh7ffdW7ZBDlj7RPgEbtzEuHkTe99L6GYuOLgeEumg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -26,8 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click-odoo
     manifestoo-core
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   passthru.updateScript = nix-update-script { };
 

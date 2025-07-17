@@ -26,6 +26,7 @@ let
     inherit src version;
     pname = "portmod-rust";
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [
@@ -121,7 +122,7 @@ python3Packages.buildPythonApplication {
   '';
 
   meta = with lib; {
-    description = "Mod manager for openMW based on portage";
+    description = "mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ marius851000 ];

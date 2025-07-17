@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sonnyp/eloquent";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ thtrf ];
-    mainProgram = "re.sonny.Eloquent";
+    mainProgram = "eloquent";
     platforms = lib.platforms.linux;
   };
 })

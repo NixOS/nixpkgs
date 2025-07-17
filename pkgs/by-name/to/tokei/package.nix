@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokei";
-  version = "13.0.0-alpha.9";
+  version = "13.0.0-alpha.8";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = "tokei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OSIJYSUwc8SvszEOMgt+d/ljCW2jtBkPw6buof4JpUc=";
+    hash = "sha256-jCI9VM3y76RI65E5UGuAPuPkDRTMyi+ydx64JWHcGfE=";
   };
 
   patches = [
@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
-  cargoHash = "sha256-FIT+c2YzGxJEvLB5uqkdVLWkQ/wlrbCrAkSQEoS4kJw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LzlyrKaRjUo6JnVLQnHidtI4OWa+GrhAc4D8RkL+nmQ=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 

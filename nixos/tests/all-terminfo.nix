@@ -13,10 +13,6 @@
       ...
     }:
     let
-      # Use derivations instead of attr names to avoid listing missing packages
-      maskedTerminfos = with pkgs; [
-        alacritty-graphics # would clobber alacritty terminfo
-      ];
       infoFilter =
         name: drv:
         let
@@ -27,8 +23,7 @@
         && o.value ? outputs
         && builtins.elem "terminfo" o.value.outputs
         && !o.value.meta.broken
-        && lib.meta.availableOn pkgs.stdenv.hostPlatform o.value
-        && !(builtins.elem o.value maskedTerminfos);
+        && lib.meta.availableOn pkgs.stdenv.hostPlatform o.value;
       terminfos = lib.filterAttrs infoFilter pkgs;
       excludedTerminfos = lib.filterAttrs (
         _: drv: !(builtins.elem drv.terminfo config.environment.systemPackages)

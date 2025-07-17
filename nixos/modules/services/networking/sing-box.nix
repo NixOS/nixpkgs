@@ -12,10 +12,7 @@ in
 {
 
   meta = {
-    maintainers = with lib.maintainers; [
-      nickcao
-      prince213
-    ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 
   options = {
@@ -30,7 +27,7 @@ in
         };
         default = { };
         description = ''
-          The sing-box configuration, see <https://sing-box.sagernet.org/configuration/> for documentation.
+          The sing-box configuration, see https://sing-box.sagernet.org/configuration/ for documentation.
 
           Options containing secret data should be set to an attribute set
           containing the attribute `_secret` - a string pointing to a file
@@ -62,27 +59,15 @@ in
         }
       ];
 
-    # for polkit rules
-    environment.systemPackages = [ cfg.package ];
-    services.dbus.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
     systemd.services.sing-box = {
+      preStart = utils.genJqSecretsReplacementSnippet cfg.settings "/run/sing-box/config.json";
       serviceConfig = {
-        User = "sing-box";
-        Group = "sing-box";
         StateDirectory = "sing-box";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "sing-box";
         RuntimeDirectoryMode = "0700";
-        ExecStartPre =
-          let
-            script = pkgs.writeShellScript "sing-box-pre-start" ''
-              ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/sing-box/config.json"}
-              chown --reference=/run/sing-box /run/sing-box/config.json
-            '';
-          in
-          "+${script}";
         ExecStart = [
           ""
           "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
@@ -90,13 +75,6 @@ in
       };
       wantedBy = [ "multi-user.target" ];
     };
-
-    users = {
-      users.sing-box = {
-        isSystemUser = true;
-        group = "sing-box";
-      };
-      groups.sing-box = { };
-    };
   };
+
 }

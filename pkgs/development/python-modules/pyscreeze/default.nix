@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
@@ -21,13 +20,12 @@ buildPythonPackage {
   };
 
   pythonImportsCheck = [ "pyscreeze" ];
-  doCheck = stdenv.hostPlatform.isLinux;
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeCheckInputs = [
     scrot
     xlib
     xvfb-run
   ];
-  checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
+  checkPhase = ''
     python -m unittest tests.test_pillow_unavailable
     xvfb-run python -m unittest tests.test_pyscreeze
   '';

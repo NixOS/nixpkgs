@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "consul-alerts";
-    description = "Highly available daemon for sending notifications and reminders based on Consul health checks";
+    description = "Extendable open source continuous integration server";
     homepage = "https://github.com/AcalephStorage/consul-alerts";
     # As per README
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.darwin;

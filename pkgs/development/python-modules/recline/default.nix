@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2025.6";
+  version = "2024.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
     tag = "v${version}";
-    sha256 = "sha256-WBMt5jDPCBmTgVdYDN662uU2HVjB1U3GYJwn0P56WsI=";
+    sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
   };
 
   patches = [

@@ -51,23 +51,25 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    SDL2
-    zlib
-  ]
-  ++ lib.optionals withVectorEnv [
-    opencv
-  ];
+  buildInputs =
+    [
+      SDL2
+      zlib
+    ]
+    ++ lib.optionals withVectorEnv [
+      opencv
+    ];
 
-  dependencies = [
-    gymnasium
-    importlib-resources
-    numpy
-    typing-extensions
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    jax
-  ];
+  dependencies =
+    [
+      gymnasium
+      importlib-resources
+      numpy
+      typing-extensions
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      jax
+    ];
 
   postPatch =
     # Relax the pybind11 version
@@ -90,13 +92,14 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeCheckInputs = [
-    gymnasium
-    pytestCheckHook
-  ]
-  + lib.optionals withVectorEnv [
-    opencv-python
-  ];
+  nativeCheckInputs =
+    [
+      gymnasium
+      pytestCheckHook
+    ]
+    + lib.optionals withVectorEnv [
+      opencv-python
+    ];
 
   disabledTests = [
     # Fatal Python error: Aborted

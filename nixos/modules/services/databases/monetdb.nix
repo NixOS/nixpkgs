@@ -38,7 +38,7 @@ in
       };
 
       port = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.ints.u16;
         default = 50000;
         description = "Port to listen on.";
       };

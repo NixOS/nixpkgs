@@ -38,26 +38,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_net
-    flac
-    libglut
-    libcdio
-    libjack2
-    libsamplerate
-    libsndfile
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libGL
-    libGLU
-    libX11
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      SDL2
+      SDL2_net
+      flac
+      libglut
+      libcdio
+      libjack2
+      libsamplerate
+      libsndfile
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libGL
+      libGLU
+      libX11
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   hardeningDisable = [
     "format"

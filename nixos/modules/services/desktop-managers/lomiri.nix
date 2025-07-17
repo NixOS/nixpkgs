@@ -7,6 +7,9 @@
 
 let
   cfg = config.services.desktopManager.lomiri;
+  nixos-gsettings-overrides = pkgs.lomiri.lomiri-gsettings-overrides.override {
+    inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
+  };
 in
 {
   options.services.desktopManager.lomiri = {
@@ -21,6 +24,18 @@ in
       '';
       type = lib.types.bool;
       default = config.services.xserver.displayManager.lightdm.greeters.lomiri.enable || cfg.enable;
+    };
+
+    extraGSettingsOverrides = lib.mkOption {
+      description = "Additional GSettings overrides.";
+      type = lib.types.lines;
+      default = "";
+    };
+
+    extraGSettingsOverridePackages = lib.mkOption {
+      description = "List of packages for which GSettings are overridden.";
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
     };
   };
 
@@ -43,26 +58,17 @@ in
           "/share/wallpapers"
         ];
 
-        systemPackages = with pkgs.lomiri; [
-          lomiri-wallpapers # default + additional wallpaper
-          suru-icon-theme # basic indicator icons
-        ];
-      };
+        # Override GSettings defaults
+        sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-      # Override GSettings defaults
-      programs.dconf = {
-        enable = true;
-        profiles.user.databases = [
-          {
-            settings = {
-              "com/lomiri/shell/launcher" = {
-                logo-picture-uri = "file://${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
-                home-button-background-color = "#5277C3";
-              };
-            };
-            lockAll = true;
-          }
-        ];
+        systemPackages =
+          [
+            nixos-gsettings-overrides # GSettings default overrides
+          ]
+          ++ (with pkgs.lomiri; [
+            lomiri-wallpapers # default + additional wallpaper
+            suru-icon-theme # basic indicator icons
+          ]);
       };
 
       fonts.packages = with pkgs; [
@@ -125,10 +131,7 @@ in
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
-            # morph-browser
-            # Adding another browser that is known-working until Morph Browser can migrate to Qt6
-            pkgs.epiphany
+            morph-browser
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
             teleports
           ]);
@@ -151,11 +154,12 @@ in
         lomiri-download-manager
       ];
 
+      # Copy-pasted basic stuff
+      hardware.graphics.enable = lib.mkDefault true;
+      fonts.enableDefaultPackages = lib.mkDefault true;
+      programs.dconf.enable = lib.mkDefault true;
+
       services.accounts-daemon.enable = true;
-      services.udisks2.enable = true;
-      services.upower.enable = true;
-      services.geoclue2.enable = true;
-      services.telepathy.enable = true;
 
       services.ayatana-indicators = {
         enable = true;
@@ -179,12 +183,18 @@ in
           );
       };
 
+      services.udisks2.enable = true;
+      services.upower.enable = true;
+      services.geoclue2.enable = true;
+
       services.gnome.evolution-data-server = {
         enable = true;
         plugins = with pkgs; [
           # TODO: lomiri.address-book-service
         ];
       };
+
+      services.telepathy.enable = true;
 
       services.displayManager = {
         defaultSession = lib.mkDefault "lomiri";
@@ -266,18 +276,19 @@ in
 
       systemd.services = {
         "dbus-com.lomiri.UserMetrics" = {
-          serviceConfig = {
-            Type = "dbus";
-            BusName = "com.lomiri.UserMetrics";
-            User = "usermetrics";
-            StandardOutput = "syslog";
-            SyslogIdentifier = "com.lomiri.UserMetrics";
-            ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
-          }
-          // lib.optionalAttrs (!config.security.apparmor.enable) {
-            # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
-            Environment = "USERMETRICS_NO_AUTH=1";
-          };
+          serviceConfig =
+            {
+              Type = "dbus";
+              BusName = "com.lomiri.UserMetrics";
+              User = "usermetrics";
+              StandardOutput = "syslog";
+              SyslogIdentifier = "com.lomiri.UserMetrics";
+              ExecStart = "${pkgs.lomiri.libusermetrics}/libexec/libusermetrics/usermetricsservice";
+            }
+            // lib.optionalAttrs (!config.security.apparmor.enable) {
+              # Due to https://gitlab.com/ubports/development/core/libusermetrics/-/issues/8, auth must be disabled when not using AppArmor, lest the next database usage breaks
+              Environment = "USERMETRICS_NO_AUTH=1";
+            };
         };
       };
 

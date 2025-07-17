@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Object-oriented class library for C++ application development";
+    description = "Smooth Class Library";
     mainProgram = "smooth-translator";
     license = licenses.artistic2;
     homepage = "http://www.smooth-project.org/";

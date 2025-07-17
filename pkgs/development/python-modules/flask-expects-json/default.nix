@@ -22,8 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     flask
     jsonschema
-  ]
-  ++ flask.optional-dependencies.async;
+  ] ++ flask.optional-dependencies.async;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

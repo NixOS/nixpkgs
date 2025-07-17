@@ -1,11 +1,11 @@
 {
   asciidoctor,
-  fetchFromRadicle,
-  gitMinimal,
+  fetchgit,
+  git,
   installShellFiles,
   jq,
   lib,
-  makeBinaryWrapper,
+  makeWrapper,
   man-db,
   nixos,
   nixosTests,
@@ -16,18 +16,16 @@
   stdenv,
   testers,
   xdg-utils,
-  versionCheckHook,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.4.0";
+  version = "1.2.0";
+  env.RADICLE_VERSION = version;
 
-  src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
-    repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
-    tag = "releases/${finalAttrs.version}";
-    hash = "sha256-e5Zelu3g8m9u5NtyABkIV4wOed9cq58xSaxginoDb2Q=";
+  src = fetchgit {
+    url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
+    rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
+    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -35,30 +33,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -rf $out/.git
     '';
   };
-
-  cargoHash = "sha256-64SDz0wHKcp/tPGDDOlCRFr3Z1q6cWOafhP0howSFhA=";
-
-  env.RADICLE_VERSION = finalAttrs.version;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
 
   nativeBuildInputs = [
     asciidoctor
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
   ];
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [ git ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
     export SOURCE_DATE_EPOCH=$(<$src/.git_time)
   '';
-
-  cargoBuildFlags = [
-    "--package=radicle-node"
-    "--package=radicle-cli"
-    "--package=radicle-remote-helper"
-  ];
-
-  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
@@ -85,17 +73,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
-
   postFixup = ''
     for program in $out/bin/* ;
     do
       wrapProgram "$program" \
         --prefix PATH : "${
           lib.makeBinPath [
-            gitMinimal
+            git
             man-db
             openssh
             xdg-utils
@@ -104,12 +88,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
   passthru.tests =
     let
       package = radicle-node;
     in
     {
+      version = testers.testVersion { inherit package; };
       basic =
         runCommand "${package.name}-basic-test"
           {
@@ -130,7 +114,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             rad debug | jq -e '
                 (.sshVersion | contains("${openssh.version}"))
               and
-                (.gitVersion | contains("${gitMinimal.version}"))
+                (.gitVersion | contains("${git.version}"))
             '
 
             touch $out
@@ -169,8 +153,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       amesgen
       lorenzleutgeb
-      defelo
     ];
     mainProgram = "rad";
   };
-})
+}

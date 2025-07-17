@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.26.2";
+  version = "0.25.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7NjMloe7teG03dwVWqHz6oc9bp+eloIhN42vBMLk92M=";
+    hash = "sha256-hALv4NR4O5xNZ4dEbV4Cer55eWlR8ickG9LF2PPgnQs=";
   };
 
   build-system = [ setuptools ];
@@ -39,8 +39,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     trustme
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like

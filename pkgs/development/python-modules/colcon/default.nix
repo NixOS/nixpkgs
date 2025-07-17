@@ -15,10 +15,7 @@
   pytest-cov-stub,
   pytest-repeat,
   pytest-rerunfailures,
-  scspell,
-  writableTmpDirAsHomeHook,
 }:
-
 buildPythonPackage rec {
   pname = "colcon-core";
   version = "0.19.0";
@@ -46,15 +43,12 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-repeat
     pytest-rerunfailures
-    scspell
-    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
-    # Skip the linter tests that require additional dependencies
+    # Skip the linter and spell check tests that require additional dependencies
     "test/test_flake8.py"
-    # Skip failing Python build tests
-    "test/test_build_python.py"
+    "test/test_spell_check.py"
   ];
 
   pythonImportsCheck = [ "colcon_core" ];

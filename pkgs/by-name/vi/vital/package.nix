@@ -73,7 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://vital.audio/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [
-      unfree # https://vital.audio/eula/
+      unfree
+      gpl3Plus
     ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ PowerUser64 ];

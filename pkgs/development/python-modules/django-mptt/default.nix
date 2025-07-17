@@ -5,21 +5,18 @@
   hatchling,
   django,
   django-js-asset,
-  model-bakery,
-  pytestCheckHook,
-  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-mptt";
-  version = "0.18";
+  version = "0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-mptt";
     repo = "django-mptt";
     rev = version;
-    hash = "sha256-UJQwjOde0DkG/Pa/pd2htnp4KEn5KwYAo8GP5A7/h+I=";
+    hash = "sha256-vWnXKWzaa5AWoNaIc8NA1B2mnzKXRliQmi5VdrRMadE=";
   };
 
   build-system = [ hatchling ];
@@ -31,16 +28,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mptt" ];
 
-  nativeCheckInputs = [
-    model-bakery
-    pytestCheckHook
-    pytest-django
-  ];
-
-  preCheck = ''
-    export DJANGO_SETTINGS_MODULE=tests.settings
-    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
-  '';
+  # No pytest checks, since they depend on model_mommy, which is deprecated
+  doCheck = false;
 
   meta = with lib; {
     description = "Utilities for implementing a modified pre-order traversal tree in Django";

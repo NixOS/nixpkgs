@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   installShellFiles,
   buildGoModule,
@@ -21,7 +20,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd autorestic \
          --bash <($out/bin/autorestic completion bash) \
          --fish <($out/bin/autorestic completion fish) \

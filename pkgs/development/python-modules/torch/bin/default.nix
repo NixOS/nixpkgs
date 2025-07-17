@@ -34,7 +34,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.8.0";
+  version = "2.7.1";
 in
 buildPythonPackage {
   inherit version;
@@ -94,8 +94,7 @@ buildPythonPackage {
     setuptools
     sympy
     typing-extensions
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [ triton ];
 
   postInstall = ''
     # ONNX conversion

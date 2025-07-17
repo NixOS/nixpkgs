@@ -2,23 +2,20 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  libX11,
 }:
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.11.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${version}";
-    hash = "sha256-mEzTvurjG/58qgNtJie7Iy6rSkiu2VbDIu1MiyrcEyo=";
+    hash = "sha256-q7dod5kKvKny4Zht6KpHpRa7N9Je+tmKVyn9PEde/+c=";
   };
 
-  vendorHash = "sha256-Xilu4wzDkwf15LmVH0Pkk91/nDisUu66aPP0JvT4ldo=";
-
-  buildInputs = [ libX11 ];
+  vendorHash = "sha256-hPbvzhYHOxytQs3NkSVaZhFH0TbOlr4U/QiH+vemTrc=";
 
   ldflags = [
     "-s"

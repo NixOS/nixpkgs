@@ -4,7 +4,7 @@
   fetchFromGitHub,
   httpx,
   protobuf,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-httpx,
   pytest-mock,
   pytestCheckHook,
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-httpx
     pytest-mock
     pytestCheckHook

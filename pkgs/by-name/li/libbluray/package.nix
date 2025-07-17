@@ -31,21 +31,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-R4/9aKD13ejvbKmJt/A1taCiLFmRQuXNP/ewO76+Xys=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ]
-  ++ lib.optionals withJava [
-    jdk17
-    ant
-    stripJavaArchivesHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      autoreconfHook
+    ]
+    ++ lib.optionals withJava [
+      jdk17
+      ant
+      stripJavaArchivesHook
+    ];
 
-  buildInputs = [
-    fontconfig
-  ]
-  ++ lib.optional withMetadata libxml2
-  ++ lib.optional withFonts freetype;
+  buildInputs =
+    [ fontconfig ] ++ lib.optional withMetadata libxml2 ++ lib.optional withFonts freetype;
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openrocket";
     repo = "openrocket";
-    tag = "release-${finalAttrs.version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-Dg/v72N9cDG9Ko5JIcZxGxh+ClRDgf5Jq5DvQyCiYOs=";
     fetchSubmodules = true;
   };

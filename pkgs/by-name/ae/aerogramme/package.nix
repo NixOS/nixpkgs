@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-GPj8qhfKgfAadQD9DJafN4ec8L6oY62PS/w/ljkPHpw=";
 
   # disable network tests as Nix sandbox breaks them

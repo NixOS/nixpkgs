@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyadjoint-ad";
-  version = "2025.04.1";
+  version = "2025.04.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
     tag = version;
-    hash = "sha256-S9A0qCatnnLuOkqWsEC4tjVY1HZqqi2T5iXu+WUoN24=";
+    hash = "sha256-ZNd8aJJ87OfQakScrkYqhCAh7qGctW/uqIoQjX5VEhI=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests/pyadjoint"
   ];
 

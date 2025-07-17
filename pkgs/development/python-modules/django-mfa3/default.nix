@@ -5,7 +5,7 @@
   django,
   setuptools,
   pyotp,
-  fido2,
+  fido2_2,
   qrcode,
   python,
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     django
     pyotp
-    fido2
+    fido2_2
     qrcode
   ];
 

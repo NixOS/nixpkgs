@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  clang,
+  clang_14,
   pkg-config,
 
   elfutils,
@@ -19,7 +19,7 @@
 
 buildGoModule rec {
   pname = "tracee";
-  version = "0.23.2";
+  version = "0.23.1";
 
   # src = /home/tim/repos/tracee;
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ buildGoModule rec {
     repo = "tracee";
     # project has branches and tags of the same name
     tag = "v${version}";
-    hash = "sha256-Rf1pa9e6t002ltg40xZZVpE5OL9Vl02Xcn2Ux0To408=";
+    hash = "sha256-9uP0yoW+xRYv7wHuCfUMU8B2oTQjiSW5p/Ty76ni2wo=";
   };
   vendorHash = "sha256-2+4UN9WB6eGzedogy5dMvhHj1x5VeUUkDM0Z28wKQgM=";
 
@@ -37,13 +37,10 @@ buildGoModule rec {
 
   enableParallelBuilding = true;
   # needed to build bpf libs
-  hardeningDisable = [
-    "stackprotector"
-    "zerocallusedregs"
-  ];
+  hardeningDisable = [ "stackprotector" ];
 
   nativeBuildInputs = [
-    clang
+    clang_14
     pkg-config
   ];
   buildInputs = [

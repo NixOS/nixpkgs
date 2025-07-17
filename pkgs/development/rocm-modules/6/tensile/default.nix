@@ -58,20 +58,21 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyyaml
-    msgpack
-    pandas
-    joblib
-  ]
-  ++ lib.optionals (!isTensileLite) [
-    rich
-  ]
-  ++ lib.optionals isTensileLite [
-    simplejson
-    ujson
-    orjson
-  ];
+  propagatedBuildInputs =
+    [
+      pyyaml
+      msgpack
+      pandas
+      joblib
+    ]
+    ++ lib.optionals (!isTensileLite) [
+      rich
+    ]
+    ++ lib.optionals isTensileLite [
+      simplejson
+      ujson
+      orjson
+    ];
 
   patches =
     lib.optional (!isTensileLite) ./tensile-solutionstructs-perf-fix.diff

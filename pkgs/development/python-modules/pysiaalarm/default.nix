@@ -6,7 +6,7 @@
   dataclasses-json,
   pycryptodome,
   setuptools-scm,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-cases,
   pytest-cov-stub,
   pytestCheckHook,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-cases
     pytest-cov-stub
     pytestCheckHook

@@ -26,8 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libnl
-  ]
-  ++ lib.optional withKerberos libkrb5;
+  ] ++ lib.optional withKerberos libkrb5;
 
   nativeBuildInputs = [
     meson

@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "cmake";
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ]
-  ++ lib.optional enableEGL "-DGLEW_EGL=ON";
+  ] ++ lib.optional enableEGL "-DGLEW_EGL=ON";
 
   postInstall = ''
     moveToOutput lib/cmake "''${!outputDev}"

@@ -1,4 +1,4 @@
-{ kanidmPackage, pkgs, ... }:
+{ pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   serverDomain = certs.domain;
@@ -15,19 +15,17 @@ let
   '';
 in
 {
-  name = "kanidm-${kanidmPackage.version}";
+  name = "kanidm";
   meta.maintainers = with pkgs.lib.maintainers; [
     Flakebi
     oddlama
   ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm;
-
   nodes.server =
     { pkgs, ... }:
     {
       services.kanidm = {
-        package = kanidmPackage;
+        package = pkgs.kanidm_1_6;
         enableServer = true;
         serverSettings = {
           origin = "https://${serverDomain}";
@@ -46,10 +44,10 @@ in
 
       users.users.kanidm.shell = pkgs.bashInteractive;
 
-      environment.systemPackages = [
-        kanidmPackage
-        pkgs.openldap
-        pkgs.ripgrep
+      environment.systemPackages = with pkgs; [
+        kanidm
+        openldap
+        ripgrep
       ];
     };
 
@@ -57,7 +55,7 @@ in
     { nodes, ... }:
     {
       services.kanidm = {
-        package = kanidmPackage;
+        package = pkgs.kanidm_1_6;
         enableClient = true;
         clientSettings = {
           uri = "https://${serverDomain}";

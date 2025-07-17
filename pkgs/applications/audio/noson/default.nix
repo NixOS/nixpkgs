@@ -30,16 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    flac
-    libpulseaudio
-    qtbase
-    qtgraphicaleffects
-    qtquickcontrols2
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      flac
+      libpulseaudio
+      qtbase
+      qtgraphicaleffects
+      qtquickcontrols2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
   # wrapQtAppsHook doesn't automatically find noson-gui
   dontWrapQtApps = true;

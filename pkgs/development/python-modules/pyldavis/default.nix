@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/bmabey/pyLDAvis";
     description = "Python library for interactive topic model visualization";
+    maintainers = with lib.maintainers; [ gm6k ];
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ fromSource ];
     platforms = platforms.all;

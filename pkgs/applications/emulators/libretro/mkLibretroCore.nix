@@ -70,8 +70,7 @@ lib.extendMkDerivation {
           }
           .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name
         }"
-      ]
-      ++ makeFlags;
+      ] ++ makeFlags;
 
       installPhase = ''
         runHook preInstall
@@ -88,14 +87,12 @@ lib.extendMkDerivation {
         # libretro repos sometimes has a fake tag like "Current", ignore
         # it by setting hardcodeZeroVersion
         updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-      }
-      // passthru;
+      } // passthru;
 
       meta = {
         inherit mainProgram;
         inherit (retroarch-bare.meta) platforms;
         teams = [ lib.teams.libretro ];
-      }
-      // meta;
+      } // meta;
     };
 }

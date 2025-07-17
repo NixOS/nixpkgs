@@ -65,8 +65,7 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   dontUseCmakeConfigure = true;
 
@@ -87,23 +86,23 @@ buildPythonPackage rec {
     scipy
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_GPU" gpuSupport)
-    (lib.cmakeBool "USE_CUDA" cudaSupport)
-  ];
+  pypaBuildFlags =
+    lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
+    ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
 
   optional-dependencies = {
     arrow = [
       cffi
       pyarrow
     ];
-    dask = [
-      dask
-      pandas
-    ]
-    ++ dask.optional-dependencies.array
-    ++ dask.optional-dependencies.dataframe
-    ++ dask.optional-dependencies.distributed;
+    dask =
+      [
+        dask
+        pandas
+      ]
+      ++ dask.optional-dependencies.array
+      ++ dask.optional-dependencies.dataframe
+      ++ dask.optional-dependencies.distributed;
     pandas = [ pandas ];
     scikit-learn = [ scikit-learn ];
   };

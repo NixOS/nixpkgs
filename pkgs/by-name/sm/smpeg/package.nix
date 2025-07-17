@@ -59,14 +59,13 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    SDL
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    gtk2
-    libGLU
-    libGL
-  ];
+  buildInputs =
+    [ SDL ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      gtk2
+      libGLU
+      libGL
+    ];
 
   outputs = [
     "out"

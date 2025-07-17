@@ -1,26 +1,28 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "4.5.11";
+  version = "4.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
     rev = "refs/tags/${version}";
-    hash = "sha256-1wnAniw7fdyfH6QeFjdIAxX5mU92ZZxLLJ/QkKge1eY=";
+    hash = "sha256-T3InE4J4qYeFJTq6nrW8y5BOA7Z0n3t9eVpl641r/xk=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = [ python3Packages.setuptools ];
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-jinja2
     astral
@@ -30,7 +32,6 @@ python3Packages.buildPythonApplication rec {
     iso8601
     paho-mqtt
     pid
-    pydantic
     python-dateutil
     python-socketio
     pytz
@@ -38,6 +39,7 @@ python3Packages.buildPythonApplication rec {
     requests
     sockjs
     uvloop
+    websocket-client
     tomli
     tomli-w
   ];

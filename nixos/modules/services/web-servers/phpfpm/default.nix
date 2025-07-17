@@ -302,7 +302,6 @@ in
             RuntimeDirectory = "phpfpm";
             RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
             Restart = "always";
-            WatchdogSec = 15;
           };
       }
     ) cfg.pools;

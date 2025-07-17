@@ -27,6 +27,5 @@ buildGoModule {
     maintainers = [ lib.maintainers.samw ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    mainProgram = "sendgmail";
   };
 }

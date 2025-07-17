@@ -416,11 +416,11 @@ let
               description = "The protocol specifier for port forwarding between host and container";
             };
             hostPort = mkOption {
-              type = types.port;
+              type = types.int;
               description = "Source port of the external interface on host";
             };
             containerPort = mkOption {
-              type = types.nullOr types.port;
+              type = types.nullOr types.int;
               default = null;
               description = "Target port of container";
             };
@@ -518,10 +518,10 @@ in
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = config.containers != { };
-      defaultText = lib.literalExpression "config.containers != { }";
+      default = true;
       description = ''
-        Whether to enable support for NixOS containers.
+        Whether to enable support for NixOS containers. Defaults to true
+        (at no cost if containers are not actually used).
       '';
     };
 
@@ -729,7 +729,7 @@ in
                   so that no overlapping UID/GID ranges are assigned to multiple containers.
                   This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
 
-                  See <https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users=> for details.
+                  See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
                 '';
               };
 
@@ -861,8 +861,7 @@ in
 
               # Removed option. See `checkAssertion` below for the accompanying error message.
               pkgs = mkOption { visible = false; };
-            }
-            // networkOptions;
+            } // networkOptions;
 
             config =
               let

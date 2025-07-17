@@ -33,11 +33,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--ds=crispy_forms.tests.test_settings"
-  ];
-
-  enabledTestPaths = [
     "crispy_forms/tests/"
   ];
 

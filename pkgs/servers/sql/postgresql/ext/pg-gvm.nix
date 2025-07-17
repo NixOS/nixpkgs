@@ -14,13 +14,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg-gvm";
-  version = "22.6.11";
+  version = "22.6.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pg-gvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkpZg1LMWuH5R4I/kTO3cofL3uNt11yXSgfFppSNC+o=";
+    hash = "sha256-T1U7t6ORHtmWeg77PR4gUH4nn3ywVC3MnvqoEIpJ4aw=";
   };
 
   nativeBuildInputs = [

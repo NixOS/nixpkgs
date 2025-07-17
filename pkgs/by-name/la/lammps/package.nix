@@ -49,14 +49,14 @@
 stdenv.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
-  version = "22Jul2025_update1";
+  version = "29Aug2024_update3";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-w0SQjckqtvTKDP5zRX9QJGd5vT9HamsRwwCmEMqkZEM=";
+    hash = "sha256-nvUkRkO58Hmrsieyd9ALRUA7Q80AcZffW85ipH4NF/U=";
   };
   preConfigure = ''
     cd cmake
@@ -74,21 +74,23 @@ stdenv.mkDerivation (finalAttrs: {
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
   };
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ]
-  ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
-  ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    ]
+    ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
+    ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
 
-  buildInputs = [
-    fftw
-    libpng
-    blas
-    lapack
-    gzip
-  ]
-  ++ lib.optionals packages.PYTHON [ python3 ]
-  ++ extraBuildInputs;
+  buildInputs =
+    [
+      fftw
+      libpng
+      blas
+      lapack
+      gzip
+    ]
+    ++ lib.optionals packages.PYTHON [ python3 ]
+    ++ extraBuildInputs;
 
   postInstall = ''
     # For backwards compatibility

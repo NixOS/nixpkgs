@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.28.4";
+  version = "4.26.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     tag = version;
-    hash = "sha256-EKJsFf4LvfDi3OL6iNhKEBl5zlpdLET9RkfHEP7E9xU=";
+    hash = "sha256-VySdeZDC71vi2mOtjdFJ4iCSpWbFEW3nzrVucPUz/oc=";
   };
 
   postPatch = ''
@@ -57,8 +57,7 @@ buildPythonPackage rec {
     six
     toml
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   doCheck = false; # infinite recursion via devpi-client
 

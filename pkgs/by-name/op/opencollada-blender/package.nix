@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "opencollada";
-  version = "0-unstable-2025-01-30";
+  version = "unstable-2025-01-30";
 
   src = fetchFromGitHub {
     owner = "aras-p";

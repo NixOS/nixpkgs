@@ -9,24 +9,24 @@ let
   pkg = cfg.package;
 
   # SECRET_KEY through an env file
-  env = {
-    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-    DEBUG = "0";
-    DEBUG_TOOLBAR = "0";
-    MEDIA_ROOT = "/var/lib/tandoor-recipes";
-  }
-  // lib.optionalAttrs (config.time.timeZone != null) {
-    TZ = config.time.timeZone;
-  }
-  // (lib.mapAttrs (_: toString) cfg.extraConfig);
+  env =
+    {
+      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+      DEBUG = "0";
+      DEBUG_TOOLBAR = "0";
+      MEDIA_ROOT = "/var/lib/tandoor-recipes";
+    }
+    // lib.optionalAttrs (config.time.timeZone != null) {
+      TZ = config.time.timeZone;
+    }
+    // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
-    # UID is a read-only shell variable
-    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $mainpid -m -S $uid -G $gid --wdns=${env.MEDIA_ROOT} \
+      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -184,7 +184,7 @@ in
       };
     };
 
-    services.tandoor-recipes.extraConfig = lib.mkIf cfg.database.createLocally {
+    services.paperless.settings = lib.mkIf cfg.database.createLocally {
       DB_ENGINE = "django.db.backends.postgresql";
       POSTGRES_HOST = "/run/postgresql";
       POSTGRES_USER = "tandoor_recipes";

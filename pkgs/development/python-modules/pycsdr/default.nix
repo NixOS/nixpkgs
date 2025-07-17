@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pycsdr";
-  version = "0.18.2";
+  version = "0.18.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pycsdr";
     rev = version;
-    hash = "sha256-OzkH1L9bFXf+kK8OPjRXpGz+fPCs67spJfXyV28NWWQ=";
+    hash = "sha256-OyfcXCcbvOOhBUkbAba3ayPzpH5z2nJWHbR6GcrCMy8=";
   };
 
   propagatedBuildInputs = [ csdr ];
@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jketterl/pycsdr";
-    description = "Bindings for the csdr library";
+    description = "bindings for the csdr library";
     license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.c3d2 ];
   };
 }

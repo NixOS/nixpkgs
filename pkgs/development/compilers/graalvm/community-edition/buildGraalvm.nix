@@ -23,6 +23,7 @@
   ...
 }@args:
 
+assert useMusl -> stdenv.hostPlatform.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
     "lib"
@@ -116,8 +117,7 @@ let
       nativeBuildInputs = [
         unzip
         makeWrapper
-      ]
-      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+      ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
       propagatedBuildInputs = [
         setJavaClassPath
@@ -138,29 +138,30 @@ let
       postInstall =
         let
           cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
-          preservedNixVariables = [
-            "-ENIX_BINTOOLS"
-            "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-            "-ENIX_BUILD_CORES"
-            "-ENIX_BUILD_TOP"
-            "-ENIX_CC"
-            "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-            "-ENIX_CFLAGS_COMPILE"
-            "-ENIX_HARDENING_ENABLE"
-            "-ENIX_LDFLAGS"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "-ELOCALE_ARCHIVE"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            "-EDEVELOPER_DIR"
-            "-EDEVELOPER_DIR_FOR_BUILD"
-            "-EDEVELOPER_DIR_FOR_TARGET"
-            "-EMACOSX_DEPLOYMENT_TARGET"
-            "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
-            "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
-            "-ENIX_APPLE_SDK_VERSION"
-          ];
+          preservedNixVariables =
+            [
+              "-ENIX_BINTOOLS"
+              "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+              "-ENIX_BUILD_CORES"
+              "-ENIX_BUILD_TOP"
+              "-ENIX_CC"
+              "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+              "-ENIX_CFLAGS_COMPILE"
+              "-ENIX_HARDENING_ENABLE"
+              "-ENIX_LDFLAGS"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isLinux [
+              "-ELOCALE_ARCHIVE"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [
+              "-EDEVELOPER_DIR"
+              "-EDEVELOPER_DIR_FOR_BUILD"
+              "-EDEVELOPER_DIR_FOR_TARGET"
+              "-EMACOSX_DEPLOYMENT_TARGET"
+              "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
+              "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
+              "-ENIX_APPLE_SDK_VERSION"
+            ];
           preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
         in
         ''
@@ -230,8 +231,8 @@ let
         }
 
         ${
-          # --static is only available in x86_64 Linux
-          lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && useMusl) ''
+          # --static is only available in Linux
+          lib.optionalString (stdenv.hostPlatform.isLinux && useMusl) ''
             echo "Ahead-Of-Time compilation with --static and --libc=musl"
             $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
             ./helloworld | fgrep 'Hello World'
@@ -247,8 +248,7 @@ let
           ./update.sh
           "graalvm-ce"
         ];
-      }
-      // (args.passhtru or { });
+      } // (args.passhtru or { });
 
       meta =
         with lib;
@@ -258,8 +258,7 @@ let
             description = "High-Performance Polyglot VM";
             license = with licenses; [
               upl
-              gpl2
-              classpathException20
+              gpl2Classpath
               bsd3
             ];
             sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -6,7 +6,7 @@ let
 in
 {
   name = "chromadb";
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.drupol ];
 
   nodes = {
     machine =

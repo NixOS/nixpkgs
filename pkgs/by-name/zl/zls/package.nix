@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = "zls";
-    tag = finalAttrs.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-A5Mn+mfIefOsX+eNBRHrDVkqFDVrD3iXDNsUL4TPhKo=";
   };

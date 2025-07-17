@@ -117,10 +117,11 @@ builtins.intersectAttrs super {
 
   # Test suite needs executable
   agda2lagda = overrideCabal (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/agda2lagda:$PATH"
-    ''
-    + drv.preCheck or "";
+    preCheck =
+      ''
+        export PATH="$PWD/dist/build/agda2lagda:$PATH"
+      ''
+      + drv.preCheck or "";
   }) super.agda2lagda;
 
   # scrypt requires SSE2
@@ -184,7 +185,7 @@ builtins.intersectAttrs super {
 
   # Doesn't declare LLVM dependency, needs llvm-config
   llvm-codegen = addBuildTools [
-    pkgs.llvmPackages.llvm.dev # for native llvm-config
+    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
   ] super.llvm-codegen;
 
   # hledger* overrides
@@ -330,36 +331,36 @@ builtins.intersectAttrs super {
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
-    preCheck = drv.preCheck or "" + ''
-      chmod +x ./test/data/*.sh
-      patchShebangs --build test/data
-    '';
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        chmod +x ./test/data/*.sh
+        patchShebangs --build test/data
+      '';
   }) super.shelly;
 
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  nix-serve-ng = lib.pipe (super.nix-serve-ng.override { nix = pkgs.nixVersions.nix_2_28; }) [
-    # nix-serve-ng isn't regularly released to Hackage
-    (overrideSrc {
+  nix-serve-ng =
+    (overrideCabal (old: {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
-        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
+        rev = "6e8d82a451fccbaa4714da8f7a3db5907bdfa96d";
+        hash = "sha256-Ht5wD/n2I/tQWNgYIdmi3UQbm1FNwp9m9JmDjZEd6ng=";
       };
-      version = "1.0.1-unstable-2025-05-28";
-    })
-
-    (overrideCabal (old: {
+      version = "1.0.0-unstable-2024-12-02";
+      #editedCabalFile = null;
       # Doesn't declare boost dependency
       pkg-configDepends = (old.pkg-configDepends or [ ]) ++ [ pkgs.boost.dev ];
-
-      passthru = old.passthru or { } // {
-        tests.lix = pkgs.lixPackageSets.stable.nix-serve-ng;
+      # error: output '/nix/store/hv6lzj1nlshn8q5lirzgys8f4vgym4hg-nix-serve-ng-1.0.0-unstable-2024-12-02' is not allowed to refer to the following paths:
+      #    /nix/store/qza2y18fwkq1wzi02qywf691r42r5jfy-ghc-9.6.6
+      broken = pkgs.stdenv.hostPlatform.system == "aarch64-darwin";
+    }) super.nix-serve-ng).override
+      {
+        nix = pkgs.nixVersions.nix_2_24;
       };
-    }))
-  ];
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -504,41 +505,14 @@ builtins.intersectAttrs super {
   # can't use pkg-config (LLVM has no official .pc files), we need to pass the
   # `dev` and `lib` output in, or Cabal will have trouble finding the library.
   # Since it looks a bit neater having it in a list, we circumvent the singular
-  # LLVM input that llvm-ffi declares.
-  llvm-ffi =
-    let
-      currentDefaultVersion = lib.versions.major pkgs.llvmPackages.llvm.version;
-      latestSupportedVersion = lib.versions.major super.llvm-ffi.version;
-    in
-    lib.pipe super.llvm-ffi (
-      [
-        (addBuildDepends [
-          pkgs.llvmPackages.llvm.lib
-          pkgs.llvmPackages.llvm.dev
-        ])
-      ]
-      # There is no matching flag for the latest supported LLVM version.
-      ++ lib.optional (currentDefaultVersion != latestSupportedVersion) (
-        enableCabalFlag "LLVM${currentDefaultVersion}00"
-      )
-    );
+  # LLVM input here.
+  llvm-ffi = addBuildDepends [
+    pkgs.llvmPackages_16.llvm.lib
+    pkgs.llvmPackages_16.llvm.dev
+  ] (super.llvm-ffi.override { LLVM = null; });
 
-  # Forces the LLVM backend; upstream signalled intent to remove this
-  # in 2017: <https://github.com/SeanRBurton/spaceprobe/issues/1>.
-  spaceprobe = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace spaceprobe.cabal \
-        --replace-fail '-fllvm ' ""
-    '';
-  }) super.spaceprobe;
-
-  # Forces the LLVM backend.
-  GlomeVec = overrideCabal (drv: {
-    postPatch = ''
-      substituteInPlace GlomeVec.cabal \
-        --replace-fail '-fllvm ' ""
-    '';
-  }) super.GlomeVec;
+  # Needs help finding LLVM.
+  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
 
   # Tries to run GUI in tests
   leksah = dontCheck (
@@ -550,12 +524,14 @@ builtins.intersectAttrs super {
           wrapGAppsHook3 # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
           gtk3 # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
         ]);
-      postPatch = (drv.postPatch or "") + ''
-        for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
-        do
-          substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
-        done
-      '';
+      postPatch =
+        (drv.postPatch or "")
+        + ''
+          for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
+          do
+            substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
+          done
+        '';
     }) super.leksah
   );
 
@@ -639,9 +615,11 @@ builtins.intersectAttrs super {
 
   # Tests execute goldplate
   goldplate = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/goldplate:$PATH"
-    '';
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        export PATH="$PWD/dist/build/goldplate:$PATH"
+      '';
   }) super.goldplate;
 
   # At least on 1.3.4 version on 32-bit architectures tasty requires
@@ -649,17 +627,23 @@ builtins.intersectAttrs super {
   tasty = overrideCabal (drv: {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [ ])
-      ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)) [
-        self.unbounded-delays
-      ];
+      ++ lib.optionals
+        (
+          !(pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isx86_64)
+          || (self.ghc.isGhcjs or false)
+        )
+        [
+          self.unbounded-delays
+        ];
   }) super.tasty;
 
   tasty-discover = overrideCabal (drv: {
     # Depends on itself for testing
-    preBuild = ''
-      export PATH="$PWD/dist/build/tasty-discover:$PATH"
-    ''
-    + (drv.preBuild or "");
+    preBuild =
+      ''
+        export PATH="$PWD/dist/build/tasty-discover:$PATH"
+      ''
+      + (drv.preBuild or "");
   }) super.tasty-discover;
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
@@ -679,9 +663,11 @@ builtins.intersectAttrs super {
     patches = drv.patches or [ ] ++ [
       ./patches/GLUT.patch
     ];
-    prePatch = drv.prePatch or "" + ''
-      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
+    prePatch =
+      drv.prePatch or ""
+      + ''
+        ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+      '';
   }) super.GLUT;
 
   libsystemd-journal = addExtraLibrary pkgs.systemd super.libsystemd-journal;
@@ -812,10 +798,11 @@ builtins.intersectAttrs super {
   }) super.copilot-libraries;
   # tests need to execute the built executable
   ogma-cli = overrideCabal (drv: {
-    preCheck = ''
-      export PATH=dist/build/ogma:$PATH
-    ''
-    + (drv.preCheck or "");
+    preCheck =
+      ''
+        export PATH=dist/build/ogma:$PATH
+      ''
+      + (drv.preCheck or "");
   }) super.ogma-cli;
 
   # Expects z3 to be on path so we replace it with a hard
@@ -855,26 +842,22 @@ builtins.intersectAttrs super {
     pkgs.z3
   ] super.crucible-llvm;
 
-  # yaml doesn't build its executables (json2yaml, yaml2json) by default:
-  # https://github.com/snoyberg/yaml/issues/194
-  yaml = lib.pipe super.yaml [
-    (disableCabalFlag "no-exe")
-    enableSeparateBinOutput
-    (addBuildDepend self.optparse-applicative)
-  ];
-
   # Compile manpages (which are in RST and are compiled with Sphinx).
   futhark =
     overrideCabal
       (_drv: {
-        postBuild = (_drv.postBuild or "") + ''
-          make -C docs man
-        '';
+        postBuild =
+          (_drv.postBuild or "")
+          + ''
+            make -C docs man
+          '';
 
-        postInstall = (_drv.postInstall or "") + ''
-          mkdir -p $out/share/man/man1
-          mv docs/_build/man/*.1 $out/share/man/man1/
-        '';
+        postInstall =
+          (_drv.postInstall or "")
+          + ''
+            mkdir -p $out/share/man/man1
+            mv docs/_build/man/*.1 $out/share/man/man1/
+          '';
       })
       (
         addBuildTools (with pkgs.buildPackages; [
@@ -916,10 +899,12 @@ builtins.intersectAttrs super {
           self.buildHaskellPackages.data-default
         ];
 
-        preConfigure = drv.preConfigure or "" + ''
-          export HOME=$TEMPDIR
-          patchShebangs .
-        '';
+        preConfigure =
+          drv.preConfigure or ""
+          + ''
+            export HOME=$TEMPDIR
+            patchShebangs .
+          '';
 
         # git-annex ships its test suite as part of the final executable instead of
         # using a Cabal test suite.
@@ -944,39 +929,41 @@ builtins.intersectAttrs super {
         # Use default installPhase of pkgs/stdenv/generic/setup.sh. We need to set
         # the environment variables it uses via the preInstall hook since the Haskell
         # generic builder doesn't accept them as arguments.
-        preInstall = drv.preInstall or "" + ''
-          installTargets="install"
-          installFlagsArray+=(
-            "PREFIX="
-            "DESTDIR=$out"
-            # Prevent Makefile from calling cabal/Setup again
-            "BUILDER=:"
-            # Make Haskell build dependencies available
-            "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
-          )
-        '';
+        preInstall =
+          drv.preInstall or ""
+          + ''
+            installTargets="install"
+            installFlagsArray+=(
+              "PREFIX="
+              "DESTDIR=$out"
+              # Prevent Makefile from calling cabal/Setup again
+              "BUILDER=:"
+              # Make Haskell build dependencies available
+              "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
+            )
+          '';
         installPhase = null;
 
         # Ensure git-annex uses the exact same coreutils it saw at build-time.
         # This is especially important on Darwin but also in Linux environments
         # where non-GNU coreutils are used by default.
-        postFixup = ''
-          wrapProgram $out/bin/git-annex \
-            --prefix PATH : "${
-              pkgs.lib.makeBinPath (
-                with pkgs;
-                [
-                  coreutils
-                  lsof
-                ]
-              )
-            }"
-        ''
-        + (drv.postFixup or "");
+        postFixup =
+          ''
+            wrapProgram $out/bin/git-annex \
+              --prefix PATH : "${
+                pkgs.lib.makeBinPath (
+                  with pkgs;
+                  [
+                    coreutils
+                    lsof
+                  ]
+                )
+              }"
+          ''
+          + (drv.postFixup or "");
         buildTools = [
           pkgs.buildPackages.makeWrapper
-        ]
-        ++ (drv.buildTools or [ ]);
+        ] ++ (drv.buildTools or [ ]);
 
         # Git annex provides a restricted login shell. Setting
         # passthru.shellPath here allows a user's login shell to be set to
@@ -1051,30 +1038,32 @@ builtins.intersectAttrs super {
       })
       [
         (overrideCabal (drv: {
-          postUnpack = (drv.postUnpack or "") + ''
-            # Spago includes the following two files directly into the binary
-            # with Template Haskell.  They are fetched at build-time from the
-            # `purescript-docs-search` repo above.  If they cannot be fetched at
-            # build-time, they are pulled in from the `templates/` directory in
-            # the spago source.
-            #
-            # However, they are not actually available in the spago source, so they
-            # need to fetched with nix and put in the correct place.
-            # https://github.com/spacchetti/spago/issues/510
-            cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
-            cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
-            cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
-            cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
+          postUnpack =
+            (drv.postUnpack or "")
+            + ''
+              # Spago includes the following two files directly into the binary
+              # with Template Haskell.  They are fetched at build-time from the
+              # `purescript-docs-search` repo above.  If they cannot be fetched at
+              # build-time, they are pulled in from the `templates/` directory in
+              # the spago source.
+              #
+              # However, they are not actually available in the spago source, so they
+              # need to fetched with nix and put in the correct place.
+              # https://github.com/spacchetti/spago/issues/510
+              cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+              cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+              cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+              cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
 
-            # For some weird reason, on Darwin, the open(2) call to embed these files
-            # requires write permissions. The easiest resolution is just to permit that
-            # (doesn't cause any harm on other systems).
-            chmod u+w \
-              "$sourceRoot/templates/docs-search-app-0.0.10.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.10" \
-              "$sourceRoot/templates/docs-search-app-0.0.11.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.11"
-          '';
+              # For some weird reason, on Darwin, the open(2) call to embed these files
+              # requires write permissions. The easiest resolution is just to permit that
+              # (doesn't cause any harm on other systems).
+              chmod u+w \
+                "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+                "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+                "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+                "$sourceRoot/templates/purescript-docs-search-0.0.11"
+            '';
         }))
 
         # Tests require network access.
@@ -1151,25 +1140,6 @@ builtins.intersectAttrs super {
     ];
   }) super.relocant;
 
-  # https://gitlab.iscpif.fr/gargantext/haskell-pgmq/blob/9a869df2842eccc86a0f31a69fb8dc5e5ca218a8/README.md#running-test-cases
-  haskell-pgmq = overrideCabal (drv: {
-    env = drv.env or { } // {
-      postgresqlEnableTCP = toString true;
-    };
-    testToolDepends = drv.testToolDepends or [ ] ++ [
-      # otherwise .dev gets selected?!
-      (lib.getBin (pkgs.postgresql.withPackages (ps: [ ps.pgmq ])))
-      pkgs.postgresqlTestHook
-    ];
-  }) super.haskell-pgmq;
-
-  # https://gitlab.iscpif.fr/gargantext/haskell-bee/blob/19c8775f0d960c669235bf91131053cb6f69a1c1/README.md#redis
-  haskell-bee-redis = overrideCabal (drv: {
-    testToolDepends = drv.testToolDepends or [ ] ++ [
-      pkgs.redisTestHook
-    ];
-  }) super.haskell-bee-redis;
-
   retrie = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [ pkgs.git pkgs.mercurial ] super.retrie_1_2_1_1;
@@ -1214,35 +1184,37 @@ builtins.intersectAttrs super {
 
   # tests need to execute the built executable
   stutter = overrideCabal (drv: {
-    preCheck = ''
-      export PATH=dist/build/stutter:$PATH
-    ''
-    + (drv.preCheck or "");
+    preCheck =
+      ''
+        export PATH=dist/build/stutter:$PATH
+      ''
+      + (drv.preCheck or "");
   }) super.stutter;
 
   # Install man page and generate shell completions
   pinboard-notes-backup = overrideCabal (drv: {
-    postInstall = ''
-      install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
-    ''
-    + (drv.postInstall or "");
+    postInstall =
+      ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      ''
+      + (drv.postInstall or "");
   }) (self.generateOptparseApplicativeCompletions [ "pnbackup" ] super.pinboard-notes-backup);
 
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
   hlint = overrideCabal (drv: {
-    postInstall = ''
-      install -Dm644 data/hlint.1 -t "$out/share/man/man1"
-    ''
-    + drv.postInstall or "";
+    postInstall =
+      ''
+        install -Dm644 data/hlint.1 -t "$out/share/man/man1"
+      ''
+      + drv.postInstall or "";
   }) super.hlint;
 
   taglib = overrideCabal (drv: {
     librarySystemDepends = [
       pkgs.zlib
-    ]
-    ++ (drv.librarySystemDepends or [ ]);
+    ] ++ (drv.librarySystemDepends or [ ]);
   }) super.taglib;
 
   # random 1.2.0 has tests that indirectly depend on
@@ -1281,33 +1253,6 @@ builtins.intersectAttrs super {
           ]
         }"
     '';
-
-    passthru = {
-      updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
-
-      # This is used by regenerate-hackage-packages.nix to supply the configuration
-      # values we can easily generate automatically without checking them in.
-      compilerConfig =
-        pkgs.runCommand "hackage2nix-${self.ghc.haskellCompilerName}-config.yaml"
-          {
-            nativeBuildInputs = [
-              self.ghc
-            ];
-          }
-          ''
-            cat > "$out" << EOF
-            # generated by haskellPackages.cabal2nix-unstable.compilerConfig
-            compiler: ${self.ghc.haskellCompilerName}
-
-            core-packages:
-            EOF
-
-            ghc-pkg list \
-              | tail -n '+2' \
-              | sed -e 's/[()]//g' -e 's/\s\+/  - /' \
-              >> "$out"
-          '';
-    };
   }) (justStaticExecutables super.cabal2nix-unstable);
 
   # test suite needs local redis daemon
@@ -1315,10 +1260,11 @@ builtins.intersectAttrs super {
 
   # Make tophat find itself for _compiling_ its test suite
   tophat = overrideCabal (drv: {
-    postPatch = ''
-      sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
-    ''
-    + (drv.postPatch or "");
+    postPatch =
+      ''
+        sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
+      ''
+      + (drv.postPatch or "");
   }) super.tophat;
 
   # Runtime dependencies and CLI completion
@@ -1361,20 +1307,14 @@ builtins.intersectAttrs super {
     # the HOME directory, so that must be set in order to generate completions.
     # https://github.com/cdepillabout/cloudy/issues/10
     (overrideCabal (oldAttrs: {
-      postInstall = ''
-        export HOME=$TMPDIR
-      ''
-      + (oldAttrs.postInstall or "");
+      postInstall =
+        ''
+          export HOME=$TMPDIR
+        ''
+        + (oldAttrs.postInstall or "");
     }))
     (self.generateOptparseApplicativeCompletions [ "cloudy" ])
   ];
-
-  # We don't have multiple GHC versions to test against in PATH
-  ghc-hie = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "--skip=/GHC.Iface.Ext.Binary/readHieFile"
-    ];
-  }) super.ghc-hie;
 
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
@@ -1426,16 +1366,6 @@ builtins.intersectAttrs super {
     (overrideCabal { mainProgram = "agda"; })
     # Split outputs to reduce closure size
     enableSeparateBinOutput
-    # Build the primitive library to generate its interface files.
-    # These are needed in order to use Agda in Nix builds.
-    (overrideCabal (drv: {
-      postInstall = drv.postInstall or "" + ''
-        agdaExe=''${bin:-$out}/bin/agda
-
-        echo "Generating Agda core library interface files..."
-        (cd "$("$agdaExe" --print-agda-data-dir)/lib/prim" && "$agdaExe" --build-library)
-      '';
-    }))
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
@@ -1446,23 +1376,24 @@ builtins.intersectAttrs super {
     justStaticExecutables (
       overrideCabal (drv: {
         # use vanilla Setup.hs
-        preCompileBuildDriver = ''
-          cat > Setup.hs << EOF
-          module Main where
-          import Distribution.Simple
-          main = defaultMain
-          EOF
-        ''
-        + (drv.preCompileBuildDriver or "");
+        preCompileBuildDriver =
+          ''
+            cat > Setup.hs << EOF
+            module Main where
+            import Distribution.Simple
+            main = defaultMain
+            EOF
+          ''
+          + (drv.preCompileBuildDriver or "");
         # install man page
         buildTools = [
           pkgs.buildPackages.installShellFiles
-        ]
-        ++ (drv.buildTools or [ ]);
-        postInstall = ''
-          installManPage man/atsfmt.1
-        ''
-        + (drv.postInstall or "");
+        ] ++ (drv.buildTools or [ ]);
+        postInstall =
+          ''
+            installManPage man/atsfmt.1
+          ''
+          + (drv.postInstall or "");
       }) super.ats-format
     )
   );
@@ -1484,15 +1415,16 @@ builtins.intersectAttrs super {
   # version and sort -V to compare against our minimum version. If the
   # Kernel turns out to be older, we disable the test suite.
   procex = overrideCabal (drv: {
-    postConfigure = ''
-      minimumKernel=5.9
-      higherVersion=`printf "%s\n%s\n" "$minimumKernel" "$(uname -r)" | sort -rV | head -n1`
-      if [[ "$higherVersion" = "$minimumKernel" ]]; then
-        echo "Used Kernel doesn't support close_range, disabling tests"
-        unset doCheck
-      fi
-    ''
-    + (drv.postConfigure or "");
+    postConfigure =
+      ''
+        minimumKernel=5.9
+        higherVersion=`printf "%s\n%s\n" "$minimumKernel" "$(uname -r)" | sort -rV | head -n1`
+        if [[ "$higherVersion" = "$minimumKernel" ]]; then
+          echo "Used Kernel doesn't support close_range, disabling tests"
+          unset doCheck
+        fi
+      ''
+      + (drv.postConfigure or "");
   }) super.procex;
 
   # Test suite wants to run main executable
@@ -1501,9 +1433,11 @@ builtins.intersectAttrs super {
     (
       let
         fourmoluTestFix = overrideCabal (drv: {
-          preCheck = drv.preCheck or "" + ''
-            export PATH="$PWD/dist/build/fourmolu:$PATH"
-          '';
+          preCheck =
+            drv.preCheck or ""
+            + ''
+              export PATH="$PWD/dist/build/fourmolu:$PATH"
+            '';
         });
       in
       builtins.mapAttrs (_: fourmoluTestFix) super
@@ -1516,9 +1450,11 @@ builtins.intersectAttrs super {
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export PATH="$PWD/dist/build/disco:$PATH"
-    '';
+    preCheck =
+      drv.preCheck or ""
+      + ''
+        export PATH="$PWD/dist/build/disco:$PATH"
+      '';
     testFlags = drv.testFlags or [ ] ++ [
       # Needs network access
       "-p"
@@ -1538,8 +1474,7 @@ builtins.intersectAttrs super {
         dot = null;
         PATH = null;
       })
-    ]
-    ++ (drv.patches or [ ]);
+    ] ++ (drv.patches or [ ]);
   }) super.graphviz;
 
   # Test suite requires AWS access which requires both a network
@@ -1551,8 +1486,7 @@ builtins.intersectAttrs super {
     testFlags = [
       "-p"
       "!/Can be used with http-client/"
-    ]
-    ++ drv.testFlags or [ ];
+    ] ++ drv.testFlags or [ ];
   }) super.http-api-data-qq;
 
   # Test have become more fussy in >= 2.0. We need to have which available for
@@ -1563,9 +1497,11 @@ builtins.intersectAttrs super {
         _:
         overrideCabal (drv: {
           buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
-          preCheck = drv.preCheck or "" + ''
-            export PATH="$PWD/dist/build/happy:$PATH"
-          '';
+          preCheck =
+            drv.preCheck or ""
+            + ''
+              export PATH="$PWD/dist/build/happy:$PATH"
+            '';
         })
       )
       {
@@ -1642,15 +1578,16 @@ builtins.intersectAttrs super {
   cabal-install = overrideCabal (old: {
     buildTools = [
       pkgs.buildPackages.makeWrapper
-    ]
-    ++ old.buildTools or [ ];
-    postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+    ] ++ old.buildTools or [ ];
+    postInstall =
+      old.postInstall
+      + ''
+        mkdir -p "$out/share/man/man1"
+        "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
 
-      wrapProgram "$out/bin/cabal" \
-        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
-    '';
+        wrapProgram "$out/bin/cabal" \
+          --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+      '';
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
@@ -1668,14 +1605,16 @@ builtins.intersectAttrs super {
         ];
         # Added a shim for the `tailwindcss` CLI entry point
         nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
-        postInstall = (oa.postInstall or "") + ''
-          nodePath=""
-          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
-            nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
-          done
-          makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
-          unset nodePath
-        '';
+        postInstall =
+          (oa.postInstall or "")
+          + ''
+            nodePath=""
+            for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+              nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+            done
+            makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
+            unset nodePath
+          '';
       }))
       super.tailwind;
 
@@ -1807,20 +1746,6 @@ builtins.intersectAttrs super {
 
   xmobar = enableSeparateBinOutput super.xmobar;
 
-  # These test cases access the network
-  hpack_0_38_1 = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "--skip"
-        "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-        "--skip"
-        "/Hpack.Defaults/ensureFile/downloads file if missing/"
-        "--skip"
-        "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-      ];
-    }) super.hpack_0_38_1
-  );
-
   # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
   inherit
     (lib.mapAttrs (
@@ -1875,6 +1800,4 @@ builtins.intersectAttrs super {
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
-
-  botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 }

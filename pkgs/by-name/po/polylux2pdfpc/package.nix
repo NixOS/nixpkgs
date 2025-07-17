@@ -15,12 +15,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "polylux-typ";
     repo = "polylux";
-    tag = "v${version}";
+    rev = "v${version}";
     sparseCheckout = [ dirname ];
     hash = "sha256-41FgRejonvVTmE89WGm0Cqumm8lb6kkfxtkWV74UKJA=";
   };
   sourceRoot = "${src.name}/${dirname}";
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-9nA18f+Dwps45M/OIY0jtx7QgyJDTVUsPndFdNBKHCQ=";
 
   passthru.updateScript = nix-update-script { };

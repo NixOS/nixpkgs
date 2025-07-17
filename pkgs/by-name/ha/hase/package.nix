@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "hase";
-  version = "0-unstable-2020-10-06";
+  version = "unstable-2020-10-06";
 
   src = fetchFromGitHub {
     owner = "theZiz";

@@ -27,8 +27,7 @@ buildPythonPackage rec {
     setuptools
     uplc
     ordered-set
-  ]
-  ++ lib.optional (pythonOlder "3.9") graphlib-backport;
+  ] ++ lib.optional (pythonOlder "3.9") graphlib-backport;
 
   pythonImportsCheck = [ "pluthon" ];
 
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     description = "Pluto-like programming language for Cardano Smart Contracts in Python";
     homepage = "https://github.com/OpShin/pluthon";
     license = licenses.mit;
-    maintainers = with maintainers; [ aciceri ];
+    maintainers = with maintainers; [ t4ccer ];
   };
 }

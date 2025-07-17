@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.15.1";
+  version = "0.15.0";
 
 in
 stdenv.mkDerivation {
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    tag = "v${version}";
-    hash = "sha256-uokj0MB6bw4I8q5dVmSO9XMDvh4T7YODBoCCHvEf4v4=";
+    rev = "v${version}";
+    hash = "sha256-fa3f8GDoQTkPppAysrkA7kHuU5z2P2pqI8dKhuKYh04=";
   };
 
   hardeningDisable = [
@@ -30,11 +30,6 @@ stdenv.mkDerivation {
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
-  '';
-
-  # Don't use makeFlags for this
-  postBuild = ''
-    make utils
   '';
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
@@ -51,19 +46,15 @@ stdenv.mkDerivation {
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "v4l2loopback.ko"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Kernel module to create V4L2 loopback devices";
     mainProgram = "v4l2loopback-ctl";
     homepage = "https://github.com/umlaeute/v4l2loopback";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [
-      moni
-      bot-wxt1221
-    ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ moni ];
+    platforms = platforms.linux;
     outputsToInstall = [ "out" ];
   };
 }

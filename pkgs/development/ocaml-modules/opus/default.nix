@@ -8,9 +8,18 @@
   libopus,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "opus";
-  inherit (ogg) version src;
+  version = "0.2.2";
+
+  duneVersion = "3";
+
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "ocaml-opus";
+    rev = "v${version}";
+    hash = "sha256-Ghfqw/J1oLbTJpYJaiB5M79jaA6DACvyxBVE+NjnPkg=";
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ];

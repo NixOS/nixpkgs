@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation {
-  version = "0-unstable-2020-11-02";
+  version = "unstable-2020-11-02";
   pname = "dydisnix";
 
   src = fetchFromGitHub {

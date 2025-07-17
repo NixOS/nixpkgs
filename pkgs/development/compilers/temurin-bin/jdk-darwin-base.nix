@@ -74,10 +74,7 @@ let
     };
 
     meta = with lib; {
-      license = with licenses; [
-        gpl2
-        classpathException20
-      ];
+      license = licenses.gpl2Classpath;
       sourceProvenance = with sourceTypes; [
         binaryNativeCode
         binaryBytecode

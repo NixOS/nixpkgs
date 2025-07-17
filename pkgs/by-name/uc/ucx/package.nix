@@ -36,15 +36,15 @@ let
   # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
   stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation rec {
   pname = "ucx";
-  version = "1.19.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-n3xJmbvUXZzfhotOBJRyH2OEL4NFZIKyB808HwEQSYo=";
+    rev = "v${version}";
+    sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
   };
 
   outputs = [
@@ -53,45 +53,48 @@ stdenv'.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    doxygen
-    pkg-config
-  ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      doxygen
+      pkg-config
+    ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = [
-    libbfd
-    libiberty
-    numactl
-    perl
-    rdma-core
-    zlib
-  ]
-  ++ lib.optionals enableCuda [
-    cudaPackages.cuda_cudart
-    cudaPackages.cuda_nvml_dev
+  buildInputs =
+    [
+      libbfd
+      libiberty
+      numactl
+      perl
+      rdma-core
+      zlib
+    ]
+    ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_nvml_dev
 
-  ]
-  ++ lib.optionals enableRocm rocmList;
+    ]
+    ++ lib.optionals enableRocm rocmList;
 
   LDFLAGS = lib.optionals enableCuda [
     # Fake libnvidia-ml.so (the real one is deployed impurely)
     "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
   ];
 
-  configureFlags = [
-    "--with-rdmacm=${lib.getDev rdma-core}"
-    "--with-dc"
-    "--with-rc"
-    "--with-dm"
-    "--with-verbs=${lib.getDev rdma-core}"
-  ]
-  ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
-  ++ lib.optional enableRocm "--with-rocm=${rocm}";
+  configureFlags =
+    [
+      "--with-rdmacm=${lib.getDev rdma-core}"
+      "--with-dc"
+      "--with-rc"
+      "--with-dm"
+      "--with-verbs=${lib.getDev rdma-core}"
+    ]
+    ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
+    ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
@@ -103,14 +106,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Unified Communication X library";
     homepage = "https://www.openucx.org";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    # LoongArch64 is not supported.
-    # See: https://github.com/openucx/ucx/issues/9873
-    badPlatforms = lib.platforms.loongarch64;
-    maintainers = with lib.maintainers; [ markuskowa ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.markuskowa ];
   };
-})
+}

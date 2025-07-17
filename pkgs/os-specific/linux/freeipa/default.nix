@@ -122,8 +122,7 @@ stdenv.mkDerivation rec {
     bind
     libpwquality
     jansson
-  ]
-  ++ pythonInputs;
+  ] ++ pythonInputs;
 
   postPatch = ''
     patchShebangs makeapi makeaci install/ui/util

@@ -109,7 +109,7 @@ let
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
-    windows.pthreads = nativePlatforms;
+    windows.mingw_w64_pthreads = nativePlatforms;
   };
 
   wasiCommon = {
@@ -212,6 +212,7 @@ in
 
   # Javascript
   ghcjs = mapTestOnCross systems.examples.ghcjs {
+    haskell.packages.ghcjs.hello = nativePlatforms;
     haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;
     haskellPackages.hello = nativePlatforms;
   };

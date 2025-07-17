@@ -47,11 +47,8 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [
-    "tests/decoder.py"
-    "tests/encoder.py"
-    "tests/hl_decoder.py"
-    "tests/hl_encoder.py"
+  pytestFlagsArray = [
+    "tests/{decoder,encoder,hl_decoder,hl_encoder}.py"
   ];
 
   meta = with lib; {

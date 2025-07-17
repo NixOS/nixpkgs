@@ -184,7 +184,7 @@ in
             services.postfix = {
               enable = true;
               origin = mailDomain;
-              settings.main = {
+              config = {
                 myhostname = mailDomain;
                 mydestination = mailDomain;
               };

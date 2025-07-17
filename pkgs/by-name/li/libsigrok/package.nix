@@ -37,20 +37,21 @@ stdenv.mkDerivation {
     pkg-config
     python3
   ];
-  buildInputs = [
-    libzip
-    glib
-    libusb1
-    libftdi1
-    check
-    libserialport
-    glibmm
-    hidapi
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libieee1284
-    bluez
-  ];
+  buildInputs =
+    [
+      libzip
+      glib
+      libusb1
+      libftdi1
+      check
+      libserialport
+      glibmm
+      hidapi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libieee1284
+      bluez
+    ];
 
   strictDeps = true;
 

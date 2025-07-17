@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-Yj9xTQJ0eu3Ymi2R9fgYwBJO0V+4bN4MOxXCJGQ8NjU=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-stO8ejSC4UeEeMZZLIJ8Wabn7A6ZrWQlU5cZDSm2AVc=";
 
   nativeBuildInputs = [
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage {
   ];
   buildInputs = [ libwebp ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd catwalk \
       --bash <("$out/bin/catwalk" completion bash) \
       --zsh <("$out/bin/catwalk" completion zsh) \

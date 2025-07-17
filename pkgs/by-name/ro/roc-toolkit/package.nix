@@ -45,16 +45,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    libuv
-    speexdsp
-  ]
-  ++ lib.optional openfecSupport openfec
-  ++ lib.optional libunwindSupport libunwind
-  ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional opensslSupport openssl
-  ++ lib.optional soxSupport sox
-  ++ lib.optional libsndfileSupport libsndfile;
+  propagatedBuildInputs =
+    [
+      libuv
+      speexdsp
+    ]
+    ++ lib.optional openfecSupport openfec
+    ++ lib.optional libunwindSupport libunwind
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional opensslSupport openssl
+    ++ lib.optional soxSupport sox
+    ++ lib.optional libsndfileSupport libsndfile;
 
   sconsFlags =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [

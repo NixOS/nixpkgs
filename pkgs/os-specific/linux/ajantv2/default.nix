@@ -1,7 +1,6 @@
 {
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   libajantv2,
 }:
 stdenv.mkDerivation {
@@ -18,8 +17,6 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  makeFlags = kernelModuleMakeFlags;
 
   preBuild = ''
     chmod -R +w ../../

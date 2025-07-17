@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ]
-  ++ extraQtStyles;
+  ] ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 

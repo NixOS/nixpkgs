@@ -141,6 +141,8 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ ehmry ];
+
   # TODO: socket activated rsyncd
 
 }

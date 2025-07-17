@@ -55,9 +55,9 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  disabledTestMarks = [
+  pytestFlagsArray = [
     # Disable tests which require network access
-    "online"
+    "-m 'not online'"
   ];
 
   disabledTestPaths = [

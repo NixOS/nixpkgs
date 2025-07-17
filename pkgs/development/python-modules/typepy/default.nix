@@ -41,8 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "typepy" ];
 

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "bklk";
-  version = "0-unstable-2020-12-29";
+  version = "unstable-2020-12-29";
 
   src = fetchFromGitHub {
     owner = "Ruunyox";

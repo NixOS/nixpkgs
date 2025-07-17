@@ -7,7 +7,6 @@
   libxml2,
   pkg-config,
   getopt,
-  gettext,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +18,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-C1a47pWtjb38bnwmZ2Zq7/LlW3+BF5BGNMRFi97/ngU=";
   };
-
-  patches = [
-    ./gettext-0.25.patch
-  ];
 
   strictDeps = true;
 
@@ -44,18 +39,17 @@ stdenv.mkDerivation rec {
     ]
     ++ [ libxml2 ];
 
-  postPatch = ''
-    substituteInPlace ocaml-dep.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace ocaml-link.sh.in --replace-fail '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace configure.ac --replace-fail 'AC_CONFIG_MACRO_DIR([m4])' 'AC_CONFIG_MACRO_DIRS([m4 ${gettext}/share/gettext/m4])'
+  prePatch = ''
+    substituteInPlace ocaml-dep.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
-    license = lib.licenses.gpl2Only;
+    license = licenses.gpl2Only;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     mainProgram = "virt-top";
   };
 }

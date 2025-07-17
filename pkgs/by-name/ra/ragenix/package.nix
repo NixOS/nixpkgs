@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-aM7kjyJJ8h4Yd1k2FTE8Vk/ezAXcCbfdAPxuNewptNQ=";
+  useFetchCargoVendor = true;
 
   RAGENIX_NIX_BIN_PATH = lib.getExe nix;
 

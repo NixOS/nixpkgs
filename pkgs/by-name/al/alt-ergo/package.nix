@@ -50,16 +50,14 @@ ocamlPackages.buildDunePackage {
 
   nativeBuildInputs = [
     ocamlPackages.menhir
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
-  propagatedBuildInputs = [
-    alt-ergo-parsers
-  ]
-  ++ (with ocamlPackages; [
-    cmdliner
-    dune-site
-    ppxlib
-  ]);
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
+  propagatedBuildInputs =
+    [ alt-ergo-parsers ]
+    ++ (with ocamlPackages; [
+      cmdliner
+      dune-site
+      ppxlib
+    ]);
 
   outputs = [
     "bin"

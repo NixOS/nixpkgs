@@ -16,7 +16,7 @@
         enable = true;
         package = pkgs.retroarch-bare;
       };
-      services.displayManager = {
+      services.xserver.displayManager = {
         sddm.enable = true;
         defaultSession = "RetroArch";
         autoLogin = {
@@ -29,15 +29,14 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.users.users.alice;
+      user = nodes.machine.config.users.users.alice;
       xdo = "${pkgs.xdotool}/bin/xdotool";
     in
     ''
       with subtest("Wait for login"):
           start_all()
-          machine.wait_for_file("/run/sddm/xauth_*")
-          machine.wait_until_succeeds("test -s /run/sddm/xauth_*")
-          machine.succeed("xauth merge /run/sddm/xauth_*")
+          machine.wait_for_file("/tmp/xauth_*")
+          machine.succeed("xauth merge /tmp/xauth_*")
 
       with subtest("Check RetroArch started"):
           machine.wait_until_succeeds("pgrep retroarch")

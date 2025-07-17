@@ -9,14 +9,14 @@
 let
   common = callPackage ./common.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "tandoor-recipes-frontend";
   inherit (common) version;
 
-  src = "${common.src}/vue3";
+  src = "${common.src}/vue";
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
+    yarnLock = "${common.src}/vue/yarn.lock";
     hash = common.yarnHash;
   };
 
@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    cp -R ../cookbook/static/vue3/ $out
+    cp -R ../cookbook/static/vue/ $out
+    cp webpack-stats.json $out
     echo "${common.version}" > "$out/version"
 
     runHook postInstall
@@ -59,4 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
   meta = common.meta // {
     description = "Tandoor Recipes frontend";
   };
-})
+}

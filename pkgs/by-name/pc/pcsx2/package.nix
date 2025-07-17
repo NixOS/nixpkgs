@@ -15,6 +15,7 @@
   libwebp,
   llvmPackages,
   lz4,
+  makeWrapper,
   pkg-config,
   qt6,
   shaderc,
@@ -35,8 +36,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "9b193aa0a61f5e93d3bd4124b111e8f296ef9fa8";
-    hash = "sha256-1hhdjFxJCNfeO/FIAnjRHESfiyzkErYddZqpRxzG7VQ=";
+    rev = "6448ff90bbf2fddb4498dcfdae0e6d3ec8c23479";
+    hash = "sha256-ZXAZekllZHYjfU1q1QrbEdRlRAUAB6VOXLeAfn1GqW0=";
   };
 
   inherit (qt6)
@@ -49,13 +50,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.4.0";
+  version = "2.3.424";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+BdywkZKxR/+Z+o1512O3A1mg9A6s7i+JZjFyUbJVs=";
+    hash = "sha256-EdFkSsat6O/1tXtJVHOPviseSaixd5LB1TNtfqhqR1E=";
   };
 
   patches = [
@@ -131,6 +132,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  # https://github.com/PCSX2/pcsx2/pull/10200
+  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
+  postFixup = ''
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/pcsx2-qt \
+      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
 
   passthru = {

@@ -45,8 +45,7 @@ in
     systemd.shutdownRamfs.storePaths = [
       pkgs.runtimeShell
       "${pkgs.coreutils}/bin"
-    ]
-    ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+    ] ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
 
     systemd.mounts = [
       {

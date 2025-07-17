@@ -26,6 +26,7 @@ buildGoModule rec {
     homepage = "https://github.com/qustavo/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
+    maintainers = with maintainers; [ pradeepchhetri ];
     mainProgram = "httplab";
   };
 }

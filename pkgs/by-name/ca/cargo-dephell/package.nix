@@ -20,27 +20,31 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 
-  cargoPatches = [
-    # update Cargo.lock to work with openssl 3
-    ./openssl3-support.patch
-  ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  cargoHash = "sha256-+5ElAfYuUfosXzR3O2QIFGy4QJuPrWDMg5LacZKi3c8=";
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+    ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+      libgit2
+    ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-    libgit2
-  ];
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   env = {
     LIBGIT2_NO_VENDOR = 1;

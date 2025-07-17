@@ -1,51 +1,55 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  nix-update-script,
+  fetchurl,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+let
+  # Original manifest file at https://spacenerdsinspace.com/snis-assets/manifest.txt transformed using
+  # awk '{print $2}' manifest.txt | grep -v -E '\.stl$' | xargs cksum -a sha256 --base64 --untagged
+  manifest = ./manifest.txt;
+  assets = lib.lists.init (lib.strings.splitString "\n" (builtins.readFile manifest));
+  ASSET_URL = "https://spacenerdsinspace.com/snis-assets";
+in
+stdenv.mkDerivation {
   pname = "snis_assets";
-  version = "2025-07-26";
+  version = "2024-08-02";
 
-  src = fetchFromGitHub {
-    owner = "marcin-serwin";
-    repo = "snis-assets-snapshotter";
-    tag = finalAttrs.version;
-    hash = "sha256-K/X66txXKpGtWPRtWXvKiVMYb6vGJtrv2CdHVuXbT8M=";
-  };
+  srcs = map (
+    line:
+    let
+      asset = lib.strings.splitString "  " line;
+    in
+    fetchurl {
+      url = "${ASSET_URL}/${builtins.elemAt asset 1}";
+      hash = "sha256-${builtins.elemAt asset 0}";
+    }
+  ) assets;
 
-  dontConfigure = true;
-  dontBuild = true;
-  dontFixup = true;
+  dontUnpack = true;
 
   installPhase = ''
-    runHook preInstall
     mkdir -p $out
-    cp -r share $out
-    runHook postInstall
+    read -r -a store_paths <<< "$srcs"
+    mapfile -t out_paths < <(awk '{print $2}' ${manifest})
+
+    for i in ''${!store_paths[@]}
+    do
+      install -m 444 -D ''${store_paths[$i]} $out/''${out_paths[$i]}
+    done
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Assets for Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
-    downloadPage = "https://github.com/marcin-serwin/snis-assets-snapshotter";
-    license = with lib.licenses; [
-      gpl2Plus
-      cc-by-sa-30
-      cc-by-40
-      cc-by-30
-      cc0
-      publicDomain
-      free
+    license = [
+      licenses.cc-by-sa-30
+      licenses.cc-by-30
+      licenses.cc0
+      licenses.publicDomain
     ];
-    maintainers = with lib.maintainers; [
-      pentane
-      marcin-serwin
-    ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ pentane ];
+    platforms = platforms.linux;
     hydraPlatforms = [ ];
   };
-})
+}

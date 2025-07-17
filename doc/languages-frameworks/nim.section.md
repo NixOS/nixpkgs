@@ -26,7 +26,9 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
+  nimFlags = [
+    "-d:NimblePkgVersion=${finalAttrs.version}"
+  ];
 })
 ```
 

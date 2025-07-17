@@ -21,22 +21,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0.2-nightly-2025-09-13";
+  version = "0-nightly-2025-07-10";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
-    tag = lib.strings.removePrefix "0.2-" finalAttrs.version;
-    hash = "sha256-Mzb5Ki6RyQIpeHRGtfGVURmvVMNuBBIjp+31M0m7oGw=";
+    tag = lib.strings.removePrefix "0-" finalAttrs.version;
+    hash = "sha256-uN+UqoTSj98ARkwgQT+npY75HDQBDyBO82USXKaq9bI=";
   };
 
-  cargoHash = "sha256-y65rM5sfSN8OA13Dwrt1VhiiODzdF0UmAA1IJwycfL0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2/Fbd6O233/464UXvK5HOk30Z8xbqeURjZNFWITVsW4=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
     let
-      tag = lib.strings.removePrefix "0.2-" finalAttrs.version;
-      versionDate = lib.strings.removePrefix "0.2-nightly-" finalAttrs.version;
+      tag = lib.strings.removePrefix "0-" finalAttrs.version;
+      versionDate = lib.strings.removePrefix "0-nightly-" finalAttrs.version;
     in
     {
       VERGEN_IDEMPOTENT = "1";
@@ -45,14 +46,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
     };
 
-  nativeBuildInputs = [
-    jre_minimal
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-    autoPatchelfHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs =
+    [ jre_minimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     else
       null;
 
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+  runtimeDependencies = [
     wayland
     xorg.libXcursor
     xorg.libXrandr
@@ -87,21 +87,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     finalAttrs.openh264-241
   ];
 
-  postInstall = ''
-    mv $out/bin/ruffle_desktop $out/bin/ruffle
-    install -Dm644 LICENSE.md -t $out/share/doc/ruffle
-    install -Dm644 README.md -t $out/share/doc/ruffle
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
-                   -t $out/share/applications/
+  postInstall =
+    ''
+      mv $out/bin/ruffle_desktop $out/bin/ruffle
+      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
+      install -Dm644 README.md -t $out/share/doc/ruffle
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
+                     -t $out/share/applications/
 
-    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
-                   -t $out/share/icons/hicolor/scalable/apps/
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
+                     -t $out/share/icons/hicolor/scalable/apps/
 
-    install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
-                   -t $out/share/metainfo/
-  '';
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
+                     -t $out/share/metainfo/
+    '';
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
@@ -116,7 +117,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
           jq -r ".[0].tag_name" \
         )"
-        exec nix-update --version "0.2-$version" ruffle
+        exec nix-update --version "0-$version" ruffle
       '';
     });
   };
@@ -135,7 +136,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://ruffle.rs/";
     downloadPage = "https://ruffle.rs/downloads";
-    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0.2" finalAttrs.version}";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0-" finalAttrs.version}";
     license = [
       lib.licenses.mit
       lib.licenses.asl20

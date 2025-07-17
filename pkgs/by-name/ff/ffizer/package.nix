@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ffizer";
-  version = "2.13.5";
+  version = "2.13.3";
 
   buildFeatures = [ "cli" ];
 
@@ -18,10 +18,11 @@ rustPlatform.buildRustPackage rec {
     owner = "ffizer";
     repo = "ffizer";
     rev = version;
-    hash = "sha256-kYsHhNW9UkttKVNEY9+Z9EZWDNIuhCWTmRJytaZVgKc=";
+    hash = "sha256-S5iF2xjOw1g6scxUMGn6ghr3iASlLlz6IUYjsLo1wRk=";
   };
 
-  cargoHash = "sha256-zsJ5RjqxzCwRJQvWi65NwZ/w3lIvZvkE80EdmNeJUdg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VYjxSZUFgdrYiL0yzHVLH3MgUx4geypxDV2h8lpqc0o=";
 
   nativeBuildInputs = [
     pkg-config

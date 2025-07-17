@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ omasanori ];
     platforms = platforms.linux;
   };
 }

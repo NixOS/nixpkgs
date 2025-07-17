@@ -24,15 +24,21 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.10.0";
+  version = "2.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
     tag = "v${version}";
-    hash = "sha256-lFYSWCe5THlivpBB6nFBR2zfCIKJ0YJeuY2rCKoXUq8=";
+    hash = "sha256-UTeZXlNuSWDOcBRVbUUWJ3mQnZZQr17aTw6rRA5DRNI=";
   };
+
+  patches = [
+    # Converts numpy.int64 to int where necessary.
+    # Upstream issue: https://github.com/pyscf/pyscf/issues/2878
+    ./coerce-numpy-to-int.patch
+  ];
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
   build-system = [ cmake ];
@@ -98,11 +104,14 @@ buildPythonPackage rec {
     "test_sacasscf_grad"
   ];
 
-  disabledTestPaths = [
-    "pyscf/pbc/tdscf"
-    "pyscf/pbc/gw"
-    "pyscf/nac/test/test_sacasscf.py"
-    "pyscf/grad/test/test_casscf.py"
+  pytestFlagsArray = [
+    "--ignore=pyscf/pbc/tdscf"
+    "--ignore=pyscf/pbc/gw"
+    "--ignore-glob=*_slow.*py"
+    "--ignore-glob=*_kproxy_.*py"
+    "--ignore-glob=test_proxy.py"
+    "--ignore-glob=pyscf/nac/test/test_sacasscf.py"
+    "--ignore-glob=pyscf/grad/test/test_casscf.py"
   ];
 
   meta = {

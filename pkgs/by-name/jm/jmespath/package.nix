@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Golang implementation of JMESPath";
+    description = "JMESPath implementation in Go";
     homepage = "https://github.com/jmespath/go-jmespath";
     license = licenses.asl20;
     maintainers = with maintainers; [ cransom ];

@@ -49,13 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
-  ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # Fix (RiscV) cross-compilation
-    # See https://github.com/apache/orc/issues/2334
-    (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")
-    (lib.cmakeFeature "HAS_POST_2038_EXITCODE" "0")
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-parameter")
   ];
 
   env = {
@@ -73,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Smallest, fastest columnar storage for Hadoop workloads";
     homepage = "https://github.com/apache/orc/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
 })

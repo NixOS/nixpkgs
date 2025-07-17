@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.2.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
     tag = version;
-    hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
+    hash = "sha256-WNr+zVrA4X2AjizsmMEau54Vv1Svey3LNsCo8Bm/W+A=";
   };
 
   disabled = pythonOlder "3.8";
@@ -44,18 +44,19 @@ buildPythonPackage rec {
       --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
   '';
 
-  dependencies = [
-    numpy
-    deprecation
-    hightime
-    tzlocal
-    python-decouple
-    click
-    requests
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    distro
-  ];
+  dependencies =
+    [
+      numpy
+      deprecation
+      hightime
+      tzlocal
+      python-decouple
+      click
+      requests
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      distro
+    ];
 
   passthru.optional-dependencies = {
     docs = [

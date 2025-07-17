@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -15,20 +16,20 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.3";
+  version = "3.23.2";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0sUJet4eViFxOR0XOAxNSprnL+kN4OW1npGihT0Q4Y=";
+    hash = "sha256-nRY8ARc31Q2Qi8Tf7921vBf5nPpI4evSjmpTYUTUigQ=";
   };
 
   postPatch = ''
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
+      "slepc.prefixdir,'${python3.sitePackages}'"
 
     patchShebangs lib/slepc/bin
   '';
@@ -41,13 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     export SLEPC_DIR=$PWD
   '';
 
-  nativeBuildInputs = [
-    python3Packages.python
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.setuptools
-    python3Packages.cython
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.setuptools
+      python3Packages.cython
+    ];
 
   configureFlags =
     lib.optionals withArpack [
@@ -57,12 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-slepc4py=1"
     ];
 
-  buildInputs = [
-    mpi
-  ]
-  ++ lib.optionals withArpack [
-    arpack-mpi
-  ];
+  buildInputs =
+    [
+      mpi
+    ]
+    ++ lib.optionals withArpack [
+      arpack-mpi
+    ];
 
   propagatedBuildInputs = [
     petsc
@@ -74,13 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    mpiCheckPhaseHook
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.pythonImportsCheckHook
-    python3Packages.unittestCheckHook
-  ];
+  nativeInstallCheckInputs =
+    [
+      mpiCheckPhaseHook
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.pythonImportsCheckHook
+      python3Packages.unittestCheckHook
+    ];
 
   doInstallCheck = true;
 

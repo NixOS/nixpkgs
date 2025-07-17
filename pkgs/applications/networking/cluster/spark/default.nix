@@ -83,8 +83,7 @@ let
           kamilchm
           illustris
         ];
-      }
-      // extraMeta;
+      } // extraMeta;
     });
 in
 {

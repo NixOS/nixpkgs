@@ -30,8 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [
     sqlite
     systemd
-  ]
-  ++ lib.optional tlsSupport openssl;
+  ] ++ lib.optional tlsSupport openssl;
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -48,6 +47,7 @@ stdenv.mkDerivation {
     description = "High performance peer-to-peer hub for the ADC network";
     homepage = "https://www.uhub.org/";
     license = licenses.gpl3;
+    maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;
   };
 }

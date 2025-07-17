@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nmap";
-  version = "7.98";
+  version = "7.97";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    hash = "sha256-zoRzE+qunlyfIXCOQtKre1bH4OuIA3KaMJL1iIbYl+Y=";
+    hash = "sha256-r5jyeSXGcMJX3Zap3fJyTgbLebL9Hg0IySBjFr4WRcA=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

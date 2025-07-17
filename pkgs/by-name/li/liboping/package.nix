@@ -45,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "ac_cv_func_malloc_0_nonnull=yes"
-  ]
-  ++ lib.optional (perl == null) "--with-perl-bindings=no";
+  ] ++ lib.optional (perl == null) "--with-perl-bindings=no";
 
   buildFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

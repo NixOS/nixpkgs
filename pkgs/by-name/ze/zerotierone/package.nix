@@ -74,14 +74,15 @@ stdenv.mkDerivation {
     rustc
   ];
 
-  buildInputs = [
-    lzo
-    openssl
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      lzo
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   enableParallelBuilding = true;
 
@@ -151,6 +152,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       sjmackenzie
       zimbatm
+      ehmry
       obadz
       danielfullmer
       mic92 # also can test darwin

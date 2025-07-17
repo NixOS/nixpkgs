@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.40.3";
+  version = "2.40.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python";
     tag = "v${version}";
-    hash = "sha256-X1HTh24oos2GUxB9DDLtNH7BsBRLD0S/ngjsDAQYvhI=";
+    hash = "sha256-jO6brNdTH8BitLKKP/nwrlUo5hfQnThT/bPbzefvRbM=";
   };
 
   build-system = [ setuptools ];
@@ -64,8 +64,6 @@ buildPythonPackage rec {
     requests = [ requests ];
   };
 
-  pythonRelaxDeps = [ "cachetools" ];
-
   nativeCheckInputs = [
     aioresponses
     flask
@@ -76,22 +74,23 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     "samples/"
     "system_tests/"
     # Requires a running aiohttp event loop
     "tests_async/"
-
-    # cryptography 44 compat issue
-    "tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  pytestFlagsArray = [
+    # cryptography 44 compat issue
+    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -103,7 +102,7 @@ buildPythonPackage rec {
       authentication mechanisms to access Google APIs.
     '';
     homepage = "https://github.com/googleapis/google-auth-library-python";
-    changelog = "https://github.com/googleapis/google-auth-library-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

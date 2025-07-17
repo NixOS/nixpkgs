@@ -42,7 +42,6 @@
     include required(file("/nix/store/ccnzr53dpipdacxgci3ii3bqacvb5hxm-hocon-test-include.conf"))
     include "/nix/store/ccnzr53dpipdacxgci3ii3bqacvb5hxm-hocon-test-include.conf"
     include url("https://example.com")
-
   }
 }
 

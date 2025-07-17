@@ -69,7 +69,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       asl20
       gpl2Only
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [
+      shyim
+    ];
     platforms = platforms.all;
   };
 })

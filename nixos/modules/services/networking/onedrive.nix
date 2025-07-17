@@ -31,7 +31,14 @@ in
   options.services.onedrive = {
     enable = lib.mkEnableOption "OneDrive service";
 
-    package = lib.mkPackageOption pkgs "onedrive" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.onedrive;
+      defaultText = lib.literalExpression "pkgs.onedrive";
+      description = ''
+        OneDrive package to use.
+      '';
+    };
   };
   ### Implementation
 

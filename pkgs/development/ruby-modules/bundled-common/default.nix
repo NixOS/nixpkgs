@@ -164,8 +164,7 @@ let
 
     meta = {
       platforms = ruby.meta.platforms;
-    }
-    // meta;
+    } // meta;
 
     passthru = (
       lib.optionalAttrs (pname != null) {

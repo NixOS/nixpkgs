@@ -1,51 +1,59 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
-  installShellFiles,
   pkg-config,
   openssl,
-  git,
   versionCheckHook,
-  stdenv,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-statuses";
-  version = "0.6.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "bircni";
     repo = "git-statuses";
     tag = finalAttrs.version;
-    hash = "sha256-phGEp9wo46owe47H+XjfDD5OlcN8cGr1oaeYMpkWies=";
+    hash = "sha256-pnqg32FH26NTtt7N5db/JGjjR3MbPOFPtMA2iZNFiSI=";
   };
 
-  cargoHash = "sha256-yG5oSwnhoFVbwdTteRgW1ljVmTnxoh8l4gG/pGuRmic=";
+  patches = [
+    # This commit requires Rust 1.88, which is not yet in Nixpkgs.
+    (fetchpatch {
+      url = "https://github.com/bircni/git-statuses/commit/8bc32d1bd47d2a9e48f1408a9137213bae925912.patch";
+      hash = "sha256-JNWsv0DjwrSbMu/j2+XMoZKgvB1OgUA3b2BNuZTM/cA=";
+      revert = true;
+    })
+  ];
+
+  # fix tests, ref. https://github.com/bircni/git-statuses/pull/8
+  postPatch = ''
+    substituteInPlace src/tests/gitinfo_test.rs --replace-fail \
+      'let repo = git2::Repository::init(tmp_dir.path()).unwrap();' \
+      'let repo = git2::Repository::init(tmp_dir.path()).unwrap();
+       let mut config = repo.config().unwrap();
+       config.set_str("user.name", "Test User").unwrap();
+       config.set_str("user.email", "test@example.com").unwrap();'
+  '';
+
+  cargoHash = "sha256-thLyIxuAACtexqCddKWuUE8Vl0CeUEBP7XxDPYT23lg=";
 
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
-    installShellFiles
     pkg-config
   ];
   buildInputs = [
     openssl
   ];
   nativeInstallCheckInputs = [
-    git
     versionCheckHook
   ];
   doInstallCheck = true;
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd git-statuses \
-      --bash <($out/bin/git-statuses --completions bash) \
-      --fish <($out/bin/git-statuses --completions fish) \
-      --zsh <($out/bin/git-statuses --completions zsh)
-  '';
 
   passthru.updateScript = nix-update-script { };
 

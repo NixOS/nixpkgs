@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "IPv4/IPv6 subnet address calculator";
+    description = "SubNetCalc is an IPv4/IPv6 subnet address calculator";
     homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
     license = lib.licenses.gpl3Plus;
     longDescription = ''

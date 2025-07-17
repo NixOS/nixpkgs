@@ -45,8 +45,6 @@ buildPythonPackage rec {
     "asynchat"
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
     description = "Make asynchat available for Python 3.12 onwards";
     homepage = "https://github.com/simonrob/pyasynchat";

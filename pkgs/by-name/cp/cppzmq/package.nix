@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zeromq/cppzmq";
     license = licenses.bsd2;
     description = "C++ binding for 0MQ";
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

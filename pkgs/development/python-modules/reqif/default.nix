@@ -1,5 +1,6 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -7,19 +8,22 @@
   lxml,
   pytestCheckHook,
   python,
+  pythonOlder,
   xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.47";
+  version = "0.0.42";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
     tag = version;
-    hash = "sha256-z7krly5X5OlrmAlm4bZZ3eP8lvx3HUY3Z8K/6AiBOfQ=";
+    hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
   };
 
   postPatch = ''
@@ -28,15 +32,15 @@ buildPythonPackage rec {
       "\"${placeholder "out"}/${python.sitePackages}/reqif\""
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     hatchling
   ];
 
-  dependencies = with python.pkgs; [
+  propagatedBuildInputs = [
+    beautifulsoup4
     lxml
     jinja2
     xmlschema
-    openpyxl
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -47,8 +51,8 @@ buildPythonPackage rec {
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
-    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
+    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ yuu ];
   };
 }

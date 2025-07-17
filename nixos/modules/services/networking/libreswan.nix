@@ -153,8 +153,7 @@ in
       '';
       "ipsec.conf".source = "${pkgs.libreswan}/etc/ipsec.conf";
       "ipsec.d/01-nixos.conf".source = configFile;
-    }
-    // policyFiles;
+    } // policyFiles;
 
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";

@@ -3,48 +3,41 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+  testers,
+  pack,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "pack";
-  version = "0.38.2";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-JDvNG0HMwr/bbWbuSLwuC5y+ZePECW4u+dzMBcKrcNk=";
+    rev = "v${version}";
+    hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
   };
 
-  subPackages = [ "." ];
+  vendorHash = "sha256-W8FTk2eJYaTE9gCRwrT+mDhda/ZZeCytqQ9vvVZZHSQ=";
 
-  vendorHash = "sha256-PvGoHJP+MsfidKz72qFx638x+uirhgckIKCBdTUrqB8=";
+  subPackages = [ "cmd/pack" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/buildpacks/pack/pkg/client.Version=${finalAttrs.version}"
+    "-X github.com/buildpacks/pack.Version=${version}"
   ];
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = pack; };
   };
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
-  versionCheckProgramArg = "--version";
-  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "CLI for building apps using Cloud Native Buildpacks";
     homepage = "https://github.com/buildpacks/pack/";
     license = lib.licenses.asl20;
     mainProgram = "pack";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-})
+}

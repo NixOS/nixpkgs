@@ -30,12 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    nasm
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      nasm
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     cpuinfo
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       aom
       bsd3
     ];
+    maintainers = with maintainers; [ Madouura ];
     mainProgram = "SvtAv1EncApp";
     platforms = platforms.unix;
   };

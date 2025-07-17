@@ -23,11 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     sed -i s,/usr/local,$out, Makefile
-
-    runHook postConfigure
   '';
 
   buildInputs = [ libpng ];

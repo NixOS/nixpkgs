@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
 
   meta = src.meta // {
     license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }

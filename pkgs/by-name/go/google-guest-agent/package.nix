@@ -61,7 +61,7 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
     changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ abbradar ];
     platforms = lib.platforms.linux;
   };
 }

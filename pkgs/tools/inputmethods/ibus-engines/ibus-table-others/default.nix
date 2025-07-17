@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table-others";
-  version = "1.3.21";
+  version = "1.3.20";
 
   src = fetchurl {
     url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-/3ZDQCc/u2HKlL0+kZ0g4Gbjrkk++l3lSrWQz7CvwaQ=";
+    hash = "sha256-mi2vF+OH3c9lgWFxswzCbENCleTWLHNE8clzZcdcwfM=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,6 @@
   libpaper,
   libpng,
   librsvg,
-  libxml2,
   pango,
   SDL2_gfx,
   SDL2_image,
@@ -27,19 +26,23 @@
 
 let
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2025-05-26/tuxpaint-stamps-2025.05.26.tar.gz";
-    hash = "sha256-CfSin4A2yTpkwoE046+u+0udlaCaceaPt1N/PF+ClJ8=";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2024-01-29/tuxpaint-stamps-2024.01.29.tar.gz";
+    hash = "sha256-GwJx9tqaX7I623tJQYO53iiaApZtYsTLQw2ptBIFlKk=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.35";
+  version = "0.9.32";
   pname = "tuxpaint";
 
   src = fetchurl {
     url = "mirror://sourceforge/tuxpaint/${finalAttrs.version}/tuxpaint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wcGK+RvnfpT9qrLJKCBMTDm6OaxdovRBqvLsq22L0K0=";
+    hash = "sha256-CcziIkFIHcE2D8S8XU2h0xgV16JWO56fohemcrqXS/I=";
   };
+
+  patches = [
+    ./tuxpaint-completion.diff
+  ];
 
   postPatch = ''
     grep -Zlr include.*SDL . | xargs -0 \
@@ -67,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpaper
     libpng
     librsvg
-    libxml2
     pango
     SDL2
     SDL2_gfx

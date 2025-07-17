@@ -17,7 +17,7 @@ let
   inherit (lib.options)
     mkEnableOption
     mkOption
-    mkPackageOption
+    literalExpression
     ;
 
   cfg = config.services.ax25.axlisten;
@@ -29,7 +29,12 @@ in
 
       enable = mkEnableOption "AX.25 axlisten daemon";
 
-      package = mkPackageOption pkgs "ax25-apps" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.ax25-apps;
+        defaultText = literalExpression "pkgs.ax25-apps";
+        description = "The ax25-apps package to use.";
+      };
 
       config = mkOption {
         type = types.str;

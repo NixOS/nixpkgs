@@ -1,8 +1,8 @@
 {
   lib,
-  python3,
-  python3Packages,
+  python311,
   fetchFromGitHub,
+  file,
   gnupg,
   gawk,
   procps,
@@ -10,23 +10,27 @@
   withManpage ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+with python311.pkgs;
+buildPythonApplication rec {
   pname = "alot";
   version = "0.11";
   pyproject = true;
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals withManpage [
-    "man"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals withManpage [
+      "man"
+    ];
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
     tag = version;
-    hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
+    sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
   };
 
   postPatch = ''
@@ -34,35 +38,31 @@ python3Packages.buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  build-system =
-    with python3Packages;
-    [
-      setuptools
-      setuptools-scm
-    ]
-    ++ lib.optional withManpage sphinx;
+  nativeBuildInputs = [
+    setuptools-scm
+  ] ++ lib.optional withManpage sphinx;
 
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = [
     configobj
+    file
     gpgme
     notmuch2
     python-magic
-    standard-mailcap
+    service-identity
     twisted
     urwid
     urwidtrees
   ];
 
   nativeCheckInputs = [
+    future
     gawk
     gnupg
-    notmuch
-    procps
-  ]
-  ++ (with python3Packages; [
-    pytestCheckHook
     mock
-  ]);
+    procps
+    pytestCheckHook
+    notmuch
+  ];
 
   postBuild = lib.optionalString withManpage [
     "make -C docs man"
@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall =
     let
-      completionPython = python3.withPackages (ps: [ ps.configobj ]);
+      completionPython = python.withPackages (ps: [ ps.configobj ]);
     in
     lib.optionalString withManpage ''
       mkdir -p $out/man
@@ -95,13 +95,12 @@ python3Packages.buildPythonApplication rec {
       sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
-    changelog = "https://github.com/pazz/alot/releases/tag/${src.tag}";
     mainProgram = "alot";
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ milibopp ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ milibopp ];
   };
 }

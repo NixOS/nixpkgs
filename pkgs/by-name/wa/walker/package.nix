@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "walker";
-  version = "0.13.26";
+  version = "0.12.31";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-LslpfHXj31Lvq+26ZDzCTaGBbxmp7yXlgKT+uwUEEts=";
+    hash = "sha256-G55itZe9xAlEq1x4IsE6Pm17t0c7A4obmOTRXjChs+o=";
   };
 
-  vendorHash = "sha256-N7lNxO/l3E1BlSSbSiQjrDPy2sWwk4G4JYlUArmMJxs=";
+  vendorHash = "sha256-250HPwSkcT7pOulhqAtmuoWOJUakF0S1bpZ8FMsp7bU=";
   subPackages = [ "cmd/walker.go" ];
 
   passthru.updateScript = nix-update-script { };

@@ -17,13 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.86";
+  version = "1.84-unstable-2024-12-06";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "surelog";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-EEhaYimyzOgQB7dxbbTfsa7APC6SlFkz9ah9BLcKDq4=";
+    # Once we're back on a stable tag, use "v$(finalAttrs.version}" below.
+    rev = "298a9cddc672cce7f25ec352f9f8f36f5b23aa4e";
+    hash = "sha256-Qv4dosj2dwakNCcvu483ZMuw+LlYs4fhZTULszERLSI=";
     fetchSubmodules = false; # we use all dependencies from nix
   };
 

@@ -9,7 +9,7 @@
 
 let
   pname = "comm";
-  version = "0.2.3";
+  version = "0.2.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -19,7 +19,7 @@ buildPythonPackage {
     owner = "ipython";
     repo = "comm";
     tag = "v${version}";
-    hash = "sha256-gDggPu2h43lGyovTND9a3o9F2hWppV5uvAJa78JxJCo=";
+    hash = "sha256-51HSSULhbKb1NdLJ//b3Vh6sOLWp0B4KW469htpduqM=";
   };
 
   nativeBuildInputs = [ hatchling ];

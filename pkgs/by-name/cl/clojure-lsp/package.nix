@@ -5,18 +5,16 @@
   fetchurl,
   fetchFromGitHub,
   writeScript,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
   testers,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "clojure-lsp";
-  version = "2025.08.25-14.21.46";
+  version = "2025.06.06-19.04.49";
 
   src = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${finalAttrs.version}/clojure-lsp-standalone.jar";
-    hash = "sha256-J89RHgxLJHSRQfbSLT0MhX7kDMsZEWjK8RGGIyx6dik=";
+    hash = "sha256-MiCwqlgvA9u64Fs4kkJta34gtsapyelbU0be/9UBJsk=";
   };
 
   extraNativeImageBuildArgs = [
@@ -27,11 +25,21 @@ buildGraalvmNativeImage (finalAttrs: {
     "--features=clj_easy.graal_build_time.InitClojureClasses"
   ];
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    writableTmpDirAsHomeHook
-    versionCheckHook
-  ];
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    export HOME="$(mktemp -d)"
+    ./clojure-lsp --version | fgrep -q '${finalAttrs.version}'
+
+    runHook postCheck
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    inherit (finalAttrs) version;
+    package = finalAttrs.finalPackage;
+    command = "clojure-lsp --version";
+  };
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell

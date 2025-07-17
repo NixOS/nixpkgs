@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "choose-gui";
-  version = "1.5.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "chipsenkbeil";
     repo = "choose";
     rev = version;
-    hash = "sha256-ewXZpP3XmOuV/MA3fK4BwZnNb2jkE727Sse6oAd4HJk=";
+    hash = "sha256-oR0GgMinKcBHaZWdE7O+mdbiLKKjkweECKbi80bjW+c=";
   };
 
   nativeBuildInputs = [ xcbuild ];
@@ -42,10 +42,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     changelog = "https://github.com/chipsenkbeil/choose/blob/${version}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [
-      heywoodlh
-      niksingh710
-    ];
+    maintainers = with lib.maintainers; [ heywoodlh ];
     mainProgram = "choose";
   };
 }

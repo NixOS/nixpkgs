@@ -1,6 +1,5 @@
 {
   lib,
-  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
@@ -23,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.52.1";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "datadogpy";
     tag = "v${version}";
-    hash = "sha256-WhfCREEuFT4b75C62KWnAyYGt4/j5tuuP8hZOHGNo10=";
+    hash = "sha256-DIuKawqOzth8XYF+M3fYm2kMeo3UbfS34/Qa4Y9V1h8=";
   };
 
   build-system = [ hatchling ];
@@ -55,35 +54,29 @@ buildPythonPackage rec {
     "tests/integration/api/test_*.py"
   ];
 
-  disabledTests = [
-    "test_default_settings_set"
-    # https://github.com/DataDog/datadogpy/issues/746
-    "TestDogshell"
+  disabledTests =
+    [
+      "test_default_settings_set"
+      # https://github.com/DataDog/datadogpy/issues/746
+      "TestDogshell"
 
-    # Flaky: test execution time against magic values
-    "test_distributed"
-    "test_timed"
-    "test_timed_in_ms"
-    "test_timed_start_stop_calls"
-
-    # OSError: AF_UNIX path too long
-    "test_socket_connection"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/DataDog/datadogpy/issues/880
-    "test_timed_coroutine"
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted
-    "test_dedicated_uds_telemetry_dest"
-  ];
+      # Flaky: test execution time against magic values
+      "test_distributed"
+      "test_timed"
+      "test_timed_in_ms"
+      "test_timed_start_stop_calls"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/DataDog/datadogpy/issues/880
+      "test_timed_coroutine"
+    ];
 
   pythonImportsCheck = [ "datadog" ];
 
   meta = {
     description = "Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
-    changelog = "https://github.com/DataDog/datadogpy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sarahec ];
   };

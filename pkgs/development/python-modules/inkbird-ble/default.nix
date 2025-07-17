@@ -6,7 +6,6 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
-  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "inkbird-ble";
-  version = "1.1.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
     tag = "v${version}";
-    hash = "sha256-Dwp65FKtqJbgux+T3Ql09sDy6m8CCeK26aDKM3I3eJo=";
+    hash = "sha256-J3BT4KZ5Kzoc8vwbsXbhZJ+qkeggYomGE0JedxNTPaQ=";
   };
 
   build-system = [ poetry-core ];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];

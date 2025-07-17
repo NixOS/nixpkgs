@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./cargo-lock.patch ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-3zcXHl/CK5p/5BpGwafMYF/ztE6Erid9nS49vRFyPfE=";
 
   nativeBuildInputs = [

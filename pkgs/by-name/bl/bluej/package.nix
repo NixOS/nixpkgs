@@ -2,109 +2,67 @@
   lib,
   stdenv,
   fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  unzip,
-  openjdk21,
-  openjfx21,
+  openjdk17,
+  openjfx17,
   glib,
-  gsettings-desktop-schemas,
-  gtk3,
+  dpkg,
   wrapGAppsHook3,
-  imagemagick,
-  nix-update-script,
 }:
 let
-  openjdk = openjdk21.override {
+  openjdk = openjdk17.override {
     enableJavaFX = true;
-    openjfx_jdk = openjfx21.override { withWebKit = true; };
+    openjfx_jdk = openjfx17.override { withWebKit = true; };
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "bluej";
-  version = "5.5.0";
+  version = "5.2.0";
 
   src = fetchurl {
-    url = "https://github.com/k-pet-group/BlueJ-Greenfoot/releases/download/BLUEJ-RELEASE-${finalAttrs.version}/BlueJ-generic-${finalAttrs.version}.jar";
-    sha256 = "sha256-UClhTH/9oFfhjYsScBvmD4cKZUJwuAsiyRTiVkPAV0o=";
+    # We use the deb here. First instinct might be to go for the "generic" JAR
+    # download, but that is actually a graphical installer that is much harder
+    # to unpack than the deb.
+    url = "https://www.bluej.org/download/files/BlueJ-linux-${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }.deb";
+    sha256 = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    unzip -d jar ${finalAttrs.src}
-    unzip -d dist jar/bluej-dist.jar
-
-    runHook postUnpack
-  '';
-
-  sourceRoot = "dist";
-
   nativeBuildInputs = [
+    dpkg
     wrapGAppsHook3
-    copyDesktopItems
-    imagemagick
-    unzip
   ];
-  buildInputs = [
-    glib
-    gtk3
-  ];
+  buildInputs = [ glib ];
 
   dontWrapGApps = true;
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "BlueJ";
-      desktopName = "BlueJ";
-      exec = "BlueJ";
-      icon = "bluej";
-      comment = "A simple powerful Java IDE";
-      categories = [
-        "Application"
-        "Development"
-      ];
-    })
-  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
+    mkdir -p $out
+    cp -r usr/* $out
 
-    cp -r ./lib $out/lib/bluej
-
-    mkdir -p $out/share/icons/hicolor/{16x16,32x32,48x48,64x64,128x128,256x256}/apps
-
-    for dimension in 16x16 32x32 48x48 64x64 128x128 256x256; do
-      magick convert ./icons/bluej-icon-512-embossed.png -geometry $dimension\
-        $out/share/icons/hicolor/$dimension/apps/bluej.png
-    done
+    rm -r $out/share/bluej/jdk
+    rm -r $out/share/bluej/javafx
+    rm -r $out/share/bluej/javafx-*.jar
 
     makeWrapper ${openjdk}/bin/java $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
-      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
-      --add-flags "-Dawt.useSystemAAFontSettings=on \
+      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
                    --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
-                   --add-opens javafx.graphics/com.sun.javafx.scene.input=ALL-UNNAMED \
-                   -cp $out/lib/bluej/boot.jar bluej.Boot"
+                   -cp $out/share/bluej/boot.jar bluej.Boot"
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license = with lib.licenses; [
-      gpl2Plus
-      classpathException20
-    ];
+    license = lib.licenses.gpl2ClasspathPlus;
     mainProgram = "bluej";
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;
   };
 
-})
+}

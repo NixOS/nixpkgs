@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.9.5";
+  version = "0.9.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = "volctl";
     rev = "v${version}";
-    sha256 = "sha256-zL1m/DeSOrNkjt9B+8pdy2jUgjSp7tt81UpAueGsIwQ=";
+    sha256 = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
   };
 
   postPatch = ''
@@ -38,17 +38,18 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [
-    pango
-    gtk3
-  ]
-  ++ (with python3Packages; [
-    pulsectl
-    click
-    pycairo
-    pygobject3
-    pyyaml
-  ]);
+  propagatedBuildInputs =
+    [
+      pango
+      gtk3
+    ]
+    ++ (with python3Packages; [
+      pulsectl
+      click
+      pycairo
+      pygobject3
+      pyyaml
+    ]);
 
   # with strictDeps importing "gi.repository.Gtk" fails with "gi.RepositoryError: Typelib file for namespace 'Pango', version '1.0' not found"
   strictDeps = false;

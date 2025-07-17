@@ -3,25 +3,25 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "tenere";
-  version = "0.11.3";
+  version = "0.11.2-unstable-2024-12-05";
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "tenere";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-iuGsDSdlNL3xc9qtMOdte1mzjmWZHieKGLHDi3XLg2g=";
+    rev = "0f3181ab23066aa69aa4fec387a7e16578078179";
+    hash = "sha256-HKPCX0bmXkB3LwvgE1li3dlWTgpW5CXuWZNq3mFY6FY=";
   };
-
-  cargoHash = "sha256-okIn32IA6ZizfS2XjHxq8cPRIZzvZ4kIz1NI0X72Tfs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vwnMfY8xYrH3pWl8YMb7Jedu1gEOcAKPChClboJJSsw=";
 
   requiredSystemFeatures = [ "big-parallel" ]; # for fat LTO from upstream
 
   meta = {
     description = "Terminal interface for large language models (LLMs)";
     homepage = "https://github.com/pythops/tenere";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ob7 ];
     mainProgram = "tenere";
   };
-})
+}

@@ -75,8 +75,7 @@ let
           license = lib.licenses.bsd2;
           platforms = lib.platforms.all;
           description = throw "please write meta.description";
-        }
-        // attrs.meta;
+        } // attrs.meta;
       }
     );
 in
@@ -85,14 +84,14 @@ in
     libname = "format";
     version = "3.5.0";
     sha256 = "sha256-5vZ7b+P74uGx0Gb7X/+jbsx5048dO/jv5nqCDtw5y/A=";
-    meta.description = "Haxe library for supporting different file formats";
+    meta.description = "A Haxe Library for supporting different file formats";
   };
 
   heaps = buildHaxeLib {
     libname = "heaps";
     version = "1.9.1";
     sha256 = "sha256-i5EIKnph80eEEHvGXDXhIL4t4+RW7OcUV5zb2f3ItlI=";
-    meta.description = "GPU game framework";
+    meta.description = "The GPU Game Framework";
   };
 
   hlopenal = buildHaxeLib {
@@ -156,7 +155,7 @@ in
       src = fetchFromGitHub {
         owner = "HaxeFoundation";
         repo = "hxnodejs";
-        rev = "cf80c6a077e705d39f752418e95555b346f4d9b2";
+        rev = "cf80c6a";
         sha256 = "0mdiacr5b2m8jrlgyd2d3vp1fha69lcfb67x4ix7l7zfi8g460gs";
       };
       installPhase = installLibHaxe { inherit libname version; };

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_19,
+  llvmPackages_17,
   boost,
   cmake,
   spdlog,
@@ -20,17 +20,17 @@ let
   # ```
   #
   # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
-  llvmPackages = llvmPackages_19;
+  llvmPackages = llvmPackages_17;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.15.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-P4syb8v3EY/tHwG8FOvR+kgMew/nwG+pG2weN6172go=";
+    sha256 = "sha256-70vvQGYcer3dosb1ulWO1F4xFwKwfo35l/TFSFa5idM=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +46,13 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     libffi
   ];
 
-  cmakeFlags = [
-    "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
+    ];
 
   postPatch = ''
     echo -n $version > VERSION

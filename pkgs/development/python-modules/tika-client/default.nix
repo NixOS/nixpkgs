@@ -2,33 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  anyio,
+  pythonOlder,
   hatchling,
   httpx,
 }:
 
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "0.10.0";
+  version = "0.9.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
     tag = version;
-    hash = "sha256-XYyMp+02lWzE+3Txr+shVGVwalLEJHvoy988tA7SWgY=";
+    hash = "sha256-lg6syUbEbPb70iBa4lw5fVN8cvfWY3bkG2jNGxxNLDo=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    anyio
-    httpx
-  ];
+  dependencies = [ httpx ];
 
   pythonImportsCheck = [ "tika_client" ];
 
-  # The tests expect the tika-server to run in a docker container
+  # Almost all of the tests (all except one in 0.1.0) fail since there
+  # is no tika http API endpoint reachable. Since tika is not yet
+  # packaged for nixpkgs, it seems like an unreasonable amount of effort
+  # fixing these tests.
   doChecks = false;
 
   meta = with lib; {

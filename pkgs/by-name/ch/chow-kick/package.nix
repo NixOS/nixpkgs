@@ -33,6 +33,7 @@
   sqlite,
   stdenv,
   util-linuxMinimal,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Chowdhury-DSP";
     repo = "ChowKick";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
     fetchSubmodules = true;
   };
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sqlite
     util-linuxMinimal
+    webkitgtk_4_0
   ];
 
   cmakeFlags = [

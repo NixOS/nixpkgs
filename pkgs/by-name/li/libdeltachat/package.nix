@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "2.14.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
     tag = "v${version}";
-    hash = "sha256-oSTQcR7HE1YaVlNuSknG6JhoiiOjgNwAIaCecmLE7PY=";
+    hash = "sha256-Evk2g2fqEmo/cd6+Sd76U0Byj6OEm99OZuUkoxTELbM=";
   };
 
   patches = [
@@ -34,30 +34,32 @@ stdenv.mkDerivation rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    pname = "chatmail-core";
+    pname = "deltachat-core-rust";
     inherit version src;
-    hash = "sha256-9Dmll7os2cq3mxp30L9Nrx53QK1ZF7loozDg/XTs0UE=";
+    hash = "sha256-vnnROLmsAh6mSPuQzTSbYSgxGfrKaanuLcADFE+kQeM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    pkg-config
-    rustPlatform.cargoSetupHook
-    cargo
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      pkg-config
+      rustPlatform.cargoSetupHook
+      cargo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
-  buildInputs = [
-    openssl
-    sqlcipher
-    sqlite
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlcipher
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   nativeCheckInputs = with rustPlatform; [
     cargoCheckHook

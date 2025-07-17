@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.25.0";
+  version = "0.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
+    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -69,22 +69,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--pyargs"
     "cartopy"
-  ];
-
-  disabledTestMarks = [
-    "network"
-    "natural_earth"
+    "-m"
+    "'not network and not natural_earth'"
   ];
 
   disabledTests = [

@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";
 
   checkFlags = [

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bvi";
-  version = "1.5.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/bvi/${pname}-${version}.src.tar.gz";
-    sha256 = "sha256-ZUBxaho7K5cRY1EI2hSya66kiIgdSmghIcC927prdMs=";
+    sha256 = "sha256-S7oWwrSWljqbk5M2wKvMjUiGZEkggK5DqG2hjPTOlPI=";
   };
 
   buildInputs = [ ncurses ];

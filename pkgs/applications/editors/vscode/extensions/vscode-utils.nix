@@ -41,13 +41,14 @@ let
       {
         pname = "vscode-extension-${pname}";
 
-        passthru = {
-          updateScript = vscode-extension-update-script { };
-        }
-        // passthru
-        // {
-          inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
-        };
+        passthru =
+          {
+            updateScript = vscode-extension-update-script { };
+          }
+          // passthru
+          // {
+            inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
+          };
 
         inherit
           configurePhase

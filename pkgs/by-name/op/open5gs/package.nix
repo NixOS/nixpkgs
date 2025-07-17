@@ -1,5 +1,7 @@
 {
   stdenv,
+  nodejs,
+  buildNpmPackage,
   lib,
   fetchFromGitHub,
   meson,
@@ -25,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open5gs";
-  version = "2.7.6";
+  version = "2.7.2";
 
   diameter = fetchFromGitHub {
     owner = "open5gs";
     repo = "freeDiameter";
-    rev = "13f5a5996b5fa1a46ed780635c7fc6fcd09b4290"; # r1.5.0
-    hash = "sha256-S8jL+9rW9RDwQc7NU8MOzMe9/iRbshWa2QLqXoiV85Q=";
+    rev = "20196a265aecb7b1573ceb526bb619e092c1fd3f"; # r1.5.0
+    hash = "sha256-0sxzQtKBx313+x3TRsmeswAq90Vk5jNA//rOJcEZJTQ=";
   };
 
   libtins = fetchFromGitHub {
@@ -57,7 +59,22 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open5gs";
     repo = "open5gs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2k+S+OXfdskJPtDUFSxb/+2UZcUiOZzRSSGgsEJWolc=";
+    hash = "sha256-XSDjVW+5l2trrilKMcSfX6QIfh/ijWxjoJg33Bn1DBU=";
+  };
+
+  webui = buildNpmPackage {
+    pname = finalAttrs.pname + "-webui";
+    inherit (finalAttrs) src version meta;
+
+    sourceRoot = "${finalAttrs.src.name}/webui";
+
+    npmDepsHash = "sha256-IpqineYa15GBqoPDJ7RpaDsq+MQIIDcdq7yhwmH4Lzo=";
+
+    installPhase = ''
+      rm -rf node_modules
+      mkdir $out
+      cp -r * $out
+    '';
   };
 
   nativeBuildInputs = [
@@ -96,6 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R --no-preserve=mode,ownership ${finalAttrs.diameter} subprojects/freeDiameter
     cp -R --no-preserve=mode,ownership ${finalAttrs.libtins} subprojects/libtins
     cp -R --no-preserve=mode,ownership ${finalAttrs.promc} subprojects/prometheus-client-c
+
+    rm -rf webui/*
+    cp -r ${finalAttrs.webui}/* webui/
   '';
 
   postInstall = ''
@@ -109,10 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "4G/5G core network components";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      bot-wxt1221
-      xddxdd
-    ];
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     changelog = "https://github.com/open5gs/open5gs/releases/tag/v${finalAttrs.version}";
   };
 })

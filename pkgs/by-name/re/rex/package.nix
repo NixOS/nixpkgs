@@ -7,6 +7,7 @@
   rsync,
   which,
   installShellFiles,
+  ...
 }:
 perlPackages.buildPerlPackage rec {
   pname = "Rex";

@@ -3,28 +3,38 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pdm-backend,
+  loguru,
   pydantic,
+  poetry-core,
+  pythonOlder,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.1.6";
+  version = "0.1.5";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yaleman";
     repo = "aussiebb";
     tag = "v${version}";
-    hash = "sha256-GD04Bq+uJs2JuTjtnGh6QKD4uFXwmGcOMB1Hu9yBlkI=";
+    hash = "sha256-ejaHweoRNrJJq6XGeTrENco8SPwwu6rSpGzksu0CsCY=";
   };
 
-  build-system = [ pdm-backend ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requests = "^2.27.1"' 'requests = "*"'
+  '';
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     requests
+    loguru
     pydantic
   ];
 
@@ -33,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aussiebb" ];
 
-  meta = {
+  meta = with lib; {
     description = "Module for interacting with the Aussie Broadband APIs";
     homepage = "https://github.com/yaleman/aussiebb";
-    changelog = "https://github.com/yaleman/pyaussiebb/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    changelog = "https://github.com/yaleman/pyaussiebb/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

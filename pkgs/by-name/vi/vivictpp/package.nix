@@ -16,22 +16,18 @@
   ffmpeg,
   cacert,
   zlib,
-  writeShellScript,
-  nix-update,
 }:
 
 let
-  version = "1.3.0";
+  version = "1.1.0";
   withSubprojects = stdenv.mkDerivation {
-    pname = "sources-with-subprojects";
-    inherit version;
+    name = "sources-with-subprojects";
 
     src = fetchFromGitHub {
       owner = "vivictorg";
       repo = "vivictpp";
-      tag = "v${version}";
-      fetchSubmodules = true;
-      hash = "sha256-yzUgLZbqEzyJINWQUTC/j33XbjSXP1vpDlgiKv6Jx9Q=";
+      rev = "v${version}";
+      hash = "sha256-ScuCOmcK714YXEHncizwj6EWdiNIJA1xRMn5gfmg4K4=";
     };
 
     nativeBuildInputs = [
@@ -49,7 +45,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-PtOb47QOffGje1U8Tle9AQon7ZCgMp/lITPAfM9/wr4=";
+    outputHash = "sha256-/6nuTKjQEXfJlHkTkeX/A4PeGb8SOk6Q801gjx1SB6M=";
   };
 in
 stdenv.mkDerivation {
@@ -82,17 +78,12 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  passthru.updateScript = writeShellScript "update-vivictpp" ''
-    ${lib.getExe nix-update} vivictpp.src
-    ${lib.getExe nix-update} vivictpp --version skip
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
     homepage = "https://github.com/vivictorg/vivictpp";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ tilpner ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ tilpner ];
     mainProgram = "vivictpp";
   };
 }

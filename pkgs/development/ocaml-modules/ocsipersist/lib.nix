@@ -8,13 +8,15 @@
 
 buildDunePackage rec {
   pname = "ocsipersist-lib";
-  version = "2.0.0";
+  version = "1.1.0";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsipersist";
-    tag = version;
-    hash = "sha256-7CKKwJxqxUpCMNs4xGbsMZ6Qud9AnczBStTXS+N21DU=";
+    rev = version;
+    sha256 = "sha256:1d6kdcfjvrz0dl764mnyxc477aa57rvmzkg154qc915w2y1nbz9a";
   };
 
   buildInputs = [ lwt_ppx ];
@@ -24,6 +26,6 @@ buildDunePackage rec {
     description = "Persistent key/value storage (for Ocsigen) - support library";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
-    homepage = "https://github.com/ocsigen/ocsipersist/";
+    inherit (src.meta) homepage;
   };
 }

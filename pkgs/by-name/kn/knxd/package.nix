@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.73";
+  version = "0.14.71";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
     tag = finalAttrs.version;
-    hash = "sha256-rBYvwNJ8rIXGv9Hz0xTn+4cUdptdoddCCv6JvF4f1+M=";
+    hash = "sha256-623Q2OGGr4wVdmJytjidTPEkP3hs2Z+KukbXt+hlPgM=";
   };
 
   postPatch = ''
@@ -39,13 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs = [
-    fmt_9
-    libev
-  ]
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional withUsb libusb1
-  ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
+  buildInputs =
+    [
+      fmt_9
+      libev
+    ]
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional withUsb libusb1
+    ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 
   configureFlags = [
     (lib.enableFeature withSystemd "systemd")

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  patch-ng,
   pytestCheckHook,
   cffi,
   lmdb,
@@ -12,29 +11,28 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.7.3";
+  version = "1.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1KJ7evT+OPNAnZ+/v0e2F7PZTe6YoAvIwqgzbM0/mxU=";
+    hash = "sha256-0o4/pZk1/2iIWHYOxS8gLsuMEImj9o0fFi6jB40VHnM=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [ lmdb ];
 
-  nativeBuildInputs = [ cffi ];
-
-  env.LMDB_FORCE_SYSTEM = 1;
-
-  dependencies = [ patch-ng ];
-
   pythonImportsCheck = [ "lmdb" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    cffi
+    pytestCheckHook
+  ];
+
+  LMDB_FORCE_SYSTEM = 1;
 
   meta = {
     description = "Universal Python binding for the LMDB 'Lightning' Database";

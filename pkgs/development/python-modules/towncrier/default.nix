@@ -17,25 +17,26 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "25.8.0";
+  version = "24.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7vFtKfgxrVers64yoFZXOYZiGfHr+90pfTKJTrmUDrE=";
+    hash = "sha256-ATQj7n7tECsvOTwofSLZX2bxo+oQpLqoLSmAAafxivM=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    click
-    incremental
-    jinja2
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies =
+    [
+      click
+      incremental
+      jinja2
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH

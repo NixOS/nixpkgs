@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Library to access AACS protected Blu-Ray disks";
     mainProgram = "aacs_info";
     license = licenses.lgpl21;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = with platforms; linux;
   };
 }

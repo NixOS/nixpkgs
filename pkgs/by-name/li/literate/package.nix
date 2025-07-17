@@ -6,7 +6,7 @@
 
 buildDubPackage {
   pname = "literate";
-  version = "0-unstable-2021-01-22";
+  version = "unstable-2021-01-22";
 
   src = fetchFromGitHub {
     owner = "zyedidia";

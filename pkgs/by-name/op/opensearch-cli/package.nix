@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -20,7 +19,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd opensearch-cli \
       --bash <($out/bin/opensearch-cli completion bash) \
@@ -33,7 +32,7 @@ buildGoModule rec {
     homepage = "https://github.com/opensearch-project/opensearch-cli";
     license = lib.licenses.asl20;
     mainProgram = "opensearch-cli";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };

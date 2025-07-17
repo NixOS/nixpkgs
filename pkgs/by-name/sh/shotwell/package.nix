@@ -24,6 +24,7 @@
   gcr,
   libgee,
   gexiv2,
+  librest,
   gettext,
   desktop-file-utils,
   gdk-pixbuf,
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gdk-pixbuf
     librsvg
+    librest
     gcr
     adwaita-icon-theme
     libsecret

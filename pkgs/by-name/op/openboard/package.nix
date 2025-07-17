@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qt6Packages,
+  libsForQt5,
   libGL,
   fontconfig,
   openssl,
@@ -27,15 +27,28 @@
 }:
 
 let
-  inherit (qt6Packages)
-    qtbase
-    qttools
-    qtmultimedia
-    qtwebengine
-    qmake
-    wrapQtAppsHook
-    quazip
-    ;
+  importer = stdenv.mkDerivation {
+    pname = "openboard-importer";
+    version = "unstable-2016-10-08";
+
+    src = fetchFromGitHub {
+      owner = "OpenBoard-org";
+      repo = "OpenBoard-Importer";
+      rev = "47927bda021b4f7f1540b794825fb0d601875e79";
+      sha256 = "19zhgsimy0f070caikc4vrrqyc8kv2h6rl37sy3iggks8z0g98gf";
+    };
+
+    nativeBuildInputs = [
+      libsForQt5.qmake
+      libsForQt5.wrapQtAppsHook
+    ];
+    buildInputs = [ libsForQt5.qtbase ];
+    dontWrapQtApps = true;
+
+    installPhase = ''
+      install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
+    '';
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
@@ -63,14 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtwebengine
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qttools
+    libsForQt5.qtwebengine
     libGL
     fontconfig
     openssl
@@ -88,10 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     lame
     fdk_aac
     libass
-    quazip
+    libsForQt5.quazip
     libXext
     libXfixes
   ];
+
+  propagatedBuildInputs = [ importer ];
 
   meta = with lib; {
     description = "Interactive whiteboard application";

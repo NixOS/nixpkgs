@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "eth-tester";
-  version = "0.13.0-beta.1";
+  version = "0.12.0-beta.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-tester";
     tag = "v${version}";
-    hash = "sha256-ssPtsEQAyaJde/empEpGU1bf3s4yxwlEXqpacN5GWDw=";
+    hash = "sha256-ox7adsqD0MPZFcxBhino8cgwYYEWrBnD+ugPQOuOO2U=";
   };
 
   build-system = [ setuptools ];
@@ -48,10 +48,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "eth_tester" ];
-
-  disabledTests = [
-    "test_install_local_wheel"
-  ];
 
   meta = {
     description = "Tool suite for testing ethereum applications";

@@ -2,30 +2,29 @@
   lib,
   allure-python-commons,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   pytest,
+  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "allure-pytest";
-  version = "2.15.0";
+  version = "2.13.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "allure-framework";
-    repo = "allure-python";
-    tag = version;
-    hash = "sha256-I3Zh9frOplcPqLd8b4peNM9WtbNmQjHX6ocVJJwPzyc=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-DvjheQxEqYjba4PE1PXpFFHixMjqEGAd+ohSjSOvz24=";
   };
 
-  sourceRoot = "${src.name}/allure-pytest";
-
-  build-system = [ setuptools-scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [ allure-python-commons ];
+  propagatedBuildInputs = [ allure-python-commons ];
 
   # Tests were moved to the meta package
   doCheck = false;

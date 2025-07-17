@@ -8,7 +8,7 @@
   pkg-config,
   glib,
   libpeas,
-  util-linux,
+  libsmartcols,
   help2man,
   zchunk,
   pcre2,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libdnf
     glib
     libpeas
-    util-linux
+    libsmartcols
     zchunk
     pcre2.dev
   ];

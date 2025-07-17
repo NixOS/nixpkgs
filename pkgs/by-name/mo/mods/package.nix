@@ -1,44 +1,34 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
   gitUpdater,
   testers,
   mods,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "mods";
-  version = "1.8.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-CT90uMQc0quQK/vCeLiHH8taEkCSDIcO7Q3aA+oaNmY=";
+    rev = "v${version}";
+    hash = "sha256-wzLYkcgUWPzghJEhYRh7HH19Rqov1RJAxdgp3AGnOTY=";
   };
 
-  # Otherwise checks fail with `panic: open /etc/protocols: operation not permitted` when sandboxing is enabled on Darwin
-  # https://github.com/NixOS/nixpkgs/pull/381645#issuecomment-2656211797
-  modPostBuild = ''
-    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
-      --replace-quiet '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
-  '';
+  vendorHash = "sha256-L+4vkh7u6uMm5ICMk8ke5RVY1oYeKMYWVYYq9YqpKiw=";
 
-  vendorHash = "sha256-jtSuSKy6GpWrJAXVN2Acmtj8klIQrgJjNwgyRZIyqyY=";
-
-  nativeBuildInputs = lib.optionals (installManPages || installShellCompletions) [
+  nativeBuildInputs = [
     installShellFiles
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Version=${version}"
   ];
 
   # These tests require internet access.
@@ -58,16 +48,13 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     export HOME=$(mktemp -d)
-  ''
-  + lib.optionalString installManPages ''
-    $out/bin/mods man > ./mods.1
-    installManPage ./mods.1
-  ''
-  + lib.optionalString installShellCompletions ''
-    installShellCompletion --cmd mods \
-      --bash <($out/bin/mods completion bash) \
-      --fish <($out/bin/mods completion fish) \
-      --zsh <($out/bin/mods completion zsh)
+    $out/bin/mods man > mods.1
+    $out/bin/mods completion bash > mods.bash
+    $out/bin/mods completion fish > mods.fish
+    $out/bin/mods completion zsh > mods.zsh
+
+    installManPage mods.1
+    installShellCompletion mods.{bash,fish,zsh}
   '';
 
   meta = {
@@ -77,8 +64,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       dit7ya
       caarlos0
-      delafthi
     ];
     mainProgram = "mods";
   };
-})
+}

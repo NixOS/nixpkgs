@@ -7,7 +7,6 @@
 
 let
   inherit (lib) mkOption types;
-  inherit (lib.types) listOf str;
   cfg = config.services.kerberos_server;
   inherit (config.security.krb5) package;
 
@@ -41,14 +40,6 @@ in
           - MIT Kerberos: <https://web.mit.edu/kerberos/krb5-1.21/doc/admin/conf_files/kdc_conf.html>
         '';
         default = { };
-      };
-
-      extraKDCArgs = mkOption {
-        type = listOf str;
-        description = ''
-          Extra arguments to pass to the KDC process. See {manpage}`kdc(8)`.
-        '';
-        default = [ ];
       };
     };
   };

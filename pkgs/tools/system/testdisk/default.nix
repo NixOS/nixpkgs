@@ -8,7 +8,7 @@
   pkg-config,
   libjpeg,
   zlib,
-  libewf-legacy,
+  libewf,
   enableNtfs ? !stdenv.hostPlatform.isDarwin,
   ntfs3g ? null,
   enableExtFs ? !stdenv.hostPlatform.isDarwin,
@@ -27,11 +27,15 @@ assert enableQt -> qwt != null;
 
 (if enableQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "testdisk";
-  version = "7.2";
+  version = "7.1";
   src = fetchurl {
     url = "https://www.cgsecurity.org/testdisk-${version}.tar.bz2";
-    hash = "sha256-+DQ74gy0ABxdkaLjvNkYOY8Arm2DEIlKWp8v64E8KD8=";
+    sha256 = "1zlh44w67py416hkvw6nrfmjickc2d43v51vcli5p374d5sw84ql";
   };
+
+  patches = [
+    ./gcc-14-fixes.diff
+  ];
 
   postPatch = ''
     substituteInPlace linux/qphotorec.desktop \
@@ -40,26 +44,27 @@ assert enableQt -> qwt != null;
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    ncurses
-    libuuid
-    libjpeg
-    zlib
-    libewf-legacy
-  ]
-  ++ lib.optional enableNtfs ntfs3g
-  ++ lib.optional enableExtFs e2fsprogs
-  ++ lib.optionals enableQt [
-    qtbase
-    qttools
-    qwt
-  ];
+  buildInputs =
+    [
+      ncurses
+      libuuid
+      libjpeg
+      zlib
+      libewf
+    ]
+    ++ lib.optional enableNtfs ntfs3g
+    ++ lib.optional enableExtFs e2fsprogs
+    ++ lib.optionals enableQt [
+      qtbase
+      qttools
+      qwt
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-unused";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
     description = "Data recovery utilities";
@@ -79,9 +84,6 @@ assert enableQt -> qwt != null;
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      fgaz
-      ryand56
-    ];
+    maintainers = with maintainers; [ fgaz ];
   };
 }

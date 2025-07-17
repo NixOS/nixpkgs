@@ -9,12 +9,11 @@
   milksnake,
   cffi,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "symbolic";
-  version = "12.16.2";
+  version = "12.15.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -23,12 +22,12 @@ buildPythonPackage rec {
     tag = version;
     # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
-    hash = "sha256-1auaIvm9y6iIhRC+mU6PX7vsPok0CDVJHLd4nx5j5wU=";
+    hash = "sha256-hHAMWXY05chd3sJCMGixytabZ1G0uzZRLg0KmutRJEY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-uHRgV+wcdOsFqcYBMCJqy4CADN8XpXeKuVAsjI54Y9I=";
+    hash = "sha256-JGq3VYZwEsp4+MiQftf1k2T/48KSD7SqnbRcwgAcaDE=";
   };
 
   nativeBuildInputs = [
@@ -54,8 +53,6 @@ buildPythonPackage rec {
   enabledTestPaths = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for dealing with symbol files and more";

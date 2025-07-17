@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication {
     description = "Experimental console client for the Gemini protocol";
     mainProgram = "av98";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ehmry ];
 
     broken = true;
   };

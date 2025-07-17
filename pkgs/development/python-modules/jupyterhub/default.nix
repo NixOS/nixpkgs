@@ -88,27 +88,28 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    alembic
-    certipy
-    idna
-    jinja2
-    jupyter-events
-    oauthlib
-    packaging
-    pamela
-    prometheus-client
-    pydantic
-    python-dateutil
-    requests
-    sqlalchemy
-    tornado
-    traitlets
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    async-generator
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      alembic
+      certipy
+      idna
+      jinja2
+      jupyter-events
+      oauthlib
+      packaging
+      pamela
+      prometheus-client
+      pydantic
+      python-dateutil
+      requests
+      sqlalchemy
+      tornado
+      traitlets
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      async-generator
+      importlib-metadata
+    ];
 
   pythonImportsCheck = [ "jupyterhub" ];
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "scipy-stubs";
-  version = "1.16.1.0";
+  version = "1.16.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy-stubs";
     tag = "v${version}";
-    hash = "sha256-KRwFQG1Nb+Kh9OpQCGtvUzQA0MHNEZnRlzSkpZCNxuw=";
+    hash = "sha256-xaBii3vONwfHlrsLr+uvXvirZ2WT1OgUzlYxRIRnGdI=";
   };
 
   disabled = pythonOlder "3.11";

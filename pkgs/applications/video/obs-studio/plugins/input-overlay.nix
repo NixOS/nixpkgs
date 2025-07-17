@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  ninja,
   obs-studio,
   libuiohook,
   qtbase,
@@ -14,14 +13,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "obs-input-overlay";
   version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "univrsal";
     repo = "input-overlay";
-    tag = finalAttrs.version;
+    rev = "refs/tags/${version}";
     hash = "sha256-ju4u7hhx+hTuq7Oh0DBPV8RRM8zqyyvYV74KymU0+2c=";
     fetchSubmodules = true;
   };
@@ -29,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    ninja
   ];
 
   buildInputs = [
@@ -49,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
   ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isx86 [
+  cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-msse4.1"
   ];
 
@@ -64,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/univrsal/input-overlay";
     maintainers = with lib.maintainers; [ glittershark ];
     license = lib.licenses.gpl2;
-    inherit (obs-studio.meta) platforms;
+    platforms = lib.platforms.linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-})
+}

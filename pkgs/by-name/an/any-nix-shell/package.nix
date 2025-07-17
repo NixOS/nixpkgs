@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Fish, xonsh and zsh support for nix-shell";
+    description = "fish, xonsh and zsh support for nix-shell";
     license = lib.licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with lib.maintainers; [ haslersn ];

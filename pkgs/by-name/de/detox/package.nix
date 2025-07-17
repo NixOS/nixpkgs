@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "detox";
-  version = "3.0.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "dharple";
     repo = "detox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/vcHN0FevouO3sWY69WJYuQK+V58C+vIejMdAWHgSAw=";
+    hash = "sha256-MMzkUh3xyyChOI1Y/mQKjnxL439mntKiMVYXuW8cPWI=";
   };
 
   nativeBuildInputs = [

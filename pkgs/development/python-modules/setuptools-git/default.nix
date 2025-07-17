@@ -1,37 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  gitMinimal,
-  replaceVars,
-  setuptools,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-git";
   version = "1.2";
-  pyproject = true;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "msabramo";
-    repo = "setuptools-git";
-    tag = version;
-    hash = "sha256-dbQ15y62nanuWgh2puLYSio391Ja3SF+HrafvTBVNbk=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ff64136da01aabba76ae88b050e7197918d8b2139ccbf6144e14d472b9c40445";
   };
 
-  patches = [
-    (replaceVars ./hardcode-git-path.patch {
-      git = lib.getExe gitMinimal;
-    })
-  ];
-
-  build-system = [ setuptools ];
-
+  propagatedBuildInputs = [ pkgs.git ];
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Setuptools revision control system plugin for Git";
-    homepage = "https://github.com/msabramo/setuptools-git";
-    license = lib.licenses.bsd3;
+    homepage = "https://pypi.python.org/pypi/setuptools-git";
+    license = licenses.bsd3;
   };
 }

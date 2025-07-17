@@ -35,11 +35,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  patches = [
-    ./fusermount-setuid.patch
-    # Taken from https://github.com/gittup/tup/issues/518#issuecomment-3014825681
-    ./fix_newer_fuse3_file_reads.patch
-  ];
+  patches = [ ./fusermount-setuid.patch ];
 
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${version}'
@@ -97,7 +93,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gittup.org/tup/";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

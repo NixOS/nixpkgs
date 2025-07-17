@@ -22,6 +22,6 @@ buildNpmPackage {
   '';
 
   meta = common.meta // {
-    description = "Openbooks frontend";
+    description = "openbooks frontend";
   };
 }

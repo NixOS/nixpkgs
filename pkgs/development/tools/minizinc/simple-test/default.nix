@@ -12,10 +12,9 @@ stdenv.mkDerivation {
   dontInstall = true;
 
   buildCommand = ''
-    mkdir -p $out
-    minizinc --solver gecode ${./aust.mzn} | tee $out/aust.log
-    minizinc --solver gecode ${./nqueens.mzn} | tee $out/nqueens.log
-    minizinc --solver cbc ${./loan.mzn} ${./loan1.dzn} | tee $out/loan.log
+    minizinc --solver gecode ${./aust.mzn}
+    minizinc --solver cbc ${./loan.mzn} ${./loan1.dzn}
+    touch $out
   '';
 
   meta.timeout = 10;

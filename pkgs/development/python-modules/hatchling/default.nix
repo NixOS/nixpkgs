@@ -36,8 +36,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [
     "hatchling"

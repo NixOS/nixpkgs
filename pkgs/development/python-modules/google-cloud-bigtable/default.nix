@@ -25,13 +25,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.32.0";
+  version = "2.31.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigtable";
     tag = "v${version}";
-    hash = "sha256-9yU0xNh5GuVbQuAmoFEHJBmHCVvFOOxEw+b/3B9O1OY=";
+    hash = "sha256-ihS58yuLnxT9h4TilejP+WImzSZTWO7tOyjIRenmvpA=";
   };
 
   pyproject = true;
@@ -45,8 +45,7 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ]
-  ++ google-api-core.optional-dependencies.grpc;
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];

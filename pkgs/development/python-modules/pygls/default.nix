@@ -10,7 +10,6 @@
   pythonOlder,
   typeguard,
   websockets,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -59,14 +58,6 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "pygls" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # Skips pre-releases
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
-  };
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";

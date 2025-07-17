@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "6.2.1";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_cov";
     inherit version;
-    hash = "sha256-JcxswKU1ggS4EI7O3FGptXs0zGuMlnzCwBpOANimfaI=";
+    hash = "sha256-RpNfeq77p2DnFsLr++HCFiQLlZKWbn2pnqgpLU0+Kgo=";
   };
 
   build-system = [ setuptools ];

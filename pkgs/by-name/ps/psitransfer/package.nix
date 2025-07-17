@@ -6,24 +6,20 @@
   vips,
 }:
 
-buildNpmPackage (finalAttrs: {
+let
   pname = "psitransfer";
-  version = "2.3.0";
-
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-XUEvR8dWwFBbZdwVM8PQnYBc17SvGF5uO04vb/nAR2A=";
+    rev = "v${version}";
+    hash = "sha256-5o4QliAXgSZekIy0CNWfEuOxNl0uetL8C8RKUJ8HsNA=";
   };
-
-  npmDepsHash = "sha256-BZpd/fsuV77uj2bGZcqBpIuOq3YlUw2bxovOfu8b9iE=";
-
   app = buildNpmPackage {
-    pname = "psitransfer-app";
-    inherit (finalAttrs) version src;
+    pname = "${pname}-app";
+    inherit version src;
 
-    npmDepsHash = "sha256-zEGYv6TaHzgPCB3mHP2UMh8VkFqSBdrLuP5KjuEU0p8=";
+    npmDepsHash = "sha256-q7E+osWIf6VZ3JvxCXoZYeF28aMgmKP6EzQkksUUjeY=";
 
     postPatch = ''
       # https://github.com/psi-4ward/psitransfer/pull/284
@@ -35,6 +31,11 @@ buildNpmPackage (finalAttrs: {
       cp -r ../public/app $out
     '';
   };
+in
+buildNpmPackage {
+  inherit pname version src;
+
+  npmDepsHash = "sha256-EW/Fej58LE/nbJomPtWvEjDveAUdo0jIWwC+ziN0gy0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -43,19 +44,16 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     rm -r public/app
-    cp -r ${finalAttrs.app} public/app
+    cp -r ${app} public/app
   '';
 
   dontBuild = true;
 
-  passthru.updateScript = ./update.sh;
-
   meta = {
-    description = "Simple open source self-hosted file sharing solution";
     homepage = "https://github.com/psi-4ward/psitransfer";
-    changelog = "https://github.com/psi-4ward/psitransfer/releases/tag/v${finalAttrs.version}";
+    description = "Simple open source self-hosted file sharing solution";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hyshka ];
     mainProgram = "psitransfer";
   };
-})
+}

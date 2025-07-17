@@ -1,10 +1,11 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   isPy27,
   pytestCheckHook,
-  autoconf,
+  autoconf271,
   automake,
   cmake,
   gcc,
@@ -13,11 +14,10 @@
   perl,
   setuptools,
   simplejson,
-  snapshot-restore-py,
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "3.1.1";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -29,13 +29,10 @@ buildPythonPackage rec {
     sha256 = "sha256-pUVWd4zpmTygndPIy76uVk7+sLCmwQqulLaUI7B0fQc=";
   };
 
-  propagatedBuildInputs = [
-    simplejson
-    snapshot-restore-py
-  ];
+  propagatedBuildInputs = [ simplejson ];
 
   nativeBuildInputs = [
-    autoconf
+    autoconf271
     automake
     cmake
     libtool
@@ -58,6 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;

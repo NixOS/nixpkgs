@@ -4,7 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  llvmPackages_20,
+  llvmPackages,
   go,
   xar,
   binaryen,
@@ -16,10 +16,8 @@
 }:
 
 let
-  # nixpkgs typically updates default llvm version faster than tinygo releases
-  # which ends up breaking this build. Use fixed version for each release.
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages_20)
+  inherit (llvmPackages)
     llvm
     clang
     compiler-rt
@@ -36,13 +34,13 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.39.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
-    tag = "v${version}";
-    hash = "sha256-uooBZl4u9EHfs1DTI/dQ9Uz1uVOmRcIClEMB7D1q8Lk=";
+    rev = "v${version}";
+    hash = "sha256-I/9JXjt6aF/80Mh3iRgUYXv4l+m3XIpmKsIBviOuWCo=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -53,7 +51,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Vae7IFACioxH4E61GX/X7G19/ITbajp96VNUhliV8ls=";
+  vendorHash = "sha256-juADakh+s8oEY9UXUwxknvVeL1TgB/zRi8Xtzt/4qPA=";
 
   patches = [
     ./0001-GNUmakefile.patch
@@ -67,8 +65,7 @@ buildGoModule rec {
   buildInputs = [
     llvm
     clang.cc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -78,7 +75,6 @@ buildGoModule rec {
     "-X github.com/tinygo-org/tinygo/goenv.TINYGOROOT=${placeholder "out"}/share/tinygo"
     "-X github.com/tinygo-org/tinygo/goenv.clangResourceDir=${clang.cc.lib}/lib/clang/${llvmMajor}"
   ];
-  tags = [ "llvm${llvmMajor}" ];
   subPackages = [ "." ];
 
   # Output contains static libraries for different arm cpus
@@ -108,6 +104,14 @@ buildGoModule rec {
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
 
+    # Build our own custom wasi-libc.
+    # This is necessary because we modify the build a bit for our needs (disable
+    # heap, enable debug symbols, etc).
+    make wasi-libc \
+      CLANG="${lib.getBin clang.cc}/bin/clang -resource-dir ${clang.cc.lib}/lib/clang/${llvmMajor}" \
+      LLVM_AR=${lib.getBin llvm}/bin/llvm-ar \
+      LLVM_NM=${lib.getBin llvm}/bin/llvm-nm
+
     make gen-device -j $NIX_BUILD_CORES
 
     export TINYGOROOT=$(pwd)
@@ -125,8 +129,7 @@ buildGoModule rec {
     avrdude
     openocd
     binaryen
-  ]
-  ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
+  ] ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall
@@ -144,6 +147,7 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [
+      Madouura
       muscaln
     ];
   };

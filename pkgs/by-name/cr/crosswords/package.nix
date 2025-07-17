@@ -1,49 +1,44 @@
 {
   lib,
   stdenv,
-  desktop-file-utils,
   fetchFromGitLab,
-  isocodes,
-  json-glib,
-  libadwaita,
-  libipuz,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
-  shared-mime-info,
   wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  isocodes,
+  json-glib,
+  libipuz,
 }:
 
 stdenv.mkDerivation rec {
   pname = "crosswords";
-  version = "0.3.15";
+  version = "0.3.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
     rev = version;
-    hash = "sha256-KcHcTjPoQNA5TBXnKgudjBTV/0JbeVMJ09XVAL7SizI=";
+    hash = "sha256-3RL2LJdIHmDAjXaxqsE0n5UQMsuBJWEMoyAEoSBemR0=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
     pkg-config
-    shared-mime-info
     wrapGAppsHook4
+    desktop-file-utils
   ];
 
   buildInputs = [
+    libadwaita
     isocodes
     json-glib
-    libadwaita
     libipuz
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Crossword player and editor for GNOME";
@@ -51,10 +46,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/jrb/crosswords/-/blob/${version}/NEWS.md?ref_type=tags";
     license = lib.licenses.gpl3Plus;
     mainProgram = "crosswords";
-    maintainers = with lib.maintainers; [
-      aleksana
-      l0b0
-    ];
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
 }

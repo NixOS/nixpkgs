@@ -1,7 +1,6 @@
 {
   lib,
-  stdenv,
-  buildGoModule,
+  buildGo123Module,
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
@@ -10,12 +9,12 @@
 }:
 
 let
-  version = "0.26.1";
+  version = "0.25.0";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     tag = "v${version}";
-    hash = "sha256-M/7qfr4gpogx7cr7zh/MARZME3/4ePjVUVcjG85Ona0=";
+    hash = "sha256-456kMO7KappYI2FuHA8g+uhkJNCGCxb/9zmleZqu6SQ=";
   };
   web-bundle = buildNpmPackage {
     inherit version;
@@ -23,7 +22,7 @@ let
 
     src = gitSrc;
 
-    npmDepsHash = "sha256-1+ROYamu0FHed6x2Y+88P0ntR8aJdN1d2UBqMBfpmyw=";
+    npmDepsHash = "sha256-XKPFT8eyZmDhNbuCpTzGYeg5QdhgpVhHkj8AGSlh6WU=";
 
     dontNpmInstall = true;
 
@@ -38,13 +37,13 @@ let
   };
 
 in
-buildGoModule rec {
+buildGo123Module rec {
   inherit version;
   pname = "glasskube";
 
   src = gitSrc;
 
-  vendorHash = "sha256-0cTW01f9yputdqLvpfISaS50Jeolh12OTP+NjsgXncA=";
+  vendorHash = "sha256-oly6SLgXVyvKQQuPrb76LYngoDPNLjTAs4gWCT3/kew=";
 
   env.CGO_ENABLED = 0;
 
@@ -68,7 +67,7 @@ buildGoModule rec {
     cp -r ${web-bundle}/bundle internal/web/root/static/bundle
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     # Completions
     installShellCompletion --cmd glasskube \
       --bash <($out/bin/glasskube completion bash) \

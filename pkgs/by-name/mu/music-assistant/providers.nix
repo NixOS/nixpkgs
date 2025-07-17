@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.5.8";
+  version = "2.5.2";
   providers = {
     airplay = ps: [
     ];
@@ -131,10 +131,9 @@
     ];
     ytmusic =
       ps: with ps; [
-        bgutil-ytdlp-pot-provider
         duration-parser
         yt-dlp
         ytmusicapi
-      ];
+      ]; # missing bgutil-ytdlp-pot-provider
   };
 }

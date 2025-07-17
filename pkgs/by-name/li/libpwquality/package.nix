@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     "dev"
     "lib"
     "man"
-  ]
-  ++ lib.optionals enablePython [ "py" ];
+  ] ++ lib.optionals enablePython [ "py" ];
 
   src = fetchFromGitHub {
     owner = "libpwquality";
@@ -68,8 +67,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ]
-  ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
+  ] ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags =

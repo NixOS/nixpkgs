@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "catdocx";
-  version = "0-unstable-2017-01-02";
+  version = "unstable-2017-01-02";
 
   src = fetchFromGitHub {
     owner = "jncraton";

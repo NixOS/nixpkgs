@@ -6,15 +6,15 @@
   curlHTTP3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "1.11.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "nghttp3";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8WQfXzzF3K0IJNectrE1amQ6Njq4pZslrcVun6Uhi6E=";
+    rev = "v${version}";
+    hash = "sha256-V4JFqi3VdblpBlZJ1uFX56AlJn894oiX86OfoxVjBbE=";
     fetchSubmodules = true;
   };
 
@@ -36,12 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit curlHTTP3;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
-    changelog = "https://github.com/ngtcp2/nghttp3/releases/tag/${finalAttrs.src.tag}";
-    description = "Implementation of HTTP/3 mapping over QUIC and QPACK in C";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ izorkin ];
+    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ izorkin ];
   };
-})
+}

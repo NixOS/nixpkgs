@@ -14,28 +14,28 @@
   e2fsprogs,
   runCommand,
   libarchive,
-  bash,
-  bashNonInteractive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.3";
-
-  __structuredAttrs = true;
+  version = "1.47.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
-    hash = "sha256-hX5u+AD+qiu0V4+8gQIUvl08iLBy6lPFOEczqWVzcyk=";
+    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
   };
 
+  # 2025-05-31: Fix libarchive, from https://github.com/tytso/e2fsprogs/pull/230
   patches = [
-    # Upstream patch that fixes musl build (and probably others).
-    # Should be included in next release after 1.47.3.
     (fetchpatch {
-      name = "stdio-portability.patch";
-      url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/patch/?id=f79abd8554e600eacc2a7c864a8332b670c9e262";
-      hash = "sha256-zZ7zmSMTwGyS3X3b/D/mVG0bV2ul5xtY5DJx9YUvQO8=";
+      name = "0001-create_inode_libarchive.c-define-libarchive-dylib-for-darwin.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/e86c65bc7ee276cd9ca920d96e18ed0cddab3412.patch";
+      hash = "sha256-HFZAznaNl5rzgVEvYx1LDKh2jd/VEXD/o0wypIh4TR8=";
+    })
+    (fetchpatch {
+      name = "0002-mkgnutar.pl-avoid-uninitialized-username-variable.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/9217c359db1d1b6d031a0e2ca9a885634fed00da.patch";
+      hash = "sha256-iDXmLq77eJolH1mkXSbvZ9tRVtGQt2F45CdkVphUZSs=";
     })
   ];
 
@@ -46,11 +46,7 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "info"
-    "scripts"
-  ]
-  ++ lib.optionals withFuse [ "fuse2fs" ];
-
-  strictDeps = true;
+  ] ++ lib.optionals withFuse [ "fuse2fs" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -61,63 +57,46 @@ stdenv.mkDerivation rec {
     libuuid
     gettext
     libarchive
-    bash
-  ]
-  ++ lib.optionals withFuse [ fuse3 ];
+  ] ++ lib.optionals withFuse [ fuse3 ];
 
-  configureFlags = [
-    "--with-libarchive=direct"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # It seems that the e2fsprogs is one of the few packages that cannot be
-    # build with shared and static libs.
-    (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
-    "--enable-symlink-install"
-    "--enable-relative-symlinks"
-    "--with-crond-dir=no"
-    # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
-    "--disable-fsck"
-    "--disable-libblkid"
-    "--disable-libuuid"
-    "--disable-uuidd"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "--enable-libuuid"
-    "--disable-e2initrd-helper"
-  ];
+  configureFlags =
+    [
+      "--with-libarchive=direct"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
+      "--enable-symlink-install"
+      "--enable-relative-symlinks"
+      "--with-crond-dir=no"
+      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+      "--disable-fsck"
+      "--disable-libblkid"
+      "--disable-libuuid"
+      "--disable-uuidd"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--enable-libuuid"
+      "--disable-e2initrd-helper"
+    ];
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
 
-  postInstall = ''
-    # avoid cycle between outputs
-    if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
-      mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
-    fi
-
-    moveToOutput bin/mk_cmds "$scripts"
-    moveToOutput bin/compile_et "$scripts"
-    moveToOutput sbin/e2scrub "$scripts"
-    moveToOutput sbin/e2scrub_all "$scripts"
-  ''
-  + lib.optionalString withFuse ''
-    mkdir -p $fuse2fs/bin
-    mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
-  '';
+  postInstall =
+    ''
+      # avoid cycle between outputs
+      if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
+        mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+      fi
+    ''
+    + lib.optionalString withFuse ''
+      mkdir -p $fuse2fs/bin
+      mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
+    '';
 
   enableParallelBuilding = true;
-
-  # non-glibc gettext has issues with this
-  outputChecks = lib.optionalAttrs stdenv.hostPlatform.isGnu {
-    bin.disallowedRequisites = [
-      bash
-      bashNonInteractive
-    ];
-    out.disallowedRequisites = [
-      bash
-      bashNonInteractive
-    ];
-  };
 
   passthru.tests = {
     simple-filesystem = runCommand "e2fsprogs-create-fs" { } ''

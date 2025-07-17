@@ -16,7 +16,7 @@
   # native dependencies
   eigen,
   boost,
-  cgal_5,
+  cgal,
   gmp,
   hdf5,
   icu,
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     # ifcopenshell needs stdc++
     (lib.getLib stdenv.cc.cc)
     boost
-    cgal_5
+    cgal
     eigen
     gmp
     hdf5

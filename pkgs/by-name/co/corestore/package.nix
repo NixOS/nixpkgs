@@ -7,21 +7,20 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "corestore";
-  version = "7.4.7";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "corestore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/UhiuEBoAJc1U2/VYVWLyEGcXUndH0QmM++FN4KCTHo=";
+    hash = "sha256-lbbjYWJah1A2/ySBTI2Mg78dRjLyt/TJ5rhqBPxWOps=";
   };
 
-  npmDepsHash = "sha256-hQYvQeTwlIWImdNhgpnJjDC24Fx4G0eST7tptWV1Xgw=";
+  npmDepsHash = "sha256-3WfcomAOE+u/ZIn5M+sP/GkxArXx5IRFzf0IG4ykaiU=";
 
   dontNpmBuild = true;
 
   # ERROR: Missing package-lock.json from src
-  # Upstream doesn't want to maintain a lockfile in their repo: https://github.com/holepunchto/corestore/issues/119
   # Copy vendored package-lock.json to src via postPatch
   postPatch = ''
     cp ${./package-lock.json} ./package-lock.json

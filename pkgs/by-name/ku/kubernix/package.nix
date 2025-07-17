@@ -6,28 +6,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubernix";
-  version = "0.2.0-unstable-2021-11-16";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "saschagrunert";
     repo = "kubernix";
-    rev = "630087e023e403d461c4bb8b1c9368b26a2c0744";
-    sha256 = "sha256-IkfVpNxWOqQt/aXsN4iD9dkKKyOui3maKowVibuKbvM=";
+    rev = "v${version}";
+    sha256 = "04dzfdzjwcwwaw9min322g30q0saxpq5kqzld4f22fmk820ki6gp";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-
-  patches = [
-    # Need a specific version of clap and clap_derive: fails with anything greater.
-    ./Cargo.toml.patch
-    # error: 1 positional argument in format string, but no arguments were given
-    ./fix-compile-error.patch
-  ];
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
-
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "clap-3.0.0-beta.1" = "sha256-tErZmEiAF1v39AtgRUHoEmoYqXPWRDXBEkWUbH+fPyY=";
+      "clap_derive-0.3.0" = "sha256-VijH+XB4WeKYUsJH9h/ID8EGZ89R3oauYO8Yg331dPU=";
+    };
+  };
   doCheck = false;
 
   meta = with lib; {

@@ -55,13 +55,11 @@ home-assistant.python.pkgs.buildPythonPackage (
 
     passthru = {
       isHomeAssistantComponent = true;
-    }
-    // args.passthru or { };
+    } // args.passthru or { };
 
     meta = {
       inherit (home-assistant.meta) platforms;
-    }
-    // args.meta or { };
+    } // args.meta or { };
 
   }
   // builtins.removeAttrs args [

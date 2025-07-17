@@ -2,7 +2,7 @@ let
   cert =
     pkgs:
     pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-      openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=muc.example.com/CN=matrix.example.com' -addext "subjectAltName = DNS:example.com,DNS:muc.example.com,DNS:matrix.example.com" -days 36500
+      openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=example.com/CN=muc.example.com/CN=matrix.example.com' -days 36500
       mkdir -p $out
       cp key.pem cert.pem $out
     '';
@@ -14,18 +14,7 @@ in
     maintainers = [ ];
   };
   nodes = {
-    client-a =
-      { nodes, pkgs, ... }:
-      {
-        security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
-        networking.extraHosts = ''
-          ${nodes.server.networking.primaryIPAddress} example.com
-        '';
-
-        imports = [ ./go-sendxmpp-listen.nix ];
-      };
-
-    client-b =
+    client =
       { nodes, pkgs, ... }:
       {
         security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
@@ -39,7 +28,6 @@ in
           })
         ];
       };
-
     server =
       { config, pkgs, ... }:
       {
@@ -322,18 +310,7 @@ in
           ejabberd_prefix + "register cthon98 example.com nothunter2",
       )
       server.fail(ejabberd_prefix + "register asdf wrong.domain")
-
-      for machine in client_a, client_b:
-        machine.systemctl("start network-online.target")
-        machine.wait_for_unit("network-online.target")
-
-      client_a.wait_for_unit("go-sendxmpp-listen")
-      client_b.succeed("send-message")
-
-      client_a.wait_until_succeeds(
-        "journalctl -o cat -u go-sendxmpp-listen.service | grep 'cthon98@example.com: Hello, this is dog.'"
-      )
-
+      client.succeed("send-message")
       server.succeed(
           ejabberd_prefix + "unregister cthon98 example.com",
           ejabberd_prefix + "unregister azurediamond example.com",

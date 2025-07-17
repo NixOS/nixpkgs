@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+      abbradar
       niklaskorz
     ];
     platforms = lib.platforms.unix;

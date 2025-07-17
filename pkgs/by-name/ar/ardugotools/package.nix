@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  ...
 }:
 let
   version = "0.6.2";

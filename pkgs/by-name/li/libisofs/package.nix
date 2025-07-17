@@ -49,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
     changelog = "https://dev.lovelyhq.com/libburnia/libisofs/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      abbradar
+    ];
     platforms = lib.platforms.unix;
   };
 })

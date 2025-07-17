@@ -92,7 +92,7 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  disabledTestMarks = [ "slow" ];
+  pytestFlagsArray = [ "-m 'not slow'" ];
 
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs
@@ -104,14 +104,15 @@ buildPythonPackage rec {
     "test_polars"
   ];
 
-  disabledTestPaths = [
-    # touch the network
-    "test_s3.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-    "test_remote_db.py"
-  ];
+  disabledTestPaths =
+    [
+      # touch the network
+      "test_s3.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+      "test_remote_db.py"
+    ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

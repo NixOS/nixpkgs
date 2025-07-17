@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.2.5";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qKZXp6vW6dI3zdJnU/fc9czVuMSKyBILCNK41XodhWo=";
+    hash = "sha256-+clSdCMe48XJQZf20FAR1Vq/BrKTdTW6jnjiTqT7vW4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -50,14 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
     libsodium
     curl
-  ]
-  ++ lib.optional enableProtoBuf protobuf;
+  ] ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"
     "--enable-systemd"
     "--enable-dns-over-tls"
-    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns-recursor"
   ];
 

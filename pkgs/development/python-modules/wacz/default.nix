@@ -49,8 +49,7 @@ buildPythonPackage rec {
     frictionless
     pyyaml
     shortuuid
-  ]
-  ++ frictionless.optional-dependencies.json;
+  ] ++ frictionless.optional-dependencies.json;
 
   optional-dependencies = {
     # signing = [

@@ -10,7 +10,6 @@
   wayland,
   wayland-scanner,
   wayland-protocols,
-  libjxl,
   enablePNG ? true,
   enableJPEG ? true,
   enableWebp ? true,
@@ -20,16 +19,16 @@
   libwebp,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "wbg";
-  version = "1.3.0";
+  version = "1.2.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "wbg";
-    tag = finalAttrs.version;
-    hash = "sha256-qEdl3dKeAfWWZ7+8MF59fAvtoELLA+C4680yFNsHhrY=";
+    rev = version;
+    hash = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
   };
 
   nativeBuildInputs = [
@@ -39,16 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    libjxl
-    pixman
-    tllist
-    wayland
-    wayland-protocols
-  ]
-  ++ lib.optional enablePNG libpng
-  ++ lib.optional enableJPEG libjpeg
-  ++ lib.optional enableWebp libwebp;
+  buildInputs =
+    [
+      pixman
+      tllist
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optional enablePNG libpng
+    ++ lib.optional enableJPEG libjpeg
+    ++ lib.optional enableWebp libwebp;
 
   mesonBuildType = "release";
 
@@ -65,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Wallpaper application for Wayland compositors";
     homepage = "https://codeberg.org/dnkl/wbg";
-    changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${finalAttrs.version}";
+    changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;
     mainProgram = "wbg";
   };
-})
+}

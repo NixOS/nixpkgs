@@ -39,12 +39,13 @@ stdenv.mkDerivation rec {
     "${placeholder "out"}/etc/findlib.conf"
   ];
 
-  buildFlags = [
-    "all"
-  ]
-  ++ lib.optionals ocaml.nativeCompilers [
-    "opt"
-  ];
+  buildFlags =
+    [
+      "all"
+    ]
+    ++ lib.optionals ocaml.nativeCompilers [
+      "opt"
+    ];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {

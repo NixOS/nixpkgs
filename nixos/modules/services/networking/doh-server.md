@@ -35,10 +35,7 @@ Setup with Nginx + ACME (recommended):
     defaults.email = "you@example.com";
   };
 
-  networking.firewall.allowedTCPPorts = [
-    80
-    443
-  ];
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }
 ```
 
@@ -69,4 +66,4 @@ in
 }
 ```
 
-See a full configuration in <https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf>.
+See a full configuration in https://github.com/m13253/dns-over-https/blob/master/doh-server/doh-server.conf.

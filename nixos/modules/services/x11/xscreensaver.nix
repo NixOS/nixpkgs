@@ -12,7 +12,12 @@ in
   options.services.xscreensaver = {
     enable = lib.mkEnableOption "xscreensaver user service";
 
-    package = lib.mkPackageOption pkgs "xscreensaver" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.xscreensaver;
+      defaultText = lib.literalExpression "pkgs.xscreensaver";
+      description = "Which xscreensaver package to use.";
+    };
   };
 
   config = lib.mkIf cfg.enable {

@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  cargo,
   capstone,
   libbfd,
   libelf,
@@ -11,25 +9,18 @@
   readline,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "wcc";
-  version = "0.0.11";
+  version = "0.0.7-unstable-2025-04-30";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-hyelDAsE3IFvUxBqttYW7QmM6NPEa6pOREmawFjW2Q8=";
+    rev = "8cbb49345d9596dfd37bd1b681753aacaab96475";
+    hash = "sha256-TYYtnMlrp/wbrTmwd3n90Uni7WE54gK6zKSBg4X9ZfA=";
     deepClone = true;
     fetchSubmodules = true;
   };
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-  ];
 
   buildInputs = [
     capstone
@@ -40,13 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
       -e "s#/usr/share/wcc#$out/share/wcc#"
 
     sed -i -e '/stropts.h>/d' src/wsh/include/libwitch/wsh.h
 
-    sed -i '/wsh-static/d' src/wsh/Makefile
+    sed -i '/wsh-`uname -m`.*-static/d' src/wsh/Makefile
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -71,17 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [
+    maintainers = with maintainers; [
       orivej
       DieracDelta
     ];
   };
-})
+}

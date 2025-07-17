@@ -38,7 +38,12 @@ let
           description = "Whether to enable this buildkite agent";
         };
 
-        package = lib.mkPackageOption pkgs "buildkite-agent" { };
+        package = lib.mkOption {
+          default = pkgs.buildkite-agent;
+          defaultText = lib.literalExpression "pkgs.buildkite-agent";
+          description = "Which buildkite-agent derivation to use";
+          type = lib.types.package;
+        };
 
         dataDir = lib.mkOption {
           default = "/var/lib/buildkite-agent-${name}";

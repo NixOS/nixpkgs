@@ -6,8 +6,7 @@
   apfel,
   applgrid,
   lhapdf,
-  root,
-  zlib,
+  root5,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +25,7 @@ stdenv.mkDerivation rec {
     apfel
     applgrid
     lhapdf
-    root
-    zlib
+    root5
   ];
 
   enableParallelBuilding = true;

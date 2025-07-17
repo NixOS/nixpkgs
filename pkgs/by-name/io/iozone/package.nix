@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Filesystem benchmark tool";
+    description = "IOzone Filesystem Benchmark";
     homepage = "http://www.iozone.org/";
     license = lib.licenses.unfreeRedistributable;
     platforms = [

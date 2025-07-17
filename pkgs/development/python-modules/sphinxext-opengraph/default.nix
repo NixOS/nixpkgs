@@ -7,13 +7,13 @@
   pytestCheckHook,
   pythonOlder,
   beautifulsoup4,
-  flit-core,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.13.0";
-  pyproject = true;
+  version = "0.9.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -21,10 +21,10 @@ buildPythonPackage rec {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     tag = "v${version}";
-    hash = "sha256-rdV6XWHfNj+TFgIfqFPWYxn6bGG5w/frUHl9+qMALi4=";
+    hash = "sha256-B+bJ1tKqTTlbNeJLxk56o2a21n3Yg6OHwJiFfCx46aw=";
   };
 
-  build-system = [ flit-core ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   optional-dependencies = {
     social_cards_generation = [ matplotlib ];
@@ -35,15 +35,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-  ]
-  ++ optional-dependencies.social_cards_generation;
+  ] ++ optional-dependencies.social_cards_generation;
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 
   meta = with lib; {
     description = "Sphinx extension to generate unique OpenGraph metadata";
     homepage = "https://github.com/wpilibsuite/sphinxext-opengraph";
-    changelog = "https://github.com/wpilibsuite/sphinxext-opengraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/wpilibsuite/sphinxext-opengraph/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];
   };

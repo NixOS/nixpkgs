@@ -100,11 +100,10 @@ with lib;
           };
           unitConfig = {
             ConditionPathExists = "!${doMetadataFile}";
-            After = [
-              "network-pre.target"
-            ]
-            ++ optional config.networking.dhcpcd.enable "dhcpcd.service"
-            ++ optional config.systemd.network.enable "systemd-networkd.service";
+            After =
+              [ "network-pre.target" ]
+              ++ optional config.networking.dhcpcd.enable "dhcpcd.service"
+              ++ optional config.systemd.network.enable "systemd-networkd.service";
           };
         };
 

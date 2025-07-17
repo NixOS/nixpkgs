@@ -29,15 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals systemdSupport [
-    systemd
-  ]
-  ++ lib.optionals mimallocSupport [
-    mimalloc
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ]
+    ++ lib.optionals mimallocSupport [
+      mimalloc
+    ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"

@@ -8,13 +8,13 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-libobjc";
-  version = "2.3";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "gnustep";
     repo = "libobjc2";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-C7Dwqp5ewtBhuIyfNZmjhGSCBod3xM9KfUXZgHmvIB0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+NP214bbisk7dCFAHaxnhNOfC/0bZLp8Dd2A9F2vK+s=";
     fetchSubmodules = true;
   };
 

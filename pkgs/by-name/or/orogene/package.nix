@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "orogene";
     repo = "orogene";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-GMWrlvZZ2xlcvcRG3u8jS8KiewHpyX0brNe4pmCpHbM=";
     fetchSubmodules = true;
   };
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
     ./update-outdated-lockfile.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-I08mqyogEuadp+V10svMmCm0i0zOZWiocOpM9E3lgag=";
 
   nativeBuildInputs = [

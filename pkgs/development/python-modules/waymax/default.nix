@@ -55,12 +55,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "waymax" ];
 
-  disabledTests = [
-    # AssertionError: Not equal to tolerance rtol=1e-07, atol=0
-    "test_obs_from_state_for_different_coordinate_system0"
-    "test_obs_from_state_for_different_coordinate_system1"
-  ];
-
   disabledTestPaths = [
     # Disable visualization tests that require a GUI
     # waymax/visualization/viz_test.py Fatal Python error: Aborted
@@ -68,7 +62,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "JAX-based simulator for autonomous driving research";
+    description = "A JAX-based simulator for autonomous driving research";
     homepage = "https://github.com/waymo-research/waymax";
     changelog = "https://github.com/waymo-research/waymax/blob/main/CHANGELOG.md";
     maintainers = with lib.maintainers; [ samuela ];

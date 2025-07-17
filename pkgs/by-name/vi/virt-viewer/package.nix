@@ -62,32 +62,33 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    bash-completion
-    glib
-    gsettings-desktop-schemas
-    gtk-vnc
-    gtk3
-    libvirt
-    libvirt-glib
-    libxml2
-    vte
-  ]
-  ++ lib.optionals ovirtSupport [
-    libgovirt
-  ]
-  ++ lib.optionals spiceSupport (
+  buildInputs =
     [
-      gdbm
-      spice-gtk
-      spice-protocol
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      bash-completion
+      glib
+      gsettings-desktop-schemas
+      gtk-vnc
+      gtk3
+      libvirt
+      libvirt-glib
+      libxml2
+      vte
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
+    ++ lib.optionals ovirtSupport [
+      libgovirt
     ]
-  );
+    ++ lib.optionals spiceSupport (
+      [
+        gdbm
+        spice-gtk
+        spice-protocol
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libcap
+      ]
+    );
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = lib.optional spiceSupport spice-gtk;

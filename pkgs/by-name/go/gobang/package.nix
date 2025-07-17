@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage {
 
   cargoPatches = [ ./update-sqlx.patch ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-K9oo0QrqcPNdV7WMlgSCVc+7AVfoyDkovvJLqKJPvTQ=";
 
   meta = {

@@ -51,5 +51,6 @@ buildNimPackage (finalAttrs: {
     mainProgram = "balls";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 })

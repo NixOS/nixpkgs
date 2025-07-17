@@ -1,22 +1,20 @@
 {
   lib,
   buildPythonPackage,
-  callPackage,
   fetchPypi,
   pbr,
-  setuptools,
   six,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "os-service-types";
-  version = "1.8.0";
-  pyproject = true;
+  version = "1.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "os_service_types";
-    inherit version;
-    hash = "sha256-iQznTxMsozTCsj8AJRErR8aSbabSjC91vPwKg96jYD4=";
+    inherit pname version;
+    sha256 = "31800299a82239363995b91f1ebf9106ac7758542a1e4ef6dc737a5932878c6c";
   };
 
   postPatch = ''
@@ -25,12 +23,7 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  build-system = [
-    pbr
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     pbr
     six
   ];

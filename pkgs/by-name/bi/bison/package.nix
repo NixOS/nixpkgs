@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     m4
     perl
-  ]
-  ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
+  ] ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
   enableParallelBuilding = true;

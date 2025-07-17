@@ -1,25 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  dramatiq,
+  pythonOlder,
   fetchFromGitLab,
-  flask-migrate,
-  flask,
-  periodiq,
   poetry-core,
+  dramatiq,
+  flask,
+  requests,
+  pytestCheckHook,
+  pytest-cov-stub,
+  flask-migrate,
+  periodiq,
   postgresql,
   postgresqlTestHook,
   psycopg2,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  requests,
 }:
 
 buildPythonPackage {
   pname = "flask-dramatiq";
   version = "0.6.0";
-  pyproject = true;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitLab {
     owner = "bersace";
@@ -36,23 +38,21 @@ buildPythonPackage {
     patchShebangs --build ./example.py
   '';
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [ dramatiq ];
+  propagatedBuildInputs = [ dramatiq ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
     flask
+    requests
     flask-migrate
     periodiq
     postgresql
     postgresqlTestHook
     psycopg2
-    pytest-cov-stub
-    pytest-mock
-    pytestCheckHook
-    requests
-  ]
-  ++ dramatiq.optional-dependencies.rabbitmq;
+  ] ++ dramatiq.optional-dependencies.rabbitmq;
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \
@@ -61,12 +61,19 @@ buildPythonPackage {
     python3 ./example.py db upgrade
   '';
 
+  pytestFlagsArray = [
+    "-x"
+    "tests/func/"
+    "tests/unit"
+  ];
+
+  pythonImportsCheck = [ "flask_dramatiq" ];
+
+  # Does HTTP requests to localhost
   disabledTests = [
     "test_fast"
     "test_other"
   ];
-
-  pythonImportsCheck = [ "flask_dramatiq" ];
 
   meta = with lib; {
     description = "Adds Dramatiq support to your Flask application";

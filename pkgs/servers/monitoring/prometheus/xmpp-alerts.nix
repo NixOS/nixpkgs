@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.6.0";
+  version = "0.5.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kXcadJnPPhMKF/1CHMLdGCqWouAKDBFTdvPpn80yK4A=";
+    sha256 = "sha256-iwqcowwJktZQfdxykpsw/MweAPY0KF7ojVwvk1LP8a4=";
   };
 
   postPatch = ''
@@ -24,18 +24,19 @@ python3Packages.buildPythonApplication rec {
       --replace "bs4" "beautifulsoup4"
   '';
 
-  propagatedBuildInputs = [
-    prometheus-alertmanager
-  ]
-  ++ (with python3Packages; [
-    aiohttp
-    aiohttp-openmetrics
-    beautifulsoup4
-    jinja2
-    slixmpp
-    prometheus-client
-    pyyaml
-  ]);
+  propagatedBuildInputs =
+    [
+      prometheus-alertmanager
+    ]
+    ++ (with python3Packages; [
+      aiohttp
+      aiohttp-openmetrics
+      beautifulsoup4
+      jinja2
+      slixmpp
+      prometheus-client
+      pyyaml
+    ]);
 
   nativeCheckInputs = with python3Packages; [
     setuptools

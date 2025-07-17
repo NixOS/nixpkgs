@@ -21,9 +21,9 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "66";
+  version = "62";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QPvdSmt4aUkPvaOUonovrCxW4pxrgoopXGi3KSukVD8=";
+    rev = "v${version}";
+    hash = "sha256-HFm04XC61AjkJSt4YBc4dO9v563w+LsYDSaZckPYE14=";
   };
 
   patches = [
@@ -88,8 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
-      --subst-var-by GSETTINGS_SCHEMA_DIR \
-        ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
+      --subst-var-by GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   postFixup = ''
@@ -117,12 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ doronbehar ];
-    teams = [ lib.teams.gnome ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.doronbehar ];
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
   };
-})
+}

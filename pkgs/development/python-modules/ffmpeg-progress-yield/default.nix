@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   tqdm,
-  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   ffmpeg,
@@ -14,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "1.0.2";
-  pyproject = true;
+  version = "0.11.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -23,7 +21,7 @@ buildPythonPackage rec {
     owner = "slhck";
     repo = "ffmpeg-progress-yield";
     tag = "v${version}";
-    hash = "sha256-tX4CioyhZvHNe5PItNwCF68ZQhs4fpG1ZrloGtei07I=";
+    hash = "sha256-o5PlL6Ggo0Mrs/ujdnTV5GMAVeG2wpBoBDfxTVic3mA=";
   };
 
   build-system = [ setuptools ];
@@ -33,23 +31,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytestCheckHook
     ffmpeg
     procps
   ];
 
-  enabledTestPaths = [ "test/test.py" ];
-
-  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
-    # cannot access /usr/bin/pgrep from the sandbox
-    "test_context_manager"
-    "test_context_manager_with_exception"
-    "test_automatic_cleanup_on_exception"
-    "test_async_context_manager"
-    "test_async_context_manager_with_exception"
-    "test_async_automatic_cleanup_on_exception"
+  disabledTests = [
+    "test_quit"
+    "test_quit_gracefully"
   ];
+
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 

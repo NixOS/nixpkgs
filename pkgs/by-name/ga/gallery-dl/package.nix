@@ -8,7 +8,7 @@
 
 let
   pname = "gallery-dl";
-  version = "1.30.8";
+  version = "1.29.7";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "mikf";
     repo = "gallery-dl";
     tag = "v${version}";
-    hash = "sha256-jetfEjKwAtJwOLKRZfnnnlb7G5YCDUzeHIASqJS3gcI=";
+    hash = "sha256-OngtJ6E7Gvr+/5Vjv1vepPVVksNDRlXZkU9yMYRvh2k=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -36,13 +36,13 @@ python3Packages.buildPythonApplication {
     "test_init"
   ];
 
-  disabledTestPaths = [
+  pytestFlagsArray = [
     # requires network access
-    "test/test_results.py"
-    "test/test_downloader.py"
+    "--ignore=test/test_results.py"
+    "--ignore=test/test_downloader.py"
 
     # incompatible with pytestCheckHook
-    "test/test_ytdl.py"
+    "--ignore=test/test_ytdl.py"
   ];
 
   pythonImportsCheck = [ "gallery_dl" ];
@@ -57,7 +57,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
-      FlameFlag
       lucasew
     ];
   };

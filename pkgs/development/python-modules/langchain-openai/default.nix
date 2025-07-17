@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.28";
+  version = "0.3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-HpAdCHxmfGJcqXArvtlYagNuEBGBjrbICIwh9nI0qMQ=";
+    hash = "sha256-eJqI7R1YzmVrZ+OoK2qtxkM2odpEDjszbBRD+2Gog9o=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -94,20 +94,10 @@ buildPythonPackage rec {
     "test_openai_get_num_tokens"
   ];
 
-  disabledTestPaths = [
-    # TODO recheck on next update. Langchain has been working on Pydantic errors.
-    # ValidationError from pydantic
-    "tests/unit_tests/chat_models/test_responses_stream.py"
-  ];
-
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "langchain-openai==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-openai==";
   };
 
   meta = {

@@ -5,22 +5,22 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-country-lite";
-  version = "2025-09";
+  version = "2025-06";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-country-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-l15K01Sx24Fs4BJWs2nK7UnJIDWAtxsvq7ayfVX7xZo=";
+    hash = "sha256-p3HJTzzAtkHgDdiXa9M1jPSukDo+AgRu3Cjf1Q+QXB8=";
   };
 
   dontUnpack = true;
 
   installPhase = ''
-    runHook preInstall
+    runHook preBuild
 
     gzip -c -d "$src" > dbip-country-lite.mmdb
     install -Dm444 dbip-country-lite.mmdb "$out/share/dbip/dbip-country-lite.mmdb"
 
-    runHook postInstall
+    runHook postBuild
   '';
 
   passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-country-lite.mmdb";

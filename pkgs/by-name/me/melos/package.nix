@@ -5,12 +5,12 @@
 }:
 let
   pname = "melos";
-  version = "7.1.0";
+  version = "6.3.2";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
     rev = "melos-v${version}";
-    hash = "sha256-caX59w0uxy5VW1p1hgds73m3sIjEutz5ZUuOzjdIr4Q=";
+    hash = "sha256-hD4UlQPFugRqtOZecyT/6wV3vFocoQ6OO5w+SZsYdO0=";
   };
 in
 buildDartApplication {

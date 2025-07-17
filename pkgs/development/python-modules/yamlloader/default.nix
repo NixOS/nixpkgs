@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "1.5.2";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wQrBMhpiaxyosJ0/Ov6YVbgYORxZmSp2tl5KLZXqxBs=";
+    hash = "sha256-jezhmwUKyxxqjKFKoweTOI+b4VT3NLgmVB+aGCjUHOw=";
   };
 
   build-system = [

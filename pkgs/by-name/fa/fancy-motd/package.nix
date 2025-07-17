@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "fancy-motd";
-  version = "0-unstable-2022-06-06";
+  version = "unstable-2022-06-06";
 
   src = fetchFromGitHub {
     owner = "bcyran";

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/simon-v/bean-add/";
-    description = "Beancount transaction entry assistant";
+    description = "beancount transaction entry assistant";
     mainProgram = "bean-add";
 
     # The (only) source file states:

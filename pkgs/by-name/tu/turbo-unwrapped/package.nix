@@ -18,26 +18,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.5.6";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3J5uctVOfjzBkoTPlHdzzpso82Yulyr6RZwqVV8z1Qw=";
+    hash = "sha256-PwZYi7B5gqiqal6qIFqciv8SFJbRBeVJKfIc29zuIxA=";
   };
 
-  cargoHash = "sha256-MINBqzs+MpHDqAMCNBzOBHfOTv6dKJA58dVEr7MxQBg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zEkpWu/L5plFCnvliAtfu19ljB4pnrEesVQZOycOKRk=";
 
-  nativeBuildInputs = [
-    capnproto
-    extra-cmake-modules
-    installShellFiles
-    pkg-config
-    protobuf
-  ]
-  # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-  ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
+  nativeBuildInputs =
+    [
+      capnproto
+      extra-cmake-modules
+      installShellFiles
+      pkg-config
+      protobuf
+    ]
+    # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
+    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs = [
     fontconfig

@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xjobs";
-  version = "20250529";
+  version = "20250209";
 
   src = fetchurl {
     url = "mirror://sourceforge//xjobs/files/xjobs-${finalAttrs.version}.tgz";
-    hash = "sha256-HR7kqx9N5fn8JMKFK0ierAwrCFlkqKo2S/mxQW9UE44=";
+    hash = "sha256-I7Vu7NunJEE4ioLap+GPnqIG2jfzSx6Wj2dOQmb9vuk=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

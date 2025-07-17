@@ -4,17 +4,16 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "gpt-cli";
-  version = "0.4.3";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kharvd";
     repo = "gpt-cli";
     tag = "v${version}";
-    hash = "sha256-BNSMxf3rhKieXYnFqVdpiHmNCDjotJUflwa6mAgsVCc=";
+    hash = "sha256-G8iepcjZFMTwsMhtGYmVOK9NkHXLqLet5SJWDAx1usg=";
   };
 
   build-system = with python3Packages; [
@@ -29,7 +28,6 @@ python3Packages.buildPythonApplication rec {
     attrs
     black
     cohere
-    google-genai
     google-generativeai
     openai
     prompt-toolkit
@@ -48,9 +46,7 @@ python3Packages.buildPythonApplication rec {
     ++ [
       versionCheckHook
     ];
-
   versionCheckProgram = "${placeholder "out"}/bin/gpt";
-
   versionCheckProgramArg = "--version";
 
   meta = {

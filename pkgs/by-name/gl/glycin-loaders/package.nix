@@ -20,16 +20,15 @@
   ninja,
   pkg-config,
   rustc,
-  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OAqv4r+07KDEW0JmDr/0SWANAKQ7YJ1bHIP3lfXI+zw=";
+    hash = "sha256-SrRG1YsQx2KDInplSHuLvbdLpQCentIwRfz6i6P7KGE=";
   };
 
   patches = [
@@ -40,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.glycinPathsPatch
   ];
 
-  cargoVendorDir = "vendor";
-
   nativeBuildInputs = [
     cargo
     gettext # for msgfmt
@@ -50,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
-    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
@@ -71,13 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-
-  postPatch = ''
-    substituteInPlace loaders/meson.build \
-      --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
-  '';
-
-  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     updateScript = gnome.updateScript {

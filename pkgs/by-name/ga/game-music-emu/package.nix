@@ -1,22 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   removeReferencesTo,
   zlib,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.4";
+  version = "0.6.3";
   pname = "game-music-emu";
 
-  src = fetchFromGitHub {
-    owner = "libgme";
-    repo = "game-music-emu";
-    tag = version;
-    hash = "sha256-qGNWFFUUjv2R5e/nQrriAyDJCARISqNB8e5/1zEJ3fk=";
+  src = fetchurl {
+    url = "https://bitbucket.org/mpyne/game-music-emu/downloads/${pname}-${version}.tar.xz";
+    sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
+  cmakeFlags = [ "-DENABLE_UBSAN=OFF" ];
   nativeBuildInputs = [
     cmake
     removeReferencesTo
@@ -31,11 +30,11 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 
-  meta = {
-    homepage = "https://github.com/libgme/game-music-emu/";
+  meta = with lib; {
+    homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
     description = "Collection of video game music file emulators";
-    license = lib.licenses.lgpl21Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ];
   };
 }

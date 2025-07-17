@@ -194,7 +194,7 @@ in
         description = ''
           Configuration options of collaboration server.
 
-          See <https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md>
+          See https://github.com/suitenumerique/docs/blob/v${cfg.collaborationServer.package.version}/docs/env.md
         '';
       };
     };
@@ -327,7 +327,7 @@ in
       description = ''
         Configuration options of docs.
 
-        See <https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md>
+        See https://github.com/suitenumerique/docs/blob/v${cfg.backendPackage.version}/docs/env.md
 
         `REDIS_URL` and `CELERY_BROKER_URL` are set if `services.lasuite-docs.redis.createLocally` is true.
         `DB_HOST` is set if `services.lasuite-docs.postgresql.createLocally` is true.
@@ -348,11 +348,10 @@ in
   config = mkIf cfg.enable {
     systemd.services.lasuite-docs = {
       description = "Docs from SuiteNumérique";
-      after = [
-        "network.target"
-      ]
-      ++ (optional cfg.postgresql.createLocally "postgresql.target")
-      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after =
+        [ "network.target" ]
+        ++ (optional cfg.postgresql.createLocally "postgresql.target")
+        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
         (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
@@ -392,17 +391,15 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      }
-      // commonServiceConfig;
+      } // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-celery = {
       description = "Docs Celery broker from SuiteNumérique";
-      after = [
-        "network.target"
-      ]
-      ++ (optional cfg.postgresql.createLocally "postgresql.target")
-      ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
+      after =
+        [ "network.target" ]
+        ++ (optional cfg.postgresql.createLocally "postgresql.target")
+        ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
       wants =
         (optional cfg.postgresql.createLocally "postgresql.target")
         ++ (optional cfg.redis.createLocally "redis-lasuite-docs.service");
@@ -423,8 +420,7 @@ in
         );
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
         MemoryDenyWriteExecute = true;
-      }
-      // commonServiceConfig;
+      } // commonServiceConfig;
     };
 
     systemd.services.lasuite-docs-collaboration-server = {
@@ -436,8 +432,7 @@ in
 
       serviceConfig = {
         ExecStart = getExe cfg.collaborationServer.package;
-      }
-      // commonServiceConfig;
+      } // commonServiceConfig;
     };
 
     services.postgresql = mkIf cfg.postgresql.createLocally {

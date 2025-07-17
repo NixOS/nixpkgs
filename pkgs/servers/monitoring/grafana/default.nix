@@ -3,7 +3,6 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   removeReferencesTo,
   tzdata,
   wire,
@@ -15,7 +14,6 @@
   nixosTests,
   xcbuild,
   faketty,
-  nodejs,
 }:
 
 let
@@ -28,21 +26,21 @@ let
   # stable is on an older patch-release of Go and then the build would fail
   # after a backport.
   patchGoVersion = ''
-    find . -name go.mod -not -path "./.bingo/*" -and -not -path "./hack/*" -and -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
+    find . -name go.mod -not -path "./.bingo/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.6" "go 1.24.0"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.6" "go 1.24.0"
+        --replace-fail "go 1.24.4" "go 1.24.0"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.6" "GO_VERSION = 1.24.0"
+      --replace-fail "GO_VERSION = 1.24.4" "GO_VERSION = 1.24.0"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.1.1";
+  version = "12.0.2";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -54,22 +52,12 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-41OqvOTHlP66UtAecrpeArKldj0DNxK1oxTtQEihbo8=";
+    hash = "sha256-Nzx7QAAON/cWLqadL2IpdRunFNNoXE8PPYrquqPvWfk=";
   };
-
-  # Fix build
-  # FIXME: remove in next update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/grafana/grafana/commit/21f305c6a0e242463f5219cc6944fb880ea809f0.patch";
-      hash = "sha256-sXooRlnKY5ax0+1CPhy4zxDQtDGspbSdOoHHciqLTD8=";
-    })
-  ];
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-    PUPPETEER_SKIP_DOWNLOAD = 1;
 
     # The build OOMs on memory constrained aarch64 without this
     NODE_OPTIONS = "--max_old_space_size=4096";
@@ -78,14 +66,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-51jCwnfWJoBICesM3SKiEvRC/Q1qUD310q59DucPdMs=";
+    hash = "sha256-vQdiQyxebtVrO76Pl4oC3DM37owhtQgZqYWaiIyKysQ=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-9z3HqheXLNh3zfmp1A620vzzf5yZBUJsbj/cc6J+xTg=";
+  vendorHash = "sha256-cJxvZPJmf5YY+IWE7rdoGUkXxDeE6b0troGsdpsQzeU=";
 
   proxyVendor = true;
 
@@ -97,11 +85,9 @@ buildGoModule rec {
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
-    nodejs
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   # We have to remove this setupHook, otherwise it also runs in the `goModules`
   # derivation and fails because `offlineCache` is missing there.

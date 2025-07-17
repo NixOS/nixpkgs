@@ -44,7 +44,6 @@ flutter.buildFlutterApplication rec {
   '';
 
   meta = with lib; {
-    broken = true;
     description = "ExpidusOS File Manager";
     homepage = "https://expidusos.com";
     license = licenses.gpl3;

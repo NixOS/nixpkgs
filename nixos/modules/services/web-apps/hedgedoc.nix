@@ -47,12 +47,6 @@ in
     package = lib.mkPackageOption pkgs "hedgedoc" { };
     enable = lib.mkEnableOption "the HedgeDoc Markdown Editor";
 
-    configureNginx = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Whether to configure nginx as a reverse proxy.";
-    };
-
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -255,32 +249,10 @@ in
       isSystemUser = true;
     };
 
-    services = {
-      hedgedoc.settings = {
-        defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
-        docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
-        viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
-      };
-
-      nginx = lib.mkIf cfg.configureNginx {
-        enable = true;
-        upstreams.hedgedoc.servers."unix:${config.services.hedgedoc.settings.path}" = { };
-        virtualHosts."${cfg.settings.domain}" = {
-          enableACME = true;
-          forceSSL = true;
-          locations = {
-            "/" = {
-              proxyPass = "http://hedgedoc";
-              recommendedProxySettings = true;
-            };
-            "/socket.io/" = {
-              proxyPass = "http://hedgedoc";
-              proxyWebsockets = true;
-              recommendedProxySettings = true;
-            };
-          };
-        };
-      };
+    services.hedgedoc.settings = {
+      defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
+      docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+      viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
     };
 
     systemd.services.hedgedoc = {
@@ -311,8 +283,7 @@ in
         WorkingDirectory = "/run/${name}";
         ReadWritePaths = [
           "-${cfg.settings.uploadsPath}"
-        ]
-        ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
+        ] ++ lib.optionals (cfg.settings.db ? "storage") [ "-${cfg.settings.db.storage}" ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=/run/${name}/config.json"

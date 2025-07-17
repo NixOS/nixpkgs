@@ -40,5 +40,6 @@ buildNimSbom (finalAttrs: {
     mainProgram = "nim_lk";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ehmry ];
   };
 }) ./sbom.json

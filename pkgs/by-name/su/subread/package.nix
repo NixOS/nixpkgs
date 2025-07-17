@@ -19,12 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    runHook preConfigure
-
     cd src
     cp Makefile.${if stdenv.hostPlatform.isLinux then "Linux" else "MacOS"} Makefile
-
-    runHook postConfigure
   '';
 
   makeFlags = [ "CC_EXEC=cc" ];

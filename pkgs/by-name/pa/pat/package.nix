@@ -38,7 +38,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Cross-platform Winlink client written in Go";
+    description = "Pat is a cross platform Winlink client written in Go";
     homepage = "https://getpat.io/";
     license = licenses.mit;
     maintainers = with maintainers; [

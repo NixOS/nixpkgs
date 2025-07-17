@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-9F1YMepkWksTQRrkziNhLxVJnhoDH17lSKef5kOjp3Y=";
+  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

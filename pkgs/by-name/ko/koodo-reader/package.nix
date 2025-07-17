@@ -3,75 +3,55 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
-  makeDesktopItem,
-
-  copyDesktopItems,
-  cctools,
-  makeWrapper,
-  nodejs,
   yarnConfigHook,
   yarnBuildHook,
+  nodejs,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
   wrapGAppsHook3,
-  xcbuild,
-
-  electron_37,
+  electron,
 }:
 
-let
-  electron = electron_37; # don't use latest electron to avoid going over the supported abi numbers
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.0.9";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t93yRd9TrtGZogjpSy0Bse0cM5BFyMaSxFYQFZZyvPM=";
+    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
   };
-
-  patches = [
-    ./bump-node-abi.patch
-  ];
 
   offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src patches;
-    hash = "sha256-gRaHVWSTBwjVcswy6DVk5yLympudbDcKkvWDry4rsvI=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    (nodejs.python.withPackages (ps: [ ps.setuptools ]))
-    yarnConfigHook
-    yarnBuildHook
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
-    wrapGAppsHook3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    xcbuild
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      copyDesktopItems
+      wrapGAppsHook3
+    ];
+
+  dontWrapGApps = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # disable code signing on Darwin
+  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
   postBuild = ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-
-    # we need to build cpu-features with the non-electron headers first
-    export npm_config_nodedir=${nodejs}
-    npm rebuild --verbose cpu-features
-
-    export npm_config_nodedir=${electron.headers}
-    npm run postinstall
-
-    # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \
-      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
   '';
@@ -95,8 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  dontWrapGApps = true;
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

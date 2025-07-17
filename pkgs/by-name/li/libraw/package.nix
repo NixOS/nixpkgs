@@ -7,19 +7,20 @@
   pkg-config,
 
   # for passthru.tests
+  freeimage,
   hdrmerge,
   imagemagick,
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "libraw";
   version = "0.21.4";
 
   src = fetchFromGitHub {
     owner = "LibRaw";
     repo = "LibRaw";
-    tag = finalAttrs.version;
+    rev = version;
     hash = "sha256-JAGIM7A9RbK22F8KczRcb+29t4fDDXzoCA3a4s/z6Q8=";
   };
 
@@ -44,17 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit imagemagick hdrmerge;
+    inherit imagemagick hdrmerge; # freeimage
     inherit (python3.pkgs) rawkit;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";
-    license = with lib.licenses; [
+    license = with licenses; [
       cddl
       lgpl2Plus
     ];
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
-})
+}

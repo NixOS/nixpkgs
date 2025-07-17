@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       hpnd
       bsd3
       bsdOriginalUC
-      bsd3ClauseTso
+      bsd3TheodoreTso
       bsd2
       isc
       sgi-b-20

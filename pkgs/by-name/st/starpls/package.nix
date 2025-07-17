@@ -1,46 +1,57 @@
 {
-  rustPlatform,
   lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
   testers,
-  fetchFromGitHub,
-  protobuf,
+  starpls,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
+
+let
+  manifest = lib.importJSON ./manifest.json;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "starpls";
-  version = "0.1.22";
+  version = manifest.version;
 
-  src = fetchFromGitHub {
-    owner = "withered-magic";
-    repo = "starpls";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-t9kdpBKyGM61CKhtfO5urVVzyKpL0bX0pZuf0djDdCw=";
-  };
+  src =
+    let
+      system = stdenv.hostPlatform.system;
+    in
+    fetchurl (manifest.assets.${system} or (throw "Unsupported system: ${system}"));
 
-  cargoHash = "sha256-5xYfQRm7U7sEQiJEfjaLznoXUxHsxnLmIEA/OxTkjFg=";
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-  nativeBuildInputs = [
-    protobuf
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [
+    autoPatchelfHook
   ];
 
-  # The tests assume Bazel build and environment variables set like
-  # RUNFILES_DIR which don't have an equivalent in Cargo.
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  installPhase = ''
+    install -D $src $out/bin/starpls
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      package = starpls;
       command = "starpls version";
       version = "v${finalAttrs.version}";
     };
+    updateScript = ./update.py;
   };
 
   meta = {
     description = "Language server for Starlark";
     homepage = "https://github.com/withered-magic/starpls";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    platforms = builtins.attrNames manifest.assets;
     maintainers = with lib.maintainers; [ aaronjheng ];
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "starpls";
   };
 })

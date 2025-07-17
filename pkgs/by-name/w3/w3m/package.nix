@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromSourcehut,
+  fetchFromGitHub,
   fetchpatch,
   ncurses,
   boehmgc,
@@ -38,29 +38,23 @@ let
     '';
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "w3m";
-  version = "0.5.5";
+  version = "0.5.3+git20230121";
 
-  src = fetchFromSourcehut {
-    owner = "~rkta";
+  src = fetchFromGitHub {
+    owner = "tats";
     repo = "w3m";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
+    rev = "v${version}";
+    hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
   };
 
-  env = {
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
 
-    # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
-    # the correct paths.
-    PERL = "${perl}/bin/perl";
-    MAN = "${man}/bin/man";
-
-    # for w3mimgdisplay
-    # see: https://bbs.archlinux.org/viewtopic.php?id=196093
-    LIBS = lib.optionalString x11Support "-lX11";
-  };
+  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
+  # the correct paths.
+  PERL = "${perl}/bin/perl";
+  MAN = "${man}/bin/man";
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -86,15 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs = [
-    ncurses
-    boehmgc
-    zlib
-  ]
-  ++ lib.optional sslSupport openssl
-  ++ lib.optional mouseSupport gpm-ncurses
-  ++ lib.optional graphicsSupport imlib2
-  ++ lib.optional x11Support libX11;
+  buildInputs =
+    [
+      ncurses
+      boehmgc
+      zlib
+    ]
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional mouseSupport gpm-ncurses
+    ++ lib.optional graphicsSupport imlib2
+    ++ lib.optional x11Support libX11;
 
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
@@ -102,15 +97,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [
-    "--with-ssl=${openssl.dev}"
-    "--with-gc=${boehmgc.dev}"
-  ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
-  ]
-  ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
-  ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
+  configureFlags =
+    [
+      "--with-ssl=${openssl.dev}"
+      "--with-gc=${boehmgc.dev}"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    ]
+    ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
+    ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
@@ -119,22 +115,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = false;
 
+  # for w3mimgdisplay
+  # see: https://bbs.archlinux.org/viewtopic.php?id=196093
+  LIBS = lib.optionalString x11Support "-lX11";
+
   passthru.tests.version = testers.testVersion {
-    inherit (finalAttrs) version;
+    inherit version;
     package = w3m;
     command = "w3m -version";
   };
 
   meta = {
-    homepage = "https://git.sr.ht/~rkta/w3m";
-    changelog = "https://git.sr.ht/~rkta/w3m/tree/v${finalAttrs.version}/item/NEWS";
+    homepage = "https://w3m.sourceforge.net/";
+    changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
     description = "Text-mode web browser";
-    maintainers = with lib.maintainers; [
-      anthonyroussel
-      toastal
-    ];
+    maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     mainProgram = "w3m";
   };
-})
+}

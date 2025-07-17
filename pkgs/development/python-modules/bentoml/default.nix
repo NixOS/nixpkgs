@@ -1,42 +1,40 @@
 {
   lib,
   stdenv,
-  a2wsgi,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
   aiohttp,
   aiosqlite,
   attrs,
-  buildPythonPackage,
   cattrs,
   circus,
-  click-option-group,
   click,
+  click-option-group,
   cloudpickle,
   deepmerge,
-  fetchFromGitHub,
-  fs-s3fs,
   fs,
-  fsspec,
+  fs-s3fs,
+  grpcio,
   grpcio-channelz,
   grpcio-health-checking,
   grpcio-reflection,
-  grpcio,
-  hatch-vcs,
-  hatchling,
-  httpx-ws,
   httpx,
+  httpx-ws,
   inflection,
   inquirerpy,
   jinja2,
-  kantoku,
   numpy,
   nvidia-ml-py,
   opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
   opentelemetry-exporter-otlp,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-instrumentation,
   opentelemetry-instrumentation-aiohttp-client,
   opentelemetry-instrumentation-asgi,
   opentelemetry-instrumentation-grpc,
-  opentelemetry-instrumentation,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
   opentelemetry-util-http,
@@ -53,15 +51,13 @@
   python-dateutil,
   python-json-logger,
   python-multipart,
-  pythonOlder,
   pyyaml,
-  questionary,
   rich,
   schema,
   simple-di,
   starlette,
-  tomli-w,
   tomli,
+  tomli-w,
   tritonclient,
   uv,
   uvicorn,
@@ -75,11 +71,10 @@
   orjson,
   pytest-asyncio,
   fastapi,
-  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "1.4.23";
+  version = "1.3.20";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -117,19 +112,18 @@ let
       tracing-otlp
       tracing
       ;
-    triton = [
-      tritonclient
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
-    );
+    triton =
+      [ tritonclient ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux (
+        tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc
+      );
   };
 
   src = fetchFromGitHub {
     owner = "bentoml";
     repo = "BentoML";
     tag = "v${version}";
-    hash = "sha256-p9d8TyN09jJ2VotaAvbC9jxJ5kNC2S7VhkatzrDJ1TY=";
+    hash = "sha256-zc/JvnEEoV21EbBHhLBWvilidXHx1pxYsBYISFg16Us=";
   };
 in
 buildPythonPackage {
@@ -139,7 +133,6 @@ buildPythonPackage {
 
   pythonRelaxDeps = [
     "cattrs"
-    "fsspec"
     "nvidia-ml-py"
     "opentelemetry-api"
     "opentelemetry-instrumentation-aiohttp-client"
@@ -156,7 +149,6 @@ buildPythonPackage {
   ];
 
   dependencies = [
-    a2wsgi
     aiohttp
     aiosqlite
     attrs
@@ -167,13 +159,11 @@ buildPythonPackage {
     cloudpickle
     deepmerge
     fs
-    fsspec
     httpx
     httpx-ws
     inflection
     inquirerpy
     jinja2
-    kantoku
     numpy
     nvidia-ml-py
     opentelemetry-api
@@ -193,7 +183,6 @@ buildPythonPackage {
     python-json-logger
     python-multipart
     pyyaml
-    questionary
     rich
     schema
     simple-di
@@ -202,8 +191,7 @@ buildPythonPackage {
     uv
     uvicorn
     watchfiles
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   inherit optional-dependencies;
 
@@ -218,15 +206,11 @@ buildPythonPackage {
   disabledTestPaths = [
     "tests/e2e"
     "tests/integration"
-    "tests/unit/grpc"
-    "tests/unit/_internal/"
   ];
 
   disabledTests = [
     # flaky test
     "test_store"
-    #
-    "test_log_collection"
   ];
 
   nativeCheckInputs = [
@@ -240,9 +224,7 @@ buildPythonPackage {
     pytest-xdist
     pytestCheckHook
     scikit-learn
-    writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.grpc;
+  ] ++ optional-dependencies.grpc;
 
   meta = with lib; {
     description = "Build Production-Grade AI Applications";
@@ -253,5 +235,8 @@ buildPythonPackage {
       happysalada
       natsukium
     ];
+    # AttributeError: 'dict' object has no attribute 'schemas'
+    # https://github.com/bentoml/BentoML/issues/4290
+    broken = versionAtLeast cattrs.version "23.2";
   };
 }

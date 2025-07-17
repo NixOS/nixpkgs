@@ -10,19 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "paperjam";
-  version = "1.2.2";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://mj.ucw.cz/download/linux/paperjam-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ooGRLQCpNfSQziCHPoe4LVIDu2GAMmvhvsYBhKyrMPw=";
+    hash = "sha256-vTjtNTkBHwfoRDshmFu1zZfGVuEtk2NXH5JdA5Ekg5s=";
   };
 
   buildInputs = [
     qpdf
     libpaper
     asciidoc
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   makeFlags = [
     "PREFIX=$(out)"

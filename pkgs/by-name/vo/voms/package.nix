@@ -48,15 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  outputs = [
-    "bin"
-    "out"
-    "dev"
-    "man"
-  ]
-  # `etc` output for default configurations that can optionally be
-  # installed to /etc (system-wide) or profile-path>/etc.
-  ++ lib.optional (externalEtc != null) "etc";
+  outputs =
+    [
+      "bin"
+      "out"
+      "dev"
+      "man"
+    ]
+    # `etc` output for default configurations that can optionally be
+    # installed to /etc (system-wide) or profile-path>/etc.
+    ++ lib.optional (externalEtc != null) "etc";
 
   preAutoreconf = ''
     mkdir -p aux src/autogen

@@ -30,15 +30,16 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    pugixml
-    fmt
-    html-tidy
-  ]
-  ++ lib.optionals enablePython [
-    python3Packages.python
-    python3Packages.pybind11
-  ];
+  buildInputs =
+    [
+      pugixml
+      fmt
+      html-tidy
+    ]
+    ++ lib.optionals enablePython [
+      python3Packages.python
+      python3Packages.pybind11
+    ];
 
   mesonFlags = [
     (lib.mesonBool "TO_JSON_BINARY" true)

@@ -16,8 +16,6 @@ let
   invoiceplane-config =
     hostName: cfg:
     pkgs.writeText "ipconfig.php" ''
-      # <?php exit('No direct script access allowed'); ?>
-
       IP_URL=http://${hostName}
       ENABLE_DEBUG=false
       DISABLE_SETUP=false
@@ -72,7 +70,7 @@ let
       postPatch = ''
         # Patch index.php file to load additional config file
         substituteInPlace index.php \
-          --replace-fail "require __DIR__ . '/vendor/autoload.php';" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+          --replace-fail "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
       '';
 
       installPhase = ''
@@ -95,9 +93,6 @@ let
         ${concatMapStringsSep "\n" (
           template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/"
         ) cfg.invoiceTemplates}
-        ${concatMapStringsSep "\n" (
-          template: "cp -r ${template}/. $out/application/views/quote_templates/pdf/"
-        ) cfg.quoteTemplates}
       '';
     };
 
@@ -165,38 +160,6 @@ let
           default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
-
-            ::: {.note}
-            These templates need to be packaged before use, see example.
-            :::
-          '';
-          example = literalExpression ''
-            let
-              # Let's package an example template
-              template-vtdirektmarketing = pkgs.stdenv.mkDerivation {
-                name = "vtdirektmarketing";
-                # Download the template from a public repository
-                src = pkgs.fetchgit {
-                  url = "https://git.project-insanity.org/onny/invoiceplane-vtdirektmarketing.git";
-                  sha256 = "1hh0q7wzsh8v8x03i82p6qrgbxr4v5fb05xylyrpp975l8axyg2z";
-                };
-                sourceRoot = ".";
-                # Installing simply means copying template php file to the output directory
-                installPhase = ""
-                  mkdir -p $out
-                  cp invoiceplane-vtdirektmarketing/vtdirektmarketing.php $out/
-                "";
-              };
-            # And then pass this package to the template list like this:
-            in [ template-vtdirektmarketing ]
-          '';
-        };
-
-        quoteTemplates = mkOption {
-          type = types.listOf types.path;
-          default = [ ];
-          description = ''
-            List of path(s) to respective template(s) which are copied from the 'quote_templates/pdf' directory.
 
             ::: {.note}
             These templates need to be packaged before use, see example.
@@ -357,8 +320,7 @@ in
             settings = {
               "listen.owner" = webserver.user;
               "listen.group" = webserver.group;
-            }
-            // cfg.poolConfig;
+            } // cfg.poolConfig;
           })
         ) eachSite;
       };
@@ -389,9 +351,6 @@ in
                      ${cfg.stateDir}/uploads
             if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
               cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
-            fi
-            if ! grep -q 'php exit' "${cfg.stateDir}/ipconfig.php"; then
-              sed -i "1i # <?php exit('No direct script access allowed'); ?>" "${cfg.stateDir}/ipconfig.php"
             fi
           '') eachSite
         );

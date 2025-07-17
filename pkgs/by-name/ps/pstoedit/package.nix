@@ -36,18 +36,19 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
-  buildInputs = [
-    zlib
-    ghostscript
-    imagemagick
-    plotutils
-    gd
-    libjpeg
-    libwebp
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      zlib
+      ghostscript
+      imagemagick
+      plotutils
+      gd
+      libjpeg
+      libwebp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/pstoedit \

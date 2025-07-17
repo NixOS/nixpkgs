@@ -27,8 +27,7 @@ perl.pkgs.toPerlModule (
 
     buildInputs = [
       nix-store
-    ]
-    ++ finalAttrs.passthru.externalBuildInputs;
+    ] ++ finalAttrs.passthru.externalBuildInputs;
 
     # Hack for sake of the dev shell
     passthru.externalBuildInputs = [

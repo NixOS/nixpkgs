@@ -16,18 +16,17 @@
   zlib,
   pkg-config,
   cmake,
-  aiger,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.8.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     rev = finalAttrs.version;
-    hash = "sha256-v5r+BWXUUbKtkos6qmGMC9MMytS/h759SHY6lsTHU1k=";
+    hash = "sha256-S8CtK8WEehUdOoqOmu5KnoqHFpCGrYWjZKv1st4M7bo=";
   };
 
   strictDeps = true;
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     zlib
     kissat
-    aiger
   ];
 
   mesonFlags = [
@@ -57,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddefault_library=shared"
     "-Dcryptominisat=true"
     "-Dkissat=true"
-    "-Daiger=true"
 
     (lib.strings.mesonEnable "testing" finalAttrs.finalPackage.doCheck)
   ];

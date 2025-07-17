@@ -1,15 +1,7 @@
-{
-  lib,
-  pkgs,
-  package,
-  ...
-}:
+{ lib, pkgs, ... }:
 rec {
   name = "clickhouse-keeper";
-  meta.maintainers = with pkgs.lib.maintainers; [
-    jpds
-    thevar1able
-  ];
+  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
 
   nodes =
     let
@@ -102,10 +94,7 @@ rec {
           9444
         ];
 
-        services.clickhouse = {
-          enable = true;
-          inherit package;
-        };
+        services.clickhouse.enable = true;
 
         systemd.services.clickhouse = {
           after = [ "network-online.target" ];

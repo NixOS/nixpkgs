@@ -23,5 +23,6 @@ postgresqlBuildExtension (finalAttrs: {
     maintainers = with lib.maintainers; [ gaelreyrol ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.mpl20;
+    broken = lib.versionOlder postgresql.version "13";
   };
 })

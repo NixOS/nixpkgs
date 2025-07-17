@@ -5,36 +5,27 @@
   flask,
   prometheus-client,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";
-  version = "0.23.2";
-  pyproject = true;
+  version = "0.22.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
-    tag = version;
-    hash = "sha256-fWCIthtBiPJwn/Mbbwdv2+1cr9nlpUsPE2mDkaSsfpM=";
+    rev = version;
+    hash = "sha256-GAQ80J7at8Apqu+DUMN3+rLi/lrNv5Y7w/DKpUN2iu8=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     flask
     prometheus-client
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
   enabledTestPaths = [ "tests/" ];
-
-  disabledTests = [
-    # AssertionError
-    "test_group_by_lambda_is_not_supported"
-  ];
 
   meta = with lib; {
     description = "Prometheus exporter for Flask applications";

@@ -3,39 +3,41 @@
   stdenv,
   fetchurl,
   cmake,
-  qt6,
-  kdePackages,
+  extra-cmake-modules,
+  qt5,
+  ki18n,
+  kconfig,
+  kiconthemes,
+  kxmlgui,
+  kwindowsystem,
+  qtbase,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kdbg";
-  version = "3.2.0";
+  version = "3.1.0";
   src = fetchurl {
-    url = "mirror://sourceforge/kdbg/${version}/kdbg-${version}.tar.gz";
-    hash = "sha256-GoWLKWD/nWXBTiTbDLxeNArDMyPI/gSzADqyOgxrNHE=";
+    url = "mirror://sourceforge/kdbg/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-aLX/0GXof77NqQj7I7FUCZjyDtF1P8MJ4/NHJNm4Yr0=";
   };
 
   nativeBuildInputs = [
     cmake
-    kdePackages.extra-cmake-modules
-    qt6.wrapQtAppsHook
+    extra-cmake-modules
+    makeWrapper
   ];
   buildInputs = [
-    qt6.qt5compat
-    qt6.qtbase
-    kdePackages.ki18n
-    kdePackages.kconfig
-    kdePackages.kiconthemes
-    kdePackages.kxmlgui
-    kdePackages.kwindowsystem
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeFeature "BUILD_FOR_KDE_VERSION" "6")
+    qt5.qtbase
+    ki18n
+    kconfig
+    kiconthemes
+    kxmlgui
+    kwindowsystem
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/kdbg --prefix QT_PLUGIN_PATH : ${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}
+    wrapProgram $out/bin/kdbg --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   dontWrapQtApps = true;

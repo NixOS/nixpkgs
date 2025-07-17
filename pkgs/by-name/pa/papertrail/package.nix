@@ -2,40 +2,42 @@
   lib,
   stdenv,
   bundlerEnv,
-  makeWrapper,
   ruby,
   bundlerUpdateScript,
   testers,
   papertrail,
 }:
-stdenv.mkDerivation rec {
-  pname = "papertrail";
-  version = (import ./gemset.nix).papertrail.version;
 
-  gems = bundlerEnv {
-    name = "papertrail";
+let
+  papertrail-env = bundlerEnv {
+    name = "papertrail-env";
+    inherit ruby;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
+in
+stdenv.mkDerivation {
+  pname = "papertrail";
+  version = (import ./gemset.nix).papertrail.version;
 
   dontUnpack = true;
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gems ];
 
   installPhase = ''
     mkdir -p $out/bin
-    makeWrapper ${gems}/bin/papertrail $out/bin/papertrail
+    ln -s ${papertrail-env}/bin/papertrail $out/bin/papertrail
   '';
 
   passthru.updateScript = bundlerUpdateScript "papertrail";
 
-  meta = {
+  passthru.tests.version = testers.testVersion { package = papertrail; };
+
+  meta = with lib; {
     description = "Command-line client for Papertrail log management service";
     mainProgram = "papertrail";
     homepage = "https://github.com/papertrail/papertrail-cli/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ nicknovitski ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicknovitski ];
     platforms = ruby.meta.platforms;
   };
 }

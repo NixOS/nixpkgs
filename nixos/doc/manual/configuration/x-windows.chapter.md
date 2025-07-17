@@ -4,7 +4,9 @@ The X Window System (X11) provides the basis of NixOS' graphical user
 interface. It can be enabled as follows:
 
 ```nix
-{ services.xserver.enable = true; }
+{
+  services.xserver.enable = true;
+}
 ```
 
 The X server will automatically detect and use the appropriate video
@@ -12,7 +14,9 @@ driver from a set of X.org drivers (such as `vesa` and `intel`). You can
 also specify a driver manually, e.g.
 
 ```nix
-{ services.xserver.videoDrivers = [ "r128" ]; }
+{
+  services.xserver.videoDrivers = [ "r128" ];
+}
 ```
 
 to enable X.org's `xf86-video-r128` driver.
@@ -23,7 +27,7 @@ Thus you should pick one or more of the following lines:
 
 ```nix
 {
-  services.desktopManager.plasma6.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
   services.desktopManager.gnome.enable = true;
   services.xserver.desktopManager.mate.enable = true;
@@ -59,7 +63,9 @@ The X server is started automatically at boot time. If you don't want
 this to happen, you can set:
 
 ```nix
-{ services.xserver.autorun = false; }
+{
+  services.xserver.autorun = false;
+}
 ```
 
 The X server can then be started manually:
@@ -72,7 +78,9 @@ On 64-bit systems, if you want OpenGL for 32-bit programs such as in
 Wine, you should also set the following:
 
 ```nix
-{ hardware.graphics.enable32Bit = true; }
+{
+  hardware.graphics.enable32Bit = true;
+}
 ```
 
 ## Auto-login {#sec-x11-auto-login}
@@ -90,7 +98,9 @@ desktop environment. If you wanted no desktop environment and i3 as your
 your window manager, you'd define:
 
 ```nix
-{ services.displayManager.defaultSession = "none+i3"; }
+{
+  services.displayManager.defaultSession = "none+i3";
+}
 ```
 
 Every display manager in NixOS supports auto-login, here is an example
@@ -177,7 +187,9 @@ both drivers. Use the option
 to set one. The recommended configuration for modern systems is:
 
 ```nix
-{ services.xserver.videoDrivers = [ "modesetting" ]; }
+{
+  services.xserver.videoDrivers = [ "modesetting" ];
+}
 ```
 ::: {.note}
 The `modesetting` driver doesn't currently provide a `TearFree` option (this
@@ -192,7 +204,7 @@ reported to resolve the issue:
 ```nix
 {
   services.xserver.videoDrivers = [ "intel" ];
-  services.xserver.deviceSection = ''
+    services.xserver.deviceSection = ''
     Option "DRI" "2"
     Option "TearFree" "true"
   '';
@@ -209,7 +221,9 @@ better 3D performance than the X.org drivers. It is not enabled by
 default because it's not free software. You can enable it as follows:
 
 ```nix
-{ services.xserver.videoDrivers = [ "nvidia" ]; }
+{
+  services.xserver.videoDrivers = [ "nvidia" ];
+}
 ```
 
 If you have an older card, you may have to use one of the legacy drivers:
@@ -231,14 +245,18 @@ Support for Synaptics touchpads (found in many laptops such as the Dell
 Latitude series) can be enabled as follows:
 
 ```nix
-{ services.libinput.enable = true; }
+{
+  services.libinput.enable = true;
+}
 ```
 
 The driver has many options (see [](#ch-options)).
 For instance, the following disables tap-to-click behavior:
 
 ```nix
-{ services.libinput.touchpad.tapping = false; }
+{
+  services.libinput.touchpad.tapping = false;
+}
 ```
 
 Note: the use of `services.xserver.synaptics` is deprecated since NixOS
@@ -292,7 +310,7 @@ A minimal layout specification must include the following:
 {
   services.xserver.xkb.extraLayouts.us-greek = {
     description = "US layout with alt-gr greek";
-    languages = [ "eng" ];
+    languages   = [ "eng" ];
     symbolsFile = /yourpath/symbols/us-greek;
   };
 }
@@ -356,9 +374,9 @@ As before, to install the layout do
 ```nix
 {
   services.xserver.xkb.extraLayouts.media = {
-    description = "Multimedia keys remapping";
-    languages = [ "eng" ];
-    symbolsFile = /path/to/media-key;
+    description  = "Multimedia keys remapping";
+    languages    = [ "eng" ];
+    symbolsFile  = /path/to/media-key;
     keycodesFile = /path/to/media-sym;
   };
 }

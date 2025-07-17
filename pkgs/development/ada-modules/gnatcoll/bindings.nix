@@ -56,8 +56,7 @@ stdenv.mkDerivation rec {
   # downstream executable.
   propagatedBuildInputs = [
     gnatcoll-core
-  ]
-  ++ libsFor."${component}" or [ ];
+  ] ++ libsFor."${component}" or [ ];
 
   # explicit flag for GPL acceptance because upstream
   # allows a gcc runtime exception for all bindings

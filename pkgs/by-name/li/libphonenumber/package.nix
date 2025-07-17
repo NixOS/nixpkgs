@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
-  enableTests ? true,
   gtest,
   jre,
   pkg-config,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.14";
+  version = "9.0.8";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-qxneoz6TO52MQotRPsHqkq+zF0nz3Ef3JDcbSs2Vci8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PLQgZdf2As5dwoM/L8SCBCysXUrw56/cn2NDf4jM1ac=";
   };
 
   patches = [
@@ -32,36 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-  ]
-  ++ lib.optionals enableTests [
     gtest
     jre
+    pkg-config
   ];
 
   buildInputs = [
+    boost
     icu
     protobuf
-  ]
-  ++ lib.optionals enableTests [
-    boost
   ];
 
   cmakeDir = "../cpp";
 
-  doCheck = enableTests;
+  doCheck = true;
 
   checkTarget = "tests";
 
-  cmakeFlags =
-    lib.optionals (!enableTests) [
-      (lib.cmakeBool "REGENERATE_METADATA" false)
-      (lib.cmakeBool "USE_BOOST" false)
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-      (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
-    ];
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";

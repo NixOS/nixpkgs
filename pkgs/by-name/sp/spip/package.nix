@@ -32,7 +32,7 @@ in
 
 stdenv.mkDerivation {
   pname = "spip";
-  version = "0-unstable-2023-04-19";
+  version = "unstable-2023-04-19";
 
   src = fetchFromGitHub {
     owner = "raphaelleman";

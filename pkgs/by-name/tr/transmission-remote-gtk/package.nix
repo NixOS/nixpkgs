@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
     changelog = "https://github.com/transmission-remote-gtk/transmission-remote-gtk/releases/tag/${version}";
     license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }

@@ -6,17 +6,15 @@
   docbook_xml_dtd_45,
   docbook_xsl_ns,
   fetchFromGitHub,
-  gettext,
-  libxslt,
   perlPackages,
   pkg-config,
-  qt6,
+  qt5,
   stdenv,
   sword,
 }:
 
 let
-  inherit (qt6)
+  inherit (qt5)
     qtbase
     qtsvg
     qttools
@@ -25,20 +23,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
-  version = "3.1.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "bibletime";
     repo = "bibletime";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kYQjkwfWsEijJ/umOylnfvHgv4u16xr3pkr3ALN4O8c=";
+    hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
   };
 
   nativeBuildInputs = [
     cmake
     docbook_xml_dtd_45
-    gettext
-    libxslt
     pkg-config
     wrapQtAppsHook
     perlPackages.Po4a

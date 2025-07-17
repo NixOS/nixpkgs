@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.1.0";
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YSqMhwgCdJNf8sehwgPHhr/Nu6jKXCeszuRp3hPqz7g=";
+    hash = "sha256-TTbwoZt5+tkxuoC05sbgrwIRmyWIR272D4TZWYXyPjA=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -60,25 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    libbfd
-    libdwarf
-    backward-cpp
-    curl
-    enet
-    freetype
-    glm
-    libjpeg
-    libuuid
-    libuv
-    lua5_4
-    lzfse
-    SDL2
-    libX11
-    SDL2_mixer
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
+  buildInputs =
+    [
+      libbfd
+      libdwarf
+      backward-cpp
+      curl
+      enet
+      freetype
+      glm
+      libjpeg
+      libuuid
+      libuv
+      lua5_4
+      lzfse
+      SDL2
+      libX11
+      SDL2_mixer
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;

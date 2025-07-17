@@ -3,9 +3,10 @@
   stdenv,
   autoreconfHook,
   bison,
+  coreutils,
   cyrus_sasl,
   db,
-  fetchurl,
+  fetchFromSavannah,
   flex,
   gdbm,
   liblockfile,
@@ -19,28 +20,24 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "nmh";
   version = "1.8";
-
-  src = fetchurl {
-    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Nmzgzj+URzAvVWcAkmnIuziC2AjzPu+shbo2fodchhU=";
+  src = fetchFromSavannah {
+    repo = "nmh";
+    rev = finalAttrs.version;
+    hash = "sha256-ShAdinvBA7guVBhjqTelBRiUzyo5KqHcawlQS9kXtqs=";
   };
 
   patches = [ ./reproducible-build-date.patch ];
 
-  postPatch =
-    # patch hardcoded shell
-    ''
-      substituteInPlace \
-        sbr/arglist.c \
-        uip/mhbuildsbr.c \
-        uip/whatnowsbr.c \
-        uip/slocal.c \
-        --replace-fail '"/bin/sh"' '"${runtimeShell}"'
-    ''
+  postPatch = ''
+    substituteInPlace \
+      sbr/arglist.c \
+      uip/mhbuildsbr.c \
+      uip/whatnowsbr.c \
+      uip/slocal.c \
+      --replace-fail '"/bin/sh"' '"${runtimeShell}"'
     # the "cleanup" pseudo-test makes diagnosing test failures a pain
-    + ''
-      ln -sf ${stdenv}/bin/true test/cleanup
-    '';
+    ln -s -f ${stdenv}/bin/true test/cleanup
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -58,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-stringop-truncation";
   doCheck = true;
   enableParallelBuilding = true;
 
@@ -92,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
       claws-mail's mail folders.  Most other mail clients have migrated to
       maildir.
     '';
-    maintainers = with lib.maintainers; [ normalcea ];
   };
 
 })

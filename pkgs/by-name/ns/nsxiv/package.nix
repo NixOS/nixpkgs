@@ -35,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libexif
     libwebp
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h

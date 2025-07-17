@@ -39,8 +39,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     six
-  ]
-  ++ optional-dependencies.git;
+  ] ++ optional-dependencies.git;
 
   pythonImportsCheck = [ "simplekv" ];
 

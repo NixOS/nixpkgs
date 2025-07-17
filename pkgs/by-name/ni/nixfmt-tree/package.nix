@@ -2,14 +2,14 @@
   lib,
   runCommand,
   treefmt,
-  nixfmt,
+  nixfmt-rfc-style,
   nixfmt-tree,
   git,
   writableTmpDirAsHomeHook,
 
   settings ? { },
   runtimeInputs ? [ ],
-  nixfmtPackage ? nixfmt,
+  nixfmtPackage ? nixfmt-rfc-style,
 
   # NOTE: `runtimePackages` is deprecated. Use `nixfmtPackage` and/or `runtimeInputs`.
   runtimePackages ? [ nixfmtPackage ],

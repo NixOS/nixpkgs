@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.4.1";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-CtxirZg6WNQpTMoXQRvB8i/KB3r58WlKh+wjBvyVMMs=";
+    hash = "sha256-7aq9JeyM+IjlRPgh4gs1DmkF0hU5EasgTuUPPlf8960=";
   };
 
   build-system = [ hatchling ];
@@ -48,9 +48,6 @@ buildPythonPackage rec {
   versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
-
-  # redisTestHook does not work on darwin-x86_64
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'

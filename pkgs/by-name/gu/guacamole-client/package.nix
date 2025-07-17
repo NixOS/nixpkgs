@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.apache.org/";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.drupol ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytest-aiohttp,
-  pytest-asyncio_0,
   pytestCheckHook,
   setuptools,
   webtest,
@@ -39,13 +38,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-    webtest
-  ];
+  dependencies = [ webtest ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    aiohttp
     pytest-aiohttp
     pytestCheckHook
   ];

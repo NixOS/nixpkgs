@@ -71,23 +71,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion =
-          !(
-            (lib.hasAttrByPath [ "settings" "queue" ] cfg)
-            && (builtins.any (lib.hasAttrByPath [
-              "value"
-              "next-hop"
-            ]) (lib.attrsToList cfg.settings.queue))
-          );
-        message = ''
-          Stalwart deprecated `next-hop` in favor of "virtual queues" `queue.strategy.route` \
-          with v0.13.0 see [Outbound Strategy](https://stalw.art/docs/mta/outbound/strategy/#configuration) \
-          and [release announcement](https://github.com/stalwartlabs/stalwart/blob/main/UPGRADING.md#upgrading-from-v012x-and-v011x-to-v013x).
-        '';
-      }
-    ];
 
     # Default config: all local
     services.stalwart-mail.settings = {
@@ -124,7 +107,7 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      spam-filter.resource = lib.mkDefault "file://${cfg.package.spam-filter}/spam-filter.toml";
+      spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
       webadmin =
         let
           hasHttpListener = builtins.any (listener: listener.protocol == "http") (
@@ -249,7 +232,6 @@ in
       happysalada
       euxane
       onny
-      norpol
     ];
   };
 }

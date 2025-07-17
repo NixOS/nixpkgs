@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pytest8_3CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "WtkPCReXhxyr6pOzE9gsdIeBlLk+nSnbxkS3OowEaHo=";
   };
 
-  nativeCheckInputs = [ pytest8_3CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   enabledTestPaths = [ "test/__main__.py::TestEsprima" ];
 

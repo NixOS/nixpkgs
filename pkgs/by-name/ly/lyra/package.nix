@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lyra";
-  version = "1.7.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
     rev = version;
-    sha256 = "sha256-X8wJwSfOo7v2SKYrKJ4RhpEmOdEkS8lPHIqCxP46VF4=";
+    sha256 = "sha256-tS2SPLiKaL8C35AmOXyJPstFUfynkE/A53rurqiySbI=";
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,7 @@
   cmocka,
   gmp,
   gperf,
+  libtap,
   ninja,
   perl,
   pkg-config,
@@ -36,34 +37,36 @@ stdenv.mkDerivation (finalAttrs: {
     six
   ];
 
-  nativeBuildInputs = [
-    cmake
-    cmocka
-    gperf
-    ninja
-    perl
-    pkg-config
-    python3
-  ]
-  ++ (
-    with perl.pkgs;
-    TaskFreecellSolverTesting.buildInputs
-    ++ [
-      GamesSolitaireVerify
-      HTMLTemplate
-      Moo
-      PathTiny
-      StringShellQuote
-      TaskFreecellSolverTesting
-      TemplateToolkit
-      TextTemplate
+  nativeBuildInputs =
+    [
+      cmake
+      cmocka
+      gperf
+      ninja
+      perl
+      pkg-config
+      python3
     ]
-  )
-  ++ [ python3.pkgs.wrapPython ]
-  ++ finalAttrs.pythonPath;
+    ++ (
+      with perl.pkgs;
+      TaskFreecellSolverTesting.buildInputs
+      ++ [
+        GamesSolitaireVerify
+        HTMLTemplate
+        Moo
+        PathTiny
+        StringShellQuote
+        TaskFreecellSolverTesting
+        TemplateToolkit
+        TextTemplate
+      ]
+    )
+    ++ [ python3.pkgs.wrapPython ]
+    ++ finalAttrs.pythonPath;
 
   buildInputs = [
     gmp
+    libtap
     rinutils
   ];
 

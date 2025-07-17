@@ -2,6 +2,7 @@
   lib,
   asn1crypto,
   buildPythonPackage,
+  cached-property,
   cython,
   fetchFromGitHub,
   setuptools-scm,
@@ -9,22 +10,23 @@
 
 buildPythonPackage rec {
   pname = "python-pkcs11";
-  version = "0.9.0";
-  pyproject = true;
+  version = "0.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "danni";
     repo = "python-pkcs11";
-    tag = "v${version}";
-    sha256 = "sha256-8KLc/jNpYAsuRaiRVD9m5rQWW6u1EG1yf9fwwXRk4Qc=";
+    rev = "v${version}";
+    sha256 = "0kncbipfpsb7m7mhv5s5b9wk604h1j08i2j26fn90pklgqll0xhv";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cython
     setuptools-scm
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
+    cached-property
     asn1crypto
   ];
 
@@ -33,11 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkcs11" ];
 
-  meta = {
-    changelog = "https://github.com/pyauth/python-pkcs11/releases/tag/${src.tag}";
+  meta = with lib; {
     description = "PKCS#11/Cryptoki support for Python";
     homepage = "https://github.com/danni/python-pkcs11";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }

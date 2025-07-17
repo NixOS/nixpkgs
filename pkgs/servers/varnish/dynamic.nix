@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  autoreconfHook269,
   pkg-config,
   varnish,
   docutils,
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     docutils
-    autoreconfHook
+    autoreconfHook269
     varnish.python
   ];
   buildInputs = [ varnish ];

@@ -197,7 +197,12 @@ in
 
     package = lib.mkPackageOption pkgs "vaultwarden" { };
 
-    webVaultPackage = lib.mkPackageOption pkgs [ "vaultwarden" "webvault" ] { };
+    webVaultPackage = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.vaultwarden.webvault;
+      defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
+      description = "Web vault package to use.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -219,8 +224,7 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
@@ -259,12 +263,13 @@ in
         inherit StateDirectory;
         StateDirectoryMode = "0700";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-        ]
-        ++ lib.optionals (!useSendmail) [
-          "~@privileged"
-        ];
+        SystemCallFilter =
+          [
+            "@system-service"
+          ]
+          ++ lib.optionals (!useSendmail) [
+            "~@privileged"
+          ];
         Restart = "always";
         UMask = "0077";
       };

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2025.7.34";
+  version = "2024.11.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nq2XZSF6/QSoaCLfzU7SdH3+Qm6IfaQTsV/wrCRX4ho=";
+    hash = "sha256-erFZsGPFKgMzyITkZ5+NeoURLuMHj+PZAEst2HVYVRk=";
   };
 
   checkPhase = ''
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Alternative regular expression module, to replace re";
     homepage = "https://bitbucket.org/mrabarnett/mrab-regex";
     license = licenses.psfl;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

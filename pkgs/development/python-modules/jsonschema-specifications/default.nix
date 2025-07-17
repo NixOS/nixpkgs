@@ -30,8 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     referencing
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

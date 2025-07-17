@@ -1,8 +1,8 @@
 {
   lib,
-  callPackage,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
   nodejs,
@@ -12,32 +12,29 @@
   electron_36,
   vulkan-helper,
   gogdl,
+  legendary-heroic,
   nile,
-  comet-gog_heroic,
-  umu-launcher,
+  comet-gog,
 }:
 
 let
-  legendary = callPackage ./legendary.nix { };
-  epic-integration = callPackage ./epic-integration.nix { };
-  comet-gog = comet-gog_heroic;
   electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.18.1";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x792VA4PZleqUUgarh59JxJVXrvT95/rINYk8t9i3X0=";
+    hash = "sha256-oJIs+tsE0PUbX+2pyvH7gPdFuevN8sfrXASu0SxDkBU=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-F8H0eYltIJ0S8AX+2S3cR+v8dvePw09VWToVOLM8qII=";
+    hash = "sha256-9WCIdQ91IU8pfq6kpbmmn6APBTNwpCi9ovgRuWYUad8=";
   };
 
   nativeBuildInputs = [
@@ -50,8 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
-    # Fixes incorrect path to GalaxyCommunication.exe
-    ./pr-4885.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -83,26 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
     rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p \
-      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux" \
-      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
+    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary}" \
+      "${lib.getExe legendary-heroic}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
       "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
-    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
-    cp \
-      "${comet-gog.dummy-service}/GalaxyCommunication.exe" \
-      "${epic-integration}/EpicGamesLauncher.exe" \
-      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/win32"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
-      --suffix PATH ":" "${umu-launcher}/bin" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
@@ -116,13 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit epic-integration legendary;
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
-    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aidalgol ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.

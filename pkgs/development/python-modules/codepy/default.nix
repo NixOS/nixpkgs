@@ -2,42 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  cgen,
-  numpy,
-  platformdirs,
   pytools,
-  typing-extensions,
-  boost,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  appdirs,
+  six,
+  cgen,
 }:
 
 buildPythonPackage rec {
   pname = "codepy";
-  version = "2025.1";
-  pyproject = true;
+  version = "2019.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "codepy";
-    tag = "v${version}";
-    hash = "sha256-PHIC3q9jQlRRoUoemVtyrl5hcZXMX28gRkI5Xpk9yBY=";
+    rev = "v${version}";
+    hash = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
   };
 
-  build-system = [ hatchling ];
-
-  dependencies = [
-    cgen
-    numpy
-    platformdirs
+  buildInputs = [
     pytools
-    typing-extensions
+    six
+    cgen
   ];
+  propagatedBuildInputs = [ appdirs ];
 
   pythonImportsCheck = [ "codepy" ];
 
-  doCheck = false; # tests require boost setup for ad hoc module compilation
+  # Tests are broken
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/inducer/codepy";

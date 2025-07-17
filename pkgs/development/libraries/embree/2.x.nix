@@ -7,7 +7,7 @@
   ispc,
   tbb_2020,
   glfw,
-  openimageio,
+  openimageio_2,
   libjpeg,
   libpng,
   libpthreadstubs,
@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ispc
-    # tbb_2022 is not backward compatible
+    # tbb_2021 is not backward compatible
     tbb_2020
     glfw
-    openimageio
+    openimageio_2
     libjpeg
     libpng
     libX11

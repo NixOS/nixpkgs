@@ -1,7 +1,7 @@
 {
   buildPgrxExtension,
   cargo-pgrx_0_12_0_alpha_1,
-  clang,
+  clang_16,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -10,9 +10,20 @@
   postgresql,
   postgresqlTestExtension,
   replaceVars,
+  rustPlatform,
 }:
 
-buildPgrxExtension (finalAttrs: {
+let
+  # Upstream only works with clang 16, so we're pinning it here to
+  # avoid future incompatibility.
+  # See https://docs.vectorchord.ai/developers/development.html#set-up-development-environment, step 2
+  clang = clang_16;
+  rustPlatform' = rustPlatform // {
+    bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
+  };
+
+in
+(buildPgrxExtension.override { rustPlatform = rustPlatform'; }) (finalAttrs: {
   inherit postgresql;
   cargo-pgrx = cargo-pgrx_0_12_0_alpha_1;
 
@@ -27,9 +38,6 @@ buildPgrxExtension (finalAttrs: {
     (replaceVars ./0001-read-clang-flags-from-environment.diff {
       clang = lib.getExe clang;
     })
-    # Rust 1.89 denies implicit autorefs by default, making the compilation fail.
-    # This restores the behaviour of previous rust versions by making the lint throw a warning instead.
-    ./0002-allow-dangerous-implicit-autorefs.diff
   ];
 
   src = fetchFromGitHub {
@@ -39,6 +47,7 @@ buildPgrxExtension (finalAttrs: {
     hash = "sha256-X7BY2Exv0xQNhsS/GA7GNvj9OeVDqVCd/k3lUkXtfgE=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-8otJ1uqGrCmlxAqvfAL3OjhBI4I6dAu6EoajstO46Sw=";
 
   # Set appropriate version on vectors.control, otherwise it won't show up on PostgreSQL

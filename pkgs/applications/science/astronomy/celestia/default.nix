@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   libglut,
   gtk2,
@@ -27,18 +26,6 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-MkElGo1ZR0ImW/526QlDE1ePd+VOQxwkX7l+0WyZ6Vs=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/CelestiaProject/Celestia/commit/94894bed3bf98d41c5097e7829d491d8ff8d4a62.patch?full_index=1";
-      hash = "sha256-hEZ6BhSEx6Qm+fLisc63xSCDT6GX92AHD0BuldOhzFk=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail "dnl AM_GNU_GETTEXT_VERSION([0.15])" "AM_GNU_GETTEXT_VERSION([0.15])"
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -70,9 +57,7 @@ stdenv.mkDerivation rec {
     mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      returntoreality
-    ];
+    maintainers = with lib.maintainers; [ hjones2199 ];
     platforms = lib.platforms.linux;
   };
 }

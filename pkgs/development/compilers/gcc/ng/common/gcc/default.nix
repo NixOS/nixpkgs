@@ -5,10 +5,10 @@
   release_version,
   version,
   monorepoSrc ? null,
-  fetchpatch,
   langAda ? false,
   langC ? true,
   langCC ? true,
+  langD ? false,
   langFortran ? false,
   langGo ? false,
   langJava ? false,
@@ -50,31 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (fetchpatch {
-      name = "for_each_path-functional-programming.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/f23bac62f46fc296a4d0526ef54824d406c3756c.diff";
-      hash = "sha256-J7SrypmVSbvYUzxWWvK2EwEbRsfGGLg4vNZuLEe6Xe0=";
-    })
-    (fetchpatch {
-      name = "find_a_program-separate-from-find_a_file.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-1-git@JohnEricson.me/raw";
-      hash = "sha256-0gaWaeFZq+a8q7Bcr3eILNjHh1LfzL/Lz4F+W+H6XIU=";
-    })
-    (fetchpatch {
-      name = "simplify-find_a_program-and-find_a_file.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-2-git@JohnEricson.me/raw";
-      hash = "sha256-ojdyszxLGL+njHK4eAaeBkxAhFTDI57j6lGuAf0A+N0=";
-    })
-    (fetchpatch {
-      name = "for_each_path-pass-machine-specific.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-3-git@JohnEricson.me/raw";
-      hash = "sha256-C5jUSyNchmZcE8RTXc2dHfCqNKuBHeiouLruK9UooSM=";
-    })
-    (fetchpatch {
-      name = "find_a_program-search-with-machine-prefix.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250822234120.1988059-4-git@JohnEricson.me/raw";
-      hash = "sha256-MwcO4OXPlcdaSYivsh5ru+Cfq6qybeAtgCgTEPGYg40=";
-    })
+    (getVersionFile "gcc/0001-find_a_program-First-search-with-machine-prefix.patch")
+    (getVersionFile "gcc/0002-driver-for_each_pass-Pass-to-callback-whether-dir-is.patch")
+    (getVersionFile "gcc/0003-find_a_program-Only-search-for-prefixed-paths-in-und.patch")
 
     (getVersionFile "gcc/fix-collect2-paths.diff")
   ];
@@ -92,37 +70,38 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     which
     gettext
-  ]
-  ++ lib.optional (perl != null) perl;
+  ] ++ lib.optional (perl != null) perl;
 
-  buildInputs = [
-    gmp
-    libmpc
-    mpfr
-  ]
-  ++ lib.optional (isl != null) isl
-  ++ lib.optional (zlib != null) zlib;
+  buildInputs =
+    [
+      gmp
+      libmpc
+      mpfr
+    ]
+    ++ lib.optional (isl != null) isl
+    ++ lib.optional (zlib != null) zlib;
 
   postUnpack = ''
     mkdir -p ./build
     buildRoot=$(readlink -e "./build")
   '';
 
-  postPatch = ''
-    configureScripts=$(find . -name configure)
-    for configureScript in $configureScripts; do
-      patchShebangs $configureScript
-    done
+  postPatch =
+    ''
+      configureScripts=$(find . -name configure)
+      for configureScript in $configureScripts; do
+        patchShebangs $configureScript
+      done
 
-    patchShebangs libbacktrace/install-debuginfo-for-buildid.sh
-    patchShebangs runtest
-  ''
-  # This should kill all the stdinc frameworks that gcc and friends like to
-  # insert into default search paths.
-  + lib.optionalString hostPlatform.isDarwin ''
-    substituteInPlace gcc/config/darwin-c.c \
-      --replace 'if (stdinc)' 'if (0)'
-  '';
+      patchShebangs libbacktrace/install-debuginfo-for-buildid.sh
+      patchShebangs runtest
+    ''
+    # This should kill all the stdinc frameworks that gcc and friends like to
+    # insert into default search paths.
+    + lib.optionalString hostPlatform.isDarwin ''
+      substituteInPlace gcc/config/darwin-c.c \
+        --replace 'if (stdinc)' 'if (0)'
+    '';
 
   preConfigure =
     # Don't built target libraries, because we want to build separately
@@ -173,62 +152,64 @@ stdenv.mkDerivation (finalAttrs: {
     "target"
   ];
 
-  configureFlags = [
-    # Force target prefix. The behavior if `--target` and `--host` are
-    # specified is inconsistent: Sometimes specifying `--target` always causes
-    # a prefix to be generated, sometimes it's only added if the `--host` and
-    # `--target` differ. This means that sometimes there may be a prefix even
-    # though nixpkgs doesn't expect one and sometimes there may be none even
-    # though nixpkgs expects one (since not all information is serialized into
-    # the config attribute). The easiest way out of these problems is to always
-    # set the program prefix, so gcc will conform to our expectations.
-    "--program-prefix=${targetPrefix}"
+  configureFlags =
+    [
+      # Force target prefix. The behavior if `--target` and `--host` are
+      # specified is inconsistent: Sometimes specifying `--target` always causes
+      # a prefix to be generated, sometimes it's only added if the `--host` and
+      # `--target` differ. This means that sometimes there may be a prefix even
+      # though nixpkgs doesn't expect one and sometimes there may be none even
+      # though nixpkgs expects one (since not all information is serialized into
+      # the config attribute). The easiest way out of these problems is to always
+      # set the program prefix, so gcc will conform to our expectations.
+      "--program-prefix=${targetPrefix}"
 
-    "--disable-dependency-tracking"
-    "--enable-fast-install"
-    "--disable-serial-configure"
-    "--disable-bootstrap"
-    "--disable-decimal-float"
-    "--disable-install-libiberty"
-    "--disable-multilib"
-    "--disable-nls"
-    "--disable-shared"
-    "--enable-languages=${
-      lib.concatStrings (
-        lib.intersperse "," (
-          lib.optional langC "c"
-          ++ lib.optional langCC "c++"
-          ++ lib.optional langFortran "fortran"
-          ++ lib.optional langJava "java"
-          ++ lib.optional langAda "ada"
-          ++ lib.optional langGo "go"
-          ++ lib.optional langObjC "objc"
-          ++ lib.optional langObjCpp "obj-c++"
-          ++ lib.optional langJit "jit"
+      "--disable-dependency-tracking"
+      "--enable-fast-install"
+      "--disable-serial-configure"
+      "--disable-bootstrap"
+      "--disable-decimal-float"
+      "--disable-install-libiberty"
+      "--disable-multilib"
+      "--disable-nls"
+      "--disable-shared"
+      "--enable-languages=${
+        lib.concatStrings (
+          lib.intersperse "," (
+            lib.optional langC "c"
+            ++ lib.optional langCC "c++"
+            ++ lib.optional langD "d"
+            ++ lib.optional langFortran "fortran"
+            ++ lib.optional langJava "java"
+            ++ lib.optional langAda "ada"
+            ++ lib.optional langGo "go"
+            ++ lib.optional langObjC "objc"
+            ++ lib.optional langObjCpp "obj-c++"
+            ++ lib.optional langJit "jit"
+          )
         )
-      )
-    }"
-    (lib.withFeature (isl != null) "isl")
-    "--without-headers"
-    "--with-gnu-as"
-    "--with-gnu-ld"
-    "--with-as=${lib.getExe' bintools "${bintools.targetPrefix}as"}"
-    "--with-system-zlib"
-    "--without-included-gettext"
-    "--enable-linker-build-id"
-    "--with-sysroot=${lib.getDev (targetPackages.libc or libc)}"
-    "--with-native-system-header-dir=/include"
-  ]
-  ++ lib.optionals enablePlugin [
-    "--enable-plugin"
-    "--enable-plugins"
-  ]
-  ++
-    # Only pass when the arch supports it.
-    # Exclude RISC-V because GCC likes to fail when the string is empty on RISC-V.
-    lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
-      "--with-multilib-list="
-    ];
+      }"
+      (lib.withFeature (isl != null) "isl")
+      "--without-headers"
+      "--with-gnu-as"
+      "--with-gnu-ld"
+      "--with-as=${lib.getExe' bintools "${bintools.targetPrefix}as"}"
+      "--with-system-zlib"
+      "--without-included-gettext"
+      "--enable-linker-build-id"
+      "--with-sysroot=${lib.getDev (targetPackages.libc or libc)}"
+      "--with-native-system-header-dir=/include"
+    ]
+    ++ lib.optionals enablePlugin [
+      "--enable-plugin"
+      "--enable-plugins"
+    ]
+    ++
+      # Only pass when the arch supports it.
+      # Exclude RISC-V because GCC likes to fail when the string is empty on RISC-V.
+      lib.optionals (targetPlatform.isAarch || targetPlatform.isAvr || targetPlatform.isx86_64) [
+        "--with-multilib-list="
+      ];
 
   doCheck = false;
 

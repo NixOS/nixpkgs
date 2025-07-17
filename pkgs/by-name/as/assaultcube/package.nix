@@ -19,15 +19,15 @@
   server ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "assaultcube";
   version = "1.3.0.2";
 
   src = fetchFromGitHub {
     owner = "assaultcube";
     repo = "AC";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6UfOKgI+6rMGNHlRQnVCm/zD3wCKwbeOD7jgxH8aY2M=";
+    rev = "v${version}";
+    sha256 = "0qv339zw9q5q1y7bghca03gw7z4v89sl4lbr6h3b7siy08mcwiz9";
   };
 
   nativeBuildInputs = [
@@ -36,30 +36,31 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    file
-    zlib
-  ]
-  ++ lib.optionals client [
-    openal
-    SDL2
-    SDL2_image
-    libGL
-    libX11
-    libogg
-    libvorbis
-  ];
+  buildInputs =
+    [
+      file
+      zlib
+    ]
+    ++ lib.optionals client [
+      openal
+      SDL2
+      SDL2_image
+      libGL
+      libX11
+      libogg
+      libvorbis
+    ];
 
+  targets = (lib.optionalString server "server") + (lib.optionalString client " client");
   makeFlags = [
     "-C source/src"
     "CXX=${stdenv.cc.targetPrefix}c++"
-  ]
-  ++ lib.optionals server [ "server" ]
-  ++ lib.optionals client [ "client" ];
+    targets
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "assaultcube";
+      name = pname;
       desktopName = "AssaultCube";
       comment = "A multiplayer, first-person shooter game, based on the CUBE engine. Fast, arcade gameplay.";
       genericName = "First-person shooter";
@@ -69,41 +70,45 @@ stdenv.mkDerivation (finalAttrs: {
         "Shooter"
       ];
       icon = "assaultcube";
-      exec = "assaultcube";
+      exec = pname;
     })
   ];
+
+  gamedatadir = "/share/games/${pname}";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/games/assaultcube
+    bindir=$out/bin
 
-    cp -r config packages $out/share/games/assaultcube
+    mkdir -p $bindir $out/$gamedatadir
+
+    cp -r config packages $out/$gamedatadir
 
     if (test -e source/src/ac_client) then
-      cp source/src/ac_client $out/bin
+      cp source/src/ac_client $bindir
       mkdir -p $out/share/applications
       install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
 
-      makeWrapper $out/bin/ac_client $out/bin/assaultcube \
-        --chdir "$out/share/games/assaultcube" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
+      makeWrapper $out/bin/ac_client $out/bin/${pname} \
+        --chdir "$out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
 
     if (test -e source/src/ac_server) then
-      cp source/src/ac_server $out/bin
-      makeWrapper $out/bin/ac_server $out/bin/assaultcube-server \
-        --chdir "$out/share/games/assaultcube" --add-flags "-Cconfig/servercmdline.txt"
+      cp source/src/ac_server $bindir
+      makeWrapper $out/bin/ac_server $out/bin/${pname}-server \
+        --chdir "$out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
     fi
 
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast and fun first-person-shooter based on the Cube fps";
     homepage = "https://assault.cubers.net";
-    platforms = lib.platforms.linux; # should work on darwin with a little effort.
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = platforms.linux; # should work on darwin with a little effort.
+    license = licenses.unfree;
+    maintainers = with maintainers; [ darkonion0 ];
   };
-})
+}

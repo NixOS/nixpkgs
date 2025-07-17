@@ -10,16 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "marmite";
-  version = "0.2.6";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "rochacbruno";
     repo = "marmite";
     tag = version;
-    hash = "sha256-4FH9WEVTvnu0gp006tBg511bn8LE6AyHOML4tHoqXeM=";
+    hash = "sha256-FxI+Qh3ZM6ZgE/KyZ/gU3CutBHETymgvkjNkYAJ012E=";
   };
 
-  cargoHash = "sha256-wl2/feheYOYPzVElwt3WDZuaQrmoi3OoThYF4PINWd4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LMoakr7LGKFkxymOC8cNxxFbDDqw5gniqh/3ImnEbB8=";
 
   nativeBuildInputs = [
     pkg-config

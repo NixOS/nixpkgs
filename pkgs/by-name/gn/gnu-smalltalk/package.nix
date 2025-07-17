@@ -33,23 +33,21 @@ let
   });
 
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "gnu-smalltalk";
+stdenv.mkDerivation rec {
+
   version = "3.2.5";
+  pname = "gnu-smalltalk";
 
   src = fetchurl {
-    url = "mirror://gnu/smalltalk/smalltalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gZoV97qKG1X19gucmli63W9hU7P5h7cOexZ+d1XWWsw=";
+    url = "mirror://gnu/smalltalk/smalltalk-${version}.tar.xz";
+    sha256 = "1k2ssrapfzhngc7bg1zrnd9n2vyxp9c9m70byvsma6wapbvib6l1";
   };
 
   patches = [
     # The awk script incorrectly parsed `glib/glib.h` and was trying to find `glib/gwin32.h`,
     # that isn't included since we're building only for linux.
     ./0000-fix_mkorder.patch
-    ./0001-fix-compilation.patch
   ];
-
-  enableParallelBuilding = true;
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
@@ -66,20 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     SDL
     sqlite
-  ]
-  ++ lib.optional emacsSupport emacs;
+  ] ++ lib.optional emacsSupport emacs;
 
   configureFlags = lib.optional (!emacsSupport) "--without-emacs";
 
   hardeningDisable = [ "format" ];
 
-  installFlags = lib.optional emacsSupport "lispdir=${placeholder "$out"}/share/emacs/site-lisp";
+  installFlags = lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if
   # executed within nix-shell --pure.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It
@@ -88,11 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
       language, well-versed to scripting tasks.
     '';
     homepage = "http://smalltalk.gnu.org/";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl2
       lgpl2
     ];
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
-})
+}

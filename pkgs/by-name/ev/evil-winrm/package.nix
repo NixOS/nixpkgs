@@ -6,14 +6,7 @@
   bundlerEnv,
   bundlerUpdateScript,
 }:
-let
-  rubyEnv = bundlerEnv {
-    name = "evil-winrm";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
-  };
-in
+
 stdenv.mkDerivation rec {
   pname = "evil-winrm";
   version = "3.5";
@@ -25,12 +18,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
   };
 
+  env = bundlerEnv {
+    name = pname;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
+
   nativeBuildInputs = [
     makeWrapper
   ];
 
   buildInputs = [
-    rubyEnv.wrappedRuby
+    env.wrappedRuby
   ];
 
   installPhase = ''

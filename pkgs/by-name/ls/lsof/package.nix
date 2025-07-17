@@ -26,18 +26,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-zn09cwFFz5ZNJu8GwGGSSGNx5jvXbKLT6/+Lcmn1wK8=";
   };
 
-  postPatch = ''
-    patchShebangs --build lib/dialects/*/Mksrc
-    # Do not re-build version.h in every 'make' to allow nuke-refs below.
-    # We remove phony 'FRC' target that forces rebuilds:
-    #   'version.h: FRC ...' is translated to 'version.h: ...'.
-    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-  ''
-  # help Configure find libproc.h in $SDKROOT
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e 's|lcurses|lncurses|g' \
-           -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
-  '';
+  postPatch =
+    ''
+      patchShebangs --build lib/dialects/*/Mksrc
+      # Do not re-build version.h in every 'make' to allow nuke-refs below.
+      # We remove phony 'FRC' target that forces rebuilds:
+      #   'version.h: FRC ...' is translated to 'version.h: ...'.
+      sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
+    ''
+    # help Configure find libproc.h in $SDKROOT
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i -e 's|lcurses|lncurses|g' \
+             -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
+    '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = lib.licenses.lsof;
+    license = lib.licenses.purdueBsd;
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = lib.platforms.unix;
   };

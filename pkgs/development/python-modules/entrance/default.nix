@@ -55,8 +55,7 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     sanic
-  ]
-  ++ opts.extraBuildInputs;
+  ] ++ opts.extraBuildInputs;
 
   prePatch = opts.prePatch;
 

@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2
@@ -71,6 +70,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
+      abbradar
       siraben
     ];
     mainProgram = "powder";

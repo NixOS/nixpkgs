@@ -8,6 +8,7 @@
   git,
   pandocSupport ? true,
   pandoc ? null,
+  ...
 }:
 
 assert pandocSupport -> pandoc != null;

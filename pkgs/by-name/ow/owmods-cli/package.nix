@@ -16,30 +16,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.15.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-5ymU9X4J5UPLHxV+7WB29e5Wuq++wYA9bqI2YPjDtWs=";
+    hash = "sha256-NIg8heytWUshpoUbaH+RFIvwPBQGXL6yaGKvUuGnxg8=";
   };
 
-  cargoHash = "sha256-Z/muI8JLjOFJBSIMWlvCyFW4JI3lP6/O0AI8Uj8AtBo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kLuiNfrxc3Z8UeDQ2Mb6N78TST6c2f4N7mt4X0zv1Zk=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ]
-  ++ lib.optional wrapWithMono makeWrapper;
+  ] ++ lib.optional wrapWithMono makeWrapper;
 
-  buildInputs = [
-    zstd
-    libsoup_3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ];
+  buildInputs =
+    [
+      zstd
+      libsoup_3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -47,15 +48,16 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "owmods_cli";
 
-  postInstall = ''
-    cargo xtask dist_cli
-    installManPage dist/cli/man/*
-    installShellCompletion --cmd owmods \
-    dist/cli/completions/owmods.{bash,fish,zsh}
-  ''
-  + lib.optionalString wrapWithMono ''
-    wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
-  '';
+  postInstall =
+    ''
+      cargo xtask dist_cli
+      installManPage dist/cli/man/*
+      installShellCompletion --cmd owmods \
+      dist/cli/completions/owmods.{bash,fish,zsh}
+    ''
+    + lib.optionalString wrapWithMono ''
+      wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : '${mono}/bin'
+    '';
 
   passthru.updateScript = nix-update-script { };
 

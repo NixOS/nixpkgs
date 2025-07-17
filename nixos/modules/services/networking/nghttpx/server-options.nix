@@ -9,7 +9,7 @@
       '';
     };
     port = lib.mkOption {
-      type = lib.types.port;
+      type = lib.types.int;
       example = 5088;
       description = ''
         Server host port.

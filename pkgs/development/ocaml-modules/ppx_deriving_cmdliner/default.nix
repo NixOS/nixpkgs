@@ -52,6 +52,5 @@ buildDunePackage rec {
     homepage = "https://github.com/hammerlab/ppx_deriving_cmdliner";
     license = licenses.asl20;
     maintainers = [ maintainers.romildo ];
-    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

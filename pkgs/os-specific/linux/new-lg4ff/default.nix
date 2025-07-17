@@ -2,7 +2,6 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   fetchFromGitHub,
 }:
 
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
       KVERSION="${kernel.modDirVersion}"
       KDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       KCFLAGS="-DCONFIG_LOGIWHEELS_FF -DCONFIG_LEDS_CLASS"
-      ${builtins.concatStringsSep " " kernelModuleMakeFlags}
     )
   '';
 

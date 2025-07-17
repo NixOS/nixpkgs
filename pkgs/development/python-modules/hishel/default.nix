@@ -49,8 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "hishel" ];
 

@@ -30,6 +30,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     homepage = "https://typodermicfonts.com/";
     description = "Vintage Typodermic fonts";
+    maintainers = with lib.maintainers; [ ehmry ];
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
   };

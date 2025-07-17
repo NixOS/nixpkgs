@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   cliff,
-  fetchFromGitHub,
+  fetchFromGitea,
   keystoneauth1,
   openstackdocstheme,
-  openstacksdk,
+  os-client-config,
   osc-lib,
   oslo-i18n,
   oslo-serialization,
@@ -13,6 +13,7 @@
   oslotest,
   osprofiler,
   pbr,
+  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -26,14 +27,17 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "6.0.0";
+  version = "5.4.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitea {
+    domain = "opendev.org";
     owner = "openstack";
     repo = "python-mistralclient";
-    tag = version;
-    hash = "sha256-zdCqBua6S+a7iS3VzELM02oJKwLlI24tHWfx4Pt3nQw=";
+    rev = version;
+    hash = "sha256-c1kMDyRNMZKnDvL993WvZSsjkXgYLM2+9KBmF+I4vnM=";
   };
 
   env.PBR_VERSION = version;
@@ -65,7 +69,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    openstacksdk
+    os-client-config
     oslotest
     osprofiler
     requests-mock

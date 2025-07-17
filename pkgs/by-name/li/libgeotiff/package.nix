@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtiff
     proj
-    zlib
   ];
 
   #hardeningDisable = [ "format" ];

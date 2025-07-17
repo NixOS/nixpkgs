@@ -9,11 +9,10 @@
   getent,
   nixosTests,
 }:
-
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
   version = "2.6.0";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
@@ -21,6 +20,35 @@ python3Packages.buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
   };
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    gtk3
+    python3Packages.poetry-core
+  ];
+
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      click
+      distro
+      psutil
+      pygobject3
+      poetry-dynamic-versioning
+      setuptools
+      pyinotify
+      urwid
+      pyasyncore
+      requests
+    ]
+    ++ [ getent ];
+
+  doCheck = false;
+  pythonImportsCheck = [ "auto_cpufreq" ];
 
   patches = [
     # hardcodes version output
@@ -36,74 +64,37 @@ python3Packages.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace auto_cpufreq/core.py \
-      --replace-fail "/opt/auto-cpufreq/override.pickle" "/var/run/override.pickle"
+      --replace-fail '/opt/auto-cpufreq/override.pickle' /var/run/override.pickle
     substituteInPlace scripts/org.auto-cpufreq.pkexec.policy \
-      --replace-fail "/opt/auto-cpufreq/venv/bin/auto-cpufreq" "$out/bin/auto-cpufreq"
+      --replace-fail "/opt/auto-cpufreq/venv/bin/auto-cpufreq" $out/bin/auto-cpufreq
     substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py \
-      --replace-fail "/usr/local/share/auto-cpufreq/images/icon.png" "$out/share/icons/hicolor/512x512/apps/auto-cpufreq.png"
+      --replace-fail "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
     substituteInPlace auto_cpufreq/gui/app.py \
-      --replace-fail "/usr/local/share/auto-cpufreq/scripts/style.css" "$out/share/auto-cpufreq/scripts/style.css"
+      --replace-fail "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
   '';
 
-  build-system = with python3Packages; [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
-
-  dependencies = with python3Packages; [
-    click
-    distro
-    psutil
-    pygobject3
-    poetry-dynamic-versioning
-    setuptools
-    pyinotify
-    urwid
-    pyasyncore
-    requests
-  ];
-
-  pythonRelaxDeps = [ "urwid" ];
-
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook3
-  ];
-
-  buildInputs = [ gtk3 ];
-
-  propagatedBuildInputs = [ getent ];
-
-  postInstall =
+  postInstall = ''
     # copy script manually
-    ''
-      install -Dm 0755 scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
-    ''
+    cp ${src}/scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
+
     # copy css file
-    + ''
-      install -Dm 0644 scripts/style.css $out/share/auto-cpufreq/scripts/style.css
-    ''
+    mkdir -p $out/share/auto-cpufreq/scripts
+    cp scripts/style.css $out/share/auto-cpufreq/scripts/style.css
+
     # systemd service
-    + ''
-      install -Dm 0644 scripts/auto-cpufreq.service -t $out/lib/systemd/system
-    ''
+    mkdir -p $out/lib/systemd/system
+    cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
+
     # desktop icon
-    + ''
-      install -Dm 0644 scripts/auto-cpufreq-gtk.desktop -t $out/share/applications
-      install -Dm 0644 images/icon.png $out/share/icons/hicolor/512x512/apps/auto-cpufreq.png
-    ''
+    mkdir -p $out/share/applications
+    mkdir $out/share/pixmaps
+    cp scripts/auto-cpufreq-gtk.desktop $out/share/applications
+    cp images/icon.png $out/share/pixmaps/auto-cpufreq.png
+
     # polkit policy
-    + ''
-      install -Dm 0644 scripts/org.auto-cpufreq.pkexec.policy -t $out/share/polkit-1/actions
-    '';
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    mkdir -p $out/share/polkit-1/actions
+    cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
-
-  pythonImportsCheck = [ "auto_cpufreq" ];
 
   passthru.tests = {
     inherit (nixosTests) auto-cpufreq;

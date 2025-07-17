@@ -6,12 +6,15 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "asciiquarium";
+let
   version = "1.1";
+in
+stdenv.mkDerivation {
+  pname = "asciiquarium";
+  inherit version;
   src = fetchurl {
-    url = "https://robobunny.com/projects/asciiquarium/asciiquarium_${finalAttrs.version}.tar.gz";
-    hash = "sha256-GwjGYTUl516HVG9OiYSrOzPx6SIIAmjHSfF3fVbJ02E=";
+    url = "https://robobunny.com/projects/asciiquarium/asciiquarium_${version}.tar.gz";
+    sha256 = "0qfkr5b7sxzi973nh0h84blz2crvmf28jkkgaj3mxrr56mhwc20v";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,15 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
       --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.TermAnimation ]}
   '';
 
-  meta = {
-    description = "Enjoy the mysteries of the sea from the safety of your own terminal";
+  meta = with lib; {
+    description = "Enjoy the mysteries of the sea from the safety of your own terminal!";
     mainProgram = "asciiquarium";
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
       sigmasquadron
       utdemir
     ];
   };
-})
+}

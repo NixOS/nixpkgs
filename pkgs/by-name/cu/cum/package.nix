@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Comic updater, mangafied";
+    description = "comic updater, mangafied";
     mainProgram = "cum";
     homepage = "https://github.com/Hamuko/cum";
     license = licenses.asl20;

@@ -29,12 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qtbase ];
 
-  nativeBuildInputs = [
-    qmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      qmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   env.LANG = "C.UTF-8";
 

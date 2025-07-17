@@ -2,76 +2,58 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   setuptools-scm,
-
-  # dependencies
   accelerate,
+  aiohttp,
+  antlr4-python3-runtime,
+  causal-conv1d,
   datasets,
   dill,
   evaluate,
+  hf-transfer,
+  immutabledict,
   jsonlines,
+  langdetect,
+  mamba-ssm,
   more-itertools,
+  nltk,
   numexpr,
+  numpy,
+  optimum,
+  pandas,
   peft,
   pybind11,
   pytablewriter,
+  pytestCheckHook,
+  requests,
   rouge-score,
   sacrebleu,
   scikit-learn,
+  sentencepiece,
   sqlitedict,
-  torch,
-  tqdm-multiprocess,
-  transformers,
-  word2number,
-  zstandard,
-
-  # optional-dependencies
-  # api
-  aiohttp,
-  requests,
+  sympy,
   tenacity,
   tiktoken,
+  torch,
   tqdm,
-  # hf_transfer
-  hf-transfer,
-  # ifeval
-  immutabledict,
-  langdetect,
-  nltk,
-  # neuronx
-  optimum,
-  # mamba
-  causal-conv1d,
-  mamba-ssm,
-  # math
-  antlr4-python3-runtime,
-  sympy,
-  # sentencepiece
-  sentencepiece,
-  # vllm
+  tqdm-multiprocess,
+  transformers,
   vllm,
-  # wandb
-  numpy,
-  pandas,
   wandb,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  word2number,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "lm-eval";
-  version = "0.4.9.1";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${version}";
-    hash = "sha256-N5NRRabjWxPchwOIkjqYTCKInCmVSY6T5cAmdxNbCkU=";
+    hash = "sha256-F8oy6XTovqiU7FQyuubRsiblSdvfZg9RPIyzRw2GH18=";
   };
 
   build-system = [
@@ -102,56 +84,53 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     api = [
-      aiohttp
       requests
+      aiohttp
       tenacity
-      tiktoken
       tqdm
+      tiktoken
     ];
     hf_transfer = [ hf-transfer ];
     ifeval = [
-      immutabledict
       langdetect
+      immutabledict
       nltk
     ];
     neuronx = [ optimum ] ++ optimum.optional-dependencies.neuronx;
     mamba = [
-      causal-conv1d
       mamba-ssm
+      causal-conv1d
     ];
     math = [
-      antlr4-python3-runtime
       sympy
+      antlr4-python3-runtime
     ];
     optimum = [ optimum ] ++ optimum.optional-dependencies.openvino;
     sentencepiece = [ sentencepiece ];
     vllm = [ vllm ];
     wandb = [
-      numpy
-      pandas
       wandb
+      pandas
+      numpy
     ];
     # Still missing dependencies for the following:
     # deepsparse, gptq, ibm_watsonx_ai, multilingual, promptsource, sparseml,
     # zeno, gptqmodel, japanese_leaderboard; all = [...];
   };
 
-  pythonRelaxDeps = [ "datasets" ];
-
   pythonImportsCheck = [ "lm_eval" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.api;
+  ] ++ optional-dependencies.api;
+
+  preCheck = ''
+    export HOME=$TMP
+  '';
 
   disabledTests = [
     "test_deepsparse" # deepsparse is not available
-
-    # download models from the internet
-    "test_get_batched_requests_with_no_ssl"
-    "test_model_tokenized_call_usage"
+    "test_model_tokenized_call_usage" # downloads a model
   ];
 
   disabledTestPaths = [
@@ -162,18 +141,14 @@ buildPythonPackage rec {
     "tests/test_prompt.py"
     "tests/test_task_manager.py"
     "tests/test_tasks.py"
-    "tests/test_unitxt_tasks.py"
 
     # optimum-intel is not available
     "tests/models/test_openvino.py"
-
-    # zeno-client is not packaged
-    "tests/scripts/test_zeno_visualize.py"
   ];
 
   meta = {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${src.tag}";
-    description = "Framework for few-shot evaluation of language models";
+    description = "A framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.booxter ];

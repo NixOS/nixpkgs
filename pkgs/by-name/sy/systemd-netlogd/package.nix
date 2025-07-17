@@ -59,8 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libcap
     systemdLibs
-  ]
-  ++ lib.optional opensslSupport openssl;
+  ] ++ lib.optional opensslSupport openssl;
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc/systemd"
@@ -71,12 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Make sure x86_64-linux -> aarch64-linux cross compilation works
-    tests = {
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
-    }
-    // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
-      aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
-    };
+    tests =
+      {
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+        aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
+      };
 
     updateScript = nix-update-script { };
   };

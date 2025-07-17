@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Validated Lighting Simulation Tool";
     homepage = "https://github.com/LBNL-ETA/Radiance";
-    license = lib.licenses.bsd3Lbnl;
+    license = lib.licenses.radiance;
     maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "rad";
   };

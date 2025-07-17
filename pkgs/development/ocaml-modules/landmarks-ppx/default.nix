@@ -23,6 +23,5 @@ buildDunePackage {
       Automatically or semi-automatically instrument your code using
       landmarks library.
     '';
-    broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

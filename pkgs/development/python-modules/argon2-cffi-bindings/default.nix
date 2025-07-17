@@ -1,42 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   libargon2,
   cffi,
   setuptools-scm,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "argon2-cffi-bindings";
-  version = "25.1.0";
-  pyproject = true;
+  version = "21.2.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "hynek";
-    repo = "argon2-cffi-bindings";
-    tag = version;
-    hash = "sha256-UDPxwqEpsmByAPM7lz3cxZz8jWwCEdghPlKXt8zQrfc=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3";
   };
 
   buildInputs = [ libargon2 ];
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools-scm
     cffi
   ];
 
-  dependencies = [ cffi ];
+  propagatedBuildInputs = [ cffi ];
 
   env.ARGON2_CFFI_USE_SYSTEM = 1;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
+  # tarball doesn't include tests, but the upstream tests are minimal
+  doCheck = false;
   pythonImportsCheck = [ "_argon2_cffi_bindings" ];
 
   meta = with lib; {
-    changelog = "https://github.com/hynek/argon2-cffi-bindings/releases/tag/${src.tag}";
     description = "Low-level CFFI bindings for Argon2";
     homepage = "https://github.com/hynek/argon2-cffi-bindings";
     license = licenses.mit;

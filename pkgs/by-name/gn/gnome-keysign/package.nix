@@ -22,14 +22,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    gobject-introspection
-  ]
-  ++ (with python3.pkgs; [
-    babel
-    babelgladeextractor
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+      gobject-introspection
+    ]
+    ++ (with python3.pkgs; [
+      babel
+      babelgladeextractor
+    ]);
 
   buildInputs = [
     # TODO: add avahi support

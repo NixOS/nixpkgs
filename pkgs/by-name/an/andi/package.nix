@@ -29,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gsl
     libdivsufsort
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   configureFlags = [ (lib.enableFeature finalAttrs.finalPackage.doCheck "unit-tests") ];
 

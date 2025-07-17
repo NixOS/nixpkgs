@@ -51,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libnotify
     sqlite
-  ]
-  ++ lib.optionals withSystemd [ systemd ];
+  ] ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
     (lib.enableFeature true "notifications")

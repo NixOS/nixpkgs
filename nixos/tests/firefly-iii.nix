@@ -6,10 +6,7 @@ let
 in
 {
   name = "firefly-iii";
-  meta = {
-    maintainers = [ lib.maintainers.savyajha ];
-    platforms = lib.platforms.linux;
-  };
+  meta.maintainers = [ lib.maintainers.savyajha ];
 
   nodes.fireflySqlite =
     { config, ... }:

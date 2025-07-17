@@ -65,7 +65,6 @@ in
         # start immediately after computer is started:
         Persistent = "true";
       };
-    }
-    // lib.optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+    } // lib.optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
   };
 }

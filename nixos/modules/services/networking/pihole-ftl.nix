@@ -53,7 +53,7 @@ in
         query logging.
       '';
       default = 0;
-      example = 3;
+      example = "3";
     };
 
     openFirewallDNS = mkOption {
@@ -115,14 +115,6 @@ in
       description = ''
         Import options defined in [](#opt-services.dnsmasq.settings) via
         misc.dnsmasq_lines in Pi-hole's config.
-      '';
-    };
-
-    macvendorURL = mkOption {
-      type = types.str;
-      default = "https://ftl.pi-hole.net/macvendor.db";
-      description = ''
-        URL from which to download the macvendor.db file.
       '';
     };
 
@@ -206,19 +198,6 @@ in
         '';
       };
     };
-
-    webserverEnabled = mkOption {
-      type = types.bool;
-      default = (
-        (hasAttrByPath [ "webserver" "port" ] cfg.settings)
-        && !builtins.elem cfg.settings.webserver.port [
-          ""
-          null
-        ]
-      );
-      internal = true;
-      description = "Whether the webserver is enabled.";
-    };
   };
 
   config = mkIf cfg.enable {
@@ -229,7 +208,15 @@ in
       }
 
       {
-        assertion = builtins.length cfg.lists == 0 || cfg.webserverEnabled;
+        assertion =
+          builtins.length cfg.lists == 0
+          || (
+            (hasAttrByPath [ "webserver" "port" ] cfg.settings)
+            && !builtins.elem cfg.settings.webserver.port [
+              ""
+              null
+            ]
+          );
         message = ''
           The Pi-hole webserver must be enabled for lists set in services.pihole-ftl.lists to be automatically loaded on startup via the web API.
           services.pihole-ftl.settings.port must be defined, e.g. by enabling services.pihole-web.enable and defining services.pihole-web.port.
@@ -253,7 +240,7 @@ in
       (mkDefaults {
         misc.readOnly = true; # Prevent config changes via API or CLI by default
         webserver.port = ""; # Disable the webserver by default
-        misc.privacylevel = cfg.privacyLevel;
+        misc.privacyLevel = cfg.privacyLevel;
       })
 
       # Move state files to cfg.stateDirectory
@@ -268,7 +255,7 @@ in
         files = {
           database = "${cfg.stateDirectory}/pihole-FTL.db";
           gravity = "${cfg.stateDirectory}/gravity.db";
-          macvendor = "${cfg.stateDirectory}/macvendor.db";
+          macvendor = "${cfg.stateDirectory}/gravity.db";
           log.ftl = "${cfg.logDirectory}/FTL.log";
           log.dnsmasq = "${cfg.logDirectory}/pihole.log";
           log.webserver = "${cfg.logDirectory}/webserver.log";
@@ -361,8 +348,6 @@ in
 
       pihole-ftl-setup = {
         description = "Pi-hole FTL setup";
-        enable = builtins.length cfg.lists > 0;
-
         # Wait for network so lists can be downloaded
         after = [ "network-online.target" ];
         requires = [ "network-online.target" ];
@@ -430,15 +415,10 @@ in
         script =
           let
             days = toString cfg.queryLogDeleter.age;
-            database = cfg.settings.files.database;
+            database = "${cfg.stateDirectory}/pihole-FTL.db";
           in
           ''
             set -euo pipefail
-
-            # Avoid creating an empty database file if it doesn't yet exist
-            if [ ! -f "${database}" ]; then
-              exit 0;
-            fi
 
             echo "Deleting query logs older than ${days} days"
             ${getExe cfg.package} sqlite3 "${database}" "DELETE FROM query_storage WHERE timestamp <= CAST(strftime('%s', date('now', '-${days} day')) AS INT); select changes() from query_storage limit 1"

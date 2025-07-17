@@ -39,12 +39,11 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

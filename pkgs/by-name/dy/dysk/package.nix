@@ -7,16 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dysk";
-  version = "3.1.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     rev = "v${version}";
-    hash = "sha256-2YqKKgNOx5+DLzIEkJTYqTAuxmKMhpCb79w7qLabvOk=";
+    hash = "sha256-B6iEssB9+BUXO4p1aSzrOGlBA8TiUOZY7a9U8F9SXaQ=";
   };
 
-  cargoHash = "sha256-2raAjpHh49ifZQfG2/WK94gR0lQzF/5cgmUzd69Kh3o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qfKNxLtvVaXGVP0wzOoZ5jaViO4hcMoZIOqxrpXiWzc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,6 +38,6 @@ rustPlatform.buildRustPackage rec {
       koral
     ];
     mainProgram = "dysk";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

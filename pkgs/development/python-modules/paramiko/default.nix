@@ -3,6 +3,7 @@
   bcrypt,
   buildPythonPackage,
   cryptography,
+  fetchpatch,
   fetchPypi,
   gssapi,
   icecream,
@@ -17,13 +18,22 @@
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "4.0.0";
+  version = "3.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aiXwezgMycmojSuSCtNxZ6xGZ/jZiGzOvY+Q9lS11p8=";
+    hash = "sha256-ssZlvEWyshW9fX8DmQGxSwZ9oA86EeZkCZX9WPJmSCI=";
   };
+
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -47,8 +57,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-relaxed
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "paramiko" ];
 

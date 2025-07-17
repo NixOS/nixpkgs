@@ -68,9 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://danielnoethen.de/butt/Changelog.html";
-    description = "Easy to use, multi OS streaming tool";
+    description = "butt (broadcast using this tool) is an easy to use, multi OS streaming tool";
     homepage = "https://danielnoethen.de/butt/";
     license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "butt";
     platforms = lib.platforms.linux;
   };

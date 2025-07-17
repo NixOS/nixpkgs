@@ -8,7 +8,7 @@
   testers,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "overcommit";
   gemdir = ./.;
   exes = [ "overcommit" ];

@@ -1,7 +1,6 @@
 {
   lib,
   babel,
-  backrefs,
   buildPythonPackage,
   cairosvg,
   colorama,
@@ -21,6 +20,7 @@
   pillow,
   pygments,
   pymdown-extensions,
+  pythonOlder,
   regex,
   requests,
   trove-classifiers,
@@ -28,14 +28,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.6.17";
+  version = "9.6.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = version;
-    hash = "sha256-yl5bc037gr3oAUH01uNvNj7fIe8ca2jH+yfWlgMImZE=";
+    hash = "sha256-Di+m06LuS5mXzvmz8Cvby49HguUPbXEJf9PnR8fQ5jw=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +49,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     babel
-    backrefs
     colorama
     jinja2
     markdown
@@ -59,8 +60,6 @@ buildPythonPackage rec {
     regex
     requests
   ];
-
-  pythonRelaxDeps = [ "backrefs" ];
 
   optional-dependencies = {
     recommended = [

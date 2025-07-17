@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "icebreaker";
-  version = "0-unstable-2023-08-13";
+  version = "unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "jonhoo";

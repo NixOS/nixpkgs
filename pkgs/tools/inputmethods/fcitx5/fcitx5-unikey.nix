@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-unikey";
-  version = "5.1.7";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-unikey";
     rev = version;
-    hash = "sha256-ve+vu/bK3GYgjn9KxuOsFZFi9eymi1TFlzUHu4fJAkk=";
+    hash = "sha256-hx3GXoloO3eQP9yhLY8v1ahwvOTCe5XcBey+ZbReRjE=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     qtbase
     fcitx5
     fcitx5-qt
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
   ];
 
   dontWrapQtApps = true;

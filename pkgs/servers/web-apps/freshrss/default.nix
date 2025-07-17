@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.27.0";
+  version = "1.26.3";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-jz9MFWkZBjiBu6jr1jp+bDpthB/OWE0pfrXhY5B08Jo=";
+    hash = "sha256-/573UMMALfU46uJefxf/DMhEcIMiI+CVR9lg9kXFdF0=";
   };
 
   postPatch = ''
@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.freshrss.org/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [
+      etu
       stunkymonkey
     ];
   };

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "evolutionhttp" ];
 
   meta = with lib; {
-    description = "HTTP client for controlling a Bryant Evolution HVAC system";
+    description = "An HTTP client for controlling a Bryant Evolution HVAC system";
     homepage = "https://github.com/danielsmyers/evolutionhttp";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

@@ -101,6 +101,14 @@ in
       extra-allowed-users = [ "nixseparatedebuginfod" ];
     };
 
-    environment.debuginfodServers = [ "http://${url}" ];
+    environment.variables.DEBUGINFOD_URLS = "http://${url}";
+
+    environment.systemPackages = [
+      # valgrind support requires debuginfod-find on PATH
+      (lib.getBin pkgs.elfutils)
+    ];
+
+    environment.etc."gdb/gdbinit.d/nixseparatedebuginfod.gdb".text = "set debuginfod enabled on";
+
   };
 }

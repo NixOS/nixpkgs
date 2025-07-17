@@ -4,7 +4,7 @@
   fetchurl,
   buildRubyGem,
   bundlerEnv,
-  ruby_3_4,
+  ruby,
   libarchive,
   libguestfs,
   qemu,
@@ -16,11 +16,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.4.8";
+  version = "2.4.3";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  hash = "sha256-AVagvZKbVT4RWrCJdskhABTunRM9tBb5+jovYM/VF+0=";
-
-  ruby = ruby_3_4;
+  hash = "sha256-ZQWdSCV5lBL8XUnOvCFwJAFk+tw30q2lRTHR93qeZ2I=";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -38,7 +36,6 @@ let
             inherit url hash;
           };
           inherit version;
-          dontCheckForBrokenSymlinks = true;
         };
       }
       // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix)
@@ -62,7 +59,7 @@ in
 buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
-  inherit ruby version;
+  inherit version;
 
   doInstallCheck = true;
   dontBuild = false;
@@ -74,6 +71,7 @@ buildRubyGem rec {
   buildInputs = [ openssl ];
 
   patches = [
+    ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
     ./0001-Revert-Merge-pull-request-12225-from-chrisroberts-re.patch

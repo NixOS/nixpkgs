@@ -43,15 +43,16 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+    ]);
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114

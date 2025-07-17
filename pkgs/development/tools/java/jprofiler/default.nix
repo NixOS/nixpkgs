@@ -15,12 +15,10 @@ let
   nameApp = "JProfiler";
 
   meta = {
-    description = "Java profiler for deep JVM analysis";
+    description = "JProfiler's intuitive UI helps you resolve performance bottlenecks";
     longDescription = ''
-      JProfiler bridges high-level analytics and low-level JVM data,
-      delivering unmatched insights to solve your toughest performance
-      problems, memory leaks, threading issues, and higher-level problems in
-      technologies like JDBC, JPA, and more.
+      JProfiler's intuitive UI helps you resolve performance bottlenecks,
+      pin down memory leaks and understand threading issues.
     '';
     homepage = "https://www.ej-technologies.com/products/jprofiler/overview.html";
     license = lib.licenses.unfree;

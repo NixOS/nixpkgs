@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "starlette-compress";
-  version = "1.6.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zaczero";
     repo = "starlette-compress";
     tag = version;
-    hash = "sha256-JRg0WeMVTYnSh2an+/duSXzAigbjbCZ9NUsSNpXlFg8=";
+    hash = "sha256-VEVPbCGE4BQo/0t/P785TyMHZGSKCicV6H0LbBsv8uo=";
   };
 
   build-system = [ hatchling ];

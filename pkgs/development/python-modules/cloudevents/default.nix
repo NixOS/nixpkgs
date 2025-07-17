@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  wheel,
   deprecation,
   flask,
   pydantic,
@@ -14,18 +15,19 @@
 
 buildPythonPackage rec {
   pname = "cloudevents";
-  version = "1.12.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudevents";
     repo = "sdk-python";
     tag = version;
-    hash = "sha256-0WdCBwYz3XJWjUP0gf+IWdF4ZgPHFvUZFoQp9taqNz8=";
+    hash = "sha256-YIvEAofWmnUblRd4jV3Zi3VdfocOnD05CMVm/abngyg=";
   };
 
   build-system = [
     setuptools
+    wheel
   ];
 
   pythonImportsCheck = [ "cloudevents" ];
@@ -42,13 +44,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "samples/http-image-cloudevents/image_sample_test.py" ];
 
-  __darwinAllowLocalNetworking = true;
-
-  meta = {
+  meta = with lib; {
     description = "Python SDK for CloudEvents";
     homepage = "https://github.com/cloudevents/sdk-python";
     changelog = "https://github.com/cloudevents/sdk-python/blob/${src.rev}/CHANGELOG.md";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

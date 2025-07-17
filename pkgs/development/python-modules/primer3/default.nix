@@ -2,11 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  click,
-  cython,
-  distutils,
   fetchFromGitHub,
+  cython,
   gcc,
+  click,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "primer3";
-  version = "2.2.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,13 +22,10 @@ buildPythonPackage rec {
     owner = "libnano";
     repo = "primer3-py";
     tag = "v${version}";
-    hash = "sha256-GrVYYjS/+LZScZETfk7YcSy2yrWc3SPumXvyQeEpFUg=";
+    hash = "sha256-Kp4JH57gEdj7SzY+7XGBzGloWuTSwUQRBK9QbgXQfUE=";
   };
 
-  build-system = [
-    distutils
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ cython ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 

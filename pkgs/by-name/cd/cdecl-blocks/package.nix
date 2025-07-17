@@ -15,11 +15,20 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "ridiculousfish";
     repo = "cdecl-blocks";
-    rev = "0fdb58f78bdc96409b07fa2945673e2d80c74557";
-    hash = "sha256-gR+a7J20oZMnHkM1LNwQOQaUt1BO84K5CzvaASHAnRE=";
+    rev = "1e6e1596771183d9bb90bcf152d6bc2055219a7e";
+    hash = "sha256-5XuiYkFe+QvVBRIXRieKoE0zbISMvU1iLgEfkw6GnlE=";
   };
 
-  patches = [ ./test_remove_interactive_line.patch ];
+  patches = [
+    ./cdecl-2.5-lex.patch
+    # when `USE_READLINE` is enabled, this option will not be present
+    ./test_remove_interactive_line.patch
+  ];
+
+  prePatch = ''
+    substituteInPlace cdecl.c \
+      --replace 'getline' 'cdecl_getline'
+  '';
 
   strictDeps = true;
 

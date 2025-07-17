@@ -37,6 +37,9 @@ buildGoModule rec {
     description = "LND Channel Management Tools";
     homepage = "https://github.com/lightninglabs/faraday";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags ];
+    maintainers = with maintainers; [
+      proofofkeags
+      prusnak
+    ];
   };
 }

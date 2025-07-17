@@ -41,18 +41,19 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
-  buildInputs = [
-    gmp
-  ]
-  ++ lib.optionals withBlas [
-    openblas
-  ]
-  ++ lib.optionals withNtl [
-    ntl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.pthreads
-  ];
+  buildInputs =
+    [
+      gmp
+    ]
+    ++ lib.optionals withBlas [
+      openblas
+    ]
+    ++ lib.optionals withNtl [
+      ntl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      windows.mingw_w64_pthreads
+    ];
 
   # We're not using autoreconfHook because flint's bootstrap
   # script calls autoreconf, among other things.
@@ -61,16 +62,17 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
-  configureFlags = [
-    "--with-gmp=${gmp}"
-    "--with-mpfr=${mpfr}"
-  ]
-  ++ lib.optionals withBlas [
-    "--with-blas=${openblas}"
-  ]
-  ++ lib.optionals withNtl [
-    "--with-ntl=${ntl}"
-  ];
+  configureFlags =
+    [
+      "--with-gmp=${gmp}"
+      "--with-mpfr=${mpfr}"
+    ]
+    ++ lib.optionals withBlas [
+      "--with-blas=${openblas}"
+    ]
+    ++ lib.optionals withNtl [
+      "--with-ntl=${ntl}"
+    ];
 
   enableParallelBuilding = true;
 

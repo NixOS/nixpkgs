@@ -61,14 +61,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.53.0";
+  version = "0.52.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     tag = "v${version}";
-    hash = "sha256-uXVL25U7szJF/v7OEsB9Ww1h6ziBxsMJdqhZG5qn0VU=";
+    hash = "sha256-AQBzYKD4RsPQBtq/FxFwYnSUf8wW87JOb2cOnk9MHDY=";
   };
 
   postPatch = ''
@@ -155,10 +155,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "-v"
-    "--hypothesis-profile ci"
     # Follow upstream with settings
+    "-m 'not serial'"
+    "--hypothesis-profile ci"
     "--durations=20"
   ];
 
@@ -167,10 +168,6 @@ buildPythonPackage rec {
     "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
     "tests/dataset/test_dataset_basic.py"
-  ];
-
-  disabledTestMarks = [
-    "serial"
   ];
 
   disabledTests = [
@@ -200,7 +197,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${src.tag}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;

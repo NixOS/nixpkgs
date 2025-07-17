@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.13.1";
+  version = "0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dewAk2y89WT2c2HEFxM2NEC2xO8PDBWStbD75ywXo1A=";
+    hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
 
   nativeCheckInputs = [
@@ -30,8 +30,6 @@ buildPythonPackage rec {
     factory-boy
     faker
   ];
-
-  doCheck = false; # missing pytest-codeblock
 
   # These tests require network access, but disabledTestPaths doesn't work.
   # the file needs to be `import`ed by another Python test file, so it

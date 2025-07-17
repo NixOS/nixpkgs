@@ -12,11 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-    runHook preConfigure
-
     echo "PREFIX = $out" > defines.make
-
-    runHook postConfigure
   '';
 
   meta = {

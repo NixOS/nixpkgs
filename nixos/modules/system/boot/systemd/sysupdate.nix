@@ -11,14 +11,7 @@ let
 
   format = pkgs.formats.ini { listToValue = toString; };
 
-  # TODO: Switch back to using utils.systemdUtils.lib.definitions once
-  # https://github.com/systemd/systemd/pull/38187 is resolved. Also ensure
-  # utils.systemdUtils.lib.definitions is capable of setting a custom file
-  # suffix.
-  sysupdateTransfers = lib.mapAttrs' (name: value: {
-    name = "sysupdate.d/${name}.transfer";
-    value.source = format.generate "${name}.transfer" value;
-  }) cfg.transfers;
+  definitionsDirectory = utils.systemdUtils.lib.definitions "sysupdate.d" format cfg.transfers;
 in
 {
   options.systemd.sysupdate = {
@@ -121,22 +114,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.systemd.package.withSysupdate;
-        message = "Cannot enable systemd-sysupdate with systemd package not built with sysupdate support";
-      }
-    ];
 
     systemd.additionalUpstreamSystemUnits = [
       "systemd-sysupdate.service"
       "systemd-sysupdate.timer"
       "systemd-sysupdate-reboot.service"
       "systemd-sysupdate-reboot.timer"
-      "systemd-sysupdated.service"
     ];
-
-    systemd.services.systemd-sysupdated.aliases = [ "dbus-org.freedesktop.sysupdate1.service" ];
 
     systemd.timers = {
       "systemd-sysupdate" = {
@@ -149,11 +133,8 @@ in
       };
     };
 
-    environment.etc = sysupdateTransfers;
+    environment.etc."sysupdate.d".source = definitionsDirectory;
   };
 
-  meta.maintainers = with lib.maintainers; [
-    nikstur
-    jmbaur
-  ];
+  meta.maintainers = with lib.maintainers; [ nikstur ];
 }

@@ -41,8 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ]
-  ++ optional-dependencies.loguru;
+  ] ++ optional-dependencies.loguru;
 
   pythonImportsCheck = [ "python_utils" ];
 

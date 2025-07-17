@@ -23,8 +23,7 @@ stdenv.mkDerivation {
     openssl
     boost
     gmp
-  ]
-  ++ lib.optional withProcps procps;
+  ] ++ lib.optional withProcps procps;
 
   cmakeFlags =
     lib.optionals (!withProcps) [ "-DWITH_PROCPS=OFF" ]

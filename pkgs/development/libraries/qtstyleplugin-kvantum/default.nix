@@ -39,17 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    libX11
-    libXext
-  ]
-  ++ lib.optionals isQt5 [ qtx11extras ]
-  ++ lib.optionals (!isQt5) [
-    kwindowsystem
-    qtwayland
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      libX11
+      libXext
+    ]
+    ++ lib.optionals isQt5 [ qtx11extras ]
+    ++ lib.optionals (!isQt5) [
+      kwindowsystem
+      qtwayland
+    ];
 
   sourceRoot = "${finalAttrs.src.name}/Kvantum";
 

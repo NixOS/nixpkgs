@@ -33,25 +33,11 @@ findpath() {
 }
 
 getvar() {
-    echo "$2" | grep -F "$1 " | sed -e 's/:=/:/g' | cut -d: -f2- | stripwhitespace
-}
-
-evalvar() {
-    local out="$(getvar "$1" "$2")"
-
-    # Replace $(VAR) within variables with other variables
-    while [[ "$out" =~ (\$\(([A-Za-z_][A-Za-z0-9_]*)\)) ]]; do
-        local match="${BASH_REMATCH[1]}"
-        local var="${BASH_REMATCH[2]}"
-        local value="$(getvar "$var" "$2")"
-        out="${out//$match/$value}"
-    done
-
-    echo $out
+    echo "$2" | grep -F "$1" | sed -e 's/:=/:/g' | cut -d: -f2- | stripwhitespace
 }
 
 attr="${UPDATE_NIX_ATTR_PATH:-curl-impersonate-chrome}"
-version="$(curl -sSL "https://api.github.com/repos/lexiforest/curl-impersonate/releases/latest" | jq -r .tag_name | sed -e 's/^v//')"
+version="$(curl -sSL "https://api.github.com/repos/yifeikong/curl-impersonate/releases/latest" | jq -r .tag_name | sed -e 's/^v//')"
 
 pkgpath="$(findpath "$attr")"
 
@@ -62,7 +48,7 @@ if [ "$updated" -eq 0 ]; then
     exit 0
 fi
 
-vars="$(curl -sSL "https://github.com/lexiforest/curl-impersonate/raw/v$version/Makefile.in" | grep '^ *[^ ]*_\(VERSION\|URL\|COMMIT\) *:=')"
+vars="$(curl -sSL "https://github.com/yifeikong/curl-impersonate/raw/v$version/Makefile.in" | grep '^ *[^ ]*_\(VERSION\|URL\|COMMIT\) *:=')"
 
 # TODO: Fix hash for curl.
 cat >"$(dirname "$pkgpath")"/deps.nix <<EOF
@@ -80,24 +66,14 @@ cat >"$(dirname "$pkgpath")"/deps.nix <<EOF
     hash = "$(narhash "https://github.com/google/brotli/archive/refs/tags/v$(getvar BROTLI_VERSION "$vars").tar.gz")";
   };
 
-  "boringssl-$(getvar BORING_SSL_COMMIT "$vars").zip" = fetchurl {
+  "boringssl.zip" = fetchurl {
     url = "https://github.com/google/boringssl/archive/$(getvar BORING_SSL_COMMIT "$vars").zip";
     hash = "$(narhash "https://github.com/google/boringssl/archive/$(getvar BORING_SSL_COMMIT "$vars").zip")";
   };
 
-  "nghttp2-$(getvar NGHTTP2_VERSION "$vars").tar.bz2" = fetchurl {
-    url = "$(evalvar NGHTTP2_URL "$vars")";
-    hash = "$(narhash "$(evalvar NGHTTP2_URL "$vars")")";
-  };
-
-  "ngtcp2-$(getvar NGTCP2_VERSION "$vars").tar.bz2" = fetchurl {
-    url = "$(evalvar NGTCP2_URL "$vars")";
-    hash = "$(narhash "$(evalvar NGTCP2_URL "$vars")")";
-  };
-
-  "nghttp3-$(getvar NGHTTP3_VERSION "$vars").tar.bz2" = fetchurl {
-    url = "$(evalvar NGHTTP3_URL "$vars")";
-    hash = "$(narhash "$(evalvar NGHTTP3_URL "$vars")")";
+  "$(getvar NGHTTP2_VERSION "$vars").tar.bz2" = fetchurl {
+    url = "$(getvar NGHTTP2_URL "$vars")";
+    hash = "$(narhash "$(getvar NGHTTP2_URL "$vars")")";
   };
 }
 EOF

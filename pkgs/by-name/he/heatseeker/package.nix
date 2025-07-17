@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ZKwRXtfIYEblsGjSSiVCl9XztM43rzBofQpPNGMPu+w=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-X4OTzgInh0D+EYCPkN2qyizzhARIOGwxJ2N9ZcrX/Ak=";
 
   # https://github.com/rschmitt/heatseeker/issues/42

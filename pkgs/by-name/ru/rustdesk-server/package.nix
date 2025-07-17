@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk-server";
-    tag = version;
+    rev = version;
     hash = "sha256-5LRMey1cxmjLg1s9RtVwgPjHjwYLSQHa6Tyv7r/XEQs=";
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-U1LTnqi2iEsm2U7t0Fr4VJWLo1MdQmeTKrPsNqRWap0=";
 
   nativeBuildInputs = [

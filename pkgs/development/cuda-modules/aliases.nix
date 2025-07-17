@@ -19,10 +19,4 @@ builtins.mapAttrs mkRenamed {
     path = "cudaPackages.cudaMajorMinorVersion";
     package = final.cudaMajorMinorVersion;
   };
-
-  cudatoolkit-legacy-runfile = {
-    path = "cudaPackages.cudatoolkit";
-    package = final.cudatoolkit;
-  };
-
 }

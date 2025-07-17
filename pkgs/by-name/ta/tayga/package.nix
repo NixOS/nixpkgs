@@ -1,34 +1,23 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.5";
+  version = "0.9.2";
   pname = "tayga";
 
-  src = fetchFromGitHub {
-    owner = "apalrd";
-    repo = "tayga";
-    tag = finalAttrs.version;
-    hash = "sha256-xOm4fetFq2UGuhOojrT8WOcX78c6MLTMVbDv+O62x2E=";
+  src = fetchurl {
+    url = "http://www.litech.org/tayga/tayga-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
   };
 
-  makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
-
-  preBuild = ''
-    echo "#define TAYGA_VERSION \"${finalAttrs.version}\"" > version.h
-  '';
-
-  installPhase = ''
-    install -Dm755 tayga $out/bin/tayga
-    install -D tayga.conf.5 $out/share/man/man5/tayga.conf.5
-    install -D tayga.8 $out/share/man/man8/tayga.8
-    cp -R docs $out/share/
-    cp tayga.conf.example $out/share/docs/
-  '';
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-address-of-packed-member"
+    "-Wno-implicit-function-declaration"
+  ];
 
   passthru.tests.tayga = nixosTests.tayga;
 
@@ -41,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       It is intended to provide production-quality NAT64 service
       for networks where dedicated NAT64 hardware would be overkill.
     '';
-    homepage = "https://github.com/apalrd/tayga";
+    homepage = "http://www.litech.org/tayga";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.linux;

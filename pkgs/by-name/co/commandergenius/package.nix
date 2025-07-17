@@ -18,14 +18,14 @@
   xorg,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "commandergenius";
   version = "3.5.2";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-4WfHdgn8frcDVa3Va6vo/jZihf09vIs+bNdAxScgovE=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,APPDIR games,APPDIR bin,' src/install.cmake
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Modern Interpreter for the Commander Keen Games";
     longDescription = ''
       Commander Genius is an open-source clone of
@@ -82,8 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       are required to do so
     '';
     homepage = "https://github.com/gerstrong/Commander-Genius";
-    maintainers = with lib.maintainers; [ hce ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ hce ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
-})
+}

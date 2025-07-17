@@ -29,14 +29,15 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    boost
-    vapoursynth
-  ]
-  ++ lib.optionals openclSupport [
-    ocl-icd
-    opencl-headers
-  ];
+  buildInputs =
+    [
+      boost
+      vapoursynth
+    ]
+    ++ lib.optionals openclSupport [
+      ocl-icd
+      opencl-headers
+    ];
 
   postPatch = ''
     substituteInPlace meson.build \

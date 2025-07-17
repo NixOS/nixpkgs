@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gost";
-  version = "3.2.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "go-gost";
     repo = "gost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zFGoM+fYO/o70LJ2fbzhMv4qbjLozJGmGbudqHjCFRU=";
+    hash = "sha256-4ZfGxhXespaZNspvbwZ/Yz2ncqtY3wxJPQsqVILayao=";
   };
 
-  vendorHash = "sha256-W3CHttD9iGpl2wG/Pa21YY6ACf5M894p25nLfMX0+F4=";
+  vendorHash = "sha256-lWuLvYF9Sl+k8VnsujvRmj7xb9zst+g//Gkg7VwtWkg=";
 
   # Based on ldflags in upstream's .goreleaser.yaml
   ldflags = [

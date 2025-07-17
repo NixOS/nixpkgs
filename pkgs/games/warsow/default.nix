@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.warsow.net";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [
+      abbradar
     ];
     platforms = warsow-engine.meta.platforms;
   };

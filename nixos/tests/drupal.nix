@@ -51,6 +51,7 @@ in
 {
   name = "drupal";
   meta.maintainers = [
+    lib.maintainers.drupol
     lib.maintainers.OulipianSummer
   ];
 

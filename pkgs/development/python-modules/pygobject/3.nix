@@ -46,8 +46,7 @@ buildPythonPackage rec {
   buildInputs = [
     cairo
     glib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
     pycairo

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -40,7 +39,7 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd witness \
       --bash <($out/bin/witness completion bash) \
       --fish <($out/bin/witness completion fish) \

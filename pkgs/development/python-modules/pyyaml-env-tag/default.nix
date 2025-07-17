@@ -2,25 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
   pyyaml,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyyaml-env-tag";
-  version = "1.1";
-  pyproject = true;
+  version = "0.1";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "pyyaml_env_tag";
     inherit version;
-    sha256 = "sha256-LrOLdaLSHuBHXW2X7BnGMoen4UAjHkIUlp0OrJI81/8=";
+    sha256 = "1nsva88jsmwn0cb9jnrfiz4dvs9xakkpgfii7g1xwkx1pmsjc2bh";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyyaml ];
+  propagatedBuildInputs = [ pyyaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -31,8 +31,6 @@ buildPythonPackage rec {
 
   dependencies = [ fnvhash ];
 
-  pythonRelaxDeps = [ "fnvhash" ];
-
   pythonImportsCheck = [ "fnv_hash_fast" ];
 
   nativeCheckInputs = [

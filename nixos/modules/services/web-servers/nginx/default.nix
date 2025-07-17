@@ -15,6 +15,8 @@ let
     vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null
   ) vhostsConfigs;
   vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
   virtualHosts = mapAttrs (
     vhostName: vhostConfig:
     let
@@ -108,7 +110,7 @@ let
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        X-Forwarded-Proto $scheme;
     proxy_set_header        X-Forwarded-Host $host;
-    proxy_set_header        X-Forwarded-Server $hostname;
+    proxy_set_header        X-Forwarded-Server $host;
   '';
 
   proxyCachePathConfig = concatStringsSep "\n" (
@@ -161,8 +163,6 @@ let
   configFile =
     (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
       ''
-        ${cfg.prependConfig}
-
         pid /run/nginx/nginx.pid;
         error_log ${cfg.logError};
         daemon off;
@@ -207,7 +207,6 @@ let
             ${optionalString cfg.recommendedTlsSettings ''
               # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
-              ssl_ecdh_curve X25519:prime256v1:secp384r1;
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
               # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
@@ -215,6 +214,10 @@ let
               # We don't enable insecure ciphers by default, so this allows
               # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
+
+              # OCSP stapling
+              ssl_stapling on;
+              ssl_stapling_verify on;
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
@@ -442,7 +445,6 @@ let
                   auth_basic off;
                   auth_request off;
                   proxy_pass http://${vhost.acmeFallbackHost};
-                  proxy_set_header Host $host;
                 }
               ''}
             '';
@@ -830,18 +832,6 @@ in
 
           If additional verbatim config in addition to other options is needed,
           [](#opt-services.nginx.appendConfig) should be used instead.
-        '';
-      };
-
-      prependConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Configuration lines prepended to the generated Nginx
-          configuration file. Can for example be used to load modules.
-          {option}`prependConfig` can be specified more than once
-          and its value will be concatenated (contrary to {option}`config`
-          which can be set only once).
         '';
       };
 
@@ -1459,12 +1449,11 @@ in
         mkCertOwnershipAssertion {
           cert = config.security.acme.certs.${name};
           groups = config.users.groups;
-          services = [
-            config.systemd.services.nginx
-          ]
-          ++ lib.optional (
-            cfg.enableReload || vhostCertNames != [ ]
-          ) config.systemd.services.nginx-config-reload;
+          services =
+            [ config.systemd.services.nginx ]
+            ++ lib.optional (
+              cfg.enableReload || vhostCertNames != [ ]
+            ) config.systemd.services.nginx-config-reload;
         }
       ) vhostCertNames;
 
@@ -1494,14 +1483,15 @@ in
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];
-      wants = concatLists (map (certName: [ "acme-${certName}.service" ]) vhostCertNames);
-      after = [
-        "network.target"
-      ]
-      # Ensure nginx runs with baseline certificates in place.
-      ++ map (certName: "acme-${certName}.service") vhostCertNames;
-      # Ensure nginx runs (with current config) before the actual ACME jobs run
-      before = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
+      wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+      after =
+        [ "network.target" ]
+        ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
+      # Nginx needs to be started in order to be able to request certificates
+      # (it's hosting the acme challenge after all)
+      # This fixes https://github.com/NixOS/nixpkgs/issues/81842
+      before = map (certName: "acme-${certName}.service") dependentCertNames;
       stopIfChanged = false;
       preStart = ''
         ${cfg.preStart}
@@ -1535,22 +1525,24 @@ in
         # New file permissions
         UMask = "0027"; # 0640 / 0750
         # Capabilities
-        AmbientCapabilities = [
-          "CAP_NET_BIND_SERVICE"
-          "CAP_SYS_RESOURCE"
-        ]
-        ++ optionals cfg.enableQuicBPF [
-          "CAP_SYS_ADMIN"
-          "CAP_NET_ADMIN"
-        ];
-        CapabilityBoundingSet = [
-          "CAP_NET_BIND_SERVICE"
-          "CAP_SYS_RESOURCE"
-        ]
-        ++ optionals cfg.enableQuicBPF [
-          "CAP_SYS_ADMIN"
-          "CAP_NET_ADMIN"
-        ];
+        AmbientCapabilities =
+          [
+            "CAP_NET_BIND_SERVICE"
+            "CAP_SYS_RESOURCE"
+          ]
+          ++ optionals cfg.enableQuicBPF [
+            "CAP_SYS_ADMIN"
+            "CAP_NET_ADMIN"
+          ];
+        CapabilityBoundingSet =
+          [
+            "CAP_NET_BIND_SERVICE"
+            "CAP_SYS_RESOURCE"
+          ]
+          ++ optionals cfg.enableQuicBPF [
+            "CAP_SYS_ADMIN"
+            "CAP_NET_ADMIN"
+          ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
@@ -1584,8 +1576,7 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
-        ]
-        ++ optional cfg.enableQuicBPF [ "bpf" ];
+        ] ++ optional cfg.enableQuicBPF [ "bpf" ];
       };
     };
 
@@ -1596,24 +1587,26 @@ in
     # This service waits for all certificates to be available
     # before reloading nginx configuration.
     # sslTargets are added to wantedBy + before
-    # which allows the acme-order-renew-$cert.service to signify the successful updating
+    # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.nginx-config-reload =
       let
-        sslOrderRenewServices = map (certName: "acme-order-renew-${certName}.service") vhostCertNames;
+        sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+        sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
       in
       mkIf (cfg.enableReload || vhostCertNames != [ ]) {
         wants = optionals cfg.enableReload [ "nginx.service" ];
-        wantedBy = sslOrderRenewServices ++ [ "multi-user.target" ];
-        # XXX Before the finished targets, after the renew services.
+        wantedBy = sslServices ++ [ "multi-user.target" ];
+        # Before the finished targets, after the renew services.
         # This service might be needed for HTTP-01 challenges, but we only want to confirm
         # certs are updated _after_ config has been reloaded.
-        after = sslOrderRenewServices;
+        before = sslTargets;
+        after = sslServices;
         restartTriggers = optionals cfg.enableReload [ configFile ];
         # Block reloading if not all certs exist yet.
         # Happens when config changes add new vhosts/certs.
         unitConfig = {
-          ConditionPathExists = optionals (vhostCertNames != [ ]) (
+          ConditionPathExists = optionals (sslServices != [ ]) (
             map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames
           );
           # Disable rate limiting for this, because it may be triggered quickly a bunch of times

@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Git commit message editor";
+    description = "Commit message editor";
     homepage = "https://github.com/sonnyp/Commit";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];

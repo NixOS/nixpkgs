@@ -26,13 +26,13 @@ let
 
   self = buildGhidraExtension (finalAttrs: {
     pname = "kaiju";
-    version = "250828";
+    version = "250709";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
       rev = finalAttrs.version;
-      hash = "sha256-edsQIBoOTY+WxVBtH1bbM7TZZHhA0jgVb2iJKC66iVM=";
+      hash = "sha256-xt/h0HeFCk4s1GIr3wKegGCGIUxMPFfyKKJ9o/WId/E=";
     };
 
     buildInputs = [
@@ -56,7 +56,7 @@ let
     };
 
     meta = {
-      description = "Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
+      description = "A Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
       homepage = "https://github.com/CERTCC/kaiju";
       downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${finalAttrs.version}";
       license = lib.licenses.bsd3;

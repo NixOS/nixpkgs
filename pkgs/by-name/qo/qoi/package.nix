@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qoi";
-  version = "0-unstable-2023-08-10"; # no upstream version yet.
+  version = "unstable-2023-08-10"; # no upstream version yet.
 
   src = fetchFromGitHub {
     owner = "phoboslab";

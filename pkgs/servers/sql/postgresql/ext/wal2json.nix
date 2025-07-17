@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  nix-update-script,
   nixosTests,
   postgresql,
   postgresqlBuildExtension,
@@ -9,20 +8,19 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "wal2json";
-  version = "2.6";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "wal2json_" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
-    tag = "wal2json_${lib.replaceString "." "_" finalAttrs.version}";
+    tag = "wal2json_2_6";
     hash = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^wal2json_(\\d+)_(\\d+)$" ];
-  };
   passthru.tests = nixosTests.postgresql.wal2json.passthru.override postgresql;
 
   meta = {

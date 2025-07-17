@@ -4,10 +4,7 @@
   gcc_meta,
   release_version,
   version,
-  getVersionFile,
   monorepoSrc ? null,
-  fetchpatch,
-  autoreconfHook269,
   runCommand,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r libssp "$out"
 
-    cp -r config "$out"
-    cp -r multilib.am "$out"
-
     cp config.guess "$out"
     cp config.rpath "$out"
     cp config.sub "$out"
@@ -37,50 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
     [[ -f MD5SUMS ]]; cp MD5SUMS "$out"
   '';
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "regular-libdir-includedir.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250720172933.2404828-1-git@JohnEricson.me/raw";
-      hash = "sha256-W7dcy1Tm3O2reK7kx83DRv8W97qUfaqDbKLiLXIegRw=";
-    })
-    (getVersionFile "libssp/force-regular-dirs.patch")
-  ];
-
-  postUnpack = ''
-    mkdir -p ./build
-    buildRoot=$(readlink -e "./build")
-  '';
-
-  preAutoreconf = ''
-    sourceRoot=$(readlink -e "./libssp")
-    cd $sourceRoot
-  '';
-
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [
-    autoreconfHook269
-  ];
+  sourceRoot = "${finalAttrs.src.name}/libssp";
 
   configurePlatforms = [
     "build"
     "host"
   ];
-
   configureFlags = [
     "--disable-dependency-tracking"
+    "--with-toolexeclibdir=${builtins.placeholder "out" + "/lib"}"
     "cross_compiling=true"
     "--disable-multilib"
   ];
 
   preConfigure = ''
-    cd "$buildRoot"
-    configureScript=$sourceRoot/configure
+    mkdir ../../build
+    cd ../../build
+    configureScript=../$sourceRoot/configure
   '';
 
   hardeningDisable = [

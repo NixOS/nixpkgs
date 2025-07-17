@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://textsnatcher.rf.gd/";
     changelog = "https://github.com/RajSolai/TextSnatcher/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;
+    maintainers = with maintainers; [ galaxy ];
     mainProgram = "com.github.rajsolai.textsnatcher";
     platforms = platforms.linux;
   };

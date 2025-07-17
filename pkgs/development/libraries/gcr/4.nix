@@ -60,17 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  buildInputs = [
-    libgcrypt
-    libtasn1
-    pango
-    libsecret
-    openssh
-    gtk4
-  ]
-  ++ lib.optionals systemdSupport [
-    systemd
-  ];
+  buildInputs =
+    [
+      libgcrypt
+      libtasn1
+      pango
+      libsecret
+      openssh
+      gtk4
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -86,13 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "systemd" systemdSupport)
     "--cross-file=${
       ini.generate "cross-file.conf" {
-        binaries = {
-          ssh-add = "'${lib.getExe' openssh "ssh-add"}'";
-          ssh-agent = "'${lib.getExe' openssh "ssh-agent"}'";
-        }
-        // lib.optionalAttrs systemdSupport {
-          systemctl = "'${lib.getExe' systemd "systemctl"}'";
-        };
+        binaries =
+          {
+            ssh-add = "'${lib.getExe' openssh "ssh-add"}'";
+            ssh-agent = "'${lib.getExe' openssh "ssh-agent"}'";
+          }
+          // lib.optionalAttrs systemdSupport {
+            systemctl = "'${lib.getExe' systemd "systemctl"}'";
+          };
       }
     }"
   ];

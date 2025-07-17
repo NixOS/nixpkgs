@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "kanit";
-  version = "0-unstable-2020-06-16";
+  version = "unstable-2020-06-16";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";

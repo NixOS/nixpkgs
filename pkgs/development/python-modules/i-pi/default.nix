@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.6";
+  version = "3.1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-S7UagXjltyy2E9s5yoq95KjMfpy/Pb0zoGl6z6yv2sA=";
+    hash = "sha256-az1rQlXwYUyPA4wP5wxBZtmJhQlvHxhRZF2O141i76o=";
   };
 
   build-system = [
@@ -46,8 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     pytest-mock
-  ]
-  ++ lib.optional (pythonAtLeast "3.12") distutils;
+  ] ++ lib.optional (pythonAtLeast "3.12") distutils;
 
   enabledTestPaths = [ "ipi_tests/unit_tests" ];
   disabledTests = [

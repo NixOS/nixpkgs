@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "dnsmon-go";
-  version = "0-unstable-2022-05-13";
+  version = "unstable-2022-05-13";
 
   src = fetchFromGitHub {
     owner = "jonpulsifer";

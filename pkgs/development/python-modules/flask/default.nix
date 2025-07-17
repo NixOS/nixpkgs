@@ -20,6 +20,7 @@
   python-dotenv,
 
   # tests
+  greenlet,
   pytestCheckHook,
 
   # reverse dependencies
@@ -31,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.2";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v2VsFcgBkO1iitCM39Oqo1vrCHhV4vSUkQqjd0zE/Yc=";
+    hash = "sha256-KEx7jy9Yy3N/DPHDD9fq8Mz83hlgmdJOzt4/wgBapZ4=";
   };
 
   build-system = [ flit-core ];
@@ -47,8 +48,7 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     async = [ asgiref ];
@@ -66,9 +66,9 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = {
-    changelog = "https://flask.palletsprojects.com/en/stable/changes/#version-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+  meta = with lib; {
+    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
     description = "Python micro framework for building web applications";
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       around Werkzeug and Jinja and has become one of the most popular
       Python web application frameworks.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nickcao ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

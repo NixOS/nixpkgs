@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "chonburi";
-  version = "0-unstable-2021-09-15";
+  version = "unstable-2021-09-15";
 
   src = fetchFromGitHub {
     owner = "cadsondemak";

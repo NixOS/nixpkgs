@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

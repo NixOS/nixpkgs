@@ -1,7 +1,6 @@
 {
   lib,
   appimageTools,
-  makeWrapper,
   runCommand,
   curl,
   gnugrep,
@@ -33,14 +32,11 @@ appimageTools.wrapType1 {
   pname = "pureref";
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-
   src = "${deb}/usr/bin/PureRef";
 
   extraInstallCommands = ''
     mv $out/bin/pureref $out/bin/PureRef
     cp -r ${deb}/usr/share $out
-    wrapProgram $out/bin/PureRef --set QT_QPA_PLATFORM xcb
   '';
 
   meta = with lib; {

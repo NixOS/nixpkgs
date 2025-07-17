@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  hatchling,
 
   # dependencies
   affine,
@@ -16,7 +16,6 @@
   pystac,
   rasterio,
   toolz,
-  typing-extensions,
   xarray,
 
   # optional-dependencies
@@ -31,17 +30,19 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.4.0";
+  version = "0.4.0rc2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-Ekyavcin13B4DAxv0/XG5QTBuLE7PRospAXe40fHeX0=";
+    hash = "sha256-I25qAJEryYaYO7KIVIoTlgzLS6PWkNG6b4NFyhghyKQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     affine
@@ -53,7 +54,6 @@ buildPythonPackage rec {
     pystac
     rasterio
     toolz
-    typing-extensions
     xarray
   ];
 
@@ -66,10 +66,9 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ]
-  ++ optional-dependencies.botocore;
+  ] ++ optional-dependencies.botocore;
 
-  disabledTestMarks = [ "network" ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # pystac href error (possible related to network)
@@ -81,12 +80,14 @@ buildPythonPackage rec {
     "test_output_geobox"
   ];
 
-  pythonImportsCheck = [ "odc.stac" ];
+  pythonImportsCheck = [
+    "odc.stac"
+  ];
 
   meta = {
-    description = "Load STAC items into xarray Datasets";
+    description = "Load STAC items into xarray Datasets.";
     homepage = "https://github.com/opendatacube/odc-stac/";
-    changelog = "https://github.com/opendatacube/odc-stac/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-stac/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };

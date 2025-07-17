@@ -9,15 +9,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "starboard";
-  version = "0.15.27";
+  version = "0.15.26";
 
   __darwinAllowLocalNetworking = true; # for tests
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "starboard";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-hp6mgJGcdJ2mm5pwo0/mCZ43VKnZtriySW+PcysgOAY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yQ4ABzN8EvD5qs0yjTaihM145K79LglprC2nlqAw0XU=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     }
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd starboard \
       --bash <($out/bin/starboard completion bash) \
       --fish <($out/bin/starboard completion fish) \

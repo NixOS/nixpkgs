@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  isPy3k,
   requests,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynanoleaf";
   version = "0.1.1";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MqCDdZxPmeAZ4AE2cEh4Qfjt+AfHoHdCqXH6GHBwcqc=";
+    sha256 = "32a083759c4f99e019e0013670487841f8edf807c7a07742a971fa18707072a7";
   };
 
-  build-system = [ setuptools ];
+  disabled = !isPy3k;
 
-  dependencies = [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   # pynanoleaf does not contain tests
   doCheck = false;
@@ -26,9 +26,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pynanoleaf" ];
 
   meta = with lib; {
-    description = "Python3 wrapper for the Nanoleaf API, capable of controlling both Nanoleaf Aurora and Nanoleaf Canvas";
     homepage = "https://github.com/Oro/pynanoleaf";
-    changelog = "https://github.com/Oro/pynanoleaf/releases/tag/${version}";
+    description = "Python3 wrapper for the Nanoleaf API, capable of controlling both Nanoleaf Aurora and Nanoleaf Canvas";
     license = licenses.mit;
     maintainers = with maintainers; [ oro ];
   };

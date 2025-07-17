@@ -57,8 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     elastic-transport
     pytest7CheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "flow.record" ];
 

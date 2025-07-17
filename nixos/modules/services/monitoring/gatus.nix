@@ -105,8 +105,7 @@ in
   config = mkIf cfg.enable {
     systemd.services.gatus = {
       description = "Automated developer-oriented status page";
-      after = [ "network-online.target" ];
-      requires = [ "network-online.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

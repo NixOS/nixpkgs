@@ -7,12 +7,12 @@
 
   # build inputs
   cargo,
-  openssl,
   pkg-config,
   protobuf,
   rustc,
   rustPlatform,
-  zstd-c,
+  pkgs, # zstd hidden by python3Packages.zstd
+  openssl,
 
   # dependencies
   bcrypt,
@@ -33,7 +33,7 @@
   orjson,
   overrides,
   posthog,
-  pybase64,
+  pulsar-client,
   pydantic,
   pypika,
   pyyaml,
@@ -58,7 +58,6 @@
   pytestCheckHook,
   sqlite,
   starlette,
-  writableTmpDirAsHomeHook,
 
   # passthru
   nixosTests,
@@ -67,20 +66,20 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "1.1.0";
+  version = "1.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-RVXMjniqZ0zUVhdgcYHFgYV1WrNZzBLW9jdrvV8AnRU=";
+    hash = "sha256-Q4PhJTRNzJeVx6DIPWirnI9KksNb8vfOtqb/q9tSK3c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}-vendor";
-    hash = "sha256-owy+6RttjVDCfsnn7MLuMn9/esHPwb7Z7jXqJ4IHfaE=";
+    hash = "sha256-+Ea2aRrsBGfVCLdOF41jeMehJhMurc8d0UKrpR6ndag=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -88,6 +87,11 @@ buildPythonPackage rec {
     url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.22.0.zip";
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
+
+  patches = [
+    # The fastapi servers can't set up their networking in the test environment, so disable for testing
+    ./disable-fastapi-fixtures.patch
+  ];
 
   postPatch = ''
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
@@ -97,7 +101,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "fastapi"
-    "posthog"
   ];
 
   build-system = [
@@ -114,7 +117,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    zstd-c
+    pkgs.zstd
   ];
 
   dependencies = [
@@ -136,7 +139,7 @@ buildPythonPackage rec {
     orjson
     overrides
     posthog
-    pybase64
+    pulsar-client
     pydantic
     pypika
     pyyaml
@@ -164,7 +167,6 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlite
     starlette
-    writableTmpDirAsHomeHook
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
@@ -180,53 +182,64 @@ buildPythonPackage rec {
   };
 
   pytestFlags = [
+    "-x" # these are slow tests, so stop on the first failure
     "-v"
     "-Wignore:DeprecationWarning"
     "-Wignore:PytestCollectionWarning"
   ];
 
-  # Skip the distributed and integration tests
-  # See https://github.com/chroma-core/chroma/issues/5315
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export CHROMA_RUST_BINDINGS_TEST_ONLY=1
+    export HOME=$(mktemp -d)
   '';
 
-  enabledTestPaths = [
-    "chromadb/test"
-  ];
-
   disabledTests = [
-    # Failure in name resolution
+    # Tests are flaky / timing sensitive
+    "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
+
+    # httpx ReadError
+    "test_not_existing_collection_delete"
+
+    # Tests launch a server and try to connect to it
+    # These either have https connection errors or name resolution errors
     "test_collection_query_with_invalid_collection_throws"
     "test_collection_update_with_invalid_collection_throws"
     "test_default_embedding"
+    "test_invalid_index_params"
+    "test_peek"
     "test_persist_index_loading"
-
-    # Deadlocks intermittently
-    "test_app"
-
-    # Depends on specific floating-point precision
-    "test_base64_conversion_is_identity_f16"
-
-    # No such file or directory: 'openssl'
+    "test_query_id_filtering_e2e"
+    "test_query_id_filtering_medium_dataset"
+    "test_query_id_filtering_small_dataset"
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+
+    # Apparent race condition with sqlite
+    # See https://github.com/chroma-core/chroma/issues/4661
+    "test_multithreaded_get_or_create"
   ];
 
   disabledTestPaths = [
     # Tests require network access
-    "chromadb/test/distributed"
-    "chromadb/test/ef"
+    "bin/rust_python_compat_test.py"
+    "chromadb/test/configurations/test_collection_configuration.py"
+    "chromadb/test/ef/test_default_ef.py"
+    "chromadb/test/ef/test_onnx_mini_lm_l6_v2.py"
+    "chromadb/test/ef/test_voyageai_ef.py"
+    "chromadb/test/property/"
     "chromadb/test/property/test_cross_version_persist.py"
-    "chromadb/test/stress"
+    "chromadb/test/stress/"
+    "chromadb/test/test_api.py"
 
-    # Excessively slow
-    "chromadb/test/property/test_add.py"
-    "chromadb/test/property/test_persist.py"
+    # Tests time out (waiting for server)
+    "chromadb/test/test_cli.py"
 
-    # ValueError: An instance of Chroma already exists for ephemeral with different settings
-    "chromadb/test/test_chroma.py"
+    # Cannot find protobuf file while loading test
+    "chromadb/test/distributed/test_log_failover.py"
   ];
 
   __darwinAllowLocalNetworking = true;

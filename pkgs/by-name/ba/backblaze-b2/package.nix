@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "4.4.2";
+  version = "4.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     tag = "v${version}";
-    hash = "sha256-ut1e/A36Tp4pgwZx+S8nYmjg3k/2CmRpdUfz3iOXTz0=";
+    hash = "sha256-EMdExF+5BJDIozAwJ/tqnq5X20uGvteDHTKsgvPEnK0=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -52,7 +52,6 @@ python3Packages.buildPythonApplication rec {
     pexpect
     pytestCheckHook
     pytest-xdist
-    tenacity
   ];
 
   preCheck = ''

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-history-search-multi-word";
-  version = "0-unstable-2021-11-13";
+  version = "unstable-2021-11-13";
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";

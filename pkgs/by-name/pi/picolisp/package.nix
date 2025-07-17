@@ -29,15 +29,16 @@ stdenv.mkDerivation {
     readline
   ];
   sourceRoot = ''pil21'';
-  preBuild = ''
-    cd src
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Flags taken from instructions at: https://picolisp.com/wiki/?alternativeMacOSRepository
-    makeFlagsArray+=(
-      SHARED='-dynamiclib -undefined dynamic_lookup'
-    )
-  '';
+  preBuild =
+    ''
+      cd src
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Flags taken from instructions at: https://picolisp.com/wiki/?alternativeMacOSRepository
+      makeFlagsArray+=(
+        SHARED='-dynamiclib -undefined dynamic_lookup'
+      )
+    '';
 
   installPhase = ''
     cd ..

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-monitor-query";
-  version = "2.0.0";
+  version = "1.4.1";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_monitor_query";
     inherit version;
-    hash = "sha256-ewXy/KxPtn/J93p9TF2YoPMJn7c7V8aewbCAdzmUZxs=";
+    hash = "sha256-cYJOK1d9Jd8NO+u7sFTAahrj68uRgxqbrAuzRNCt32g=";
   };
 
   nativeBuildInputs = [ setuptools ];

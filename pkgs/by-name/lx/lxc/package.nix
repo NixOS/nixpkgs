@@ -17,18 +17,19 @@
   pkg-config,
   systemd,
 
+  fetchpatch,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.5";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bnvKSs7w1cq3vP2BzX4kfDrGUIFhU4Fnu5pM81jPVQ8=";
+    hash = "sha256-zmL568PprrpIWTVCkScXHEzTZ+NduSH4r8ETnz4NY64=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
+
+    # Fixes https://github.com/zabbly/incus/issues/81
+    (fetchpatch {
+      name = "4536.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/lxc/lxc/pull/4536.patch";
+      hash = "sha256-yEqK9deO2MhfPROPfBw44Z752Mc5bR8DBKl1KrGC+5c=";
+    })
   ];
 
   mesonFlags = [
@@ -92,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
+      lxd = nixosTests.lxd.container;
     };
 
     updateScript = nix-update-script {

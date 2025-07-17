@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "6.1.0";
+  version = "6.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     tag = version;
-    hash = "sha256-i4oxZO3gBVc2PMFSISeytaO8YrzYR9YuUMxrEqrg2c4=";
+    hash = "sha256-i4cO1fzERKHJW2Ym0ogc2YID3IXVpBVDE33UumxvvHE=";
   };
 
   build-system = [ setuptools ];
@@ -40,8 +40,7 @@ buildPythonPackage rec {
     pytest-env
     pytest-mock
     pytestCheckHook
-  ]
-  ++ optional-dependencies.signal;
+  ] ++ optional-dependencies.signal;
 
   pythonImportsCheck = [ "pynamodb" ];
 
@@ -69,7 +68,7 @@ buildPythonPackage rec {
       verbose. PynamoDB presents you with a simple, elegant API.
     '';
     homepage = "http://jlafon.io/pynamodb.html";
-    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${src.tag}";
+    changelog = "https://github.com/pynamodb/PynamoDB/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ ];
   };

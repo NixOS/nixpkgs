@@ -65,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       libadwaita.devdoc
       webkitgtk.devdoc
       gobject-introspection.devdoc
-    ]
-    ++ extraDocsPackage;
+    ] ++ extraDocsPackage;
   };
 
   postPatch = ''

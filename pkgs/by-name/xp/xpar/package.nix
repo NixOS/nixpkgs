@@ -8,26 +8,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpar";
-  version = "0.6";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "kspalaiologos";
     repo = "xpar";
     rev = finalAttrs.version;
-    hash = "sha256-cvt5fXg3mKzh0GlL1qkA7G17p2ZA0PpFnE2cLYwlmUM=";
+    hash = "sha256-DMUDWQqYSQjGxYOpcfwNaaM21avcZ1w3IqEhuOaabrw=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
 
-  configureFlags = [
-    "--disable-arch-native"
-    "--enable-lto"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-x86-64"
-  ++ lib.optional stdenv.hostPlatform.isAarch64 "--enable-aarch64";
+  configureFlags =
+    [
+      "--disable-arch-native"
+      "--enable-lto"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-x86-64"
+    ++ lib.optional stdenv.hostPlatform.isAarch64 "--enable-aarch64";
 
   meta = {
     description = "Error/erasure code system guarding data integrity";

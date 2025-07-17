@@ -83,8 +83,7 @@ buildPythonPackage rec {
     pyparsing
     python-dateutil
     regex
-  ]
-  ++ lib.optionals gui [ tkinter ];
+  ] ++ lib.optionals gui [ tkinter ];
 
   optional-dependencies = {
     crypto = [ pycryptodome ];
@@ -124,21 +123,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     boto3
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  disabledTestPaths = [
-    "tests/integration_tests"
-  ]
-  ++ lib.optionals (!gui) [
-    # these tests import tkinter
-    "tests/unit_tests/arelle/test_updater.py"
-    "tests/unit_tests/arelle/test_import.py"
-  ];
+  disabledTestPaths =
+    [
+      "tests/integration_tests"
+    ]
+    ++ lib.optionals (!gui) [
+      # these tests import tkinter
+      "tests/unit_tests/arelle/test_updater.py"
+      "tests/unit_tests/arelle/test_import.py"
+    ];
 
   meta = {
     description = "Open source XBRL platform";

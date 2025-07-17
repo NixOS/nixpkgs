@@ -25,6 +25,7 @@ buildRustPackage {
     repo = "cargo-profiler";
   };
 
+  useFetchCargoVendor = true;
   inherit cargoHash;
 
   meta = with lib; {

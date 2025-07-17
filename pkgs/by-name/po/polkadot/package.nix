@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "2506-1";
+  version = "2503-5";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-stable${version}";
-    hash = "sha256-gnPfhdlOakfm9Ieitl8CBLBht1ECkfXhguK9eNeI6k4=";
+    hash = "sha256-hQ0tXPore1kbezBCsacAsSZAB1GHXEp5BJatxdi19eI=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoHash = "sha256-f6VI8pWZ+yRyFGO347ASD31k3WyBuRixqIUfzBqIr+s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fK8EBgIdXHfxpNWUyquEutZpkTGSe11ZsLwe13ZZ1+0=";
 
   buildType = "production";
   buildAndTestSubdir = "polkadot";
@@ -59,14 +60,11 @@ rustPlatform.buildRustPackage rec {
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [
     openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ];
 
   checkInputs = [
     cacert
   ];
-
-  doCheck = false;
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";

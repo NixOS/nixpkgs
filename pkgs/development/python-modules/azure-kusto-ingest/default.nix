@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "5.0.5";
+  version = "4.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-DEHTxSvc6AeBMEJuAiDavFj2xVfPmWKpZBaZcpHWHak=";
+    hash = "sha256-VndOEvSi4OMf/yAjNl34X9IFF0T+wNfjlPW8NfdrwUo=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -40,11 +40,6 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  pythonRelaxDeps = [
-    "azure-storage-blob"
-    "azure-storage-queue"
-  ];
-
   optional-dependencies = {
     pandas = [ pandas ];
   };
@@ -54,8 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     responses
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "azure.kusto.ingest" ];
 

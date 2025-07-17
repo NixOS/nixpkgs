@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.7";
+  version = "1.7.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "delfick";
     repo = "python-dict2xml";
     tag = "release-${version}";
-    hash = "sha256-66ODdslXF6nWYqJku8cNG0RPK/YGEfbpHwVLLnSoDrk=";
+    hash = "sha256-5GnIVpG2xHKYv27sSjjmm8JsZ1YR9Mvc3SqE4SnE84o=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to convert a Python dictionary into an XML string";
     homepage = "https://github.com/delfick/python-dict2xml";
-    changelog = "https://github.com/delfick/python-dict2xml/releases/tag/release-${src.tag}";
+    changelog = "https://github.com/delfick/python-dict2xml/releases/tag/release-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ johnazoidberg ];
   };

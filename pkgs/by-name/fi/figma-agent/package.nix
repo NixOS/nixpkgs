@@ -6,18 +6,23 @@
   fontconfig,
   freetype,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "figma-agent";
-  version = "0.3.2-unstable-2024-11-16";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "neetly";
     repo = "figma-agent-linux";
-    rev = "6709a1b7ffcbfb227472d8f017bfbbda77ddca7d";
-    sha256 = "sha256-Cq+ivyrj6wt7DEUM730BG44sMkpOMt4qxb+J3itVar4=";
+    tag = version;
+    sha256 = "sha256-iXLQOc8gomOik+HIIoviw19II5MD6FM0W5DT3aqtIcM=";
   };
 
-  cargoHash = "sha256-QdEs1zaQ2CQT50nIhKxtp7zpJfa64xQgOy3sTOUGmxk=";
+  cargoPatches = [
+    ./0001-update-time.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4OAce76XCLlngC7BrX8eiQlHo+Mi2Tfrb9t1Rc/gSFA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,17 +34,11 @@ rustPlatform.buildRustPackage {
     freetype
   ];
 
-  checkFlags = [
-    # All tests fail due to unavailable bindings
-    "--skip=figma-agent-freetype-sys"
-  ];
-
   meta = {
-    description = "Figma Agent for Linux with a focus on performance";
     homepage = "https://github.com/neetly/figma-agent-linux";
+    description = "Figma Agent for Linux (a.k.a. Font Helper)";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ercao ];
     mainProgram = "figma-agent";
-    platforms = lib.platforms.linux;
   };
 }

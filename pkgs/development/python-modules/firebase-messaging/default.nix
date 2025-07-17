@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sphinxHook
-  ]
-  ++ optional-dependencies.docs;
+  ] ++ optional-dependencies.docs;
 
   pythonRelaxDeps = [
     "http-ece"

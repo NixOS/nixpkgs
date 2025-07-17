@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-iX5hEaQwCW9MuyafjXml8jV3EDnxRNUlOoy3Cur/Iyw=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-KljaAzYHbny7KHOO51MotdmNpHCKWdt6kc/FIpFN6c0=";
 
   nativeBuildInputs = [
@@ -43,15 +44,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    curl
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    xz
-  ];
+  buildInputs =
+    [
+      openssl
+      curl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      xz
+    ];
 
   buildFeatures = [ "no-self-update" ];
 

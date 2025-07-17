@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "teleports";
-  version = "1.21";
+  version = "1.20";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/teleports";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V9yOQbVXtZGxdiieggPwHd17ilRZ0xMEI2yphgjx188=";
+    hash = "sha256-hHnQjitBI4RX8DwX1HHicpgAl3pznWN4wC4lkhlh+OI=";
   };
 
   patches = [

@@ -8,7 +8,7 @@
   pyserial,
   pyserial-asyncio,
   pyserial-asyncio-fast,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.70";
+  version = "0.0.62";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     tag = version;
-    hash = "sha256-NrCA0KPD363Pyg+KBcZ6dVonP+GrE3TytSuV6wNnBYA=";
+    hash = "sha256-UM2cxiLXWYuidtmIIpA8CrFZqOpWDUc+A0nY4cRYuus=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-timeout
     pytest-xdist
     pytestCheckHook

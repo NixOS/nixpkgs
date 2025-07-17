@@ -149,36 +149,38 @@ let
           ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
-        policies = {
-          DisableAppUpdate = true;
-        }
-        // lib.optionalAttrs usesNixExtensions {
-          ExtensionSettings = {
-            "*" = {
-              blocked_install_message = "You can't have manual extension mixed with nix extensions";
-              installation_mode = "blocked";
+        policies =
+          {
+            DisableAppUpdate = true;
+          }
+          // lib.optionalAttrs usesNixExtensions {
+            ExtensionSettings =
+              {
+                "*" = {
+                  blocked_install_message = "You can't have manual extension mixed with nix extensions";
+                  installation_mode = "blocked";
+                };
+              }
+              // lib.foldr (
+                e: ret:
+                ret
+                // {
+                  "${e.extid}" = {
+                    installation_mode = "allowed";
+                  };
+                }
+              ) { } extensions;
+
+            Extensions = {
+              Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
             };
           }
-          // lib.foldr (
-            e: ret:
-            ret
-            // {
-              "${e.extid}" = {
-                installation_mode = "allowed";
-              };
-            }
-          ) { } extensions;
-
-          Extensions = {
-            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
-          };
-        }
-        // lib.optionalAttrs smartcardSupport {
-          SecurityDevices = {
-            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
-          };
-        }
-        // extraPolicies;
+          // lib.optionalAttrs smartcardSupport {
+            SecurityDevices = {
+              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+            };
+          }
+          // extraPolicies;
       };
 
       mozillaCfg = ''
@@ -289,70 +291,71 @@ let
       ];
       buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
 
-      makeWrapperArgs = [
-        "--prefix"
-        "LD_LIBRARY_PATH"
-        ":"
-        "${finalAttrs.libs}"
+      makeWrapperArgs =
+        [
+          "--prefix"
+          "LD_LIBRARY_PATH"
+          ":"
+          "${finalAttrs.libs}"
 
-        "--suffix"
-        "PATH"
-        ":"
-        "${placeholder "out"}/bin"
+          "--suffix"
+          "PATH"
+          ":"
+          "${placeholder "out"}/bin"
 
-        "--set"
-        "MOZ_APP_LAUNCHER"
-        launcherName
+          "--set"
+          "MOZ_APP_LAUNCHER"
+          launcherName
 
-        "--set"
-        "MOZ_LEGACY_PROFILES"
-        "1"
+          "--set"
+          "MOZ_LEGACY_PROFILES"
+          "1"
 
-        "--set"
-        "MOZ_ALLOW_DOWNGRADE"
-        "1"
-      ]
-      ++ lib.optionals (!isDarwin) [
-        "--suffix"
-        "GTK_PATH"
-        ":"
-        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+          "--set"
+          "MOZ_ALLOW_DOWNGRADE"
+          "1"
+        ]
+        ++ lib.optionals (!isDarwin) [
+          "--suffix"
+          "GTK_PATH"
+          ":"
+          "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
 
-        "--suffix"
-        "XDG_DATA_DIRS"
-        ":"
-        "${adwaita-icon-theme}/share"
+          "--suffix"
+          "XDG_DATA_DIRS"
+          ":"
+          "${adwaita-icon-theme}/share"
 
-        "--set-default"
-        "MOZ_ENABLE_WAYLAND"
-        "1"
+          "--set-default"
+          "MOZ_ENABLE_WAYLAND"
+          "1"
 
-      ]
-      ++ lib.optionals (!xdg-utils.meta.broken && !isDarwin) [
-        # make xdg-open overridable at runtime
-        "--suffix"
-        "PATH"
-        ":"
-        "${lib.makeBinPath [ xdg-utils ]}"
+        ]
+        ++ lib.optionals (!xdg-utils.meta.broken && !isDarwin) [
+          # make xdg-open overridable at runtime
+          "--suffix"
+          "PATH"
+          ":"
+          "${lib.makeBinPath [ xdg-utils ]}"
 
-      ]
-      ++ lib.optionals hasMozSystemDirPatch [
-        "--set"
-        "MOZ_SYSTEM_DIR"
-        "${placeholder "out"}/lib/mozilla"
+        ]
+        ++ lib.optionals hasMozSystemDirPatch [
+          "--set"
+          "MOZ_SYSTEM_DIR"
+          "${placeholder "out"}/lib/mozilla"
 
-      ]
-      ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
-        "--run"
-        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
-
-      ]
-      ++ lib.optionals (!hasMozSystemDirPatch) (
-        lib.concatMap (ext: [
+        ]
+        ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
           "--run"
-          ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
-        ]) allNativeMessagingHosts
-      );
+          ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+
+        ]
+        ++ lib.optionals (!hasMozSystemDirPatch) (
+          lib.concatMap (ext: [
+            "--run"
+            ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+          ]) allNativeMessagingHosts
+        );
 
       buildCommand =
         let

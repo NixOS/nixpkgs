@@ -8,6 +8,7 @@
   jdk,
   findutils,
   sleuthkit,
+  ...
 }:
 let
   jdkWithJfx = jdk.override (

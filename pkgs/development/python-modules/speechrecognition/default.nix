@@ -77,8 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pocketsphinx
     respx
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 

@@ -104,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
       # is a modified version of tetrio-desktop, which is unfree.
       lib.licenses.unfree
     ];
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [
+      huantian
+      wackbyte
+    ];
     platforms = lib.platforms.linux;
   };
 })

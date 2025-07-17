@@ -549,6 +549,10 @@
   ./services/desktops/blueman.nix
   ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
+  ./services/desktops/deepin/app-services.nix
+  ./services/desktops/deepin/dde-api.nix
+  ./services/desktops/deepin/dde-daemon.nix
+  ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/dleyna.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
@@ -795,6 +799,13 @@
   ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
   ./services/misc/angrr.nix
+  ./services/matrix/mx-puppet-discord.nix
+  ./services/matrix/pantalaimon.nix
+  ./services/matrix/synapse-auto-compressor.nix
+  ./services/matrix/synapse.nix
+  ./services/misc/airsonic.nix
+  ./services/misc/amazon-ssm-agent.nix
+  ./services/misc/ananicy.nix
   ./services/misc/anki-sync-server.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
@@ -909,6 +920,7 @@
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
   ./services/misc/preload.nix
+  ./services/misc/private-gpt.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radicle.nix
@@ -1168,6 +1180,7 @@
   ./services/networking/frp.nix
   ./services/networking/frr.nix
   ./services/networking/g3proxy.nix
+  ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
@@ -1673,6 +1686,8 @@
   ./services/web-apps/part-db.nix
   ./services/web-apps/peering-manager.nix
   ./services/web-apps/peertube-runner.nix
+  ./services/web-apps/pds.nix
+  ./services/web-apps/peering-manager.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/photoprism.nix
@@ -1707,6 +1722,7 @@
   ./services/web-apps/snips-sh.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/sshwifty.nix
+  ./services/web-apps/sogo.nix
   ./services/web-apps/stash.nix
   ./services/web-apps/stirling-pdf.nix
   ./services/web-apps/strfry.nix

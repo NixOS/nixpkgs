@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "asmjit";
-  version = "0-unstable-2025-02-12";
+  version = "unstable-2025-02-12";
 
   src = fetchFromGitHub {
     owner = "asmjit";

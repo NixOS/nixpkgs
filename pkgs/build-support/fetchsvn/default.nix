@@ -63,8 +63,7 @@ else
       cacert
       subversion
       glibcLocales
-    ]
-    ++ lib.optional sshSupport openssh;
+    ] ++ lib.optional sshSupport openssh;
 
     SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
 

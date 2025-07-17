@@ -3,7 +3,7 @@
   runCommand,
   testers,
   treefmt,
-  nixfmt,
+  nixfmt-rfc-style,
 }:
 let
   inherit (treefmt) buildConfig withConfig;
@@ -29,7 +29,7 @@ let
 
   nixfmtExamplePackage = withConfig {
     settings = nixfmtExampleConfig;
-    runtimeInputs = [ nixfmt ];
+    runtimeInputs = [ nixfmt-rfc-style ];
   };
 in
 {

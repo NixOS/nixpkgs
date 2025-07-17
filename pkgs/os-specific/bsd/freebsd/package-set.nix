@@ -21,7 +21,9 @@ lib.packagesFromDirectoryRecursive {
   inherit sourceData patchesRoot versionData;
 
   # Keep the crawled portion of Nixpkgs finite.
-  buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd;
+  buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd // {
+    __attrsFailEvaluation = true;
+  };
 
   ports = fetchgit {
     url = "https://git.FreeBSD.org/ports.git";

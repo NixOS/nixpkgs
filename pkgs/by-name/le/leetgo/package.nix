@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd leetgo \
       --bash <($out/bin/leetgo completion bash) \
       --fish <($out/bin/leetgo completion fish) \

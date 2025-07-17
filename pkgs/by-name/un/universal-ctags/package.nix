@@ -38,14 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (p: [ p.docutils ]))
   ];
 
-  buildInputs = [
-    libyaml
-    pcre2
-    libxml2
-    jansson
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
-  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  buildInputs =
+    [
+      libyaml
+      pcre2
+      libxml2
+      jansson
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 

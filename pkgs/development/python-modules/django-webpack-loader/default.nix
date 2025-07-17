@@ -2,27 +2,29 @@
   lib,
   buildPythonPackage,
   django,
-  fetchFromGitHub,
+  fetchPypi,
+  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "3.2.1";
+  version = "3.1.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "django-webpack";
-    repo = "django-webpack-loader";
-    tag = version;
-    hash = "sha256-2CmIaVDSZlqfSJVPVBmOcT89znjxQhe7ZHhe7i6DCGY=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-8Rt5cA0b/BKZExvfS6R5wewgD4OhQA4aL+tcK6e2+MQ=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [ django ];
 
-  doCheck = false; # tests require fetching node_modules
+  # django.core.exceptions.ImproperlyConfigured (path issue with DJANGO_SETTINGS_MODULE?)
+  doCheck = false;
 
   pythonImportsCheck = [ "webpack_loader" ];
 

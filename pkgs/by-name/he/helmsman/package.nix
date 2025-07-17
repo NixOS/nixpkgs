@@ -2,16 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  ...
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "helmsman";
   version = "4.0.1";
 
   src = fetchFromGitHub {
-    owner = "mkubaczyk";
+    owner = "Praqma";
     repo = "helmsman";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-As0YjqMdPCgIzYWB1Wf3R11mwj6CglWZdvCRzlHDvkw=";
   };
 
@@ -31,4 +32,4 @@ buildGoModule (finalAttrs: {
       sarcasticadmin
     ];
   };
-})
+}

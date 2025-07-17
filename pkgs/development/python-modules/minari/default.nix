@@ -79,8 +79,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jaxlib
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # Require internet access

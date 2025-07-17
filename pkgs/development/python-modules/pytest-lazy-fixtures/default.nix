@@ -2,40 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
-  pytest,
+  poetry-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.3.2";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
     tag = version;
-    hash = "sha256-h2Zm8Vbw3L9WeXaeFE/fJqiOgI3r+XnJUnnELDkmyaU=";
+    hash = "sha256-EkvSmSTwoWmQlUZ4qBBqboOomxwn72H8taJ3CY142ms=";
   };
 
-  postPatch = ''
-    # Prevent double registration here and in the pyproject.toml entrypoint
-    # ValueError: Plugin already registered under a different name:
-    substituteInPlace tests/conftest.py \
-      --replace-fail '"pytest_lazy_fixtures.plugin",' ""
-  '';
+  build-system = [ poetry-core ];
 
-  build-system = [ hatchling ];
-
-  dependencies = [ pytest ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    # missing pytest-deadfixtures
-    "tests/test_deadfixtures_support.py"
-  ];
+  dependencies = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_lazy_fixtures" ];
 

@@ -11,19 +11,22 @@
   wrapGAppsHook4,
   glib,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+let
+  releaseVersion = "0.5.2";
+in
+rustPlatform.buildRustPackage {
   pname = "watchmate";
-  version = "0.5.3";
+  version = "${releaseVersion}-unstable-2024-08-13";
 
   src = fetchFromGitHub {
     owner = "azymohliad";
     repo = "watchmate";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-quEYcJiNPqbQqSfUf8mF2M4bHb7vnW1WzvF5OflubjE=";
+    rev = "e05edfae94a1973110c6f40f25133d5979f485ab";
+    hash = "sha256-fHWxn7hFx/9cnLlCHIC6hIJaLd1U3Ii9mJgTJ+Hw63M=";
   };
 
-  cargoHash = "sha256-k9nvg5wp95OZDYyRLL7s++fJHjO6r+lZtodJLPev988=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9OR0+OIUpDu37BDC1QJ0r4P/T+DtuHIStFfYT/kPXBE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,13 +51,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 assets/icons/io.gitlab.azymohliad.WatchMate-symbolic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
-  meta = {
+  meta = with lib; {
     description = "PineTime smart watch companion app for Linux phone and desktop";
     mainProgram = "watchmate";
     homepage = "https://github.com/azymohliad/watchmate";
-    changelog = "https://github.com/azymohliad/watchmate/raw/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
-    platforms = lib.platforms.linux;
+    changelog = "https://github.com/azymohliad/watchmate/raw/v${releaseVersion}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ chuangzhu ];
+    platforms = platforms.linux;
   };
-})
+}

@@ -8,7 +8,6 @@
   asciidoc,
   xmlto,
   enableDrafts ? false,
-  fetchpatch,
   # for passthru.tests
   azmq,
   cppzmq,
@@ -26,19 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "libzmq";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-q2h5y0Asad+fGB9haO4Vg7a1ffO2JSb7czzlhmT3VmI=";
   };
-
-  # Use proper STREQUAL instead of EQUAL to compare strings
-  # See: https://github.com/zeromq/libzmq/pull/4711
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/zeromq/libzmq/pull/4711/commits/55bd6b3df06734730d3012c17bc26681e25b549d.patch";
-      hash = "sha256-/FVah+s7f1hWXv3MXkYfIiV1XAiMVDa0tmt4BQmSgmY=";
-      name = "cacheline_undefined.patch";
-    })
-  ];
 
   strictDeps = true;
 

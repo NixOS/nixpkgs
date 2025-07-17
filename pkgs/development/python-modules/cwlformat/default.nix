@@ -6,13 +6,12 @@
   pytestCheckHook,
   pythonOlder,
   ruamel-yaml,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwlformat";
   version = "2022.02.18";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -32,18 +31,11 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
-
-  dependencies = [ ruamel-yaml ];
+  propagatedBuildInputs = [ ruamel-yaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cwlformat" ];
-
-  disabledTests = [
-    # Test compares output
-    "test_formatting_battery"
-  ];
 
   meta = with lib; {
     description = "Code formatter for CWL";

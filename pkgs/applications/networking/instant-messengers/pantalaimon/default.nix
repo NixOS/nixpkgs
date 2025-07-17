@@ -22,12 +22,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
   };
 
-  build-system = [
-    installShellFiles
-  ]
-  ++ (with python3Packages; [
-    setuptools
-  ]);
+  build-system =
+    [
+      installShellFiles
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   pythonRelaxDeps = [
     "matrix-nio"

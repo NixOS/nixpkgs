@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   chromium,
   fetchFromGitHub,
   libreoffice,
@@ -22,23 +22,18 @@ let
   libreoffice' = "${libreoffice}/lib/libreoffice/program/soffice.bin";
   inherit (lib) getExe;
 in
-buildGo125Module rec {
+buildGoModule rec {
   pname = "gotenberg";
-  version = "8.23.0";
-
-  outputs = [
-    "out"
-    "hyphen"
-  ];
+  version = "8.21.1";
 
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${version}";
-    hash = "sha256-sZALMMnOmewhhukPoW6sIw80uPHu+rAZmgYdlZdVH7A=";
+    hash = "sha256-2uILOK5u+HrdjqN+ZQjGv48QxSCrzSvnF+Ae6iCKCbU=";
   };
 
-  vendorHash = "sha256-fAAaX8E4di6ppU8osLPs6wnAe+e6ogOwp6dQAr42Mes=";
+  vendorHash = "sha256-sTcP/tyrCtvgYeOnsbqRFdBC1bbMAbA978t6LOTKFio=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
@@ -87,20 +82,14 @@ buildGo125Module rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall = ''
-    mkdir $hyphen
-    cp -r build/chromium-hyphen-data/*/* $hyphen/
-  '';
-
   preFixup = ''
     wrapProgram $out/bin/gotenberg \
-      --set CHROMIUM_HYPHEN_DATA_DIR_PATH "$hyphen" \
-      --set EXIFTOOL_BIN_PATH "${getExe exiftool}" \
-      --set JAVA_HOME "${jre'}" \
-      --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
       --set PDFTK_BIN_PATH "${getExe pdftk}" \
       --set QPDF_BIN_PATH "${getExe qpdf}" \
-      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}"
+      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}" \
+      --set EXIFTOOL_BIN_PATH "${getExe exiftool}" \
+      --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
+      --set JAVA_HOME "${jre'}"
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
-    tag = version;
+    rev = version;
     fetchSubmodules = true;
     hash = "sha256-0rRwIbOciPepo+ApvJiK5IyhMdq/4jsMlCSv0UeDETs=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://fna-xna.github.io/";
     license = lib.licenses.mspl;
     platforms = lib.platforms.linux;
-    mainProgram = "fna3d";
+    mainProgram = pname;
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
 }

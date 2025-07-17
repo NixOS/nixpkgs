@@ -5,7 +5,6 @@ in
   system ? builtins.currentSystem,
 
   nixpkgs ? null,
-  nixPath ? "nixVersions.latest",
 }:
 let
   nixpkgs' =
@@ -19,9 +18,10 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    # Nixpkgs generally — and CI specifically — do not use aliases,
-    # because we want to ensure they are not load-bearing.
-    allowAliases = false;
+    config = {
+      permittedInsecurePackages = [ "nix-2.3.18" ];
+    };
+    overlays = [ ];
   };
 
   fmt =
@@ -47,30 +47,12 @@ let
 
         programs.actionlint.enable = true;
 
-        programs.biome = {
-          enable = true;
-          settings.formatter = {
-            useEditorconfig = true;
-          };
-          settings.javascript.formatter = {
-            quoteStyle = "single";
-            semicolons = "asNeeded";
-          };
-          settings.json.formatter.enabled = false;
-        };
-        settings.formatter.biome.excludes = [
-          "*.min.js"
-          "pkgs/*"
-        ];
-
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt underneath, the default formatter for Nix code.
+        # This uses nixfmt-rfc-style underneath,
+        # the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
-        programs.nixfmt = {
-          enable = true;
-          package = pkgs.nixfmt;
-        };
+        programs.nixfmt.enable = true;
 
         programs.yamlfmt = {
           enable = true;
@@ -93,23 +75,6 @@ let
           includes = [ "*" ];
           priority = 1;
         };
-
-        # TODO: Upstream this into treefmt-nix eventually:
-        #   https://github.com/numtide/treefmt-nix/issues/387
-        settings.formatter.markdown-code-runner = {
-          command = pkgs.lib.getExe pkgs.markdown-code-runner;
-          options =
-            let
-              config = pkgs.writers.writeTOML "markdown-code-runner-config" {
-                presets.nixfmt = {
-                  language = "nix";
-                  command = [ (pkgs.lib.getExe pkgs.nixfmt) ];
-                };
-              };
-            in
-            [ "--config=${config}" ];
-          includes = [ "*.md" ];
-        };
       };
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
@@ -124,7 +89,7 @@ let
     };
 
 in
-rec {
+{
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
@@ -133,33 +98,19 @@ rec {
   # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
   # have eval divergence.
   eval = pkgs.callPackage ./eval {
-    nix = pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." nixPath) pkgs;
+    nix = pkgs.nixVersions.latest;
   };
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
-  manual-nixpkgs = (import ../doc { inherit pkgs; });
-  manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
-  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
-    nix = pkgs.nixVersions.latest;
-  };
+  manual-nixpkgs = (import ../doc { });
+  manual-nixpkgs-tests = (import ../doc { }).tests;
+  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix { };
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
+    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
-  tarball = import ../pkgs/top-level/make-tarball.nix {
-    # Mirrored from top-level release.nix:
-    nixpkgs = {
-      outPath = pkgs.lib.cleanSource ../.;
-      revCount = 1234;
-      shortRev = "abcdef";
-      revision = "0000000000000000000000000000000000000000";
-    };
-    officialRelease = false;
-    inherit pkgs lib-tests;
-    nix = pkgs.nixVersions.latest;
-  };
 }

@@ -34,8 +34,7 @@ buildPythonPackage rec {
     numpy
     pandas
     pytestCheckHook
-  ]
-  ++ optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "debuglater" ];
 

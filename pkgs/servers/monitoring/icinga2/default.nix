@@ -85,8 +85,7 @@ stdenv.mkDerivation rec {
     libedit
     openssl
     systemd
-  ]
-  ++ lib.optional withPostgresql libpq;
+  ] ++ lib.optional withPostgresql libpq;
 
   nativeBuildInputs = [
     cmake

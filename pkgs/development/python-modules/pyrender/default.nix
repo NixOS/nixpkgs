@@ -79,12 +79,13 @@ buildPythonPackage rec {
 
   env.PYOPENGL_PLATFORM = "egl"; # enables headless rendering during check
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-    mesa.llvmpipeHook
-  ];
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+      mesa.llvmpipeHook
+    ];
 
   disabledTestPaths = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform mesa.llvmpipeHook) [
     # requires opengl context
@@ -98,6 +99,5 @@ buildPythonPackage rec {
     description = "Easy-to-use glTF 2.0-compliant OpenGL renderer for visualization of 3D scenes";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   hypothesis,
   hatchling,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   trustme,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "4.0.2";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${version}";
-    hash = "sha256-LpD2bSgpClUpNguZaRy11WEwQviiCjqMJlRl6CRp50o=";
+    hash = "sha256-DHZyed94XgixMTeKQ7Lj4oykL42HMmEMSdNGRHCiRvM=";
   };
 
   build-system = [ hatchling ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiosmtpd
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytestCheckHook
     trustme
   ];

@@ -35,8 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     scim2-client
-  ]
-  ++ scim2-client.optional-dependencies.httpx;
+  ] ++ scim2-client.optional-dependencies.httpx;
 
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 

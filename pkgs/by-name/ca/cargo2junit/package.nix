@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-FPCLy4mIuUeHMuYgYGTs/fn8tUf55LVWBwrrA5hiG2k=";
 
   meta = with lib; {

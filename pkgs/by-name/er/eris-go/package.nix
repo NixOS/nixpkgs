@@ -41,6 +41,7 @@ buildGoModule rec {
     description = "Implementation of ERIS for Go";
     homepage = "https://codeberg.org/eris/eris-go";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "eris-go";
   };
 }

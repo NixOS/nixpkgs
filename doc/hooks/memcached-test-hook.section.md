@@ -4,12 +4,17 @@
 This hook starts a Memcached server during `checkPhase`. Example:
 
 ```nix
-{ stdenv, memcachedTestHook }:
+{
+  stdenv,
+  memcachedTestHook,
+}:
 stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [ memcachedTestHook ];
+  nativeCheckInputs = [
+    memcachedTestHook
+  ];
 }
 ```
 
@@ -40,10 +45,11 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [ memcachedTestHook ];
+  nativeCheckInputs = [
+    memcachedTestHook
+  ];
 
   preCheck = ''
     memcachedTestPort=1234;
   '';
 }
-```

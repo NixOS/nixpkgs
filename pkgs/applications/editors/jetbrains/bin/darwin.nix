@@ -42,7 +42,6 @@ stdenvNoCC.mkDerivation {
     cp -Tr *.app "$APP_DIR"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/${loname}"
-    #!${stdenvNoCC.shell}
     open -na '$APP_DIR' --args "\$@"
     EOF
     chmod +x "$out/bin/${loname}"

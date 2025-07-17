@@ -67,17 +67,9 @@ let
       # we can also run non-NixOS guests during tests. This, however, is
       # mostly futureproofing as the test instrumentation is still very
       # tightly coupled to NixOS.
-      PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/hvc0
+      PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
     '';
     serviceConfig.KillSignal = "SIGHUP";
-  };
-
-  managerSettings = {
-    # Don't clobber the console with duplicate systemd messages.
-    ShowStatus = false;
-    # Allow very slow start
-    DefaultTimeoutStartSec = 300;
-    DefaultDeviceTimeoutSec = 300;
   };
 
 in
@@ -123,7 +115,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        settings.Manager = managerSettings;
+        extraConfig = config.systemd.extraConfig;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -218,7 +210,13 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.settings.Manager = managerSettings;
+    systemd.extraConfig = ''
+      # Don't clobber the console with duplicate systemd messages.
+      ShowStatus=no
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
+    '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300

@@ -62,7 +62,7 @@ in
                 type = types.port;
                 default = qtcfg.localPort;
                 defaultText = lib.literalExpression "config.services.quicktun.<name>.localPort";
-                description = "Remote UDP port";
+                description = " remote UDP port";
               };
 
               remoteFloat = mkOption {

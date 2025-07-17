@@ -73,21 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    bison
-    flex
-    cmake
-    protobuf
-    python3
-  ]
-  ++ lib.optionals enableDocumentation [
-    doxygen
-    graphviz
-  ]
-  ++ lib.optionals enableBPF [
-    libllvm
-    libbpf
-  ];
+  nativeBuildInputs =
+    [
+      bison
+      flex
+      cmake
+      protobuf
+      python3
+    ]
+    ++ lib.optionals enableDocumentation [
+      doxygen
+      graphviz
+    ]
+    ++ lib.optionals enableBPF [
+      libllvm
+      libbpf
+    ];
 
   buildInputs = [
     protobuf

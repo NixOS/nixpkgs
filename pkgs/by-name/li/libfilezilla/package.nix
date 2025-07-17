@@ -26,15 +26,16 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    gettext
-    gnutls
-    nettle
-    libxcrypt
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      gettext
+      gnutls
+      nettle
+      libxcrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   enableParallelBuilding = true;
 

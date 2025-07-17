@@ -28,8 +28,7 @@ buildPythonPackage rec {
     pycryptodome
     enlighten
     zstandard
-  ]
-  ++ lib.optional withGUI kivy;
+  ] ++ lib.optional withGUI kivy;
 
   # do not check, as nsz requires producation keys
   # dumped from a Nintendo Switch.

@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zstandard" ];
 
   meta = {
-    description = "Zstandard bindings for Python";
+    description = "zstandard bindings for Python";
     homepage = "https://github.com/indygreg/python-zstandard";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ arnoldfarkas ];

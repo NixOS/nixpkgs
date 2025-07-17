@@ -20,7 +20,7 @@
 let
   pythonWP = python3.withPackages (
     p: with p; [
-      openbabel
+      openbabel-bindings
       numpy
     ]
   );
@@ -29,32 +29,32 @@ let
   moleculesRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molecules";
-    tag = "1.101.0";
-    hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
+    rev = "1.0.0";
+    sha256 = "guY6osnpv7Oqt+HE1BpIqL10POp+x8GAci2kY0bLmqg=";
   };
   crystalsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "crystals";
-    tag = "1.101.0";
-    hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
+    rev = "1.0.1";
+    sha256 = "sH/WuvLaYu6akOc3ssAKhnxD8KNoDxuafDSozHqJZC4=";
   };
   fragmentsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "fragments";
-    tag = "1.101.0";
-    hash = "sha256-x10jGl3lAEfm8OxUZJnjXRJCQg8RLQZTstjwnt5B2bw=";
+    rev = "8dc711a59d016604b3e9b6d59dec178b8e6ccd36";
+    hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "avogadrolibs";
-  version = "1.101.0";
+  version = "1.100.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = pname;
-    tag = version;
-    hash = "sha256-0DJU40Etse90rdX8xByjQeUiBsJtEQozZQQsWsc4vxk=";
+    rev = version;
+    hash = "sha256-zDn5cgMBJYM27mfQHujxhIf4ZTljFxvFrKl7pNa4K9E=";
   };
 
   postUnpack = ''

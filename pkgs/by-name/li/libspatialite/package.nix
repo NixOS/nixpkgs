@@ -48,19 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for geos-config
   ];
 
-  buildInputs = [
-    freexl
-    geos
-    librttopo
-    libxml2
-    minizip
-    proj
-    sqlite
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      freexl
+      geos
+      librttopo
+      libxml2
+      minizip
+      proj
+      sqlite
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   enableParallelBuilding = true;
 

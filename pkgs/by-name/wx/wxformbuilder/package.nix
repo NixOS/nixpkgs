@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -36,16 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
-    makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    shared-mime-info
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.sigtool
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      shared-mime-info
+    ];
 
   buildInputs = [
     boost

@@ -62,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rsync
     makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     capstone

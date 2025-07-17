@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-allcxxplugins"
-  ]
-  ++ lib.optional withPython "--enable-pyext";
+  ] ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
 

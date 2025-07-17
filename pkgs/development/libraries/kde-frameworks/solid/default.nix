@@ -18,8 +18,7 @@ mkDerivation {
     bison
     extra-cmake-modules
     flex
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ media-player-info ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ media-player-info ];
   buildInputs = [
     qtdeclarative
     qttools

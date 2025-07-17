@@ -55,7 +55,7 @@ let
           type = types.str;
         };
 
-        botPolicy = mkDefaultOption "botPolicy" {
+        botPolicy = lib.mkOption {
           default = null;
           description = ''
             Anubis policy configuration in Nix syntax. Set to `null` to use the baked-in policy which should be
@@ -265,18 +265,7 @@ in
         wants = [ "network-online.target" ];
 
         environment = lib.mapAttrs (lib.const (lib.generators.mkValueStringDefault { })) (
-          lib.filterAttrs (_: v: v != null) (
-            instance.settings
-            // {
-              POLICY_FNAME =
-                if instance.settings.POLICY_FNAME != null then
-                  instance.settings.POLICY_FNAME
-                else if instance.botPolicy != null then
-                  jsonFormat.generate "${instanceName name}-botPolicy.json" instance.botPolicy
-                else
-                  null;
-            }
-          )
+          lib.filterAttrs (_: v: v != null) instance.settings
         );
 
         serviceConfig = {

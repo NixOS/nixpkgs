@@ -16,6 +16,7 @@
   dask,
   dask-awkward,
   dask-histogram,
+  fsspec-xrootd,
   hist,
   lz4,
   matplotlib,
@@ -41,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.7.3";
+  version = "2025.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-lCrmWcVzu8Ls0a+r2D1DMZ/Ysq3H9bPj13XOmAS1M5I=";
+    hash = "sha256-Lbhxgn9aBtR/wmyxMJjyP813miG9FjaJ+rdHM6oTcvw=";
   };
 
   build-system = [
@@ -69,6 +70,7 @@ buildPythonPackage rec {
     dask
     dask-awkward
     dask-histogram
+    fsspec-xrootd
     hist
     lz4
     matplotlib
@@ -84,8 +86,7 @@ buildPythonPackage rec {
     tqdm
     uproot
     vector
-  ]
-  ++ dask.optional-dependencies.array;
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed

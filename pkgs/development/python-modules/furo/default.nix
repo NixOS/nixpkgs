@@ -1,74 +1,47 @@
 {
   lib,
-  buildNpmPackage,
   buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  accessible-pygments,
-  beautifulsoup4,
-  pygments,
+  pythonOlder,
+  fetchPypi,
   sphinx,
+  beautifulsoup4,
   sphinx-basic-ng,
 }:
 
-let
-  pname = "furo";
-  version = "2025.07.19";
-
-  src = fetchFromGitHub {
-    owner = "pradyunsg";
-    repo = "furo";
-    tag = version;
-    hash = "sha256-pIF5zrh5YbkuSkrateEB/tDULSNbeVn2Qx+Fm3nOYGE=";
-  };
-
-  web = buildNpmPackage {
-    pname = "${pname}-web";
-    inherit version src;
-
-    npmDepsHash = "sha256-dcdHoyqF9zC/eKtEqMho7TK2E1KIvoXo0iwSPTzj+Kw=";
-
-    installPhase = ''
-      pushd src/furo/theme/furo/static
-      mkdir $out
-      cp -rv scripts styles $out/
-      popd
-    '';
-  };
-in
-
 buildPythonPackage rec {
-  inherit pname version src;
-  pyproject = true;
+  pname = "furo";
+  version = "2024.8.6";
+  format = "wheel";
 
-  postPatch = ''
-    # build with boring backend that does not manage a node env
-    substituteInPlace pyproject.toml \
-      --replace-fail "sphinx-theme-builder >= 0.2.0a10" "flit-core" \
-      --replace-fail "sphinx_theme_builder" "flit_core.buildapi"
+  disabled = pythonOlder "3.8";
 
-    pushd src/furo/theme/furo/static
-    cp -rv ${web}/{scripts,styles} .
-    popd
-  '';
-
-  build-system = [ flit-core ];
+  src = fetchPypi {
+    inherit pname version format;
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-bNl8WLR4E9NhnmPpCBFpiA++Mx8MqIPIcf8fPxGBT1w=";
+  };
 
   pythonRelaxDeps = [ "sphinx" ];
 
-  dependencies = [
-    accessible-pygments
-    beautifulsoup4
-    pygments
+  propagatedBuildInputs = [
     sphinx
+    beautifulsoup4
     sphinx-basic-ng
   ];
 
-  pythonImportsCheck = [ "furo" ];
+  installCheckPhase = ''
+    # furo was built incorrectly if this directory is empty
+    # Ignore the hidden file .gitignore
+    cd "$out/lib/python"*
+    if [ "$(ls 'site-packages/furo/theme/furo/static/' | wc -l)" -le 0 ]; then
+      echo 'static directory must not be empty'
+      exit 1
+    fi
+    cd -
+  '';
 
-  passthru = {
-    inherit web;
-  };
+  pythonImportsCheck = [ "furo" ];
 
   meta = with lib; {
     description = "Clean customizable documentation theme for Sphinx";

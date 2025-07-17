@@ -21,7 +21,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
-    setuptools-gettext
   ];
 
   buildInputs = [

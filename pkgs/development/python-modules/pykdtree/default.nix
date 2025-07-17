@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.4.3";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2Rh5MP+4yCLFJZW2SUi0c0ZpTuKknicCQgtY90PXhvU=";
+    hash = "sha256-EISP9qxzMraOZb+MLolme2tisHWq0nI0d0Smm/HIrX4=";
   };
 
   nativeBuildInputs = [

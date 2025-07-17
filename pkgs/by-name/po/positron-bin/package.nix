@@ -22,7 +22,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2025.09.0-139";
+  version = "2025.07.0-204";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -31,41 +31,40 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
-        hash = "sha256-N6urQYmpVoL2JeriHxO/H0J66U6nAez7U8w8qbzZ+ys=";
+        hash = "sha256-f1EQw6fKH4pgVG7+YcLPv6FawJ2TN507hYLD0pn+PlM=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-IbMLnI/SDDLKIL1sTWjez186tbY3SZtuNmfNe9b6PXw=";
+        hash = "sha256-SxjQPZ2wUmSIYOxBB6AS6Ue7ajXzMkY32nHdkZkNhBA=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-XlRj+1Gmo7HUzluehmJ4VjcIWbqWl2ncB0dfyC6iz8I=";
+        hash = "sha256-f27LC4+SXnkyePw/fw8r9JYsOQKVoIiFkAet/QtwbNg=";
       };
 
-  buildInputs = [
-    makeShellWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    gtk3
-    libglvnd
-    libxkbcommon
-    libgbm
-    musl
-    nss
-    stdenv.cc.cc
-    openssl
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libxkbfile
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    blas
-    patchelf
-  ];
+  buildInputs =
+    [ makeShellWrapper ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      gtk3
+      libglvnd
+      libxkbcommon
+      libgbm
+      musl
+      nss
+      stdenv.cc.cc
+      openssl
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libxkbfile
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      blas
+      patchelf
+    ];
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -142,7 +141,6 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-    ]
-    ++ platforms.darwin;
+    ] ++ platforms.darwin;
   };
 }

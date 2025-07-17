@@ -86,6 +86,7 @@ bundlerApp {
     homepage = "https://github.com/toy/image_optim";
     license = licenses.mit;
     maintainers = with maintainers; [
+      srghma
       nicknovitski
     ];
     platforms = platforms.all;

@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
     "bin"
     "dev"
     "out"
-  ]
-  ++ lib.optional enablePython "py";
+  ] ++ lib.optional enablePython "py";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
@@ -41,12 +40,13 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  configureFlags = [
-    "--enable-debug"
-  ]
-  ++ lib.optionals (!enablePython) [
-    "--without-cython"
-  ];
+  configureFlags =
+    [
+      "--enable-debug"
+    ]
+    ++ lib.optionals (!enablePython) [
+      "--without-cython"
+    ];
 
   doCheck = true;
 

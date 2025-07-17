@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stb";
-  version = "0-unstable-2023-01-29";
+  version = "unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";
@@ -44,11 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Single-file public domain libraries for C/C++";
     homepage = "https://github.com/nothings/stb";
-    license = with licenses; [
-      mit
-      # OR
-      unlicense
-    ];
+    license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = [ ];
   };

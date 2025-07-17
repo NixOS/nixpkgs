@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.4.0";
+  version = "6.2.20";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X/rihS5iOVAFJsqTG2Bq1V/G1ITFxxJIS+YDI0TKfE4=";
+    hash = "sha256-3AFbzalyrdQxPEBuQwJydydh8YaIN9m5XfT2h6Rcd/Y=";
   };
 
   buildInputs = [ php84 ];
@@ -38,13 +38,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     composerNoScripts = true;
     composerStrictValidation = true;
     strictDeps = true;
-    vendorHash = "sha256-ICoOD0cJrsSphJ9Ke86qO9/cOZst30pwAXDjerV+Ds4=";
+    vendorHash = "sha256-1tgNR1WXFymIqmTgFRPOvvuondVolT9uil0HDMTEL8Q=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-6SMXXc1aJiHpWloRuY6Rd6NhuS5xQ0QuInlu5fLUHvk=";
+    hash = "sha256-FHJVaAWBxZ6IsGT5Sqrfv3yCJC0DPX1SrrLFD70TAFY=";
   };
 
   preInstall = ''

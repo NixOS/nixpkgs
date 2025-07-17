@@ -23,7 +23,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.int;
         default = 8082;
         description = "Port for Homepage to bind to.";
       };
@@ -191,16 +191,6 @@ in
         default = { };
       };
 
-      proxmox = lib.mkOption {
-        inherit (settingsFormat) type;
-        description = ''
-          Homepage proxmox configuration.
-
-          See <https://gethomepage.dev/configs/proxmox/>.
-        '';
-        default = { };
-      };
-
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         description = ''
@@ -225,7 +215,6 @@ in
       "homepage-dashboard/services.yaml".source = settingsFormat.generate "services.yaml" cfg.services;
       "homepage-dashboard/settings.yaml".source = settingsFormat.generate "settings.yaml" cfg.settings;
       "homepage-dashboard/widgets.yaml".source = settingsFormat.generate "widgets.yaml" cfg.widgets;
-      "homepage-dashboard/proxmox.yaml".source = settingsFormat.generate "proxmox.yaml" cfg.proxmox;
     };
 
     systemd.services.homepage-dashboard = {

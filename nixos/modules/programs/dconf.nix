@@ -50,8 +50,7 @@ let
           (pkgs.writeTextDir "locks/nixos-generated-dconf-locks" (
             lib.concatStringsSep "\n" (if val.lockAll then mkAllLocks val.settings else val.locks)
           ))
-        ]
-        ++ (map checkDconfKeyfiles val.keyfiles);
+        ] ++ (map checkDconfKeyfiles val.keyfiles);
       }
     );
 

@@ -51,8 +51,7 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Robustly estimate trend and periodicity in a timeseries";

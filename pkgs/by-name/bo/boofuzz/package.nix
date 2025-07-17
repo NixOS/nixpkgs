@@ -17,17 +17,21 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-ffZVFmfDAJ+Qn3hbeHY/CvYgpDLxB+jaYOiYyZqZ7mo=";
   };
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
-  dependencies = with python3.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     attrs
     click
     colorama
     flask
     funcy
+    future
     psutil
     pyserial
     pydot
+    six
     tornado
   ];
 
@@ -38,22 +42,27 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "TestNetworkMonitor"
-    "TestNoResponseFailure"
-    "TestProcessMonitor"
-    "TestSocketConnection"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_time_repeater" ];
+  disabledTests =
+    [
+      "TestNetworkMonitor"
+      "TestNoResponseFailure"
+      "TestProcessMonitor"
+      "TestSocketConnection"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_time_repeater"
+    ];
 
-  pythonImportsCheck = [ "boofuzz" ];
+  pythonImportsCheck = [
+    "boofuzz"
+  ];
 
   meta = {
     description = "Network protocol fuzzing tool";
-    homepage = "https://github.com/jtpereyda/boofuzz";
-    changelog = "https://github.com/jtpereyda/boofuzz/blob/${src.tag}/CHANGELOG.rst";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "boo";
+    homepage = "https://github.com/jtpereyda/boofuzz";
+    changelog = "https://github.com/jtpereyda/boofuzz/blob/v${version}/CHANGELOG.rst";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

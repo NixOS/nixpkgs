@@ -38,8 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
-  ]
-  ++ optional-dependencies.pydantic;
+  ] ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "ulid" ];
 

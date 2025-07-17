@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,7 +7,7 @@
 
 let
   pname = "lefthook";
-  version = "1.13.0";
+  version = "1.11.15";
 in
 buildGoModule {
   inherit pname version;
@@ -17,10 +16,10 @@ buildGoModule {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-K7qTf5wTBhOZpYMfCs+G+EeAXClYw37H2L1tAfcVeAE=";
+    hash = "sha256-rfOsk8yMVCbTCk6CFL7qbp5oKQ21E9qD4ioyDBML7gw=";
   };
 
-  vendorHash = "sha256-n+5tIEI/s32w8oWws6loFrtc8CSb2d368uqKZRkVuJs=";
+  vendorHash = "sha256-kB12J6b6EbYur1QeLkwqrrzCf51rPF+7Hns1H7m4X9M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +30,7 @@ buildGoModule {
 
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd lefthook \
       --bash <($out/bin/lefthook completion bash) \
       --fish <($out/bin/lefthook completion fish) \

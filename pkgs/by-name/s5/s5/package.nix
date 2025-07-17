@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Cipher/decipher text within a file";
+    description = "cipher/decipher text within a file";
     mainProgram = "s5";
     homepage = "https://github.com/mvisonneau/s5";
     license = licenses.asl20;

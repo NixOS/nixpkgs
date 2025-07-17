@@ -32,16 +32,14 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "66.0";
+  version = "65.1";
   pyproject = true;
-
-  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "WeasyPrint";
     tag = "v${version}";
-    hash = "sha256-wmEDVEbikBpOQ5394IBPWQRjWZOLfMzEGxTtq4tt2Tw=";
+    hash = "sha256-iSeuRX1dnnrGZbcb1yTxOJPD5kgIWY6oz/0v02QJqSs=";
   };
 
   patches = [
@@ -66,8 +64,7 @@ buildPythonPackage rec {
     pyphen
     tinycss2
     tinyhtml5
-  ]
-  ++ fonttools.optional-dependencies.woff;
+  ] ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
     pkgs.ghostscript
@@ -108,11 +105,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/v${version}";
     description = "Converts web documents to PDF";
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.apm ];
+    badPlatforms = [
+      # Fatal Python error: Segmentation fault
+      # "...weasyprint/pdf/fonts.py", line 221 in _harfbuzz_subset
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

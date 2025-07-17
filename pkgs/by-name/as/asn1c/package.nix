@@ -5,13 +5,13 @@
   perl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "asn1c";
   version = "0.9.28";
 
   src = fetchurl {
-    url = "https://lionet.info/soft/asn1c-${finalAttrs.version}.tar.gz";
-    hash = "sha256-gAdEC2R+8t2ftz2THDOsEXZOavskN9vmOLtOX8gjhrk=";
+    url = "https://lionet.info/soft/asn1c-${version}.tar.gz";
+    sha256 = "1fc64g45ykmv73kdndr4zdm4wxhimhrir4rxnygxvwkych5l81w0";
   };
 
   outputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "http://lionet.info/asn1c/compiler.html";
     description = "Open Source ASN.1 Compiler";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ numinit ];
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.numinit ];
   };
-})
+}

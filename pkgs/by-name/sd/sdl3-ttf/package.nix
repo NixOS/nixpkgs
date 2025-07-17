@@ -33,8 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     sdl3

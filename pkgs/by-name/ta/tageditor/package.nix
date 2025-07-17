@@ -7,43 +7,38 @@
   cpp-utilities,
   mp4v2,
   libid3tag,
-  kdePackages,
-  qt6,
+  libsForQt5,
+  qt5,
   tagparser,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tageditor";
-  version = "3.9.7";
+  version = "3.9.5";
 
   src = fetchFromGitHub {
     owner = "martchus";
     repo = "tageditor";
     tag = "v${version}";
-    hash = "sha256-ETRlyAOCWIz8tioCsGXnmnuTnzWiUOb64vKsPm1hIt0=";
+    hash = "sha256-Sia6Y/V81WQj4oWjZAAR4o3TngfWq7sWxxiKEuFjQ2M=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    qt6.wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     mp4v2
     libid3tag
+    qt5.qtbase
+    qt5.qttools
+    qt5.qtx11extras
+    qt5.qtwebengine
     cpp-utilities
-    kdePackages.qtutilities
-    qt6.qtbase
-    qt6.qttools
-    qt6.qtwebengine
+    libsForQt5.qtutilities
     tagparser
-  ];
-
-  cmakeFlags = [
-    "-DQT_PACKAGE_PREFIX=Qt6"
-    "-DQt6_DIR=${qt6.qtbase}/lib/cmake/Qt6"
-    "-DQt6WebEngineWidgets_DIR=${qt6.qtwebengine}/lib/cmake/Qt6WebEngineWidgets"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

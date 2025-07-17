@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-iWRjXC+JaBA/z2eOHiiqFFtS2gug5/hkIpYrPdHyux0=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -48,6 +49,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Tool designed to enable Roblox developers to use professional-grade software engineering tools.
     '';
     mainProgram = "rojo";
-    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    maintainers = with lib.maintainers; [
+      wackbyte
+      HeitorAugustoLN
+    ];
   };
 })

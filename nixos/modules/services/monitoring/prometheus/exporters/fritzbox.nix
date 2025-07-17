@@ -22,7 +22,7 @@ in
     };
 
     gatewayPort = mkOption {
-      type = types.port;
+      type = types.int;
       default = 49000;
       description = ''
         The port of the FRITZ!Box UPnP service.

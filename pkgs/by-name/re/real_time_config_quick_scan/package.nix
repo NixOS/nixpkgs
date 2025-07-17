@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "realTimeConfigQuickScan";
-  version = "0-unstable-2020-07-23";
+  version = "unstable-2020-07-23";
 
   src = fetchFromGitHub {
     owner = "raboof";

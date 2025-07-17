@@ -40,7 +40,7 @@ let
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-wOFSPPEu7AGsEcqHG7xFWzFlYZRWAIvvfTj5FLZ3HFc=";
   };

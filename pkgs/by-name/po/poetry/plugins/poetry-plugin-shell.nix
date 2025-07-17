@@ -36,14 +36,15 @@ buildPythonPackage rec {
     shellingham
   ];
 
-  nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.ps
-  ];
+  nativeCheckInputs =
+    [
+      pytest-mock
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.ps
+    ];
 
   meta = {
     changelog = "https://github.com/python-poetry/poetry-plugin-shell/blob/${src.tag}/CHANGELOG.md";

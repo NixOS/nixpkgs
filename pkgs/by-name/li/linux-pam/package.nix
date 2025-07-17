@@ -2,141 +2,95 @@
   lib,
   stdenv,
   buildPackages,
-  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
   flex,
   db4,
   gettext,
-  ninja,
   audit,
-  linuxHeaders,
   libxcrypt,
-  bash,
-  bashNonInteractive,
   nixosTests,
-  meson,
-  pkg-config,
-  systemdLibs,
-  docbook5,
-  libxslt,
-  libxml2,
-  w3m-batch,
-  findXMLCatalogs,
-  docbook_xsl_ns,
-  nix-update-script,
-  withLogind ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  withAudit ?
-    lib.meta.availableOn stdenv.hostPlatform audit
-    # cross-compilation only works from platforms with linux headers
-    && lib.meta.availableOn stdenv.buildPlatform linuxHeaders,
+  autoreconfHook269,
+  pkg-config-unwrapped,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.7.1";
+  version = "1.6.1";
 
-  src = fetchFromGitHub {
-    owner = "linux-pam";
-    repo = "linux-pam";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kANcwxifQz2tYPSrSBSFiYNTm51Gr10L/zroCqm8ZHQ=";
-
+  src = fetchurl {
+    url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    hash = "sha256-+JI8dAFZBS1xnb/CovgZQtaN00/K9hxwagLJuA/u744=";
   };
 
-  __structuredAttrs = true;
+  patches = [
+    ./suid-wrapper-path.patch
+    # required for fixing CVE-2025-6020
+    (fetchpatch {
+      url = "https://github.com/linux-pam/linux-pam/commit/10b80543807e3fc5af5f8bcfd8bb6e219bb3cecc.patch";
+      hash = "sha256-VS3D3wUbDxDXRriIuEvvgeZixzDA58EfiLygfFeisGg=";
+    })
+    # Manually cherry-picked from 475bd60c552b98c7eddb3270b0b4196847c0072e
+    ./CVE-2025-6020.patch
+  ];
 
-  # patching unix_chkpwd is required as the nix store entry does not have the necessary bits
-  postPatch = ''
-    substituteInPlace modules/module-meson.build \
-      --replace-fail "sbindir / 'unix_chkpwd'" "'/run/wrappers/bin/unix_chkpwd'"
-  '';
+  # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
+  postPatch =
+    lib.optionalString (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform)
+      ''
+        rm CHANGELOG
+        touch ChangeLog
+      '';
 
   outputs = [
     "out"
     "doc"
-    "man"
-    "scripts"
-    # "modules"
+    "man" # "modules"
   ];
-
-  strictDeps = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
+  # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
   nativeBuildInputs = [
     flex
-    meson
-    ninja
-    pkg-config
-    gettext
-
-    libxslt
-    libxml2
-    w3m-batch
-    findXMLCatalogs
-    docbook_xsl_ns
-    docbook5
-  ];
+    autoreconfHook269
+    pkg-config-unwrapped
+  ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [
     db4
     libxcrypt
-    bash
-  ]
-  ++ lib.optionals withAudit [
-    audit
-  ]
-  ++ lib.optionals withLogind [
-    systemdLibs
-  ];
+  ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
 
-  mesonAutoFeatures = "auto";
-  mesonFlags = [
-    (lib.mesonEnable "logind" withLogind)
-    (lib.mesonEnable "audit" withAudit)
-    (lib.mesonEnable "pam_lastlog" (!stdenv.hostPlatform.isMusl)) # TODO: switch to pam_lastlog2, pam_lastlog is deprecated and broken on musl
-    (lib.mesonEnable "pam_unix" true)
-    # (lib.mesonBool "pam-debug" true) # warning: slower execution due to debug makes VM tests fail!
-    (lib.mesonOption "sysconfdir" "etc") # relative to meson prefix, which is $out
-    (lib.mesonEnable "elogind" false)
-    (lib.mesonEnable "econf" false)
-    (lib.mesonEnable "selinux" false)
-    (lib.mesonEnable "nis" false)
-    (lib.mesonBool "xtests" false)
-    (lib.mesonBool "examples" false)
+  configureFlags = [
+    "--includedir=${placeholder "out"}/include/security"
+    "--enable-sconfigdir=/etc/security"
+    # The module is deprecated. We re-enable it explicitly until NixOS
+    # module stops using it.
+    "--enable-lastlog"
   ];
 
-  postInstall = ''
-    moveToOutput sbin/pam_namespace_helper $scripts
-    moveToOutput etc/security/namespace.init $scripts
-  '';
+  installFlags = [
+    "SCONFIGDIR=${placeholder "out"}/etc/security"
+  ];
 
   doCheck = false; # fails
 
-  outputChecks.out.disallowedRequisites = [
-    bash
-    bashNonInteractive
-  ];
-
-  passthru = {
-    tests = {
-      inherit (nixosTests)
-        pam-oath-login
-        pam-u2f
-        pam-lastlog
-        shadow
-        sssd-ldap
-        ;
-    };
-    updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests)
+      pam-oath-login
+      pam-u2f
+      shadow
+      sssd-ldap
+      ;
   };
 
-  meta = {
-    changelog = "https://github.com/linux-pam/linux-pam/releases/tag/${finalAttrs.src.tag}";
+  meta = with lib; {
     homepage = "https://github.com/linux-pam/linux-pam";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
-    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
-})
+}

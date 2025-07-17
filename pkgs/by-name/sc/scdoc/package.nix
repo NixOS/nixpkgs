@@ -27,12 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "LDFLAGS+=-static" "LDFLAGS+="
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "HOST_SCDOC=${lib.getExe buildPackages.scdoc}"
+    ];
 
   doCheck = true;
 

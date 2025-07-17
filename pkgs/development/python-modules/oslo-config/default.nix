@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  debtcollector,
   netaddr,
   oslo-i18n,
   pbr,
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "10.0.0";
+  version = "9.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_config";
     inherit version;
-    hash = "sha256-Mz5nXbjGvncVs97PeMOYyhE4Q5IlqidGMuiTFIN/bqM=";
+    hash = "sha256-7qgAlQSr7mchN8WL2r2roYX0lrk8ha3SRuLNzr6dCKo=";
   };
 
   postPatch = ''
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    debtcollector
     netaddr
     oslo-i18n
     pbr

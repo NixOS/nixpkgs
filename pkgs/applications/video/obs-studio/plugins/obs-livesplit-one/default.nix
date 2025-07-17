@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-4Ar4ChSl226BVFyAnqpWDLxsZF63bxl++sWD+6aENW8=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-e0FDa72vzRb5AMVmtkvAkiQ5GUXsq0LekqF+wDYDsr8=";
 
   nativeBuildInputs = [
@@ -43,6 +44,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ maintainers.Bauke ];
-    inherit (obs-studio.meta) platforms;
+    platforms = obs-studio.meta.platforms;
   };
 }

@@ -27,8 +27,7 @@ stdenv.mkDerivation {
 
   paths = [
     wingpanel
-  ]
-  ++ selectedIndicators;
+  ] ++ selectedIndicators;
 
   passAsFile = [ "paths" ];
 

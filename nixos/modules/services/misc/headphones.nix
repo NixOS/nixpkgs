@@ -42,7 +42,7 @@ in
         description = "Host to listen on.";
       };
       port = lib.mkOption {
-        type = lib.types.port;
+        type = lib.types.ints.u16;
         default = 8181;
         description = "Port to bind to.";
       };

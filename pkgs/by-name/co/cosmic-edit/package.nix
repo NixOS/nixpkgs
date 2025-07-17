@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-mgUSkYtc+i9pXv0n3zLHwBXFxfeWlhbsFJKa7X+mI98=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-qfPLDgGeYGSO0ZKJooXRK0NnTqzJ6zq6RhBpTTUusQY=";
 
   # COSMIC applications now uses vergen for the About page

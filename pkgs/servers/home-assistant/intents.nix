@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -23,17 +22,17 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2025.9.3";
+  version = "2025.6.23";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "OHF-Voice";
+    owner = "home-assistant";
     repo = "intents-package";
-    tag = version;
+    rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-Oy8q7Gi5vn/xPj1AGRU3/o45AHLCoBxgdQ5Zcs3AFTM=";
+    hash = "sha256-0xFa4Xz2zjN5EQVd9XafkUvroAH4AIiF/9bqFAZcJ9U=";
   };
 
   build-system = [
@@ -48,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    # https://github.com/OHF-Voice/intents-package/blob/main/script/package#L23-L24
+    # https://github.com/home-assistant/intents-package/blob/main/script/package#L23-L24
     PACKAGE_DIR=$out/${python.sitePackages}/home_assistant_intents
     ${python.pythonOnBuildForHost.interpreter} script/merged_output.py $PACKAGE_DIR/data
     ${python.pythonOnBuildForHost.interpreter} script/write_languages.py $PACKAGE_DIR/data > $PACKAGE_DIR/languages.py
@@ -63,15 +62,13 @@ buildPythonPackage rec {
     "intents/tests"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isx86_64 [
-    # assert 100 == -100.0
-    "test_HassLightSet_name_brightness"
-  ];
+  # requires hassil 3.0.0, but Home Assistant is stuck on 2.2.3
+  doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant/intents/releases/tag/${version}";
     description = "Intents to be used with Home Assistant";
-    homepage = "https://github.com/OHF-Voice/intents-package";
+    homepage = "https://github.com/home-assistant/intents";
     license = licenses.cc-by-40;
     teams = [ teams.home-assistant ];
   };

@@ -74,15 +74,12 @@ stdenv.mkDerivation rec {
         '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "Variance-optimal paragraph formatter";
     homepage = "https://github.com/stephen-huan/inflow";
-    license = lib.licenses.unlicense;
+    license = licenses.unlicense;
     mainProgram = "inflow";
-    maintainers = with lib.maintainers; [
-      fbrs
-      stephen-huan
-    ];
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ fbrs ];
+    platforms = platforms.all;
   };
 }

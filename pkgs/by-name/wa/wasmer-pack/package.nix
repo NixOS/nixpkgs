@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+wqgYkdkuhPFkJBdQLnUKAGmUfGBU9mBfMRNBFmiT4E=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-PZudXmdPz6fG7NDC/yN7qG+RQFSzNynXo6SpYJEku9A=";
 
   cargoBuildFlags = [ "-p=wasmer-pack-cli" ];

@@ -5,7 +5,7 @@
   pytestCheckHook,
   crc,
   setuptools,
-  pytest-asyncio_0,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio_0
+    pytest-asyncio
   ];
 
   meta = {

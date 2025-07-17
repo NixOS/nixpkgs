@@ -11,6 +11,7 @@ let
 
   # Known broken plugins, PLEASE remove entries here whenever possible.
   broken-plugins = [
+    "github-copilot" # GitHub Copilot: https://github.com/NixOS/nixpkgs/issues/400317
   ];
 
   ides =

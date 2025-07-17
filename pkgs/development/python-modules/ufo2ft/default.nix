@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.6.0";
+  version = "3.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hKqTjD8cTgyxHZnaojPAT5JY11okvLiNOnemoULnpmw=";
+    hash = "sha256-FUITbL+FnscmZjZMlgh/dX4+tJR6MD0LoH5jDNisQkI=";
   };
 
   build-system = [
@@ -35,19 +35,20 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  dependencies = [
-    cu2qu
-    fontmath
-    fonttools
-    defcon
-    compreffor
-    booleanoperations
-    cffsubr
-    ufolib2
-    skia-pathops
-  ]
-  ++ fonttools.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      cu2qu
+      fontmath
+      fonttools
+      defcon
+      compreffor
+      booleanoperations
+      cffsubr
+      ufolib2
+      skia-pathops
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
     pytestCheckHook

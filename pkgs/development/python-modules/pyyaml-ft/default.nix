@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  cython,
+  cython_3_1,
   fetchFromGitHub,
   lib,
   libyaml,
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    cython
+    cython_3_1
     setuptools
   ];
 

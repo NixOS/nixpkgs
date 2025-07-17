@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
     maintainers = with maintainers; [
+      abbradar
       ericson2314
     ];
     platforms = platforms.unix;

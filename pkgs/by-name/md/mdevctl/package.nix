@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
     ./script-dir.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-LG5UaSUTF6pVx7BBLiZ/OmAZNCKswFlTqHymg3bDkuc=";
 
   nativeBuildInputs = [

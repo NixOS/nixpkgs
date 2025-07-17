@@ -1,25 +1,32 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  cmake,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libmaddy-markdown";
-  version = "1.6.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "progsource";
     repo = "maddy";
     tag = finalAttrs.version;
-    hash = "sha256-WMueY199ngw9BtHSY8zypfPZjWaQsSLUx8FDfQbBt5g=";
+    hash = "sha256-FlERT2A5bxvLElBcqHCFTORFRK04rJjvRYguqZ+foVo=";
   };
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  dontBuild = true;
+  dontConfigure = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/include/maddy
+    install -Dm444 include/maddy/* -t $out/include/maddy
+
+    runHook postInstall
+  '';
 
   passthru.updateScript = nix-update-script { };
 

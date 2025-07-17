@@ -50,8 +50,7 @@ buildDotnetModule rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-  ]
-  ++ lib.optionals withSELinux [ libselinux ];
+  ] ++ lib.optionals withSELinux [ libselinux ];
 
   postInstall = ''
     export ICON_DIR=$out/share/icons/hicolor/256x256/apps

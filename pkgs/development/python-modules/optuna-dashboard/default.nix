@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   alembic,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "optuna-dashboard";
-  version = "0.20.0b1";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna-dashboard";
     tag = "v${version}";
-    hash = "sha256-+mS9D71cwVkO0AqtU0pxK0PBvwCOxA6dPJyTVps4X+g=";
+    hash = "sha256-0L1QTw9srZsHWDVP4J0WMIvndn5pn51Hs/Xz/tusv0I=";
   };
 
   dependencies = [
@@ -58,12 +57,6 @@ buildPythonPackage rec {
     streamlit
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AttributeError: module 'numpy' has no attribute 'float128' ==> not available on 64-bit Darwin
-    "test_infer_sortable"
-    "test_serialize_numpy_floating"
-  ];
-
   # Disable tests that use playwright (needs network)
   disabledTestPaths = [
     "e2e_tests/test_dashboard/test_usecases/test_preferential_optimization.py"
@@ -74,14 +67,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optuna_dashboard" ];
 
-  # Temporarily disable tests as they hang due to a torch bug on darwin
-  # Will revert in https://github.com/NixOS/nixpkgs/pull/424873
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   meta = {
     description = "Real-time Web Dashboard for Optuna";
     homepage = "https://github.com/optuna/optuna-dashboard";
-    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/${src.tag}";
+    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "optuna-dashboard";

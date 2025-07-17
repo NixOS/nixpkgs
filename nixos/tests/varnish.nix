@@ -1,14 +1,6 @@
 { pkgs, package, ... }:
 let
   testPath = pkgs.hello;
-
-  # Same stateDir logic as in nixos/modules/services/web-servers/varnish/default.nix
-  stateDir =
-    hostName:
-    if (pkgs.lib.versionOlder package.version "7") then
-      "/var/run/varnish/${hostName}"
-    else
-      "/var/run/varnishd";
 in
 {
   name = "varnish";
@@ -45,16 +37,13 @@ in
               port = 8080;
               proto = "PROXY";
             }
+            { address = "@asdf"; }
             {
-              address = "${stateDir config.networking.hostName}/client.http.sock";
+              address = "/run/varnishd/client.http.sock";
               user = "varnish";
               group = "varnish";
               mode = "660";
             }
-          ]
-          ++ lib.optionals (lib.versionAtLeast package.version "7.3") [
-            # Support added in 7.3.0
-            { address = "@asdf"; }
           ];
           config = ''
             vcl 4.1;
@@ -70,25 +59,24 @@ in
         system.extraDependencies = [ testPath ];
 
         assertions =
-          let
-            cmdline = config.systemd.services.varnish.serviceConfig.ExecStart;
-          in
           map
-            (pattern: {
-              assertion = lib.hasInfix pattern cmdline;
-              message = "Address argument `${pattern}` missing in commandline `${cmdline}`.";
-            })
             (
-              [
-                " -a 0.0.0.0:80,HTTP "
-                " -a proxyport=0.0.0.0:8080,PROXY "
-                " -a ${stateDir config.networking.hostName}/client.http.sock,HTTP,user=varnish,group=varnish,mode=660 "
-                " -a 0.0.0.0:81 "
-              ]
-              ++ lib.optionals (lib.versionAtLeast package.version "7.3") [
-                " -a @asdf,HTTP "
-              ]
-            );
+              pattern:
+              let
+                cmdline = config.systemd.services.varnish.serviceConfig.ExecStart;
+              in
+              {
+                assertion = lib.hasInfix pattern cmdline;
+                message = "Address argument `${pattern}` missing in commandline `${cmdline}`.";
+              }
+            )
+            [
+              " -a 0.0.0.0:80,HTTP "
+              " -a proxyport=0.0.0.0:8080,PROXY "
+              " -a @asdf,HTTP "
+              " -a /run/varnishd/client.http.sock,HTTP,user=varnish,group=varnish,mode=660 "
+              " -a 0.0.0.0:81 "
+            ];
       };
 
     client =

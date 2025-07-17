@@ -7,7 +7,7 @@
   parse-type,
   poetry-core,
   pytest,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   typing-extensions,
 }:
@@ -37,8 +37,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # requires an update for pytest 8.4 compat
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin

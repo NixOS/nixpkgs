@@ -27,16 +27,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    (libevent.override { inherit openssl; })
-    libprom
-    libmicrohttpd
-    sqlite.dev
-  ]
-  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
-    systemdMinimal
-  ];
+  buildInputs =
+    [
+      openssl
+      (libevent.override { inherit openssl; })
+      libprom
+      libmicrohttpd
+      sqlite.dev
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdMinimal) [
+      systemdMinimal
+    ];
 
   patches = [
     ./pure-configure.patch

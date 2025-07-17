@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-i+ryTF2hlZFbyFft/769c800FkzL26E4snUsxU79sKY=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-gtaD2jqnGhoJGw9FAJefnU9BSGIODi/RrhTeB3MC69U=";
 
   postInstall = ''
@@ -45,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "find";
     maintainers = with lib.maintainers; [
       defelo
+      drupol
     ];
     platforms = lib.platforms.unix;
   };

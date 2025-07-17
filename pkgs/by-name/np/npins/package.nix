@@ -5,12 +5,14 @@
   makeWrapper,
 
   # runtime dependencies
+  nix, # for nix-prefetch-url
   nix-prefetch-git,
   git, # for git ls-remote
 }:
 
 let
   runtimePath = lib.makeBinPath [
+    nix
     nix-prefetch-git
     git
   ];
@@ -26,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-PPk9Ve1pM3X7NfGeGb8Jiq4YDEwAjErP4xzGwLaakTU=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-YRW2TqbctuGC2M6euR4bb0m9a19m8WQVvWucRMpzkQE=";
   buildNoDefaultFeatures = true;
   buildFeatures = [

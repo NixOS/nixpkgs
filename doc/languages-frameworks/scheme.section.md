@@ -11,7 +11,7 @@ itself is at the top level as `akku`. The packages could be used
 in a derivation's `buildInputs`, work inside of `nix-shell`, and
 are tested using [Chez](https://www.scheme.com/) &
 [Chibi](https://synthcode.com/wiki/chibi-scheme)
-Scheme at build time.
+Scheme during build time.
 
 Including a package as a build input is done in the typical Nix fashion.
 For example, to include
@@ -25,6 +25,7 @@ primarily for Chez Scheme in a derivation, one might write:
     akkuPackages.chez-srfi
   ];
 }
+
 ```
 
 The package index is located in `pkgs/tools/package-management/akku`

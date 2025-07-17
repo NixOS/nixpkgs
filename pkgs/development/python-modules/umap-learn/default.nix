@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.9.post2";
+  version = "0.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     tag = "release-${version}";
-    hash = "sha256-ollUXPVB07v6DkQ/d1eke0/j1f4Ekfygo1r6CtIRTuk=";
+    hash = "sha256-VR+qBZyFtpW/xuFXI8pxDkkwJKt9qajnUtvuZLFZtF0=";
   };
 
   build-system = [ setuptools ];
@@ -101,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
-    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${src.tag}";
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

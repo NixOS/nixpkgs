@@ -82,7 +82,9 @@ This example uses `ociTools.buildContainer` to create a simple container that ru
   bash,
 }:
 ociTools.buildContainer {
-  args = [ (lib.getExe bash) ];
+  args = [
+    (lib.getExe bash)
+  ];
 
   readonly = false;
 }

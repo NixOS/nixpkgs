@@ -2,14 +2,11 @@
   pkgs,
   config,
   lib,
-  utils,
   ...
 }:
 
 let
   inherit (lib) mapAttrs;
-  inherit (utils) escapeSystemdExecArgs;
-
   cfg = config.services.kerberos_server;
   package = config.security.krb5.package;
 
@@ -97,13 +94,7 @@ in
         "info:heimdal"
       ];
       serviceConfig = {
-        ExecStart = escapeSystemdExecArgs (
-          [
-            "${package}/libexec/kdc"
-            "--config-file=/etc/heimdal-kdc/kdc.conf"
-          ]
-          ++ cfg.extraKDCArgs
-        );
+        ExecStart = "${package}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
         Slice = "system-kerberos-server.slice";
         StateDirectory = "heimdal";
       };

@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iina";
-  version = "1.4.0";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
-    hash = "sha256-S5gHyI1dQcqmNfCkCDI649gKMwVHZpisLaRyYTakgbg=";
+    hash = "sha256-O4uRmfQaGMKqizDlgk0MnazMHVkXaDLqZQ9TP8vcajg=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       arkivm
-      FlameFlag
+      donteatoreo
       stepbrobd
     ];
     mainProgram = "iina";

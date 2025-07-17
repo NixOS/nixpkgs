@@ -35,15 +35,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xz
-  ];
+  buildInputs =
+    [
+      curl
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xz
+    ];
 
   checkFeatures = [ ];
 

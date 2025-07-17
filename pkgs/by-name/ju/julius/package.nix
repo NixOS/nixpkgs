@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "julius";
-  version = "1.8.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bvschaik";
     repo = "julius";
     rev = "v${version}";
-    hash = "sha256-ppA/lCugFfzcbANuyWUvH3/1STNRdYOhRNR4tlfWEhc=";
+    hash = "sha256-I5GTaVWzz0ryGLDSS3rzxp+XFVXZa9hZmgwon/6r83A=";
   };
 
   patches = [
@@ -27,14 +27,15 @@ stdenv.mkDerivation rec {
     ./darwin-fixes.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
-    libicns
-    imagemagick
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.sigtool
+      libicns
+      imagemagick
+    ];
 
   buildInputs = [
     SDL2

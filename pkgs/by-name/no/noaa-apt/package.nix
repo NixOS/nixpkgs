@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-du44N+G9/nN5YuOpkWXvr1VaSQfjCpZYJ8yDc48ATIU=";
 
   preBuild = ''

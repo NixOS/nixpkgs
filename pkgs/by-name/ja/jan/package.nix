@@ -5,11 +5,11 @@
 }:
 
 let
-  pname = "Jan";
-  version = "0.6.10";
+  pname = "jan";
+  version = "0.5.17";
   src = fetchurl {
-    url = "https://github.com/menloresearch/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-eag8c/Jp2ahV71kEuFoT2rmz0S9RPbiqy5YBO0Z+ICY=";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
+    hash = "sha256-Gvjkq4GWC7aYDrlTF7496C5IlcT+vzU+soumrVwux/I=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -18,16 +18,18 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
+    install -Dm444 ${appimageContents}/jan.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/jan.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
   meta = {
-    changelog = "https://github.com/menloresearch/jan/releases/tag/v${version}";
+    changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
     description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
-    homepage = "https://github.com/menloresearch/jan";
+    homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
-    mainProgram = "Jan";
+    mainProgram = "jan";
     maintainers = [ ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64;
   };

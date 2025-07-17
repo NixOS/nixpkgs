@@ -2,32 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "asyncserial";
-  version = "1.0";
-  pyproject = true;
+  version = "unstable-2022-06-10";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "asyncserial";
-    tag = version;
-    hash = "sha256-ZHzgJnbsDVxVcp09LXq9JZp46+dorgdP8bAiTB59K28=";
+    rev = "446559fec892a556876b17d17f182ae9647d5952";
+    hash = "sha256-WExmgh55sTH2w7wV3i96J1F1FN7L5rX3L/Ayvt2Kw/g=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ pyserial ];
+  propagatedBuildInputs = [ pyserial ];
 
   pythonImportsCheck = [ "asyncserial" ];
 
-  meta = {
+  meta = with lib; {
     description = "asyncio support for pyserial";
     homepage = "https://github.com/m-labs/asyncserial";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

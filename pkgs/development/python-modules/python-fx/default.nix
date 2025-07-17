@@ -8,6 +8,7 @@
   dacite,
   decorator,
   fetchFromGitHub,
+  future,
   first,
   jsonpath-ng,
   loguru,
@@ -53,13 +54,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ antlr4 ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     antlr4-python3-runtime
     asciimatics
     click
     dacite
     decorator
     first
+    future
     jsonpath-ng
     loguru
     overrides
@@ -86,8 +88,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
-    changelog = "https://github.com/cielong/pyfx/releases/tag/${src.tag}";
-    license = licenses.mit;
+    changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "pyfx";
   };

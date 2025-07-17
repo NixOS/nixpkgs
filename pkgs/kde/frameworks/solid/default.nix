@@ -8,6 +8,11 @@
 mkKdeDerivation {
   pname = "solid";
 
+  patches = [
+    # Also search /run/wrappers for mount/umount
+    ./fix-search-path.patch
+  ];
+
   extraNativeBuildInputs = [
     qttools
     bison

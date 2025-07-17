@@ -5,27 +5,27 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  setuptools,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "7.0.0";
-  pyproject = true;
+  version = "6.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "azure_mgmt_monitor";
-    inherit version;
-    hash = "sha256-t19TZEHUMPaf+HOhZG5fXbyzCAoQdopZ0K3AFUFiOBY=";
+    inherit pname version;
+    hash = "sha256-X/v1AOSZq3kSsbptJs7yZIDZrkEVMgGbt41yViGW4Hs=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     isodate
     azure-common
     azure-mgmt-core
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

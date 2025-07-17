@@ -29,6 +29,6 @@
 
   testScript = ''
     machine.wait_for_unit("gatus.service")
-    machine.wait_until_succeeds("curl -s http://localhost:8080/metrics | grep go_info", timeout=60)
+    machine.succeed("curl -s http://localhost:8080/metrics | grep go_info")
   '';
 }

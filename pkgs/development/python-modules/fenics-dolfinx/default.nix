@@ -32,6 +32,7 @@
   # nativeCheckInputs
   scipy,
   matplotlib,
+  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   mpiCheckPhaseHook,
@@ -107,6 +108,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     scipy
     matplotlib
+    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
     mpiCheckPhaseHook
@@ -124,21 +126,20 @@ buildPythonPackage rec {
     # require cffi<1.17
     "test_cffi_expression"
     "test_hexahedron_mesh"
-    # https://github.com/FEniCS/dolfinx/issues/1104
-    "test_cube_distance"
   ];
 
   passthru = {
-    tests = {
-      complex = fenics-dolfinx.override {
-        petsc4py = petsc4py.override { scalarType = "complex"; };
+    tests =
+      {
+        complex = fenics-dolfinx.override {
+          petsc4py = petsc4py.override { scalarType = "complex"; };
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        mpich = fenics-dolfinx.override {
+          petsc4py = petsc4py.override { mpi = mpich; };
+        };
       };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      mpich = fenics-dolfinx.override {
-        petsc4py = petsc4py.override { mpi = mpich; };
-      };
-    };
   };
 
   meta = {

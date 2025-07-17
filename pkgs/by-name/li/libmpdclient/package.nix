@@ -5,37 +5,27 @@
   meson,
   ninja,
   stdenv,
-  pkg-config,
-  check,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmpdclient";
-  version = "2.24";
+  version = "2.22";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "libmpdclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VACe7/RnKgoA3qRIWmjFhCW+GVk9qUGp4+tSXMTo8Bk=";
+    hash = "sha256-KF8IR9YV6b9ro+L9m6nHs1IggakEZddfcBKm/oKCVZY=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
-
-  nativeCheckInputs = [
-    pkg-config
-    check
-  ];
-
-  mesonFlags = [ (lib.strings.mesonBool "test" finalAttrs.finalPackage.doCheck) ];
-
-  doCheck = true;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   meta = {
     description = "Client library for MPD (music player daemon)";

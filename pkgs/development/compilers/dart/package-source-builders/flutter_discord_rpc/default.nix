@@ -14,6 +14,8 @@ let
 
     buildAndTestSubdir = "rust";
 
+    useFetchCargoVendor = true;
+
     cargoHash =
       {
         _1_0_0 = "sha256-C9WDE9+6V59yNCNVeMUY5lRpMJ+8XWpHpxzdTmz+/Yw=";

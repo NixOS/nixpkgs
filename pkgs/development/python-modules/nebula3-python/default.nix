@@ -34,8 +34,7 @@ buildPythonPackage rec {
     httpx
     pytz
     six
-  ]
-  ++ httpx.optional-dependencies.http2;
+  ] ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

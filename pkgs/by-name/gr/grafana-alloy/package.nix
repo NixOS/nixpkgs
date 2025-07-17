@@ -17,17 +17,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.10.2";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${version}";
-    hash = "sha256-7KOnpkpQzqvqyMAuDyUjIzseJAxqmkjEw9ecHD+kI3I=";
+    hash = "sha256-ciM5DbP5OTvAPUNgBTuwb+hbVtKGgQzafLLOjDftPZQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-/G00ZJnAQoAFR66sYkO3bqhnWXvGmronjFnk7m8ogYA=";
+  vendorHash = "sha256-zmNrnCaUrsYJ0S5MQrj07sV+ZCnXbGQmH8Z0pMpJZk4=";
 
   nativeBuildInputs = [
     fixup-yarn-lock
@@ -112,7 +112,7 @@ buildGoModule rec {
       $out/bin/alloy
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd alloy \
       --bash <($out/bin/alloy completion bash) \
       --fish <($out/bin/alloy completion fish) \

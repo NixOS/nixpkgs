@@ -33,27 +33,27 @@ stdenv.mkDerivation (finalAttr: {
     asio
     cmake
     fastdeploy.cmake
-  ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [
-    fastdeploy
-    libcpr
-    onnxruntime
-    opencv
-  ]
-  ++ lib.optionals cudaSupport (
-    with cudaPackages;
+  buildInputs =
     [
-      cuda_cccl # cub/cub.cuh
-      libcublas # cublas_v2.h
-      libcurand # curand.h
-      libcusparse # cusparse.h
-      libcufft # cufft.h
-      cudnn # cudnn.h
-      cuda_cudart
+      fastdeploy
+      libcpr
+      onnxruntime
+      opencv
     ]
-  );
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl # cub/cub.cuh
+        libcublas # cublas_v2.h
+        libcurand # curand.h
+        libcusparse # cusparse.h
+        libcufft # cufft.h
+        cudnn # cudnn.h
+        cuda_cudart
+      ]
+    );
 
   cmakeBuildType = "None";
 

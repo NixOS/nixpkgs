@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "thermopro-ble";
-  version = "1.1.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";
     tag = "v${version}";
-    hash = "sha256-m4koagyGOOuwFCctQK1oz5riwCbrC0I8js+bnrHxwMY=";
+    hash = "sha256-FgobrgMA+YbmI5VxdzCgYipSLGRK6+uIOTMy9P4Aeos=";
   };
 
   build-system = [ poetry-core ];
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];

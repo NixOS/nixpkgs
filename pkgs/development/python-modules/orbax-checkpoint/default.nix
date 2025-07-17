@@ -9,7 +9,6 @@
   flit-core,
 
   # dependencies
-  aiofiles,
   etils,
   humanize,
   importlib-resources,
@@ -24,6 +23,7 @@
   typing-extensions,
 
   # tests
+  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -31,19 +31,18 @@
   portpicker,
   pytest-xdist,
   pytestCheckHook,
-  safetensors,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.25";
+  version = "0.11.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-myhPWKP2uI9NQKZki1Rr+B6Kusn0qNWREKHkiDrSheA=";
+    hash = "sha256-j15E4jGvxIjEdWG6Lwr9mvPXr9WifrD1zFF6Vj+7wik=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -56,7 +55,6 @@ buildPythonPackage rec {
 
   dependencies = [
     absl-py
-    aiofiles
     etils
     humanize
     importlib-resources
@@ -72,6 +70,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiofiles
     chex
     google-cloud-logging
     mock
@@ -79,7 +78,6 @@ buildPythonPackage rec {
     portpicker
     pytest-xdist
     pytestCheckHook
-    safetensors
   ];
 
   pythonImportsCheck = [
@@ -87,18 +85,19 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = [
-    # Flaky
-    # AssertionError: 2 not greater than 2.0046136379241943
-    "test_async_mkdir_parallel"
-    "test_async_mkdir_sequential"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Probably failing because of a filesystem impurity
-    # self.assertFalse(os.path.exists(dst_dir))
-    # AssertionError: True is not false
-    "test_create_snapshot"
-  ];
+  disabledTests =
+    [
+      # Flaky
+      # AssertionError: 2 not greater than 2.0046136379241943
+      "test_async_mkdir_parallel"
+      "test_async_mkdir_sequential"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Probably failing because of a filesystem impurity
+      # self.assertFalse(os.path.exists(dst_dir))
+      # AssertionError: True is not false
+      "test_create_snapshot"
+    ];
 
   disabledTestPaths = [
     # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
@@ -106,10 +105,6 @@ buildPythonPackage rec {
     # Description from first occurrence: Number of processes to use.
     # https://github.com/google/orbax/issues/1580
     "orbax/checkpoint/experimental/emergency/"
-
-    # E   FileNotFoundError: [Errno 2] No such file or directory:
-    # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'
-    "orbax/checkpoint/_src/path/snapshot/snapshot_test.py"
 
     # Circular dependency flax
     "orbax/checkpoint/_src/metadata/empty_values_test.py"

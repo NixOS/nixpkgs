@@ -45,11 +45,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    gtk2
-  ]
-  ++ lib.optionals gpgSupport [ gpgme ]
-  ++ lib.optionals sslSupport [ openssl ];
+  buildInputs =
+    [ gtk2 ] ++ lib.optionals gpgSupport [ gpgme ] ++ lib.optionals sslSupport [ openssl ];
 
   configureFlags = lib.optional gpgSupport "--enable-gpgme" ++ lib.optional sslSupport "--enable-ssl";
 

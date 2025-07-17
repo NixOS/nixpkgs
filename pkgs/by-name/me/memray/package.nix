@@ -10,23 +10,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.18.0";
+  version = "1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-bShFMuDJlvBA3rQJRwXlsgRk4q+gdFQjOpDzOrp4/8k=";
+    hash = "sha256-n000m2jIJJFZFTjfECS3gFrO6xHauZW46xe1tDqI6Lg=";
   };
-
-  # AttributeError: 'Label' object has no attribute 'renderable'.
-  # In textual==0.6.0, the `renderable` property was renamed to `content`
-  # https://github.com/Textualize/textual/pull/6041
-  postPatch = ''
-    substituteInPlace tests/unit/test_tui_reporter.py \
-      --replace-fail ".renderable" ".content"
-  '';
 
   build-system = with python3Packages; [
     distutils
@@ -39,8 +31,7 @@ python3Packages.buildPythonApplication rec {
     elfutils # for `-ldebuginfod`
     libunwind
     lz4
-  ]
-  ++ (with python3Packages; [ cython ]);
+  ] ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig
@@ -85,7 +76,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
-    changelog = "https://github.com/bloomberg/memray/releases/tag/${src.tag}";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/v${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

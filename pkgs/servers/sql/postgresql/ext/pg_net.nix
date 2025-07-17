@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_net";
-  version = "0.19.7";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_net";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HQiFD8vhox7SmjJIDyVnnwt8DCENKABIZTMfTjGElwU=";
+    hash = "sha256-Sy2PG1zCB6tNbcMNMWvl/Fe2Zu1stvEIqGrLsRF09GY=";
   };
 
   buildInputs = [ curl ];

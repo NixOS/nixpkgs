@@ -12,42 +12,43 @@ in
 { pkgs, lib, ... }:
 {
   name = "solanum";
-  nodes = {
-    "${server}" = {
-      networking.firewall.allowedTCPPorts = [ ircPort ];
-      services.solanum = {
-        enable = true;
-        motd = ''
-          The default MOTD doesn't contain the word "nixos" in it.
-          This one does.
-        '';
-      };
-    };
-  }
-  // lib.listToAttrs (
-    builtins.map (
-      client:
-      lib.nameValuePair client {
-        imports = [
-          ./common/user-account.nix
-        ];
-
-        systemd.services.ii = {
-          requires = [ "network.target" ];
-          wantedBy = [ "default.target" ];
-
-          serviceConfig = {
-            Type = "simple";
-            ExecPreStartPre = "mkdir -p ${iiDir}";
-            ExecStart = ''
-              ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
-            '';
-            User = "alice";
-          };
+  nodes =
+    {
+      "${server}" = {
+        networking.firewall.allowedTCPPorts = [ ircPort ];
+        services.solanum = {
+          enable = true;
+          motd = ''
+            The default MOTD doesn't contain the word "nixos" in it.
+            This one does.
+          '';
         };
-      }
-    ) clients
-  );
+      };
+    }
+    // lib.listToAttrs (
+      builtins.map (
+        client:
+        lib.nameValuePair client {
+          imports = [
+            ./common/user-account.nix
+          ];
+
+          systemd.services.ii = {
+            requires = [ "network.target" ];
+            wantedBy = [ "default.target" ];
+
+            serviceConfig = {
+              Type = "simple";
+              ExecPreStartPre = "mkdir -p ${iiDir}";
+              ExecStart = ''
+                ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
+              '';
+              User = "alice";
+            };
+          };
+        }
+      ) clients
+    );
 
   testScript =
     let

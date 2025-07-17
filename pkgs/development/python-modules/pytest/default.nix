@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.4.1";
+  version = "8.3.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fGf9aRdIdzWe2Tcew6+KPSsEdBgYxR5emcwXQiUfqTw=";
+    hash = "sha256-9O/nDMFOURVlrEdrV8J54SqFWxH0jyEq8QgO8iY9OEU=";
   };
 
   outputs = [
@@ -42,21 +42,21 @@ buildPythonPackage rec {
     "testout"
   ];
 
-  build-system = [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
-    iniconfig
-    packaging
-    pluggy
-    pygments
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
-  ];
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
   optional-dependencies = {
     testing = [
@@ -64,6 +64,7 @@ buildPythonPackage rec {
       attrs
       hypothesis
       mock
+      pygments
       requests
       setuptools
       xmlschema

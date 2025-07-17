@@ -3,25 +3,30 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  hatchling,
+  poetry-core,
   pydantic,
   pytestCheckHook,
   pytest-mock,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.3.0";
-  pyproject = true;
+  version = "4.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jodal";
     repo = "pykka";
     tag = "v${version}";
-    hash = "sha256-xCvWqWThsi78S9DW4ssz0gezb0RFGlqW2W8oMxkNc+E=";
+    hash = "sha256-n9TgXcmUEIQdqtrY+9T+EtPys+7OzXCemRwNPj1xPDw=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
+
+  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     pydantic

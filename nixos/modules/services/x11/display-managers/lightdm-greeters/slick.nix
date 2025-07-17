@@ -36,7 +36,14 @@ in
       enable = mkEnableOption "lightdm-slick-greeter as the lightdm greeter";
 
       theme = {
-        package = mkPackageOption pkgs "gnome-themes-extra" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.gnome-themes-extra;
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
+          description = ''
+            The package path that contains the theme given in the name option.
+          '';
+        };
 
         name = mkOption {
           type = types.str;
@@ -48,7 +55,14 @@ in
       };
 
       iconTheme = {
-        package = mkPackageOption pkgs "adwaita-icon-theme" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          description = ''
+            The package path that contains the icon theme given in the name option.
+          '';
+        };
 
         name = mkOption {
           type = types.str;
@@ -60,7 +74,14 @@ in
       };
 
       font = {
-        package = mkPackageOption pkgs "ubuntu-classic" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.ubuntu-classic;
+          defaultText = literalExpression "pkgs.ubuntu-classic";
+          description = ''
+            The package path that contains the font given in the name option.
+          '';
+        };
 
         name = mkOption {
           type = types.str;
@@ -72,7 +93,14 @@ in
       };
 
       cursorTheme = {
-        package = mkPackageOption pkgs "adwaita-icon-theme" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          description = ''
+            The package path that contains the cursor theme given in the name option.
+          '';
+        };
 
         name = mkOption {
           type = types.str;

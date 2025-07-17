@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uk4XLF0QsH9Nhz73PmdSpwhxPdCh+DlNNqtbJtLWgNI=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-2wJBYTOfaPBm+24ABl1cOs4W7UsRPYn70PSFDRRMCyU=";
 
   # tests require rust nightly

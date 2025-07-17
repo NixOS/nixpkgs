@@ -38,11 +38,11 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Detects the individual coffee grounds in a white-background picture to determine particle size distribution";
     mainProgram = "coffeegrindsize";
     homepage = "https://github.com/jgagneastro/coffeegrindsize";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ t4ccer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
   };
 }

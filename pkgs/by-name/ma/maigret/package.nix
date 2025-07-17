@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  python312,
+  python3,
 }:
 
-python312.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
   pyproject = true;
@@ -27,9 +27,9 @@ python312.pkgs.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python312.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python312.pkgs; [
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiohttp-socks
@@ -70,7 +70,7 @@ python312.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  nativeCheckInputs = with python312.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio
     pytestCheckHook
@@ -85,31 +85,29 @@ python312.pkgs.buildPythonApplication rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests = [
-    # Tests require network access
-    "test_extract_ids_from_page"
-    "test_import_aiohttp_cookies"
-    "test_maigret_results"
-    "test_pdf_report"
-    "test_self_check_db_negative_enabled"
-    "test_self_check_db_positive_enable"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AsyncioProgressbarExecutor is slower on darwin than it should be,
-    # Upstream issue: https://github.com/soxoj/maigret/issues/679
-    "test_asyncio_progressbar_executor"
-  ];
+  disabledTests =
+    [
+      # Tests require network access
+      "test_extract_ids_from_page"
+      "test_import_aiohttp_cookies"
+      "test_maigret_results"
+      "test_pdf_report"
+      "test_self_check_db_negative_enabled"
+      "test_self_check_db_positive_enable"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AsyncioProgressbarExecutor is slower on darwin than it should be,
+      # Upstream issue: https://github.com/soxoj/maigret/issues/679
+      "test_asyncio_progressbar_executor"
+    ];
 
   pythonImportsCheck = [ "maigret" ];
 
-  meta = {
+  meta = with lib; {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      fab
-      thtrf
-    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -7,7 +7,6 @@
   gst_all_1,
   wayland,
   pkg-config,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,14 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  ++ (with libsForQt5; [
-    qmake
-    qttools
-    wrapQtAppsHook
-  ]);
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ (with libsForQt5; [
+      qmake
+      qttools
+      wrapQtAppsHook
+    ]);
 
   preConfigure = ''
     mkdir build
@@ -88,7 +86,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };
@@ -96,8 +94,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./disable-bad-message.patch
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";

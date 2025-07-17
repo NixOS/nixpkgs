@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-  ]
-  ++ runtimeDependencies;
+  ] ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Jam";
   };

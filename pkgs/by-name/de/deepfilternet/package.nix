@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
     ./cargo-lock-bump-time.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-I0hY2WmaHu/HKQJHyZp0C6wIi0++w5dFeExVMyhInJY=";
 
   # only the ladspa plugin part has been packaged so far...

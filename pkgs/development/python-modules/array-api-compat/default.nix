@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  setuptools-scm,
   numpy,
   jaxlib,
   jax,
@@ -19,20 +18,17 @@
 
 buildPythonPackage rec {
   pname = "array-api-compat";
-  version = "1.12";
+  version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = version;
-    hash = "sha256-Hb0bFjVMl4CBI3gN3abTO2QUPAOvUaFE0GdPjdops5E=";
+    hash = "sha256-qGf1XDhRx9hJJP0LcZF7lA8tl+LKYNCw0xTqGjsZYj8=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,14 +39,14 @@ buildPythonPackage rec {
     dask
     sparse
     array-api-strict
-  ]
-  ++ lib.optionals cudaSupport [ cupy ];
+  ] ++ lib.optionals cudaSupport [ cupy ];
 
   pythonImportsCheck = [ "array_api_compat" ];
 
   # CUDA (used via cupy) is not available in the testing sandbox
-  disabledTests = [
-    "cupy"
+  pytestFlagsArray = [
+    "-k"
+    "'not cupy'"
   ];
 
   meta = {

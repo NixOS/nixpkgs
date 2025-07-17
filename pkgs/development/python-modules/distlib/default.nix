@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "distlib";
-  version = "0.4.0";
+  version = "0.3.9";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/uxAB1vgOgRQGpc9gfYzc1tLafmLBUUFkjEMD0AaTg0=";
+    hash = "sha256-pg8g3qZGuKM/Pndy903AstB3LSg37hNCoAZFyB7flAM=";
   };
 
   nativeBuildInputs = [ setuptools ];

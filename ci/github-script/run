@@ -7,7 +7,7 @@ import { program } from 'commander'
 import * as core from '@actions/core'
 import { getOctokit } from '@actions/github'
 
-async function run(action, owner, repo, pull_number, options = {}) {
+async function run(action, owner, repo, pull_number, dry = true) {
   const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
 
   const github = getOctokit(token)
@@ -35,22 +35,9 @@ async function run(action, owner, repo, pull_number, options = {}) {
       },
     },
     core,
-    dry: true,
-    ...options,
+    dry,
   })
 }
-
-program
-  .command('prepare')
-  .description('Prepare relevant information of a pull request.')
-  .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
-  .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
-  .argument('<pr>', 'Number of the Pull Request to check')
-  .option('--no-dry', 'Make actual modifications')
-  .action(async (owner, repo, pr, options) => {
-    const prepare = (await import('./prepare.js')).default
-    await run(prepare, owner, repo, pr, options)
-  })
 
 program
   .command('commits')
@@ -58,10 +45,9 @@ program
   .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
   .argument('<pr>', 'Number of the Pull Request to check')
-  .option('--no-cherry-picks', 'Do not expect cherry-picks.')
-  .action(async (owner, repo, pr, options) => {
+  .action(async (owner, repo, pr) => {
     const commits = (await import('./commits.js')).default
-    await run(commits, owner, repo, pr, options)
+    run(commits, owner, repo, pr)
   })
 
 program
@@ -77,7 +63,7 @@ program
     try {
       process.env.GITHUB_WORKSPACE = tmp
       process.chdir(tmp)
-      await run(labels, owner, repo, pr, options)
+      run(labels, owner, repo, pr, options.dry)
     } finally {
       rmSync(tmp, { recursive: true })
     }

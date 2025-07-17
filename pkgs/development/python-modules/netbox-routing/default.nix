@@ -36,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [ django-polymorphic ];
 
   meta = {
-    description = "NetBox plugin for tracking all kinds of routing information";
+    description = "A NetBox plugin for tracking all kinds of routing information";
     homepage = "https://github.com/DanSheps/netbox-routing";
     changelog = "https://github.com/DanSheps/netbox-routing/releases/tag/${src.tag}";
     license = lib.licenses.asl20;

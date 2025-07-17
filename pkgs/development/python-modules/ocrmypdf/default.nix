@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.11.0";
+  version = "16.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-seylNBl29+QxN+3SbgRUdtTo1JwvW1sODpsz7Gwer3E=";
+    hash = "sha256-kEPVufS8wpoGi/A4Eh1u9gLVIEdJmoPDmAiY38DYDv4=";
   };
 
   patches = [
@@ -53,6 +53,8 @@ buildPythonPackage rec {
       tesseract = lib.getExe tesseract;
       unpaper = lib.getExe unpaper;
     })
+    # Fix crashing in tests on Python 3.13.4
+    ./multiprocessing.patch
   ];
 
   build-system = [

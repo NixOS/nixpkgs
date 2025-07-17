@@ -6,6 +6,9 @@ in
 {
 
   name = "molly-brown";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ ehmry ];
+  };
 
   nodes = {
 

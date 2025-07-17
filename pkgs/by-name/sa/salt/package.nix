@@ -12,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3007.7";
+  version = "3007.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WGEC38rCegqcCCb/gGve6YjkAooEzyqzFiq6nwsEAss=";
+    hash = "sha256-F2qLl8Q8UO2H3xInmz3SSLu2q0jNMrLekPRSNMfE0JQ=";
   };
 
   patches = [
@@ -47,7 +47,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3.pkgs;
     [
-      cryptography
       distro
       jinja2
       jmespath

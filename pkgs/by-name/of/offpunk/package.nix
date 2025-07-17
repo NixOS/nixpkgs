@@ -30,22 +30,23 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  dependencies = [
-    file
-    less
-    timg
-    xdg-utils
-    xsel
-  ]
-  ++ (with python3Packages; [
-    beautifulsoup4
-    chardet
-    cryptography
-    feedparser
-    readability-lxml
-    requests
-    setproctitle
-  ]);
+  dependencies =
+    [
+      file
+      less
+      timg
+      xdg-utils
+      xsel
+    ]
+    ++ (with python3Packages; [
+      beautifulsoup4
+      chardet
+      cryptography
+      feedparser
+      readability-lxml
+      requests
+      setproctitle
+    ]);
 
   postInstall = ''
     installManPage man/*.1

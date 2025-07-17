@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.11.2";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
+    hash = "sha256-rJ3/JtbzYwsMRk5OZKczr/BDwfDU4NH48JdYWC5/fNk=";
   };
 
   build-system = [
@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "authlib"
-    "fitdecode"
     "flask"
     "flask-limiter"
     "flask-migrate"

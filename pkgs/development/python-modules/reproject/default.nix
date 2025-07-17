@@ -1,89 +1,81 @@
 {
   lib,
-  asdf,
   astropy,
+  astropy-extension-helpers,
   astropy-healpix,
   buildPythonPackage,
+  cloudpickle,
   cython,
   dask,
-  extension-helpers,
-  fetchFromGitHub,
+  fetchPypi,
   fsspec,
-  gwcs,
   numpy,
-  pillow,
-  pyavm,
   pytest-astropy,
-  pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   scipy,
-  setuptools,
   setuptools-scm,
-  shapely,
-  tqdm,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.15.0";
+  version = "0.14.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "astropy";
-    repo = "reproject";
-    tag = "v${version}";
-    hash = "sha256-gv5LOxXTNdHSx4Q4ydi/QBHhc7/E/DXJD7WuPBAH0dE=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-U8jqJ5uLVX8zoeQwr14FPNdHACRA4HK65q2TAtRr5Xk=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "cython==" "cython>="
+  '';
+
+  nativeBuildInputs = [
+    astropy-extension-helpers
     cython
-    extension-helpers
     numpy
+    setuptools-scm
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     astropy
     astropy-healpix
+    cloudpickle
     dask
     fsspec
     numpy
-    pillow
-    pyavm
     scipy
     zarr
-  ]
-  ++ dask.optional-dependencies.array;
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-astropy
-    pytest-xdist
-    asdf
-    gwcs
-    shapely
-    tqdm
+    pytestCheckHook
   ];
 
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "build/lib*"
-  ];
-
-  disabledTestPaths = [
+    # Avoid failure due to user warning: Distutils was imported before Setuptools
+    "-p no:warnings"
     # Uses network
-    "build/lib*/reproject/interpolation/"
+    "--ignore build/lib*/reproject/interpolation/"
+    # prevent "'filterwarnings' not found in `markers` configuration option" error
+    "-o 'markers=filterwarnings'"
   ];
 
   pythonImportsCheck = [ "reproject" ];
 
-  meta = {
+  meta = with lib; {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
-    changelog = "https://github.com/astropy/reproject/releases/tag/${src.tag}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ smaret ];
+    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
   };
 }

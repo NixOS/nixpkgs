@@ -78,8 +78,7 @@ let
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_arm64.deb";
       hash = "sha256-tmBhV7J8E+BE0Ku+ZwMB+I3k4Xgq/KT5wGpYF/PgOpw=";
     };
-  }
-  // _linuxAttrs;
+  } // _linuxAttrs;
 
   linuxAttrs.x86_64-linux = rec {
     version = "0.12.6.1-3";
@@ -87,8 +86,7 @@ let
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
       hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
     };
-  }
-  // _linuxAttrs;
+  } // _linuxAttrs;
 in
 stdenv.mkDerivation (
   {

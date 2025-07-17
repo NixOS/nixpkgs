@@ -4,6 +4,7 @@
   swift,
   swiftpm,
   fetchFromGitHub,
+  ...
 }:
 
 swiftPackages.stdenv.mkDerivation {

@@ -5,8 +5,7 @@ The NixOS configuration file generally looks like this:
 ```nix
 { config, pkgs, ... }:
 
-{
-  # option definitions
+{ /* option definitions */
 }
 ```
 
@@ -20,8 +19,7 @@ name of an option and `value` is its value. For example,
 ```nix
 { config, pkgs, ... }:
 
-{
-  services.httpd.enable = true;
+{ services.httpd.enable = true;
   services.httpd.adminAddr = "alice@example.org";
   services.httpd.virtualHosts.localhost.documentRoot = "/webroot";
 }
@@ -40,8 +38,7 @@ example above can also be written as:
 ```nix
 { config, pkgs, ... }:
 
-{
-  services = {
+{ services = {
     httpd = {
       enable = true;
       adminAddr = "alice@example.org";

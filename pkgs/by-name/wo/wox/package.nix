@@ -8,7 +8,7 @@
   pnpm_9,
   python3Packages,
   writableTmpDirAsHomeHook,
-  buildGo125Module,
+  buildGoModule,
   pkg-config,
   autoPatchelfHook,
   xorg,
@@ -22,20 +22,20 @@
 }:
 
 let
-  version = "2.0.0-beta.4";
+  version = "2.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-KOndb8snDk1BwOontI5G9wnBBvO8KV85YF5zzp95t/M=";
+    hash = "sha256-z/fVRs5mflBhkeTazK9zg5WTYqDpqiXWEcNepEHg2k8=";
   };
 
   metaCommon = {
     description = "Cross-platform launcher that simply works";
     homepage = "https://github.com/Wox-launcher/Wox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
   };
 
   ui-flutter = flutter332.buildFlutterApplication {
@@ -74,8 +74,8 @@ let
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-HhdMwVNt7178EQlZGpTiTySBp8GR9tBpUaikEWt1BGY=";
+      fetcherVersion = 1;
+      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
     };
 
     buildPhase = ''
@@ -137,7 +137,7 @@ let
     };
   };
 in
-buildGo125Module {
+buildGoModule {
   pname = "wox";
   inherit version src;
 
@@ -154,7 +154,7 @@ buildGo125Module {
       --replace-fail "Exec=%s" "Exec=wox"
   '';
 
-  vendorHash = "sha256-Ft4X2woSf0ib0Z8dAwf0VAFQv0ck9nVs7EnpWgGi2+0=";
+  vendorHash = "sha256-PW8upRPhv4UDnXvI+0b61c4jKkTrxzFuobF7x+qxY74=";
 
   proxyVendor = true;
 
@@ -200,7 +200,7 @@ buildGo125Module {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/icons/hicolor/1024x1024/apps/wox.png
+    install -Dm644 ../assets/app.png $out/share/pixmaps/wox.png
   '';
 
   meta = metaCommon // {

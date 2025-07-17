@@ -6,7 +6,7 @@
   # Build-time dependencies:
   addDriverRunpath,
   autoAddDriverRunpath,
-  bazel_7,
+  bazel_6,
   binutils,
   buildBazelPackage,
   buildPythonPackage,
@@ -77,9 +77,6 @@ let
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
     platforms = platforms.linux;
-
-    # Needs update for Bazel 7.
-    broken = true;
   };
 
   # Bazel wants a merged cudnn at configuration time
@@ -224,8 +221,7 @@ let
     name = "bazel-build-${pname}-${version}";
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
-    #bazel = bazel_6;
-    bazel = bazel_7;
+    bazel = bazel_6;
 
     src = fetchFromGitHub {
       owner = "google";
@@ -243,8 +239,7 @@ let
       wheel
       build
       which
-    ]
-    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
+    ] ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ cctools ];
 
     buildInputs = [
       curl
@@ -261,8 +256,7 @@ let
       six
       snappy-cpp
       zlib
-    ]
-    ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
+    ] ++ lib.optionals (!effectiveStdenv.hostPlatform.isDarwin) [ nsync ];
 
     # We don't want to be quite so picky regarding bazel version
     postPatch = ''
@@ -345,21 +339,22 @@ let
 
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
-    bazelFlags = [
-      "-c opt"
-      # See https://bazel.build/external/advanced#overriding-repositories for
-      # information on --override_repository flag.
-      "--override_repository=xla=${xla}"
-    ]
-    ++ lib.optionals effectiveStdenv.cc.isClang [
-      # bazel depends on the compiler frontend automatically selecting these flags based on file
-      # extension but our clang doesn't.
-      # https://github.com/NixOS/nixpkgs/issues/150655
-      "--cxxopt=-x"
-      "--cxxopt=c++"
-      "--host_cxxopt=-x"
-      "--host_cxxopt=c++"
-    ];
+    bazelFlags =
+      [
+        "-c opt"
+        # See https://bazel.build/external/advanced#overriding-repositories for
+        # information on --override_repository flag.
+        "--override_repository=xla=${xla}"
+      ]
+      ++ lib.optionals effectiveStdenv.cc.isClang [
+        # bazel depends on the compiler frontend automatically selecting these flags based on file
+        # extension but our clang doesn't.
+        # https://github.com/NixOS/nixpkgs/issues/150655
+        "--cxxopt=-x"
+        "--cxxopt=c++"
+        "--host_cxxopt=-x"
+        "--host_cxxopt=c++"
+      ];
 
     # We intentionally overfetch so we can share the fetch derivation across all the different configurations
     fetchAttrs = {

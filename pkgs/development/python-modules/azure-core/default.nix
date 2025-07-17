@@ -8,10 +8,6 @@
   aiohttp,
   flask,
   mock,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-instrumentation-requests,
-  opentelemetry-sdk,
   pytest,
   pytest-asyncio,
   pytest-trio,
@@ -24,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.35.0";
+  version = "1.32.0";
   pname = "azure-core";
   pyproject = true;
 
@@ -35,12 +31,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_core";
     inherit version;
-    hash = "sha256-wL5ShIlIXp7eWbaXHrY8HqrPg+9TABv+OQTkdelyvlw=";
+    hash = "sha256-IrPDXWstrhSZD2wb4pEr8j/+ULIg5wiiirG7krHHMOU=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     requests
     six
     typing-extensions
@@ -48,23 +44,18 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     aio = [ aiohttp ];
-    tracing = [ opentelemetry-api ];
   };
 
   nativeCheckInputs = [
     aiodns
     flask
     mock
-    opentelemetry-instrumentation
-    opentelemetry-instrumentation-requests
-    opentelemetry-sdk
     pytest
     pytest-trio
     pytest-asyncio
     pytestCheckHook
     trio
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
@@ -85,8 +76,7 @@ buildPythonPackage rec {
     # disable 8 tests failing on some darwin machines with errors:
     # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
     # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
 
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
@@ -103,10 +93,6 @@ buildPythonPackage rec {
     "tests/test_polling.py"
     "tests/async_tests/test_base_polling_async.py"
     "tests/async_tests/test_polling_async.py"
-    # infinite recursion with azure-storage-blob
-    "tests/async_tests/test_tracing_live_async.py"
-    "tests/test_serialization.py"
-    "tests/test_tracing_live.py"
   ];
 
   meta = with lib; {

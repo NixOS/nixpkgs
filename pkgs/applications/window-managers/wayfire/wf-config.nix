@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       wucke13
-      wineee
+      rewine
     ];
     platforms = lib.platforms.unix;
   };

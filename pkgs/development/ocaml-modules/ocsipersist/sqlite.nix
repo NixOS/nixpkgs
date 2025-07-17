@@ -1,22 +1,26 @@
 {
   buildDunePackage,
-  ocsipersist,
+  ocsipersist-lib,
   lwt_log,
   ocaml_sqlite3,
   ocsigen_server,
+  xml-light,
 }:
 
 buildDunePackage {
   pname = "ocsipersist-sqlite";
-  inherit (ocsipersist) version src;
+  inherit (ocsipersist-lib) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     lwt_log
     ocaml_sqlite3
-    ocsipersist
+    ocsigen_server
+    ocsipersist-lib
+    xml-light
   ];
 
-  meta = ocsipersist.meta // {
-    description = "Persistent key/value storage for OCaml using SQLite";
+  meta = ocsipersist-lib.meta // {
+    description = "Persistent key/value storage (for Ocsigen) using SQLite";
   };
 }

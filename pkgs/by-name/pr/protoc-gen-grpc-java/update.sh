@@ -14,7 +14,7 @@ ARCHS=(
   'windows-x86_32'
   'windows-x86_64'
 )
-DATA_FILE=pkgs/by-name/pr/protoc-gen-grpc-java/data.nix
+HASHES_FILE=pkgs/by-name/pr/protoc-gen-grpc-java/hashes.nix
 
 version="$(
   curl --silent --location --fail \
@@ -24,13 +24,10 @@ version="$(
     sed 's/^v//'
 )"
 
-echo '{' >"${DATA_FILE}"
-echo "  version = \"${version}\";" >>"${DATA_FILE}"
-echo '  hashes = {' >>"${DATA_FILE}"
+echo '{' >"${HASHES_FILE}"
 for arch in "${ARCHS[@]}"; do
   url="https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/${version}/protoc-gen-grpc-java-${version}-${arch}.exe"
   hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$(nix-prefetch-url "${url}")")
-  echo "    ${arch} = \"${hash}\";" >>"${DATA_FILE}"
+  echo "  ${arch} = \"${hash}\";" >>"${HASHES_FILE}"
 done
-echo '  };' >>"${DATA_FILE}"
-echo '}' >>"${DATA_FILE}"
+echo '}' >>"${HASHES_FILE}"

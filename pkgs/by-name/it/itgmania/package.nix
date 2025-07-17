@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "itgmania";
     repo = "itgmania";
-    tag = "v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-C9qVUZdRnKbQgfgbXnzT+lI2+FEXBaMQv/U6UF5wyzo=";
   };

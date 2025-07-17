@@ -32,7 +32,7 @@
   config,
   wrapQtAppsHook,
   gst_plugins,
-  util-linuxMinimal,
+  util-linux,
   libunwind,
   libselinux,
   elfutils,
@@ -49,20 +49,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.1-55-g03726250a";
+  version = "1.4.1-45-g34eb666c0";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
     tag = finalAttrs.version;
-    hash = "sha256-tfXZH3E9VZUVnGbKYIWln76fJNwDvc+H4IGDL5U+3pI=";
+    hash = "sha256-5qZpQW8ZsyKpIww51sqghcrkhhh78TcpmMoctHgcoQo=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapQtAppsHook
-    util-linuxMinimal
+    util-linux
     libunwind
     libselinux
     elfutils
@@ -70,40 +70,41 @@ stdenv.mkDerivation (finalAttrs: {
     orc
   ];
 
-  buildInputs = [
-    boost
-    chromaprint
-    fftw
-    gettext
-    glew
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gstreamer
-    gvfs
-    liblastfm
-    libpulseaudio
-    pcre
-    projectm_3
-    protobuf
-    qca-qt5
-    qjson
-    qtbase
-    qtx11extras
-    qttools
-    sqlite
-    taglib_1
-    alsa-lib
-  ]
-  # gst_plugins needed for setup-hooks
-  ++ gst_plugins
-  ++ lib.optionals withIpod [
-    libgpod
-    libplist
-    usbmuxd
-  ]
-  ++ lib.optionals withMTP [ libmtp ]
-  ++ lib.optionals withCD [ libcdio ]
-  ++ lib.optionals withCloud [ sparsehash ];
+  buildInputs =
+    [
+      boost
+      chromaprint
+      fftw
+      gettext
+      glew
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gstreamer
+      gvfs
+      liblastfm
+      libpulseaudio
+      pcre
+      projectm_3
+      protobuf
+      qca-qt5
+      qjson
+      qtbase
+      qtx11extras
+      qttools
+      sqlite
+      taglib_1
+      alsa-lib
+    ]
+    # gst_plugins needed for setup-hooks
+    ++ gst_plugins
+    ++ lib.optionals (withIpod) [
+      libgpod
+      libplist
+      usbmuxd
+    ]
+    ++ lib.optionals (withMTP) [ libmtp ]
+    ++ lib.optionals (withCD) [ libcdio ]
+    ++ lib.optionals (withCloud) [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -119,9 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
-    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
-    (lib.cmakeBool "SPOTIFY_BLOB" false)
+    "-DFORCE_GIT_REVISION=1.3.1"
+    "-DUSE_SYSTEM_PROJECTM=ON"
+    "-DSPOTIFY_BLOB=OFF"
   ];
 
   dontWrapQtApps = true;
@@ -136,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplatform music player";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    mainProgram = "clementine";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

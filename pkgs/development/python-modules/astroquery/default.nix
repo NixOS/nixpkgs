@@ -1,10 +1,8 @@
 {
-  lib,
+  pkgs,
   buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
+  fetchPypi,
   astropy,
-  boto3,
   requests,
   keyring,
   beautifulsoup4,
@@ -19,41 +17,33 @@
   pyvo,
   astropy-helpers,
   setuptools,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "astroquery";
   version = "0.4.10";
-  pyproject = true;
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "astropy";
-    repo = "astroquery";
-    tag = "v${version}";
-    hash = "sha256-5pNKV+XNfUQca7WoWboVphXffzyVIHCmfxwr4nBMaEk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-6s2R6do3jmQXQPvDEjhQ2qg7oJJqb/9MQMy/XcbVpAY=";
   };
 
-  patches = [
-    # https://github.com/astropy/astroquery/pull/3311
-    (fetchpatch2 {
-      name = "setuptools-package-index.patch";
-      url = "https://github.com/astropy/astroquery/commit/9d43beb4b7bea424d73fff0b602ca90026155519.patch";
-      hash = "sha256-3QdOwP1rlWeScGxHT9ZVPmffE7S1XE0cbtnQ8T4bIYw=";
-    })
-  ];
+  disabled = !isPy3k;
 
-  build-system = [
-    astropy-helpers
-    setuptools
-  ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     astropy
     requests
     keyring
     beautifulsoup4
     html5lib
     pyvo
+  ];
+
+  nativeBuildInputs = [
+    astropy-helpers
+    setuptools
   ];
 
   # Disable automatic update of the astropy-helper module
@@ -64,7 +54,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
-    boto3
     matplotlib
     pillow
     pytest
@@ -87,10 +76,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "astroquery" ];
 
-  meta = {
+  meta = with pkgs.lib; {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.smaret ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.smaret ];
   };
 }

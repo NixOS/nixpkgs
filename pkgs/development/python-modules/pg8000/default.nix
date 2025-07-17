@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.31.4";
+  version = "1.31.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5+zOQzmJHyewsi4veeue/kQRi9OEIHNZ/Bg1D3iKzgA=";
+    hash = "sha256-HqRs8J2Oygf+fqre/XlR43vuf6vmdd8WTxpXL/swCHY=";
   };
 
   build-system = [
@@ -32,8 +32,7 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

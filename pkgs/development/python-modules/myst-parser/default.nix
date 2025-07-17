@@ -51,8 +51,7 @@ buildPythonPackage rec {
     pytest-regressions
     sphinx-pytest
     pytestCheckHook
-  ]
-  ++ markdown-it-py.optional-dependencies.linkify;
+  ] ++ markdown-it-py.optional-dependencies.linkify;
 
   disabledTests = [
     # sphinx 8.2 compat

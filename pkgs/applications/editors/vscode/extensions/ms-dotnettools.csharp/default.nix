@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
   vscode-utils,
   autoPatchelfHook,
   icu,
@@ -18,41 +17,29 @@ let
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-0SMd7cEMSxH6fuvQl5RKc1jFvonBIgYpUMnmMnDiRmU=";
+        hash = "sha256-2UeXsvj1W62Ath0hcNomgyQF58uCKkwr8UfjoLhOyWs=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-Y6KpB6WreP4ZWovUL4cOZxxorp2Ekzq9jISY0Yo4c1Q=";
+        hash = "sha256-Qn2PFh2O3ouoH1T9pDPDKVVoowTSyKYqY+FZ579J0nU=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-uXL/AN3dA45po1EuZHCSCLSFyzfVGs7yPX+0refwy10=";
+        hash = "sha256-lXwkoVw/t+1A0sVPSYaCoXtOusQtCZEjACEE0bLpr14=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-Tj0uEwLFMNN+T5XG+8y67ssUig+QeUS4uFe0HZp2ua8=";
+        hash = "sha256-b7NaFjoAlyeW5PJc4OwnvJ18FSbcpchDjhGQPahM8tg=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
   );
-
-  # Get url from runtimeDependencies in package.json
-  # TODO: Automate fetching runtimeDependencies from package.json
-  #       ideally should be done at the vscode-extensions level for
-  #       everyone to reuse.
-  roslyn-copilot = fetchzip {
-    url = "https://roslyn.blob.core.windows.net/releases/Microsoft.VisualStudio.Copilot.Roslyn.LanguageServer-18.0.479-alpha.zip";
-    hash = "sha256-xq66gY3N3/R9bG6XWqLy53T/ExzGdZi3ZBNEzYAeqM8=";
-    postFetch = ''
-      touch install.Lock
-    '';
-  };
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csharp";
     publisher = "ms-dotnettools";
-    version = "2.90.60";
+    version = "2.84.19";
     inherit (extInfo) hash arch;
   };
 
@@ -73,10 +60,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
   postPatch = ''
     substituteInPlace dist/extension.js \
       --replace-fail 'uname -m' '${lib.getExe' coreutils "uname"} -m'
-  '';
-
-  postInstall = ''
-    ln -s ${roslyn-copilot} "$out"/share/vscode/extensions/ms-dotnettools.csharp/.roslynCopilot
   '';
 
   preFixup = ''

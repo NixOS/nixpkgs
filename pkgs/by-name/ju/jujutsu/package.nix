@@ -14,16 +14,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.33.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EKYM18UavIbZeI5/F5OKUzyjQip0yb6WPt6BZ2YpYww=";
+    hash = "sha256-4zDHSpi7Kk7rramrWFOlBelZnOxt0zgXIrHucYQUOz0=";
   };
 
-  cargoHash = "sha256-iIMmtuf4uDe2PX/X3UW8sDt3kPTij8Nlh/SU92abvUw=";
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-QmMc7pG2FMJBI9AIGPRRh2juFoz7gRFw5CQIcNK6QZI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,6 +52,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "jj-cli"
   ];
+
+  # taplo-cli (used in tests) always creates a reqwest client, which
+  # requires configd access on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
 
   env = {
     # Disable vendored libraries.

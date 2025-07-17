@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "schwifty";
-  version = "2025.7.0";
+  version = "2025.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qYr08ABWul+m8lt+sXScUMSBwYE7ZQDIhDPjTvRcGfk=";
+    hash = "sha256-q62H94Kjj2N9bnHn3XuxmGuwkReFI0FgvrvnF/vsuLQ=";
   };
 
   build-system = [
@@ -42,8 +42,7 @@ buildPythonPackage rec {
     iso3166
     pycountry
     rstr
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     pydantic = [ pydantic ];
@@ -51,8 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "schwifty" ];
 

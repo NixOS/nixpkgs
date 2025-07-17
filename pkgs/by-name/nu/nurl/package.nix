@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   gitMinimal,
   mercurial,
-  nix,
+  nixForLinking,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-OUJGxNqytwz7530ByqkanpseVJJXAea/L2GIHnuSIqk=";
 
   nativeBuildInputs = [
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage rec {
         lib.makeBinPath [
           gitMinimal
           mercurial
-          nix
+          nixForLinking
         ]
       }
     installManPage artifacts/nurl.1

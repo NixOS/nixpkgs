@@ -6,11 +6,10 @@
   lib,
   libgit2,
   libgpg-error,
-  lua5_4,
+  luajit,
   makeWrapper,
   nix,
   openssl,
-  perl,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -18,18 +17,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.17.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "lumen-oss";
+    owner = "nvim-neorocks";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZIXPUd6ZGXFdqbuQvZR6F9UqpTxoXXIao55LGHhewLg=";
+    hash = "sha256-O4n/xTGd1WDiZ/LhBBifsUq7dTvBD4uLoOxX1ByJ82s=";
   };
 
   buildAndTestSubdir = "lux-cli";
-
-  cargoHash = "sha256-8rYjZyssjfQpKPZ4sSFVLOz3tBarY4F/q5WyhKPVtZk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I8dAcPWug/7l3gAyAlHjwqNVzZVEfcvWWBnXuqOEbd4=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -41,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    perl
     pkg-config
   ];
 
@@ -50,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gpgme
     libgit2
     libgpg-error
-    lua5_4
+    luajit
     openssl
   ];
 
@@ -63,18 +61,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = "--lib"; # Disable impure integration tests
 
   nativeCheckInputs = [
-    lua5_4
+    luajit
     nix
   ];
 
   postBuild = ''
     cargo xtask dist-man
     cargo xtask dist-completions
-  '';
-
-  postInstall = ''
-    installManPage target/dist/lx.1
-    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {
@@ -84,8 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       compatible with luarocks.org and the Rockspec specification,
       with first-class support for Nix and Neovim.
     '';
-    homepage = "https://lux.lumen-labs.org/";
-    changelog = "https://github.com/lumen-oss/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://nvim-neorocks.github.io/";
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb

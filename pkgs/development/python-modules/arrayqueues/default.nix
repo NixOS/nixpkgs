@@ -1,36 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
+  isPy3k,
   numpy,
-  pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "arrayqueues";
   version = "1.4.1";
-  pyproject = true;
+  format = "setuptools";
+  disabled = !isPy3k;
 
-  src = fetchFromGitHub {
-    owner = "portugueslab";
-    repo = "arrayqueues";
-    tag = "v${version}";
-    hash = "sha256-tqIfpkwbJNd9jMe0YvAWz9Z8rOO80qxVM2ZcJFeAmwo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-7I+5BQO/gsvTREDkBfxrMblw3JPfY48S4KI4PCGPtFY=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ numpy ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "arrayqueues" ];
+  propagatedBuildInputs = [ numpy ];
 
   meta = {
     homepage = "https://github.com/portugueslab/arrayqueues";
     description = "Multiprocessing queues for numpy arrays using shared memory";
-    changelog = "https://github.com/portugueslab/arrayqueues/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tbenst ];
   };

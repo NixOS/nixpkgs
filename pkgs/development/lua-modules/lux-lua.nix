@@ -9,7 +9,6 @@
   lux-cli,
   nix,
   openssl,
-  perl,
   pkg-config,
   rustPlatform,
 }:
@@ -29,10 +28,10 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ luaFeature ];
 
+  useFetchCargoVendor = true;
   cargoHash = lux-cli.cargoHash;
 
   nativeBuildInputs = [
-    perl
     pkg-config
   ];
 
@@ -41,11 +40,8 @@ rustPlatform.buildRustPackage rec {
     gpgme
     libgit2
     libgpg-error
-    openssl
-  ];
-
-  propagatedBuildInputs = [
     lua
+    openssl
   ];
 
   doCheck = false; # lux-lua tests are broken in nixpkgs
@@ -61,19 +57,14 @@ rustPlatform.buildRustPackage rec {
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  buildPhase = ''
-    runHook preBuild
+  postBuild = ''
     cargo xtask-${luaFeature} dist
-    mkdir -p $out
-    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    cp -r target/dist/share $out
-    cp -r target/dist/lib $out
-    mkdir -p $out/lib/lua
-    ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
+    install -D -v target/dist/${luaVersionDir}/* -t $out/${luaVersionDir}
+    install -D -v target/dist/lib/pkgconfig/* -t $out/lib/pkgconfig
     runHook postInstall
   '';
 
@@ -81,9 +72,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Lua API for the Lux package manager";
-    homepage = "https://lux.lumen-labs.org/";
-    changelog = "https://github.com/lumen-oss/lux/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.lgpl3Plus;
+    homepage = "https://nvim-neorocks.github.io/";
+    changelog = "https://github.com/nvim-neorocks/lux/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mrcjkb
     ];

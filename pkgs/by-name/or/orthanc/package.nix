@@ -28,12 +28,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";
-  version = "1.12.9";
+  version = "1.12.8";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc/";
     rev = "Orthanc-${finalAttrs.version}";
-    hash = "sha256-IBULO03og+aXmpYAXZdsesTFkc7HkeXol+A7yzDzcfQ=";
+    hash = "sha256-ktfTqCid/0aYAp5HPB7niZ1sw+zMNmd5mhZrXRbMGyk=";
   };
 
   outputs = [
@@ -123,11 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Lightweight, RESTful DICOM server for healthcare and medical research";
+    description = "Orthanc is a lightweight, RESTful DICOM server for healthcare and medical research";
     homepage = "https://www.orthanc-server.com/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Orthanc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.linux;
   };
 })

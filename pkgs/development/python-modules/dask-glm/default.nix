@@ -48,8 +48,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     sparse
-  ]
-  ++ dask.optional-dependencies.array;
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     pytest-xdist

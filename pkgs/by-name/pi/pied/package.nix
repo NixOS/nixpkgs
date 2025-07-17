@@ -7,13 +7,13 @@
 
 flutter327.buildFlutterApplication rec {
   pname = "pied";
-  version = "0.3.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Elleo";
     repo = "pied";
     tag = "v${version}";
-    hash = "sha256-STeSpto70b4m03ExikUrIwsHCqj1QH2jvVZ8G/ybw28=";
+    hash = "sha256-I2p3GIb54r9r/phbKJsz/cFw1ECdwZ2RnCYVxjsHzg0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

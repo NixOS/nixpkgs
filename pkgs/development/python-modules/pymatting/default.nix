@@ -28,16 +28,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    numba
-    numpy
-    pillow
-    scipy
-  ]
-  ++ lib.optionals cudaSupport [
-    cupy
-    pyopencl
-  ];
+  dependencies =
+    [
+      numba
+      numpy
+      pillow
+      scipy
+    ]
+    ++ lib.optionals cudaSupport [
+      cupy
+      pyopencl
+    ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

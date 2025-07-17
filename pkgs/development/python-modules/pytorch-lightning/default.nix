@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.5.5";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = version;
-    hash = "sha256-8CDVvgaxnFWO4Fl5lW/+cn/1WZCgVXYys86iOVNYUfY=";
+    hash = "sha256-zYPjMahC8/9uYomzSFMbswJoh+CcBsnO0h4pkgCxIcQ=";
   };
 
   preConfigure = ''
@@ -50,8 +50,7 @@ buildPythonPackage rec {
     torchmetrics
     tqdm
     traitlets
-  ]
-  ++ fsspec.optional-dependencies.http;
+  ] ++ fsspec.optional-dependencies.http;
 
   nativeCheckInputs = [
     psutil

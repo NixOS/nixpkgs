@@ -12,29 +12,27 @@
 
 buildPythonPackage rec {
   pname = "python-mbedtls";
-  version = "2.10.1";
-  pyproject = true;
+  version = "2.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Synss";
     repo = "python-mbedtls";
     rev = version;
-    hash = "sha256-eKKb12G/0QAcwtv5Yk/92QXhMipeKOfKR1JEaNHDIlg=";
+    hash = "sha256-gMFludfAprQ/1JR77Ee6/xVvGLJ9pY1LrouLpSKVrzk=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cython
     setuptools
   ];
 
   buildInputs = [ mbedtls_2 ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     certifi
     typing-extensions
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

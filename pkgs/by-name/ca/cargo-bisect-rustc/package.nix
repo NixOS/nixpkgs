@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
 
   checkFlags = [

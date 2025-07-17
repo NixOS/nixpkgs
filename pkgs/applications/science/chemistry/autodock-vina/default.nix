@@ -25,12 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then "mac" else "linux"
   }/release";
 
-  buildInputs = [
-    boost'
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    glibc.static
-  ];
+  buildInputs =
+    [
+      boost'
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      glibc.static
+    ];
 
   makeFlags = [
     "GPP=${stdenv.cc.targetPrefix}c++"

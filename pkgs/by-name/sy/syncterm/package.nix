@@ -24,16 +24,17 @@ stdenv.mkDerivation rec {
   # We can't use sourceRoot, as the cherry-picked patches apply to files outside of it.
   postPatch = ''cd src/syncterm'';
 
-  CFLAGS = [
-    "-DHAS_INTTYPES_H"
-    "-DXPDEV_DONT_DEFINE_INTTYPES"
+  CFLAGS =
+    [
+      "-DHAS_INTTYPES_H"
+      "-DXPDEV_DONT_DEFINE_INTTYPES"
 
-    "-Wno-unused-result"
-    "-Wformat-overflow=0"
-  ]
-  ++ (lib.optionals stdenv.hostPlatform.isLinux [
-    "-DUSE_ALSA_SOUND" # Don't use OSS for beeps.
-  ]);
+      "-Wno-unused-result"
+      "-Wformat-overflow=0"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isLinux [
+      "-DUSE_ALSA_SOUND" # Don't use OSS for beeps.
+    ]);
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -52,8 +53,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     SDL2
-  ]
-  ++ (lib.optional stdenv.hostPlatform.isLinux alsa-lib);
+  ] ++ (lib.optional stdenv.hostPlatform.isLinux alsa-lib);
   runtimeDependencies = [
     ncurses
     SDL2

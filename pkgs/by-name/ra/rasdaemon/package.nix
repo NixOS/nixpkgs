@@ -34,18 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    libtraceevent
-    (perl.withPackages (
-      ps: with ps; [
-        DBDSQLite
-      ]
-    ))
-    sqlite
-  ]
-  ++ lib.optionals enableDmidecode [
-    dmidecode
-  ];
+  buildInputs =
+    [
+      libtraceevent
+      (perl.withPackages (
+        ps: with ps; [
+          DBDSQLite
+        ]
+      ))
+      sqlite
+    ]
+    ++ lib.optionals enableDmidecode [
+      dmidecode
+    ];
 
   configureFlags = [
     "--sysconfdir=/etc"

@@ -67,21 +67,22 @@ import ../make-test-python.nix {
             }
           );
 
-          systemd.services.${serviceName} = {
-            inherit description;
-            requiredBy = [ "multi-user.target" ];
-            confinement = (config.confinement or { }) // {
-              enable = true;
-            };
-            serviceConfig = (config.serviceConfig or { }) // {
-              ExecStart = mkTest serviceName testScript;
-              Type = "oneshot";
-            };
-          }
-          // removeAttrs config [
-            "confinement"
-            "serviceConfig"
-          ];
+          systemd.services.${serviceName} =
+            {
+              inherit description;
+              requiredBy = [ "multi-user.target" ];
+              confinement = (config.confinement or { }) // {
+                enable = true;
+              };
+              serviceConfig = (config.serviceConfig or { }) // {
+                ExecStart = mkTest serviceName testScript;
+                Type = "oneshot";
+              };
+            }
+            // removeAttrs config [
+              "confinement"
+              "serviceConfig"
+            ];
         };
 
       parametrisedTests =

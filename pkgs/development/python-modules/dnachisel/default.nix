@@ -1,35 +1,35 @@
 {
   lib,
-  biopython,
   buildPythonPackage,
-  docopt,
   fetchFromGitHub,
+  biopython,
+  docopt,
   flametree,
-  genome-collector,
-  matplotlib,
   numpy,
-  primer3,
   proglog,
   pytestCheckHook,
+  pythonOlder,
   python-codon-tables,
-  setuptools,
+  primer3,
+  genome-collector,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.16";
-  pyproject = true;
+  version = "3.2.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     tag = "v${version}";
-    hash = "sha256-F+G7dwehUCHYKSGsLQR4OZg2NQ4677XMlN6jOcmz8No=";
+    hash = "sha256-XmaUkmRGD1py5+8gfRe/6WegX1bOQtbTDDUT6RO2rBk=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     biopython
     docopt
     flametree

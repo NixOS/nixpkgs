@@ -34,7 +34,6 @@ let
       meta.maintainers = with lib.maintainers; [
         bendlas
         emilylange
-        tebriel
       ];
 
       nodes = {

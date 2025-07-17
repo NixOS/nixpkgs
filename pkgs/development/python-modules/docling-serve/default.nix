@@ -6,18 +6,15 @@
   setuptools-scm,
   # python dependencies
   docling,
-  docling-jobkit,
-  docling-mcp,
   fastapi,
   httpx,
   pydantic-settings,
   python-multipart,
-  scalar-fastapi,
   uvicorn,
   websockets,
   tesserocr,
   typer,
-  rapidocr,
+  rapidocr-onnxruntime,
   onnxruntime,
   torch,
   torchvision,
@@ -32,15 +29,20 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "1.5.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-JUHXrvsZBF/WHxsMT1xkPzpuX483RxF3ZlO+/NUMZ/8=";
+    hash = "sha256-R8W/FXKj2wLJOcjwIsna/2wFOLGM80Qr3WlYPJTTSNU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"kfp[kubernetes]>=2.10.0",' ""
+  '';
 
   build-system = [
     hatchling
@@ -55,23 +57,21 @@ buildPythonPackage rec {
     "mlx-vlm" # not yet available on nixpkgs
   ];
 
-  dependencies = [
-    docling
-    docling-jobkit
-    docling-mcp
-    fastapi
-    httpx
-    pydantic-settings
-    python-multipart
-    scalar-fastapi
-    typer
-    uvicorn
-    websockets
-  ]
-  ++ lib.optionals withUI optional-dependencies.ui
-  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-  ++ lib.optionals withCPU optional-dependencies.cpu;
+  dependencies =
+    [
+      docling
+      fastapi
+      httpx
+      pydantic-settings
+      python-multipart
+      typer
+      uvicorn
+      websockets
+    ]
+    ++ lib.optionals withUI optional-dependencies.ui
+    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+    ++ lib.optionals withCPU optional-dependencies.cpu;
 
   optional-dependencies = {
     ui = [
@@ -83,7 +83,7 @@ buildPythonPackage rec {
       tesserocr
     ];
     rapidocr = [
-      rapidocr
+      rapidocr-onnxruntime
       onnxruntime
     ];
     cpu = [
@@ -105,6 +105,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/docling-project/docling-serve";
     license = lib.licenses.mit;
     mainProgram = "docling-serve";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 }

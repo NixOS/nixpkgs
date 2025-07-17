@@ -52,8 +52,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     tldextract
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     route53 = [ boto3 ];
@@ -75,8 +74,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-vcr
-  ]
-  ++ optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
   enabledTestPaths = [ "tests/" ];
 

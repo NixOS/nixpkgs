@@ -23,16 +23,16 @@
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.19.3-beta";
+  version = "0.19.1-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    hash = "sha256-j37tLwVmAI18N0Xb3epACKRpJbs60HamZOlKDxWngFA=";
+    hash = "sha256-ifxEUEQUhy1msMsP+rIx0s1GkI+569kMR9LwymeSPkY=";
   };
 
-  vendorHash = "sha256-Ah5jOknXSoWEOnn0UKRuuwqT+E4eAkCg1h4qzW0rSHM=";
+  vendorHash = "sha256-FYyjCNiHKoG7/uvxhHKnEz3J4GuKwEJcjrFXYqCxTtc=";
 
   subPackages = [
     "cmd/lncli"

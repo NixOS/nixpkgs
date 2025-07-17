@@ -85,6 +85,6 @@ python3.pkgs.buildPythonPackage {
     mainProgram = "bumblebee-status";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jamerrq ];
+    maintainers = with maintainers; [ augustebaum ];
   };
 }

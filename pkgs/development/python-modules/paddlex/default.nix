@@ -19,7 +19,6 @@
   ujson,
   distutils,
   huggingface-hub,
-  nix-update-script,
 }:
 
 let
@@ -51,14 +50,14 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.1.4";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-Oc8fgAv8T/9PjxW8yU31t3m3CUxFuAXdVS71BGhtlJo=";
+    hash = "sha256-vmb1A7AifQmWv31b847hP1lHeBe+ZDEGR3raIGykRoo=";
   };
 
   build-system = [ setuptools ];
@@ -87,14 +86,12 @@ buildPythonPackage rec {
     huggingface-hub
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
     license = lib.licenses.asl20;
     description = "All-in-One Development Tool based on PaddlePaddle";
     changelog = "https://github.com/PaddlePaddle/PaddleX/releases/tag/${src.tag}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       transmission exists.
     '';
     maintainers = with lib.maintainers; [
+      ehmry
       woffs
     ];
     platforms = lib.platforms.all;

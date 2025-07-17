@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cython,
@@ -17,21 +18,20 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "6.0.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
     tag = "lxml-${version}";
-    hash = "sha256-e1Lhtn8cjuDWkBV29icIqe0CJ59Ab05hBGMa+eRBzAw=";
+    hash = "sha256-yp0Sb/0Em3HX1XpDNFpmkvW/aXwffB4D1sDYEakwKeY=";
   };
 
   build-system = [
     cython
     setuptools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   # required for build time dependency check
   nativeBuildInputs = [

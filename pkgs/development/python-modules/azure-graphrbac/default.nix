@@ -5,23 +5,20 @@
   msrest,
   msrestazure,
   azure-common,
-  setuptools,
 }:
 
 buildPythonPackage rec {
+  version = "0.61.1";
+  format = "setuptools";
   pname = "azure-graphrbac";
-  version = "0.61.2";
-  pyproject = true;
 
   src = fetchPypi {
-    pname = "azure_graphrbac";
-    inherit version;
-    hash = "sha256-+yWwMwfhf3Ocga1r0+m1fFeENoYDHw8hS2UVhEfHc90=";
+    inherit pname version;
+    extension = "zip";
+    sha256 = "1qmjhpqw0sgy406ij5xyzkffisjah9m1pfz9x54v66bwrbi8msak";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
@@ -32,8 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Graph RBAC Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/graphrbac/azure-graphrbac";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-graphrbac_${version}/sdk/graphrbac/azure-graphrbac/CHANGELOG.md";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

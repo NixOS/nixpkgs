@@ -1,55 +1,41 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
+  python3,
   fetchFromGitHub,
-  poetry-core,
-  fido2,
-  nitrokey,
-  pyside6,
-  usb-monitor,
-  qt6,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
 }:
 
-let
-  inherit (qt6)
-    wrapQtAppsHook
-    qtbase
-    qtwayland
-    qtsvg
-    ;
-in
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.4.1";
+  version = "2.3.3";
   pyproject = true;
+
+  disabled = python3.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
-    hash = "sha256-nzhhtnKKOHA+Cw1y+BpYsyQklzkDnmFRKGIfaJ/dmaQ=";
+    hash = "sha256-BbgP4V0cIctY/oR4/1r1MprkIn+5oyHeFiOQQQ71mNU=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-    qtsvg
-  ];
+  buildInputs =
+    [ qtbase ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      qtsvg
+    ];
 
-  build-system = [
-    poetry-core
-  ];
-
-  dependencies = [
-    fido2
+  propagatedBuildInputs = with python3.pkgs; [
     nitrokey
     pyside6
     usb-monitor
@@ -66,16 +52,10 @@ buildPythonApplication rec {
     install -Dm755 meta/nk-app2.png $out/share/icons/hicolor/128x128/apps/com.nitrokey.nitrokey-app2.png
   '';
 
-  # wrapQtApps only wrapps binary files and normally skips python programs.
-  # Manually pass the qtWrapperArgs from wrapQtAppsHook to wrap python programs.
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
-
   meta = with lib; {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
-    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
+    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       _999eagle

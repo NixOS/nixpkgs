@@ -2,45 +2,34 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  bash,
   just,
-  catppuccin-whiskers,
   kdePackages,
   flavor ? "mocha",
-  accent ? "mauve",
   font ? "Noto Sans",
   fontSize ? "9",
   background ? null,
   loginBackground ? false,
-  userIcon ? false,
-  clockEnabled ? true,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "catppuccin-sddm";
-  version = "1.1.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "sddm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-7S0DKyb+4lP+5HCPAJRw/KDls2ZO9kksdlwYSz2uQC8=";
+    rev = "v${version}";
+    hash = "sha256-mDOiIGcpIvl4d3Dtsb2AX/1OggFEJ+hAjCd2LH7lqv0=";
   };
 
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
     just
-    catppuccin-whiskers
   ];
 
   propagatedBuildInputs = [
     kdePackages.qtsvg
   ];
-
-  postPatch = ''
-    substituteInPlace justfile \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -54,9 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/sddm/themes/"
-    cp -r themes/catppuccin-${flavor}-${accent} "$out/share/sddm/themes/catppuccin-${flavor}-${accent}"
+    cp -r dist/catppuccin-${flavor} "$out/share/sddm/themes/catppuccin-${flavor}"
 
-    configFile=$out/share/sddm/themes/catppuccin-${flavor}-${accent}/theme.conf
+    configFile=$out/share/sddm/themes/catppuccin-${flavor}/theme.conf
 
     substituteInPlace $configFile \
       --replace-fail 'Font="Noto Sans"' 'Font="${font}"' \
@@ -64,23 +53,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (background != null) ''
       substituteInPlace $configFile \
-        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"' \
+        --replace-fail 'Background="backgrounds/wall.jpg"' 'Background="${background}"' \
         --replace-fail 'CustomBackground="false"' 'CustomBackground="true"'
     ''}
 
     ${lib.optionalString loginBackground ''
       substituteInPlace $configFile \
         --replace-fail 'LoginBackground="false"' 'LoginBackground="true"'
-    ''}
-
-    ${lib.optionalString userIcon ''
-      substituteInPlace $configFile \
-        --replace-fail 'UserIcon="false"' 'UserIcon="true"'
-    ''}
-
-    ${lib.optionalString (!clockEnabled) ''
-      substituteInPlace $configFile \
-        --replace-fail 'ClockEnabled="true"' 'ClockEnabled="false"'
     ''}
 
     runHook postInstall
@@ -95,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Soothing pastel theme for SDDM";
     homepage = "https://github.com/catppuccin/sddm";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gipphe ];
+    maintainers = with lib.maintainers; [ elysasrc ];
     platforms = lib.platforms.linux;
   };
-})
+}

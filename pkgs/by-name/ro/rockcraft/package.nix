@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ [ dpkg ];
 
-  enabledTestPaths = [ "tests/unit" ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     "test_project_all_platforms_invalid"
@@ -60,11 +60,6 @@ python3Packages.buildPythonApplication rec {
     "test_run_init_django"
     # Mock is broken for Unix FHS reasons.
     "test_run_pack_services"
-    # Later version of craft-application is being used, which adds an
-    # additional kind of file to be ignored, and invalidates a somewhat
-    # static assertion. Can be removed in a later version once rockcraft
-    # catches up with craft-application version.
-    "test_lifecycle_args"
   ];
 
   versionCheckProgramArg = "--version";

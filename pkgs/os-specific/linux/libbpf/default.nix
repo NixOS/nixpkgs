@@ -15,20 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.6.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-igjjwirg3O5mC3DzGCAO9OgrH2drnE/gV6NH7ZLNnFE=";
+    hash = "sha256-bTT7ehTHVaqkT27hJrH2YQBrVU6uo2gkgHE1AJtDKKY=";
   };
-
-  patches = [
-    # Fix redefinition when using linux/netlink.h from libbpf with musl
-    # https://github.com/libbpf/libbpf/pull/919
-    ./sync-uapi-move-constants-from-linux-kernel-h-to-linux-const-h.patch
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

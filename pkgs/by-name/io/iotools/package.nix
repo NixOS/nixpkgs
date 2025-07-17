@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "iotools";
   version = "unstable-2017-12-11";
 
@@ -15,8 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tlGXJn3n27mQDupMIVYDd86YaWazVwel/qs0QqCy1W8=";
   };
 
-  patches = [ ./001-fix-werror-in-sprintf.patch ];
-
   makeFlags = [
     "DEBUG=0"
     "STATIC=0"
@@ -26,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 iotools -t $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Set of simple command line tools which allow access to
       hardware device registers";
     longDescription = ''
@@ -37,12 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
       operations.
     '';
     homepage = "https://github.com/adurbin/iotools";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ felixsinger ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ felixsinger ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     mainProgram = "iotools";
   };
-})
+}

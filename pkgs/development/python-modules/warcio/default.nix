@@ -51,12 +51,9 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlags = [
+  pytestFlagsArray = [
     "--offline"
-  ];
-
-  disabledTestPaths = [
-    "test/test_capture_http_proxy.py"
+    "--ignore=test/test_capture_http_proxy.py"
   ];
 
   pythonImportsCheck = [ "warcio" ];

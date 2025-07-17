@@ -49,13 +49,14 @@ buildPythonPackage rec {
   # > ps: vsz: requires entitlement
   # > ps: rss: requires entitlement
   # > ps: time: requires entitlement
-  disabledTests = [
-    "test_forgotten_stop"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "test_mirakuru_cleanup"
-    "test_daemons_killing"
-  ];
+  disabledTests =
+    [
+      "test_forgotten_stop"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_mirakuru_cleanup"
+      "test_daemons_killing"
+    ];
 
   meta = with lib; {
     homepage = "https://github.com/dbfixtures/mirakuru";

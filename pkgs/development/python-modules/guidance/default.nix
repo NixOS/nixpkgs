@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.2.5";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
     tag = version;
-    hash = "sha256-dTMJOBGirEumbpTanCVZQJATfLxqxmpUCqE7pah97Zw=";
+    hash = "sha256-FBnND9kCIVmE/IEz3TNOww8x0EAH6TTBYfKTprqSbDg=";
   };
 
   build-system = [
@@ -85,8 +85,7 @@ buildPythonPackage rec {
     tokenizers
     torch
     writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.schemas;
+  ] ++ optional-dependencies.schemas;
 
   enabledTestPaths = [ "tests/unit" ];
 
@@ -119,7 +118,7 @@ buildPythonPackage rec {
   meta = {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.tag}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

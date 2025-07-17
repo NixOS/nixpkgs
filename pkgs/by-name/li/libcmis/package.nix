@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-werror"
     "DOCBOOK2MAN=${docbook2x}/bin/docbook2man"
-    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;

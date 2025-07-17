@@ -22,13 +22,13 @@
 
 let
   pname = "typora";
-  version = "1.11.5";
+  version = "1.10.8";
   src = fetchurl {
     urls = [
       "https://download.typora.io/linux/typora_${version}_amd64.deb"
-      "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
+      "https://download2.typoraio.cn/linux/typora_${version}_amd64.deb"
     ];
-    hash = "sha256-CpUF8pRLzR3RzFD85Cobbmo3BInaeCee0NWKsmelPGs=";
+    hash = "sha256-7auxTtdVafvM2fIpQVvEey1Q6eLVG3mLdjdZXcqSE/Q=";
   };
 
   typoraBase = stdenv.mkDerivation {
@@ -133,7 +133,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A minimal Markdown editor and reader.";
+    description = "Markdown editor, a markdown reader";
     homepage = "https://typora.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ npulidomateo ];

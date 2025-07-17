@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.116.1";
+  version = "0.115.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
-    hash = "sha256-sd0SnaxuuF3Zaxx7rffn4ttBpRmWQoOtXln/amx9rII=";
+    hash = "sha256-qUJFBOwXIizgIrTYbueflimni+/BhbuTEf45dsjShKE=";
   };
 
   build-system = [ pdm-backend ];
@@ -67,51 +67,54 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = [
-      fastapi-cli
-      httpx
-      jinja2
-      python-multipart
-      itsdangerous
-      pyyaml
-      ujson
-      orjson
-      email-validator
-      uvicorn
-    ]
-    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-      pydantic-settings
-      pydantic-extra-types
-    ]
-    ++ fastapi-cli.optional-dependencies.standard
-    ++ uvicorn.optional-dependencies.standard;
-    standard = [
-      fastapi-cli
-      httpx
-      jinja2
-      python-multipart
-      email-validator
-      uvicorn
-    ]
-    ++ fastapi-cli.optional-dependencies.standard
-    ++ uvicorn.optional-dependencies.standard;
+    all =
+      [
+        fastapi-cli
+        httpx
+        jinja2
+        python-multipart
+        itsdangerous
+        pyyaml
+        ujson
+        orjson
+        email-validator
+        uvicorn
+      ]
+      ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+        pydantic-settings
+        pydantic-extra-types
+      ]
+      ++ fastapi-cli.optional-dependencies.standard
+      ++ uvicorn.optional-dependencies.standard;
+    standard =
+      [
+        fastapi-cli
+        httpx
+        jinja2
+        python-multipart
+        email-validator
+        uvicorn
+      ]
+      ++ fastapi-cli.optional-dependencies.standard
+      ++ uvicorn.optional-dependencies.standard;
   };
 
-  nativeCheckInputs = [
-    anyio
-    dirty-equals
-    flask
-    inline-snapshot
-    passlib
-    pyjwt
-    pytestCheckHook
-    pytest-asyncio
-    trio
-    sqlalchemy
-  ]
-  ++ anyio.optional-dependencies.trio
-  ++ passlib.optional-dependencies.bcrypt
-  ++ optional-dependencies.all;
+  nativeCheckInputs =
+    [
+      anyio
+      dirty-equals
+      flask
+      inline-snapshot
+      passlib
+      pyjwt
+      pytestCheckHook
+      pytest-asyncio
+      trio
+      sqlalchemy
+    ]
+    ++ anyio.optional-dependencies.trio
+    ++ passlib.optional-dependencies.bcrypt
+    ++ optional-dependencies.all;
 
   pytestFlags = [
     # ignoring deprecation warnings to avoid test failure from
@@ -136,7 +139,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastapi" ];
 
   meta = with lib; {
-    changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${version}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
     license = licenses.mit;

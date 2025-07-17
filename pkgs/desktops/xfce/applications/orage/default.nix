@@ -13,9 +13,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "orage";
-  version = "4.20.2";
+  version = "4.20.1";
 
-  sha256 = "sha256-iV4eVYmOXfEpq5cnHeCXRvx0Ms0Dis3EIwbcSakGLXs=";
+  sha256 = "sha256-WdvqsgHfhJ2sk4vQ75m1zmWjefJBJdDKH8E0GA4fCNg=";
 
   buildInputs = [
     glib

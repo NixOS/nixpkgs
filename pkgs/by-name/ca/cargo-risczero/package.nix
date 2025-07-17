@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     RECURSION_SRC_PATH = src-recursion;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-r2bs1MT2jBK4ATUKyRGLEAFCHNaGnnQ4jbQOKbQbldY=";
 
   nativeBuildInputs = [

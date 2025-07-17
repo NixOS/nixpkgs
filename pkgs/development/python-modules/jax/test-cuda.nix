@@ -7,8 +7,7 @@ pkgs.writers.writePython3Bin "jax-test-cuda"
   {
     libraries = [
       jax
-    ]
-    ++ jax.optional-dependencies.cuda;
+    ] ++ jax.optional-dependencies.cuda;
   }
   ''
     import jax

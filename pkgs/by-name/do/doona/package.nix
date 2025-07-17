@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "doona";
-  version = "0-unstable-2019-03-08";
+  version = "unstable-2019-03-08";
 
   src = fetchFromGitHub {
     owner = "wireghoul";

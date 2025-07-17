@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-release"
     "--enable-sse"
-  ]
-  ++ lib.optional enableEditor "--enable-uforadiant";
+  ] ++ lib.optional enableEditor "--enable-uforadiant";
 
   buildInputs = [
     libtheora

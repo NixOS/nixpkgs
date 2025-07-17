@@ -11,13 +11,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.41";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
-    tag = "v.${version}";
-    hash = "sha256-HF2g8rrcV6f6ZTKmveS/yjil/mBxpvRUFyauv5f+qQ8=";
+    rev = "v.${version}";
+    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
   };
 
   patches = [
@@ -30,7 +30,6 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     perl
-    perl.pkgs.Appcpanminus
     makeBinaryWrapper
   ];
 
@@ -68,9 +67,6 @@ buildNpmPackage rec {
       TimeLocal
       YAMLPP
       StringSimilarity
-      CHI
-      CacheFastMmap
-      LocaleMaketextLexicon
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
 
@@ -78,7 +74,8 @@ buildNpmPackage rec {
     runHook preBuild
 
     # Check if every perl dependency was installed
-    cpanm --installdeps ./tools --notest
+    # explicitly call cpanm with perl because the shebang is broken on darwin
+    perl ${perl.pkgs.Appcpanminus}/bin/cpanm --installdeps ./tools --notest
 
     perl ./tools/install.pl install-full
     rm -r node_modules public/js/vendor/*.map public/css/vendor/*.map
@@ -126,7 +123,7 @@ buildNpmPackage rec {
   passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
-    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.rev}";
     description = "Web application for archival and reading of manga/doujinshi";
     homepage = "https://github.com/Difegue/LANraragi";
     license = lib.licenses.mit;

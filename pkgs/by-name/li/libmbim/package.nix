@@ -20,20 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.32.0";
+  version = "1.30.0";
 
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals withDocs [ "man" ];
+  ] ++ lib.optionals withDocs [ "man" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "libmbim";
     rev = version;
-    hash = "sha256-+4INXuH2kbKs9C6t4bOJye7yyfYH/BLukmgDVvXo+u0=";
+    hash = "sha256-sHTpu9WeMZroT+1I18ObEHWSzcyj/Relyz8UNe+WawI=";
   };
 
   mesonFlags = [
@@ -44,18 +43,19 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    python3
-  ]
-  ++ lib.optionals withDocs [
-    help2man
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals withDocs [
+      help2man
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
   buildInputs = [
     glib

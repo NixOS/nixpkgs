@@ -8,7 +8,7 @@ without tiles), install `cataclysmDDA.stable.curses`. Note: `cataclysm-dda` is
 an alias to `cataclysmDDA.stable.tiles`.
 
 If you like access to a development build of your favorite git revision,
-override `cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like the curses
+override `cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like curses
 build):
 
 ```nix
@@ -29,7 +29,9 @@ The default configuration directory is `~/.cataclysm-dda`. If you prefer
 `$XDG_CONFIG_HOME/cataclysm-dda`, override the derivation:
 
 ```nix
-cataclysm-dda.override { useXdgDir = true; }
+cataclysm-dda.override {
+  useXdgDir = true;
+}
 ```
 
 ## Important note for overriding packages {#important-note-for-overriding-packages}
@@ -60,10 +62,10 @@ let
 
   # or by using a helper function `attachPkgs`.
   goodExample2 = attachPkgs pkgs myCDDA;
-
-  # badExample                     # parallel building disabled
-  # goodExample1.withMods (_: [])  # parallel building enabled
 in
+
+# badExample                     # parallel building disabled
+# goodExample1.withMods (_: [])  # parallel building enabled
 goodExample2.withMods (_: [ ]) # parallel building enabled
 ```
 
@@ -73,7 +75,11 @@ To install Cataclysm DDA with mods of your choice, you can use `withMods`
 attribute:
 
 ```nix
-cataclysm-dda.withMods (mods: with mods; [ tileset.UndeadPeople ])
+cataclysm-dda.withMods (
+  mods: with mods; [
+    tileset.UndeadPeople
+  ]
+)
 ```
 
 All mods, soundpacks, and tilesets available in nixpkgs are found in

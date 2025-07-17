@@ -5,22 +5,22 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbip-city-lite";
-  version = "2025-09";
+  version = "2025-06";
 
   src = fetchurl {
     url = "https://download.db-ip.com/free/dbip-city-lite-${finalAttrs.version}.mmdb.gz";
-    hash = "sha256-/PSE1mKx3QEovL09cvkh932uH3RJWdUr+HUaBOeQvSE=";
+    hash = "sha256-iv4UfdLcmLE5d5y38kz4EFpDpecjScESr1I30dB+jDQ=";
   };
 
   dontUnpack = true;
 
   installPhase = ''
-    runHook preInstall
+    runHook preBuild
 
     gzip -c -d "$src" > dbip-city-lite.mmdb
     install -Dm444 dbip-city-lite.mmdb "$out/share/dbip/dbip-city-lite.mmdb"
 
-    runHook postInstall
+    runHook postBuild
   '';
 
   passthru.mmdb = "${finalAttrs.finalPackage}/share/dbip/dbip-city-lite.mmdb";

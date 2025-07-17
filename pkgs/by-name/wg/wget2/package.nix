@@ -43,10 +43,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-0tOoStZHr5opehFmuQdFRPYvOv8IMrDTBNFtoweY3VM=";
   };
 
-  patches = [
-    ./gettext-0.25.patch
-  ];
-
   # wget2_noinstall contains forbidden reference to /build/
   postPatch = ''
     substituteInPlace src/Makefile.am \
@@ -63,22 +59,23 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    brotli
-    bzip2
-    gpgme
-    libhsts
-    libidn2
-    libpsl
-    nghttp2
-    pcre2
-    xz
-    zlib
-    zstd
-  ]
-  ++ lib.optionals sslSupport [
-    openssl
-  ];
+  buildInputs =
+    [
+      brotli
+      bzip2
+      gpgme
+      libhsts
+      libidn2
+      libpsl
+      nghttp2
+      pcre2
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals sslSupport [
+      openssl
+    ];
 
   # TODO: include translation files
   autoreconfPhase = ''
@@ -104,7 +101,7 @@ stdenv.mkDerivation rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
-  meta = {
+  meta = with lib; {
     description = "Successor of GNU Wget, a file and recursive website downloader";
     longDescription = ''
       Designed and written from scratch it wraps around libwget, that provides the basic
@@ -115,11 +112,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/gnuwget/wget2";
     # wget2 GPLv3+; libwget LGPLv3+
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Plus
       lgpl3Plus
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };
 }

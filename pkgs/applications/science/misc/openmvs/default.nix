@@ -1,6 +1,7 @@
 {
   lib,
   boost,
+  breakpad,
   ceres-solver,
   cgal,
   cmake,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boostWithZstd
+    breakpad
     ceres-solver
     cgal
     eigen
@@ -68,6 +70,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest
+    runHook postCheck
+  '';
 
   meta = {
     description = "Open Multi-View Stereo reconstruction library";

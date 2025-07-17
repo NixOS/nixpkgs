@@ -8,7 +8,6 @@
   asio,
   avahi,
   boost,
-  expat,
   flac,
   libogg,
   libvorbis,
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.32.3";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
     rev = "v${version}";
-    hash = "sha256-pGON2Nh7GgcGvMUNI3nWstm5Q9R+VW9eEi4IE6KkFBo=";
+    hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
   };
 
   nativeBuildInputs = [
@@ -39,26 +38,24 @@ stdenv.mkDerivation rec {
   ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
-  buildInputs = [
-    boost
-    asio
-    avahi
-    expat
-    flac
-    libogg
-    libvorbis
-    libopus
-    aixlog
-    popl
-    soxr
-    openssl
-  ]
-  ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
+  buildInputs =
+    [
+      boost
+      asio
+      avahi
+      flac
+      libogg
+      libvorbis
+      libopus
+      aixlog
+      popl
+      soxr
+      openssl
+    ]
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
-
-  cmakeFlags = [ (lib.cmakeBool "BUILD_WITH_PULSE" pulseaudioSupport) ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

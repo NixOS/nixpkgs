@@ -48,7 +48,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
-  version = "5.8.1";
+  version = "5.8.0";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
   __structuredAttrs = true;
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
-    hash = "sha256-60hNYhbHONv9E9VY8G0goE83q7AwJh1u/Z+QRK8anHQ=";
+    hash = "sha256-opJW7+Z/YhyUFwYTTTuWZuykz8Z4do6/XTBThHyTVCs=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -89,23 +89,25 @@ stdenv.mkDerivation (finalAttrs: {
       "${if static then "all" else "allshared"}"
     ];
 
-  installPhase = ''
-    mkdir $out
-    cp -r include lib $out
-  ''
-  + lib.optionalString (!mpiSupport) ''
-    # Install mumps_seq headers
-    install -Dm 444 -t $out/include/mumps_seq libseq/*.h
+  installPhase =
+    ''
+      mkdir $out
+      cp -r include lib $out
+    ''
+    + lib.optionalString (!mpiSupport) ''
+      # Install mumps_seq headers
+      install -Dm 444 -t $out/include/mumps_seq libseq/*.h
 
-    # Add some compatibility with coin-or-mumps
-    ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
-  '';
+      # Add some compatibility with coin-or-mumps
+      ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
+    '';
 
-  nativeBuildInputs = [
-    gfortran
-  ]
-  ++ lib.optional mpiSupport mpi
-  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs =
+    [
+      gfortran
+    ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
   buildInputs =

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.7.1";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-GUY4Evya0GQksl0R4b01UDSvoxUEOOeq4oOIblmoF5o=";
+    hash = "sha256-a2Lc4Vou+tND/d8bRw9MpjWrPgdE9gwisfT+xbHUMjY=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -53,26 +53,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Do-not-download-sources-in-cmake.patch
   ];
 
-  postPatch = ''
-    # fix library_check.sh interpreter error
-    patchShebangs .
+  postPatch =
+    ''
+      # fix library_check.sh interpreter error
+      patchShebangs .
 
-    mkdir -p srccadical
-    cp -r ${finalAttrs.srccadical}/* srccadical
+      mkdir -p srccadical
+      cp -r ${finalAttrs.srccadical}/* srccadical
 
-    mkdir -p srcglucose
-    cp -r ${finalAttrs.srcglucose}/* srcglucose
-    find -exec chmod +w {} \;
+      mkdir -p srcglucose
+      cp -r ${finalAttrs.srcglucose}/* srcglucose
+      find -exec chmod +w {} \;
 
-    substituteInPlace src/solvers/CMakeLists.txt \
-     --replace-fail "@srccadical@" "$PWD/srccadical" \
-     --replace-fail "@srcglucose@" "$PWD/srcglucose"
-  ''
-  + lib.optionalString (!stdenv.cc.isGNU) ''
-    # goto-gcc rely on gcc
-    substituteInPlace "regression/CMakeLists.txt" \
-      --replace-fail "add_subdirectory(goto-gcc)" ""
-  '';
+      substituteInPlace src/solvers/CMakeLists.txt \
+       --replace-fail "@srccadical@" "$PWD/srccadical" \
+       --replace-fail "@srcglucose@" "$PWD/srcglucose"
+    ''
+    + lib.optionalString (!stdenv.cc.isGNU) ''
+      # goto-gcc rely on gcc
+      substituteInPlace "regression/CMakeLists.txt" \
+        --replace-fail "add_subdirectory(goto-gcc)" ""
+    '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH
@@ -115,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Bounded Model Checker for C and C++ programs";
+    description = "CBMC is a Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

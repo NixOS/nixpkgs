@@ -1,19 +1,16 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  nix-update-script,
+  fetchurl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "bchunk";
   version = "1.2.2";
 
-  src = fetchFromGitHub {
-    owner = "hessu";
-    repo = "bchunk";
-    tag = "release/${finalAttrs.version}";
-    hash = "sha256-wFhBRLRwyC7FrGzadbssqLI9/UwfxBmFfOetaFJgsCo=";
+  src = fetchurl {
+    url = "http://he.fi/bchunk/${pname}-${version}.tar.gz";
+    sha256 = "12dxx98kbpc5z4dgni25280088bhlsb677rp832r82zzc1drpng7";
   };
 
   makeFlags = lib.optionals stdenv.cc.isClang [
@@ -26,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $out/share/man/man1 bchunk.1
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = with lib; {
     homepage = "http://he.fi/bchunk/";
     description = "Program that converts CD images in BIN/CUE format into a set of ISO and CDR tracks";
@@ -35,4 +30,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     mainProgram = "bchunk";
   };
-})
+}

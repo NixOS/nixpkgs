@@ -25,15 +25,15 @@
   writeScript,
 }:
 let
-  id = "289869947";
+  id = "243289393";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "2.1.0";
+  version = "1.43.2";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.dev/download/${id}/multiviewer_${version}_amd64.deb";
-    sha256 = "sha256-H+tt2FiT1UxkWBxpuyOIUjRMOMl7kN/SFH/WqoRdVUU=";
+    url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
+    sha256 = "sha256-wdA5f/80GkKP6LrrP2E6M9GY5bl6rg7Spz7NWB7cQjg=";
   };
 
   nativeBuildInputs = [
@@ -83,11 +83,13 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    mv -t $out/share usr/share/* usr/lib/multiviewer
+    mv -t $out/share usr/share/* usr/lib/multiviewer-for-f1
 
-    makeWrapper "$out/share/multiviewer/multiviewer" $out/bin/multiviewer \
+    makeWrapper "$out/share/multiviewer-for-f1/MultiViewer for F1" $out/bin/multiviewer-for-f1 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/multiviewer\""
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [ libudev0-shim ]
+      }:\"$out/share/Multiviewer for F1\""
 
     runHook postInstall
   '';
@@ -117,12 +119,12 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Unofficial desktop client for F1 TV";
+    description = "Unofficial desktop client for F1 TV®";
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
     license = licenses.unfree;
     maintainers = with maintainers; [ babeuh ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "multiviewer";
+    mainProgram = "multiviewer-for-f1";
   };
 }

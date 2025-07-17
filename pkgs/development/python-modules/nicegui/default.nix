@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.24.1";
+  version = "2.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-Qwgs7e44h+i0YBLhmSReXVJEBSiShUT0M4QaU/X8uhI=";
+    hash = "sha256-pQh3kFFlqfktpW5UtX7smb7qXubX5bMeM46hX8jhtTA=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -102,8 +102,7 @@ buildPythonPackage rec {
     pytestCheckHook
     webdriver-manager
     writableTmpDirAsHomeHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 

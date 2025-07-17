@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.12.1";
+  version = "1.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
     tag = version;
-    hash = "sha256-Nxhv3K/wF7AYi5kTJxL2pjiDWgWN+27wKsMXf0yaXrk=";
+    hash = "sha256-bQjmAmTRP/ce25hSP1nTtuDmUtk46DxkKWtylJRoj3s=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -33,22 +33,23 @@ python3Packages.buildPythonApplication rec {
     pytest-cov-stub
   ];
 
-  propagatedBuildInputs = [
-    nix
-  ]
-  ++ (with python3Packages; [
-    click
-    colorama
-    pyyaml
-    requests
-    setuptools
-    toml
-    zodb
-  ]);
+  propagatedBuildInputs =
+    [
+      nix
+    ]
+    ++ (with python3Packages; [
+      click
+      colorama
+      pyyaml
+      requests
+      setuptools
+      toml
+      zodb
+    ]);
 
   postBuild = "make -C doc";
 
-  enabledTestPaths = [ "src/vulnix" ];
+  pytestFlagsArray = [ "src/vulnix" ];
 
   postInstall = ''
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst

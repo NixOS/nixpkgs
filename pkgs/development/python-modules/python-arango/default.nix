@@ -18,6 +18,7 @@
   packaging,
 
   # tests
+  arangodb,
   mock,
 }:
 
@@ -32,7 +33,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "8.2.2";
+  version = "8.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
-    hash = "sha256-qcG1q85q3hhkcYSGcWp5I1spwvf+yPg6TZbAnc0/iYw=";
+    hash = "sha256-ZLjCcH6cSG+LcoeSifBm6HGjnRFJwYNTXbcw9b/BeQY=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +61,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    #arangodb
+    arangodb
     mock
     pytestCheckHook
   ];
 
-  # ArangoDB has been removed from Nixpkgs due to lack of maintenace,
-  # so we cannot run the tests at present.
-  #
-  # Before that, the issue was:
-  #
   # arangodb is compiled only for particular target architectures
   # (i.e. "haswell"). Thus, these tests may not pass reproducibly,
   # failing with: `166: Illegal instruction` if not run on arangodb's
@@ -80,27 +76,27 @@ buildPythonPackage rec {
   # architecture issues will be irrelevant.
   doCheck = false;
 
-  #preCheck = lib.optionalString doCheck ''
-  #  # Start test DB
-  #  mkdir -p .nix-test/{data,work}
-  #
-  #  ICU_DATA=${arangodb}/share/arangodb3 \
-  #  GLIBCXX_FORCE_NEW=1 \
-  #  TZ=UTC \
-  #  TZ_DATA=${arangodb}/share/arangodb3/tzdata \
-  #  ARANGO_ROOT_PASSWORD=${testDBOpts.password} \
-  #  ${arangodb}/bin/arangod \
-  #    --server.uid=$(id -u) \
-  #    --server.gid=$(id -g) \
-  #    --server.authentication=true \
-  #    --server.endpoint=http+tcp://${testDBOpts.host}:${testDBOpts.port} \
-  #    --server.descriptors-minimum=4096 \
-  #    --server.jwt-secret=${testDBOpts.secret} \
-  #    --javascript.app-path=.nix-test/app \
-  #    --log.file=.nix-test/log \
-  #    --database.directory=.nix-test/data \
-  #    --foxx.api=false &
-  #'';
+  preCheck = lib.optionalString doCheck ''
+    # Start test DB
+    mkdir -p .nix-test/{data,work}
+
+    ICU_DATA=${arangodb}/share/arangodb3 \
+    GLIBCXX_FORCE_NEW=1 \
+    TZ=UTC \
+    TZ_DATA=${arangodb}/share/arangodb3/tzdata \
+    ARANGO_ROOT_PASSWORD=${testDBOpts.password} \
+    ${arangodb}/bin/arangod \
+      --server.uid=$(id -u) \
+      --server.gid=$(id -g) \
+      --server.authentication=true \
+      --server.endpoint=http+tcp://${testDBOpts.host}:${testDBOpts.port} \
+      --server.descriptors-minimum=4096 \
+      --server.jwt-secret=${testDBOpts.secret} \
+      --javascript.app-path=.nix-test/app \
+      --log.file=.nix-test/log \
+      --database.directory=.nix-test/data \
+      --foxx.api=false &
+  '';
 
   pytestFlags = [
     "--host=${testDBOpts.host}"

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "incubator-tvm";
-    tag = "v${version}";
+    rev = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-/5IpOraFTgg6sQ1TLHoepq/C8VHKg5BXKrNMBSyYajA=";
   };

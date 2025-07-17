@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "whereami";
-  version = "0-unstable-2022-02-18";
+  version = "unstable-2022-02-18";
 
   src = fetchFromGitHub {
     owner = "gpakosz";

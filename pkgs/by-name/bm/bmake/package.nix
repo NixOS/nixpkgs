@@ -4,18 +4,18 @@
   fetchurl,
   getopt,
   ksh,
-  pkgsMusl ? { },
+  pkgsMusl,
   stdenv,
   tzdata,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20250804";
+  version = "20250528";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C0kDdkSyUyBtLnENRuMoWeYt/ixsjnIYrkOfLvUN6K0=";
+    hash = "sha256-DcOJpeApiqWFNTtgeW1dYy3mYNreWNAKzWCtcihGyaM=";
   };
 
   patches = [
@@ -36,13 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     getopt
   ];
 
-  nativeCheckInputs = [
-    bc
-    tzdata
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  nativeCheckInputs =
+    [
+      bc
+      tzdata
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+      ksh
+    ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
   # given op. On a case-insensitive filesystem this generated makefile clobbers
@@ -57,18 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   # * opt-keep-going-indirect: not yet known
   # * varmod-localtime: musl doesn't support TZDIR and this test relies on
   #   impure, implicit paths
-  # * interrupt-compat (fails on x86_64-linux building for i686-linux)
-  env.BROKEN_TESTS = lib.concatStringsSep " " (
-    [
-      "directive-export"
-      "directive-export-gmake"
-      "opt-keep-going-indirect"
-      "varmod-localtime"
-    ]
-    ++ lib.optionals stdenv.targetPlatform.is32bit [
-      "interrupt-compat"
-    ]
-  );
+  env.BROKEN_TESTS = builtins.concatStringsSep " " [
+    "directive-export"
+    "directive-export-gmake"
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
 
   strictDeps = true;
 
@@ -113,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      bmakeMusl = pkgsMusl.bmake or null;
+      bmakeMusl = pkgsMusl.bmake;
     };
   };
 

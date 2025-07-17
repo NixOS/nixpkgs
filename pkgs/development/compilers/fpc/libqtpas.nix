@@ -24,12 +24,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [
-    qtbase
-  ]
-  ++ lib.optionals (qtVersion == "5") [
-    qtx11extras
-  ];
+  buildInputs =
+    [
+      qtbase
+    ]
+    ++ lib.optionals (qtVersion == "5") [
+      qtx11extras
+    ];
 
   dontWrapQtApps = true;
 

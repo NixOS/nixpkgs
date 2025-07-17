@@ -14,6 +14,8 @@
   lib,
 }:
 
+assert stdenv.cc.isGNU;
+
 with pkgs;
 # rebuild gcc using the "final" stdenv
 let
@@ -29,23 +31,11 @@ let
         NIX_OUTPATH_USED_AS_RANDOM_SEED = stdenv.cc.cc.out;
       });
 in
-
-(runCommand "gcc-stageCompare"
-  {
-    checksumCompare =
-      assert lib.assertMsg (gcc-stageCompare ? checksum)
-        "tests-stdenv-gcc-stageCompare: No `checksum` output in `gcc-stageCompare` see conditional in `gcc/common/checksum.nix`";
-      gcc-stageCompare.checksum;
-
-    checksumUnwrapped =
-      assert lib.assertMsg (pkgs.gcc-unwrapped ? checksum)
-        "tests-stdenv-gcc-stageCompare: No `checksum` output in `gcc-stageCompare` see conditional in `gcc/common/checksum.nix`";
-      pkgs.gcc-unwrapped.checksum;
-  }
-  ''
-    diff -sr "$checksumUnwrapped"/checksums "$checksumCompare"/checksums && touch $out
-  ''
-).overrideAttrs
+assert lib.assertMsg (gcc-stageCompare ? checksum)
+  "tests-stdenv-gcc-stageCompare: No `checksum` output in `gcc-stageCompare` see conditional in `gcc/common/checksum.nix`";
+(runCommand "gcc-stageCompare" { } ''
+  diff -sr ${pkgs.gcc-unwrapped.checksum}/checksums ${gcc-stageCompare.checksum}/checksums && touch $out
+'').overrideAttrs
   (a: {
     meta = (a.meta or { }) // {
       platforms = lib.platforms.linux;

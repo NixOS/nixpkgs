@@ -6,8 +6,6 @@
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
-  writeShellScript,
-  nix-update,
 }:
 let
   icon =
@@ -20,16 +18,16 @@ let
         };
       }
       ''
-        magick $src -resize 512x512 $out
+        convert $src $out
       '';
 in
 appimageTools.wrapType2 rec {
   pname = "xnviewmp";
-  version = "1.9.3";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://download.xnview.com/old_versions/XnView_MP/XnView_MP-${version}.glibc2.17-x86_64.AppImage";
-    hash = "sha256-Aai88JrjStkUVYCb1up662jyqBo+vmj+nu/i2vBe8XI=";
+    hash = "sha256-lj6yLxg6VsNq4/3nZG8QuYYL+N+XRlpaN1Lmi307b8Q=";
   };
 
   nativeBuildInputs = [
@@ -54,14 +52,6 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/xnviewmp.png
   '';
-
-  passthru = {
-    inherit src;
-    updateScript = writeShellScript "update-xnviewmp" ''
-      latestVersion=$(curl --fail --silent "http://www.xnview.com/update.txt" | awk -F= '/\[XnViewMP\]/{getline; if($1=="version") print $2}')
-      ${lib.getExe nix-update} xnviewmp --version $latestVersion
-    '';
-  };
 
   meta = {
     description = "Efficient multimedia viewer, browser and converter";

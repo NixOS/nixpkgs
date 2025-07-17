@@ -3,7 +3,6 @@
 
   buildPythonPackage,
   fetchFromGitHub,
-  fetchPypi,
   pythonOlder,
 
   nix-update-script,
@@ -19,7 +18,7 @@
   versionCheckHook,
 }:
 let
-  version = "0.22.1";
+  version = "0.22.0";
 in
 buildPythonPackage {
   inherit version;
@@ -31,14 +30,10 @@ buildPythonPackage {
     owner = "caksoylar";
     repo = "keymap-drawer";
     tag = "v${version}";
-    hash = "sha256-X3O5yspEdey03YQ6JsYN/DE9NUiq148u1W6LQpUQ3ns=";
+    hash = "sha256-SPnIfrUA0M9xznjEe60T+0VHh9lCmY4cni9hyqFlZqM=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "tree-sitter-devicetree"
-  ];
 
   dependencies = [
     pcpp
@@ -47,16 +42,7 @@ buildPythonPackage {
     pydantic-settings
     pyparsing
     pyyaml
-    # keymap-drawer currently requires tree-sitter 0.24.0
-    # See https://github.com/caksoylar/keymap-drawer/issues/183
-    (tree-sitter.overrideAttrs rec {
-      version = "0.24.0";
-      src = fetchPypi {
-        inherit version;
-        inherit (tree-sitter) pname;
-        hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
-      };
-    })
+    tree-sitter
     tree-sitter-grammars.tree-sitter-devicetree
   ];
 
@@ -74,7 +60,6 @@ buildPythonPackage {
   meta = {
     description = "Module and CLI tool to help parse and draw keyboard layouts";
     homepage = "https://github.com/caksoylar/keymap-drawer";
-    changelog = "https://github.com/caksoylar/keymap-drawer/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       MattSturgeon

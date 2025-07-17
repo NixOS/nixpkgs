@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-camera-app";
-  version = "4.1.1";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-camera-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NRdZLBN+06/YCa+4L1elrmP2nQm/6DNg1EmRY73B+RQ=";
+    hash = "sha256-rGWIcaU3iFZIse69DUVjCebWH18yVrqWHcGoXItGX3k=";
   };
 
   patches = [
@@ -59,31 +59,32 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    exiv2
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    qtquickcontrols2
-    qzxing
+  buildInputs =
+    [
+      exiv2
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      qtquickcontrols2
+      qzxing
 
-    # QML
-    libusermetrics
-    lomiri-action-api
-    lomiri-content-hub
-    lomiri-ui-toolkit
-    lomiri-thumbnailer
-    qtpositioning
-    qtsensors
-  ]
-  ++ (with gst_all_1; [
-    # cannot create camera service, the 'camerabin' plugin is missing for GStreamer
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+      # QML
+      libusermetrics
+      lomiri-action-api
+      lomiri-content-hub
+      lomiri-ui-toolkit
+      lomiri-thumbnailer
+      qtpositioning
+      qtsensors
+    ]
+    ++ (with gst_all_1; [
+      # cannot create camera service, the 'camerabin' plugin is missing for GStreamer
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
   nativeCheckInputs = [ xvfb-run ];
 

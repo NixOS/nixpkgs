@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "oguri";
-  version = "0-unstable-2020-12-19";
+  version = "unstable-2020-12-19";
 
   src = fetchFromGitHub {
     owner = "vilhalmer";

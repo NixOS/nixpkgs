@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jnv";
-  version = "0.6.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ynqa";
     repo = "jnv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VjT0S+eEaO8FOPb1grIpheeP9v1dCpV7FRHn+nJXOEM=";
+    hash = "sha256-HKZ+hF5Y7vTA4EODSAd9xYJHaipv5YukTl470ejPLtM=";
   };
 
-  cargoHash = "sha256-dR9cb3TBxrRGP3BFYro/nGe5XVEfJuTZbQLo+FUfFNs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VLVoURqmUhhekNZ0a75bwjvSiLfaQ79IlltbmWVyBrI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

@@ -14,8 +14,7 @@ let
       modules = [
         module
         { image.baseName = isoBaseName; }
-      ]
-      ++ extraModules;
+      ] ++ extraModules;
     }).config;
 
 in

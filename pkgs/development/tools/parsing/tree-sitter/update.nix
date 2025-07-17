@@ -144,7 +144,7 @@ let
       repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
-      orga = "nix-community";
+      orga = "cstrahan";
       repo = "tree-sitter-nix";
     };
     "tree-sitter-latex" = {
@@ -183,10 +183,6 @@ let
       orga = "stsewd";
       repo = "tree-sitter-rst";
     };
-    "tree-sitter-sml" = {
-      orga = "MatthewFluet";
-      repo = "tree-sitter-sml";
-    };
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
@@ -209,7 +205,7 @@ let
       repo = "tree-sitter-viml";
     };
     "tree-sitter-yaml" = {
-      orga = "tree-sitter-grammars";
+      orga = "ikatyang";
       repo = "tree-sitter-yaml";
     };
     "tree-sitter-zig" = {
@@ -281,7 +277,7 @@ let
       repo = "tree-sitter-scss";
     };
     "tree-sitter-erlang" = {
-      orga = "WhatsApp";
+      orga = "abstractmachineslab";
       repo = "tree-sitter-erlang";
     };
     "tree-sitter-elixir" = {
@@ -343,10 +339,6 @@ let
     "tree-sitter-gemini" = {
       orga = "blessanabraham";
       repo = "tree-sitter-gemini";
-    };
-    "tree-sitter-go-template" = {
-      orga = "ngalaiko";
-      repo = "tree-sitter-go-template";
     };
     "tree-sitter-godot-resource" = {
       orga = "prestonknopp";
@@ -502,21 +494,6 @@ let
     };
   };
 
-  pinnedGrammars = [
-    "tree-sitter-bash"
-    "tree-sitter-bibtex"
-    "tree-sitter-c"
-    "tree-sitter-comment"
-    "tree-sitter-fortran"
-    "tree-sitter-hcl"
-    "tree-sitter-hyprlang"
-    "tree-sitter-llvm"
-    "tree-sitter-markdown"
-    "tree-sitter-query"
-    "tree-sitter-rust"
-  ];
-  pinnedGrammarsJson = jsonFile pinnedGrammars;
-
   allGrammars =
     let
       treeSitterOrgaGrammars = lib.listToAttrs (
@@ -546,7 +523,6 @@ let
         inherit
           knownTreeSitterOrgGrammarRepos
           ignoredTreeSitterOrgRepos
-          pinnedGrammars
           ;
       }
       (

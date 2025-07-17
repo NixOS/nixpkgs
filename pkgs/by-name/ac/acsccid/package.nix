@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoconf,
-  autoconf-archive,
   automake,
   libtool,
   gettext,
@@ -15,19 +14,20 @@
   libiconv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  version = "1.1.12";
+stdenv.mkDerivation rec {
+  version = "1.1.8";
   pname = "acsccid";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-KPYHWlSUpWjOL9hmbEifb0pRWZtE+8k5Dh3bSNPMxb0=";
+  src = fetchFromGitHub {
+    owner = "acshk";
+    repo = "acsccid";
+    tag = "v${version}";
+    sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoconf
-    autoconf-archive
     automake
     libtool
     gettext
@@ -35,13 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs = [
-    pcsclite
-    libusb1
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      pcsclite
+      libusb1
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   configureFlags = [
     "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
@@ -50,10 +51,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postPatch = ''
-    substituteInPlace src/Makefile.in \
-      --replace-fail '$(INSTALL_UDEV_RULE_FILE)' ""
+    sed -e s_/bin/echo_echo_g -i src/Makefile.am
     patchShebangs src/convert_version.pl
     patchShebangs src/create_Info_plist.pl
+  '';
+
+  preConfigure = ''
+    libtoolize --force
+    aclocal
+    autoheader
+    automake --force-missing --add-missing
+    autoconf
   '';
 
   meta = {
@@ -71,9 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
         services.pcscd.enable = true;
         services.pcscd.plugins = [ pkgs.acsccid ];
     '';
-    homepage = "http://acsccid.sourceforge.net";
+    homepage = src.meta.homepage;
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
-})
+}

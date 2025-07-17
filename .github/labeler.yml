@@ -28,7 +28,6 @@
               - nixos/modules/services/x11/desktop-managers/cinnamon.nix
               - nixos/tests/cinnamon.nix
               - nixos/tests/cinnamon-wayland.nix
-              - pkgs/by-name/ci/cinnamon/**/*
               - pkgs/by-name/ci/cinnamon-*/**/*
               - pkgs/by-name/cj/cjs/**/*
               - pkgs/by-name/mu/muffin/**/*
@@ -393,7 +392,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - nixos/modules/services/desktops/pantheon/**/*
-              - nixos/modules/services/desktop-managers/pantheon.nix
+              - nixos/modules/services/x11/desktop-managers/pantheon.nix
               - nixos/modules/services/x11/display-managers/lightdm-greeters/pantheon.nix
               - nixos/tests/pantheon.nix
               - pkgs/desktops/pantheon/**/*
@@ -431,9 +430,12 @@
       - changed-files:
           - any-glob-to-any-file:
               - doc/languages-frameworks/qt.section.md
-              - nixos/modules/services/desktop-managers/plasma6.nix
-              - nixos/tests/plasma6.nix
-              - pkgs/kde/**/*
+              - nixos/modules/services/x11/desktop-managers/plasma5.nix
+              - nixos/tests/plasma5.nix
+              - pkgs/applications/kde/**/*
+              - pkgs/desktops/plasma-5/**/*
+              - pkgs/development/libraries/kde-frameworks/**/*
+              - pkgs/development/libraries/qt-5/**/*
 
 "6.topic: R":
   - any:

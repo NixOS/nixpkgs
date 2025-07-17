@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "3.1.2";
+  version = "2.8.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-8ZLXXA4NKR7GaCdgk8XDMjAssQsKP1wZpEZPYWpglwk=";
+    hash = "sha256-0LUT7OdYoOZTdR/UXJO2eL2Afo2Y7GjBPIrjWUt205E=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -24,6 +24,7 @@ let
   pythonpkgs = python3Packages;
   python = pythonpkgs.python;
 in
+
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
@@ -45,7 +46,9 @@ pythonpkgs.buildPythonApplication rec {
     apprise
     authlib
     bcrypt
+    extruct
     fastapi
+    gunicorn
     html2text
     httpx
     ingredient-parser-nlp
@@ -55,12 +58,12 @@ pythonpkgs.buildPythonApplication rec {
     openai
     orjson
     paho-mqtt
+    pillow
     pillow-heif
     psycopg2
     pydantic-settings
     pyhumps
     pyjwt
-    python-dateutil
     python-dotenv
     python-ldap
     python-multipart
@@ -102,10 +105,7 @@ pythonpkgs.buildPythonApplication rec {
         --set OUT "$out"
     '';
 
-  nativeCheckInputs = with pythonpkgs; [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
 
   # Needed for tests
   preCheck = ''

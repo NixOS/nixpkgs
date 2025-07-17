@@ -6,13 +6,11 @@
 
   # build-system
   hatchling,
-  uv-dynamic-versioning,
 
   # dependencies
   anyio,
   httpx,
   httpx-sse,
-  jsonschema,
   pydantic,
   pydantic-settings,
   python-multipart,
@@ -30,7 +28,6 @@
   websockets,
 
   # tests
-  dirty-equals,
   inline-snapshot,
   pytest-asyncio,
   pytest-examples,
@@ -41,32 +38,23 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.14.0";
+  version = "1.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-LHc2G5mzyfZ2GvUIuaXYp8AHOVGs6Xtk4MTDYtUcySI=";
+    hash = "sha256-VXbu/wHbXGS+cISJVUgCVEpTmZc0VfckNRoMj3GDi/A=";
   };
 
-  postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
-    # time.sleep(0.1) feels a bit optimistic and it has been flaky whilst
-    # testing this on macOS under load.
-    substituteInPlace \
-      "tests/client/test_stdio.py" \
-      "tests/server/fastmcp/test_integration.py" \
-      "tests/shared/test_ws.py" \
-      "tests/shared/test_sse.py" \
-      "tests/shared/test_streamable_http.py" \
-      --replace-fail "time.sleep(0.1)" "time.sleep(1)"
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "uv-dynamic-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  build-system = [
-    hatchling
-    uv-dynamic-versioning
-  ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "pydantic-settings"
@@ -76,7 +64,6 @@ buildPythonPackage rec {
     anyio
     httpx
     httpx-sse
-    jsonschema
     pydantic
     pydantic-settings
     python-multipart
@@ -101,56 +88,39 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
-    dirty-equals
     inline-snapshot
     pytest-asyncio
     pytest-examples
     pytest-xdist
     pytestCheckHook
     requests
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # attempts to run the package manager uv
-    "test_command_execution"
-
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_lifespan_cleanup_executed"
-
-    # AssertionError: Child process should be writing
-    "test_basic_child_process_cleanup"
-
-    # AssertionError: parent process should be writing
-    "test_nested_process_tree"
-
-    # AssertionError: Child should be writing
-    "test_early_parent_exit"
-
-    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <_io.FileIO ...
-    "test_list_tools_returns_all_tools"
-
-    # AssertionError: Server startup marker not created
-    "test_stdin_close_triggers_cleanup"
-
-    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: <function St..
-    "test_resource_template_client_interaction"
-
-    # Flaky: https://github.com/modelcontextprotocol/python-sdk/pull/1171
-    "test_notification_validation_error"
-
-    # Flaky: httpx.ConnectError: All connection attempts failed
-    "test_sse_security_"
-    "test_streamable_http_"
-
-    # This just feels a bit optimistic...
-    #     	assert duration < 3 * _sleep_time_seconds
-    # AssertionError: assert 0.0733884589999434 < (3 * 0.01)
-    "test_messages_are_executed_concurrently"
-
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_tool_progress"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
+
+  disabledTests =
+    [
+      # attempts to run the package manager uv
+      "test_command_execution"
+
+      # performance-dependent test
+      "test_messages_are_executed_concurrently"
+
+      # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+      "test_client_session_version_negotiation_failure"
+
+      # AttributeError: 'coroutine' object has no attribute 'client_metadata'
+      "TestOAuthClientProvider"
+
+      # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
+      "test_build_metadata"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+      "test_notification_validation_error"
+    ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -159,9 +129,6 @@ buildPythonPackage rec {
     description = "Official Python SDK for Model Context Protocol servers and clients";
     homepage = "https://github.com/modelcontextprotocol/python-sdk";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      bryanhonof
-      josh
-    ];
+    maintainers = with lib.maintainers; [ josh ];
   };
 }

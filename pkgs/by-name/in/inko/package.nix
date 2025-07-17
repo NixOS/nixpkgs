@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  llvm,
+  llvm_17,
   libffi,
   libz,
   libxml2,
@@ -13,17 +13,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "inko";
   version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "inko-lang";
     repo = "inko";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     hash = "sha256-jVfAfR02R2RaTtzFSBoLuq/wdPaaI/eochrZaRVdmHY=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-IOMhwcZHB5jVYDM65zifxCjVHWl1EBbxNA3WVmarWcs=";
 
   buildInputs = [
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    llvm
+    llvm_17
     makeWrapper
   ];
 
@@ -62,8 +63,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
-  __darwinAllowLocalNetworking = true;
-
   meta = {
     description = "Language for building concurrent software with confidence";
     homepage = "https://inko-lang.org/";
@@ -73,4 +72,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "inko";
   };
-})
+}

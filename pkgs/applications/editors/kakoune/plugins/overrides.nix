@@ -172,6 +172,7 @@ self: super: {
       git
     ];
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-cgUBa0rgfJFnosCgD20G1rlOl/nyXJ9bA9SSf4BuqAs=";
 
     postInstall = ''
@@ -180,7 +181,7 @@ self: super: {
     '';
 
     meta = with lib; {
-      description = "Hinting brought to Kakoune selections";
+      description = "hinting brought to Kakoune selections";
       homepage = "https://git.sr.ht/~hadronized/hop.kak/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ oleina ];

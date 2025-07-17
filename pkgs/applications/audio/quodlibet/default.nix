@@ -72,43 +72,45 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail 'quodlibet = "quodlibet.main:main"' ""
   '';
 
-  nativeBuildInputs = [
-    gettext
-    gobject-introspection
-    wrapGAppsHook3
-  ]
-  ++ (with python3.pkgs; [
-    sphinx-rtd-theme
-    sphinxHook
-  ]);
-
-  buildInputs = [
-    adwaita-icon-theme
-    gdk-pixbuf
-    glib
-    glib-networking
-    gtk3
-    gtksourceview
-    kakasi
-    keybinder3
-    libappindicator-gtk3
-    libmodplug
-    libsoup_3
-  ]
-  ++ lib.optionals (withXineBackend) [ xine-lib ]
-  ++ lib.optionals (withGstreamerBackend) (
-    with gst_all_1;
+  nativeBuildInputs =
     [
-      gst-plugins-base
-      gstreamer
+      gettext
+      gobject-introspection
+      wrapGAppsHook3
     ]
-    ++ lib.optionals (withGstPlugins) [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-ugly
+    ++ (with python3.pkgs; [
+      sphinx-rtd-theme
+      sphinxHook
+    ]);
+
+  buildInputs =
+    [
+      adwaita-icon-theme
+      gdk-pixbuf
+      glib
+      glib-networking
+      gtk3
+      gtksourceview
+      kakasi
+      keybinder3
+      libappindicator-gtk3
+      libmodplug
+      libsoup_3
     ]
-  );
+    ++ lib.optionals (withXineBackend) [ xine-lib ]
+    ++ lib.optionals (withGstreamerBackend) (
+      with gst_all_1;
+      [
+        gst-plugins-base
+        gstreamer
+      ]
+      ++ lib.optionals (withGstPlugins) [
+        gst-libav
+        gst-plugins-bad
+        gst-plugins-good
+        gst-plugins-ugly
+      ]
+    );
 
   dependencies =
     with python3.pkgs;
@@ -126,32 +128,34 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals withSoco [ soco ]
     ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
-  nativeCheckInputs = [
-    dbus
-    gdk-pixbuf
-    glibcLocales
-    hicolor-icon-theme
-    xvfb-run
-    writableTmpDirAsHomeHook
-  ]
-  ++ (with python3.pkgs; [
-    polib
-    pytest
-    pytest-xdist
-  ]);
+  nativeCheckInputs =
+    [
+      dbus
+      gdk-pixbuf
+      glibcLocales
+      hicolor-icon-theme
+      xvfb-run
+      writableTmpDirAsHomeHook
+    ]
+    ++ (with python3.pkgs; [
+      polib
+      pytest
+      pytest-xdist
+    ]);
 
-  pytestFlags = [
-    # missing translation strings in potfiles
-    "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
-    # require networking
-    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
-    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
-    # upstream does actually not enforce source code linting
-    "--ignore=tests/quality"
-  ]
-  ++ lib.optionals (withXineBackend || !withGstPlugins) [
-    "--ignore=tests/plugin/test_replaygain.py"
-  ];
+  pytestFlags =
+    [
+      # missing translation strings in potfiles
+      "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+      # require networking
+      "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+      "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
+      # upstream does actually not enforce source code linting
+      "--ignore=tests/quality"
+    ]
+    ++ lib.optionals (withXineBackend || !withGstPlugins) [
+      "--ignore=tests/plugin/test_replaygain.py"
+    ];
 
   env.LC_ALL = "en_US.UTF-8";
 

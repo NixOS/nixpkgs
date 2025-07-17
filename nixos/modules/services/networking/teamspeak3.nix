@@ -148,14 +148,13 @@ in
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [
-        cfg.fileTransferPort
-      ]
-      ++ (map (port: mkIf cfg.openFirewallServerQuery port) [
-        cfg.queryPort
-        cfg.querySshPort
-        cfg.queryHttpPort
-      ]);
+      allowedTCPPorts =
+        [ cfg.fileTransferPort ]
+        ++ (map (port: mkIf cfg.openFirewallServerQuery port) [
+          cfg.queryPort
+          cfg.querySshPort
+          cfg.queryHttpPort
+        ]);
       # subsequent vServers will use the incremented voice port, let's just open the next 10
       allowedUDPPortRanges = [
         {

@@ -3,17 +3,17 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  hatchling,
+  pytestCheckHook,
 
   # dependencies
   beancount-black,
   beancount-parser,
   beanhub-forms,
   beanhub-import,
-  beanhub-inbox,
   click,
   fastapi,
   jinja2,
+  poetry-core,
   pydantic-settings,
   pydantic,
   pyyaml,
@@ -31,16 +31,15 @@
   tomli,
 
   # tests
+  pytest,
   pytest-asyncio,
-  pytest-factoryboy,
   pytest-httpx,
   pytest-mock,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "3.0.1";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -49,19 +48,20 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     tag = version;
-    hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
+    hash = "sha256-mGLg6Kgur2LAcujFzO/rkSPAC2t3wR5CO2AeOO0+bFI=";
   };
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "rich"
+  ];
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     beancount-black
     beancount-parser
     beanhub-forms
     beanhub-import
-    beanhub-inbox
     click
     fastapi
     jinja2
@@ -71,8 +71,7 @@ buildPythonPackage rec {
     rich
     starlette-wtf
     uvicorn
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   optional-dependencies = {
     login = [
@@ -95,21 +94,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-factoryboy
     pytest-httpx
     pytest-mock
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "beanhub_cli" ];
 
   meta = {
     description = "Command line tools for BeanHub or Beancount users";
+    mainProgram = "bh";
     homepage = "https://github.com/LaunchPlatform/beanhub-cli/";
     changelog = "https://github.com/LaunchPlatform/beanhub-cli/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
-    mainProgram = "bh";
   };
 }

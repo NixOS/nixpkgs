@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-9oNfXNQywvgTREa0G1UbId4ezLSCem4IBkqE5X234hE=";
 
   meta = {

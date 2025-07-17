@@ -7,6 +7,7 @@
   empty-files,
   fetchFromGitHub,
   mock,
+  mrjob,
   numpy,
   pyperclip,
   pytest,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "15.0.0";
+  version = "14.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-lXc81hQzxHxpg96OSWkkWmdmLOf4nU56dIKYVgLo+s8=";
+    hash = "sha256-hoBT83p2PHZR5NtVChdWK5SMjLt8llj59K5ODaKtRhQ=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     beautifulsoup4
     empty-files
     mock
+    mrjob
     pyperclip
     pytest
     testfixtures
@@ -50,9 +52,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_warnings"
-    # test runs another python interpreter, ignoring $PYTHONPATH
+    "test_preceding_whitespace"
     "test_command_line_verify"
+    # Tests expect paths below ApprovalTests.Python directory
+    "test_received_filename"
+    "test_pytest_namer"
   ];
 
   pythonImportsCheck = [

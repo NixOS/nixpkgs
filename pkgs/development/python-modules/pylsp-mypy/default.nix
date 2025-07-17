@@ -33,8 +33,7 @@ buildPythonPackage rec {
   dependencies = [
     mypy
     python-lsp-server
-  ]
-  ++ lib.optional (pythonOlder "3.11") tomli;
+  ] ++ lib.optional (pythonOlder "3.11") tomli;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

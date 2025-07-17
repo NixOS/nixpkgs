@@ -2,7 +2,6 @@
   lib,
   stdenv,
   kernel,
-  kernelModuleMakeFlags,
   looking-glass-client,
 }:
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags ++ [
+  makeFlags = [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

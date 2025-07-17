@@ -1,67 +1,66 @@
 {
+  libsepol,
+  libavif,
   bash,
+  curl,
+  librsvg,
+  libselinux,
+  util-linux,
+  libwebp,
+  libheif,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libxslt,
+  libxml2,
   cmake,
+  exiftool,
+  openexr,
+  glib,
+  python3Packages,
+  perlPackages,
+  lensfun,
+  intltool,
+  pkg-config,
+  desktop-file-utils,
+  libffi,
+  gtk3,
+  libjpeg,
+  pugixml,
+  pcre,
+  pcre2,
+  lcms,
+  sqlite,
+  json-glib,
+  jasper,
+  libsecret,
+  gmic,
+  icu,
   colord,
   colord-gtk,
-  curl,
-  dav1d,
-  desktop-file-utils,
-  exiftool,
-  exiv2,
-  fetchFromGitHub,
-  glib,
-  gmic,
-  graphicsmagick,
-  gtk3,
-  icu,
-  intltool,
-  isocodes,
-  jasper,
-  json-glib,
-  lcms,
-  lensfun,
-  lerc,
-  lib,
   libaom,
-  libavif,
   libdatrie,
-  libde265,
-  libepoxy,
-  libffi,
-  libgcrypt,
-  libgpg-error,
-  libheif,
-  libjpeg,
-  libpsl,
-  librsvg,
-  libsecret,
-  libselinux,
-  libsepol,
-  libsoup_3,
   libsysprof-capture,
-  libthai,
-  libwebp,
-  libXdmcp,
-  libxkbcommon,
-  libxml2,
+  libde265,
+  isocodes,
+  libpsl,
+  libepoxy,
+  libsoup_2_4,
+  exiv2,
   libXtst,
-  llvmPackages,
-  openexr,
-  openjpeg,
-  osm-gps-map,
-  pcre2,
-  perlPackages,
-  pkg-config,
-  pugixml,
-  python3Packages,
-  rav1e,
-  saxon,
-  sqlite,
-  stdenv,
-  unstableGitUpdater,
-  util-linux,
-  wrapGAppsHook3,
+  libthai,
   x265,
+  libXdmcp,
+  openjpeg,
+  libgpg-error,
+  libxkbcommon,
+  osm-gps-map,
+  wrapGAppsHook3,
+  rav1e,
+  dav1d,
+  libgcrypt,
+  graphicsmagick,
+  unstableGitUpdater,
 }:
 
 let
@@ -104,12 +103,11 @@ stdenv.mkDerivation {
     desktop-file-utils
     exiftool
     intltool
-    llvmPackages.llvm
+    libxml2
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
     wrapGAppsHook3
-    saxon
   ];
 
   buildInputs = [
@@ -129,9 +127,8 @@ stdenv.mkDerivation {
     jasper
     lcms
     lensfun
-    lerc
     libaom
-    libavif
+    libavif_0_11
     libdatrie
     libde265
     libepoxy
@@ -145,17 +142,18 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
-    libsoup_3
+    libsoup_2_4
     libsysprof-capture
     libthai
     libwebp
     libXdmcp
     libxkbcommon
-    libxml2
+    libxslt
     libXtst
     openexr
     openjpeg
     osm-gps-map
+    pcre
     pcre2
     perlPackages.Po4a
     pugixml
@@ -170,20 +168,22 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" "$out/lib/ansel"
     )
   '';
-  cmakeFlags = [
-    "-DBINARY_PACKAGE_BUILD=1"
-  ];
 
   passthru.updateScript = unstableGitUpdater {
     # Tags inherited from Darktable, + a "nightly" 0.0.0 tag that new artefacts get attached to
     hardcodeZeroVersion = true;
   };
 
+  # cmake can't find the binary itself
+  cmakeFlags = [
+    (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
+  ];
+
   meta = {
     description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mBornand ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ansel";
     platforms = lib.platforms.linux;
   };

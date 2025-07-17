@@ -123,4 +123,6 @@ in
             };
       };
   };
+
+  meta.maintainers = with lib.maintainers; [ ehmry ];
 }

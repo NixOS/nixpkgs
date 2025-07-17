@@ -16,9 +16,8 @@
   libxml2,
   libyaml,
   libffi,
-  llvmPackages_19,
-  llvmPackages_20,
-  llvmPackages_21,
+  llvmPackages_15,
+  llvmPackages_18,
   makeWrapper,
   openssl,
   pcre2,
@@ -121,47 +120,48 @@ let
         "bin"
       ];
 
-      postPatch = ''
-        export TMP=$(mktemp -d)
-        export HOME=$TMP
-        export TMPDIR=$TMP
-        mkdir -p $HOME/test
+      postPatch =
+        ''
+          export TMP=$(mktemp -d)
+          export HOME=$TMP
+          export TMPDIR=$TMP
+          mkdir -p $HOME/test
 
-        # Add dependency of crystal to docs to avoid issue on flag changes between releases
-        # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
-        substituteInPlace Makefile \
-          --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
+          # Add dependency of crystal to docs to avoid issue on flag changes between releases
+          # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
+          substituteInPlace Makefile \
+            --replace 'docs: ## Generate standard library documentation' 'docs: crystal ## Generate standard library documentation'
 
-        mkdir -p $TMP/crystal
+          mkdir -p $TMP/crystal
 
-        substituteInPlace spec/std/file_spec.cr \
-          --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/share' "$TMP/crystal" \
-          --replace '/usr' "$TMP" \
-          --replace '/tmp' "$TMP"
+          substituteInPlace spec/std/file_spec.cr \
+            --replace '/bin/ls' '${coreutils}/bin/ls' \
+            --replace '/usr/share' "$TMP/crystal" \
+            --replace '/usr' "$TMP" \
+            --replace '/tmp' "$TMP"
 
-        substituteInPlace spec/std/process_spec.cr \
-          --replace '/bin/cat' '${coreutils}/bin/cat' \
-          --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/bin/env' '${coreutils}/bin/env' \
-          --replace '"env"' '"${coreutils}/bin/env"' \
-          --replace '/usr' "$TMP" \
-          --replace '/tmp' "$TMP"
+          substituteInPlace spec/std/process_spec.cr \
+            --replace '/bin/cat' '${coreutils}/bin/cat' \
+            --replace '/bin/ls' '${coreutils}/bin/ls' \
+            --replace '/usr/bin/env' '${coreutils}/bin/env' \
+            --replace '"env"' '"${coreutils}/bin/env"' \
+            --replace '/usr' "$TMP" \
+            --replace '/tmp' "$TMP"
 
-        substituteInPlace spec/std/system_spec.cr \
-          --replace '`hostname`' '`${hostname}/bin/hostname`'
+          substituteInPlace spec/std/system_spec.cr \
+            --replace '`hostname`' '`${hostname}/bin/hostname`'
 
-        # See https://github.com/crystal-lang/crystal/issues/8629
-        substituteInPlace spec/std/socket/udp_socket_spec.cr \
-          --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+          # See https://github.com/crystal-lang/crystal/issues/8629
+          substituteInPlace spec/std/socket/udp_socket_spec.cr \
+            --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      ''
-      + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
-        # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
-        # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
-        substituteInPlace src/llvm/lib_llvm.cr \
-          --replace '@[Link("stdc++")]' '@[Link("c++")]'
-      '';
+        ''
+        + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
+          # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
+          # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
+          substituteInPlace src/llvm/lib_llvm.cr \
+            --replace '@[Link("stdc++")]' '@[Link("c++")]'
+        '';
 
       # Defaults are 4
       preBuild = ''
@@ -169,7 +169,11 @@ let
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
         export MACOSX_DEPLOYMENT_TARGET=10.11
-        export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
+
+        # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
+        if [[ -f src/SOURCE_DATE_EPOCH ]]; then
+          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
+        fi
       '';
 
       strictDeps = true;
@@ -181,17 +185,18 @@ let
         llvmPackages.llvm
         installShellFiles
       ];
-      buildInputs = [
-        boehmgc
-        pcre2
-        libevent
-        libyaml
-        zlib
-        libxml2
-        openssl
-      ]
-      ++ extraBuildInputs
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+      buildInputs =
+        [
+          boehmgc
+          pcre2
+          libevent
+          libyaml
+          zlib
+          libxml2
+          openssl
+        ]
+        ++ extraBuildInputs
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -244,7 +249,8 @@ let
         ln -s $bin/bin $out/bin
         ln -s $bin/share/bash-completion $out/share/bash-completion
         ln -s $bin/share/zsh $out/share/zsh
-        ln -s $bin/share/fish $out/share/fish
+        # fish completion was introduced in 1.6.0
+        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall
@@ -293,11 +299,19 @@ rec {
     };
   };
 
+  # When removing this version, also remove checks for src/SOURCE_DATE_EPOCH existence
+  crystal_1_11 = generic {
+    version = "1.11.2";
+    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_15;
+  };
+
   crystal_1_14 = generic {
     version = "1.14.1";
     sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_19;
+    llvmPackages = llvmPackages_18;
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
@@ -305,7 +319,7 @@ rec {
     version = "1.15.1";
     sha256 = "sha256-L/Q8yZdDq/wn4kJ+zpLfi4pxznAtgjxTCbLnEiCC2K0=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_19;
+    llvmPackages = llvmPackages_18;
     doCheck = false;
   };
 
@@ -313,15 +327,7 @@ rec {
     version = "1.16.3";
     sha256 = "sha256-U9H1tHUMyDNicZnXzEccDki5bGXdV0B2Wu2PyCksPVI=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_20;
-    doCheck = false;
-  };
-
-  crystal_1_17 = generic {
-    version = "1.17.1";
-    sha256 = "sha256-+wHhozPhpIsfQy1Lw+V48zvuWCfXzT4IC9KA1AU/DLw=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_21;
+    llvmPackages = llvmPackages_18;
     doCheck = false;
   };
 

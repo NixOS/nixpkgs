@@ -9,8 +9,6 @@
   cmake,
   ninja,
   plutovg,
-  enableFreetype ? false,
-  freetype,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plutosvg";
@@ -43,25 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     validatePkgConfig
   ];
-
   propagatedBuildInputs = [
     plutovg
-  ]
-  ++ lib.optional enableFreetype freetype;
-
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "PLUTOSVG_ENABLE_FREETYPE" enableFreetype)
   ];
 
-  passthru.tests = {
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    cmake-config = testers.hasCmakeConfigModules {
-      package = finalAttrs.finalPackage;
-      moduleNames = [ "plutosvg" ];
-      versionCheck = true;
-    };
-  };
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   passthru.updateScript = nix-update-script { };
 

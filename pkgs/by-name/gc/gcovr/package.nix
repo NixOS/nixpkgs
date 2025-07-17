@@ -22,10 +22,6 @@ python3Packages.buildPythonPackage rec {
   preBuild = ''
     substituteInPlace pyproject.toml \
       --replace-fail "hatchling==1.26.1" "hatchling"
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatch-fancy-pypi-readme==24.1.0" "hatch-fancy-pypi-readme>=24.1.0"
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatch-vcs==0.4.0" "hatch-vcs>=0.4.0"
   '';
 
   dependencies =

@@ -7,6 +7,7 @@
   coreutils,
   fetchFromGitHub,
   makeWrapper,
+  ...
 }:
 
 stdenv.mkDerivation rec {

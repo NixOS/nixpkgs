@@ -10,13 +10,13 @@ let
     { directory, meta }:
     stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "open-relay-${name}";
-      version = "2025-09-01";
+      version = "2025-03-20";
 
       src = fetchFromGitHub {
         owner = "kreativekorp";
         repo = "open-relay";
         tag = finalAttrs.version;
-        hash = "sha256-+vG9gzbb3x7Fh3xIpUJZRpclz1qT+gyTSqmOtKJXZtw=";
+        hash = "sha256-OQpZHPbNL3rxXH89lwtHvm7eENl8fS0M0i8IBn4m2hI=";
       };
 
       installPhase = ''
@@ -38,8 +38,7 @@ let
           linus
           toastal
         ];
-      }
-      // meta;
+      } // meta;
     });
 in
 lib.mapAttrs mkOpenRelayTypeface {
@@ -47,7 +46,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "Constructium";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/constructium/";
-      description = "Fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
+      description = "fork of SIL Gentium designed specifically to support constructed scripts as encoded in the Under-ConScript Unicode Registry";
       longDescription = ''
         Constructium is a fork of SIL Gentium designed specifically to support
         constructed scripts as encoded in the Under-ConScript Unicode Registry.
@@ -76,7 +75,7 @@ lib.mapAttrs mkOpenRelayTypeface {
     directory = "FairfaxHD";
     meta = {
       homepage = "https://www.kreativekorp.com/software/fonts/fairfaxhd/";
-      description = "Halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
+      description = "halfwidth scalable monospace font supporting many Unicode blocks & script as well as constructed scripts";
       longDescription = ''
         Fairfax HD is a halfwidth scalable monospace font for terminals, text
         editors, IDEs, etc. It supports many scripts and a large number of

@@ -47,8 +47,7 @@ buildPythonPackage rec {
     pytest-httpserver
     pytestCheckHook
     tomli-w
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "responses" ];
 

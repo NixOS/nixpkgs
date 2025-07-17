@@ -42,6 +42,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/FirefighterBlu3/python-pam";
     license = licenses.mit;
     maintainers = with maintainers; [
+      abbradar
       mkg20001
     ];
   };

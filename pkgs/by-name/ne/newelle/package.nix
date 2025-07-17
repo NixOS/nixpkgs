@@ -12,26 +12,22 @@
   vte-gtk4,
   gsettings-desktop-schemas,
   gtksourceview5,
-  webkitgtk_6_0,
   lsb-release,
   bash,
   ffmpeg,
   nix-update-script,
 }:
 
-let
-  version = "1.0.1";
-in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "newelle";
-  inherit version;
+  version = "0.9.8";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "qwersyk";
     repo = "Newelle";
     tag = version;
-    hash = "sha256-l/eNf1KLZeuDWf1A/5Y8fggOovKmjW6UFNMvNxuJXkc=";
+    hash = "sha256-VyUng/ZX8+wInRX705IWdBgTbX439R60h62ONdpZ0+8=";
   };
 
   postPatch = ''
@@ -53,7 +49,6 @@ python3Packages.buildPythonApplication {
     vte-gtk4
     gsettings-desktop-schemas
     gtksourceview5
-    webkitgtk_6_0
   ];
 
   dependencies = with python3Packages; [
@@ -104,6 +99,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "newelle";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
   };
 }

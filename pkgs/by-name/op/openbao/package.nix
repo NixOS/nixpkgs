@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.4.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HfPkjeScegylpA/i8KlS3t468pmD5sRwp2Ct164fkTo=";
+    hash = "sha256-X0O3JwJS49yReTEIjRfk0GGzgGDUZjNadKMZXUuor/I=";
   };
 
-  vendorHash = "sha256-4SWpWGWoesUCgSpgOpblkxOpPbBC/grC2S1m7R9qasY=";
+  vendorHash = "sha256-uOWLCyLCSGMTjRpPbOWlJJYKbZmkkOWnzr5o3zvRLU0=";
 
   proxyVendor = true;
 
@@ -33,6 +33,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+    "-w"
     "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
     "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"
@@ -77,9 +78,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/openbao/openbao/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "bao";
-    maintainers = with lib.maintainers; [
-      brianmay
-      emilylange
-    ];
+    maintainers = with lib.maintainers; [ brianmay ];
   };
 })

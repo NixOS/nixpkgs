@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "qstylizer";
-  version = "0.2.4";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "blambright";
     repo = "qstylizer";
     tag = version;
-    hash = "sha256-Is/kYkSX9fOX+pLv5g1ns2OxeLpSkaCfO2jPIbiuIxA=";
+    hash = "sha256-eZVBUGQxa2cr0O48iKWNTqM9E5ZAsiT1WfXjdYdxIdg=";
   };
 
   PBR_VERSION = version;

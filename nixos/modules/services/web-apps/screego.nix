@@ -90,8 +90,7 @@ in
           ExecStart = "${lib.getExe pkgs.screego} serve";
           Restart = "on-failure";
           RestartSec = "5s";
-        }
-        // lib.optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
+        } // lib.optionalAttrs (cfg.environmentFile != null) { EnvironmentFile = cfg.environmentFile; };
       };
     };
 }

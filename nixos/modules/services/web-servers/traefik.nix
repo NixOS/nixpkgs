@@ -152,7 +152,6 @@ in
         ProtectSystem = "full";
         ReadWritePaths = [ cfg.dataDir ];
         RuntimeDirectory = "traefik";
-        WorkingDirectory = cfg.dataDir;
       };
     };
 

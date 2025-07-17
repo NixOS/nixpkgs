@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Volleyball game";
+    description = "Blobby volleyball game";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];

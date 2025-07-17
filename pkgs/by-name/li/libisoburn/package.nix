@@ -32,19 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    libcdio
-    libiconv
-    readline
-    zlib
-    libburn
-    libisofs
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    acl
-    attr
-  ];
+  buildInputs =
+    [
+      bzip2
+      libcdio
+      libiconv
+      readline
+      zlib
+      libburn
+      libisofs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+      attr
+    ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     acl

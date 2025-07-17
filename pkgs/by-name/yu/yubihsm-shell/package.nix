@@ -42,18 +42,19 @@ stdenv.mkDerivation rec {
     gengetopt
   ];
 
-  buildInputs = [
-    libusb1
-    libedit
-    curl
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pcsclite.dev
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      libusb1
+      libedit
+      curl
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pcsclite.dev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
+    description = "yubihsm-shell and libyubihsm";
     homepage = "https://github.com/Yubico/yubihsm-shell";
     maintainers = with maintainers; [ matthewcroughan ];
     license = licenses.asl20;

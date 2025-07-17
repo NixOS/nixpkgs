@@ -10,7 +10,6 @@ const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
 const { promisify } = require('util')
 const url = require('url')
-const { URL } = url;
 const { urlToName } = require('./common.js')
 
 const execFile = promisify(child_process.execFile)
@@ -21,7 +20,7 @@ const exec = async (...args) => {
   return res
 }
 
-const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha1') => {
+const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
   return new Promise((resolve, reject) => {
     const get = (url, redirects = 0) => https.get(url, (res) => {
       if(redirects > 10) {
@@ -29,9 +28,7 @@ const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha
         return;
       }
       if(res.statusCode === 301 || res.statusCode === 302) {
-        const location = new URL(res.headers.location, url);
-        if (verbose) console.log('following redirect to ' + location);
-        return get(location, redirects + 1);
+        return get(res.headers.location, redirects + 1)
       }
       const file = fs.createWriteStream(fileName)
       const hash = crypto.createHash(hashType)
@@ -122,9 +119,9 @@ const downloadPkg = (pkg, verbose) => {
   } else if (url.startsWith('https://')) {
     if (typeof pkg.integrity === 'string' || pkg.integrity instanceof String) {
       const [ type, checksum ] = pkg.integrity.split('-')
-      return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), verbose, type)
+      return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), type)
     }
-    return downloadFileHttps(fileName, url, hash, verbose)
+    return downloadFileHttps(fileName, url, hash)
   } else if (url.startsWith('file:')) {
     console.warn(`ignoring unsupported file:path url "${url}"`)
   } else {

@@ -14,7 +14,7 @@
 
 python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.11.2";
+  version = "8.10.1";
 
   pyproject = true;
 
@@ -22,16 +22,10 @@ python312Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-Rc3OSRTTpYA7WKI/WEvCdq1SQnkO91FXzQscV2b93TI=";
+    hash = "sha256-WGCbqtuCOF5X8yOVrgLKWyDcqjpb8sbTPRZzVesnAIY=";
   };
 
   patches = [
-    # We're using a later version of `craft-cli` than expected, which
-    # adds an extra deprecation warning to the CLI output, meaning that
-    # an expected error message looks slightly different. This patch corrects
-    # that by checking for the updated error message and can be dropped in a
-    # later release of snapcraft.
-    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
@@ -59,9 +53,7 @@ python312Packages.buildPythonApplication rec {
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
-    substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools>=69.0,<80.9.0' 'setuptools' \
-      --replace-fail 'gnupg' 'python-gnupg'
+    substituteInPlace pyproject.toml --replace-fail 'gnupg' 'python-gnupg'
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -115,7 +107,6 @@ python312Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "click"
     "craft-parts"
-    "craft-providers"
     "cryptography"
     "docutils"
     "jsonschema"
@@ -178,13 +169,7 @@ python312Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-    # Disabled because we're uisng a later version of a library than
-    # specified which changes the behaviour in a non-breaking way, apart
-    # from when a test is looking for a specific error message
-    "test_esm_error[core]"
-    "test_esm_error[core18]"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

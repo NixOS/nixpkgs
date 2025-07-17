@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "1.5.4";
+  version = "1.5.3";
 in
 buildPecl {
   inherit version;
@@ -20,7 +20,7 @@ buildPecl {
     repo = "php-gnupg";
     rev = "gnupg-${version}";
     fetchSubmodules = true;
-    hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
+    hash = "sha256-F9Rq+mmUhvXfIuoifqRM/ZIMYszCF93cvv13Vt/A5Mo=";
   };
 
   buildInputs = [ gpgme ];
@@ -42,11 +42,6 @@ buildPecl {
       --replace-fail '/usr/bin/gpg' '${gnupg}/bin/gpg' \
       --replace-fail 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
   '';
-
-  patches = [
-    # https://github.com/php-gnupg/php-gnupg/issues/62
-    ./missing-new-line-test.patch
-  ];
 
   doCheck = true;
 

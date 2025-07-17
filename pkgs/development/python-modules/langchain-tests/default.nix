@@ -20,7 +20,7 @@
 
   # tests
   numpy,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-socket,
   pytestCheckHook,
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   dependencies = [
     httpx
     langchain-core
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-benchmark
     pytest-codspeed
     pytest-recording
@@ -72,12 +72,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "langchain-tests==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-tests==";
   };
 
   meta = {

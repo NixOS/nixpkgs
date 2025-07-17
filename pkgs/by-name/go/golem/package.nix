@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/golemcloud/golem-examples/blob/v1.0.6/build.rs#L9
   GOLEM_WIT_ROOT = "../golem-wit-1.1.0";
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-zf/L7aNsfQXCdGpzvBZxgoatAGB92bvIuj59jANrXIc=";
 
   # Tests are failing in the sandbox because of some redis integration tests

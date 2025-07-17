@@ -43,17 +43,18 @@ else
     ];
     buildInputs = [ topkg ];
 
-    propagatedBuildInputs = [
-      uchar
-      result
-      gg
-    ]
-    ++ optionals pdfBackend [
-      otfm
-    ]
-    ++ optionals htmlcBackend [
-      brr
-    ];
+    propagatedBuildInputs =
+      [
+        uchar
+        result
+        gg
+      ]
+      ++ optionals pdfBackend [
+        otfm
+      ]
+      ++ optionals htmlcBackend [
+        brr
+      ];
 
     strictDeps = true;
 

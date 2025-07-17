@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   installShellFiles,
@@ -52,24 +51,20 @@ let
       installShellFiles
       setuptools
       wheel
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
+
       # docs
-      # (sphinx requires Python 3.11)
       sphinx
       sphinx-issues
     ];
 
     outputs = [
       "out"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
       "man"
     ];
 
     # pip uses a custom sphinx extension and unusual conf.py location, mimic the internal build rather than attempting
     # to fit sphinxHook see https://github.com/pypa/pip/blob/0778c1c153da7da457b56df55fb77cbba08dfb0c/noxfile.py#L129-L148
-    postBuild = lib.optionalString (pythonAtLeast "3.11") ''
+    postBuild = ''
       cd docs
 
       # remove references to sphinx extentions only required for html doc generation

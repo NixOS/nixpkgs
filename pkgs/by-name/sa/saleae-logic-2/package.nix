@@ -70,7 +70,6 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://www.saleae.com/";
-    changelog = "https://ideas.saleae.com/f/changelog/";
     description = "Software for Saleae logic analyzers";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

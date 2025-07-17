@@ -5,48 +5,55 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  electron_37,
-  yarn-berry,
-  writableTmpDirAsHomeHook,
+  electron,
+  cacert,
+  gitMinimal,
+  yarn,
 }:
-
-let
-  electron = electron_37;
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "6.2.4";
+  version = "6.2.2-unstable-2025-06-12";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "whalebird-desktop";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-0wXfyRmCDkirYgSXUuvrIkQ2yRnVRWMoyyqifIF5VU4=";
+    rev = "506a1ff00188f04bffeaede0110719512c621b02";
+    hash = "sha256-jkdGwdNcF4Rbivi0TziW/ZOficbXIrxqaB+kQrNcdsc=";
   };
+  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
+  offlineCache = stdenv.mkDerivation {
+    name = "whalebird-${version}-offline-cache";
+    inherit src;
 
-  missingHashes = ./missing-hashes.json;
+    nativeBuildInputs = [
+      cacert # needed for git
+      gitMinimal # needed to download git dependencies
+      yarn
+    ];
 
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-vwSVd+ttQFeXEsRsh9jmHKouyqkHeosy0Z/LMb4pzeI=";
+    buildPhase = ''
+      export HOME=$(mktemp -d)
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '[ "arm64", "x64" ]'
+      yarn
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-Lru6utVP1uHpHvL8Jg/JzEnIErsxVo7njJhsqkThktk=";
   };
-
-  postPatch = ''
-    sed -i "/module.exports = {/a \  typescript: {\n    ignoreBuildErrors: true,\n  }," renderer/next.config.js
-  '';
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
-    writableTmpDirAsHomeHook
+    yarn
   ];
 
   desktopItems = [
     (makeDesktopItem {
       desktopName = "Whalebird";
-      comment = finalAttrs.meta.description;
+      comment = meta.description;
       categories = [ "Network" ];
       exec = "whalebird";
       icon = "whalebird";
@@ -54,15 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   buildPhase = ''
     runHook preBuild
 
-    yarn exec nextron build --no-pack
-    yarn exec electron-builder --dir \
-      --linux \
-      -p never \
+    export HOME=$(mktemp -d)
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder ${offlineCache}
+
+    yarn --immutable-cache
+    yarn run nextron build --no-pack
+    yarn run electron-builder --dir \
       --config electron-builder.yml \
       -c.electronDist="${electron.dist}" \
       -c.electronVersion=${electron.version}
@@ -75,10 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/opt
     cp -r ./dist/*-unpacked $out/opt/Whalebird
-  ''
-  # Install icons
-  # Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=whalebird#n41
-  + ''
+
+    # Install icons
+    # Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=whalebird#n41
     for i in 16 32 128 256 512; do
       install -Dm644 "resources/icons/icon.iconset/icon_$i"x"$i.png" \
         "$out/share/icons/hicolor/$i"x"$i/apps/whalebird.png"
@@ -88,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/whalebird" \
       --add-flags "$out/opt/Whalebird/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
@@ -97,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Single-column Fediverse client for desktop";
     mainProgram = "whalebird";
     homepage = "https://whalebird.social";
-    changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ weathercold ];
     platforms = [
@@ -105,4 +114,4 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
   };
-})
+}

@@ -46,11 +46,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Failed: async def functions are not natively supported
-    "test_issue_9_safe"
-  ];
-
   disabledTestPaths = [ "tests/test_benchmark.py" ];
 
   pythonImportsCheck = [ "promise" ];

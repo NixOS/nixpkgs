@@ -102,21 +102,22 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    authlib
-    flask-sqlalchemy-lite
-    freezegun
-    mongoengine
-    mongomock
-    peewee
-    pytestCheckHook
-    requests
-    zxcvbn
-  ]
-  ++ optional-dependencies.babel
-  ++ optional-dependencies.common
-  ++ optional-dependencies.fsqla
-  ++ optional-dependencies.mfa;
+  nativeCheckInputs =
+    [
+      authlib
+      flask-sqlalchemy-lite
+      freezegun
+      mongoengine
+      mongomock
+      peewee
+      pytestCheckHook
+      requests
+      zxcvbn
+    ]
+    ++ optional-dependencies.babel
+    ++ optional-dependencies.common
+    ++ optional-dependencies.fsqla
+    ++ optional-dependencies.mfa;
 
   preCheck = ''
     pybabel compile --domain flask_security -d flask_security/translations

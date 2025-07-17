@@ -4,25 +4,26 @@
   fetchFromSourcehut,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "wayidle";
-  version = "1.0.1";
+  version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "wayidle";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VZfoPD9bpHOQBtDBpG4My7/KJNTKcy5PjFNO2xKmqKg=";
+    rev = "v${version}";
+    hash = "sha256-DgsktRIGWswSBYeij5OL4nJwWaURv+v+qzOdZnLKG/E=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-rpmMUrVobYa9mGERJnhGsvebzWbuL+51VeuXKUIFdwg=";
 
-  meta = {
+  meta = with lib; {
     description = "Execute a program when a Wayland compositor reports being N seconds idle";
     homepage = "https://git.sr.ht/~whynothugo/wayidle";
-    license = lib.licenses.isc;
+    license = licenses.isc;
     maintainers = [ ];
     mainProgram = "wayidle";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
-})
+}

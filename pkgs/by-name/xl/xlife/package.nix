@@ -32,6 +32,5 @@ stdenv.mkDerivation {
     description = "Conway's Game of Life and other cellular automata, for X";
     license = licenses.hpndSellVariant;
     maintainers = with maintainers; [ djanatyn ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

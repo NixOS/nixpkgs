@@ -1,5 +1,4 @@
 {
-  acl,
   coreutils,
   cryptsetup,
   e2fsprogs,
@@ -17,39 +16,19 @@
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  testers,
   util-linux,
   zsh,
 }:
 
-let
-  runtimeDependencies = [
-    acl # setfacl
-    coreutils # shred
-    cryptsetup
-    e2fsprogs # resize2fs
-    file
-    gawk
-    getent
-    gettext
-    gnugrep
-    gnupg
-    libargon2
-    lsof
-    pinentry
-    util-linux
-  ];
-
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "tomb";
-  version = "2.13";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "dyne";
-    repo = "tomb";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-z7LkCes0wg+1bZrNXXy4Lh5VwMotCULJQy5DmCisu+Q=";
+    repo = "Tomb";
+    tag = "v${version}";
+    hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -63,9 +42,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
       --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
-
-    # Fix version variable
-    sed -i 's/VERSION=".*"/VERSION="${finalAttrs.version}"/' tomb
   '';
 
   installPhase = ''
@@ -73,21 +49,33 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
+      --prefix PATH : $out/bin:${
+        lib.makeBinPath [
+          coreutils
+          cryptsetup
+          e2fsprogs
+          file
+          gawk
+          getent
+          gettext
+          gnugrep
+          gnupg
+          libargon2
+          lsof
+          pinentry
+          util-linux
+        ]
+      }
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "tomb -v";
-    };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "File encryption on GNU/Linux";
-    homepage = "https://dyne.org/tomb/";
-    changelog = "https://github.com/dyne/tomb/blob/v${finalAttrs.version}/ChangeLog.md";
+    homepage = "https://www.dyne.org/software/tomb/";
+    changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "tomb";
     maintainers = with lib.maintainers; [
@@ -96,4 +84,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
   };
-})
+}

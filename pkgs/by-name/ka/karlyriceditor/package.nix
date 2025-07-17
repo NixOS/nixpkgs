@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karlyriceditor";
-  version = "4.1.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = "karlyriceditor";
     rev = finalAttrs.version;
-    hash = "sha256-eW5sO1gjuwIighnlylJQd9QC+07s1MZX/oPyaHIi/Qs=";
+    hash = "sha256-i4uZtHxnreow7a5ZX6WCXMUSwgkUJS/1oDCJOgfFjHw=";
   };
 
   nativeBuildInputs = [

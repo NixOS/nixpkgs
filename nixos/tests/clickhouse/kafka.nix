@@ -1,4 +1,4 @@
-{ pkgs, package, ... }:
+{ pkgs, ... }:
 
 let
   kafkaNamedCollectionConfig = ''
@@ -28,10 +28,7 @@ let
 in
 {
   name = "clickhouse-kafka";
-  meta.maintainers = with pkgs.lib.maintainers; [
-    jpds
-    thevar1able
-  ];
+  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
 
   nodes = {
     clickhouse = {
@@ -41,10 +38,7 @@ in
         };
       };
 
-      services.clickhouse = {
-        enable = true;
-        inherit package;
-      };
+      services.clickhouse.enable = true;
       virtualisation.memorySize = 4096;
     };
 

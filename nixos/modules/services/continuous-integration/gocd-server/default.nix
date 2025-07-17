@@ -64,7 +64,7 @@ in
 
       sslPort = mkOption {
         default = 8154;
-        type = types.port;
+        type = types.int;
         description = ''
           Specifies port number on which the Go.CD server HTTPS interface listens.
         '';

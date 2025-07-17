@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "kde-gruvbox";
-  version = "0-unstable-2015-08-09";
+  version = "unstable-2015-08-09";
 
   src = fetchFromGitHub {
     owner = "printesoi";

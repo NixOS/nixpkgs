@@ -9,7 +9,8 @@
   glib,
   flutter,
   pkg-config,
-  buildPackages,
+  jq,
+  yq,
 }:
 
 # absolutely no mac support for now
@@ -31,14 +32,15 @@ let
     lib.optionalString (!flutter.engine.isOptimized) "_unopt"
   }";
 
-  flutterBuildFlags = [
-    "--${flutterMode}"
-  ]
-  ++ (args.flutterBuildFlags or [ ])
-  ++ flutterFlags;
+  flutterBuildFlags =
+    [
+      "--${flutterMode}"
+    ]
+    ++ (args.flutterBuildFlags or [ ])
+    ++ flutterFlags;
 
   builderArgs =
-    let
+    rec {
       universal = args // {
         inherit flutterMode flutterFlags flutterBuildFlags;
 
@@ -109,26 +111,21 @@ let
             '';
         };
 
-        # https://github.com/flutter/flutter/blob/edada7c56edf4a183c1735310e123c7f923584f1/packages/flutter_tools/lib/src/dart/pub.dart#L804
-        extraPackageConfigSetup = lib.optionalString (lib.versionOlder flutter.version "3.34.0") ''
-          if [ "$("${lib.getExe buildPackages.yq}" '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
-            if ! "${lib.getExe buildPackages.jq}" -e '.packages[] | select(.name == "flutter_gen")' "$out" >/dev/null 2>&1; then
-              export TEMP_PACKAGES=$(mktemp)
-              "${lib.getExe buildPackages.jq}" '.packages |= . + [{
-                name: "flutter_gen",
-                rootUri: "flutter_gen",
-                languageVersion: "2.12"
-              }]' "$out" > "$TEMP_PACKAGES"
-              cp "$TEMP_PACKAGES" "$out"
-              rm "$TEMP_PACKAGES"
-              unset TEMP_PACKAGES
-            fi
+        extraPackageConfigSetup = ''
+          # https://github.com/flutter/flutter/blob/3.13.8/packages/flutter_tools/lib/src/dart/pub.dart#L755
+          if [ "$('${yq}/bin/yq' '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+            export TEMP_PACKAGES=$(mktemp)
+            '${jq}/bin/jq' '.packages |= . + [{
+              name: "flutter_gen",
+              rootUri: "flutter_gen",
+              languageVersion: "2.12",
+            }]' "$out" > "$TEMP_PACKAGES"
+            cp "$TEMP_PACKAGES" "$out"
+            rm "$TEMP_PACKAGES"
+            unset TEMP_PACKAGES
           fi
         '';
       };
-    in
-    {
-      inherit universal;
 
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];

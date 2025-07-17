@@ -2,6 +2,7 @@
   stdenv,
   callPackage,
   lib,
+  ...
 }:
 
 let

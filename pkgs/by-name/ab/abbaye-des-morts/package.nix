@@ -7,14 +7,14 @@
   SDL2_mixer,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "abbaye-des-morts";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
-    tag = "v${finalAttrs.version}";
+    tag = "v${version}";
     sha256 = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
   };
 
@@ -25,17 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}"
+    "PREFIX=$(out)"
     "DESTDIR="
-  ]
-  ++ lib.optional stdenv.isDarwin "PLATFORM=mac";
+  ];
 
-  # Even with PLATFORM=mac, the Makefile specifies some GCC-specific CFLAGS that
-  # are not supported by modern Clang on macOS
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile \
-      --replace-fail "-funswitch-loops" "" \
-      --replace-fail "-fgcse-after-reload" ""
+      --replace -fpredictive-commoning ""
+  '';
+
+  preInstall = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share/applications
   '';
 
   meta = {
@@ -45,4 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-})
+}

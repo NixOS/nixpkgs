@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     description = "Simple SDL joystick test application for the console";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

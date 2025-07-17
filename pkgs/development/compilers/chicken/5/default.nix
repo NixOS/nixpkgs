@@ -3,14 +3,7 @@
   newScope,
   fetchurl,
 }:
-let
-  # Some eggs mistakenly declare dependencies on modules which are part of chicken itself and thus
-  # need not (and cannot) be installed as eggs. Instead of marking such eggs as broken, we remove
-  # these invalid dependencies.
-  invalidDependencies = [
-    "srfi-4"
-  ];
-in
+
 lib.makeScope newScope (self: {
 
   fetchegg =
@@ -44,9 +37,9 @@ lib.makeScope newScope (self: {
           ...
         }:
         self.eggDerivation {
-          inherit pname version;
+          name = "${pname}-${version}";
           src = self.fetchegg (eggData // { inherit pname; });
-          buildInputs = map (x: eggself.${x}) (lib.subtractLists invalidDependencies dependencies);
+          buildInputs = map (x: eggself.${x}) dependencies;
           meta.homepage = "https://wiki.call-cc.org/eggref/5/${pname}";
           meta.description = synopsis;
           meta.license =

@@ -5,7 +5,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "rtl8192su";
-  version = "0-unstable-2016-10-05";
+  version = "unstable-2016-10-05";
 
   src = fetchFromGitHub {
     owner = "chunkeey";

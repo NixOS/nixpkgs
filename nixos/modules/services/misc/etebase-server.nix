@@ -51,7 +51,12 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "etebase-server" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.etebase-server;
+        defaultText = lib.literalExpression "pkgs.python3.pkgs.etebase-server";
+        description = "etebase-server package to use.";
+      };
 
       dataDir = lib.mkOption {
         type = lib.types.str;
@@ -184,12 +189,13 @@ in
       )
     ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ]
-    ++ lib.optionals (cfg.unixSocket != null) [
-      "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ]
+      ++ lib.optionals (cfg.unixSocket != null) [
+        "d '${builtins.dirOf cfg.unixSocket}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+      ];
 
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";

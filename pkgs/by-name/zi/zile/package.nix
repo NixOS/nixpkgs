@@ -27,14 +27,15 @@ stdenv.mkDerivation rec {
     libgee
     ncurses
   ];
-  nativeBuildInputs = [
-    perl
-    pkg-config
-    vala
-  ]
-  # `help2man' wants to run Zile, which won't work when the
-  # newly-produced binary can't be run at build-time.
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+  nativeBuildInputs =
+    [
+      perl
+      pkg-config
+      vala
+    ]
+    # `help2man' wants to run Zile, which won't work when the
+    # newly-produced binary can't be run at build-time.
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/zile/";
     changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${version}";
-    description = "Implements Lua Editors";
+    description = "Zile Implements Lua Editors";
     longDescription = ''
       GNU Zile is a text editor development kit, so that you can (relatively)
       quickly develop your own ideal text editor without reinventing the wheel

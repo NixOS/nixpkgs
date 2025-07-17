@@ -11,14 +11,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.143.0";
+  version = "1.135.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-QnJQ45ucziHmOkQdAT29szOljBExiIXZ2zvhiKYXBxI=";
+    hash = "sha256-ccYpEznuU6d7gDyrDiuUmvdCJutXI7SAH2PH9Vdq8Fs=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -105,13 +105,11 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlags = [
-    # Disable warnings
-    "-Wignore::DeprecationWarning"
-  ];
-
-  enabledTestPaths = [
+  pytestFlagsArray = [
     "tests"
+    # Disable warnings
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

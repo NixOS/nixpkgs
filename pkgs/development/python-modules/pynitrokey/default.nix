@@ -1,31 +1,36 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   installShellFiles,
   libnitrokey,
-  poetry-core,
+  flit-core,
+  certifi,
   cffi,
   click,
   cryptography,
+  ecdsa,
   fido2,
-  hidapi,
   intelhex,
   nkdfu,
+  python-dateutil,
   pyusb,
   requests,
   tqdm,
   tlv8,
+  typing-extensions,
+  click-aliases,
   semver,
   nethsm,
+  importlib-metadata,
   nitrokey,
   pyscard,
+  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.10.0";
+  version = "0.8.5";
   mainProgram = "nitropy";
 in
 
@@ -35,45 +40,52 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kr6VtBADLvXUva7csbsHujGzBfRG1atJLF7qbIWmToM=";
+    hash = "sha256-mPhH4IdpKKA9d8sJOGMWpGerzki5qZHFHe4u4ao2RgE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
+    certifi
     cffi
     click
     cryptography
+    ecdsa
     fido2
-    hidapi
     intelhex
     nkdfu
-    nitrokey
+    python-dateutil
     pyusb
     requests
     tqdm
     tlv8
+    typing-extensions
+    click-aliases
     semver
     nethsm
+    importlib-metadata
+    nitrokey
+    pyscard
+    asn1crypto
   ];
 
-  optional-dependencies = {
-    pcsc = [
-      pyscard
-    ];
-  };
-
   pythonRelaxDeps = true;
+
+  # pythonRelaxDepsHook runs in postBuild so cannot be used
+  pypaBuildFlags = [ "--skip-dependency-check" ];
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
   makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
 
+  # no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "pynitrokey" ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd ${mainProgram} \
       --bash <(_NITROPY_COMPLETE=bash_source $out/bin/${mainProgram}) \
       --zsh <(_NITROPY_COMPLETE=zsh_source $out/bin/${mainProgram}) \
@@ -90,6 +102,7 @@ buildPythonPackage {
     ];
     maintainers = with maintainers; [
       frogamic
+      raitobezarius
     ];
     inherit mainProgram;
   };

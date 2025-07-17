@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1fdnnx7d18gj4rkv1dc6q379dqabl66zks9i0rjarjwcci8m30d9";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-6uIqvX50XoWCPQ8u38rUdi4LwtMTBcNuefNmzGY+vLU=";
   cargoBuildFlags = [
     "-p"
@@ -35,8 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1

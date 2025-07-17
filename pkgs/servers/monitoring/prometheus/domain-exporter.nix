@@ -29,6 +29,7 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       mmilata
+      prusnak
       peterhoeg
       caarlos0
     ];

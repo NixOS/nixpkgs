@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_ruff" ];
 
   meta = {
-    description = "Pytest plugin to run ruff";
+    description = "A pytest plugin to run ruff";
     homepage = "https://github.com/businho/pytest-ruff";
     changelog = "https://github.com/businho/pytest-ruff/releases/tag/${src.tag}";
     license = lib.licenses.mit;

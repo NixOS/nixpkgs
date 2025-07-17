@@ -5,38 +5,27 @@
   rustPlatform,
   versionCheckHook,
   udevCheckHook,
-  pkg-config,
-  openssl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bmputil";
-  version = "1.0.0";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "blackmagic-debug";
     repo = "bmputil";
     tag = "v${version}";
-    hash = "sha256-5BHnh1/6DqjvT0ptOoGqDqVGU0coVPdnZPDQPT9fVFk=";
+    hash = "sha256-LKtdwQbsPNEu3EDTowOXeFmi5OHOU3kq5f5xxevBjtM=";
   };
 
-  cargoHash = "sha256-JoqNEesozr4ahyenZeeAMf0m8M+sxvbF+A6t23Gcz+4=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    openssl # can be removed once https://github.com/blackmagic-debug/bmputil/commit/5fa01c20902a3f2570fed58ee66f2241546dd6d7 is released
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-32dTB5gOMgy6Fn62p68tAZB8AYwh1BAW+kwwuZPGJyM=";
 
   postInstall = ''
-    install -Dm 444 ${blackmagic.src}/driver/99-blackmagic-plugdev.rules $out/lib/udev/rules.d/99-blackmagic-plugdev.rules
+    install -Dm 444 ${blackmagic.src}/driver/99-blackmagic.rules $out/lib/udev/rules.d/99-blackmagic.rules
   '';
 
-  doCheck = false; # fails at least 1 test
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    udevCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeBuildInputs = [ udevCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -47,10 +36,7 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
-    mainProgram = "bmputil-cli";
-    maintainers = [
-      lib.maintainers.shimun
-      lib.maintainers.carlossless
-    ];
+    mainProgram = "bmputil";
+    maintainers = [ lib.maintainers.shimun ];
   };
 }

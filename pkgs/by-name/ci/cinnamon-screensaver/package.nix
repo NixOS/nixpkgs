@@ -9,7 +9,7 @@
   dbus,
   gettext,
   cinnamon-desktop,
-  cinnamon,
+  cinnamon-common,
   intltool,
   libxslt,
   gtk3,
@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.4.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
     rev = version;
-    hash = "sha256-CK4WP5IafNII81e8HxUNN3Vp36Ln78Xvv5lIMvL+nbk=";
+    hash = "sha256-XlEu/aBwNeu+CC6IRnFTF6LUnb7VY2+OOGsdCvQYweA=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     pam
     cairo
     cinnamon-desktop
-    cinnamon
+    cinnamon-common
     libgnomekbd
     caribou
   ];

@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  future,
   lib,
   pytestCheckHook,
   setuptools,
@@ -20,7 +21,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRemoveDeps = [ "future" ];
+  dependencies = [
+    future
+  ];
 
   pythonImportsCheck = [ "ahocorapy" ];
 

@@ -34,8 +34,7 @@ buildPythonPackage rec {
     twisted
     automat
     zope-interface
-  ]
-  ++ twisted.optional-dependencies.tls;
+  ] ++ twisted.optional-dependencies.tls;
 
   nativeCheckInputs = [
     pytestCheckHook

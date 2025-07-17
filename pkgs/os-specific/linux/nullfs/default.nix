@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Virtual black hole file system that behaves like /dev/null";
+    description = "A virtual black hole file system that behaves like /dev/null";
     homepage = "https://github.com/abbbi/nullfsvfs";
     license = licenses.gpl3;
     platforms = platforms.linux;

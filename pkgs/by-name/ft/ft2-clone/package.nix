@@ -11,23 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.99";
+  version = "1.96";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-7FA6pd8rnobvOWHqHqJseJgUniAYhpzqmJnmqYyvpm0=";
+    hash = "sha256-Kw2EjFiKRVriiauwL/o/yNQkFwnKA23qTs4fhZtEEuA=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    SDL2
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ SDL2 ]
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;

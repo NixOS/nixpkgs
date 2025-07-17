@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from functools import cached_property
 import json
 from pathlib import Path
-import shutil
 
 from libfdt import Fdt, FdtException, FDT_ERR_NOSPACE, FDT_ERR_NOTFOUND, fdt_overlay_apply
 
@@ -15,16 +14,16 @@ class Overlay:
     dtbo_file: Path
 
     @cached_property
-    def fdt(self) -> Fdt:
+    def fdt(self):
         with self.dtbo_file.open("rb") as fd:
             return Fdt(fd.read())
 
     @cached_property
-    def compatible(self) -> set[str]:
+    def compatible(self):
         return get_compatible(self.fdt)
 
 
-def get_compatible(fdt) -> set[str]:
+def get_compatible(fdt):
     root_offset = fdt.path_offset("/")
 
     try:
@@ -57,33 +56,6 @@ def apply_overlay(dt: Fdt, dto: Fdt) -> Fdt:
 
         raise FdtException(err)
 
-def process_dtb(rel_path: Path, source: Path, destination: Path, overlays_data: list[Overlay]):
-    source_dt = source / rel_path
-    print(f"Processing source device tree {rel_path}...")
-    with source_dt.open("rb") as fd:
-        dt = Fdt(fd.read())
-
-    for overlay in overlays_data:
-        if overlay.filter and overlay.filter not in str(rel_path):
-            print(f"  Skipping overlay {overlay.name}: filter does not match")
-            continue
-
-        dt_compatible = get_compatible(dt)
-        if len(dt_compatible) == 0:
-            print(f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay")
-        elif not overlay.compatible.intersection(dt_compatible):
-            print(f"  Skipping overlay {overlay.name}: {overlay.compatible} is incompatible with {dt_compatible}")
-            continue
-
-        print(f"  Applying overlay {overlay.name}")
-        dt = apply_overlay(dt, overlay.fdt)
-
-    print(f"Saving final device tree {rel_path}...")
-    dest_path = destination / rel_path
-    dest_path.parent.mkdir(parents=True, exist_ok=True)
-    with dest_path.open("wb") as fd:
-        fd.write(dt.as_bytearray())
-
 def main():
     parser = ArgumentParser(description='Apply a list of overlays to a directory of device trees')
     parser.add_argument("--source", type=Path, help="Source directory")
@@ -105,16 +77,33 @@ def main():
             for item in json.load(fd)
         ]
 
-    for dirpath, dirnames, filenames in source.walk():
-        for filename in filenames:
-            rel_path = (dirpath / filename).relative_to(source)
-            if filename.endswith(".dtb"):
-                process_dtb(rel_path, source, destination, overlays_data)
-            else:
-                # Copy other files through
-                dest_path = destination / rel_path
-                dest_path.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy(source / rel_path, dest_path)
+    for source_dt in source.glob("**/*.dtb"):
+        rel_path = source_dt.relative_to(source)
+
+        print(f"Processing source device tree {rel_path}...")
+        with source_dt.open("rb") as fd:
+            dt = Fdt(fd.read())
+
+        for overlay in overlays_data:
+            if overlay.filter and overlay.filter not in str(rel_path):
+                print(f"  Skipping overlay {overlay.name}: filter does not match")
+                continue
+
+            dt_compatible = get_compatible(dt)
+            if len(dt_compatible) == 0:
+                print(f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay")
+            elif not overlay.compatible.intersection(dt_compatible):
+                print(f"  Skipping overlay {overlay.name}: {overlay.compatible} is incompatible with {dt_compatible}")
+                continue
+
+            print(f"  Applying overlay {overlay.name}")
+            dt = apply_overlay(dt, overlay.fdt)
+
+        print(f"Saving final device tree {rel_path}...")
+        dest_path = destination / rel_path
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
+        with dest_path.open("wb") as fd:
+            fd.write(dt.as_bytearray())
 
 
 if __name__ == '__main__':

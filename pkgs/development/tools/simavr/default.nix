@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
     which
     pkg-config
     avrgcc
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
   buildInputs = [
     libelf
     libglut

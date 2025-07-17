@@ -35,18 +35,17 @@ stdenv.mkDerivation rec {
     tcl
   ];
 
-  buildInputs = [
-    libusb1
-  ]
-  ++ lib.optionals notWindows [
-    hidapi
-    jimtcl
-    libftdi1
-    libjaylink
-  ]
-  ++
-    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
-    lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
+  buildInputs =
+    [ libusb1 ]
+    ++ lib.optionals notWindows [
+      hidapi
+      jimtcl
+      libftdi1
+      libjaylink
+    ]
+    ++
+      # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+      lib.optional stdenv.hostPlatform.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"
@@ -58,8 +57,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature stdenv.hostPlatform.isLinux "sysfsgpio")
     (lib.enableFeature isWindows "internal-jimtcl")
     (lib.enableFeature isWindows "internal-libjaylink")
-  ]
-  ++ map (hardware: "--enable-${hardware}") extraHardwareSupport;
+  ] ++ map (hardware: "--enable-${hardware}") extraHardwareSupport;
 
   enableParallelBuilding = true;
 

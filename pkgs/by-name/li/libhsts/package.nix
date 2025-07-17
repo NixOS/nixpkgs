@@ -9,11 +9,11 @@
   python3,
 }:
 let
-  chromium_version = "140.0.7324.1";
+  chromium_version = "90.0.4417.1";
 
   hsts_list = fetchurl {
     url = "https://raw.github.com/chromium/chromium/${chromium_version}/net/http/transport_security_state_static.json";
-    hash = "sha256-XV3yZA3Ai4It7S/y4V0h+UtKm8SXm6x1hlITD7jGY9I=";
+    sha256 = "09f24n30x5dmqk8zk7k2glcilgr27832a3304wj1yp97158sqsfx";
   };
 
 in
@@ -21,26 +21,16 @@ stdenv.mkDerivation rec {
   pname = "libhsts";
   version = "0.1.0";
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   src = fetchFromGitLab {
     owner = "rockdaboot";
     repo = "libhsts";
-    tag = "libhsts-${version}";
-    hash = "sha256-pM9ZFk8W73Sx3ru/mqN/rWYMyZnNFCa/Wb8TB9yHbD0=";
+    rev = "libhsts-${version}";
+    sha256 = "0gbchzf0f4xzb6zjc56dk74hqrmdgyirmgxvvsqp9vqn9wb5kkx4";
   };
-
-  patches = [
-    ./gettext-0.25.patch
-  ];
 
   postPatch = ''
     pushd tests
     cp ${hsts_list} transport_security_state_static.json
-    # strip comments from json
     sed 's/^ *\/\/.*$//g' transport_security_state_static.json >hsts.json
     popd
     patchShebangs src/hsts-make-dafsa
@@ -53,16 +43,19 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  passthru.updateScript = ./update.sh;
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Library to easily check a domain against the Chromium HSTS Preload list";
     mainProgram = "hsts";
     homepage = "https://gitlab.com/rockdaboot/libhsts";
-    license = with lib.licenses; [
+    license = with licenses; [
       mit
       bsd3
     ];
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }

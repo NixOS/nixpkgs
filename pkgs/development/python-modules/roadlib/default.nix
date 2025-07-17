@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "roadlib";
-  version = "1.4.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xiWX16bnEhy7Ykn0nEXpXLJJ5rsZrr2rYmu6WE5XhaQ=";
+    hash = "sha256-RI6gUqCaOeLesIwHtsASEkTtdRxLCAP6+C5Yj8mBb2o=";
   };
 
   build-system = [ setuptools ];

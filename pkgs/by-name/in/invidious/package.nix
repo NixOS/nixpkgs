@@ -20,8 +20,6 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
-  # Broken versions:
-  #   * 20250517 (`Missing hash key: "videoDetails" (KeyError)`)
   versions ? lib.importJSON ./versions.json,
 }:
 let
@@ -139,6 +137,7 @@ crystal.buildCrystalPackage rec {
       _999eagle
       GaetanLepage
       sbruder
+      pbsds
     ];
   };
 }

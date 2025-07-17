@@ -6,7 +6,6 @@
   lib,
   libGL,
   libX11,
-  libxcb,
   libXext,
   libXrandr,
   libxkbcommon,
@@ -23,8 +22,6 @@
   testers,
   wayland,
   wlx-overlay-s,
-  # openvr support is broken on aarch64-linux
-  withOpenVr ? !stdenv.hostPlatform.isAarch64,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,18 +35,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lWUfhiHRxu72p9ZG2f2fZH6WZECm/fOKcK05MLZV+MI=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-em5sWSty2/pZp2jTwBnLUIBgPOcoMpwELwj984XYf+k=";
-
-  # explicitly only add openvr if withOpenVr is set to true.
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "openxr"
-    "osc"
-    "x11"
-    "wayland"
-    "wayvr"
-  ]
-  ++ lib.optional withOpenVr "openvr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -63,15 +50,14 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libGL
     libX11
-    libxcb
     libXext
     libXrandr
     libxkbcommon
+    openvr
     openxr-loader
     pipewire
     wayland
-  ]
-  ++ lib.optional withOpenVr openvr;
+  ];
 
   env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
@@ -94,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64 && withOpenVr;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "wlx-overlay-s";
   };
 }

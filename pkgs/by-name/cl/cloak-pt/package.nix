@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.12.0";
+  version = "2.11.0";
 in
 buildGoModule {
   pname = "Cloak";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "cbeuw";
     repo = "Cloak";
     rev = "v${version}";
-    hash = "sha256-789UyTJmIhujsg0OlCy8GqUxgHDjzkGUi5kHD5sytwQ=";
+    hash = "sha256-afFOWjJiqlMeo8M8D2RsW572c2qTthMNbQvxEf7edHE=";
   };
 
-  vendorHash = "sha256-LOXPs/3qkP3GJZZ7W4rPOfAjmvNh1mowRuQ1tlV1uC4=";
+  vendorHash = "sha256-P3/fB1vJjEMETyFxH9XNQySCEDQWrbZdaf0V4qFucbI=";
 
   doCheck = false;
 

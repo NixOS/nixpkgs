@@ -28,14 +28,12 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ]
-  ++ lib.optionals withDocs [ "doc" ];
+  ] ++ lib.optionals withDocs [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-  ]
-  ++ lib.optionals withDocs [ doxygen ];
+  ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs = lib.optional enableUdev udev;
 
   # Many dependents are dealing with hardware devices, exposing udev rules for them.
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libusb.info/";
-    description = "Cross-platform user-mode USB device library";
+    description = "cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';

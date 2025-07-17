@@ -26,7 +26,7 @@ let
       inherit (config.sdImage) storePaths;
       compressImage = config.sdImage.compressImage;
       populateImageCommands = config.sdImage.populateRootCommands;
-      volumeLabel = config.sdImage.rootVolumeLabel;
+      volumeLabel = "NIXOS_SD";
     }
     // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
       uuid = config.sdImage.rootPartitionUUID;
@@ -117,17 +117,6 @@ in
       '';
     };
 
-    rootVolumeLabel = mkOption {
-      type = types.str;
-      default = "NIXOS_SD";
-      example = "NIXOS_PENDRIVE";
-      description = ''
-        Label for the NixOS root volume.
-        Usually used when creating a recovery NixOS media installation
-        that avoids conflicting with previous instalation label.
-      '';
-    };
-
     firmwareSize = mkOption {
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
@@ -208,7 +197,7 @@ in
         ];
       };
       "/" = {
-        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
+        device = "/dev/disk/by-label/NIXOS_SD";
         fsType = "ext4";
       };
     };
@@ -216,7 +205,7 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     image.extension = if config.sdImage.compressImage then "img.zst" else "img";
-    image.filePath = "sd-image/${config.image.fileName}";
+    image.filePath = "sd-card/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage (
@@ -238,8 +227,7 @@ in
           libfaketime
           mtools
           util-linux
-        ]
-        ++ lib.optional config.sdImage.compressImage zstd;
+        ] ++ lib.optional config.sdImage.compressImage zstd;
 
         inherit (config.sdImage) compressImage;
 

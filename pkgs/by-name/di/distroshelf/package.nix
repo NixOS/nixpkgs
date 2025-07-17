@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "distroshelf";
-  version = "1.0.13";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "DistroShelf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2R5jDstnzCTG6UfynsO2aeX6eST4cZIEHNdP9OLDKrw=";
+    hash = "sha256-pNGIwmw75c7Q+lXZBSZnAnIqJqYOPIA9cpAlzv/HjJU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "distroshelf";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
   };
 })

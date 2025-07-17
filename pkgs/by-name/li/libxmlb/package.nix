@@ -23,42 +23,44 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.23";
+  version = "0.3.22";
 
-  outputs = [
-    "out"
-    "lib"
-    "dev"
-    "installedTests"
-  ]
-  ++ lib.optionals withIntrospection [
-    "devdoc"
-  ];
+  outputs =
+    [
+      "out"
+      "lib"
+      "dev"
+      "installedTests"
+    ]
+    ++ lib.optionals withIntrospection [
+      "devdoc"
+    ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    hash = "sha256-hdF1yce9/ztXVV6BYocPGVAjoxJancID77rnHBJsKmM=";
+    hash = "sha256-6S/4X6dYsVj9v98LoDJjir6Kmb5L8PloD23yvvkiD6o=";
   };
 
   patches = [
     ./installed-tests-path.patch
   ];
 
-  nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
-    meson
-    ninja
-    pkg-config
-    python3
-    shared-mime-info
-  ]
-  ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [
+      docbook_xml_dtd_43
+      docbook-xsl-nons
+      meson
+      ninja
+      pkg-config
+      python3
+      shared-mime-info
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gtk-doc
+    ];
 
   buildInputs = [
     glib

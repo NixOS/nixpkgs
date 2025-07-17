@@ -4,17 +4,14 @@
   fetchzip,
 }:
 
-let
-  version = "16.0.3";
-in
-
 stdenvNoCC.mkDerivation {
   pname = "babelstone-han";
-  inherit version;
+  version = "13.0.3";
 
   src = fetchzip {
-    url = "https://babelstone.co.uk/Fonts/Download/BabelStoneHan-${version}.zip";
-    hash = "sha256-HmmRJLs51hoHoKQYdjbiivnJl+RhcBwzkng+5PoqX10=";
+    # upstream download links are unversioned, so hash changes
+    url = "https://web.archive.org/web/20200210125314/https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip";
+    hash = "sha256-LLhNtHu2hh5DY2XVSrLuVzzR6OtMdSSHetyA0k1IFs0=";
   };
 
   installPhase = ''

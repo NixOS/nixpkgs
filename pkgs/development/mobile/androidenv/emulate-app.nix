@@ -33,17 +33,18 @@
 }:
 
 let
-  sdkArgs = {
-    includeEmulator = true;
-    includeSystemImages = true;
-  }
-  // sdkExtraArgs
-  // {
-    cmdLineToolsVersion = "8.0";
-    platformVersions = [ platformVersion ];
-    systemImageTypes = [ systemImageType ];
-    abiVersions = [ abiVersion ];
-  };
+  sdkArgs =
+    {
+      includeEmulator = true;
+      includeSystemImages = true;
+    }
+    // sdkExtraArgs
+    // {
+      cmdLineToolsVersion = "8.0";
+      platformVersions = [ platformVersion ];
+      systemImageTypes = [ systemImageType ];
+      abiVersions = [ abiVersion ];
+    };
 
   sdk = (composeAndroidPackages sdkArgs).androidsdk;
 in

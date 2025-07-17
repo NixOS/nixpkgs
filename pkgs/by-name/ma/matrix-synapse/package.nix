@@ -3,12 +3,15 @@
   stdenv,
   makeWrapper,
   matrix-synapse-unwrapped,
-  extras ? [
-    "postgres"
-    "url-preview"
-  ]
-  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
+  extras ?
+    [
+      "postgres"
+      "url-preview"
+      "user-search"
+    ]
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
   plugins ? [ ],
+  ...
 }:
 
 let

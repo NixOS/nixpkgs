@@ -2,27 +2,38 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
-  pytest-cov-stub,
+  glibcLocales,
   pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "2.2.1";
-  pyproject = true;
+  version = "2.1.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DqqVXx8Ly1uHrBla90Dwb/n/9KQO0wuKfGu+uyZNTdE=";
+    hash = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    sed -i '/cov/d' setup.cfg
+  '';
 
-  nativeCheckInputs = [
-    pytest-cov-stub
-    pytestCheckHook
+  buildInputs = [ glibcLocales ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  propagatedBuildInputs = [
+    pytz
+    six
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "feedgenerator" ];
 

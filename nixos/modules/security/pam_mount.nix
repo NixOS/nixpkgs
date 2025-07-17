@@ -158,8 +158,7 @@ in
                 user = user.name;
                 path = user.cryptHomeLuks;
                 mountpoint = user.home;
-              }
-              // user.pamMount;
+              } // user.pamMount;
             in
             "<volume ${lib.concatStringsSep " " (lib.mapAttrsToList mkAttr attrs)} />\n";
         in

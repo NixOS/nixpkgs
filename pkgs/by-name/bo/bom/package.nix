@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -13,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "bom";
-    tag = "v${version}";
+    rev = "v${version}";
     hash = "sha256-nYzBaFtOJhqO0O6MJsxTw/mxsIOa+cnU27nOFRe2/uI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -44,7 +43,7 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd bom \
       --bash <($out/bin/bom completion bash) \
       --fish <($out/bin/bom completion fish) \

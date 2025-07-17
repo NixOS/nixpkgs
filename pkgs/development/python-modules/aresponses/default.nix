@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    pytest-asyncio_0
+    pytest-asyncio
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/13-CF/afetch";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+      dan4ik605743
       jk
     ];
     platforms = lib.platforms.linux;

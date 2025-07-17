@@ -4,18 +4,15 @@
   fetchFromGitHub,
 }:
 
-let
-  version = "2.4.1";
-in
 python3.pkgs.buildPythonApplication {
   pname = "deluge-exporter";
-  inherit version;
+  version = "2.4.0-unstable-2024-06-02";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibizaman";
     repo = "deluge_exporter";
-    tag = "v${version}";
+    rev = "8d446c8cba4a324aa052e66c115121b23adc970f";
     hash = "sha256-1brLWx6IEGffcvHPCkz10k9GCNQIXXJ9PYZuEzlKHTA=";
   };
 

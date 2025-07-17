@@ -1,39 +1,29 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
+  fetchurl,
   intltool,
   pkg-config,
   libX11,
   gtk2,
   gtk3,
-  libxslt,
-  docbook_xsl,
   wrapGAppsHook3,
   withGtk3 ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lxappearance";
-  version = "0.6.4";
+  version = "0.6.3";
 
-  src = fetchFromGitHub {
-    owner = "lxde";
-    repo = "lxappearance";
-    tag = finalAttrs.version;
-    hash = "sha256-t5P3JYGZzhTaJ3s23r6yrAQoFcCV5uteHh67sWY1KrI=";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/lxde/LXAppearance/${pname}-${version}.tar.xz";
+    sha256 = "0f4bjaamfxxdr9civvy55pa6vv9dx1hjs522gjbbgx7yp1cdh8kj";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     pkg-config
     intltool
     wrapGAppsHook3
-    autoreconfHook
-    libxslt
-    docbook_xsl
   ];
 
   buildInputs = [
@@ -45,16 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./lxappearance-0.6.3-xdg.system.data.dirs.patch
   ];
 
-  env.XSLTPROC = lib.getExe' libxslt "xsltproc";
-
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";
     mainProgram = "lxappearance";
     homepage = "https://lxde.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ romildo ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
   };
-})
+}

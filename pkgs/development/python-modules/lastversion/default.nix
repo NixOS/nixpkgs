@@ -49,8 +49,7 @@ buildPythonPackage rec {
     requests
     tqdm
     urllib3
-  ]
-  ++ cachecontrol.optional-dependencies.filecache;
+  ] ++ cachecontrol.optional-dependencies.filecache;
 
   pythonRelaxDeps = [
     "cachecontrol" # Use newer cachecontrol that uses filelock instead of lockfile
@@ -63,11 +62,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  enabledTestPaths = [
+  pytestFlags = [
     "tests/test_cli.py"
-  ];
-
-  enabledTests = [
+    "-k"
     "test_cli_format"
   ];
 

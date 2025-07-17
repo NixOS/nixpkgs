@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils git nix curl jq nixfmt-tree
+#!nix-shell -i bash -p coreutils git nix curl jq
 # shellcheck shell=bash enable=all
 
 set -e
@@ -226,7 +226,6 @@ if grep '""' "${tmp}"; then
 fi
 
 mv "${tmp}" "${file}"
-treefmt "${file}"
 
 printf "\nFinished\nMoved output to %s\n\n" "${file}" >&2
 

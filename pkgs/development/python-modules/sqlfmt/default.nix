@@ -5,36 +5,41 @@
   click,
   fetchFromGitHub,
   gitpython,
+  importlib-metadata,
   jinja2,
   platformdirs,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  tomli,
   tqdm,
-  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.27.0";
+  version = "0.26.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${version}";
-    hash = "sha256-Yel9SB7KrDqtuZxNx4omz6u4AID8Fk5kFYKBEZD1fuU=";
+    hash = "sha256-q0pkwuQY0iLzK+Lef6k62UxMKJy592RsJnSZnVYdMa8=";
   };
+
+  pythonRelaxDeps = [ "platformdirs" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
     click
+    importlib-metadata
     jinja2
     platformdirs
+    tomli
     tqdm
   ];
 
@@ -46,11 +51,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    writableTmpDirAsHomeHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
+    export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
   '';
 
@@ -59,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sqlfmt formats your dbt SQL files so you don't have to";
     homepage = "https://github.com/tconbeer/sqlfmt";
-    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";

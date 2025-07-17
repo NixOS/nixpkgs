@@ -47,8 +47,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     openapi = [
@@ -62,8 +61,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     strict-rfc3339
-  ]
-  ++ optional-dependencies.openapi;
+  ] ++ optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)

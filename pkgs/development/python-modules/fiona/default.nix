@@ -39,11 +39,6 @@ buildPythonPackage rec {
     hash = "sha256-5NN6PBh+6HS9OCc9eC2TcBvkcwtI4DV8qXnz4tlaMXc=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "cython~=3.0.2" cython
-  '';
-
   build-system = [
     cython
     gdal # for gdal-config
@@ -74,17 +69,16 @@ buildPythonPackage rec {
     pytz
     shapely
     snuggs
-  ]
-  ++ optional-dependencies.s3;
+  ] ++ optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
   '';
 
-  disabledTestMarks = [
+  pytestFlagsArray = [
     # Tests with gdal marker do not test the functionality of Fiona,
     # but they are used to check GDAL driver capabilities.
-    "gdal"
+    "-m 'not gdal'"
   ];
 
   disabledTests = [

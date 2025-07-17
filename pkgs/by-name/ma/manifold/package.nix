@@ -6,19 +6,18 @@
   clipper2,
   gtest,
   glm,
-  tbb_2022,
-  python3Packages,
+  tbb_2021,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "3.2.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-d/e4SKwfKqvLZgQu/Gfwsym9/XqEqQr7fWNSyLtCxzs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dCCTjWRjXSyuEDxGI9ZS2UTmLdZVSmDOmHFnhox3N+4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,10 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     glm
-    tbb_2022
+    tbb_2021
+    clipper2
   ];
-
-  propagatedBuildInputs = [ clipper2 ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -38,34 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMANIFOLD_PAR=TBB"
   ];
 
-  excludedTestPatterns = lib.optionals stdenv.isDarwin [
-    # https://github.com/elalish/manifold/issues/1306
-    "Manifold.Simplify"
-  ];
   doCheck = true;
   checkPhase = ''
-    test/manifold_test --gtest_filter=-${builtins.concatStringsSep ":" finalAttrs.excludedTestPatterns}
+    test/manifold_test --gtest_filter=-CrossSection.RoundOffset
   '';
-
-  passthru = {
-    tbb = tbb_2022;
-    tests = {
-      python = python3Packages.manifold3d;
-    };
-  };
 
   meta = {
     description = "Geometry library for topological robustness";
     homepage = "https://github.com/elalish/manifold";
-    changelog = "https://github.com/elalish/manifold/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers =
-      with lib.maintainers;
-      [
-        hzeller
-        pca006132
-      ]
-      ++ python3Packages.manifold3d.meta.maintainers;
+    maintainers = with lib.maintainers; [
+      hzeller
+      pca006132
+    ];
     platforms = lib.platforms.unix;
   };
 })

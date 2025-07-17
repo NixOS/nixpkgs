@@ -12,7 +12,6 @@
   perl,
   pkg-config,
   tzdata,
-  ctestCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,17 +41,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    doxygen
-    graphviz
-    perl
-    pkg-config
-  ]
-  ++ (with libsForQt5; [
-    wrapQtAppsHook
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      extra-cmake-modules
+      doxygen
+      graphviz
+      perl
+      pkg-config
+    ]
+    ++ (with libsForQt5; [
+      wrapQtAppsHook
+    ]);
 
   buildInputs = with libsForQt5; [
     kcalendarcore
@@ -63,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     tzdata
-    ctestCheckHook
   ];
 
   cmakeFlags = [
@@ -71,17 +70,25 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "INSTALL_TESTS" false)
     (lib.cmakeBool "BUILD_DOCUMENTATION" true)
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Test expects to be passed a real, already existing database to test migrations. We don't have one
+            "tst_perf"
+
+            # 10/97 tests fail. Half seem related to time (zone) issues w/ local time / Helsinki timezone
+            # Other half are x-1/x on lists of alarms/events
+            "tst_storage"
+          ]
+        })")
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  disabledTests = [
-    # Test expects to be passed a real, already existing database to test migrations. We don't have one
-    "tst_perf"
-
-    # 10/97 tests fail. Half seem related to time (zone) issues w/ local time / Helsinki timezone
-    # Other half are x-1/x on lists of alarms/events
-    "tst_storage"
-  ];
 
   # Parallelism breaks tests
   enableParallelChecking = false;

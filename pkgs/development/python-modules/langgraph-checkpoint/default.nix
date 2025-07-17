@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build system
-  hatchling,
+  poetry-core,
 
   # dependencies
   langchain-core,
@@ -13,8 +13,6 @@
 
   # testing
   dataclasses-json,
-  numpy,
-  pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -25,19 +23,19 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.1.1";
+  version = "2.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
+    hash = "sha256-DSkjaxUfpsOg2ex0dgfO/UJ7WiQb5wQsAGgHPTckF6o=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
-  build-system = [ hatchling ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     langchain-core
@@ -50,25 +48,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dataclasses-json
-    numpy
-    pandas
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # assert 1.0000000000000004 == 1.0000000000000002
-    # https://github.com/langchain-ai/langgraph/issues/5845
-    "test_embed_with_path"
-  ];
-
-  passthru = {
-    # python updater script sets the wrong tag
-    skipBulkUpdate = true;
-    updateScript = gitUpdater {
-      rev-prefix = "checkpoint==";
-    };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "checkpoint==";
   };
 
   meta = {
@@ -77,6 +63,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      drupol
       sarahec
     ];
   };

@@ -4,108 +4,89 @@
   fetchurl,
 
   # build time
-  bison,
-  flex,
-  meson,
-  ninja,
+  autoreconfHook,
   pkg-config,
   python3Packages,
 
   # runtime
-  boost,
+  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  boost186,
+  libmysqlclient,
   log4cplus,
   openssl,
-  python3,
-  withKrb5 ? true,
-  krb5,
-  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  libmysqlclient,
-  withPostgresql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
   libpq,
+  python3,
 
   # tests
   nixosTests,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "kea";
-  version = "3.0.1"; # only even minor versions are stable
+  version = "2.6.2"; # only even minor versions are stable
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7IT+xLt/a50VqC51Wlcek0jrTW+8Yrs/bxKWzXokxWY=";
+    url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-ilC2MQNzS1nDuGGczWdm0t/uPwLjpfnzq8HNVfcPpCQ=";
   };
 
   patches = [
-    ./dont-create-system-paths.patch
+    ./dont-create-var.patch
   ];
 
   postPatch = ''
-    patchShebangs \
-      scripts/grabber.py \
-      doc/sphinx/*.sh.in
+    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
+    # darwin special-casing just causes trouble
+    substituteInPlace ./m4macros/ax_crypto.m4 --replace 'apple-darwin' 'nope'
   '';
 
   outputs = [
     "out"
     "doc"
-    "python"
+    "man"
   ];
 
-  mesonFlags = [
-    (lib.mesonOption "crypto" "openssl")
-    (lib.mesonEnable "krb5" withKrb5)
-    (lib.mesonEnable "mysql" withMysql)
-    (lib.mesonEnable "netconf" false) # missing libyang-cpp, sysinfo, libsysrepo-cpp
-    (lib.mesonEnable "postgresql" withPostgresql)
-    (lib.mesonOption "localstatedir" "/var")
-    (lib.mesonOption "runstatedir" "/run")
-  ];
+  configureFlags =
+    [
+      "--enable-perfdhcp"
+      "--enable-shell"
+      "--localstatedir=/var"
+      "--with-openssl=${lib.getDev openssl}"
+    ]
+    ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
+    ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
-    for file in config.report meson-info/intro*.json; do
-      sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i "$file"
-    done
+    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
   '';
 
-  nativeBuildInputs = [
-    bison
-    flex
-    meson
-    ninja
-    pkg-config
-    python3
-  ]
-  ++ (with python3Packages; [
-    sphinx
-    sphinx-rtd-theme
-  ]);
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+    ]
+    ++ (with python3Packages; [
+      sphinxHook
+      sphinx-rtd-theme
+    ]);
+
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+  sphinxRoot = "doc/sphinx";
 
   buildInputs = [
-    boost
+    boost186 # does not build with 1.87 yet, see https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2523
+    libmysqlclient
     log4cplus
     openssl
     python3
-  ]
-  ++ lib.optionals withMysql [
-    libmysqlclient
-  ]
-  ++ lib.optionals withPostgresql [
-    libpq
-  ]
-  ++ lib.optionals withKrb5 [
-    krb5
   ];
 
-  postBuild = ''
-    ninja doc
-  '';
-
-  postFixup = ''
-    mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
-  '';
+  enableParallelBuilding = true;
 
   passthru.tests = {
     kea = nixosTests.kea;
@@ -119,7 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://gitlab.isc.org/isc-projects/kea/-/wikis/Release-Notes/release-notes-${finalAttrs.version}";
+    # error: implicit instantiation of undefined template 'std::char_traits<unsigned char>'
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''
@@ -136,4 +119,4 @@ stdenv.mkDerivation (finalAttrs: {
       hexa
     ];
   };
-})
+}

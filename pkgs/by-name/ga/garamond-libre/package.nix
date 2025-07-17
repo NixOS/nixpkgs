@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dbenjaminmiller/garamond-libre";
     description = "Garamond Libre font family";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ drupol ];
     license = licenses.x11;
     platforms = platforms.all;
   };

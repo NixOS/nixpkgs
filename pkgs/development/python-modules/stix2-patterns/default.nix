@@ -1,5 +1,6 @@
 {
   lib,
+  antlr4_9,
   antlr4-python3-runtime,
   buildPythonPackage,
   fetchFromGitHub,
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    antlr4-python3-runtime
+    (antlr4-python3-runtime.override { antlr4 = antlr4_9; })
     six
   ];
 
@@ -35,7 +36,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stix2patterns" ];
 
   meta = with lib; {
-    broken = lib.versionAtLeast antlr4-python3-runtime.version "4.10";
     description = "Validate patterns used to express cyber observable content in STIX Indicators";
     mainProgram = "validate-patterns";
     homepage = "https://github.com/oasis-open/cti-pattern-validator";

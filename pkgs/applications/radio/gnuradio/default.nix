@@ -58,16 +58,17 @@ let
         pkg-config
         orc
       ];
-      runtime = [
-        volk
-        boost
-        spdlog
-        mpir
-      ]
-      # when gr-qtgui is disabled, icu needs to be included, otherwise
-      # building with boost 1.7x fails
-      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
-      pythonNative = with python.pythonOnBuildForHost.pkgs; [
+      runtime =
+        [
+          volk
+          boost
+          spdlog
+          mpir
+        ]
+        # when gr-qtgui is disabled, icu needs to be included, otherwise
+        # building with boost 1.7x fails
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      pythonNative = with python.pkgs; [
         mako
         six
       ];
@@ -337,8 +338,6 @@ stdenv.mkDerivation (
         # This is the only python reference worth removing, if needed.
         + lib.optionalString (!hasFeature "python-support") ''
           remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-        ''
-        + lib.optionalString (!hasFeature "python-support" && hasFeature "gnuradio-runtime") ''
           remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
           remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
         '';

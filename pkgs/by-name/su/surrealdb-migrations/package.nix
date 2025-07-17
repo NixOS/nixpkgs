@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-BCShTHZSeahJclOHcWh7etl0FajhFs4/RVVszFZdOV8=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-fV7yHRiqcM4l9i3tnoMawEQxd9fqbcZYZkeTITy310g=";
 
   # Error: No such file or directory (os error 2)

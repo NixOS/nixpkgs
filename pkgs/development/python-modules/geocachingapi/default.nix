@@ -33,8 +33,6 @@ buildPythonPackage rec {
     yarl
   ];
 
-  pythonRelaxDeps = [ "reverse_geocode" ];
-
   # Tests require a token and network access
   doCheck = false;
 

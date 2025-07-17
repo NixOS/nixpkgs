@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "CPython bindings for zopfli";
+    description = "cPython bindings for zopfli";
     homepage = "https://github.com/obp/py-zopfli";
     license = licenses.asl20;
     maintainers = [ maintainers.sternenseemann ];

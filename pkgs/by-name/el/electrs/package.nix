@@ -8,21 +8,19 @@
 let
   rocksdb = rocksdb_7_10;
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.10.10";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "electrs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FSsTo2m88U7t6wMXaSuYhF5bCMRq11EBQsq6uiMdF7c=";
+    rev = "v${version}";
+    hash = "sha256-Xo7aqP4tIh/kYthPucscxnl+ZtVioEja4TTFdH0Q350=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-hVPtnMqaFH+1QJ52ZG9vZ3clsMTsEpvF5JjTKWoKSPE=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wDEtVsgkddGv89tTy96wYzNWVicn34Gxi+YAo7yAfQA=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -40,4 +38,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with maintainers; [ prusnak ];
     mainProgram = "electrs";
   };
-})
+}

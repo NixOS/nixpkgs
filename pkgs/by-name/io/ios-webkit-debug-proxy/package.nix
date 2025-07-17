@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ios-webkit-debug-proxy";
-  version = "1.9.2";
+  version = "1.9.1";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "ios-webkit-debug-proxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-42hNAMokjfo7Vi1xclFcjUmioMFQW64HYTMvvTVk5hY=";
+    hash = "sha256-94gYTv5v4YNwbiUJ/9PIHU+Bnvf5uN12+oMFWKj+J1Y=";
   };
 
   patches = [

@@ -1,49 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustc,
-  rustPlatform,
-  setuptools,
-  setuptools-rust,
+  cython,
+  fetchPypi,
   python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.3.6";
+  version = "0.3.2";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "breezy-team";
-    repo = "fastbencode";
-    tag = "v${version}";
-    hash = "sha256-Vn9NcJQaSF+k2TyRTAA9yMWiV+kYrfw6RIbIe99CCsg=";
+  disabled = pythonOlder "3.9";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-o0wyxQSw7J3hpJk0btJJMjWetGI0sotwl1pQ/fqhSrU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-r229xfSrkbDEfm/nGFuQshyP4o04US0xJiRK4oXtaYE=";
-  };
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
-  ];
-
-  build-system = [
-    setuptools
-    setuptools-rust
-  ];
+  nativeBuildInputs = [ cython ];
 
   pythonImportsCheck = [ "fastbencode" ];
 
   checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest tests.test_suite
-    runHook postCheck
+    ${python.interpreter} -m unittest fastbencode.tests.test_suite
   '';
 
   meta = with lib; {

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "mantra";
-  version = "3.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "MrEmpy";
     repo = "Mantra";
     tag = "v${version}";
-    hash = "sha256-DnErXuMbCRK3WxhdyPj0dOUtGnCcmynPk/hYmOsOKVU=";
+    hash = "sha256-fBcoKoTBGCyJS8+mzKXLGxcxmRsCcZFZEyMTnA5Rkbw=";
   };
 
   vendorHash = null;

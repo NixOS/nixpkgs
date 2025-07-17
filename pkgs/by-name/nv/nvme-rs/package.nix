@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvme-rs";
-  version = "0.2.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "nvme-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0zQPLl9B6Nu5qAzV5/3eKuRXx/4P6paOIr7uQ+znc8=";
+    hash = "sha256-lkuOPe5gYhboK9zylTCVN1DFWCFRHhfJa7tNEHH/GQM=";
   };
 
-  cargoHash = "sha256-MQ6iSadHLNioYNy8MTACQ05tdsdxY8/LUcoOKARqoT8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MNEG6GGfMg1FXodD8yEMqvm8lYkQgYXMc/vR4lV166I=";
 
   nativeBuildInputs = [
     pkg-config

@@ -30,16 +30,7 @@ stdenv.mkDerivation {
     XCTest
   ];
 
-  configurePhase =
-    generated.configure
-    # Fix the build with modern Clang.
-    #
-    # Based on the upstream fix for Musl:
-    # <https://github.com/apple/swift-nio/commit/fc6e3c0eefb28adf641531180b81aaf41b02ed20>
-    + ''
-      swiftpmMakeMutable swift-nio
-      patch -p1 -d .build/checkouts/swift-nio -i ${./fix-swift-nio.patch}
-    '';
+  configurePhase = generated.configure;
 
   # We only install the docc binary, so don't need the other products.
   # This works around a failure building generate-symbol-graph:

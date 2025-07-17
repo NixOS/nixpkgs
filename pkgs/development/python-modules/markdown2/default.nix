@@ -4,7 +4,7 @@
   fetchFromGitHub,
   latex2mathml,
   pygments,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   wavedrom,
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdown2" ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   optional-dependencies = {
     code_syntax_highlighting = [ pygments ];

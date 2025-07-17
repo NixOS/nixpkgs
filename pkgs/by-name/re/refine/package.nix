@@ -50,13 +50,14 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  dependencies = [
-    libportal
-    libportal-gtk4
-  ]
-  ++ (with python3Packages; [
-    pygobject3
-  ]);
+  dependencies =
+    [
+      libportal
+      libportal-gtk4
+    ]
+    ++ (with python3Packages; [
+      pygobject3
+    ]);
 
   strictDeps = true;
 

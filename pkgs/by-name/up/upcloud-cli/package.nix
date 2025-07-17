@@ -1,24 +1,24 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
   dbus,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "upcloud-cli";
-  version = "3.23.0";
+  version = "3.20.2";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oATz3ZvOeFT0wJ7R69cleGdpD9ICWQVOINKelJguBR4=";
+    hash = "sha256-M2xGrJKZRlC3YS6JBvLRahX2gm12kctM3waQ1sQ/BHQ=";
   };
 
-  vendorHash = "sha256-Q/FokLGjc65ptbouRT5L0bxPIzzctTo87oFu9qd/NHs=";
+  vendorHash = "sha256-EytU3BuAdW3p54SOvgnfohODbd11PYLk4HC5Ix393XU=";
 
   ldflags = [
     "-s -w -X github.com/UpCloudLtd/upcloud-cli/v3/internal/config.Version=${finalAttrs.version}"

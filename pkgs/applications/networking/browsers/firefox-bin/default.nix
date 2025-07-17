@@ -52,8 +52,7 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  }
-  // config.firefox.policies or { };
+  } // config.firefox.policies or { };
 
   policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
@@ -77,16 +76,17 @@ stdenv.mkDerivation {
 
   sourceRoot = lib.optional stdenv.hostPlatform.isDarwin ".";
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    autoPatchelfHook
-    patchelfUnstable
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    undmg
-  ];
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      autoPatchelfHook
+      patchelfUnstable
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      undmg
+    ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
     adwaita-icon-theme
@@ -94,13 +94,14 @@ stdenv.mkDerivation {
     dbus-glib
     libXtst
   ];
-  runtimeDependencies = [
-    curl
-    pciutils
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libva.out
-  ];
+  runtimeDependencies =
+    [
+      curl
+      pciutils
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libva.out
+    ];
   appendRunpaths = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "${pipewire}/lib"
   ];

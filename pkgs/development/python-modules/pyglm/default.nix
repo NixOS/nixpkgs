@@ -8,30 +8,22 @@
 
 buildPythonPackage rec {
   pname = "pyglm";
-  version = "2.8.2";
+  version = "2.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zuzu-Typ";
     repo = "PyGLM";
     tag = version;
-    hash = "sha256-oLPZ6sCIAt12iolcSBNXEjbHGE4ou+dgoFhB400pyRk=";
+    hash = "sha256-5NXueFZ4+hIP1xd30Dt7sv/oxEqh6ejJoJtQv2rpGyQ=";
     fetchSubmodules = true;
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Having the source root in `sys.path` causes import issues
-  preCheck = ''
-    cd test
-  '';
-
-  pythonImportsCheck = [
-    "pyglm"
-    "glm"
-  ];
+  pythonImportsCheck = [ "glm" ];
 
   meta = with lib; {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";

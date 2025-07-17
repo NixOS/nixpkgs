@@ -14,21 +14,19 @@
   # tests
   pygments,
   pytest-cov-stub,
-  pytest-rerunfailures,
-  pytest-timeout,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "portalocker";
-  version = "3.2.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HzAClWpUqMNzBYbFx3vxj65BSeB+rxwp/D+vTVo/iaw=";
+    hash = "sha256-7CD23aKtnOifo5ml8x9PFJX1FZWPDLfKZUPO97tadJ4=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +39,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pygments
     pytest-cov-stub
-    pytest-rerunfailures
-    pytest-timeout
     pytestCheckHook
   ];
 

@@ -1,20 +1,22 @@
 {
   lib,
-  fetchFromGitHub,
   python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mqtt-exporter";
-  version = "1.8.1-1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kpetremann";
     repo = "mqtt-exporter";
     tag = "v${version}";
-    hash = "sha256-FBB8KvSLrcJ9pdfVq18ykovwApNZoOcU0xTfvAWTxpc=";
+    hash = "sha256-aEuwJeNMB6sou6oyAwCj11lOdMCjCyEsrDcMF/pHzcg=";
   };
+
+  pythonRelaxDeps = [ "prometheus-client" ];
 
   build-system = with python3.pkgs; [ setuptools ];
 

@@ -9,7 +9,7 @@
   fetchpatch,
   geopy,
   mock,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -53,10 +53,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pytest-asyncio_0
+    pytest-asyncio
     pytestCheckHook
-  ]
-  ++ optional-dependencies.mqtt;
+  ] ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-09-18";
+  version = "1.21.1-unstable-2025-07-04";
 
   nativeBuildInputs = [
     mtools
@@ -56,8 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     xorriso
     xz
-  ]
-  ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
+  ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -66,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "6464f2edb855274cd3e311eff0aa718935b3eef6";
-    hash = "sha256-K1BiZqthdkIbRiBHUYTu7aIJ8LJ1xpGmVCa255GkFmM=";
+    rev = "c21443f0b9a4dee56ab0f47b096540d6443cda9f";
+    hash = "sha256-rCMTtzNZM3KElNYwnpQOINU4CsMhIgla8JQT5Fgx2tQ=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -85,51 +84,51 @@ stdenv.mkDerivation (finalAttrs: {
     "ECHO_E_BIN_ECHO=echo"
     "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
     "CROSS=${stdenv.cc.targetPrefix}"
-  ]
-  ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
+  ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
   enabledOptions = [
     "PING_CMD"
     "IMAGE_TRUST_CMD"
     "DOWNLOAD_PROTO_HTTP"
     "DOWNLOAD_PROTO_HTTPS"
-  ]
-  ++ additionalOptions;
+  ] ++ additionalOptions;
 
-  configurePhase = ''
-    runHook preConfigure
-    for opt in ${lib.escapeShellArgs finalAttrs.enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
-    substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
-  ''
-  + lib.optionalString stdenv.hostPlatform.isx86 ''
-    substituteInPlace src/util/genfsimg --replace /usr/lib/syslinux ${syslinux}/share/syslinux
-  ''
-  + ''
-    runHook postConfigure
-  '';
+  configurePhase =
+    ''
+      runHook preConfigure
+      for opt in ${lib.escapeShellArgs finalAttrs.enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
+      substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      substituteInPlace src/util/genfsimg --replace /usr/lib/syslinux ${syslinux}/share/syslinux
+    ''
+    + ''
+      runHook postConfigure
+    '';
 
   preBuild = "cd src";
 
   buildFlags = lib.attrNames targets;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
-      ) targets
-    )}
-  ''
-  + lib.optionalString stdenv.hostPlatform.isx86 ''
-    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
-    # let's provide it as a symlink to be compatible in this case.
-    ln -s undionly.kpxe $out/undionly.kpxe.0
-  ''
-  + ''
-    runHook postInstall
-  '';
+      mkdir -p $out
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
+        ) targets
+      )}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+      # let's provide it as a symlink to be compatible in this case.
+      ln -s undionly.kpxe $out/undionly.kpxe.0
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   enableParallelBuilding = true;
 
@@ -147,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd2
       bsd3
       gpl2Only
-      ubdlException
+      gpl2UBDLPlus
       isc
       mit
       mpl11

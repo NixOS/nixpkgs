@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pkg-config,
   hyprland-protocols,
-  hyprlang,
   hyprutils,
   hyprwayland-scanner,
   wayland,
@@ -15,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";
-  version = "0.3.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprsunset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eYLtZJayWWbKBC3u/gvDSqVyffuD+egryr7zPWRAeyY=";
+    hash = "sha256-EIJka3UtSEtmkDBjYiGeR/hO6s6R4x3K+rbUlc9KPBE=";
   };
 
   postPatch = ''
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprland-protocols
-    hyprlang
     hyprutils
     wayland
     wayland-protocols

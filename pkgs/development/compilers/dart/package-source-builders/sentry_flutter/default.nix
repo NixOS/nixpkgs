@@ -10,9 +10,8 @@ let
   sentry-native = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
-    tag = "0.9.1";
-    fetchSubmodules = true;
-    hash = "sha256-1jyJGiIrX0TsRDzAeg3IuE1Vf5STAaG8JVxdbmPMXGQ=";
+    tag = "0.8.4";
+    hash = "sha256-0NLxu+aelp36m3ocPhyYz3LDeq310fkyu8WSpZML3Pc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {

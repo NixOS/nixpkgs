@@ -166,7 +166,7 @@ in
         setSendmail = true;
         #sslCert = "${tls-cert}/cert.pem";
         #sslKey = "${tls-cert}/key.pem";
-        settings.main.recipient_delimiter = "+";
+        recipientDelimiter = "+";
       };
 
       environment.systemPackages = [

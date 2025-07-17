@@ -72,7 +72,7 @@ mesonCheckPhase() {
     TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild --print-errorlogs --max-lines=1000000 "${flagsArray[@]}"
+    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
 
     runHook postCheck
 }

@@ -152,7 +152,12 @@ in
   options.services.writefreely = {
     enable = lib.mkEnableOption "Writefreely, build a digital writing community";
 
-    package = lib.mkPackageOption pkgs "writefreely" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.writefreely;
+      defaultText = lib.literalExpression "pkgs.writefreely";
+      description = "Writefreely package to use.";
+    };
 
     stateDir = mkOption {
       type = types.path;
@@ -349,12 +354,11 @@ in
     };
 
     systemd.services.writefreely = {
-      after = [
-        "network.target"
-      ]
-      ++ optional isSqlite "writefreely-sqlite-init.service"
-      ++ optional isMysql "writefreely-mysql-init.service"
-      ++ optional isMysqlLocal "mysql.service";
+      after =
+        [ "network.target" ]
+        ++ optional isSqlite "writefreely-sqlite-init.service"
+        ++ optional isMysql "writefreely-mysql-init.service"
+        ++ optional isMysqlLocal "mysql.service";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

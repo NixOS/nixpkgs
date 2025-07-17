@@ -11,12 +11,7 @@ Each of the meta-attributes must be defined at most once per module
 file.
 
 ```nix
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 {
   options = {
     # ...

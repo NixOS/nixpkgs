@@ -27,14 +27,11 @@ in
         enable = true;
         enableSubmission = true;
         enableSubmissions = true;
-
-        settings.main = {
-          smtp_tls_CAfile = "${certs.ca.cert}";
-          smtpd_tls_chain_files = [
-            "${certs.${domain}.key}"
-            "${certs.${domain}.cert}"
-          ];
-        };
+        tlsTrustedAuthorities = "${certs.ca.cert}";
+        config.smtpd_tls_chain_files = [
+          "${certs.${domain}.key}"
+          "${certs.${domain}.cert}"
+        ];
       };
       services.dovecot2 = {
         enable = true;

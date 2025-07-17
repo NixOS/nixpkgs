@@ -1,11 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   ipython,
   keyring,
   ptpython,
   pytestCheckHook,
+  pythonOlder,
   setuptools,
   setuptools-generate,
   setuptools-scm,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "repl-python-wakatime";
-  version = "0.1.1";
+  version = "0.0.11";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "wakatime";
-    repo = "repl-python-wakatime";
-    tag = version;
-    hash = "sha256-1uzW3Q1PE4Gdpo354JewzkR8UREPrAFMXiwOKEMbW3M=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-HoCdeo03Lf3g5Xg0GgAyWOu2PtGqy33vg5bQrfkEPkE=";
   };
 
   build-system = [

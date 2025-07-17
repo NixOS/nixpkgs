@@ -34,8 +34,7 @@ buildPythonPackage rec {
   dependencies = [
     toml
     zipp
-  ]
-  ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;

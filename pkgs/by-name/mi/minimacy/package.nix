@@ -23,15 +23,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    libGL
-    libGLU
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libX11
-    libXext
-  ];
+  buildInputs =
+    [
+      libGL
+      libGLU
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libX11
+      libXext
+    ];
 
   enableParallelBuilding = true;
 

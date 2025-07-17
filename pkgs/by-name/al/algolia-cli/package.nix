@@ -1,12 +1,11 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 let
-  version = "1.7.1";
+  version = "1.7.0";
 in
 buildGoModule {
   pname = "algolia-cli";
@@ -16,10 +15,10 @@ buildGoModule {
     owner = "algolia";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-XaPod/8MwucNXzTfMkF2Sr8i8U5RKJs/RfBxDjJK4vU=";
+    hash = "sha256-j8OCN+iV5sMjgYTMGCc72JPImuFFvehKw4S99l+YWhs=";
   };
 
-  vendorHash = "sha256-zDhsJ9iUKm0RzALVlvZDIPYaTqfIDIuUWAU+h5gp4Es=";
+  vendorHash = "sha256-qzgkcmRuXHM9aMQGBObUHYH9qpWnDfTvwdx1A4it8aQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -31,7 +30,7 @@ buildGoModule {
     "-X github.com/algolia/cli/pkg/version.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd algolia \
       --bash <($out/bin/algolia completion bash) \
       --fish <($out/bin/algolia completion fish) \

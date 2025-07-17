@@ -50,8 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ]
-  ++ optional-dependencies.linkify;
+  ] ++ optional-dependencies.linkify;
 
   # disable and remove benchmark tests
   preCheck = ''

@@ -17,16 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fend";
-  version = "1.5.7";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3qEKYb8uYsTZ+UkpJkCKeGmY3iRQz9VfklE4LmcdA2E=";
+    hash = "sha256-FaPP7344rb5789CeDv9L4lysiTrK+7UoEbH8IK/6N3k=";
   };
 
-  cargoHash = "sha256-HzmRO7MDSVJHkeOWIKrEnaFmq68rCBcmWvXwQWGzA/s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BFWk91FPJaHccr9LeLq5NQlVrkglMz1W0MPTz0HzOfI=";
 
   nativeBuildInputs = [
     pandoc

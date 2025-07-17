@@ -28,13 +28,13 @@ let
     p.semantic-version
   ]);
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "7.2.2";
+  version = "6.2.1";
 
   src = fetchurl {
-    url = "https://download.zeek.org/zeek-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Kx3ySPlBmaFoThxGDWTPHF5J10ccK1YvlCrF++mAWJM=";
+    url = "https://download.zeek.org/zeek-${version}.tar.gz";
+    hash = "sha256-ZOOlK9mfZVrfxvgFREgqcRcSs18EMpADD8Y4Ev391Bw=";
   };
 
   strictDeps = true;
@@ -52,42 +52,44 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    broker
-    curl
-    gperftools
-    libmaxminddb
-    libpcap
-    ncurses
-    openssl
-    zlib
-    python
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libkqueue
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gettext
-  ];
+  buildInputs =
+    [
+      broker
+      curl
+      gperftools
+      libmaxminddb
+      libpcap
+      ncurses
+      openssl
+      zlib
+      python
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libkqueue
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gettext
+    ];
 
   postPatch = ''
     patchShebangs ./ci/collect-repo-info.py
     patchShebangs ./auxil/spicy/scripts
   '';
 
-  cmakeFlags = [
-    "-DBroker_ROOT=${broker}"
-    "-DENABLE_PERFTOOLS=true"
-    "-DINSTALL_AUX_TOOLS=true"
-    "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
-    "-DZEEK_LOG_DIR=/var/log/zeek"
-    "-DZEEK_STATE_DIR=/var/lib/zeek"
-    "-DZEEK_SPOOL_DIR=/var/spool/zeek"
-    "-DDISABLE_JAVASCRIPT=ON"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
-  ];
+  cmakeFlags =
+    [
+      "-DBroker_ROOT=${broker}"
+      "-DENABLE_PERFTOOLS=true"
+      "-DINSTALL_AUX_TOOLS=true"
+      "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
+      "-DZEEK_LOG_DIR=/var/log/zeek"
+      "-DZEEK_STATE_DIR=/var/lib/zeek"
+      "-DZEEK_SPOOL_DIR=/var/spool/zeek"
+      "-DDISABLE_JAVASCRIPT=ON"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
+    ];
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
@@ -108,13 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
-    changelog = "https://github.com/zeek/zeek/blob/v${finalAttrs.version}/CHANGES";
+    changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = lib.licenses.bsd3;
-    mainProgram = "zeek";
     maintainers = with lib.maintainers; [
       pSub
       tobim
     ];
     platforms = lib.platforms.unix;
   };
-})
+}

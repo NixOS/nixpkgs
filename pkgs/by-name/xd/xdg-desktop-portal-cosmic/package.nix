@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-fOaLeWtrjgBDSShC5OmBZKODNQn4bp/+iPZX5ZMQFqk=";
 
   separateDebugInfo = true;

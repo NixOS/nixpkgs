@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "glocaltokens";
-  version = "0.7.6";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "leikoilja";
     repo = "glocaltokens";
     tag = "v${version}";
-    hash = "sha256-+7HpyZUumu1r/UXM4awckjTkpVbCz7MsAJOp2JiJzho=";
+    hash = "sha256-anIiYNUVHHzv21yV7Y3S+lIst3iWEwgQZD9Ymx86tbk=";
   };
 
   build-system = [

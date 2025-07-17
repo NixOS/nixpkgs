@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage {
     tagPrefix = "v";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-HcwdUwhiSkULCevsHTnRyazNfHDvLZv44SFXKxrHxYY=";
 
   meta = with lib; {

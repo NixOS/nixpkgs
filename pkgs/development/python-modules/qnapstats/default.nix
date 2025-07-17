@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   requests,
   xmltodict,
   responses,
@@ -11,29 +10,23 @@
 
 buildPythonPackage rec {
   pname = "qnapstats";
-  version = "0.6.0";
-  pyproject = true;
+  version = "0.5.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "colinodell";
     repo = "python-qnapstats";
     tag = version;
-    hash = "sha256-4zGCMwuPL9QFVLgyZ6/aV9YBQJBomPkX34C7ULEd4Fw=";
+    hash = "sha256-dpxl6a61h8zB7eS/2lxG+2//bOTzV6s4T1W+DVj0fnI=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     requests
     xmltodict
   ];
 
   nativeCheckInputs = [ responses ];
-
-  # File "/build/source/tests/test-models.py", line 124, in <module>
-  #   assert json.dumps(qnap.get_system_stats(), sort_keys=True) == systemstats
-  # https://github.com/colinodell/python-qnapstats/issues/104
-  doCheck = false;
 
   checkPhase = ''
     runHook preCheck
@@ -46,7 +39,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qnapstats" ];
 
   meta = {
-    changelog = "https://github.com/colinodell/python-qnapstats/releases/tag/${src.tag}";
     description = "Python API for obtaining QNAP NAS system stats";
     homepage = "https://github.com/colinodell/python-qnapstats";
     license = lib.licenses.mit;

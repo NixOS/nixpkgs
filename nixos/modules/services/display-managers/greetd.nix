@@ -6,29 +6,21 @@
 }:
 let
   cfg = config.services.greetd;
-  tty = "tty1";
+  tty = "tty${toString cfg.vt}";
   settingsFormat = pkgs.formats.toml { };
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule [
-      "services"
-      "greetd"
-      "vt"
-    ] "The VT is now fixed to VT1.")
-  ];
-
   options.services.greetd = {
     enable = lib.mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
-    package = lib.mkPackageOption pkgs "greetd" { };
+    package = lib.mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       example = lib.literalExpression ''
         {
           default_session = {
-            command = "''${pkgs.greetd}/bin/agreety --cmd sway";
+            command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
           };
         }
       '';
@@ -49,6 +41,14 @@ in
       '';
     };
 
+    vt = lib.mkOption {
+      type = lib.types.int;
+      default = 1;
+      description = ''
+        The virtual console (tty) that greetd should use. This option also disables getty on that tty.
+      '';
+    };
+
     restart = lib.mkOption {
       type = lib.types.bool;
       default = !(cfg.settings ? initial_session);
@@ -59,20 +59,10 @@ in
         because every greetd restart will trigger the autologin again.
       '';
     };
-
-    useTextGreeter = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Whether the greeter uses text-based user interfaces (For example, tuigreet).
-
-        When set to true, some systemd service configuration will be adjusted to avoid systemd boot messages interrupt TUI.
-      '';
-    };
   };
   config = lib.mkIf cfg.enable {
 
-    services.greetd.settings.terminal.vt = 1;
+    services.greetd.settings.terminal.vt = lib.mkDefault cfg.vt;
     services.greetd.settings.default_session.user = lib.mkDefault "greeter";
 
     security.pam.services.greetd = {
@@ -94,13 +84,14 @@ in
         Wants = [
           "systemd-user-sessions.service"
         ];
-        After = [
-          "systemd-user-sessions.service"
-          "getty@${tty}.service"
-        ]
-        ++ lib.optionals (!cfg.greeterManagesPlymouth) [
-          "plymouth-quit-wait.service"
-        ];
+        After =
+          [
+            "systemd-user-sessions.service"
+            "getty@${tty}.service"
+          ]
+          ++ lib.optionals (!cfg.greeterManagesPlymouth) [
+            "plymouth-quit-wait.service"
+          ];
         Conflicts = [
           "getty@${tty}.service"
         ];
@@ -118,19 +109,7 @@ in
         KeyringMode = "shared";
 
         Type = "idle";
-      }
-      // (lib.optionalAttrs cfg.useTextGreeter {
-        StandardInput = "tty";
-        StandardOutput = "tty";
-        # Without this errors will spam on screen
-        StandardError = "journal";
-
-        # Without these bootlogs will spam on screen
-        TTYPath = "/dev/tty1";
-        TTYReset = true;
-        TTYVHangup = true;
-        TTYVTDisallocate = true;
-      });
+      };
 
       # Don't kill a user session when using nixos-rebuild
       restartIfChanged = false;

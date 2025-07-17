@@ -31,7 +31,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.3";
+    version = "1.3.2";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ let
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-/tE+F1wH7YkqfgenXwtcfkjxUR5FwfgoS4NYC6n+/2M=";
+      hash = "sha256-mtD54KfCm1vNBjcGuAKqRpKF+FLy3WmTYo7FLoE01QY=";
     };
 
     # prevent unnecessary references to the build python when cross compiling
@@ -92,7 +92,7 @@ let
     '';
 
     meta = with lib; {
-      changelog = "https://github.com/contourpy/contourpy/releases/tag/${src.tag}";
+      changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
       license = licenses.bsd3;

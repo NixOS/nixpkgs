@@ -14,32 +14,30 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "1.1.1";
-  pyproject = true;
+  version = "0.22.3";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hbldh";
     repo = "bleak";
     tag = "v${version}";
-    hash = "sha256-z0Mxr1pUQWNEK01PKMV/CzpW+GeCRcv/+9BADts1FuU=";
+    hash = "sha256-kPeKQcJETZE6+btQsmCgb37yRI2Klg0lZ1ZIrm8ODow=";
   };
 
   postPatch = ''
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
     substituteInPlace bleak/backends/bluezdbus/version.py \
-      --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
+      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
+  propagatedBuildInputs = [
+    async-timeout
     dbus-fast
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -52,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
-    changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/hbldh/bleak/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ oxzi ];

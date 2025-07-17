@@ -7,7 +7,6 @@
   extra-cmake-modules,
   dbus,
   libX11,
-  libxcb,
   libXi,
   libXtst,
   libnotify,
@@ -24,12 +23,13 @@
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
+  espanso,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPlatform.buildRustPackage {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-2Hf492/xZ/QGqDYbjiZep/FX8bPyEuoxkMJ4qnMqu+c=";
 
   nativeBuildInputs = [
@@ -51,40 +52,41 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "modulo"
-  ]
-  ++ lib.optionals waylandSupport [
-    "wayland"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "vendored-tls"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "native-tls"
-  ];
+  buildFeatures =
+    [
+      "modulo"
+    ]
+    ++ lib.optionals waylandSupport [
+      "wayland"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "vendored-tls"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "native-tls"
+    ];
 
-  buildInputs = [
-    libpng
-    wxGTK32
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-    dbus
-    libnotify
-    libxkbcommon
-  ]
-  ++ lib.optionals waylandSupport [
-    wl-clipboard
-  ]
-  ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
-    libxcb
-    xclip
-    xdotool
-  ];
+  buildInputs =
+    [
+      libpng
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+      dbus
+      libnotify
+      libxkbcommon
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+    ]
+    ++ lib.optionals x11Support [
+      libXi
+      libXtst
+      libX11
+      xclip
+      xdotool
+    ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
@@ -128,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       '';
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = espanso;
     # remove when updating to a release version
     version = "2.2.1";
   };
@@ -140,6 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       kimat
+      pyrox0
       n8henrie
     ];
     platforms = platforms.unix;
@@ -148,4 +151,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';
   };
-})
+}

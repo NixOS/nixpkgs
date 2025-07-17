@@ -16,7 +16,6 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" 
   ${fetchTags:+--fetch-tags} \
   ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
   ${nonConeMode:+--non-cone-mode} \
-  ${branchName:+--branch-name "$branchName"} \
-  ${rootDir:+--root-dir "$rootDir"}
+  ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch

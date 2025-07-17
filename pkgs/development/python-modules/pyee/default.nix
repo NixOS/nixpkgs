@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   mock,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
   pythonOlder,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-trio
     pytestCheckHook
     twisted

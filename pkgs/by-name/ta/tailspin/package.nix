@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "5.5.0";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     tag = finalAttrs.version;
-    hash = "sha256-coatx8Ud6iLnXvr+/X9hUEe3+0j9jnP5N3+aHQ+eWV8=";
+    hash = "sha256-Cl1S183iAyFPa3KijHCn/CyRXQBluphNMQFAgdIOzuM=";
   };
 
-  cargoHash = "sha256-7N/vkhytkDF2ef0T6RJv8YzCpjzi+hjg061Uz9dyEM0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2p4jkta6w2vje169KCHw0ErC7FweLabF6B7ZIkTmNBI=";
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \

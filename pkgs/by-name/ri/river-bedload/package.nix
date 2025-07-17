@@ -6,11 +6,11 @@
   lib,
   pkg-config,
   stdenv,
-  river-classic,
+  river,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  zig_0_14,
+  zig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    zig_0_14.hook
+    zig.hook
   ];
 
   buildInputs = [
@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ adamcstephens ];
     mainProgram = "river-bedload";
-    inherit (river-classic.meta) platforms;
+    inherit (river.meta) platforms;
   };
 })

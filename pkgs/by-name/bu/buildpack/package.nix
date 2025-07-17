@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -32,7 +31,7 @@ buildGoModule {
     "-X github.com/buildpacks/pack.Version=${version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd pack \
       --zsh $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh) \
       --bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash) \

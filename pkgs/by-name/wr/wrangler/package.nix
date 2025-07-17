@@ -12,18 +12,18 @@
   xorg,
   jq,
   moreutils,
-  nix-update-script,
+  gitUpdater,
   versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.38.0";
+  version = "4.22.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-4avSdp68ecDnY5ZhtVCjq9+u8bmNRpq2XTbnapmY+S0=";
+    hash = "sha256-4uE1Jv70aDqAUk7GWmFr65SNXLnDDIZiFN87DQxluKg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -33,39 +33,37 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    fetcherVersion = 2;
-    hash = "sha256-oavyEIDsGCsX0cZu0fI3vpjFc/BwHNre9hNantu/wCk=";
+    fetcherVersion = 1;
+    hash = "sha256-r3QswmqP6CNufnsFM0KeKojm/HjHogrfYO/TdL3SrmA=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
     jq 'del(.packageManager)' package.json | sponge package.json
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex=wrangler@(.*)"
+  passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
+
+  buildInputs =
+    [
+      llvmPackages.libcxx
+      llvmPackages.libunwind
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      musl # not used, but requires extra work to remove
+      xorg.libX11 # for the clipboardy package
     ];
-  };
 
-  buildInputs = [
-    llvmPackages.libcxx
-    llvmPackages.libunwind
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    musl # not used, but requires extra work to remove
-    xorg.libX11 # for the clipboardy package
-  ];
-
-  nativeBuildInputs = [
-    makeWrapper
-    nodejs
-    pnpm_9.configHook
-    jq
-    moreutils
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      nodejs
+      pnpm_9.configHook
+      jq
+      moreutils
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      autoPatchelfHook
+    ];
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
@@ -85,9 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
     mv packages/~vitest-pool-workers packages/vitest-pool-workers
-    cp -r {fixtures,packages,node_modules,vendor} $out/lib
+    cp -r fixtures $out/lib
+    cp -r packages $out/lib
+    cp -r node_modules $out/lib
     cp -r tools $out/lib/tools
     rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin
@@ -103,12 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
-  preFixup = ''
-    # fixupPhase spends a lot of time trying to strip text files, which is especially slow on Darwin
-    stripExclude+=("*.js" "*.ts" "*.map" "*.json" "*.md")
-  '';
-
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";

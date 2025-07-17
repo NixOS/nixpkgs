@@ -108,7 +108,13 @@ in
             };
 
             LogLevel = lib.mkOption {
-              type = lib.types.ints.between 0 4;
+              type = lib.types.enum [
+                0
+                1
+                2
+                3
+                4
+              ];
               description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
@@ -191,16 +197,10 @@ in
       )
     );
 
-    security.auditd = lib.mkIf (cfg.settings.ProcMonitorMethod == "audit") {
-      enable = true;
-      plugins.af_unix.active = true;
-    };
-
     systemd = {
       packages = [ cfg.package ];
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
-        path = lib.optionals (cfg.settings.ProcMonitorMethod == "audit") [ pkgs.audit ];
         serviceConfig = {
           ExecStart =
             let
@@ -210,7 +210,7 @@ in
             in
             [
               ""
-              "${lib.getExe' cfg.package "opensnitchd"} --config-file ${format.generate "default-config.json" preparedSettings}"
+              "${cfg.package}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
             ];
         };
         preStart = lib.mkIf (cfg.rules != { }) (
@@ -251,8 +251,5 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [
-    onny
-    grimmauld
-  ];
+  meta.maintainers = with lib.maintainers; [ onny ];
 }

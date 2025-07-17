@@ -16,14 +16,15 @@
   pythonOlder,
   scikit-learn,
   scipy,
-  setuptools,
   sybil,
 }:
 
 buildPythonPackage rec {
   pname = "lifelines";
   version = "0.30.0";
-  pyproject = true;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-rbt0eON8Az5jDvj97RDn3ppWyjbrSa/xumbwhq21g6g=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     autograd
     autograd-gamma
     formulaic
@@ -58,17 +57,13 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "lifelines/tests/test_estimation.py" ];
 
-  disabledTests = [
-    "test_datetimes_to_durations_with_different_frequencies"
-    # AssertionError
-    "test_mice_scipy"
-  ];
+  disabledTests = [ "test_datetimes_to_durations_with_different_frequencies" ];
 
-  meta = {
+  meta = with lib; {
     description = "Survival analysis in Python";
     homepage = "https://lifelines.readthedocs.io";
     changelog = "https://github.com/CamDavidsonPilon/lifelines/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ swflint ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ swflint ];
   };
 }

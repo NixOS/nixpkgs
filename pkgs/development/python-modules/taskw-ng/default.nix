@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "taskw-ng";
-  version = "0.2.7";
+  version = "0.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bergercookie";
     repo = "taskw-ng";
     tag = "v${version}";
-    hash = "sha256-KxXLSDvUclQlNbMR+Zzl6tgBrH2QxqjLVoyBK3OiKVU=";
+    hash = "sha256-tlidTt0TzWnvfajYiIfvRv7OfakHY6zWAicmAwq/Z8w=";
   };
 
   pythonRelaxDeps = [

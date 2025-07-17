@@ -283,15 +283,13 @@ in
         visible = false;
         default = {
           default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
-        }
-        // cfg.interfaces;
+        } // cfg.interfaces;
         type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
         description = ''
           All open ports.
         '';
       };
-    }
-    // commonOptions;
+    } // commonOptions;
 
   };
 
@@ -314,8 +312,7 @@ in
     environment.systemPackages = [
       cfg.package
       pkgs.nixos-firewall-tool
-    ]
-    ++ cfg.extraPackages;
+    ] ++ cfg.extraPackages;
 
     boot.kernelModules =
       (lib.optional cfg.autoLoadConntrackHelpers "nf_conntrack")

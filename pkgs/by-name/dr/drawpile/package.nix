@@ -58,8 +58,7 @@ let
     # optional:
     libmicrohttpd # HTTP admin api
     libsodium # ext-auth support
-  ]
-  ++ lib.optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
 in
 stdenv.mkDerivation rec {
@@ -91,12 +90,13 @@ stdenv.mkDerivation rec {
     )
   ];
 
-  buildInputs = [
-    libzip
-    qt6Packages.qtwebsockets
-  ]
-  ++ lib.optionals buildClient clientDeps
-  ++ lib.optionals buildServer serverDeps;
+  buildInputs =
+    [
+      libzip
+      qt6Packages.qtwebsockets
+    ]
+    ++ lib.optionals buildClient clientDeps
+    ++ lib.optionals buildServer serverDeps;
 
   cmakeFlags = [
     (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
@@ -106,19 +106,20 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "TOOLS" buildExtraTools)
   ];
 
-  meta = {
-    description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = "https://drawpile.net/";
-    downloadPage = "https://drawpile.net/download/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
-  }
-  // lib.optionalAttrs buildServer {
-    mainProgram = "drawpile-srv";
-  }
-  // lib.optionalAttrs buildClient {
-    mainProgram = "drawpile";
-  };
+  meta =
+    {
+      description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+      homepage = "https://drawpile.net/";
+      downloadPage = "https://drawpile.net/download/";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ fgaz ];
+      platforms = lib.platforms.unix;
+      broken = stdenv.hostPlatform.isDarwin;
+    }
+    // lib.optionalAttrs buildServer {
+      mainProgram = "drawpile-srv";
+    }
+    // lib.optionalAttrs buildClient {
+      mainProgram = "drawpile";
+    };
 }

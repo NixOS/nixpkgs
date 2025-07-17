@@ -6,13 +6,15 @@
   jsonrpc-base,
   pytest-aiohttp,
   pytestCheckHook,
-  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
   version = "2.1.2";
-  pyproject = true;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "emlove";
@@ -21,14 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-KOnycsOZFDEVj8CJDwGbdtbOpMPQMVdrXbHG0fzr9PI=";
   };
 
-  patches = [
-    # https://github.com/emlove/jsonrpc-async/pull/11
-    ./mark-tests-async.patch
-  ];
-
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     jsonrpc-base
   ];

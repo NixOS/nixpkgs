@@ -78,8 +78,7 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''

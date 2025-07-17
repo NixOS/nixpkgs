@@ -33,6 +33,7 @@ let
     pname = "maple";
     inherit version src meta;
 
+    useFetchCargoVendor = true;
     cargoHash = "sha256-FEeSwa8KmIyfhWAU9Dpric6uB2e0yK+Tig/k2zwq2Rg=";
 
     nativeBuildInputs = [

@@ -3,47 +3,41 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  applyPatches,
+  nodejs,
   php,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
   nodePackages,
+  python3,
+  pkg-config,
+  libsass,
+  stdenv,
   fetchzip,
 }:
 let
-  version = "1.6.3";
+  version = "1.6.2";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-MuqxbkayW3GeiaorxfZSJtlwCWvnIF2ED/UUqahyoIQ=";
+    hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "InvoicePlane";
-      repo = "InvoicePlane";
-      tag = "v${version}";
-      hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
-    };
-    patches = [
-      # Fix composer.json validation
-      # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
-      ./fix_composer_validation.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "InvoicePlane";
+    repo = "InvoicePlane";
+    tag = "v${version}";
+    hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
-  patches = [
-    # yarn.lock missing some resolved attributes and fails
-    ./fix-yarn-lock.patch
-  ];
+  vendorHash = "sha256-eq3YKIZZzZihDYgFH3YTETHvNG6hAE/oJ5Ul2XRMn4U=";
 
-  vendorHash = "sha256-UCYAnECuIbIYg1T4I8I9maXVKXJc1zkyauBuIy5frTY=";
+  buildInputs = [ libsass ];
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -51,14 +45,31 @@ php.buildComposerProject2 (finalAttrs: {
     yarnInstallHook
     # Needed for executing package.json scripts
     nodePackages.grunt-cli
+    pkg-config
+    (python3.withPackages (ps: with ps; [ distutils ]))
+    stdenv.cc
   ];
 
   offlineCache = fetchYarnDeps {
-    inherit (finalAttrs) src patches;
-    hash = "sha256-0fPdxOIeQBTulPUxHtaQylm4jevQTONSN1bChqbGbGs=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
   };
 
+  # Upstream composer.json file is missing the name, description and license fields
+  composerStrictValidation = false;
+
   postBuild = ''
+    # Building node-sass dependency
+    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
+    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
+    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
+    export npm_config_nodedir=${nodejs}
+
+    pushd node_modules/node-sass
+    LIBSASS_EXT=auto yarn run build --offline
+    popd
+
+    # Running package.json scripts
     grunt build
   '';
 

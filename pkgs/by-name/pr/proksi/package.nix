@@ -13,20 +13,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proksi";
-  version = "0.6.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "luizfonseca";
     repo = "proksi";
     tag = "proksi-v${finalAttrs.version}";
-    hash = "sha256-AVNQBrFxkFPgnVbh3Y0CQ3RajMmh/M6ee/QkumdLDs4=";
+    hash = "sha256-5IXtMtyKbx7re6CA61AnQ85k/SMdkjZo/ySnNoD2DDo=";
   };
 
   postPatch = ''
     tomlq -ti 'del(.bench)' crates/proksi/Cargo.toml
   '';
 
-  cargoHash = "sha256-MYyPYZFmbQZszYViaGZdbUZWM739MN14J1ckyR8hXZc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yjbtP+FlDaJXPhCu1UyaDolpzy+BUejU8nVVSVsKCzE=";
 
   nativeBuildInputs = [
     pkg-config

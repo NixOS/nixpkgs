@@ -34,24 +34,25 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    perl
-    glibc
-  ]
-  ++ (with perlPackages; [
-    LWP
-    LWPProtocolHttps
-    MozillaCA
-    CryptSSLeay
-    IOSocketINET6
-    LinuxDistribution
-    JSONPP
-    JSON
-    LogLogLite
-    TryTiny
-    DBI
-    DBDmysql
-  ]);
+  buildInputs =
+    [
+      perl
+      glibc
+    ]
+    ++ (with perlPackages; [
+      LWP
+      LWPProtocolHttps
+      MozillaCA
+      CryptSSLeay
+      IOSocketINET6
+      LinuxDistribution
+      JSONPP
+      JSON
+      LogLogLite
+      TryTiny
+      DBI
+      DBDmysql
+    ]);
 
   dontBuild = true;
 

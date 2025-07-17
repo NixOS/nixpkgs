@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "phik";
-  version = "0.12.5";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "KaveIO";
     repo = "PhiK";
     tag = "v${version}";
-    hash = "sha256-/Zzin3IHwlFEDQwKjzTwY4ET2r0k3Ne/2lGzXkur9p8=";
+    hash = "sha256-YsH7vVn6gzejunUjUY/RIcvWtaQ/W1gbciJWKi5LDTk=";
   };
 
   build-system = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       Pearson’s hypothesis test of independence of two variables.
     '';
     homepage = "https://phik.readthedocs.io/";
-    changelog = "https://github.com/KaveIO/PhiK/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/KaveIO/PhiK/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ melsigl ];
   };

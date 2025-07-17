@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "System and kernel logging services";
     homepage = "https://smarden.org/socklog/";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ joachifm ];
   };

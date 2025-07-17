@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0XfJ8q8n2ANO0oDtLZhZjRunZ5S1EouQ6Ak/pxEQYOQ=";
   };
 
-  # Remove after https://github.com/Aitum/obs-vertical-canvas/pull/25 is released :)
-  patches = [ ./obs-vertical-canvas.diff ];
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -47,6 +44,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Aitum/obs-vertical-canvas";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
-    inherit (obs-studio.meta) platforms;
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

@@ -16,13 +16,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "vmctl";
-  version = "1.00";
+  version = "0.99-unstable-2024-05-14";
 
   src = fetchFromGitHub {
     owner = "SamsungDS";
     repo = "vmctl";
-    rev = "8cc71d4350f4f5814ffd7a3091a5c1a9d2e25158";
-    hash = "sha256-nIJEgd62yq3DKhaMnB2OEaGN/zC5/Z5cTtO3iQEVF44=";
+    rev = "5b6b7084b8cba06b474c0e020df965237f2c832c";
+    hash = "sha256-yDgaY2RJXBjWkMSQb4JaJzMGLFzowfOGixSRzzv2iIk=";
   };
 
   dontBuild = true;

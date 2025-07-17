@@ -1,13 +1,12 @@
 {
   lib,
   writeScript,
-  stdenv,
   qt5,
   fetchurl,
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+qt5.mkDerivation rec {
   pname = "synology-cloud-sync-decryption-tool";
   version = "027";
 
@@ -16,10 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-EWxADvkfhnMwHIauJj3pH6SvSkkrc4cwAhsf1pWOOWQ=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    qt5.wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall

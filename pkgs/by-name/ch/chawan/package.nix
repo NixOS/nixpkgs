@@ -12,18 +12,17 @@
   brotli,
   zlib,
   gitUpdater,
-  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.2.2";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pUwwqFvTtLAGFQG62W90hEH+yPN+ifa5BDRYNh/Jupg=";
+    hash = "sha256-DiA7SEXPJTScdoFeGzH45wZP6gZRU8t/fvJLOufuNmU=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
@@ -74,19 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-  versionCheckProgramArg = "--version";
-
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
-    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
-    license = lib.licenses.unlicense;
+    license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ];
     mainProgram = "cha";

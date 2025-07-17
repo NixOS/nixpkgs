@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pretix-reluctant-stripe";
-  version = "0-unstable-2023-08-03";
+  version = "unstable-2023-08-03";
   pyproject = true;
 
   src = fetchFromGitHub {

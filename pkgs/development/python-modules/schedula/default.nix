@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "schedula";
-  version = "1.5.64";
+  version = "1.5.62";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vinci1it2000";
     repo = "schedula";
     tag = "v${version}";
-    hash = "sha256-huMhJTMiTVrKyZ5z0dFfw61GHyLbpHNtZGXP4gmUdTs=";
+    hash = "sha256-erEUdiKV1MRwjVy3SKFneJVHp6gWEok7EWdv6v6HFGM=";
   };
 
   build-system = [ setuptools ];
@@ -51,8 +51,7 @@ buildPythonPackage rec {
     sphinx = [
       sphinx
       sphinx-click
-    ]
-    ++ plot;
+    ] ++ plot;
     web = [
       requests
       regex
@@ -60,15 +59,16 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    cryptography # doctests
-    ddt
-    sphinx
-    pytestCheckHook
-  ]
-  ++ schedula.optional-dependencies.io
-  ++ schedula.optional-dependencies.parallel
-  ++ schedula.optional-dependencies.plot;
+  nativeCheckInputs =
+    [
+      cryptography # doctests
+      ddt
+      sphinx
+      pytestCheckHook
+    ]
+    ++ schedula.optional-dependencies.io
+    ++ schedula.optional-dependencies.parallel
+    ++ schedula.optional-dependencies.plot;
 
   disabledTests = [
     # FAILED tests/test_setup.py::TestSetup::test_long_description - ModuleNotFoundError: No module named 'sphinxcontrib.writers'

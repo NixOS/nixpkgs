@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwtk-sdl2";
-  version = "0-unstable-2023-02-28";
+  version = "unstable-2023-02-28";
 
   src = fetchFromGitHub {
     owner = "muesli4";

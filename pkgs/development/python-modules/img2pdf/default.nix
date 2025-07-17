@@ -83,9 +83,6 @@ buildPythonPackage rec {
     "test_miff_cmyk16"
     "test_png_gray16"
     "test_png_rgb16"
-    # these only fail on aarch64
-    "test_png_rgba8"
-    "test_png_gray8a"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

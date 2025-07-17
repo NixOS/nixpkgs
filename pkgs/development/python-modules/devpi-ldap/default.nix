@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.1.1-unstable-2023-11-28";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "devpi_ldap" ];
 
   meta = {
-    description = "LDAP authentication for devpi-server";
     homepage = "https://github.com/devpi/devpi-ldap";
+    description = "LDAP authentication for devpi-server";
     changelog = "https://github.com/devpi/devpi-ldap/blob/main/CHANGELOG.rst";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit; # according to its setup.py
     maintainers = with lib.maintainers; [ confus ];
   };
 }

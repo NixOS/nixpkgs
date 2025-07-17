@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpris-discord-rpc";
-  version = "0.5.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "patryk-ku";
     repo = "mpris-discord-rpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tPIm07q5HWosqhA3zefyuwM+fIztNZe1sSpB/NmUIoE=";
+    hash = "sha256-szftij29YTLzqBNirvoTgZfPIRznM1Ax5MPTKqB1nYI=";
   };
 
-  cargoHash = "sha256-3MJAvCc0ekUQ+eM5n8MdPNxXJWUgV76vi/Rq7GhhEPE=";
+  cargoHash = "sha256-/QYeNcmkW6cm1VJkzJfVGvZU79wGswhKUFYc54oQbGw=";
 
   nativeBuildInputs = [
     pkg-config

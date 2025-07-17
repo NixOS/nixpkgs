@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cppy";
-  version = "1.3.1";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = "cppy";
     tag = version;
-    hash = "sha256-/u9JQ2ivjSlBPodfAjeDmJ+HUu1rFZ58p3V5L2dy4Jk=";
+    hash = "sha256-RwwXwdjpq4ZjUyHkWoh3eaJDzIV3MargeoBJ+nTHsyg=";
   };
 
   build-system = [ setuptools-scm ];

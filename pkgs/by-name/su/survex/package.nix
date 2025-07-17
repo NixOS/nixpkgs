@@ -33,21 +33,22 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ffmpeg
-    glib
-    proj
-    gdal
-    wxGTK32
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # TODO: libGLU doesn't build for macOS because of Mesa issues
-    # (#233265); is it required for anything?
-    libGLU
-    libgbm
-    libICE
-    libX11
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      glib
+      proj
+      gdal
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # TODO: libGLU doesn't build for macOS because of Mesa issues
+      # (#233265); is it required for anything?
+      libGLU
+      libgbm
+      libICE
+      libX11
+    ];
 
   strictDeps = true;
 

@@ -49,8 +49,7 @@ buildPythonPackage rec {
     mock
     pycryptodome
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "adb_shell" ];
 

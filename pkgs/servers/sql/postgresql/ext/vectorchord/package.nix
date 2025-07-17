@@ -50,6 +50,7 @@ buildPgrxExtension (finalAttrs: {
     rust-jemalloc-sys'
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-8NwfsJn5dnvog3fexzLmO3v7/3+L7xtv+PHWfCCWoHY=";
 
   # Include upgrade scripts in the final package
@@ -123,12 +124,6 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # PostgreSQL 18 is not yet supported
-    # Will be supported in the next release (likely 0.5.0), as it's already supported in the main branch
-    # Check after next package update.
-    broken = lib.warnIf (
-      finalAttrs.version != "0.4.2"
-    ) "Is postgresql18Packages.vectorchord still broken?" (lib.versionAtLeast postgresql.version "18");
     changelog = "https://github.com/tensorchord/VectorChord/releases/tag/${finalAttrs.version}";
     description = "Scalable, fast, and disk-friendly vector search in Postgres, the successor of pgvecto.rs";
     homepage = "https://github.com/tensorchord/VectorChord";

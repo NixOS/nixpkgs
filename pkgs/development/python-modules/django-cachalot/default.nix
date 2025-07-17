@@ -7,26 +7,20 @@
   psycopg2,
   jinja2,
   beautifulsoup4,
-  pytest-django,
-  pytestCheckHook,
   python,
   pytz,
-  redis,
-  redisTestHook,
-  setuptools,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "django-cachalot";
-  version = "2.8.0";
+  version = "2.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
     tag = "v${version}";
-    hash = "sha256-3W+9cULL3mMtAkxbqetoIj2FL/HRbzWHIDMe9O1e6BM=";
+    hash = "sha256-Fi5UvqH2bVb4v/GWDkEYIcBMBVos+35g4kcEnZTOQvw=";
   };
 
   patches = [
@@ -35,49 +29,36 @@ buildPythonPackage rec {
     ./disable-unsupported-tests.patch
   ];
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [ django ];
 
-  dependencies = [ django ];
-
-  nativeCheckInputs = [
+  checkInputs = [
     beautifulsoup4
     django-debug-toolbar
     psycopg2
     jinja2
-    pytest-django
-    pytestCheckHook
     pytz
-    redis
-    redisTestHook
   ];
 
   pythonImportsCheck = [ "cachalot" ];
 
-  # redisTestHook does not work on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
+  # disable broken pinning test
   preCheck = ''
-    export DJANGO_SETTINGS_MODULE=settings
+    substituteInPlace cachalot/tests/read.py \
+      --replace-fail \
+        "def test_explain(" \
+        "def _test_explain("
   '';
 
-  pytestFlags = [
-    "-o python_files=*.py"
-    "-o collect_imported_tests=false"
-    "cachalot/tests"
-    "cachalot/admin_tests"
-  ];
-
-  disabledTests = [
-    # relies on specific EXPLAIN output format from sqlite, which is not stable
-    "test_explain"
-    # broken on django-debug-toolbar 6.0
-    "test_rendering"
-  ];
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} runtests.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "No effort, no worry, maximum performance";
     homepage = "https://github.com/noripyt/django-cachalot";
-    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwebm";
-  version = "1.0.0.32";
+  version = "1.0.0.31";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libwebm";
     tag = "libwebm-${finalAttrs.version}";
-    hash = "sha256-SxDGt7nPVkSxwRF/lMmcch1h+C2Dyh6GZUXoZjnXWb4=";
+    hash = "sha256-+ayX33rcX/jkewsW8WrGalTe9X44qFBHOrIYTteOQzc=";
   };
 
   patches = [
@@ -37,12 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^libwebm-(.+)$"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "WebM file parser";

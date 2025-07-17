@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto";
-  version = "3.012";
+  version = "3.011";
 
   src = fetchzip {
     url = "https://github.com/googlefonts/roboto-3-classic/releases/download/v${finalAttrs.version}/Roboto_v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-J1X5+/pW5HgX6LIqQDaZeRmwdIwEVowzsf5Bg0OQy2M=";
+    hash = "sha256-Ko5x4zn/bhrFLuYktaAsqsWUsIOMfnxK8rZ4UiqK8ds=";
   };
 
   installPhase = ''

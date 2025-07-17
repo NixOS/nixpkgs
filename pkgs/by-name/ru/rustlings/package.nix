@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-VdIIcpyoCuid3MECVc9aKeIOUlxGlxcG7znqbqo9pjc=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-QWmK+chAUnMGjqLq2xN5y6NJZJBMDTszImB9bXhO4+w=";
 
   # Disabled test that does not work well in an isolated environment

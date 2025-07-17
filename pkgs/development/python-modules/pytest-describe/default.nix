@@ -1,16 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
 
-  # build-system
-  setuptools,
-
-  # dependencies
+  # build
   pytest,
 
   # tests
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 let
@@ -19,21 +16,16 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "pytest-dev";
-    repo = "pytest-describe";
-    tag = version;
-    hash = "sha256-ih0XkYOtB+gwUsgo1oSti2460P3gq3tR+UsyRlzMjLE=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ObsF65DySX2co0Lvmgt/pbraflhQWuwz9m1mHWMZVbc=";
   };
-
-  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  # test_fixture breaks with pytest 8.4
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Describe-style plugin for the pytest framework";

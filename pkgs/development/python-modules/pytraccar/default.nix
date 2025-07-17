@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "3.0.0";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = "pytraccar";
     tag = version;
-    hash = "sha256-DtxZCvLuvQpbu/1lIXz2BVbACt5Q1N2txVMyqwd4d9A=";
+    hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to handle device information from Traccar";
     homepage = "https://github.com/ludeeus/pytraccar";
-    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${src.tag}";
+    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

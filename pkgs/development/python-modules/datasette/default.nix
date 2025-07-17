@@ -87,15 +87,13 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pytestFlags = [
-    # datasette/app.py:14: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
-    "-Wignore::DeprecationWarning"
-  ];
-
   # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
   # with pytest-xdist, it still takes around 10 mins with 32 cores
   # just run the csv tests, as this should give some indictation of correctness
-  enabledTestPaths = [
+  pytestFlagsArray = [
+    # datasette/app.py:14: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-W"
+    "ignore::DeprecationWarning"
     "tests/test_csv.py"
   ];
 

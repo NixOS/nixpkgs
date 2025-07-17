@@ -29,8 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-linalgebra-templates"
     "--enable-performance"
-  ]
-  ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
+  ] ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-intrinsics";
 
   env = {
     # Required for compilation with gcc-14

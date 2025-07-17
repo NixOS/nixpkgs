@@ -8,7 +8,6 @@
   dune-configurator,
   zarith,
   integers,
-  stdlib-random,
   alcotest,
   bisect_ppx,
 }:
@@ -16,13 +15,14 @@
 buildDunePackage (
   rec {
     pname = "class_group_vdf";
-    version = "0.0.5";
+    version = "0.0.4";
+    duneVersion = "3";
 
     src = fetchFromGitLab {
       owner = "nomadic-labs/cryptography";
       repo = "ocaml-chia-vdf";
       rev = "v${version}";
-      hash = "sha256-/wPlS9JrQH+4kvEzsn2DCkAFhu0LMxlIIKQZ9jOJkco=";
+      hash = "sha256-KvpnX2DTUyfKARNWHC2lLBGH2Ou2GfRKjw05lu4jbBs=";
     };
 
     minimalOCamlVersion = "4.08";
@@ -40,7 +40,6 @@ buildDunePackage (
     propagatedBuildInputs = [
       zarith
       integers
-      stdlib-random
     ];
 
     checkInputs = [

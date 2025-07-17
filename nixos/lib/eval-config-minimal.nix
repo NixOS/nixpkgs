@@ -40,8 +40,7 @@ let
       class = "nixos";
       specialArgs = {
         modulesPath = builtins.toString ../modules;
-      }
-      // specialArgs;
+      } // specialArgs;
     };
 
 in

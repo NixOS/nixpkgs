@@ -3,21 +3,12 @@
   lib,
   fetchFromGitHub,
   gfortran,
-  buildType ? "meson",
   meson,
   ninja,
-  cmake,
   pkg-config,
   python3,
   mctc-lib,
 }:
-
-assert (
-  builtins.elem buildType [
-    "meson"
-    "cmake"
-  ]
-);
 
 stdenv.mkDerivation rec {
   pname = "mstore";
@@ -30,21 +21,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-zfrxdrZ1Um52qTRNGJoqZNQuHhK3xM/mKfk0aBLrcjw=";
   };
 
-  patches = [
-    # Fix wrong generation of package config include paths
-    ./pkgconfig.patch
-  ];
-
   nativeBuildInputs = [
     gfortran
-    pkg-config
-    python3
-  ]
-  ++ lib.optionals (buildType == "meson") [
     meson
     ninja
-  ]
-  ++ lib.optional (buildType == "cmake") cmake;
+    pkg-config
+    python3
+  ];
 
   buildInputs = [ mctc-lib ];
 

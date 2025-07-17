@@ -24,8 +24,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     wrapQtAppsHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"

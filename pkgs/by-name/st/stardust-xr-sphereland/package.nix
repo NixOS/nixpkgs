@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-4mESTxfogMQxfDMQRVML752fkinOIqkddW3PHmvxekc=";
 
   buildInputs = [

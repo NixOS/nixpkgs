@@ -60,19 +60,20 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
-    configobj
-    dulwich
-    fastbencode
-    merge3
-    patiencediff
-    pyyaml
-    tzlocal
-    urllib3
-  ]
-  ++ optional-dependencies.launchpad
-  ++ optional-dependencies.fastimport
-  ++ optional-dependencies.github;
+  propagatedBuildInputs =
+    [
+      configobj
+      dulwich
+      fastbencode
+      merge3
+      patiencediff
+      pyyaml
+      tzlocal
+      urllib3
+    ]
+    ++ optional-dependencies.launchpad
+    ++ optional-dependencies.fastimport
+    ++ optional-dependencies.github;
 
   optional-dependencies = {
     launchpad = [ launchpadlib ];

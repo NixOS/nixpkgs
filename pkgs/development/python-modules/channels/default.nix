@@ -43,8 +43,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-django
     pytestCheckHook
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "channels" ];
 

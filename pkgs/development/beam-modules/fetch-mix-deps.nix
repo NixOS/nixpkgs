@@ -16,7 +16,6 @@
   sha256 ? "",
   src,
   mixEnv ? "prod",
-  mixTarget ? "host",
   debug ? false,
   meta ? { },
   patches ? [ ],
@@ -54,7 +53,6 @@ stdenvNoCC.mkDerivation (
     ];
 
     MIX_ENV = mixEnv;
-    MIX_TARGET = mixTarget;
     MIX_DEBUG = if debug then 1 else 0;
     DEBUG = if debug then 1 else 0; # for rebar3
     # the api with `mix local.rebar rebar path` makes a copy of the binary

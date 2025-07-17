@@ -4,17 +4,16 @@
   qt5,
   fetchFromGitLab,
   libGLU,
-  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "oscar";
-  version = "1.6.1";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
     repo = "OSCAR-code";
     rev = "v${version}";
-    hash = "sha256-idooSDmozMtf0akhbaQP1aBIv6Ae9UMhMmN1P48u7FE=";
+    hash = "sha256-1rHgajjs+Vt9lcqkqKy92pWQLjvAHE10fPUTy8hurw4=";
   };
 
   buildInputs = [
@@ -50,13 +49,6 @@ stdenv.mkDerivation rec {
     install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
-  };
 
   meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";

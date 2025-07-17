@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "owl";
-  version = "0-unstable-2022-01-30";
+  version = "unstable-2022-01-30";
 
   src = fetchFromGitHub {
     owner = "seemoo-lab";

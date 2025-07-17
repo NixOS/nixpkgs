@@ -25,12 +25,13 @@ rustPlatform.buildRustPackage {
   inherit pname version;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "yaml-cfg"
-    "json-cfg"
-  ]
-  ++ lib.optionals enableAlsaWidget [ "alsa-widget" ]
-  ++ lib.optionals enablePulseaudioWidget [ "pulseaudio-widget" ];
+  buildFeatures =
+    [
+      "yaml-cfg"
+      "json-cfg"
+    ]
+    ++ lib.optionals enableAlsaWidget [ "alsa-widget" ]
+    ++ lib.optionals enablePulseaudioWidget [ "pulseaudio-widget" ];
 
   src = fetchFromGitHub {
     owner = "kennylevinsen";
@@ -42,18 +43,20 @@ rustPlatform.buildRustPackage {
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    dbus
-    fontconfig
-  ]
-  ++ lib.optionals enableAlsaWidget [ alsa-lib ]
-  ++ lib.optionals enablePulseaudioWidget [ libpulseaudio ];
+  buildInputs =
+    [
+      dbus
+      fontconfig
+    ]
+    ++ lib.optionals enableAlsaWidget [ alsa-lib ]
+    ++ lib.optionals enablePulseaudioWidget [ libpulseaudio ];
 
   cargoPatches = [
     ./0001-Update-Cargo.lock.patch
     ./0002-Update-fontconfig.patch
   ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-gvIsm6D6ZvRm0APw+xpayY+yt2IedMpWoa/hmvIpmV8=";
 
   dontPatchELF = true;

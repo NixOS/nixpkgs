@@ -37,12 +37,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    rm -r third_party
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    rm -r build
-  '';
+  postPatch =
+    ''
+      rm -r third_party
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm -r build
+    '';
 
   nativeBuildInputs = [
     cmake

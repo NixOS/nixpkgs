@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    tag = version;
+    rev = version;
     hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };

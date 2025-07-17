@@ -16,7 +16,6 @@
 
   # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
-  chromaprint,
   essentia-extractor,
   ffmpeg,
   flac,
@@ -83,8 +82,7 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   patches = [
-  ]
-  ++ extraPatches;
+  ] ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
@@ -111,16 +109,16 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
-  ]
-  ++ extraNativeBuildInputs;
+  ] ++ extraNativeBuildInputs;
 
-  buildInputs = [
-  ]
-  ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+    ]);
 
   outputs = [
     "out"
@@ -176,8 +174,6 @@ python3Packages.buildPythonApplication {
   disabledTests = disabledTests ++ [
     # https://github.com/beetbox/beets/issues/5880
     "test_reject_different_art"
-    # touches network
-    "test_merge_duplicate_album"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

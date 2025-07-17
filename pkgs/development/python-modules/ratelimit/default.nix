@@ -23,7 +23,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  enabledTestPaths = [ "tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "ratelimit" ];
 

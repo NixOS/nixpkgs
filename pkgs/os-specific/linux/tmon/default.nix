@@ -2,6 +2,7 @@
   lib,
   stdenv,
   kernel,
+  kernelModuleMakeFlags,
   ncurses,
 }:
 
@@ -17,9 +18,7 @@ stdenv.mkDerivation {
     cd tools/thermal/tmon
   '';
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  makeFlags = kernelModuleMakeFlags ++ [
     "INSTALL_ROOT=\"$(out)\""
     "BINDIR=bin"
   ];

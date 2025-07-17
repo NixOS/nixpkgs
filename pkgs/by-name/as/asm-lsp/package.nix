@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-41iWqgywfFdqf3TzZT5peh39jiSZw8FRTI1AeL5CroY=";
 
   # tests expect ~/.cache/asm-lsp to be writable

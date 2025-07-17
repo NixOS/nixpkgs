@@ -62,31 +62,33 @@ stdenv.mkDerivation rec {
     # don't seem to be packaged in Nixpkgs, so don't unbundle them.
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ]
-  ++ lib.optionals (buildClient && stdenv.hostPlatform.isLinux) [
-    icoutils
-  ];
-
-  buildInputs = [
-    python3
-    lua5_3
-    zlib
-    wavpack
-  ]
-  ++ lib.optionals buildClient (
+  nativeBuildInputs =
     [
-      SDL2
-      freetype
+      cmake
+      pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      alsa-lib
-      libX11
+    ++ lib.optionals (buildClient && stdenv.hostPlatform.isLinux) [
+      icoutils
+    ];
+
+  buildInputs =
+    [
+      python3
+      lua5_3
+      zlib
+      wavpack
     ]
-  );
+    ++ lib.optionals buildClient (
+      [
+        SDL2
+        freetype
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libGLU
+        alsa-lib
+        libX11
+      ]
+    );
 
   cmakeFlags = [
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"

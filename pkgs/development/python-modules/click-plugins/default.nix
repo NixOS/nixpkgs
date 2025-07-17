@@ -4,23 +4,19 @@
   fetchPypi,
   click,
   pytest,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "click-plugins";
-  version = "1.1.1.2";
-  pyproject = true;
+  version = "1.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    pname = "click_plugins";
-    inherit version;
-    sha256 = "sha256-1685hKmdJDwTGqGoKDMedjD0qIqXQf0FySeyBLz5ImE=";
+    inherit pname version;
+    sha256 = "46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ click ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ pytest ];
 

@@ -78,8 +78,7 @@ else
         ocaml
         Dune
         findlib
-      ]
-      ++ nativeBuildInputs;
+      ] ++ nativeBuildInputs;
 
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or ocaml.meta.platforms;

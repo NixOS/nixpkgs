@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";
-  version = "0.35.1";
-  pyproject = true;
+  version = "0.34.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etesync-dav";
     tag = "v${version}";
-    hash = "sha256-y4BhU2kSn+RWqc5+pJQFhbwfat9cMWD0ED0EXJp25cY=";
+    hash = "sha256-+rNqyksOmDUh0OuvgEDWv6tuZQkn1gizz35Ptr6izos=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -46,6 +46,7 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "etesync-dav";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+      thyol
       valodim
     ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing

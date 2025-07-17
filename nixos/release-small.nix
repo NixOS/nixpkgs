@@ -103,7 +103,7 @@ rec {
       opensshTest
       php
       postgresql
-      python3
+      python
       release-checks
       rsyslog
       stdenv

@@ -8,7 +8,7 @@
   googleapis-common-protos,
   h2,
   multidict,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "grpclib";
-  version = "0.4.8";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "vmagamedov";
     repo = "grpclib";
     tag = "v${version}";
-    hash = "sha256-Z+DMwGMUxNTQ7ABd4q/FgMHEZ/NCOtst+6QfQJm3jVU=";
+    hash = "sha256-5221hVjD0TynCsTdruiUZkTsb7uOi49tZ8M/YqdWreE=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio_0
+    pytest-asyncio
     async-timeout
     faker
     googleapis-common-protos

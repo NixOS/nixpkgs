@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "nbutools";
-  version = "0-unstable-2023-06-06";
+  version = "unstable-2023-06-06";
   pyproject = true;
 
   src = fetchFromGitHub {

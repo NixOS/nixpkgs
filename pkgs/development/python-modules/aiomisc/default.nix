@@ -22,23 +22,22 @@
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "17.9.4";
+  version = "17.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oSwMhomcPIN2JYterJuBUcmJtUx3rayADH1ugah+pI8=";
+    hash = "sha256-Wfum+9M0Kx9GA9F2/fzhvETsQodNKnoRXSADFZl6Sf4=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    colorlog
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
+  dependencies =
+    [ colorlog ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];
 
   nativeCheckInputs = [
     aiocontextvars
@@ -46,8 +45,7 @@ buildPythonPackage rec {
     fastapi
     pytestCheckHook
     setproctitle
-  ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];

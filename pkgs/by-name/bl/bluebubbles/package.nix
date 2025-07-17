@@ -65,6 +65,7 @@ flutter327.buildFlutterApplication rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+      emaryn
       zacharyweiss
     ];
   };

@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   flex,
+  gitUpdater,
   libusb1,
   meson,
   ninja,
-  nix-update-script,
   pcsclite,
   perl,
   pkg-config,
@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
   pname = "ccid";
   version = "1.6.2";
 
-  src = fetchFromGitHub {
-    owner = "LudovicRousseau";
-    repo = "CCID";
-    tag = version;
-    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
+  src = fetchurl {
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
+    hash = "sha256-QZWEEJUBV+Yi+dkcnnjHtwjbdOIvcRkMWB0k0gVk1Ek=";
   };
 
   postPatch = ''
@@ -67,23 +65,21 @@ stdenv.mkDerivation rec {
   # usually getting stripped.
   stripDebugList = [ "pcsc" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    url = "https://salsa.debian.org/rousseau/CCID.git";
+  };
 
-  installCheckPhase =
-    let
-      platform = if stdenv.hostPlatform.isLinux then "Linux" else "MacOS";
-    in
-    lib.optionalString (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) ''
-      runHook preInstallCheck
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-      [ -f $out/etc/reader.conf.d/libccidtwin ]
-      [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
-      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
-      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/${platform}/libccid${stdenv.hostPlatform.extensions.sharedLibrary} ]
-      [ -f $out/pcsc/drivers/serial/libccidtwin${stdenv.hostPlatform.extensions.sharedLibrary} ]
+    [ -f $out/etc/reader.conf.d/libccidtwin ]
+    [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
+    [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
 
-      runHook postInstallCheck
-    '';
+    runHook preInstallCheck
+  '';
 
   meta = with lib; {
     description = "PC/SC driver for USB CCID smart card readers";

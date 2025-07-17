@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "4.4.1";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
-    hash = "sha256-J1gLi85tEFJcWupV2FzunJhROFdU3G12hRHxbLSX0kc=";
+    hash = "sha256-SZcXYSmGvhXNP4keQPfnhVg9icHJnH2IfTXaKaJ+qLU=";
   };
 
   nativeBuildInputs = [ flit-core ];

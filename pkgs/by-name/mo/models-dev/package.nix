@@ -6,14 +6,23 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
+
+let
+  models-dev-node-modules-hash = {
+    "aarch64-darwin" = "sha256-2EVW5zQTcqH9zBYAegWj/Wtb0lYHZwA7Bbqs3gRjcx0=";
+    "aarch64-linux" = "sha256-nJgFnszwvknqA21uaqlGQQ1x+4ztKx0/tEvcNrv1LJg=";
+    "x86_64-darwin" = "sha256-Un6UxmvsmBuDdUwcWnu4qb0nPN1V1PFJi4VGVkNh/YU=";
+    "x86_64-linux" = "sha256-nlL+Ayacxz4fm404cABORSVGQcNxb3cB4mOezkrI90U=";
+  };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-09-19";
+  version = "0-unstable-2025-07-14";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "bb40a42fb7178e1e563598924cfa36c43fcffb80";
-    hash = "sha256-0NBBOzsICb27SZ6Uj7apknCTcqPrhG9UUpBkiMiN6Jo=";
+    rev = "2b0849aa20d48c28e2bac1fa3762aec867a2e7c7";
+    hash = "sha256-SC2yOy+6xjiGgRuRJY6wCtzWjFJm/DUy+gSlMXXDgAk=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -40,8 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        bun install \
          --force \
          --frozen-lockfile \
-         --no-progress \
-         --production
+         --no-progress
 
       runHook postBuild
     '';
@@ -58,26 +66,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash =
-      {
-        x86_64-linux = "sha256-Uajwvce9EO1UwmpkGrViOrxlm2R/VnnMK8WAiOiQOhY=";
-        aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
-        x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
-        aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-      }
-      .${stdenvNoCC.hostPlatform.system};
+    outputHash = models-dev-node-modules-hash.${stdenvNoCC.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
 
   nativeBuildInputs = [ bun ];
-
-  patches = [
-    # In bun 1.2.13 (release-25.05) HTML entrypoints get content hashes
-    # appended → index.html becomes index-pq8vj7za.html in ./dist. So, we
-    # rename the index file back to index.html
-    ./post-build-rename-index-file.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure

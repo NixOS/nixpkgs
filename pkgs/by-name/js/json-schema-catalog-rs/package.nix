@@ -1,7 +1,6 @@
 {
   callPackage,
   fetchFromGitHub,
-  jsonSchemaCatalogs,
   lib,
   nix-update-script,
   rustPlatform,
@@ -29,9 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     tests = {
       run = callPackage ./test-run.nix { json-schema-catalog-rs = finalAttrs.finalPackage; };
-      jsonSchemaCatalogs = jsonSchemaCatalogs.tests.override {
-        json-schema-catalog-rs = finalAttrs.finalPackage;
-      };
     };
 
     updateScript = nix-update-script { };

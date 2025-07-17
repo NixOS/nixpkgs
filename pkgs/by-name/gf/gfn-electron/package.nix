@@ -2,13 +2,12 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_35,
+  electron,
   nix-update-script,
   makeBinaryWrapper,
   python3,
 }:
 let
-  electron = electron_35;
   version = "2.2.0";
 in
 buildNpmPackage {

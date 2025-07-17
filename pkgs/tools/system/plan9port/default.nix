@@ -44,25 +44,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [
-    perl
-    which
-  ]
-  ++ (
-    if !stdenv.hostPlatform.isDarwin then
-      [
-        fontconfig
-        freetype # fontsrv uses these
-        libX11
-        libXext
-        libXt
-        xorgproto
-      ]
-    else
-      [
-        DarwinTools
-      ]
-  );
+  buildInputs =
+    [
+      perl
+      which
+    ]
+    ++ (
+      if !stdenv.hostPlatform.isDarwin then
+        [
+          fontconfig
+          freetype # fontsrv uses these
+          libX11
+          libXext
+          libXt
+          xorgproto
+        ]
+      else
+        [
+          DarwinTools
+        ]
+    );
 
   configurePhase = ''
     runHook preConfigure
@@ -135,6 +136,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       bbarker
+      ehmry
       ftrvxmtrx
       kovirobi
       matthewdargan

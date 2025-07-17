@@ -1,14 +1,13 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   requests-mock,
   requests,
+  aiohttp,
   setuptools,
 }:
 
@@ -34,9 +33,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
-    pytest-cov-stub
     pytestCheckHook
+    pytest-cov-stub
     requests-mock
   ];
 

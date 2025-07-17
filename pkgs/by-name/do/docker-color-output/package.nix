@@ -16,10 +16,6 @@ buildGoModule rec {
     hash = "sha256-r11HNRXnmTC1CJR871sX7xW9ts9KAu1+azwIwXH09qg=";
   };
 
-  postInstall = ''
-    mv $out/bin/cli $out/bin/docker-color-output
-  '';
-
   vendorHash = null;
 
   passthru = {

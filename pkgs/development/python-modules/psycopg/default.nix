@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  pythonOlder,
   replaceVars,
 
   # build
@@ -68,9 +69,6 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
-
-      substituteInPlace pyproject.toml \
-        --replace-fail "Cython >= 3.0.0, < 3.1.0" "Cython"
     '';
 
     nativeBuildInputs = [
@@ -118,14 +116,17 @@ in
 
 buildPythonPackage rec {
   inherit pname version src;
-  pyproject = true;
+  format = "pyproject";
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    "doc"
-  ];
+  disabled = pythonOlder "3.7";
+
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      "doc"
+    ];
 
   sphinxRoot = "../docs";
 
@@ -142,17 +143,18 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ]
-  # building the docs fails with the following error when cross compiling
-  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    furo
-    sphinx-autodoc-typehints
-    sphinxHook
-    shapely
-  ];
+  nativeBuildInputs =
+    [
+      furo
+      setuptools
+      shapely
+    ]
+    # building the docs fails with the following error when cross compiling
+    #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      sphinx-autodoc-typehints
+      sphinxHook
+    ];
 
   propagatedBuildInputs = [
     psycopg-c
@@ -170,16 +172,17 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs = [
-    anyio
-    pproxy
-    pytest-randomly
-    pytestCheckHook
-    postgresql
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
-  ++ optional-dependencies.c
-  ++ optional-dependencies.pool;
+  nativeCheckInputs =
+    [
+      anyio
+      pproxy
+      pytest-randomly
+      pytestCheckHook
+      postgresql
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -187,12 +190,13 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck = ''
-    cd ..
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-  '';
+  preCheck =
+    ''
+      cd ..
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+    '';
 
   disabledTests = [
     # don't depend on mypy for tests
@@ -209,16 +213,15 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
+    # https://github.com/psycopg/psycopg/pull/915
+    "tests/test_notify.py"
+    "tests/test_notify_async.py"
   ];
 
-  pytestFlags = [
-    "-ocache_dir=.cache"
-  ];
-
-  disabledTestMarks = [
-    "refcount"
-    "timing"
-    "flakey"
+  pytestFlagsArray = [
+    "-o cache_dir=.cache"
+    "-m"
+    "'not refcount and not timing and not flakey'"
   ];
 
   postCheck = ''

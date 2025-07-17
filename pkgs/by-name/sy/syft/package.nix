@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +7,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "1.33.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
     tag = "v${version}";
-    hash = "sha256-S7PvaLjrd6W7AyCgi8yAC0kjFwVxpf/FlzyOq3yvayE=";
+    hash = "sha256-cJIHyfnrzy0SM9qOxNGf9PGVapoGRWD8hT5L7XCKLjo=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +28,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-JppXYoge4hK5hw2O2KSRL1n/UX/bc2LmGEzwQW6xD44=";
+  vendorHash = "sha256-cBaAndcF1RBxdmG196KFXKd9mEqyUQdGlaTPZSPln0I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -57,7 +56,7 @@ buildGoModule rec {
   # tests require a running docker instance
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
     installShellCompletion --cmd syft \
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \

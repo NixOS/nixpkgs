@@ -1,5 +1,4 @@
 {
-  lib,
   fetchFromGitHub,
   buildPythonPackage,
   cargo,
@@ -11,6 +10,9 @@
   fixtures,
   networkx,
   testtools,
+  libiconv,
+  stdenv,
+  lib,
   pytestCheckHook,
 }:
 
@@ -42,7 +44,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  dependencies = [ numpy ];
+  buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     fixtures

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "0.2.6";
 
   src = fetchFromGitHub {
-    owner = "beamerpresenter";
+    owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
     hash = "sha256-sPeWlPkWOPfLAoAC/+T7nyhPqvoaZg6aMOIVLjMqd2k=";
@@ -47,29 +47,30 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  buildInputs = [
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    zlib
-    qtbase
-    qtsvg
-    qtmultimedia
-    qttools
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ]
-  ++ lib.optionals useMupdf [
-    freetype
-    gumbo
-    jbig2dec
-    mupdf
-    openjpeg
-  ]
-  ++ lib.optionals usePoppler [
-    poppler
-  ];
+  buildInputs =
+    [
+      gst_all_1.gst-libav
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      zlib
+      qtbase
+      qtsvg
+      qtmultimedia
+      qttools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+    ++ lib.optionals useMupdf [
+      freetype
+      gumbo
+      jbig2dec
+      mupdf
+      openjpeg
+    ]
+    ++ lib.optionals usePoppler [
+      poppler
+    ];
 
   cmakeFlags = [
     "-DGIT_VERSION=OFF"
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Modular multi screen pdf presentation viewer";
-    homepage = "https://github.com/beamerpresenter/BeamerPresenter";
+    homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
     license = with licenses; [
       agpl3Only
       gpl3Plus

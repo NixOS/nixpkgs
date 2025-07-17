@@ -60,7 +60,10 @@ lib.extendMkDerivation {
     }@args:
     {
       # Arguments to pass
-      inherit preferLocalBuild allowSubstitute;
+      inherit
+        preferLocalBuild
+        allowSubstitute
+        ;
       # Some expressions involving specialArg
       greeting = if specialArg "hi" then "hi" else "hello";
     };

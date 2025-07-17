@@ -34,8 +34,7 @@ else
         findlib
         ocamlbuild
         ocaml_oasis
-      ]
-      ++ nativeBuildInputs;
+      ] ++ nativeBuildInputs;
 
       inherit createFindlibDestdir;
       inherit dontStrip;

@@ -24,18 +24,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mousai";
-  version = "0.7.9";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    hash = "sha256-UhGqgVZ4K7+xKRGf7JYw4Mr+V+Cc3HjvGT8hDKaM6fo=";
+    hash = "sha256-lib2rPUTKudzbZQIGZxxxzvWNlbLkLdWtb9h7+C05QE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NYYVxVCONQoW+dcbwuJWzD2LAPhwOEQSgtfoY2iZi/c=";
+    hash = "sha256-59mxTtXQaGiHHbS4vOtwm5py/1BWwaSf+CBdKEtUpno=";
   };
 
   nativeBuildInputs = [

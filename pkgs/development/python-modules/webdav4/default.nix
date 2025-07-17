@@ -47,8 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     wsgidav
-  ]
-  ++ optional-dependencies.fsspec;
+  ] ++ optional-dependencies.fsspec;
 
   optional-dependencies = {
     fsspec = [ fsspec ];

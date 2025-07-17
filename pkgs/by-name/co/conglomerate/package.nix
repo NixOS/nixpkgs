@@ -32,15 +32,16 @@ stdenv.mkDerivation {
     zlib
     bicpl
   ];
-  propagatedBuildInputs = [
-    coreutils
-    minc_tools
-  ]
-  ++ (with perlPackages; [
-    perl
-    GetoptTabular
-    MNI-Perllib
-  ]);
+  propagatedBuildInputs =
+    [
+      coreutils
+      minc_tools
+    ]
+    ++ (with perlPackages; [
+      perl
+      GetoptTabular
+      MNI-Perllib
+    ]);
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"

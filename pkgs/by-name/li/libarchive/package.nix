@@ -48,11 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
       hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
     })
-    # Fix the tests on Darwin when `$TMPDIR` does not end with a slash
-    # and its parent directory is not writable by the build user, as on
-    # Nix ≥ 2.30.0 and Lix ≥ 2.91.2, ≥ 2.92.2, ≥ 2.93.1.
-    # <https://github.com/libarchive/libarchive/pull/2708>
-    ./fix-darwin-tmpdir-handling.patch
   ];
 
   outputs = [
@@ -63,23 +58,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      skipTestPaths = [
-        # test won't work in nix sandbox
-        "libarchive/test/test_write_disk_perms.c"
-        # the filesystem does not necessarily have sparse capabilities
-        "libarchive/test/test_sparse_basic.c"
-        # the filesystem does not necessarily have hardlink capabilities
-        "libarchive/test/test_write_disk_hardlink.c"
-        # access-time-related tests flakey on some systems
-        "libarchive/test/test_read_disk_directory_traversals.c"
-        "cpio/test/test_option_a.c"
-        "cpio/test/test_option_t.c"
-        # fails tests on filesystems with 64-bit inode values:
-        # FAIL: bsdcpio_test
-        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
-        "cpio/test/test_basic.c"
-        "cpio/test/test_format_newc.c"
-      ];
+      skipTestPaths =
+        [
+          # test won't work in nix sandbox
+          "libarchive/test/test_write_disk_perms.c"
+          # the filesystem does not necessarily have sparse capabilities
+          "libarchive/test/test_sparse_basic.c"
+          # the filesystem does not necessarily have hardlink capabilities
+          "libarchive/test/test_write_disk_hardlink.c"
+          # access-time-related tests flakey on some systems
+          "libarchive/test/test_read_disk_directory_traversals.c"
+          "cpio/test/test_option_a.c"
+          "cpio/test/test_option_t.c"
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+          # only on some aarch64-linux systems?
+          "cpio/test/test_basic.c"
+          "cpio/test/test_format_newc.c"
+        ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
         rm "${testPath}"
@@ -97,19 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    lzo
-    openssl
-    xz
-    zlib
-    zstd
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    acl
-    attr
-  ]
-  ++ lib.optional xarSupport libxml2;
+  buildInputs =
+    [
+      bzip2
+      lzo
+      openssl
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      acl
+      attr
+    ]
+    ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

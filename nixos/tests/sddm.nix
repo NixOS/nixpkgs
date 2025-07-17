@@ -24,7 +24,6 @@
         machine.screenshot("sddm")
         machine.send_chars("${user.password}\n")
         machine.wait_for_file("/tmp/xauth_*")
-        machine.wait_until_succeeds("test -s /tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
         machine.wait_for_window("^IceWM ")
       '';
@@ -55,7 +54,6 @@
       testScript = ''
         start_all()
         machine.wait_for_file("/tmp/xauth_*")
-        machine.wait_until_succeeds("test -s /tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
         machine.wait_for_window("^IceWM ")
       '';

@@ -10,12 +10,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
-  version = "2.11.0";
+  version = "2.10.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
-    sha256 = "sha256-XJ5Gu3nFLtSaEedzxBZERtPydIFMWWGi5frXWmgKxVA=";
+    sha256 = "sha256-xUWIIpnOohcpD/1esjHQTUxndo4j91hyyAXTmV3Eo0k=";
   };
 
   nativeBuildInputs = [
@@ -91,16 +91,16 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://thetimelineproj.sourceforge.net/";
     changelog = "https://thetimelineproj.sourceforge.net/changelog.html";
     description = "Display and navigate information on a timeline";
     mainProgram = "timeline";
-    license = with lib.licenses; [
+    license = with licenses; [
       gpl3Only
       cc-by-sa-30
     ];
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ davidak ];
+    platforms = with platforms; unix;
+    maintainers = with maintainers; [ davidak ];
   };
 }

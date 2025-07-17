@@ -3,26 +3,20 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  withBlas ? false,
+  withBlas ? true,
   blas,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cminpack";
-  version = "1.3.11";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "devernay";
     repo = "cminpack";
     rev = "v${version}";
-    hash = "sha256-GF9HiITX/XV8hXrp5lJw2XM0Zyb/CBkMZkRFBbQj03A=";
+    hash = "sha256-eFJ43cHbSbWld+gPpMaNiBy1X5TIcN9aVxjh8PxvVDU=";
   };
-
-  postPatch = ''
-    substituteInPlace cmake/cminpack.pc.in \
-      --replace-fail ''\'''${prefix}/' ""
-  '';
 
   strictDeps = true;
 
@@ -38,10 +32,6 @@ stdenv.mkDerivation rec {
     "-DUSE_BLAS=${if withBlas then "ON" else "OFF"}"
     "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Software for solving nonlinear equations and nonlinear least squares problems";

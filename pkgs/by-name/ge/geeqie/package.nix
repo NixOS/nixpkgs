@@ -11,7 +11,7 @@
   gtk3,
   lcms2,
   exiv2,
-  libchamplain_libsoup3,
+  libchamplain,
   clutter-gtk,
   ffmpegthumbnailer,
   fbida,
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     gtk3
     lcms2
     exiv2
-    libchamplain_libsoup3
+    libchamplain
     clutter-gtk
     ffmpegthumbnailer
     fbida

@@ -10,26 +10,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.12.8";
+  version = "1.11.15";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4+t90/oJtg93f+cLc2licyqLsQKy3Vh53gEUmTppPdc=";
+    hash = "sha256-uqPV3PGk3hFpV1B8+htBG9x58RVWew0sBDUItpxyv8Q=";
   };
 
-  vendorHash = "sha256-q06yWv0K/BMplGcIlAufx1HiGb4AEJ4UioeAhPoQce0=";
+  vendorHash = "sha256-qZlnY0MxB4/ttgjuAroTfqGWqGRea549EyIjSxPAlOI=";
 
   tags = [
     "with_quic"
     "with_dhcp"
     "with_wireguard"
+    "with_ech"
     "with_utls"
+    "with_reality_server"
     "with_acme"
     "with_clash_api"
     "with_gvisor"
-    "with_tailscale"
   ];
 
   subPackages = [
@@ -49,9 +50,6 @@ buildGoModule (finalAttrs: {
       --replace-fail "/usr/bin/sing-box" "$out/bin/sing-box" \
       --replace-fail "/bin/kill" "${coreutils}/bin/kill"
     install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
-
-    install -Dm444 release/config/sing-box.rules $out/share/polkit-1/rules.d/sing-box.rules
-    install -Dm444 release/config/sing-box-split-dns.xml $out/share/dbus-1/system.d/sing-box-split-dns.conf
   '';
 
   passthru = {

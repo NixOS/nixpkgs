@@ -100,17 +100,16 @@ in
         text = cfg.config;
       };
     };
-    environment.systemPackages = [
-      cfg.package
-    ]
-    ++ lib.optionals (cfg.testing) (
-      with pkgs.error-inject;
-      [
-        edac-inject
-        mce-inject
-        aer-inject
-      ]
-    );
+    environment.systemPackages =
+      [ cfg.package ]
+      ++ lib.optionals (cfg.testing) (
+        with pkgs.error-inject;
+        [
+          edac-inject
+          mce-inject
+          aer-inject
+        ]
+      );
 
     boot.initrd.kernelModules =
       cfg.extraModules

@@ -90,8 +90,7 @@ stdenv.mkDerivation (
       perl
       makeWrapper
       copyDesktopItems
-    ]
-    ++ attrs.nativeBuildInputs or [ ];
+    ] ++ attrs.nativeBuildInputs or [ ];
 
     desktopItems = [ desktopItem ];
 

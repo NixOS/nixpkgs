@@ -47,10 +47,6 @@ let
       sha256 = "03yjb78j1fnr2fwklxy54sdljwi0imvp29m8kmwl9v0pdapka8yj";
     };
 
-    patches = [
-      ./libg15render-implicit-decls.patch
-    ];
-
     buildInputs = [ libg15 ];
 
     enableParallelBuilding = true;

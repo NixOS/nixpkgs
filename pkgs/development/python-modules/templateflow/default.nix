@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "25.0.3";
+  version = "24.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "templateflow";
     repo = "python-client";
     tag = version;
-    hash = "sha256-5LGAuDaJzc2asM5EPOVuOxZwpV0LQNBhMhYKHJlXHmE=";
+    hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 
   build-system = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://templateflow.org/python-client";
     description = "Python API to query TemplateFlow via pyBIDS";
-    changelog = "https://github.com/templateflow/python-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/templateflow/python-client/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

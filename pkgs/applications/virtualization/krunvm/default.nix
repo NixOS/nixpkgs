@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "krunvm";
-  version = "0.2.4";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YbK4DKw0nh9IO1F7QsJcbOMlHekEdeUBbDHwuQ2x1Ww=";
+    hash = "sha256-IXofYsOmbrjq8Zq9+a6pvBYsvZFcKzN5IvCuHaxwazI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-TMV9xCcqBQgPsUSzsTJAi4qsplTOSm3ilaUmtmdaGnE=";
+    hash = "sha256-Vmb5IgGyKGekuL018/Xiz9QroWIwTIUxVB57fb0X7Kw=";
   };
 
   nativeBuildInputs = [
@@ -36,15 +36,13 @@ stdenv.mkDerivation rec {
     rustc
     asciidoctor
     makeWrapper
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  buildInputs = [
-    libkrun
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [ libkrun ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

@@ -23,20 +23,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "learn6502";
-  version = "0.3.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JumpLink";
     repo = "Learn6502";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Aoj4Z9uraBEH3BW0hrhuV3Hu7cnRxvjbpzm4pUziWS4=";
+    hash = "sha256-2c8dUhxCNaDlvQlYwqebfAAlClrnJpGFs9EukdiVgy0=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-0r+SRVx8b238SVm+XM4+uw7Ge3rFtsNwD/+uNfBA7eM=";
+    hash = "sha256-nbahJ+nwpHVvw8pCqhg1W+4lmgSH7o7BjjhujF7yyQs=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "eu.jumplink.Learn6502";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ emaryn ];
   };
 })

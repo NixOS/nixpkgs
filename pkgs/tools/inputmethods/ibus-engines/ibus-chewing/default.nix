@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus-chewing";
-  version = "2.1.6";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "chewing";
     repo = "ibus-chewing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-griEIWdIcnHrTcHTfF/a8QFigmnAZ36YmUVMvTLZ1x4=";
+    hash = "sha256-l2sXjXpiParDslVDG1mXmtGNj6qcLJMPxeaBYNQkqZA=";
   };
 
   nativeBuildInputs = [

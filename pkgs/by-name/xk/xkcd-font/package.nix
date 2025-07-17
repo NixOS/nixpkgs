@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "xkcd-font";
-  version = "0-unstable-2017-08-24";
+  version = "unstable-2017-08-24";
 
   src = fetchFromGitHub {
     owner = "ipython";

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   python,
   buildPythonPackage,
   fetchFromGitHub,
@@ -13,71 +12,72 @@
   setuptools-scm,
   psutil,
   pandas,
-  cmake,
-  ninja,
-  scikit-build-core,
-  packaging,
-  pytest,
-  hypothesis,
-  pyarrow,
 }:
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.34.2";
-  format = "pyproject";
+  version = "0.33.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     tag = version;
-    hash = "sha256-EXRrWp/2sMn7DCzgXk5L0692rhGtQZwWpVWYnfrxmGA=";
+    hash = "sha256-c7mEYgk+9sHvOI7z/jp/VI3mA7XOlNFik8X5rTyBclg=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cython
     pybind11
     setuptools-scm
-    scikit-build-core
-    packaging
-    cmake
-    ninja
   ];
 
   buildInputs = [ tiledb ];
 
   propagatedBuildInputs = [
     numpy
+    wheel # No idea why but it is listed
   ];
 
   nativeCheckInputs = [
     psutil
     # optional
     pandas
-    pytest
-    hypothesis
-    pyarrow
   ];
 
   TILEDB_PATH = tiledb;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 
-  dontUseCmakeConfigure = true;
+  postPatch = ''
+    # Hardcode path to shared object
+    substituteInPlace tiledb/__init__.py --replace \
+      'os.path.join(lib_dir, lib_name)' 'os.path.join("${tiledb}/lib", lib_name)'
 
-  # We have to run pytest from a diffferent directory to force it to import tiledb from $out
-  # otherwise it cannot be imported because extension modules are not compiled in sources
-  checkPhase = ''
-    pushd "$TMPDIR"
-    ${python.interpreter} -m pytest --pyargs tiledb${lib.optionalString stdenv.isDarwin " -k 'not test_ctx_thread_cleanup and not test_array'"}
-    popd
+    # Disable failing test
+    substituteInPlace tiledb/tests/test_examples.py --replace \
+      "test_docs" "dont_test_docs"
+    # these tests don't always fail
+    substituteInPlace tiledb/tests/test_libtiledb.py --replace \
+      "test_varlen_write_int_subarray" "dont_test_varlen_write_int_subarray" \
+      --replace "test_memory_cleanup" "dont_test_memory_cleanup" \
+      --replace "test_ctx_thread_cleanup" "dont_test_ctx_thread_cleanup"
+    substituteInPlace tiledb/tests/test_metadata.py --replace \
+      "test_metadata_consecutive" "dont_test_metadata_consecutive"
   '';
 
+  checkPhase = ''
+    pushd "$TMPDIR"
+    ${python.interpreter} -m unittest tiledb.tests.all.suite_test
+    popd
+  '';
   pythonImportsCheck = [ "tiledb" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python interface to the TileDB storage manager";
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
+    broken = true;
   };
 }

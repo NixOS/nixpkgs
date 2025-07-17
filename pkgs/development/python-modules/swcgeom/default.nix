@@ -26,9 +26,9 @@
 }:
 
 let
-  version = "0.19.4";
+  version = "0.19.3";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "swcgeom";
   inherit version;
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "yzx9";
     repo = "swcgeom";
     tag = "v${version}";
-    hash = "sha256-emffSI4LO+5UU267d+qj/NCVvHmRpzikJ7jdCOtPFNo=";
+    hash = "sha256-mpp8Dw0XcU59fYt7vjswAnXCmrRP3mhbgTDG+J4UwzI=";
   };
 
   build-system = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Neuron geometry library for swc format";
     homepage = "https://github.com/yzx9/swcgeom";
-    changelog = "https://github.com/yzx9/swcgeom/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/yzx9/swcgeom/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yzx9 ];
   };

@@ -8,7 +8,6 @@
   aiohttp,
   attrs,
   defusedxml,
-  pytest-asyncio_0,
   pytest-aiohttp,
   pytest-mock,
   pytestCheckHook,
@@ -16,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "2.0.0";
+  version = "1.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-OiBTlAcSLhaMWbp5k+0yU1amSpLKnJA+3Q56lyiSDUA=";
+    hash = "sha256-sNV2k3cbQe60Jpq1J2T6TQAz+NEyLXvS97//vXJ17TM=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
     pytest-aiohttp
     pytest-mock
     pytestCheckHook
@@ -67,7 +65,7 @@ buildPythonPackage rec {
     description = "Python library for speaking to Arcam receivers";
     mainProgram = "arcam-fmj";
     homepage = "https://github.com/elupus/arcam_fmj";
-    changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${src.tag}";
+    changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

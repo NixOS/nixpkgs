@@ -26,8 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     perl
     fortune
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   preFixup = ''
     wrapProgram "$out/bin/typefortune" \

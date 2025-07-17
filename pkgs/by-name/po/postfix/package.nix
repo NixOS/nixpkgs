@@ -71,30 +71,31 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postfix";
-  version = "3.10.4";
+  version = "3.10.2";
 
   src = fetchurl {
     url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-z7ZoYf6PlkeH3a6rFfPKPn7z3nMPlxca/EpeyjOMpEQ=";
+    hash = "sha256-vMpWQTLUz1+cnONU2rndNe6OniGQCGRiPIFdrBa/vCc=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     m4
   ];
-  buildInputs = [
-    db
-    openssl
-    cyrus_sasl
-    icu
-    libnsl
-    pcre2
-  ]
-  ++ lib.optional withPgSQL libpq
-  ++ lib.optional withMySQL libmysqlclient
-  ++ lib.optional withSQLite sqlite
-  ++ lib.optional withLDAP openldap
-  ++ lib.optional withTLSRPT libtlsrpt;
+  buildInputs =
+    [
+      db
+      openssl
+      cyrus_sasl
+      icu
+      libnsl
+      pcre2
+    ]
+    ++ lib.optional withPgSQL libpq
+    ++ lib.optional withMySQL libmysqlclient
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLDAP openldap
+    ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];

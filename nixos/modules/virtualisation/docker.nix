@@ -78,7 +78,7 @@ in
       };
       description = ''
         Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
-        See <https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file>
+        See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
       '';
     };
 
@@ -286,11 +286,8 @@ in
           ];
         };
 
-        path = [
-          pkgs.kmod
-        ]
-        ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package
-        ++ cfg.extraPackages;
+        path =
+          [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") config.boot.zfs.package ++ cfg.extraPackages;
       };
 
       systemd.sockets.docker = {

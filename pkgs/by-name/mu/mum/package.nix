@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-r2isuwXq79dOQQWB+CsofYCLQYu9VKm7kzoxw103YV4=";
   };
 
+  useFetchCargoVendor = true;
   cargoHash = "sha256-ey3nT6vZ5YOZGk08HykK9RxI7li+Sz+sER3HioGSXP0=";
 
   nativeBuildInputs = [
@@ -42,8 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libopus
     openssl
-  ]
-  ++ lib.optional withNotifications libnotify;
+  ] ++ lib.optional withNotifications libnotify;
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withNotifications "notifications" ++ lib.optional withOgg "ogg";

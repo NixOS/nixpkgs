@@ -12,12 +12,12 @@
   git,
   gnused,
   nix,
-  nixfmt,
+  nixfmt-rfc-style,
   rebar3-nix,
 }:
 
 let
-  version = "3.25.1";
+  version = "3.25.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "Wpg8MDVwum/cBpwbcY3Cjt2JkuQHEp7wxbZKgyP6crc=";
+      sha256 = "uiKgB+YuqKnfs9TZbnudp6TZd6ZGXfpF9c8jJffCs/U=";
     };
 
     buildInputs = [ erlang ];
@@ -95,7 +95,7 @@ let
           git
           gnused
           nix
-          nixfmt
+          nixfmt-rfc-style
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
@@ -142,6 +142,9 @@ let
 
           # our patches cause the tests to fail
           doCheck = false;
+
+          # patchShebangs corrupts the magic escript shebang+zip files
+          dontPatchShebangs = true;
         })
       );
     in

@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.3.2";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
     tag = "v${version}";
-    hash = "sha256-Rvhh99DO/4J1p0JZJauOnvQZKtZBvxu+7hNnNgsXn2w=";
+    hash = "sha256-/ThWsPtFuUo41+Xw23UigZup1fq6/SAzDpxIaT0Vhvg=";
   };
 
   build-system = [ python3Packages.hatchling ];

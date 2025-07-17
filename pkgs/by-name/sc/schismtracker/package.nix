@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20250825";
+  version = "20250415";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
     tag = version;
-    hash = "sha256-R1u0ZIWt4sG9cVhG9WhLdYVwAy7u62AT7E4ZwiTw1rY=";
+    hash = "sha256-VK2XdixejaoG6P1X3XG8Ow4H6CF3sNwAveJ4cCxdLuQ=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -32,18 +32,19 @@ stdenv.mkDerivation rec {
       --replace-fail 'git log' 'echo ${version} #'
   '';
 
-  configureFlags = [
-    (lib.enableFeature true "dependency-tracking")
-    (lib.withFeature true "sdl2")
-    (lib.enableFeature true "sdl2-linking")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.enableFeature true "alsa")
-    (lib.enableFeature true "alsa-linking")
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.enableFeature false "sdltest")
-  ];
+  configureFlags =
+    [
+      (lib.enableFeature true "dependency-tracking")
+      (lib.withFeature true "sdl2")
+      (lib.enableFeature true "sdl2-linking")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      (lib.enableFeature true "alsa")
+      (lib.enableFeature true "alsa-linking")
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.enableFeature false "sdltest")
+    ];
 
   strictDeps = true;
 
@@ -53,15 +54,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    libX11
-    utf8proc
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libXext
-  ];
+  buildInputs =
+    [
+      SDL2
+      libX11
+      utf8proc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libXext
+    ];
 
   enableParallelBuilding = true;
 

@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  ...
 }:
 buildGoModule rec {
   pname = "maildir-rank-addr";

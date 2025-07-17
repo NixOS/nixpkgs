@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydemumble" ];
 
   meta = {
-    description = "Demumble wrapper library";
+    description = "demumble wrapper library";
     longDescription = ''
       Python wrapper library for demumble; demumble is a tool to
       demangle C++, Rust, and Swift symbol names.

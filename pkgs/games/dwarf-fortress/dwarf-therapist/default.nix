@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     mainProgram = "dwarftherapist";
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
     maintainers = with maintainers; [
+      abbradar
       bendlas
       numinit
     ];

@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "BUILDTYPE=release"
     "INSTALLDIR=$(out)"
-  ]
-  ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
+  ] ++ (if installTool then [ "INSTALLTOOL=true" ] else [ "INSTALLTOOL=false" ]);
 
   enableParallelBuilding = true;
 

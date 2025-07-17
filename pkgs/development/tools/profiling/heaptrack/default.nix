@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
   cmake,
   extra-cmake-modules,
   makeBinaryWrapper,
@@ -12,7 +14,6 @@
   sparsehash,
   zstd,
   qtbase,
-  wrapQtAppsHook,
   kio,
   kitemmodels,
   threadweaver,
@@ -21,42 +22,48 @@
   kdiagram,
 }:
 
-stdenv.mkDerivation {
+mkDerivation rec {
   pname = "heaptrack";
-  version = "1.5.0-unstable-2025-07-21";
+  version = "1.5.0";
 
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "sdk";
+  src = fetchFromGitHub {
+    owner = "KDE";
     repo = "heaptrack";
-    rev = "9db5d53df554959478575e080648f6854d362faf";
-    hash = "sha256-8NLpp/+PK3wIB5Sx0Z1185DCDQ18zsGj9Wp5YNKgX8E=";
+    rev = "v${version}";
+    hash = "sha256-pP+s60ERnmOctYTe/vezCg0VYzziApNY0QaF3aTccZU=";
   };
+
+  patches = [
+    # cmake: Fix C compatibility of libunwind probes
+    (fetchpatch {
+      url = "https://invent.kde.org/sdk/heaptrack/-/commit/c6c45f3455a652c38aefa402aece5dafa492e8ab.patch";
+      hash = "sha256-eou53UUQX+S7yrz2RS95GwkAnNIZY/aaze0eAdjnbPU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     makeBinaryWrapper
-    wrapQtAppsHook
   ];
-
-  buildInputs = [
-    zlib
-    boost
-    libunwind
-    sparsehash
-    zstd
-    qtbase
-    kio
-    kitemmodels
-    threadweaver
-    kconfigwidgets
-    kcoreaddons
-    kdiagram
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    elfutils
-  ];
+  buildInputs =
+    [
+      zlib
+      boost
+      libunwind
+      sparsehash
+      zstd
+      qtbase
+      kio
+      kitemmodels
+      threadweaver
+      kconfigwidgets
+      kcoreaddons
+      kdiagram
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      elfutils
+    ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper \

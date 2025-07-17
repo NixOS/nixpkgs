@@ -5,6 +5,7 @@
   qtbase,
   accounts-qt,
   qtdeclarative,
+  kaccounts-integration,
   kconfig,
   kcoreaddons,
   ki18n,
@@ -23,6 +24,7 @@ mkDerivation {
     qtbase
     accounts-qt
     qtdeclarative
+    kaccounts-integration
     kconfig
     kcoreaddons
     ki18n
