@@ -233,6 +233,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       pname = "discourse-assets";
       inherit version src;
+      fetcherVersion = 1;
       hash = "sha256-WyRBnuKCl5NJLtqy3HK/sJcrpMkh0PjbasGPNDV6+7Y=";
     };
 

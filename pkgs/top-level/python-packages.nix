@@ -144,8 +144,6 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
-  aider-chat = callPackage ../development/python-modules/aider-chat { };
-
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -3409,6 +3407,8 @@ self: super: with self; {
 
   dctorch = callPackage ../development/python-modules/dctorch { };
 
+  ddgs = callPackage ../development/python-modules/ddgs { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
@@ -3969,6 +3969,8 @@ self: super: with self; {
 
   django-pwa = callPackage ../development/python-modules/django-pwa { };
 
+  django-pydantic-field = callPackage ../development/python-modules/django-pydantic-field { };
+
   django-q2 = callPackage ../development/python-modules/django-q2 { };
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
@@ -4056,6 +4058,8 @@ self: super: with self; {
       { };
 
   django-vite = callPackage ../development/python-modules/django-vite { };
+
+  django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
@@ -4307,6 +4311,8 @@ self: super: with self; {
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
   drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
+
+  drf-pydantic = callPackage ../development/python-modules/drf-pydantic { };
 
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
@@ -5051,6 +5057,8 @@ self: super: with self; {
   fickling = callPackage ../development/python-modules/fickling { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
+
+  fido2_2 = callPackage ../development/python-modules/fido2/2.nix { };
 
   fields = callPackage ../development/python-modules/fields { };
 
@@ -7394,10 +7402,7 @@ self: super: with self; {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
-  jsonnet = buildPythonPackage {
-    inherit (pkgs.jsonnet) name src;
-    format = "setuptools";
-  };
+  jsonnet = callPackage ../development/python-modules/jsonnet { };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
@@ -7803,6 +7808,8 @@ self: super: with self; {
   langchain-deepseek = callPackage ../development/python-modules/langchain-deepseek { };
 
   langchain-fireworks = callPackage ../development/python-modules/langchain-fireworks { };
+
+  langchain-google-genai = callPackage ../development/python-modules/langchain-google-genai { };
 
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
@@ -14946,6 +14953,8 @@ self: super: with self; {
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
 
+  pyvers = callPackage ../development/python-modules/pyvers { };
+
   pyversasense = callPackage ../development/python-modules/pyversasense { };
 
   pyvesync = callPackage ../development/python-modules/pyvesync { };
@@ -15148,7 +15157,11 @@ self: super: with self; {
 
   qscintilla = self.qscintilla-qt5;
 
-  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
+  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla {
+    pythonPackages = self;
+  };
+
+  qscintilla-qt6 = pkgs.qt6Packages.callPackage ../development/python-modules/qscintilla {
     pythonPackages = self;
   };
 
@@ -19064,6 +19077,8 @@ self: super: with self; {
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
+  urwid-satext = callPackage ../development/python-modules/urwid-satext { };
+
   urwidgets = callPackage ../development/python-modules/urwidgets { };
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
@@ -19685,7 +19700,9 @@ self: super: with self; {
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
-  xformers = callPackage ../development/python-modules/xformers { };
+  xformers = callPackage ../development/python-modules/xformers {
+    inherit (pkgs.llvmPackages) openmp;
+  };
 
   xgboost = callPackage ../development/python-modules/xgboost { inherit (pkgs) xgboost; };
 

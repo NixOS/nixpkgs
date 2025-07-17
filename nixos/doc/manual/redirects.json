@@ -587,6 +587,12 @@
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
   ],
+  "module-services-paisa": [
+    "index.html#module-services-paisa"
+  ],
+  "module-services-paisa-usage": [
+    "index.html#module-services-paisa-usage"
+  ],
   "module-services-plausible": [
     "index.html#module-services-plausible"
   ],

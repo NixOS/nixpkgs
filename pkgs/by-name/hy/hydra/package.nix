@@ -131,6 +131,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
   version = "0-unstable-2025-06-15";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";

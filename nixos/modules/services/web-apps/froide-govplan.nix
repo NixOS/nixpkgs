@@ -182,6 +182,7 @@ in
             StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/froide-govplan") "froide-govplan";
             User = "govplan";
             Group = "govplan";
+            TimeoutStartSec = "5m";
           };
           after = [
             "postgresql.target"
@@ -191,7 +192,7 @@ in
           wantedBy = [ "multi-user.target" ];
           environment =
             {
-              PYTHONPATH = pkg.pythonPath;
+              PYTHONPATH = "${pkg.pythonPath}:${pkg}/${pkg.python.sitePackages}";
               GDAL_LIBRARY_PATH = "${pkgs.gdal}/lib/libgdal.so";
               GEOS_LIBRARY_PATH = "${pkgs.geos}/lib/libgeos_c.so";
             }

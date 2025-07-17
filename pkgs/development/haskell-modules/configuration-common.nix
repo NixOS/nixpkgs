@@ -762,6 +762,14 @@ with haskellLib;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
+  # Apply patch fixing an incorrect QuickCheck property which occasionally causes false negatives
+  # https://github.com/Philonous/xml-picklers/issues/5
+  xml-picklers = appendPatch (pkgs.fetchpatch {
+    name = "xml-picklers-fix-prop-xp-attribute.patch";
+    url = "https://github.com/Philonous/xml-picklers/commit/887e5416b5e61c589cadf775d82013eb87751ea2.patch";
+    sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
+  }) super.xml-picklers;
+
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
 
@@ -3205,6 +3213,18 @@ with haskellLib;
   brillo-examples = warnAfterVersion "1.13.3" (doJailbreak super.brillo-examples);
   brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
   brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
+
+  # Floating point precision issues. Test suite is only checked on x86_64.
+  # https://github.com/tweag/monad-bayes/issues/368
+  monad-bayes = dontCheckIf (
+    let
+      inherit (pkgs.stdenv) hostPlatform;
+    in
+    !hostPlatform.isx86_64
+    # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
+    # also fails on Hydra
+    || hostPlatform.isDarwin
+  ) super.monad-bayes;
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
   crucible = warnAfterVersion "0.7.2" (
