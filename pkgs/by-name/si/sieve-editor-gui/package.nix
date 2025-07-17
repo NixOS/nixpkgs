@@ -10,17 +10,17 @@
 }:
 buildNpmPackage {
   pname = "sieve-editor-gui";
-  version = "0.6.1-unstable-2024-01-06";
+  version = "0.6.1-unstable-2025-03-12";
   nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "thsmi";
     repo = "sieve";
-    rev = "5879679ed8d16a34af760ee56bfec16a1a322b4e";
-    hash = "sha256-wl6dwKoGan+DrpXk2p1fD/QN/C2qT4h/g3N73gF8sOI=";
+    rev = "4bcefba15314177521a45a833e53969b50f4351e";
+    hash = "sha256-jR3+YaVQ+Yd2Xm40SzQNvwWMPe0mJ6bhT96hlUz3/qU=";
   };
 
-  npmDepsHash = "sha256-a2I9csxFZJekG1uCOHqdRaLLi5v/BLTz4SU+uBd855A=";
+  npmDepsHash = "sha256-w2i7XsTx3hlsh/JbvShaxvDyFGcBpL66lMy7KL2tnzM=";
 
   nativeBuildInputs = [
     electron
