@@ -7,6 +7,13 @@ in
   mir = common {
     version = "2.21.1";
     hash = "sha256-FDZ40LiuvMuyWQQGjgOHTm+J3i7yczKMzL3dZ1jsz/E=";
+    patches = [
+      (fetchpatch {
+        name = "0001-Fix-gtest-nodiscard-error.patch";
+        url = "https://github.com/canonical/mir/commit/60dab2b197deb159087e44865e7314ad2865b79d.patch";
+        hash = "sha256-fB49E+Wjm2zJnie9Ws+tP0d6lxcG3V/C/UDfy/4iuFU=";
+      })
+    ];
   };
 
   mir_2_15 = common {
