@@ -57,26 +57,16 @@ let
       ;
   };
   helloDrvSimpleSrc = srcOnly helloDrvSimple;
-  helloDrvSimpleSrcFreeform = srcOnly (
-    {
-      inherit (helloDrvSimple)
-        name
-        pname
-        version
-        src
-        patches
-        stdenv
-        ;
-    }
-    # __impureHostDeps get duplicated in helloDrvSimpleSrc (on darwin)
-    # This is harmless, but fails the test for what is arguably an
-    # unrelated non-problem, so we just work around it here.
-    # The inclusion of __impureHostDeps really shouldn't be required,
-    # and should be removed from this test.
-    // lib.optionalAttrs (helloDrvSimple ? __impureHostDeps) {
-      inherit (helloDrvSimple) __impureHostDeps;
-    }
-  );
+  helloDrvSimpleSrcFreeform = srcOnly ({
+    inherit (helloDrvSimple)
+      name
+      pname
+      version
+      src
+      patches
+      stdenv
+      ;
+  });
 
   # Test the issue reported in https://github.com/NixOS/nixpkgs/issues/269539
   stdenvAdapterDrv =
