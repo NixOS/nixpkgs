@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Apply fix for: https://www.virtualbox.org/ticket/22397
-  patches = lib.optional stdenv.hostPlatform.isAarch64  ./guest-additions-aarch64-fix.patch;
+  patches = lib.optional stdenv.hostPlatform.isAarch64 ./guest-additions-aarch64-fix.patch;
 
   postPatch = ''
     set -x
