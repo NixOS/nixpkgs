@@ -25,18 +25,21 @@
   fsspec,
   moto,
   requests,
+  tomlkit,
+  uv,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "3.0.4";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-br5tZdH26vteu45DT8bld7DQwDOv6/G7XNHv1GeU05g=";
+    hash = "sha256-rOWxEdxp1TFcsWVd/Q+BbFrPl5jSrZL0O2CKUsjIrCs=";
   };
 
   build-system = [
@@ -66,6 +69,9 @@ buildPythonPackage rec {
       aiohttp
       moto
       requests
+      tomlkit
+      uv
+      writableTmpDirAsHomeHook
     ]
     ++ moto.optional-dependencies.s3
     ++ moto.optional-dependencies.server
@@ -76,6 +82,12 @@ buildPythonPackage rec {
     # discussion, and see:
     # https://github.com/zarr-developers/zarr-python/blob/v3.0.4/tests/conftest.py#L182C1-L187C2
     "--hypothesis-profile=ci"
+  ];
+  disabledTests = [
+    # 3 tests that require multiple Python versions to co-exist
+    "test_scripts_can_run"
+    "test_roundtrip_v2"
+    "test_roundtrip_v3"
   ];
 
   pythonImportsCheck = [ "zarr" ];
