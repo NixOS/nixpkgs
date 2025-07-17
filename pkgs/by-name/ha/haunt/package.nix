@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   autoreconfHook,
+  texinfo,
   guile,
   guile-commonmark,
   guile-reader,
@@ -14,15 +15,17 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "haunt";
   version = "0.3.0";
 
-  src = fetchurl {
-    url = "https://files.dthompson.us/haunt/haunt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-mLq+0GvlSgZsPryUQQqR63zEg2fpTVKBMdO6JxSZmSs=";
+  src = fetchgit {
+    url = "https://git.dthompson.us/haunt.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i6MI0eaRiA/JNgkIBJGLAsqMnyJz47aavyD6kOL7sqU=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     makeBinaryWrapper
     pkg-config
+    texinfo
   ];
 
   buildInputs = [
