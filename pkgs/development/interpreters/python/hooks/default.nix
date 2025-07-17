@@ -168,6 +168,7 @@ in
       # For package tests
       testers,
       objprint,
+      pypck,
     }:
     makePythonHook {
       name = "pytest-check-hook";
@@ -180,6 +181,10 @@ in
           # Test Python package objprint
           objprint = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-objprint-${previousPythonAttrs.pname}";
+          });
+          # Test Python package pypck, whose source module is defined under the project root instead of src/
+          pypck = pypck.overridePythonAttrs (previousPythonAttrs: {
+            pname = "test-pytestCheckHook-pypck-${previousPythonAttrs.pname}";
           });
           disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTests-${previousPythonAttrs.pname}";
