@@ -26,8 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
     glm
     tbb_2021
-    clipper2
   ];
+
+  propagatedBuildInputs = [ clipper2 ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
