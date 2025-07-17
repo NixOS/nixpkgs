@@ -302,9 +302,51 @@ stdenv.mkDerivation (
           stripLen = 1;
           extraPrefix = "libraries/unix/";
         })
+
+        # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+        ./docs-sphinx-7.patch
       ]
+
+      # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
+      # invoke the C compiler to generate assembly and later call the assembler on the result of
+      # that operation. Unfortunately, that is brittle in a lot of cases, e.g. when using mismatched
+      # CC / assembler (https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12005). This issue
+      # does not affect us. However, LLVM 18 introduced a check in clang that makes sure no
+      # non private labels occur between .cfi_startproc and .cfi_endproc which causes the
+      # assembly that the same version (!) of clang generates from rts/StgCRun.c to be rejected.
+      # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
+      # LLVM 19.
+      #
+      # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+      # the solution is to backport those changes from GHC 9.6 that skip the intermediate
+      # assembly step.
+      #
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
+      ++ (
+        if lib.versionAtLeast version "9.4" then
+          [
+            # Need to use this patch so the next one applies, passes file location info to the cc phase
+            (fetchpatch {
+              name = "ghc-add-location-to-cc-phase.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
+              hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
+            })
+            # Makes Cc phase directly generate object files instead of assembly
+            (fetchpatch {
+              name = "ghc-cc-directly-emit-object.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
+              hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
+            })
+          ]
+        else
+          [
+            # TODO(@sternenseemann): backport changes to GHC < 9.4 if possible
+          ]
+      )
+
+      # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
       ++ lib.optionals (lib.versionOlder version "9.4") [
-        # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
         (fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
           sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
@@ -321,11 +363,6 @@ stdenv.mkDerivation (
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
           sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
         })
-      ]
-
-      ++ [
-        # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-        ./docs-sphinx-7.patch
       ]
 
       ++ lib.optionals (lib.versionOlder version "9.2.2") [
@@ -382,45 +419,8 @@ stdenv.mkDerivation (
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
           sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
         })
-      ]
+      ];
 
-      # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
-      # invoke the C compiler to generate assembly and later call the assembler on the result of
-      # that operation. Unfortunately, that is brittle in a lot of cases, e.g. when using mismatched
-      # CC / assembler (https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12005). This issue
-      # does not affect us. However, LLVM 18 introduced a check in clang that makes sure no
-      # non private labels occur between .cfi_startproc and .cfi_endproc which causes the
-      # assembly that the same version (!) of clang generates from rts/StgCRun.c to be rejected.
-      # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
-      # LLVM 19.
-      #
-      # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
-      # the solution is to backport those changes from GHC 9.6 that skip the intermediate
-      # assembly step.
-      #
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
-      ++ (
-        if lib.versionAtLeast version "9.4" then
-          [
-            # Need to use this patch so the next one applies, passes file location info to the cc phase
-            (fetchpatch {
-              name = "ghc-add-location-to-cc-phase.patch";
-              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
-              hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
-            })
-            # Makes Cc phase directly generate object files instead of assembly
-            (fetchpatch {
-              name = "ghc-cc-directly-emit-object.patch";
-              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
-              hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
-            })
-          ]
-        else
-          [
-            # TODO(@sternenseemann): backport changes to GHC < 9.4 if possible
-          ]
-      );
 
     postPatch = "patchShebangs .";
 
