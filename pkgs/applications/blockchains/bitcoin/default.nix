@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   installShellFiles,
@@ -23,6 +24,7 @@
   withGui,
   withWallet ? true,
   enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+  gnupg,
 }:
 
 let
@@ -44,11 +46,39 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "882c782c34a3bf2eacd1fae5cdc58b35b869883512f197f7d6dc8f195decfdaa";
   };
 
+  preUnpack =
+    let
+      publicKeys = import ./guix-sigs.nix { inherit stdenv fetchFromGitHub; };
+
+      checksums = fetchurl {
+        url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
+        hash = "sha256-lOwVH0UqIhOT0I9rAvswuqy+tZ8ZRhH0kGnn9VCbRv4=";
+      };
+
+      signatures = fetchurl {
+        url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
+        hash = "sha256-s05cRmZ9aoPdSZTaz6D6qmVwX6OprqxynPn5vZQ7bbw=";
+      };
+    in
+    ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      ln -s ${checksums} ./SHA256SUMS
+      ln -s ${signatures} ./SHA256SUMS.asc
+      ln -s $src ./bitcoin-${finalAttrs.version}.tar.gz
+      sha256sum -c --ignore-missing SHA256SUMS
+      gpg --import ${publicKeys}/*
+      gpg --verify SHA256SUMS.asc SHA256SUMS
+      popd
+    '';
+
   nativeBuildInputs =
     [
       cmake
       pkg-config
       installShellFiles
+      gnupg
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
