@@ -84,10 +84,16 @@ lib.checkListOfEnum "${pname}: theme variants"
       gtk-engine-murrine
     ];
 
+    postPatch = ''
+      patchShebangs install.sh wallpaper/install-wallpapers.sh
+
+      substituteInPlace wallpaper/install-wallpapers.sh \
+       --replace-fail /usr/share $out/share \
+       --replace-fail '[[ "$UID" -eq "$ROOT_UID" ]]' true
+    '';
+
     installPhase = ''
       runHook preInstall
-
-      patchShebangs install.sh
 
       name= ./install.sh \
         ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
@@ -96,13 +102,7 @@ lib.checkListOfEnum "${pname}: theme variants"
         ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
         --dest $out/share/themes
 
-      ${lib.optionalString wallpapers ''
-        mkdir -p $out/share/backgrounds
-        cp -a wallpaper/Graphite/*.png $out/share/backgrounds/
-        ${lib.optionalString (builtins.elem "nord" tweaks) ''
-          cp -a wallpaper/Graphite-nord/*.png $out/share/backgrounds/
-        ''}
-      ''}
+      ${lib.optionalString wallpapers "sh -x wallpaper/install-wallpapers.sh"}
 
       ${lib.optionalString withGrub ''
         (

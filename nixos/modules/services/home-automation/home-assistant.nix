@@ -74,7 +74,11 @@ let
   );
   configFile = renderYAMLFile "configuration.yaml" filteredConfig;
 
-  lovelaceConfigFile = renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig;
+  lovelaceConfigFile =
+    if cfg.lovelaceConfig != null then
+      renderYAMLFile "ui-lovelace.yaml" cfg.lovelaceConfig
+    else
+      cfg.lovelaceConfigFile;
 
   # Components advertised by the home-assistant package
   availableComponents = cfg.package.availableComponents;
@@ -430,9 +434,10 @@ in
                   "yaml"
                   "storage"
                 ];
-                default = if cfg.lovelaceConfig != null then "yaml" else "storage";
+                default =
+                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) then "yaml" else "storage";
                 defaultText = literalExpression ''
-                  if cfg.lovelaceConfig != null
+                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null)
                     then "yaml"
                   else "storage";
                 '';
@@ -509,6 +514,16 @@ in
         Setting this option will automatically set `lovelace.mode` to `yaml`.
 
         Beware that setting this option will delete your previous {file}`ui-lovelace.yaml`
+      '';
+    };
+
+    lovelaceConfigFile = mkOption {
+      default = null;
+      type = types.nullOr types.path;
+      example = "/path/to/ui-lovelace.yaml";
+      description = ''
+        Your {file}`ui-lovelace.yaml` managed as configuraton file.
+        Setting this option will automatically set `lovelace.mode` to `yaml`.
       '';
     };
 
@@ -600,6 +615,10 @@ in
         assertion = cfg.openFirewall -> cfg.config != null;
         message = "openFirewall can only be used with a declarative config";
       }
+      {
+        assertion = !(cfg.lovelaceConfig != null && cfg.lovelaceConfigFile != null);
+        message = "Only one of `lovelaceConfig` or `lovelaceConfigFile` can be configured at the same time.";
+      }
     ];
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
@@ -610,9 +629,12 @@ in
         "home-assistant/configuration.yaml".source = configFile;
       })
 
-      (mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
-        "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
-      })
+      (mkIf
+        ((cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) && !cfg.lovelaceConfigWritable)
+        {
+          "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
+        }
+      )
     ];
 
     systemd.services.home-assistant = {
@@ -627,7 +649,7 @@ in
       ];
       reloadTriggers =
         optionals (cfg.config != null) [ configFile ]
-        ++ optionals (cfg.lovelaceConfig != null) [ lovelaceConfigFile ];
+        ++ optionals (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) [ lovelaceConfigFile ];
 
       preStart =
         let
