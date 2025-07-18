@@ -8,7 +8,7 @@
   yarn,
   nodejs,
   git,
-  python3,
+  python311,
   pkg-config,
   libsass,
   nix-update-script,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn
     nodejs
     pkg-config
-    python3
+    python311
     git
     libsass
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
