@@ -247,6 +247,8 @@ in
 
     systemd.packages = [ cfg.package ];
 
+    systemd.services.upower.wantedBy = [ "graphical.target" ];
+
     environment.etc."UPower/UPower.conf".text = lib.generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
