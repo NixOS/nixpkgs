@@ -11,6 +11,7 @@ in
   nodes.machine = {
     services.syncthing = {
       enable = true;
+      apiKeyFile = "${pkgs.writeText "syncthing-init-test-apiKeyFile" "theNewCustomApiKey"}";
       settings.devices.testDevice = {
         id = testId;
       };
@@ -29,5 +30,6 @@ in
     assert "testFolder" in config
     assert "${testId}" in config
     assert "guiUser" in config
+    assert "theNewCustomApiKey" in config
   '';
 }
