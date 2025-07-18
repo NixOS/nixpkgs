@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pytest-timeout,
   pytestCheckHook,
   pytest-cov-stub,
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
   };
+
+  patches = [
+    # Fix bash error on optional nargs="?" (iterative/shtab#184)
+    (fetchpatch2 {
+      url = "https://github.com/iterative/shtab/commit/a04ddf92896f7e206c9b19d48dcc532765364c59.patch?full_index=1";
+      hash = "sha256-H4v81xQLI9Y9R5OyDPJevCLh4gIUaiJKHVEU/eWdNbA=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
