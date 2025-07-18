@@ -223,6 +223,10 @@ If `null` (which is the default value), the one included in `src` is used.
 `editedCabalFile`
 : `sha256` hash of the cabal file identified by `revision` or `null`.
 
+`env`
+: Extra environment variables to set during the build.
+These will also be set inside the [development environment defined by the `passthru.env` attribute in the returned derivation](#haskell-development-environments), but will not be set inside a development environment built with [`shellFor`](#haskell-shellFor) that includes this package.
+
 `configureFlags`
 : Extra flags passed when executing the `configure` command of `Setup.hs`.
 
