@@ -11,11 +11,14 @@ function _pytestIncludeExcludeExpr() {
     local includeString excludeString
     if [[ -n "${includeListRef[*]-}" ]]; then
         # ((element1) or (element2))
-        includeString="(($(concatStringsSep ") or (" "$includeListName")))"
+        includeString="$(concatStringsSep " or " "$includeListName")"
+        if [[ "$includeString" =~ " or " ]]; then
+            includeString="($includeString)"
+        fi
     fi
     if [[ -n "${excludeListRef[*]-}" ]]; then
         # and not (element1) and not (element2)
-        excludeString="${includeString:+ and }not ($(concatStringsSep ") and not (" "$excludeListName"))"
+        excludeString="${includeString:+ and }not $(concatStringsSep " and not " "$excludeListName")"
     fi
     echo "$includeString$excludeString"
 }
