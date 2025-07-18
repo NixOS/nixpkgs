@@ -22,8 +22,10 @@ set -e
 
 rm -vf "$PATCH_LIST"
 
-wget "https://tiswww.case.edu/php/chet/gpgkey.asc"
-echo "4ef5051ce7200241e65d29c11eb57df8  gpgkey.asc" > gpgkey.asc.md5
+# https://savannah.gnu.org/projects/bash/: Group Admins: Chet Ramey
+# https://savannah.gnu.org/users/chet: Download GPG Key
+wget "https://savannah.gnu.org/people/viewgpg.php?user_id=2590" -O gpgkey.asc
+echo "d94dc6b8baa5b673971350236e95957f  gpgkey.asc" > gpgkey.asc.md5
 md5sum -c gpgkey.asc.md5
 gpg --import ./gpgkey.asc
 rm gpgkey.asc{,.md5}
@@ -39,7 +41,7 @@ do
     wget -P "$DIR" "ftp.gnu.org/gnu/$PROJECT/$PROJECT-$VERSION-patches/$PROJECT$VERSION_CONDENSED-$i.sig"
     gpg --verify "$DIR/$PROJECT$VERSION_CONDENSED-$i.sig"
     hash=$(nix-hash --flat --type sha256 --base32 "$DIR/$PROJECT$VERSION_CONDENSED-$i")
-    echo "(patch \"$i\" \"$hash\")"	\
+    echo "  (patch \"$i\" \"$hash\")"	\
     >> "$PATCH_LIST"
 
     rm -f "$DIR/$PROJECT$VERSION_CONDENSED-$i"{,.sig}
