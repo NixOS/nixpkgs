@@ -233,8 +233,8 @@ let
   };
 
   brokenPlugins = fetchurl {
-    url = "https://web.archive.org/web/20250509141038/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
-    hash = "sha256-FzYANZSTasCdVEu9jLF1+2PEH8SadUddaIaec5vhKH8=";
+    url = "https://web.archive.org/web/20250623135654/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-633yCFPN9A/Ndw669BPf2T7TwQY/fuZ1fgCZM4JyLwk=";
   };
 
 in
