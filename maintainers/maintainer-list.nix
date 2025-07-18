@@ -1445,6 +1445,11 @@
     githubId = 5149377;
     name = "Amine Chikhaoui";
   };
+  amiryal = {
+    name = "Amir Yalon";
+    email = "nixpkgs-maintainer@please.nospammail.net";
+    githubId = 105565;
+  };
   amorsillo = {
     email = "andrew.morsillo@gmail.com";
     github = "evelant";
