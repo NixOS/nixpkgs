@@ -26,6 +26,7 @@
   trace ? false,
   enableWarnings ? true,
   checkMeta ? true,
+  tryEval ? true,
   path ? ./../..,
 }:
 let
@@ -99,7 +100,9 @@ let
       tried = builtins.tryEval seq;
 
       result =
-        if tried.success then
+        if !tryEval && path != [ "AAAAAASomeThingsFailToEvaluate" ] then
+          seq
+        else if tried.success then
           tried.value
         else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ] then
           lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" [ ]

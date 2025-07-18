@@ -65,7 +65,8 @@ let
             --option restrict-eval true \
             --option allow-import-from-derivation false \
             --option eval-system "${evalSystem}" \
-            --arg enableWarnings false > $out/paths.json
+            --arg tryEval ${if evalSystem == "x86_64-linux" then "false" else "true"} \
+            --arg enableWarnings true > $out/paths.json
       '';
 
   singleSystem =
