@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   makeWrapper,
   pkg-config,
   kronosnet,
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2025-30472.patch";
+      url = "https://github.com/corosync/corosync/commit/7839990f9cdf34e55435ed90109e82709032466a.patch??full_index=1";
+      hash = "sha256-EgGTfOM9chjLnb1QWNGp6IQQKQGdetNkztdddXlN/uo=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
