@@ -1,0 +1,31 @@
+diff --git a/cmd/version/version.go b/cmd/version/version.go
+index 9945f53b..ea180336 100644
+--- a/cmd/version/version.go
++++ b/cmd/version/version.go
+@@ -4,8 +4,8 @@ import (
+ 	"fmt"
+ 
+ 	"github.com/kubescape/kubescape/v3/core/meta"
++	"github.com/kubescape/kubescape/v3/core/cautils"
+ 
+-	"github.com/kubescape/backend/pkg/versioncheck"
+ 	"github.com/spf13/cobra"
+ )
+ 
+@@ -15,15 +15,9 @@ func GetVersionCmd(ks meta.IKubescape) *cobra.Command {
+ 		Short: "Get current version",
+ 		Long:  ``,
+ 		RunE: func(cmd *cobra.Command, args []string) error {
+-			v := versioncheck.NewIVersionCheckHandler(ks.Context())
+-			versionCheckRequest := versioncheck.NewVersionCheckRequest("", versioncheck.BuildNumber, "", "", "version", nil)
+-			if err := v.CheckLatestVersion(ks.Context(), versionCheckRequest); err != nil {
+-				return err
+-			}
+-
+ 			fmt.Fprintf(cmd.OutOrStdout(),
+ 				"Your current version is: %s\n",
+-				versionCheckRequest.ClientVersion,
++				cautils.BuildNumber,
+ 			)
+ 			return nil
+ 		},
