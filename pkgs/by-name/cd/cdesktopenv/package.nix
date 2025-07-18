@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   libX11,
   bison,
-  ksh,
+  mksh,
   perl,
   libXinerama,
   libXt,
@@ -33,16 +33,22 @@
   flex,
   libXpm,
   rpcsvc-proto,
+  sessreg,
+  pkg-config,
+  lmdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cde";
-  version = "2.5.1";
+  version = "2.5.2-23-gbb0a127a8";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cdesktopenv/cde-${version}.tar.gz";
-    hash = "sha256-caslezz2kbljwApv5igDPH345PK2YqQUTi1YZgvM1Dw=";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/cdesktopenv/code";
+    rev = "bb0a127a847f21de400bef038ff6a9c2153096c4";
+    hash = "sha256-57m7m5fvkstSnuNnEU2Y51uwgyvbTZ4IV6c4kj51PA4=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/cde";
 
   postPatch = ''
     for f in $(find . -type f ! -path doc/common); do
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace configure.ac \
-      --replace "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
+      --replace-warn "-I/usr/include/tirpc" "-I${libtirpc.dev}/include/tirpc"
 
     patchShebangs autogen.sh config.rpath contrib programs
   '';
@@ -82,9 +88,11 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     tcl
     libXaw
-    ksh
+    mksh
     libxcrypt
     libXpm
+    sessreg
+    lmdb
   ];
   nativeBuildInputs = [
     bison
@@ -100,6 +108,7 @@ stdenv.mkDerivation rec {
     perl
     flex
     rpcsvc-proto
+    pkg-config
   ];
 
   enableParallelBuilding = true;
@@ -116,11 +125,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/dt/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Common Desktop Environment";
     homepage = "https://sourceforge.net/projects/cdesktopenv/";
-    license = licenses.lgpl2;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
   };
-}
+})
