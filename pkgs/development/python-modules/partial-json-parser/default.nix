@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "partial-json-parser";
-  version = "0.2.1.1.post5";
+  version = "0.2.1.1.post6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "partial_json_parser";
     inherit version;
-    hash = "sha256-mScQrGfpCzZ5IdUnJ2mJKAQPdxO6fsszuWNx6nrsgso=";
+    hash = "sha256-Q4lraJKWeCJMu+SISmpf6SUd7UswuLfX61aeX+6pOvw=";
   };
 
   build-system = [ pdm-backend ];
