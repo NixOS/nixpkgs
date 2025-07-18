@@ -1,27 +1,29 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
   autoreconfHook,
+  fetchFromGitHub,
+  lib,
   libpq,
+  nix-update-script,
   openssl,
+  stdenv,
+
   withLibiodbc ? false,
   libiodbc,
+
   withUnixODBC ? true,
   unixODBC,
 }:
 
 assert lib.xor withLibiodbc withUnixODBC;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psqlodbc";
-  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL-" src.tag)}";
+  version = "17.00.0002";
 
   src = fetchFromGitHub {
     owner = "postgresql-interfaces";
     repo = "psqlodbc";
-    tag = "REL-17_00_0002";
+    tag = "REL-${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
   };
 
@@ -39,15 +41,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  passthru =
-    {
-      updateScript = nix-update-script { };
-    }
-    // lib.optionalAttrs withUnixODBC {
-      fancyName = "PostgreSQL";
-      driver = "lib/psqlodbcw.so";
-    };
-
   configureFlags =
     [
       "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
@@ -56,11 +49,22 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
     ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
-  meta = with lib; {
+  passthru =
+    {
+      updateScript = nix-update-script {
+        extraArgs = [ "--version-regex=^REL-(\\d+)_(\\d+)_(\\d+)$" ];
+      };
+    }
+    // lib.optionalAttrs withUnixODBC {
+      fancyName = "PostgreSQL";
+      driver = "lib/psqlodbcw.so";
+    };
+
+  meta = {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
     teams = libpq.meta.teams;
   };
-}
+})
