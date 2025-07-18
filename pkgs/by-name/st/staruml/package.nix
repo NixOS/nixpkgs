@@ -60,12 +60,12 @@ let
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.3.3";
+  version = "6.3.4";
   pname = "staruml";
 
   src = fetchurl {
     url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-WCsMWbQ0V76EOwlZaqpeczGg6qQFz7xCfyMxZ3F1w/o=";
+    sha256 = "sha256-Qo5hBdVl/pDBkfBYhNF31P3Tii/V6Iczc7BOvagxjxE=";
   };
 
   nativeBuildInputs = [
