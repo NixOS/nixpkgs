@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "openant-unstable";
-  version = "1.3.1";
+  version = "1.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Tigge";
     repo = "openant";
     tag = "v${version}";
-    hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
+    hash = "sha256-XUPL2BJQnQNUX105d342TLiGI28kc+iZ6oRofO0VLjk=";
   };
 
   nativeBuildInputs = [
