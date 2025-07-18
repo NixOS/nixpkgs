@@ -6,8 +6,8 @@
   pathspec,
   pytestCheckHook,
   pyyaml,
+  pythonAtLeast,
 }:
-
 buildPythonPackage rec {
   pname = "ssort";
   version = "0.14.0";
@@ -19,6 +19,8 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-TINktjuTdyRYkqIs3Jyv6vobSBqV1iPoHrG36sBHah8=";
   };
+
+  disabled = pythonAtLeast "3.13"; # Python 3.13 has introduced new builtin functions. ssort 0.14 does not know how to correctly sort python>=3.13 source code.
 
   build-system = [ setuptools ];
 
