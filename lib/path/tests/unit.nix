@@ -15,7 +15,7 @@ let
   # This is not allowed generally, but we're in the tests here, so we'll allow ourselves.
   storeDirPath = /. + builtins.storeDir;
 
-  cases = lib.runTests {
+  failures = lib.runTests {
     # Test examples from the lib.path.append documentation
     testAppendExample1 = {
       expr = append /foo "bar/baz";
@@ -326,7 +326,6 @@ let
     };
   };
 in
-if cases == [ ] then
-  "Unit tests successful"
-else
-  throw "Path unit tests failed: ${lib.generators.toPretty { } cases}"
+lib.debug.throwTestFailures {
+  inherit failures;
+}
