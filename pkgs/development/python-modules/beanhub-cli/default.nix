@@ -10,10 +10,11 @@
   beancount-parser,
   beanhub-forms,
   beanhub-import,
+  beanhub-inbox,
   click,
   fastapi,
+  hatchling,
   jinja2,
-  poetry-core,
   pydantic-settings,
   pydantic,
   pyyaml,
@@ -31,15 +32,16 @@
   tomli,
 
   # tests
-  pytest,
   pytest-asyncio,
+  pytest-factoryboy,
   pytest-httpx,
   pytest-mock,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "beanhub-cli";
-  version = "2.1.1";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -48,56 +50,46 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-cli";
     tag = version;
-    hash = "sha256-mGLg6Kgur2LAcujFzO/rkSPAC2t3wR5CO2AeOO0+bFI=";
+    hash = "sha256-hreVGsptCGW6L3rj6Ec8+lefZWpQ4tZtUEJI+NxTO7w=";
   };
 
   pythonRelaxDeps = [
     "rich"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    attrs
     beancount-black
     beancount-parser
     beanhub-forms
     beanhub-import
+    beanhub-inbox
     click
+    cryptography
     fastapi
+    httpx
     jinja2
     pydantic
     pydantic-settings
+    pynacl
+    python-dateutil
     pyyaml
     rich
     starlette-wtf
+    tomli
+    tomli-w
     uvicorn
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  optional-dependencies = {
-    login = [
-      attrs
-      httpx
-      python-dateutil
-      tomli
-      tomli-w
-    ];
-    connect = [
-      attrs
-      cryptography
-      httpx
-      pynacl
-      python-dateutil
-      tomli
-      tomli-w
-    ];
-  };
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-factoryboy
     pytest-httpx
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ];
 
   pythonImportsCheck = [ "beanhub_cli" ];
 
