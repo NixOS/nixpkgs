@@ -7,7 +7,7 @@ end
 source 'https://rubygems.org'
 
 if ENV.fetch('BUNDLER_CHECKSUM_VERIFICATION_OPT_IN', 'false') != 'false' # this verification is still experimental
-  $LOAD_PATH.unshift(File.expand_path("vendor/gems/bundler-checksum/lib", __dir__))
+  $LOAD_PATH.unshift(File.expand_path("gems/bundler-checksum/lib", __dir__))
   require 'bundler-checksum'
   BundlerChecksum.patch!
 end
@@ -21,7 +21,7 @@ end
 
 extend ignore_feature_category
 
-gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', require: false, feature_category: :shared
+gem 'bundler-checksum', '~> 0.1.0', path: 'gems/bundler-checksum', require: false, feature_category: :shared
 
 # See https://docs.gitlab.com/ee/development/gemfile.html#upgrade-rails for guidelines when upgrading Rails
 
@@ -37,7 +37,7 @@ gem 'mutex_m', '~> 0.3', feature_category: :shared
 # Need by Rails
 gem 'drb', '~> 2.2', feature_category: :shared
 
-gem 'bootsnap', '~> 1.18.3', require: false, feature_category: :shared
+gem 'bootsnap', '~> 1.18.6', require: false, feature_category: :shared
 
 # Avoid the precompiled native gems because Omnibus needs to build this to ensure
 # LD_LIBRARY_PATH is correct: https://gitlab.com/gitlab-org/omnibus-gitlab/-/merge_requests/7730
@@ -344,9 +344,6 @@ gem 'atlassian-jwt', '~> 0.2.1', feature_category: :integrations
 # Slack integration
 gem 'slack-messenger', '~> 2.3.5', feature_category: :integrations
 
-# FogBugz integration
-gem 'ruby-fogbugz', '~> 0.3.0', feature_category: :importers
-
 # Kubernetes integration
 gem 'kubeclient', '~> 4.11.0', feature_category: :shared
 
@@ -404,7 +401,7 @@ gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation', feature_c
 gem 'gitlab-http', path: 'gems/gitlab-http', feature_category: :shared
 
 gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
-gem 'gitlab-labkit', '~> 0.37.0', feature_category: :shared
+gem 'gitlab-labkit', '~> 0.39.0', feature_category: :shared
 gem 'thrift', '>= 0.16.0', feature_category: :shared
 
 # I18n
@@ -422,10 +419,6 @@ gem 'tty-prompt', '~> 0.23', require: false, feature_category: :shared
 # Perf bar
 gem 'peek', '~> 1.1', feature_category: :shared
 
-# Google Cloud Profiler support
-gem 'cloud_profiler_agent', '~> 0.0.0', path: 'vendor/gems/cloud_profiler_agent', require: false,
-  feature_category: :shared
-
 # Snowplow events trackin
 gem 'snowplow-tracker', '~> 0.8.0', feature_category: :product_analytics
 
@@ -438,7 +431,7 @@ gem 'prometheus-client-mmap', '~> 1.2.9', require: 'prometheus/client', feature_
 gem 'async', '~> 2.24.0', require: false, feature_category: :shared
 
 # Security report schemas used to validate CI job artifacts of security jobs
-gem 'gitlab-security_report_schemas', '0.1.2.min15.0.0.max15.2.1', feature_category: :vulnerability_management
+gem 'gitlab-security_report_schemas', '0.1.3.min15.0.0.max15.2.2', feature_category: :vulnerability_management
 
 # OpenTelemetry
 group :opentelemetry do
@@ -515,7 +508,7 @@ group :development, :test do
 
   gem 'database_cleaner-active_record', '~> 2.2.0', feature_category: :database
   gem 'rspec-rails', '~> 7.1.0', feature_category: :shared
-  gem 'factory_bot_rails', '~> 6.4.3', feature_category: :tooling
+  gem 'factory_bot_rails', '~> 6.5.0', feature_category: :tooling
 
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
   gem 'minitest', '~> 5.11.0', feature_category: :shared
@@ -565,7 +558,7 @@ group :development, :test, :coverage do
   gem 'simplecov', '~> 0.22', require: false, feature_category: :tooling
   gem 'simplecov-lcov', '~> 0.8.0', require: false, feature_category: :tooling
   gem 'simplecov-cobertura', '~> 2.1.0', require: false, feature_category: :tooling
-  gem 'undercover', '~> 0.6.0', require: false, feature_category: :tooling
+  gem 'undercover', '~> 0.7.0', require: false, feature_category: :tooling
 end
 
 # Gems required in omnibus-gitlab pipeline
@@ -646,7 +639,7 @@ gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
 gem 'gitaly', '~> 18.1.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 17.11.0', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 18.1.0', feature_category: :deployment_management
 
 # Lock until 1.74.0 is available
 # https://gitlab.com/gitlab-com/gl-infra/production/-/issues/20067
@@ -728,6 +721,7 @@ gem 'arr-pm', '~> 0.0.12', feature_category: :package_registry
 
 # Remote Development
 gem 'devfile', '~> 0.4.4', feature_category: :workspaces
+gem 'hashdiff', '~> 1.2.0', feature_category: :workspaces
 
 # Apple plist parsing
 gem 'CFPropertyList', '~> 3.0.0', feature_category: :mobile_devops
@@ -758,4 +752,4 @@ gem 'paper_trail', '~> 16.0', feature_category: :shared
 
 gem "i18n_data", "~> 0.13.1", feature_category: :system_access
 
-gem "gitlab-cloud-connector", "~> 1.14", require: 'gitlab/cloud_connector', feature_category: :cloud_connector
+gem "gitlab-cloud-connector", "~> 1.21", require: 'gitlab/cloud_connector', feature_category: :plan_provisioning
