@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix curl jq nixfmt-rfc-style
+#!nix-shell -i bash -p cabal2nix curl jq
 
 set -euo pipefail
 

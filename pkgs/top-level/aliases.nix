@@ -1412,7 +1412,13 @@ mapAliases {
   nixStable = nixVersions.stable; # Added 2022-01-24
   nixUnstable = throw "nixUnstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest."; # Converted to throw 2024-04-22
   nix_2_3 = nixVersions.nix_2_3;
-  nixfmt = lib.warnOnInstantiate "nixfmt was renamed to nixfmt-classic. The nixfmt attribute may be used for the new RFC 166-style formatter in the future, which is currently available as nixfmt-rfc-style" nixfmt-classic; # Added 2024-03-31
+  nixfmt-rfc-style =
+    if lib.oldestSupportedReleaseIsAtLeast 2511 then
+      lib.warnOnInstantiate
+        "nixfmt-rfc-style is now the same as pkgs.nixfmt which should be used instead."
+        nixfmt # Added 2025-07-14
+    else
+      nixfmt;
 
   # When the nixops_unstable alias is removed, nixops_unstable_minimal can be renamed to nixops_unstable.
 

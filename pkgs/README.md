@@ -940,7 +940,8 @@ Update scripts are to be invoked by the [automatic package update script](../mai
 You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it.
 `update.nix` offers several modes for selecting packages to update, and it will execute update scripts for all matched packages that have an `updateScript` attribute.
 
-Each update script will be passed the following environment variables:
+Update scripts will be run inside the [Nixpkgs development shell](../shell.nix), providing access to some useful tools for CI.
+Furthermore each update script will be passed the following environment variables:
 
 - [`UPDATE_NIX_NAME`] – content of the `name` attribute of the updated package
 - [`UPDATE_NIX_PNAME`] – content of the `pname` attribute of the updated package

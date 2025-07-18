@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
   nix-update-script,
 }:
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     CFG_RELEASE = version;
-    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt-rfc-style;
+    CFG_DEFAULT_FORMATTER = lib.getExe nixfmt;
   };
 
   # might be related to https://github.com/NixOS/nix/issues/5884
