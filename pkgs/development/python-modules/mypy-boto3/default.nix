@@ -1087,7 +1087,7 @@ in rec {
     "sha256-bX6nxgcmAQudjbMK53TAtaJUx/GM0F4t7CXIsWaE64E=";
 
   mypy-boto3-synthetics = buildMypyBoto3Package "synthetics" "1.39.0"
-    "sha256-nDL0trCi65U88Fs7hPm7i71aBxDR8hZ54Z1KwmAmvA8=";
+    "sha256-oEWsMardjPV3ZlyStCdvZxDaKxE4ewq4MYiO6xAxuN4=";
 
   mypy-boto3-textract = buildMypyBoto3Package "textract" "1.39.0"
     "sha256-lf9f2Ax02hCkjp/+iHnYbMoGyWnAL/zn/FfSo1nSITs=";
