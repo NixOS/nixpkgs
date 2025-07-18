@@ -9,7 +9,7 @@ let
   pkg = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "mobile-config-firefox";
-    rev = "3fbea365e9ea7bcd317d5d4ef7723f994bbdc381";
+    rev = "4.6.0";
     hash = "sha256-pgDMXnEdQg7d1lfGym4V+tsi6JAMgMVGI5ozSu0j0og=";
   };
   mobileConfigDir = runCommand "mobile-config-firefox" { } ''
