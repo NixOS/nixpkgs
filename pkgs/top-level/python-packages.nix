@@ -6162,6 +6162,12 @@ self: super: with self; {
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
+  gramps = callPackage ../development/python-modules/gramps { };
+
+  gramps-ql = callPackage ../development/python-modules/gramps-ql { };
+
+  gramps-web-api = callPackage ../development/python-modules/gramps-web-api { };
+
   grandalf = callPackage ../development/python-modules/grandalf { };
 
   granian = callPackage ../development/python-modules/granian { };
@@ -10519,6 +10525,8 @@ self: super: with self; {
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
   objax = callPackage ../development/python-modules/objax { };
+
+  object-ql = callPackage ../development/python-modules/object-ql { };
 
   objexplore = callPackage ../development/python-modules/objexplore { };
 
@@ -16308,6 +16316,8 @@ self: super: with self; {
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
 
   sievelib = callPackage ../development/python-modules/sievelib { };
+
+  sifts = callPackage ../development/python-modules/sifts { };
 
   signalslot = callPackage ../development/python-modules/signalslot { };
 
