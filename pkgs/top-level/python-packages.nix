@@ -15951,6 +15951,8 @@ self: super: with self; {
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
 
+  scalar-fastapi = callPackage ../development/python-modules/scalar-fastapi { };
+
   scalene = callPackage ../development/python-modules/scalene { };
 
   scales = callPackage ../development/python-modules/scales { };
