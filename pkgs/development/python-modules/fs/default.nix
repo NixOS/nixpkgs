@@ -12,6 +12,7 @@
   pytz,
   setuptools,
   six,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -46,13 +47,10 @@ buildPythonPackage rec {
     mock
     psutil
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   LC_ALL = "en_US.utf-8";
-
-  preCheck = ''
-    HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # Circular dependency with parameterized
