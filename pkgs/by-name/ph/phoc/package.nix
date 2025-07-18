@@ -4,6 +4,7 @@
   stdenvNoCC,
   fetchFromGitLab,
   meson,
+  cacert,
   ninja,
   pkg-config,
   python3,
@@ -19,17 +20,18 @@
   wayland,
   libdrm,
   libxkbcommon,
-  wlroots_0_17,
+  wlroots_0_19,
   xorg,
   directoryListingUpdater,
   nixosTests,
   testers,
   gmobile,
+  git,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.44.1";
+  version = "0.48.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -37,7 +39,25 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Whke7wTRp5NaRauiiQZLjs0pSD1uAyr0aAhlK5e1+Hw=";
+    hash = "sha256-hyepFyXlZd9Qs8PRNpesiANj81Ea2PjoGMUvCiBlM+k=";
+
+    # https://discourse.nixos.org/t/best-practices-for-meson-wrapped-subprojects-with-patches/26845/4
+
+    nativeBuildInputs = [
+      meson
+      ninja
+      git
+      cacert
+      pkg-config
+    ];
+
+    postFetch = ''
+      (
+        cd "$out"
+        meson subprojects download "$(basename "gvdb" .wrap)"
+        rm -rf subprojects/$(basename "gvdb" .wrap)/.git
+      )
+    '';
   };
 
   nativeBuildInputs = [
@@ -66,11 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     gmobile
   ];
 
-  mesonFlags = [ "-Dembed-wlroots=disabled" ];
+  mesonFlags = [
+    "-Dembed-wlroots=disabled"
+  ];
 
-  # Patch wlroots to remove a check which crashes Phosh.
-  # This patch can be found within the phoc source tree.
-  wlroots = wlroots_0_17.overrideAttrs (old: {
+  mesonInstallFlags = [
+    "--skip-subprojects"
+  ];
+
+  # Apply vendored patches for wlroots
+
+  wlroots = wlroots_0_19.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";

@@ -1,0 +1,108 @@
+From 649ea7ca0359f6b25d3bfa6e6b790c3287413e87 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Mon, 19 May 2025 16:48:24 +0200
+Subject: [PATCH] nixos: Use XDG_DATA_DIRS instead of hardcoded paths to
+ sessions
+
+---
+ Cargo.lock      |  7 +++++++
+ Cargo.toml      |  1 +
+ src/sessions.rs | 40 +++++++++++++++++++++++++++++++++-------
+ 3 files changed, 41 insertions(+), 7 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index bd9ee40..9afa306 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -940,6 +940,12 @@ version = "1.0.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
+ 
++[[package]]
++name = "lazy_static"
++version = "1.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
++
+ [[package]]
+ name = "libc"
+ version = "0.2.158"
+@@ -1124,6 +1130,7 @@ dependencies = [
+  "greetd_ipc",
+  "gtk",
+  "input-event-codes",
++ "lazy_static",
+  "libhandy",
+  "libphosh",
+  "log",
+diff --git a/Cargo.toml b/Cargo.toml
+index d963e09..a25f513 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -16,6 +16,7 @@ nix = { version = "0.29", features = ["signal"] }
+ async-global-executor = "2.4.1"
+ futures-util = "0.3.30"
+ log = "0.4.22"
++lazy_static = "^1.4"
+ 
+ [dependencies.glib]
+ version = "0.18"
+diff --git a/src/sessions.rs b/src/sessions.rs
+index d12198c..79a2b3c 100644
+--- a/src/sessions.rs
++++ b/src/sessions.rs
+@@ -3,18 +3,44 @@ use glib::warn;
+ use glob::glob;
+ use gtk::gio::DesktopAppInfo;
+ use gtk::prelude::*;
+-use std::collections::HashMap;
++use lazy_static::lazy_static;
++use std::{
++  collections::HashMap,
++  path::{Path, PathBuf},
++  env,
++};
+ 
+ static G_LOG_DOMAIN: &str = "phrog-sessions";
+ 
++lazy_static! {
++    // Snippet copied from https://github.com/apognu/tuigreet
++
++    static ref XDG_DATA_DIRS: Vec<PathBuf> = {
++        let value = env::var("XDG_DATA_DIRS").unwrap_or("/usr/local/share:/usr/share".to_string());
++        env::split_paths(&value).filter(|p| p.is_absolute()).collect()
++    };
++}
++
+ pub fn sessions() -> Vec<SessionObject> {
+     let mut sessions = HashMap::new();
+-    session_list(
+-        "/usr/share/wayland-sessions/*.desktop",
+-        "wayland",
+-        &mut sessions,
+-    );
+-    session_list("/usr/share/xsessions/*.desktop", "x11", &mut sessions);
++
++    for DIR in XDG_DATA_DIRS.iter() {
++        let wl_dir = DIR.join("wayland-sessions/*.desktop");
++        let x11_dir = DIR.join("wayland-sessions/*.desktop");
++
++        session_list(
++            &wl_dir.into_os_string().into_string().unwrap(),
++            "wayland",
++            &mut sessions,
++        );
++
++        session_list(
++            &x11_dir.into_os_string().into_string().unwrap(),
++            "wayland",
++            &mut sessions,
++        );        
++    };
++
+     sessions.values().cloned().collect()
+ }
+ 
+-- 
+2.49.0
+
