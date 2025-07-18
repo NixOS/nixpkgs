@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     data = ./. + "/${featureVersion}/deps.json";
   };
 
-  gradleBuildTask = "sdk";
+  gradleBuildTask = "jmods";
 
   stripDebugList = [ "." ];
 
@@ -145,6 +145,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     cp -r build/modular-sdk $out
+    cp -r build/jmods $out/jmods
   '';
 
   postFixup = ''
