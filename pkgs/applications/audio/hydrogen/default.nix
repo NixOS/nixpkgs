@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
+    sha256 = "sha256-omphX01SAMPve4khG3vK+P6lmf/fZZ6jMC2IIaKMKkY=";
   };
 
   nativeBuildInputs = [
