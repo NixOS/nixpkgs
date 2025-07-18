@@ -8,7 +8,8 @@ For new packages please briefly describe the package or provide a link to its ho
 
 ## Things done
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!-- Please check what applies. These will apply to most PRs that add/modify a single package. Note that these are not
+hard requirements but merely serve as information for reviewers. -->
 
 - Built on platform(s)
   - [ ] x86_64-linux
@@ -18,19 +19,31 @@ For new packages please briefly describe the package or provide a link to its ho
 - For non-Linux: Is sandboxing enabled in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
   - [ ] `sandbox = relaxed`
   - [ ] `sandbox = true`
+- [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md), [pkgs/README.md](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md), [maintainers/README.md](https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md) and other contributing documentation in corresponding paths.
+- [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
+
+---
+<!--
+  These are more niche processes, that are likely to apply to you if you're:
+
+  1. Making a major/breaking change to nixpkgs
+  2. Modifying a package that many other packages depend on
+  3. Modifying/adding a NixOS module
+
+  It may be that none of these processes are relevant to your PR. If so, simply leave them all blank.
+-->
+
+- [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
 - [ ] Tested, as applicable:
   - [NixOS test(s)](https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests) (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
   - and/or [package tests](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests)
   - or, for functions and "core" functionality, tests in [lib/tests](https://github.com/NixOS/nixpkgs/blob/master/lib/tests) or [pkgs/test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/test)
   - made sure NixOS tests are [linked](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#linking-nixos-module-tests-to-a-package) to the relevant packages
-- [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
-- [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
 - [Nixpkgs 25.11 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/doc/release-notes/rl-2511.section.md) (or backporting [25.05](https://github.com/NixOS/nixpkgs/blob/master/doc/manual/release-notes/rl-2505.section.md) Nixpkgs Release notes)
   - [ ] (Package updates) Added a release notes entry if the change is major or breaking
 - [NixOS 25.11 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2511.section.md) (or backporting [25.05](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md) NixOS Release notes)
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
-- [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md), [pkgs/README.md](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md), [maintainers/README.md](https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md) and other contributing documentation in corresponding paths.
 
 <!--
 To help with the large amounts of pull requests, we would appreciate your
