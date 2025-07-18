@@ -77,6 +77,19 @@ in
         Porkbun's control panel.
       '';
     };
+    environmentFile = lib.mkOption {
+      description = ''
+        Environment file to be passed to the systemd service.
+
+        Useful for passing secrets to the service to prevent them from
+        being world-readable in the Nix store. In order to set your API
+        keys for Porkbun, ensure `OINK_OVERRIDE_SECRETAPIKEY` and
+        `OINK_OVERRIDE_APIKEY` are both set.
+      '';
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/var/lib/secrets/oinkSecrets";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -85,6 +98,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${cfg.package}/bin/oink -c ${oinkConfig}";
+      serviceConfig.EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
     };
   };
 }
