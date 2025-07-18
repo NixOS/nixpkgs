@@ -18,6 +18,10 @@ let
     port
     ;
 
+  # Dynamic user doesn't play well with prefect
+  # It has assets that needs to change ownership
+  # On every version update.
+  defaultUser = "prefect";
 in
 {
   options.services.prefect = {
@@ -94,6 +98,12 @@ in
       '';
     };
 
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = defaultUser;
+      description = "User under which Paperless runs.";
+    };
+
     # now define workerPools as an attribute set of submodules,
     # each key is the pool name, and the submodule has an installPolicy
     workerPools = lib.mkOption {
@@ -135,6 +145,18 @@ in
           description = "prefect server";
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
+
+          users = lib.optionalAttrs (cfg.user == defaultUser) {
+            users.${defaultUser} = {
+              group = defaultUser;
+              uid = config.ids.uids.prefect;
+              home = cfg.dataDir;
+            };
+
+            groups.${defaultUser} = {
+              gid = config.ids.gids.prefect;
+            };
+          };
 
           serviceConfig = {
             DynamicUser = true;
