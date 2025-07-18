@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ];
 
   preCheck = ''
     export HOME=$TMP
