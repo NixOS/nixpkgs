@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
     xmlto
     docbook_xml_dtd_45
     docbook_xsl
-    valgrind
     sourceHighlight
     flex
     bison
@@ -67,8 +66,14 @@ stdenv.mkDerivation rec {
     "docs"
   ];
 
-  doCheck = true;
+  doCheck = lib.meta.availableOn stdenv.hostPlatform valgrind;
+
+  nativeCheckInputs = [ valgrind ];
   checkInputs = [ cunit ];
+
+  mesonCheckFlags = [
+    "--wrapper=valgrind"
+  ];
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
