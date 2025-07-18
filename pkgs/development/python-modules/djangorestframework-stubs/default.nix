@@ -3,6 +3,7 @@
   buildPythonPackage,
   django-stubs,
   fetchFromGitHub,
+  fetchpatch,
   mypy,
   py,
   coreapi,
@@ -30,6 +31,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-q/9tCMT79TMHIQ4KH8tiunaTt7L6IItwNYBFlbNxBcE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "revert-restrict-setuptools-version-to-79.0.0.patch";
+      url = "https://github.com/typeddjango/djangorestframework-stubs/pull/756.patch";
+      revert = true;
+      hash = "sha256-I2emAer75bwPrEYwH02QoVjekZ27Yp00PVDgKQII8Fo=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
