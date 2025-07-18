@@ -78,14 +78,87 @@ in
           else
             pkgs.buildPackages.man-db;
 
+        generateMandb =
+          package:
+          pkgs.runCommand
+            (
+              with lib.strings;
+              let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in
+              (package.name or pathName) + "_man-db"
+            )
+            (
+              {
+                nativeBuildInputs = [ buildPackage ];
+                preferLocalBuild = true;
+              }
+              // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
+            )
+            ''
+              mkdir -p $out
+              if [ -d ${package}/share/man ]; then
+                echo "MANDB_MAP ${package}/share/man $out" > man.conf
+                mandb -C man.conf -psc >/dev/null 2>&1
+              fi
+            '';
+
+        extraOutputsToInstall = [ "man" ] ++ lib.optionals config.documentation.dev.enable [ "devman" ];
+
         manualCache =
-          pkgs.runCommand "man-cache"
+          pkgs.runCommand "merged-system-man-db"
             {
-              nativeBuildInputs = [ buildPackage ];
+              # TODO: use cfg.manualPages
+              packages = lib.pipe config.environment.systemPackages [
+                (lib.subtractLists cfg.skipPackages)
+
+                # chosenOutputs from pkgs.buildEnv
+                (builtins.map (drv: {
+                  paths =
+                    # First add the usual output(s): respect if user has chosen explicitly,
+                    # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
+                    # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
+                    # aren't expected to have multiple outputs.
+                    (
+                      if
+                        (!drv ? outputSpecified || !drv.outputSpecified) && drv.meta.outputsToInstall or null != null
+                      then
+                        map (outName: drv.${outName}) drv.meta.outputsToInstall
+                      else
+                        [ drv ]
+                    )
+                    # Add any extra outputs specified by the caller of `buildEnv`.
+                    ++ lib.filter (p: p != null) (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+                  priority = drv.meta.priority or lib.meta.defaultPriority;
+                }))
+
+                # reverse sort on priority so that man pages from higher priority packages are processed last
+                lib.sortProperties
+                lib.reverseList
+
+                (builtins.map (p: p.paths))
+                lib.lists.flatten
+
+                lib.unique
+                (builtins.map generateMandb)
+              ];
+
+              nativeBuildInputs = [
+                pkgs.findutils
+                pkgs.gdbm
+              ];
             }
             ''
-              echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-              mandb -C man.conf -psc >/dev/null 2>&1
+              # don't fail if there are no man pages
+              mkdir -p $out
+
+              for in in $packages; do
+                find "$in" -type f -name index.db -printf '%P\n' | while IFS="" read -r db; do
+                  mkdir -p "$out/$(dirname $db)"
+                  gdbm_dump "$in/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
+                done
+              done
             '';
       in
       ''
