@@ -90,8 +90,9 @@ let
             xargs -0 patchelf --add-needed libssl.so --add-rpath "${lib.makeLibraryPath [ openssl ]}"
         '';
 
-        passthru = old.passthru or { } // {
-          fetch-deps =
+        passthru =
+          old.passthru or { }
+          // (
             let
               inherit (vmr) targetRid updateScript;
               otherRids = lib.remove targetRid (
@@ -138,37 +139,40 @@ let
 
               drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
             in
-            writeShellScript "fetch-dotnet-sdk-deps" ''
-              ${nix}/bin/nix-shell --pure --run 'source /dev/stdin' "${drv}" << 'EOF'
-              set -e
+            {
+              fetch-drv = drv;
+              fetch-deps = writeShellScript "fetch-dotnet-sdk-deps" ''
+                ${nix}/bin/nix-shell --pure --run 'source /dev/stdin' "${drv}" << 'EOF'
+                set -e
 
-              tmp=$(mktemp -d)
-              trap 'rm -fr "$tmp"' EXIT
+                tmp=$(mktemp -d)
+                trap 'rm -fr "$tmp"' EXIT
 
-              HOME=$tmp/.home
-              cd "$tmp"
+                HOME=$tmp/.home
+                cd "$tmp"
 
-              phases="''${prePhases[*]:-} unpackPhase patchPhase ''${preConfigurePhases[*]:-} \
-                configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
-                genericBuild
+                phases="''${prePhases[*]:-} unpackPhase patchPhase ''${preConfigurePhases[*]:-} \
+                  configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
+                  genericBuild
 
-              # intentionally after calling stdenv
-              set -Eeuo pipefail
-              shopt -s nullglob
+                # intentionally after calling stdenv
+                set -Eeuo pipefail
+                shopt -s nullglob
 
-              depsFiles=(./src/*/deps.json)
+                depsFiles=(./src/*/deps.json)
 
-              combined=$(nix-build ${toString ./combine-deps.nix} \
-                --arg list "[ ''${depsFiles[*]} ]" \
-                --argstr baseRid ${targetRid} \
-                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
+                combined=$(nix-build ${toString ./combine-deps.nix} \
+                  --arg list "[ ''${depsFiles[*]} ]" \
+                  --argstr baseRid ${targetRid} \
+                  --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
 
-              jq . "$combined" > deps.json
+                jq . "$combined" > deps.json
 
-              mv deps.json "${toString prebuiltPackages.sourceFile}"
-              EOF
-            '';
-        };
+                mv deps.json "${toString prebuiltPackages.sourceFile}"
+                EOF
+              '';
+            }
+          );
       });
 in
 mkPackages { inherit baseName vmr; }
