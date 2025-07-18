@@ -33,18 +33,20 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-9BsEEcdFYs9SSgL749Zhau34uieyOQry/g3wo/oW0DA=";
 
-  postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail 'npm run install:esbuild && ' "" \
-      --replace-fail 'npm run install:electron && ' ""
+  postPatch =
+    ''
+      substituteInPlace package.json \
+        --replace-fail 'npm run install:esbuild && ' "" \
+        --replace-fail 'npm run install:electron && ' ""
 
-    substituteInPlace .electron-builder.config.mjs \
-      --replace-fail 'AppImage' 'dir'
-
+      substituteInPlace .electron-builder.config.mjs \
+        --replace-fail 'AppImage' 'dir'
+    ''
     # Workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace src/background/window/path.ts \
-      --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
-  '';
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace src/background/window/path.ts \
+        --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
+    '';
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
