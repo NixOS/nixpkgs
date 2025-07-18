@@ -23,9 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
   };
 
-  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "-std=c++14" "-std=c++17"
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
+    '';
 
   strictDeps = true;
 
