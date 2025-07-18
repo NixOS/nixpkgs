@@ -8,11 +8,6 @@ let
   imcfg = config.i18n.inputMethod;
   cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = lib.types.mkOptionType {
-    name = "ibus-engine";
-    inherit (lib.types.package) descriptionClass merge;
-    check = x: (lib.types.package.check x) && (lib.attrByPath [ "meta" "isIbusEngine" ] false x);
-  };
 
   impanel = lib.optionalString (cfg.panel != null) "--panel=${cfg.panel}";
 
@@ -40,7 +35,7 @@ in
   options = {
     i18n.inputMethod.ibus = {
       engines = lib.mkOption {
-        type = with lib.types; listOf ibusEngine;
+        type = with lib.types; listOf package;
         default = [ ];
         example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
