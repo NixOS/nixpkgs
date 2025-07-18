@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.18.0";
+  version = "0.20.2";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${version}";
-    hash = "sha256-79HHJeAP3pnM/KAdGsGw31MRXl3Qz2ttTvXX+oBCcow=";
+    hash = "sha256-fEd6t+adYI1jpRapZ/XHpxVWtX0nwUl9ZurIwywSFgk=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-N1s6Kf6iy28QcrLQy6TVbXjfSb9KtzJeaKksW4wXsMw=";
+  cargoHash = "sha256-oRcqaXWa/eh5QQtTk0NQr90aL/Q0zgxQbPIoMLMtHe8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
