@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyephember2";
-  version = "0.4.12";
+  version = "2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roberty99";
     repo = "pyephember2";
-    tag = version;
-    hash = "sha256-R63Ts+1620QQOFF8o2/6CFNZi5jAeWTQkElgqZhNA7c=";
+    tag = "Release${version}";
+    hash = "sha256-BxDXjrXPx6UNWo7mGLzbIGtenE0B10x39iCUCzGFAr0=";
   };
 
   build-system = [ setuptools ];
