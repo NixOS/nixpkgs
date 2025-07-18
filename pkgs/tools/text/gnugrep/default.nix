@@ -8,6 +8,7 @@
   libiconv,
   perl,
   runtimeShellPackage,
+  withPrefix ? false,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -17,6 +18,7 @@
 
 let
   version = "3.12";
+  prefix = lib.optionalString withPrefix "g";
 in
 
 stdenv.mkDerivation {
@@ -70,18 +72,19 @@ stdenv.mkDerivation {
   preConfigure = ''
     export MKDIR_P="mkdir -p"
   '';
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
   # absolute path rather than looking at argv[0].
   postInstall = ''
-    rm $out/bin/egrep $out/bin/fgrep
-    echo "#! /bin/sh" > $out/bin/egrep
-    echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
-    echo "#! /bin/sh" > $out/bin/fgrep
-    echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
-    chmod +x $out/bin/egrep $out/bin/fgrep
+    rm $out/bin/${prefix}egrep $out/bin/${prefix}fgrep
+    echo "#! /bin/sh" > $out/bin/${prefix}egrep
+    echo "exec $out/bin/${prefix}grep -E \"\$@\"" >> $out/bin/${prefix}egrep
+    echo "#! /bin/sh" > $out/bin/${prefix}fgrep
+    echo "exec $out/bin/${prefix}grep -F \"\$@\"" >> $out/bin/${prefix}fgrep
+    chmod +x $out/bin/${prefix}egrep $out/bin/${prefix}fgrep
   '';
 
   env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
@@ -105,7 +108,7 @@ stdenv.mkDerivation {
       maintainers.m00wl
     ];
     platforms = platforms.all;
-    mainProgram = "grep";
+    mainProgram = prefix + "grep";
   };
 
   passthru = {
