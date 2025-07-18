@@ -1,0 +1,43 @@
+From 4921fbf7168e82a1405a61008412f01721957879 Mon Sep 17 00:00:00 2001
+From: Luke Bailey <baileylu@tcd.ie>
+Date: Tue, 3 Jun 2025 22:20:12 +0100
+Subject: [PATCH] Include demo folder in build for command line package target
+
+---
+ tsconfig.json | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/tsconfig.json b/tsconfig.json
+index 494c2b4..59018de 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -1,9 +1,9 @@
+ {
+   "compilerOptions": {
+-    "rootDir": "src",
++    "rootDir": ".",
+     "target": "es2018",
+     "module": "NodeNext",
+-    "outDir": "./dist/esm" /* Redirect output structure to the directory. */,
++    "outDir": "./dist" /* Redirect output structure to the directory. */,
+     "strict": true /* Enable all strict type-checking options. */,
+     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
+     "declaration": true,
+@@ -12,6 +12,12 @@
+     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
+     "useDefineForClassFields": false
+   },
+-  "include": ["src/**/*.ts"],
+-  "exclude": ["src/**/*.spec.ts"]
++  "include": [
++    "src/**/*.ts",
++    "demo/**/*.ts"
++  ],
++  "exclude": [
++    "src/**/*.spec.ts",
++    "demo/**/*.spec.ts"
++  ]
+ }
+-- 
+2.49.0
+
