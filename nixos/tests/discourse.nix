@@ -29,7 +29,7 @@ in
   _module.args.package = lib.mkDefault pkgs.discourse;
 
   nodes.discourse =
-    { nodes, ... }:
+    { nodes, pkgs, ... }:
     {
       virtualisation.memorySize = 2048;
       virtualisation.cores = 4;
@@ -62,7 +62,7 @@ in
 
       services.discourse = {
         enable = true;
-        inherit admin;
+        inherit admin package;
         hostname = discourseDomain;
         sslCertificate = "${certs.${discourseDomain}.cert}";
         sslCertificateKey = "${certs.${discourseDomain}.key}";
@@ -87,7 +87,7 @@ in
     };
 
   nodes.client =
-    { nodes, ... }:
+    { nodes, pkgs, ... }:
     {
       imports = [ common/user-account.nix ];
 
