@@ -4948,6 +4948,8 @@ self: super: with self; {
 
   fastcore = callPackage ../development/python-modules/fastcore { };
 
+  fastcov = callPackage ../development/python-modules/fastcov { };
+
   fastcrc = callPackage ../development/python-modules/fastcrc { };
 
   fastdiff = callPackage ../development/python-modules/fastdiff { };
