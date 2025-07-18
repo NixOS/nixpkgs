@@ -11666,10 +11666,6 @@ with pkgs;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
-    inherit (libsForQt5) breeze-icons;
-  };
-
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
@@ -12078,8 +12074,6 @@ with pkgs;
       openjfx_jdk = openjfx21.override { withWebKit = true; };
     };
   };
-
-  haruna = kdePackages.callPackage ../applications/video/haruna { };
 
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
@@ -12505,10 +12499,6 @@ with pkgs;
     )
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
-
-  hollywood = callPackage ../applications/misc/hollywood {
-    inherit (python3Packages) pygments;
-  };
 
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
