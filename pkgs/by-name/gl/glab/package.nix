@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  makeBinaryWrapper,
   stdenv,
   nix-update-script,
   writableTmpDirAsHomeHook,
@@ -38,7 +39,7 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeBinaryWrapper ];
 
   subPackages = [ "cmd/glab" ];
 
@@ -49,6 +50,10 @@ buildGoModule (finalAttrs: {
       --bash <($out/bin/glab completion -s bash) \
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
+
+    wrapProgram $out/bin/glab \
+      --set-default GLAB_CHECK_UPDATE 0 \
+      --set-default GLAB_SEND_TELEMETRY 0
   '';
 
   nativeCheckInputs = [
