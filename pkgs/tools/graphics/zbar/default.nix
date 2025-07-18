@@ -106,6 +106,11 @@ stdenv.mkDerivation rec {
     argp-standalone
   ];
 
+  # fix iconv linking on macOS
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="-liconv"
+  '';
+
   # Note: postConfigure instead of postPatch in order to include some
   # autoconf-generated files. The template files for the autogen'd scripts are
   # not chmod +x, so patchShebangs misses them.
