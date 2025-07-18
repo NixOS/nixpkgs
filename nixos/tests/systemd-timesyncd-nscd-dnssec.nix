@@ -44,7 +44,7 @@ in
 
       # Enable systemd-resolved with DNSSEC and use the local DNS as a name server
       services.resolved.enable = true;
-      services.resolved.dnssec = "true";
+      services.resolved.settings.DNSSEC = true;
       networking.nameservers = [ eth1IP ];
 
       # Configure systemd-timesyncd to use our NTP hostname
