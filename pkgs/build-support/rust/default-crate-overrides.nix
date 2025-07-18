@@ -20,6 +20,7 @@
   gmp,
   gobject-introspection,
   graphene,
+  gst_all_1,
   gtk3,
   gtk4,
   libevdev,
@@ -31,6 +32,7 @@
   linux-pam,
   llvmPackages,
   nettle,
+  opencv,
   openssl,
   pango,
   pkg-config,
@@ -51,6 +53,31 @@
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ alsa-lib ];
+  };
+
+  aws-lc-sys = attrs: {
+    # aws-lc-sys vendors aws-lc, and there doesn't seem to be an easy
+    # way to override that in the builder script. However, the build
+    # script doesn't work on macos.
+    preConfigure = lib.strings.optionalString stdenv.isDarwin ''
+      cat <<EOF > bcm.c
+      #include <sys/types.h>
+      #include <sys/_types/_u_int.h>
+      #include <sys/_types/_u_char.h>
+      #include <sys/_types/_u_short.h>
+      EOF
+      cat aws-lc/crypto/fipsmodule/bcm.c >> bcm.c
+      mv bcm.c aws-lc/crypto/fipsmodule/bcm.c
+
+      cat <<EOF > cpu_aarch64_apple.c
+      #include <sys/types.h>
+      #include <sys/_types/_u_int.h>
+      #include <sys/_types/_u_char.h>
+      #include <sys/_types/_u_short.h>
+      EOF
+      cat aws-lc/crypto/fipsmodule/cpucap/cpu_aarch64_apple.c >> cpu_aarch64_apple.c
+      mv cpu_aarch64_apple.c aws-lc/crypto/fipsmodule/cpucap
+    '';
   };
 
   cairo-rs = attrs: {
@@ -199,13 +226,86 @@
     nativeBuildInputs = [ pkg-config ];
   };
 
+  gstreamer-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-base-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-app-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-net-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-sdp-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-audio-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-video-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-rtsp-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-pbutils-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
+  gstreamer-rtsp-server-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = gst_plugins ++ [
+      gst_all_1.gstreamer
+    ];
+  };
+
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
+    # Prefer the system version.
+    LIBGIT2_NO_VENDOR = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       openssl
       zlib
       libgit2
+      libssh2
     ];
   };
 
@@ -260,6 +360,11 @@
     LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
   };
 
+  opencv = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ opencv ];
+  };
+
   openssl = attrs: {
     buildInputs = [ openssl ];
   };
@@ -267,6 +372,9 @@
   openssl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
+    # On some versions of openssl-sys, the vendored version is
+    # preferred. Override that choice.
+    OPENSSL_NO_VENDOR = 1;
   };
 
   opentelemetry-proto = attrs: {
@@ -293,6 +401,12 @@
 
   prost-wkt-types = attr: {
     nativeBuildInputs = [ protobuf ];
+  };
+
+  rav1e = attrs: {
+    # Temporary fix until CARGO_ENCODED_RUSTFLAGS is set by
+    # `buildRustCrate`.
+    CARGO_ENCODED_RUSTFLAGS = "";
   };
 
   rdkafka-sys = attr: {
@@ -375,6 +489,14 @@
 
   tonic-reflection = attrs: {
     nativeBuildInputs = [ protobuf ];
+  };
+
+  validify = attrs: {
+    # `validify` wants to include_str! a README from a workspace,
+    # which for some reason doesn't fly with buildRustCrate.
+    preBuild = ''
+      sed -ie "s/.*CARGO_PKG_README.*//" src/lib.rs
+    '';
   };
 
   webkit2gtk-sys = attrs: {
