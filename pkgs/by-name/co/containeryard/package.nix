@@ -23,6 +23,14 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
+  
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/yard";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
 
   meta = with lib; {
     description = "ContainerYard is a declarative, reproducible, and reusable decentralized approach for defining containers. Think Nix flakes meets Containerfiles (aka Dockerfiles).";
