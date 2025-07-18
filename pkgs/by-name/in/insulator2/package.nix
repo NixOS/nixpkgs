@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   patches = [
     # see: https://github.com/andrewinci/insulator2/pull/733
     ./fix-rust-1.80.0.patch
+    # see https://github.com/andrewinci/insulator2/issues/735
+    ./use-original-avro-crate.patch
   ];
 
   # Yarn *really* wants us to use corepack if this is set
@@ -49,12 +51,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
-      "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      patches
+      cargoRoot
+      ;
+    hash = "sha256-mq8xw1wdc6+Na2fPXWvZ+lIjtu76xIA3vK39hQBXQ3g=";
   };
 
   cargoRoot = "backend/";

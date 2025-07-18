@@ -1,0 +1,30 @@
+diff --git a/backend/Cargo.lock b/backend/Cargo.lock
+index dc3ac0d..43756fa 100644
+--- a/backend/Cargo.lock
++++ b/backend/Cargo.lock
+@@ -100,7 +100,7 @@ checksum = "080e9890a082662b09c1ad45f567faeeb47f22b5fb23895fbe1e651e718e25ca"
+ [[package]]
+ name = "apache-avro"
+ version = "0.16.0"
+-source = "git+https://github.com/andrewinci/avro#81a44a1b2df4a117a0a27d164cd2a0638f31ffc3"
++source = "git+https://github.com/apache/avro?rev=b431018996e9b408cde18b9c603e318056bddb05#b431018996e9b408cde18b9c603e318056bddb05"
+ dependencies = [
+  "byteorder",
+  "digest",
+diff --git a/backend/Cargo.toml b/backend/Cargo.toml
+index 2a68996..c4030dd 100644
+--- a/backend/Cargo.toml
++++ b/backend/Cargo.toml
+@@ -32,10 +32,8 @@ reqwest = { version = "0.11", features = ["json", "blocking"] }
+ url = { version = "2", features = ["serde"] }
+ tokio = { version = "1", features = ["full"] }
+ futures = { version = "0.3" }
+-# todo: replace the fork with the apache repo when https://github.com/apache/avro/pull/2374 is merged
+-# apache-avro = { git = "https://github.com/apache/avro", rev = "<todo>" }
+-# apache-avro = "0.16.0"
+-apache-avro = { git = "https://github.com/andrewinci/avro" }
++# See: https://github.com/apache/avro/pull/2374
++apache-avro = { git = "https://github.com/apache/avro", rev = "b431018996e9b408cde18b9c603e318056bddb05" }
+ log = { version = "0.4" }
+ env_logger = { version = "0.10.0" }
+ async-trait = "0.1.71"
