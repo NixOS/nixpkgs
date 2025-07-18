@@ -19239,6 +19239,8 @@ self: super: with self; {
 
   virtualenvwrapper = callPackage ../development/python-modules/virtualenvwrapper { };
 
+  viser = callPackage ../development/python-modules/viser { };
+
   visions = callPackage ../development/python-modules/visions { };
 
   visitor = callPackage ../development/python-modules/visitor { };
@@ -19875,6 +19877,8 @@ self: super: with self; {
   yoto-api = callPackage ../development/python-modules/yoto-api { };
 
   youless-api = callPackage ../development/python-modules/youless-api { };
+
+  yourdfpy = callPackage ../development/python-modules/yourdfpy { };
 
   youseedee = callPackage ../development/python-modules/youseedee { };
 
