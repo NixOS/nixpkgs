@@ -1069,7 +1069,7 @@ in rec {
     "sha256-Cc3eTbro2qQ1x+r6Us0125nLZGIm28GXuvjLvx7OdVw=";
 
   mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.39.0"
-    "sha256-aZbDf61cGeoeyNArz8Uweft/wqVfZpQySklFXIpf7R4=";
+    "sha256-6eLSFjwfUE6BFYyYJekyj5P5MbwBqIQBMRym1pA67sk=";
 
   mypy-boto3-storagegateway = buildMypyBoto3Package "storagegateway" "1.39.0"
     "sha256-XLb8v1eMYCDSrG8B6JUr96kUhGxL1c5kdH1jiO1Xi3I=";
