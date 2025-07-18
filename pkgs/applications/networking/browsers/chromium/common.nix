@@ -215,7 +215,6 @@ let
   };
 
   isElectron = packageName == "electron";
-  needsCompgen = chromiumVersionAtLeast "133";
   rustcVersion = buildPackages.rustc.version;
 
   chromiumDeps = lib.mapAttrs (
@@ -295,11 +294,7 @@ let
       [
         ninja
         gnChromium
-      ]
-      ++ lib.optionals needsCompgen [
         bashInteractive # needed for compgen in buildPhase -> process_template
-      ]
-      ++ [
         pkg-config
         python3WithPackages
         perl
@@ -513,7 +508,7 @@ let
           revert = true;
         })
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "131" && stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         # Reverts decommit pooled pages which causes random crashes of tabs on systems
         # with page sizes different than 4k. It 'supports' runtime page sizes, but has
         # a hardcode for aarch64 systems.
@@ -812,18 +807,10 @@ let
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
       }
-      // (
-        # M134 changed use_qt to use_qt5 (and use_qt6)
-        if chromiumVersionAtLeast "134" then
-          {
-            use_qt5 = false;
-            use_qt6 = false;
-          }
-        else
-          {
-            use_qt = false;
-          }
-      )
+      // {
+        use_qt5 = false;
+        use_qt6 = false;
+      }
       // lib.optionalAttrs (chromiumVersionAtLeast "136") {
         # LLVM < v21 does not support --warning-suppression-mappings yet:
         clang_warning_suppression_file = "";
@@ -911,12 +898,14 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          ${lib.optionalString needsCompgen "bash -s << EOL\n"}(
+          bash -s << EOL
+          (
             source chrome/installer/linux/common/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )${lib.optionalString needsCompgen "\nEOL"}
+          )
+          EOL
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;
