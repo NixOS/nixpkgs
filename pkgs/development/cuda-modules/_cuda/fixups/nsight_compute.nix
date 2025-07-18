@@ -40,17 +40,19 @@ in
   postInstall =
     prevAttrs.postInstall or ""
     + ''
-      moveToOutput 'ncu' "''${!outputBin}/bin"
-      moveToOutput 'ncu-ui' "''${!outputBin}/bin"
-      moveToOutput 'host/${archDir}' "''${!outputBin}/bin"
-      moveToOutput 'target/${archDir}' "''${!outputBin}/bin"
-      wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
+      mkdir -p "$out/bin"
+      moveToOutput 'host/${archDir}' "$out"
+      moveToOutput 'target/${archDir}' "$out"
+      wrapQtApp "$out/host/${archDir}/ncu-ui.bin"
+      ln -snf "$out/target/linux-desktop-glibc_2_11_3-x64/ncu" "$out/bin/"
+      ln -snf "$out/host/linux-desktop-glibc_2_11_3-x64/ncu-ui" "$out/bin/"
+      rm "$out/ncu" "$out/ncu-ui"
     '';
   preFixup =
     prevAttrs.preFixup or ""
     + ''
       # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
+      patchelf --replace-needed libtiff.so.5 libtiff.so "$out/host/${archDir}/Plugins/imageformats/libqtiff.so"
     '';
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
