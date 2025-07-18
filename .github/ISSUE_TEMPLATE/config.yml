@@ -1,0 +1,23 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Package Request
+    url: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#how-to-create-pull-requests
+    about: |
+      Package requests were removed, as maintainers should generally try to package stuff
+      that they use. There's an increased risk of breakage being unnoticed over time, and
+      a broken package is often worse than no package. Since the notability requirement
+      for a project to be accepted into nixpkgs is trivial (there should be a potential
+      userbase of at least 5, and for libraries, there must be at least one dependency),
+      there is no longer any reason to accept package requests. You should instead try to
+      package it yourself. It'll take a few hours to learn how to do it, but if you like
+      NixOS, it's worth it. See the following resource to get familiar with the process:
+
+      https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#how-to-create-pull-requests
+
+      Then, reference the language-specific document in the `doc/languages-frameworks`
+      directory for next steps, or view the rendered manual:
+
+      https://nixos.org/manual/nixpkgs/stable/#chap-language-support
+
+      See https://github.com/NixOS/nixpkgs/pull/391926 for the discussion surrounding
+      this decision.
