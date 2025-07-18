@@ -304,9 +304,6 @@ let
             done
 
             for crate in ${toString depCrates}; do
-              # Link the crate directory, removing the output path hash from the destination.
-              ln -s "$crate" $out/$(basename "$crate" | cut -c 34-)
-
               if [ -e "$crate/.cargo-config" ]; then
                 key=$(sed 's/\[source\."\(.*\)"\]/\1/; t; d' < "$crate/.cargo-config")
                 if [[ -z ''${keysSeen[$key]} ]]; then
@@ -314,6 +311,17 @@ let
                   cat "$crate/.cargo-config" >> $out/.cargo/config.toml
                 fi
               fi
+              # In monorepos, it's possible to have multiple crates with the
+              # same name, pointing at potentially different versions. As such,
+              # link the only top definition, but collect config from all (done
+              # above).
+              outCrate=$out/$(basename "$crate" | cut -c 34-)
+              if [ -e $outCrate ]; then
+                echo "Warning: $outCrate already exists, not overwriting it"
+                continue
+              fi
+              # Link the first crate directory, with a clean output path
+              ln -s "$crate" $outCrate
             done
       '';
 in
