@@ -1,0 +1,23 @@
+From 1c5d502c4c4f35858952ced2954e87e20c134a9c Mon Sep 17 00:00:00 2001
+From: Tristan Ross <tristan.ross@midstall.com>
+Date: Mon, 30 Jun 2025 21:32:00 -0700
+Subject: [PATCH] chore: bump pyyaml from 6.0.1 to 6.0.2
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 17e2c40..315bd46 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -24,7 +24,7 @@ classifiers = [
+   "Programming Language :: Python :: 3 :: Only",
+ ]
+ dependencies = [
+-  "pyyaml == 6.0.1",
++  "pyyaml == 6.0.2",
+   "pyluwen @ git+https://github.com/tenstorrent/luwen.git@v0.6.4#subdirectory=crates/pyluwen",
+   "tabulate == 0.9.0",
+   "tomli == 2.0.1; python_version < '3.11'",
+
