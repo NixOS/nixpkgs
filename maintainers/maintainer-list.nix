@@ -7719,6 +7719,13 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  eripa = {
+    name = "Eric Ripa";
+    email = "eric@ripa.io";
+    keys = [ { fingerprint = "L2IODNAzlzi0tkpCy4LHixqMUhkEas9D3+mo4a+PQZg"; } ];
+    github = "eripa";
+    githubId = 1429673;
+  };
   ern775 = {
     email = "eren.demir2479090@gmail.com";
     github = "ern775";
