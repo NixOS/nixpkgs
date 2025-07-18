@@ -29,10 +29,20 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postInstall = ''
-    mv $out/bin/bosh-cli $out/bin/bosh
-    wrapProgram $out/bin/bosh --prefix PATH : '${lib.makeBinPath [ openssh ]}'
-  '';
+  postInstall =
+    let
+      runtimeDependencies = [
+        (openssh.override ({
+          withSecurityKey = false;
+          withFIDO = false;
+          withPAM = false;
+        }))
+      ];
+    in
+    ''
+      mv $out/bin/bosh-cli $out/bin/bosh
+      wrapProgram $out/bin/bosh --prefix PATH : '${lib.makeBinPath runtimeDependencies}'
+    '';
 
   meta = {
     description = "Command line interface to CloudFoundry BOSH";
