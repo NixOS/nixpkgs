@@ -272,6 +272,10 @@ stdenv.mkDerivation (finalAttrs: {
   # must be explicitly set since 5590e365
   dontWrapQtApps = true;
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     tests =
       {
