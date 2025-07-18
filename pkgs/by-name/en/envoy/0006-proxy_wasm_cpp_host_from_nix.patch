@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: "Colton J. McCurdy" <mccurdyc22@gmail.com>
+Date: Fri, 4 Jul 2025 15:55:54 -0400
+Subject: [PATCH] proxy_wasm_cpp_host_from_nix
+
+Signed-off-by: Colton J. McCurdy <mccurdyc22@gmail.com>
+---
+ WORKSPACE | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/WORKSPACE b/WORKSPACE
+index e4460bfc547561a9dfe1f2e2f3a39b01c992a3c2..8cb19fef07fdcb86ab716f11fe3048bb42fa4f83 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -1,5 +1,11 @@
+ workspace(name = "envoy")
+ 
++# matches the name in bazel/repository_locations.bzl to essentially override it.
++local_repository(
++    name = "proxy_wasm_cpp_host",
++    path = "@proxy_wasm_cpp_host_from_nix@",
++)
++
+ load("//bazel:api_binding.bzl", "envoy_api_binding")
+ 
+ envoy_api_binding()
