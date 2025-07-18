@@ -12106,8 +12106,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  fmit = libsForQt5.callPackage ../applications/audio/fmit { };
-
   focuswriter = qt6Packages.callPackage ../applications/editors/focuswriter { };
 
   fossil = callPackage ../applications/version-management/fossil {
