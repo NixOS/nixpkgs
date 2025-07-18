@@ -55,7 +55,6 @@ jobs:
 
       - name: Check cherry-picks
         id: check
-        continue-on-error: true
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
@@ -63,83 +62,8 @@ jobs:
               github,
               context,
               core,
+              dry: context.eventName == 'pull_request',
             })
-
-      - name: Request changes
-        if: ${{ github.event_name == 'pull_request_target' && steps.check.outcome == 'failure' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const { readFile } = require('node:fs/promises')
-            const body = await readFile('review.md', 'utf-8')
-
-            const pendingReview = (await github.paginate(github.rest.pulls.listReviews, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
-            })).find(review =>
-              review.user.login == 'github-actions[bot]' && (
-                // If a review is still pending, we can just update this instead
-                // of posting a new one.
-                review.state == 'CHANGES_REQUESTED' ||
-                // No need to post a new review, if an older one with the exact
-                // same content had already been dismissed.
-                review.body == body
-              )
-            )
-
-            // Either of those two requests could fail for very long comments. This can only happen
-            // with multiple commits all hitting the truncation limit for the diff. If you ever hit
-            // this case, consider just splitting up those commits into multiple PRs.
-            if (pendingReview) {
-              await github.rest.pulls.updateReview({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                review_id: pendingReview.id,
-                body
-              })
-            } else {
-              await github.rest.pulls.createReview({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                event: 'REQUEST_CHANGES',
-                body
-              })
-            }
-
-      - name: Dismiss old reviews
-        if: ${{ github.event_name == 'pull_request_target' && steps.check.outcome == 'success' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            await Promise.all(
-              (await github.paginate(github.rest.pulls.listReviews, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number
-              })).filter(review =>
-                review.user.login == 'github-actions[bot]'
-              ).map(async (review) => {
-                if (review.state == 'CHANGES_REQUESTED') {
-                  await github.rest.pulls.dismissReview({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: context.payload.pull_request.number,
-                    review_id: review.id,
-                    message: 'All cherry-picks are good now, thank you!'
-                  })
-                }
-                await github.graphql(`mutation($node_id:ID!) {
-                  minimizeComment(input: {
-                    classifier: RESOLVED,
-                    subjectId: $node_id
-                  })
-                  { clientMutationId }
-                }`, { node_id: review.node_id })
-              })
-            )
 
       - name: Log current API rate limits
         env:

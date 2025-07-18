@@ -1,6 +1,6 @@
 {
   lib,
-  clangStdenv,
+  stdenv,
   fetchFromGitLab,
   rustPlatform,
   cargo,
@@ -11,23 +11,17 @@
   glib,
   gtk4,
   libadwaita,
-  zbar,
   sqlite,
   openssl,
   pipewire,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gst-plugins-good,
-  gst-plugins-rs,
+  gst_all_1,
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
-  glycin-loaders,
   nix-update-script,
 }:
 
-clangStdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-decoder";
   version = "0.7.1";
 
@@ -35,29 +29,21 @@ clangStdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-lLZ8tll/R9cwk3t/MULmrR1KWZ1e+zneXL93035epPE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-USfC7HSL1TtjP1SmBRTKkPyKE4DkSn6xeH4mzfIBQWg=";
   };
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # vp8enc preset
-      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    glib
+    gtk4
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
@@ -71,28 +57,34 @@ clangStdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
-    zbar
     sqlite
     openssl
     pipewire
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-rs # for gtk4paintablesink
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-rs # for gtk4paintablesink
   ];
+
+  # Adds vp8enc preset for camera enablement
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+    )
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "Scan and Generate QR Codes";
+  meta = {
+    description = "Scan and generate QR codes";
     homepage = "https://gitlab.gnome.org/World/decoder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "decoder";
-    maintainers = with maintainers; [ zendo ];
-    teams = [ teams.gnome-circle ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})
