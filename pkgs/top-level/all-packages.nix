@@ -8151,7 +8151,7 @@ with pkgs;
       wasilibc
     else if libc == "relibc" then
       relibc
-    else if name == "llvm" then
+    else if libc == "llvm" then
       llvmPackages_20.libc
     else
       throw "Unknown libc ${libc}";

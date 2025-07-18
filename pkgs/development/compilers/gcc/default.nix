@@ -39,7 +39,7 @@
   name ? "gcc",
   libcCross ? null,
   threadsCross ? { }, # for MinGW
-  withoutTargetLibc ? false,
+  withoutTargetLibc ? stdenv.targetPlatform.libc == null,
   flex,
   gnused ? null,
   buildPackages,
