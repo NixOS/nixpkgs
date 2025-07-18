@@ -35,8 +35,9 @@ buildNpmPackage (finalAttrs: {
 
     substituteInPlace .electron-builder.config.mjs \
       --replace-fail 'AppImage' 'dir'
-
-    # Workaround for https://github.com/electron/electron/issues/31121
+  ''
+  # Workaround for https://github.com/electron/electron/issues/31121
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/background/window/path.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
