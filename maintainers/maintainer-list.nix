@@ -4780,6 +4780,12 @@
     githubId = 9336788;
     name = "Claes Hallström";
   };
+  classic-ally = {
+    email = "allison@bentley.sh";
+    github = "classic-ally";
+    githubId = 4556652;
+    name = "Allison Bentley";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
@@ -9943,6 +9949,12 @@
     github = "hce";
     githubId = 147689;
     name = "Hans-Christian Esperer";
+  };
+  hcenge = {
+    email = "me@helenengelhardt.ca";
+    github = "hcenge";
+    githubId = 15042353;
+    name = "Helen Engelhardt";
   };
   hdhog = {
     name = "Serg Larchenko";
