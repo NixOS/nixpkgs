@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
   config,
   pkg-config,
@@ -62,23 +63,28 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
+    # PMIx v6.x support
+    (fetchpatch {
+      url = "https://github.com/SchedMD/slurm/commit/483f5f29a79e6a417e37267a537e0a2bbec05bed.patch";
+      hash = "sha256-TKNKLioz4hVk6nOzF//NaKOZARRQtsx3TEO47iawbE0=";
+    })
   ];
 
   prePatch =
     ''
       substituteInPlace src/common/env.c \
-          --replace "/bin/echo" "${coreutils}/bin/echo"
+          --replace-fail "/bin/echo" "${coreutils}/bin/echo"
 
       # Autoconf does not support split packages for pmix (libs and headers).
       # Fix the path to the pmix libraries, so dlopen can find it.
       substituteInPlace src/plugins/mpi/pmix/mpi_pmix.c \
-          --replace 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
+          --replace-fail 'xstrfmtcat(full_path, "%s/", PMIXP_LIBPATH)' \
                     'xstrfmtcat(full_path, "${lib.getLib pmix}/lib/")'
 
     ''
     + (lib.optionalString enableX11 ''
       substituteInPlace src/common/x11_util.c \
-          --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
+          --replace-fail '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
     '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
@@ -159,12 +165,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       jagajaga
       markuskowa
     ];
