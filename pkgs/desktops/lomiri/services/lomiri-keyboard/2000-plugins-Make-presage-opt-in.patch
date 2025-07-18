@@ -1,0 +1,2403 @@
+From 311b9d46e07ab858e292fcae32d91144f5996224 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 23 Jun 2025 14:56:14 +0200
+Subject: [PATCH] plugins/*: Make presage opt-in
+
+---
+ plugins/ar/src/src.pro                        | 28 +++++++++-------
+ plugins/az/src/src.pro                        | 28 +++++++++-------
+ plugins/be/src/src.pro                        | 28 +++++++++-------
+ plugins/bg/src/src.pro                        | 28 +++++++++-------
+ plugins/bn-probhat/src/src.pro                |  6 +++-
+ plugins/bn/src/src.pro                        | 28 +++++++++-------
+ plugins/bs/src/src.pro                        | 28 +++++++++-------
+ plugins/ca/src/src.pro                        | 32 +++++++++++--------
+ plugins/cs/src/src.pro                        | 28 +++++++++-------
+ plugins/da/src/src.pro                        | 32 +++++++++++--------
+ plugins/de/src/src.pro                        | 28 +++++++++-------
+ plugins/el/src/src.pro                        | 28 +++++++++-------
+ plugins/en/src/src.pro                        | 32 +++++++++++--------
+ plugins/en@dv/src/src.pro                     |  6 +++-
+ plugins/eo/src/src.pro                        | 28 +++++++++-------
+ plugins/es/src/src.pro                        | 28 +++++++++-------
+ plugins/fa/src/src.pro                        | 28 +++++++++-------
+ plugins/fi/src/src.pro                        | 28 +++++++++-------
+ plugins/fr-ch/src/src.pro                     |  6 +++-
+ plugins/fr/src/src.pro                        | 32 +++++++++++--------
+ plugins/gd/src/src.pro                        | 28 +++++++++-------
+ plugins/he/src/src.pro                        | 32 +++++++++++--------
+ plugins/hr/src/src.pro                        | 28 +++++++++-------
+ plugins/hu/src/src.pro                        | 28 +++++++++-------
+ plugins/is/src/src.pro                        | 28 +++++++++-------
+ plugins/it/src/src.pro                        | 32 +++++++++++--------
+ plugins/ja/src/src.pro                        |  6 +++-
+ plugins/ko/src/koreanplugin.cpp               | 32 +++++++++----------
+ plugins/ko/src/koreanplugin.h                 |  6 ++--
+ plugins/ko/src/src.pro                        | 32 +++++++++++--------
+ plugins/lt/src/src.pro                        | 28 +++++++++-------
+ plugins/lv/src/src.pro                        | 28 +++++++++-------
+ plugins/mk/src/src.pro                        |  6 +++-
+ plugins/nb/src/src.pro                        | 28 +++++++++-------
+ plugins/nl/src/src.pro                        | 32 +++++++++++--------
+ plugins/pl/src/src.pro                        | 28 +++++++++-------
+ plugins/pt/src/src.pro                        | 32 +++++++++++--------
+ plugins/ro/src/src.pro                        | 32 +++++++++++--------
+ plugins/ru/src/src.pro                        | 28 +++++++++-------
+ plugins/sl/src/src.pro                        | 28 +++++++++-------
+ plugins/sr/src/src.pro                        | 28 +++++++++-------
+ plugins/sv/src/src.pro                        | 32 +++++++++++--------
+ plugins/tr/src/src.pro                        | 28 +++++++++-------
+ plugins/uk/src/src.pro                        | 28 +++++++++-------
+ plugins/westernsupport/candidatescallback.h   |  6 ++++
+ plugins/westernsupport/spellpredictworker.cpp | 10 ++++++
+ plugins/westernsupport/spellpredictworker.h   |  4 +++
+ .../westernsupport/westernlanguagesplugin.cpp | 32 +++++++++----------
+ .../westernsupport/westernlanguagesplugin.h   |  8 +++--
+ plugins/westernsupport/westernsupport.pro     |  4 ++-
+ src/word-prediction.pri                       |  2 +-
+ tests/testlayout/src/src.pro                  | 28 +++++++++-------
+ word-prediction.pri                           |  2 +-
+ 53 files changed, 756 insertions(+), 488 deletions(-)
+
+diff --git a/plugins/ar/src/src.pro b/plugins/ar/src/src.pro
+index 86785ad8..d4962284 100644
+--- a/plugins/ar/src/src.pro
++++ b/plugins/ar/src/src.pro
+@@ -22,19 +22,25 @@ EXAMPLE_FILES = arabicplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/ar/
+ 
+-lang_db_ar.commands += \
+-  rm -f $$PWD/database_ar.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt
+-lang_db_ar.files += $$PWD/database_ar.db
+-lang_db_ar_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_ar_install.files += $$PWD/database_ar.db
++enable-presage {
++  lang_db_ar.commands += \
++    rm -f $$PWD/database_ar.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_ar.db $$PWD/free_ebook.txt
++  lang_db_ar.files += $$PWD/database_ar.db
++  lang_db_ar_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_ar_install.files += $$PWD/database_ar.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_ar lang_db_ar_install
++  QMAKE_EXTRA_TARGETS += lang_db_ar lang_db_ar_install
++
++  INSTALLS += lang_db_ar_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_ar_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     arabicplugin.json \
+@@ -42,7 +48,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/az/src/src.pro b/plugins/az/src/src.pro
+index f8fe5362..8951ae48 100644
+--- a/plugins/az/src/src.pro
++++ b/plugins/az/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = azerbaijaniplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/az/
+ 
+-lang_db_az.commands += \
+-  rm -f $$PWD/database_az.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt
+-lang_db_az.files += $$PWD/database_az.db
++enable-presage {
++  lang_db_az.commands += \
++    rm -f $$PWD/database_az.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_az.db $$PWD/free_ebook.txt
++  lang_db_az.files += $$PWD/database_az.db
+ 
+-lang_db_az_install.files += $$PWD/database_az.db
+-lang_db_az_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_az_install.files += $$PWD/database_az.db
++  lang_db_az_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_az lang_db_az_install
++  QMAKE_EXTRA_TARGETS += lang_db_az lang_db_az_install
++
++  INSTALLS += lang_db_az_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_az_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     free_ebook.txt \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/be/src/src.pro b/plugins/be/src/src.pro
+index 5b6af587..8c77a7c1 100644
+--- a/plugins/be/src/src.pro
++++ b/plugins/be/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = belarusianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/be/
+ 
+-lang_db_be.commands += \
+-  rm -f $$PWD/database_be.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt
+-lang_db_be.files += $$PWD/database_be.db
++enable-presage {
++  lang_db_be.commands += \
++    rm -f $$PWD/database_be.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_be.db $$PWD/free_ebook.txt
++  lang_db_be.files += $$PWD/database_be.db
+ 
+-lang_db_be_install.files += $$PWD/database_be.db
+-lang_db_be_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_be_install.files += $$PWD/database_be.db
++  lang_db_be_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_be lang_db_be_install
++  QMAKE_EXTRA_TARGETS += lang_db_be lang_db_be_install
++
++  INSTALLS += lang_db_be_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_be_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     belarusianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/bg/src/src.pro b/plugins/bg/src/src.pro
+index cf0f264c..37f0bace 100644
+--- a/plugins/bg/src/src.pro
++++ b/plugins/bg/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = bulgarianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/bg/
+ 
+-lang_db_bg.commands += \
+-  rm -f $$PWD/database_bg.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt
+-lang_db_bg.files += $$PWD/database_bg.db
++enable-presage {
++  lang_db_bg.commands += \
++    rm -f $$PWD/database_bg.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_bg.db $$PWD/free_ebook.txt
++  lang_db_bg.files += $$PWD/database_bg.db
+ 
+-lang_db_bg_install.files += $$PWD/database_bg.db
+-lang_db_bg_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_bg_install.files += $$PWD/database_bg.db
++  lang_db_bg_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_bg lang_db_bg_install
++  QMAKE_EXTRA_TARGETS += lang_db_bg lang_db_bg_install
++
++  INSTALLS += lang_db_bg_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_bg_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     bulgarianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/bn-probhat/src/src.pro b/plugins/bn-probhat/src/src.pro
+index 88038bd3..2f881756 100644
+--- a/plugins/bn-probhat/src/src.pro
++++ b/plugins/bn-probhat/src/src.pro
+@@ -29,7 +29,11 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
++
++enable-presage {
++  LIBS += -lpresage
++}
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/bn/src/src.pro b/plugins/bn/src/src.pro
+index 5969578e..38ee205a 100644
+--- a/plugins/bn/src/src.pro
++++ b/plugins/bn/src/src.pro
+@@ -19,20 +19,24 @@ TARGET          = $$qtLibraryTarget(bnplugin)
+ 
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/bn/
+ 
+-# install database for presage:
+-lang_bn_db_install.commands += \
+-  rm -f $$PWD/database_bn.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt
++enable-presage {
++  # install database for presage:
++  lang_bn_db_install.commands += \
++    rm -f $$PWD/database_bn.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_bn.db $$PWD/free_ebooks/*.txt
+ 
+-lang_bn_db_install.path = $$PLUGIN_INSTALL_PATH
+-lang_bn_db_install.files = $$PWD/database_bn.db
++  lang_bn_db_install.path = $$PLUGIN_INSTALL_PATH
++  lang_bn_db_install.files = $$PWD/database_bn.db
++
++  INSTALLS += lang_bn_db_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += \
+-	target \
+-	lang_bn_db_install
++INSTALLS += target
+ 
+ EXAMPLE_FILES = bengaliplugin.json
+ 
+@@ -41,7 +45,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/bs/src/src.pro b/plugins/bs/src/src.pro
+index 33ede1d0..59a39fb3 100644
+--- a/plugins/bs/src/src.pro
++++ b/plugins/bs/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = bosnianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/bs/
+ 
+-lang_db_bs.commands += \
+-  rm -f $$PWD/database_bs.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt
+-lang_db_bs.files += $$PWD/database_bs.db
++enable-presage {
++	lang_db_bs.commands += \
++	  rm -f $$PWD/database_bs.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_bs.db $$PWD/free_ebook.txt
++	lang_db_bs.files += $$PWD/database_bs.db
+ 
+-lang_db_bs_install.files += $$PWD/database_bs.db
+-lang_db_bs_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_bs_install.files += $$PWD/database_bs.db
++	lang_db_bs_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_bs lang_db_bs_install
++	QMAKE_EXTRA_TARGETS += lang_db_bs lang_db_bs_install
++
++  INSTALLS += lang_db_bs_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_bs_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     bosnianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/ca/src/src.pro b/plugins/ca/src/src.pro
+index ad81160b..76710788 100644
+--- a/plugins/ca/src/src.pro
++++ b/plugins/ca/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = catalanplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/ca/
+ 
+-lang_db_ca.commands += \
+-  rm -f $$PWD/database_ca.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt
+-lang_db_ca.files += $$PWD/database_ca.db
++enable-presage {
++  lang_db_ca.commands += \
++    rm -f $$PWD/database_ca.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_ca.db $$PWD/paulina_buxareu.txt
++  lang_db_ca.files += $$PWD/database_ca.db
+ 
+-lang_db_ca_install.files += $$PWD/database_ca.db
+-lang_db_ca_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_ca_install.files += $$PWD/database_ca.db
++  lang_db_ca_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_ca lang_db_ca_install
++  QMAKE_EXTRA_TARGETS += lang_db_ca lang_db_ca_install
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
++
++  INSTALLS += lang_db_ca_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_ca_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     catalanplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/cs/src/src.pro b/plugins/cs/src/src.pro
+index f332bed0..a97f44bc 100644
+--- a/plugins/cs/src/src.pro
++++ b/plugins/cs/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = czechplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/cs/
+ 
+-lang_db_cs.commands += \
+-  rm -f $$PWD/database_cs.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt
+-lang_db_cs.files += $$PWD/database_cs.db
++enable-presage {
++	lang_db_cs.commands += \
++	  rm -f $$PWD/database_cs.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_cs.db $$PWD/free_ebook.txt
++	lang_db_cs.files += $$PWD/database_cs.db
+ 
+-lang_db_cs_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_cs_install.files += $$PWD/database_cs.db
++	lang_db_cs_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_cs_install.files += $$PWD/database_cs.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_cs lang_db_cs_install
++	QMAKE_EXTRA_TARGETS += lang_db_cs lang_db_cs_install
++
++  INSTALLS += lang_db_cs_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_cs_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     czechplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/da/src/src.pro b/plugins/da/src/src.pro
+index 0c543596..92468e2b 100644
+--- a/plugins/da/src/src.pro
++++ b/plugins/da/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = danishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/da/
+ 
+-lang_db_da.commands += \
+-  rm -f $$PWD/database_da.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt
+-lang_db_da.files += $$PWD/database_da.db
++enable-presage {
++  lang_db_da.commands += \
++    rm -f $$PWD/database_da.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_da.db $$PWD/free_ebook.txt
++  lang_db_da.files += $$PWD/database_da.db
+ 
+-lang_db_da_install.files += $$PWD/database_da.db
+-lang_db_da_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_da_install.files += $$PWD/database_da.db
++  lang_db_da_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_da lang_db_da_install
++  QMAKE_EXTRA_TARGETS += lang_db_da lang_db_da_install
++
++  INSTALLS += lang_db_da_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_da_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     danishplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/de/src/src.pro b/plugins/de/src/src.pro
+index 7f1e4954..db3e24ea 100644
+--- a/plugins/de/src/src.pro
++++ b/plugins/de/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = germanplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/de/
+ 
+-lang_db_de.commands += \
+-  rm -f $$PWD/database_de.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt
+-lang_db_de.files += $$PWD/database_de.db
++enable-presage {
++	lang_db_de.commands += \
++	  rm -f $$PWD/database_de.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_de.db $$PWD/buddenbrooks.txt
++	lang_db_de.files += $$PWD/database_de.db
+ 
+-lang_db_de_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_de_install.files += $$PWD/database_de.db
++	lang_db_de_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_de_install.files += $$PWD/database_de.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_de lang_db_de_install
++	QMAKE_EXTRA_TARGETS += lang_db_de lang_db_de_install
++
++  INSTALLS += lang_db_de_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_de_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     germanplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/el/src/src.pro b/plugins/el/src/src.pro
+index 181448e6..ea936868 100644
+--- a/plugins/el/src/src.pro
++++ b/plugins/el/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = greekplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/el/
+ 
+-lang_db_el.commands += \
+-  rm -f $$PWD/database_el.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt
+-lang_db_el.files += $$PWD/database_el.db
++enable-presage {
++	lang_db_el.commands += \
++	  rm -f $$PWD/database_el.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_el.db $$PWD/grazia_deledda-christos_alexandridis.txt
++	lang_db_el.files += $$PWD/database_el.db
+ 
+-lang_db_el_install.files += $$PWD/database_el.db
+-lang_db_el_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_el_install.files += $$PWD/database_el.db
++	lang_db_el_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_el lang_db_el_install
++	QMAKE_EXTRA_TARGETS += lang_db_el lang_db_el_install
++
++  INSTALLS += lang_db_el_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_el_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     greekplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/en/src/src.pro b/plugins/en/src/src.pro
+index ba09fabb..ebee4fc0 100644
+--- a/plugins/en/src/src.pro
++++ b/plugins/en/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = englishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/en/
+ 
+-lang_db_en.commands += \
+-  rm -f $$PWD/database_en.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt
+-lang_db_en.files += $$PWD/database_en.db
++enable-presage {
++  lang_db_en.commands += \
++    rm -f $$PWD/database_en.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_en.db $$PWD/the_picture_of_dorian_gray.txt
++  lang_db_en.files += $$PWD/database_en.db
+ 
+-lang_db_en_install.files += $$PWD/database_en.db
+-lang_db_en_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_en_install.files += $$PWD/database_en.db
++  lang_db_en_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_en lang_db_en_install
++  QMAKE_EXTRA_TARGETS += lang_db_en lang_db_en_install
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
++
++  INSTALLS += lang_db_en_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_en_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     englishplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/en@dv/src/src.pro b/plugins/en@dv/src/src.pro
+index f40241ce..08bef58f 100644
+--- a/plugins/en@dv/src/src.pro
++++ b/plugins/en@dv/src/src.pro
+@@ -30,7 +30,11 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
++
++enable-presage {
++  LIBS += -lpresage
++}
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/eo/src/src.pro b/plugins/eo/src/src.pro
+index 18a0de80..5c6852fe 100644
+--- a/plugins/eo/src/src.pro
++++ b/plugins/eo/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = esperantoplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/eo/
+ 
+-lang_db_eo.commands += \
+-  rm -f $$PWD/database_eo.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt
+-lang_db_eo.files += $$PWD/database_eo.db
++enable-presage {
++	lang_db_eo.commands += \
++	  rm -f $$PWD/database_eo.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_eo.db $$PWD/alicio_en_mirlando.txt
++	lang_db_eo.files += $$PWD/database_eo.db
+ 
+-lang_db_eo_install.files += $$PWD/database_eo.db
+-lang_db_eo_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_eo_install.files += $$PWD/database_eo.db
++	lang_db_eo_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_eo lang_db_eo_install
++	QMAKE_EXTRA_TARGETS += lang_db_eo lang_db_eo_install
++
++  INSTALLS += lang_db_eo_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_eo_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     esperantoplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/es/src/src.pro b/plugins/es/src/src.pro
+index ec328c23..27133fe3 100644
+--- a/plugins/es/src/src.pro
++++ b/plugins/es/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = spanishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/es/
+ 
+-lang_db_es.commands += \
+-  rm -f $$PWD/database_es.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt
+-lang_db_es.files += $$PWD/database_es.db
++enable-presage {
++	lang_db_es.commands += \
++	  rm -f $$PWD/database_es.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_es.db $$PWD/el_quijote.txt
++	lang_db_es.files += $$PWD/database_es.db
+ 
+-lang_db_es_install.files += $$PWD/database_es.db
+-lang_db_es_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_es_install.files += $$PWD/database_es.db
++	lang_db_es_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_es lang_db_es_install
++	QMAKE_EXTRA_TARGETS += lang_db_es lang_db_es_install
++
++  INSTALLS += lang_db_es_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_es_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     spanishplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/fa/src/src.pro b/plugins/fa/src/src.pro
+index 8bc2021a..f04da5d1 100644
+--- a/plugins/fa/src/src.pro
++++ b/plugins/fa/src/src.pro
+@@ -22,19 +22,25 @@ EXAMPLE_FILES = persianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/fa/
+ 
+-lang_db_fa.commands += \
+-  rm -f $$PWD/database_fa.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt
+-lang_db_fa.files += $$PWD/database_fa.db
+-lang_db_fa_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_fa_install.files += $$PWD/database_fa.db
++enable-presage {
++  lang_db_fa.commands += \
++    rm -f $$PWD/database_fa.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_fa.db $$PWD/free_ebook.txt
++  lang_db_fa.files += $$PWD/database_fa.db
++  lang_db_fa_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_fa_install.files += $$PWD/database_fa.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_fa lang_db_fa_install
++  QMAKE_EXTRA_TARGETS += lang_db_fa lang_db_fa_install
++
++  INSTALLS += lang_db_fa_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_fa_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     persianplugin.json \
+@@ -42,7 +48,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/fi/src/src.pro b/plugins/fi/src/src.pro
+index 518ce3b8..ba81eb89 100644
+--- a/plugins/fi/src/src.pro
++++ b/plugins/fi/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = finnishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/fi/
+ 
+-lang_db_fi.commands += \
+-  rm -f $$PWD/database_fi.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt
+-lang_db_fi.files += $$PWD/database_fi.db
++enable-presage {
++	lang_db_fi.commands += \
++	  rm -f $$PWD/database_fi.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_fi.db $$PWD/free_ebook.txt
++	lang_db_fi.files += $$PWD/database_fi.db
+ 
+-lang_db_fi_install.files += $$PWD/database_fi.db
+-lang_db_fi_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_fi_install.files += $$PWD/database_fi.db
++	lang_db_fi_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_fi lang_db_fi_install
++	QMAKE_EXTRA_TARGETS += lang_db_fi lang_db_fi_install
++
++  INSTALLS += lang_db_fi_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_fi_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     finnishplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/fr-ch/src/src.pro b/plugins/fr-ch/src/src.pro
+index 8356052c..2420bf51 100644
+--- a/plugins/fr-ch/src/src.pro
++++ b/plugins/fr-ch/src/src.pro
+@@ -30,7 +30,11 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
++
++enable-presage {
++  LIBS += -lpresage
++}
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/fr/src/src.pro b/plugins/fr/src/src.pro
+index eb1a7a77..56fd991c 100644
+--- a/plugins/fr/src/src.pro
++++ b/plugins/fr/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = frenchplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/fr/
+ 
+-lang_db_fr.commands += \
+-  rm -f $$PWD/database_fr.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt
+-lang_db_fr.files += $$PWD/database_fr.db
++enable-presage {
++  lang_db_fr.commands += \
++    rm -f $$PWD/database_fr.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_fr.db $$PWD/les_trois_mousquetaires.txt
++  lang_db_fr.files += $$PWD/database_fr.db
+ 
+-lang_db_fr_install.files += $$PWD/database_fr.db
+-lang_db_fr_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_fr_install.files += $$PWD/database_fr.db
++  lang_db_fr_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_fr lang_db_fr_install
++  QMAKE_EXTRA_TARGETS += lang_db_fr lang_db_fr_install
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
++
++  INSTALLS += lang_db_fr_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_fr_install overrides
++INSTALLS += target
+ 
+ 
+ OTHER_FILES += \
+@@ -47,7 +53,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/gd/src/src.pro b/plugins/gd/src/src.pro
+index 8be9121c..c132a10f 100644
+--- a/plugins/gd/src/src.pro
++++ b/plugins/gd/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = gaelicplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/gd/
+ 
+-lang_db_gd.commands += \
+-  rm -f $$PWD/database_gd.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt
+-lang_db_gd.files += $$PWD/database_gd.db
++enable-presage {
++	lang_db_gd.commands += \
++	  rm -f $$PWD/database_gd.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_gd.db $$PWD/teacsa.txt
++	lang_db_gd.files += $$PWD/database_gd.db
+ 
+-lang_db_gd_install.files += $$PWD/database_gd.db
+-lang_db_gd_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_gd_install.files += $$PWD/database_gd.db
++	lang_db_gd_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_gd lang_db_gd_install
++	QMAKE_EXTRA_TARGETS += lang_db_gd lang_db_gd_install
++
++  INSTALLS += lang_db_gd_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_gd_install
++INSTALLS += target
+ 
+ 
+ OTHER_FILES += \
+@@ -44,7 +50,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/he/src/src.pro b/plugins/he/src/src.pro
+index 566be563..9c3bd1ff 100644
+--- a/plugins/he/src/src.pro
++++ b/plugins/he/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = hebrewplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/he/
+ 
+-lang_db_he.commands += \
+-  rm -f $$PWD/database_he.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt
+-lang_db_he.files += $$PWD/database_he.db
++enable-presage {
++  lang_db_he.commands += \
++    rm -f $$PWD/database_he.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_he.db $$PWD/free_ebook.txt
++  lang_db_he.files += $$PWD/database_he.db
+ 
+-lang_db_he_files.files += $$PWD/database_he.db
+-lang_db_he_files.path = $$PLUGIN_INSTALL_PATH
++  lang_db_he_files.files += $$PWD/database_he.db
++  lang_db_he_files.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_he lang_db_he_files
++  QMAKE_EXTRA_TARGETS += lang_db_he lang_db_he_files
++
++  INSTALLS += lang_db_he_files overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_he_files overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     hebrewplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/hr/src/src.pro b/plugins/hr/src/src.pro
+index b5c91e61..f955304f 100644
+--- a/plugins/hr/src/src.pro
++++ b/plugins/hr/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = croatianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/hr/
+ 
+-lang_db_hr.commands += \
+-  rm -f $$PWD/database_hr.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt
+-lang_db_hr.files += $$PWD/database_hr.db
++enable-presage {
++	lang_db_hr.commands += \
++	  rm -f $$PWD/database_hr.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_hr.db $$PWD/knjiga.txt
++	lang_db_hr.files += $$PWD/database_hr.db
+ 
+-lang_db_hr_install.files += $$PWD/database_hr.db
+-lang_db_hr_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_hr_install.files += $$PWD/database_hr.db
++	lang_db_hr_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_hr lang_db_hr_install
++	QMAKE_EXTRA_TARGETS += lang_db_hr lang_db_hr_install
++
++  INSTALLS += lang_db_hr_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_hr_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     croatianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/hu/src/src.pro b/plugins/hu/src/src.pro
+index 373c58f7..ca5bab09 100644
+--- a/plugins/hu/src/src.pro
++++ b/plugins/hu/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = hungarianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/hu/
+ 
+-lang_db_hu.commands += \
+-  rm -f $$PWD/database_hu.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt
+-lang_db_hu.files += $$PWD/database_hu.db
++enable-presage {
++	lang_db_hu.commands += \
++	  rm -f $$PWD/database_hu.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_hu.db $$PWD/free_ebook.txt
++	lang_db_hu.files += $$PWD/database_hu.db
+ 
+-lang_db_hu_install.files += $$PWD/database_hu.db
+-lang_db_hu_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_hu_install.files += $$PWD/database_hu.db
++	lang_db_hu_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_hu lang_db_hu_install
++	QMAKE_EXTRA_TARGETS += lang_db_hu lang_db_hu_install
++
++  INSTALLS += lang_db_hu_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_hu_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     hungarianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/is/src/src.pro b/plugins/is/src/src.pro
+index c65bc3fd..3c539f03 100644
+--- a/plugins/is/src/src.pro
++++ b/plugins/is/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = icelandicplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/is/
+ 
+-lang_db_is.commands += \
+-  rm -f $$PWD/database_is.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt
+-lang_db_is.files += $$PWD/database_is.db
++enable-presage {
++	lang_db_is.commands += \
++	  rm -f $$PWD/database_is.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_is.db $$PWD/althingi_umraedur_2004_2005.txt
++	lang_db_is.files += $$PWD/database_is.db
+ 
+-lang_db_is_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_is_install.files += $$PWD/database_is.db
++	lang_db_is_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_is_install.files += $$PWD/database_is.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_is lang_db_is_install
++	QMAKE_EXTRA_TARGETS += lang_db_is lang_db_is_install
++
++  INSTALLS += lang_db_is_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_is_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     icelandicplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/it/src/src.pro b/plugins/it/src/src.pro
+index 120722cb..faadc5b2 100644
+--- a/plugins/it/src/src.pro
++++ b/plugins/it/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = italianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/it/
+ 
+-lang_db_it.commands += \
+-  rm -f $$PWD/database_it.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt
+-lang_db_it.files += $$PWD/database_it.db
++enable-presage {
++  lang_db_it.commands += \
++    rm -f $$PWD/database_it.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_it.db $$PWD/la_francia_dal_primo_impero.txt
++  lang_db_it.files += $$PWD/database_it.db
+ 
+-lang_db_it_install.files += $$PWD/database_it.db
+-lang_db_it_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_it_install.files += $$PWD/database_it.db
++  lang_db_it_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_it lang_db_it_install
++  QMAKE_EXTRA_TARGETS += lang_db_it lang_db_it_install
++
++  INSTALLS += lang_db_it_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_it_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     italianplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/ja/src/src.pro b/plugins/ja/src/src.pro
+index 19cc0134..e38a6dbc 100644
+--- a/plugins/ja/src/src.pro
++++ b/plugins/ja/src/src.pro
+@@ -36,4 +36,8 @@ INSTALLS += target
+ OTHER_FILES += \
+     jaglishplugin.json
+ 
+-LIBS += -lpresage -lanthy -lanthydic
++LIBS += -lanthy -lanthydic
++
++enable-presage {
++  LIBS += -lpresage
++}
+diff --git a/plugins/ko/src/koreanplugin.cpp b/plugins/ko/src/koreanplugin.cpp
+index c45efe4a..376f78f5 100644
+--- a/plugins/ko/src/koreanplugin.cpp
++++ b/plugins/ko/src/koreanplugin.cpp
+@@ -1,6 +1,6 @@
+ #include "koreanplugin.h"
+ #include "koreanlanguagefeatures.h"
+-#include "spellpredictworker.h"
++// #include "spellpredictworker.h"
+ 
+ #include <QDebug>
+ 
+@@ -10,27 +10,27 @@ KoreanPlugin::KoreanPlugin(QObject *parent) :
+   , m_spellCheckEnabled(false)
+   , m_processingSpelling(false)
+ {
+-    m_spellPredictThread = new QThread();
+-    m_spellPredictWorker = new SpellPredictWorker();
+-    m_spellPredictWorker->moveToThread(m_spellPredictThread);
++    // m_spellPredictThread = new QThread();
++    // m_spellPredictWorker = new SpellPredictWorker();
++    // m_spellPredictWorker->moveToThread(m_spellPredictThread);
+ 
+-    connect(m_spellPredictWorker, SIGNAL(newSpellingSuggestions(QString, QStringList)), this, SLOT(spellCheckFinishedProcessing(QString, QStringList)));
+-    connect(m_spellPredictWorker, SIGNAL(newPredictionSuggestions(QString, QStringList)), this, SIGNAL(newPredictionSuggestions(QString, QStringList)));
+-    connect(this, SIGNAL(newSpellCheckWord(QString)), m_spellPredictWorker, SLOT(newSpellCheckWord(QString)));
+-    connect(this, SIGNAL(setSpellPredictLanguage(QString, QString)), m_spellPredictWorker, SLOT(setLanguage(QString, QString)));
+-    connect(this, SIGNAL(setSpellCheckLimit(int)), m_spellPredictWorker, SLOT(setSpellCheckLimit(int)));
+-    connect(this, SIGNAL(parsePredictionText(QString, QString)), m_spellPredictWorker, SLOT(parsePredictionText(QString, QString)));
+-    connect(this, SIGNAL(addToUserWordList(QString)), m_spellPredictWorker, SLOT(addToUserWordList(QString)));
+-    connect(this, SIGNAL(addOverride(QString, QString)), m_spellPredictWorker, SLOT(addOverride(QString, QString)));
+-    m_spellPredictThread->start();
++    // connect(m_spellPredictWorker, SIGNAL(newSpellingSuggestions(QString, QStringList)), this, SLOT(spellCheckFinishedProcessing(QString, QStringList)));
++    // connect(m_spellPredictWorker, SIGNAL(newPredictionSuggestions(QString, QStringList)), this, SIGNAL(newPredictionSuggestions(QString, QStringList)));
++    // connect(this, SIGNAL(newSpellCheckWord(QString)), m_spellPredictWorker, SLOT(newSpellCheckWord(QString)));
++    // connect(this, SIGNAL(setSpellPredictLanguage(QString, QString)), m_spellPredictWorker, SLOT(setLanguage(QString, QString)));
++    // connect(this, SIGNAL(setSpellCheckLimit(int)), m_spellPredictWorker, SLOT(setSpellCheckLimit(int)));
++    // connect(this, SIGNAL(parsePredictionText(QString, QString)), m_spellPredictWorker, SLOT(parsePredictionText(QString, QString)));
++    // connect(this, SIGNAL(addToUserWordList(QString)), m_spellPredictWorker, SLOT(addToUserWordList(QString)));
++    // connect(this, SIGNAL(addOverride(QString, QString)), m_spellPredictWorker, SLOT(addOverride(QString, QString)));
++    // m_spellPredictThread->start();
+ 
+ }
+ 
+ KoreanPlugin::~KoreanPlugin()
+ {
+-    m_spellPredictWorker->deleteLater();
+-    m_spellPredictThread->quit();
+-    m_spellPredictThread->wait();
++    // m_spellPredictWorker->deleteLater();
++    // m_spellPredictThread->quit();
++    // m_spellPredictThread->wait();
+ }
+ 
+ AbstractLanguageFeatures* KoreanPlugin::languageFeature()
+diff --git a/plugins/ko/src/koreanplugin.h b/plugins/ko/src/koreanplugin.h
+index 2bdd743f..0de7291f 100644
+--- a/plugins/ko/src/koreanplugin.h
++++ b/plugins/ko/src/koreanplugin.h
+@@ -7,7 +7,7 @@
+ #include "abstractlanguageplugin.h"
+ #include "candidatescallback.h"
+ #include "spellchecker.h"
+-#include "spellpredictworker.h"
++// #include "spellpredictworker.h"
+ 
+ #include <iostream>
+ 
+@@ -51,8 +51,8 @@ public slots:
+ 
+ private:
+     KoreanLanguageFeatures* m_koreanLanguageFeatures;
+-    SpellPredictWorker *m_spellPredictWorker;
+-    QThread *m_spellPredictThread;
++    // SpellPredictWorker *m_spellPredictWorker;
++    // QThread *m_spellPredictThread;
+     bool m_spellCheckEnabled;
+     QString m_nextSpellWord;
+     bool m_processingSpelling;
+diff --git a/plugins/ko/src/src.pro b/plugins/ko/src/src.pro
+index 10575882..908f0347 100644
+--- a/plugins/ko/src/src.pro
++++ b/plugins/ko/src/src.pro
+@@ -17,7 +17,7 @@ HEADERS         = \
+     koreanlanguagefeatures.h \
+     $${TOP_SRCDIR}/src/lib/logic/abstractlanguageplugin.h \
+     $${TOP_SRCDIR}/plugins/westernsupport/spellchecker.h \
+-    $${TOP_SRCDIR}/plugins/westernsupport/spellpredictworker.h \
++    # $${TOP_SRCDIR}/plugins/westernsupport/spellpredictworker.h \
+     $${TOP_SRCDIR}/plugins/westernsupport/candidatescallback.h \
+ 
+ SOURCES         = \
+@@ -25,7 +25,7 @@ SOURCES         = \
+     koreanlanguagefeatures.cpp \
+     $${TOP_SRCDIR}/src/lib/logic/abstractlanguageplugin.cpp \
+     $${TOP_SRCDIR}/plugins/westernsupport/spellchecker.cpp \
+-    $${TOP_SRCDIR}/plugins/westernsupport/spellpredictworker.cpp \
++    # $${TOP_SRCDIR}/plugins/westernsupport/spellpredictworker.cpp \
+     $${TOP_SRCDIR}/plugins/westernsupport/candidatescallback.cpp \
+ 
+ 
+@@ -36,20 +36,26 @@ EXAMPLE_FILES = koreanplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/ko/
+ 
+-lang_db_ko.commands += \
+-  rm -f $$PWD/database_ko.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt
+-lang_db_ko.files += $$PWD/database_ko.db
++enable-presage {
++  lang_db_ko.commands += \
++    rm -f $$PWD/database_ko.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_ko.db $$PWD/korean.txt
++  lang_db_ko.files += $$PWD/database_ko.db
+ 
+-lang_db_ko_install.files += $$PWD/database_ko.db
+-lang_db_ko_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_ko_install.files += $$PWD/database_ko.db
++  lang_db_ko_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_ko lang_db_ko_install
++  QMAKE_EXTRA_TARGETS += lang_db_ko lang_db_ko_install
++
++  INSTALLS += lang_db_ko_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_ko_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     koreanplugin.json \
+@@ -60,7 +66,5 @@ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+ DEFINES += HAVE_HUNSPELL
+ 
+-# presage
+-LIBS += -lpresage
+ DEFINES += HUNSPELL_DICT_PATH=\\\"$$HUNSPELL_DICT_PATH\\\"
+ 
+diff --git a/plugins/lt/src/src.pro b/plugins/lt/src/src.pro
+index 9eb8067e..2d8fa808 100644
+--- a/plugins/lt/src/src.pro
++++ b/plugins/lt/src/src.pro
+@@ -22,19 +22,25 @@ EXAMPLE_FILES = lithuanianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/lt/
+ 
+-lang_db_lt.commands += \
+-  rm -f $$PWD/database_lt.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt
+-lang_db_lt.files += $$PWD/database_lt.db
+-lang_db_lt_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_lt_install.files += $$PWD/database_lt.db
++enable-presage {
++  lang_db_lt.commands += \
++    rm -f $$PWD/database_lt.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_lt.db $$PWD/free_ebook.txt
++  lang_db_lt.files += $$PWD/database_lt.db
++  lang_db_lt_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_lt_install.files += $$PWD/database_lt.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_lt lang_db_lt_install
++  QMAKE_EXTRA_TARGETS += lang_db_lt lang_db_lt_install
++
++  INSTALLS += lang_db_lt_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_lt_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     lithuanianplugin.json \
+@@ -42,7 +48,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/lv/src/src.pro b/plugins/lv/src/src.pro
+index 299f41bb..bf9c8587 100644
+--- a/plugins/lv/src/src.pro
++++ b/plugins/lv/src/src.pro
+@@ -22,19 +22,25 @@ EXAMPLE_FILES = latvianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/lv/
+ 
+-lang_db_lv.commands += \
+-  rm -f $$PWD/database_lv.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt
+-lang_db_lv.files += $$PWD/database_lv.db
+-lang_db_lv_install.path = $$PLUGIN_INSTALL_PATH
+-lang_db_lv_install.files += $$PWD/database_lv.db
++enable-presage {
++  lang_db_lv.commands += \
++    rm -f $$PWD/database_lv.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_lv.db $$PWD/free_ebook.txt
++  lang_db_lv.files += $$PWD/database_lv.db
++  lang_db_lv_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_lv_install.files += $$PWD/database_lv.db
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_lv lang_db_lv_install
++  QMAKE_EXTRA_TARGETS += lang_db_lv lang_db_lv_install
++
++  INSTALLS += lang_db_lv_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_lv_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     latvianplugin.json \
+@@ -42,7 +48,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/mk/src/src.pro b/plugins/mk/src/src.pro
+index 5553833e..66df30ce 100644
+--- a/plugins/mk/src/src.pro
++++ b/plugins/mk/src/src.pro
+@@ -27,7 +27,11 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
++
++enable-presage {
++  LIBS += -lpresage
++}
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/nb/src/src.pro b/plugins/nb/src/src.pro
+index 70b5aa34..b933f680 100644
+--- a/plugins/nb/src/src.pro
++++ b/plugins/nb/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = norwegianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/nb/
+ 
+-lang_db_nb.commands += \
+-  rm -f $$PWD/database_nb.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt
+-lang_db_nb.files += $$PWD/database_nb.db
++enable-presage {
++	lang_db_nb.commands += \
++	  rm -f $$PWD/database_nb.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_nb.db $$PWD/free_ebook.txt
++	lang_db_nb.files += $$PWD/database_nb.db
+ 
+-lang_db_nb_install.files += $$PWD/database_nb.db
+-lang_db_nb_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_nb_install.files += $$PWD/database_nb.db
++	lang_db_nb_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_nb lang_db_nb_install
++	QMAKE_EXTRA_TARGETS += lang_db_nb lang_db_nb_install
++
++  INSTALLS += lang_db_nb_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_nb_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     norwegianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/nl/src/src.pro b/plugins/nl/src/src.pro
+index 524c5a6d..9dfd02f3 100644
+--- a/plugins/nl/src/src.pro
++++ b/plugins/nl/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = dutchplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/nl/
+ 
+-lang_db_nl.commands += \
+-  rm -f $$PWD/database_nl.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt
+-lang_db_nl.files += $$PWD/database_nl.db
++enable-presage {
++  lang_db_nl.commands += \
++    rm -f $$PWD/database_nl.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_nl.db $$PWD/free_ebook.txt
++  lang_db_nl.files += $$PWD/database_nl.db
+ 
+-lang_db_nl_install.files += $$PWD/database_nl.db
+-lang_db_nl_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_nl_install.files += $$PWD/database_nl.db
++  lang_db_nl_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_nl lang_db_nl_install
++  QMAKE_EXTRA_TARGETS += lang_db_nl lang_db_nl_install
++
++  INSTALLS += lang_db_nl_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_nl_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     dutchplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/pl/src/src.pro b/plugins/pl/src/src.pro
+index 9d2e5d9a..3e023a1a 100644
+--- a/plugins/pl/src/src.pro
++++ b/plugins/pl/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = polishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/pl/
+ 
+-lang_db_pl.commands += \
+-  rm -f $$PWD/database_pl.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt
+-lang_db_pl.files += $$PWD/database_pl.db
++enable-presage {
++	lang_db_pl.commands += \
++	  rm -f $$PWD/database_pl.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_pl.db $$PWD/ziemia_obiecana_tom_pierwszy_4.txt
++	lang_db_pl.files += $$PWD/database_pl.db
+ 
+-lang_db_pl_install.files += $$PWD/database_pl.db
+-lang_db_pl_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_pl_install.files += $$PWD/database_pl.db
++	lang_db_pl_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_pl lang_db_pl_install
++	QMAKE_EXTRA_TARGETS += lang_db_pl lang_db_pl_install
++
++  INSTALLS += lang_db_pl_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_pl_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     polishplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/pt/src/src.pro b/plugins/pt/src/src.pro
+index b90bc434..cd7aadad 100644
+--- a/plugins/pt/src/src.pro
++++ b/plugins/pt/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = portugueseplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $$LOMIRI_KEYBOARD_PLUGIN_DIR/pt/
+ 
+-lang_db_pt.commands += \
+-  rm -f $$PWD/database_pt.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt
+-lang_db_pt.files += $$PWD/database_pt.db
++enable-presage {
++  lang_db_pt.commands += \
++    rm -f $$PWD/database_pt.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_pt.db $$PWD/historias_sem_data.txt
++  lang_db_pt.files += $$PWD/database_pt.db
+ 
+-lang_db_pt_install.files += $$PWD/database_pt.db
+-lang_db_pt_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_pt_install.files += $$PWD/database_pt.db
++  lang_db_pt_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_pt lang_db_pt_install
++  QMAKE_EXTRA_TARGETS += lang_db_pt lang_db_pt_install
++
++  INSTALLS += lang_db_pt_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_pt_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     portugueseplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/ro/src/src.pro b/plugins/ro/src/src.pro
+index e012cc0a..5bc486d4 100644
+--- a/plugins/ro/src/src.pro
++++ b/plugins/ro/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = romanianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/ro/
+ 
+-lang_db_ro.commands += \
+-  rm -f $$PWD/database_ro.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt
+-lang_db_ro.files += $$PWD/database_ro.db
++enable-presage {
++  lang_db_ro.commands += \
++    rm -f $$PWD/database_ro.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_ro.db $$PWD/amintiri_din_copilarie.txt
++  lang_db_ro.files += $$PWD/database_ro.db
+ 
+-lang_db_ro_install.files += $$PWD/database_ro.db
+-lang_db_ro_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_ro_install.files += $$PWD/database_ro.db
++  lang_db_ro_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_ro lang_db_ro_install
++  QMAKE_EXTRA_TARGETS += lang_db_ro lang_db_ro_install
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
++
++  INSTALLS += lang_db_ro_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_ro_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     romanianplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/ru/src/src.pro b/plugins/ru/src/src.pro
+index 8dbe639a..623193c9 100644
+--- a/plugins/ru/src/src.pro
++++ b/plugins/ru/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = russianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/ru/
+ 
+-lang_db_ru.commands += \
+-  rm -f $$PWD/database_ru.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt
+-lang_db_ru.files += $$PWD/database_ru.db
++enable-presage {
++	lang_db_ru.commands += \
++	  rm -f $$PWD/database_ru.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_ru.db $$PWD/free_ebook.txt
++	lang_db_ru.files += $$PWD/database_ru.db
+ 
+-lang_db_ru_install.files += $$PWD/database_ru.db
+-lang_db_ru_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_ru_install.files += $$PWD/database_ru.db
++	lang_db_ru_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_ru lang_db_ru_install
++	QMAKE_EXTRA_TARGETS += lang_db_ru lang_db_ru_install
++
++  INSTALLS += lang_db_ru_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_ru_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     russianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/sl/src/src.pro b/plugins/sl/src/src.pro
+index 19da7408..8e051712 100644
+--- a/plugins/sl/src/src.pro
++++ b/plugins/sl/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = slovenianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/sl/
+ 
+-lang_db_sl.commands += \
+-  rm -f $$PWD/database_sl.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt
+-lang_db_sl.files += $$PWD/database_sl.db
++enable-presage {
++	lang_db_sl.commands += \
++	  rm -f $$PWD/database_sl.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_sl.db $$PWD/free_ebook.txt
++	lang_db_sl.files += $$PWD/database_sl.db
+ 
+-lang_db_sl_install.files += $$PWD/database_sl.db
+-lang_db_sl_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_sl_install.files += $$PWD/database_sl.db
++	lang_db_sl_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_sl lang_db_sl_install
++	QMAKE_EXTRA_TARGETS += lang_db_sl lang_db_sl_install
++
++  INSTALLS += lang_db_sl_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_sl_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     slovenianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/sr/src/src.pro b/plugins/sr/src/src.pro
+index c1f4ca10..691eb646 100644
+--- a/plugins/sr/src/src.pro
++++ b/plugins/sr/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = serbianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/sr/
+ 
+-lang_db_sr.commands += \
+-  rm -f $$PWD/database_sr.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt
+-lang_db_sr.files += $$PWD/database_sr.db
++enable-presage {
++	lang_db_sr.commands += \
++	  rm -f $$PWD/database_sr.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_sr.db $$PWD/free_ebook.txt
++	lang_db_sr.files += $$PWD/database_sr.db
+ 
+-lang_db_sr_install.files += $$PWD/database_sr.db
+-lang_db_sr_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_sr_install.files += $$PWD/database_sr.db
++	lang_db_sr_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_sr lang_db_sr_install
++	QMAKE_EXTRA_TARGETS += lang_db_sr lang_db_sr_install
++
++  INSTALLS += lang_db_sr_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_sr_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     serbianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/sv/src/src.pro b/plugins/sv/src/src.pro
+index b66abb45..6dd9693a 100644
+--- a/plugins/sv/src/src.pro
++++ b/plugins/sv/src/src.pro
+@@ -22,23 +22,29 @@ EXAMPLE_FILES = swedishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/sv/
+ 
+-lang_db_sv.commands += \
+-  rm -f $$PWD/database_sv.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt
+-lang_db_sv.files += $$PWD/database_sv.db
++enable-presage {
++  lang_db_sv.commands += \
++    rm -f $$PWD/database_sv.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_sv.db $$PWD/free_ebook.txt
++  lang_db_sv.files += $$PWD/database_sv.db
+ 
+-lang_db_sv_install.files += $$PWD/database_sv.db
+-lang_db_sv_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_sv_install.files += $$PWD/database_sv.db
++  lang_db_sv_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-overrides.files += $$PWD/overrides.csv
+-overrides.path += $$PLUGIN_INSTALL_PATH
++  overrides.files += $$PWD/overrides.csv
++  overrides.path += $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_sv lang_db_sv_install
++  QMAKE_EXTRA_TARGETS += lang_db_sv lang_db_sv_install
++
++  INSTALLS += lang_db_sv_install overrides
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_sv_install overrides
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     swedishplugin.json \
+@@ -46,7 +52,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/tr/src/src.pro b/plugins/tr/src/src.pro
+index 6e3d6519..bb80840b 100644
+--- a/plugins/tr/src/src.pro
++++ b/plugins/tr/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = turkishplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/tr/
+ 
+-lang_db_tr.commands += \
+-  rm -f $$PWD/database_tr.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt
+-lang_db_tr.files += $$PWD/database_tr.db
++enable-presage {
++	lang_db_tr.commands += \
++	  rm -f $$PWD/database_tr.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_tr.db $$PWD/free_ebook.txt
++	lang_db_tr.files += $$PWD/database_tr.db
+ 
+-lang_db_tr_install.files += $$PWD/database_tr.db
+-lang_db_tr_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_tr_install.files += $$PWD/database_tr.db
++	lang_db_tr_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_tr lang_db_tr_install
++	QMAKE_EXTRA_TARGETS += lang_db_tr lang_db_tr_install
++
++  INSTALLS += lang_db_tr_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_tr_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     free_ebook.txt \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/uk/src/src.pro b/plugins/uk/src/src.pro
+index 5a843ddf..e885cccd 100644
+--- a/plugins/uk/src/src.pro
++++ b/plugins/uk/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = ukrainianplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_PLUGIN_DIR}/uk/
+ 
+-lang_db_uk.commands += \
+-  rm -f $$PWD/database_uk.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt
+-lang_db_uk.files += $$PWD/database_uk.db
++enable-presage {
++  lang_db_uk.commands += \
++    rm -f $$PWD/database_uk.db && \
++    text2ngram -n 1 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt && \
++    text2ngram -n 2 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt && \
++    text2ngram -n 3 -l -f sqlite -o $$PWD/database_uk.db $$PWD/free_ebook.txt
++  lang_db_uk.files += $$PWD/database_uk.db
+ 
+-lang_db_uk_install.files += $$PWD/database_uk.db
+-lang_db_uk_install.path = $$PLUGIN_INSTALL_PATH
++  lang_db_uk_install.files += $$PWD/database_uk.db
++  lang_db_uk_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_uk lang_db_uk_install
++  QMAKE_EXTRA_TARGETS += lang_db_uk lang_db_uk_install
++
++  INSTALLS += lang_db_uk_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_uk_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     ukrainianplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $$PWD/../../westernsupport
+ DEPENDPATH += $$PWD/../../westernsupport
+diff --git a/plugins/westernsupport/candidatescallback.h b/plugins/westernsupport/candidatescallback.h
+index ae3fa338..b684b5f2 100644
+--- a/plugins/westernsupport/candidatescallback.h
++++ b/plugins/westernsupport/candidatescallback.h
+@@ -1,10 +1,16 @@
+ #ifndef CANDIDATESCALLBACK_H
+ #define CANDIDATESCALLBACK_H
+ 
++#include <string>
++
++#ifdef HAVE_PRESAGE
+ #include <presage.h>
++#endif
+ 
+ class CandidatesCallback
++#ifdef HAVE_PRESAGE
+     : public PresageCallback
++#endif
+ {
+ private:
+     const std::string& m_past_context;
+diff --git a/plugins/westernsupport/spellpredictworker.cpp b/plugins/westernsupport/spellpredictworker.cpp
+index 768148d0..b5fae1ff 100644
+--- a/plugins/westernsupport/spellpredictworker.cpp
++++ b/plugins/westernsupport/spellpredictworker.cpp
+@@ -33,12 +33,16 @@ SpellPredictWorker::SpellPredictWorker(QObject *parent)
+     : QObject(parent)
+     , m_candidatesContext()
+     , m_presageCandidates(CandidatesCallback(m_candidatesContext))
++#ifdef HAVE_PRESAGE
+     , m_presage(&m_presageCandidates)
++#endif
+     , m_spellChecker()
+     , m_limit(5)
+ {
++#ifdef HAVE_PRESAGE
+     m_presage.config("Presage.Selector.SUGGESTIONS", "6");
+     m_presage.config("Presage.Selector.REPEAT_SUGGESTIONS", "yes");
++#endif
+ }
+ 
+ void SpellPredictWorker::parsePredictionText(const QString& surroundingLeft, const QString& origPreedit)
+@@ -62,7 +66,11 @@ void SpellPredictWorker::parsePredictionText(const QString& surroundingLeft, con
+     }
+ 
+     try {
++#ifdef HAVE_PRESAGE
+         const std::vector<std::string> predictions = m_presage.predict();
++#else
++        const std::vector<std::string> predictions;
++#endif
+ 
+         std::vector<std::string>::const_iterator it;
+         for (it = predictions.begin(); it != predictions.end(); ++it) {
+@@ -112,11 +120,13 @@ void SpellPredictWorker::setLanguage(QString locale, QString pluginPath)
+     m_spellChecker.setLanguage(baseLocale);
+     m_spellChecker.setEnabled(true);
+ 
++#ifdef HAVE_PRESAGE
+     try {
+         m_presage.config("Presage.Predictors.DefaultSmoothedNgramPredictor.DBFILENAME", fullPath.toLatin1().data());
+     } catch (int error) {
+         qWarning() << "An exception was thrown in libpresage when changing language database, exception nr: " << error;
+     }
++#endif
+ }
+ 
+ void SpellPredictWorker::suggest(const QString& word, int limit)
+diff --git a/plugins/westernsupport/spellpredictworker.h b/plugins/westernsupport/spellpredictworker.h
+index 8996bbc5..c1906a2d 100644
+--- a/plugins/westernsupport/spellpredictworker.h
++++ b/plugins/westernsupport/spellpredictworker.h
+@@ -30,7 +30,9 @@
+ 
+ #include "spellchecker.h"
+ #include "candidatescallback.h"
++#ifdef HAVE_PRESAGE
+ #include <presage.h>
++#endif
+ 
+ #include <QObject>
+ #include <QStringList>
+@@ -61,7 +63,9 @@ signals:
+ private:
+     std::string m_candidatesContext;
+     CandidatesCallback m_presageCandidates;
++#ifdef HAVE_PRESAGE
+     Presage m_presage;
++#endif
+     SpellChecker m_spellChecker;
+     int m_limit;
+     QMap<QString, QString> m_overrides;
+diff --git a/plugins/westernsupport/westernlanguagesplugin.cpp b/plugins/westernsupport/westernlanguagesplugin.cpp
+index 40fa170f..a3fcce34 100644
+--- a/plugins/westernsupport/westernlanguagesplugin.cpp
++++ b/plugins/westernsupport/westernlanguagesplugin.cpp
+@@ -1,6 +1,6 @@
+ #include "westernlanguagesplugin.h"
+ #include "westernlanguagefeatures.h"
+-#include "spellpredictworker.h"
++// #include "spellpredictworker.h"
+ 
+ #include <QDebug>
+ 
+@@ -10,26 +10,26 @@ WesternLanguagesPlugin::WesternLanguagesPlugin(QObject *parent) :
+   , m_spellCheckEnabled(false)
+   , m_processingSpelling(false)
+ {
+-    m_spellPredictThread = new QThread();
+-    m_spellPredictWorker = new SpellPredictWorker();
+-    m_spellPredictWorker->moveToThread(m_spellPredictThread);
++    // m_spellPredictThread = new QThread();
++    // m_spellPredictWorker = new SpellPredictWorker();
++    // m_spellPredictWorker->moveToThread(m_spellPredictThread);
+ 
+-    connect(m_spellPredictWorker, SIGNAL(newSpellingSuggestions(QString, QStringList)), this, SLOT(spellCheckFinishedProcessing(QString, QStringList)));
+-    connect(m_spellPredictWorker, SIGNAL(newPredictionSuggestions(QString, QStringList)), this, SIGNAL(newPredictionSuggestions(QString, QStringList)));
+-    connect(this, SIGNAL(newSpellCheckWord(QString)), m_spellPredictWorker, SLOT(newSpellCheckWord(QString)));
+-    connect(this, SIGNAL(setSpellPredictLanguage(QString, QString)), m_spellPredictWorker, SLOT(setLanguage(QString, QString)));
+-    connect(this, SIGNAL(setSpellCheckLimit(int)), m_spellPredictWorker, SLOT(setSpellCheckLimit(int)));
+-    connect(this, SIGNAL(parsePredictionText(QString, QString)), m_spellPredictWorker, SLOT(parsePredictionText(QString, QString)));
+-    connect(this, SIGNAL(addToUserWordList(QString)), m_spellPredictWorker, SLOT(addToUserWordList(QString)));
+-    connect(this, SIGNAL(addOverride(QString, QString)), m_spellPredictWorker, SLOT(addOverride(QString, QString)));
+-    m_spellPredictThread->start();
++    // connect(m_spellPredictWorker, SIGNAL(newSpellingSuggestions(QString, QStringList)), this, SLOT(spellCheckFinishedProcessing(QString, QStringList)));
++    // connect(m_spellPredictWorker, SIGNAL(newPredictionSuggestions(QString, QStringList)), this, SIGNAL(newPredictionSuggestions(QString, QStringList)));
++    // connect(this, SIGNAL(newSpellCheckWord(QString)), m_spellPredictWorker, SLOT(newSpellCheckWord(QString)));
++    // connect(this, SIGNAL(setSpellPredictLanguage(QString, QString)), m_spellPredictWorker, SLOT(setLanguage(QString, QString)));
++    // connect(this, SIGNAL(setSpellCheckLimit(int)), m_spellPredictWorker, SLOT(setSpellCheckLimit(int)));
++    // connect(this, SIGNAL(parsePredictionText(QString, QString)), m_spellPredictWorker, SLOT(parsePredictionText(QString, QString)));
++    // connect(this, SIGNAL(addToUserWordList(QString)), m_spellPredictWorker, SLOT(addToUserWordList(QString)));
++    // connect(this, SIGNAL(addOverride(QString, QString)), m_spellPredictWorker, SLOT(addOverride(QString, QString)));
++    // m_spellPredictThread->start();
+ }
+ 
+ WesternLanguagesPlugin::~WesternLanguagesPlugin()
+ {
+-    m_spellPredictWorker->deleteLater();
+-    m_spellPredictThread->quit();
+-    m_spellPredictThread->wait();
++    // m_spellPredictWorker->deleteLater();
++    // m_spellPredictThread->quit();
++    // m_spellPredictThread->wait();
+ }
+ 
+ void WesternLanguagesPlugin::predict(const QString& surroundingLeft, const QString& preedit)
+diff --git a/plugins/westernsupport/westernlanguagesplugin.h b/plugins/westernsupport/westernlanguagesplugin.h
+index a4733cb0..b1863dfa 100644
+--- a/plugins/westernsupport/westernlanguagesplugin.h
++++ b/plugins/westernsupport/westernlanguagesplugin.h
+@@ -2,14 +2,16 @@
+ #define WESTERNLANGUAGESPLUGIN_H
+ 
+ #include <QObject>
++#ifdef HAVE_PRESAGE
+ #include <presage.h>
++#endif
+ 
+ #include "languageplugininterface.h"
+ #include "candidatescallback.h"
+ #include "westernlanguagefeatures.h"
+ #include "spellchecker.h"
+ #include "abstractlanguageplugin.h"
+-#include "spellpredictworker.h"
++// #include "spellpredictworker.h"
+ 
+ class WesternLanguageFeatures;
+ class CandidatesCallback;
+@@ -50,8 +52,8 @@ public slots:
+ 
+ private:
+     WesternLanguageFeatures* m_languageFeatures;
+-    SpellPredictWorker *m_spellPredictWorker;
+-    QThread *m_spellPredictThread;
++    // SpellPredictWorker *m_spellPredictWorker;
++    // QThread *m_spellPredictThread;
+     bool m_spellCheckEnabled;
+     QString m_nextSpellWord;
+     bool m_processingSpelling;
+diff --git a/plugins/westernsupport/westernsupport.pro b/plugins/westernsupport/westernsupport.pro
+index fbaeaa21..83c2c88c 100644
+--- a/plugins/westernsupport/westernsupport.pro
++++ b/plugins/westernsupport/westernsupport.pro
+@@ -54,5 +54,7 @@ PKGCONFIG += hunspell
+ DEFINES += HAVE_HUNSPELL
+ 
+ # presage
+-LIBS += -lpresage
++enable-presage {
++  LIBS += -lpresage
++}
+ DEFINES += HUNSPELL_DICT_PATH=\\\"$$HUNSPELL_DICT_PATH\\\"
+diff --git a/src/word-prediction.pri b/src/word-prediction.pri
+index 7a6d4c29..fee211c3 100644
+--- a/src/word-prediction.pri
++++ b/src/word-prediction.pri
+@@ -1,6 +1,6 @@
+ # to be included at bottom of .pro files
+ enable-presage {
+-#    DEFINES += HAVE_PRESAGE
++    DEFINES += HAVE_PRESAGE
+     LIBS += -lpresage
+ }
+ 
+diff --git a/tests/testlayout/src/src.pro b/tests/testlayout/src/src.pro
+index 60140ede..bf491262 100644
+--- a/tests/testlayout/src/src.pro
++++ b/tests/testlayout/src/src.pro
+@@ -22,20 +22,26 @@ EXAMPLE_FILES = testlayoutplugin.json
+ # generate database for presage:
+ PLUGIN_INSTALL_PATH = $${LOMIRI_KEYBOARD_TEST_DIR}/testlayout/
+ 
+-lang_db_testlayout.commands += \
+-  rm -f $$PWD/database_testlayout.db && \
+-  text2ngram -n 1 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt && \
+-  text2ngram -n 2 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt && \
+-  text2ngram -n 3 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt
+-lang_db_testlayout.files += $$PWD/database_testlayout.db
++enable-presage {
++	lang_db_testlayout.commands += \
++	  rm -f $$PWD/database_testlayout.db && \
++	  text2ngram -n 1 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt && \
++	  text2ngram -n 2 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt && \
++	  text2ngram -n 3 -l -f sqlite -o $$PWD/database_testlayout.db $$PWD/empty.txt
++	lang_db_testlayout.files += $$PWD/database_testlayout.db
+ 
+-lang_db_testlayout_install.files += $$PWD/database_testlayout.db
+-lang_db_testlayout_install.path = $$PLUGIN_INSTALL_PATH
++	lang_db_testlayout_install.files += $$PWD/database_testlayout.db
++	lang_db_testlayout_install.path = $$PLUGIN_INSTALL_PATH
+ 
+-QMAKE_EXTRA_TARGETS += lang_db_testlayout lang_db_testlayout_install
++	QMAKE_EXTRA_TARGETS += lang_db_testlayout lang_db_testlayout_install
++
++  INSTALLS += lang_db_testlayout_install
++
++  LIBS += -lpresage
++}
+ 
+ target.path = $$PLUGIN_INSTALL_PATH
+-INSTALLS += target lang_db_testlayout_install
++INSTALLS += target
+ 
+ OTHER_FILES += \
+     testlayoutplugin.json \
+@@ -43,7 +49,7 @@ OTHER_FILES += \
+ 
+ CONFIG += link_pkgconfig
+ PKGCONFIG += hunspell
+-LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a -lpresage
++LIBS += $${TOP_BUILDDIR}/plugins/plugins/libwesternsupport.a
+ 
+ INCLUDEPATH += $${TOP_SRCDIR}/plugins/westernsupport
+ DEPENDPATH += $${TOP_SRCDIR}/plugins/westernsupport
+diff --git a/word-prediction.pri b/word-prediction.pri
+index 7a6d4c29..fee211c3 100644
+--- a/word-prediction.pri
++++ b/word-prediction.pri
+@@ -1,6 +1,6 @@
+ # to be included at bottom of .pro files
+ enable-presage {
+-#    DEFINES += HAVE_PRESAGE
++    DEFINES += HAVE_PRESAGE
+     LIBS += -lpresage
+ }
+ 
+-- 
+2.49.0
+

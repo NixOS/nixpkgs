@@ -1,0 +1,40 @@
+From e57d7e713001da190cdcc8d2f127b95a517f314c Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 23 Jun 2025 15:31:28 +0200
+Subject: [PATCH] src/mimpluginmanager.cpp: Allow external wrapper to collect
+ plugins
+
+Plugins will be looked up in NIX_MALIIT_PLUGINS_DIR if envvar exists. Then the regular (normally empty) path.
+---
+ src/mimpluginmanager.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/mimpluginmanager.cpp b/src/mimpluginmanager.cpp
+index b5048a6..dd500f2 100644
+--- a/src/mimpluginmanager.cpp
++++ b/src/mimpluginmanager.cpp
+@@ -40,6 +40,7 @@
+ 
+ namespace
+ {
++    const QString NixWrapperPluginLocation = qgetenv("NIX_MALIIT_PLUGINS_DIR");
+     const QString DefaultPluginLocation(MALIIT_PLUGINS_DIR);
+ 
+     const char * const VisualizationAttribute = "visualizationPriority";
+@@ -1188,7 +1189,12 @@ MIMPluginManager::MIMPluginManager(const QSharedPointer<MInputContextConnection>
+     connect(d->attributeExtensionManager.data(), SIGNAL(globalAttributeChanged(MAttributeExtensionId,QString,QString,QVariant)),
+             this, SLOT(onGlobalAttributeChanged(MAttributeExtensionId,QString,QString,QVariant)));
+ 
+-    d->paths        = MImSettings(MImPluginPaths).value(QStringList(DefaultPluginLocation)).toStringList();
++    QStringList pluginPaths;
++    if (!NixWrapperPluginLocation.isEmpty()) {
++        pluginPaths << NixWrapperPluginLocation;
++    }
++    pluginPaths << DefaultPluginLocation;
++    d->paths        = MImSettings(MImPluginPaths).value(pluginPaths).toStringList();
+     d->blacklist    = MImSettings(MImPluginDisabled).value().toStringList();
+ 
+     d->loadPlugins();
+-- 
+2.49.0
+
