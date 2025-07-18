@@ -52,7 +52,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.roastiek ];
+    maintainers = with lib.maintainers; [
+      roastiek
+      mvs
+    ];
+
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })
