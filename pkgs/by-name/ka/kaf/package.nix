@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -19,6 +20,13 @@ buildGoModule rec {
 
   # Many tests require a running Kafka instance
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kaf \
+      --bash <($out/bin/kaf completion bash) \
+      --zsh <($out/bin/kaf completion zsh) \
+      --fish <($out/bin/kaf completion fish)
+  '';
 
   meta = with lib; {
     description = "Modern CLI for Apache Kafka, written in Go";
