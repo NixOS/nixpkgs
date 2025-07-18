@@ -1,0 +1,134 @@
+diff --git a/.gitmodules b/.gitmodules
+index 3ffdc49..fed34fe 100644
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -1,6 +1,6 @@
+ [submodule "modules/hump"]
+ 	path = modules/hump
+-	url = git@github.com:vrld/hump.git
++	url = https://github.com/vrld/hump.git
+ [submodule "modules/bump"]
+ 	path = modules/bump
+-	url = git@github.com:kikito/bump.lua.git
++	url = https://github.com/kikito/bump.lua.git
+diff --git a/src/music.lua b/src/music.lua
+index 5ac15b4..711734d 100644
+--- a/src/music.lua
++++ b/src/music.lua
+@@ -10,10 +10,10 @@ Music.QUIET_RAIN_VOLUME = 0.4
+ Music.QUIET_RAIN_PITCH = 0.6
+ Music.AUDIO_MAX_VOLUME = 10
+ 
+-local loud = love.audio.newSource('res/sounds/bee_dangerous.mp3')
+-local soft = love.audio.newSource('res/sounds/bee_calm.mp3')
+-local ambient = love.audio.newSource('res/sounds/bee_ambient.mp3')
+-local rain = love.audio.newSource('res/sounds/rain.mp3')
++local loud = love.audio.newSource('res/sounds/bee_dangerous.mp3', "stream")
++local soft = love.audio.newSource('res/sounds/bee_calm.mp3', "stream")
++local ambient = love.audio.newSource('res/sounds/bee_ambient.mp3', "stream")
++local rain = love.audio.newSource('res/sounds/rain.mp3', "stream")
+ 
+ local prevQuietRain = false
+ local quietRain = false
+diff --git a/src/objects/enemy.lua b/src/objects/enemy.lua
+index 6f94521..6c30afa 100644
+--- a/src/objects/enemy.lua
++++ b/src/objects/enemy.lua
+@@ -6,7 +6,7 @@ local Enemy = Class.new()
+ Enemy:include(Object)
+ 
+ local sounds = {
+-    buzz = love.audio.newSource('res/sounds/fly.mp3')
++    buzz = love.audio.newSource('res/sounds/fly.mp3', "stream")
+ }
+ 
+ function Enemy:init(objects, x, y, player)
+diff --git a/src/objects/flower.lua b/src/objects/flower.lua
+index 7acc9a1..c88af54 100644
+--- a/src/objects/flower.lua
++++ b/src/objects/flower.lua
+@@ -17,7 +17,7 @@ local sprites = {
+ }
+ 
+ local sounds = {
+-    poof = love.audio.newSource('res/sounds/poof.mp3')
++    poof = love.audio.newSource('res/sounds/poof.mp3', "stream")
+ }
+ 
+ local Pollen = Class.new()
+diff --git a/src/objects/frog.lua b/src/objects/frog.lua
+index b9670d7..34fc75d 100644
+--- a/src/objects/frog.lua
++++ b/src/objects/frog.lua
+@@ -13,7 +13,7 @@ local sprites = {
+ }
+ 
+ local sounds = {
+-    frog = love.audio.newSource('res/sounds/ribbit.wav')
++    frog = love.audio.newSource('res/sounds/ribbit.wav', "stream")
+ }
+ 
+ local Tongue = Class.new()
+diff --git a/src/objects/raindrop.lua b/src/objects/raindrop.lua
+index c9e1005..e4fc55a 100644
+--- a/src/objects/raindrop.lua
++++ b/src/objects/raindrop.lua
+@@ -15,7 +15,7 @@ local sprites = {
+ }
+ 
+ local sounds = {
+-    droplet = love.audio.newSource('res/sounds/droplet.wav')
++    droplet = love.audio.newSource('res/sounds/droplet.wav', "stream")
+ }
+ 
+ function Raindrop:init(objects, x, y, radius)
+diff --git a/src/states/game.lua b/src/states/game.lua
+index b350dea..dffe883 100644
+--- a/src/states/game.lua
++++ b/src/states/game.lua
+@@ -31,7 +31,7 @@ local sprites = {
+ }
+ 
+ local sounds = {
+-    thunder = love.audio.newSource('res/sounds/thunder.mp3')
++    thunder = love.audio.newSource('res/sounds/thunder.mp3', "stream")
+ }
+ 
+ function Game:init()
+
+diff --git a/src/objects/flower.lua b/src/objects/flower.lua
+index c88af54..73423bc 100644
+--- a/src/objects/flower.lua
++++ b/src/objects/flower.lua
+@@ -88,7 +88,7 @@ function Flower:init(objects, x, y)
+     self.splashes:setPosition(x, y)
+     self.splashes:setOffset(16, 32)
+     self.splashes:setParticleLifetime(10)
+-    self.splashes:setAreaSpread('uniform', 70, 4)
++    self.splashes:setEmissionArea('uniform', 70, 4)
+ 
+     self.timer = Timer.new()
+     self.timer:every(10, function()
+@@ -98,7 +98,7 @@ function Flower:init(objects, x, y)
+     self.droplets = love.graphics.newParticleSystem(sprites.dropletSmall)
+     self.droplets:setSizes(0.4, 0)
+     self.droplets:setPosition(x, y)
+-    self.droplets:setAreaSpread('uniform', 70, 4)
++    self.droplets:setEmissionArea('uniform', 70, 4)
+     self.droplets:setParticleLifetime(30)
+     self.droplets:setLinearAcceleration(0, 0.2)
+ 
+diff --git a/src/objects/frog.lua b/src/objects/frog.lua
+index 34fc75d..a3cc111 100644
+--- a/src/objects/frog.lua
++++ b/src/objects/frog.lua
+@@ -80,7 +80,7 @@ function Frog:init(objects, x, y, player)
+     self.particles:setPosition(x, y - 70)
+     self.particles:setOffset(16, 32)
+     self.particles:setParticleLifetime(10)
+-    self.particles:setAreaSpread('uniform', 128, 24)
++    self.particles:setEmissionArea('uniform', 128, 24)
+ 
+     self.timer = Timer.new()
+     self.timer:every(4, function()
+
