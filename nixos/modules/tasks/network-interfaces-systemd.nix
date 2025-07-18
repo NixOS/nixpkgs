@@ -24,6 +24,7 @@ let
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (ipip: ipip.dev) (attrValues cfg.ipips)
     ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
@@ -45,6 +46,9 @@ let
               }
               // optionalAttrs (gateway.metric != null) {
                 Metric = gateway.metric;
+              }
+              // optionalAttrs (gateway.source != null) {
+                PreferredSource = gateway.source;
               }
             )
           ];
@@ -435,7 +439,7 @@ in
                   // (optionalAttrs (sit.ttl != null) {
                     TTL = sit.ttl;
                   })
-                  // (optionalAttrs (sit.encapsulation != null) (
+                  // (optionalAttrs (sit.encapsulation.type != "6in4") (
                     {
                       FooOverUDP = true;
                       Encapsulation = if sit.encapsulation.type == "fou" then "FooOverUDP" else "GenericUDPEncapsulation";
@@ -448,6 +452,38 @@ in
               };
               networks = mkIf (sit.dev != null) {
                 "40-${sit.dev}" = {
+                  tunnel = [ name ];
+                };
+              };
+            }
+          )
+        ))
+        (mkMerge (
+          flip mapAttrsToList cfg.ipips (
+            name: ipip: {
+              netdevs."40-${name}" = {
+                netdevConfig = {
+                  Name = name;
+                  Kind = if ipip.encapsulation.type == "ipip" then "ipip" else "ip6tnl";
+                };
+                tunnelConfig =
+                  (optionalAttrs (ipip.remote != null) {
+                    Remote = ipip.remote;
+                  })
+                  // (optionalAttrs (ipip.local != null) {
+                    Local = ipip.local;
+                  })
+                  // (optionalAttrs (ipip.ttl != null) {
+                    TTL = ipip.ttl;
+                  })
+                  // (optionalAttrs (ipip.encapsulation.type != "ipip") {
+                    # IPv6 tunnel options
+                    Mode = if ipip.encapsulation.type == "4in6" then "ipip6" else "ip6ip6";
+                    EncapsulationLimit = ipip.encapsulation.type;
+                  });
+              };
+              networks = mkIf (ipip.dev != null) {
+                "40-${ipip.dev}" = {
                   tunnel = [ name ];
                 };
               };

@@ -19,7 +19,8 @@ let
   hasSits = cfg.sits != { };
   hasGres = cfg.greTunnels != { };
   hasBonds = cfg.bonds != { };
-  hasFous = cfg.fooOverUDP != { } || filterAttrs (_: s: s.encapsulation != null) cfg.sits != { };
+  hasFous =
+    cfg.fooOverUDP != { } || filterAttrs (_: s: s.encapsulation.type != "6in4") cfg.sits != { };
 
   slaves =
     concatMap (i: i.interfaces) (attrValues cfg.bonds)
@@ -178,6 +179,12 @@ let
           default = null;
           example = 42;
           description = "The default gateway metric/preference.";
+        };
+
+        source = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "The default source address.";
         };
 
       };
@@ -656,6 +663,7 @@ in
       example = {
         address = "131.211.84.1";
         interface = "enp3s0";
+        source = "131.211.84.2";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -669,6 +677,7 @@ in
       example = {
         address = "2001:4d0:1e04:895::1";
         interface = "enp3s0";
+        source = "2001:4d0:1e04:895::2";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -1134,6 +1143,104 @@ in
         });
     };
 
+    networking.ipips = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          wan4in6 = {
+            remote = "2001:db8::1";
+            local = "2001:db8::3";
+            dev = "wan6";
+            encapsulation.type = "4in6";
+            encapsulation.limit = 0;
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define interfaces encapsulating IP
+        packets within IP packets; which should be automatically created.
+
+        For example, this allows you to create 4in6 (RFC 2473)
+        or IP within IP (RFC 2003) tunnels.
+      '';
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+
+            remote = mkOption {
+              type = types.str;
+              example = "2001:db8::1";
+              description = ''
+                The address of the remote endpoint to forward traffic over.
+              '';
+            };
+
+            local = mkOption {
+              type = types.str;
+              example = "2001:db8::3";
+              description = ''
+                The address of the local endpoint which the remote
+                side should send packets to.
+              '';
+            };
+
+            ttl = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              example = 255;
+              description = ''
+                The time-to-live of the connection to the remote tunnel endpoint.
+              '';
+            };
+
+            dev = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "wan6";
+              description = ''
+                The underlying network device on which the tunnel resides.
+              '';
+            };
+
+            encapsulation.type = mkOption {
+              type = types.enum [
+                "ipip"
+                "4in6"
+                "ip6ip6"
+              ];
+              default = "ipip";
+              description = ''
+                Select the encapsulation type:
+
+                - `ipip` to create an IPv4 within IPv4 tunnel (RFC 2003).
+
+                - `4in6` to create a 4in6 tunnel (RFC 2473);
+
+                - `ip6ip6` to create an IPv6 within IPv6 tunnel (RFC 2473);
+
+                ::: {.note}
+                For encapsulating IPv6 within IPv4 packets, see
+                the ad-hoc {option}`networking.sits` option.
+                :::
+              '';
+            };
+
+            encapsulation.limit = mkOption {
+              type = types.either (types.enum [ "none" ]) types.ints.unsigned;
+              default = 4;
+              example = "none";
+              description = ''
+                For an IPv6-based tunnel, the maximum number of nested
+                encapsulation to allow. 0 means no nesting, "none" unlimited.
+              '';
+            };
+
+          };
+
+        });
+    };
+
     networking.sits = mkOption {
       default = { };
       example = literalExpression ''
@@ -1151,7 +1258,8 @@ in
         }
       '';
       description = ''
-        This option allows you to define 6-to-4 interfaces which should be automatically created.
+        This option allows you to define interfaces encapsulating IPv6
+        packets within IPv4 packets; which should be automatically created.
       '';
       type =
         with types;
@@ -1195,50 +1303,76 @@ in
               '';
             };
 
-            encapsulation =
-              with types;
-              mkOption {
-                type = nullOr (submodule {
+            encapsulation = mkOption {
+              type = types.nullOr (
+                types.submodule {
                   options = {
                     type = mkOption {
-                      type = enum [
+                      type = types.enum [
+                        "6in4"
                         "fou"
                         "gue"
                       ];
+                      default = "6in4";
                       description = ''
-                        Selects encapsulation type. See
-                        {manpage}`ip-link(8)` for details.
+                        Select the encapsulation type:
+
+                        - `6in4`: the IPv6 packets are encapsulated using the
+                          6in4 protocol (formerly known as SIT, RFC 4213);
+
+                        - `gue`: the IPv6 packets are encapsulated in UDP packets
+                           using the Generic UDP Encapsulation (GUE) scheme;
+
+                        - `foo`: the IPv6 packets are encapsulated in UDP packets
+                           using the Foo over UDP (FOU) scheme.
                       '';
                     };
 
                     port = mkOption {
-                      type = port;
+                      type = types.nullOr types.port;
+                      default = null;
                       example = 9001;
                       description = ''
-                        Destination port for encapsulated packets.
+                        Destination port when using UDP encapsulation.
                       '';
                     };
 
                     sourcePort = mkOption {
-                      type = nullOr types.port;
+                      type = types.nullOr types.port;
                       default = null;
                       example = 9002;
                       description = ''
-                        Source port for encapsulated packets. Will be chosen automatically by
-                        the kernel if unset.
+                        Source port when using UDP encapsulation.
+                        Will be chosen automatically by the kernel if unset.
                       '';
                     };
                   };
-                });
-                default = null;
-                example = {
-                  type = "fou";
-                  port = 9001;
-                };
-                description = ''
-                  Configures encapsulation in UDP packets.
-                '';
+                }
+              );
+              apply =
+                x:
+                if x == null then
+                  lib.warn
+                    ''
+                      The option networking.sits.*.encapsulation no longer accepts `null`
+                      as a valid value. To fix this warning simply remove this definition.
+                    ''
+                    {
+                      type = "6in4";
+                      port = null;
+                      sourcePort = null;
+                    }
+                else
+                  x;
+              default = { };
+              example = {
+                type = "fou";
+                port = 9001;
               };
+              description = ''
+                Configures the type of encapsulation.
+              '';
+            };
 
           };
 
@@ -1540,6 +1674,8 @@ in
   };
 
   ###### implementation
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
   config = {
 
