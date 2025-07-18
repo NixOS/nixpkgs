@@ -12,26 +12,28 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.17.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iBDvvKy5alaieIm+Jv9WnqHVGjItDSvJAk+ClTRj3v0=";
+    hash = "sha256-JimVGDHL4pwN0ALdZVJjkzgdOMTlXo4okiH8b7aALJg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rHlzLawpCD9onhca9NzgUXmA2vDmW48cQrV05qs+tn8=";
+  cargoHash = "sha256-5Db3veAs2Zk1EzCp0M8krkUEtfiuJwbAUpUODquYXlA=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-0rJAU4PZAshTu6KD4EzIltUT8PO4dnWCY5oM3kyxBBk=";
+    hash = "sha256-m0W9S/NcbwVMsqSBh5GIHawQR1kRsEEQCnHGbSGNq74=";
   };
 
   npmRoot = "frontend";
@@ -82,6 +84,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";

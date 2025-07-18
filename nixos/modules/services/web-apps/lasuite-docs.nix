@@ -362,10 +362,6 @@ in
           touch .version
         fi
 
-        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
-          ${getExe cfg.backendPackage} migrate
-          echo -n "${cfg.backendPackage.version}" > .version
-        fi
         ${optionalString (cfg.secretKeyPath == null) ''
           if [[ ! -f /var/lib/lasuite-docs/django_secret_key ]]; then
             (
@@ -374,6 +370,10 @@ in
             )
           fi
         ''}
+        if [ "${cfg.backendPackage.version}" != "$(cat .version)" ]; then
+          ${getExe cfg.backendPackage} migrate
+          echo -n "${cfg.backendPackage.version}" > .version
+        fi
       '';
 
       environment = pythonEnvironment;

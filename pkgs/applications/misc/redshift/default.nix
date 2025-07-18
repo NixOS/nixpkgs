@@ -51,11 +51,6 @@ let
         meta
         ;
 
-      patches = lib.optionals (pname != "gammastep") [
-        # https://github.com/jonls/redshift/pull/575
-        ./575.patch
-      ];
-
       strictDeps = true;
 
       depsBuildBuild = [ pkg-config ];

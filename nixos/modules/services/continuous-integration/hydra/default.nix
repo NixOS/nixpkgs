@@ -423,11 +423,11 @@ in
         "network.target"
       ];
       path = [
-        hydra-package
-        pkgs.net-tools
-        pkgs.openssh
-        pkgs.bzip2
         config.nix.package
+        hydra-package
+        pkgs.bzip2
+        pkgs.hostname-debian
+        pkgs.openssh
       ];
       restartTriggers = [ hydraConf ];
       environment = env // {
@@ -458,8 +458,8 @@ in
         "network-online.target"
       ];
       path = with pkgs; [
+        hostname-debian
         hydra-package
-        net-tools
         jq
       ];
       restartTriggers = [ hydraConf ];
