@@ -12081,8 +12081,6 @@ with pkgs;
     };
   };
 
-  haruna = kdePackages.callPackage ../applications/video/haruna { };
-
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
