@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mcmah309 ];
+    mainProgram = "yard";
   };
 }
