@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "0.1.29";
+  version = "0.1.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-dvAPKNsj8ZnH0eLofbkE09hXL1g8YdViX8sQ/9+4L7k=";
+    hash = "sha256-Ow2xi3twW6FeG88Ya5AeRNk6MIY5JGqd7e1qukKTfQs=";
   };
 
   sourceRoot = "source/src/backend";
