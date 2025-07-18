@@ -38,14 +38,14 @@
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.22.2";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-HGpOEsTj4t57z38qKF6i1oUj7R7aFl8Xgk5y0TtgyMg=";
+    hash = "sha256-z9MRnhPSI+9lGS0UQ5VnSwdCGdYdNnqlDQmb8JAqmyc=";
   };
 
   postPatch =
@@ -63,11 +63,6 @@ buildPythonPackage rec {
     + ''
       substituteInPlace examples/compute_textures.py \
         --replace-fail 'import wgpu' 'import wgpu # run_example = false'
-    ''
-    # Tweak tests that fail due to a dependency of `wgpu-native`, `naga`, adding an `ir` module
-    + ''
-      substituteInPlace tests/test_wgpu_native_errors.py \
-        --replace-fail 'naga::' 'naga::ir::'
     '';
 
   # wgpu-py expects to have an appropriately named wgpu-native library in wgpu/resources
@@ -122,10 +117,13 @@ buildPythonPackage rec {
   # as there is no "script" to wrap.
   doCheck = stdenv.hostPlatform.isDarwin;
 
+  # Usually, we would run the `examples` suite as well, however the examples
+  # now require py-gfx's `rendercanvas`, which is not only not in nixpkgs, but also is
+  # pinned to a version lower than the current one.
   installCheckPhase = ''
     runHook preInstallCheck
 
-    for suite in tests examples codegen tests_mem; do
+    for suite in tests codegen tests_mem; do
       pytest -vvv $suite
     done
 
