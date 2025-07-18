@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     find node_modules server/node_modules -xtype l -delete
 
     # remove non-deterministic files
-    rm node_modules/{.modules.yaml,.pnpm-workspace-state.json}
+    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''
