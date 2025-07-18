@@ -4,7 +4,7 @@
   python312,
 }:
 
-python312.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication {
   pname = "routersploit";
   version = "3.4.1-unstable-2025-04-24";
   pyproject = true;
@@ -50,11 +50,11 @@ python312.pkgs.buildPythonApplication rec {
     "tests/test_module_info.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       fab
       thtrf
     ];
