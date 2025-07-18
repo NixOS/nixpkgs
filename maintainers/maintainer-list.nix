@@ -7048,6 +7048,13 @@
     githubId = 757125;
     name = "Dzmitry Lahoda";
   };
+  e0 = {
+    email = "eliasoderso@riseup.net";
+    github = "e042";
+    githubId = 63226814;
+    name = "Elias";
+    keys = [ { fingerprint = "30E3 E009 E114 F95D F122 CD82 7AF8 8AB3 823A 5856"; } ];
+  };
   e1mo = {
     email = "nixpkgs@e1mo.de";
     matrix = "@e1mo:chaos.jetzt";
