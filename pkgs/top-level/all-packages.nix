@@ -11668,10 +11668,6 @@ with pkgs;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
-    inherit (libsForQt5) breeze-icons;
-  };
-
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
