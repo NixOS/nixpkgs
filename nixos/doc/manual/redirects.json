@@ -1902,6 +1902,9 @@
   "test-opt-sshBackdoor.vsockOffset": [
     "index.html#test-opt-sshBackdoor.vsockOffset"
   ],
+  "test-opt-enableDebugHook": [
+    "index.html#test-opt-enableDebugHook"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -2009,6 +2012,9 @@
   ],
   "sec-nixos-test-testing-hardware-features": [
     "index.html#sec-nixos-test-testing-hardware-features"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"
