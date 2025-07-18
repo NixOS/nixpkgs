@@ -16260,8 +16260,6 @@ with pkgs;
     callPackage ../applications/networking/cluster/terraform-providers { }
   );
 
-  terraforming = callPackage ../applications/networking/cluster/terraforming { };
-
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
   trufflehog = callPackage ../tools/security/trufflehog {
