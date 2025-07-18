@@ -1,10 +1,10 @@
 {
   lib,
   python3,
+  python3Packages,
   fetchFromGitHub,
 }:
-
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "syncall";
   version = "1.8.5";
   format = "pyproject";
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "syncall";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-f9WVZ1gpVG0wvIqoAkeaYBE4QsGXSqrYS4KyHy6S+0Q=";
   };
 
@@ -24,12 +24,12 @@ python3.pkgs.buildPythonApplication rec {
     --replace-fail 'typing = "^3.7.4"' '''
   '';
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-    python3.pkgs.poetry-dynamic-versioning
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     bidict
     bubop
     click
@@ -39,39 +39,40 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     rfc3339
     typing
-
-    # asana optional-dep
-    asana
-    # caldav optional-dep
-    caldav
-    icalendar
-    # fs optional-dep
-    xattr
-    # gkeep optional-dep
-    # gkeepapi is unavailable in nixpkgs
-    # google optional-dep
-    google-api-python-client
-    google-auth-oauthlib
-    # notion optional-dep
-    # FIXME: notion-client -- broken, doesn't build.
-    # taskwarrior optional-dep
-    taskw-ng
   ];
 
-  postInstall = ''
-    # We do not support gkeep
-    rm $out/bin/tw_gkeep_sync
-  '';
+  optional-dependencies = with python3Packages; {
+    asana = [
+      asana
+    ];
+    caldav = [
+      caldav
+      icalendar
+    ];
+    fs = [
+      xattr
+    ];
+    gkeep = [
+      gkeepapi
+    ];
+    gcal = [
+      google-api-python-client
+      google-auth-oauthlib
+    ];
+    notion-client = [
+      notion-client
+    ];
+    taskw-ng = [
+      taskw-ng
+    ];
+  };
 
   pythonImportsCheck = [ "syncall" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bi-directional synchronization between services such as Taskwarrior, Google Calendar, Notion, Asana, and more";
     homepage = "https://github.com/bergercookie/syncall";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raitobezarius ];
-    # Upstream issue making it practically unusable:
-    # https://github.com/bergercookie/syncall/issues/99
-    broken = true;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }
