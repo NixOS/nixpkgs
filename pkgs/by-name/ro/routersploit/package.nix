@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python312,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   pname = "routersploit";
   version = "3.4.1-unstable-2025-04-24";
   pyproject = true;
@@ -16,9 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-IET0vL0VVP9ZNn75hKdTCiEmOZRHHYICykhzW2g3LEg=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python312.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python312.pkgs; [
     future
     paramiko
     pycryptodome
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   # Tests are out-dated and support for newer pysnmp is not implemented yet
   doCheck = false;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python312.pkgs; [
     pytest-xdist
     pytestCheckHook
     threat9-test-bed
@@ -54,7 +54,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      thtrf
+    ];
     mainProgram = "rsf";
   };
 }
