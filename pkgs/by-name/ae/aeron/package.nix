@@ -119,14 +119,14 @@ stdenv.mkDerivation {
     jar = aeronAll.jar;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Low-latency messaging library";
     homepage = "https://aeron.io/";
-    license = licenses.asl20;
-    mainProgram = "${pname}-media-driver";
-    maintainers = [ maintainers.vaci ];
+    license = lib.licenses.asl20;
+    mainProgram = "aeron-media-driver";
+    maintainers = with lib.maintainers; [ vaci ];
     sourceProvenance = [
-      sourceTypes.binaryBytecode
+      lib.sourceTypes.binaryBytecode
     ];
   };
 }
