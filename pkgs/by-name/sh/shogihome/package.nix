@@ -66,12 +66,15 @@ buildNpmPackage (finalAttrs: {
     rm electron-dist/libvulkan.so.1
     cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
   ''
+  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+  # See: https://github.com/electron-userland/electron-builder/pull/9007
   + ''
     npm run electron:pack
 
     ./node_modules/.bin/electron-builder \
         --dir \
         --config .electron-builder.config.mjs \
+        -c.mac.identity=null \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
 
