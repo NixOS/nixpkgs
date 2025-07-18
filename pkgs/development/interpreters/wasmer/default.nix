@@ -5,26 +5,32 @@
   llvmPackages,
   libffi,
   libxml2,
+  makeWrapper,
+  bash,
+  make,
   withLLVM ? true,
   withSinglepass ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "5.0.4";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-rP0qvSb9PxsTMAq0hpB+zdSTHvridyCVdukLUYxdao8=";
+    hash = "sha256-Qx5bHCzdh3RqB5r93sa01mPyxN2EQWPWcIXJs1MrUHs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Fympp2A04viibo4U79FiBSJIeGDUWS34OOwebCks6S0=";
+  cargoHash = "sha256-/Kcd9vZu5QstIEjDYaJ/ddXUIXL1F8Omi+Bm4jtOKcg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    makeWrapper
+    bash
+    make
   ];
 
   buildInputs = lib.optionals withLLVM [
@@ -56,6 +62,22 @@ rustPlatform.buildRustPackage rec {
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;
+
+  postBuild = ''
+    # Prepare and build the Wasmer C-API
+    sed -i 's|SHELL=/usr/bin/env bash|SHELL=${bash}/bin/bash|' Makefile
+    make build-capi
+    make package-capi
+  '';
+
+  postInstall = ''
+    # Install the C-API headers, libs, etc.
+    cp -r package/* $out/
+
+    # Ensure the CLI can locate its assets
+    makeWrapper "$out/bin/wasmer" \
+      --set WASMER_DIR "$out"
+  '';
 
   meta = {
     description = "Universal WebAssembly Runtime";
