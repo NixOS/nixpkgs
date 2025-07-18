@@ -19,6 +19,7 @@
   libxcrypt-legacy,
   libxkbcommon,
   libkrb5,
+  libxml2,
   krb5,
   makeWrapper,
   markForCudatoolkitRootHook,
@@ -31,6 +32,7 @@
   python3, # FIXME: CUDAToolkit 10 may still need python27
   python310,
   python311,
+  python312,
   pulseaudio,
   setupCudaHook,
   stdenv,
@@ -156,6 +158,17 @@ backendStdenv.mkDerivation rec {
       ncurses6
       python310
       python311
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "12.9") [
+      # Replace once https://github.com/NixOS/nixpkgs/pull/421740 is merged.
+      (libxml2.overrideAttrs rec {
+        version = "2.13.8";
+        src = fetchurl {
+          url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+          hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+        };
+      })
+      python312
     ];
 
   # Prepended to runpaths by autoPatchelf.
@@ -177,6 +190,9 @@ backendStdenv.mkDerivation rec {
     # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
     # than pinned in runpath
     "libcuda.so.1"
+
+    # Similar to libcuda.so.1, this is part of the driver package.
+    "libnvidia-ml.so.1"
 
     # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
     # older
@@ -292,14 +308,22 @@ backendStdenv.mkDerivation rec {
         wrapProgram $out/bin/nvprof \
           --prefix LD_LIBRARY_PATH : $out/lib
       ''
-    # 11.8 includes a broken symlink, include/include, pointing to targets/x86_64-linux/include
-    + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
-      rm $out/include/include
+    # 11.8 and 12.9 include a broken symlink, include/include, pointing to targets/x86_64-linux/include
+    +
+      lib.optionalString
+        (lib.versions.majorMinor version == "11.8" || lib.versions.majorMinor version == "12.9")
+        ''
+          rm $out/include/include
+        ''
+    # 12.9 has another broken symlink, lib64/lib64, pointing to lib/targets/x86_64-linux/lib
+    + lib.optionalString (lib.versions.majorMinor version == "12.9") ''
+      rm $out/lib64/lib64
     ''
-    # Python 3.8 is not in nixpkgs anymore, delete Python 3.8 cuda-gdb support
-    # to avoid autopatchelf failing to find libpython3.8.so.
+    # Python 3.8 and 3.9 are not in nixpkgs anymore, delete Python 3.{8,9} cuda-gdb support
+    # to avoid autopatchelf failing to find libpython3.{8,9}.so.
     + lib.optionalString (lib.versionAtLeast version "12.6") ''
       find $out -name '*python3.8*' -delete
+      find $out -name '*python3.9*' -delete
     ''
     + ''
       runHook postInstall
