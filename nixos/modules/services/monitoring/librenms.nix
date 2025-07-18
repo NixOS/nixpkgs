@@ -43,6 +43,11 @@ let
     $sudo ${package}/artisan "$@"
   '';
 
+  libreNMSSyslogWrapper = pkgs.writeShellScriptBin "librenms-syslog" ''
+    cd ${package}
+    exec ${package.phpPackage}/bin/php ${package}/syslog.php "$@"
+  '';
+
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
     cd ${package}
     sudo=exec
@@ -337,6 +342,23 @@ in
       };
     };
 
+    ingestSyslog = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable a syslog-ng service on this LibreNMS instance in order to ingest and display Syslog traffic.
+        '';
+      };
+      syslogPort = mkOption {
+        type = types.port;
+        default = 514;
+        description = ''
+          Port accepting syslog traffic.
+        '';
+      };
+    };
+
     environmentFile = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -354,7 +376,11 @@ in
       description = ''
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
+
+        All possible options and their defaults are listed [here](https://github.com/librenms/librenms/blob/88fe1a7abdb500d9a2d4c45f9872df54c9ff8062/misc/config_definitions.json).
+        Be aware, that in case you want to extend a setting that is of type list, you will overwrite the defaults and not extend them.
+        Therefore you have to include the defaults as well, if you want to use them.
+
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
@@ -370,7 +396,7 @@ in
       default = null;
       description = ''
         Additional config for LibreNMS that will be appended to the `config.php`. See
-        <https://github.com/librenms/librenms/blob/master/misc/config_definitions.json>
+        <https://github.com/librenms/librenms/blob/88fe1a7abdb500d9a2d4c45f9872df54c9ff8062/misc/config_definitions.json>
         for possible options. Useful if you want to use PHP-Functions in your config.
       '';
     };
@@ -519,6 +545,26 @@ in
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
       } // cfg.poolConfig;
+    };
+
+    services.syslog-ng = lib.mkIf cfg.ingestSyslog.enable {
+      enable = true;
+      # Taken from here: https://docs.librenms.org/Extensions/Syslog/
+      extraConfig = ''
+        source s_net {
+          tcp(port(${toString cfg.ingestSyslog.syslogPort}) flags(syslog-protocol));
+          udp(port(${toString cfg.ingestSyslog.syslogPort}) flags(syslog-protocol));
+        };
+
+        destination d_librenms {
+          program("${libreNMSSyslogWrapper}/bin/librenms-syslog" template ("''$HOST||''$FACILITY||''$PRIORITY||''$LEVEL||''$TAG||''$R_YEAR-''$R_MONTH-''$R_DAY ''$R_HOUR:''$R_MIN:''$R_SEC||''$MSG||''$PROGRAM\n") template-escape(yes));
+        };
+
+        log {
+          source(s_net);
+          destination(d_librenms);
+        };
+      '';
     };
 
     systemd.services.librenms-scheduler = {
