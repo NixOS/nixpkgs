@@ -44,19 +44,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
+    sha256 = "sha256-ONpyJJjIn5kEnkudZe4Nf67wdQgWa+2qEkT1nxRBDpI=";
   };
 
   patches = [
     ./add-config-path-env-var.patch
     ./respect-xml-catalog-files-var.patch
     ./specify-localedir.patch
+
+    ./gettext-0.25.patch
   ];
 
   postPatch =

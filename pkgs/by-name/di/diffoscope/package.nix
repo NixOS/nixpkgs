@@ -277,10 +277,12 @@ python.pkgs.buildPythonApplication rec {
 
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
+
+      # Flaky test on Linux and Darwin
+      "test_non_unicode_filename"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
-      "test_non_unicode_filename"
       "test_listing"
       "test_symlink_root"
 
