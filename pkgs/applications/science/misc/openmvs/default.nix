@@ -70,11 +70,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest
-    runHook postCheck
-  '';
 
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
