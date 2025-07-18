@@ -2536,6 +2536,8 @@ self: super: with self; {
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
+  ckdl = callPackage ../development/python-modules/ckdl { inherit (pkgs) ckdl; };
+
   ckzg = callPackage ../development/python-modules/ckzg { };
 
   clarabel = callPackage ../development/python-modules/clarabel { };
