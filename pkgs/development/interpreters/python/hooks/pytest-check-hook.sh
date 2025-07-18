@@ -24,8 +24,30 @@ function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
     runHook preCheck
 
+    if [[ -z "${dontDisableSourceModuleTestPaths-}" ]]; then
+        # Don't discover tests inside the module source code to prevent import mismatch
+        local _installedModulePath _installedModulePathReal _moduleName
+        while read -r _installedModulePath; do
+            _installedModulePathReal=$(realpath "$_installedModulePath")
+            if [[ -d "$_installedModulePathReal" ]]; then
+                _moduleName=$(basename "$_installedModulePath")
+                if [[ -e "$_moduleName" ]] && [[ -d "$(realpath "$_moduleName")" ]]; then
+                    echo "Adding installed module $_moduleName to disabledTestPaths"
+                    appendToVar disabledTestPaths "$PWD/$_moduleName"
+                fi
+            elif [[ -f "$_installedModulePathReal" ]] && [[ "$_installedModulePath" == *.py ]]; then
+                _moduleName=$(basename -s .py "$_installedModulePath")
+                if [[ -e "${_moduleName}.py" ]]; then
+                    echo "Adding installed module file ${_moduleName}.py to disabledTestPaths"
+                    appendToVar disabledTestPaths "$PWD/${_moduleName}.py"
+                fi
+            fi
+        done < <(find "$out/@pythonSitePackages@" -mindepth 1 -maxdepth 1)
+        unset _installedModulePath _installedModulePathReal _moduleName
+    fi
+
     # Compose arguments
-    local -a flagsArray=(-m pytest)
+    local -a flagsArray=()
 
     local -a _pathsArray
     local path
@@ -88,7 +110,7 @@ EOF
 
     concatTo flagsArray pytestFlags
     echoCmd 'pytest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ "${flagsArray[@]}"
+    pytest "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"

@@ -1332,6 +1332,10 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 :   To append additional command-line arguments to `pytest`.
 
+`dontDisableSourceMoudleTestPaths`
+
+:   To opt out the default behaviour of adding source modules right under the current working directory to `disabledTestPaths`.
+
 By default, `pytest` automatically discovers which tests to run.
 If tests are explicitly enabled, only those tests will run.
 A test, that is both enabled and disabled, will not run.
