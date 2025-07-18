@@ -16,7 +16,9 @@
 
 let
 
-  eafApps = { };
+  eafApps = {
+    eaf-pdf-viewer = callPackage ./apps/pdf-viewer { };
+  };
 
   callApps = enabledApps eafApps;
 
