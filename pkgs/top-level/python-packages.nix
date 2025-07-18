@@ -8209,6 +8209,8 @@ self: super: with self; {
 
   libsupermesh = callPackage ../development/python-modules/libsupermesh { };
 
+  libtfr = callPackage ../development/python-modules/libtfr { };
+
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
   libtmux = callPackage ../development/python-modules/libtmux { };
