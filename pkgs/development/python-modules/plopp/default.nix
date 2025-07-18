@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -44,6 +45,13 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-SwF0bUU/DAAJ5+0WvZgwqEw6IoaqdbKj0GkCgffGclA=";
   };
+  patches = [
+    # https://github.com/scipp/plopp/issues/472
+    (fetchpatch {
+      url = "https://github.com/scipp/plopp/commit/7af8cbee85796005f2fea79171ae44aba9a8cfc7.patch";
+      hash = "sha256-uyCV/2tSvcnnw+ak6fT99ru+UrTZXsS3b4YGeXVykAY=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -103,11 +111,6 @@ buildPythonPackage rec {
             };
       };
   };
-
-  pytestFlagsArray = [
-    # https://github.com/scipp/plopp/issues/472
-    "-Wignore::DeprecationWarning"
-  ];
 
   pythonImportsCheck = [
     "plopp"
