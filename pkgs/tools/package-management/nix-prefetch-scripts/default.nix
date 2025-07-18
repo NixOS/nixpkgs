@@ -5,6 +5,7 @@
   buildEnv,
   bash,
   breezy,
+  cacert,
   coreutils,
   cvs,
   findutils,
@@ -12,7 +13,9 @@
   git,
   git-lfs,
   gnused,
+  jq,
   mercurial,
+  pijul,
   subversion,
 }:
 
@@ -73,6 +76,11 @@ rec {
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [
     subversion
   ];
+  nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
+    pijul
+    cacert
+    jq
+  ];
 
   nix-prefetch-scripts = buildEnv {
     name = "nix-prefetch-scripts";
@@ -83,6 +91,7 @@ rec {
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn
+      nix-prefetch-pijul
     ];
 
     meta = with lib; {
