@@ -323,6 +323,7 @@ in
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
   cloudlog = runTest ./cloudlog.nix;
+  cmk-agent = runTest ./cmk-agent.nix;
   cntr = import ./cntr.nix {
     inherit (pkgs) lib;
     runTest = runTestOn [
