@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kemai";
-  version = "0.11.1";
+  version = "98-break-ui";
 
   src = fetchFromGitHub {
     owner = "AlexandrePTJ";
     repo = "kemai";
     tag = finalAttrs.version;
-    hash = "sha256-2Cyrd0fKaEHkDaKF8lFwuoLvl6553rp3ET2xLUUrTnk=";
+    hash = "sha256-lO2ZkLGZzPoOIo0xkStvBalsBAVqRG2yZ6gSCEFok1I=";
   };
 
   postPatch = ''
