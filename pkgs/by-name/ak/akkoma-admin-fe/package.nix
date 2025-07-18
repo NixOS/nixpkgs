@@ -9,6 +9,7 @@
   nodejs,
   git,
   python3,
+  python3Packages,
   pkg-config,
   libsass,
   nix-update-script,
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     python3
+    python3Packages.distutils
     git
     libsass
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
