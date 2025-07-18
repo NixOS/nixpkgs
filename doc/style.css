@@ -326,8 +326,10 @@ div.appendix .important > :last-child {
 
 div.book .note,
 div.book .tip,
+div.book .important,
 div.appendix .note,
-div.appendix .tip {
+div.appendix .tip,
+div.appendix .important {
     color: var(--note-text-color);
     background: var(--note-background);
 }
