@@ -17,7 +17,9 @@ let
     elemAt
     extendDerivation
     filter
+    filterAttrs
     findFirst
+    foldl'
     getDev
     head
     imap1
@@ -714,6 +716,15 @@ let
       cmakeFlags ? [ ],
       mesonFlags ? [ ],
 
+      preserveMetaFields ? [
+        "name"
+        "pname"
+        "version"
+        "license"
+        "vendor"
+        "cpe"
+        "mainProgram"
+      ],
       meta ? { },
       passthru ? { },
       pos ? # position used in error messages and for meta.position
@@ -750,21 +761,40 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
       envIsExportable = isAttrs env' && !isDerivation env';
 
-      derivationArg = makeDerivationArgument (
-        removeAttrs attrs (
-          [
-            "meta"
-            "passthru"
-            "pos"
-          ]
-          ++ optional (__structuredAttrs || envIsExportable) "env"
-        )
-        // optionalAttrs __structuredAttrs { env = checkedEnv; }
-        // {
-          cmakeFlags = makeCMakeFlags attrs;
-          mesonFlags = makeMesonFlags attrs;
-        }
-      );
+      derivationArg =
+        let
+          # Get attrSet containing key-value only if key exists, otherwise get empty attrSet.
+          optAttr = name: optionalAttrs (builtins.hasAttr name attrs) { ${name} = attrs.${name}; };
+          # For convenience, include some useful attributes (if present) plus existing meta attrSet.
+          nonMetaAttributes = [
+            "name"
+            "pname"
+            "version"
+          ];
+          meta = foldl' (acc: x: acc // optAttr x) { } nonMetaAttributes // attrs.meta or { };
+          nixMetaJSON = builtins.toJSON (filterAttrs (n: _: (elem n preserveMetaFields)) meta);
+          nixMetaJSONContext = builtins.getContext nixMetaJSON;
+        in
+          assert assertMsg (nixMetaJSONContext == {})
+            "Context not allowed nixMetaJSON: ${builtins.toJSON nixMetaJSONContext}";
+        makeDerivationArgument (
+          removeAttrs attrs (
+            [
+              "meta"
+              "passthru"
+              "pos"
+            ]
+            ++ optional (__structuredAttrs || envIsExportable) "env"
+          )
+          // optionalAttrs __structuredAttrs { env = checkedEnv; }
+          // optionalAttrs (preserveMetaFields != [ ]) {
+            inherit nixMetaJSON;
+          }
+          // {
+            cmakeFlags = makeCMakeFlags attrs;
+            mesonFlags = makeMesonFlags attrs;
+          }
+        );
 
       meta = checkMeta.commonMeta {
         inherit validity attrs pos;
