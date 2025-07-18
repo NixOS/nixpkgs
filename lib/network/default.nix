@@ -45,5 +45,39 @@ in
       {
         inherit address prefixLength;
       };
+
+    /**
+      Converts a 48-bit MAC address into a EUI-64 IPv6 address suffix.
+
+      # Example
+
+      ```nix
+      mkEUI64Suffix "00:B0:D0:63:C2:26"
+      => "2b0:d0ff:fe63:c226"
+      ```
+
+      # Type
+
+      ```
+      mkEUI64Suffix :: String -> String
+      ```
+
+      # Argumemts
+
+      mac
+      : The MAC address (may contain these delimiters: `:`, `-` or `.` but it's not necessary)
+    */
+    mkEUI64Suffix =
+      mac:
+      let
+        sanitizedMac = builtins.replaceStrings [ ":" "-" "." ] [ "" "" "" ] mac;
+        hextets = [
+          (lib.toHexString (builtins.bitXor 512 (lib.fromHexString (builtins.substring 0 4 sanitizedMac))))
+          ((builtins.substring 4 2 sanitizedMac) + "ff")
+          ("fe" + (builtins.substring 6 2 sanitizedMac))
+          (builtins.substring 8 4 sanitizedMac)
+        ];
+      in
+      lib.toLower (builtins.concatStringsSep ":" hextets);
   };
 }
