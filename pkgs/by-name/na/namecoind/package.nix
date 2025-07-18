@@ -5,37 +5,34 @@
   python3,
   boost,
   libevent,
-  autoreconfHook,
+  cmake,
   db4,
-  miniupnpc,
   sqlite,
+  libsystemtap,
   pkg-config,
-  util-linux,
-  hexdump,
   zeromq,
   zlib,
   darwin,
   withWallet ? true,
+  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "namecoind";
-  version = "28.0";
+  version = "29.0";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
-    tag = "nc${version}";
-    hash = "sha256-r6rVgPrKz7nZ07oXw7KmVhGF4jVn6L+R9YHded+3E9k=";
+    tag = "nc${finalAttrs.version}";
+    hash = "sha256-cdu1at3nM8RpCmYXd3jnF3V+gyzHxp30ZXy/Inr5Sno=";
   };
 
   nativeBuildInputs =
     [
-      autoreconfHook
+      cmake
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       darwin.autoSignDarwinBinariesHook
     ];
@@ -45,25 +42,35 @@ stdenv.mkDerivation rec {
       boost
       libevent
       db4
-      miniupnpc
       zeromq
       zlib
     ]
+    ++ lib.optionals enableTracing [ libsystemtap ]
     ++ lib.optionals withWallet [ sqlite ]
     # building with db48 (for legacy descriptor wallet support) is broken on Darwin
     ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db4 ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
+  cmakeFlags =
     [
-      "--with-boost-libdir=${boost.out}/lib"
-      "--disable-bench"
-      "--disable-gui-tests"
+      (lib.cmakeBool "BUILD_BENCH" false)
+      (lib.cmakeBool "WITH_ZMQ" true)
+      # building with db48 (for legacy wallet support) is broken on Darwin
+      (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+      (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
+    ]
+    ++ lib.optionals (!finalAttrs.doCheck) [
+      (lib.cmakeBool "BUILD_GUI_TESTS" false)
     ]
     ++ lib.optionals (!withWallet) [
-      "--disable-wallet"
+
+      (lib.cmakeBool "ENABLE_WALLET" false)
     ];
+
+  NIX_LDFLAGS = lib.optionals (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+  ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 
@@ -78,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.linux;
   };
-}
+})
