@@ -2,31 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  git,
   cmake,
   ninja,
   openssl,
-  openjdk11,
   python3,
   unixODBC,
-  withJdbc ? false,
   withOdbc ? false,
 }:
 
 let
-  enableFeature = yes: if yes then "ON" else "OFF";
-  versions = lib.importJSON ./versions.json;
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  duckDBPlatform = let
+    os = if stdenv.hostPlatform.parsed.kernel.name == "darwin"
+      then "osx"
+      else stdenv.hostPlatform.parsed.kernel.name;
+    arch = {
+      "aarch64" = "arm64";
+      "x86_64" = "amd64";
+    }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  in
+    "${os}_${arch}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  inherit (versions) rev version;
+  version = "1.2.2";
 
   src = fetchFromGitHub {
-    # to update run:
-    # nix-shell maintainers/scripts/update.nix --argstr path duckdb
-    inherit (versions) hash;
     owner = "duckdb";
     repo = "duckdb";
-    tag = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-cHQcEA9Gpza/edEVyXUYiINC/Q2b3bf+zEQbl/Otfr4=";
+    leaveDotGit = true;
+
+    nativeBuildInputs = [ git ];
+    postFetch = ''
+      mkdir "$out"/.git
+      (gzip -cd "$renamed" 2>/dev/null || true) | \\
+        git get-tar-commit-id > "$out"/.git/HEAD
+    '';
   };
 
   outputs = [
@@ -39,23 +53,28 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    git
   ];
   buildInputs =
-    [ openssl ] ++ lib.optionals withJdbc [ openjdk11 ] ++ lib.optionals withOdbc [ unixODBC ];
+    [ openssl ]
+    ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags =
     [
       "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
-      "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
-      "-DJDBC_DRIVER=${enableFeature withJdbc}"
-      "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
+      (lib.cmakeBool "BUILD_ODBC_DRIVER" withOdbc)
     ]
     ++ lib.optionals finalAttrs.doInstallCheck [
-      # development settings
-      "-DBUILD_UNITTESTS=ON"
+      (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.doInstallCheck)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    ]
+    ++ lib.optionals (!canExecute) [
+      "-DDUCKDB_EXPLICIT_PLATFORM=${duckDBPlatform}"
     ];
 
-  doInstallCheck = true;
+  doInstallCheck = canExecute;
 
   installCheckPhase =
     let
@@ -130,8 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
-  passthru.updateScript = ./update.sh;
-
   meta = with lib; {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
@@ -141,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       costrouc
       cpcloud
+      paparodeo
     ];
     platforms = platforms.all;
   };
