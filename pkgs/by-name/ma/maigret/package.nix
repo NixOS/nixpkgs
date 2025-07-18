@@ -103,11 +103,11 @@ python312.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "maigret" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fab
       thtrf
     ];
