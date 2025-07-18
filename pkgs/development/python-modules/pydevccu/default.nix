@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.11";
+  version = "0.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = version;
-    hash = "sha256-Ar9KNOkiy60HTGKz8br701v8xF470dz1jv8sp/CZbpw=";
+    hash = "sha256-21vUdMOnolZie+CDVVMyWM4h9UT8oCm9klSfc8ffLI4=";
   };
 
   postPatch = ''
