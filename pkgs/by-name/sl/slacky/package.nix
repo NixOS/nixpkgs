@@ -24,17 +24,15 @@ buildNpmPackage (finalAttrs: {
   npmFlags = [ "--legacy-peer-deps" ];
   npmPackFlags = [ "--ignore-scripts" ];
 
-  nativeBuildInputs = [
-    electron
-    copyDesktopItems
-  ];
+  strictDeps = true;
+  nativeBuildInputs = [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postInstall = ''
     mkdir -p $out/share/icons
     ln -s $out/lib/node_modules/slacky/build/icons/icon.png $out/share/icons/slacky.png
-    makeWrapper ${electron}/bin/electron $out/bin/slacky \
+    makeWrapper ${lib.getExe electron} $out/bin/slacky \
       --add-flags $out/lib/node_modules/slacky/
   '';
 
