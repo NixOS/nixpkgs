@@ -1,0 +1,24 @@
+diff --git a/src/rpc/client.h b/src/rpc/client.h
+index f78a04c56..f564ea841 100644
+--- a/src/rpc/client.h
++++ b/src/rpc/client.h
+@@ -7,6 +7,7 @@
+ #ifndef BITCOIN_RPC_CLIENT_H
+ #define BITCOIN_RPC_CLIENT_H
+ 
++#include <optional>
+ #include <tl/expected.hpp>
+ #include <univalue.h>
+ #include <variant>
+diff --git a/src/zcash/memo.cpp b/src/zcash/memo.cpp
+index 4ad634ee4..19af7fe06 100644
+--- a/src/zcash/memo.cpp
++++ b/src/zcash/memo.cpp
+@@ -4,6 +4,7 @@
+ 
+ #include "zcash/memo.h"
+ 
++#include <algorithm>
+ #include <utf8cpp/utf8.h>
+ 
+ namespace libzcash {
