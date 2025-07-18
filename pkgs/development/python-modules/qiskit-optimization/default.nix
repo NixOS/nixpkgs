@@ -12,7 +12,7 @@
   docplex,
   networkx,
   numpy,
-  qiskit-terra,
+  qiskit,
   scipy,
   # Check Inputs
   pytestCheckHook,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     decorator
     networkx
     numpy
-    qiskit-terra
+    qiskit
     scipy
   ];
 
