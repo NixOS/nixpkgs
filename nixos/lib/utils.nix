@@ -434,6 +434,29 @@ let
         units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
       };
     };
+
+    # Utilities for working with the security.pam module (pam.nix)
+    pam = {
+      /*
+        Set up the ordering for a set of PAM rules using an ordered list of rules.
+
+        The input is an ordered list of PAM rules. Each rule is an attrset similar to the options
+        in `security.pam.services.<service>.rules.<rule>`, with two modifications:
+
+        1. The `order` option may not be given.
+        2. The `name` option is required.
+
+        The output is an attrset of rules suitable for `security.pam.services.<service>.rules`.
+
+        The `order` option on the resulting rules will automatically be configured according to the
+        (implied) ordering of the input rules.
+      */
+      autoOrderRules = lib.flip lib.pipe [
+        (lib.imap1 (index: rule: rule // { order = lib.mkDefault (10000 + index * 100); }))
+        (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
+        lib.listToAttrs
+      ];
+    };
   };
 in
 utils

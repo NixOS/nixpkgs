@@ -115,13 +115,40 @@ in
       "C /var/lib/AccountsService/icons 0775 root root - ${pkgs.deepin.dde-account-faces}/var/lib/AccountsService/icons"
     ];
 
-    security.pam.services.dde-lock.text = ''
+    security.pam.services.dde-lock = {
+      useDefaultRules = false;
       # original at {dde-session-shell}/etc/pam.d/dde-lock
-      auth      substack      login
-      account   include       login
-      password  substack      login
-      session   include       login
-    '';
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+        password = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+      };
+    };
 
     environment.systemPackages =
       with pkgs;
