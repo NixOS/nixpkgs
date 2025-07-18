@@ -16,7 +16,13 @@ buildGoModule (finalAttrs: {
     owner = "gitlab-org";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dFyVhl4+WdQeoSZSY8JbkjJBhqOX/oN2b9q1CGlLhpc=";
+    hash = "sha256-sLxb3BC2yvtbT11C9iWlGsIQ/7Lr34+q/BPIcDx4P+s=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   vendorHash = "sha256-m4IWtK2PNjs2UxzVCT2oSx6Gic2flN4Fq8w0mNIhHxo=";
@@ -27,7 +33,10 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+  '';
+
 
   subPackages = [ "cmd/glab" ];
 
@@ -41,6 +50,8 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
   '';
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
 
