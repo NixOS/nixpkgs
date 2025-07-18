@@ -56,7 +56,7 @@
   opencolorio,
   openexr,
   openimagedenoise,
-  openimageio_2,
+  openimageio,
   openjpeg,
   openpgl,
   opensubdiv,
@@ -249,7 +249,7 @@ stdenv'.mkDerivation (finalAttrs: {
       libwebp
       opencolorio
       openexr
-      openimageio_2
+      openimageio
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
