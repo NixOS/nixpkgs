@@ -52,18 +52,27 @@
 
 let
   inherit (vscode) executableName longName;
+  # This is expensive but I don't see a better way of doing this
+  vscodeExtensions' = (
+    lib.converge (
+      extensions:
+      lib.sort (a: b: a.outPath < b.outPath) (
+        lib.unique (extensions ++ lib.concatMap (x: x.propagatedExtensions or [ ]) extensions)
+      )
+    ) vscodeExtensions
+  );
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
   extensionJsonFile = writeTextFile {
     name = "vscode-extensions-json";
     destination = "/share/vscode/extensions/extensions.json";
-    text = vscode-utils.toExtensionJson vscodeExtensions;
+    text = vscode-utils.toExtensionJson vscodeExtensions';
   };
 
   combinedExtensionsDrv = buildEnv {
     name = "vscode-extensions";
-    paths = vscodeExtensions ++ [ extensionJsonFile ];
+    paths = vscodeExtensions' ++ [ extensionJsonFile ];
   };
 
   extensionsFlag = ''
