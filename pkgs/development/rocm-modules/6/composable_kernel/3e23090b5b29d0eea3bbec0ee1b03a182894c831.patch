@@ -1,0 +1,33 @@
+From 3e23090b5b29d0eea3bbec0ee1b03a182894c831 Mon Sep 17 00:00:00 2001
+From: Gavin Zhao <git@gzgz.dev>
+Date: Mon, 30 Dec 2024 12:04:51 -0500
+Subject: [PATCH] More RDNA1 changes
+
+Signed-off-by: Gavin Zhao <git@gzgz.dev>
+---
+ include/ck_tile/core/config.hpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/ck_tile/core/config.hpp b/include/ck_tile/core/config.hpp
+index a8bc27cdff..3d638491f6 100644
+--- a/include/ck_tile/core/config.hpp
++++ b/include/ck_tile/core/config.hpp
+@@ -10,6 +10,9 @@
+ #if defined(__gfx940__) || defined(__gfx941__) || defined(__gfx942__)
+ #define __gfx94__
+ #endif
++#if defined(__gfx1010__) || defined(__gfx1011__) || defined(__gfx1012__)
++#define __gfx101__
++#endif
+ #if defined(__gfx1030__) || defined(__gfx1031__) || defined(__gfx1032__) || \
+     defined(__gfx1034__) || defined(__gfx1035__) || defined(__gfx1036__)
+ #define __gfx103__
+@@ -177,7 +180,7 @@
+ #elif defined(__gfx803__) || defined(__gfx900__) || defined(__gfx906__) || \
+     defined(__gfx9__) // for GPU code
+ #define CK_TILE_BUFFER_RESOURCE_3RD_DWORD 0x00020000
+-#elif defined(__gfx103__) // for GPU code
++#elif defined(__gfx101__) || defined(__gfx103__) // for GPU code
+ #define CK_TILE_BUFFER_RESOURCE_3RD_DWORD 0x31014000
+ #elif defined(__gfx11__) || defined(__gfx12__) // for GPU code
+ #define CK_TILE_BUFFER_RESOURCE_3RD_DWORD 0x31004000
