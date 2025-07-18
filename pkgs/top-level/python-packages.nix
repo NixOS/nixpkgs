@@ -4549,6 +4549,8 @@ self: super: with self; {
 
   elasticsearchdsl = self.elasticsearch-dsl;
 
+  electrum-ecc = callPackage ../development/python-modules/electrum-ecc { };
+
   elegy = callPackage ../development/python-modules/elegy { };
 
   elementpath = callPackage ../development/python-modules/elementpath { };
