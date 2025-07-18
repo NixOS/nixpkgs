@@ -1,0 +1,211 @@
+--- a/Eigen/src/SparseLU/SparseLU.h
++++ b/Eigen/src/SparseLU/SparseLU.h
+@@ -156,12 +156,12 @@ class SparseLU : public SparseSolverBase<SparseLU<_MatrixType,_OrderingType> >,
+     
+   public:
+ 
+-    SparseLU():m_lastError(""),m_Ustore(0,0,0,0,0,0),m_symmetricmode(false),m_diagpivotthresh(1.0),m_detPermR(1)
++    SparseLU():m_lastError(""),m_Ustore(0,0,0,0,0,0),m_symmetricmode(false),m_diagpivotthresh(1),m_detPermR(1)
+     {
+       initperfvalues(); 
+     }
+     explicit SparseLU(const MatrixType& matrix)
+-      : m_lastError(""),m_Ustore(0,0,0,0,0,0),m_symmetricmode(false),m_diagpivotthresh(1.0),m_detPermR(1)
++      : m_lastError(""),m_Ustore(0,0,0,0,0,0),m_symmetricmode(false),m_diagpivotthresh(1),m_detPermR(1)
+     {
+       initperfvalues(); 
+       compute(matrix);
+@@ -353,7 +353,7 @@ class SparseLU : public SparseSolverBase<SparseLU<_MatrixType,_OrderingType> >,
+       using std::abs;
+       eigen_assert(m_factorizationIsOk && "The matrix should be factorized first.");
+       // Initialize with the determinant of the row matrix
+-      Scalar det = Scalar(1.);
++      Scalar det = Scalar(1);
+       // Note that the diagonal blocks of U are stored in supernodes,
+       // which are available in the  L part :)
+       for (Index j = 0; j < this->cols(); ++j)
+@@ -436,7 +436,7 @@ class SparseLU : public SparseSolverBase<SparseLU<_MatrixType,_OrderingType> >,
+     {
+       eigen_assert(m_factorizationIsOk && "The matrix should be factorized first.");
+       // Initialize with the determinant of the row matrix
+-      Scalar det = Scalar(1.);
++      Scalar det = Scalar(1);
+       // Note that the diagonal blocks of U are stored in supernodes,
+       // which are available in the  L part :)
+       for (Index j = 0; j < this->cols(); ++j)
+diff --git a/Eigen/src/SparseLU/SparseLU_column_bmod.h b/Eigen/src/SparseLU/SparseLU_column_bmod.h
+index b57f06802..be15e5ee6 100644
+--- a/Eigen/src/SparseLU/SparseLU_column_bmod.h
++++ b/Eigen/src/SparseLU/SparseLU_column_bmod.h
+@@ -129,7 +129,7 @@ Index SparseLUImpl<Scalar,StorageIndex>::column_bmod(const Index jcol, const Ind
+   {
+     irow = glu.lsub(isub);
+     glu.lusup(nextlu) = dense(irow);
+-    dense(irow) = Scalar(0.0); 
++    dense(irow) = Scalar(0);
+     ++nextlu; 
+   }
+   
+diff --git a/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h b/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+index c32d8d8b1..03c8aaf85 100644
+--- a/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
++++ b/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+@@ -87,7 +87,7 @@ Index SparseLUImpl<Scalar,StorageIndex>::copy_to_ucol(const Index jcol, const In
+           irow = glu.lsub(isub); 
+           glu.usub(nextu) = perm_r(irow); // Unlike the L part, the U part is stored in its final order
+           glu.ucol(nextu) = dense(irow); 
+-          dense(irow) = Scalar(0.0); 
++          dense(irow) = Scalar(0);
+           nextu++;
+           isub++;
+         }
+diff --git a/Eigen/src/SparseLU/SparseLU_panel_bmod.h b/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+index 92cdb0e45..2f548691c 100644
+--- a/Eigen/src/SparseLU/SparseLU_panel_bmod.h
++++ b/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+@@ -122,7 +122,7 @@ void SparseLUImpl<Scalar,StorageIndex>::panel_bmod(const Index m, const Index w,
+         
+         Index isub = lptr + no_zeros;
+         Index off = u_rows-segsize;
+-        for (Index i = 0; i < off; i++) U(i,u_col) = 0;
++        for (Index i = 0; i < off; i++) U(i,u_col) = Scalar(0);
+         for (Index i = 0; i < segsize; i++)
+         {
+           Index irow = glu.lsub(isub); 
+@@ -171,7 +171,7 @@ void SparseLUImpl<Scalar,StorageIndex>::panel_bmod(const Index m, const Index w,
+         {
+           Index irow = glu.lsub(isub++); 
+           dense_col(irow) = U.coeff(i+off,u_col);
+-          U.coeffRef(i+off,u_col) = 0;
++          U.coeffRef(i+off,u_col) = Scalar(0);
+         }
+         
+         // Scatter l into SPA dense[]
+@@ -179,7 +179,7 @@ void SparseLUImpl<Scalar,StorageIndex>::panel_bmod(const Index m, const Index w,
+         {
+           Index irow = glu.lsub(isub++); 
+           dense_col(irow) -= L.coeff(i,u_col);
+-          L.coeffRef(i,u_col) = 0;
++          L.coeffRef(i,u_col) = Scalar(0);
+         }
+         u_col++;
+       }
+diff --git a/Eigen/src/SparseLU/SparseLU_pivotL.h b/Eigen/src/SparseLU/SparseLU_pivotL.h
+index a86dac93f..f1ebd3cf6 100644
+--- a/Eigen/src/SparseLU/SparseLU_pivotL.h
++++ b/Eigen/src/SparseLU/SparseLU_pivotL.h
+@@ -32,7 +32,46 @@
+ 
+ namespace Eigen {
+ namespace internal {
+-  
++    template<typename Scalar, typename StorageIndex, typename std::enable_if<!std::is_same<Scalar, storm::RationalFunction>::value, int>::type = 0>
++    void findLargestAbsolutePivotElement(const Index& nsupc, const Index& nsupr, Scalar const* lu_col_ptr, StorageIndex const* lsub_ptr, Index const& diagind, Index& diag, Index& pivptr, Scalar& pivmax) {
++        Scalar rtemp = 0;
++        for (Index isub = nsupc; isub < nsupr; ++isub) {
++            rtemp = storm::utility::abs(lu_col_ptr[isub]);
++            if (rtemp > pivmax) {
++                pivmax = rtemp;
++                pivptr = isub;
++            }
++            if (lsub_ptr[isub] == diagind) diag = isub;
++        }
++    }
++
++    template<typename Scalar, typename StorageIndex, typename std::enable_if<std::is_same<Scalar, storm::RationalFunction>::value, int>::type = 0>
++    void findLargestAbsolutePivotElement(const Index& nsupc, const Index& nsupr, Scalar const* lu_col_ptr, StorageIndex const* lsub_ptr, Index const& diagind, Index& diag, Index& pivptr, Scalar& pivmax) {
++        bool foundPivotElement = false;
++        for (Index isub = nsupc; isub < nsupr; ++isub) {
++            Scalar const& rtemp = lu_col_ptr[isub];
++            if (!foundPivotElement && !storm::utility::isZero(rtemp)) {
++                foundPivotElement = true;
++                pivmax = rtemp;
++                pivptr = isub;
++            }
++            if (lsub_ptr[isub] == diagind) diag = isub;
++        }
++    }
++
++    template<typename Scalar, typename std::enable_if<std::is_same<Scalar, double>::value, int>::type = 0>
++    bool diagonalElementCanBePivot(Scalar const* lu_col_ptr, Index const& diag, Scalar const& diagpivotthresh, Scalar const& pivmax) {
++        Scalar thresh = diagpivotthresh * pivmax;
++        double rtemp = std::abs(lu_col_ptr[diag]);
++        if (!storm::utility::isZero(rtemp) && rtemp >= thresh) return true;
++        return false;
++    }
++
++    template<typename Scalar, typename std::enable_if<!std::is_same<Scalar, double>::value, int>::type = 0>
++    bool diagonalElementCanBePivot(Scalar const* lu_col_ptr, Index const& diag, Scalar const& diagpivotthresh, Scalar const& pivmax) {
++        if (!storm::utility::isZero(lu_col_ptr[diag])) return true;
++        return false;
++    }
+ /**
+  * \brief Performs the numerical pivotin on the current column of L, and the CDIV operation.
+  * 
+@@ -70,42 +109,30 @@ Index SparseLUImpl<Scalar,StorageIndex>::pivotL(const Index jcol, const RealScal
+   StorageIndex* lsub_ptr = &(glu.lsub.data()[lptr]); // Start of row indices of the supernode
+   
+   // Determine the largest abs numerical value for partial pivoting 
+-  Index diagind = iperm_c(jcol); // diagonal index 
+-  RealScalar pivmax(-1.0);
+-  Index pivptr = nsupc; 
+-  Index diag = emptyIdxLU; 
+-  RealScalar rtemp;
+-  Index isub, icol, itemp, k; 
+-  for (isub = nsupc; isub < nsupr; ++isub) {
+-    using std::abs;
+-    rtemp = abs(lu_col_ptr[isub]);
+-    if (rtemp > pivmax) {
+-      pivmax = rtemp; 
+-      pivptr = isub;
+-    } 
+-    if (lsub_ptr[isub] == diagind) diag = isub;
+-  }
++  Index diagind = iperm_c(jcol); // diagonal index
++  RealScalar pivmax(-1);
++  Index pivptr = nsupc;
++  Index diag = emptyIdxLU;
++  Index icol, itemp, k;
++
++  findLargestAbsolutePivotElement(nsupc, nsupr, lu_col_ptr, lsub_ptr, diagind, diag, pivptr, pivmax);
+   
+   // Test for singularity
+-  if ( pivmax <= RealScalar(0.0) ) {
++  bool columnStructurallyEmpty = nsupr <= nsupc;
++  if ( columnStructurallyEmpty || storm::utility::isZero(pivmax)) {
+     // if pivmax == -1, the column is structurally empty, otherwise it is only numerically zero
+-    pivrow = pivmax < RealScalar(0.0) ? diagind : lsub_ptr[pivptr];
++    pivrow = columnStructurallyEmpty ? diagind : lsub_ptr[pivptr];
+     perm_r(pivrow) = StorageIndex(jcol);
+     return (jcol+1);
+   }
+   
+-  RealScalar thresh = diagpivotthresh * pivmax; 
+-  
+-  // Choose appropriate pivotal element 
+-  
++  // Choose appropriate pivotal element
+   {
+     // Test if the diagonal element can be used as a pivot (given the threshold value)
+     if (diag >= 0 ) 
+     {
+       // Diagonal element exists
+-      using std::abs;
+-      rtemp = abs(lu_col_ptr[diag]);
+-      if (rtemp != RealScalar(0.0) && rtemp >= thresh) pivptr = diag;
++      if (diagonalElementCanBePivot(lu_col_ptr, diag, diagpivotthresh, pivmax)) pivptr = diag;
+     }
+     pivrow = lsub_ptr[pivptr];
+   }
+@@ -125,7 +152,7 @@ Index SparseLUImpl<Scalar,StorageIndex>::pivotL(const Index jcol, const RealScal
+     }
+   }
+   // cdiv operations
+-  Scalar temp = Scalar(1.0) / lu_col_ptr[nsupc];
++  Scalar temp = Scalar(1) / lu_col_ptr[nsupc];
+   for (k = nsupc+1; k < nsupr; k++)
+     lu_col_ptr[k] *= temp; 
+   return 0;
+-- 
+2.39.3 (Apple Git-146)
+
