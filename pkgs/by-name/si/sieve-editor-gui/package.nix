@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   electron,
@@ -7,7 +8,28 @@
   nodePackages,
   makeDesktopItem,
   copyDesktopItems,
+  runCommand,
+  zip,
 }:
+
+let
+  electronArch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x64";
+  electronZip =
+    runCommand "electronZip"
+      {
+        nativeBuildInputs = [ zip ];
+      }
+      ''
+        mkdir $out
+
+        cp -r ${electron.dist} electron-dist
+        chmod -R u+w electron-dist
+
+        cd electron-dist
+        zip -0Xqr $out/electron-v${electron.version}-darwin-${electronArch}.zip .
+      '';
+in
+
 buildNpmPackage {
   pname = "sieve-editor-gui";
   version = "0.6.1-unstable-2025-03-12";
@@ -24,9 +46,9 @@ buildNpmPackage {
 
   nativeBuildInputs = [
     electron
-    copyDesktopItems
     nodePackages.gulp
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   dontNpmBuild = true;
 
@@ -36,7 +58,25 @@ buildNpmPackage {
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mv build/ $out
+
+    makeWrapper ${lib.getExe electron} $out/bin/sieve-editor-gui \
+      --add-flags $out/electron/resources/main_esm.js
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    npx electron-packager ./build/electron/resources \
+      --electron-zip-dir ${electronZip} \
+      --electron-version ${electron.version} \
+      --icon src/common/icons/mac.icns
+
+    mkdir -p $out/Applications
+    cp -r sieve-darwin-*/sieve.app $out/Applications/
+
+    makeWrapper $out/Applications/sieve.app/Contents/MacOS/Sieve $out/bin/sieve-editor-gui
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -54,17 +94,15 @@ buildNpmPackage {
     })
   ];
 
-  postInstall = ''
-    makeWrapper ${lib.getExe electron} $out/bin/sieve-editor-gui \
-      --add-flags $out/electron/resources/main_esm.js
-  '';
-
   meta = {
     description = "Activate, edit, delete and add Sieve scripts with a convenient interface";
     homepage = "https://github.com/thsmi/sieve";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ Silver-Golden ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      Silver-Golden
+      fugi
+    ];
     mainProgram = "sieve-editor-gui";
+    inherit (electron.meta) platforms;
   };
 }
