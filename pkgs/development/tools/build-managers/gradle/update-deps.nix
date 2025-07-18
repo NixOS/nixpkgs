@@ -129,8 +129,8 @@ lib.makeOverridable (
       export MITM_CACHE_CERT_DIR="$PWD"
       export MITM_CACHE_CA="$MITM_CACHE_CERT_DIR/ca.cer"
       popd >/dev/null
-      useBwrap="''${USE_BWRAP:-${toString useBwrap}}"
-      if [ -n "$useBwrap" ]; then
+      useBwrap="''${USE_BWRAP:-${if useBwrap then "1" else "0"}}"
+      if [[ "$useBwrap" -ne 0 ]]; then
         # bwrap isn't necessary, it's only used to prevent messy build scripts from touching ~
         bwrap \
           --unshare-all --share-net --clearenv --chdir / --setenv HOME /homeless-shelter \
