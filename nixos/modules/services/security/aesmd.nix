@@ -166,15 +166,25 @@ in
         ];
 
         serviceConfig = {
-          ExecStartPre = pkgs.writeShellScript "copy-aesmd-data-files.sh" ''
-            set -euo pipefail
-            whiteListFile="${aesmDataFolder}/white_list_cert_to_be_verify.bin"
-            if [[ ! -f "$whiteListFile" ]]; then
-              ${pkgs.coreutils}/bin/install -m 644 -D \
-                "${storeAesmFolder}/data/white_list_cert_to_be_verify.bin" \
-                "$whiteListFile"
-            fi
-          '';
+          ExecStartPre =
+            let
+              script = pkgs.writeShellScript "copy-aesmd-data-files.sh" ''
+                set -euo pipefail
+
+                # For some reason systemd 257+ won't properly bind mount the
+                # StateDirectory with the aesmd DynamicUser owning it
+                chown -R aesmd:aesmd /var/opt/aesmd
+
+                whiteListFile="${aesmDataFolder}/white_list_cert_to_be_verify.bin"
+                if [[ ! -f "$whiteListFile" ]]; then
+                  install -m 644 -o aesmd -g aesmd -D \
+                    "${storeAesmFolder}/data/white_list_cert_to_be_verify.bin" \
+                    "$whiteListFile"
+                fi
+              '';
+              # Run setup with elevated privileges
+            in
+            "+${script}";
           ExecStart = "${sgx-psw}/bin/aesm_service --no-daemon";
           ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
 
@@ -196,9 +206,8 @@ in
           RuntimeDirectoryMode = "0750";
 
           # Hardening
-
-          # chroot into the runtime directory
-          RootDirectory = "%t/aesmd";
+          # # chroot prevents the setup from locating the aesmd DynamicUser
+          # RootDirectory = "%t/aesmd";
           BindReadOnlyPaths = [
             builtins.storeDir
             # Hardcoded path AESM_CONFIG_FILE in psw/ae/aesm_service/source/utils/aesm_config.cpp
