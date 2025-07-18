@@ -524,7 +524,9 @@ rec {
           # Stupid misc. symlinks.
           ln -s ${cfg.defaultUnit} $out/default.target
           ln -s ${cfg.ctrlAltDelUnit} $out/ctrl-alt-del.target
-          ln -s rescue.target $out/kbrequest.target
+          ${optionalString (cfg.kbrequestUnit != null) ''
+            ln -s ${cfg.kbrequestUnit} $out/kbrequest.target
+          ''}
 
           mkdir -p $out/getty.target.wants/
           ln -s ../autovt@tty1.service $out/getty.target.wants/
