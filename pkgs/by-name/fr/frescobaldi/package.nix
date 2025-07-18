@@ -8,34 +8,40 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "4.0.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wbsoft";
+    owner = "frescobaldi";
     repo = "frescobaldi";
     tag = "v${version}";
-    sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
+    hash = "sha256-fTTHhoQJUOYncYkKb9jwp9i0hCoQpClvVlil/A6r8UI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     qpageview
     lilypond
-    pygame
+    pyqt6
+    pyqt6-webengine
     python-ly
-    sip4
-    pyqt5
-    poppler-qt5
-    pyqtwebengine
   ];
 
-  nativeBuildInputs = [ python3Packages.pyqtwebengine.wrapQtAppsHook ];
+  build-system = [ python3Packages.hatchling ];
+
+  nativeBuildInputs = with python3Packages; [
+    pyqtwebengine.wrapQtAppsHook
+    tox
+    pygame-ce
+  ];
 
   # Needed because source is fetched from git
   preBuild = ''
-    make -C i18n
-    make -C linux
+    tox -e mo-generate
+    tox -e linux-generate
   '';
+
+  # Needed otherwise hatchling complains that the license has both file and text even though it doesn't
+  postPatch = "sed -i '/license = {text =/d' pyproject.toml";
 
   # no tests in shipped with upstream
   doCheck = false;
