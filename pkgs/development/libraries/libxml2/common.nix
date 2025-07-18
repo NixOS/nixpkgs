@@ -2,7 +2,6 @@
   stdenv,
   darwin,
   lib,
-  fetchFromGitLab,
   pkg-config,
   autoreconfHook,
   python3,
@@ -28,6 +27,10 @@
   gnome,
   testers,
   enableHttp ? false,
+
+  version,
+  src,
+  extraMeta ? { },
 }:
 
 let
@@ -36,8 +39,12 @@ let
   stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
+  inherit
+    version
+    src
+    ;
+
   pname = "libxml2";
-  version = "2.14.5";
 
   outputs =
     [
@@ -49,14 +56,6 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
-
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libxml2";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-vxKlw8Kz+fgUP6bhWG2+4346WJVzqG0QvPG/BT7RftQ=";
-  };
 
   patches = [
     # Unmerged ABI-breaking patch required to fix the following security issues:
@@ -159,9 +158,6 @@ stdenv'.mkDerivation (finalAttrs: {
     description = "XML parsing library for C";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      jtojnar
-    ];
     pkgConfigModules = [ "libxml-2.0" ];
-  };
+  } // extraMeta;
 })
