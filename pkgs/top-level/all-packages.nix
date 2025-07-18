@@ -5894,9 +5894,12 @@ with pkgs;
     ocamlformat_0_26_1
     ;
 
+  inherit (ocaml-ng.ocamlPackages_5_2)
+    ocamlformat_0_26_2
+    ;
+
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_26_2
     ocamlformat_0_27_0
     ;
 
