@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  nix-update-script,
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2024.02";
+  version = "2025.06.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     tag = "v${version}";
-    sha256 = "sha256-UJU8b9BzuuUSHRjnA6hOd1bMPNOlk4LNtrQV5aZmGhI=";
+    hash = "sha256-OWpMBXwEX7QHA7ahM6m1NN/aY17lA0pANPaekJjRv1c=";
   };
 
   patches = [
@@ -44,6 +45,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dtschema" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
@@ -52,7 +55,10 @@ buildPythonPackage rec {
       bsd2 # or
       gpl2Only
     ];
-    maintainers = with maintainers; [ sorki ];
+    maintainers = with maintainers; [
+      sorki
+      dramforever
+    ];
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
