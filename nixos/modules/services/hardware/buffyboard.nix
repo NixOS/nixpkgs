@@ -30,7 +30,7 @@ in
   options = {
     services.buffyboard = with lib; {
       enable = mkEnableOption "buffyboard framebuffer keyboard (on-screen keyboard)";
-      package = mkPackageOption pkgs "buffybox" { };
+      package = mkPackageOption pkgs "buffyboard" { };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
