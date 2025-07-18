@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.3.0-unstable-2025-06-16";
+  version = "0.9.1";
 
   outputs = [
     "out"
@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = "casilda";
-    rev = "5b5933d32f0221341c98a25dea1ce5ef78199a79";
-    hash = "sha256-LrXoVK7KMjIko6jUkrKY06QdZMQaVrHhG7/C5ickdJA=";
+    tag = finalAttrs.version;
+    hash = "sha256-7A3XzfUALsmkykwOqF/8fg7T7LoVzwk1+7TmRkh1Wys=";
   };
 
   depsBuildBuild = [ pkg-config ];
