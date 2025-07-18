@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "14.0.3";
+  version = "14.5.4";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-Kv69Q6o/Ww64yA8y5J3JXIV48A2B08YhNE9ib/UuA0o=";
+      hash = "sha256-DJEc+2GJHxG49euVpwH8h/yLoR6DVn0a0ZUFS429XaA=";
     };
   };
 
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the MB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$MB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 
@@ -262,7 +262,7 @@ stdenv.mkDerivation rec {
 
     # Easier access to docs
     mkdir -p $out/share/doc
-    ln -s $MB_IN_STORE/Data/Docs $out/share/doc/mullvad-browser
+    ln -s $MB_IN_STORE/MullvadBrowser/Docs $out/share/doc/mullvad-browser
 
     # Install icons
     for i in 16 32 48 64 128; do

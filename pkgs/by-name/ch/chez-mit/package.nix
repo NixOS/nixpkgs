@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fedeinthemix/chez-mit/";
     maintainers = [ maintainers.jitwit ];
     license = licenses.gpl3Plus;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
 }

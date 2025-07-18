@@ -10,18 +10,18 @@
   xcbuild,
   fetchNpmDeps,
   npmHooks,
+  electron,
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
-
 in
 stdenv.mkDerivation rec {
-  pname = "keytar";
+  pname = "keytar-forked";
   inherit (pinData) version;
 
   src = fetchFromGitHub {
-    owner = "atom";
+    owner = "shiftkey";
     repo = "node-keytar";
     rev = "v${version}";
     hash = pinData.srcHash;
@@ -48,8 +48,10 @@ stdenv.mkDerivation rec {
     export -f pkg-config
   '';
 
-  # https://nodejs.org/api/os.html#osarch
   npmFlags = [
+    # Make sure the native modules are built against electron's ABI
+    "--nodedir=${electron.headers}"
+    # https://nodejs.org/api/os.html#osarch
     "--arch=${
       if stdenv.hostPlatform.parsed.cpu.name == "i686" then
         "ia32"

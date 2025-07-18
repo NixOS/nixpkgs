@@ -5,7 +5,7 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "brakeman";
   exes = [ "brakeman" ];
   gemdir = ./.;

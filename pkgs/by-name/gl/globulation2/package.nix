@@ -66,7 +66,17 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  nativeBuildInputs = [ scons ];
+  # fix sdl-config for cross
+  # TODO: remaining *-config, and make it work for !(build.canExecute host)
+  preBuild = ''
+    substituteInPlace SConstruct \
+      --replace-fail sdl-config "${lib.getExe' (lib.getDev SDL) "sdl-config"}"
+  '';
+
+  nativeBuildInputs = [
+    scons
+    bsdiff # bspatch
+  ];
   buildInputs = [
     libGLU
     libGL
@@ -80,7 +90,6 @@ stdenv.mkDerivation rec {
     libogg
     boost
     fribidi
-    bsdiff
   ];
 
   sconsFlags = [
@@ -97,6 +106,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
 }

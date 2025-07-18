@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libfuse/sshfs";
     license = licenses.gpl2Plus;
     mainProgram = "sshfs";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

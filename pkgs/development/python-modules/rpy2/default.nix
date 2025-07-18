@@ -12,6 +12,7 @@
   xz,
   bzip2,
   zlib,
+  zstd,
   icu,
   ipython,
   jinja2,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       xz
       bzip2
       zlib
+      zstd
       icu
       libdeflate
     ]
@@ -86,8 +88,6 @@ buildPythonPackage rec {
     tzlocal
     simplegeneric
   ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # https://github.com/rpy2/rpy2/issues/1111
   disabledTests = [

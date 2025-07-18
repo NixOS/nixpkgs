@@ -2,8 +2,8 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
+  cairosvg,
   inkscape,
-  python3Packages,
   xcursorgen,
 }:
 stdenvNoCC.mkDerivation {
@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [
+    cairosvg
     inkscape
-    python3Packages.cairosvg
     xcursorgen
   ];
 

@@ -8,7 +8,6 @@
   cairo,
   poppler,
   wxGTK,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     cairo
     poppler
     wxGTK
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   preConfigure = "./bootstrap";
 

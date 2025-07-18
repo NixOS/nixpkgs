@@ -1,5 +1,4 @@
 {
-  stdenv,
   gcc,
   buildPythonPackage,
   fetchFromGitHub,
@@ -11,29 +10,21 @@
   raylib,
   physac,
   raygui,
-  darwin,
   lib,
+  writers,
+  raylib-python-cffi,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    OpenGL
-    Cocoa
-    IOKit
-    CoreFoundation
-    CoreVideo
-    ;
-in
 buildPythonPackage rec {
   pname = "raylib-python-cffi";
-  version = "5.0.0.3";
+  version = "5.5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
     tag = "v${version}";
-    hash = "sha256-R/w39zYkoOF5JqHDyqVIdON9yXFo2PeosyEQZOd4aYo=";
+    hash = "sha256-Ls+9+iByGQJQJdJiW4WOmKPGbrWJDisXZ1ZYqvAj+3o=";
   };
 
   build-system = [ setuptools ];
@@ -58,21 +49,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyray" ];
 
-  buildInputs =
-    [
-      glfw
-      libffi
-      raylib
-      physac
-      raygui
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      OpenGL
-      Cocoa
-      IOKit
-      CoreFoundation
-      CoreVideo
-    ];
+  buildInputs = [
+    glfw
+    libffi
+    raylib
+    physac
+    raygui
+  ];
+
+  passthru.tests = import ./passthru-tests.nix {
+    inherit src raylib-python-cffi writers;
+  };
 
   meta = {
     description = "Python CFFI bindings for Raylib";

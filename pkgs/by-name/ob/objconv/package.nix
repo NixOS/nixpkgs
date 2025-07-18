@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "objconv";
@@ -12,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   unpackPhase = ''
     mkdir -p "$name"

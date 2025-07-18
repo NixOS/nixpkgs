@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "bandit";
-  version = "1.8.0";
+  version = "1.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tb/lWglavZ/iAJkXinxsBg+ES/1P5MdtKONeTFK50x4=";
+    hash = "sha256-24EunDm4howP7VJ4t3//u6uoKLSJG8gONLnFA3MgHP0=";
   };
 
   nativeBuildInputs = [ pbr ];

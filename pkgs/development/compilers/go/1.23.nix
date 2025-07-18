@@ -3,14 +3,12 @@
   stdenv,
   fetchurl,
   tzdata,
-  substituteAll,
+  replaceVars,
   iana-etc,
-  apple-sdk_11,
-  xcbuild,
   mailcap,
   buildPackages,
   pkgsBuildTarget,
-  threadsCross,
+  targetPackages,
   testers,
   skopeo,
   buildGo123Module,
@@ -21,27 +19,6 @@ let
 
   skopeoTest = skopeo.override { buildGoModule = buildGo123Module; };
 
-  goarch =
-    platform:
-    {
-      "aarch64" = "arm64";
-      "arm" = "arm";
-      "armv5tel" = "arm";
-      "armv6l" = "arm";
-      "armv7l" = "arm";
-      "i686" = "386";
-      "mips" = "mips";
-      "mips64el" = "mips64le";
-      "mipsel" = "mipsle";
-      "powerpc64" = "ppc64";
-      "powerpc64le" = "ppc64le";
-      "riscv64" = "riscv64";
-      "s390x" = "s390x";
-      "x86_64" = "amd64";
-      "wasm32" = "wasm";
-    }
-    .${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
-
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
@@ -50,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.4";
+  version = "1.23.11";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-rTRaxCHpCBQpOpaZzKGd1SOCUcP2h5gLvK4oSVsmNTE=";
+    hash = "sha256-KWOBYHpIOoqGZ9dpUzF1L5Sh8jHCBOJSfS8i4ePRJH0=";
   };
 
   strictDeps = true;
@@ -63,56 +40,44 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    apple-sdk_11
-    xcbuild
-  ];
-
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .
   '';
 
   patches = [
-    (substituteAll {
-      src = ./iana-etc-1.17.patch;
+    (replaceVars ./iana-etc-1.17.patch {
       iana = iana-etc;
     })
     # Patch the mimetype database location which is missing on NixOS.
     # but also allow static binaries built with NixOS to run outside nix
-    (substituteAll {
-      src = ./mailcap-1.17.patch;
+    (replaceVars ./mailcap-1.17.patch {
       inherit mailcap;
     })
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
-    (substituteAll {
-      src = ./tzdata-1.19.patch;
+    (replaceVars ./tzdata-1.19.patch {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./go_no_vendor_checks-1.22.patch
+    ./go_no_vendor_checks-1.23.patch
   ];
 
-  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
+  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
   # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
   CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
 
-  GOARM = toString (
-    lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]
-  );
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
@@ -171,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/go
-    cp -a bin pkg src lib misc api doc go.env $out/share/go
+    cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
     mkdir -p $out/bin
     ln -s $out/share/go/bin/* $out/bin
     runHook postInstall
@@ -196,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
-    maintainers = teams.golang.members;
+    teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };

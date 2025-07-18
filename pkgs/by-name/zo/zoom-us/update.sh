@@ -21,14 +21,14 @@ echo >&2 "=== Downloading packages and computing hashes..."
 # causes cross compiling headaches; using nix-prefetch-url with
 # hard-coded URLs is simpler.  Keep these URLs in sync with the ones
 # in package.nix where `srcs` is defined.
-hash_aarch64_darwin=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_aarch64_darwin}/zoomusInstallerFull.pkg?archType=arm64"))
-hash_x86_64_darwin=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_darwin}/zoomusInstallerFull.pkg"))
-hash_x86_64_linux=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_linux}/zoom_x86_64.pkg.tar.xz"))
+hash_aarch64_darwin=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_aarch64_darwin}/zoomusInstallerFull.pkg?archType=arm64"))
+hash_x86_64_darwin=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_darwin}/zoomusInstallerFull.pkg"))
+hash_x86_64_linux=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url --type sha256 "https://zoom.us/client/${version_x86_64_linux}/zoom_x86_64.pkg.tar.xz"))
 
 echo >&2 "=== Updating package.nix ..."
 # update-source-version expects to be at the root of nixpkgs
 (cd "$nixpkgs" && update-source-version zoom-us "$version_aarch64_darwin" $hash_aarch64_darwin --system=aarch64-darwin --version-key=versions.aarch64-darwin)
 (cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_darwin" $hash_x86_64_darwin --system=x86_64-darwin --version-key=versions.x86_64-darwin)
-(cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_linux" $hash_x86_64_linux --system=x86_64-linux --version-key=versions.x86_64-linux)
+(cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_linux" $hash_x86_64_linux --system=x86_64-linux --version-key=versions.x86_64-linux --source-key=unpacked.src)
 
 echo >&2 "=== Done!"

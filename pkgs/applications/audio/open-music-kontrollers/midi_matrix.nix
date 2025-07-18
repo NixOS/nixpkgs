@@ -2,7 +2,7 @@
 
 callPackage ./generic.nix (
   args
-  // rec {
+  // {
     pname = "midi_matrix";
     version = "0.30.0";
 

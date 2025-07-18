@@ -31,9 +31,10 @@ flutter.buildFlutterApplication rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postFixup = ''
-    for SIZE in 16 32 48 64 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/$SIZEx$SIZE/apps/
-      cp -av assets/resources/quickgui_$SIZE.png $out/share/icons/hicolor/$SIZEx$SIZE/apps/quickgui.png
+    for n in 16 32 48 64 128 256 512; do
+      size=$n"x"$n
+      mkdir -p $out/share/icons/hicolor/$size/apps/
+      cp -av assets/resources/quickgui_$n.png $out/share/icons/hicolor/$size/apps/quickgui.png
     done
   '';
 

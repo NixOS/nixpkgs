@@ -30,13 +30,13 @@ assert enableViewer -> wrapGAppsHook3 != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
-  version = "0.8.33";
+  version = "0.8.35";
 
   src = fetchFromGitHub {
     owner = "AravisProject";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-D6zcTCaFJxJ2VhhsgEFu5+3Xx1MJov4ryrtA0VkjZlY=";
+    repo = "aravis";
+    tag = version;
+    hash = "sha256-RRIYZHtljZ44s1kmmUI1KMx92+PLLI/eCJRs4m0+egg=";
   };
 
   outputs = [
@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # needed for fakegv tests
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Library for video acquisition using GenICam cameras";
     longDescription = ''
@@ -89,7 +92,7 @@ stdenv.mkDerivation rec {
     '';
     # the documentation is the best working homepage that's not the Github repo
     homepage = "https://aravisproject.github.io/docs/aravis-0.8";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ tpw_rules ];
     platforms = lib.platforms.unix;
   };

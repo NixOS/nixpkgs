@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9az7AJ4NXmisRZiCFTdHQBVatgEIdRuKU6ZEKVHEgnQ=";
   };
 
-  cargoHash = "sha256-6Ur4s8bMSQR9mfh6apsocle6KDIsQ6gzU5luXH7BP7M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qTJ7/3jIqDXSu6H16YZJqtc/AqMIb4t7SulTtcVbKMI=";
 
   passthru = {
     tests.version = testers.testVersion { package = commitlint-rs; };

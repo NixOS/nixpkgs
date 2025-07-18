@@ -27,6 +27,7 @@
   libchardet,
   libical,
   libmysqlclient,
+  libpq,
   libsrs2,
   libuuid,
   libxml2,
@@ -34,7 +35,6 @@
   openssl,
   pcre2,
   perl,
-  postgresql,
   rsync,
   shapelib,
   sqlite,
@@ -66,13 +66,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-imapd";
-  version = "3.10.0";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "cyrusimap";
     repo = "cyrus-imapd";
     tag = "cyrus-imapd-${finalAttrs.version}";
-    hash = "sha256-dyybRqmrVX+ERGpToS5JjGC6S/B0t967dLCWfeUrLKA=";
+    hash = "sha256-fwt8ierxM4bMp+ZfYINXUIcKNMnkTIWJTNWyv8GyX0c=";
   };
 
   nativeBuildInputs = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       xapian
     ]
     ++ lib.optionals withMySQL [ libmysqlclient ]
-    ++ lib.optionals withPgSQL [ postgresql ]
+    ++ lib.optionals withPgSQL [ libpq ]
     ++ lib.optionals withSQLite [ sqlite ];
 
   enableParallelBuilding = true;
@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           zlib
           cyrus_sasl
+          sqlite
         ]
         # Darwin doesn't have libuuid, try to build without it
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;

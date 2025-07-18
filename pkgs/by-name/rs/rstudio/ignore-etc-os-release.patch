@@ -1,0 +1,77 @@
+diff --git a/cmake/globals.cmake b/cmake/globals.cmake
+index e53248b..179e3cb 100644
+--- a/cmake/globals.cmake
++++ b/cmake/globals.cmake
+@@ -23,11 +23,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(LINUX TRUE CACHE INTERNAL "")
+ endif()
+ 
+-# read /etc/os-release
+-if(LINUX)
+-   include(OsRelease)
+-endif()
+-
+ # version info
+ if ("$ENV{RSTUDIO_VERSION_MAJOR}" STREQUAL "")
+   string(TIMESTAMP CPACK_PACKAGE_VERSION_MAJOR "%Y")
+diff --git a/cmake/modules/OsRelease.cmake b/cmake/modules/OsRelease.cmake
+deleted file mode 100644
+index 81a9e1f..0000000
+--- a/cmake/modules/OsRelease.cmake
++++ /dev/null
+@@ -1,24 +0,0 @@
+-#
+-# OsRelease.cmake
+-#
+-# Copyright (C) 2022 by Posit Software, PBC
+-#
+-# This program is licensed to you under the terms of version 3 of the
+-# GNU Affero General Public License. This program is distributed WITHOUT
+-# ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING THOSE OF NON-INFRINGEMENT,
+-# MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Please refer to the
+-# AGPL (http://www.gnu.org/licenses/agpl-3.0.txt) for more details.
+-#
+-#
+-
+-# reads and parses /etc/os-release into CMake variables
+-file(STRINGS "/etc/os-release" OS_RELEASE)
+-foreach(LINE ${OS_RELEASE})
+-	string(FIND "${LINE}" "=" INDEX)
+-	string(SUBSTRING "${LINE}" 0 "${INDEX}" KEY)
+-	math(EXPR INDEX "${INDEX} + 1")
+-	string(SUBSTRING "${LINE}" "${INDEX}" -1 VALUE)
+-	separate_arguments(VALUE UNIX_COMMAND "${VALUE}")
+-	set("OS_RELEASE_${KEY}" "${VALUE}" CACHE INTERNAL "/etc/os-release: ${KEY}")
+-endforeach()
+-
+diff --git a/package/linux/CMakeLists.txt b/package/linux/CMakeLists.txt
+index 2c55ebe..7ac9651 100644
+--- a/package/linux/CMakeLists.txt
++++ b/package/linux/CMakeLists.txt
+@@ -16,7 +16,7 @@
+ # configure cpack install location
+ set(CPACK_SET_DESTDIR "ON")
+ set(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+-message(STATUS "Packaging RStudio for ${OS_RELEASE_PRETTY_NAME}")
++message(STATUS "Packaging RStudio for Nix")
+ 
+ # detect architecture (packaging platform specific)
+ find_program(DPKG_EXECUTABLE dpkg)
+@@ -42,17 +42,6 @@ if(EXISTS "/etc/redhat-release")
+    endif()
+ endif()
+ 
+-# set libssl dependency
+-if(OS_RELEASE_ID STREQUAL "ubuntu")
+-  if(OS_RELEASE_VERSION_ID VERSION_GREATER_EQUAL "22.04")
+-    set(RSTUDIO_DEBIAN_DEPENDS_SSL "libssl-dev")
+-  else()
+-    set(RSTUDIO_DEBIAN_DEPENDS_SSL "libssl1.0.0 | libssl1.0.2 | libssl1.1")
+-  endif()
+-else()
+-  set(RSTUDIO_DEBIAN_DEPENDS_SSL "libssl-dev")
+-endif()
+-
+ # configuration specific
+ if(RSTUDIO_SERVER)
+ 

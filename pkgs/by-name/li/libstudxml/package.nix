@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstudxml";
-  version = "1.1.0-b.10+2";
+  version = "1.1.0";
 
   src = fetchgit {
     url = "https://git.codesynthesis.com/libstudxml/libstudxml.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OsjMhQ3u/wLhOay7qg9sQMEhnAOdrO30dsKQ8aDWUOo=";
+    hash = "sha256-WMqO03ShZ5h3gqe3VQmdxE6JT4799kfdDbsqHVBzReI=";
   };
 
   outputs = [
@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [ build2 ];
 
@@ -29,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A streaming XML pull parser and streaming XML serializer implementation for modern, standard C++";
+    description = "Streaming XML pull parser and streaming XML serializer implementation for modern, standard C++";
     homepage = "https://www.codesynthesis.com/projects/libstudxml/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

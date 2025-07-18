@@ -1,8 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bundlerEnv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bundlerEnv,
+  bundlerUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,11 +38,13 @@ stdenv.mkDerivation rec {
     cp evil-winrm.rb $out/bin/evil-winrm
   '';
 
-  meta = with lib; {
+  passthru.updateScript = bundlerUpdateScript "evil-winrm";
+
+  meta = {
     description = "WinRM shell for hacking/pentesting";
     mainProgram = "evil-winrm";
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
   };
 }

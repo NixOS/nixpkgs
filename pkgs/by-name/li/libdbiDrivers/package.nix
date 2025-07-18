@@ -6,7 +6,7 @@
   # TODO: migrate away from overriding packages to null
   libmysqlclient ? null,
   sqlite ? null,
-  postgresql ? null,
+  libpq ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libdbi
     sqlite
-    postgresql
   ] ++ lib.optional (libmysqlclient != null) libmysqlclient;
 
   patches = [
@@ -58,8 +57,10 @@ stdenv.mkDerivation rec {
       "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"
       "--with-sqlite3-libdir=${sqlite.out}/lib/sqlite"
     ]
-    ++ lib.optionals (postgresql != null) [
+    ++ lib.optionals (libpq != null) [
       "--with-pgsql"
+      "--with-pgsql-incdir=${libpq.dev}/include"
+      "--with-pgsql-libdir=${libpq}/lib/"
     ];
 
   env.NIX_CFLAGS_COMPILE = toString (

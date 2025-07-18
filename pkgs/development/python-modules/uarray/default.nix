@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
-    repo = pname;
+    repo = "uarray";
     tag = version;
-    hash = "sha256-6dOi7+quWvASl2RHetULK5zixHFJlj/D6667o99ceSs=";
+    hash = "sha256-eCrmmP+9TI+T8Km8MOz0EqseneFwPizlnZloK5yNLcM=";
   };
 
   build-system = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     cd $TMP
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "uarray"
   ];

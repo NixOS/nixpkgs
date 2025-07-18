@@ -12,6 +12,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   pname = "webmacs";
   version = "0.8";
+  format = "setuptools";
 
   disabled = python3Packages.isPy27;
 

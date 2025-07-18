@@ -7,7 +7,7 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "avdump3";
   version = "8293_stable";
 

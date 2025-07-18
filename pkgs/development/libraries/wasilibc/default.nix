@@ -72,7 +72,8 @@ stdenv.mkDerivation {
       rvolosatovs
     ];
     license = with licenses; [
-      asl20-llvm
+      asl20
+      llvm-exception
       mit
     ];
   };

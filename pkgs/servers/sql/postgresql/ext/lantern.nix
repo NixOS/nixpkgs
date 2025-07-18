@@ -1,22 +1,21 @@
 {
-  lib,
-  stdenv,
   cmake,
   fetchFromGitHub,
+  lib,
   openssl,
   postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgresql-lantern";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IsDD/um5pVvbzin8onf45DQVszl+Id/pJSQ2iijgHmg=";
     fetchSubmodules = true;
   };
@@ -51,11 +50,11 @@ buildPostgresqlExtension (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL vector database extension for building AI applications";
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };

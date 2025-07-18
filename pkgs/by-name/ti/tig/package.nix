@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.10";
+  version = "2.5.12";
 
   src = fetchFromGitHub {
     owner = "jonas";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-WTrw7WaSqC2fp76fPvfogWTibev0Hg0LW2x4umc3+1Q=";
+    repo = "tig";
+    rev = "tig-${version}";
+    sha256 = "sha256-2kNogpzu8e/abjwo18s1G5ZcSZdG5c/Ydp6tfezumdk=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,6 @@ stdenv.mkDerivation rec {
     description = "Text-mode interface for git";
     maintainers = with maintainers; [
       bjornfor
-      domenkozar
       qknight
       globin
       ma27

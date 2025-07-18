@@ -14,7 +14,6 @@
   openjpeg,
   jbig2dec,
   libjpeg,
-  darwin,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libX11,
@@ -37,6 +36,7 @@
   swig,
   xcbuild,
   gitUpdater,
+  enableBarcode ? false,
 
   # for passthru.tests
   cups-filters,
@@ -62,12 +62,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.24.11";
+  version = "1.26.1";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-GRInuWd19nBe99lVEYdRGTK1GSc7NFNaMxSRz32YFj8=";
+    hash = "sha256-vc4BfHdnRMKIsCECl37gN4y0NseN+BJ6I/KB8TYEBv0=";
   };
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
+    substituteInPlace Makerules --replace-fail "(shell pkg-config" "(shell $PKG_CONFIG"
 
     patchShebangs scripts/mupdfwrap.py
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
     # fix libclang unnamed struct format
     for wrapper in ./scripts/wrap/{cpp,state}.py; do
-      substituteInPlace "$wrapper" --replace 'struct (unnamed' '(unnamed struct'
+      substituteInPlace "$wrapper" --replace-fail 'struct (unnamed' '(unnamed struct'
     done
   '';
 
@@ -102,7 +102,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
-    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ];
+    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ]
+    ++ lib.optionals (enableBarcode) [
+      "barcode=yes"
+      "USE_SYSTEM_ZXINGCPP=no"
+    ];
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -142,19 +146,10 @@ stdenv.mkDerivation rec {
       curl
       openssl
     ]
-    ++ lib.optionals enableGL (
-      if stdenv.hostPlatform.isDarwin then
-        with darwin.apple_sdk.frameworks;
-        [
-          GLUT
-          OpenGL
-        ]
-      else
-        [
-          freeglut-mupdf
-          libGLU
-        ]
-    )
+    ++ lib.optionals (enableGL && !stdenv.hostPlatform.isDarwin) [
+      freeglut-mupdf
+      libGLU
+    ]
     ++ lib.optionals enableOcr [
       leptonica
       tesseract
@@ -169,7 +164,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    # Don't remove mujs because upstream version is incompatible
+    # Don't remove mujs or zxing-cpp because upstream version is incompatible
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
 
@@ -238,7 +233,7 @@ stdenv.mkDerivation rec {
     '')
     + (lib.optionalString (enableX11 || enableGL) ''
       mkdir -p $bin/share/icons/hicolor/48x48/apps
-      cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps
+      cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps/mupdf.png
     '')
     + (
       if enableGL then
@@ -252,7 +247,7 @@ stdenv.mkDerivation rec {
     )
     + (lib.optionalString (enableCxx) ''
       cp platform/c++/include/mupdf/*.h $out/include/mupdf
-      cp build/*/libmupdfcpp.so $out/lib
+      cp build/*/libmupdfcpp.so* $out/lib
     '')
     + (lib.optionalString (enablePython) (
       ''
@@ -267,7 +262,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = "no";
+  env.USE_SONAME = if (stdenv.hostPlatform.isDarwin) then "no" else "yes";
 
   passthru = {
     tests = {
@@ -288,13 +283,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.unix;
     mainProgram = "mupdf";
   };
 }

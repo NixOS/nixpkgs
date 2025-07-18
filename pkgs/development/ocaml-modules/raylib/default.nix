@@ -1,35 +1,43 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchurl,
   buildDunePackage,
   dune-configurator,
   ctypes,
   integers,
   patch,
-  gitUpdater,
+  libGL,
+  libX11,
+  libXcursor,
+  libXi,
+  libXinerama,
+  libXrandr,
 }:
 
 buildDunePackage rec {
   pname = "raylib";
   version = "1.4.0";
 
-  src = fetchFromGitHub {
-    owner = "tjammer";
-    repo = "raylib-ocaml";
-    tag = version;
-    hash = "sha256-Fh79YnmboQF5Kn3VF//JKLaIFKl8QJWVOqRexTzxF0U=";
-    # enable submodules for vendored raylib sources
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/tjammer/raylib-ocaml/releases/download/${version}/raylib-${version}.tbz";
+    hash = "sha256-/SeKgQOrhsAgMNk6ODAZlopL0mL0lVfCTx1ugmV1P/s=";
   };
 
-  propagatedBuildInputs = [
+  buildInputs = [
     dune-configurator
-    ctypes
-    integers
     patch
   ];
 
-  passthru.updateScript = gitUpdater { };
+  propagatedBuildInputs = [
+    ctypes
+    integers
+    libGL
+    libX11
+    libXcursor
+    libXi
+    libXinerama
+    libXrandr
+  ];
 
   meta = {
     description = "OCaml bindings for Raylib (5.0.0)";

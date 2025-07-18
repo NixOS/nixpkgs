@@ -21,7 +21,7 @@ let
 
   testingName = lib.optionalString (testName != null) "${testName}-";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "${testingName}${switchboard.pname}-with-plugs";
   inherit (switchboard) version;
 

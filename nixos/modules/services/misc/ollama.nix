@@ -158,7 +158,7 @@ in
 
           This creates a systemd unit `ollama-model-loader.service`.
 
-          Search for models of your choice from: https://ollama.com/library
+          Search for models of your choice from: <https://ollama.com/library>
         '';
       };
       openFirewall = lib.mkOption {
@@ -223,6 +223,7 @@ in
             "char-nvidia-uvm"
             # ROCm
             "char-drm"
+            "char-fb"
             "char-kfd"
             # WSL (Windows Subsystem for Linux)
             "/dev/dxg"

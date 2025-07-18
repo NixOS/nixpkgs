@@ -1,7 +1,4 @@
-if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 # This is the builder for all X.org components.
-source $stdenv/setup
-
 
 # After installation, automatically add all "Requires" fields in the
 # pkgconfig files (*.pc) to the propagated build inputs.

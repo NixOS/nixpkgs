@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.14";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-SEFyiKxfKC2Rx5tQ2OK8zEiCBFex2kZUY/vnnDsdCoc=";
+    hash = "sha256-GCtcIXGrMH6LOKxjnB2SkUSChQnMj5d939i2atvqK+Q=";
   };
 
   nativeBuildInputs = [
@@ -85,93 +85,89 @@ stdenv.mkDerivation rec {
       ];
       fake = {
         # script guards usage behind has_cmd test function, it's safe to leave these external and optional
-        external =
-          [
-            "cpio"
-            "isoinfo"
-            "cabextract"
-            "bsdtar"
-            "rpm2cpio"
-            "bsdtar"
-            "unzip"
-            "ar"
-            "unrar"
-            "rar"
-            "7zr"
-            "7za"
-            "isoinfo"
-            "gzip"
-            "bzip2"
-            "lzip"
-            "lzma"
-            "xz"
-            "brotli"
-            "compress"
-            "zstd"
-            "lz4"
-            "archive_color"
-            "bat"
-            "batcat"
-            "pygmentize"
-            "source-highlight"
-            "vimcolor"
-            "code2color"
+        external = [
+          "cpio"
+          "isoinfo"
+          "cabextract"
+          "bsdtar"
+          "rpm2cpio"
+          "bsdtar"
+          "unzip"
+          "ar"
+          "unrar"
+          "rar"
+          "7zr"
+          "7za"
+          "isoinfo"
+          "gzip"
+          "bzip2"
+          "lzip"
+          "lzma"
+          "xz"
+          "brotli"
+          "compress"
+          "zstd"
+          "lz4"
+          "archive_color"
+          "bat"
+          "batcat"
+          "pygmentize"
+          "source-highlight"
+          "vimcolor"
+          "code2color"
 
-            "w3m"
-            "lynx"
-            "elinks"
-            "html2text"
-            "xmq"
-            "dtc"
-            "pdftotext"
-            "pdftohtml"
-            "pdfinfo"
-            "ps2ascii"
-            "procyon"
-            "ccze"
-            "mdcat"
-            "pandoc"
-            "docx2txt"
-            "libreoffice"
-            "pptx2md"
-            "mdcat"
-            "xlscat"
-            "odt2txt"
-            "wvText"
-            "catdoc"
-            "broken_catppt"
-            "sxw2txt"
-            "groff"
-            "mandoc"
-            "unrtf"
-            "dvi2tty"
-            "pod2text"
-            "perldoc"
-            "h5dump"
-            "ncdump"
-            "matdump"
-            "djvutxt"
-            "openssl"
-            "gpg"
-            "plistutil"
-            "plutil"
-            "id3v2"
-            "csvlook"
-            "csvtable"
-            "jq"
-            "zlib-flate"
-            "lessfilter"
-            "snap"
-          ]
-          ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
-            # resholve only identifies this on darwin/bsd
-            # call site is guarded by || so it's safe to leave dynamic
-            "locale"
-          ];
+          "w3m"
+          "lynx"
+          "elinks"
+          "html2text"
+          "xmq"
+          "dtc"
+          "pdftotext"
+          "pdftohtml"
+          "pdfinfo"
+          "ps2ascii"
+          "procyon"
+          "ccze"
+          "mdcat"
+          "pandoc"
+          "docx2txt"
+          "libreoffice"
+          "pptx2md"
+          "mdcat"
+          "xlscat"
+          "odt2txt"
+          "wvText"
+          "catdoc"
+          "broken_catppt"
+          "sxw2txt"
+          "groff"
+          "mandoc"
+          "unrtf"
+          "dvi2tty"
+          "pod2text"
+          "perldoc"
+          "h5dump"
+          "ncdump"
+          "matdump"
+          "djvutxt"
+          "openssl"
+          "gpg"
+          "plistutil"
+          "plutil"
+          "id3v2"
+          "csvlook"
+          "csvtable"
+          "jq"
+          "zlib-flate"
+          "lessfilter"
+          "snap"
+          "locale" # call site is guarded by || so it's safe to leave dynamic
+        ];
         builtin = [ "setopt" ];
       };
       execer = [
         "cannot:${iconv}/bin/iconv"
+        "cannot:${file}/bin/file"
       ];
     }}
     ${resholve.phraseSolution "lesscomplete" {
@@ -221,6 +217,9 @@ stdenv.mkDerivation rec {
         ];
         builtin = [ "setopt" ];
       };
+      execer = [
+        "cannot:${file}/bin/file"
+      ];
     }}
   '';
 

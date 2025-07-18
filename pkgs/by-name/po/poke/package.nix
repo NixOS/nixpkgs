@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poke";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://gnu/poke/poke-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iq825h42elMUDqQOJVnp7FEud5xCvuNOesJLNLoRm94=";
+    hash = "sha256-qEy5F11Q1FpBHySB/QZiuDyzLOUXMWuInPtXCBlXk3M=";
   };
 
   outputs =
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Interactive, extensible editor for binary data";
     homepage = "http://www.jemarch.net/poke";
-    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${finalAttrs.version}";
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/NEWS?h=releases/poke-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.unix;

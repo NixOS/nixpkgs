@@ -13,24 +13,23 @@
   libvorbis,
   libopus,
   soxr,
-  IOKit,
-  AudioToolbox,
   aixlog,
   popl,
   pulseaudioSupport ? false,
   libpulseaudio,
   nixosTests,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "snapcast";
     rev = "v${version}";
-    hash = "sha256-FWOGBXYWLHHZhvC5/BpkDd70ZupzALZ3ks3qTcrtwKQ=";
+    hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
   };
 
   nativeBuildInputs = [
@@ -51,13 +50,10 @@ stdenv.mkDerivation rec {
       aixlog
       popl
       soxr
+      openssl
     ]
     ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      AudioToolbox
-    ];
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 

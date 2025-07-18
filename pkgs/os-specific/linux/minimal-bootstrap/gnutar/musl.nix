@@ -42,7 +42,7 @@ bash.runCommand "${pname}-${version}"
       description = "GNU implementation of the `tar' archiver";
       homepage = "https://www.gnu.org/software/tar";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       mainProgram = "tar";
       platforms = platforms.unix;
     };

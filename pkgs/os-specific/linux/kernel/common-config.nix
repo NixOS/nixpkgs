@@ -43,16 +43,25 @@ let
   );
 
   forceRust = features.rust or false;
-  kernelSupportsRust = lib.versionAtLeast version "6.7";
+  # Architecture support collected from HAVE_RUST Kconfig definitions and the following table:
+  # https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/rust/arch-support.rst
+  rustByDefault = (
+    lib.versionAtLeast version "6.12"
+    && (
+      stdenv.hostPlatform.isx86_64
+      || stdenv.hostPlatform.isLoongArch64
+      || stdenv.hostPlatform.isAarch64
+      || (stdenv.hostPlatform.isRiscV64 && !stdenv.cc.isGNU)
+    )
+  );
 
-  # Currently only enabling Rust by default on kernel 6.12+,
-  # which actually has features that use Rust that we want.
-  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
-    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
-      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
-    '';
-    (forceRust || defaultRust) && kernelSupportsRust;
+    lib.warnIfNot (forceRust -> rustAvailable)
+      "force-enabling Rust for Linux without an available rustc"
+      lib.warnIfNot
+      (forceRust -> rustByDefault)
+      "force-enabling Rust for Linux on an unsupported kernel version, host platform or compiler"
+      (forceRust || (rustAvailable && rustByDefault));
 
   options = {
 
@@ -80,7 +89,7 @@ let
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG = yes;
       # Provide access to tunables like sched_migration_cost_ns
-      SCHED_DEBUG = yes;
+      SCHED_DEBUG = whenOlder "6.15" yes;
 
       # Count IRQ and steal CPU time separately
       IRQ_TIME_ACCOUNTING = yes;
@@ -89,7 +98,9 @@ let
       # Enable CPU lockup detection
       LOCKUP_DETECTOR = yes;
       SOFTLOCKUP_DETECTOR = yes;
-      HARDLOCKUP_DETECTOR = yes;
+      HARDLOCKUP_DETECTOR = lib.mkIf (
+        with stdenv.hostPlatform; isPower || isx86 || lib.versionAtLeast version "6.5"
+      ) yes;
 
       # Enable streaming logs to a remote device over a network
       NETCONSOLE = module;
@@ -100,12 +111,17 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
     power-management =
       {
         CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = yes;
         CPU_FREQ_GOV_SCHEDUTIL = yes;
+        PM_DEBUG = yes;
         PM_ADVANCED_DEBUG = yes;
         PM_WAKELOCKS = yes;
         POWERCAP = yes;
@@ -117,6 +133,12 @@ let
         ACPI_APEI = (option yes);
         # APEI Generic Hardware Error Source
         ACPI_APEI_GHES = (option yes);
+
+        # Without this, on some hardware the kernel fails at some
+        # point after the EFI stub has executed but before a console
+        # is set up. Regardless, it's good to have the extra debug
+        # anyway.
+        ACPI_DEBUG = yes;
 
         # Enable lazy RCUs for power savings:
         # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
@@ -213,7 +235,7 @@ let
         MEMORY_FAILURE = yes;
 
         # Collect ECC errors and retire pages that fail too often
-        RAS_CEC = yes;
+        RAS_CEC = lib.mkIf stdenv.hostPlatform.isx86 yes;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.is32bit) {
         # Enable access to the full memory range (aka PAE) on 32-bit architectures
@@ -266,7 +288,7 @@ let
         IP_VS_PROTO_ESP = yes;
         IP_VS_PROTO_AH = yes;
         IP_VS_IPV6 = yes;
-        IP_DCCP_CCID3 = no; # experimental
+        IP_DCCP_CCID3 = whenOlder "6.16" no; # experimental
         CLS_U32_PERF = yes;
         CLS_U32_MARK = yes;
         BPF_JIT = whenPlatformHasEBPFJit yes;
@@ -282,6 +304,7 @@ let
         CGROUP_BPF = option yes;
         CGROUP_NET_PRIO = yes; # Required by systemd
         IP_ROUTE_VERBOSE = yes;
+        IP_MROUTE = yes;
         IP_MROUTE_MULTIPLE_TABLES = yes;
         IP_MULTICAST = yes;
         IP_MULTIPLE_TABLES = yes;
@@ -309,6 +332,7 @@ let
         NET_L3_MASTER_DEV = option yes;
         NET_FOU_IP_TUNNELS = option yes;
         IP_NF_TARGET_REDIRECT = module;
+        NETKIT = whenAtLeast "6.7" yes;
 
         PPP_MULTILINK = yes; # PPP multilink support
         PPP_FILTER = yes;
@@ -374,6 +398,10 @@ let
         # Enable debugfs for wireless drivers
         CFG80211_DEBUGFS = yes;
         MAC80211_DEBUGFS = yes;
+
+        # HAM radio
+        HAMRADIO = yes;
+        AX25 = module;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # Not enabled by default, hides modules behind it
@@ -407,6 +435,13 @@ let
       ATH10K_DFS_CERTIFIED = option yes;
       B43_PHY_HT = option yes;
       BCMA_HOST_PCI = option yes;
+
+      # Enable "untested" hardware support for RTL8xxxU.
+      # There's a bunch of those still floating around,
+      # and given how old the hardware is, we're unlikely
+      # to kill any, so let's enable all known device IDs.
+      RTL8XXXU_UNTESTED = option yes;
+
       RTW88 = module;
       RTW88_8822BE = lib.mkMerge [
         (whenOlder "5.8" yes)
@@ -430,7 +465,7 @@ let
       FB_SIS_300 = yes;
       FB_SIS_315 = yes;
       FB_3DFX_ACCEL = yes;
-      FB_VESA = yes;
+      FB_VESA = lib.mkIf stdenv.hostPlatform.isx86 yes;
       FRAMEBUFFER_CONSOLE = yes;
       FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
@@ -456,7 +491,7 @@ let
       in
       {
         # compile in DRM so simpledrm can load before initrd if necessary
-        AGP = yes;
+        AGP = lib.mkIf (with stdenv.hostPlatform; isPower || isx86) yes;
         DRM = yes;
 
         DRM_LEGACY = whenOlder "6.8" no;
@@ -473,11 +508,11 @@ let
 
         # Allow specifying custom EDID on the kernel command line
         DRM_LOAD_EDID_FIRMWARE = yes;
-        VGA_SWITCHEROO = yes; # Hybrid graphics support
-        DRM_GMA500 = whenAtLeast "5.12" module;
-        DRM_GMA600 = whenOlder "5.13" yes;
-        DRM_GMA3600 = whenOlder "5.12" yes;
-        DRM_VMWGFX_FBCON = whenOlder "6.1" yes;
+        VGA_SWITCHEROO = lib.mkIf stdenv.hostPlatform.isx86 yes; # Hybrid graphics support
+        DRM_GMA500 = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" module);
+        DRM_GMA600 = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "5.13" yes);
+        DRM_GMA3600 = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "5.12" yes);
+        DRM_VMWGFX_FBCON = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "6.1" yes);
         # (experimental) amdgpu support for verde and newer chipsets
         DRM_AMDGPU_SI = yes;
         # (stable) amdgpu support for bonaire and newer chipsets
@@ -489,8 +524,10 @@ let
         DRM_AMD_DC_DCN1_0 = whenOlder "5.6" yes;
         DRM_AMD_DC_DCN2_0 = whenOlder "5.6" yes;
         DRM_AMD_DC_DCN2_1 = whenOlder "5.6" yes;
-        DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
-        DRM_AMD_DC_DCN = whenBetween "5.11" "6.4" yes;
+        DRM_AMD_DC_DCN3_0 = lib.mkIf (with stdenv.hostPlatform; isx86) (whenBetween "5.9" "5.11" yes);
+        DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
+          whenBetween "5.11" "6.4" yes
+        );
         DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
         DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
         DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
@@ -499,7 +536,13 @@ let
         DRM_AMD_ACP = yes;
 
         # Enable AMD secure display when available
-        DRM_AMD_SECURE_DISPLAY = whenAtLeast "5.13" yes;
+        DRM_AMD_SECURE_DISPLAY = lib.mkIf (
+          with stdenv.hostPlatform;
+          (lib.versionAtLeast version "5.13" && (isx86 || isPower64))
+          || (lib.versionAtLeast version "6.2" && isAarch64 && !stdenv.cc.isClang)
+          || (lib.versionAtLeast version "6.5" && isLoongArch64 && !stdenv.cc.isClang)
+          || (lib.versionAtLeast version "6.10" && isRiscV64 && !stdenv.cc.isClang)
+        ) yes;
 
         # Enable AMD image signal processor
         DRM_AMD_ISP = whenAtLeast "6.11" yes;
@@ -525,6 +568,8 @@ let
         DRM_I915_GVT_KVMGT = module;
         # Enable Hyper-V Synthetic DRM Driver
         DRM_HYPERV = whenAtLeast "5.14" module;
+        # And disable the legacy framebuffer driver when we have the new one
+        FB_HYPERV = whenAtLeast "5.14" no;
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # enable HDMI-CEC on RPi boards
@@ -677,6 +722,7 @@ let
       NFSD_V4 = yes;
       NFSD_V4_SECURITY_LABEL = yes;
 
+      NFS_FS = module;
       NFS_FSCACHE = yes;
       NFS_SWAP = yes;
       NFS_V3_ACL = yes;
@@ -744,7 +790,7 @@ let
         # This does not have any effect if a program does not support it
         SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
 
-        DEVKMEM = whenOlder "5.13" no; # Disable /dev/kmem
+        DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 
         USER_NS = yes; # Support for user namespaces
 
@@ -825,9 +871,9 @@ let
       };
 
     microcode = {
-      MICROCODE = yes;
-      MICROCODE_INTEL = whenOlder "6.6" yes;
-      MICROCODE_AMD = whenOlder "6.6" yes;
+      MICROCODE = lib.mkIf stdenv.hostPlatform.isx86 yes;
+      MICROCODE_INTEL = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "6.6" yes);
+      MICROCODE_AMD = lib.mkIf stdenv.hostPlatform.isx86 (whenOlder "6.6" yes);
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
@@ -843,6 +889,7 @@ let
       CGROUP_HUGETLB = yes;
       CGROUP_PERF = yes;
       CGROUP_RDMA = yes;
+      CGROUP_DMEM = whenAtLeast "6.14" yes;
 
       MEMCG = yes;
       MEMCG_SWAP = whenOlder "6.1" yes;
@@ -888,12 +935,12 @@ let
     virtualisation = {
       PARAVIRT = option yes;
 
-      HYPERVISOR_GUEST = yes;
+      HYPERVISOR_GUEST = lib.mkIf stdenv.hostPlatform.isx86 yes;
       PARAVIRT_SPINLOCKS = option yes;
 
-      KVM_ASYNC_PF = yes;
+      KVM_ASYNC_PF = lib.mkIf (with stdenv.hostPlatform; isS390 || isx86) yes;
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
-      KVM_GUEST = yes;
+      KVM_GUEST = lib.mkIf (with stdenv.hostPlatform; isPower || isx86) yes;
       KVM_MMIO = yes;
       KVM_VFIO = yes;
       KSM = yes;
@@ -904,7 +951,7 @@ let
         tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";
       };
 
-      VFIO_PCI_VGA = lib.mkIf stdenv.hostPlatform.is64bit yes;
+      VFIO_PCI_VGA = lib.mkIf stdenv.hostPlatform.isx86_64 yes;
 
       UDMABUF = yes;
 
@@ -1014,7 +1061,7 @@ let
 
       # Allows soft-dirty tracking on pages, used by CRIU.
       # See https://docs.kernel.org/admin-guide/mm/soft-dirty.html
-      MEM_SOFT_DIRTY = lib.mkIf (!stdenv.hostPlatform.isx86_32) yes;
+      MEM_SOFT_DIRTY = lib.mkIf (with stdenv.hostPlatform; isS390 || isPower64 || isx86_64) yes;
     };
 
     misc =
@@ -1027,19 +1074,24 @@ let
         # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
         KERNEL_UNCOMPRESSED = lib.mkIf stdenv.hostPlatform.isRiscV yes;
         KERNEL_XZ = lib.mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
-        KERNEL_ZSTD = lib.mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
+        KERNEL_ZSTD = lib.mkIf (
+          with stdenv.hostPlatform;
+          (isMips || isS390 || isx86 || (lib.versionAtLeast version "6.1" && isAarch64 || isLoongArch64))
+          && useZstd
+        ) yes;
 
         HID_BATTERY_STRENGTH = yes;
         # enabled by default in x86_64 but not arm64, so we do that here
         HIDRAW = yes;
 
         # Enable loading HID fixups as eBPF from userspace
-        HID_BPF = whenAtLeast "6.3" yes;
+        HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
 
         HID_ACRUX_FF = yes;
         DRAGONRISE_FF = yes;
         GREENASIA_FF = yes;
         HOLTEK_FF = yes;
+        INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
         LOGIG940_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
@@ -1065,12 +1117,18 @@ let
 
         MD = yes; # Device mapper (RAID, LVM, etc.)
 
+        # enable support for device trees and overlays
+        OF = option yes;
+        # OF_OVERLAY breaks v5.10 on x86_64, see https://github.com/NixOS/nixpkgs/issues/403985
+        OF_OVERLAY = lib.mkIf (!(lib.versionOlder version "5.15" && stdenv.hostPlatform.isx86_64)) (
+          option yes
+        );
+
         # Enable initrd support.
         BLK_DEV_INITRD = yes;
 
         # Allows debugging systems that get stuck during suspend/resume
-        PM_TRACE = yes;
-        PM_TRACE_RTC = yes;
+        PM_TRACE_RTC = lib.mkIf stdenv.hostPlatform.isx86 yes;
 
         ACCESSIBILITY = yes; # Accessibility support
         AUXDISPLAY = yes; # Auxiliary Display support
@@ -1127,6 +1185,7 @@ let
 
         DVB_DYNAMIC_MINORS = option yes; # we use udev
 
+        EFI = lib.mkIf stdenv.hostPlatform.isEfi yes;
         EFI_STUB = yes; # EFI bootloader in the bzImage itself
         EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER = whenOlder "6.2" (whenAtLeast "5.8" yes); # initrd kernel parameter for EFI
 
@@ -1142,13 +1201,15 @@ let
         POSIX_MQUEUE = yes;
         FRONTSWAP = whenOlder "6.6" yes;
         FUSION = yes; # Fusion MPT device support
-        IDE = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
+        IDE = lib.mkIf (with stdenv.hostPlatform; isAarch32 || isM68k || isMips || isPower || isx86) (
+          whenOlder "5.14" no
+        ); # deprecated IDE support, removed in 5.14
         IDLE_PAGE_TRACKING = yes;
 
         JOYSTICK_XPAD_FF = option yes; # X-Box gamepad rumble support
         JOYSTICK_XPAD_LEDS = option yes; # LED Support for Xbox360 controller 'BigX' LED
 
-        KEYBOARD_APPLESPI = module;
+        KEYBOARD_APPLESPI = lib.mkIf stdenv.hostPlatform.isx86 module;
 
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
@@ -1184,16 +1245,16 @@ let
 
         MOUSE_ELAN_I2C_SMBUS = yes;
         MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
-        MOUSE_PS2_VMMOUSE = yes;
-        MTRR_SANITIZER = yes;
+        MOUSE_PS2_VMMOUSE = lib.mkIf stdenv.hostPlatform.isx86 yes;
+        MTRR_SANITIZER = lib.mkIf stdenv.hostPlatform.isx86 yes;
         NET_FC = yes; # Fibre Channel driver support
         # Needed for touchpads to work on some AMD laptops
         PINCTRL_AMD = whenAtLeast "5.19" yes;
         # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
-        PINCTRL_BAYTRAIL = yes;
+        PINCTRL_BAYTRAIL = lib.mkIf stdenv.hostPlatform.isx86 yes;
         # GPIO for Braswell and Cherryview devices
         # Needs to be built-in to for integrated keyboards to function properly
-        PINCTRL_CHERRYVIEW = yes;
+        PINCTRL_CHERRYVIEW = lib.mkIf stdenv.hostPlatform.isx86 yes;
         # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
         MMC_BLOCK_MINORS = freeform "32";
 
@@ -1222,8 +1283,8 @@ let
         UEVENT_HELPER = no;
 
         USERFAULTFD = yes;
-        X86_CHECK_BIOS_CORRUPTION = yes;
-        X86_MCE = yes;
+        X86_CHECK_BIOS_CORRUPTION = lib.mkIf stdenv.hostPlatform.isx86 yes;
+        X86_MCE = lib.mkIf stdenv.hostPlatform.isx86 yes;
 
         RAS = yes; # Needed for EDAC support
 
@@ -1252,14 +1313,14 @@ let
         PREEMPT = no;
         PREEMPT_VOLUNTARY = yes;
 
-        X86_AMD_PLATFORM_DEVICE = yes;
-        X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
-        X86_PLATFORM_DRIVERS_HP = whenAtLeast "6.1" yes;
+        X86_AMD_PLATFORM_DEVICE = lib.mkIf stdenv.hostPlatform.isx86 yes;
+        X86_PLATFORM_DRIVERS_DELL = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "5.12" yes);
+        X86_PLATFORM_DRIVERS_HP = lib.mkIf stdenv.hostPlatform.isx86 (whenAtLeast "6.1" yes);
 
         LIRC = yes;
 
         SCHED_CORE = whenAtLeast "5.14" yes;
-        SCHED_CLASS_EXT = whenAtLeast "6.12" yes;
+        SCHED_CLASS_EXT = whenAtLeast "6.12" (whenPlatformHasEBPFJit yes);
 
         LRU_GEN = whenAtLeast "6.1" yes;
         LRU_GEN_ENABLED = whenAtLeast "6.1" yes;
@@ -1320,6 +1381,8 @@ let
             ACPI_HOTPLUG_CPU = yes;
             ACPI_HOTPLUG_MEMORY = yes;
             MEMORY_HOTPLUG = yes;
+            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
+            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
             MEMORY_HOTREMOVE = yes;
             HOTPLUG_CPU = yes;
             MIGRATION = yes;
@@ -1338,8 +1401,6 @@ let
             CROS_EC = module;
             CROS_EC_I2C = module;
             CROS_EC_SPI = module;
-            CROS_EC_LPC = module;
-            CROS_EC_ISHTP = module;
             CROS_KBD_LED_BACKLIGHT = module;
             TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
           }
@@ -1361,7 +1422,7 @@ let
 
             # Add debug interfaces for CMA
             CMA_DEBUGFS = yes;
-            CMA_SYSFS = yes;
+            CMA_SYSFS = whenAtLeast "5.13" yes;
 
             # https://docs.kernel.org/arch/arm/mem_alignment.html
             # tldr:
@@ -1396,6 +1457,9 @@ let
             CP15_BARRIER_EMULATION = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
           }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        CROS_EC_LPC = module;
+        CROS_EC_ISHTP = module;
+
         CHROMEOS_LAPTOP = module;
         CHROMEOS_PSTORE = module;
 

@@ -9,20 +9,21 @@
   gtk4,
   gtk4-layer-shell,
   nix-update-script,
+  libqalculate,
 }:
 
 buildGoModule rec {
   pname = "walker";
-  version = "0.11.16";
+  version = "0.12.31";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-9cZ+cJcBiZA0HU8YU7+DmOPmbeFtuiqmyBEosVxCADQ=";
+    hash = "sha256-G55itZe9xAlEq1x4IsE6Pm17t0c7A4obmOTRXjChs+o=";
   };
 
-  vendorHash = "sha256-urAtl2aSuNw7UVnuacSACUE8PCwAsrRQbuMb7xItjao=";
+  vendorHash = "sha256-250HPwSkcT7pOulhqAtmuoWOJUakF0S1bpZ8FMsp7bU=";
   subPackages = [ "cmd/walker.go" ];
 
   passthru.updateScript = nix-update-script { };
@@ -37,6 +38,7 @@ buildGoModule rec {
     gtk4
     vips
     gtk4-layer-shell
+    libqalculate
   ];
 
   meta = with lib; {

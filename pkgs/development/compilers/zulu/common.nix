@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   setJavaClassPath,
+  testers,
   enableJavaFX ? false,
   dists,
   # minimum dependencies
@@ -116,21 +117,30 @@ let
       else
         null;
 
-    installPhase = ''
-      mkdir -p $out
-      mv * $out
+    installPhase =
+      ''
+        mkdir -p $out
+        mv * $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Library/Java/JavaVirtualMachines
+        bundle=$out/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk
+        mv $out/zulu-${lib.versions.major version}.jdk $bundle
+        ln -sf $bundle/Contents/Home/* $out/
+      ''
+      + ''
 
-      unzip ${jce-policies}
-      mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
+        unzip ${jce-policies}
+        mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
 
-      # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/${stdenv.hostPlatform.parsed.kernel.name}/*_md.h $out/include/
+        # jni.h expects jni_md.h to be in the header search path.
+        ln -s $out/include/${stdenv.hostPlatform.parsed.kernel.name}/*_md.h $out/include/
 
-      if [ -f $out/LICENSE ]; then
-        install -D $out/LICENSE $out/share/zulu/LICENSE
-        rm $out/LICENSE
-      fi
-    '';
+        if [ -f $out/LICENSE ]; then
+          install -D $out/LICENSE $out/share/zulu/LICENSE
+          rm $out/LICENSE
+        fi
+      '';
 
     preFixup =
       ''
@@ -165,7 +175,7 @@ let
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+      ln -nsf $bundle/Contents/Home/man $out/share/man
     '';
 
     passthru =
@@ -174,6 +184,16 @@ let
       })
       // {
         home = jdk;
+        tests.version = testers.testVersion {
+          package = jdk;
+          command = "java -version";
+          version = ''openjdk version \""${
+            if lib.versions.major version == "8" then "1.8" else lib.versions.major version
+          }"'';
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        bundle = "${jdk}/Library/Java/JavaVirtualMachines/zulu-${lib.versions.major version}.jdk";
       };
 
     meta = {
@@ -185,7 +205,7 @@ let
       homepage = "https://www.azul.com/products/zulu/";
       license = lib.licenses.gpl2Only;
       mainProgram = "java";
-      maintainers = [ ] ++ lib.teams.java.members;
+      teams = [ lib.teams.java ];
       platforms = builtins.attrNames dists;
       sourceProvenance = with lib.sourceTypes; [
         binaryBytecode

@@ -20,14 +20,17 @@ from urllib.request import urlopen
 # documented.
 with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?deviceCategory=ChromeOS') as resp:
     reader = csv.reader(map(bytes.decode, resp))
-    header = reader.__next__()
+    header = next(reader)
     cr_stable_index = header.index('cr_stable')
     cros_stable_index = header.index('cros_stable')
     chrome_version = []
     platform_version = []
 
     for line in reader:
-        this_chrome_version = list(map(int, line[cr_stable_index].split('.')))
+        this_chrome_version_str = line[cr_stable_index]
+        if "no update" in this_chrome_version_str:
+            continue
+        this_chrome_version = list(map(int, this_chrome_version_str.split('.')))
         this_platform_version = list(map(int, line[cros_stable_index].split('.')))
         chrome_version = max(chrome_version, this_chrome_version)
         platform_version = max(platform_version, this_platform_version)

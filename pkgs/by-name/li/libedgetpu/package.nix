@@ -61,6 +61,8 @@ stdenv.mkDerivation {
     flatbuffers_23_5_26
   ];
 
+  doInstallCheck = true;
+
   nativeBuildInputs = [ xxd ];
 
   NIX_CXXSTDLIB_COMPILE = "-std=c++17";

@@ -4,7 +4,6 @@
   aiohttp,
   buildPythonPackage,
   certifi,
-  pkgs,
   docutils,
   fastapi,
   fetchFromGitHub,
@@ -17,8 +16,10 @@
   matplotlib,
   orjson,
   pandas,
+  pkgs,
   plotly,
   poetry-core,
+  polars,
   pyecharts,
   pygments,
   pytest-asyncio,
@@ -26,8 +27,8 @@
   pytestCheckHook,
   python-multipart,
   python-socketio,
-  pythonOlder,
   pywebview,
+  redis,
   requests,
   setuptools,
   typing-extensions,
@@ -36,26 +37,22 @@
   vbuild,
   watchfiles,
   webdriver-manager,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.5.0";
+  version = "2.21.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-oT191QVpvE5xszgBFt3o4A2hU50zmzPUywmAQuKZ5OE=";
+    hash = "sha256-pQh3kFFlqfktpW5UtX7smb7qXubX5bMeM46hX8jhtTA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0,<50",' ""
-  '';
+  pythonRelaxDeps = [ "requests" ];
 
   build-system = [
     poetry-core
@@ -92,21 +89,20 @@ buildPythonPackage rec {
     native = [ pywebview ];
     plotly = [ plotly ];
     sass = [ libsass ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
     pandas
     pkgs.chromedriver
+    polars
     pyecharts
     pytest-asyncio
     pytest-selenium
     pytestCheckHook
     webdriver-manager
+    writableTmpDirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -116,7 +112,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/v${version}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

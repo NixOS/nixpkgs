@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     mainProgram = "cl";
     platforms = platforms.unix;
   };

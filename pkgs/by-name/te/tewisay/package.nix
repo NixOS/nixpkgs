@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "tewisay";
   version = "0-unstable-2022-11-04";
 

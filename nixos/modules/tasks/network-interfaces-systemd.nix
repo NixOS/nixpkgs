@@ -53,32 +53,36 @@ let
     )
   );
 
-  genericDhcpNetworks =
-    initrd:
-    mkIf cfg.useDHCP {
-      networks."99-ethernet-default-dhcp" = {
-        matchConfig = {
-          Type = "ether";
-          Kind = "!*"; # physical interfaces have no kind
-        };
-        DHCP = "yes";
-        networkConfig.IPv6PrivacyExtensions = "kernel";
+  genericDhcpNetworks = mkIf cfg.useDHCP {
+    networks."99-ethernet-default-dhcp" = {
+      matchConfig = {
+        Type = "ether";
+        Kind = "!*"; # physical interfaces have no kind
       };
-      networks."99-wireless-client-dhcp" = {
-        matchConfig.WLANInterfaceType = "station";
-        DHCP = "yes";
-        networkConfig.IPv6PrivacyExtensions = "kernel";
-        # We also set the route metric to one more than the default
-        # of 1024, so that Ethernet is preferred if both are
-        # available.
-        dhcpV4Config.RouteMetric = 1025;
-        ipv6AcceptRAConfig.RouteMetric = 1025;
-      };
+      DHCP = "yes";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
     };
+    networks."99-wireless-client-dhcp" = {
+      matchConfig.WLANInterfaceType = "station";
+      DHCP = "yes";
+      networkConfig.IPv6PrivacyExtensions = "kernel";
+      # We also set the route metric to one more than the default
+      # of 1024, so that Ethernet is preferred if both are
+      # available.
+      dhcpV4Config.RouteMetric = 1025;
+      ipv6AcceptRAConfig.RouteMetric = 1025;
+    };
+  };
 
   interfaceNetworks = mkMerge (
     forEach interfaces (i: {
-      netdevs = mkIf i.virtual ({
+      links = mkIf i.wakeOnLan.enable {
+        "40-${i.name}" = {
+          matchConfig.name = i.name;
+          linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+        };
+      };
+      netdevs = mkIf i.virtual {
         "40-${i.name}" = {
           netdevConfig = {
             Name = i.name;
@@ -88,7 +92,7 @@ let
             User = i.virtualOwner;
           };
         };
-      });
+      };
       networks."40-${i.name}" = {
         name = mkDefault i.name;
         DHCP = mkForce (
@@ -166,6 +170,9 @@ let
           // optionalAttrs (i.mtu != null) {
             MTUBytes = toString i.mtu;
           };
+        bridgeConfig = optionalAttrs i.proxyARP {
+          ProxyARP = i.proxyARP;
+        };
       };
     })
   );
@@ -220,7 +227,7 @@ in
       # former, the user retains full control over the configuration.
       boot.initrd.systemd.network = mkMerge [
         defaultGateways
-        (genericDhcpNetworks true)
+        genericDhcpNetworks
         interfaceNetworks
         bridgeNetworks
         vlanNetworks
@@ -271,7 +278,7 @@ in
           enable = true;
         }
         defaultGateways
-        (genericDhcpNetworks false)
+        genericDhcpNetworks
         interfaceNetworks
         bridgeNetworks
         (mkMerge (

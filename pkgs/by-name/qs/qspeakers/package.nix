@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qspeakers";
-  version = "1.6.10";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "be1";
     repo = "qspeakers";
     tag = finalAttrs.version;
-    hash = "sha256-ab3+lw3F0CU8OLa7V4itPZsWKCV+6DoUvmFEqhAdklw=";
+    hash = "sha256-zN9Z2t7dKo7Ffe5J9ZOGCpNJUK2RkZfQzjzL5HCmJpg=";
   };
 
   nativeBuildInputs = [

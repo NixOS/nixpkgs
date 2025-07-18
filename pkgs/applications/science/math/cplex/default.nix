@@ -1,4 +1,24 @@
-{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, makeWrapper, alsa-lib, glib, glib-networking, gsettings-desktop-schemas, gtk3, libsecret, openjdk, sqlite, unixODBC, gtk2, xorg, glibcLocales, releasePath ? null }:
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  alsa-lib,
+  glib,
+  glib-networking,
+  gsettings-desktop-schemas,
+  gtk3,
+  libsecret,
+  openjdk,
+  sqlite,
+  unixODBC,
+  gtk2,
+  xorg,
+  glibcLocales,
+  releasePath ? null,
+}:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.
@@ -26,8 +46,21 @@ stdenv.mkDerivation rec {
     else
       releasePath;
 
-  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper openjdk ];
-  buildInputs = [ alsa-lib gsettings-desktop-schemas gtk2 sqlite unixODBC xorg.libXtst glibcLocales ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+    makeWrapper
+    openjdk
+  ];
+  buildInputs = [
+    alsa-lib
+    gsettings-desktop-schemas
+    gtk2
+    sqlite
+    unixODBC
+    xorg.libXtst
+    glibcLocales
+  ];
 
   unpackPhase = "cp $src $name";
 
@@ -44,46 +77,55 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = let
-    libraryPath = lib.makeLibraryPath [ stdenv.cc.cc glib gtk2 gtk3 libsecret xorg.libXtst ];
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      libraryPath = lib.makeLibraryPath [
+        stdenv.cc.cc
+        glib
+        gtk2
+        gtk3
+        libsecret
+        xorg.libXtst
+      ];
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin
+      mkdir -p $out/bin
 
-    for pgm in \
-      $out/opl/bin/x86-64_linux/oplrun \
-      $out/opl/bin/x86-64_linux/oplrunjava \
-      $out/opl/oplide/oplide \
-      $out/cplex/bin/x86-64_linux/cplex \
-      $out/cpoptimizer/bin/x86-64_linux/cpoptimizer
-    do
-      makeWrapperArgs=(
-        --set-default LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
-      )
-
-      if [[ "$pgm" = "$out/opl/oplide/oplide" ]]; then
-        makeWrapperArgs+=(
-          --prefix LD_LIBRARY_PATH : ${libraryPath}
-          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
-          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+      for pgm in \
+        $out/opl/bin/x86-64_linux/oplrun \
+        $out/opl/bin/x86-64_linux/oplrunjava \
+        $out/opl/oplide/oplide \
+        $out/cplex/bin/x86-64_linux/cplex \
+        $out/cpoptimizer/bin/x86-64_linux/cpoptimizer
+      do
+        makeWrapperArgs=(
+          --set-default LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
         )
-      fi
 
-      makeWrapper "$pgm" "$out/bin/$(basename "$pgm")" "''${makeWrapperArgs[@]}"
-    done
+        if [[ "$pgm" = "$out/opl/oplide/oplide" ]]; then
+          makeWrapperArgs+=(
+            --prefix LD_LIBRARY_PATH : ${libraryPath}
+            --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"
+            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+          )
+        fi
 
-    mkdir -p $out/share/pixmaps
-    ln -s $out/opl/oplide/icon.xpm $out/share/pixmaps/oplide.xpm
+        makeWrapper "$pgm" "$out/bin/$(basename "$pgm")" "''${makeWrapperArgs[@]}"
+      done
 
-    mkdir -p $out/share/doc
-    mv $out/doc $out/share/doc/$name
+      mkdir -p $out/share/pixmaps
+      ln -s $out/opl/oplide/icon.xpm $out/share/pixmaps/oplide.xpm
 
-    mkdir -p $out/share/licenses
-    mv $out/license $out/share/licenses/$name
+      mkdir -p $out/share/doc
+      mv $out/doc $out/share/doc/$name
 
-    runHook postInstall
-  '';
+      mkdir -p $out/share/licenses
+      mv $out/license $out/share/licenses/$name
+
+      runHook postInstall
+    '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -92,7 +134,12 @@ stdenv.mkDerivation rec {
       genericName = "Optimization Software";
       icon = "oplide";
       exec = "oplide";
-      categories = [ "Development" "IDE" "Math" "Science" ];
+      categories = [
+        "Development"
+        "IDE"
+        "Math"
+        "Science"
+      ];
     })
   ];
 

@@ -183,8 +183,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  pytestFlagsArray = [
-    "-p no:pytest-blender"
+  pytestFlags = [
+    "-pno:pytest-blender"
   ];
 
   disabledTestPaths = [
@@ -208,7 +208,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
-    homepage = "http://ifcopenshell.org/";
+    homepage = "https://ifcopenshell.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ autra ];
   };

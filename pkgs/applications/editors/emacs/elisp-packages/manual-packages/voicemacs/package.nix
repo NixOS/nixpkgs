@@ -13,7 +13,6 @@
   melpaBuild,
   nav-flash,
   porthole,
-  unstableGitUpdater,
   yasnippet,
   el-patch,
 }:
@@ -49,12 +48,10 @@ melpaBuild {
     el-patch
   ];
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
   meta = {
     homepage = "https://github.com/jcaw/voicemacs/";
     description = "Set of utilities for controlling Emacs by voice";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,29 +1,23 @@
 {
-  python311Packages,
-  fetchFromGitHub,
-  nix-update-script,
+  python3Packages,
   qt5,
   lib,
+  opensnitch,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
+  pyproject = true;
   pname = "opensnitch-ui";
-  version = "1.6.7";
 
-  src = fetchFromGitHub {
-    owner = "evilsocket";
-    repo = "opensnitch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2BwFCRbVvs7pAM5SnhynWws2+QthB/F9V6DYPViDICU=";
-  };
+  inherit (opensnitch) src version;
+  sourceRoot = "${opensnitch.src.name}/ui";
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils/__init__.py \
-      --replace /usr/lib/python3/dist-packages/data ${python311Packages.pyasn}/${python311Packages.python.sitePackages}/pyasn/data
+    substituteInPlace opensnitch/utils/__init__.py \
+      --replace-fail /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [
-    python311Packages.pyqt5
     qt5.wrapQtAppsHook
   ];
 
@@ -31,9 +25,15 @@ python311Packages.buildPythonApplication rec {
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python311Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    pyqt5
+  ];
+
+  dependencies = with python3Packages; [
     grpcio-tools
     notify2
+    packaging
     pyasn
     pyinotify
     pyqt5
@@ -46,11 +46,7 @@ python311Packages.buildPythonApplication rec {
     make -C ../proto ../ui/opensnitch/ui_pb2.py
     # sourced from ui/Makefile
     pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
-    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
-  '';
-
-  preConfigure = ''
-    cd ui
+    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/proto/ui_pb2*
   '';
 
   preCheck = ''
@@ -58,7 +54,7 @@ python311Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mv $out/${python311Packages.python.sitePackages}/usr/* $out/
+    mv $out/${python3Packages.python.sitePackages}/usr/* $out/
   '';
 
   dontWrapQtApps = true;
@@ -67,14 +63,17 @@ python311Packages.buildPythonApplication rec {
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  pythonImportsCheck = [ "opensnitch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Application firewall";
     mainProgram = "opensnitch-ui";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      onny
+      grimmauld
+    ];
+    platforms = lib.platforms.linux;
   };
 }

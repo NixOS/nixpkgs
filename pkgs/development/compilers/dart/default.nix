@@ -1,8 +1,10 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchurl,
   unzip,
+  bintools,
+  versionCheckHook,
   runCommand,
   cctools,
   darwin,
@@ -23,16 +25,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase =
     ''
-      mkdir -p $out
-      cp -R * $out/
-      echo $libPath
+      runHook preInstall
+
+      cp -R . $out
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
+      find $out/bin -executable -type f -exec patchelf --set-interpreter ${bintools.dynamicLinker} {} \;
+    ''
+    + ''
+      runHook postInstall
     '';
 
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
   dontStrip = true;
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
+
   passthru = {
     updateScript = ./update.sh;
     tests = {
@@ -67,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dart.dev";
-    maintainers = with maintainers; [ grburst ];
+    maintainers = with lib.maintainers; [ grburst ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
@@ -79,12 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dart";
     platforms = [
       "x86_64-linux"
-      "i686-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
   };
 })

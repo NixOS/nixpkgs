@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.88";
+  version = "0.1.89";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
     tag = "v${version}";
-    hash = "sha256-umRq+FZwyx1hz839ZibRTEFKjbBugrfUJuE8PagjqI4=";
+    hash = "sha256-eTEfmbpmwtCuphtOq0iHUT8zGfyQ4/aUorL4FQwcKBw=";
   };
 
   build-system = [ setuptools ];
@@ -51,11 +51,6 @@ buildPythonPackage rec {
     dm-tree
     pytestCheckHook
   ];
-
-  # AttributeError: module 'unittest' has no attribute 'makeSuite'
-  # https://github.com/google-deepmind/chex/issues/371
-  # TODO: re-enable at next release
-  doCheck = pythonOlder "3.13";
 
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";

@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.2.0";
+  version = "1.2.3";
 in
 buildNpmPackage {
   pname = "openfortivpn-webview";
@@ -16,7 +16,7 @@ buildNpmPackage {
       owner = "gm-vm";
       repo = "openfortivpn-webview";
       rev = "v${version}-electron";
-      hash = "sha256-HheqDjlWxHJS0+OEhRTwANs9dyz3lhhCmWh+YH4itOk=";
+      hash = "sha256-jGDCFdqRfnYwUgVs3KO1pDr52JgkYVRHi2KvABaZFl4=";
     })
     + "/openfortivpn-webview-electron";
 
@@ -27,7 +27,7 @@ buildNpmPackage {
     runHook postInstall
   '';
 
-  npmDepsHash = "sha256-Vf8R0+RXHlXwPOnPENw8ooxIXT3kSppQmB2yk5TWEwg=";
+  npmDepsHash = "sha256-NKGu9jZMc+gd4BV1PnF4ukCNkjdUpZIJlYJ7ZzO+5WI=";
   dontNpmBuild = true;
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

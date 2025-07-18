@@ -4,7 +4,8 @@
   fetchurl,
   pkg-config,
   systemd,
-  util-linux,
+  unixtools,
+  libusb-compat-0_1,
   coreutils,
   wall,
   hostname,
@@ -28,14 +29,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     man
-    util-linux
+    unixtools.col
   ];
-  buildInputs = lib.optional enableCgiScripts gd;
 
-  prePatch = ''
-    sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
-        -i ./src/apcagent/Makefile ./autoconf/targets.mak
-  '';
+  buildInputs =
+    lib.optional enableCgiScripts gd
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libusb-compat-0_1
+    ];
+
+  prePatch =
+    ''
+      sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
+          -i ./src/apcagent/Makefile ./autoconf/targets.mak
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/apcagent/Makefile \
+        --replace-fail "Applications" "$out/Applications"
+      substituteInPlace include/libusb.h.in \
+        --replace-fail "@LIBUSBH@" "${libusb-compat-0_1.dev}/include/usb.h"
+      substituteInPlace platforms/darwin/Makefile \
+        --replace-fail "/Library/LaunchDaemons" "$out/Library/LaunchDaemons" \
+        --replace-fail "/System/Library/Extensions" "$out/System/Library/Extensions"
+    '';
 
   preConfigure = ''
     sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
@@ -57,13 +73,21 @@ stdenv.mkDerivation rec {
       "--with-lock-dir=/run/lock"
       "--with-pid-dir=/run"
       "--enable-usb"
-      "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
       "ac_cv_path_WALL=${wall}/bin/wall"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "ac_cv_path_SHUTDOWN=/sbin/shutdown"
+      "ac_cv_func_which_gethostbyname_r=no"
     ]
     ++ lib.optionals enableCgiScripts [
       "--enable-cgi"
       "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
     ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     for file in "$out"/etc/apcupsd/*; do
@@ -71,6 +95,7 @@ stdenv.mkDerivation rec {
                -e 's|^HOSTNAME=.*|HOSTNAME=`${hostname}/bin/hostname`|g' \
                "$file"
     done
+    rm -f "$out/bin/apcupsd-uninstall"
   '';
 
   passthru.tests.smoke = nixosTests.apcupsd;
@@ -79,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "Daemon for controlling APC UPSes";
     homepage = "http://www.apcupsd.com/";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

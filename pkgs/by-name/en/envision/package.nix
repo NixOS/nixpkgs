@@ -14,7 +14,7 @@ buildFHSEnv {
 
   strictDeps = true;
 
-  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
+  # TODO: I'm pretty suspicious of this list of additional required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]
@@ -52,6 +52,7 @@ buildFHSEnv {
           xorg.xorgproto
           SDL2
           wayland
+          mesa-gl-headers
           # Additional dependencies required for Monado WMR support
           bc
           fmt
@@ -60,9 +61,11 @@ buildFHSEnv {
           gtest
           jq
           libepoxy
+          lz4
           lz4.dev
           tbb
           libxkbcommon
+          librealsense
           boost
           glew
         ])
@@ -76,15 +79,34 @@ buildFHSEnv {
       pkgs.wivrn.buildInputs
       ++ pkgs.wivrn.nativeBuildInputs
       ++ (with pkgs; [
+        avahi
+        ffmpeg
         glib
         libmd
         ninja
         glslang
         gst_all_1.gstreamer
+        gdk-pixbuf
+        lerc
+        libsysprof-capture
+        libbsd
+        libdeflate
         libdrm
+        libGL
+        libnotify
+        libpng
+        libselinux
+        libsepol
+        libtiff
+        libuuid
+        libwebp
         openssl
         openxr-loader
+        pipewire
+        pulseaudio
+        systemd
         vulkan-loader
+        x264
       ])
       ++ (with pkgs; [
         android-tools # For adb installing WiVRn APKs

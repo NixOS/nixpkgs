@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "witnessme";
   version = "0-unstable-2023-12-06";
   pyproject = true;

@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "stardust-xr-atmosphere";
   version = "0-unstable-2024-08-22";
 
@@ -18,13 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pk1+kkPV6fx+7Xz9hKFFVw402iztcvNC31zVCc3hfTY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "stardust-xr-0.45.0" = "sha256-WF/uNtFYB+ZQqsyXJe7qUCd8SHUgaNOLMxGuNIN1iKM=";
-      "stardust-xr-molecules-0.45.0" = "sha256-UldPQQ0Psx/lFUdCKJJDeG8W6lK6qDU3JSwffawK3xg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eQjRbavmUW2iw0OEC/DPk2FflTc4QCn0K/c4Og+sGW4=";
 
   passthru = {
     tests.versionTest = testers.testVersion {

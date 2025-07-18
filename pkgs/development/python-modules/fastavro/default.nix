@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.9.7";
+  version = "1.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fastavro";
+    repo = "fastavro";
     tag = version;
-    hash = "sha256-hKhwQqNJ+QvYf4x9FesNOPg36m8zC6D6dmlhANXCcsk=";
+    hash = "sha256-I8Te1Ae20UrE5qI2nwktU0Ubip7Jx4/NWteSKsSz7tg=";
   };
 
   preBuild = ''

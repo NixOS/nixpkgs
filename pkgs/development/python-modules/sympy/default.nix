@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.13.3";
+  version = "1.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sn/SxlMOCrOeJ1/JtoOJU2flHV2pG6qNPWTbJWX+xNk=";
+    hash = "sha256-09P+jfHloLQvDnvfUFQWl9vn0jdG6JSZDAMOKwXnJRc=";
   };
 
   nativeCheckInputs = [ glibcLocales ];
@@ -27,10 +27,6 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sympy" ];
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
-
   passthru.tests = {
     inherit sage;
   };
@@ -40,6 +36,7 @@ buildPythonPackage rec {
     mainProgram = "isympy";
     homepage = "https://www.sympy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;
+    maintainers = with maintainers; [ lovek323 ];
+    teams = [ teams.sage ];
   };
 }

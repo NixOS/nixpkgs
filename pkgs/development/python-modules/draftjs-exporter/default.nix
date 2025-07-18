@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "draftjs-exporter";
-  version = "5.0.0";
+  version = "5.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
     owner = "springload";
     tag = "v${version}";
-    sha256 = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
+    sha256 = "sha256-AR8CK75UdtEThE68WSE6DFSqryI509GTW1fBl1SL29w=";
   };
 
   optional-dependencies = {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to convert Draft.js ContentState to HTML";
     homepage = "https://github.com/springload/draftjs_exporter";
-    changelog = "https://github.com/springload/draftjs_exporter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/springload/draftjs_exporter/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ sephi ];
   };

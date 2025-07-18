@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-cloud";
-  version = "0.1.7";
+  version = "0.1.33";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_cloud";
     inherit version;
-    hash = "sha256-fBdnyyCZBUAOiUVmZhqRIwvP+DzU2cCOeC/SFDympkY=";
+    hash = "sha256-oLuQDVpuhvjHZ7SGhsUlNnmtfKG1dhLcObB2fletPXg=";
   };
 
   build-system = [ poetry-core ];

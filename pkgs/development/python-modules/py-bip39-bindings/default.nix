@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
   pythonOlder,
   pytestCheckHook,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
-  version = "0.1.11";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,16 +20,8 @@ buildPythonPackage rec {
     owner = "polkascan";
     repo = "py-bip39-bindings";
     tag = "v${version}";
-    hash = "sha256-3/KBPUFVFkJifunGWJeAHLnY08KVTb8BHCFzDqKWH18=";
+    hash = "sha256-CglVEvmZ8xYtjFPNhCyzToYrOvGe/Sw3zHAIy1HidzM=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "update-to-latest-maturin-and-pyo3.patch";
-      url = "https://github.com/polkascan/py-bip39-bindings/commit/f05cced028b43b59cfa67e17fbf0f337bdd3aa8d.patch";
-      hash = "sha256-/pFNSFtYyKiOoIDVqEWdZCbQxFZ7FIcvAHY2m5STlEc=";
-    })
-  ];
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
@@ -47,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   pythonImportsCheck = [ "bip39" ];
 

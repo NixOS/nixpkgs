@@ -26,7 +26,13 @@ in
       write = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the {option}`nix.settings.trusted-users` option in most use cases, such as allowing remote building of derivations.";
+        description = "Whether to enable writing to the Nix store as a remote store via SSH. Note: by default, the sshServe user is named nix-ssh and is not a trusted-user. nix-ssh should be added to the {option}`nix.sshServe.trusted` option in most use cases, such as allowing remote building of derivations to anonymous people based on ssh key";
+      };
+
+      trusted = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to add nix-ssh to the nix.settings.trusted-users";
       };
 
       keys = lib.mkOption {
@@ -58,6 +64,8 @@ in
       shell = pkgs.bashInteractive;
     };
     users.groups.nix-ssh = { };
+
+    nix.settings.trusted-users = lib.mkIf cfg.trusted [ "nix-ssh" ];
 
     services.openssh.enable = true;
 

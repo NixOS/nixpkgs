@@ -9,15 +9,16 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ckan";
-  version = "1.35.2";
+  version = "1.36.0";
 
   src = fetchurl {
     url = "https://github.com/KSP-CKAN/CKAN/releases/download/v${version}/ckan.exe";
-    sha256 = "sha256-SK2eKdH/bm+W+qU8XUHRD9uffmfp5bR4dBvBEUKCm8E=";
+    hash = "sha256-Tw8s86FtBz/92uq2imFZm4n88NCCpePTpydoAoYsE3U=";
   };
 
   icon = fetchurl {
@@ -75,6 +76,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Mod manager for Kerbal Space Program";
     mainProgram = "ckan";
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       Baughn
       ymarkus
+      nullcube
     ];
     platforms = platforms.all;
   };

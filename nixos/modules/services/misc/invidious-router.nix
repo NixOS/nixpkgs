@@ -66,7 +66,7 @@ in
       };
       description = ''
         Configuration for invidious-router.
-        Check https://gitlab.com/gaincoder/invidious-router#configuration
+        Check <https://gitlab.com/gaincoder/invidious-router#configuration>
         for configuration options.
       '';
     };
@@ -101,6 +101,10 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.invidious-router = {
       wantedBy = [ "multi-user.target" ];
+
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
+
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe cfg.package} --configfile ${configFile}";

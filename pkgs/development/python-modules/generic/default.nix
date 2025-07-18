@@ -1,35 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
   exceptiongroup,
+  fetchPypi,
   poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "generic";
-  version = "1.1.3";
-  disabled = pythonOlder "3.7";
+  version = "1.1.5";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d4+CRv1uecIdS4t23cAI34s/PdIFYNQXfABuRWjzCUQ=";
+    hash = "sha256-Dvpiw6DRQczT5Tcj81II1cdZAIPbcWTIENLP/QQprpI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ exceptiongroup ];
+  dependencies = [ exceptiongroup ];
 
   pythonImportsCheck = [ "generic" ];
 
   meta = with lib; {
     description = "Generic programming (Multiple dispatch) library for Python";
-    maintainers = [ ];
     homepage = "https://github.com/gaphor/generic";
     changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

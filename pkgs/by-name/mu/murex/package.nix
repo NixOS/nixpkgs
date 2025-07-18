@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "murex";
-  version = "6.4.1005";
+  version = "7.0.2107";
 
   src = fetchFromGitHub {
     owner = "lmorg";
-    repo = pname;
+    repo = "murex";
     rev = "v${version}";
-    sha256 = "sha256-zuLVZnHZP/QbFZLUwWdQIy3LTaWF+8UnQ+DIhLjKbjw=";
+    sha256 = "sha256-k87Xj92TDPlcHNGSbAL1oznCX+0mVd5pHzZ/QiA4s2A=";
   };
 
-  vendorHash = "sha256-NIhg8D8snCNxpb3i2JG5tLcZteYBCGN4QbOowG/vgJE=";
+  vendorHash = "sha256-p+KIaZLJEWxsOTRKhg0X3qpBdY3VBQUb8+A84A1eOdw=";
 
   subPackages = [ "." ];
 

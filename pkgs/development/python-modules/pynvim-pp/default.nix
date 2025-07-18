@@ -8,19 +8,21 @@
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2024-07-31";
+  version = "0-unstable-2025-05-29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "pynvim_pp";
-    rev = "6d3c298b7eb9543bce7ab515b0a39f256c1d37ca";
-    hash = "sha256-W6YaxI/fa2HL6+FIBTTA+7K2Be02iuIfFFVO/hhYnpo=";
+    rev = "6beffc4f479360489481705dc23a9ebd54f0c17d";
+    hash = "sha256-5QDqH+oOx7mANxTseszr7+kXCdu+vUWqwTgXxE2GhnA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pynvim ];
+
+  pythonImportsCheck = [ "pynvim_pp" ];
 
   meta = {
     homepage = "https://github.com/ms-jpq/pynvim_pp";

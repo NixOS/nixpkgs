@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.10.0";
+  version = "3.12.1";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-9dm6tVQ5nsDC8X2clrT4cAl8jg4wLwcihE4bnFgdU+A=";
+    sha256 = "sha256-Zpzl3H8cgVmPqpRAakL3m12OZ04Ddzpm+2krkuEkwrk=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +109,16 @@ stdenv.mkDerivation rec {
 
         # Unity Editor 6000 specific dependencies
         harfbuzz
+        vulkan-loader
+
+        # Unity Bug Reporter specific dependencies
+        xorg.libICE
+        xorg.libSM
+
+        # Fonts used by built-in and third party editor tools
+        corefonts
+        dejavu_fonts
+        liberation_ttf
       ]
       ++ extraLibs pkgs;
   };

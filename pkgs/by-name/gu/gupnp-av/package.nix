@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-av";
-  version = "0.14.1";
+  version = "0.14.3";
 
   outputs = [
     "out"
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "t5zgzEsMZtnFS8Ihg6EOVwmgAR0q8nICWUjvyrM6Pk8=";
+    url = "mirror://gnome/sources/gupnp-av/${lib.versions.majorMinor version}/gupnp-av-${version}.tar.xz";
+    sha256 = "q+IEYEPmapUpNl2JBZvhIhnCGk7eDEdDcDsP2arxe7Q=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
     libxml2
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gupnp-av";
       versionPolicy = "odd-unstable";
     };
   };

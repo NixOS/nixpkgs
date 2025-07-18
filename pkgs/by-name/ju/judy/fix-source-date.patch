@@ -1,0 +1,25 @@
+diff -Naur judy-1.0.5.orig/jhton.c judy-1.0.5/jhton.c
+--- judy-1.0.5.orig/tool/jhton.c	2025-03-29 18:37:09
++++ judy-1.0.5/tool/jhton.c	2025-03-29 18:40:47
+@@ -674,7 +674,6 @@
+ 	char *	pagesection;		// such as "3X".
+ 	char	lcletter;		// manual tab section, such as "j".
+ 	char *	revision;		// from centered table datum.
+-	time_t	currtime;		// for ctime().
+ 
+ // Extract "weird" header values:
+ //
+@@ -690,11 +689,8 @@
+ 		  "contain revision information");
+ 	}
+ 
+-// Emit file header; note, ctime() output already contains a newline:
+-
+-	(void) time(&currtime);
+-	(void) printf(".\\\" Auto-translated to nroff -man from %s by %s at %s",
+-		      Filename, gc_myname, ctime(&currtime));
++	(void) printf(".\\\" Auto-translated to nroff -man from %s by %s\n",
++		      Filename, gc_myname);
+ 
+ 	(void) printf(".\\\" %s\n",  filerev);
+ 	(void) printf(".TA %c\n",    lcletter);

@@ -5,17 +5,17 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "coq-record-update";
   owner = "tchajed";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.10" "8.20";
-        out = "0.3.4";
-      }
+      (case (range "8.10" "9.1") "0.3.4")
     ] null;
   release."0.3.4".sha256 = "sha256-AhEcugUiVIsgbq884Lur/bQIuGw8prk+3AlNkP1omcw=";
   release."0.3.3".sha256 = "sha256-HDIPeFHiC9EwhiOH7yMGJ9d2zJMhboTpRGf9kWcB9Io=";

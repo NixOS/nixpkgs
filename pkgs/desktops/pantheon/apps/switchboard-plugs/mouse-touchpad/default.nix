@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -13,6 +13,7 @@
   granite7,
   gtk4,
   switchboard,
+  gettext,
   gnome-settings-daemon,
   glib,
   gala, # needed for gestures support
@@ -31,13 +32,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       touchegg = touchegg;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -65,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

@@ -47,9 +47,8 @@ let
       "{connection_file}"
     ];
     language = "sage";
-    # just one 16x16 logo is available
-    logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
-    logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
+    logo32 = "${sage-src}/src/sage/ext_data/notebook-ipython/logo-64x64.png";
+    logo64 = "${sage-src}/src/sage/ext_data/notebook-ipython/logo-64x64.png";
   };
 
   jupyter-kernel-specs = pkgs.jupyter-kernel.create {

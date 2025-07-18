@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,32 +11,69 @@ let
   cfg = config.services.syncplay;
 
   cmdArgs =
-    [ "--port" cfg.port ]
+    [
+      "--port"
+      cfg.port
+    ]
     ++ optionals (cfg.isolateRooms) [ "--isolate-rooms" ]
     ++ optionals (!cfg.ready) [ "--disable-ready" ]
     ++ optionals (!cfg.chat) [ "--disable-chat" ]
-    ++ optionals (cfg.salt != null) [ "--salt" cfg.salt ]
-    ++ optionals (cfg.motdFile != null) [ "--motd-file" cfg.motdFile ]
-    ++ optionals (cfg.roomsDBFile != null) [ "--rooms-db-file" cfg.roomsDBFile ]
-    ++ optionals (cfg.permanentRoomsFile != null) [ "--permanent-rooms-file" cfg.permanentRoomsFile ]
-    ++ [ "--max-chat-message-length" cfg.maxChatMessageLength ]
-    ++ [ "--max-username-length" cfg.maxUsernameLength ]
-    ++ optionals (cfg.statsDBFile != null) [ "--stats-db-file" cfg.statsDBFile ]
-    ++ optionals (cfg.certDir != null) [ "--tls" cfg.certDir ]
+    ++ optionals (cfg.salt != null) [
+      "--salt"
+      cfg.salt
+    ]
+    ++ optionals (cfg.motdFile != null) [
+      "--motd-file"
+      cfg.motdFile
+    ]
+    ++ optionals (cfg.roomsDBFile != null) [
+      "--rooms-db-file"
+      cfg.roomsDBFile
+    ]
+    ++ optionals (cfg.permanentRoomsFile != null) [
+      "--permanent-rooms-file"
+      cfg.permanentRoomsFile
+    ]
+    ++ [
+      "--max-chat-message-length"
+      cfg.maxChatMessageLength
+    ]
+    ++ [
+      "--max-username-length"
+      cfg.maxUsernameLength
+    ]
+    ++ optionals (cfg.statsDBFile != null) [
+      "--stats-db-file"
+      cfg.statsDBFile
+    ]
+    ++ optionals (cfg.certDir != null) [
+      "--tls"
+      cfg.certDir
+    ]
     ++ optionals cfg.ipv4Only [ "--ipv4-only" ]
     ++ optionals cfg.ipv6Only [ "--ipv6-only" ]
-    ++ optionals (cfg.interfaceIpv4 != "") [ "--interface-ipv4" cfg.interfaceIpv4 ]
-    ++ optionals (cfg.interfaceIpv6 != "") [ "--interface-ipv6" cfg.interfaceIpv6 ]
+    ++ optionals (cfg.interfaceIpv4 != "") [
+      "--interface-ipv4"
+      cfg.interfaceIpv4
+    ]
+    ++ optionals (cfg.interfaceIpv6 != "") [
+      "--interface-ipv6"
+      cfg.interfaceIpv6
+    ]
     ++ cfg.extraArgs;
 
-  useACMEHostDir = optionalString (cfg.useACMEHost != null) config.security.acme.certs.${cfg.useACMEHost}.directory;
+  useACMEHostDir = optionalString (
+    cfg.useACMEHost != null
+  ) config.security.acme.certs.${cfg.useACMEHost}.directory;
 in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "syncplay" "user" ]
-      "The syncplay service now uses DynamicUser, override the systemd unit settings if you need the old functionality.")
+      "The syncplay service now uses DynamicUser, override the systemd unit settings if you need the old functionality."
+    )
     (mkRemovedOptionModule [ "services" "syncplay" "group" ]
-      "The syncplay service now uses DynamicUser, override the systemd unit settings if you need the old functionality.")
+      "The syncplay service now uses DynamicUser, override the systemd unit settings if you need the old functionality."
+    )
   ];
 
   options = {
@@ -150,7 +192,11 @@ in
 
       permanentRoomsFile = mkOption {
         type = types.nullOr types.str;
-        default = if cfg.permanentRooms != [ ] then (builtins.toFile "perm" (builtins.concatStringsSep "\n" cfg.permanentRooms)) else null;
+        default =
+          if cfg.permanentRooms != [ ] then
+            (builtins.toFile "perm" (builtins.concatStringsSep "\n" cfg.permanentRooms))
+          else
+            null;
         defaultText = literalExpression ''if services.syncplay.permanentRooms != [ ] then (builtins.toFile "perm" (builtins.concatStringsSep "\n" services.syncplay.permanentRooms)) else null'';
         description = ''
           File with list of rooms that will be listed even if the room is empty,
@@ -272,8 +318,11 @@ in
       }
     ];
 
-    warnings = optional (cfg.interfaceIpv4 != "" && cfg.ipv6Only) "You have specified services.syncplay.interfaceIpv4 but IPv4 is disabled by services.syncplay.ipv6Only."
-      ++ optional (cfg.interfaceIpv6 != "" && cfg.ipv4Only) "You have specified services.syncplay.interfaceIpv6 but IPv6 is disabled by services.syncplay.ipv4Only.";
+    warnings =
+      optional (cfg.interfaceIpv4 != "" && cfg.ipv6Only)
+        "You have specified services.syncplay.interfaceIpv4 but IPv4 is disabled by services.syncplay.ipv6Only."
+      ++ optional (cfg.interfaceIpv6 != "" && cfg.ipv4Only)
+        "You have specified services.syncplay.interfaceIpv6 but IPv6 is disabled by services.syncplay.ipv4Only.";
 
     security.acme.certs = mkIf (cfg.useACMEHost != null) {
       "${cfg.useACMEHost}".reloadServices = [ "syncplay.service" ];
@@ -290,13 +339,14 @@ in
         DynamicUser = true;
         StateDirectory = "syncplay";
         WorkingDirectory = "%S/syncplay";
-        LoadCredential = optional (cfg.passwordFile != null) "password:${cfg.passwordFile}"
+        LoadCredential =
+          optional (cfg.passwordFile != null) "password:${cfg.passwordFile}"
           ++ optional (cfg.saltFile != null) "salt:${cfg.saltFile}"
           ++ optionals (cfg.useACMEHost != null) [
-          "cert.pem:${useACMEHostDir}/cert.pem"
-          "privkey.pem:${useACMEHostDir}/key.pem"
-          "chain.pem:${useACMEHostDir}/chain.pem"
-        ];
+            "cert.pem:${useACMEHostDir}/cert.pem"
+            "privkey.pem:${useACMEHostDir}/key.pem"
+            "chain.pem:${useACMEHostDir}/chain.pem"
+          ];
       };
 
       script = ''
@@ -306,7 +356,9 @@ in
         ${optionalString (cfg.saltFile != null) ''
           export SYNCPLAY_SALT=$(cat "''${CREDENTIALS_DIRECTORY}/salt")
         ''}
-        exec ${cfg.package}/bin/syncplay-server ${escapeShellArgs cmdArgs} ${optionalString (cfg.useACMEHost != null) "--tls $CREDENTIALS_DIRECTORY"}
+        exec ${cfg.package}/bin/syncplay-server ${escapeShellArgs cmdArgs} ${
+          optionalString (cfg.useACMEHost != null) "--tls $CREDENTIALS_DIRECTORY"
+        }
       '';
     };
   };

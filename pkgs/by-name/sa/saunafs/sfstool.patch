@@ -1,13 +1,11 @@
 diff --git a/src/tools/sfstools.sh b/src/tools/sfstools.sh
-index c6c41197..9a59814f 100755
+index 2d47a275..30d1b20c 100755
 --- a/src/tools/sfstools.sh
 +++ b/src/tools/sfstools.sh
-@@ -1,5 +1,6 @@
- #!/usr/bin/env bash
+@@ -2,4 +2,5 @@
  
--tool=$(basename $0)
-+tool="$(basename $0)"
+ tool="$(basename $0)"
+ >&2 echo "Warning: ${tool} is deprecated. Use saunafs ${tool#sfs} instead."
+-exec saunafs "${tool#sfs}" "$@"
 +dir="$(dirname $0)"
- 
--${tool/saunafs/saunafs } "$@"
-+$dir/saunafs ${tool/sfs/} "$@"
++exec "$dir/saunafs" "${tool#sfs}" "$@"

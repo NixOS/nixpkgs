@@ -7,6 +7,8 @@
   gql,
   graphql-core,
   marshmallow,
+  pydantic-extra-types,
+  pydantic,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
@@ -26,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.6.0";
+  version = "1.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = version;
-    hash = "sha256-I6GlYPQI8qF9eyq8p4Wtkz8UEGth51ZALwA+Mu3TqhQ=";
+    hash = "sha256-ayueOCgbn90vFtDfKtfOhFvWX5p3nsrg7sBQP0QBNaQ=";
   };
 
   pythonRelaxDeps = [
@@ -46,12 +48,14 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    defusedxml
-    marshmallow
-    python-box
     cryptography
+    defusedxml
     gql
     graphql-core
+    marshmallow
+    pydantic
+    pydantic-extra-types
+    python-box
     python-dateutil
     requests
     requests-toolbelt
@@ -90,7 +94,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.13.1";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
-    repo = pname;
+    repo = "zigpy-znp";
     tag = "v${version}";
-    hash = "sha256-6ApwGB6VvG+XiE8U85gg/EWnYniMb+1fqmNwtHGcf/I=";
+    hash = "sha256-V662zDUBMbr+cARxrwt8196Ml4zlGEAudR3BtvY96HM=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--reruns=3" ];
+  pytestFlags = [ "--reruns=3" ];
 
   disabledTests = [
     # failing since zigpy 0.60.0

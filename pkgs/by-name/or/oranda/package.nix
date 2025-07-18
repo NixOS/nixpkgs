@@ -6,7 +6,6 @@
   tailwindcss,
   oniguruma,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,21 +19,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FVd8NQVtzlZsDY40ZMJDdaX+6Q5jUxZHUq2v+kDFVOk=";
   };
 
-  cargoHash = "sha256-48qDAgHf1tGUwhQWqEi4LQQmSi9PplTlgjVd7/yxZZc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wPYgAbaoUVJoZT1nRCBsPziszkAubImZEKGrC2RAkEA=";
 
   nativeBuildInputs = [
     pkg-config
     tailwindcss
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    oniguruma
+  ];
 
   # requires internet access
   checkFlags = [

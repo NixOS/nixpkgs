@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.15.0";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
-    rev = "${pname}-${version}";
+    rev = "mimir-${version}";
     owner = "grafana";
-    repo = pname;
-    hash = "sha256-mFCeetwMaqdxFt001QUEtoiPupRAtFBkTvIABszPQbc=";
+    repo = "mimir";
+    hash = "sha256-+GFsWBjZHxRe3a2/ZT0zkoRXDTR4qopTUcU5Fx9t5xA=";
   };
 
   vendorHash = null;
@@ -30,7 +30,7 @@ buildGoModule rec {
       "delete-objects"
       "list-deduplicated-blocks"
       "listblocks"
-      "markblocks"
+      "mark-blocks"
       "undelete-blocks"
     ]);
 
@@ -51,7 +51,6 @@ buildGoModule rec {
       t = "github.com/grafana/mimir/pkg/util/version";
     in
     [
-      ''-extldflags "-static"''
       "-s"
       "-w"
       "-X ${t}.Version=${version}"

@@ -6,13 +6,15 @@
   installShellFiles,
   git,
   spdx-license-list-data,
-  substituteAll,
+  replaceVars,
+  writableTmpDirAsHomeHook,
+  udevCheckHook,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.16";
+  version = "6.1.18";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -20,7 +22,7 @@ buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     tag = "v${version}";
-    hash = "sha256-hZgbLUk2Krynut5uD6GMxWA+95y8ONNUmv4kaAltumk=";
+    hash = "sha256-h9/xDWXCoGHQ9r2f/ZzAtwTAs4qzDrvVAQ2kuLS9Lk8=";
   };
 
   outputs = [
@@ -29,12 +31,10 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./interpreter.patch;
+    (replaceVars ./interpreter.patch {
       interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
     })
-    (substituteAll {
-      src = ./use-local-spdx-license-list.patch;
+    (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
     })
     ./missing-udev-rules-nixos.patch
@@ -58,6 +58,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     installShellFiles
     setuptools
+    udevCheckHook
   ];
 
   pythonRelaxDeps = true;
@@ -90,13 +91,13 @@ buildPythonApplication rec {
     ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH=$PATH:$out/bin
   '';
 
   nativeCheckInputs = [
     jsondiff
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   # Install udev rules into a separate output so all of platformio-core is not a dependency if
@@ -209,7 +210,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
+    changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
     description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";

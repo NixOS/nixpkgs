@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgig";
-  version = "4.4.1";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/cie+rH5BhKObFRymWdXfo0EYgFwGLwSVRJX313+OqQ=";
+    sha256 = "sha256-CHnSi5tjktpZhYJtvdjZyVeyoDKi8QGQUGrvLiLzxUo=";
   };
 
   nativeBuildInputs = [

@@ -2,10 +2,10 @@
 
 buildDotnetGlobalTool {
   pname = "csharpier";
-  version = "0.30.5";
-  executables = "dotnet-csharpier";
+  version = "1.0.3";
+  executables = "csharpier";
 
-  nugetHash = "sha256-8NuhwRhvEZtmPtgbLLNbTOLUoDAihtkKE8aw5UQ0O5A=";
+  nugetHash = "sha256-DJe3zpzFCBjmsNmLMgIC1clLxo/exPZ+xHUmdpKMaMo=";
 
   meta = with lib; {
     description = "Opinionated code formatter for C#";
@@ -13,6 +13,6 @@ buildDotnetGlobalTool {
     changelog = "https://github.com/belav/csharpier/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ zoriya ];
-    mainProgram = "dotnet-csharpier";
+    mainProgram = "csharpier";
   };
 }

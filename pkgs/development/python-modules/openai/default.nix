@@ -19,10 +19,21 @@
   tqdm,
   typing-extensions,
 
+  # `httpx_aiohttp` not currently in `nixpkgs`
+  # optional-dependencies (aiohttp)
+  # aiohttp,
+  # httpx_aiohttp,
+
+  # optional-dependencies (datalib)
   numpy,
   pandas,
   pandas-stubs,
+
+  # optional-dependencies (realtime)
   websockets,
+
+  # optional-dependencies (voice-helpers)
+  sounddevice,
 
   # check deps
   pytestCheckHook,
@@ -31,13 +42,17 @@
   nest-asyncio,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
 
+  # optional-dependencies toggle
+  withRealtime ? true,
+  withVoiceHelpers ? true,
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.59.3";
+  version = "1.91.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,26 +61,36 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-gMykGfNgpTlh8LiFXL2p5ECSpeYCfS0LTsgHIzT1c1I=";
+    hash = "sha256-5thOFxXIStNowiEz9IacAkAC611zzXXs0ZB1tyuR+Go=";
   };
+
+  postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
 
   build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
 
-  dependencies = [
-    anyio
-    distro
-    httpx
-    jiter
-    pydantic
-    sniffio
-    tqdm
-    typing-extensions
-  ] ++ optional-dependencies.realtime;
+  dependencies =
+    [
+      anyio
+      distro
+      httpx
+      jiter
+      pydantic
+      sniffio
+      tqdm
+      typing-extensions
+    ]
+    ++ lib.optionals withRealtime optional-dependencies.realtime
+    ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    # `httpx_aiohttp` not currently in `nixpkgs`
+    # aiohttp = [
+    #   aiohttp
+    #   httpx_aiohttp
+    # ];
     datalib = [
       numpy
       pandas
@@ -73,6 +98,10 @@ buildPythonPackage rec {
     ];
     realtime = [
       websockets
+    ];
+    voice-helpers = [
+      numpy
+      sounddevice
     ];
   };
 
@@ -85,12 +114,12 @@ buildPythonPackage rec {
     nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests =

@@ -17,17 +17,17 @@
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "1.5.4";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming";
     tag = version;
-    hash = "sha256-gx9IbFkwR5fiFFAZTiQKzBbVBJ/RYz29sztgbvAEeRQ=";
+    hash = "sha256-jP2RLKjm79tb4lPbTp1zcDnRV0phn7I2qjxYpC6hqTM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     zeroconf = [ zeroconf ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming/releases/tag/${version}";
+    changelog = "https://github.com/rhasspy/wyoming/releases/tag/${src.tag}";
     description = "Protocol for Rhasspy Voice Assistant";
     homepage = "https://github.com/rhasspy/wyoming";
     license = licenses.mit;

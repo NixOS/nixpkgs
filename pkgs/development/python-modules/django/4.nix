@@ -3,9 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
   setuptools,
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.17";
+  version = "4.2.23";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -53,22 +54,35 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-G3PAG/fe4yG55699XS8rcWigF92J0Fke1qnUxRqOUnc=";
+    hash = "sha256-h6VkMLg2XAVC0p+ItTs/2EqpYdZn9uNvv6ZwQHXP0bI=";
   };
 
   patches =
     [
-      (substituteAll {
-        src = ./django_4_set_zoneinfo_dir.patch;
+      (replaceVars ./django_4_set_zoneinfo_dir.patch {
         zoneinfo = tzdata + "/share/zoneinfo";
       })
       # make sure the tests don't remove packages from our pythonpath
       # and disable failing tests
       ./django_4_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove if ever backported
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
+
+      # backport fix for https://code.djangoproject.com/ticket/36056
+      # FIXME: remove if ever backported upstream
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/ec0e784f91b551c654f0962431cc31091926792d.patch";
+        includes = [ "django/*" ]; # tests don't apply
+        hash = "sha256-8YwdOBNJq6+GNoxzdLyN9HEEIWRXGQk9YbyfPwYVkwU=";
+      })
     ]
     ++ lib.optionals withGdal [
-      (substituteAll {
-        src = ./django_4_set_geos_gdal_lib.patch;
+      (replaceVars ./django_4_set_geos_gdal_lib.patch {
         geos = geos;
         gdal = gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;

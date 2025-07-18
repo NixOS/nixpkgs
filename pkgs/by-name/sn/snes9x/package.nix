@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
-  libGL,
+  libGLX,
   libX11,
   libXdmcp,
   libXext,
@@ -91,11 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-avx2"
     ];
 
-  postPatch = ''
+  postPatch = lib.optionalString withGtk ''
     substituteInPlace external/glad/src/egl.c \
-      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+      --replace-fail libEGL.so.1 "${lib.getLib libGLX}/lib/libEGL.so.1"
     substituteInPlace external/glad/src/glx.c \
-      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+      --replace-fail libGL.so.1 ${lib.getLib libGLX}/lib/libGL.so.1
   '';
 
   preConfigure = ''
@@ -106,9 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 snes9x -t "$out/bin/"
-    install -Dm644 snes9x.conf.default -t "$out/share/doc/${finalAttrs.pname}/"
+    install -Dm644 snes9x.conf.default -t "$out/share/doc/snes9x/"
     install -Dm644 ../docs/{control-inputs,controls,snapshots}.txt -t \
-      "$out/share/doc/${finalAttrs.pname}/"
+      "$out/share/doc/snes9x/"
 
     runHook postInstall
   '';
@@ -135,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         qknight
         thiagokokada
         sugar700

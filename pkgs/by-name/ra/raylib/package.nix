@@ -53,7 +53,10 @@ lib.checkListOfEnum "${pname}: platform"
 
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
 
-      propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ];
+      propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+        libGLU
+        libX11
+      ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
       cmakeFlags =

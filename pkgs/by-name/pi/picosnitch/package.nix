@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

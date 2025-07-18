@@ -6,17 +6,16 @@
   automake,
   libtool,
   gmp,
-  darwin,
   libunistring,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.4b";
+  version = "4.6a";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
+    url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${version}.tar.gz";
+    hash = "sha256-lwXsPeAMwcUe52mYlIQaN3DAaodCFbRWNbiESuba8KY=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.ApplicationServices
     libunistring
   ];
 

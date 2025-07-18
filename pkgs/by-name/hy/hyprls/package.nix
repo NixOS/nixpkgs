@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "hyprls";
-  version = "0.3.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprls";
     rev = "v${version}";
-    hash = "sha256-uNT3sC81pnFqDzmhL20q5YDLBSVJwv0frNGB9wzkRkg=";
+    hash = "sha256-cJDDyF44nD/XvxtaGPYCk2MC574HDBHP1ByhVwqatvQ=";
   };
 
-  vendorHash = "sha256-rG+oGJOABA9ee5nIpC5/U0mMsPhwvVtQvJBlQWfxi5Y=";
+  vendorHash = "sha256-WTdwIAC3gDWgCKlVuOtMyl0ZfdZ9RhlpqUl2S2d65HA=";
 
   checkFlags = [
     # Not yet implemented
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = {
     description = "LSP server for Hyprland's configuration language";
-    homepage = "https://en.ewen.works/hyprls";
+    homepage = "https://gwen.works/hyprls";
     changelog = "https://github.com/hyprland-community/hyprls/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arthsmn ];

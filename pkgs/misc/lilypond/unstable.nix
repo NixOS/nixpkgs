@@ -1,14 +1,14 @@
 {
   lib,
-  fetchurl,
+  fetchzip,
   lilypond,
 }:
 
 lilypond.overrideAttrs (oldAttrs: rec {
-  version = "2.25.22";
-  src = fetchurl {
+  version = "2.25.26";
+  src = fetchzip {
     url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    hash = "sha256-+p0D//hU/AKVJ6DuPhoK9EOqZxZpTVRugabxidmHYLU=";
+    hash = "sha256-k76jt8axKu17MXuQp/TtXtQ+KKdIAjSvDStYa44EpR4=";
   };
 
   passthru.updateScript = {

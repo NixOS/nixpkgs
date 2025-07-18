@@ -47,15 +47,15 @@
   libpng,
   librsvg,
   libsecret,
-  libsoup_2_4,
   libsysprof-capture,
   libthai,
   libtiff,
   libwebp,
+  libxml2,
   libxslt,
   lua,
   util-linux,
-  openexr_3,
+  openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
@@ -80,12 +80,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.0";
+  version = "5.2.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-6qE25uYku1MScoLiaq+gRBq8wYm1U3FGXh9aikk/o6E=";
+    hash = "sha256-U6Rs1G73EYSFxKv0q0B8GBY5u4Y0JD7A7R98HoKZvsY=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
     [
       SDL2
       adwaita-icon-theme
-      alsa-lib
       cairo
       curl
       exiv2
@@ -134,15 +133,14 @@ stdenv.mkDerivation rec {
       libpng
       librsvg
       libsecret
-      libsoup_2_4
       libsysprof-capture
       libthai
       libtiff
       libwebp
+      libxml2
       libxslt
       lua
-      util-linux
-      openexr_3
+      openexr
       openjpeg
       osm-gps-map
       pcre2
@@ -151,6 +149,7 @@ stdenv.mkDerivation rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
       colord
       colord-gtk
       libselinux
@@ -160,6 +159,7 @@ stdenv.mkDerivation rec {
       libxkbcommon
       libXtst
       ocl-icd
+      util-linux
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
@@ -193,10 +193,14 @@ stdenv.mkDerivation rec {
       )
     '';
 
+  postPatch = ''
+    patchShebangs ./tools/generate_styles_string.sh
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {

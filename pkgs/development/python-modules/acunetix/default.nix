@@ -7,7 +7,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "acunetix";
   version = "0.0.7";
   format = "setuptools";

@@ -1,4 +1,4 @@
-import ./common.nix rec {
+import ./common.nix {
   pname = "opl3bankeditor";
   chip = "OPL3";
   version = "1.5.1";

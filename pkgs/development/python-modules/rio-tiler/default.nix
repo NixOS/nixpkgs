@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "7.2.2";
+  version = "7.3.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = version;
-    hash = "sha256-uVLizNkUL7wGF0vFjPXb2iW9ILVkJcbDssXtp3E8ubE=";
+    hash = "sha256-8Ly1QKKFzct0CPAN/54/kzNUE2FPiwvM+EqmX1utboU=";
   };
 
   build-system = [ hatchling ];
@@ -61,7 +60,7 @@ buildPythonPackage rec {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
     # Tests broken with gdal 3.10
     # https://github.com/cogeotiff/rio-tiler/issues/769
     broken = true;

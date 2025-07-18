@@ -1,18 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ch9344";
-  version = "0-unstable-2024-11-15";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "WCHSoftGroup";
     repo = "ch9344ser_linux";
-    rev = "4ea8973886989d67acdd01dba213e355eacc9088";
-    hash = "sha256-ZZ/8s26o7wRwHy6c0m1vZ/DtRW5od+NgiU6aXZBVfc4=";
+    rev = "e0a38c4f4f9d4c1f5e2e3a352b7b1010b33aa322";
+    hash = "sha256-ldYoGmG9DAjASl3xL8djeZ8jRHlcBQdAt0KYAr53epI=";
   };
 
   patches = [
     ./fix-linux-6-12-build.patch
+    ./fix-linux-6-15-build.patch
   ];
 
   sourceRoot = "${src.name}/driver";
@@ -42,6 +48,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ MakiseKurisu ];
+    maintainers = with maintainers; [ RadxaYuntian ];
   };
 }

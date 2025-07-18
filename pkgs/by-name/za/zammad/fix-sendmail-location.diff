@@ -1,12 +1,13 @@
 diff --git a/app/models/channel/driver/sendmail.rb b/app/models/channel/driver/sendmail.rb
-index b15ef48a6..64c120a87 100644
+index 475636c013..7f3149c331 100644
 --- a/app/models/channel/driver/sendmail.rb
 +++ b/app/models/channel/driver/sendmail.rb
-@@ -32,6 +32,6 @@ def delivery_method(mail)
- 
-     return mail.delivery_method :test if Rails.env.test?
- 
--    mail.delivery_method :sendmail
-+    mail.delivery_method :sendmail, :location => '/run/wrappers/bin/sendmail'
+@@ -30,7 +30,7 @@ class Channel::Driver::Sendmail < Channel::Driver::BaseEmailOutbound
+       # test
+       super(attr, notification, :test)
+     else
+-      super(attr, notification, :sendmail)
++      super(attr, notification, :sendmail, { location: '/run/wrappers/bin/sendmail' })
+     end
    end
  end

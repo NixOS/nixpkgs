@@ -5,12 +5,8 @@
   fetchpatch,
   cdrtools,
   m4,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) IOKit;
-in
 stdenv.mkDerivation rec {
   pname = "dvd+rw-tools";
   version = "7.1";
@@ -76,7 +72,7 @@ stdenv.mkDerivation rec {
         ];
 
   nativeBuildInputs = [ m4 ];
-  buildInputs = [ cdrtools ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  buildInputs = [ cdrtools ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"

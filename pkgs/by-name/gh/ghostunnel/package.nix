@@ -4,42 +4,50 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  apple-sdk_12,
+  darwinMinVersionHook,
 }:
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-WO7dyz+S8dBSFfNCTHHg1lGDlUGSBqa5pcR5GCiWsl8=";
+    hash = "sha256-NnRm1HEdfK6WI5ntilLSwdR2B5czG5CIcMFzl2TzEds=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-vP8OtjpYNMm1KkNfD3pmNrHh3HRy1GkzUbfLKWKhHbo=";
 
   deleteVendor = true;
 
-  # The certstore directory isn't recognized as a subpackage, but is when moved
-  # into the vendor directory.
-  postUnpack = ''
-    mkdir -p $sourceRoot/vendor/ghostunnel
-    mv $sourceRoot/certstore $sourceRoot/vendor/ghostunnel/
-  '';
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_12
+    (darwinMinVersionHook "12.0")
+  ];
+
+  # These tests don't exist for Linux, and on Darwin they attempt to use the macOS Keychain
+  # which doesn't work from a nix build. Presumably other platform implementations of the
+  # certstore would have similar issues, so it probably makes sense to skip them in
+  # general wherever they are available.
+  checkFlags = [ "-skip=^Test(ImportDelete|Signer|Certificate)(RSA|ECDSA|EC)$" ];
 
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
     podman = nixosTests.podman-tls-ghostunnel;
   };
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ roberth ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      roberth
+      mjm
+    ];
     mainProgram = "ghostunnel";
   };
 }

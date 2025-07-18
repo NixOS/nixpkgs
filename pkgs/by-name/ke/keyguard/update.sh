@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p bash nixVersions.latest curl coreutils jq common-updater-scripts
+#!nix-shell -I nixpkgs=./. -i bash -p bash nix curl coreutils jq common-updater-scripts
 
 set -eou pipefail
 
@@ -20,9 +20,9 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
     exit 0
 fi
 
-hash=$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/AChep/keyguard-app/archive/refs/tags/${latestTag}.tar.gz"))
+hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/AChep/keyguard-app/archive/refs/tags/${latestTag}.tar.gz"))
 update-source-version keyguard $latestVersion $hash
 
-sed -i "s/tag = \"r[0-9]\+\";/tag = \"$latestTag\";/g" "$ROOT/package.nix"
+sed -i 's/tag = "r[0-9]\+\(\.[0-9]\+\)\?";/tag = "'"$latestTag"'";/g' "$ROOT/package.nix"
 
 $(nix-build -A keyguard.mitmCache.updateScript)

@@ -23,7 +23,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "11.0.1002";
   pname = "passmark-performancetest";
 

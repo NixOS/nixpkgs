@@ -11,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "9.0.0";
+  version = "9.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-j1TMe2/jkSVa7p4Ar9HmZjh56GNqtkHP+QbSuyTDT04=";
+    pname = "azure_mgmt_datafactory";
+    inherit version;
+    hash = "sha256-UTLpwkxEGsIl8qYCJZJLqlUHnKge/325mnDWYdZLsNc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate

@@ -1,39 +1,48 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.anuko-time-tracker;
-  configFile = let
-    smtpPassword = if cfg.settings.email.smtpPasswordFile == null
-                   then "''"
-                   else "trim(file_get_contents('${cfg.settings.email.smtpPasswordFile}'))";
+  configFile =
+    let
+      smtpPassword =
+        if cfg.settings.email.smtpPasswordFile == null then
+          "''"
+        else
+          "trim(file_get_contents('${cfg.settings.email.smtpPasswordFile}'))";
 
-  in pkgs.writeText "config.php" ''
-    <?php
-    // Set include path for PEAR and its modules, which we include in the distribution.
-    // Updated for the correct location in the nix store.
-    set_include_path('${cfg.package}/WEB-INF/lib/pear' . PATH_SEPARATOR . get_include_path());
-    define('DSN', 'mysqli://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}?charset=utf8mb4');
-    define('MULTIORG_MODE', ${lib.boolToString cfg.settings.multiorgMode});
-    define('EMAIL_REQUIRED', ${lib.boolToString cfg.settings.emailRequired});
-    define('WEEKEND_START_DAY', ${toString cfg.settings.weekendStartDay});
-    define('FORUM_LINK', '${cfg.settings.forumLink}');
-    define('HELP_LINK', '${cfg.settings.helpLink}');
-    define('SENDER', '${cfg.settings.email.sender}');
-    define('MAIL_MODE', '${cfg.settings.email.mode}');
-    define('MAIL_SMTP_HOST', '${toString cfg.settings.email.smtpHost}');
-    define('MAIL_SMTP_PORT', '${toString cfg.settings.email.smtpPort}');
-    define('MAIL_SMTP_USER', '${cfg.settings.email.smtpUser}');
-    define('MAIL_SMTP_PASSWORD', ${smtpPassword});
-    define('MAIL_SMTP_AUTH', ${lib.boolToString cfg.settings.email.smtpAuth});
-    define('MAIL_SMTP_DEBUG', ${lib.boolToString cfg.settings.email.smtpDebug});
-    define('DEFAULT_CSS', 'default.css');
-    define('RTL_CSS', 'rtl.css'); // For right to left languages.
-    define('LANG_DEFAULT', '${cfg.settings.defaultLanguage}');
-    define('CURRENCY_DEFAULT', '${cfg.settings.defaultCurrency}');
-    define('EXPORT_DECIMAL_DURATION', ${lib.boolToString cfg.settings.exportDecimalDuration});
-    define('REPORT_FOOTER', ${lib.boolToString cfg.settings.reportFooter});
-    define('AUTH_MODULE', 'db');
-  '';
+    in
+    pkgs.writeText "config.php" ''
+      <?php
+      // Set include path for PEAR and its modules, which we include in the distribution.
+      // Updated for the correct location in the nix store.
+      set_include_path('${cfg.package}/WEB-INF/lib/pear' . PATH_SEPARATOR . get_include_path());
+      define('DSN', 'mysqli://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}?charset=utf8mb4');
+      define('MULTIORG_MODE', ${lib.boolToString cfg.settings.multiorgMode});
+      define('EMAIL_REQUIRED', ${lib.boolToString cfg.settings.emailRequired});
+      define('WEEKEND_START_DAY', ${toString cfg.settings.weekendStartDay});
+      define('FORUM_LINK', '${cfg.settings.forumLink}');
+      define('HELP_LINK', '${cfg.settings.helpLink}');
+      define('SENDER', '${cfg.settings.email.sender}');
+      define('MAIL_MODE', '${cfg.settings.email.mode}');
+      define('MAIL_SMTP_HOST', '${toString cfg.settings.email.smtpHost}');
+      define('MAIL_SMTP_PORT', '${toString cfg.settings.email.smtpPort}');
+      define('MAIL_SMTP_USER', '${cfg.settings.email.smtpUser}');
+      define('MAIL_SMTP_PASSWORD', ${smtpPassword});
+      define('MAIL_SMTP_AUTH', ${lib.boolToString cfg.settings.email.smtpAuth});
+      define('MAIL_SMTP_DEBUG', ${lib.boolToString cfg.settings.email.smtpDebug});
+      define('DEFAULT_CSS', 'default.css');
+      define('RTL_CSS', 'rtl.css'); // For right to left languages.
+      define('LANG_DEFAULT', '${cfg.settings.defaultLanguage}');
+      define('CURRENCY_DEFAULT', '${cfg.settings.defaultCurrency}');
+      define('EXPORT_DECIMAL_DURATION', ${lib.boolToString cfg.settings.exportDecimalDuration});
+      define('REPORT_FOOTER', ${lib.boolToString cfg.settings.reportFooter});
+      define('AUTH_MODULE', 'db');
+    '';
   package = pkgs.stdenv.mkDerivation rec {
     pname = "anuko-time-tracker";
     inherit (src) version;
@@ -58,7 +67,7 @@ in
   options.services.anuko-time-tracker = {
     enable = lib.mkEnableOption "Anuko Time Tracker";
 
-    package = lib.mkPackageOption pkgs "anuko-time-tracker" {};
+    package = lib.mkPackageOption pkgs "anuko-time-tracker" { };
 
     database = {
       createLocally = lib.mkOption {
@@ -93,7 +102,13 @@ in
     };
 
     poolConfig = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.oneOf [ lib.types.str lib.types.int lib.types.bool ]);
+      type = lib.types.attrsOf (
+        lib.types.oneOf [
+          lib.types.str
+          lib.types.int
+          lib.types.bool
+        ]
+      );
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -110,9 +125,7 @@ in
     hostname = lib.mkOption {
       type = lib.types.str;
       default =
-        if config.networking.domain != null
-        then config.networking.fqdn
-        else config.networking.hostName;
+        if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "anuko.example.com";
       description = ''
@@ -122,10 +135,9 @@ in
 
     nginx = lib.mkOption {
       type = lib.types.submodule (
-        lib.recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           serverAliases = [
@@ -340,12 +352,14 @@ in
       enable = lib.mkDefault true;
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [{
-        name = cfg.database.user;
-        ensurePermissions = {
-          "${cfg.database.name}.*" = "ALL PRIVILEGES";
-        };
-      }];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     systemd = {

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   intltool,
@@ -35,6 +36,13 @@ stdenv.mkDerivation rec {
     gtk3
     openconnect
     connman
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/nickm/connman-gtk/-/raw/ef01b52fa02c5cca199b2e47c0cf360691266fd8/debian/patches/incompatible-pointer-type";
+      hash = "sha256-T+N9FfDyROBA4/HLK+l/fpnju2imDU4y6nGSbF+JDiA=";
+    })
   ];
 
   preConfigure = ''

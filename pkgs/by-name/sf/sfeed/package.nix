@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfeed";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     tag = finalAttrs.version;
-    hash = "sha256-KVZsVCTkwyOVr37vIXbiPjQLnb9lbuIlNxpZNvHxbEo=";
+    hash = "sha256-ULCYZYRTdrsUaL0XJd5Dxa9Cd0Hc6PVNMnnLTGs4pIo=";
   };
 
   buildInputs = [ ncurses ];

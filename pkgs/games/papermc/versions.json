@@ -60,15 +60,23 @@
         "version": "1.21-130"
     },
     "1.21.1": {
-        "hash": "sha256-SXFrATNCx19foUHIzaJkeqCh4YGNKmGq4KQymeNf9Bg=",
-        "version": "1.21.1-132"
+        "hash": "sha256-Ob2MALnhjekdyr08w9z6UyhoWlO3GHovYygMIuLSh7k=",
+        "version": "1.21.1-133"
     },
     "1.21.3": {
-        "hash": "sha256-/nrczvDAygftMAFP+vAVygnpy6muucsiXjIY3CMswFU=",
-        "version": "1.21.3-81"
+        "hash": "sha256-h+lz4dM46Gnn/bxLj63BV517sCRqDgz25XAKzmyLwX4=",
+        "version": "1.21.3-83"
     },
     "1.21.4": {
-        "hash": "sha256-FDVaeckg1PoHfiwuwxBRLD2uZkwtAMshEJeSQY9NM8E=",
-        "version": "1.21.4-15"
+        "hash": "sha256-XuT1QvYooUxkRBCwjJTqQudy700p/pKXNja2gT1Or/w=",
+        "version": "1.21.4-232"
+    },
+    "1.21.5": {
+        "hash": "sha256-KuauIq30F2mXRuD4n8LvbLbuBQpfZgjO5Y8FNdYLUJ4=",
+        "version": "1.21.5-114"
+    },
+    "1.21.6": {
+        "hash": "sha256-xL/DN+CRAP39Bgo2tmF0voc3DZl1rOTijkXYc86ZLGI=",
+        "version": "1.21.6-47"
     }
 }

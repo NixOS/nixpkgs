@@ -6,25 +6,33 @@
   rcu,
   testers,
   copyDesktopItems,
+  coreutils,
   desktopToDarwinBundle,
+  gnutar,
   libsForQt5,
   makeDesktopItem,
-  python3Packages,
+  net-tools,
+  protobuf,
+  python312Packages,
   system-config-printer,
+  wget,
 }:
 
+let
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "2024.001q";
+  version = "4.0.24";
 
   format = "other";
 
   src =
     let
       src-tarball = requireFile {
-        name = "rcu-d${version}-source.tar.gz";
-        hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
-        url = "http://www.davisr.me/projects/rcu/";
+        name = "rcu-${version}-source.tar.gz";
+        hash = "sha256-3rZiqg8Uuta3kI2m+2rBZ1XzN9bFds+emhivH5X7sJg=";
+        url = "https://www.davisr.me/projects/rcu/";
       };
     in
     runCommand "${src-tarball.name}-unpacked" { } ''
@@ -43,11 +51,20 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace package_support/gnulinux/50-remarkable.rules \
       --replace-fail 'GROUP="yourgroup"' 'GROUP="users"'
+
+    # This must match the protobuf version imported at runtime, regenerate it
+    rm src/model/update_metadata_pb2.py
+    protoc --proto_path src/model src/model/update_metadata.proto --python_out=src/model
+
+    # We don't make it available at this location, wrapping adds it to PATH instead
+    substituteInPlace src/model/document.py \
+      --replace-fail '/sbin/ifconfig' 'ifconfig'
   '';
 
   nativeBuildInputs =
     [
       copyDesktopItems
+      protobuf
       libsForQt5.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -66,7 +83,7 @@ python3Packages.buildPythonApplication rec {
     pdfminer-six
     pikepdf
     pillow
-    protobuf
+    python3Packages.protobuf # otherwise it picks up protobuf from function args
     pyside2
   ];
 
@@ -128,9 +145,21 @@ python3Packages.buildPythonApplication rec {
     ''
       makeWrapperArgs+=(
         "''${qtWrapperArgs[@]}"
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnutar
+            wget
+          ]
+        }
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      --prefix PATH : ${lib.makeBinPath [ system-config-printer ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          net-tools
+          system-config-printer
+        ]
+      }
     ''
     + ''
       )
@@ -158,12 +187,12 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "rcu";
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }

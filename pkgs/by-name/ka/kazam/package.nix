@@ -16,9 +16,10 @@
   libgudev,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "kazam";
   version = "unstable-2021-06-22";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "niknah";
@@ -29,10 +30,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.distutils-extra
     intltool
     wrapGAppsHook3
   ];
+
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -44,7 +45,12 @@ python3Packages.buildPythonApplication rec {
     libgudev
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    distutils-extra
+  ];
+
+  dependencies = with python3Packages; [
     pygobject3
     pyxdg
     pycairo
@@ -63,12 +69,14 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "kazam" ];
+
   meta = with lib; {
     description = "Screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = [ ];
     mainProgram = "kazam";
   };
 }

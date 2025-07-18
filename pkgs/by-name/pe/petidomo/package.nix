@@ -5,15 +5,16 @@
   flex,
   bison,
   sendmailPath ? "/run/wrappers/bin/sendmail",
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "petidomo";
   version = "4.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/petidomo/${pname}-${version}.tar.gz";
-    sha256 = "0x4dbxc4fcfg1rw5ywpcypvylnzn3y4rh0m6fz4h4cdnzb8p1lvm";
+    url = "mirror://sourceforge/petidomo/petidomo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ddNw0fq2MQLJd6YCmIkf9lvq9/Xscl94Ds8xR1hfjXQ=";
   };
 
   buildInputs = [
@@ -23,9 +24,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-mta=${sendmailPath}" ];
 
+  # test.c:43:11: error: implicit declaration of function 'gets'; did you mean 'fgets'?
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://petidomo.sourceforge.net/";
@@ -35,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.peti ];
   };
-}
+})

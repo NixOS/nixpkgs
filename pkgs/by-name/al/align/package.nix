@@ -10,8 +10,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Guitarbum722";
-    repo = pname;
-    rev = "v${version}";
+    repo = "align";
+    tag = "v${version}";
     sha256 = "17gs3417633z71kc6l5zqg4b3rjhpn2v8qs8rnfrk4nbwzz4nrq3";
   };
 

@@ -12,7 +12,7 @@
   polkit,
 }:
 let
-  version = "0.1.0";
+  version = "0.2.0";
 in
 rustPlatform.buildRustPackage {
   pname = "soteria";
@@ -22,10 +22,11 @@ rustPlatform.buildRustPackage {
     owner = "imvaskel";
     repo = "soteria";
     tag = "v${version}";
-    hash = "sha256-lhS+37DqSgZrgrYgKGUpKMC22Qjdq9LPNS5k/dqvkRY=";
+    hash = "sha256-bZhxz6aycx7J3itInSsl2glbIs6OpIEkfSp3nYfPojk=";
   };
 
-  cargoHash = "sha256-NMSGSqdCu/kW6vv8+C7UC6oitZqlTklO1sRKDcc1T9o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rxZRDx+5srBbMTVLMNH8liOqjyg90FvTaTT7g+3fq7E=";
 
   nativeBuildInputs = [
     pkg-config

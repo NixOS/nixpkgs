@@ -7,7 +7,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "udis86";
   version = "unstable-2014-12-25";
 

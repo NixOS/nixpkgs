@@ -108,4 +108,5 @@ in
   supportedFeatures = [
     "commit"
   ];
+  inherit attrPath;
 }

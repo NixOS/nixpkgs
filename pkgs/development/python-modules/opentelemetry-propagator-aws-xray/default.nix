@@ -12,7 +12,7 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-propagator-aws-xray";
   pyproject = true;
@@ -26,12 +26,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-benchmark
     requests
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "opentelemetry.propagators.aws" ];
 

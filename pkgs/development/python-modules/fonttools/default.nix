@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.54.1";
+  version = "4.56.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +36,14 @@ buildPythonPackage rec {
     owner = "fonttools";
     repo = "fonttools";
     tag = version;
-    hash = "sha256-iYd3EiziaLR7zS0UQAje0QfShNfnhHPdH2+noCQ2yto=";
+    hash = "sha256-ZkC1+I2d9wY9J7IoCGHGWG2gOVN7wW274UpN1lQxmJY=";
   };
+
+  patches = [
+    # https://github.com/fonttools/fonttools/pull/3855
+    # FIXME: remove when merged
+    ./python-3.13.4.patch
+  ];
 
   build-system = [
     setuptools
@@ -53,7 +59,7 @@ buildPythonPackage rec {
           (if isPyPy then brotlicffi else brotli)
           zopfli
         ];
-        unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+        unicode = lib.optional (pythonOlder "3.13") unicodedata2;
         graphite = [ lz4 ];
         interpolatable = [
           pycairo
@@ -119,7 +125,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
-    changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

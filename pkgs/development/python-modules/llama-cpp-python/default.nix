@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -33,28 +34,45 @@
   cudaPackages ? { },
 
 }:
+let
+  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
+in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
-  version = "0.3.5";
+  version = "0.3.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-+LBq+rCqOsvGnhTL1UoCcAwvDt8Zo9hlaa4KibFFDag=";
+    hash = "sha256-TTGweGfav1uI2+87iUYc1Esmuor9sEZdZqSU2YVPCdQ=";
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
 
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
-    lib.optionals cudaSupport [
+    # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
+    # -march=native* which is either a no-op (if cc-wrapper is able to ignore
+    # it), or an attempt to build a non-reproducible binary.
+    #
+    # This issue was spotted when cmake rules appended feature modifiers to
+    # -mcpu, breaking linux build as follows:
+    #
+    # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
+    [
+      "-DGGML_NATIVE=off"
+      "-DGGML_BUILD_NUMBER=1"
+    ]
+    ++ lib.optionals cudaSupport [
       "-DGGML_CUDA=on"
       "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
       "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
     ]
   );
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
@@ -75,6 +93,8 @@ buildPythonPackage rec {
       libcublas # cublas_v2.h
     ]
   );
+
+  stdenv = stdenvTarget;
 
   dependencies = [
     diskcache
@@ -98,8 +118,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llama_cpp" ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.llama-cpp-python = llama-cpp-python.override { cudaSupport = true; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      allowedVersions = "^[.0-9]+$";
+    };
+    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+      withCuda = llama-cpp-python.override {
+        cudaSupport = true;
+      };
+    };
   };
 
   meta = {
@@ -107,13 +134,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/abetlen/llama-cpp-python";
     changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kirillrdy ];
-    badPlatforms = [
-      # Segfaults during tests:
-      # tests/test_llama.py .Fatal Python error: Segmentation fault
-      # Current thread 0x00000001f3decf40 (most recent call first):
-      #   File "/private/tmp/nix-build-python3.12-llama-cpp-python-0.3.2.drv-0/source/llama_cpp/_internals.py", line 51 in __init__
-      lib.systems.inspect.patterns.isDarwin
+    maintainers = with lib.maintainers; [
+      booxter
+      kirillrdy
     ];
   };
 }

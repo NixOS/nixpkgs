@@ -11,9 +11,9 @@ buildNpmPackage rec {
   version = "3.1.9";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "antora";
+    repo = "antora";
+    tag = "v${version}";
     hash = "sha256-hkavYC2LO8NRIRwHNWIJLRDkVnhAB4Di3IqL8uGt+U8=";
   };
 

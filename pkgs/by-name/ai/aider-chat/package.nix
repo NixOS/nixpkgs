@@ -1,19 +1,26 @@
 {
   lib,
   stdenv,
-  python312,
+  python312Packages,
   fetchFromGitHub,
+  replaceVars,
   gitMinimal,
   portaudio,
+  playwright-driver,
+  nix-update-script,
 }:
 
 let
-  python3 = python312.override {
-    self = python3;
-    packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
-  };
-  version = "0.70.0";
-  aider-chat = python3.pkgs.buildPythonApplication {
+  # dont support python 3.13 (Aider-AI/aider#3037)
+  python3Packages = python312Packages;
+
+  aider-nltk-data = python3Packages.nltk.dataDir (d: [
+    d.punkt-tab
+    d.stopwords
+  ]);
+
+  version = "0.85.2";
+  aider-chat = python3Packages.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
     pyproject = true;
@@ -22,14 +29,14 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-wGm6JV9ISRi/p1lA3JyzOdHQKFHFxEhfr+NdShUxm0M=";
+      hash = "sha256-J2xCx1edbu8mEGzNq2PKMxPCMlMZkArEwz6338Sm1tw=";
     };
 
     pythonRelaxDeps = true;
 
-    build-system = with python3.pkgs; [ setuptools-scm ];
+    build-system = with python3Packages; [ setuptools-scm ];
 
-    dependencies = with python3.pkgs; [
+    dependencies = with python3Packages; [
       aiohappyeyeballs
       aiohttp
       aiosignal
@@ -38,6 +45,7 @@ let
       attrs
       backoff
       beautifulsoup4
+      cachetools
       certifi
       cffi
       charset-normalizer
@@ -52,8 +60,11 @@ let
       fsspec
       gitdb
       gitpython
+      google-ai-generativelanguage
+      google-generativeai
       grep-ast
       h11
+      hf-xet
       httpcore
       httpx
       huggingface-hub
@@ -73,6 +84,7 @@ let
       networkx
       numpy
       openai
+      oslex
       packaging
       pathspec
       pexpect
@@ -97,17 +109,20 @@ let
       rich
       rpds-py
       scipy
+      shtab
       smmap
       sniffio
       sounddevice
+      socksio
       soundfile
       soupsieve
       tiktoken
       tokenizers
       tqdm
       tree-sitter
-      tree-sitter-languages
+      tree-sitter-language-pack
       typing-extensions
+      typing-inspection
       urllib3
       watchfiles
       wcwidth
@@ -125,7 +140,18 @@ let
 
     buildInputs = [ portaudio ];
 
-    nativeCheckInputs = (with python3.pkgs; [ pytestCheckHook ]) ++ [ gitMinimal ];
+    nativeCheckInputs = [
+      python3Packages.pytestCheckHook
+      gitMinimal
+    ];
+
+    patches = [
+      ./fix-tree-sitter.patch
+
+      (replaceVars ./fix-flake8-invoke.patch {
+        flake8 = lib.getExe python3Packages.flake8;
+      })
+    ];
 
     disabledTestPaths = [
       # Tests require network access
@@ -159,8 +185,12 @@ let
       ];
 
     makeWrapperArgs = [
-      "--set AIDER_CHECK_UPDATE false"
-      "--set AIDER_ANALYTICS false"
+      "--set"
+      "AIDER_CHECK_UPDATE"
+      "false"
+      "--set"
+      "AIDER_ANALYTICS"
+      "false"
     ];
 
     preCheck = ''
@@ -168,30 +198,100 @@ let
       export AIDER_ANALYTICS="false"
     '';
 
-    optional-dependencies = with python3.pkgs; {
+    optional-dependencies = with python3Packages; {
       playwright = [
         greenlet
         playwright
         pyee
         typing-extensions
       ];
+      browser = [
+        streamlit
+      ];
+      help = [
+        llama-index-core
+        llama-index-embeddings-huggingface
+        torch
+        nltk
+      ];
+      bedrock = [
+        boto3
+      ];
     };
 
     passthru = {
-      withPlaywright = aider-chat.overridePythonAttrs (
-        { dependencies, ... }:
+      withOptional =
         {
-          dependencies = dependencies ++ aider-chat.optional-dependencies.playwright;
-        }
-      );
+          withAll ? false,
+          withPlaywright ? withAll,
+          withBrowser ? withAll,
+          withHelp ? withAll,
+          withBedrock ? withAll,
+          ...
+        }:
+        aider-chat.overridePythonAttrs (
+          {
+            pname,
+            dependencies,
+            makeWrapperArgs,
+            propagatedBuildInputs ? [ ],
+            ...
+          }:
+
+          {
+            pname =
+              pname
+              + lib.optionalString withPlaywright "-playwright"
+              + lib.optionalString withBrowser "-browser"
+              + lib.optionalString withHelp "-help"
+              + lib.optionalString withBedrock "-bedrock";
+
+            dependencies =
+              dependencies
+              ++ lib.optionals withPlaywright aider-chat.optional-dependencies.playwright
+              ++ lib.optionals withBrowser aider-chat.optional-dependencies.browser
+              ++ lib.optionals withHelp aider-chat.optional-dependencies.help
+              ++ lib.optionals withBedrock aider-chat.optional-dependencies.bedrock;
+
+            propagatedBuildInputs =
+              propagatedBuildInputs
+              ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
+
+            makeWrapperArgs =
+              makeWrapperArgs
+              ++ lib.optionals withPlaywright [
+                "--set"
+                "PLAYWRIGHT_BROWSERS_PATH"
+                "${playwright-driver.browsers}"
+                "--set"
+                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                "true"
+              ]
+              ++ lib.optionals withHelp [
+                "--set"
+                "NLTK_DATA"
+                "${aider-nltk-data}"
+              ];
+          }
+        );
+
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^v([0-9.]+)$"
+        ];
+      };
     };
 
     meta = {
       description = "AI pair programming in your terminal";
-      homepage = "https://github.com/paul-gauthier/aider";
-      changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
+      homepage = "https://github.com/Aider-AI/aider";
+      changelog = "https://github.com/Aider-AI/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ taha-yassine ];
+      maintainers = with lib.maintainers; [
+        happysalada
+        yzx9
+      ];
       mainProgram = "aider";
     };
   };

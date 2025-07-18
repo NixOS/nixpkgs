@@ -1,6 +1,6 @@
 {
   mkDerivation,
-  substituteAll,
+  replaceVars,
   extra-cmake-modules,
   kdoctools,
   kcmutils,
@@ -75,8 +75,7 @@ mkDerivation {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0002-openvpn-binary-path.patch;
+    (replaceVars ./0002-openvpn-binary-path.patch {
       inherit openvpn;
     })
   ];

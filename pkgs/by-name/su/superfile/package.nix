@@ -2,31 +2,44 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+let
+  version = "1.3.1";
+  tag = "v${version}";
+in
+buildGoModule {
   pname = "superfile";
-  version = "1.1.7";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    rev = "v${version}";
-    hash = "sha256-p5rTwGgiVdZoUWg6PYcmDlfED4/Z6+3lR4VBdWaaz9Q=";
+    inherit tag;
+    hash = "sha256-GlPePeINZ6KL3RRqfQQFYsEdd+70bRJcMqMVnUmgo/I=";
   };
 
-  vendorHash = "sha256-MdOdQQZhiuOJtnj5n1uVbJV6KIs0aa1HLZpFmvxxsWY=";
+  vendorHash = "sha256-ArsB0B67ymuzxTXfaUuWiRrgVCrZhmGMbJUl2u+thUw=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # Upstream notes that this could be flakey, and it consistently fails for me.
+  checkFlags = [ "-skip=^TestReturnDirElement/Sort_by_Date$" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       momeemt
       redyf
     ];

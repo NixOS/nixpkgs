@@ -5,26 +5,24 @@
   stdenv,
   vimUtils,
   nix-update-script,
-  git,
-  replaceVars,
+  gitMinimal,
 }:
 let
-  version = "0.9.2";
+  version = "1.5.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-uvMB3oU6uxERfkXiweeFS0cCIOgO/ogy7GoYAlXUPDs=";
+    hash = "sha256-R95i3dDVBfH0oxTdK0F0ami0SAk0VVONXIlX6ZF0kmk=";
   };
-  libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-ISCrUaIWNn+SfNzrAXKqeBbQyEnuqs3F8GAEl90kK7I=";
+    cargoHash = "sha256-pWBOPMUy/gXeujaowlp2I6kqD+Q95h+f9mXl231DN88=";
 
-    nativeBuildInputs = [ git ];
+    nativeBuildInputs = [ gitMinimal ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
@@ -35,14 +33,14 @@ in
 vimUtils.buildVimPlugin {
   pname = "blink.cmp";
   inherit version src;
-  preInstall = ''
-    mkdir -p target/release
-    ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
-  '';
-
-  patches = [
-    (replaceVars ./force-version.patch { inherit (src) tag; })
-  ];
+  preInstall =
+    let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      mkdir -p target/release
+      ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
+    '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -56,11 +54,15 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
+    changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       balssh
       redxtech
     ];
   };
-  doInstallCheck = true;
-  nvimRequireCheck = "blink-cmp";
+
+  nvimSkipModules = [
+    # Module for reproducing issues
+    "repro"
+  ];
 }

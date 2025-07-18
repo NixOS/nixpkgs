@@ -26,12 +26,12 @@ let
       # Corretto, too.
       "--disable-warnings-as-errors"
     ];
-    version = "11.0.25.9.1";
+    version = "11.0.26.4.1";
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-11";
       rev = version;
-      hash = "sha256-ewGGj4BHmwoPdULeT3PSI0Fo9T3cFbTO7cZXhzuKISY=";
+      hash = "sha256-buJlSvmyOVeMwaP9oDcHhG+Sabr1exf0nRUt4O7MaIY=";
     };
   };
 in

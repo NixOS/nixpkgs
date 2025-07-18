@@ -9,9 +9,6 @@
   pkg-config,
   python3,
   xorg,
-  Libsystem,
-  AppKit,
-  Security,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -19,12 +16,15 @@
   testers,
   nushell,
   nix-update-script,
+  curlMinimal,
 }:
 
 let
-  version = "0.101.0";
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
+  version = "0.105.1";
 in
-
 rustPlatform.buildRustPackage {
   pname = "nushell";
   inherit version;
@@ -33,10 +33,11 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-Ptctp2ECypmSd0BHa6l09/U7wEjtLsvRSQV/ISz9+3w=";
+    hash = "sha256-UcIcCzfe2C7qFJKLo3WxwXyGI1rBBrhQHtrglKNp6ck=";
   };
 
-  cargoHash = "sha256-KOIVlF8V5bdtGIFbboTQpVSieETegA6iF7Hi6/F+2bE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v3BtcEd1eMtHlDLsu0Y4i6CWA47G0CMOyVlMchj7EJo=";
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -44,26 +45,16 @@ rustPlatform.buildRustPackage {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs =
-    [
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-      Libsystem
-      Security
-    ]
+    [ zstd ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      AppKit
       nghttp2
       libgit2
     ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
@@ -81,6 +72,10 @@ rustPlatform.buildRustPackage {
     runHook postCheck
   '';
 
+  checkInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ curlMinimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+
   passthru = {
     shellPath = "/bin/nu";
     tests.version = testers.testVersion {
@@ -97,6 +92,7 @@ rustPlatform.buildRustPackage {
       Br1ght0ne
       johntitor
       joaquintrinanes
+      ryan4yin
     ];
     mainProgram = "nu";
   };

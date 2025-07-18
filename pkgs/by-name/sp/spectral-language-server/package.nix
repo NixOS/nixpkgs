@@ -62,7 +62,7 @@ let
     };
   });
 in
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "spectral-language-server";
   version = "1.0.8-unstable-2023-06-06";
 

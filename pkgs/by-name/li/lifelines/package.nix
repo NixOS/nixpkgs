@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   gettext,
   libiconv,
   bison,
@@ -11,26 +10,16 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lifelines";
-  version = "unstable-2019-05-07";
+  version = "0-unstable-2025-01-05";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "43f29285ed46fba322b6a14322771626e6b02c59";
-    sha256 = "1agszzlmkxmznpc1xj0vzxkskrcfagfjvqsdyw1yp5yg6bsq272y";
+    owner = "lifelines";
+    repo = "lifelines";
+    rev = "fbc92b6585e5f642c59a5317a0f4d4573f51b2d6";
+    sha256 = "sha256-G/Sj3E8K4QDR4fJcipCKTXpQU19LOfOeLBp5k7uPwk4=";
   };
-
-  patches = [
-    # Fix pending upstream inclusion for ncurses-6.3 support:
-    #  https://github.com/lifelines/lifelines/pull/437
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/lifelines/lifelines/commit/e04ce2794d458c440787c191877fbbc0784447bd.patch";
-      sha256 = "1smnz4z5hfjas79bfvlnpw9x8199a5g0p9cvhf17zpcnz1432kg7";
-    })
-  ];
 
   buildInputs = [
     gettext
@@ -43,11 +32,11 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Genealogy tool with ncurses interface";
     homepage = "https://lifelines.github.io/lifelines/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ disassembler ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.disassembler ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -15,18 +15,19 @@
   fend,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fend";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
-    rev = "v${version}";
-    hash = "sha256-yRNfkP6DgXK1pLq50D9dMbbJaOX4ouQACJrfP5XrAJs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FaPP7344rb5789CeDv9L4lysiTrK+7UoEbH8IK/6N3k=";
   };
 
-  cargoHash = "sha256-y2H1BghzVvU/1WtAa4Yy2G9liKNbnyaufn5HbApwERA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BFWk91FPJaHccr9LeLq5NQlVrkglMz1W0MPTz0HzOfI=";
 
   nativeBuildInputs = [
     pandoc
@@ -92,15 +93,15 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
-    changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/printfn/fend/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       djanatyn
       liff
     ];
     mainProgram = "fend";
   };
-}
+})

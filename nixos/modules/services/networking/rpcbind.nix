@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,7 +21,7 @@ with lib;
         description = ''
           Whether to enable `rpcbind`, an ONC RPC directory service
           notably used by NFS and NIS, and which can be queried
-          using the rpcinfo(1) command. `rpcbind` is a replacement for
+          using the {manpage}`rpcinfo(1)` command. `rpcbind` is a replacement for
           `portmap`.
         '';
       };
@@ -24,7 +29,6 @@ with lib;
     };
 
   };
-
 
   ###### implementation
 

@@ -81,6 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
         -i include/ntop_defines.h
   '';
 
+  # Upstream build system makes
+  # $out/share/ntopng/httpdocs/geoip/README.geolocation.md a dangling symlink
+  # to ../../doc/README.geolocation.md. Copying the whole doc/ tree adds over
+  # 70 MiB to the output size, so only copy the files we need for now.
+  # (Ref. noBrokenSymlinks.)
+  postInstall = ''
+    mkdir -p "$out/share/ntopng/doc"
+    cp -r doc/README.geolocation.md "$out/share/ntopng/doc/"
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {

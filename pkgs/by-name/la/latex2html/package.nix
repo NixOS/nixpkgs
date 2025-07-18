@@ -1,19 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, ghostscript, netpbm, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ghostscript,
+  netpbm,
+  perl,
+}:
 # TODO: withTex
 
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2024.2";
+  version = "2025";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "latex2html";
+    repo = "latex2html";
     rev = "v${version}";
-    sha256 = "sha256-4g6bX6aVPOzSHTOB9wsfIiqS0SWygFtfeUDHT13FutA=";
+    sha256 = "sha256-xylIU2GY/1t9mA8zJzEjHwAIlvVxZmUAUdQ/IXEy+Wg=";
   };
 
-  buildInputs = [ ghostscript netpbm perl ];
+  buildInputs = [
+    ghostscript
+    netpbm
+    perl
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 

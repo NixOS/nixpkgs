@@ -1,5 +1,4 @@
 {
-  rocfft,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -15,18 +14,18 @@
   gtest,
   openmp,
   rocrand,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocfft";
-  version = "6.0.2";
+  pname = "rocfft${clr.gpuArchSuffix}";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6Gjsy14GeR08VqnNmFhu8EyYDnQ+VZRlg+u9MAAWfHc=";
+    hash = "sha256-RrxdwZ64uC7lQzyJI1eGHX2dmRnW8TfNThnuvuz5XWo=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
+  # FIXME: rocfft_aot_helper runs at the end of the build and has a risk of timing it out
+  # due to a long period with no terminal output
   buildInputs = [ sqlite ];
 
   cmakeFlags =
@@ -156,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      owner = finalAttrs.src.owner;
-      repo = finalAttrs.src.repo;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
     };
   };
 
@@ -167,10 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FFT implementation for ROCm";
     homepage = "https://github.com/ROCm/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

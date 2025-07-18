@@ -13,6 +13,7 @@
   pydantic,
   requests,
   requests-toolbelt,
+  zstandard,
 
   # tests
   anthropic,
@@ -21,6 +22,7 @@
   freezegun,
   instructor,
   pytest-asyncio,
+  pytest-vcr,
   pytestCheckHook,
   uvicorn,
   attr,
@@ -28,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.147";
+  version = "0.3.45";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-d0PJaC1MhVS3i4AtXUjSkkq/Yj2Pi42H/cW/XML/94o=";
+    hash = "sha256-uR3Uukt8LwoBKBcgyX2srK0C6O04IEECe/cFhBQFO2s=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,6 +52,7 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    zstandard
   ];
 
   nativeCheckInputs = [
@@ -59,6 +62,7 @@ buildPythonPackage rec {
     freezegun
     instructor
     pytest-asyncio
+    pytest-vcr
     pytestCheckHook
     uvicorn
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
@@ -81,13 +85,16 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # due to circular import
-    "tests/integration_tests/test_client.py"
-    "tests/integration_tests/test_prompts.py"
+    # Circular import
+    "tests/integration_tests/"
     "tests/unit_tests/test_client.py"
-    # Tests require a Langsmith API key
+    "tests/unit_tests/evaluation/test_runner.py"
+    "tests/unit_tests/evaluation/test_runner.py"
+    # Require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
+    # Marked as flaky in source
+    "tests/unit_tests/test_run_helpers.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
@@ -97,9 +104,12 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langsmith";
   };
 }

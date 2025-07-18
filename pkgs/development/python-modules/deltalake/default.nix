@@ -7,12 +7,12 @@
   pyarrow-hotfix,
   openssl,
   stdenv,
-  darwin,
   libiconv,
   pkg-config,
+  polars,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pandas,
   azure-storage-blob,
@@ -20,17 +20,17 @@
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.20.1";
+  version = "0.25.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-serMb6Rirmw+QLpET3NT2djBoFBW/TGu1/5qYjiYpKE=";
+    hash = "sha256-Fz5Lg/z/EPJkdK4RcWHD8r3V9EwwwgRjwktri1IOdlY=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-NkXovFsX+qbca+gYeBMQnacNzubloWNW/GrXNeWquE8=";
+    hash = "sha256-6SGVKJu01MzZxJv29PZKea+Z2YwAnvzbdDlnA4R6Az0=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -45,8 +45,6 @@ buildPythonPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 
@@ -64,8 +62,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
+    polars
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     azure-storage-blob
   ];
@@ -79,7 +78,10 @@ buildPythonPackage rec {
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
+    "-m 'not integration'"
+  ];
 
   meta = with lib; {
     description = "Native Rust library for Delta Lake, with bindings into Python";

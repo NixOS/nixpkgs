@@ -1,13 +1,16 @@
 {
   lib,
+  stdenv,
   src,
   version,
+  fetchpatch,
   bashInteractive,
   diffPlugins,
   gobject-introspection,
   gst_all_1,
   python3Packages,
   sphinxHook,
+  writableTmpDirAsHomeHook,
   runtimeShell,
   writeScript,
 
@@ -78,7 +81,8 @@ python3Packages.buildPythonApplication {
   inherit src version;
   pyproject = true;
 
-  patches = extraPatches;
+  patches = [
+  ] ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
@@ -97,6 +101,7 @@ python3Packages.buildPythonApplication {
       pyyaml
       unidecode
       typing-extensions
+      lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
@@ -140,24 +145,35 @@ python3Packages.buildPythonApplication {
     with python3Packages;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       mock
       rarfile
       responses
+      requests-mock
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
     ]
     ++ pluginWrapperBins;
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTestPaths = disabledTestPaths ++ [
-    # touches network
-    "test/plugins/test_aura.py"
-  ];
+  disabledTestPaths =
+    disabledTestPaths
+    ++ [
+      # touches network
+      "test/plugins/test_aura.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: several tests fail randomly with:
+      # if not self._poll(timeout):
+      #   raise Empty
+      #   _queue.Empty
+      "test/plugins/test_player.py"
+    ];
   disabledTests = disabledTests ++ [
-    # beets.ui.UserError: unknown command 'autobpm'
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
-    # AssertionError: assert 0 == 117
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+    # https://github.com/beetbox/beets/issues/5880
+    "test_reject_different_art"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.
@@ -170,8 +186,7 @@ python3Packages.buildPythonApplication {
       | sort -u > plugins_available
     ${diffPlugins (attrNames builtinPlugins) "plugins_available"}
 
-    export BEETS_TEST_SHELL="${bashInteractive}/bin/bash --norc"
-    export HOME="$(mktemp -d)"
+    export BEETS_TEST_SHELL="${lib.getExe bashInteractive} --norc"
 
     env EDITOR="${writeScript "beetconfig.sh" ''
       #!${runtimeShell}

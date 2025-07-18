@@ -33,6 +33,16 @@ buildPythonPackage rec {
     hash = "sha256-F8OaxLH8BL6MPNLFv1hBuVmeEdnEQ5w2Qny6by1wP6k=";
   };
 
+  # _pickle.UnpicklingError: Weights only load failed.
+  # torchsnapshot needs to adapt to the change of torch.load that occured in 2.6.0:
+  # https://pytorch.org/docs/stable/generated/torch.load.html
+  postPatch = ''
+    substituteInPlace torchsnapshot/io_preparers/object.py \
+      --replace-fail \
+        "torch.load(io.BytesIO(buf))" \
+        "torch.load(io.BytesIO(buf), weights_only=False)"
+  '';
+
   build-system = [
     setuptools
   ];
@@ -68,7 +78,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      # test suite gets stuck and eventually times out with: "torch.distributed.DistNetworkError: The client socket has timed out after"
       lib.systems.inspect.patterns.isDarwin
     ];
   };

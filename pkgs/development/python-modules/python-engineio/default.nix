@@ -9,6 +9,7 @@
   iana-etc,
   libredirect,
   mock,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.10.1";
+  version = "4.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     tag = "v${version}";
-    hash = "sha256-qfFMpE0aW8/TUBaKcaD/qV+JaBEqNR3WZ+mhQQsXkdU=";
+    hash = "sha256-VgdqVzO3UToXpD9pMEDqAH2DfdBwaWUfulALAEG2DNs=";
   };
 
   build-system = [ setuptools ];
@@ -44,29 +45,29 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aiohttp
     eventlet
+    libredirect.hook
     mock
-    requests
     tornado
-    websocket-client
+    pytest-asyncio
     pytestCheckHook
-  ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
   '';
 
   postCheck = ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
+  disabledTests = [
+    # Assertion issue
+    "test_async_mode_eventlet"
+    # Somehow effective log level does not change?
+    "test_logger"
+  ];
 
   pythonImportsCheck = [ "engineio" ];
 
@@ -77,7 +78,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
-    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/miguelgrinberg/python-engineio/blob/${src.tag}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mic92 ];
   };

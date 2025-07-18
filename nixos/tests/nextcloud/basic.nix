@@ -8,15 +8,11 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        globin
-        eqyiel
-        ma27
-      ];
+    meta = {
+      maintainers = lib.teams.nextcloud.members;
     };
 
     imports = [ testBase ];
@@ -66,6 +62,7 @@ runTest (
               startAt = "20:00";
             };
             phpExtraExtensions = all: [ all.bz2 ];
+            nginx.enableFastcgiRequestBuffering = true;
           };
 
           specialisation.withoutMagick.configuration = {
@@ -94,6 +91,7 @@ runTest (
         nexcloudWithImagick = findInClosure "imagick" nodes.nextcloud.system.build.vm;
         nextcloudWithoutImagick = findInClosure "imagick" nodes.nextcloud.specialisation.withoutMagick.configuration.system.build.vm;
       in
+      # python
       ''
         with subtest("File is in proper nextcloud home"):
             nextcloud.succeed("test -f ${nodes.nextcloud.services.nextcloud.datadir}/data/root/files/test-shared-file")
@@ -107,6 +105,17 @@ runTest (
 
         with subtest("Ensure SSE is disabled by default"):
             nextcloud.succeed("grep -vE '^HBEGIN:oc_encryption_module' /var/lib/nextcloud-data/data/root/files/test-shared-file")
+
+        with subtest("Create non-empty files with Transfer-Encoding: chunked"):
+            client.succeed(
+              'dd if=/dev/urandom of=testfile.bin bs=1M count=10',
+              'curl --fail -v -X PUT --header "Transfer-Encoding: chunked" --data-binary @testfile.bin "http://nextcloud/remote.php/webdav/testfile.bin" -u ${config.adminuser}:${config.adminpass}',
+            )
+
+            # Verify the local and remote copies of the file are identical.
+            client_hash = client.succeed("nix-hash testfile.bin").strip()
+            nextcloud_hash = nextcloud.succeed("nix-hash /var/lib/nextcloud-data/data/root/files/testfile.bin").strip()
+            t.assertEqual(client_hash, nextcloud_hash)
       '';
   }
 )

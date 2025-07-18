@@ -19,12 +19,12 @@ buildGoModule rec {
 
   ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scan local git repositories and generate a visual contributions graph";
     changelog = "https://github.com/knbr13/gitcs/releases/tag/v${version}";
     homepage = "https://github.com/knbr13/gitcs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ phanirithvij ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "gitcs";
   };
 }

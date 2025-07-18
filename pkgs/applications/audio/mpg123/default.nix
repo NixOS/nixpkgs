@@ -10,8 +10,6 @@
   withPulse ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   withCoreAudio ? stdenv.hostPlatform.isDarwin,
-  AudioUnit,
-  AudioToolbox,
   withJack ? stdenv.hostPlatform.isUnix,
   jack,
   withConplay ? !stdenv.hostPlatform.isWindows,
@@ -23,11 +21,11 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.32.9";
+  version = "1.33.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    hash = "sha256-A7YeQATpYLrPKs2toD7ZTTduaqsnpgFEe9SQjYQHspE=";
+    hash = "sha256-IpDjrt5vTRY+GhdFIWWvM8qtS18JSPmUKc+i2Dhfqp0=";
   };
 
   outputs = [
@@ -45,8 +43,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withAlsa [ alsa-lib ]
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [
-      AudioUnit
-      AudioToolbox
     ]
     ++ lib.optionals withJack [ jack ]
   );

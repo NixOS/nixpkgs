@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dsnap";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "RhinoSecurityLabs";
     repo = "dsnap";
     tag = "v${version}";
-    hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
+    hash = "sha256-h5zeyfkBoHnvjqHYahDXEEbGdmMti2Y56R/8OKyxOOM=";
   };
 
   postPatch = ''

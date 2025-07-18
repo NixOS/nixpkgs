@@ -27,7 +27,6 @@
   gtk3,
   dconf,
   llvmPackages_15,
-  overrideSDK,
   overrideLibcxx,
   darwin,
 
@@ -55,6 +54,11 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+      (fetchpatch {
+        name = "0012-qtbase-loongarch64.patch";
+        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/81b14ae4eed038662b53cd20786fd5e0816279ec/community/qt5-qtbase/loongarch64.patch";
+        hash = "sha256-BnpejF6/L73kVVts0R0/OMbVN8G4DXVFwBMJPLU9QbE=";
+      })
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
@@ -125,6 +129,11 @@ let
         url = "https://github.com/qt/qtpim/commit/114615812dcf9398c957b0833e860befe15f840f.patch";
         hash = "sha256-yZ1qs8y5DSq8FDXRPyuSPRIzjEUTWAhpVide/b+xaLQ=";
       })
+      # Provide interface for accessing all extended metadata from collections
+      (fetchpatch {
+        url = "https://github.com/qt/qtpim/commit/5bdfb9127b3f6c9863def0578c7a8734a5156ea9.patch";
+        hash = "sha256-asJNa8tcdtovVE579FjZg1CHeCmvRJ8otQeSrEdrXdQ=";
+      })
       # Accessors should be const
       (fetchpatch {
         url = "https://github.com/qt/qtpim/commit/a2bf7cdf05c264b5dd2560f799760b5508f154e4.patch";
@@ -164,7 +173,14 @@ let
         hash = "sha256-6wg/eVu9J83yvIO428U1FX3otz58tAy6pCvp7fqOBKU=";
       })
     ];
-    qtscript = [ ./qtscript.patch ];
+    qtscript = [
+      ./qtscript.patch
+      (fetchpatch {
+        name = "qtscript-loongarch64.patch";
+        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/2fa4f3b28affc29835fcca5c75431f19ff3754a3/community/qt5-qtscript/qtscript-loongarch64.patch";
+        hash = "sha256-DUTXX20ClqGRYat8zk3/Facc1IyAw58qCXrbUaDLyiM=";
+      })
+    ];
     qtserialport = [ ./qtserialport.patch ];
     qtsystems = [
       # Fix crash if no X11 display available
@@ -186,15 +202,6 @@ let
         # See: https://bugreports.qt.io/browse/QTBUG-124375
         # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
         ./qtwebengine-ninja-1.12.patch
-        # 5.15.17: Fixes 'converts to incompatible function type [-Werror,-Wcast-function-type-strict]'
-        # in chromium harfbuzz dependency. This may be removed again if harfbuzz is updated
-        # to include the upstream fixes: https://github.com/harfbuzz/harfbuzz/commit/d88269c827895b38f99f7cf741fa60210d4d5169
-        # See https://trac.macports.org/ticket/70850
-        (fetchpatch {
-          url = "https://github.com/macports/macports-ports/raw/dd7bc40d8de48c762bf9757ce0a0672840c5d8c2/aqua/qt5/files/patch-qtwebengine_hb-ft.cc_error.diff";
-          sha256 = "sha256-8/CYjGM5n2eJ6sG+ODTa8fPaxZSDVyKuInpc3IlZuyc=";
-          extraPrefix = "";
-        })
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         ./qtwebengine-darwin-no-platform-check.patch

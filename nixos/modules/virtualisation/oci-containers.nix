@@ -17,6 +17,10 @@ let
     { name, ... }:
     {
 
+      config = {
+        podman = mkIf (cfg.backend == "podman") { };
+      };
+
       options = {
 
         image = mkOption {
@@ -155,7 +159,7 @@ let
             [Docker engine documentation](https://docs.docker.com/engine/logging/configure/)
 
             For Podman:
-            Refer to the docker-run(1) man page.
+            Refer to the {manpage}`docker-run(1)` man page.
           '';
         };
 
@@ -287,6 +291,43 @@ let
           '';
         };
 
+        podman = mkOption {
+          type = types.nullOr (
+            types.submodule {
+              options = {
+                sdnotify = mkOption {
+                  default = "conmon";
+                  type = types.enum [
+                    "conmon"
+                    "healthy"
+                    "container"
+                  ];
+                  description = ''
+                    Determines how `podman` should notify systemd that the unit is ready. There are
+                    [three options](https://docs.podman.io/en/latest/markdown/podman-run.1.html#sdnotify-container-conmon-healthy-ignore):
+
+                    * `conmon`: marks the unit as ready when the container has started.
+                    * `healthy`: marks the unit as ready when the [container's healthcheck](https://docs.podman.io/en/stable/markdown/podman-healthcheck-run.1.html) passes.
+                    * `container`: `NOTIFY_SOCKET` is passed into the container and the process inside the container needs to indicate on its own that it's ready.
+                  '';
+                };
+                user = mkOption {
+                  default = "root";
+                  type = types.str;
+                  description = ''
+                    The user under which the container should run.
+                  '';
+                };
+              };
+            }
+          );
+          default = null;
+          description = ''
+            Podman-specific settings in OCI containers. These must be null when using
+            the `docker` backend.
+          '';
+        };
+
         pull = mkOption {
           type =
             with types;
@@ -340,6 +381,14 @@ let
           '';
         };
 
+        autoRemoveOnStop = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Automatically remove the container when it is stopped or killed
+          '';
+        };
+
         networks = mkOption {
           type = with types; listOf str;
           default = [ ];
@@ -367,7 +416,7 @@ let
             # try logging in, if it fails, check if image exists locally
             ${cfg.backend} login \
             ${container.login.registry} \
-            --username ${container.login.username} \
+            --username ${escapeShellArg container.login.username} \
             --password-stdin < ${container.login.passwordFile} \
             || ${cfg.backend} image inspect ${container.image} >/dev/null \
             || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
@@ -379,16 +428,21 @@ let
             ${container.imageStream} | ${cfg.backend} load
           ''}
           ${optionalString (cfg.backend == "podman") ''
-            rm -f /run/podman-${escapedName}.ctr-id
+            rm -f /run/${escapedName}/ctr-id
           ''}
         '';
       };
+
+      effectiveUser = container.podman.user or "root";
+      inherit (config.users.users.${effectiveUser}) uid;
+      dependOnLingerService =
+        cfg.backend == "podman" && effectiveUser != "root" && config.users.users.${effectiveUser}.linger;
     in
     {
       wantedBy = [ ] ++ optional (container.autoStart) "multi-user.target";
-      wants = lib.optional (
-        container.imageFile == null && container.imageStream == null
-      ) "network-online.target";
+      wants =
+        lib.optional (container.imageFile == null && container.imageStream == null) "network-online.target"
+        ++ lib.optionals dependOnLingerService [ "linger-users.service" ];
       after =
         lib.optionals (cfg.backend == "docker") [
           "docker.service"
@@ -398,9 +452,22 @@ let
         ++ lib.optionals (container.imageFile == null && container.imageStream == null) [
           "network-online.target"
         ]
-        ++ dependsOn;
-      requires = dependsOn;
-      environment = proxy_env;
+        ++ dependsOn
+        ++ lib.optionals dependOnLingerService [ "linger-users.service" ]
+        ++ lib.optionals (effectiveUser != "root" && container.podman.sdnotify == "healthy") [
+          "user@${toString uid}.service"
+        ];
+      requires =
+        dependsOn
+        ++ lib.optionals (effectiveUser != "root" && container.podman.sdnotify == "healthy") [
+          "user@${toString uid}.service"
+        ];
+      environment = lib.mkMerge [
+        proxy_env
+        (mkIf (cfg.backend == "podman" && container.podman.user != "root") {
+          HOME = config.users.users.${container.podman.user}.home;
+        })
+      ];
 
       path =
         if cfg.backend == "docker" then
@@ -417,16 +484,15 @@ let
         ++ map escapeShellArg container.preRunExtraOptions
         ++ [
           "run"
-          "--rm"
           "--name=${escapedName}"
           "--log-driver=${container.log-driver}"
         ]
         ++ optional (container.entrypoint != null) "--entrypoint=${escapeShellArg container.entrypoint}"
         ++ optional (container.hostname != null) "--hostname=${escapeShellArg container.hostname}"
         ++ lib.optionals (cfg.backend == "podman") [
-          "--cidfile=/run/podman-${escapedName}.ctr-id"
-          "--cgroups=no-conmon"
-          "--sdnotify=conmon"
+          "--cidfile=/run/${escapedName}/ctr-id"
+          "--cgroups=enabled"
+          "--sdnotify=${container.podman.sdnotify}"
           "-d"
           "--replace"
         ]
@@ -438,6 +504,7 @@ let
         ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
         ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ optional (container.privileged) "--privileged"
+        ++ optional (container.autoRemoveOnStop) "--rm"
         ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (
           filterAttrs (_: v: v == true) container.capabilities
         )
@@ -454,15 +521,19 @@ let
 
       preStop =
         if cfg.backend == "podman" then
-          "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+          "podman stop --ignore --cidfile=/run/${escapedName}/ctr-id"
         else
           "${cfg.backend} stop ${name} || true";
 
       postStop =
         if cfg.backend == "podman" then
-          "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+          "podman rm -f --ignore --cidfile=/run/${escapedName}/ctr-id"
         else
           "${cfg.backend} rm -f ${name} || true";
+
+      unitConfig = mkIf (effectiveUser != "root") {
+        RequiresMountsFor = "/run/user/${toString uid}/containers";
+      };
 
       serviceConfig =
         {
@@ -490,6 +561,9 @@ let
           Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
           Type = "notify";
           NotifyAccess = "all";
+          Delegate = mkIf (container.podman.sdnotify == "healthy") true;
+          User = effectiveUser;
+          RuntimeDirectory = escapedName;
         };
     };
 
@@ -536,17 +610,55 @@ in
 
         assertions =
           let
-            toAssertion =
-              _:
-              { imageFile, imageStream, ... }:
+            toAssertions =
+              name:
               {
-                assertion = imageFile == null || imageStream == null;
+                imageFile,
+                imageStream,
+                podman,
+                ...
+              }:
+              [
+                {
+                  assertion = imageFile == null || imageStream == null;
 
-                message = "You can only define one of imageFile and imageStream";
-              };
-
+                  message = "virtualisation.oci-containers.containers.${name}: You can only define one of imageFile and imageStream";
+                }
+                {
+                  assertion = cfg.backend == "docker" -> podman == null;
+                  message = "virtualisation.oci-containers.containers.${name}: Cannot set `podman` option if backend is `docker`.";
+                }
+                {
+                  assertion =
+                    cfg.backend == "podman" && podman.sdnotify == "healthy" && podman.user != "root"
+                    -> config.users.users.${podman.user}.uid != null;
+                  message = ''
+                    Rootless container ${name} (with podman and sdnotify=healthy)
+                    requires that its running user ${podman.user} has a statically specified uid.
+                  '';
+                }
+              ];
           in
-          lib.mapAttrsToList toAssertion cfg.containers;
+          concatMap (name: toAssertions name cfg.containers.${name}) (lib.attrNames cfg.containers);
+
+        warnings = mkIf (cfg.backend == "podman") (
+          lib.foldlAttrs (
+            warnings: name:
+            { podman, ... }:
+            let
+              inherit (config.users.users.${podman.user}) linger;
+            in
+            warnings
+            ++ lib.optional (podman.user != "root" && linger && podman.sdnotify == "conmon") ''
+              Podman container ${name} is configured as rootless (user ${podman.user})
+              with `--sdnotify=conmon`, but lingering for this user is turned on.
+            ''
+            ++ lib.optional (podman.user != "root" && !linger && podman.sdnotify == "healthy") ''
+              Podman container ${name} is configured as rootless (user ${podman.user})
+              with `--sdnotify=healthy`, but lingering for this user is turned off.
+            ''
+          ) [ ] cfg.containers
+        );
       }
       (lib.mkIf (cfg.backend == "podman") {
         virtualisation.podman.enable = true;
@@ -556,5 +668,4 @@ in
       })
     ]
   );
-
 }

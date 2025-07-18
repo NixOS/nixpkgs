@@ -16,8 +16,8 @@
   stdenv,
 }:
 let
-  version = "2.0-1483";
-  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  version = "2.53.1544";
+  urlVersion = builtins.replaceStrings [ "." ] [ "0" ] version;
 in
 stdenv.mkDerivation {
   pname = "roon-server";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-    hash = "sha256-y8MYiWlc3HfF7a3n7yrs84H/9KbEoANd8+7t2ORIm6w=";
+    hash = "sha256-Hbe2EfBbpA3Xzyh4ZYjm1G8qrwg+dEq5YAwZEG59ClI=";
   };
 
   dontConfigure = true;
@@ -104,6 +104,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+  passthru.updateScript = ./update.py;
   meta = with lib; {
     description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
@@ -113,6 +114,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       lovesegfault
       steell
+      ramblurr
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "RoonServer";

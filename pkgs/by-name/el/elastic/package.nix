@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk4
-, libgee
-, libadwaita
-, gtksourceview5
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, template-glib
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk4,
+  libgee,
+  libadwaita,
+  gtksourceview5,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  template-glib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     mainProgram = "app.drey.Elastic";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ _0xMRTT ];
+    teams = [ teams.gnome-circle ];
   };
 }

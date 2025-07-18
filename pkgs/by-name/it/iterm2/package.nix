@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.5.11";
+  version = "3.5.14";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-vcZL74U9RNjhpIQRUUn6WueYhE/LfLqpb/JgWunY5dI=";
+    hash = "sha256-cF7gg4kT0z/7Qu7d6AyXpnvrSQ937JbFUgpXw5F4AWE=";
   };
 
   dontFixup = true;
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/iterm2"
     #!${stdenvNoCC.shell}
-    open -na "$APP_DIR" --args "$@"
+    open -na "$APP_DIR" --args "\$@"
     EOF
     chmod +x "$out/bin/iterm2"
     runHook postInstall

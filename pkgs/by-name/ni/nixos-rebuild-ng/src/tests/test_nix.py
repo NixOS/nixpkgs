@@ -3,9 +3,10 @@ import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
-from unittest.mock import ANY, call, patch
+from unittest.mock import ANY, Mock, call, patch
 
 import pytest
+from pytest import MonkeyPatch
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
@@ -19,7 +20,7 @@ from .helpers import get_qualified_name
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build(mock_run: Any, monkeypatch: Any) -> None:
+def test_build(mock_run: Mock) -> None:
     assert n.build(
         "config.system.build.attr",
         m.BuildAttr("<nixpkgs/nixos>", None),
@@ -51,7 +52,8 @@ def test_build(mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_flake(mock_run: Any) -> None:
+def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+    monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse(".#hostname")
 
     assert n.build_flake(
@@ -66,7 +68,7 @@ def test_build_flake(mock_run: Any) -> None:
             "nix-command flakes",
             "build",
             "--print-out-paths",
-            ".#nixosConfigurations.hostname.config.system.build.toplevel",
+            '.#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
             "--nix-flag",
             "foo",
@@ -76,8 +78,10 @@ def test_build_flake(mock_run: Any) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-@patch(get_qualified_name(n.uuid4, n), autospec=True)
-def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
+@patch("uuid.uuid4", autospec=True)
+def test_build_remote(
+    mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
+) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
@@ -102,7 +106,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
-        build_flags={"build": True},
+        realise_flags={"realise": True},
         instantiate_flags={"inst": True},
         copy_flags={"copy": True},
     ) == Path("/path/to/config")
@@ -130,7 +134,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
             ),
             call(
@@ -145,7 +149,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
                     Path("/path/to/file"),
                     "--add-root",
                     Path("/tmp/tmpdir/00000000000000000000000000000002"),
-                    "--build",
+                    "--realise",
                 ],
                 remote=build_host,
                 stdout=PIPE,
@@ -165,7 +169,10 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote_flake(
+    mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
+) -> None:
+    monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
@@ -187,7 +194,7 @@ def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
                     "nix-command flakes",
                     "eval",
                     "--raw",
-                    ".#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    '.#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
                     "--flake",
                 ],
                 stdout=PIPE,
@@ -201,7 +208,7 @@ def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
             ),
             call(
@@ -221,7 +228,7 @@ def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
     )
 
 
-def test_copy_closure(monkeypatch: Any) -> None:
+def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     closure = Path("/path/to/closure")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, None)
@@ -242,20 +249,22 @@ def test_copy_closure(monkeypatch: Any) -> None:
         mock_run.assert_called_with(
             ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
-                "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
+                "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-opt"])
             },
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     monkeypatch.setattr(n, "WITH_NIX_2_18", True)
     extra_env = {
-        "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
+        "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-target-opt"])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
                 "copy",
                 "--copy-flag",
                 "--from",
@@ -285,10 +294,22 @@ def test_copy_closure(monkeypatch: Any) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
-    # Flake
+def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+    with monkeypatch.context() as mp:
+        default_nix = tmpdir / "default.nix"
+        default_nix.write_text("{}", encoding="utf-8")
+
+        mp.setenv("NIXOS_CONFIG", str(tmpdir))
+        mp.setenv("EDITOR", "editor")
+
+        n.edit()
+        mock_run.assert_called_with(["editor", default_nix], check=False)
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_edit_flake(mock_run: Mock) -> None:
     flake = m.Flake.parse(".#attr")
-    n.edit(flake, {"commit_lock_file": True})
+    n.edit_flake(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
             "nix",
@@ -297,21 +318,107 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            ".#nixosConfigurations.attr",
+            '.#nixosConfigurations."attr"',
         ],
         check=False,
     )
 
-    # Classic
-    with monkeypatch.context() as mp:
-        default_nix = tmpdir.join("default.nix")
-        default_nix.write("{}")
 
-        mp.setenv("NIXOS_CONFIG", str(tmpdir))
-        mp.setenv("EDITOR", "editor")
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [],
+        0,
+        """
+        {
+          "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+          "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk"
+        }
+        """,
+    ),
+)
+def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
+    build_attr = m.BuildAttr("<nixpkgs/nixos>", None)
+    assert n.get_build_image_variants(build_attr) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent("""
+            let
+              value = import <nixpkgs/nixos>;
+              set = if builtins.isFunction value then value {} else value;
+            in
+              builtins.attrNames set.config.system.build.images
+            """),
+        ],
+        stdout=PIPE,
+    )
 
-        n.edit(None)
-        mock_run.assert_called_with(["editor", default_nix], check=False)
+    build_attr = m.BuildAttr(Path(tmp_path), "preAttr")
+    assert n.get_build_image_variants(build_attr, {"inst_flag": True}) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "--expr",
+            textwrap.dedent(f"""
+            let
+              value = import "{tmp_path}";
+              set = if builtins.isFunction value then value {{}} else value;
+            in
+              builtins.attrNames set.preAttr.config.system.build.images
+            """),
+            "--inst-flag",
+        ],
+        stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess(
+        [],
+        0,
+        """
+        {
+          "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+          "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk"
+        }
+        """,
+    ),
+)
+def test_get_build_image_variants_flake(mock_run: Mock) -> None:
+    flake = m.Flake(Path("flake.nix"), "myAttr")
+    assert n.get_build_image_variants_flake(flake, {"eval_flag": True}) == {
+        "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
+        "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
+    }
+    mock_run.assert_called_with(
+        [
+            "nix",
+            "eval",
+            "--json",
+            "flake.nix#myAttr.config.system.build.images",
+            "--apply",
+            "builtins.attrNames",
+            "--eval-flag",
+        ],
+        stdout=PIPE,
+    )
 
 
 def test_get_nixpkgs_rev() -> None:
@@ -446,7 +553,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
         ),
     ],
 )
-def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
+def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
     # Probably better to test this function in a real system, this test is
     # mostly to make sure it doesn't break horribly
     assert n.list_generations(m.Profile("system", tmp_path)) == [
@@ -472,26 +579,26 @@ def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_repl(mock_run: Any) -> None:
-    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
+def test_repl(mock_run: Mock) -> None:
+    n.repl(m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
         ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
 
-    n.repl("attr", m.BuildAttr(Path("file.nix"), "myAttr"))
+    n.repl(m.BuildAttr(Path("file.nix"), "myAttr"))
     mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_repl_flake(mock_run: Any) -> None:
-    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
+def test_repl_flake(mock_run: Mock) -> None:
+    n.repl_flake(m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
     assert mock_run.call_count == 1
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_rollback(mock_run: Any, tmp_path: Path) -> None:
+def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
     path = tmp_path / "test"
     path.touch()
 
@@ -567,9 +674,11 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_set_profile(mock_run: Any) -> None:
+def test_set_profile(mock_run: Mock) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 0)
+
     n.set_profile(
         m.Profile("system", profile_path),
         config_path,
@@ -583,11 +692,27 @@ def test_set_profile(mock_run: Any) -> None:
         sudo=False,
     )
 
+    mock_run.return_value = CompletedProcess([], 1)
+
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.set_profile(
+            m.Profile("system", profile_path),
+            config_path,
+            target_host=None,
+            sudo=False,
+        )
+    assert str(e.value).startswith(
+        "error: your NixOS configuration path seems to be missing essential files."
+    )
+
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
+def test_switch_to_configuration_without_systemd_run(
+    mock_run: Any, monkeypatch: MonkeyPatch
+) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 1)
 
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "")
@@ -607,7 +732,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         remote=None,
     )
 
-    with pytest.raises(m.NRError) as e:
+    with pytest.raises(m.NixOSRebuildError) as e:
         n.switch_to_configuration(
             config_path,
             m.Action.BOOT,
@@ -645,8 +770,64 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
     )
 
 
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_switch_to_configuration_with_systemd_run(
+    mock_run: Mock, monkeypatch: MonkeyPatch
+) -> None:
+    profile_path = Path("/path/to/profile")
+    config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 0)
+
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "")
+
+        n.switch_to_configuration(
+            profile_path,
+            m.Action.SWITCH,
+            sudo=False,
+            target_host=None,
+            specialisation=None,
+            install_bootloader=False,
+        )
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            profile_path / "bin/switch-to-configuration",
+            "switch",
+        ],
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
+        sudo=False,
+        remote=None,
+    )
+
+    target_host = m.Remote("user@localhost", [], None)
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
+        mp.setattr(Path, Path.exists.__name__, lambda self: True)
+
+        n.switch_to_configuration(
+            Path("/path/to/config"),
+            m.Action.TEST,
+            sudo=True,
+            target_host=target_host,
+            install_bootloader=True,
+            specialisation="special",
+        )
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            config_path / "specialisation/special/bin/switch-to-configuration",
+            "test",
+        ],
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
+        sudo=True,
+        remote=target_host,
+    )
+
+
 @patch(
-    get_qualified_name(n.Path.glob, n),
+    "pathlib.Path.glob",
     autospec=True,
     return_value=[
         Path("/nix/var/nix/profiles/per-user/root/channels/nixos"),
@@ -654,18 +835,35 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         Path("/nix/var/nix/profiles/per-user/root/channels/home-manager"),
     ],
 )
-@patch(get_qualified_name(n.Path.is_dir, n), autospec=True, return_value=True)
-def test_upgrade_channels(mock_is_dir: Any, mock_glob: Any) -> None:
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(False)
-    mock_run.assert_called_with(["nix-channel", "--update", "nixos"], check=False)
+@patch("pathlib.Path.is_dir", autospec=True, return_value=True)
+@patch("os.geteuid", autospec=True, return_value=1000)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_upgrade_channels(
+    mock_run: Mock,
+    mock_geteuid: Mock,
+    mock_is_dir: Mock,
+    mock_glob: Mock,
+) -> None:
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.upgrade_channels(all_channels=False, sudo=False)
+    assert str(e.value) == (
+        "error: if you pass the '--upgrade' or '--upgrade-all' flag, you must "
+        "also pass '--sudo' or run the command as root (e.g., with sudo)"
+    )
 
-    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.upgrade_channels(True)
+    n.upgrade_channels(all_channels=False, sudo=True)
+    mock_run.assert_called_once_with(
+        ["nix-channel", "--update", "nixos"], check=False, sudo=True
+    )
+
+    mock_geteuid.return_value = 0
+    n.upgrade_channels(all_channels=True, sudo=False)
     mock_run.assert_has_calls(
         [
-            call(["nix-channel", "--update", "nixos"], check=False),
-            call(["nix-channel", "--update", "nixos-hardware"], check=False),
-            call(["nix-channel", "--update", "home-manager"], check=False),
+            call(["nix-channel", "--update", "nixos"], check=False, sudo=False),
+            call(
+                ["nix-channel", "--update", "nixos-hardware"], check=False, sudo=False
+            ),
+            call(["nix-channel", "--update", "home-manager"], check=False, sudo=False),
         ]
     )

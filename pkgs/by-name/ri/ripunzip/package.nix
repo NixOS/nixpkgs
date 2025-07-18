@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
-  darwin,
   pkg-config,
   testers,
   fetchzip,
@@ -13,27 +11,35 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "2.0.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-O9R7SmhKQ6VB9TWbLsQmK/0tDWhJ1QWIPwW7VtibqAk=";
+    hash = "sha256-giNaTALPZYOfQ+kPyQufbRTdTwwKLK7iDvg50YNfzDg=";
   };
 
-  cargoHash = "sha256-1ZHAbJIWRQh876rshMYeuCz7UMlwdqrScO0eIkGjZao=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uz07yZBkmBTEGB64rhBYQ2iL0KbrY4UAM96utv8HCSE=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
+
+  checkFlags = [
+    # Skip tests involving network
+    "--skip=unzip::http_range_reader::tests::test_with_accept_range"
+    "--skip=unzip::http_range_reader::tests::test_without_accept_range"
+    "--skip=unzip::seekable_http_reader::tests::test_big_readahead"
+    "--skip=unzip::seekable_http_reader::tests::test_random_access"
+    "--skip=unzip::seekable_http_reader::tests::test_small_readahead"
+    "--skip=unzip::seekable_http_reader::tests::test_unlimited_readahead"
+    "--skip=unzip::tests::test_extract_biggish_zip_from_ranges_server"
+    "--skip=unzip::tests::test_extract_from_server"
+    "--skip=unzip::tests::test_small_zip_from_no_content_length_server"
+    "--skip=unzip::tests::test_small_zip_from_no_range_server"
+    "--skip=unzip::tests::test_small_zip_from_ranges_server"
+  ];
 
   setupHook = ./setup-hook.sh;
 

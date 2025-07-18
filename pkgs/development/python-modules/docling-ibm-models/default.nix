@@ -2,29 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  docling-core,
   huggingface-hub,
   jsonlines,
-  mean-average-precision,
   numpy,
   opencv-python-headless,
   pillow,
+  pydantic,
+  rtree,
+  safetensors,
   torch,
   torchvision,
   tqdm,
+  transformers,
+
+  # tests
+  datasets,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "2.0.4";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${version}";
-    hash = "sha256-QZvkkazxgkGuSQKIYI+YghH7pLlDSEbCGhg89gZsOpk=";
+    hash = "sha256-Yogg71CXQTdF5OUbdbma1rQxtLudTLjyOIFe2LS9CpI=";
   };
 
   build-system = [
@@ -32,21 +44,25 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    docling-core
     huggingface-hub
     jsonlines
-    mean-average-precision
     numpy
     opencv-python-headless
     pillow
+    pydantic
+    rtree
+    safetensors
     torch
     torchvision
     tqdm
+    transformers
   ];
 
   pythonRelaxDeps = [
-    "mean_average_precision"
-    "pillow"
-    "torchvision"
+    "jsonlines"
+    "numpy"
+    "transformers"
   ];
 
   pythonImportsCheck = [
@@ -54,17 +70,22 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    datasets
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
     # Requires network access
+    "test_code_formula_predictor" # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_figure_classifier" # huggingface_hub.errors.LocalEntryNotFoundError
     "test_layoutpredictor"
+    "test_readingorder"
     "test_tf_predictor"
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.tag}/CHANGELOG.md";
     description = "Docling IBM models";
     homepage = "https://github.com/DS4SD/docling-ibm-models";
     license = lib.licenses.mit;

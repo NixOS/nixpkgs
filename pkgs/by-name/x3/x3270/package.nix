@@ -1,6 +1,5 @@
 {
   stdenv,
-  darwin,
   lib,
   libiconv,
   fetchurl,
@@ -74,12 +73,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
     ];
 
   meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";
-    homepage = "http://x3270.bgp.nu/index.html";
+    homepage = "https://x3270.bgp.nu/index.html";
     license = licenses.bsd3;
     maintainers = [ maintainers.anna328p ];
   };

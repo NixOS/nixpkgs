@@ -7,11 +7,11 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "6.2.3";
+  version = "6.4.0";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-yS3KnR9JLUEwtV8e2J5l4WW+XNHWg7PDOKtlfT/zfUE=";
+    hash = "sha256-QTq2hBuFfuCvQ9EDcSW5M7bpkBvhYjYXCkKaRqLyblg=";
   };
 
   appimageContents = appimageTools.extract {
@@ -39,13 +39,13 @@ appimageTools.wrapType2 {
     ignoredVersions = "-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop application for SimpleX Chat";
     mainProgram = "simplex-chat-desktop";
     homepage = "https://simplex.chat";
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ terryg ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ terryg ];
     platforms = [ "x86_64-linux" ];
   };
 }

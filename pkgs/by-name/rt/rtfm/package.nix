@@ -10,44 +10,66 @@
   sqlite,
   libadwaita,
   gtk4,
+  glib,
   pango,
-  replaceVars,
+  symlinkJoin,
+  gitUpdater,
+  _experimental-update-script-combinators,
+  runCommand,
+  crystal2nix,
+  writeShellScript,
 }:
 let
-  gtk4' = gtk4.override { x11Support = true; };
-  pango' = pango.override { withIntrospection = true; };
-in
-crystal.buildCrystalPackage rec {
-  pname = "rtfm";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
-    rev = "v${version}";
-    name = "rtfm";
-    hash = "sha256-+s7KXl3+j/BaneOBqVAMJJhmrG6xtcGaHhYnMvUfiVA=";
+    tag = "v${version}";
+    hash = "sha256-0yKldVTZdFV1Tj1MUI7TCqF3Ho/D7NOGR9UuLaLUFdo=";
   };
 
-  patches = [
-    # 1) fixed gi-crystal binding generator command
-    # 2) fixed docset generator command
-    # 3) added commands to build gschemas and update icon-cache
-    (replaceVars ./make.patch {
-      inherit crystal;
-    })
-    # added chmod +w for copied docs to prevent error:
-    # `Error opening file with mode 'wb': '.../style.css': Permission denied`
-    ./enable-write-permissions.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/doc2dash/create_gtk_docset.cr \
-      --replace-fail 'basedir = Path.new("/usr/share/doc")' 'basedir = Path.new(ARGV[0]? || "gtk-docs")'
-  '';
+  gtk-doc =
+    let
+      gtk4' = gtk4.override { x11Support = true; };
+      pango' = pango.override { withIntrospection = true; };
+    in
+    symlinkJoin {
+      name = "gtk-doc";
+      paths = [
+        gtk4'.devdoc
+        pango'.devdoc
+        glib.devdoc
+        libadwaita.devdoc
+        webkitgtk_6_0.devdoc
+      ];
+    };
+in
+crystal.buildCrystalPackage {
+  pname = "rtfm";
+  inherit version src;
 
   shardsFile = ./shards.nix;
   copyShardDeps = true;
+
+  postPatch = ''
+    substituteInPlace src/doc2dash/create_gtk_docset.cr \
+      --replace-fail 'basedir = Path.new("/usr/share/doc")' 'basedir = Path.new(ARGV[0]? || "${gtk-doc}/share/doc")' \
+      --replace-fail 'webkit2gtk-4.0' 'webkitgtk-6.0'
+    substituteInPlace src/doc2dash/create_crystal_docset.cr \
+      --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal}/share/doc/crystal/api")'
+    substituteInPlace src/doc2dash/docset_builder.cr \
+      --replace-fail 'File.copy(original, real_dest)' 'File.copy(original, real_dest); File.chmod(real_dest, 0o600)'
+  '';
+
+  preBuild = ''
+    cd lib/gi-crystal
+    shards build -Dpreview_mt --release --no-debug
+    cd ../..
+    install -Dm755 lib/gi-crystal/bin/gi-crystal bin/gi-crystal
+  '';
+
+  buildTargets = [ "all" ];
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -58,31 +80,39 @@ crystal.buildCrystalPackage rec {
     webkitgtk_6_0
     sqlite
     libadwaita
-    gtk4'
-    pango'
+    gtk4
+    pango
   ];
 
-  buildTargets = [
-    "configure"
-    "rtfm"
-    "docsets"
-  ];
-
-  preBuild = ''
-    mkdir gtk-doc/
-
-    for file in "${gtk4'.devdoc}"/share/doc/*; do
-      ln -s "$file" "gtk-doc/$(basename "$file")"
-    done
-
-    for file in "${pango'.devdoc}"/share/doc/*; do
-      ln -s "$file" "gtk-doc/$(basename "$file")"
-    done
-
-    for file in "${libadwaita.devdoc}"/share/doc/*; do
-      ln -s "$file" "gtk-doc/$(basename "$file")"
-    done
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  doInstallCheck = false;
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "rtfm.shardLock" "./shard.lock")
+      {
+        command = [
+          (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}")
+          ./.
+        ];
+        supportedFeatures = [ "silent" ];
+      }
+      {
+        command = [
+          "rm"
+          "./shard.lock"
+        ];
+        supportedFeatures = [ "silent" ];
+      }
+    ];
+    shardLock = runCommand "shard.lock" { inherit src; } ''
+      cp $src/shard.lock $out
+    '';
+  };
 
   meta = with lib; {
     description = "Dash/docset reader with built in documentation for Crystal and GTK APIs";
@@ -90,5 +120,6 @@ crystal.buildCrystalPackage rec {
     license = licenses.mit;
     mainProgram = "rtfm";
     maintainers = with maintainers; [ sund3RRR ];
+    platforms = platforms.unix;
   };
 }

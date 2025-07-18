@@ -16,6 +16,7 @@
   libimobiledevice,
   monoSupport ? false,
   mono,
+  udevCheckHook,
   gtk-sharp-2_0,
 }:
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
       autoreconfHook
       intltool
       pkg-config
+      udevCheckHook
     ]
     ++ (with perlPackages; [
       perl
@@ -78,6 +80,8 @@ stdenv.mkDerivation rec {
     glib
     libimobiledevice
   ];
+
+  doInstallCheck = true;
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = toString [

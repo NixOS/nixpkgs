@@ -89,7 +89,7 @@
 let
   version = "2.7.3";
 
-  airflow-src = fetchFromGitHub rec {
+  airflow-src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
     rev = "refs/tags/${version}";
@@ -147,6 +147,7 @@ in
 buildPythonPackage rec {
   pname = "apache-airflow";
   inherit version;
+  format = "setuptools";
   src = airflow-src;
 
   disabled = pythonOlder "3.7";
@@ -289,7 +290,7 @@ buildPythonPackage rec {
     airflow db reset -y
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/core/test_core.py"
   ];
 

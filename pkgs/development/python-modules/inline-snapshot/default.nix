@@ -3,14 +3,16 @@
   asttokens,
   black,
   buildPythonPackage,
-  click,
   dirty-equals,
   executing,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   hypothesis,
   pydantic,
   pyright,
+  pytest-freezer,
+  pytest-mock,
   pytest-subtests,
   pytest-xdist,
   pytestCheckHook,
@@ -18,22 +20,18 @@
   rich,
   time-machine,
   toml,
-  types-toml,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.13.3";
+  version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
-    tag = "v${version}";
-    hash = "sha256-hwt/EFYedrml0x58Rd1AjqrIlELAXp1ku8v7glhCebE=";
+    tag = version;
+    hash = "sha256-UiVxG9W1lwvvoflVey4250iL8gL8Tm41LBo0ab0tTqk=";
   };
 
   build-system = [ hatchling ];
@@ -41,27 +39,31 @@ buildPythonPackage rec {
   dependencies =
     [
       asttokens
-      black
-      click
       executing
       rich
-      typing-extensions
+      toml
     ]
     ++ lib.optionals (pythonOlder "3.11") [
-      types-toml
       toml
     ];
 
   nativeCheckInputs = [
-    dirty-equals
+    freezegun
     hypothesis
     pydantic
     pyright
+    pytest-freezer
+    pytest-mock
     pytest-subtests
     pytest-xdist
     pytestCheckHook
     time-machine
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  optional-dependencies = {
+    black = [ black ];
+    dirty-equals = [ dirty-equals ];
+  };
 
   pythonImportsCheck = [ "inline_snapshot" ];
 
@@ -73,7 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
-    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -263,7 +263,7 @@ let
             ];
             sourceProvenance = with sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
-            maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
+            teams = [ teams.graalvm-ce ];
           }
           // (args.meta or { })
         );

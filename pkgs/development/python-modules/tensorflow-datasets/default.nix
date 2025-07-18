@@ -1,86 +1,106 @@
 {
-  apache-beam,
-  array-record,
-  attrs,
-  beautifulsoup4,
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build system
+  setuptools,
+
+  # dependencies
+  absl-py,
+  array-record,
+  dm-tree,
+  etils,
+  immutabledict,
+  numpy,
+  promise,
+  protobuf,
+  psutil,
+  pyarrow,
+  requests,
+  simple-parsing,
+  tensorflow-metadata,
+  termcolor,
+  toml,
+  tqdm,
+  wrapt,
+  pythonOlder,
+  importlib-resources,
+
+  # tests
+  apache-beam,
+  beautifulsoup4,
   click,
+  cloudpickle,
   datasets,
   dill,
-  dm-tree,
-  fetchFromGitHub,
   ffmpeg,
-  future,
   imagemagick,
-  importlib-resources,
   jax,
   jaxlib,
   jinja2,
   langdetect,
-  lib,
   lxml,
   matplotlib,
+  mlcroissant,
   mwparserfromhell,
   mwxml,
   networkx,
   nltk,
-  numpy,
   opencv4,
   pandas,
   pillow,
-  promise,
-  protobuf,
-  psutil,
   pycocotools,
   pydub,
   pytest-xdist,
   pytestCheckHook,
-  requests,
   scikit-image,
   scipy,
-  six,
+  sortedcontainers,
   tensorflow,
-  tensorflow-metadata,
-  termcolor,
   tifffile,
-  tqdm,
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.9.6";
-  format = "setuptools";
+  version = "4.9.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2zR1b/Zkj3hcwiVK7wdxix3taNgFFOxqy7fSge6dAIk=";
+    tag = "v${version}";
+    hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
 
-  patches = [
-    # addresses https://github.com/tensorflow/datasets/issues/3673
-    ./corruptions.patch
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    array-record
-    attrs
-    dill
-    dm-tree
-    future
-    importlib-resources
-    numpy
-    promise
-    protobuf
-    psutil
-    requests
-    six
-    tensorflow-metadata
-    termcolor
-    tqdm
-  ];
+  dependencies =
+    [
+      absl-py
+      array-record
+      dm-tree
+      etils
+      immutabledict
+      numpy
+      promise
+      protobuf
+      psutil
+      pyarrow
+      requests
+      simple-parsing
+      tensorflow-metadata
+      termcolor
+      toml
+      tqdm
+      wrapt
+    ]
+    ++ etils.optional-dependencies.epath
+    ++ etils.optional-dependencies.etree
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -88,7 +108,9 @@ buildPythonPackage rec {
     apache-beam
     beautifulsoup4
     click
+    cloudpickle
     datasets
+    dill
     ffmpeg
     imagemagick
     jax
@@ -97,6 +119,7 @@ buildPythonPackage rec {
     langdetect
     lxml
     matplotlib
+    mlcroissant
     mwparserfromhell
     mwxml
     networkx
@@ -110,9 +133,23 @@ buildPythonPackage rec {
     pytestCheckHook
     scikit-image
     scipy
+    sortedcontainers
     tensorflow
     tifffile
     zarr
+  ];
+
+  pytestFlagsArray = [
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
+  ];
+
+  disabledTests = [
+    # Since updating apache-beam to 2.65.0
+    # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
+    # https://github.com/tensorflow/datasets/issues/11055
+    "test_download_and_prepare_as_dataset"
   ];
 
   disabledTestPaths = [
@@ -126,6 +163,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/import_without_tf_test.py"
     "tensorflow_datasets/proto/build_tf_proto_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
+    "tensorflow_datasets/datasets/imagenet2012_corrupted/imagenet2012_corrupted_dataset_builder_test.py"
 
     # Requires `pretty_midi` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/audio/groove.py"
@@ -143,13 +181,15 @@ buildPythonPackage rec {
     # Requires `gcld3` and `pretty_midi` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/core/lazy_imports_lib_test.py"
 
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/dataset_builder_beam_test.py"
+    "tensorflow_datasets/core/dataset_builders/adhoc_builder_test.py"
+    "tensorflow_datasets/core/split_builder_test.py"
+    "tensorflow_datasets/core/writer_test.py"
+
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/core/features/audio_feature_test.py"
     "tensorflow_datasets/image/lsun_test.py"
-
-    # Requires `envlogger` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
-    "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related
@@ -171,10 +211,11 @@ buildPythonPackage rec {
     "tensorflow_datasets/text/c4_utils_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

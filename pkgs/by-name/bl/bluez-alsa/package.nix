@@ -15,22 +15,28 @@
   pkg-config,
   readline,
   sbc,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-alsa";
-  version = "4.1.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vebxyku7xl/ReU025iThEbvfHsi4kCbvFqlBGDWrHxc=";
   };
+
+  postPatch = ''
+    patchShebangs src/dbus-codegen.py
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3
   ];
 
   buildInputs =

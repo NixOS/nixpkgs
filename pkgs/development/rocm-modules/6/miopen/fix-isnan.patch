@@ -1,0 +1,31 @@
+From 17f67e0aa31cd2f1c1cb012d3858abf6956acc72 Mon Sep 17 00:00:00 2001
+From: "Sv. Lockal" <lockalsash@gmail.com>
+Date: Tue, 24 Dec 2024 14:43:10 +0000
+Subject: [PATCH] Fix missing isnan definition on libstdc++ >=14 systems
+
+Closes #3441
+---
+ driver/reducecalculation_driver.hpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/driver/reducecalculation_driver.hpp b/driver/reducecalculation_driver.hpp
+index 8226b3c953..2001969509 100644
+--- a/driver/reducecalculation_driver.hpp
++++ b/driver/reducecalculation_driver.hpp
+@@ -33,6 +33,7 @@
+ #include "random.hpp"
+ #include <algorithm>
+ #include <cfloat>
++#include <cmath>
+ #include <cstdlib>
+ #include <memory>
+ #include <miopen/miopen.h>
+@@ -77,7 +78,7 @@ int32_t mloReduceCalculationForwardRunHost(miopenTensorDescriptor_t inputDesc,
+         for(size_t i = 0; i < reduce_size; ++i)
+         {
+             Tcheck val = static_cast<Tcheck>(input[input_idx]);
+-            if(nanPropagation && isnan(val))
++            if(nanPropagation && std::isnan(val))
+             {
+                 val = 0.0f;
+             }

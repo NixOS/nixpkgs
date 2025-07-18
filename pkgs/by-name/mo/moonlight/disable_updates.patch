@@ -1,0 +1,78 @@
+diff --git a/packages/core-extensions/src/moonbase/host.ts b/packages/core-extensions/src/moonbase/host.ts
+index 8903f41..e5c8709 100644
+--- a/packages/core-extensions/src/moonbase/host.ts
++++ b/packages/core-extensions/src/moonbase/host.ts
+@@ -79,22 +79,9 @@ electron.app.whenReady().then(() => {
+ 
+     if (!entries.find((e) => e.label === "moonlight")) {
+       const options: Electron.MenuItemConstructorOptions[] = [
+-        { label: "Update and restart", click: updateAndRestart },
+         { label: "Reset config", click: resetConfig }
+       ];
+ 
+-      if (moonlightHost.branch !== MoonlightBranch.DEV) {
+-        options.push({
+-          label: "Switch branch",
+-          submenu: [MoonlightBranch.STABLE, MoonlightBranch.NIGHTLY].map((branch) => ({
+-            label: branch,
+-            type: "radio",
+-            checked: moonlightHost.branch === branch,
+-            click: () => changeBranch(branch)
+-          }))
+-        });
+-      }
+-
+       options.push({ label: "About", click: showAbout });
+ 
+       entries.splice(i + 1, 0, {
+diff --git a/packages/core-extensions/src/moonbase/native.ts b/packages/core-extensions/src/moonbase/native.ts
+index c6e068f..0adc765 100644
+--- a/packages/core-extensions/src/moonbase/native.ts
++++ b/packages/core-extensions/src/moonbase/native.ts
+@@ -39,24 +39,7 @@ export default function getNatives(): MoonbaseNatives {
+ 
+   return {
+     async checkForMoonlightUpdate() {
+-      try {
+-        if (moonlightGlobal.branch === MoonlightBranch.STABLE) {
+-          const json = await getStableRelease();
+-          return json.name !== moonlightGlobal.version ? json.name : null;
+-        } else if (moonlightGlobal.branch === MoonlightBranch.NIGHTLY) {
+-          const req = await fetch(nightlyRefUrl, {
+-            cache: "no-store",
+-            headers: sharedHeaders
+-          });
+-          const ref = (await req.text()).split("\n")[0];
+-          return ref !== moonlightGlobal.version ? ref : null;
+-        }
+-
+-        return null;
+-      } catch (e) {
+-        logger.error("Error checking for moonlight update", e);
+-        return null;
+-      }
++      return null;
+     },
+ 
+     async updateMoonlight(overrideBranch?: MoonlightBranch) {
+diff --git a/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx b/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
+index 302c610..2db7ecd 100644
+--- a/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
++++ b/packages/core-extensions/src/moonbase/webpackModules/ui/config/index.tsx
+@@ -108,16 +108,6 @@ function ArrayFormItem({ config }: { config: "repositories" | "devSearchPaths" }
+ export default function ConfigPage() {
+   return (
+     <>
+-      <FormSwitch
+-        className={Margins.marginTop20}
+-        value={MoonbaseSettingsStore.getExtensionConfigRaw<boolean>("moonbase", "updateChecking", true) ?? true}
+-        onChange={(value: boolean) => {
+-          MoonbaseSettingsStore.setExtensionConfig("moonbase", "updateChecking", value);
+-        }}
+-        note="Checks for updates to moonlight"
+-      >
+-        Automatic update checking
+-      </FormSwitch>
+       <FormItem title="Repositories">
+         <FormText className={Margins.marginBottom4}>A list of remote repositories to display extensions from</FormText>
+         <ArrayFormItem config="repositories" />

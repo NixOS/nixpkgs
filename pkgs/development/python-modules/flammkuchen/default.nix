@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch2,
   fetchPypi,
   numpy,
   pandas,
@@ -13,16 +14,24 @@
 buildPythonPackage rec {
   pname = "flammkuchen";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-z68HBsU9J6oe8+YL4OOQiMYQRs3TZUDM+e2ssqo6BFI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    (fetchpatch2 {
+      name = "numpy-v2-compat.patch";
+      url = "https://github.com/portugueslab/flammkuchen/commit/c523ea78e10facd98d4893f045249c68bae17940.patch?full_index=1";
+      hash = "sha256-/goNkiEBrcprywQYf2oKvGbu5j12hmalPuB45wNNt+I=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
     tables

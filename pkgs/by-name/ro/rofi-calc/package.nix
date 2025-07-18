@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
   pkg-config,
   rofi-unwrapped,
   libqalculate,
@@ -10,24 +9,27 @@
   cairo,
   gobject-introspection,
   wrapGAppsHook3,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-calc";
-  version = "2.2.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
-    repo = pname;
+    repo = "rofi-calc";
     rev = "v${version}";
-    sha256 = "sha256-uXaI8dwTRtg8LnFxopgXr9x/vEl8ixzIGOsSQQkAkoQ=";
+    sha256 = "sha256-iTLi76GinRASawPSWAqmxSwLZPGvHesarHNoqO4m4dM=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
     pkg-config
     gobject-introspection
     wrapGAppsHook3
+    meson
+    ninja
   ];
 
   buildInputs = [
@@ -37,12 +39,16 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
-  patches = [
-    ./0001-Patch-plugindir-to-output.patch
-  ];
+  mesonBuildType = "release";
 
   postPatch = ''
-    sed "s|qalc_binary = \"qalc\"|qalc_binary = \"${libqalculate}/bin/qalc\"|" -i src/calc.c
+    substituteInPlace src/calc.c --replace-fail \
+      "qalc_binary = \"qalc\"" \
+      "qalc_binary = \"${lib.getExe libqalculate}\""
+
+    substituteInPlace src/meson.build --replace-fail \
+      "rofi.get_variable('pluginsdir')" \
+      "'$out/lib/rofi'"
   '';
 
   meta = with lib; {

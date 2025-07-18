@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : "$out/bin:${
           lib.makeBinPath [
             nbdkit
+            ocamlPackages.nbd
             qemu
           ]
         }"

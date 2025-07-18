@@ -6,13 +6,11 @@
   pkg-config,
   python3,
   gfortran,
-  lesstif,
   cfitsio,
   getopt,
   perl,
   groff,
   which,
-  darwin,
   ncurses,
 }:
 
@@ -26,8 +24,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "dec24a";
-  version = "20241201_a";
+  srcVersion = "jul25a";
+  version = "20250701_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    sha256 = "sha256-5XKImlE5A6JjA6LLqmGc4IzaMMPoHDo8cUPmgRtnEp0=";
+    hash = "sha256-t64lcbdrPXu4II5IGyd9Un6yJGrH+wqKRt5jmr/F5y4=";
   };
 
   nativeBuildInputs = [
@@ -49,33 +47,24 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      gtk2-x11
-      lesstif
-      cfitsio
-      python3Env
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks; [ CoreFoundation ]
-    );
+  buildInputs = [
+    gtk2-x11
+    cfitsio
+    python3Env
+    ncurses
+  ];
 
   patches =
     [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./clang.patch
       ./cpp-darwin.patch
-    ]);
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
-
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
-  );
 
   configurePhase = ''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
@@ -85,7 +74,7 @@ stdenv.mkDerivation rec {
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
-  userExec = "astro class greg imager mapping sic";
+  userExec = "astro class greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin
@@ -96,6 +85,8 @@ stdenv.mkDerivation rec {
       chmod 755 $out/bin/$i
     done
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Radioastronomy data analysis software";

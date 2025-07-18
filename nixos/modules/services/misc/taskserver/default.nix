@@ -137,13 +137,13 @@ let
   nixos-taskserver =
     with pkgs.python3.pkgs;
     buildPythonApplication {
+      format = "setuptools";
       name = "nixos-taskserver";
 
       src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
         mkdir -p "$out"
         cat "${
-          pkgs.substituteAll {
-            src = ./helper-tool.py;
+          pkgs.replaceVars ./helper-tool.py {
             inherit taskd certtool;
             inherit (cfg)
               dataDir

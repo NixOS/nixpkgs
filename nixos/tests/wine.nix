@@ -75,5 +75,14 @@ listToAttrs (
       # This wayland combination times out after spending many hours.
       # https://hydra.nixos.org/job/nixos/trunk-combined/nixos.tests.wine.wineWowPackages-wayland.x86_64-linux
       (pkgs.lib.remove "wayland" variants)
+    ++
+      map
+        (makeWineTest "wineWow64Packages" [
+          hello32
+          hello64
+        ])
+        # This wayland combination times out after spending many hours.
+        # https://hydra.nixos.org/job/nixos/trunk-combined/nixos.tests.wine.wineWowPackages-wayland.x86_64-linux
+        (pkgs.lib.remove "wayland" variants)
   )
 )

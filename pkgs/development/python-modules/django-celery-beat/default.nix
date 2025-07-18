@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "celery";
     repo = "django-celery-beat";
     tag = "v${version}";
-    hash = "sha256-XWcmKQXNw8eoGkld77E3rHpR9ofa1i2qO/JI8Hnpi9M=";
+    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
   };
 
   pythonRelaxDeps = [ "django" ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Celery Periodic Tasks backed by the Django ORM";
     homepage = "https://github.com/celery/django-celery-beat";
-    changelog = "https://github.com/celery/django-celery-beat/releases/tag/v${version}";
+    changelog = "https://github.com/celery/django-celery-beat/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
   };

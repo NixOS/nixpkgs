@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "osm-c-tools";
-    repo = pname;
+    repo = "osmctools";
     rev = version;
     sha256 = "1m8d3r1q1v05pkr8k9czrmb4xjszw6hvgsf3kn9pf0v14gpn4r8f";
   };

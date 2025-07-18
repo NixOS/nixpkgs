@@ -16,11 +16,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcl";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${finalAttrs.version}/abcl-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
+    hash = "sha256-uwShIj06mGCS4BD/2tE69QQp1VwagYdL8wIvlDa/sv8=";
   };
 
   # note for the future:
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://common-lisp.net/project/armedbear/";
     license = lib.licenses.gpl2Classpath;
     mainProgram = "abcl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })

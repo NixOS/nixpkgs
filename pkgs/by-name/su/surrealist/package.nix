@@ -1,21 +1,23 @@
 {
   buildGoModule,
   cairo,
-  cargo,
   cargo-tauri,
+  cargo,
   esbuild,
   fetchFromGitHub,
   gdk-pixbuf,
   glib-networking,
   gobject-introspection,
+  jq,
   lib,
   libsoup_3,
   makeBinaryWrapper,
+  moreutils,
   nodejs,
   openssl,
   pango,
   pkg-config,
-  pnpm,
+  pnpm_9,
   rustc,
   rustPlatform,
   stdenv,
@@ -48,45 +50,36 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "3.0.8";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-46CXldjhWc7H6wdKfMK2IlmBqfe0QHi/J1uFhbV42HY=";
+    hash = "sha256-FWNGC0QoEUu1h3e3sfgWmbvqcNNvfWXU7PEjTXxu9Qo=";
   };
 
-  # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
-  # as an actually optional dependency. It ends up in the `Cargo.lock` file of
-  # tauri, but not in the one of surrealist. We apply a patch to `Cargo.toml`
-  # and `Cargo.lock` to ensure that we have it in our vendor archive. This may
-  # be a result of the following bug:
-  # https://github.com/rust-lang/cargo/issues/10801
-  patches = [
-    ./0001-Cargo.patch
-  ];
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) patches src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-HmdEcjgxPyRsQqhU0P/C3KVgwZsSvfHjyzj0OHKe5jY";
-    patchFlags = [ "-p2" ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-Su9ZOPIskV5poeS8pgtri+sZANBpdgnuCsQqE4WKFdA=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uBDbBfWC9HxxzY1x4+rNo87D5C1zZa2beFLa5NkLs80=";
+    fetcherVersion = 1;
+    hash = "sha256-oreeV9g16/F7JGLApi0Uq+vTqNhIg7Lg1Z4k00RUOYI=";
   };
 
   nativeBuildInputs = [
     cargo
     cargo-tauri.hook
     gobject-introspection
+    jq
     makeBinaryWrapper
+    moreutils
     nodejs
-    pnpm.configHook
     pkg-config
+    pnpm_9.configHook
     rustc
     rustPlatform.cargoSetupHook
   ];
@@ -107,6 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  # Deactivate the upstream update mechanism
+  postPatch = ''
+    jq '
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
+    ' \
+    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
 
   postFixup = ''
     wrapProgram "$out/bin/surrealist" \

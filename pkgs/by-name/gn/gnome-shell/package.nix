@@ -1,7 +1,7 @@
 {
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   lib,
   stdenv,
   docutils,
@@ -24,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  perl,
   desktop-file-utils,
   libpulseaudio,
   libical,
@@ -70,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.2";
+  version = "48.3";
 
   outputs = [
     "out"
@@ -79,13 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QYTQGhq4LLQh0couK8zgKSzrRsTHSeYbC95LdQBNLgA=";
+    hash = "sha256-+wID/HSFk/FOUXMmGOHwQlJf1xl2Sg/bDuP2/kE6mys=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
       tecla = "${lib.getBin gnome-tecla}/bin/tecla";
@@ -118,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     gi-docgen
-    perl
     wrapGAppsHook4
     sassc
     desktop-file-utils
@@ -186,11 +183,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.pl
+    patchShebangs \
+      src/data-to-c.py \
+      meson/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
+  '';
+
+  preInstall = ''
+    # gnome-shell contains GSettings schema overrides for Mutter.
+    schemadir="$out/share/glib-2.0/schemas"
+    mkdir -p "$schemadir"
+    cp "${glib.getSchemaPath mutter}/org.gnome.mutter.gschema.xml" "$schemadir"
   '';
 
   postInstall = ''
@@ -239,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 

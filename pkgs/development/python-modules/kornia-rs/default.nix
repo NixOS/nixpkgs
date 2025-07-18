@@ -6,7 +6,6 @@
   rustPlatform,
   cmake,
   nasm,
-  substituteAll,
   libiconv,
 }:
 
@@ -32,19 +31,15 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   cargoRoot = "py-kornia";
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  # The path dependency doesn't vendor the dependencies correctly, so get kornia-rs from crates instead.
-  patches = [
-    (substituteAll {
-      src = ./kornia-rs-from-crates.patch;
-      inherit version;
-    })
-  ];
-
-  prePatch = ''
-    cp ${./Cargo.lock} py-kornia/Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-VQtPfTmT9UGM0fIMeZF/1lUqQeyP63naoYZ7UuL6hFg=";
+  };
 
   maturinBuildFlags = [
     "-m"

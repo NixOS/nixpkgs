@@ -201,7 +201,7 @@ let
       # the old service and then starts the new service after config updates.
       # Since we use path-based activation[1] here, the service unit will
       # immediately[2] be started by the path unit.  Probably that start is
-      # before config updates, whcih causes the service unit to use the old
+      # before config updates, which causes the service unit to use the old
       # config after nixos-rebuild switch.  Setting stopIfChanged to false works
       # around this issue by restarting the service after config updates.
       # [0]: https://nixos.org/manual/nixos/unstable/#sec-switching-systems

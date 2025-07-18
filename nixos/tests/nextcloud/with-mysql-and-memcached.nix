@@ -8,12 +8,11 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ eqyiel ];
-    };
+
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 

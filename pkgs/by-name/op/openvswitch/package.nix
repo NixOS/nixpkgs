@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${version}";
-    hash = "sha256-EudcANZ0aUImQ/HWSX1PRklvhP2D5L3ugXaC0GKyF0Q=";
+    hash = "sha256-iiFpX4w6vdsRxjhRcxXTTtSAb8WPwg1afqwgBpzjhoA=";
   };
 
   outputs = [
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
@@ -148,13 +148,13 @@ stdenv.mkDerivation rec {
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
     '';
     homepage = "https://www.openvswitch.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       adamcstephens
       kmcopper
       netixx
       xddxdd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,8 +1,7 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -29,31 +28,25 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.12.0";
+  version = "1.23.0-unstable-2025-04-21";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    # Unfortunately, upstream doesn't tag commits on GitHub, and the pypi source
-    # doesn't include tests. TODO: Write an update script that will detect the
-    # version from `dbt_common/__about__.py`.
-    rev = "5a401a9e8dd46e4582ac4edd2883e34714e77530";
-    hash = "sha256-SIMg6ewnE6kY+drqcPlYrxt1XlWBurZU62FI/QnHAHY=";
+    rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
+    hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
   };
-
-  patches = [
-    # https://github.com/dbt-labs/dbt-common/pull/211
-    ./protobuf_5.patch
-  ];
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "agate"
     "deepdiff"
+    # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
+    # https://pypi.org/project/isodate/0.7.2/
+    "isodate"
+    "protobuf"
   ];
 
   dependencies = [
@@ -78,10 +71,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion errors (TODO: Notify upstream)
-    "test_create_print_json"
-    "test_events"
-    "test_extra_dict_on_event"
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];

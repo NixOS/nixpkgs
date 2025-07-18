@@ -6,7 +6,7 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fetchpatch,
-  git,
+  gitMinimal,
   glibc,
   glibcLocales,
   lib,
@@ -25,13 +25,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.321.0";
+  version = "2.326.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KZ072v5kYlD78RGQl13Aj05DGzj2+r2akzyZ1aJn93A=";
+    hash = "sha256-bKOxTV6iAvC+QOsfSs1hTS9k/Ou+YGEwTr5hew23cLY=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -112,7 +112,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs =
     [
       which
-      git
+      gitMinimal
       # needed for `uname`
       coreutils
     ]
@@ -199,6 +199,11 @@ buildDotnetModule (finalAttrs: {
       "RunnerLayoutParts_CheckExternalsHash"
       "RunnerLayoutParts_CheckDotnetRuntimeHash"
     ]
+    # Strictly require a Debug configuration to work
+    ++ [
+      # https://github.com/actions/runner/blob/da3412e/src/Runner.Common/HostContext.cs#L260-L266
+      "GitHub.Runner.Common.Tests.HostContextL0.AuthMigrationAutoReset"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
@@ -217,6 +222,8 @@ buildDotnetModule (finalAttrs: {
 
   preCheck =
     ''
+      # Required by some tests
+      export GITHUB_ACTIONS_RUNNER_TRACE=1
       mkdir -p _layout/externals
     ''
     + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
@@ -328,12 +335,12 @@ buildDotnetModule (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/actions/runner/releases/tag/v${finalAttrs.version}";
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       veehaitch
       kfollesdal
       aanderse
@@ -345,6 +352,6 @@ buildDotnetModule (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

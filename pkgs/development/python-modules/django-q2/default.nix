@@ -14,18 +14,19 @@
   poetry-core,
   pytest-django,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "django-q2";
-  version = "1.7.4";
+  version = "1.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mp/IZkfT64xW42B1TEO6lSHxvLQbeH4td8vqZH7wUxM=";
+    tag = "v${version}";
+    hash = "sha256-L2IrLKszo2UCpeioAwI8c636KwQgNCEJjHUDY2Ctv4A=";
   };
 
   postPatch = ''
@@ -53,7 +54,7 @@ buildPythonPackage rec {
       new: old: {
         version = "3.1.0";
         src = old.src.override {
-          rev = "refs/tags/v${new.version}";
+          tag = "v${new.version}";
           hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
         };
       }
@@ -65,7 +66,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_q" ];
 
   preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
+    ${pkgs.valkey}/bin/redis-server &
     REDIS_PID=$!
   '';
 
@@ -78,10 +79,21 @@ buildPythonPackage rec {
     REDIS_HOST = "127.0.0.1";
   };
 
-  disabledTests = [
-    # requires a running mongodb
-    "test_mongo"
-  ];
+  disabledTests =
+    [
+      # requires a running mongodb
+      "test_mongo"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fails with an assertion
+      "test_max_rss"
+      "test_recycle"
+      # cannot connect to redis
+      "test_broker"
+      "test_custom"
+      "test_redis"
+      "test_redis_connection"
+    ];
 
   disabledTestPaths = [
     "django_q/tests/test_commands.py"
@@ -89,11 +101,13 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-vv" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Multiprocessing distributed task queue for Django based on Django-Q";
     homepage = "https://github.com/django-q2/django-q2";
     changelog = "https://github.com/django-q2/django-q2/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

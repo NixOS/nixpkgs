@@ -1,0 +1,40 @@
+https://bugzilla.opensuse.org/show_bug.cgi?id=1041534
+
+Avoid benchmarking the build machine
+to determine compilation results
+
+Index: procmail-3.24/src/autoconf
+===================================================================
+--- procmail-3.24.orig/src/autoconf
++++ procmail-3.24/src/autoconf
+@@ -951,6 +951,7 @@ void*realloc(),*malloc();
+ #endif
+ int main()
+ { char*p=malloc(1),*q=0;
++#if 0
+   size_t len,last,max=BLKSIZ*64;	      /* 1M on non-SMALLHEAP systems */
+   int count=0;
+   for(last=len=INITIAL;len<=max+INITIAL;len+=BLKSIZ)
+@@ -968,6 +969,7 @@ int main()
+    { puts("#define INEFFICIENTrealloc");
+      exit(1);
+    }
++#endif
+   exit(0);
+ }
+ HERE
+@@ -1248,10 +1250,9 @@ int main(argc,argv)int argc;const char*a
+ 	if(!iter)
+ 	   iter=1;
+ 	printf("\
+-/* Your system's strstr() is %.2f times %sER than my C-routine */\n",
+-	 syscnt>=iter?(double)syscnt/iter:(double)iter/syscnt,
+-	 syscnt>=iter?"SLOW":"FAST");
+-	if(syscnt>iter+iter/16)		  /* if at least 1.0625 times slower */
++/* Your system's strstr() is %sER than my C-routine */\n",
++	 "FAST");
++	if(0)		  /* always use system strstr to have reproducible binaries */
+ 	   printf("\
+ #define SLOWstrstr\t\t\t      /* using my substitute instead */\n");
+       }
+

@@ -10,24 +10,25 @@
   versionCheckHook,
 
   # passthru
-  ruff-lsp,
   nixosTests,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.8.6";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    tag = version;
-    hash = "sha256-9YvHmNiKdf5hKqy9tToFSQZM2DNLoIiChcfjQay8wbU=";
+    tag = finalAttrs.version;
+    hash = "sha256-KvTRoiySjLhm5jmYqXZAehRAzkB9CufyNisXkuagOv8=";
   };
 
+  cargoBuildFlags = [ "--package=ruff" ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-aTzTCDCMhG4cKD9wFNHv6A3VBUifnKgI8a6kelc3bAM=";
+  cargoHash = "sha256-5fK5VQ+UqkHmPdFz3FKAY9TVjvpePiYifrTHsxnkThM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     rust-jemalloc-sys
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -44,7 +45,8 @@ rustPlatform.buildRustPackage rec {
         --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
         --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
-    '';
+    ''
+  );
 
   # Run cargo tests
   checkType = "debug";
@@ -52,64 +54,47 @@ rustPlatform.buildRustPackage rec {
   # tests do not appear to respect linker options on doctests
   # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
   # This causes errors like "error: linker `cc` not found" on static builds
-  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    cargoCheckHook
-  '';
+  doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=added_package"
-    "--skip=add_search_path"
-    "--skip=changed_file"
-    "--skip=changed_versions_file"
-    "--skip=deleted_file"
-    "--skip=directory_deleted"
-    "--skip=directory_moved_to_trash"
-    "--skip=directory_moved_to_workspace"
-    "--skip=directory_renamed"
-    "--skip=hard_links_in_workspace"
-    "--skip=hard_links_to_target_outside_workspace"
-    "--skip=move_file_to_trash"
-    "--skip=move_file_to_workspace"
-    "--skip=nested_packages_delete_root"
-    "--skip=new_file"
-    "--skip=new_ignored_file"
-    "--skip=removed_package"
-    "--skip=rename_file"
-    "--skip=search_path"
-    "--skip=unix::changed_metadata"
-    "--skip=unix::symlinked_module_search_path"
-    "--skip=unix::symlink_inside_workspace"
+  # Exclude tests from `ty`-related crates, run everything else.
+  # Ordinarily we would run all the tests, but there is significant overlap with the `ty` package in nixpkgs,
+  # which ruff shares a monorepo with.
+  # As such, we leave running `ty` tests to the `ty` package, and concentrate on everything else.
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude=ty"
+    "--exclude=ty_ide"
+    "--exclude=ty_project"
+    "--exclude=ty_python_semantic"
+    "--exclude=ty_server"
+    "--exclude=ty_test"
+    "--exclude=ty_vendored"
+    "--exclude=ty_wasm"
   ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    tests =
-      {
-        inherit ruff-lsp;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-      };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "Extremely fast Python linter";
+    description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];
   };
-}
+})

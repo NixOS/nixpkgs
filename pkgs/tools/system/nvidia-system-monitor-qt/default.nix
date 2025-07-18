@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvidia-system-monitor-qt";
-  version = "1.6";
+  version = "1.6-1";
 
   src = fetchFromGitHub {
     owner = "congard";
     repo = "nvidia-system-monitor-qt";
     rev = "v${version}";
-    sha256 = "sha256-Gvg7MgCqvfiEfGDQJSR1v5uAB99ZULAuGPGCce/K7HE=";
+    sha256 = "sha256-JHK7idyk5UxgDyt+SzvYjTLmlNzx6+Z+OPYsRD4NWPg=";
   };
 
   buildInputs = [ qtbase ];

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-bio";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
     tag = version;
-    hash = "sha256-1L3AemXVqfgBDlRZorG7+8qt3f1Bm8L+Se+OwqEWwI4=";
+    hash = "sha256-yZa9Kl7+Rk4FLQkZIxa9UIsIGAo6YI4UAiJYbhhPIaI=";
   };
 
   build-system = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
-  pytestFlagsArray = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
+  enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 
   disabledTestPaths = [
     # don't know why, but this segfaults

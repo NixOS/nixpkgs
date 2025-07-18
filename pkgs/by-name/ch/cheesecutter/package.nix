@@ -7,7 +7,7 @@
   patchelf,
   SDL,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cheesecutter";
   version = "unstable-2021-02-27";
 

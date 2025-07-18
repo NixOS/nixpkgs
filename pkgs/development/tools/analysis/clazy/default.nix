@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clazy";
-  version = "1.13";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "clazy";
     tag = finalAttrs.version;
-    hash = "sha256-cNckRQ3+9HjJ1xYIDkosEP7K66+G0J3K9wt4OWLokLs=";
+    hash = "sha256-i/tqH2RHU+LwvMFI8ft92j0i04mQxLVIyrGXlqzMGWs=";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

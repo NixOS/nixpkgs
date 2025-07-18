@@ -1,17 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  installShellFiles,
+  stdenv,
+  testers,
+  kopia,
+}:
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.18.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7gQlBLmHvqsXXmSYllfsDJRx9VjW0AH7bXf6cG6lGOI=";
+    owner = "kopia";
+    repo = "kopia";
+    tag = "v${version}";
+    hash = "sha256-hKtrHv7MQjA/AQ/frjP2tPT6zqVPPGnBxYuhWtUgIl0=";
   };
 
-  vendorHash = "sha256-lCUEL7rtnv8/86ZTHM4HsYplDnWj1xsFh83JKW6qRrk=";
+  vendorHash = "sha256-npNSNlS8gvbxtB4KeaiSsCUzxwJ0kwvnzDda/CZRVmM=";
 
   subPackages = [ "." ];
 

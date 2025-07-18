@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.48.05";
+  version = "0.49.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
-    hash = "sha256-oOuHPOvs3qcQcibKyChe2AK1OB3JK/xRKUp1cj5p5PU=";
+    hash = "sha256-EmtJ8XXPb75W4VPj4Si9fdzVLDKVfm+8P6UZZlMpMdI=";
   };
 
   pythonRelaxDeps = true;
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       dnspython
       elementpath
       eventlet
+      extruct
       feedgen
       flask
       flask-compress
@@ -74,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
-    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
+    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mikaelfangel ];
     mainProgram = "changedetection.io";

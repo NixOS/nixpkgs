@@ -9,36 +9,35 @@ pkgs: lib: self: super:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias:
-    if alias.recurseForDerivations or false
-    then lib.removeAttrs alias ["recurseForDerivations"]
-    else alias;
+  removeRecurseForDerivations =
+    alias:
+    if alias.recurseForDerivations or false then
+      lib.removeAttrs alias [ "recurseForDerivations" ]
+    else
+      alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias:
-    if lib.isDerivation alias then
-      lib.dontDistribute alias
-    else alias;
+  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
   # Make sure that we are not shadowing something from node-packages.nix.
-  checkInPkgs = n: alias:
-    if builtins.hasAttr n super
-    then throw "Alias ${n} is still in node-packages.nix"
-    else alias;
+  checkInPkgs =
+    n: alias:
+    if builtins.hasAttr n super then throw "Alias ${n} is still in node-packages.nix" else alias;
 
-  mapAliases = aliases:
-    lib.mapAttrs (n: alias:
-      removeDistribute
-        (removeRecurseForDerivations
-          (checkInPkgs n alias)))
-      aliases;
+  mapAliases =
+    aliases:
+    lib.mapAttrs (
+      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+    ) aliases;
 in
 
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@commitlint/config-conventional" =
+    throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -48,6 +47,8 @@ mapAliases {
   "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  "@prisma/language-server" = throw "@prisma/language-server has been removed because it was broken"; # added 2025-03-23
+  "@shopify/cli" = throw "@shopify/cli has been removed because it was broken"; # added 2025-03-12
   "@tailwindcss/language-server" = pkgs.tailwindcss-language-server; # added 2024-01-22
   "@volar/vue-language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
@@ -94,8 +95,11 @@ mapAliases {
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
+  inherit (pkgs.elmPackages) elm-review;
+  escape-string-regexp = throw "escape-string-regexp was removed because it provides no executable"; # added 2025-03-12
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
+  inherit (pkgs) eas-cli; # added 2025-01-08
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
@@ -112,6 +116,7 @@ mapAliases {
   inherit (pkgs) gramma; # added 2024-06-26
   grammarly-languageserver = throw "grammarly-languageserver was removed because it requires EOL Node.js 16"; # added 2024-07-15
   inherit (pkgs) graphite-cli; # added 2024-01-25
+  inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
   gtop = pkgs.gtop; # added 2023-07-31
   hs-client = pkgs.hsd; # added 2023-08-20
@@ -121,6 +126,7 @@ mapAliases {
   inherit (pkgs) http-server; # added 2024-01-20
   hueadm = pkgs.hueadm; # added 2023-07-31
   inherit (pkgs) hyperpotamus; # added 2023-08-19
+  ijavascript = throw "ijavascript has been removed because it was broken"; # added 2025-03-18
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
@@ -132,6 +138,10 @@ mapAliases {
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
+  inherit (pkgs) lerna; # added 2025-02-12
+  less = pkgs.lessc; # added 2024-06-15
+  less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
+  lodash = throw "lodash was removed because it provides no executable"; # added 2025-03-18
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
@@ -149,15 +159,24 @@ mapAliases {
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
-  npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
+  npm = pkgs.nodejs.overrideAttrs (old: {
+    meta = old.meta // {
+      mainProgram = "npm";
+    };
+  }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  orval = throw "orval has been removed because it was broken"; # added 2025-03-23
+  parcel = throw "parcel has been removed because it was broken"; # added 2025-03-12
   parcel-bundler = self.parcel; # added 2023-09-04
   inherit (pkgs) patch-package; # added 2024-06-29
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
+  postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
+  inherit (pkgs) prettier; # added 2025-05-31
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) prisma; # added 2024-08-31
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
@@ -167,12 +186,15 @@ mapAliases {
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
   remod-cli = pkgs.remod; # added 2024-12-04
+  "reveal.js" = throw "reveal.js was removed because it provides no executable"; # added 2025-03-23
   reveal-md = pkgs.reveal-md; # added 2023-07-31
+  rollup = throw "rollup has been removed because it was broken"; # added 2025-04-28
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
   inherit (pkgs) serverless; # Added 2023-11-29
   shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
   inherit (pkgs) snyk; # Added 2023-08-30
+  "socket.io" = throw "socket.io was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
@@ -182,6 +204,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
@@ -200,6 +223,45 @@ mapAliases {
   inherit (pkgs) textlint-rule-unexpanded-acronym; # Added 2024-05-17
   inherit (pkgs) textlint-rule-write-good; # Added 2024-05-16
   thelounge = pkgs.thelounge; # Added 2023-05-22
+  thelounge-plugin-closepms = throw "thelounge-plugin-closepms has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-plugin-giphy = throw "thelounge-plugin-giphy has been removed because thelounge moved out of nodePackages"; # added 2025-03-12
+  thelounge-plugin-shortcuts = throw "thelounge-plugin-shortcuts has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-abyss = throw "thelounge-theme-abyss has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-amoled = throw "thelounge-theme-amoled has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-amoled-sourcecodepro = throw "thelounge-theme-amoled-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-bdefault = throw "thelounge-theme-bdefault has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-bmorning = throw "thelounge-theme-bmorning has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-chord = throw "thelounge-theme-chord has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-classic = throw "thelounge-theme-classic has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-common = throw "thelounge-theme-common has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-crypto = throw "thelounge-theme-crypto has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-discordapp = throw "thelounge-theme-discordapp has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-dracula = throw "thelounge-theme-dracula has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-dracula-official = throw "thelounge-theme-dracula-official has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-flat-blue = throw "thelounge-theme-flat-blue has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-flat-dark = throw "thelounge-theme-flat-dark has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-gruvbox = throw "thelounge-theme-gruvbox has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-hexified = throw "thelounge-theme-hexified has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-ion = throw "thelounge-theme-ion has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-light = throw "thelounge-theme-light has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-midnight = throw "thelounge-theme-midnight has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-mininapse = throw "thelounge-theme-mininapse has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-monokai-console = throw "thelounge-theme-monokai-console has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-mortified = throw "thelounge-theme-mortified has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-neuron-fork = throw "thelounge-theme-neuron-fork has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-new-morning = throw "thelounge-theme-new-morning has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-new-morning-compact = throw "thelounge-theme-new-morning-compact has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-nologo = throw "thelounge-theme-nologo has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-nord = throw "thelounge-theme-nord has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-onedark = throw "thelounge-theme-onedark has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-purplenight = throw "thelounge-theme-purplenight has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-scoutlink = throw "thelounge-theme-scoutlink has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-seraphimrp = throw "thelounge-theme-seraphimrp has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-solarized = throw "thelounge-theme-solarized has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-solarized-fork-monospace = throw "thelounge-theme-solarized-fork-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn = throw "thelounge-theme-zenburn has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn-monospace = throw "thelounge-theme-zenburn-monospace has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
+  thelounge-theme-zenburn-sourcecodepro = throw "thelounge-theme-zenburn-sourcecodepro has been removed because thelounge was moved out of nodePackages"; # added 2025-03-12
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
@@ -212,6 +274,7 @@ mapAliases {
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-css-languageserver-bin = throw "vscode-css-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
+  inherit (pkgs) vscode-json-languageserver; # added 2025-06-19
   vscode-json-languageserver-bin = throw "vscode-json-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-language-server = self.vls; # added 2023-08-20
@@ -219,6 +282,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) webpack-cli; # added 2024-12-03
   webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
+  webtorrent-cli = throw "webtorrent-cli has been removed because it was broken"; # added 2025-03-12
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29

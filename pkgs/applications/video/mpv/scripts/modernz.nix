@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 buildLua (finalAttrs: {
-  pname = "modernx";
-  version = "0.2.3";
+  pname = "modernz";
+  version = "0.2.8";
 
   scriptPath = "modernz.lua";
   src = fetchFromGitHub {
     owner = "Samillion";
     repo = "ModernZ";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yjxMBGXpu7Uyt0S9AW8ewGRNzbdu2S8N0st7VSKlqcc=";
+    hash = "sha256-pQttcfCaw9K8BD/T2CZdRAb9QEFobyeUj/KmNStgzEg=";
   };
 
   postInstall = ''

@@ -24,7 +24,9 @@ let
   go-turbo = stdenv.mkDerivation {
     pname = "go-turbo";
     version = go-turbo-version;
-    src = go-turbo-srcs.${stdenv.hostPlatform.system};
+    src =
+      go-turbo-srcs.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     nativeBuildInputs = [ autoPatchelfHook ];
     dontBuild = true;
     installPhase = ''
@@ -35,13 +37,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.1.157";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-1+5UaSYtY00F+1oJfovLIBPnmfRnKpIkQHpxb93rO2k=";
+    hash = "sha256-LFbC3GXYLCgBOYBdNJRdESGb37DuGBCEL8ak1Qf9DVA=";
     # turborepo requires .git directory
     leaveDotGit = true;
   };
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-AjdXclrNl1AHJ4LXq9I5Rk6KGyDaWXW187o2uLwRy/o=";
   };
 

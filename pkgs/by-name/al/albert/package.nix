@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  kdePackages,
   qt6,
   cmake,
   libqalculate,
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.26.11";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rPQ6nxUT7qiuOgmmQKCrYHl4kKJODe+nw4VNGjF+n/g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lkicEaQLHloa10A7rySDX7UpOFsDzOSL1xepL5bymd0=";
     fetchSubmodules = true;
   };
 
@@ -32,17 +33,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      kdePackages.qtkeychain
       libqalculate
       libarchive
       muparser
-      qt6.qtbase
-      qt6.qtscxml
-      qt6.qtsvg
-      qt6.qtdeclarative
-      qt6.qtwayland
-      qt6.qt5compat
-      qt6.qttools
     ]
+    ++ (with qt6; [
+      qt5compat
+      qtbase
+      qtdeclarative
+      qtscxml
+      qtsvg
+      qttools
+      qtwayland
+    ])
     ++ (with python3Packages; [
       python
       pybind11
@@ -77,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      ericsagnes
       synthetica
       eljamm
     ];

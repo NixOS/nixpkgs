@@ -113,6 +113,12 @@ stdenv.mkDerivation {
     )
     ++ [
       ./patches/256-color-resources.patch
+      (fetchPatchFromAUR {
+        name = "7-bit-queries.patch";
+        package = "rxvt-unicode-truecolor-wide-glyphs";
+        rev = "61ed186890a2bf37585e4704a095be61e6504ac6";
+        sha256 = "1xpv6g3bhxq5gp40k3rp8yjp4xrw7dr2g9sfkdmj0gi3rr0myx46";
+      })
     ]
     ++ lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
       name = "perl538-locale-c.patch";
@@ -164,5 +170,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.unix;
     license = licenses.gpl3;
+    mainProgram = "urxvt";
   };
 }

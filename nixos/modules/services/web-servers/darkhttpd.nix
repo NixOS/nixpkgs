@@ -1,19 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkIf mkOption optional;
-  inherit (lib.types) path bool listOf str port;
+  inherit (lib.types)
+    path
+    bool
+    listOf
+    str
+    port
+    ;
   cfg = config.services.darkhttpd;
 
-  args = lib.concatStringsSep " " ([
-    cfg.rootDir
-    "--port ${toString cfg.port}"
-    "--addr ${cfg.address}"
-  ] ++ cfg.extraArgs
-    ++ optional cfg.hideServerId             "--no-server-id"
-    ++ optional config.networking.enableIPv6 "--ipv6");
+  args = lib.concatStringsSep " " (
+    [
+      cfg.rootDir
+      "--port ${toString cfg.port}"
+      "--addr ${cfg.address}"
+    ]
+    ++ cfg.extraArgs
+    ++ optional cfg.hideServerId "--no-server-id"
+    ++ optional config.networking.enableIPv6 "--ipv6"
+  );
 
-in {
+in
+{
   options.services.darkhttpd = {
     enable = lib.mkEnableOption "DarkHTTPd web server";
 
@@ -52,7 +67,7 @@ in {
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Additional configuration passed to the executable.
       '';

@@ -5,12 +5,13 @@
   pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gdb,
   lldb,
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
+  pytest-retry,
   importlib-metadata,
   psutil,
   untangle,
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.11";
+  version = "1.8.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,14 +34,13 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-C/cLUMQNmiLn3z93LOg++3WeDUihMR9O3XKouL4uPqw=";
+    hash = "sha256-neo7A+bjAhuvqYY4YA3O0v5aWUKV91mqajI8gpY0QYs=";
   };
 
   patches =
     [
       # Use nixpkgs version instead of versioneer
-      (substituteAll {
-        src = ./hardcode-version.patch;
+      (replaceVars ./hardcode-version.patch {
         inherit version;
       })
 
@@ -62,15 +62,13 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-gdb.patch;
+      (replaceVars ./hardcode-gdb.patch {
         inherit gdb;
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-lldb.patch;
+      (replaceVars ./hardcode-lldb.patch {
         inherit lldb;
       })
     ];
@@ -86,9 +84,9 @@ buildPythonPackage rec {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "i686-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
+            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
         }
@@ -102,6 +100,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     pytest-timeout
+    pytest-retry
 
     ## Used by test helpers:
     importlib-metadata
@@ -132,7 +131,12 @@ buildPythonPackage rec {
   '';
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" ];
+  pytestFlags = [ "--timeout=0" ];
+
+  disabledTests = [
+    # hanging test (flaky)
+    "test_systemexit"
+  ];
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
@@ -142,7 +146,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
-    changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [
@@ -150,8 +154,8 @@ buildPythonPackage rec {
       "i686-linux"
       "aarch64-linux"
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
   };
 }

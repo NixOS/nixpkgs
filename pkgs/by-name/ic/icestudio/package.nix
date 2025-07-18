@@ -5,6 +5,7 @@
   buildNpmPackage,
   makeDesktopItem,
   makeWrapper,
+  unstableGitUpdater,
 
   nwjs,
   python3,
@@ -12,13 +13,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0-unstable-2024-11-18";
+  version = "0.12-unstable-2025-03-08";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "87d057adb1e795352a7dd67666a69ada4269b2e8";
-    hash = "sha256-VZuc5Wa6o5PMUE+P4EMDl/pI/zmcff9OEhqeCfS4bzE=";
+    rev = "46d39da2613aa2f55a068b50e7ac45a8f270005d";
+    hash = "sha256-UNRNJubM9ePjXhqZ9RiZQIxGBMM3nOye83S7J8wCHMg=";
   };
 
   collection = fetchurl {
@@ -29,7 +30,7 @@ let
   app = buildNpmPackage {
     pname = "icestudio-app";
     inherit version src;
-    npmDepsHash = "sha256-CbrnhnhCG8AdAqySO6fB5hZ128lHyC3WH/vZcFtv6Ko=";
+    npmDepsHash = "sha256-Dpnx23iq0fK191DXFgIfnbi+MLEp65H6eL81Icg4H4U=";
     sourceRoot = "${src.name}/app";
     dontNpmBuild = true;
     installPhase = ''
@@ -50,7 +51,7 @@ in
 buildNpmPackage rec {
   pname = "icestudio";
   inherit version src;
-  npmDepsHash = "sha256-y1lo5+qJ6JBxjt7wtUmTHuJHMH9Mztf6xmmadI8zBgA=";
+  npmDepsHash = "sha256-ZHvXC0hpAcPMsHhxQWELFC2b+WBNoEvbtLLNJsDhMso=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies
@@ -101,6 +102,9 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -110,15 +114,13 @@ buildNpmPackage rec {
     description = "Visual editor for open FPGA boards";
     homepage = "https://github.com/FPGAwars/icestudio/";
     license = lib.licenses.gpl2Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        kiike
-        jleightcap
-        rcoeurjoly
-        amerino
-      ]
-      ++ [ lib.teams.ngi ];
+    maintainers = with lib.maintainers; [
+      kiike
+      jleightcap
+      rcoeurjoly
+      amerino
+    ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "icestudio";
     platforms = lib.platforms.linux;
   };

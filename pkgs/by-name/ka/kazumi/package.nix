@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   webkitgtk_4_1,
   alsa-lib,
   libayatana-appindicator,
@@ -11,23 +11,27 @@
   mimalloc,
   mpv,
   mpv-unwrapped,
+  runCommand,
+  yq,
+  kazumi,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
-flutter327.buildFlutterApplication rec {
+
+flutter332.buildFlutterApplication rec {
   pname = "kazumi";
-  version = "1.5.0";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-YYg8DpW/O517R9YZ9jpikNIy2MfLQdiLsdhO3uhCusc=";
+    hash = "sha256-Tzg8vFu2/ZLHQ1Ijp4et+qNPX0ytTZ//zVqQHJ6QBxs=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     webkitgtk_4_1
@@ -89,32 +93,51 @@ flutter327.buildFlutterApplication rec {
       };
   };
 
-  gitHashes = {
-    desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
-    webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
-    media_kit = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_android_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_ios_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_linux = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_macos_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_windows_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-  };
+  gitHashes =
+    let
+      media_kit-hash = "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=";
+    in
+    {
+      desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
+      webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
+      media_kit = media_kit-hash;
+      media_kit_libs_android_video = media_kit-hash;
+      media_kit_libs_ios_video = media_kit-hash;
+      media_kit_libs_linux = media_kit-hash;
+      media_kit_libs_macos_video = media_kit-hash;
+      media_kit_libs_video = media_kit-hash;
+      media_kit_libs_windows_video = media_kit-hash;
+      media_kit_video = media_kit-hash;
+    };
 
   postInstall = ''
-    install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
-    install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+    ln -snf ${mpv}/lib/libmpv.so.2 $out/app/kazumi/lib/libmpv.so.2
+    install -Dm0644 assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
+    install -Dm0644 assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (kazumi) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "kazumi.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Watch Animes online with danmaku support";
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

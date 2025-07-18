@@ -7,7 +7,8 @@
 rustPlatform.buildRustPackage rec {
   pname = "buckle";
   version = "1.1.0";
-  cargoHash = "sha256-O90/Xo9WjLVGFEkh6S6IyvanceRBJHneEret6W8e5Yc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2QUgyml4ebPLt0oXrdCNYIORvVyBKvsDfC+ZgsVn+cQ=";
 
   src = fetchFromGitHub {
     owner = "benbrittain";

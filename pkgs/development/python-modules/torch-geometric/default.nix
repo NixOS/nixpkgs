@@ -57,6 +57,8 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -148,20 +150,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
-      # TODO: try to re-enable when triton will have been updated to 3.0
-      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-      # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
-      "test_compile_hetero_conv_graph_breaks"
-      "test_compile_multi_aggr_sage_conv"
-
       # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
       # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
       "test_asap"
@@ -169,11 +162,51 @@ buildPythonPackage rec {
 
       # AttributeError: type object 'Any' has no attribute '_name'
       "test_type_repr"
+
+      # AttributeError: module 'torch.fx._symbolic_trace' has no attribute 'List'
+      "test_set_clear_mask"
+      "test_sequential_to_hetero"
+      "test_to_fixed_size"
+      "test_to_hetero_basic"
+      "test_to_hetero_with_gcn"
+      "test_to_hetero_with_basic_model"
+      "test_to_hetero_and_rgcn_equal_output"
+      "test_graph_level_to_hetero"
+      "test_hetero_transformer_self_loop_error"
+      "test_to_hetero_validate"
+      "test_to_hetero_on_static_graphs"
+      "test_to_hetero_with_bases"
+      "test_to_hetero_with_bases_and_rgcn_equal_output"
+      "test_to_hetero_with_bases_validate"
+      "test_to_hetero_with_bases_on_static_graphs"
+      "test_to_hetero_with_bases_save"
+
+      # Failed: DID NOT WARN.
+      "test_to_hetero_validate"
+      "test_to_hetero_with_bases_validate"
+
+      # Failed: DID NOT RAISE
+      "test_scatter_backward"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # This test uses `torch.jit` which might not be working on darwin:
       # RuntimeError: required keyword attribute 'value' has the wrong type
       "test_traceable_my_conv_with_self_loops"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_compile"
+
+      # RuntimeError: Python 3.13+ not yet supported for torch.compile
+      "test_compile_graph_breaks"
+      "test_compile_multi_aggr_sage_conv"
+      "test_compile_hetero_conv_graph_breaks"
+
+      # AttributeError: module 'typing' has no attribute 'io'. Did you mean: 'IO'?
+      "test_packaging"
+
+      # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
+      "test_feature_store"
     ];
 
   meta = {

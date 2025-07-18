@@ -1,0 +1,93 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0611614fe18..a6dcb2f04b6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2567,7 +2567,7 @@ if(WITH_COMPILER_SHORT_FILE_MACRO)
+   )
+   if(C_MACRO_PREFIX_MAP AND CXX_MACRO_PREFIX_MAP)
+     if(APPLE)
+-      if(XCODE AND ${XCODE_VERSION} VERSION_LESS 12.0)
++      if(FALSE)
+         # Developers may have say LLVM Clang-10.0.1 toolchain (which supports the flag)
+         # with Xcode-11 (the Clang of which doesn't support the flag).
+         message(
+diff --git a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platform/platform_apple.cmake
+index b2db64bbd2e..aac4b552655 100644
+--- a/build_files/cmake/platform/platform_apple.cmake
++++ b/build_files/cmake/platform/platform_apple.cmake
+@@ -55,7 +55,6 @@ if(NOT DEFINED LIBDIR)
+   endif()
+ endif()
+ if(NOT EXISTS "${LIBDIR}/.git")
+-  message(FATAL_ERROR "Mac OSX requires pre-compiled libs at: '${LIBDIR}'")
+ endif()
+ if(FIRST_RUN)
+   message(STATUS "Using pre-compiled LIBDIR: ${LIBDIR}")
+@@ -121,10 +120,6 @@ if(WITH_CODEC_SNDFILE)
+   find_library(_sndfile_VORBIS_LIBRARY NAMES vorbis HINTS ${LIBDIR}/ffmpeg/lib)
+   find_library(_sndfile_VORBISENC_LIBRARY NAMES vorbisenc HINTS ${LIBDIR}/ffmpeg/lib)
+   list(APPEND LIBSNDFILE_LIBRARIES
+-    ${_sndfile_FLAC_LIBRARY}
+-    ${_sndfile_OGG_LIBRARY}
+-    ${_sndfile_VORBIS_LIBRARY}
+-    ${_sndfile_VORBISENC_LIBRARY}
+   )
+ 
+   print_found_status("SndFile libraries" "${LIBSNDFILE_LIBRARIES}")
+@@ -168,9 +163,7 @@ if(WITH_CODEC_FFMPEG)
+   set(FFMPEG_ROOT_DIR ${LIBDIR}/ffmpeg)
+   set(FFMPEG_FIND_COMPONENTS
+     avcodec avdevice avformat avutil
+-    mp3lame ogg opus swresample swscale
+-    theora theoradec theoraenc vorbis vorbisenc
+-    vorbisfile vpx x264)
++    swresample swscale)
+   if(EXISTS ${LIBDIR}/ffmpeg/lib/libaom.a)
+     list(APPEND FFMPEG_FIND_COMPONENTS aom)
+   endif()
+@@ -285,7 +278,6 @@ endif()
+ add_bundled_libraries(boost/lib)
+ 
+ if(WITH_CODEC_FFMPEG)
+-  string(APPEND PLATFORM_LINKFLAGS " -liconv") # ffmpeg needs it !
+ endif()
+ 
+ if(WITH_PUGIXML)
+@@ -361,7 +353,7 @@ endif()
+ # CMake FindOpenMP doesn't know about AppleClang before 3.12, so provide custom flags.
+ if(WITH_OPENMP)
+   if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+-    if(${CMAKE_C_COMPILER_VERSION} VERSION_GREATER_EQUAL 17.0)
++    if(FALSE) # clang in nix was compatible with openmp
+       if(WITH_STRICT_BUILD_OPTIONS)
+         message(SEND_ERROR "OpenMP library is not compatible with the current Clang version")
+       else()
+@@ -446,7 +438,7 @@ string(APPEND PLATFORM_LINKFLAGS
+   " -Wl,-unexported_symbols_list,'${PLATFORM_SYMBOLS_MAP}'"
+ )
+ 
+-if(${XCODE_VERSION} VERSION_GREATER_EQUAL 15.0)
++if(FALSE)
+   if("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "x86_64")
+     # Silence "no platform load command found in <static library>, assuming: macOS".
+     string(APPEND PLATFORM_LINKFLAGS " -Wl,-ld_classic")
+diff --git a/source/blender/blendthumb/CMakeLists.txt b/source/blender/blendthumb/CMakeLists.txt
+index 935b3f94ee1..f3d73637f71 100644
+--- a/source/blender/blendthumb/CMakeLists.txt
++++ b/source/blender/blendthumb/CMakeLists.txt
+@@ -65,15 +65,6 @@ elseif(APPLE)
+     # Prevent Xcode from overwriting the signature.
+     XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+   )
+-  # CMake needs the target defined in the same file as add_custom_command.
+-  # It needs to be code-signed (ad-hoc in this case)
+-  # even on developer machine to generate thumbnails.
+-  # Command taken from XCode build process.
+-  add_custom_command(
+-    TARGET blender-thumbnailer POST_BUILD
+-    COMMAND codesign --deep --force --sign - --entitlements "${CMAKE_SOURCE_DIR}/release/darwin/thumbnailer_entitlements.plist"
+-    --timestamp=none $<TARGET_BUNDLE_DIR:blender-thumbnailer>
+-  )
+ elseif(UNIX)
+   # -----------------------------------------------------------------------------
+   # Build `blender-thumbnailer` executable

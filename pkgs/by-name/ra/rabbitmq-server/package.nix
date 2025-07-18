@@ -42,12 +42,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-  version = "4.0.5";
+  version = "4.0.9";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Jn6DvSvegezhq+zjZbUdHR/b6Kgg+QqZwDDrxu21+0g=";
+    hash = "sha256-imBxBn8RQS0jBGfT5KLLLt+fKvyybzLzPZu9DpFOos8=";
   };
 
   nativeBuildInputs = [
@@ -112,13 +112,16 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
-    out="$(env - LANG=C.utf8 HOME=/build ${placeholder "out"}/bin/rabbitmqctl version)"
+    out="$(env - LANG=C.utf8 HOME=$TMPDIR ${placeholder "out"}/bin/rabbitmqctl version)"
     if [[ "$out" != "$version" ]]; then
       echo "Rabbitmq should report version $version, but thinks it's version $out" >&2
       exit 1
     fi
     runHook postInstallCheck
   '';
+
+  # Needed for the check in installCheckPhase
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     vm-test = nixosTests.rabbitmq;

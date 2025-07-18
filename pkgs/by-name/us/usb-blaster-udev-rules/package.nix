@@ -1,10 +1,20 @@
-{ lib, stdenvNoCC }:
+{
+  lib,
+  stdenvNoCC,
+  udevCheckHook,
+}:
 
 stdenvNoCC.mkDerivation rec {
   name = "usb-blaster-udev-rules";
 
   udevRules = ./usb-blaster.rules;
   dontUnpack = true;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     install -Dm 644 "${udevRules}" "$out/lib/udev/rules.d/51-usbblaster.rules"

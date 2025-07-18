@@ -1,0 +1,31 @@
+From b3cd46bf1ea7ddc7ce26e9b713bb7fb5faadba40 Mon Sep 17 00:00:00 2001
+From: Ulysses Zhan <ulysseszhan@gmail.com>
+Date: Wed, 20 Mar 2024 21:57:47 -0700
+Subject: [PATCH] fix `Unknown option --pdf-page` when calling inkscape
+
+---
+ pdftowrite/pdftowrite.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pdftowrite/pdftowrite.py b/pdftowrite/pdftowrite.py
+index 6c12515..4d03fc2 100644
+--- a/pdftowrite/pdftowrite.py
++++ b/pdftowrite/pdftowrite.py
+@@ -79,7 +79,7 @@ def process_page(filename: str, page_num: int, output_dir: str, ns: argparse.Nam
+     opts = ['--pdf-poppler'] if ns.mode is Mode.POPPLER or ns.mode is Mode.MIXED else []
+     utils.inkscape_run([
+         *opts,
+-        f'--pdf-page={page_num}',
++        f'--pages={page_num}',
+         f'--export-dpi={ns.dpi}',
+         '--export-plain-svg',
+         '-o', output,
+@@ -90,7 +90,7 @@ def process_page(filename: str, page_num: int, output_dir: str, ns: argparse.Nam
+     if ns.mode is Mode.MIXED:
+         text_layer_output = str(Path(output_dir) / f'output-{page_num}-text.svg')
+         utils.inkscape_run([
+-            f'--pdf-page={page_num}',
++            f'--pages={page_num}',
+             f'--export-dpi={ns.dpi}',
+             '--export-plain-svg',
+             '-o', text_layer_output,

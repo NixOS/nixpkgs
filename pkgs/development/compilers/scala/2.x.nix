@@ -11,7 +11,6 @@
   git,
   gnused,
   nix,
-  nixfmt-classic,
   majorVersion,
 }:
 
@@ -19,18 +18,6 @@ let
   repo = "git@github.com:scala/scala.git";
 
   versionMap = {
-    "2.10" = {
-      version = "2.10.7";
-      hash = "sha256-koMRmRb2u3cU4HaihAzPItWIGbNVIo7RWRrm92kp8RE=";
-      pname = "scala_2_10";
-    };
-
-    "2.11" = {
-      version = "2.11.12";
-      hash = "sha256-sR19M2mcpPYLw7K2hY/ZU+PeK4UiyUP0zaS2dDFhlqg=";
-      pname = "scala_2_11";
-    };
-
     "2.12" = {
       version = "2.12.18";
       hash = "sha256-naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
@@ -98,17 +85,13 @@ stdenv.mkDerivation rec {
           git
           gnused
           nix
-          nixfmt-classic
         ]
       }
       versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
       oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
       if [ "$oldVersion" != "$latestTag" ]; then
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/development/compilers/scala/2.x.nix"
         update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi

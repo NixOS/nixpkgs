@@ -14,13 +14,13 @@
 }:
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprcursor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LOTmvTIxmaWtXF8OP6b6oENSdG/quWxhsO3dJQACBUw=";
+    hash = "sha256-IvneQb4YFlEXWjXaKeA0y6lL7Z6JqTAvSAlcMDWnjK4=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland cursor format, library and utilities";
     changelog = "https://github.com/hyprwm/hyprcursor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = with lib.maintainers; [
+      iynaix
+    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprcursor-util";
     platforms = lib.platforms.linux;
   };

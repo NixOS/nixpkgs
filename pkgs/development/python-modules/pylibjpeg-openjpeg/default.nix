@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-openjpeg";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
     tag = "v${version}";
-    hash = "sha256-cCDnARElNn+uY+HQ39OnGJRz2vTz0I8s0Oe+qGvqM1o=";
+    hash = "sha256-T38Ur5NLF9iPTrDwT3GYgI6621A90zWP/leUxSqA70w=";
   };
 
   # don't use vendored openjpeg submodule:
@@ -36,6 +36,8 @@ buildPythonPackage rec {
     rmdir lib/openjpeg
     cp -r ${openjpeg.src} lib/openjpeg
     chmod +rwX -R lib/openjpeg
+
+    substituteInPlace pyproject.toml --replace-fail "poetry-core >=1.8,<2" "poetry-core"
   '';
 
   dontUseCmakeConfigure = true;
@@ -60,18 +62,17 @@ buildPythonPackage rec {
     "lib/openjpeg"
   ];
 
-  pytestFlagsArray = [ "openjpeg/tests" ];
+  enabledTestPaths = [ "openjpeg/tests" ];
 
   pythonImportsCheck = [ "openjpeg" ];
 
   meta = {
     description = "A J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
+    changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/v${version}";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    # x86-linux: test_encode.py::TestEncodeBuffer failures
-    # darwin: numerous test failures, seemingly due to issues setting up test data
-    broken =
-      (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+    # darwin: numerous test failures, test dependency pydicom is marked as unsupported
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

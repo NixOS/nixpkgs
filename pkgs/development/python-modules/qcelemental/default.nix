@@ -4,37 +4,50 @@
   lib,
   fetchPypi,
   poetry-core,
+  ipykernel,
   networkx,
   numpy,
+  packaging,
   pint,
   pydantic,
   pytestCheckHook,
   pythonOlder,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.28.0";
-
+  version = "0.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2pb924jBcB+BKyU2mmoWnTXy1URsN8YuhgSMsPGxaKI=";
+    hash = "sha256-v2NO5lLn2V6QbikZiVEyJCM7HXBcJq/qyG5FHzFrPAQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    networkx
+  dependencies = [
     numpy
+    packaging
     pint
     pydantic
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    viz = [
+      # TODO: nglview
+      ipykernel
+    ];
+    align = [
+      networkx
+      scipy
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "qcelemental" ];
 

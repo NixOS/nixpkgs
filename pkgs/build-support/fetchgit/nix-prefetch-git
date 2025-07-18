@@ -11,6 +11,7 @@ leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
 fetchSubmodules=
 fetchLFS=
 builder=
+fetchTags=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
@@ -47,6 +48,7 @@ Options:
       --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
+      --name n        Symbolic store path name to use for the result (default: based on URL)
       --branch-name   Branch name to check out into
       --sparse-checkout Only fetch and checkout part of the repository.
       --non-cone-mode Use non-cone mode for sparse checkouts.
@@ -55,6 +57,7 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-lfs     Fetch git Large File Storage (LFS) files.
       --fetch-submodules Fetch submodules.
+      --fetch-tags    Fetch all tags (useful for git describe).
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
       --quiet         Only print the final json summary.
 "
@@ -75,6 +78,7 @@ for arg; do
             --url) argfun=set_url;;
             --rev) argfun=set_rev;;
             --hash) argfun=set_hashType;;
+            --name) argfun=set_symbolicName;;
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --sparse-checkout) argfun=set_sparseCheckout;;
@@ -84,6 +88,7 @@ for arg; do
             --leave-dotGit) leaveDotGit=true;;
             --fetch-lfs) fetchLFS=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --fetch-tags) fetchTags=true;;
             --builder) builder=true;;
             -h|--help) usage; exit;;
             *)
@@ -209,8 +214,8 @@ checkout_ref(){
 init_submodules(){
     # shallow with leaveDotGit will change hashes
     [[ -z "$deepClone" ]] && [[ -z "$leaveDotGit" ]] && \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
+    clean_git submodule update --init --recursive --checkout -j ${NIX_BUILD_CORES:-1} --progress
 }
 
 clone(){
@@ -231,6 +236,12 @@ clone(){
         echo 1>&2 "Unable to checkout $hash$ref from $url."
         exit 1
     )
+
+    # Fetch all tags if requested
+    if test -n "$fetchTags"; then
+        echo "fetching all tags..." >&2
+        clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
+    fi
 
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
@@ -401,6 +412,7 @@ print_results() {
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
+  "fetchTags": $([[ -n "$fetchTags" ]] && echo true || echo false),
   "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
 }
 EOF
@@ -424,6 +436,12 @@ if test -z "$branchName"; then
     branchName=fetchgit
 fi
 
+if [ -v symbolicName ]; then
+    storePathName="$symbolicName"
+else
+    storePathName="$(url_to_name "$url" "$rev")"
+fi
+
 tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
 exit_handlers+=(remove_tmpHomePath)
 ln -s "${NETRC:-$HOME/.netrc}" "$tmpHomePath/.netrc"
@@ -443,7 +461,7 @@ else
     # If the hash was given, a file with that hash may already be in the
     # store.
     if test -n "$expHash"; then
-        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" "$(url_to_name "$url" "$rev")")
+        finalPath=$(nix-store --print-fixed-path --recursive "$hashType" "$expHash" "$storePathName")
         if ! nix-store --check-validity "$finalPath" 2> /dev/null; then
             finalPath=
         fi
@@ -458,7 +476,7 @@ else
         tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
         exit_handlers+=(remove_tmpPath)
 
-        tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
+        tmpFile="$tmpPath/$storePathName"
         mkdir -p "$tmpFile"
 
         # Perform the checkout.

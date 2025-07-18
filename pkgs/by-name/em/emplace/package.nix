@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-0BYAJOHymBVAssNfU5nPYTSvPbLEDCKoRVovIm6evUQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nBpM8i4jlxtnaonOx71DWjbLS8tYznJkoR2JI/B25LM=";
 
   meta = {
     description = "Mirror installed software on multiple machines";

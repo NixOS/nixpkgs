@@ -13,12 +13,13 @@
   sphinx,
   systemd,
   systemdLibs,
+  testers,
   opensslSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "systemd-netlogd";
-  version = "1.4.3";
+  version = "1.4.4";
 
   outputs = [
     "out"
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-netlogd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NwDmNrq2rLing5BQrSXoNDErcLK0Q8go9TN9zLSW5rE=";
+    hash = "sha256-Kgr6KZp2SSLG8xnqXNWsDgIa9rNnBGcN+TkuAbr+yAA=";
   };
 
   # Fixup a few installation paths
@@ -69,9 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Make sure x86_64-linux -> aarch64-linux cross compilation works
-    tests = lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
-      aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
-    };
+    tests =
+      {
+        version = testers.testVersion { package = finalAttrs.finalPackage; };
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+        aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
+      };
 
     updateScript = nix-update-script { };
   };

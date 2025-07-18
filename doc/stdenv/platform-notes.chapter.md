@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 }
 ```
 
-Note: It is possible to have multiple, different instances of `darwinMinVerisonHook` in your inputs.
+Note: It is possible to have multiple, different instances of `darwinMinVersionHook` in your inputs.
 When that happens, the one with the  highest version is always used.
 
 #### Picking an SDK version {#sec-darwin-troubleshooting-picking-sdk-version}

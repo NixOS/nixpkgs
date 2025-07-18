@@ -1,23 +1,24 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, libkrb5
-, zlib
-, openssl
-, callPackage
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  libkrb5,
+  zlib,
+  openssl,
+  callPackage,
 }:
 
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.1.0.3";
+  version = "6.1.7.8";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-3NOeKdXb1tz4qx+tCs6QKfze2KLfyodKwt/aNx6tLvI=";
+    hash = "sha256-bdjkYrfaC/5rKqRmKr+NVmCMU871WJFNRdh92i8GJF8=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
@@ -35,14 +36,17 @@ buildDotnetModule rec {
     # useAppHost doesn't explicitly disable this
     "-p:UseAppHost=false"
     "-p:RuntimeIdentifiers="
-  ]
-  ;
+  ];
   dotnetBuildFlags = [
     "--framework=net9.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
-  runtimeDeps = [ libkrb5 zlib openssl ];
+  runtimeDeps = [
+    libkrb5
+    zlib
+    openssl
+  ];
 
   doCheck = true;
 

@@ -7,15 +7,16 @@
   which,
   coreutils,
   openssh,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck";
-  version = "5.8.0-20241205";
+  version = "5.13.0-20250625";
 
   src = fetchurl {
     url = "https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-${finalAttrs.version}.war/artifacts/rundeck-${finalAttrs.version}.war/download?distro_version_id=167";
-    hash = "sha256-fqmRYzmBteiZjCmBj30J6RLBzgZgwLcFzUKNFIsH2MQ=";
+    hash = "sha256-RqyJ0/gZQ1gIYSPoYfGGN5VB5ubUMl00pHPlw6v6tBQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,26 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck/rundeck.war
 
     mkdir -p $out/bin
-    # Main rundeck executable
     makeWrapper ${lib.getExe jdk17} $out/bin/rundeck \
-      --set RDECK_BASE "/var/lib/rundeck" \
-      --add-flags "-Xmx4g" \
-      --add-flags "-Drdeck.base=/var/lib/rundeck" \
-      --add-flags "-Drundeck.config.location=/etc/rundeck" \
       --add-flags "-jar $out/share/rundeck/rundeck.war" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          which
-          coreutils
-          openssh
-        ]
-      }
-
-    # Installation helper script
-    makeWrapper ${lib.getExe jdk17} $out/bin/rundeck-install \
-      --set RDECK_BASE "/var/lib/rundeck" \
-      --add-flags "-jar $out/share/rundeck/rundeck.war" \
-      --add-flags "--installonly" \
       --prefix PATH : ${
         lib.makeBinPath [
           which
@@ -59,6 +42,22 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeScript "update-rundeck" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+    set -eu -o pipefail
+
+    latest_tag=$(curl -s "https://api.github.com/repos/rundeck/rundeck/tags" | jq -r '.[0].name')
+    version=$(echo "$latest_tag" | sed -E 's/^v//')
+    full_version="$version-$(date +"%Y%m%d")"
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$full_version" ]]; then
+      download_url="https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-$full_version.war/artifacts/rundeck-$full_version.war/download?distro_version_id=167"
+      hash=$(curl -L "$download_url" | nix-hash --flat --type sha256 --base32 - | nix --extra-experimental-features nix-command hash to-sri --type sha256)
+      update-source-version "$UPDATE_NIX_ATTR_PATH" "$full_version" "$hash"
+    fi
   '';
 
   meta = {
@@ -73,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.liberodark ];
+    maintainers = with lib.maintainers; [ liberodark ];
+    mainProgram = "rundeck";
   };
 })

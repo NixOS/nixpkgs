@@ -90,7 +90,10 @@ in
 {
   name = "nvidia-container-toolkit";
   meta = with lib.maintainers; {
-    maintainers = [ ereslibre ];
+    maintainers = [
+      ereslibre
+      christoph-heiss
+    ];
   };
   defaults =
     { config, ... }:

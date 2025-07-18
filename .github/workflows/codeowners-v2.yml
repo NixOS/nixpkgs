@@ -1,5 +1,3 @@
-name: Codeowners v2
-
 # This workflow depends on two GitHub Apps with the following permissions:
 # - For checking code owners:
 #   - Permissions:
@@ -22,12 +20,24 @@ name: Codeowners v2
 #
 # Note that the latter is also used for ./eval.yml requesting reviewers.
 
-on:
-  pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened, edited]
+name: Codeowners v2
 
-# We don't need any default GitHub token
+on:
+  pull_request:
+    paths:
+      - .github/workflows/codeowners-v2.yml
+  pull_request_target:
+    types: [opened, ready_for_review, synchronize, reopened]
+
+concurrency:
+  group: codeowners-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
+
+defaults:
+  run:
+    shell: bash
 
 env:
   OWNERS_FILE: ci/OWNERS
@@ -35,77 +45,103 @@ env:
   DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
 
 jobs:
-  get-merge-commit:
-    uses: ./.github/workflows/get-merge-commit.yml
-
   # Check that code owners is valid
   check:
     name: Check
-    runs-on: ubuntu-24.04
-    needs: get-merge-commit
-    if: needs.get-merge-commit.outputs.mergedSha
+    runs-on: ubuntu-24.04-arm
     steps:
-    - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge and target commits
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
+          target-as-trusted: true
 
-    - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
-      if: github.repository_owner == 'NixOS'
-      with:
-        # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
-        name: nixpkgs-ci
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
-    # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR itself.
-    # We later build and run code from the base branch with access to secrets,
-    # so it's important this is not the PRs code.
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        path: base
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    - name: Build codeowners validator
-      run: nix-build base/ci -A codeownersValidator
+      - name: Build codeowners validator
+        run: nix-build trusted/ci -A codeownersValidator
 
-    - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
-      id: app-token
-      with:
-        app-id: ${{ vars.OWNER_RO_APP_ID }}
-        private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
+      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_RO_APP_ID }}
+          private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
 
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-        path: pr
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
 
-    - name: Validate codeowners
-      run: result/bin/codeowners-validator
-      env:
-        OWNERS_FILE: pr/${{ env.OWNERS_FILE }}
-        GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
-        REPOSITORY_PATH: pr
-        OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
-        # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
-        EXPERIMENTAL_CHECKS: "avoid-shadowing"
+      - name: Validate codeowners
+        if: steps.app-token.outputs.token
+        env:
+          OWNERS_FILE: untrusted/${{ env.OWNERS_FILE }}
+          GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY_PATH: untrusted
+          OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
+          # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
+          EXPERIMENTAL_CHECKS: "avoid-shadowing"
+        run: result/bin/codeowners-validator
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
 
   # Request reviews from code owners
   request:
     name: Request
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     steps:
-    - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
-    # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
-    # This is intentional, because we need to request the review of owners as declared in the base branch.
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
+      # This is intentional, because we need to request the review of owners as declared in the base branch.
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: trusted
 
-    - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
-      id: app-token
-      with:
-        app-id: ${{ vars.OWNER_APP_ID }}
-        private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+      - name: Build review request package
+        run: nix-build trusted/ci -A requestReviews
 
-    - name: Build review request package
-      run: nix-build ci -A requestReviews
+      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_APP_ID }}
+          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
+          permission-pull-requests: write
 
-    - name: Request reviews
-      run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
-      env:
-        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Request reviews
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+
+      - name: Log current API rate limits
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq

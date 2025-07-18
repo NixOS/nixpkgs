@@ -5,18 +5,20 @@
   nim,
   openssl,
   makeWrapper,
+
+  nix-update-script,
 }:
 
 buildNimPackage (
   final: prev: {
     pname = "nimble";
-    version = "0.16.4";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
       rev = "v${final.version}";
-      hash = "sha256-ASodRov4rO/IhjQRRdqVnLWMG1voXWM9F6R6VJd9qkM=";
+      hash = "sha256-XcXdhEtwnsHZGBTt1xU7HaJK2qyJ0s2xxk2O3XkbTXQ=";
       fetchSubmodules = true;
     };
 
@@ -32,11 +34,15 @@ buildNimPackage (
         --suffix PATH : ${lib.makeBinPath [ nim ]}
     '';
 
+    passthru.updateScript = nix-update-script { };
+
     meta = {
       description = "Package manager for the Nim programming language";
       homepage = "https://github.com/nim-lang/nimble";
+      changelog = "https://github.com/nim-lang/nimble/releases/tag/v${final.version}";
       license = lib.licenses.bsd3;
       mainProgram = "nimble";
+      maintainers = [ lib.maintainers.daylinmorgan ];
     };
   }
 )

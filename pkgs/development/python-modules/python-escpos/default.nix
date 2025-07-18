@@ -21,6 +21,7 @@
 
   jaconv,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
   scripttest,
   mock,
@@ -71,10 +72,6 @@ buildPythonPackage rec {
     # force the tests to use the module in $out
     rm -r src
 
-    # disable checking coverage
-    substituteInPlace pyproject.toml \
-        --replace-fail "--cov escpos --cov-report=xml" ""
-
     # allow tests to find the cli executable
     export PATH="$out/bin:$PATH"
   '';
@@ -82,6 +79,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jaconv
     pytestCheckHook
+    pytest-cov-stub
     pytest-mock
     scripttest
     mock

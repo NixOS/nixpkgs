@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.16.2";
+  version = "2.17.1";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     tag = finalAttrs.version;
-    hash = "sha256-awmWfVl7gMLROEkjYdSpbXnFaWQwEX9Ah8B9E0OOFm0=";
+    hash = "sha256-jsLhVKNr/4RWw2SVNkycm/xbcy1BKIf983oTnaJKV6U=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -117,10 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      joachifm
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ joachifm ];
     platforms = lib.platforms.unix;
   };
 })

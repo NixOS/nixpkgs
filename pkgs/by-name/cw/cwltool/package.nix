@@ -25,14 +25,14 @@ with py.pkgs;
 
 py.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20241217163858";
+  version = "3.1.20250110105449";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
     tag = version;
-    hash = "sha256-46x/7ewnt1eTu+1GdmPUExpiFfYE3mN8N8VFMM4r1Vk=";
+    hash = "sha256-V0CQiNkIw81s6e9224qcfbsOqBvMo34q+lRURpRetKs=";
   };
 
   postPatch = ''
@@ -40,6 +40,8 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail "prov == 1.5.1" "prov" \
       --replace-fail '"schema-salad >= 8.7, < 9",' '"schema-salad",' \
       --replace-fail "PYTEST_RUNNER + " ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy==1.14.1" "mypy"
   '';
 
   build-system = with py.pkgs; [
@@ -97,12 +99,12 @@ py.pkgs.buildPythonApplication rec {
     "cwltool"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
     changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
 }

@@ -9,8 +9,6 @@
   numpy,
   pkg-config,
 
-  # buildInputs
-  Accelerate,
   blas,
   lapack,
 
@@ -23,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.2.7";
+  version = "3.2.7.post2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     tag = version;
-    hash = "sha256-ZhY4h0C8aF3IjD9NMtevcNTSqX+tIUao9bC+WlP+uDk=";
+    hash = "sha256-A626gK30J4e/TrJMXYc+jMgYw7fNcnWfnTeXlyYQNMM=";
     fetchSubmodules = true;
   };
 
@@ -45,14 +43,10 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [ Accelerate ]
-    else
-      [
-        blas
-        lapack
-      ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    blas
+    lapack
+  ];
 
   dependencies = [
     numpy

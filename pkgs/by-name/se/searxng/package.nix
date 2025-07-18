@@ -3,18 +3,24 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+  unstableGitUpdater,
 }:
-
-python3.pkgs.toPythonModule (
-  python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = final: prev: { };
+  };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-11-25";
+    version = "0-unstable-2025-07-16";
+    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "bad070b4bc2c5afa73edea546c68d3e142a476fc";
-      hash = "sha256-pJl0pD+lx1L7CMKEZaK15ahd96gwWKsR53EVF7RRNtY=";
+      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
+      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
     };
 
     postPatch = ''
@@ -41,28 +47,29 @@ python3.pkgs.toPythonModule (
       '';
 
     dependencies =
-      with python3.pkgs;
+      with python.pkgs;
       [
         babel
         brotli
         certifi
+        cryptography
         fasttext-predict
         flask
         flask-babel
+        httpx
+        httpx-socks
         isodate
         jinja2
         lxml
+        markdown-it-py
         msgspec
         pygments
         python-dateutil
         pyyaml
-        redis
+        setproctitle
         typer
         uvloop
-        setproctitle
-        httpx
-        httpx-socks
-        markdown-it-py
+        valkey
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;
@@ -73,16 +80,17 @@ python3.pkgs.toPythonModule (
     postInstall = ''
       # Create a symlink for easier access to static data
       mkdir -p $out/share
-      ln -s ../${python3.sitePackages}/searx/static $out/share/
+      ln -s ../${python.sitePackages}/searx/static $out/share/
 
       # copy config schema for the limiter
-      cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
     '';
 
     passthru = {
       tests = {
         searxng = nixosTests.searx;
       };
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
     meta = with lib; {

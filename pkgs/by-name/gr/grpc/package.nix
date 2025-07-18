@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPackages
-, cmake
-, zlib
-, c-ares
-, pkg-config
-, re2
-, openssl
-, protobuf
-, grpc
-, abseil-cpp
-, libnsl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  buildPackages,
+  cmake,
+  zlib,
+  c-ares,
+  pkg-config,
+  re2,
+  openssl,
+  protobuf,
+  grpc,
+  abseil-cpp,
+  libnsl,
 
-# tests
-, python3
-, arrow-cpp
+  # tests
+  python3,
+  arrow-cpp,
 }:
 
 # This package should be updated together with all related python grpc packages
@@ -24,64 +26,86 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.68.1"; # N.B: if you change this, please update:
-    # pythonPackages.grpcio
-    # pythonPackages.grpcio-channelz
-    # pythonPackages.grpcio-health-checking
-    # pythonPackages.grpcio-reflection
-    # pythonPackages.grpcio-status
-    # pythonPackages.grpcio-testing
-    # pythonPackages.grpcio-tools
+  version = "1.73.1"; # N.B: if you change this, please update:
+  # pythonPackages.grpcio
+  # pythonPackages.grpcio-channelz
+  # pythonPackages.grpcio-health-checking
+  # pythonPackages.grpcio-reflection
+  # pythonPackages.grpcio-status
+  # pythonPackages.grpcio-testing
+  # pythonPackages.grpcio-tools
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-Rp+vg90biF6XXa4rVaLPWMjmWYut9XmBPgxQDTnltzk=";
+    hash = "sha256-VAr+f+xqZfrP4XfCnZ9KxVTO6pHQe9gB2DgaQuen840=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      # armv6l support, https://github.com/grpc/grpc/pull/21341
-      name = "grpc-link-libatomic.patch";
-      url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
-      hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
-    })
-    # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./dynamic-lookup-darwin.patch);
+  patches =
+    [
+      (fetchpatch {
+        # armv6l support, https://github.com/grpc/grpc/pull/21341
+        name = "grpc-link-libatomic.patch";
+        url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
+        hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
+      })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
+      ./dynamic-lookup-darwin.patch
+      # https://github.com/grpc/grpc/issues/39170
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/rdhafidh/vcpkg/0ae97b7b81562bd66ab99d022551db1449c079f9/ports/grpc/00017-add-src-upb.patch";
+        hash = "sha256-0zaJqeCM90DTtUR6xCUorahUpiJF3D/KODYkUXQh2ok=";
+      })
+    ];
 
-  nativeBuildInputs = [ cmake pkg-config ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
-  propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ openssl protobuf ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  propagatedBuildInputs = [
+    c-ares
+    re2
+    zlib
+    abseil-cpp
+  ];
+  buildInputs = [
+    openssl
+    protobuf
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
-  cmakeFlags = [
-    "-DgRPC_ZLIB_PROVIDER=package"
-    "-DgRPC_CARES_PROVIDER=package"
-    "-DgRPC_RE2_PROVIDER=package"
-    "-DgRPC_SSL_PROVIDER=package"
-    "-DgRPC_PROTOBUF_PROVIDER=package"
-    "-DgRPC_ABSL_PROVIDER=package"
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-    "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
-  ]
-  # The build scaffold defaults to c++14 on darwin, even when the compiler uses
-  # a more recent c++ version by default [1]. However, downgrades are
-  # problematic, because the compatibility types in abseil will have different
-  # interface definitions than the ones used for building abseil itself.
-  # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
-  ++ (let
-    defaultCxxIsOlderThan17 =
-      (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
-       || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
-    in lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17)
-  [
-    "-DCMAKE_CXX_STANDARD=17"
-  ]);
+  cmakeFlags =
+    [
+      "-DgRPC_ZLIB_PROVIDER=package"
+      "-DgRPC_CARES_PROVIDER=package"
+      "-DgRPC_RE2_PROVIDER=package"
+      "-DgRPC_SSL_PROVIDER=package"
+      "-DgRPC_PROTOBUF_PROVIDER=package"
+      "-DgRPC_ABSL_PROVIDER=package"
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+      "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
+    ]
+    # The build scaffold defaults to c++14 on darwin, even when the compiler uses
+    # a more recent c++ version by default [1]. However, downgrades are
+    # problematic, because the compatibility types in abseil will have different
+    # interface definitions than the ones used for building abseil itself.
+    # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
+    ++ (
+      let
+        defaultCxxIsOlderThan17 =
+          (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
+          || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
+      in
+      lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
+        "-DCMAKE_CXX_STANDARD=17"
+      ]
+    );
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -98,12 +122,15 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-Wno-error"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Workaround for https://github.com/llvm/llvm-project/issues/48757
-    "-Wno-elaborated-enum-base"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Workaround for https://github.com/llvm/llvm-project/issues/48757
+      "-Wno-elaborated-enum-base"
+    ]
+  );
 
   enableParallelBuilding = true;
 
@@ -112,12 +139,12 @@ stdenv.mkDerivation rec {
     inherit arrow-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lnl7 ];
     homepage = "https://grpc.io/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
   };
 }

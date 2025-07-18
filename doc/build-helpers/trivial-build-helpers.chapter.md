@@ -66,15 +66,17 @@ runCommandWith :: {
 # Invocation of `runCommandWith`
 
 ```nix
-runCommandWith {
-  name = "example";
-  derivationArgs.nativeBuildInputs = [ cowsay ];
-} ''
-  cowsay > $out <<EOMOO
-  'runCommandWith' is a bit cumbersome,
-  so we have more ergonomic wrappers.
-  EOMOO
-''
+runCommandWith
+  {
+    name = "example";
+    derivationArgs.nativeBuildInputs = [ cowsay ];
+  }
+  ''
+    cowsay > $out <<EOMOO
+    'runCommandWith' is a bit cumbersome,
+    so we have more ergonomic wrappers.
+    EOMOO
+  ''
 ```
 
 :::
@@ -118,7 +120,7 @@ While the type signature(s) differ from [`runCommandWith`], individual arguments
 # Invocation of `runCommand`
 
 ```nix
-runCommand "my-example" {} ''
+runCommand "my-example" { } ''
   echo My example command is running
 
   mkdir $out
@@ -238,7 +240,7 @@ The following fields are either required, are of a different type than in the sp
 Write a desktop file `/nix/store/<store path>/my-program.desktop` to the Nix store.
 
 ```nix
-{makeDesktopItem}:
+{ makeDesktopItem }:
 makeDesktopItem {
   name = "my-program";
   desktopName = "My Program";
@@ -260,7 +262,10 @@ makeDesktopItem {
   mimeTypes = [ "video/mp4" ];
   categories = [ "Utility" ];
   implements = [ "org.my-program" ];
-  keywords = [ "Video" "Player" ];
+  keywords = [
+    "Video"
+    "Player"
+  ];
   startupNotify = false;
   startupWMClass = "MyProgram";
   prefersNonDefaultGPU = false;
@@ -276,18 +281,22 @@ makeDesktopItem {
 Override the `hello` package to add a desktop item.
 
 ```nix
-{ copyDesktopItems
-, hello
-, makeDesktopItem }:
+{
+  copyDesktopItems,
+  hello,
+  makeDesktopItem,
+}:
 
 hello.overrideAttrs {
   nativeBuildInputs = [ copyDesktopItems ];
 
-  desktopItems = [(makeDesktopItem {
-    name = "hello";
-    desktopName = "Hello";
-    exec = "hello";
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "hello";
+      desktopName = "Hello";
+      exec = "hello";
+    })
+  ];
 }
 ```
 
@@ -446,10 +455,9 @@ The store path will include the name, and it will be a file.
 Write the string `Contents of File` to `/nix/store/<store path>`:
 
 ```nix
-writeText "my-file"
-  ''
+writeText "my-file" ''
   Contents of File
-  ''
+''
 ```
 :::
 
@@ -486,10 +494,9 @@ The store path will be a directory.
 Write the string `Contents of File` to `/nix/store/<store path>/share/my-file`:
 
 ```nix
-writeTextDir "share/my-file"
-  ''
+writeTextDir "share/my-file" ''
   Contents of File
-  ''
+''
 ```
 :::
 
@@ -528,10 +535,9 @@ The store path will include the name, and it will be a file.
 Write the string `Contents of File` to `/nix/store/<store path>` and make the file executable.
 
 ```nix
-writeScript "my-file"
-  ''
+writeScript "my-file" ''
   Contents of File
-  ''
+''
 ```
 
 This is equivalent to:
@@ -570,10 +576,9 @@ The store path will include the name, and it will be a directory.
 # Usage of `writeScriptBin`
 
 ```nix
-writeScriptBin "my-script"
-  ''
+writeScriptBin "my-script" ''
   echo "hi"
-  ''
+''
 ```
 :::
 
@@ -614,10 +619,9 @@ This function is almost exactly like [](#trivial-builder-writeScript), except th
 # Usage of `writeShellScript`
 
 ```nix
-writeShellScript "my-script"
-  ''
+writeShellScript "my-script" ''
   echo "hi"
-  ''
+''
 ```
 :::
 
@@ -657,10 +661,9 @@ This function is a combination of [](#trivial-builder-writeShellScript) and [](#
 # Usage of `writeShellScriptBin`
 
 ```nix
-writeShellScriptBin "my-script"
-  ''
+writeShellScriptBin "my-script" ''
   echo "hi"
-  ''
+''
 ```
 :::
 
@@ -685,26 +688,40 @@ These functions concatenate `files` to the Nix store in a single file. This is u
 
 Here are a few examples:
 ```nix
-
 # Writes my-file to /nix/store/<store path>
-concatTextFile {
-  name = "my-file";
-  files = [ drv1 "${drv2}/path/to/file" ];
-}
-# See also the `concatText` helper function below.
+concatTextFile
+  {
+    name = "my-file";
+    files = [
+      drv1
+      "${drv2}/path/to/file"
+    ];
+  }
+  # See also the `concatText` helper function below.
 
-# Writes executable my-file to /nix/store/<store path>/bin/my-file
-concatTextFile {
-  name = "my-file";
-  files = [ drv1 "${drv2}/path/to/file" ];
-  executable = true;
-  destination = "/bin/my-file";
-}
-# Writes contents of files to /nix/store/<store path>
-concatText "my-file" [ file1 file2 ]
+  # Writes executable my-file to /nix/store/<store path>/bin/my-file
+  concatTextFile
+  {
+    name = "my-file";
+    files = [
+      drv1
+      "${drv2}/path/to/file"
+    ];
+    executable = true;
+    destination = "/bin/my-file";
+  }
+  # Writes contents of files to /nix/store/<store path>
+  concatText
+  "my-file"
+  [ file1 file2 ]
 
-# Writes contents of files to /nix/store/<store path>
-concatScript "my-file" [ file1 file2 ]
+  # Writes contents of files to /nix/store/<store path>
+  concatScript
+  "my-file"
+  [
+    file1
+    file2
+  ]
 ```
 
 ## `writeShellApplication` {#trivial-builder-writeShellApplication}
@@ -722,7 +739,10 @@ For example, the following shell application can refer to `curl` directly, rathe
 writeShellApplication {
   name = "show-nixos-org";
 
-  runtimeInputs = [ curl w3m ];
+  runtimeInputs = [
+    curl
+    w3m
+  ];
 
   text = ''
     curl -s 'https://nixos.org' | w3m -dump -T text/html
@@ -736,7 +756,14 @@ This can be used to put many derivations into the same directory structure. It w
 Here is an example:
 ```nix
 # adds symlinks of hello and stack to current build and prints "links added"
-symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+symlinkJoin {
+  name = "myexample";
+  paths = [
+    pkgs.hello
+    pkgs.stack
+  ];
+  postBuild = "echo links added";
+}
 ```
 This creates a derivation with a directory structure like the following:
 ```

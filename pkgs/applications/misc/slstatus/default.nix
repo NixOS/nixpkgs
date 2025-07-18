@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation rec {
   pname = "slstatus";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchgit {
     url = "https://git.suckless.org/slstatus";
     rev = version;
-    hash = "sha256-cFah6EgApslLSlJaOy/5W9ZV9Z1lzfKye/rRh9Om3T4=";
+    hash = "sha256-MRDovZpQsvnLEvsbJNBzprkzQQ4nIs1T9BLT+tSGta8=";
   };
 
   preBuild =

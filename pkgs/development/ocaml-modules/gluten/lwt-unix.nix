@@ -6,7 +6,7 @@
   lwt_ssl,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "gluten-lwt-unix";
   inherit (gluten)
     doCheck

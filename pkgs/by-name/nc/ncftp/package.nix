@@ -6,13 +6,13 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncftp";
-  version = "3.2.6";
+  version = "3.3.0";
 
   src = fetchurl {
-    url = "ftp://ftp.ncftp.com/ncftp/ncftp-${version}-src.tar.xz";
-    sha256 = "1389657cwgw5a3kljnqmhvfh4vr2gcr71dwz1mlhf22xq23hc82z";
+    url = "https://www.ncftp.com/public_ftp/ncftp/ncftp-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-eSD4hMKtr8gsjkHEbW89ImmHhcez9W9Wd6jVyGY5Y4Y=";
   };
 
   buildInputs = [ ncurses ];
@@ -53,11 +53,12 @@ stdenv.mkDerivation rec {
     "--mandir=$(out)/share/man/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line FTP (File Transfer Protocol) client";
     homepage = "https://www.ncftp.com/ncftp/";
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
-    license = licenses.clArtistic;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.clArtistic;
+    mainProgram = "ncftp";
   };
-}
+})

@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ginac";
-  version = "1.8.8";
+  version = "1.8.9";
 
   src = fetchurl {
     url = "https://www.ginac.de/ginac-${version}.tar.bz2";
-    sha256 = "sha256-Mw9X0O1529j5xGyktAhDm4sw4uoGHjZy2QTF2rlOytY=";
+    sha256 = "sha256-bP1Gz043NpDhLRa3cteu0PXEM9qMfs0kd/LnNkg7tDk=";
   };
 
   propagatedBuildInputs = [ cln ];

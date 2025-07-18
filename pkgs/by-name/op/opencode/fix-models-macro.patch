@@ -1,0 +1,8 @@
+--- a/packages/opencode/src/provider/models-macro.ts
++++ b/packages/opencode/src/provider/models-macro.ts
+@@ -1,4 +1,3 @@
+ export async function data() {
+-  const json = await fetch("https://models.dev/api.json").then((x) => x.text())
+-  return json
++  return process.env.MODELS_JSON || '{}';
+ }

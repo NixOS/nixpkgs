@@ -10,7 +10,7 @@
   iptables,
   iputils,
   kmod,
-  nettools,
+  net-tools,
   procps,
   tcpdump,
   traceroute,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firehol";
-  version = "3.1.7";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "firehol";
     repo = "firehol";
     rev = "v${version}";
-    sha256 = "sha256-gq7l7QoUsK+j5DUn84kD9hlUTC4hz3ds3gNJc1tRygs=";
+    sha256 = "sha256-6O3AoQs7Qzcin8VXQgJfCVsNOI74H6fE1DgqdY+e4bA=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     iptables
     iputils
     kmod
-    nettools
+    net-tools
     procps
     tcpdump
     traceroute

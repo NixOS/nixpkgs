@@ -8,11 +8,16 @@
   libtorrent-rasterbar-1_2_x,
   qt5,
   nix-update-script,
+  boost186,
 }:
 
 let
-  # libtorrent-rasterbar-1_2_x requires python311
-  python3 = python311;
+  # libtorrent-rasterbar-1_2_x requires python311 and boost 1.86
+  python3 = python311.override {
+    packageOverrides = final: prev: {
+      boost = boost186;
+    };
+  };
   libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/Tribler/tribler/releases/download/v${finalAttrs.version}/Tribler-${finalAttrs.version}.tar.xz";
     hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
   };
+
+  patches = [
+    ./startupwmclass.patch
+  ];
 
   nativeBuildInputs = [
     python3.pkgs.wrapPython

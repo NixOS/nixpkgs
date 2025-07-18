@@ -3,19 +3,19 @@
   stdenv,
   bash,
   fetchFromGitHub,
+  fetchpatch,
   SDL2,
   alsa-lib,
   catch2_3,
-  fetchpatch,
   fftw,
   glib,
   gobject-introspection,
+  gpsd,
   gtk-layer-shell,
   gtkmm3,
-  howard-hinnant-date,
-  hyprland,
   iniparser,
   jsoncpp,
+  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -38,9 +38,9 @@
   sndio,
   spdlog,
   systemdMinimal,
-  sway,
   udev,
   upower,
+  versionCheckHook,
   wayland,
   wayland-scanner,
   wireplumber,
@@ -50,7 +50,7 @@
   enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   evdevSupport ? true,
   experimentalPatches ? true,
-  hyprlandSupport ? true,
+  gpsSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
@@ -63,55 +63,39 @@
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  swaySupport ? true,
   traySupport ? true,
   udevSupport ? true,
   upowerSupport ? true,
   wireplumberSupport ? true,
   withMediaPlayer ? mprisSupport && false,
   nix-update-script,
-  testers,
-  waybar,
 }:
 
-let
-  # Derived from subprojects/cava.wrap
-  libcava.src = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    rev = "0.10.3";
-    hash = "sha256-ZDFbI69ECsUTjbhlw2kHRufZbQMu+FQSMmncCJ5pagg=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     tag = finalAttrs.version;
-    hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
+    hash = "sha256-KfWjYDqJf2jNmYAnmV7EQHweMObEBreUc2G7/LpvvC0=";
   };
-
-  patches = [
-    # Fix a regression introduced in release 0.11.0
-    # TODO: remove this patch when updating to the next release
-    # Issue: https://github.com/Alexays/Waybar/issues/3597
-    # PR: https://github.com/Alexays/Waybar/pull/3604
-    (fetchpatch {
-      name = "fix-tray";
-      url = "https://github.com/Alexays/Waybar/commit/0d02f6877d88551ea2be0cd151c1e6354e208b1c.patch";
-      hash = "sha256-wpdK6AY+14jt85dOQy6xkh8tNGDN2F9GA9zOfAuOaIc=";
-    })
-  ];
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.2
+    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.4
     patchShebangs .
     popd
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "waybar-default-icon.patch";
+      url = "https://github.com/Alexays/Waybar/commit/c336bc5466c858ac41dc9afd84f04a5ffec9e292.patch";
+      hash = "sha256-RRGy/aeFX95fW0pT6mXhww2RdEtoOnaT3+dc7iB3bAY=";
+    })
+  ];
 
   nativeBuildInputs =
     [
@@ -134,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       gtk-layer-shell
       gtkmm3
-      howard-hinnant-date
       jsoncpp
       libsigcxx
       libxkbcommon
@@ -150,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       portaudio
     ]
     ++ lib.optional evdevSupport libevdev
-    ++ lib.optional hyprlandSupport hyprland
+    ++ lib.optional gpsSupport gpsd
     ++ lib.optional inputSupport libinput
     ++ lib.optional jackSupport libjack2
     ++ lib.optional mpdSupport libmpdclient
@@ -158,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional nlSupport libnl
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio
-    ++ lib.optional swaySupport sway
     ++ lib.optional systemdSupport systemdMinimal
     ++ lib.optional traySupport libdbusmenu-gtk3
     ++ lib.optional udevSupport udev
@@ -174,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mapAttrsToList lib.mesonEnable {
       "cava" = cavaSupport && lib.asserts.assertMsg sndioSupport "Sndio support is required for Cava";
       "dbusmenu-gtk" = traySupport;
+      "gps" = gpsSupport;
       "jack" = jackSupport;
       "libevdev" = evdevSupport;
       "libinput" = inputSupport;
@@ -212,12 +195,15 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = waybar;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {

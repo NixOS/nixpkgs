@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   # The tool needs a nightly compiler.
   RUSTC_BOOTSTRAP = 1;
 
-  cargoHash = "sha256-Ot8f/58bAlpDSB11l14paCx2yjVoAYaHVIXaOzT1z/c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o/um/Ugm3GfDz1daBKxoDD7ailUu6QJ0rj5jcKWB0lM=";
 
   passthru.tests.version = testers.testVersion { package = i3-back; };
 

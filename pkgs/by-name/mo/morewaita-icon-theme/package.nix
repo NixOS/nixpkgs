@@ -4,17 +4,22 @@
   fetchFromGitHub,
   gtk3,
   xdg-utils,
+  nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";
-  version = "47.3";
+  version = "48.3.1";
 
   src = fetchFromGitHub {
     owner = "somepaulo";
     repo = "MoreWaita";
-    tag = "v${version}";
-    hash = "sha256-ImpBIpNs29JMAeWZTQ93BfWC9JBzu4Y/cuulyzD9Xyg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gi73Cn/FwI055Inodo8huHeaWGTy9IR3qPMbjAHBsPw=";
   };
+
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
   nativeBuildInputs = [
     gtk3
@@ -24,18 +29,23 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/share/icons/MoreWaita
-    cp -r . $out/share/icons/MoreWaita
-    gtk-update-icon-cache -f -t $out/share/icons/MoreWaita && xdg-desktop-menu forceupdate
+    THEMEDIR="$out/share/icons/MoreWaita" ./install.sh
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Adwaita style extra icons theme for Gnome Shell";
     homepage = "https://github.com/somepaulo/MoreWaita";
-    license = with licenses; [ gpl3Only ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pkosel ];
+    license = with lib.licenses; [ gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pkosel
+      kachick
+    ];
   };
-}
+})

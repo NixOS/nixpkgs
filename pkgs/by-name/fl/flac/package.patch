@@ -1,0 +1,12 @@
+diff --git a/test/test_replaygain.sh b/test/test_replaygain.sh
+index 11fb77dc..b5dea14c 100755
+--- a/test/test_replaygain.sh
++++ b/test/test_replaygain.sh
+@@ -140,7 +140,4 @@ for ACTION in $REPLAYGAIN_FREQ ; do
+   done
+ done
+
+-
+-rm -f $testdir/out.flac $testdir/out.meta
+-
+ exit 0

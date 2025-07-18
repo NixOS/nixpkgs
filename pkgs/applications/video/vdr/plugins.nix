@@ -4,7 +4,7 @@
   vdr,
   fetchFromGitHub,
   graphicsmagick,
-  boost,
+  boost186,
   libgcrypt,
   ncurses,
   callPackage,
@@ -155,7 +155,7 @@ in
 
     buildInputs = [
       vdr
-      boost
+      boost186
       libgcrypt
     ];
 

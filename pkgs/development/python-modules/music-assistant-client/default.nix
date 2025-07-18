@@ -15,15 +15,20 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-client";
-  version = "1.0.8";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
-    rev = version;
-    hash = "sha256-QE2PQeXCAq7+iMomCZK+UmrPUApJxwKi/pzCaLJVS/4=";
+    tag = version;
+    hash = "sha256-0NgV/xa8jF+j+oIZllgT7UI4MRsP3vTDarluLgtSZwI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${version}"
+  '';
 
   build-system = [ setuptools ];
 
@@ -42,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client to interact with the Music Assistant Server API";
     homepage = "https://github.com/music-assistant/client";
-    changelog = "https://github.com/music-assistant/client/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/music-assistant/client/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];
   };

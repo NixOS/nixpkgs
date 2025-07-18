@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "hue-plus";
   version = "1.4.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kusti8";

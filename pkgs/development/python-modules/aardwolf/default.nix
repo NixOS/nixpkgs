@@ -11,61 +11,58 @@
   colorama,
   fetchFromGitHub,
   iconv,
-  minikerberos,
   pillow,
   pyperclip,
-  pythonOlder,
   rustPlatform,
   rustc,
+  setuptools,
   setuptools-rust,
   tqdm,
   unicrypto,
-  winsspi,
 }:
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.8";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.2.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
     tag = version;
-    hash = "sha256-4kJsW0uwWfcgVruEdDw3QhbzfPDuLjmK+YvcLrgF4SI=";
+    hash = "sha256-CMO3qhxYmwB9kWIiHWV/0gAfs/yCnHzpfNYLTy4wX78=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    name = "${pname}-${version}";
-    hash = "sha256-i7fmdWOseRQGdvdBnlGi+lgWvhC2WFI2FwXU9JywYsc=";
+    hash = "sha256-+2hENnrG35eRgQwtCCJUux9mYEkzD2astLgOqWHrH/M=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
 
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
+
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    setuptools-rust
     cargo
     rustc
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arc4
     asn1crypto
     asn1tools
     asyauth
     asysocks
     colorama
-    minikerberos
     pillow
     pyperclip
     tqdm
     unicrypto
-    winsspi
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
@@ -78,7 +75,7 @@ buildPythonPackage rec {
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

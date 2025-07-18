@@ -2,12 +2,13 @@
   lib,
   flutter324,
   fetchFromGitHub,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   sqlite,
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  jdk17_headless,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -17,19 +18,20 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.2.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-pg2ivtTsMtDRNmxp2SQwI2n94qg60q8JfIWoO/rEUJE=";
+    hash = "sha256-bwLEOmdDiD7X2o9PshDBf+Y1s6KYT7xGhqCu4nNAchI=";
   };
 
   sourceRoot = "${src.name}/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   patches = [
     # Disable update notifications and auto-update functionality
@@ -41,23 +43,21 @@ flutter324.buildFlutterApplication rec {
     ln -s ${simple-icons} assets/simple-icons
   '';
 
-  gitHashes = {
-    desktop_webview_window = "sha256-jdNMpzFBgw53asWlGzWUS+hoPdzcL6kcJt2KzjxXf2E=";
-    ente_crypto_dart = "sha256-XBzQ268E0cYljJH6gDS5O0Pmie/GwuhMDlQPfopSqJM=";
-    flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
-    flutter_secure_storage_linux = "sha256-x45jrJ7pvVyhZlpqRSy3CbwT4Lna6yi/b2IyAilWckg=";
-    sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
-  };
-
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
   buildInputs = [
-    webkitgtk_4_0
+    webkitgtk_4_1
     sqlite
     libayatana-appindicator
+    # The networking client used by ente-auth (native_dio_adapter)
+    # introduces a transitive dependency on Java, which technically
+    # is only needed for the Android implementation.
+    # Unfortunately, attempts to remove it from the build entirely were
+    # unsuccessful.
+    jdk17_headless # JDK version used by upstream CI
   ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
@@ -91,6 +91,9 @@ flutter324.buildFlutterApplication rec {
 
     # For backwards compatibility
     ln -s $out/bin/enteauth $out/bin/ente_auth
+
+    # Not required at runtime as it's only used on Android
+    rm $out/app/ente-auth/lib/libdartjni.so
   '';
 
   passthru.updateScript = ./update.sh;

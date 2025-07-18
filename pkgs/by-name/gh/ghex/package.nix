@@ -8,7 +8,6 @@
   ninja,
   gnome,
   desktop-file-utils,
-  appstream-glib,
   gettext,
   itstool,
   gtk4,
@@ -20,9 +19,9 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghex";
-  version = "46.1";
+  version = "48.beta2";
 
   outputs = [
     "out"
@@ -31,8 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ghex/${lib.versions.major version}/ghex-${version}.tar.xz";
-    hash = "sha256-ihOXVHTu4ncZsprXY/GyR2Chrt5tfaS2I3AwcLwm6f0=";
+    url = "mirror://gnome/sources/ghex/${lib.versions.major finalAttrs.version}/ghex-${finalAttrs.version}.tar.xz";
+    hash = "sha256-4vIgRVGNgWtG0wluCp075lTdggMBVGX8ck/okWrY70E=";
   };
 
   nativeBuildInputs = [
@@ -53,11 +52,6 @@ stdenv.mkDerivation rec {
     libadwaita
     atk
     glib
-  ];
-
-  nativeCheckInputs = [
-    appstream-glib
-    desktop-file-utils
   ];
 
   mesonFlags =
@@ -83,11 +77,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
-    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
-}
+})

@@ -44,7 +44,7 @@ let
   #   on the compiler binary (`exePathForLibraryCheck`).
   # * To skip library checking for an architecture,
   #   set `exePathForLibraryCheck = null`.
-  # * To skip file checking for a specific arch specfic library,
+  # * To skip file checking for a specific arch specific library,
   #   set `fileToCheckFor = null`.
   ghcBinDists = {
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
@@ -204,7 +204,7 @@ let
     ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
       or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
 
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
@@ -229,7 +229,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "ghc-binary${binDistUsed.variantSuffix}";
 
@@ -342,12 +342,17 @@ stdenv.mkDerivation rec {
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     ''
     +
-      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-        find . -name package.conf.in \
-            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-      ''
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -387,6 +392,15 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # GHC tries to remove xattrs when installing to work around Gatekeeper
+  # (see https://gitlab.haskell.org/ghc/ghc/-/issues/17418). This step normally
+  # succeeds in nixpkgs because xattrs are not allowed in the store, but it
+  # can fail when a file has the `com.apple.provenance` xattr, and it can’t be
+  # modified (such as target of the symlink to `libiconv.dylib`).
+  # The `com.apple.provenance` xattr is a new feature of macOS as of macOS 13.
+  # See: https://eclecticlight.co/2023/03/13/ventura-has-changed-app-quarantine-with-a-new-xattr/
+  makeFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "XATTR=/does-not-exist" ];
 
   # Patch scripts to include runtime dependencies in $PATH.
   postInstall = ''
@@ -471,14 +485,12 @@ stdenv.mkDerivation rec {
       # They're in $out/share/{doc,man}.
     '';
 
-  # In nixpkgs, musl based builds currently enable `pie` hardening by default
-  # (see `defaultHardeningFlags` in `make-derivation.nix`).
-  # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+  # GHC cannot currently produce outputs that are ready for `-pie` linking.
   # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
   # See:
   # * https://github.com/NixOS/nixpkgs/issues/129247
   # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-  hardeningDisable = lib.optional stdenv.targetPlatform.isMusl "pie";
+  hardeningDisable = [ "pie" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -505,7 +517,7 @@ stdenv.mkDerivation rec {
       # Our Cabal compiler name
       haskellCompilerName = "ghc-${version}";
     }
-    # We duplicate binDistUsed here since we have a sensible default even if no bindist is avaible,
+    # We duplicate binDistUsed here since we have a sensible default even if no bindist is available,
     # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
     // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
       # Normal GHC derivations expose the hadrian derivation used to build them
@@ -530,12 +542,9 @@ stdenv.mkDerivation rec {
     # long as the evaluator runs on a platform that supports
     # `pkgsMusl`.
     platforms = builtins.attrNames ghcBinDists.${distSetName};
-    maintainers =
-      with lib.maintainers;
-      [
-        prusnak
-        domenkozar
-      ]
-      ++ lib.teams.haskell.members;
+    maintainers = with lib.maintainers; [
+      prusnak
+    ];
+    teams = [ lib.teams.haskell ];
   };
 }

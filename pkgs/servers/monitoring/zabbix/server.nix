@@ -10,6 +10,7 @@
   libxml2,
   openssl,
   pcre,
+  pcre2,
   zlib,
   jabberSupport ? true,
   iksemel,
@@ -24,7 +25,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresqlSupport ? false,
-  postgresql,
+  libpq,
   ipmiSupport ? false,
   openipmi,
 }:
@@ -50,7 +51,7 @@ import ./versions.nix (
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
-    ];
+    ] ++ optional postgresqlSupport libpq.pg_config;
     buildInputs =
       [
         curl
@@ -58,7 +59,7 @@ import ./versions.nix (
         libiconv
         libxml2
         openssl
-        pcre
+        (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
         zlib
       ]
       ++ optional odbcSupport unixODBC
@@ -67,7 +68,7 @@ import ./versions.nix (
       ++ optional snmpSupport net-snmp
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient
-      ++ optional postgresqlSupport postgresql
+      ++ optional postgresqlSupport libpq
       ++ optional ipmiSupport openipmi;
 
     configureFlags =
@@ -122,6 +123,7 @@ import ./versions.nix (
       license =
         if (lib.versions.major version >= "7") then lib.licenses.agpl3Only else lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
+        bstanderline
         mmahut
         psyanticy
       ];

@@ -19,8 +19,7 @@
   opencv,
   vigra,
   pdal,
-  postgresql,
-  darwin,
+  libpq,
   unixODBC,
   poppler,
   hdf5,
@@ -34,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.7.0";
+  version = "9.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-wUj0TvZoL/9miCwVk3eYilYXqczkbgsStCrbKAoeuxw=";
+    hash = "sha256-xS9h8QGm6PH8rx0qXmvolDpH9fy8ma7HlBVbQo5pX4Q=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
       libharu
       opencv
       vigra
-      postgresql
+      libpq
       libiodbc
       xz
       qhull
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
     # for why the have additional buildInputs on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
       unixODBC
       poppler
       netcdf
@@ -83,18 +81,16 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
-    license = licenses.gpl2Plus;
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        michelk
-        mpickering
-      ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      michelk
+      mpickering
+    ];
+    teams = [ lib.teams.geospatial ];
+    platforms = with lib.platforms; unix;
   };
 }

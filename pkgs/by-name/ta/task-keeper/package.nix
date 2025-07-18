@@ -8,18 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "task-keeper";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "linux-china";
     repo = "task-keeper";
     tag = "v${version}";
-    hash = "sha256-ufKHKQULN1zaEmnLx4voL/rL8bBe0aZEfclb+5/ybps=";
+    hash = "sha256-D+aAqyJ7DzkaGHY+MEItcxQwuNKXzZhV/0HVj5WMqn0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
-  cargoHash = "sha256-g2CxCpSBAKUn+ENduuh+u5l3KD7rchY0qLAuPz8ATww=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-asmdiJJmm+59vts0tkKDo7gkHOXbRM6FQWhdjfZ3w7U=";
 
   # tests depend on many packages (java, node, python, sbt, ...) - which I'm not currently willing to set up 😅
   doCheck = false;

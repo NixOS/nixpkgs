@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2024.9.20";
+  version = "2025.5.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P7874vmVpwUaiuBaS+cMlvwHifIu1vHEEEyXPPaKZAs=";
+    hash = "sha256-AYM100KDqj/YwmO65cPCtmHrxFVI/eMVBAFvyue/EQM=";
   };
 
   build-system = [ setuptools ];

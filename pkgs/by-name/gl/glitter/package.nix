@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -11,15 +11,16 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "milo123459";
-    repo = pname;
+    repo = "glitter";
     rev = "v${version}";
     hash = "sha256-dImQLC7owPf2EB5COO5vjN3a6k7gJ88D2hMSUW2/wn4=";
   };
 
-  cargoHash = "sha256-7JQcY3HCG3UQ0Mfz/+ZZ0axGEpQoH410FT72tjHW7EE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gHwweWKRnRJRfVMxnIFkafbN9Sl+UTnnYRQF7QD3nCc=";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # tests require it to be in a git repository
@@ -33,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     "runs_correctly"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Git wrapper that allows you to compress multiple commands into one";
     homepage = "https://github.com/milo123459/glitter";
     changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "glitter";
   };
 }

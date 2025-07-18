@@ -1,57 +1,56 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   alembic,
-  boto3,
-  botorch,
-  catboost,
-  cma,
-  cmaes,
   colorlog,
-  distributed,
-  fakeredis,
-  google-cloud-storage,
-  lightgbm,
-  matplotlib,
-  mlflow,
-  moto,
   numpy,
   packaging,
+  sqlalchemy,
+  tqdm,
+  pyyaml,
+
+  # optional-dependencies
+  boto3,
+  cmaes,
+  fvcore,
+  google-cloud-storage,
+  grpcio,
+  matplotlib,
   pandas,
   plotly,
-  pytest-xdist,
-  pytorch-lightning,
-  pyyaml,
+  protobuf,
   redis,
   scikit-learn,
   scipy,
-  setuptools,
-  shap,
-  sqlalchemy,
-  tensorflow,
+
+  # tests
+  addBinToPathHook,
+  fakeredis,
+  kaleido,
+  moto,
+  pytest-xdist,
+  pytestCheckHook,
   torch,
-  torchaudio,
-  torchvision,
-  tqdm,
-  wandb,
-  xgboost,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.1.0";
+  version = "4.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
+    hash = "sha256-WLrdHrdfCtCZMW2J375N8vmod7FcKCMwQPGKicRA878=";
   };
 
   build-system = [
@@ -69,70 +68,86 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    integration = [
-      botorch
-      catboost
-      cma
-      distributed
-      lightgbm
-      mlflow
-      pandas
-      # pytorch-ignite
-      pytorch-lightning
-      scikit-learn
-      shap
-      tensorflow
-      torch
-      torchaudio
-      torchvision
-      wandb
-      xgboost
-    ];
     optional = [
       boto3
-      botorch
       cmaes
+      fvcore
       google-cloud-storage
+      grpcio
       matplotlib
       pandas
       plotly
+      protobuf
       redis
       scikit-learn
+      scipy
     ];
   };
 
+  # grpc tests are racy
   preCheck = ''
-    export PATH=$out/bin:$PATH
+    sed -i '/"grpc",/d' optuna/testing/storages.py
   '';
 
   nativeCheckInputs =
     [
+      addBinToPathHook
       fakeredis
+      kaleido
       moto
       pytest-xdist
       pytestCheckHook
-      scipy
+      torch
+      versionCheckHook
     ]
     ++ fakeredis.optional-dependencies.lua
     ++ optional-dependencies.optional;
+  versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
+  disabledTests =
+    [
+      # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
+      "test_get_pareto_front_plot"
+      # too narrow time limit
+      "test_get_timeline_plot_with_killed_running_trials"
+      # times out under load
+      "test_optimize_with_progbar_timeout"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ValueError: Failed to start Kaleido subprocess. Error stream
+      # kaleido/executable/kaleido: line 5:  5956 Illegal instruction: 4  ./bin/kaleido $@
+      "test_get_optimization_history_plot"
+      "test_plot_intermediate_values"
+      "test_plot_rank"
+      "test_plot_terminator_improvement"
 
-  disabledTestPaths = [
-    # require unpackaged kaleido and building it is a bit difficult
-    "tests/visualization_tests"
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/artifacts_tests/test_boto3.py"
-  ];
+      # Fatal Python error: Aborted
+      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+      "test_edf_plot_no_trials"
+      "test_get_timeline_plot"
+      "test_plot_contour"
+      "test_plot_contour_customized_target_name"
+      "test_plot_edf_with_multiple_studies"
+      "test_plot_edf_with_target"
+      "test_plot_parallel_coordinate"
+      "test_plot_parallel_coordinate_customized_target_name"
+      "test_plot_param_importances"
+      "test_plot_param_importances_customized_target_name"
+      "test_plot_param_importances_multiobjective_all_objectives_displayed"
+      "test_plot_slice"
+      "test_plot_slice_customized_target_name"
+      "test_target_is_none_and_study_is_multi_obj"
+      "test_visualizations_with_single_objectives"
+    ];
 
   pythonImportsCheck = [ "optuna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
     changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";
   };
 }

@@ -10,23 +10,36 @@
   llvmPackages,
   musl,
   xorg,
+  jq,
+  moreutils,
   gitUpdater,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "3.80.1";
+  version = "4.22.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-9ClosoDIT+yP2dvNenHW2RSxLimOT3znXD+Pq+N6cQA=";
+    hash = "sha256-4uE1Jv70aDqAUk7GWmFr65SNXLnDDIZiFN87DQxluKg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      postPatch
+      ;
+    fetcherVersion = 1;
+    hash = "sha256-r3QswmqP6CNufnsFM0KeKojm/HjHogrfYO/TdL3SrmA=";
   };
+  # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
+  postPatch = ''
+    jq 'del(.packageManager)' package.json | sponge package.json
+  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
 
@@ -45,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper
       nodejs
       pnpm_9.configHook
+      jq
+      moreutils
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       autoPatchelfHook
@@ -53,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it
   postBuild = ''
-    rm -fr packages/vitest-pool-workers
+    mv packages/vitest-pool-workers packages/~vitest-pool-workers
     NODE_ENV="production" pnpm --filter workers-shared run build
     NODE_ENV="production" pnpm --filter miniflare run build
     NODE_ENV="production" pnpm --filter wrangler run build
@@ -65,19 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
   # - the build process builds a version of miniflare which is used by wrangler; for this reason, the miniflare package is copied also
   # - pnpm stores all content in the top-level node_modules directory, but it is linked to from a node_modules directory inside wrangler
   # - as they are linked via symlinks, the relative location of them on the filesystem should be maintained
+  # - Update: Now we're copying everything over due to broken symlink errors
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/lib $out/lib/packages/wrangler
-    rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
+    mv packages/~vitest-pool-workers packages/vitest-pool-workers
+    cp -r fixtures $out/lib
+    cp -r packages $out/lib
     cp -r node_modules $out/lib
-    cp -r packages/miniflare $out/lib/packages
-    cp -r packages/workers-tsconfig $out/lib/packages
-    cp -r packages/workers-shared $out/lib/packages
-    cp -r packages/wrangler/node_modules $out/lib/packages/wrangler
-    cp -r packages/wrangler/templates $out/lib/packages/wrangler
-    cp -r packages/wrangler/wrangler-dist $out/lib/packages/wrangler
+    cp -r tools $out/lib/tools
+    rm -rf node_modules/typescript node_modules/eslint node_modules/prettier node_modules/bin node_modules/.bin node_modules/**/bin node_modules/**/.bin
     rm -rf $out/lib/**/bin $out/lib/**/.bin
-    cp -r packages/wrangler/bin $out/lib/packages/wrangler
     NODE_PATH_ARRAY=( "$out/lib/node_modules" "$out/lib/packages/wrangler/node_modules" )
     makeWrapper ${lib.getExe nodejs} $out/bin/wrangler \
       --inherit-argv0 \
@@ -86,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" # https://github.com/cloudflare/workers-sdk/issues/3264
     runHook postInstall
   '';
-
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
     homepage = "https://github.com/cloudflare/workers-sdk#readme";
@@ -98,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       seanrmurphy
       dezren39
       ryand56
+      ezrizhu
     ];
     mainProgram = "wrangler";
     # Tunneling and other parts of wrangler, which require workerd won't run on

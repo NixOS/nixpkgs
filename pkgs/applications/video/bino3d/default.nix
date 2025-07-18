@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bino";
-  version = "2.3";
+  version = "2.5";
 
   src = fetchgit {
     url = "https://git.marlam.de/git/bino.git";
     rev = "bino-${finalAttrs.version}";
-    hash = "sha256-3DnEVde7LzaQUMhPi/RosRIW9j8bbkPVkihO5swCbws=";
+    hash = "sha256-vGPbSYTfRy414xVcLIvOnN4Te36HWVz7DQegNhYb3u4=";
   };
 
   nativeBuildInputs = [

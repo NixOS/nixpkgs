@@ -2,23 +2,25 @@
   lib,
   python3Packages,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   ffmpeg,
+  extras ? [
+    "decompress"
+  ],
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "7.1.1";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wYge0LulNhLZedmpGLfewFb8k80gKlsHoIDlVo29q0w=";
+    hash = "sha256-wJG8d6PMjhKaIy2z4sjYuuLf75aBP83sYu4CB5QGj7k=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-path.patch;
+    (replaceVars ./ffmpeg-path.patch {
       ffmpeg = lib.getExe ffmpeg;
     })
   ];
@@ -40,19 +42,26 @@ python3Packages.buildPythonApplication rec {
     "test_no_cache"
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    certifi
-    isodate
-    lxml
-    pycountry
-    pycryptodome
-    pysocks
-    requests
-    trio
-    trio-websocket
-    urllib3
-    websocket-client
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      certifi
+      isodate
+      lxml
+      pycountry
+      pycryptodome
+      pysocks
+      requests
+      trio
+      trio-websocket
+      urllib3
+      websocket-client
+    ]
+    ++ lib.attrVals extras optional-dependencies;
+
+  optional-dependencies = with python3Packages; {
+    decompress = urllib3.optional-dependencies.brotli ++ urllib3.optional-dependencies.zstd;
+  };
 
   meta = {
     changelog = "https://streamlink.github.io/changelog.html";

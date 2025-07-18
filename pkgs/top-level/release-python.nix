@@ -12,6 +12,7 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
     };
@@ -49,7 +50,7 @@ let
   );
 
   jobs = {
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    # for pkgs.formats tests, which rely on remarshal
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     tested = pkgs.releaseTools.aggregate {
@@ -57,7 +58,7 @@ let
       meta.description = "Release-critical packages from the python package sets";
       constituents = [
         jobs.nixos-render-docs.x86_64-linux # Used in nixos manual
-        jobs.remarshal.x86_64-linux # Used in pkgs.formats helper
+        jobs.remarshal_0_17.x86_64-linux # Used in pkgs.formats.yaml_1_1
         jobs.python312Packages.afdko.x86_64-linux # Used in noto-fonts-color-emoji
         jobs.python312Packages.buildcatrust.x86_64-linux # Used in pkgs.cacert
         jobs.python312Packages.colorama.x86_64-linux # Used in nixos test-driver

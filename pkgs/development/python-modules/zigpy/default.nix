@@ -12,9 +12,7 @@
   fetchFromGitHub,
   freezegun,
   frozendict,
-  importlib-resources,
   jsonschema,
-  pycryptodome,
   pyserial-asyncio,
   pytest-asyncio,
   pytest-timeout,
@@ -27,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.73.3";
+  version = "0.80.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
-    hash = "sha256-+YkNV6xbM38dHVpXD264KmzozborvotZRETAncpAUEs=";
+    hash = "sha256-OHwX2bwM6XYPGs2n7X5OQ3lW1lsD0RaaPNSFXOX+C/Q=";
   };
 
   postPatch = ''
@@ -47,22 +43,18 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      attrs
-      aiohttp
-      aiosqlite
-      crccheck
-      cryptography
-      frozendict
-      jsonschema
-      pyserial-asyncio
-      typing-extensions
-      pycryptodome
-      voluptuous
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [
+    attrs
+    aiohttp
+    aiosqlite
+    crccheck
+    cryptography
+    frozendict
+    jsonschema
+    pyserial-asyncio
+    typing-extensions
+    voluptuous
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses
@@ -84,6 +76,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/ota/test_ota_providers.py"
+    # All tests fail to shutdown thread during teardown
+    "tests/ota/test_ota_matching.py"
   ];
 
   pythonImportsCheck = [

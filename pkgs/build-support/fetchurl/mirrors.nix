@@ -69,12 +69,6 @@
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need
     "https://download.gnome.org/"
-
-    "https://fr2.rpmfind.net/linux/gnome.org/"
-    "https://ftp.acc.umu.se/pub/GNOME/"
-    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
-    "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   # GNU (https://www.gnu.org/prep/ftp.html)
@@ -215,13 +209,19 @@
 
   # SAMBA
   samba = [
-    "https://www.samba.org/ftp/"
-    "http://www.samba.org/ftp/"
+    "https://download.samba.org/pub/"
+    "http://download.samba.org/pub/"
   ];
 
   # GNU Savannah
   savannah = [
-    # Mirrors from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
+    # Try the official HTTP(S) dispatchers first.
+    # These generate redirects to mirrors appropriate for the user.
+    "https://download.savannah.gnu.org/releases/"
+    "https://download.savannah.nongnu.org/releases/"
+
+    # If the above fail, try some individual mirrors.
+    # These are taken from https://download-mirror.savannah.gnu.org/releases/00_MIRRORS.html
     "https://mirror.easyname.at/nongnu/"
     "https://savannah.c3sl.ufpr.br/"
     "https://mirror.csclub.uwaterloo.ca/nongnu/"

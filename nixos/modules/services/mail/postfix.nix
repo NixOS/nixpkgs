@@ -5,6 +5,10 @@
   ...
 }:
 let
+  inherit (lib)
+    mkOption
+    types
+    ;
 
   cfg = config.services.postfix;
   user = cfg.user;
@@ -47,7 +51,11 @@ let
           );
       mkEntry = name: value: "${escape name} =${mkVal value}";
     in
-    lib.concatStringsSep "\n" (lib.mapAttrsToList mkEntry cfg.config) + "\n" + cfg.extraConfig;
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.config)
+    )
+    + "\n"
+    + cfg.extraConfig;
 
   masterCfOptions =
     {
@@ -546,7 +554,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
+          Additional entries to put verbatim into aliases file, cf. man-page {manpage}`aliases(8)`.
         '';
       };
 
@@ -564,16 +572,60 @@ in
       };
 
       config = lib.mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            bool
-            int
-            str
-            (listOf str)
-          ]);
+        type = lib.types.submodule {
+          freeformType =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+                (listOf str)
+              ])
+            );
+          options = {
+            smtpd_tls_chain_files = mkOption {
+              type = with types; listOf path;
+              default = [ ];
+              example = [
+                "/var/lib/acme/mail.example.com/privkey.pem"
+                "/var/lib/acme/mail.example.com/fullchain.pem"
+              ];
+              description = ''
+                List of paths to the server private keys and certificates.
+
+                ::: {.caution}
+                The order of items matters and a private key must always be followed by the corresponding certificate.
+                :::
+
+                <https://www.postfix.org/postconf.5.html#smtpd_tls_chain_files>
+              '';
+            };
+
+            smtpd_tls_security_level = mkOption {
+              type = types.enum [
+                "none"
+                "may"
+                "encrypt"
+              ];
+              default = if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none";
+              defaultText = lib.literalExpression ''
+                if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none"
+              '';
+              example = "may";
+              description = ''
+                The server TLS security level. Enable TLS by configuring at least `may`.
+
+                <https://www.postfix.org/postconf.5.html#smtpd_tls_security_level>
+              '';
+            };
+          };
+        };
+
         description = ''
           The main.cf configuration file as key value set.
+
+          Null values will not be rendered.
         '';
         example = {
           mail_owner = "postfix";
@@ -591,23 +643,12 @@ in
 
       tlsTrustedAuthorities = lib.mkOption {
         type = lib.types.str;
-        default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        defaultText = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
+        default = config.security.pki.caBundle;
+        defaultText = lib.literalExpression "config.security.pki.caBundle";
+        example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
-          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
+          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
         '';
-      };
-
-      sslCert = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "SSL certificate to use.";
-      };
-
-      sslKey = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = "SSL key to use.";
       };
 
       recipientDelimiter = lib.mkOption {
@@ -631,7 +672,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Entries for the virtual alias map, cf. man-page virtual(5).
+          Entries for the virtual alias map, cf. man-page {manpage}`virtual(5)`.
         '';
       };
 
@@ -654,7 +695,7 @@ in
           List of accepted local users. Specify a bare username, an
           `"@domain.tld"` wild-card, or a complete
           `"user@domain.tld"` address. If set, these names end
-          up in the local recipient map -- see the local(8) man-page -- and
+          up in the local recipient map -- see the {manpage}`local(8)` man-page -- and
           effectively replace the system user database lookup that's otherwise
           used by default.
         '';
@@ -664,7 +705,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Entries for the transport map, cf. man-page transport(8).
+          Entries for the transport map, cf. man-page {manpage}`transport(8)`.
         '';
       };
 
@@ -744,12 +785,6 @@ in
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
-      useSrs = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable sender rewriting scheme";
-      };
-
     };
 
   };
@@ -766,8 +801,6 @@ in
           # This makes it comfortable to run 'postqueue/postdrop' for example.
           systemPackages = [ pkgs.postfix ];
         };
-
-        services.pfix-srsd.enable = config.services.postfix.useSrs;
 
         services.mail.sendmailSetuidWrapper = lib.mkIf config.services.postfix.setSendmail {
           program = "sendmail";
@@ -853,7 +886,7 @@ in
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+                ${pkgs.postfix}/bin/postmap -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -870,6 +903,7 @@ in
         systemd.services.postfix = {
           description = "Postfix mail server";
 
+          documentation = [ "man:postfix(1)" ];
           wantedBy = [ "multi-user.target" ];
           after = [
             "network.target"
@@ -960,30 +994,12 @@ in
             ] ++ lib.optional haveAliases "$alias_maps";
           }
           // lib.optionalAttrs (cfg.dnsBlacklists != [ ]) { smtpd_client_restrictions = clientRestrictions; }
-          // lib.optionalAttrs cfg.useSrs {
-            sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
-            sender_canonical_classes = [ "envelope_sender" ];
-            recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
-            recipient_canonical_classes = [ "envelope_recipient" ];
-          }
           // lib.optionalAttrs cfg.enableHeaderChecks {
             header_checks = [ "regexp:/etc/postfix/header_checks" ];
           }
           // lib.optionalAttrs (cfg.tlsTrustedAuthorities != "") {
             smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
             smtp_tls_security_level = lib.mkDefault "may";
-          }
-          // lib.optionalAttrs (cfg.sslCert != "") {
-            smtp_tls_cert_file = cfg.sslCert;
-            smtp_tls_key_file = cfg.sslKey;
-
-            smtp_tls_security_level = lib.mkDefault "may";
-
-            smtpd_tls_cert_file = cfg.sslCert;
-            smtpd_tls_key_file = cfg.sslKey;
-
-            smtpd_tls_security_level = lib.mkDefault "may";
-
           };
 
         services.postfix.masterConfig =
@@ -1148,11 +1164,18 @@ in
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
       "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig."
     )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "sslCert" ]
+      "services.postfix.sslCert was removed. Use services.postfix.config.smtpd_tls_chain_files for the server certificate, or services.postfix.config.smtp_tls_chain_files for the client certificate."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "sslKey" ]
+      "services.postfix.sslKey was removed. Use services.postfix.config.smtpd_tls_chain_files for server private key, or services.postfix.config.smtp_tls_chain_files for the client private key."
+    )
 
     (lib.mkChangedOptionModule
       [ "services" "postfix" "useDane" ]
       [ "services" "postfix" "config" "smtp_tls_security_level" ]
       (config: lib.mkIf config.services.postfix.useDane "dane")
     )
+    (lib.mkRenamedOptionModule [ "services" "postfix" "useSrs" ] [ "services" "pfix-srsd" "enable" ])
   ];
 }

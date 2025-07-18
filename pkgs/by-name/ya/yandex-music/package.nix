@@ -10,17 +10,32 @@
   electron,
   fetchFromGitHub,
   electronArguments ? "",
+
+  # Whether to enable tray menu by default
   trayEnabled ? true,
+  # Style of tray: 1 - default style, 2 - mono black, 3 - mono white
+  trayStyle ? 1,
+  # Whether to leave application in tray disregarding of its play state
+  trayAlways ? false,
+  # Whether to enable developers tools
+  devTools ? false,
+  # Vibe animation FPS can be  from 0 (black screen) to any reasonable number.
+  # Recommended 25 - 144. Default 25.
+  vibeAnimationMaxFps ? 25,
+  # Yandex Music's custom Windows-styled titlebar. Also makes the window frameless.
+  customTitleBar ? false,
 }:
+assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be withing 1 and 3";
+assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.28.4";
+  version = "5.57.0";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-0YUZKklwHkZ3bDI4OLmXyj0v2wzWzJbJpQ8QQa356fI=";
+    hash = "sha256-WvbT/ipVF1oQul76G+92iR1hdOxBUp4BpT4ekQrMtMY=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +63,27 @@ stdenvNoCC.mkDerivation rec {
     runHook postBuild
   '';
 
+  config =
+    let
+      inherit (lib) optionalString;
+    in
+    ''
+      ELECTRON_ARGS="${electronArguments}"
+      VIBE_ANIMATION_MAX_FPS=${toString vibeAnimationMaxFps}
+    ''
+    + optionalString trayEnabled ''
+      TRAY_ENABLED=${toString trayStyle}
+    ''
+    + optionalString trayAlways ''
+      ALWAYS_LEAVE_TO_TRAY=1
+    ''
+    + optionalString devTools ''
+      DEV_TOOLS=1
+    ''
+    + optionalString customTitleBar ''
+      CUSTOM_TITLE_BAR=1
+    '';
+
   installPhase = ''
     runHook preInstall
 
@@ -55,9 +91,7 @@ stdenvNoCC.mkDerivation rec {
     mv app/yandex-music.asar "$out/share/nodejs"
 
     CONFIG_FILE="$out/share/yandex-music.conf"
-    echo "TRAY_ENABLED=${if trayEnabled then "1" else "0"}" >> "$CONFIG_FILE"
-    echo "ELECTRON_ARGS=\"${electronArguments}\"" >> "$CONFIG_FILE"
-
+    echo "$config" >> "$CONFIG_FILE"
 
     install -Dm755 "$src/templates/yandex-music.sh" "$out/bin/yandex-music"
     substituteInPlace "$out/bin/yandex-music"                                  \

@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "2.0.7";
+  version = "2.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
     tag = version;
-    hash = "sha256-O0jS/hO31ou9h0xsMSKAy76vEELjryaHKbvdfzYevJc=";
+    hash = "sha256-5B+Bsxv2X1BHEMg8uv56ex//6EKEcLmte7ozcKzul/c=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
   preCheck = ''

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+KARAKEEP_LIB_PATH=
+RELEASE=
+NODE_ENV=production
+
+[[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
+
+export RELEASE NODE_ENV
+exec "$KARAKEEP_LIB_PATH/node_modules/.bin/tsx" "$KARAKEEP_LIB_PATH/packages/db/migrate.ts" "$@"

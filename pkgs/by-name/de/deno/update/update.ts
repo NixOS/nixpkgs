@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 /*
-#!nix-shell -i "deno run --allow-net --allow-run --allow-read --allow-write" -p deno git nix-prefetch
+#!nix-shell -i "deno run --allow-net --allow-run --allow-read --allow-write" -p deno git nurl
 */
 import { getExistingVersion, getLatestVersion, logger } from "./common.ts";
 import { Architecture, updateLibrustyV8 } from "./librusty_v8.ts";

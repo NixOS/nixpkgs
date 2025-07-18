@@ -5,24 +5,24 @@
   qt6Packages,
   cmake,
   makeWrapper,
-  botan2,
+  botan3,
+  libgit2,
   pkg-config,
   nixosTests,
   installShellFiles,
   xvfb-run,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.12.7";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "25.7.7";
 
   src = fetchurl {
-    url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-48puEyScG6EIrsXZpFc62dl4a23p+TO2buzuwq9m3Sw=";
+    url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
+    hash = "sha256-9ldUIT3pQlkO2YhQ3cF9H6Soe8IU4AGEGNRWg0LA1MQ=";
   };
 
   nativeBuildInputs =
@@ -41,55 +41,67 @@ stdenv.mkDerivation {
     qt6Packages.qtdeclarative
     qt6Packages.qtsvg
     qt6Packages.qtwebsockets
-    botan2
+    botan3
+    libgit2
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
     "-DQON_QT6_BUILD=ON"
     "-DBUILD_WITH_SYSTEM_BOTAN=ON"
+    "-DBUILD_WITH_LIBGIT2=ON"
   ];
 
   # Install shell completion on Linux (with xvfb-run)
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      installShellCompletion --cmd ${appname} \
-        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-        --fish <(xvfb-run $out/bin/${appname} --completion fish)
-      installShellCompletion --cmd ${pname} \
-        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${finalAttrs.appname} \
+        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash <(xvfb-run $out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Install shell completion on macOS
-    + lib.optionalString stdenv.isDarwin ''
-      installShellCompletion --cmd ${pname} \
-        --bash <($out/bin/${appname} --completion bash) \
-        --fish <($out/bin/${appname} --completion fish)
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      installShellCompletion --cmd ${finalAttrs.pname} \
+        --bash <($out/bin/${finalAttrs.appname} --completion bash) \
+        --fish <($out/bin/${finalAttrs.appname} --completion fish)
     ''
     # Create a lowercase symlink for Linux
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      ln -s $out/bin/${appname} $out/bin/${pname}
+      ln -s $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}
     ''
     # Rename application for macOS as lowercase binary
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Prevent "same file" error
-      mv $out/bin/${appname} $out/bin/${pname}.bin
-      mv $out/bin/${pname}.bin $out/bin/${pname}
+      mv $out/bin/${finalAttrs.appname} $out/bin/${finalAttrs.pname}.bin
+      mv $out/bin/${finalAttrs.pname}.bin $out/bin/${finalAttrs.pname}
     '';
 
   # Tests QOwnNotes using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
     changelog = "https://www.qownnotes.org/changelog.html";
-    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       pbek
       totoroot
       matthiasbeyer
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

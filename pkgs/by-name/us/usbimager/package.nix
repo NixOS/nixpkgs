@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "bztsrc";
-    repo = pname;
+    repo = "usbimager";
     rev = version;
     hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };

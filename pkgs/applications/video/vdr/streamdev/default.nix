@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-streamdev";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "vdr-projects";
     repo = "vdr-plugin-streamdev";
     rev = version;
-    sha256 = "sha256-12sASyFAnSuP2xQzr1KL/Am52ez6hiOUH/0zFH2bxhc=";
+    sha256 = "sha256-fFnRDe3n/ltanRvLhrQDB6aV0UmyuEJgNUip0gKBrBA=";
   };
 
   # configure don't accept argument --prefix

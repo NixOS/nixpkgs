@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -15,23 +15,22 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.23.2";
+  version = "0.24.0-unstable-2025-06-02";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    tag = "v${version}";
-    hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
+    rev = "9c78f3b8d10f81b97fbb2181c9333323d6375480";
+    hash = "sha256-jPqTraGrYFXBlci4Zaleyp/NTQhvuI39tYWRckjnV2E=";
     fetchSubmodules = true;
   };
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tree-sitter/py-tree-sitter/commit/a85342e16d28c78a1cf1e14c74f4598cd2a5f3e0.patch";
-      hash = "sha256-gm79KciA/KoDqrRfWuSB3GOD1jBx6Skd1olt4zoofaw=";
-    })
+
+  # see https://github.com/tree-sitter/py-tree-sitter/issues/330#issuecomment-2629403946
+  patches = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    ./segfault-patch.diff
   ];
 
   build-system = [ setuptools ];
@@ -52,11 +51,26 @@ buildPythonPackage rec {
     rm -r tree_sitter
   '';
 
-  meta = with lib; {
-    description = "Python bindings to the Tree-sitter parsing library";
-    homepage = "https://github.com/tree-sitter/py-tree-sitter";
-    changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
-  };
+  disabledTests = [
+    # test fails in nix sandbox
+    "test_dot_graphs"
+  ];
+
+  meta =
+    let
+      # for an -unstable version, we grab the release notes for the last tagged
+      # version it is based upon
+      lastTag = lib.pipe version [
+        lib.splitVersion
+        (lib.take 3)
+        (lib.concatStringsSep ".")
+      ];
+    in
+    {
+      description = "Python bindings to the Tree-sitter parsing library";
+      homepage = "https://github.com/tree-sitter/py-tree-sitter";
+      changelog = "https://github.com/tree-sitter/py-tree-sitter/releases/tag/v${lastTag}";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
+    };
 }

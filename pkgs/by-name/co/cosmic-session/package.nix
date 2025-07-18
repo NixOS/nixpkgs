@@ -7,24 +7,25 @@
   dbus,
   stdenv,
   xdg-desktop-portal-cosmic,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-session";
-  version = "1.0.0-alpha.2";
 
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-session";
+  version = "1.0.0-alpha.7";
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
-    rev = "epoch-${version}";
-    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-vozm4vcXV3RB9Pk6om1UNCfGh80vIVJvSwbzwGDQw3Y=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rK0tWckPvp31BT+K0pfs/mk/Z4XkwlOIwJEZwpYphJE=";
+  cargoHash = "sha256-68budhhbt8wPY7sfDqwIs4MWB/NBXsswK6HbC2AnHqE=";
 
   postPatch = ''
-    substituteInPlace Justfile \
-      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-session'
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
@@ -41,21 +42,37 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "prefix"
     (placeholder "out")
+    "--set"
+    "cosmic_dconf_profile"
+    "${placeholder "out"}/etc/dconf/profile/cosmic"
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.XDP_COSMIC = lib.getExe xdg-desktop-portal-cosmic;
+  env = {
+    XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
+    ORCA = "orca"; # get orca from $PATH
+  };
 
-  passthru.providedSessions = [ "cosmic" ];
+  passthru = {
+    providedSessions = [ "cosmic" ];
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with maintainers; [
-      a-kenji
-      nyabinary
-    ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

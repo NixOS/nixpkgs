@@ -8,9 +8,9 @@
   ninja,
   clang,
   python3,
+  tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
-  qtimageformats,
   qtsvg,
   qtwayland,
   kcoreaddons,
@@ -20,14 +20,10 @@
   protobuf,
   openalSoft,
   minizip,
-  libopus,
-  alsa-lib,
-  libpulseaudio,
   range-v3,
   tl-expected,
   hunspell,
   gobject-introspection,
-  jemalloc,
   rnnoise,
   microsoft-gsl,
   boost,
@@ -46,24 +42,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.10.0";
+  version = "5.16.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gkwu28VWelUhjkvcosBnGuT1J0MLykOufcsn9jl7vqU=";
+    hash = "sha256-yU2Ai2JgxDlaTK5GsL+yWkwtFbk14tPRAj1Rdt+gmmQ=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-  '';
 
   nativeBuildInputs =
     [
@@ -81,14 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       qtbase
-      qtimageformats
       qtsvg
       lz4
       xxHash
       ffmpeg_6
       openalSoft
       minizip
-      libopus
       range-v3
       tl-expected
       rnnoise
@@ -96,15 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
       microsoft-gsl
       boost
       ada
+      (tdlib.override { tde2eOnly = true; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       protobuf
       qtwayland
       kcoreaddons
-      alsa-lib
-      libpulseaudio
       hunspell
-      jemalloc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
@@ -145,6 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ nickcao ];
-    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    mainProgram = "Telegram";
   };
 })

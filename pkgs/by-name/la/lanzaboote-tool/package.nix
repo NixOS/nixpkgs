@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/rust/tool";
-  cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HnTsu46P3HRYo2d1DeaP6hqn+pVW3J4IM+CneckSFoM=";
 
   env.TEST_SYSTEMD = systemd;
   doCheck = lib.meta.availableOn stdenv.hostPlatform systemd;
@@ -49,10 +50,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
+    description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems (unwrapped; does not contain the required stub)";
     homepage = "https://github.com/nix-community/lanzaboote";
     license = licenses.gpl3Only;
-    mainProgram = "lzbt";
+    mainProgram = "lzbt-unwrapped";
     maintainers = with maintainers; [
       raitobezarius
       nikstur

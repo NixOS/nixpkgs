@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
-    homepage = "http://www.netperf.org/netperf/";
+    homepage = "https://github.com/HewlettPackard/netperf/";
     license = lib.licenses.mit;
 
     platforms = lib.platforms.unix;

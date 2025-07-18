@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "abjad";
-  version = "3.19";
+  version = "3.22";
   format = "setuptools";
 
   # see issue upstream indicating Python 3.12 support will come
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I9t3ORUKFFlMfXJsAzXhCzl1B4a9/ZNmvSX2/R44TPs=";
+    hash = "sha256-cTll4E5qPuacc7K3TFfK4IqtXGUHuiiU5J20poRuWbI=";
   };
 
   propagatedBuildInputs = [

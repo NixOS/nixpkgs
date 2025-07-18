@@ -1,33 +1,35 @@
 {
   lib,
   stdenv,
-  brotlicffi,
   buildPythonPackage,
   certifi,
   chardet,
   charset-normalizer,
-  fetchPypi,
+  fetchFromGitHub,
   idna,
   pysocks,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.32.3";
-  format = "setuptools";
+  version = "2.32.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VTZUF3NOsYJVWQqf+euX6eHaho1MzWQCOZ6vaK8gp2A=";
+  src = fetchFromGitHub {
+    owner = "psf";
+    repo = "requests";
+    tag = "v${version}";
+    hash = "sha256-sD9GLCAa3y9L1J+fcd+ZXBtW4jNL40hOesKXORhcjGQ=";
   };
 
   patches = [
@@ -36,8 +38,9 @@ buildPythonPackage rec {
     ./ca-load-regression.patch
   ];
 
+  build-system = [ setuptools ];
+
   dependencies = [
-    brotlicffi
     certifi
     charset-normalizer
     idna

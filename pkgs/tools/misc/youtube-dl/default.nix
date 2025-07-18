@@ -29,6 +29,7 @@ buildPythonPackage rec {
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
   version = "2021.12.17";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
@@ -104,7 +105,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     maintainers = with maintainers; [
-      bluescreen303
       fpletz
     ];
     platforms = with platforms; linux ++ darwin;

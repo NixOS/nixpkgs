@@ -13,27 +13,38 @@ It is used to override the arguments passed to a function.
 Example usages:
 
 ```nix
-pkgs.foo.override { arg1 = val1; arg2 = val2; /* ... */ }
+pkgs.foo.override {
+  arg1 = val1;
+  arg2 = val2; # ...
+}
 ```
 
 It's also possible to access the previous arguments.
 
 ```nix
-pkgs.foo.override (previous: { arg1 = previous.arg1; /* ... */ })
+pkgs.foo.override (previous: {
+  arg1 = previous.arg1; # ...
+})
 ```
 
 <!-- TODO: move below programlisting to a new section about extending and overlays and reference it -->
 
 ```nix
-import pkgs.path { overlays = [ (self: super: {
-  foo = super.foo.override { barSupport = true ; };
-  })];}
+import pkgs.path {
+  overlays = [
+    (self: super: {
+      foo = super.foo.override { barSupport = true; };
+    })
+  ];
+}
 ```
 
 ```nix
 {
   mypkg = pkgs.callPackage ./mypkg.nix {
-    mydep = pkgs.mydep.override { /* ... */ };
+    mydep = pkgs.mydep.override {
+      # ...
+    };
   };
 }
 ```
@@ -55,9 +66,11 @@ Example usages:
 
 ```nix
 {
-  helloBar = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
-    pname = previousAttrs.pname + "-bar";
-  });
+  helloBar = pkgs.hello.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      pname = previousAttrs.pname + "-bar";
+    }
+  );
 }
 ```
 
@@ -107,7 +120,7 @@ Example usage:
       url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
       hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
     };
-    patches = [];
+    patches = [ ];
   });
 }
 ```
@@ -128,8 +141,15 @@ Example usage:
 
 ```nix
 {
-  f = { a, b }: { result = a+b; };
-  c = lib.makeOverridable f { a = 1; b = 2; };
+  f =
+    { a, b }:
+    {
+      result = a + b;
+    };
+  c = lib.makeOverridable f {
+    a = 1;
+    b = 2;
+  };
 }
 ```
 

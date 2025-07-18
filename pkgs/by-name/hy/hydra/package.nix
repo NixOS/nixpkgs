@@ -1,57 +1,60 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, meson
-, ninja
-, fetchFromGitHub
-, nixosTests
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  meson,
+  ninja,
+  nix-eval-jobs,
+  fetchFromGitHub,
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -76,6 +79,7 @@ let
         CryptRandPasswd
         DBDPg
         DBDSQLite
+        DBIxClassHelpers
         DataDump
         DateTime
         DigestSHA1
@@ -118,23 +122,28 @@ let
         UUID4Tiny
         XMLSimple
         YAML
-        nix.perl-bindings
+        (nix.libs.nix-perl-bindings or nix.perl-bindings)
         git
       ];
   };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-12-05";
+  version = "0-unstable-2025-06-15";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "250668a19fa4d8ff9a6176ee6c44ca3003adedf1";
-    hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
+    rev = "ed500ca4345f7edaa6c3d84027a7599d38b15a29";
+    hash = "sha256-Mxz4n40VKxA2ILtIHX6fObgcy2WlgsM+ERfpjuVJ0BU=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     unzip
@@ -152,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pixz
     boost
-    postgresql
     nlohmann_json
     prometheus-cpp
   ];
@@ -162,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
+      nix-eval-jobs
       coreutils
       findutils
       pixz
@@ -176,7 +185,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -194,7 +208,9 @@ stdenv.mkDerivation (finalAttrs: {
     glibcLocales
     python3
     libressl.nc
+    nix-eval-jobs
     openldap
+    postgresql
   ];
 
   env = {
@@ -202,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
+    PATH=$(pwd)/src/script:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
@@ -224,11 +240,12 @@ stdenv.mkDerivation (finalAttrs: {
         read -n 4 chars < $i
         if [[ $chars =~ ELF ]]; then continue; fi
         wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
+            --prefix PERL5LIB ':' "$out/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}" \
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"} \
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
     done
   '';
 
@@ -236,8 +253,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit nix perlDeps;
-    tests.basic = nixosTests.hydra.hydra;
-    updateScript = unstableGitUpdater {};
+    tests = { inherit (nixosTests) hydra; };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {
@@ -245,6 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mindavi ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ mindavi ];
+    teams = [ teams.helsinki-systems ];
   };
 })

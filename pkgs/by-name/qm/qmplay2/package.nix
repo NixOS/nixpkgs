@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   alsa-lib,
   callPackage,
   cmake,
@@ -19,7 +20,6 @@
   pkg-config,
   qt5,
   qt6,
-  stdenv,
   taglib,
   vulkan-headers,
   vulkan-tools,
@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -va ${sources.qmvk.src}/* qmvk/
     chmod --recursive 744 qmvk
     popd
+    substituteInPlace src/qmplay2/vulkan/VulkanWindow.cpp \
+      --replace-fail "getSubmitInfo()" "getSubmitInfo(0)"
   '';
 
   nativeBuildInputs =
@@ -108,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       kashw2
     ];
     platforms = lib.platforms.linux;

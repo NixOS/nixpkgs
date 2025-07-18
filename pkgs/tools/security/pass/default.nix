@@ -3,6 +3,7 @@
   lib,
   pkgs,
   fetchurl,
+  bash,
   buildEnv,
   coreutils,
   findutils,
@@ -91,6 +92,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.hostPlatform.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ bash ];
 
   installFlags = [
     "PREFIX=$(out)"
@@ -194,6 +197,7 @@ stdenv.mkDerivation rec {
       tadfisher
       globin
       ma27
+      ryan4yin
     ];
     platforms = platforms.unix;
 

@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGo124Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -16,25 +16,25 @@
   ffmpegSupport ? true,
 }:
 
-buildGo123Module rec {
+buildGo124Module rec {
   pname = "navidrome";
-  version = "0.54.3";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-mOJSgX+1id8tZU8KVjWbf2LycrzdudhUV/9pxKa4yHw=";
+    hash = "sha256-KTgh+dA2YYPyNdGr2kYEUlYeRwNnEcSQlpQ7ZTbAjP0=";
   };
 
-  vendorHash = "sha256-LpSmSbReQ3yHFvHhN/LERWQjf72/ELTjk4qhO4lyzW0=";
+  vendorHash = "sha256-/WeEimHCEQbTbCZ+4kXVJdHAa9PJEk1bG1d2j3V9JKM=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/ui";
-    hash = "sha256-PaE1xcZX9wZRcKeqQCXbdhi4cIBWBL8ZQdww6AOB7sQ=";
+    hash = "sha256-tl6unHz0E0v0ObrfTiE0vZwVSyVFmrLggNM5QsUGsvI=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,11 @@ buildGo123Module rec {
     patchShebangs ui/bin/update-workbox.sh
   '';
 
+  patches = [
+    # Until https://github.com/navidrome/navidrome/pull/4302 is released
+    ./0001-test-fix-Use-bin-sh-as-mock_mpv.sh-interpreter-4301.patch
+  ];
+
   preBuild = ''
     make buildjs
   '';
@@ -92,6 +97,7 @@ buildGo123Module rec {
     maintainers = with lib.maintainers; [
       aciceri
       squalus
+      tebriel
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

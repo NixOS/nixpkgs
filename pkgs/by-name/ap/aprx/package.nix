@@ -18,13 +18,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-fcommon"
-      "-O2"
-    ]
-    ++ lib.optional stdenv.cc.isClang "-Wno-error=implicit-int"
-  );
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-fcommon"
+    "-O2"
+    "-Wno-implicit-int" # clang, gcc 14
+  ]);
 
   configureFlags = [
     "--with-erlangstorage"

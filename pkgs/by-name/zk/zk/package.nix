@@ -2,20 +2,21 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "zk";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "zk-org";
     repo = "zk";
     rev = "v${version}";
-    sha256 = "sha256-PbF2k7b03Oo3fIWIN4BHUZJ625HUeX+htT9FTINowIs=";
+    sha256 = "sha256-h4q3GG4DPPEJk2G5JDbUhnHpqEdMAkGYSMs9TS5Goco=";
   };
 
-  vendorHash = "sha256-UZsJa5hmMQwe9lhrp4ey8GGTkWUF8xJW+LPWMR0qfoo=";
+  vendorHash = "sha256-2PlaIw7NaW4pAVIituSVWhssSBKjowLOLuBV/wz829I=";
 
   doCheck = false;
 
@@ -27,6 +28,8 @@ buildGoModule rec {
     "-X=main.Build=${version}"
     "-X=main.Version=${version}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   tags = [ "fts5" ];
 

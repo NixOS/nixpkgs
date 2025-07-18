@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aioraven";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cottsay";
     repo = "aioraven";
     tag = version;
-    hash = "sha256-ux2jeXkh8YsJ6mItXOx40pp0Tc+aJXMV7ZqyZg+iy2c=";
+    hash = "sha256-rGqaDJtpdDWd8fxdfwU+rmgwEzZyYHfbiZxUlWoH2ks=";
   };
 
   build-system = [ setuptools ];

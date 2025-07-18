@@ -9,15 +9,15 @@
   jaraco-collections,
   jaraco-itertools,
   jaraco-context,
+  jaraco-functools,
   jaraco-net,
   keyring,
   lomond,
   more-itertools,
   platformdirs,
+  pytest-responses,
   pytestCheckHook,
-  pythonOlder,
   requests,
-  requests-mock,
   requests-toolbelt,
   setuptools,
   setuptools-scm,
@@ -25,24 +25,22 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "6.2.1";
+  version = "6.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
     tag = "v${version}";
-    hash = "sha256-t5AI2wpSM6xMzULEZYkUgGvcODM8PVxdd2Vy/PV0Ga4=";
+    hash = "sha256-AqnyQdLkg2vobVJ84X15AB0Yyj3gZf4rP3pEdk3MqZ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     lomond
     colorlog
@@ -57,11 +55,12 @@ buildPythonPackage rec {
     bx-py-utils
     platformdirs
     jaraco-itertools
+    jaraco-functools
   ];
 
   nativeCheckInputs = [
+    pytest-responses
     pytestCheckHook
-    requests-mock
   ];
 
   pythonImportsCheck = [ "jaraco.abode" ];
@@ -79,13 +78,12 @@ buildPythonPackage rec {
     "test_camera_capture_no_control_URLs"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/${src.tag}/NEWS.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
-    mainProgram = "abode";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jamiemagee
       dotlambda
     ];

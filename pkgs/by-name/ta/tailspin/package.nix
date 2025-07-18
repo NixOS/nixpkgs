@@ -2,32 +2,43 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "4.0.0";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
-    rev = version;
-    hash = "sha256-5VbxQDK69If5N8EiS8sIKNqHkCAfquOz8nUS7ynp+nA=";
+    tag = finalAttrs.version;
+    hash = "sha256-Cl1S183iAyFPa3KijHCn/CyRXQBluphNMQFAgdIOzuM=";
   };
 
-  cargoHash = "sha256-ohfza2ti7Ar/9TV/WoTL5g6CPaONrxtr7nW0qmLdB/8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2p4jkta6w2vje169KCHw0ErC7FweLabF6B7ZIkTmNBI=";
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \
-      'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/debug"
+      'target/debug' "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/tspin";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
-    changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/bensadeh/tailspin/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "tspin";
   };
-}
+})

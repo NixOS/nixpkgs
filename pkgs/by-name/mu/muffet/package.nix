@@ -6,23 +6,23 @@
 
 buildGoModule rec {
   pname = "muffet";
-  version = "2.10.6";
+  version = "2.10.9";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "muffet";
     rev = "v${version}";
-    hash = "sha256-9dra/LhtSIWN2pjNEJMITz/GzyWRtXTyQBqBxRhjARc=";
+    hash = "sha256-I4xLa4R9vxP+bHa1wP4ci5r4ZIlH2KUif+udSVLUsNk=";
   };
 
-  vendorHash = "sha256-MYU8zgqI05oBep/dehs59S3JcrThrgLEzIgrIr/Tr4Y=";
+  vendorHash = "sha256-scma8hrm8e/KU2x+TIGOvaUk6nYxKIZ1eaGqs/W2I0I=";
 
-  meta = with lib; {
+  meta = {
     description = "Website link checker which scrapes and inspects all pages in a website recursively";
     homepage = "https://github.com/raviqqe/muffet";
     changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "muffet";
   };
 }

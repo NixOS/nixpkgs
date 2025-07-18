@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       type = "Application";
-      name = finalAttrs.pname;
+      name = "stegsolve";
       desktopName = "Stegsolve";
       comment = "A steganographic image analyzer, solver and data extractor for challanges";
-      exec = finalAttrs.pname;
+      exec = "stegsolve";
       categories = [ "Graphics" ];
     })
   ];

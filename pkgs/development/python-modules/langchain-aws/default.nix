@@ -10,29 +10,33 @@
   boto3,
   langchain-core,
   numpy,
+  pydantic,
 
   # tests
-  langchain-standard-tests,
+  langchain-tests,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.1";
+  version = "0.2.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "v${version}";
-    hash = "sha256-LHhyEkgu1sjOk4E4WMy4vYGyikqdVD3WvRPjoAP1CfA=";
+    tag = "langchain-aws==${version}";
+    hash = "sha256-sfdijQxcw0TNK1/IOmHQTHznDIMDTvXqMWBb58cTPlI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--snapshot-warn-unused" "" \
-      --replace-fail "--cov=langchain_aws" ""
+      --replace-fail "--snapshot-warn-unused" ""
   '';
 
   sourceRoot = "${src.name}/libs/aws";
@@ -43,35 +47,41 @@ buildPythonPackage rec {
     boto3
     langchain-core
     numpy
+    pydantic
   ];
 
   pythonRelaxDeps = [
     # Boto @ 1.35 has outstripped the version requirement
     "boto3"
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individual components.
+    "langchain-core"
   ];
 
   nativeCheckInputs = [
-    langchain-standard-tests
+    langchain-tests
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain-aws==";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       drupol
       natsukium
+      sarahec
     ];
   };
 }

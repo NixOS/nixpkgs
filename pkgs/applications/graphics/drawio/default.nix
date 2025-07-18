@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "24.7.17";
+  version = "26.1.1";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-DWNFh3ocU5WVi5WZheMOMUYH6FHJ+LJbaUC1XkQ5TFo=";
+    hash = "sha256-h9APkOtH7s31r89hqqH12zYqkVMrR2ZxMyc+Zwq21+A=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-bAvS7AXmmS+yYsEkXxvszlErpZ3J5hVVXxxzYcsVP5Y=";
+    hash = "sha256-kmA0z/vmWH+yD2OQ6VVSE0yPxInTAGjjG+QfcoZHlQ0=";
   };
 
   nativeBuildInputs =
@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
     fixup-yarn-lock yarn.lock
+    # Ensure that the node_modules folder is created by yarn install.
+    # See https://github.com/yarnpkg/yarn/issues/5500#issuecomment-1221456246
+    echo "nodeLinker: node-modules" > .yarnrc.yml
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -127,13 +130,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "Desktop application for creating diagrams";
+  meta = {
+    description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = licenses.unfree;
+    license = with lib.licenses; [
+      # The LICENSE file of https://github.com/jgraph/drawio claims Apache License Version 2.0 again since https://github.com/jgraph/drawio/commit/5b2e73471e4fea83d681f0cec5d1aaf7c3884996
+      asl20
+      # But the README says:
+      # The minified code authored by us in this repo is licensed under an Apache v2 license, but the sources to build those files are not in this repo. This is not an open source project.
+      unfreeRedistributable
+    ];
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = platforms.darwin ++ platforms.linux;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "drawio";
   };
 }

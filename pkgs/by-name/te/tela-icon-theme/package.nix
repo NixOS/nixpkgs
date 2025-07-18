@@ -4,18 +4,20 @@
   fetchFromGitHub,
   gtk3,
   jdupes,
+  adwaita-icon-theme,
+  libsForQt5,
   hicolor-icon-theme,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2024-09-04";
+  version = "2025-02-10";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "tela-icon-theme";
     rev = version;
-    hash = "sha256-ZzF4U/cTy/7oSDQs4+dezewgNzS5zroba8wpcfPciW4=";
+    hash = "sha256-ufjKFlKJnmNwD2m1w+7JSBQij6ltxXWCpUEvVxECS98=";
   };
 
   nativeBuildInputs = [
@@ -23,13 +25,18 @@ stdenvNoCC.mkDerivation rec {
     jdupes
   ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+    libsForQt5.breeze-icons
+    hicolor-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;
   dontRewriteSymlinks = true;
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     runHook preInstall

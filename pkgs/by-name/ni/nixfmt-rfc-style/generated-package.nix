@@ -14,6 +14,7 @@
   mtl,
   parser-combinators,
   pretty-simple,
+  process,
   safe-exceptions,
   scientific,
   text,
@@ -24,8 +25,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/a4639036723e510d8331124c80d9ca14dd7aba02.tar.gz";
-    sha256 = "0zpkljcvfnwn1ik5cgvq396xkpp053k4lh62a24c4g434n2vz0rj";
+    url = "https://github.com/nixos/nixfmt/archive/65af4b69133d19f534d97746c97c2d5b464f43b4.tar.gz";
+    sha256 = "0l0w3janvss1n1j7qkcml97zndm2jm2gbrzzs9d8l0ixnrw0cd5r";
   };
   isLibrary = true;
   isExecutable = true;
@@ -46,6 +47,7 @@ mkDerivation {
     directory
     file-embed
     filepath
+    process
     safe-exceptions
     text
     transformers

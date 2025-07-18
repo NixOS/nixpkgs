@@ -74,7 +74,6 @@ let
     "systemd"
     "postgres"
     "url-preview"
-    "user-search"
   ];
 
   wantedExtras =
@@ -84,7 +83,6 @@ let
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
-    ++ lib.optional (cfg.settings ? user_directory) "user-search"
     ++ lib.optional (cfg.settings.url_preview_enabled) "url-preview"
     ++ lib.optional (cfg.settings.database.name == "psycopg2") "postgres";
 
@@ -124,12 +122,13 @@ let
   genLogConfigFile =
     logName:
     format.generate "synapse-log-${logName}.yaml" (
-      cfg.log
-      // optionalAttrs (cfg.log ? handlers.journal) {
-        handlers.journal = cfg.log.handlers.journal // {
-          SYSLOG_IDENTIFIER = logName;
-        };
-      }
+      attrsets.recursiveUpdate cfg.log (
+        optionalAttrs (cfg.log ? handlers.journal) {
+          handlers.journal = cfg.log.handlers.journal // {
+            SYSLOG_IDENTIFIER = logName;
+          };
+        }
+      )
     );
 
   toIntBase8 =
@@ -673,7 +672,6 @@ in
               "sentry"       # Error tracking and performance metrics
               "systemd"      # Provide the JournalHandler used in the default log_config
               "url-preview"  # Support for oEmbed URL previews
-              "user-search"  # Support internationalized domain names in user-search
             ]
           '';
           description = ''
@@ -1438,7 +1436,7 @@ in
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1450,13 +1448,13 @@ in
               partOf = [ "matrix-synapse.target" ];
               wantedBy = [ "matrix-synapse.target" ];
               unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              requires = optional hasLocalPostgresDB "postgresql.target";
             }
           else
             {
               wants = [ "network-online.target" ];
-              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-              requires = optional hasLocalPostgresDB "postgresql.service";
+              after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.target";
+              requires = optional hasLocalPostgresDB "postgresql.target";
               wantedBy = [ "multi-user.target" ];
             };
         baseServiceConfig = {
@@ -1597,9 +1595,9 @@ in
   };
 
   meta = {
+    inherit (pkgs.matrix-synapse.meta) maintainers;
     buildDocsInSandbox = false;
     doc = ./synapse.md;
-    maintainers = teams.matrix.members;
   };
 
 }

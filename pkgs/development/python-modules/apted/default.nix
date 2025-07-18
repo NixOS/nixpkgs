@@ -6,7 +6,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "apted";
   version = "1.0.3";
   pyproject = true;

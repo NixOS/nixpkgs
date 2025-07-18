@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.9";
+  version = "0.1.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = version;
-    hash = "sha256-s1u9+w0sPpXuqAET4k5VPWP+VoPqB08dZa9oY4UFXc8=";
+    hash = "sha256-Ar9KNOkiy60HTGKz8br701v8xF470dz1jv8sp/CZbpw=";
   };
 
   postPatch = ''

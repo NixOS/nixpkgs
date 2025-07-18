@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 55ce9e0..86af3e0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,7 +47,7 @@ find_package(KF6CoreAddons ${KF_MIN_VERSION} REQUIRED)
+ find_package(KF6I18n ${KF_MIN_VERSION} REQUIRED)
+ find_package(KF6Config ${KF_MIN_VERSION} REQUIRED)
+ 
+-ecm_find_qmlmodule(org.kde.prison.scanner REQUIRED)
++ecm_find_qmlmodule(org.kde.prison.scanner)
+ 
+ ecm_set_disabled_deprecation_versions(QT 6.0.0
+     KF 6.12.0

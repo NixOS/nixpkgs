@@ -20,20 +20,14 @@
   dbus,
   gmobile,
   umockdev,
+  feedbackd-device-themes,
+  udevCheckHook,
+  nix-update-script,
 }:
 
-let
-  themes = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = "feedbackd-device-themes";
-    rev = "v0.4.0";
-    hash = "sha256-kY/+DyRxKEUzq7ctl6Va14AKUCpWU7NRQhJOwhtkJp8=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.4.1";
+  version = "0.8.3";
 
   outputs = [
     "out"
@@ -42,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.freedesktop.org";
+    owner = "agx";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ta14DYqkid8Cp8fx9ZMGOOJroCBszN9/VrTN6mrpTZg=";
+    hash = "sha256-ypKD9n9dC+0J+HFtL43mCky/ZXu4bgejYzw7nHHPAm4=";
   };
 
   depsBuildBuild = [
@@ -65,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vala
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -92,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/data/90-feedbackd.rules > $out/lib/udev/rules.d/90-feedbackd.rules
-    cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
   postFixup = ''
@@ -106,11 +100,28 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  strictDeps = true;
+
   meta = with lib; {
-    description = "Daemon to provide haptic (and later more) feedback on events";
-    homepage = "https://source.puri.sm/Librem5/feedbackd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pacman99 ];
+    description = "Theme based Haptic, Visual and Audio Feedback";
+    homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
+    license = with licenses; [
+      # feedbackd
+      gpl3Plus
+
+      # libfeedback library
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [
+      pacman99
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 })

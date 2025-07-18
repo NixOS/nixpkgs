@@ -12,20 +12,21 @@
   pythonOlder,
   typer,
   webcolors,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.33.0";
+  version = "0.35.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    tag = version;
-    hash = "sha256-gwhN8aFwxRdA6fPuCDVdBJ8yl8Zq6DAfSRW88Yk7IUk=";
+    tag = "v${version}";
+    hash = "sha256-0jmaVMN4wwqoO5wGMaV4kJefNUPOuJpWbsqHcZZ0Nh4=";
   };
 
   build-system = [ poetry-core ];
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+    udevCheckHook
   ];
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];
@@ -58,7 +60,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/JnyJny/busylight";
     changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = teams.helsinki-systems.members;
+    teams = [ teams.helsinki-systems ];
     mainProgram = "busylight";
   };
 }

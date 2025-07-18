@@ -1,7 +1,7 @@
 {
   lib,
   fetchzip,
-  python310,
+  python311,
   rtlcss,
   wkhtmltopdf,
   nixosTests,
@@ -9,8 +9,8 @@
 
 let
   odoo_version = "16.0";
-  odoo_release = "20241010";
-  python = python310.override {
+  odoo_release = "20250506";
+  python = python311.override {
     self = python;
   };
 in
@@ -24,8 +24,10 @@ python.pkgs.buildPythonApplication rec {
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-ICe5UOy+Ga81fE66SnIhRz3+JEEbGfoz7ag53mkG4UM="; # odoo
+    hash = "sha256-dBqRZ3cf4/udP9hm+u9zhuUCkH176uG2NPAy5sujyNc="; # odoo
   };
+
+  patches = [ ./fix-test.patch ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -90,14 +92,14 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo;
+      inherit (nixosTests) odoo16;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

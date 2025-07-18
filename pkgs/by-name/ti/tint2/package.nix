@@ -22,6 +22,7 @@
   libXdmcp,
   libstartup_notification,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -78,12 +79,16 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in ./src/launcher/apps-common.c \
-             ./src/launcher/icon-theme-common.c
-    do
-      substituteInPlace $f --replace-fail /usr/share/ /run/current-system/sw/share/
-    done
+    # Add missing dependency on libm
+    substituteInPlace src/tint2conf/CMakeLists.txt \
+      --replace-fail "RSVG_LIBRARIES} )" "RSVG_LIBRARIES} m)"
+
+    substituteInPlace src/launcher/apps-common.c src/launcher/icon-theme-common.c \
+      --replace-fail /usr/share/ /run/current-system/sw/share/
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://gitlab.com/nick87720z/tint2";

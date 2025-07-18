@@ -1,0 +1,71 @@
+diff --git a/src/core/retroarch.cpp b/src/core/retroarch.cpp
+index c2a2c47..97fa782 100644
+--- a/src/core/retroarch.cpp
++++ b/src/core/retroarch.cpp
+@@ -102,7 +102,7 @@ static void loadConfig( std::map<string, string> &configs ) {
+ 
+ 	const fs::path basePath = RetroArch::getBasePath();
+ 	configs["system_directory"] = (basePath / _NFS("system")).u8string();
+-	configs["libretro_directory"] = (basePath / _NFS("cores")).u8string();
++	configs["libretro_directory"] = "@retroArchCoresPath@";
+ 	configs["savefile_directory"] = (basePath / _NFS("saves")).u8string();
+ 	configs["savestate_directory"] = (basePath / _NFS("states")).u8string();
+ 	configs["libretro_info_path"] = (basePath / _NFS("info")).u8string();
+@@ -110,7 +110,7 @@ static void loadConfig( std::map<string, string> &configs ) {
+ #if defined(FLATPAK_VERSION)
+ 	configs["assets_directory"] = "/app/share/libretro/assets/";
+ #elif defined(__linux__)
+-	configs["assets_directory"] = (BaseDir::data() / "retro-data" / "assets").u8string();
++	configs["assets_directory"] = "@retroArchAssetsPath@";;
+ 	configs["osk_overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays" / "keyboards").u8string();
+ 	configs["overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays").u8string();
+ 	configs["audio_filter_dir"] = (BaseDir::data() / "retro-data" / "filters" / "audio").u8string();
+@@ -845,13 +845,7 @@ fs::path RetroArch::getBasePath() {
+ }
+ 
+ fs::path RetroArch::getCorePath() {
+-#if defined(_WIN32)
+-	return RetroArch::getBasePath() / L"cores" / L"parallel_n64_next_libretro.dll";
+-#elif defined(__APPLE__)
+-	return RetroArch::getBasePath() / "cores" / "parallel_n64_next_libretro.dylib";
+-#else
+-	return RetroArch::getBasePath() / "cores" / "parallel_n64_next_libretro.so";
+-#endif
++	return "@parallelN64CorePath@";
+ }
+ 
+ fs::path RetroArch::getConfigPath() {
+@@ -866,7 +860,7 @@ fs::path RetroArch::getExePath() {
+ #elif defined(FLATPAK_VERSION)
+ 	return BaseDir::program() / "retroarch";
+ #else
+-	return BaseDir::data() / "appimage" / "RetroArch-Linux-x86_64.AppImage";
++	return "@retroArchExePath@";
+ #endif
+ }
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index 3ca39b2..f3c14ba 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -200,6 +200,7 @@ int main( int argc, char **argv ) {
+ 		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
+ 		fs::path( "/usr/share/parallel-launcher/translations/" )
+ #else
++		fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher/translations/",
+ 		fs::path( "/usr/share/parallel-launcher/translations/" ),
+ 		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
+ 		BaseDir::program() / "lang"
+diff --git a/src/polyfill/base-directory.cpp b/src/polyfill/base-directory.cpp
+index 720a754..db607ca 100644
+--- a/src/polyfill/base-directory.cpp
++++ b/src/polyfill/base-directory.cpp
+@@ -134,7 +134,7 @@ static Locations getLocations() {
+ #if defined(FLATPAK_VERSION)
+ 		fs::path( "/app/share/parallel-launcher" )
+ #elif defined(__linux__)
+-		fs::path( "/usr/share/parallel-launcher" )
++		fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher"
+ #endif
+ 	};
+ }

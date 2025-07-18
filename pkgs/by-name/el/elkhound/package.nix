@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elkhound";
-  version = "unstable-2020-04-13";
+  version = "0-unstable-2020-04-13";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
-    repo = pname;
+    repo = "elkhound";
     rev = "a7eb4bb2151c00cc080613a770d37560f62a285c";
-    sha256 = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
+    hash = "sha256-Y96OFpBNrD3vrKoEZ4KdJuI1Q4RmYANsu7H3ZzfaA6g=";
   };
 
   postPatch = ''
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     perl
   ];
 
+  cmakeFlags = [ "-Wno-dev" ]; # it vomits warnings that only upstream cares about
+
   installPhase = ''
     runHook preInstall
 
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       install -Dm444 -t $out/lib $d/*.a
       install -Dm444 -t $out/include/$d $src/src/$d/*.h
     done
-    install -Dm444 -t $out/share/doc/${pname} $src/src/elkhound/*.txt
+    install -Dm444 -t $out/share/doc/elkhound $src/src/elkhound/*.txt
 
     runHook postInstall
   '';
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://scottmcpeak.com/elkhound/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
-    # possibly works on Darwin
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "elkhound";
   };
 }

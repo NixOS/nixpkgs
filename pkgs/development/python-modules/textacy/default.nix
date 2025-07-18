@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Almost all tests have to deal with downloading a dataset, only test pure tests
     "tests/test_constants.py"
     "tests/preprocessing/test_normalize.py"

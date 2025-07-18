@@ -20,6 +20,8 @@ stdenv.mkDerivation {
   '';
 
   # Substituted variables
-  inherit sigtool;
-  codesignAllocate = "${cctools}/bin/${cctools.targetPrefix}codesign_allocate";
+  env = {
+    inherit sigtool;
+    codesignAllocate = "${cctools}/bin/${cctools.targetPrefix}codesign_allocate";
+  };
 }

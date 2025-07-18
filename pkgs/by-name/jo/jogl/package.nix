@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       substituteInPlace jogl/make/build-*.xml \
         --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
     ''
-    # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+    # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
     # if arm/aarch64 support will be added, this block might be commented out on those platforms
     # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
     + ''

@@ -5,12 +5,11 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "atdgen-runtime";
   inherit (atdgen-codec-runtime) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     biniou

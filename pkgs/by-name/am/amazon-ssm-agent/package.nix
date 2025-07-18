@@ -6,7 +6,7 @@
   darwin,
   fetchFromGitHub,
   coreutils,
-  nettools,
+  net-tools,
   util-linux,
   stdenv,
   dmidecode,
@@ -42,13 +42,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.1345.0";
+  version = "3.3.2299.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     tag = version;
-    hash = "sha256-6MGb6P3PYfnoztLdLhOm/smCjyWuV7ZGJtK40l4yFB0=";
+    hash = "sha256-8jqsAGnfn6+a+Zs9XfIyHzG/+jPO+UoSVsm0GHthq3E=";
   };
 
   vendorHash = null;
@@ -92,7 +92,7 @@ buildGoModule rec {
 
       substituteInPlace agent/platform/platform_unix.go \
         --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
-        --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+        --replace-fail '"/bin", "hostname"' '"${net-tools}/bin/hostname"' \
         --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
       substituteInPlace agent/session/shell/shell_unix.go \
@@ -169,14 +169,13 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      copumpkin
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       manveru
       anthonyroussel
       arianvp

@@ -23,16 +23,16 @@
 
 buildGoModule rec {
   pname = "lnd";
-  version = "0.18.4-beta";
+  version = "0.19.2-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
-    hash = "sha256-vZ5A0AsxZ8gpvXB4tH+GQIIvlJbSFvk38UbR24BVOPc=";
+    hash = "sha256-LUBUODPKXqU/wzQhjmC0NfvM284sD5dc7iQFSsdzyyI=";
   };
 
-  vendorHash = "sha256-Irlf2dwI0QZyzMFeBVr2I5iUe0PJyv20HX4rPOE8M54=";
+  vendorHash = "sha256-3eOKZ/NgSPrtYfDYUTDnVVb7EyMz8s+mtFo2UMyieHY=";
 
   subPackages = [
     "cmd/lncli"
@@ -46,6 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/lightningnetwork/lnd";
     license = licenses.mit;
     maintainers = with maintainers; [
+      bleetube
       cypherpunk2140
       prusnak
     ];

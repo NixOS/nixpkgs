@@ -17,12 +17,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
+    repo = "sn0int";
     tag = "v${version}";
     hash = "sha256-tiJLwlxZ9ndircgkH23ew+3QJeuuqt93JahAtFPcuG8=";
   };
 
-  cargoHash = "sha256-3FrUlv6UxULsrvgyV5mlry9j3wFMiXZVoxk6z6pRM3I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nDgWNm5HTvFEMQhUUnU7o2Rpzl3/bGwyB0N9Z1KorDs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,9 +37,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libseccomp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkgs.darwin.apple_sdk.frameworks.Security
     ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
@@ -52,16 +50,16 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/sn0int completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
     changelog = "https://github.com/kpcyrd/sn0int/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [
       fab
       xrelkd
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "sn0int";
   };
 }

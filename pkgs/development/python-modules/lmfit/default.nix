@@ -1,12 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   asteval,
   dill,
   fetchPypi,
   matplotlib,
   numpy,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   scipy,
@@ -17,20 +19,22 @@
 
 buildPythonPackage rec {
   pname = "lmfit";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mb7q4fAnwbjBTc1/LoSIqAt1+zied/ymd1Sb3C/ll7s=";
+    hash = "sha256-czIea4gfL2hiNXIaffwCr2uw8DCiXv62Zjj2KxxgU6E=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=lmfit --cov-report html" ""
-  '';
+  patches = [
+    # https://github.com/lmfit/lmfit-py/issues/999
+    (fetchpatch {
+      url = "https://github.com/lmfit/lmfit-py/commit/d4f4e3755d50cb9720c616fcff2cd7b58fbabba5.patch";
+      hash = "sha256-h1WK3ajnoX3pOZOduFBKpPz3exfoKzkbO/QNgROLT7c=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -48,6 +52,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     matplotlib
     pandas
+    pytest-cov-stub
     pytestCheckHook
   ];
 

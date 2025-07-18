@@ -8,33 +8,29 @@
   pip,
   pytestCheckHook,
   pythonOlder,
-  setuptools-scm,
+  setuptools,
   six,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.6.0";
-  format = "setuptools";
+  version = "3.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "codrsquad";
-    repo = pname;
+    repo = "setupmeta";
     tag = "v${version}";
-    hash = "sha256-OI7PU5LQ6w0iAbK7nsP+6RizsEWjKP9nec2J6n0xUhI=";
+    hash = "sha256-2SKiIkwfmXVOQBKBNUmw4SjiVpyLjIMpSHNA9IQxqwY=";
   };
 
   preBuild = ''
     export PYGRADLE_PROJECT_VERSION=${version};
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     git

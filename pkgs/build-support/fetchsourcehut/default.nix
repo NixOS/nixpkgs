@@ -1,8 +1,9 @@
 {
+  lib,
+  repoRevToNameMaybe,
   fetchgit,
   fetchhg,
   fetchzip,
-  lib,
 }:
 
 let
@@ -18,9 +19,9 @@ makeOverridable (
     owner,
     repo,
     rev,
+    name ? repoRevToNameMaybe repo rev "sourcehut",
     domain ? "sr.ht",
     vc ? "git",
-    name ? "source",
     fetchSubmodules ? false,
     ... # For hash agility
   }@args:

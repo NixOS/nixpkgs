@@ -24,16 +24,14 @@
   nss,
   nspr,
   vips,
-  wrapGAppsHook3,
   udev,
   libGL,
   unzip,
-  makeWrapper,
 }:
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.10.4";
+  version = "0.11.3";
 
   passthru.updateScript = ./update.sh;
 
@@ -48,7 +46,7 @@ let
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
   };
 
   linux = stdenv.mkDerivation {
@@ -64,16 +62,14 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-dwBnRuskajMpfaBQ5zr19+CQ3A/qen2RtxmV7GnXx0E=";
-          aarch64-linux = "sha256-HfzvbAV8RkmuwvuBtgvHgzAslbejlPJJJO7juGSMm1o=";
+          x86_64-linux = "sha256-pcYJHj8Jt5RazHZNAgXuSL6mu0MnUVqM9lmAUVJvGfg=";
+          aarch64-linux = "sha256-HAnlEHhbl15W/ynRWTG7TLtGkC7EPPpJzWQfMK52loA=";
         };
       };
 
     nativeBuildInputs = [
       dpkg
       autoPatchelfHook
-      wrapGAppsHook3
-      makeWrapper
     ];
 
     buildInputs = [
@@ -99,29 +95,27 @@ let
       vips
     ];
 
-    runtimeDependencies = map lib.getLib [
-      udev
-    ];
-
     installPhase = ''
       runHook preInstall
 
-      cp -r opt $out
+      mkdir -p $out/bin $out/app
+      cp -r opt/Wave $out/app/waveterm
       cp -r usr/share $out/share
       substituteInPlace $out/share/applications/waveterm.desktop \
         --replace-fail "/opt/Wave/" ""
+      ln -s $out/app/waveterm/waveterm $out/bin/waveterm
 
       runHook postInstall
     '';
 
     preFixup = ''
-      mkdir $out/bin
-      makeWrapper $out/Wave/waveterm $out/bin/waveterm \
-        --prefix LD_LIBRARY_PATH : "${
+      patchelf --add-needed libGL.so.1 \
+        --add-rpath ${
           lib.makeLibraryPath [
             libGL
+            udev
           ]
-        }"
+        } $out/app/waveterm/waveterm
     '';
 
     meta = metaCommon // {
@@ -142,14 +136,12 @@ let
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
         hash = selectSystem {
-          x86_64-darwin = "sha256-iQimmHhpojimZvJtPgOExLaEu/io6BrWWkTsx/1avjY=";
-          aarch64-darwin = "sha256-4txsd3aKIcsjSvx+XeDm7a6M9YRkZNLUuvv5adLOVx8=";
+          x86_64-darwin = "sha256-KmH5az2p2dRC1UCXCt7SBVfomj6dDaAtevIai1YIYO0=";
+          aarch64-darwin = "sha256-SdZY5MPi+oP3+ywW3BASMzYr16QiYS3MXyPs9jCqD+Y=";
         };
       };
 
-    nativeBuildInputs = [
-      unzip
-    ];
+    nativeBuildInputs = [ unzip ];
 
     installPhase = ''
       runHook preInstall

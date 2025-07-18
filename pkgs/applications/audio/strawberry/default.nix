@@ -32,6 +32,8 @@
   taglib,
   util-linux,
   wrapQtAppsHook,
+  sparsehash,
+  rapidjson,
 }:
 
 let
@@ -40,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.2.3";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-90gnPw21oBHrRslJmB2hUId0WI7Gf+I4bvdS+dvAHdI=";
+    hash = "sha256-AhNx2CdfE7ff3+L47X6lYPD8GA7imkDIJD5ESndn/cc=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
       qtbase
       sqlite
       taglib
+      sparsehash
+      rapidjson
     ]
     ++ optionals stdenv.hostPlatform.isLinux [
       libgpod
@@ -112,14 +116,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
     changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "strawberry";
   };
 }

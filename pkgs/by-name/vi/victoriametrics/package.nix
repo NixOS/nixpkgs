@@ -9,18 +9,17 @@
   withVmAuth ? true, # HTTP proxy for authentication
   withBackupTools ? true, # vmbackup, vmrestore
   withVmctl ? true, # vmctl is used to migrate time series
-  withVictoriaLogs ? true, # logs server
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.108.1";
+  version = "1.121.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
-    rev = "v${version}";
-    hash = "sha256-UaWTBOlMf7SR3tBjeaNnokdSqtRrYm5rPQPi3UGxTvQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hCZU6O3synVayg253Cbsonzad3ZBMx1B/yJwBJzU+X0=";
   };
 
   vendorHash = null;
@@ -43,12 +42,6 @@ buildGoModule rec {
     ++ lib.optionals withBackupTools [
       "app/vmbackup"
       "app/vmrestore"
-    ]
-    ++ lib.optionals withVictoriaLogs [
-      "app/victoria-logs"
-      "app/vlinsert"
-      "app/vlselect"
-      "app/vlstorage"
     ];
 
   postPatch = ''
@@ -60,40 +53,43 @@ buildGoModule rec {
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
-      --replace "time.After(10 " "time.After(120 " \
-      --replace "time.NewTimer(30 " "time.NewTimer(120 " \
-      --replace "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
+      --replace-fail "time.After(10 " "time.After(120 " \
+      --replace-fail "time.NewTimer(30 " "time.NewTimer(120 " \
+      --replace-fail "time.NewTimer(time.Second * 10)" "time.NewTimer(time.Second * 120)" \
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}"
+    "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${finalAttrs.version}"
   ];
 
   preCheck = ''
     # `lib/querytracer/tracer_test.go` expects `buildinfo.Version` to be unset
-    export ldflags=''${ldflags//=${version}/=}
+    export ldflags=''${ldflags//=${finalAttrs.version}/=}
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) victoriametrics;
+  passthru = {
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+    updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       yorickvp
       ivan
       leona
       shawn8901
       ryan4yin
     ];
-    changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
+    changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${finalAttrs.version}";
     mainProgram = "victoria-metrics";
   };
-}
+})

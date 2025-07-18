@@ -1,0 +1,30 @@
+Prevents NextJS from attempting to download fonts during build. The fonts
+directory will be created in the derivation script.
+
+See similar patches:
+ pkgs/by-name/cr/crabfit-frontend/01-localfont.patch
+ pkgs/by-name/al/alcom/use-local-fonts.patch
+ pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
+
+---
+--- a/apps/web/app/layout.tsx
++++ b/apps/web/app/layout.tsx
+@@ -1,5 +1,5 @@
+ import type { Metadata } from "next";
+-import { Inter } from "next/font/google";
++import localFont from "next/font/local";
+ import { NuqsAdapter } from "nuqs/adapters/next/app";
+ 
+ import "@karakeep/tailwind-config/globals.css";
+@@ -14,9 +14,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+ 
+ import { clientConfig } from "@karakeep/shared/config";
+ 
+-const inter = Inter({
++const inter = localFont({
+   subsets: ["latin"],
+   fallback: ["sans-serif"],
++  src: "./fonts/InterVariable.ttf",
+ });
+ 
+ export const metadata: Metadata = {

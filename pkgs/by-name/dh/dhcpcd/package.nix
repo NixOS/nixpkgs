@@ -8,18 +8,20 @@
   runtimeShellPackage,
   runtimeShell,
   nixosTests,
+  # Always tries to do dynamic linking for udev.
+  withUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   enablePrivSep ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcpcd";
-  version = "10.1.0";
+  version = "10.2.4";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
     rev = "v${version}";
-    sha256 = "sha256-Qtg9jOFMR/9oWJDmoNNcEAMxG6G1F187HF4MMBJIoTw=";
+    sha256 = "sha256-ysaKgF4Cu/S6yhSn/4glA0+Ey54KNp3/1Oh82yE0/PY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     [
       runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals withUdev [
       udev
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--disable-privsep"
     "--dbdir=/var/lib/dhcpcd"
+    "--with-default-hostname=nixos"
     (lib.enableFeature enablePrivSep "privsep")
   ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
@@ -57,18 +60,21 @@ stdenv.mkDerivation rec {
   ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (
-    udev != null && stdenv.hostPlatform.isLinux
-  ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString withUdev "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru.tests = {
-    inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf;
+    inherit (nixosTests.networking.scripted)
+      macvlan
+      dhcpSimple
+      dhcpHostname
+      dhcpOneIf
+      ;
   };
 
   meta = with lib; {
     description = "Client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = "https://roy.marples.name/projects/dhcpcd";
-    platforms = platforms.linux ++ platforms.freebsd;
+    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
     license = licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";

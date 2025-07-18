@@ -1,0 +1,84 @@
+From da16ec51ea78f88f333ecf3df2a249fcc65ead24 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 18 Jan 2025 22:01:03 +0000
+Subject: [PATCH 2/4] cmake: add config so headers can be discovered when
+ installed
+
+---
+ CMakeLists.txt                 | 39 +++++++++++++++++++++++++++++++---
+ cudnn_frontend-config.cmake.in |  3 +++
+ 2 files changed, 39 insertions(+), 3 deletions(-)
+ create mode 100644 cudnn_frontend-config.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8944621..9b1bfba 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.17)
++cmake_minimum_required(VERSION 3.23)
+ 
+ project(cudnn_frontend VERSION 1.9.0)
+ 
+@@ -15,6 +15,15 @@ endif()
+ 
+ add_library(cudnn_frontend INTERFACE)
+ 
++# Add header files to library
++file(GLOB_RECURSE CUDNN_FRONTEND_INCLUDE_FILES "include/*")
++target_sources(
++    cudnn_frontend PUBLIC FILE_SET HEADERS
++    BASE_DIRS "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
++    FILES "${CUDNN_FRONTEND_INCLUDE_FILES}"
++)
++unset(CUDNN_FRONTEND_INCLUDE_FILES)
++
+ target_compile_definitions(
+     cudnn_frontend INTERFACE
+     $<$<BOOL:${CUDNN_FRONTEND_SKIP_JSON_LIB}>:CUDNN_FRONTEND_SKIP_JSON_LIB>
+@@ -58,7 +67,31 @@ endif()
+ # * CMAKE_INSTALL_INCLUDEDIR
+ include(GNUInstallDirs)
+ 
++# See https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html#example-generating-package-files
++include(CMakePackageConfigHelpers)
++
++# Install and export the header files
++install(
++    TARGETS cudnn_frontend
++    EXPORT cudnn_frontend_targets FILE_SET HEADERS
++)
++export(
++    EXPORT cudnn_frontend_targets
++    FILE "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend/cudnn_frontend-targets.cmake"
++)
++install(
++    EXPORT cudnn_frontend_targets
++    FILE cudnn_frontend-targets.cmake
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cudnn_frontend"
++)
++
++# Install the CMake configuration file for header discovery
++configure_package_config_file(
++    cudnn_frontend-config.cmake.in
++    "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-config.cmake"
++    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cudnn_frontend"
++)
+ install(
+-    DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++    FILES "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-config.cmake"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cudnn_frontend"
+ )
+diff --git a/cudnn_frontend-config.cmake.in b/cudnn_frontend-config.cmake.in
+new file mode 100644
+index 0000000..8b2d843
+--- /dev/null
++++ b/cudnn_frontend-config.cmake.in
+@@ -0,0 +1,3 @@
++@PACKAGE_INIT@
++
++include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-targets.cmake)
+-- 
+2.47.0
+

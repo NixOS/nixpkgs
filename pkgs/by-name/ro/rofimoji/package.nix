@@ -7,7 +7,6 @@
   waylandSupport ? true,
   x11Support ? true,
 
-  rofi,
   wl-clipboard,
   wtype,
   xdotool,
@@ -36,7 +35,6 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs =
     [
       python3Packages.configargparse
-      rofi
     ]
     ++ lib.optionals waylandSupport [
       wl-clipboard

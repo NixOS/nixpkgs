@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, mono
-, buildDotnetModule
-, dotnetCorePackages
-, unzip
+{
+  lib,
+  fetchFromGitHub,
+  mono,
+  buildDotnetModule,
+  dotnetCorePackages,
+  unzip,
 }:
 
 buildDotnetModule rec {
@@ -17,9 +18,11 @@ buildDotnetModule rec {
     hash = "sha256-4iXabFp0LqJ8TXOrqeD+oTAocg6ZTIfijfX3s3fMJuI=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
 
-  projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
+  projectFile = [
+    "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj"
+  ];
 
   nugetDeps = ./deps.json;
 

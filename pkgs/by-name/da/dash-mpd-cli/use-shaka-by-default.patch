@@ -1,0 +1,12 @@
+diff --git a/src/main.rs b/src/main.rs
+index f720d4c..a3c6c85 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -325,6 +325,7 @@ async fn main () -> Result<()> {
+              .value_name("APP")
+              .num_args(1)
+              .value_parser(["mp4decrypt", "shaka"])
++             .default_value("shaka")
+              .help("Application to use to decrypt encrypted media streams (either mp4decrypt or shaka)."))
+         .arg(Arg::new("save-fragments")
+              .long("save-fragments")

@@ -3,35 +3,45 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  httpx,
   pytestCheckHook,
-  requests,
+  pytest-asyncio,
 }:
 buildPythonPackage rec {
   pname = "biothings-client";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "biothings_client.py";
-    rev = "v${version}";
-    hash = "sha256-rCpzBX2H+7R8ulnJgtVlBA45ASa4DaY5jQ1bO2+bAC8=";
+    tag = "v${version}";
+    hash = "sha256-uItIVoWbclF5Xkt7BxI/Q9sfKtrOJxYeJJmTd2NeGfo=";
   };
 
   build-system = [ setuptools ];
-  dependencies = [ requests ];
+  dependencies = [ httpx ];
   pythonImportsCheck = [ "biothings_client" ];
-  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  enabledTestPaths = [
     # All other tests make network requests to exercise the API
-    "tests/gene.py::TestGeneClient::test_http"
-    "tests/test.py::TestBiothingsClient::test_generate_settings_from_url"
-    "tests/variant.py::TestVariantClient::test_format_hgvs"
+    "tests/test_async.py::test_generate_async_settings"
+    "tests/test_async.py::test_url_protocol"
+    "tests/test_async.py::test_async_client_proxy_discovery"
+    "tests/test_async_variant.py::test_format_hgvs"
+    "tests/test_sync.py::test_generate_settings"
+    "tests/test_sync.py::test_url_protocol"
+    "tests/test_sync.py::test_client_proxy_discovery"
+    "tests/test_variant.py::test_format_hgvs"
   ];
 
   meta = {
-    changelog = "https://github.com/biothings/biothings_client.py/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/biothings/biothings_client.py/blob/${src.tag}/CHANGES.txt";
     description = "Wrapper to access Biothings.api-based backend services";
     homepage = "https://github.com/biothings/biothings_client.py";
     license = lib.licenses.bsd3;

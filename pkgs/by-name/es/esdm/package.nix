@@ -13,7 +13,7 @@
   openssl,
   libkcapi,
 
-  # A more detailed explaination of the following meson build options can be found
+  # A more detailed explanation of the following meson build options can be found
   # in the source code of esdm.
   # A brief explanation is given.
 
@@ -23,13 +23,13 @@
   drngChaCha20 ? false, # set the default drng callback
   ais2031 ? false, # set the seeding strategy to be compliant with AIS 20/31
   sp80090c ? false, # set compliance with NIST SP800-90C
-  cryptoBackend ? "botan", # set backend for hash and drbg operations
+  cryptoBackend ? "builtin", # set backend for hash and drbg operations
   linuxDevFiles ? true, # enable linux /dev/random and /dev/urandom support
   linuxGetRandom ? true, # enable linux getrandom support
   hashSha512 ? false, # set the conditioning hash: SHA2-512
   hashSha3_512 ? true, # set the conditioning hash: SHA3-512
-  openSSLRandProvider ? true, # build ESDM provider for OpenSSL 3.x
-  botanRng ? true, # build ESDM class for Botan 3.x
+  openSSLRandProvider ? false, # build ESDM provider for OpenSSL 3.x
+  botanRng ? false, # build ESDM class for Botan 3.x
 
   # client-related options (handle with care, consult source code and meson options)
   # leave as is if in doubt
@@ -56,10 +56,7 @@
 
 assert drngHashDrbg != drngChaCha20;
 assert hashSha512 != hashSha3_512;
-assert
-  cryptoBackend == "openssl"
-  || cryptoBackend == "botan"
-  || cryptoBackend == "builtin" "Unsupported ESDM crypto backend";
+assert cryptoBackend == "openssl" || cryptoBackend == "botan" || cryptoBackend == "builtin";
 
 stdenv.mkDerivation rec {
   pname = "esdm";

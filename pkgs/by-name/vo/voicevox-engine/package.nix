@@ -2,32 +2,28 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  replaceVars,
   voicevox-core,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
-  version = "0.22.2";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
-    hash = "sha256-TZycd3xX5d4dNk4ze2JozyO7zDpGAuO+O7xHAx7QXUI=";
+    hash = "sha256-WoHTv4VjLFJPIi47WETMQM8JmgBctAWlue8yKmi1+6A=";
   };
 
   patches = [
-    # the upstream package only uses poetry for dependency management, not for package definition
-    # this patch makes the package installable via poetry-core
-    (replaceVars ./make-installable.patch {
-      inherit version;
-    })
+    # this patch makes the package installable via hatchling
+    ./make-installable.patch
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
   dependencies =
@@ -35,27 +31,27 @@ python3Packages.buildPythonApplication rec {
       passthru.pyopenjtalk
     ]
     ++ (with python3Packages; [
-      numpy
       fastapi
       jinja2
-      python-multipart
-      uvicorn
-      soundfile
-      pyyaml
-      pyworld
-      semver
+      kanalizer
+      numpy
       platformdirs
-      soxr
       pydantic
+      python-multipart
+      pyworld
+      pyyaml
+      semver
+      setuptools
+      soundfile
+      soxr
       starlette
+      uvicorn
     ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
     "fastapi-slim"
   ];
-
-  pythonRelaxDeps = true;
 
   preConfigure = ''
     # copy demo metadata to temporary directory
@@ -91,16 +87,6 @@ python3Packages.buildPythonApplication rec {
     mv test_character_info resources/character_info
   '';
 
-  disabledTests = [
-    # this test checks the behaviour of openapi
-    # one of the functions returns a slightly different output due to openapi version differences
-    "test_OpenAPIの形が変わっていないことを確認"
-
-    # these tests fail due to some tiny floating point discrepancies
-    "test_upspeak_voiced_last_mora"
-    "test_upspeak_voiced_N_last_mora"
-  ];
-
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     syrupy
@@ -113,7 +99,7 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
-      hash = "sha256-oeWJESm1v0wicAXXFAyZT8z4QRVv9c+3vsWksmuY5wY=";
+      hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };

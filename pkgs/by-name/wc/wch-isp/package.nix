@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromSourcehut {
     owner = "~jmaselbas";
-    repo = pname;
+    repo = "wch-isp";
     rev = "v${version}";
     hash = "sha256-JB7cvZPzRhYJ8T3QJkguHOzZFrLOft5rRz0F0sVav/k=";
   };
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "install"
     "install-rules"
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Firmware programmer for WCH microcontrollers over USB";

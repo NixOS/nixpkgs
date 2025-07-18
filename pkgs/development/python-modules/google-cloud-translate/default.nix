@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.19.0";
+  version = "3.20.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;
-    hash = "sha256-SNHDNsJsEl0EFnhj0hCtgBOtgenhZC/mUjR0gty/3DE=";
+    hash = "sha256-bTZUx/h3O/ytddhBkPdbqe6vJp5j4L+3PD8QrVUR5Ps=";
   };
 
   build-system = [ setuptools ];
@@ -64,8 +64,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Translation API client library";
-    homepage = "https://github.com/googleapis/python-translate";
-    changelog = "https://github.com/googleapis/python-translate/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-translate";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-translate-v${version}/packages/google-cloud-translate/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

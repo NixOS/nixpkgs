@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -12,7 +11,6 @@
   requests,
   moto,
   paramiko,
-  pynacl,
   pytestCheckHook,
   responses,
   setuptools,
@@ -22,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.0.4";
+  version = "7.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,18 +29,8 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-4HOTaF6AKXGlVCvSGKnnaH73aa4IO0aRxz03XQ4gSd8=";
+    hash = "sha256-/16Is90235scTAYUW/65QxcTddD0+aiG5TLzYsBUE1A=";
   };
-
-  patches = [
-    # https://github.com/RaRe-Technologies/smart_open/pull/822
-    # fix test_smart_open.py on python 3.12
-    (fetchpatch {
-      name = "fix-smart-open-test.patch";
-      url = "https://github.com/RaRe-Technologies/smart_open/commit/3d29564ca034a56d343c9d14b178aaa0ff4c937c.patch";
-      hash = "sha256-CrAeqaIMM8bctWiFnq9uamnIlkaslDyjaWL6k9wUjT8=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -68,10 +56,9 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
-    pynacl
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [ "smart_open" ];
+  enabledTestPaths = [ "smart_open" ];
 
   disabledTests = [
     # https://github.com/RaRe-Technologies/smart_open/issues/784
@@ -82,7 +69,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/piskvorky/smart_open/releases/tag/v${version}";
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;

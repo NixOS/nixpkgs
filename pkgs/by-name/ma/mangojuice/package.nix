@@ -7,29 +7,38 @@
   vala,
   pkg-config,
   makeBinaryWrapper,
+  replaceVars,
 
   gtk4,
   libadwaita,
   glib,
   libgee,
+  pciutils,
   wrapGAppsHook4,
 
   mangohud,
   mesa-demos,
   vulkan-tools,
+  vkbasalt,
 
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.7.9";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-L+wxRmpCAfrvLE9IHAT9g+F/clXlQAkLpbnMJwC8RxY=";
+    hash = "sha256-pqtzNJBMoKbF48JoIrbcJX78S+e3tb+otiG85YbBKYk=";
   };
+
+  patches = [
+    (replaceVars ./fix-vkbasalt-path.patch {
+      vkbasalt = lib.getLib vkbasalt + "/lib/vkbasalt/libvkbasalt.so";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -55,8 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     let
       path = lib.makeBinPath [
         mangohud
-        mesa-demos
-        vulkan-tools
+        mesa-demos # glxgears
+        pciutils # lspci
+        vulkan-tools # vkcube
       ];
     in
     ''
@@ -70,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Convenient alternative to GOverlay for setting up MangoHud";
     homepage = "https://github.com/radiolamp/mangojuice";
+    changelog = "https://github.com/radiolamp/mangojuice/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

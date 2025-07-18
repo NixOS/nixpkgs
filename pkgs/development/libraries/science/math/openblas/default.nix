@@ -101,6 +101,21 @@ let
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
+    x86_64-windows = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
+      USE_OPENMP = false;
+    };
+
+    powerpc64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER4";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
     powerpc64le-linux = {
       BINARY = 64;
       TARGET = setTarget "POWER5";
@@ -116,8 +131,7 @@ let
     };
 
     loongarch64-linux = {
-      BINARY = 64;
-      TARGET = setTarget "LOONGSONGENERIC";
+      TARGET = setTarget "LA64_GENERIC";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
@@ -126,6 +140,14 @@ let
       BINARY = 64;
       TARGET = setTarget "ZARCH_GENERIC";
       DYNAMIC_ARCH = setDynamicArch true;
+      USE_OPENMP = true;
+    };
+
+    x86_64-freebsd = {
+      BINARY = 64;
+      TARGET = setTarget "ATHLON";
+      DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = true;
     };
   };
@@ -158,7 +180,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.28";
+  version = "0.3.30";
 
   outputs = [
     "out"
@@ -169,7 +191,7 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
+    hash = "sha256-foP2OXUL6ttgYvCxLsxUiVdkPoTvGiHomdNudbSUmSE=";
   };
 
   postPatch = ''
@@ -272,6 +294,9 @@ stdenv.mkDerivation rec {
           done
 
           # Setup symlinks for blas / lapack
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      ln -s $out/bin/*.dll $out/lib
     ''
     + lib.optionalString enableShared ''
       ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}

@@ -126,6 +126,7 @@ mkDerivation rec {
 
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
+    ln -s ${liblinphone}/share/sounds/linphone/* $out/share/sounds/linphone/
     ln -s ${belle-sip}/share/belr/grammars/* $out/share/belr/grammars/
 
     wrapProgram $out/bin/linphone \

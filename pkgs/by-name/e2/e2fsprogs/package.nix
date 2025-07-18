@@ -13,16 +13,31 @@
   shared ? !stdenv.hostPlatform.isStatic,
   e2fsprogs,
   runCommand,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.1";
+  version = "1.47.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-mvzSAfOUKdLbJJKusT26XnXWzFBoK3MtyjVkO9XwkuM=";
+    url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
+    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
   };
+
+  # 2025-05-31: Fix libarchive, from https://github.com/tytso/e2fsprogs/pull/230
+  patches = [
+    (fetchpatch {
+      name = "0001-create_inode_libarchive.c-define-libarchive-dylib-for-darwin.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/e86c65bc7ee276cd9ca920d96e18ed0cddab3412.patch";
+      hash = "sha256-HFZAznaNl5rzgVEvYx1LDKh2jd/VEXD/o0wypIh4TR8=";
+    })
+    (fetchpatch {
+      name = "0002-mkgnutar.pl-avoid-uninitialized-username-variable.patch";
+      url = "https://github.com/tytso/e2fsprogs/commit/9217c359db1d1b6d031a0e2ca9a885634fed00da.patch";
+      hash = "sha256-iDXmLq77eJolH1mkXSbvZ9tRVtGQt2F45CdkVphUZSs=";
+    })
+  ];
 
   # fuse2fs adds 14mb of dependencies
   outputs = [
@@ -41,40 +56,30 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libuuid
     gettext
+    libarchive
   ] ++ lib.optionals withFuse [ fuse3 ];
 
-  patches = [
-    (fetchurl {
-      name = "SIZEOF_SIZE_T.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527074121.2767083-1-hi@alyssa.is/raw";
-      hash = "sha256-QdsvcvBi0mC/4YErqG0UKl94MH0OZpFVTGszNqBe/qw=";
-    })
-    (fetchurl {
-      name = "unused-parameters.patch";
-      url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
-      hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
-    })
-  ];
-
   configureFlags =
-    if stdenv.hostPlatform.isLinux then
-      [
-        # It seems that the e2fsprogs is one of the few packages that cannot be
-        # build with shared and static libs.
-        (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
-        "--enable-symlink-install"
-        "--enable-relative-symlinks"
-        "--with-crond-dir=no"
-        # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
-        "--disable-fsck"
-        "--disable-libblkid"
-        "--disable-libuuid"
-        "--disable-uuidd"
-      ]
-    else
-      [
-        "--enable-libuuid --disable-e2initrd-helper"
-      ];
+    [
+      "--with-libarchive=direct"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
+      "--enable-symlink-install"
+      "--enable-relative-symlinks"
+      "--with-crond-dir=no"
+      # fsck, libblkid, libuuid and uuidd are in util-linux-ng (the "libuuid" dependency)
+      "--disable-fsck"
+      "--disable-libblkid"
+      "--disable-libuuid"
+      "--disable-uuidd"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "--enable-libuuid"
+      "--disable-e2initrd-helper"
+    ];
 
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
@@ -102,17 +107,18 @@ stdenv.mkDerivation rec {
       [ -e $out/success ]
     '';
   };
-  meta = with lib; {
+
+  meta = {
     homepage = "https://e2fsprogs.sourceforge.net/";
     changelog = "https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#${version}";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus # lib/ext2fs, lib/e2p
       bsd3 # lib/uuid
       mit # lib/et, lib/ss
     ];
-    platforms = platforms.unix;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ usertam ];
   };
 }

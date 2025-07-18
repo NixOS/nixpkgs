@@ -10,6 +10,7 @@
   SDL2,
   SDL2_image,
   libvorbis,
+  libX11,
   bullet,
   curl,
   gettext,
@@ -34,6 +35,11 @@ let
       sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
+    postPatch = ''
+      substituteInPlace src/SConscript \
+        --replace-fail sdl2-config "${lib.getExe' (lib.getDev SDL2) "sdl2-config"}"
+    '';
+
     nativeBuildInputs = [
       pkg-config
       scons
@@ -44,6 +50,7 @@ let
       SDL2
       SDL2_image
       libvorbis
+      libX11
       bullet
       curl
       gettext
@@ -54,16 +61,19 @@ let
     ];
 
     buildPhase = ''
-      sed -i -e s,/usr/local,$out, SConstruct
-      export CXXFLAGS="$(pkg-config --cflags SDL2_image)"
+      runHook preBuild
+      substituteInPlace SConstruct \
+        --replace-fail /usr/local "$out" \
+        --replace-fail pkg-config "${stdenv.cc.targetPrefix}pkg-config"
+      export CXXFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --cflags SDL2_image)"
       scons -j$NIX_BUILD_CORES
+      runHook postBuild
     '';
-    installPhase = "scons install";
 
     meta = {
       description = "Car racing game";
       mainProgram = "vdrift";
-      homepage = "http://vdrift.net/";
+      homepage = "https://vdrift.net/";
       license = lib.licenses.gpl2Plus;
       maintainers = [ ];
       platforms = lib.platforms.linux;

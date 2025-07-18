@@ -21,6 +21,7 @@
   twisted,
   setuptools,
   distutils,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -86,7 +87,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl
@@ -114,6 +115,8 @@ buildPythonPackage rec {
   };
 
   meta = {
+    # cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ []
+    broken = pythonAtLeast "3.13";
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";

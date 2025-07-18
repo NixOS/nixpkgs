@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchgit
-, perl
-, gnutar
-, zlib
-, bzip2
-, xz
-, zstd
-, libmd
-, makeWrapper
-, coreutils
-, autoreconfHook
-, pkg-config
-, diffutils
-, glibc ? !stdenv.hostPlatform.isDarwin
-, darwin
+{
+  lib,
+  stdenv,
+  fetchgit,
+  perl,
+  gnutar,
+  zlib,
+  bzip2,
+  xz,
+  zstd,
+  libmd,
+  makeWrapper,
+  coreutils,
+  autoreconfHook,
+  pkg-config,
+  diffutils,
+  glibc ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.11";
+  version = "1.22.20";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-mKyS0lPTG3ROcw8AhB4IdjNjvZK2YTGV9pbpjz/OLAc=";
+    hash = "sha256-Sw4darMZNFWwvDVBuf0EEdG5Qo2ceiooBrbXWJfCw4o=";
   };
 
   configureFlags = [
@@ -49,45 +49,61 @@ stdenv.mkDerivation rec {
     for i in $(find . -name Makefile.in); do
       substituteInPlace $i --replace "install-data-local:" "disabled:" ;
     done
+
+    # Skip check broken when cross-compiling.
+    substituteInPlace configure \
+      --replace-fail 'as_fn_error $? "cannot find a GNU tar program"' "#"
   '';
 
-  postPatch = ''
-    patchShebangs .
-
-    # Dpkg commands sometimes calls out to shell commands
-    substituteInPlace lib/dpkg/dpkg.h \
-       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
-       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
-       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
-       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
-       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
-       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
-       --replace '"dpkg"' \"$out/bin/dpkg\" \
-       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
-       --replace '"rm"' \"${coreutils}/bin/rm\" \
-       --replace '"cat"' \"${coreutils}/bin/cat\" \
-       --replace '"diff"' \"${diffutils}/bin/diff\"
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace src/main/help.c \
-       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
-  '';
-
-  buildInputs = [ perl zlib bzip2 xz zstd libmd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
-  nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
-
-  postInstall =
+  postPatch =
     ''
-      for i in $out/bin/*; do
-        if head -n 1 $i | grep -q perl; then
-          substituteInPlace $i --replace \
-            "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
-        fi
-      done
+      patchShebangs --host .
 
-      mkdir -p $out/etc/dpkg
-      cp -r scripts/t/origins $out/etc/dpkg
+      # Dpkg commands sometimes calls out to shell commands
+      substituteInPlace lib/dpkg/dpkg.h \
+         --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+         --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+         --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+         --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+         --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+         --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+         --replace '"dpkg"' \"$out/bin/dpkg\" \
+         --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+         --replace '"rm"' \"${coreutils}/bin/rm\" \
+         --replace '"cat"' \"${coreutils}/bin/cat\" \
+         --replace '"diff"' \"${diffutils}/bin/diff\"
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace src/main/help.c \
+         --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
     '';
+
+  buildInputs = [
+    perl
+    zlib
+    bzip2
+    xz
+    zstd
+    libmd
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    autoreconfHook
+    pkg-config
+  ];
+
+  postInstall = ''
+    for i in $out/bin/*; do
+      if head -n 1 $i | grep -q perl; then
+        substituteInPlace $i --replace \
+          "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      fi
+    done
+
+    mkdir -p $out/etc/dpkg
+    cp -r scripts/t/origins $out/etc/dpkg
+  '';
 
   setupHook = ./setup-hook.sh;
 
@@ -96,6 +112,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ siriobalmelli ];
   };
 }

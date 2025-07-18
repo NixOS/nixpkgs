@@ -109,7 +109,7 @@ in
         description = "The API for Crab Fit.";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
 
         serviceConfig = {
           # TODO: harden

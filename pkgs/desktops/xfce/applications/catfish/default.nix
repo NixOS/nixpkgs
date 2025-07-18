@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  desktop-file-utils,
   gobject-introspection,
   meson,
   ninja,
@@ -19,18 +18,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catfish";
-  version = "4.20.0";
+  version = "4.20.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "catfish";
     rev = "catfish-${finalAttrs.version}";
-    hash = "sha256-7ERE6R714OuqTjeNZw3K6HvQTA8OIglG6+8Kiawwzu8=";
+    hash = "sha256-mTAunc1GJLkSu+3oWD5+2sCQemWdVsUURlP09UkbVyw=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     gobject-introspection
     meson
     ninja
@@ -73,6 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 })

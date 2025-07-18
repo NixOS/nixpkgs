@@ -12,7 +12,7 @@ buildPecl {
     description = "Inotify bindings for PHP";
     homepage = "https://github.com/arnaud-lb/php-inotify";
     license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
     platforms = lib.platforms.linux;
   };
 }

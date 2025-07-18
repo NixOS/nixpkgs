@@ -6,8 +6,7 @@
   libusb1,
   gcc,
   pkg-config,
-  util-linux,
-  pciutils,
+  makeWrapper,
   stdenv,
   systemdMinimal,
 }:
@@ -24,16 +23,16 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
-    rev = "v${version}";
-    hash = "sha256-T7x9xU/Tr2BKfrHQHrP6Mm6rNUWYASjEPzHIKgyS7aE=";
+    tag = "v${version}";
+    hash = "sha256-4kER7CyFvMKVpKxCYHuf9fkkYVzVK9AWpF55cBNzPc0=";
   };
 
-  vendorHash = "sha256-qDzd+aq08PN9kl1YkvNLGvWaFVh7xFXJhGdx/ELwYGY=";
+  vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";
 
   env.CGO_ENABLED = 1;
 
@@ -45,14 +44,14 @@ buildGoModule rec {
   nativeBuildInputs = [
     gcc
     pkg-config
+    makeWrapper
   ];
 
-  runtimeInputs = [
-    libusb1
-    util-linux
-    pciutils
-    systemdMinimal
-  ];
+  # nixos-facter calls systemd-detect-virt
+  postInstall = ''
+    wrapProgram "$out/bin/nixos-facter" \
+        --prefix PATH : "${lib.makeBinPath [ systemdMinimal ]}"
+  '';
 
   ldflags = [
     "-s"

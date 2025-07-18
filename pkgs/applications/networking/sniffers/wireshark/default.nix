@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
 
-  ApplicationServices,
   asciidoctor,
   bcg729,
   bison,
@@ -43,7 +42,6 @@
   snappy,
   spandsp3,
   speexdsp,
-  SystemConfiguration,
   wrapGAppsHook3,
   zlib-ng,
   zstd,
@@ -58,7 +56,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.2";
+  version = "4.4.8";
 
   outputs = [
     "out"
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-qeMaj8kRGG1NlDb5j4M/Za2M2Ohh2qhXbzBtQGjrCSo=";
+    hash = "sha256-XdZXzIJODD8SCn6mut5poboOBX2r/yGpKthpNgJqgaY=";
   };
 
   patches = [
@@ -148,9 +146,7 @@ stdenv.mkDerivation rec {
       sbc
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ApplicationServices
       gmp
-      SystemConfiguration
     ];
 
   strictDeps = true;
@@ -190,6 +186,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString isAppBundle ''
       mkdir -p $out/Applications
       mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
+
+      ln -s $out/Applications/Wireshark.app/Contents/MacOS/Wireshark $out/bin/wireshark
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       local flags=()
@@ -218,7 +216,7 @@ stdenv.mkDerivation rec {
     cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Powerful network protocol analyzer";
     longDescription = ''
       Wireshark (formerly known as "Ethereal") is a powerful network
@@ -227,9 +225,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.wireshark.org";
     changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       bjornfor
       fpletz
     ];

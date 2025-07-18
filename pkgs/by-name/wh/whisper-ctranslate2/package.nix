@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   python3Packages,
   fetchFromGitHub,
@@ -7,7 +8,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.5.1";
+  version = "0.5.3";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -17,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     tag = version;
-    hash = "sha256-y1xCycWUxrLwmnk6tlyag0uN0oo6DRQFeIIBw555VjY=";
+    hash = "sha256-rRxadVYv69Jgzai+ANS6oKHOArTI9vPDPeTybtOySww=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -41,6 +42,9 @@ python3Packages.buildPythonApplication {
     ${python3.interpreter} -m nose2 -s tests
     runHook postCheck
   '';
+  # Tests fail in build sandbox on aarch64-linux, but the program still works at
+  # runtime. See https://github.com/microsoft/onnxruntime/issues/10038.
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   passthru.updateScript = nix-update-script { };
 

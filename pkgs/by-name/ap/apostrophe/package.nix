@@ -4,7 +4,7 @@
   gtksourceview5,
   libspelling,
   fetchFromGitHub,
-  python3Packages,
+  python312Packages,
   nodePackages,
   meson,
   ninja,
@@ -40,7 +40,10 @@ let
     hash = "sha256-L6KVBw20K67lHT07Ws+ZC2DwdURahqyuyjAaK0kTgN0=";
   };
 in
-python3Packages.buildPythonApplication {
+
+# Requires telnetlib, and possibly others
+# Try to remove in subsequent updates
+python312Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";
   pyproject = false;
@@ -80,7 +83,7 @@ python3Packages.buildPythonApplication {
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python312Packages; [
     pygobject3
     pypandoc
     chardet
@@ -107,12 +110,10 @@ python3Packages.buildPythonApplication {
     description = "Distraction free Markdown editor for GNU/Linux";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers =
-      with lib.maintainers;
-      [
-        sternenseemann
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      sternenseemann
+    ];
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "apostrophe";
   };
 }

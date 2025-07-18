@@ -20,7 +20,6 @@
   python,
   pythonOlder,
   rich,
-  sniffio,
   socksio,
   pytestCheckHook,
   pytest-asyncio,
@@ -32,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.27.2";
-  format = "pyproject";
+  version = "0.28.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpx";
     tag = version;
-    hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+    hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };
 
   build-system = [
@@ -49,12 +48,11 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     certifi
     httpcore
     idna
-    sniffio
   ];
 
   optional-dependencies = {
@@ -87,11 +85,9 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -109,6 +105,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "httpx" ];
 
   __darwinAllowLocalNetworking = true;
+
+  # stdenv's fake SSL_CERT_FILE breaks default http transport constructor with:
+  # FileNotFoundError: [Errno 2] No such file or directory
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";

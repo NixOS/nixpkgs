@@ -18,26 +18,22 @@
   enableZstd ? true,
   zstd,
   nixosTests,
+  fakeroot,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchurl {
-    # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
+    # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
-    hash = "sha256-c5nppnCMMtZ4pypjIZ6W8jvgviM25Q/RNISY0HBB35A=";
+    hash = "sha256-KSS8s6Hti1UfwQH3QLnw/gogKxFQJ2R89phQ1l/YjFI=";
   };
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     perl
-  ];
-
-  patches = [
-    # https://github.com/WayneD/rsync/pull/558
-    ./configure.ac-fix-failing-IPv6-check.patch
   ];
 
   buildInputs =
@@ -51,6 +47,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableLZ4 lz4
     ++ lib.optional enableOpenSSL openssl
     ++ lib.optional enableXXHash xxHash;
+
+  # fakeroot doesn't work well on darwin anymore, apparently
+  checkInputs = lib.optionals (!stdenv.isDarwin) [ fakeroot ];
 
   configureFlags =
     [
@@ -76,13 +75,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
-      ehmry
       kampfschlaefer
       ivan
     ];

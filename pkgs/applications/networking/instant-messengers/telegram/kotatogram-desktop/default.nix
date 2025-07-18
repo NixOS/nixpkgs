@@ -5,6 +5,10 @@
   fetchpatch,
   libsForQt5,
   yasm,
+  alsa-lib,
+  jemalloc,
+  libopus,
+  libpulseaudio,
   withWebkit ? true,
 }:
 
@@ -22,7 +26,7 @@ let
       fetchSubmodules = true;
     };
 
-    patches = (oldAttrs.patches or [ ]) ++ [
+    patches = [
       (fetchpatch {
         url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
         decode = "base64 -d";
@@ -38,7 +42,7 @@ in
 telegram-desktop.override {
   pname = "kotatogram-desktop";
   inherit withWebkit;
-  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs (old: {
     pname = "kotatogram-desktop-unwrapped";
     version = "${version}-unstable-2024-09-27";
 
@@ -60,19 +64,26 @@ telegram-desktop.override {
       })
     ];
 
-    meta = with lib; {
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      alsa-lib
+      jemalloc
+      libopus
+      libpulseaudio
+    ];
+
+    meta = {
       description = "Kotatogram – experimental Telegram Desktop fork";
       longDescription = ''
         Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 
         It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
       '';
-      license = licenses.gpl3Only;
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.all;
       homepage = "https://kotatogram.github.io";
       changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
-      maintainers = with maintainers; [ ilya-fedin ];
+      maintainers = with lib.maintainers; [ ilya-fedin ];
       mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
     };
-  };
+  });
 }

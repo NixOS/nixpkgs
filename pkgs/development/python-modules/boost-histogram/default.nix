@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
     tag = "v${version}";
-    hash = "sha256-GsgzJqZTrtc4KRkGn468m0e+sgX9rzJdwA9JMPSSPWk=";
+    hash = "sha256-7E4y3P3RzVmIHb5mEoEYWZSwWnmL3LbGqYjGbnszM98=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-benchmark
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum

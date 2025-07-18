@@ -55,9 +55,7 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  configureScript = "./autogen.sh";
 
   # link SKK-JISYO.L from skkdicts for the bundled tool `skk`
   preInstall = ''

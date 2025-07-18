@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "approval-utilities";
   inherit (approvaltests) version src;
   disabled = pythonOlder "3.7";

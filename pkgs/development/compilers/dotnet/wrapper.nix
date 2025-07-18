@@ -6,16 +6,16 @@
   testers,
   runCommand,
   runCommandWith,
+  darwin,
   expect,
   curl,
   installShellFiles,
   callPackage,
   zlib,
   swiftPackages,
-  darwin,
   icu,
   lndir,
-  substituteAll,
+  replaceVars,
   nugetPackageHook,
   xmlstarlet,
 }:
@@ -42,10 +42,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     [
       ./dotnet-setup-hook.sh
     ]
-    ++ lib.optional (type == "sdk") (substituteAll {
-      src = ./dotnet-sdk-setup-hook.sh;
-      inherit lndir xmlstarlet;
-    });
+    ++ lib.optional (type == "sdk") (
+      replaceVars ./dotnet-sdk-setup-hook.sh {
+        inherit lndir xmlstarlet;
+      }
+    );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -75,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/dotnet --info
+    HOME=$(mktemp -d) $out/bin/dotnet --info
     runHook postInstallCheck
   '';
 
@@ -204,6 +205,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               runtime = null;
               run = checkConsoleOutput "$src/bin/test";
             };
+
+            ready-to-run = mkConsoleTest {
+              name = "ready-to-run";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
+              run = checkConsoleOutput "$src/bin/test";
+            };
           }
           // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
             aot = mkConsoleTest {
@@ -214,17 +222,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                 [
                   zlib
                 ]
-                ++ lib.optional stdenv.hostPlatform.isDarwin (
-                  with darwin;
-                  with apple_sdk.frameworks;
-                  [
-                    swiftPackages.swift
-                    Foundation
-                    CryptoKit
-                    GSS
-                    ICU
-                  ]
-                );
+                ++ lib.optional stdenv.hostPlatform.isDarwin [
+                  swiftPackages.swift
+                  darwin.ICU
+                ];
               build = ''
                 dotnet restore -p:PublishAot=true
                 dotnet publish -p:PublishAot=true -o $out/bin
@@ -274,14 +275,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       in
       unwrapped.passthru.tests or { }
       // {
-        version = testers.testVersion (
-          {
-            package = finalAttrs.finalPackage;
-          }
-          // lib.optionalAttrs (type != "sdk") {
-            command = "dotnet --info";
-          }
-        );
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
+        };
       }
       // lib.optionalAttrs (type == "sdk") ({
         console = lib.recurseIntoAttrs {

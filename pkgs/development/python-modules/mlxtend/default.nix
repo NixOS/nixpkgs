@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.3";
+  version = "0.23.4";
   pyproject = true;
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
-    repo = pname;
+    repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-c6I0dwu4y/Td2G6m2WP/52W4noQUmQMDvpzXA9RZauo=";
+    hash = "sha256-xoAHYRmqN5SrEWlc18ntTZ6WAznBlVZdf+x5Yev3ysE=";
   };
 
   build-system = [ setuptools ];
@@ -38,15 +38,31 @@ buildPythonPackage rec {
     joblib
   ];
 
+  patches = [
+    # https://github.com/rasbt/mlxtend/issues/1117
+    ./0001-StackingCVClassifier-fit-ensure-compatibility-with-s.patch
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-sv" ];
+  pytestFlags = [ "-sv" ];
+
+  disabledTests = [
+    # Type changed in numpy2 test should be updated
+    "test_invalid_labels_1"
+    "test_default"
+    "test_nullability"
+  ];
 
   disabledTestPaths = [
     "mlxtend/evaluate/f_test.py" # need clean
     "mlxtend/evaluate/tests/test_feature_importance.py" # urlopen error
     "mlxtend/evaluate/tests/test_bias_variance_decomp.py" # keras.api._v2
     "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
+    # Failing tests, most likely an upstream issue. See https://github.com/rasbt/mlxtend/issues/1117
+    "mlxtend/classifier/tests/test_ensemble_vote_classifier.py"
+    "mlxtend/classifier/tests/test_stacking_classifier.py"
+    "mlxtend/classifier/tests/test_stacking_cv_classifier.py"
   ];
 
   meta = {

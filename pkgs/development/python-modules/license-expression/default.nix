@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.4.0";
+  version = "30.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "aboutcode-org";
     repo = "license-expression";
     tag = "v${version}";
-    hash = "sha256-RAgGg0Xekcw5H13YHmkgfL7eybK+4tA8EAvVTuWFRck=";
+    hash = "sha256-e/pu2Mhy3E4ddGUGkVF7M9UFlB1IlXDPTReSh5gKwbE=";
   };
 
   dontConfigure = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library to parse, normalize and compare License expressions";
     homepage = "https://github.com/aboutcode-org/license-expression";
-    changelog = "https://github.com/aboutcode-org/license-expression/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/license-expression/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

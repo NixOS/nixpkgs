@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-h2l9YKMeELXLhqnwZR4ex77pgyDQSMBzlDGqw9V2T7Y=";
+    hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
   };
 
   outputs = [
@@ -38,12 +38,6 @@ stdenv.mkDerivation rec {
     ncurses # for `talk'
     libxcrypt
   ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.
-    # A commit to revert this change will be included in the fix PR targeting staging.
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html

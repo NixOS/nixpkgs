@@ -17,7 +17,7 @@
 let
   sources = callPackage ./sources.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
   inherit (sources.cbqn) version src;
 
@@ -146,7 +146,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "cbqn";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       detegr
       shnarazk
       sternenseemann

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  addBinToPathHook,
   installShellFiles,
   nix-update-script,
 }:
@@ -24,6 +25,7 @@ python3Packages.buildPythonApplication rec {
       setuptools
     ]
     ++ [
+      addBinToPathHook
       installShellFiles
     ];
 
@@ -46,7 +48,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    export PATH=$out/bin:$PATH
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
       --fish <(source utils/code_completion/audible-complete-zsh-fish.sh) \

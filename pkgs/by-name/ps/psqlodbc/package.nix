@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  postgresql,
+  fetchFromGitHub,
+  nix-update-script,
+  autoreconfHook,
+  libpq,
   openssl,
   withLibiodbc ? false,
   libiodbc,
@@ -14,35 +16,51 @@ assert lib.xor withLibiodbc withUnixODBC;
 
 stdenv.mkDerivation rec {
   pname = "psqlodbc";
-  version = "16.00.0000";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL-" src.tag)}";
 
-  src = fetchurl {
-    url = "mirror://postgresql/odbc/versions.old/src/${pname}-${version}.tar.gz";
-    hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
+  src = fetchFromGitHub {
+    owner = "postgresql-interfaces";
+    repo = "psqlodbc";
+    tag = "REL-17_00_0002";
+    hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
   };
 
   buildInputs =
     [
-      postgresql
+      libpq
       openssl
     ]
     ++ lib.optional withLibiodbc libiodbc
     ++ lib.optional withUnixODBC unixODBC;
 
-  passthru = lib.optionalAttrs withUnixODBC {
-    fancyName = "PostgreSQL";
-    driver = "lib/psqlodbcw.so";
-  };
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
-  configureFlags = [
-    "--with-libpq=${lib.getDev postgresql}/bin/pg_config"
-  ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
+  strictDeps = true;
+
+  passthru =
+    {
+      updateScript = nix-update-script { };
+    }
+    // lib.optionalAttrs withUnixODBC {
+      fancyName = "PostgreSQL";
+      driver = "lib/psqlodbcw.so";
+    };
+
+  configureFlags =
+    [
+      "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
+      "--with-libpq=${lib.getDev libpq}"
+    ]
+    ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+    ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
   meta = with lib; {
     homepage = "https://odbc.postgresql.org/";
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = [ ];
+    teams = libpq.meta.teams;
   };
 }

@@ -4,8 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   protobuf,
-  stdenv,
-  darwin,
   pkg-config,
   openssl,
 }:
@@ -19,12 +17,13 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "tellerops";
-    repo = pname;
+    repo = "teller";
     rev = "v${version}";
     hash = "sha256-CI74nMMTIPwjJfy7ASR19V6EbYZ62NoAOxlP3Xt2BuI=";
   };
 
-  cargoHash = "sha256-iqZX+9l3TWrFuaQreNz4RrCgPQCyKJt6RJ1UeKYaNRs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PSa4EEDEFdFpfYPG5M5wMwfq3WSqMw5d8a+mKgBzCFw=";
 
   nativeBuildInputs = [
     protobuf
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   doCheck = false;
 

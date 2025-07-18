@@ -491,7 +491,11 @@ It might be useful to manipulate the content downloaded by `fetchurl` directly i
 In this example, we'll adapt [](#ex-fetchers-fetchurl-nixpkgs-version) to append the result of running the `hello` package to the contents we download, purely to illustrate how to manipulate the content.
 
 ```nix
-{ fetchurl, hello, lib }:
+{
+  fetchurl,
+  hello,
+  lib,
+}:
 fetchurl {
   url = "https://raw.githubusercontent.com/NixOS/nixpkgs/23.11/.version";
 
@@ -714,9 +718,10 @@ A wrapper around `fetchpatch`, which takes:
 Here is an example of `fetchDebianPatch` in action:
 
 ```nix
-{ lib
-, fetchDebianPatch
-, buildPythonPackage
+{
+  lib,
+  fetchDebianPatch,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -768,9 +773,14 @@ Additionally, the following optional arguments can be given:
 
 : Whether to fetch LFS objects.
 
+*`preFetch`* (String)
+
+: Shell code to be executed before the repository has been fetched, to allow
+  changing the environment the fetcher runs in.
+
 *`postFetch`* (String)
 
-: Shell code executed after the file has been fetched successfully.
+: Shell code executed after the repository has been fetched successfully.
   This can do things like check or transform the file.
 
 *`leaveDotGit`* (Boolean)
@@ -784,6 +794,10 @@ Additionally, the following optional arguments can be given:
 
 : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
+
+*`fetchTags`* (Boolean)
+
+: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
 
 *`sparseCheckout`* (List of String)
 
@@ -826,7 +840,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `hash`.
+Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
@@ -914,7 +928,9 @@ It produces packages that cannot be built automatically.
 { fetchtorrent }:
 
 fetchtorrent {
-  config = { peer-limit-global = 100; };
+  config = {
+    peer-limit-global = 100;
+  };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
   hash = "";
 }

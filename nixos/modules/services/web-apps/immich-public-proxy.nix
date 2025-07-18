@@ -92,7 +92,6 @@ in
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
-    meta.maintainers = with lib.maintainers; [ jaculabilis ];
   };
+  meta.maintainers = with lib.maintainers; [ jaculabilis ];
 }

@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   hyprutils,
+  hyprland-qt-support,
   pciutils,
   qt6,
 }:
@@ -13,13 +14,13 @@ let
 in
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxbuGQExtN37ToWYnGmO6weOYN6WPHN/RAqbr7gNPek=";
+    hash = "sha256-2dModE32doiyQMmd6EDAQeZnz+5LOs6KXyE0qX76WIg=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     hyprutils
+    hyprland-qt-support
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
@@ -43,7 +45,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland QT/qml utility apps";
     homepage = "https://github.com/hyprwm/hyprland-qtutils";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.fufexan ];
+    teams = [ lib.teams.hyprland ];
     platforms = lib.platforms.linux;
   };
 })

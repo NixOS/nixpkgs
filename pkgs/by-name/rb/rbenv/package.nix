@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rbenv";
-  version = "1.3.0";
+  version = "1.3.2";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rbenv";
     repo = "rbenv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AO0z9QtCGHwUr2ji28sbvQmCBDIfjAqbiac+HTH3N7Q=";
+    sha256 = "sha256-vkwYl+cV5laDfevAHfju5G+STA3Y+wcMBtW1NWzJ4po=";
   };
 
   postPatch = ''

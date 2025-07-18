@@ -50,7 +50,7 @@
 
 let
   version = "2.40";
-  patchSuffix = "-36";
+  patchSuffix = "-66";
   sha256 = "sha256-GaiQF16SY9dI9ieZPeb0sa+c0h4D8IDkv7Oh+sECBaI=";
 in
 
@@ -68,8 +68,8 @@ stdenv.mkDerivation (
       [
         /*
           No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-           glibc-2.40-36-g7073164add
+           $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
+           glibc-2.40-66-g7d4b6bcae9
            $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
 
           To compare the archive contents zdiff can be used.
@@ -124,10 +124,16 @@ stdenv.mkDerivation (
           isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
           isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
         in
+        # Remove certain defines when __CUDACC__ is defined (i.e. we're building with a CUDA compiler)
         lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
       )
+      # Modify certain defines to be compatible with musl
       ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
+      # Enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
       ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+      # Reverts this patch: https://sourceware.org/git/?p=glibc.git;a=commit;h=55d63e731253de82e96ed4ddca2e294076cd0bc5
+      # This revert enables [CET] (Control-flow Enforcement Technology) by default
+      # [CET]: https://en.wikipedia.org/wiki/Control-flow_integrity#Intel_Control-flow_Enforcement_Technology
       ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
 
     postPatch =
@@ -199,9 +205,13 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional withGd "--with-gd";
 
-    makeFlags = (args.makeFlags or [ ]) ++ [
-      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    ];
+    makeFlags =
+      (args.makeFlags or [ ])
+      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ lib.optionals (stdenv.cc.libc != null) [
+        "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
+        "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
+      ];
 
     postInstall =
       (args.postInstall or "")
@@ -256,6 +266,7 @@ stdenv.mkDerivation (
 
   // (removeAttrs args [
     "withLinuxHeaders"
+    "linuxHeaders"
     "withGd"
     "enableCET"
     "postInstall"
@@ -268,11 +279,6 @@ stdenv.mkDerivation (
         url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
         inherit sha256;
       };
-
-      makeFlags = lib.optionals (stdenv.cc.libc != null) [
-        "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
-        "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
-      ];
 
       # Remove absolute paths from `configure' & co.; build out-of-tree.
       preConfigure =

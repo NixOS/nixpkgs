@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "onelogin.saml2" ];
 
   disabledTests = [
-    # Tests require network acces or additions files
+    # Tests require network access or additions files
     "OneLogin_Saml2_Metadata_Test"
     "OneLogin_Saml2_Response_Test"
     "OneLogin_Saml2_Utils_Test"

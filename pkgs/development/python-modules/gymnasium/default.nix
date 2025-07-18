@@ -15,7 +15,12 @@
   pythonOlder,
   importlib-metadata,
 
+  # optional-dependencies
+  # atari
+  ale-py,
+
   # tests
+  array-api-compat,
   dill,
   flax,
   jax,
@@ -28,11 +33,12 @@
   pygame,
   pytestCheckHook,
   scipy,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "1.0.0";
+  version = "1.2.0";
 
   pyproject = true;
 
@@ -40,7 +46,7 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     tag = "v${version}";
-    hash = "sha256-Qchuz08yJ0giVrtKLC9vBgr28JrHQyAOCuoS239ivVw=";
+    hash = "sha256-fQsz1Qpef9js+iqkqbfxrTQgcZT+JKjwpEiWewju2Dc=";
   };
 
   build-system = [ setuptools ];
@@ -52,9 +58,16 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
+  optional-dependencies = {
+    atari = [
+      ale-py
+    ];
+  };
+
   pythonImportsCheck = [ "gymnasium" ];
 
   nativeCheckInputs = [
+    array-api-compat
     dill
     flax
     jax
@@ -67,6 +80,7 @@ buildPythonPackage rec {
     pygame
     pytestCheckHook
     scipy
+    torch
   ];
 
   # if `doCheck = true` on Darwin, `jaxlib` is evaluated, which is both
@@ -88,6 +102,10 @@ buildPythonPackage rec {
     "tests/utils/test_save_video.py"
     "tests/wrappers/test_record_video.py"
   ];
+
+  preCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
 
   disabledTests = [
     # Succeeds for most environments but `test_render_modes[Reacher-v4]` fails because it requires

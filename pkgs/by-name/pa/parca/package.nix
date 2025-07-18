@@ -4,17 +4,17 @@
   fetchFromGitHub,
   lib,
   nodejs,
-  pnpm,
+  pnpm_9,
   stdenv,
 }:
 let
-  version = "0.22.0";
+  version = "0.24.0";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-iuTlKUmugRum0qZRhuw0FR13iE2qrQegTgwpAvgJSXk=";
+    hash = "sha256-MyI3pyfsdw17K03FOSckVzLSRNbwSm3FwYIHMr/SbWo=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -22,15 +22,16 @@ let
     pname = "parca-ui";
     src = "${parca-src}/ui";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-MVNO24Oksy/qRUmEUoWoviQEo6Eimb18ZnDj5Z1vJkY=";
+      fetcherVersion = 1;
+      hash = "sha256-gczEkCU9xESn9T1eVOmGAufh+24mOsYCMO6f5tcbdmQ=";
     };
 
     nativeBuildInputs = [
       faketty
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
     # faketty is required to work around a bug in nx.
@@ -56,7 +57,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-fErrbi3iSJlkguqzL6nH+fzmjxhoYVl1qH7tqRR1F1A=";
+  vendorHash = "sha256-2CVXXCWKa21cToe5flxIMtSBPc3HkxWDNkJAWCI4ORw=";
 
   ldflags = [
     "-X=main.version=${version}"
@@ -67,6 +68,11 @@ buildGoModule rec {
     # Copy the built UI into the right place for the Go build to embed it.
     cp -r ${ui}/share/parca/ui/* ui/packages/app/web/build
   '';
+
+  passthru = {
+    inherit ui;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     mainProgram = "parca";

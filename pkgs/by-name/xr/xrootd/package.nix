@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrootd";
-  version = "5.7.1";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZU31nsQgs+Gz9mV8LVv4utJ7g8TXN5OxHjNDfQlt38M=";
+    hash = "sha256-zeyg/VdzcWbMXuCE1RELiyGg9mytfpNfIa911BwqqIA=";
   };
 
   postPatch =
@@ -68,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       davix
       curl
-      isa-l
       libkrb5
       libuuid
       libxcrypt
@@ -83,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       fuse
     ]
     ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+      isa-l # not available on Apple silicon
       systemd # only available on specific non-static Linux platforms
       voms # only available on Linux due to gsoap failing to build on Darwin
     ];
@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_SCITOKENS" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_VOMS" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ENABLE_XRDEC" (lib.meta.availableOn stdenv.hostPlatform isa-l)) # requires isa-l
   ];
 
   # TODO(@ShamrockLee): Enable the checks.

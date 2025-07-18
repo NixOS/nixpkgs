@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tinymembench";
-  version = "0.4";
+  version = "0.4.9-unstable-2017-02-15";
 
   src = fetchFromGitHub {
     owner = "ssvb";
     repo = "tinymembench";
-    rev = "v${version}";
-    hash = "sha256-N6jHRLqVSNe+Mk3WNfIEBGtVC7Y6/sERVaeAD68LQJc=";
+    rev = "a2cf6d7e382e3aea1eb39173174d9fa28cad15f3";
+    hash = "sha256-INgvyu7jAA+07vkO9DsIDMcEy713jcnaEx3CI6GTMDA=";
   };
 
   installPhase = ''

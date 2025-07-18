@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-VQjjLK2gnxbf7CzRjNrS/562fBGVAFMTxj6F71hOXrU=";
   };
 
-  cargoHash = "sha256-P7hrSTb8XE/rCAGflbZwrqpQGxWnXFREqXSmZmIMAGU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eqkdiNww0CBZ0ZfoirZSvpL7i/4b1XjN3NZFPOGkPko=";
 
   meta = with lib; {
     description = "Helper tool to watch GNOME Pomodoro timer";

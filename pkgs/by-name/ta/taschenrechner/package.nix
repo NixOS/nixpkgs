@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZZVghL0R3p5sE8V9Z0MsmTiCacuE2RXohQQEYJYgp/o=";
   };
 
-  cargoHash = "sha256-xZ3Ki1HLzF7A1+83GQNTBgRjn802Z9ZAKENKB5CykCc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/tgfHU4/B7tes2jU8L/MbWIG1sTLg9exWhmuSA6Davk=";
 
   meta = with lib; {
     description = "Cli-calculator written in Rust";

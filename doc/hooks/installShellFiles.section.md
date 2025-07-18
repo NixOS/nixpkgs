@@ -84,7 +84,7 @@ zsh).
 }
 ```
 
-The path may also be a fifo or named fd (such as produced by `<(cmd)`), in which
+The path may also be the result of process substitution (e.g. `<(cmd)`), in which
 case the shell and name must be provided (see below).
 
 If the destination shell completion file is not actually present or consists of
@@ -100,7 +100,7 @@ failure. To prevent this, guard the completion generation commands.
 {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # using named fd
+    # using process substitution
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
       --fish <($out/bin/foobar --fish-completion) \

@@ -66,6 +66,10 @@ in
             isNormalUser = true;
             hashedPassword = newNormaloHashedPassword;
           };
+          normalo-disabled = {
+            enable = false;
+            isNormalUser = true;
+          };
         };
         groups = {
           new-group = { };
@@ -95,6 +99,11 @@ in
       print(machine.succeed("getent passwd sysuser"))
       assert 1000 > int(machine.succeed("id --user sysuser")), "sysuser user doesn't have a system UID"
       assert "${sysuserInitialHashedPassword}" in machine.succeed("getent shadow sysuser"), "system user password is not correct"
+
+    with subtest("normalo-disabled is NOT created"):
+      machine.fail("id normalo-disabled")
+      # Check if user's home has been created
+      machine.fail("[ -d '/home/normalo-disabled' ]")
 
     with subtest("sysusers group is created"):
       print(machine.succeed("getent group sysusers"))

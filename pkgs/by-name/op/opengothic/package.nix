@@ -9,21 +9,22 @@
   libglvnd,
   makeWrapper,
   ninja,
+  nix-update-script,
   stdenv,
   vulkan-headers,
   vulkan-loader,
   vulkan-validation-layers,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opengothic";
-  version = "0.80-unstable-09-10-2024";
+  version = "1.0.3010";
 
   src = fetchFromGitHub {
     owner = "Try";
     repo = "OpenGothic";
-    rev = "0db60b0a956e2a2f365aa3a8bdbe366be198e641";
+    tag = "opengothic-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hf3B7B4CaW/GsTcYs0PChpPfA9aK41pPJkImtUDgoKc=";
+    hash = "sha256-ELDuyoAZmulMjFFctuCmdKDUMtrbVVndJxIf9Xo82N4=";
   };
 
   outputs = [
@@ -48,10 +49,19 @@ stdenv.mkDerivation {
     vulkan-validation-layers
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-Werror" ""
+  '';
+
   postFixup = ''
     wrapProgram $out/bin/Gothic2Notr \
       --set LD_PRELOAD "${lib.getLib alsa-lib}/lib/libasound.so.2"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^opengothic-v(.*)$" ];
+  };
 
   meta = {
     description = "Open source re-implementation of Gothic 2: Night of the Raven";
@@ -61,4 +71,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "Gothic2Notr";
   };
-}
+})

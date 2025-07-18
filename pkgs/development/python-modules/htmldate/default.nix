@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.1";
+  version = "1.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "adbar";
     repo = "htmldate";
     tag = "v${version}";
-    hash = "sha256-VjOqttpbHp1wQARyHieAZie/yO74+S2mDbBXx00PKWM=";
+    hash = "sha256-9uFf/sx0AZdlvizU65H87hbtwDKf8Ykm67bKM9Oq//s=";
   };
 
   build-system = [ setuptools ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
-    changelog = "https://github.com/adbar/htmldate/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
     mainProgram = "htmldate";

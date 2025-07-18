@@ -29,7 +29,7 @@ Thus you should pick one or more of the following lines:
 {
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.desktopManager.gnome.enable = true;
   services.xserver.desktopManager.mate.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
   services.xserver.windowManager.twm.enable = true;
@@ -46,7 +46,7 @@ alternative one by picking one of the following lines:
 ```nix
 {
   services.displayManager.sddm.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = true;
 }
 ```
 
@@ -114,6 +114,56 @@ using lightdm for a user `alice`:
 }
 ```
 
+## Running X without a display manager  {#sec-x11-startx}
+
+It is possible to avoid a display manager entirely and starting the X server
+manually from a virtual terminal. Add to your configuration:
+```nix
+{
+  services.xserver.displayManager.startx = {
+    enable = true;
+    generateScript = true;
+  };
+}
+```
+then you can start the X server with the `startx` command.
+
+The second option will generate a base `xinitrc` script that will run your
+window manager and set up the systemd user session.
+You can extend the script using the
+[extraCommands](#opt-services.xserver.displayManager.startx.extraCommands)
+option, for example:
+```nix
+{
+  services.xserver.displayManager.startx = {
+    generateScript = true;
+    extraCommands = ''
+      xrdb -load .Xresources
+      xsetroot -solid '#666661'
+      xsetroot -cursor_name left_ptr
+    '';
+  };
+}
+```
+or, alternatively, you can write your own from scratch in `~/.xinitrc`.
+
+In this case, remember you're responsible for starting the window manager, for
+example:
+```shell
+sxhkd &
+bspwm &
+```
+and if you have enabled some systemd user service, you will probably want to
+also add these lines too:
+```shell
+# import required env variables from the current shell
+systemctl --user import-environment DISPLAY XDG_SESSION_ID
+# start all graphical user services
+systemctl --user start nixos-fake-graphical-session.target
+# start the user dbus daemon
+dbus-daemon --session --address="unix:path=/run/user/$(id -u)/bus" &
+```
+
 ## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
 The default and recommended driver for Intel Graphics in X.org is `modesetting`
@@ -123,6 +173,24 @@ setting](https://en.wikipedia.org/wiki/Mode_setting) (KMS) mechanism, it
 supports Glamor (2D graphics acceleration via OpenGL) and is actively
 maintained, it may perform worse in some cases (like in old chipsets).
 
+There is a second driver, `intel` (provided by the xf86-video-intel package),
+specific to older Intel iGPUs from generation 2 to 9. It is not recommended by
+most distributions: it lacks several modern features (for example, it doesn't
+support Glamor) and the package hasn't been officially updated since 2015.
+
+Third generation and older iGPUs (15-20+ years old) are not supported by the
+`modesetting` driver (X will crash upon startup). Thus, the `intel` driver is
+required for these chipsets.
+Otherwise, the results vary depending on the hardware, so you may have to try
+both drivers. Use the option
+[](#opt-services.xserver.videoDrivers)
+to set one. The recommended configuration for modern systems is:
+
+```nix
+{
+  services.xserver.videoDrivers = [ "modesetting" ];
+}
+```
 ::: {.note}
 The `modesetting` driver doesn't currently provide a `TearFree` option (this
 will become available in an upcoming X.org release), So, without using a
@@ -130,19 +198,21 @@ compositor (for example, see [](#opt-services.picom.enable)) you will
 experience screen tearing.
 :::
 
-There also used to be a second driver, `intel` (provided by the
-xf86-video-intel package), specific to older Intel iGPUs from generation 2 to
-9.
-This driver hasn't been maintained in years and was removed in NixOS 24.11
-after it stopped working. If you chipset is too old to be supported by
-`modesetting` and have no other choice you may try an unsupported NixOS version
-(reportedly working up to NixOS 24.05) and set
+If you experience screen tearing no matter what, this configuration was
+reported to resolve the issue:
 
 ```nix
 {
   services.xserver.videoDrivers = [ "intel" ];
+    services.xserver.deviceSection = ''
+    Option "DRI" "2"
+    Option "TearFree" "true"
+  '';
 }
 ```
+
+Note that this will likely downgrade the performance compared to
+`modesetting` or `intel` with DRI 3 (default).
 
 ## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia}
 

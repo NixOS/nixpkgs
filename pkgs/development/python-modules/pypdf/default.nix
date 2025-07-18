@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "5.1.0";
+  version = "5.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-ziJTYl7MQUCE8US0yeiq6BPDVbBsxWhti0NyiDnKtfE=";
+    hash = "sha256-O1kV9VKbI3MFsWvr3jrDg9rJ0G+92ny0v7g4Xx/1ytM=";
   };
 
   outputs = [
@@ -85,7 +84,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
-    changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ javaes ];
   };

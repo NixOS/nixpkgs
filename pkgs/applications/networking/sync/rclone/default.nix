@@ -5,17 +5,19 @@
   fetchFromGitHub,
   buildPackages,
   installShellFiles,
+  versionCheckHook,
   makeWrapper,
   enableCmount ? true,
   fuse,
   fuse3,
   macfuse-stubs,
   librclone,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.68.2";
+  version = "1.70.3";
 
   outputs = [
     "out"
@@ -26,10 +28,10 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     tag = "v${version}";
-    hash = "sha256-3Al58jg+pYP46VbpIRbYBhMOG6m7OQaC0pxKawX12E8=";
+    hash = "sha256-3MQyziA+Xq8oSOvex4WeeXs8rPDOcSkLHUH0Fcg8ENs=";
   };
 
-  vendorHash = "sha256-PCj/f/oeLEAC/yFmR5dSyoLb45Z1fPLAASBaM251+Mc=";
+  vendorHash = "sha256-/A9Sq7KlHitqHxvElVMQtuXUWhweiB0ukut7AJYaJHw=";
 
   subPackages = [ "." ];
 
@@ -83,19 +85,28 @@ buildGoModule rec {
             --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
         '';
 
-  passthru.tests = {
-    inherit librclone;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = "version";
+
+  passthru = {
+    tests = {
+      inherit librclone;
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "rclone";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       SuperSandro2000
-      tomfitzhenry
     ];
   };
 }

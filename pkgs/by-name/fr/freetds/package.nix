@@ -15,12 +15,16 @@ assert odbcSupport -> unixODBC != null;
 
 stdenv.mkDerivation rec {
   pname = "freetds";
-  version = "1.4.24";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
-    hash = "sha256-B86htFf4/Vutdbw0I3G35+CS+SR6gT3HtifJI139tkI=";
+    hash = "sha256-XLZsRqYKg7iihV5GYUi2+ieWLH/R3LP25dCrF+xf9t0=";
   };
+
+  patches = [
+    ./gettext-0.25.patch
+  ];
 
   buildInputs = [
     openssl
@@ -31,12 +35,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
     homepage = "https://www.freetds.org";
     changelog = "https://github.com/FreeTDS/freetds/releases/tag/v${version}";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
   };
 }

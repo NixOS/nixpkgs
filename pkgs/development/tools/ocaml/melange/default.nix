@@ -21,22 +21,27 @@
 let
   pname = "melange";
   versionHash =
-    if lib.versionAtLeast ocaml.version "5.2" then
+    if lib.versionAtLeast ocaml.version "5.3" then
       {
-        version = "4.0.1-52";
-        hash = "sha256-kUlChqQtLX7zh90GK23ibMqyI/MIp0sMYLjkPX9vdTc=";
+        version = "5.1.0-53";
+        hash = "sha256-96rDDzul/v+Dc+IWTNtbOKWUV8rf7HS1ZMK2LQNcpKk=";
+      }
+    else if lib.versionAtLeast ocaml.version "5.2" then
+      {
+        version = "5.1.0-52";
+        hash = "sha256-EGIInGCo3JADYyE4mLw5Fzkm4OB+V9yi2ayV0lVq3v0=";
       }
     else if lib.versionAtLeast ocaml.version "5.1" then
       {
-        version = "4.0.0-51";
-        hash = "sha256-940Yzp1ZXnN6mKVWY+nqKjn4qtBUJR5eHE55OTjGvdU=";
+        version = "5.1.0-51";
+        hash = "sha256-DIF8vZLEKsFf6m5tl1/T6zqjHyKxDMois2h//tDhsJI=";
       }
     else if lib.versionAtLeast ocaml.version "5.0" then
       throw "melange is not available for OCaml ${ocaml.version}"
     else
       {
-        version = "4.0.0-414";
-        hash = "sha256-PILDOXYIyLvfv1sSwP6WSdCiXfpYdnct7WMw3jHBLJM=";
+        version = "5.1.0-414";
+        hash = "sha256-Sv1XyOqCNhICTsXzetXh/zqX/tdTupYZ0Q1nZRLfpe0=";
       };
   version = versionHash.version;
   hash = versionHash.hash;
@@ -53,9 +58,11 @@ buildDunePackage {
     cppo
     makeWrapper
   ];
-  propagatedBuildInputs = [
+  buildInputs = [
     cmdliner
     dune-build-info
+  ];
+  propagatedBuildInputs = [
     menhirLib
     ppxlib
   ];

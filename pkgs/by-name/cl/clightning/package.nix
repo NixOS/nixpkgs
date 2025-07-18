@@ -19,6 +19,7 @@
   sqlite,
   zlib,
   jq,
+  libpq,
 }:
 let
   py3 = python3.withPackages (p: [
@@ -28,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "24.11.1";
+  version = "25.05";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-FdrD+FA0t90oJnXjUA8oalU7DDjUv70fAteNxbhscgk=";
+    hash = "sha256-ANYzpjVw9kGdsNvXW1A7sEug9utGmJTab87SqJSdgAc=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
       py3
       unzip
       which
+      libpq.pg_config
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
@@ -94,11 +96,6 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
-
-  # The `clnrest` plugin requires a Python environment to run
-  postInstall = ''
-    rm -r $out/libexec/c-lightning/plugins/clnrest
-  '';
 
   meta = with lib; {
     description = "Bitcoin Lightning Network implementation in C";

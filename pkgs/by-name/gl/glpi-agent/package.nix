@@ -6,7 +6,7 @@
   pciutils,
   usbutils,
   iproute2,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   makeWrapper,
   versionCheckHook,
@@ -15,22 +15,22 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.11";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-WdQ+/ZnMCRqLZK64oJNoR9dtMPq+CghsA8NUwt3EpjA=";
+    hash = "sha256-+zHTlxfkZ1x21ePZUni7lbRJQ/NUDeoZnvOzM+yzG3M=";
   };
 
   postPatch = ''
     patchShebangs bin
 
     substituteInPlace lib/GLPI/Agent/Tools/Linux.pm \
-      --replace-fail "/sbin/ip" $"{iproute2}/sbin/ip"
+      --replace-fail "/sbin/ip" "${lib.getExe' iproute2 "ip"}"
     substituteInPlace lib/GLPI/Agent/Task/Inventory/Linux/Networks.pm \
-      --replace-fail "/sbin/ip" "${iproute2}/sbin/ip"
+      --replace-fail "/sbin/ip" "${lib.getExe' iproute2 "ip"}"
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,38 +38,38 @@ perlPackages.buildPerlPackage rec {
     with perlPackages;
     [
       CGI
+      CpanelJSONXS
+      CryptDES
       DataStructureUtil
+      DataUUID
+      DateTime
+      DigestSHA1
       FileCopyRecursive
+      HTTPDaemon
       HTTPProxy
       HTTPServerSimple
       HTTPServerSimpleAuthen
       IOCapture
+      IOCompress
       IOSocketSSL
       IPCRun
       JSON
       LWPProtocolHttps
       ModuleInstall
+      NetPing
       NetSNMP
+      ParallelForkManager
+      ParseEDID
       TestCompile
       TestDeep
       TestException
       TestMockModule
       TestMockObject
       TestNoWarnings
-      CpanelJSONXS
-      XMLLibXML
-      NetPing
-      ParallelForkManager
-      DigestSHA1
-      CryptDES
-      FileCopyRecursive
-      URIEscapeXS
-      DateTime
-      DataUUID
       URI
-      HTTPDaemon
+      URIEscapeXS
+      XMLLibXML
       YAML
-      IOCompress
     ]
   );
 
@@ -105,7 +105,7 @@ perlPackages.buildPerlPackage rec {
             dmidecode
             pciutils
             usbutils
-            nettools
+            net-tools
             iproute2
           ]
         }
@@ -118,7 +118,7 @@ perlPackages.buildPerlPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

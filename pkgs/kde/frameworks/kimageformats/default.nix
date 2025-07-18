@@ -5,7 +5,7 @@
   libjxl,
   libavif,
   libraw,
-  openexr_3,
+  openexr,
 }:
 mkKdeDerivation {
   pname = "kimageformats";
@@ -15,8 +15,9 @@ mkKdeDerivation {
   extraBuildInputs = [
     libheif
     libjxl
-    libavif
+    # FIXME: cmake files are broken, disabled for now
+    # libavif
     libraw
-    openexr_3
+    openexr
   ];
 }

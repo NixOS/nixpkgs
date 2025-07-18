@@ -10,7 +10,6 @@
 
   # native dependencies
   abseil-cpp,
-  darwin,
 
   # tests
   pytestCheckHook,
@@ -28,14 +27,22 @@ buildPythonPackage rec {
     hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
 
+  postPatch = with stdenv.hostPlatform.uname; ''
+    # Configure the correct host platform for cross builds
+    substituteInPlace setup.py --replace-fail \
+      "system = platform.system().lower()" \
+      'system = "${lib.toLower system}"'
+    substituteInPlace setup.py --replace-fail \
+      "machine = platform.machine().lower()" \
+      'machine = "${lib.toLower processor}"'
+  '';
+
   nativeBuildInputs = [
     pybind11
     setuptools
   ];
 
-  buildInputs = [
-    abseil-cpp
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = [ abseil-cpp ];
 
   pythonImportsCheck = [ "webrtc_noise_gain" ];
 

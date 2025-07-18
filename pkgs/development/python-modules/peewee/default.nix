@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.17.8";
+  version = "3.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "peewee";
     tag = version;
-    hash = "sha256-2mViwo39adzzhpFS056C1JU5fXr3zKorzkVyJrKKRhI=";
+    hash = "sha256-7MLDhMiW9LaedPMQ2QqSqos4SegzUmTX1joyV18MkEg=";
   };
 
   build-system = [ setuptools ];
@@ -36,9 +36,12 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs = [
-    apsw
-  ] ++ lib.optionals withPostgres [ psycopg2 ] ++ lib.optionals withMysql [ mysql-connector ];
+  propagatedBuildInputs =
+    [
+      apsw
+    ]
+    ++ lib.optionals withPostgres [ psycopg2 ]
+    ++ lib.optionals withMysql [ mysql-connector ];
 
   nativeCheckInputs = [ flask ];
 
@@ -54,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
-    changelog = "https://github.com/coleifer/peewee/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "pwiz.py";

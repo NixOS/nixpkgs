@@ -1,0 +1,107 @@
+name: "Request: backport to stable"
+description: "Create a backport request for a package that is up-to-date in the unstable channel, but outdated in the stable channel."
+title: "Backport to Stable: PACKAGENAME OLDVERSION → NEWVERSION"
+labels: ["0.kind: enhancement", "9.needs: port to stable"]
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        <p align="center">
+          <a href="https://nixos.org">
+            <picture>
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
+            </picture>
+          </a>
+        </p>
+
+        > [!CAUTION]
+        > **Before you begin:** Be advised that backports are subject to the [release suitability guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
+        >
+        > Stable releases of Nixpkgs do not receive breaking changes, which include major package updates that have incompatible API changes and break backwards compatibility. In the [Semantic Versioning standard](https://semver.org/), this is the first version number (1.X.X).
+        >
+        > Generally, only minor package updates, such as security patches, bug fixes and feature additions (but not removals!) will be considered for backporting. Please read the rules above carefully before filing this backport request.
+
+        Welcome to Nixpkgs. Please replace the **`Backport to Stable: PACKAGENAME OLDVERSION → NEWVERSION`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)), the current version of the package in Nixpkgs Stable and the current version of the package in Nixpkgs Unstable.
+
+        > [!TIP]
+        > For instance, if you were filing a request against the out of date `hello` package, where the current version in Nixpkgs Unstable is 1.0.1, but the current version in Nixpkgs Stable is 1.0.0, your title would be as follows:
+        > ```
+        > Backport to Stable: hello 1.0.0 → 1.0.1
+        > ```
+
+        ---
+  - type: "input"
+    id: "name"
+    attributes:
+      label: "Package name"
+      description: "Please indicate the name of the package."
+    validations:
+      required: true
+  - type: "input"
+    id: "unstable-version"
+    attributes:
+      label: "Version in unstable"
+      description: "Please indicate the current version of the package in the unstable channel."
+    validations:
+      required: true
+  - type: "input"
+    id: "stable-version"
+    attributes:
+      label: "Version in stable"
+      description: "Please indicate the current version of the package in the stable channel."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "reasoning"
+    attributes:
+      label: "Reasoning for backport"
+      description: "Please briefly explain why this backport fits the [release suitability guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases) and why you think this update should be backported."
+    validations:
+      required: false
+  - type: "textarea"
+    id: "maintainers"
+    attributes:
+      label: "Notify maintainers"
+      description: |
+        Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
+      value: |2
+
+
+        ---
+
+        **Note for maintainers:** Please tag this issue in your pull request description. (i.e. `Resolves #ISSUE`.)
+    validations:
+      required: false
+  - type: "checkboxes"
+    id: "sanity-check"
+    attributes:
+      label: "I assert that this issue is relevant for Nixpkgs"
+      options:
+        - label: "I assert that this backport does not yet exist in an [open pull request](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+in%3Atitle+backport)."
+          required: true
+        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+label%3A%229.needs%3A+port+to+stable%22+)."
+          required: true
+        - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+  - type: "markdown"
+    attributes:
+      value: |
+        # Thank you for helping improve Nixpkgs!
+
+        ---
+  - type: "textarea"
+    id: "prioritisation"
+    attributes:
+      label: "Is this issue important to you?"
+      description: |
+        **Please do not modify this text area!**
+
+        This template helps Nixpkgs developers know which issues should be prioritised by allowing users to vote with a :+1: reaction.
+        This is not a guarantee that highly-requested issues will be fixed first, but it helps us to figure out what's important to users. Please react on other users' issues if you find them important.
+      value: |
+        Add a :+1: [reaction] to [issues you find important].
+
+        [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+        [issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc

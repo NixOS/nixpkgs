@@ -6,7 +6,7 @@
   automake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tftp-hpa";
   version = "5.2-untagged-2024-06-10";
   src = fetchgit {

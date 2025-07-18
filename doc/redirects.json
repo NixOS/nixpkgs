@@ -1,9 +1,94 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "chap-toolchains": [
+    "index.html#chap-toolchains"
+  ],
+  "cmake-ctest": [
+    "index.html#cmake-ctest"
+  ],
+  "cmake-ctest-disabled-tests": [
+    "index.html#cmake-ctest-disabled-tests"
+  ],
+  "cmake-ctest-flags": [
+    "index.html#cmake-ctest-flags"
+  ],
+  "cmake-ctest-variables": [
+    "index.html#cmake-ctest-variables"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-pkgs-replace-vars": [
+    "index.html#ex-pkgs-replace-vars",
+    "index.html#ex-pkgs-substituteAll",
+    "index.html#ex-pkgs-substitute-all-files"
+  ],
+  "ex-pkgs-replace-vars-with": [
+    "index.html#ex-pkgs-replace-vars-with"
+  ],
+  "ex-shfmt": [
+    "index.html#ex-shfmt"
+  ],
+  "ex-testBuildFailurePrime-doc-example": [
+    "index.html#ex-testBuildFailurePrime-doc-example"
+  ],
+  "ex-testEqualArrayOrMap-test-function-add-cowbell": [
+    "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
+  ],
+  "ghc-deprecation-policy": [
+    "index.html#ghc-deprecation-policy"
+  ],
+  "inkscape-plugins": [
+    "index.html#inkscape-plugins"
+  ],
+  "major-ghc-deprecation": [
+    "index.html#major-ghc-deprecation"
+  ],
+  "minor-ghc-deprecation": [
+    "index.html#minor-ghc-deprecation"
+  ],
+  "neovim": [
+    "index.html#neovim"
+  ],
+  "neovim-custom-configuration": [
+    "index.html#neovim-custom-configuration"
+  ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
+  ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
+  ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
+  "pkgs-replacevars": [
+    "index.html#pkgs-replacevars",
+    "index.html#pkgs-substituteall",
+    "index.html#pkgs-substituteallfiles"
+  ],
+  "pkgs-replacevarswith": [
+    "index.html#pkgs-replacevarswith"
+  ],
+  "part-toolchains": [
+    "index.html#part-toolchains"
+  ],
+  "pkgs.treefmt.buildConfig": [
+    "index.html#pkgs.treefmt.buildConfig"
+  ],
+  "pkgs.treefmt.evalConfig": [
+    "index.html#pkgs.treefmt.evalConfig"
+  ],
+  "pkgs.treefmt.withConfig": [
+    "index.html#pkgs.treefmt.withConfig"
   ],
   "preface": [
     "index.html#preface"
@@ -20,6 +105,9 @@
   "chap-packageconfig": [
     "index.html#chap-packageconfig"
   ],
+  "python-tree-sitter": [
+    "index.html#python-tree-sitter"
+  ],
   "sec-allow-broken": [
     "index.html#sec-allow-broken"
   ],
@@ -31,6 +119,24 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
+  ],
+  "sec-building-packages-with-llvm": [
+    "index.html#sec-building-packages-with-llvm"
+  ],
+  "sec-building-packages-with-llvm-using-clang-stdenv": [
+    "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
+  ],
+  "sec-functions-library-treefmt": [
+    "index.html#sec-functions-library-treefmt"
+  ],
+  "sec-inkscape": [
+    "index.html#sec-inkscape"
+  ],
+  "sec-language-cosmic": [
+    "index.html#sec-language-cosmic"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -53,11 +159,39 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-nixpkgs-release-25.11": [
+    "release-notes.html#sec-nixpkgs-release-25.11"
+  ],
+  "sec-nixpkgs-release-25.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.11-highlights"
+  ],
+  "sec-nixpkgs-release-25.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib"
+  ],
+  "sec-nixpkgs-release-25.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.11-notable-changes"
+  ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
+  "sec-nixpkgs-release-25.05-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.05-highlights"
+  ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
@@ -73,6 +207,12 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.05-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.05-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -275,6 +415,9 @@
   "chap-stdenv": [
     "index.html#chap-stdenv"
   ],
+  "sec-using-llvm": [
+    "index.html#sec-using-llvm"
+  ],
   "sec-using-stdenv": [
     "index.html#sec-using-stdenv"
   ],
@@ -283,6 +426,33 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "sec-treefmt-options-reference": [
+    "index.html#sec-treefmt-options-reference"
+  ],
+  "ssec-cosmic-common-issues": [
+    "index.html#ssec-cosmic-common-issues"
+  ],
+  "ssec-cosmic-common-issues-vergen": [
+    "index.html#ssec-cosmic-common-issues-vergen"
+  ],
+  "ssec-cosmic-custom-wrapper-args": [
+    "index.html#ssec-cosmic-custom-wrapper-args"
+  ],
+  "ssec-cosmic-icons": [
+    "index.html#ssec-cosmic-icons"
+  ],
+  "ssec-cosmic-libcosmic-app-hook": [
+    "index.html#ssec-cosmic-libcosmic-app-hook"
+  ],
+  "ssec-cosmic-packaging": [
+    "index.html#ssec-cosmic-packaging"
+  ],
+  "ssec-cosmic-runtime-libraries": [
+    "index.html#ssec-cosmic-runtime-libraries"
+  ],
+  "ssec-cosmic-settings-fallback": [
+    "index.html#ssec-cosmic-settings-fallback"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
@@ -307,6 +477,66 @@
   ],
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "strictflexarrays1": [
+    "index.html#strictflexarrays1"
+  ],
+  "strictflexarrays3": [
+    "index.html#strictflexarrays3"
+  ],
+  "tester-shfmt": [
+    "index.html#tester-shfmt"
+  ],
+  "tester-shfmt-inputs": [
+    "index.html#tester-shfmt-inputs"
+  ],
+  "tester-shfmt-return": [
+    "index.html#tester-shfmt-return"
+  ],
+  "tester-testBuildFailurePrime": [
+    "index.html#tester-testBuildFailurePrime"
+  ],
+  "tester-testBuildFailurePrime-inputs": [
+    "index.html#tester-testBuildFailurePrime-inputs"
+  ],
+  "tester-testBuildFailurePrime-return": [
+    "index.html#tester-testBuildFailurePrime-return"
+  ],
+  "tester-testEqualArrayOrMap": [
+    "index.html#tester-testEqualArrayOrMap"
+  ],
+  "tester-testEqualArrayOrMap-inputs": [
+    "index.html#tester-testEqualArrayOrMap-inputs"
+  ],
+  "tester-testEqualArrayOrMap-return": [
+    "index.html#tester-testEqualArrayOrMap-return"
+  ],
+  "treefmt": [
+    "index.html#treefmt"
+  ],
+  "typst": [
+    "index.html#typst",
+    "doc/languages-frameworks/typst.section.md#typst"
+  ],
+  "typst-custom-environment": [
+    "index.html#typst-custom-environment",
+    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+  ],
+  "typst-custom-packages": [
+    "index.html#typst-custom-packages",
+    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+  ],
+  "typst-handling-outdated-package-hashes": [
+    "index.html#typst-handling-outdated-package-hashes"
+  ],
+  "typst-package-scope-and-usage": [
+    "index.html#typst-package-scope-and-usage"
+  ],
+  "var-meta-teams": [
+    "index.html#var-meta-teams"
+  ],
+  "var-go-goSum": [
+    "index.html#var-go-goSum"
   ],
   "variables-specifying-dependencies": [
     "index.html#variables-specifying-dependencies"
@@ -809,6 +1039,12 @@
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
   ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
+  ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
   ],
@@ -949,6 +1185,9 @@
   ],
   "var-meta-broken": [
     "index.html#var-meta-broken"
+  ],
+  "var-meta-knownVulnerabilities": [
+    "index.html#var-meta-knownVulnerabilities"
   ],
   "sec-meta-license": [
     "index.html#sec-meta-license"
@@ -1470,6 +1709,12 @@
   "ex-haspkgconfigmodules-explicitmodules": [
     "index.html#ex-haspkgconfigmodules-explicitmodules"
   ],
+  "tester-hasCmakeConfigModules": [
+    "index.html#tester-hasCmakeConfigModules"
+  ],
+  "ex-hascmakeconfigmodules": [
+    "index.html#ex-hascmakeconfigmodules"
+  ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
   ],
@@ -1490,9 +1735,6 @@
   ],
   "tester-shellcheck-inputs": [
     "index.html#tester-shellcheck-inputs"
-  ],
-  "tester-shellcheck-param-src": [
-    "index.html#tester-shellcheck-param-src"
   ],
   "tester-shellcheck-return": [
     "index.html#tester-shellcheck-return"
@@ -1941,6 +2183,9 @@
   "sec-pkgs-binary-cache": [
     "index.html#sec-pkgs-binary-cache"
   ],
+  "sec-pkgs-binary-cache-arguments": [
+    "index.html#sec-pkgs-binary-cache-arguments"
+  ],
   "sec-pkgs-binary-cache-example": [
     "index.html#sec-pkgs-binary-cache-example"
   ],
@@ -1955,6 +2200,9 @@
   ],
   "setup-hook-automake": [
     "index.html#setup-hook-automake"
+  ],
+  "setup-hook-autopatchcilhook": [
+    "index.html#setup-hook-autopatchcilhook"
   ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
@@ -2202,6 +2450,9 @@
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
   ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
+  ],
   "unzip": [
     "index.html#unzip"
   ],
@@ -2324,6 +2575,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"
@@ -2499,32 +2756,52 @@
   "cuda": [
     "index.html#cuda"
   ],
-  "adding-a-new-cuda-release": [
-    "index.html#adding-a-new-cuda-release"
-  ],
-  "updating-cuda-redistributables": [
-    "index.html#updating-cuda-redistributables"
-  ],
-  "updating-cutensor": [
-    "index.html#updating-cutensor"
-  ],
-  "updating-supported-compilers-and-gpus": [
-    "index.html#updating-supported-compilers-and-gpus"
-  ],
-  "updating-the-cuda-toolkit": [
-    "index.html#updating-the-cuda-toolkit"
-  ],
-  "updating-the-cuda-package-set": [
-    "index.html#updating-the-cuda-package-set"
+  "cuda-contributing": [
+    "index.html#cuda-contributing"
   ],
   "cuda-docker-podman": [
     "index.html#cuda-docker-podman"
   ],
-  "specifying-what-devices-to-expose-to-the-container": [
+  "cuda-package-set-maintenance": [
+    "index.html#cuda-package-set-maintenance",
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "cuda-passthru-testers": [
+    "index.html#cuda-passthru-testers"
+  ],
+  "cuda-passthru-tests": [
+    "index.html#cuda-passthru-tests"
+  ],
+  "cuda-specifying-what-devices-to-expose-to-the-container": [
+    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
     "index.html#specifying-what-devices-to-expose-to-the-container"
   ],
-  "using-docker-compose": [
+  "cuda-updating-redistributables": [
+    "index.html#cuda-updating-redistributables",
+    "index.html#updating-cuda-redistributables"
+  ],
+  "cuda-updating-cutensor": [
+    "index.html#cuda-updating-cutensor",
+    "index.html#updating-cutensor"
+  ],
+  "cuda-updating-supported-compilers-and-gpus": [
+    "index.html#cuda-updating-supported-compilers-and-gpus",
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "cuda-updating-the-cuda-package-set": [
+    "index.html#cuda-updating-the-cuda-package-set",
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-updating-the-cuda-toolkit": [
+    "index.html#cuda-updating-the-cuda-toolkit",
+    "index.html#updating-the-cuda-toolkit"
+  ],
+  "cuda-using-docker-compose": [
+    "index.html#cuda-using-docker-compose",
     "index.html#using-docker-compose"
+  ],
+  "cuda-writing-tests": [
+    "index.html#cuda-writing-tests"
   ],
   "cuelang": [
     "index.html#cuelang"
@@ -2640,6 +2917,24 @@
   "declarative-debugging": [
     "index.html#declarative-debugging"
   ],
+  "sec-language-factor": [
+    "index.html#sec-language-factor"
+  ],
+  "ssec-factor-scaffolding": [
+    "index.html#ssec-factor-scaffolding"
+  ],
+  "ssec-factor-packaging": [
+    "index.html#ssec-factor-packaging"
+  ],
+  "ssec-factor-buildFactorApplication-func": [
+    "index.html#ssec-factor-buildFactorApplication-func"
+  ],
+  "ssec-factor-dev-env": [
+    "index.html#ssec-factor-dev-env"
+  ],
+  "ssec-factor-applications": [
+    "index.html#ssec-factor-applications"
+  ],
   "sec-language-gnome": [
     "index.html#sec-language-gnome"
   ],
@@ -2751,6 +3046,9 @@
   ],
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
+  ],
+  "ssec-go-toolchain-versions": [
+    "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
     "index.html#buildGoModule-goModules-override"
@@ -3049,8 +3347,20 @@
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
   ],
+  "javascript-pnpm-fetcherVersion": [
+    "index.html#javascript-pnpm-fetcherVersion"
+  ],
+  "javascript-pnpm-fetcherVersion-versionHistory": [
+    "index.html#javascript-pnpm-fetcherVersion-versionHistory"
+  ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
+  ],
+  "javascript-yarn-v1": [
+    "index.html#javascript-yarn-v1"
+  ],
+  "javascript-yarn-v3-v4": [
+    "index.html#javascript-yarn-v3-v4"
   ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
@@ -3078,6 +3388,18 @@
   ],
   "javascript-yarn2nix-pitfalls": [
     "index.html#javascript-yarn2nix-pitfalls"
+  ],
+  "javascript-yarnBerry-missing-hashes": [
+    "index.html#javascript-yarnBerry-missing-hashes"
+  ],
+  "javascript-yarnBerryConfigHook": [
+    "index.html#javascript-yarnBerryConfigHook"
+  ],
+  "javascript-yarnBerry-patching": [
+    "index.html#javascript-yarnBerry-patching"
+  ],
+  "javascript-fetchYarnBerryDeps": [
+    "index.html#javascript-fetchYarnBerryDeps"
   ],
   "javascript-outside-nixpkgs": [
     "index.html#javascript-outside-nixpkgs"
@@ -3763,7 +4085,8 @@
   "vim": [
     "index.html#vim"
   ],
-  "custom-configuration": [
+  "vim-custom-configuration": [
+    "index.html#vim-custom-configuration",
     "index.html#custom-configuration"
   ],
   "managing-plugins-with-vim-packages": [
@@ -3772,10 +4095,12 @@
   "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
     "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
   ],
-  "vim-plugin-specificities": [
-    "index.html#vim-plugin-specificities"
+  "neovim-plugin-specificities": [
+    "index.html#neovim-plugin-specificities",
+    "neovim-plugin-specificities#vim-plugin-specificities"
   ],
-  "vim-plugin-treesitter": [
+  "neovim-plugin-treesitter": [
+    "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
   ],
   "managing-plugins-with-vim-plug": [
@@ -3790,7 +4115,8 @@
   "testing-neovim-plugins-neovim-require-check": [
     "index.html#testing-neovim-plugins-neovim-require-check"
   ],
-  "vim-plugin-required-snippet": [
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [
@@ -4030,18 +4356,6 @@
   "ex-pkgs-substitute": [
     "index.html#ex-pkgs-substitute"
   ],
-  "pkgs-substituteall": [
-    "index.html#pkgs-substituteall"
-  ],
-  "ex-pkgs-substituteAll": [
-    "index.html#ex-pkgs-substituteAll"
-  ],
-  "pkgs-substituteallfiles": [
-    "index.html#pkgs-substituteallfiles"
-  ],
-  "ex-pkgs-substitute-all-files": [
-    "index.html#ex-pkgs-substitute-all-files"
-  ],
   "part-development": [
     "index.html#part-development"
   ],
@@ -4227,5 +4541,23 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "module-system-module-argument-_prefix": [
+    "index.html#module-system-module-argument-_prefix"
+  ],
+  "module-system-module-argument-lib": [
+    "index.html#module-system-module-argument-lib"
+  ],
+  "module-system-module-argument-config": [
+    "index.html#module-system-module-argument-config"
+  ],
+  "module-system-module-arguments": [
+    "index.html#module-system-module-arguments"
+  ],
+  "module-system-module-argument-_class": [
+    "index.html#module-system-module-argument-_class"
+  ],
+  "module-system-module-argument-options": [
+    "index.html#module-system-module-argument-options"
   ]
 }

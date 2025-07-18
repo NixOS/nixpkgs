@@ -53,6 +53,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webdataset" ];
 
+  preCheck = ''
+    export WIDS_CACHE=$TMPDIR
+  '';
+
   disabledTests =
     [
       # requires network
@@ -77,8 +81,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
       "test_concurrent_access"
-      # fails to patch 'init_process_group' from torch.distributed
-      "TestDistributedChunkedSampler"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # segfaults on aarch64-linux
@@ -89,11 +91,10 @@ buildPythonPackage rec {
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AttributeError: <module 'torch.distributed' from /nix/store/...
-    "tests/wids/test_wids.py"
-
     # Issue with creating a temp file in the sandbox
     "tests/wids/test_wids_mmtar.py"
+    # hangs the build *after* the tests
+    "tests/webdataset/test_loaders.py"
   ];
 
   meta = {

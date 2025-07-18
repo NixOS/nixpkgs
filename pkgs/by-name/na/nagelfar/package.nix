@@ -1,18 +1,20 @@
 {
   lib,
-  fetchzip,
+  fetchurl,
   tcl,
   tclPackages,
   tk,
 }:
 
-tcl.mkTclDerivation {
+tcl.mkTclDerivation rec {
   pname = "nagelfar";
-  version = "1.3.3";
+  version = "1.3.5";
 
-  src = fetchzip {
-    url = "https://sourceforge.net/projects/nagelfar/files/Rel_133/nagelfar133.tar.gz";
-    sha256 = "sha256-bdH53LSOKMwq53obVQitl7bpaSpwvMce8oJgg/GKrg0=";
+  src = fetchurl {
+    url = "https://sourceforge.net/projects/nagelfar/files/Rel_${
+      lib.replaceString "." "" version
+    }/nagelfar${lib.replaceString "." "" version}.tar.gz";
+    hash = "sha256-O6+SD7NLc+MgZxGDZdB02FkpjivON0itlFhiS+zoWyM=";
   };
 
   buildInputs = [
@@ -22,10 +24,14 @@ tcl.mkTclDerivation {
   ];
 
   installPhase = ''
-    install -Dm 755 $src/nagelfar.tcl $out/bin/nagelfar
+    runHook preInstall
+
+    install -Dm 755 nagelfar.tcl $out/bin/nagelfar
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nagelfar.sourceforge.net/";
     description = "Static syntax checker (linter) for Tcl";
     longDescription = ''
@@ -33,8 +39,8 @@ tcl.mkTclDerivation {
       and is very extendable through its syntax database and plugins.
     '';
     mainProgram = "nagelfar";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.nat-418 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.nat-418 ];
   };
 }

@@ -61,6 +61,11 @@ buildPythonPackage rec {
     # fails due to change in file (libmagic) 5.45
     "test_doc_postscript_eps"
     "test_package_debian"
+
+    # fails due to change in file (libmagic) 5.46
+    "test_media_image_img"
+    "test_compiled_elf_so"
+    "test_compiled_elf_so_2"
   ];
 
   pythonImportsCheck = [ "typecode" ];

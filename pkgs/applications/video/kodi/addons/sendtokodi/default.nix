@@ -4,46 +4,46 @@
   fetchFromGitHub,
   kodi,
   inputstreamhelper,
+  requests,
 }:
 
 buildKodiAddon rec {
   pname = "sendtokodi";
   namespace = "plugin.video.sendtokodi";
-  version = "0.9.557";
+  version = "0.9.924";
 
   src = fetchFromGitHub {
     owner = "firsttris";
     repo = "plugin.video.sendtokodi";
-    rev = "v${version}";
-    hash = "sha256-Ga+9Q7x8+sEmQmteHbSyCahZ/T/l28BAEM84w7bf7z8=";
+    tag = "v${version}";
+    hash = "sha256-ycp5/NbRX2rcRRpbpX6LlplyxdfoIwCw39EyQDcyzOU=";
   };
 
   patches = [
-    # Unconditionally depend on packaged yt-dlp. This removes the ability to
-    # use youtube_dl, which is unmaintained and considered vulnerable (see
-    # CVE-2024-38519).
-    ./use-packaged-yt-dlp.patch
+    # Use yt-dlp, only. This removes the ability to use youtube_dl, which is
+    # unmaintained and considered vulnerable (see CVE-2024-38519).
+    ./use-yt-dlp-only.patch
   ];
 
   propagatedBuildInputs = [
     inputstreamhelper
+    requests
   ];
 
   postPatch = ''
-    # Remove vendored youtube-dl and yt-dlp libraries.
-    rm -r lib/
+    # Remove youtube-dl, which is unmaintained and vulnerable.
+    rm -r lib/youtube_dl lib/youtube_dl_version
+    # Replace yt-dlp with our own packaged version thereof.
+    rm -r lib/yt_dlp
+    echo "${lib.strings.getVersion kodi.pythonPackages.yt-dlp}" >lib/yt_dlp_version
+    ln -s ${kodi.pythonPackages.yt-dlp}/${kodi.pythonPackages.python.sitePackages}/yt_dlp lib/
   '';
-
-  passthru = {
-    # Instead of the vendored libraries, we propagate yt-dlp via the Python
-    # path.
-    pythonPath = with kodi.pythonPackages; makePythonPath [ yt-dlp ];
-  };
 
   meta = with lib; {
     homepage = "https://github.com/firsttris/plugin.video.sendtokodi";
     description = "Plays various stream sites on Kodi using yt-dlp";
     license = licenses.mit;
-    maintainers = teams.kodi.members ++ [ maintainers.pks ];
+    maintainers = [ maintainers.pks ];
+    teams = [ teams.kodi ];
   };
 }

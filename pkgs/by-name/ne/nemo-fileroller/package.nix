@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Nemo file roller extension";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

@@ -2,10 +2,9 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   nix-update-script,
 
-  autoreconfHook,
+  cmake,
   pkg-config,
   sphinx,
 
@@ -16,6 +15,17 @@
   xz,
   zlib,
   zstd,
+
+  # Because lerc is C++ and static libraries don't track dependencies,
+  # that every downstream dependent of libtiff has to link with a C++
+  # compiler, or the C++ standard library won't be linked, resulting
+  # in undefined symbol errors.  Without systematic support for this
+  # in build systems, fixing this would require modifying the build
+  # system of every libtiff user.  Hopefully at some point build
+  # systems will figure this out, and then we can enable this.
+  #
+  # See https://github.com/mesonbuild/meson/issues/14234
+  withLerc ? !stdenv.hostPlatform.isStatic,
 
   # for passthru.tests
   libgeotiff,
@@ -40,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # FreeImage needs this patch
-    ./headers.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
@@ -61,24 +69,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    moveToOutput include/tif_config.h $dev_private
-    moveToOutput include/tif_dir.h $dev_private
-    moveToOutput include/tif_hash_set.h $dev_private
-    moveToOutput include/tiffiop.h $dev_private
+    mkdir -p $dev_private/include
+    mv -t $dev_private/include \
+      libtiff/tif_config.h \
+      ../libtiff/tif_dir.h \
+      ../libtiff/tif_hash_set.h \
+      ../libtiff/tiffiop.h
   '';
 
-  # If you want to change to a different build system, please make
-  # sure cross-compilation works first!
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
     sphinx
   ];
 
-  buildInputs = [
-    lerc
-    zstd
-  ];
+  buildInputs =
+    [
+      zstd
+    ]
+    ++ lib.optionals withLerc [
+      lerc
+    ];
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
@@ -90,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     zlib
     zstd
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
   ];
 
   enableParallelBuilding = true;
@@ -123,6 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 })

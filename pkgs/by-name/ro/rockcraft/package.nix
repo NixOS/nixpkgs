@@ -4,24 +4,28 @@
   fetchFromGitHub,
   dpkg,
   nix-update-script,
-  testers,
-  rockcraft,
-  cacert,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.7.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-2Bo3qtpSSfNvqszlt9cCc9/rurDNDMySAaqLbvRmjjw=";
+    hash = "sha256-pIOCgOC969Fj3lNnmsb6QTEV8z1KWxrUSsdl6Aogd4Q=";
   };
 
   pyproject = true;
+
   build-system = with python3Packages; [ setuptools-scm ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "setuptools~=80.8.0" "setuptools"
+  '';
 
   dependencies = with python3Packages; [
     craft-application
@@ -29,6 +33,10 @@ python3Packages.buildPythonApplication rec {
     craft-platforms
     spdx-lookup
     tabulate
+  ];
+
+  pythonRelaxDeps = [
+    "craft-providers"
   ];
 
   nativeCheckInputs =
@@ -39,28 +47,25 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
 
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     "test_project_all_platforms_invalid"
     "test_run_init_flask"
     "test_run_init_django"
+    # Mock is broken for Unix FHS reasons.
+    "test_run_pack_services"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = rockcraft;
-      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) rockcraft --version";
-      version = "rockcraft ${version}";
-    };
-  };
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "rockcraft";

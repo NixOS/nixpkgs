@@ -1,49 +1,75 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
-  testers,
+  installShellFiles,
+  versionCheckHook,
   nix-update-script,
-  pinact,
 }:
 
 let
+  mainProgram = "pinact";
+in
+buildGoModule (finalAttrs: {
   pname = "pinact";
-  version = "1.0.0";
+  version = "3.3.0";
+
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
-    rev = "v${version}";
-    hash = "sha256-fOmQDfqG1aWzpL80Nc8JA6HWQR+z9mhqtwU4rC2g2Gg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aNRDz0mAc5fsS01W0PZxCGw0NgEcExtciTcv/Omdv3g=";
   };
-in
-buildGoModule {
-  inherit pname version src;
 
-  vendorHash = "sha256-AFlkzs5mL/x9CwfF2apLcQbiu60GD33oFH6lQDHAL1M=";
+  vendorHash = "sha256-eqT92vK8Ah7glS/O5rWp+wK/apGwC61/GIZRUtpmNFo=";
+
+  env.CGO_ENABLED = 0;
 
   doCheck = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = pinact;
-    };
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-    updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd '${mainProgram}' \
+      --bash <("$out/bin/${mainProgram}" completion bash) \
+      --zsh <("$out/bin/${mainProgram}" completion zsh) \
+      --fish <("$out/bin/${mainProgram}" completion fish)
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${mainProgram}";
+  versionCheckProgramArg = "version";
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([\\d\\.]+)$"
+      ];
+    };
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version} -X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version} -X main.commit=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  subPackages = [
+    "cmd/pinact"
+  ];
+
+  meta = {
+    inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
-    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kachick ];
-    mainProgram = "pinact";
+    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kachick ];
   };
-}
+})

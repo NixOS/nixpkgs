@@ -27,8 +27,7 @@
   cacert,
   extraFeatures ? false, # catch-all if defaults aren't enough
 }:
-let # un-indented, over the whole file
-
+let
   result = if extraFeatures then wrapped-full else unwrapped;
 
   inherit (lib) optional optionals optionalString;
@@ -36,11 +35,11 @@ let # un-indented, over the whole file
 
   unwrapped = stdenv.mkDerivation rec {
     pname = "knot-resolver";
-    version = "5.7.4";
+    version = "5.7.6";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-      hash = "sha256-a22m7PBoKAQa+tRN+iJ3gfCuNK0YOmZwCFCTVdGL2cg=";
+      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
     };
 
     outputs = [
@@ -67,7 +66,7 @@ let # un-indented, over the whole file
         # Even though they should already be loaded and they're in RPATH, too.
         for f in daemon/lua/{kres,zonefile}.lua; do
           substituteInPlace "$f" \
-            --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+            --replace-fail "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
         done
       ''
       # some tests have issues with network sandboxing, apparently

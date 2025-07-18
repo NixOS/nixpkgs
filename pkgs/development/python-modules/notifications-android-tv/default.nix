@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-JUvxxVCiQtywAWU5AYnPm4SueIWIXkzLxPYveVXpc2E=";
   };
 
+  pythonRelaxDeps = [ "httpx" ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ httpx ];

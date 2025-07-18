@@ -39,13 +39,15 @@
   libglvnd,
   numactl,
   amf-headers,
-  intel-media-sdk,
   svt-av1,
   vulkan-loader,
   libappindicator,
   libnotify,
   miniupnpc,
+  nlohmann_json,
   config,
+  coreutils,
+  udevCheckHook,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -54,31 +56,21 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.23.1";
+  version = "2025.628.4510";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
-    rev = "v${version}";
-    hash = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
+    tag = "v${version}";
+    hash = "sha256-xNWFo6a4YrJ+tBFTSReoAEi1oZ4DSguBEusizWeWKYY=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix(upnp): support newer miniupnpc library (#2782)
-    # Manually cherry-picked on to 0.23.1.
-    ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
-
-    # port of https://github.com/LizardByte/Sunshine/commit/e90b71ce62b7744bb18ffc7823b1e895786ffb0a
-    # remove on update
-    ./boost-186.patch
-  ];
 
   # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-9FuMtxTwrU9UIhZXQn/tmGN0IHZBdunV0cY/EElj4bA=";
+    npmDepsHash = "sha256-kUixeLf8prsWQolg1v+vJ5rvwKZOsU+88+0hVOgTZ0A=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -100,9 +92,12 @@ stdenv'.mkDerivation rec {
       wayland-scanner
       # Avoid fighting upstream's usage of vendored ffmpeg libraries
       autoPatchelfHook
+      udevCheckHook
     ]
     ++ lib.optionals cudaSupport [
       autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+      (lib.getDev cudaPackages.cuda_cudart)
     ];
 
   buildInputs =
@@ -145,12 +140,11 @@ stdenv'.mkDerivation rec {
       libappindicator
       libnotify
       miniupnpc
+      nlohmann_json
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cudatoolkit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      intel-media-sdk
+      cudaPackages.cuda_cudart
     ];
 
   runtimeDependencies = [
@@ -161,12 +155,30 @@ stdenv'.mkDerivation rec {
     libglvnd
   ];
 
-  cmakeFlags = [
-    "-Wno-dev"
-    # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
-    (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
-    (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
-  ];
+  cmakeFlags =
+    [
+      "-Wno-dev"
+      # upstream tries to use systemd and udev packages to find these directories in FHS; set the paths explicitly instead
+      (lib.cmakeBool "UDEV_FOUND" true)
+      (lib.cmakeBool "SYSTEMD_FOUND" true)
+      (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
+      (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
+      (lib.cmakeBool "BOOST_USE_STATIC" false)
+      (lib.cmakeBool "BUILD_DOCS" false)
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_NAME" "nixpkgs")
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_WEBSITE" "https://nixos.org")
+      (lib.cmakeFeature "SUNSHINE_PUBLISHER_ISSUE_URL" "https://github.com/NixOS/nixpkgs/issues")
+    ]
+    ++ lib.optionals (!cudaSupport) [
+      (lib.cmakeBool "SUNSHINE_ENABLE_CUDA" false)
+    ];
+
+  env = {
+    # needed to trigger CMake version configuration
+    BUILD_VERSION = "${version}";
+    BRANCH = "master";
+    COMMIT = "";
+  };
 
   postPatch = ''
     # remove upstream dependency on systemd and udev
@@ -174,14 +186,21 @@ stdenv'.mkDerivation rec {
       --replace-fail 'find_package(Systemd)' "" \
       --replace-fail 'find_package(Udev)' ""
 
-    substituteInPlace packaging/linux/sunshine.desktop \
+    # don't look for npm since we build webui separately
+    substituteInPlace cmake/targets/common.cmake \
+      --replace-fail 'find_program(NPM npm REQUIRED)' ""
+
+    substituteInPlace packaging/linux/dev.lizardbyte.app.Sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
       --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
 
     substituteInPlace packaging/linux/sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   preBuild = ''
@@ -207,8 +226,10 @@ stdenv'.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+    install -Dm644 ../packaging/linux/dev.lizardbyte.app.Sunshine.desktop $out/share/applications/dev.lizardbyte.app.Sunshine.desktop
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     tests.sunshine = nixosTests.sunshine;

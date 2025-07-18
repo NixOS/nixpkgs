@@ -43,7 +43,7 @@ in
       default = true;
       description = ''
         Whether to create a local database automatically.
-        This will override every database setting in {option}`services.engelsystem.config`.
+        This will override every database setting in {option}`services.engelsystem.settings`.
       '';
     };
 
@@ -85,7 +85,7 @@ in
         picture of this: in the resulting config.php file, the email.password key will be set to
         the contents of the /var/keys/engelsystem/mail file.
 
-        See https://engelsystem.de/doc/admin/configuration/ for available options.
+        See <https://engelsystem.de/doc/admin/configuration/> for available options.
 
         Note that the admin user login credentials cannot be set here - they always default to
         admin:asdfasdf. Log in and change them immediately.
@@ -134,7 +134,7 @@ in
       enable = true;
       virtualHosts."${cfg.domain}".locations = {
         "/" = {
-          root = "${cfg.package}/share/engelsystem/public";
+          root = "${cfg.package}/share/php/engelsystem/public";
           extraConfig = ''
             index index.php;
             try_files $uri $uri/ /index.php?$args;
@@ -142,7 +142,7 @@ in
           '';
         };
         "~ \\.php$" = {
-          root = "${cfg.package}/share/engelsystem/public";
+          root = "${cfg.package}/share/php/engelsystem/public";
           extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.engelsystem.socket};
             fastcgi_index index.php;

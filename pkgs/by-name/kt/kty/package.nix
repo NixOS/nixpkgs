@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,18 +25,12 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk;
-      [
-        frameworks.SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
-  cargoHash = "sha256-mhXi4YgYT2NfIjtESjvSP5TMOl3UH3CJFwKlJriZ0/4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nJ+nof2YhyLrNuLVy69kYj5tw+aG4IJm6nVxHkczbko=";
 
   meta = {
     homepage = "https://kty.dev/";

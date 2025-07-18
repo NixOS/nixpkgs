@@ -68,16 +68,10 @@ in
     services = {
       nginx = {
         enable = true;
-        upstreams.tailscale-derper = {
-          servers."127.0.0.1:${toString cfg.port}" = { };
-          extraConfig = ''
-            keepalive 64;
-          '';
-        };
         virtualHosts."${cfg.domain}" = {
           addSSL = true; # this cannot be forceSSL as derper sends some information over port 80, too.
           locations."/" = {
-            proxyPass = "http://tailscale-derper";
+            proxyPass = "http://127.0.0.1:${toString cfg.port}";
             proxyWebsockets = true;
             extraConfig = ''
               keepalive_timeout 0;

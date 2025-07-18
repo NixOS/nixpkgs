@@ -185,8 +185,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.pgmanage = {
       description = "pgmanage - PostgreSQL Administration for the web";
-      wants = [ "postgresql.service" ];
-      after = [ "postgresql.service" ];
+      wants = [ "postgresql.target" ];
+      after = [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = pgmanage;

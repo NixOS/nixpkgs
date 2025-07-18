@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   autoreconfHook269,
   autoconf-archive,
   pkg-config,
@@ -75,13 +74,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "release-";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Word processing program, similar to Microsoft Word";
     mainProgram = "abiword";
     homepage = "https://gitlab.gnome.org/World/AbiWord/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       pSub
       ylwghst
       sna

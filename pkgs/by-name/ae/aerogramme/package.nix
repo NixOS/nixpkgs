@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchgit,
+  nix-update-script,
   pkg-config,
   openssl,
 }:
@@ -35,11 +36,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Encrypted e-mail storage over Garage";
     homepage = "https://aerogramme.deuxfleurs.fr/";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ supinie ];
+    teams = with lib.teams; [ ngi ];
     mainProgram = "aerogramme";
     platforms = lib.platforms.linux;
   };

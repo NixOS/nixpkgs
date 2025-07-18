@@ -37,6 +37,7 @@
   libxslt,
   harfbuzz,
   hyphen,
+  icu,
   libsysprof-capture,
   libpthreadstubs,
   nettle,
@@ -65,7 +66,7 @@
   libbacktrace,
   systemd,
   xdg-dbus-proxy,
-  substituteAll,
+  replaceVars,
   glib,
   unifdef,
   addDriverRunpath,
@@ -79,7 +80,7 @@
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.46.5";
+  version = "2.48.3";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -99,12 +100,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-utQCC7DPs+dA3zCCwtnL9nz0CVWWWIpWrs3eZwITeAU=";
+    hash = "sha256-1NxZcPD8alKf9/1nvL+rK7tekb54my6SeWQLMhengsM=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./fix-bubblewrap-paths.patch;
+    (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })
@@ -136,6 +136,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       at-spi2-core
       cairo # required even when using skia
       enchant2
+      flite
       libavif
       libepoxy
       libjxl
@@ -144,6 +145,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       harfbuzz
       hyphen
+      icu
       libGL
       libGLU
       libgbm
@@ -187,7 +189,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       geoclue2
     ]
     ++ lib.optionals enableExperimental [
-      flite
+      # For ENABLE_WEB_RTC
       openssl
     ]
     ++ lib.optionals withLibsecret [
@@ -259,7 +261,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "webkit2gtk-web-extension-4.0"
     ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

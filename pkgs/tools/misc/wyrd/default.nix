@@ -1,38 +1,49 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  makeWrapper,
   ocamlPackages,
-  ncurses,
   remind,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.4.6";
+stdenv.mkDerivation (finalAttrs: {
   pname = "wyrd";
+  version = "1.7.4";
 
-  src = fetchurl {
-    url = "http://pessimization.com/software/wyrd/wyrd-${version}.tar.gz";
-    sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
+  src = fetchFromGitLab {
+    owner = "wyrd-calendar";
+    repo = "wyrd";
+    tag = finalAttrs.version;
+    hash = "sha256-9HCwc4yrBi0D+fv7vOPstxN1tqqNyGRgpkce1uLVxTg=";
   };
 
-  preConfigure = ''
-    substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
-  '';
-
   strictDeps = true;
+
   nativeBuildInputs = [
+    makeWrapper
+    ocamlPackages.findlib
     ocamlPackages.ocaml
-    ocamlPackages.camlp4
+    ocamlPackages.odoc
   ];
+
   buildInputs = [
-    ncurses
+    ocamlPackages.camlp-streams
+    ocamlPackages.curses
+    ocamlPackages.yojson
     remind
   ];
 
-  preferLocalBuild = true;
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  meta = with lib; {
+  postInstall = ''
+    wrapProgram "$out/bin/wyrd" \
+      --prefix PATH : "${lib.makeBinPath [ remind ]}"
+  '';
+
+  meta = {
     description = "Text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
@@ -41,11 +52,11 @@ stdenv.mkDerivation rec {
       flashy GUI dialogs. Rather, Wyrd is designed to make you more
       efficient at editing your reminder files directly.
     '';
-    homepage = "http://pessimization.com/software/wyrd/";
-    downloadPage = "http://pessimization.com/software/wyrd/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.prikhi ];
-    platforms = platforms.unix;
+    homepage = "https://gitlab.com/wyrd-calendar/wyrd";
+    downloadPage = "https://gitlab.com/wyrd-calendar/wyrd";
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.prikhi ];
+    platforms = lib.platforms.unix;
     mainProgram = "wyrd";
   };
-}
+})

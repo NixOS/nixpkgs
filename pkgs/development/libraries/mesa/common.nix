@@ -5,14 +5,14 @@
 # nix build .#legacyPackages.x86_64-darwin.mesa .#legacyPackages.aarch64-darwin.mesa
 rec {
   pname = "mesa";
-  version = "24.3.3";
+  version = "25.1.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-OThJ/txyJ6p879jG5qOXX6mL27t7Uz/tbr620iRMeIc=";
+    hash = "sha256-SHYYezt2ez9awvIATEC6wVMZMuJUsOYXxlugs1Q6q7U=";
   };
 
   meta = {
@@ -32,7 +32,6 @@ rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       k900
-      primeos
       vcunat
     ]; # Help is welcome :)
   };

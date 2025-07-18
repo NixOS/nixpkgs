@@ -2,20 +2,27 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
   pname = "cross-seed";
-  version = "6.8.4";
+  version = "6.11.1";
 
   src = fetchFromGitHub {
     owner = "cross-seed";
     repo = "cross-seed";
     tag = "v${version}";
-    hash = "sha256-R0mgrRWb9pM7DWC4Y5cASkuwWBJAtk6iKz2tIa5rLVE=";
+    hash = "sha256-ZyagXbbYUZA2CfoqVh0pmKt91kTLUGB8hUItgHbPb2w=";
   };
 
-  npmDepsHash = "sha256-1xP0KwuVZMeIxg3dXd0CAGW0517i/6WBu3qGOkwsoks=";
+  npmDepsHash = "sha256-hSiGnw3Fo//oTONBmtuv0sDvldCzs1PsdImxdGWEpMo=";
+
+  passthru = {
+    updateScript = nix-update-script;
+    tests.cross-seed = nixosTests.cross-seed;
+  };
 
   meta = {
     description = "Fully-automatic torrent cross-seeding with Torznab";

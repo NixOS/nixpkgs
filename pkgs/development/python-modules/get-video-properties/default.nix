@@ -5,7 +5,7 @@
   ffmpeg-headless,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "get-video-properties";
   version = "0.1.1";
   format = "setuptools";

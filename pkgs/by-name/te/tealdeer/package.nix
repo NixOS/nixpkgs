@@ -7,16 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    hash = "sha256-UYOAj6ft6FHQz06A+K2K+bK3WXQnF5U7TuN95WIXj+M=";
+    hash = "sha256-GZN7WE12f3MEoBfswag0O04UOCmZeYwt5CbYwddmwHs=";
   };
 
-  cargoHash = "sha256-ZKaq/JqH/Y2Cs9LLnlt1Gawe4R+kvS3vpUcNK95uujk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Zk2L4cq7j9CkSc+cnZRWwhtfWP6y5faiMVGFFNkBwwA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,6 +47,7 @@ rustPlatform.buildRustPackage rec {
       davidak
       newam
       mfrw
+      ryan4yin
     ];
     license = with licenses; [
       asl20

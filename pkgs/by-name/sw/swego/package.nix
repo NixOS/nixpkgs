@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "swego";
-  version = "1.12";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     tag = "v${version}";
-    hash = "sha256-roaAzh6Mncu4qtaxEoXk41Mrmz/l7X1+n+Yh5skA65A=";
+    hash = "sha256-28PU7jAVnWfRbFmTE2pmwJO1Zi+ceyFrzY5MiRt+91Y=";
   };
 
-  vendorHash = "sha256-mJWJdwbZq042//hM3WWp2rnLC1GebckUnsIopbF858Q=";
+  vendorHash = "sha256-w2OhZq7vaVDVoRfnWPH0bFO85yGTFcO6KpDo5ulTifo=";
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname
@@ -34,7 +34,8 @@ buildGoModule rec {
       SimpleHTTPServer but with many features.
     '';
     homepage = "https://github.com/nodauf/Swego";
-    license = with licenses; [ gpl2Only ];
+    changelog = "https://github.com/nodauf/Swego/releases/tag/${src.tag}";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles

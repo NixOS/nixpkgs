@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage {
     rev = "d09b3102ff7a364bf2593589327a16a473bd4f25";
     hash = "sha256-vdHPFY6zZ/OBNlJO3N/6YXcvlddw2wYHgFWI0yfSgVo=";
   };
-  cargoHash = "sha256-HAeEd7HY+hbTUOkIt6aTfvPYLRPtdAcUGvkuBUMjohA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rWU8rOGLUrSkXLkHib8qkkiOZvuGbSJ4knFrHuD+R44=";
 
   meta = with lib; {
     description = "like cargo, but backwards";

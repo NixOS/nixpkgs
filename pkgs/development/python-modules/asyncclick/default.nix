@@ -3,7 +3,7 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
+  flit-core,
   pytestCheckHook,
   pythonOlder,
   trio,
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.1.7.2";
+  version = "8.1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,22 +19,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
-    tag = version;
-    hash = "sha256-ahzI7yILq1OpZ6IT0qt8vjzi6I6zAoTrULOl8CqRw4A=";
+    tag = "${version}+async";
+    hash = "sha256-J294pYuNOSm7v2BbwDpzn3uelAnZ3ip2U1gWuchhOtA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ anyio ];
+  dependencies = [ anyio ];
 
   nativeCheckInputs = [
     pytestCheckHook
     trio
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -48,7 +47,7 @@ buildPythonPackage rec {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
     changelog = "https://github.com/python-trio/asyncclick/blob/${version}/CHANGES.rst";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

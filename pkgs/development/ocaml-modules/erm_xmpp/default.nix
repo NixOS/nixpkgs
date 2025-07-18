@@ -5,6 +5,7 @@
   ocaml,
   findlib,
   camlp4,
+  cstruct,
   ocamlbuild,
   erm_xml,
   mirage-crypto,
@@ -13,7 +14,7 @@
   digestif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.3+20241009";
   pname = "ocaml${ocaml.version}-erm_xmpp";
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ camlp4 ];
   propagatedBuildInputs = [
+    cstruct
     erm_xml
     mirage-crypto
     mirage-crypto-rng

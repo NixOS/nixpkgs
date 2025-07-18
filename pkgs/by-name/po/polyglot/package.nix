@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   jre,
   makeWrapper,
@@ -12,13 +13,13 @@
 }:
 maven.buildMavenPackage rec {
   pname = "polyglot";
-  version = "3.6";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "DraqueT";
     repo = "PolyGlot";
-    rev = "v${version}";
-    hash = "sha256-fAeYrj5x2kGGz+LPnlhR3j+0RSh4akPfN+ZyMMyrndE=";
+    tag = "v${version}";
+    hash = "sha256-jDW74Hk+6vzCUm84wwMn5XBGPVlsJ3mQrjtuqMZssz0=";
   };
 
   preBuild = ''
@@ -30,7 +31,13 @@ maven.buildMavenPackage rec {
     cd ../..
   '';
 
-  mvnHash = "sha256-nQScNCkA+eaeL3tcLCec1qIoYO6ct28FLxGp/Cm4nn4=";
+  mvnHash =
+    {
+      aarch64-linux = "sha256-Tlz2I6xE8g3GqKz9N7VXRO0ObE1XOv6IfTrKZmVlscY=";
+      x86_64-linux = "sha256-nQScNCkA+eaeL3tcLCec1qIoYO6ct28FLxGp/Cm4nn4=";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
   mvnParameters = "-DskipTests";
 
   nativeBuildInputs = [

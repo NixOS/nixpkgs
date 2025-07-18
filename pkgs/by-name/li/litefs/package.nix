@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "litefs";
-  version = "0.5.11";
+  version = "0.5.14";
 
   src = fetchFromGitHub {
     owner = "superfly";
-    repo = pname;
+    repo = "litefs";
     rev = "v${version}";
-    sha256 = "sha256-I12bKImZkvAMyfwb6r/NxE+BcUk+SalN+cIDXP0q4xA=";
+    sha256 = "sha256-URwHnOvvz/UnrxoFIuUYpw10uPHgxQf9LPO1xECixDE=";
   };
 
-  vendorHash = "sha256-FcYPe4arb+jbxj4Tl6bRRAnkEvw0rkECIo8/zC79lOA=";
+  vendorHash = "sha256-i0gYhPwcs3dfWy6GANlUl1Nc+dXD8KuAT71FATwxpDo=";
 
   subPackages = [ "cmd/litefs" ];
 

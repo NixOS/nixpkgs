@@ -14,24 +14,23 @@
   # buildInputs
   opencl-headers,
   pybind11,
-  darwin,
   ocl-icd,
 
   # dependencies
   platformdirs,
   pytools,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  mako,
+  pocl,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
-in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.3";
+  version = "2025.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +38,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HE7dARgKnZxqjAXX4iI1ml0N2BalyTo+ZAzjC2ThEN8=";
+    hash = "sha256-VmnCMaq6op/7M+n1U9mPgRpCyZtkgmzMXQuWW6Clbd4=";
   };
 
   build-system = [
@@ -54,27 +53,33 @@ buildPythonPackage rec {
 
   buildInputs = [
     opencl-headers
+    ocl-icd
     pybind11
-  ] ++ os-specific-buildInputs;
+  ];
 
   dependencies = [
     numpy
     platformdirs
     pytools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pocl
+    mako
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  env = {
+    CL_INC_DIR = "${opencl-headers}/include";
+    CL_LIB_DIR = "${ocl-icd}/lib";
+    CL_LIBNAME = "${ocl-icd}/lib/libOpenCL${stdenv.hostPlatform.extensions.sharedLibrary}";
+  };
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # https://github.com/NixOS/nixpkgs/issues/255262
-    cd $out
+    rm -rf pyopencl
   '';
-
-  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
-  # tests are all the tests that are available.
-  doCheck = false;
 
   pythonImportsCheck = [
     "pyopencl"
@@ -88,10 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ld: symbol(s) not found for architecture arm64
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

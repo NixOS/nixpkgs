@@ -97,7 +97,11 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    badPlatforms = [
+      # Mandatory libdconfsettings shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
+    teams = [ teams.gnome ];
     mainProgram = "dconf";
   };
 }

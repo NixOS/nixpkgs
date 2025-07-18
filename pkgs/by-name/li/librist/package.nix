@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   # avoid rebuild on Linux for now
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://code.videolan.org/rist/librist/-/issues/192
     ./no-brew-darwin.diff
   ];

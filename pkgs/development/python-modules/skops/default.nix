@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   pytest-cov-stub,
   huggingface-hub,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "skops";
-  version = "0.10";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,10 +26,10 @@ buildPythonPackage rec {
     owner = "skops-dev";
     repo = "skops";
     tag = "v${version}";
-    hash = "sha256-2uX5sGVdTnZEbl0VXI8E7h1pQYQVbpQeUKUchCZpgg4=";
+    hash = "sha256-23Wy/VSd/CvpqT/zDX4ApplfsUwbjOj9q+T8YCKs8X4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     huggingface-hub
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     streamlit
   ];
-  pytestFlagsArray = [ "skops" ];
+  enabledTestPaths = [ "skops" ];
   disabledTests = [
     # flaky
     "test_base_case_works_as_expected"
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     description = "Library for saving/loading, sharing, and deploying scikit-learn based models";
     mainProgram = "skops";
     homepage = "https://skops.readthedocs.io/en/stable";
-    changelog = "https://github.com/skops-dev/skops/releases/tag/v${version}";
+    changelog = "https://github.com/skops-dev/skops/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

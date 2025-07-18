@@ -11,7 +11,7 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk,
+  gtk3,
   girara,
   gettext,
   gnome,
@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
+    hash = "sha256-6Ehw+/lrdmuCJKPzps58z6Nu+jtpGcyKL792XqTf5HY=";
   };
 
   outputs = [
@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     "-Dtests=disabled"
+    # by default, zathura searches for zathurarc under $out/etc
+    "-Dsysconfdir=/etc"
     # Make sure tests are enabled for doCheck
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
@@ -73,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      gtk
+      gtk3
       girara
       libintl
       sqlite

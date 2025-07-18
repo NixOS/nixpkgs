@@ -8,9 +8,12 @@
   buildPythonPackage,
   confluent-kafka,
   fetchPypi,
+  google-cloud-pubsub,
+  google-cloud-monitoring,
   hypothesis,
   kazoo,
   msgpack,
+  packaging,
   pycurl,
   pymongo,
   #, pyro4
@@ -28,20 +31,21 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.4.2";
+  version = "5.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7vVy3S/Z/GFLN1gOPK6v3Vr0bB7/Mef7qJE4zbQG8s8=";
+    hash = "sha256-iGYAFoJ16+rak7iI6DE1L+V4FoNC8NHVgz2Iug2Ec2M=";
   };
 
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     amqp
+    packaging
     tzdata
     vine
   ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
@@ -64,7 +68,11 @@ buildPythonPackage rec {
     ];
     azureservicebus = [ azure-servicebus ];
     confluentkafka = [ confluent-kafka ];
-    # pyro4 doesn't suppport Python 3.11
+    gcpubsub = [
+      google-cloud-pubsub
+      google-cloud-monitoring
+    ];
+    # pyro4 doesn't support Python 3.11
     #pyro = [
     #  pyro4
     #];

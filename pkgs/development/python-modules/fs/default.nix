@@ -8,7 +8,6 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   pytz,
   setuptools,
@@ -27,9 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-rpfH1RIT9LcLapWCklMCiQkN46fhWEHhCPvhRPBp0xM=";
   };
 
+  postPatch = ''
+    # https://github.com/PyFilesystem/pyfilesystem2/pull/591
+    substituteInPlace tests/test_ftpfs.py \
+      --replace ThreadedTestFTPd FtpdThreadWrapper
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
+    setuptools
     six
     appdirs
     pytz

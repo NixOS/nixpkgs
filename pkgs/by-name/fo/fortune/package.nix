@@ -6,6 +6,7 @@
   recode,
   perl,
   rinutils,
+  fortune,
   withOffensive ? false,
 }:
 
@@ -20,11 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    perl
-    rinutils
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      perl
+      rinutils
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      # "strfile" must be in PATH for cross-compiling builds.
+      fortune
+    ];
 
   buildInputs = [ recode ];
 

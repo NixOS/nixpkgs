@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "coqpit-config";
-  version = "0.1.2";
+  version = "0.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-coqpit";
     tag = "v${version}";
-    hash = "sha256-3LZxoj2aFTpezakBymogkNPCaEBBaaUmyIa742cSMgU=";
+    hash = "sha256-puTqaYK1j1SGqGQQsrEH9lbpcF0FzcQ8v2siUQVyHsE=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/idiap/coqui-ai-coqpit";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

@@ -40,7 +40,7 @@ let
     sha256 = "0cwbfff8gzci5zrahh6d53b9b3bfv1cbwlv0k6076531i1c7md9p";
   };
 in
-mkDerivation rec {
+mkDerivation {
   pname = "koko";
 
   nativeBuildInputs = [

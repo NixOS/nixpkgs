@@ -9,7 +9,6 @@ in
   libtool,
   bison,
   buildPackages,
-  fetchFromGitHub,
   fetchurl,
   gettext,
   lib,
@@ -17,7 +16,6 @@ in
   perl,
   runCommand,
   zlib,
-  CoreServices,
 
   enableGold ? withGold stdenv.targetPlatform,
   enableGoldDefault ? false,
@@ -34,11 +32,46 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.43.1";
+  version = "2.44";
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  # gas is disabled for some targets via noconfigdirs in configure.
+  targetHasGas = !stdenv.targetPlatform.isDarwin;
+
+  # gas isn't multi-target, even with --enable-targets=all, so we do
+  # separate builds of just gas for each target.
+  #
+  # There's no way to do this exhaustively, so feel free to add
+  # additional targets here as required.
+  allGasTargets =
+    allGasTargets'
+    ++ lib.optional (
+      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+    ) targetPlatform.config;
+  allGasTargets' = [
+    "aarch64-unknown-linux-gnu"
+    "alpha-unknown-linux-gnu"
+    "arm-unknown-linux-gnu"
+    "avr-unknown-linux-gnu"
+    "cris-unknown-linux-gnu"
+    "hppa-unknown-linux-gnu"
+    "i686-unknown-linux-gnu"
+    "ia64-unknown-linux-gnu"
+    "m68k-unknown-linux-gnu"
+    "mips-unknown-linux-gnu"
+    "mips64-unknown-linux-gnu"
+    "msp430-unknown-linux-gnu"
+    "powerpc-unknown-linux-gnu"
+    "powerpc64-unknown-linux-gnu"
+    "s390-unknown-linux-gnu"
+    "sparc-unknown-linux-gnu"
+    "vax-unknown-linux-gnu"
+    "x86_64-unknown-linux-gnu"
+    "xscale-unknown-linux-gnu"
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-    hash = "sha256-vsqsXSleA3WHtjpC+tV/49nXuD9HjrJLZ/nuxdDxhy8=";
+    url = "mirror://gnu/binutils/binutils-with-gold-${version}.tar.bz2";
+    hash = "sha256-NHM+pJXMDlDnDbTliQ3sKKxB8OFMShZeac8n+5moxMg=";
   };
 
   # WARN: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -123,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     zlib
     gettext
-  ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
+  ];
 
   inherit noSysDirs;
 
@@ -150,20 +183,10 @@ stdenv.mkDerivation (finalAttrs: {
           sed -i "$i" -e 's|ln |ln -s |'
       done
 
-      # autoreconfHook is not included for all targets.
-      # Call it here explicitly as well.
-      ${finalAttrs.postAutoreconf}
+      configureScript="$PWD/configure"
+      mkdir $NIX_BUILD_TOP/build
+      cd $NIX_BUILD_TOP/build
     '';
-
-  postAutoreconf = ''
-    # As we regenerated configure build system tries hard to use
-    # texinfo to regenerate manuals. Let's avoid the dependency
-    # on texinfo in bootstrap path and keep manuals unmodified.
-    touch gas/doc/.dirstamp
-    touch gas/doc/asconfig.texi
-    touch gas/doc/as.1
-    touch gas/doc/as.info
-  '';
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
@@ -221,7 +244,11 @@ stdenv.mkDerivation (finalAttrs: {
       # path to force users to declare their use of these libraries.
       "--with-lib-path=:"
     ]
-    ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+    ++ lib.optionals withAllTargets [
+      "--enable-targets=all"
+      # gas will be built separately for each target.
+      "--disable-gas"
+    ]
     ++ lib.optionals enableGold [
       "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
       "--enable-plugins"
@@ -249,6 +276,30 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
+  postConfigure = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      mkdir "$NIX_BUILD_TOP/build-$target"
+      env -C "$NIX_BUILD_TOP/build-$target" \
+        "$configureScript" $configureFlags "''${configureFlagsArray[@]}" \
+        --enable-gas --program-prefix "$target-"  --target "$target"
+    done
+  '';
+
+  makeFlags = [
+    # As we regenerated configure build system tries hard to use
+    # texinfo to regenerate manuals. Let's avoid the dependency
+    # on texinfo in bootstrap path and keep manuals unmodified.
+    "MAKEINFO=true"
+  ];
+
+  postBuild = lib.optionalString withAllTargets ''
+    for target in ${lib.escapeShellArgs allGasTargets}; do
+      make -C "$NIX_BUILD_TOP/build-$target" -j"$NIX_BUILD_CORES" \
+        $makeFlags "''${makeFlagsArray[@]}" $buildFlags "''${buildFlagsArray[@]}" \
+        TARGET-gas=as-new all-gas
+    done
+  '';
+
   # Fails
   doCheck = false;
 
@@ -271,10 +322,21 @@ stdenv.mkDerivation (finalAttrs: {
   #   $out/$host/$target/include/* to $dev/include/*
   # TODO(trofi): fix installation paths upstream so we could remove this
   # code and have "lib" output unconditionally.
-  postInstall = lib.optionalString (hostPlatform.config != targetPlatform.config) ''
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
-    ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
-  '';
+  postInstall =
+    lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/lib/*     $out/lib/
+      ln -s $out/${hostPlatform.config}/${targetPlatform.config}/include/* $dev/include/
+    ''
+    + lib.optionalString withAllTargets ''
+      for target in ${lib.escapeShellArgs allGasTargets}; do
+        make -C "$NIX_BUILD_TOP/build-$target/gas" -j"$NIX_BUILD_CORES" \
+          $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
+          install-exec-bindir
+      done
+    ''
+    + lib.optionalString (withAllTargets && targetHasGas) ''
+      ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
+    '';
 
   passthru = {
     inherit targetPrefix;

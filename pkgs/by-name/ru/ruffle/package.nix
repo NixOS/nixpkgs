@@ -1,122 +1,151 @@
 {
-  alsa-lib,
-  fetchFromGitHub,
-  makeWrapper,
-  openssl,
-  pkg-config,
-  python3,
-  rustPlatform,
-  stdenv,
   lib,
+  stdenv,
+  rustPlatform,
+  withRuffleTools ? false,
+  fetchFromGitHub,
+  jre_minimal,
+  pkg-config,
+  autoPatchelfHook,
+  alsa-lib,
   wayland,
   xorg,
   vulkan-loader,
   udev,
-  jre_minimal,
-  cairo,
-  gtk3,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  glib,
   libxkbcommon,
-  darwin,
+  openh264,
+  writeShellApplication,
+  curl,
+  jq,
+  nix-update,
 }:
-
-let
-  version = "nightly-2024-11-07";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  inherit version;
+  version = "0-nightly-2025-07-10";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
-    rev = version;
-    hash = "sha256-eufp3myszqguoHGYGqIpv5gMkVx1d4L/GflRgvnxPTQ=";
+    tag = lib.strings.removePrefix "0-" finalAttrs.version;
+    hash = "sha256-uN+UqoTSj98ARkwgQT+npY75HDQBDyBO82USXKaq9bI=";
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2/Fbd6O233/464UXvK5HOk30Z8xbqeURjZNFWITVsW4=";
+  cargoBuildFlags = lib.optional withRuffleTools "--workspace";
+
+  env =
+    let
+      tag = lib.strings.removePrefix "0-" finalAttrs.version;
+      versionDate = lib.strings.removePrefix "0-nightly-" finalAttrs.version;
+    in
+    {
+      VERGEN_IDEMPOTENT = "1";
+      VERGEN_GIT_SHA = tag;
+      VERGEN_GIT_COMMIT_DATE = versionDate;
+      VERGEN_GIT_COMMIT_TIMESTAMP = "${versionDate}T00:00:00Z";
+    };
 
   nativeBuildInputs =
     [ jre_minimal ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib
-      gsettings-desktop-schemas
-      makeWrapper
       pkg-config
-      python3
-      wrapGAppsHook3
+      autoPatchelfHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      cairo
-      gtk3
-      openssl
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libxcb
-      xorg.libXrender
-      vulkan-loader
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    udev
+    (lib.getLib stdenv.cc.cc)
+  ];
 
-  dontWrapGApps = true;
+  # Prevents ruffle from downloading openh264 at runtime for Linux
+  openh264-241 =
+    if stdenv.hostPlatform.isLinux then
+      openh264.overrideAttrs (_: rec {
+        version = "2.4.1";
+        src = fetchFromGitHub {
+          owner = "cisco";
+          repo = "openh264";
+          tag = "v${version}";
+          hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+        };
+      })
+    else
+      null;
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/bin/ruffle_desktop \
-      --add-needed libxkbcommon-x11.so \
-      --add-needed libwayland-client.so \
-      --add-rpath ${libxkbcommon}/lib:${wayland}/lib
-  '';
+  runtimeDependencies = [
+    wayland
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
+    xorg.libxcb
+    libxkbcommon
+    vulkan-loader
+    finalAttrs.openh264-241
+  ];
 
-  postFixup =
+  postInstall =
     ''
-      # This name is too generic
-      mv $out/bin/exporter $out/bin/ruffle_exporter
+      mv $out/bin/ruffle_desktop $out/bin/ruffle
+      install -Dm644 LICENSE.md -t $out/share/doc/ruffle
+      install -Dm644 README.md -t $out/share/doc/ruffle
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      vulkanWrapperArgs+=(
-        --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
-      )
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
+                     -t $out/share/applications/
 
-      wrapProgram $out/bin/ruffle_exporter \
-        "''${vulkanWrapperArgs[@]}"
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.svg \
+                     -t $out/share/icons/hicolor/scalable/apps/
 
-      wrapProgram $out/bin/ruffle_desktop \
-        "''${vulkanWrapperArgs[@]}" \
-        "''${gappsWrapperArgs[@]}"
+      install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
+                     -t $out/share/metainfo/
     '';
 
-  cargoBuildFlags = [ "--workspace" ];
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "flash-lso-0.6.0" = "sha256-dhOAnVfxZw9JaOrY17xAeN7/y/aWZP+KUoDQuCf6D3Q=";
-      "h263-rs-0.1.0" = "sha256-dyQHnCe7LwwZYlF57sbRzir9vUavN3K8wLhwPIWlmik=";
-      "jpegxr-0.3.1" = "sha256-aV4Qh9ea0CirWU3lScjSKi4mii0cDTnx+miTcqWzxGg=";
-      "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
-      "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
-    };
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "ruffle-update";
+      runtimeInputs = [
+        curl
+        jq
+        nix-update
+      ];
+      text = ''
+        version="$( \
+          curl https://api.github.com/repos/ruffle-rs/ruffle/releases?per_page=1 | \
+          jq -r ".[0].tag_name" \
+        )"
+        exec nix-update --version "0-$version" ruffle
+      '';
+    });
   };
 
-  meta = with lib; {
-    description = "Adobe Flash Player emulator written in the Rust programming language";
+  meta = {
+    description = "Cross platform Adobe Flash Player emulator";
+    longDescription = ''
+      Ruffle is a cross platform emulator for running and preserving
+      Adobe Flash content. It is capable of running ActionScript 1, 2
+      and 3 programs with machine-native performance thanks to being
+      written in the Rust programming language.
+
+      Additionally, overriding the `withRuffleTools` input to
+      `true` will build all the available packages in the ruffle
+      project, including the `exporter` and `scanner` utilities.
+    '';
     homepage = "https://ruffle.rs/";
-    license = with licenses; [
-      mit
-      asl20
+    downloadPage = "https://ruffle.rs/downloads";
+    changelog = "https://github.com/ruffle-rs/ruffle/releases/tag/${lib.strings.removePrefix "0-" finalAttrs.version}";
+    license = [
+      lib.licenses.mit
+      lib.licenses.asl20
     ];
-    maintainers = with maintainers; [
-      govanify
-      jchw
+    maintainers = [
+      lib.maintainers.jchw
+      lib.maintainers.normalcea
     ];
-    platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "ruffle_desktop";
+    mainProgram = "ruffle";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

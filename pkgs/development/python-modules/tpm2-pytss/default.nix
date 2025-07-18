@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
@@ -44,6 +44,12 @@ buildPythonPackage rec {
         url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
         hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
       })
+      # support cryptography >= 45.0.0
+      # https://github.com/tpm2-software/tpm2-pytss/pull/643
+      (fetchpatch {
+        url = "https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439.patch";
+        hash = "sha256-01Qe4qpD2IINc5Z120iVdPitiLBwdr8KNBjLFnGgE7E=";
+      })
     ]
     ++ lib.optionals isCross [
       # pytss will regenerate files from headers of tpm2-tss.
@@ -53,8 +59,7 @@ buildPythonPackage rec {
       # when cross-compiling is turned on.
       # This patch changes the call to pycparser.preprocess_file to provide the name
       # of the cross-compiling cpp
-      (substituteAll {
-        src = ./cross.patch;
+      (replaceVars ./cross.patch {
         crossPrefix = stdenv.hostPlatform.config;
       })
     ];

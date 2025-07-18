@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   cfg = config.qt;
 
@@ -22,6 +21,11 @@ let
       libsForQt5.plasma-integration
       libsForQt5.systemsettings
     ];
+    kde6 = [
+      kdePackages.kio
+      kdePackages.plasma-integration
+      kdePackages.systemsettings
+    ];
     lxqt = [
       lxqt.lxqt-qtplugin
       lxqt.lxqt-config
@@ -30,6 +34,11 @@ let
       libsForQt5.qt5ct
       qt6Packages.qt6ct
     ];
+  };
+
+  # Maps style names to their QT_QPA_PLATFORMTHEME, if necessary.
+  styleNames = {
+    kde6 = "kde";
   };
 
   stylePackages = with pkgs; {
@@ -61,7 +70,10 @@ let
       adwaita-qt6
     ];
 
-    breeze = [ libsForQt5.breeze-qt5 ];
+    breeze = [
+      libsForQt5.breeze-qt5
+      kdePackages.breeze
+    ];
 
     kvantum = [
       libsForQt5.qtstyleplugin-kvantum
@@ -116,6 +128,14 @@ in
             "systemsettings"
           ]
           [
+            "kdePackages"
+            "plasma-integration"
+          ]
+          [
+            "kdePackages"
+            "systemsettings"
+          ]
+          [
             "lxqt"
             "lxqt-config"
           ]
@@ -138,7 +158,8 @@ in
           The options are
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
           - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
-          - `kde`: Use Qt settings from Plasma.
+          - `kde`: Use Qt settings from Plasma 5.
+          - `kde6`: Use Qt settings from Plasma 6.
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
              application.
           - `qt5ct`: Use Qt style set using the [qt5ct](https://sourceforge.net/projects/qt5ct/)
@@ -215,7 +236,9 @@ in
       ];
 
     environment.variables = {
-      QT_QPA_PLATFORMTHEME = lib.mkIf (cfg.platformTheme != null) cfg.platformTheme;
+      QT_QPA_PLATFORMTHEME =
+        lib.mkIf (cfg.platformTheme != null)
+          styleNames.${cfg.platformTheme} or cfg.platformTheme;
       QT_STYLE_OVERRIDE = lib.mkIf (cfg.style != null) cfg.style;
     };
 

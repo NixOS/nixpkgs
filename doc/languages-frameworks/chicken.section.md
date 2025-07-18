@@ -60,19 +60,23 @@ all the other eggs:
 
 ```nix
 let
-  myChickenPackages = pkgs.chickenPackages.overrideScope (self: super: {
+  myChickenPackages = pkgs.chickenPackages.overrideScope (
+    self: super: {
       # The chicken package itself can be overridden to effect the whole ecosystem.
       # chicken = super.chicken.overrideAttrs {
       #   src = ...
       # };
 
-      chickenEggs = super.chickenEggs.overrideScope (eggself: eggsuper: {
-        srfi-180 = eggsuper.srfi-180.overrideAttrs {
-          # path to a local copy of srfi-180
-          src = <...>;
-        };
-      });
-  });
+      chickenEggs = super.chickenEggs.overrideScope (
+        eggself: eggsuper: {
+          srfi-180 = eggsuper.srfi-180.overrideAttrs {
+            # path to a local copy of srfi-180
+            src = <...>;
+          };
+        }
+      );
+    }
+  );
 in
 # Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
 # the local copy of `srfi-180`.

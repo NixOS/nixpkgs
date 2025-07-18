@@ -6,7 +6,6 @@
   docutils,
   ell,
   enableExperimental ? false,
-  fetchpatch,
   fetchurl,
   glib,
   json_c,
@@ -14,7 +13,6 @@
   pkg-config,
   python3Packages,
   readline,
-  systemdMinimal,
   udev,
   # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
@@ -24,24 +22,17 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.79";
+  version = "5.83";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QWSlMDqfcccPSMA/9gvjQjG1aNk6mtXnmSjTTmqg6oo=";
+    hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee";
-      hash = "sha256-yMXPRPK8aT+luVoXNxx9zIa4c6E0BKYKS55DCfr8EQ0=";
-    })
-  ];
 
   buildInputs = [
     alsa-lib
@@ -60,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.pygments
     python3Packages.wrapPython
+    udevCheckHook
   ];
 
   outputs = [
@@ -70,19 +62,28 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     ''
       substituteInPlace tools/hid2hci.rules \
-        --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+        --replace-fail /sbin/udevadm ${udev}/bin/udevadm \
         --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
     ''
     +
       # Disable some tests:
       # - test-mesh-crypto depends on the following kernel settings:
       #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+      # - test-vcp is flaky (?), see:
+      #     - https://github.com/bluez/bluez/issues/683
+      #     - https://github.com/bluez/bluez/issues/726
       ''
-        if [[ ! -f unit/test-mesh-crypto.c ]]; then
-          echo "unit/test-mesh-crypto.c no longer exists"
-          false
-        fi
-        echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
+        skipTest() {
+          if [[ ! -f unit/$1.c ]]; then
+            echo "unit/$1.c no longer exists"
+            false
+          fi
+
+          echo 'int main() { return 77; }' > unit/$1.c
+        }
+
+        skipTest test-mesh-crypto
+        skipTest test-vcp
       '';
 
   configureFlags = [
@@ -121,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   postInstall =
     let
@@ -160,7 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
               simple-agent \
               test-adapter \
               test-device \
-              test-thermometer \
               ; do
         ln -s ../test/$t $test/bin/bluez-$t
       done

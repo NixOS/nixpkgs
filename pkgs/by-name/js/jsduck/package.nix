@@ -39,5 +39,8 @@ stdenv.mkDerivation rec {
       nicknovitski
     ];
     platforms = platforms.unix;
+    # rdiscount fails to compile with:
+    # mktags.c:44:1: error: return type defaults to ‘int’ [-Wimplicit-int]
+    broken = true;
   };
 }

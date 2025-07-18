@@ -11,8 +11,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "180snqvh6k6il6prb19fncflf2jcvkihlb4w84sbndcv1wvicfa6";
+    hash = "sha256-RjkWNw+bNbs0QZwsCuPcTApHHbMuhZWvodFMAze2GqA=";
   };
+
+  postPatch = ''
+    # Do not strip binary during install
+    substituteInPlace Makefile.in \
+      --replace-fail '$(INSTALL_BIN) -s' '$(INSTALL_BIN)'
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -22,12 +28,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-install.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Secure file wiping utility";
-    mainProgram = "wipe";
     homepage = "https://wipe.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.abbradar ];
+    mainProgram = "wipe";
   };
 }

@@ -3,6 +3,8 @@
   lib,
   fetchFromGitLab,
   cmake,
+  gettext,
+  glib,
   pkg-config,
   libdrm,
   libGL,
@@ -21,13 +23,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
-    repo = pname;
-    rev = "v${version}";
+    repo = "adriconf";
+    tag = "v${version}";
     sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 
   nativeBuildInputs = [
     cmake
+    gettext # msgfmt
+    glib # glib-compile-resources
     pkg-config
   ];
   buildInputs = [
@@ -41,6 +45,7 @@ stdenv.mkDerivation rec {
     pciutils
   ];
 
+  # tries to download googletest
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 
   postInstall = ''
@@ -52,13 +57,13 @@ stdenv.mkDerivation rec {
       -t $out/share/icons/hicolor/256x256/apps/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
     changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${version}";
     description = "GUI tool used to configure open source graphics drivers";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ muscaln ];
+    platforms = lib.platforms.linux;
     mainProgram = "adriconf";
   };
 }

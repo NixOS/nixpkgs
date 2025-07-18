@@ -9,7 +9,6 @@
   wayland-scanner,
 
   capstone,
-  darwin,
   dbus,
   freetype,
   glfw,
@@ -25,8 +24,8 @@
   wayland-protocols,
 }:
 
-assert withGtkFileSelector -> stdenv.isLinux;
-assert withWayland -> stdenv.isLinux;
+assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
+assert withWayland -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = if withWayland then "tracy-wayland" else "tracy-glfw";
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
       ninja
       pkg-config
     ]
-    ++ lib.optionals stdenv.isLinux [ wayland-scanner ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ]
     ++ lib.optionals stdenv.cc.isClang [ stdenv.cc.cc.libllvm ];
 
   buildInputs =
@@ -68,19 +67,15 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && !withWayland)) [
       glfw
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ]
-    ++ lib.optionals (
-      stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"
-    ) [ darwin.apple_sdk.frameworks.UniformTypeIdentifiers ];
+    ];
 
   cmakeFlags =
     [
       "-DDOWNLOAD_CAPSTONE=off"
       "-DTRACY_STATIC=off"
     ]
-    ++ lib.optional (stdenv.isLinux && withGtkFileSelector) "-DGTK_FILESELECTOR=ON"
-    ++ lib.optional (stdenv.isLinux && !withWayland) "-DLEGACY=on";
+    ++ lib.optional (stdenv.hostPlatform.isLinux && withGtkFileSelector) "-DGTK_FILESELECTOR=ON"
+    ++ lib.optional (stdenv.hostPlatform.isLinux && !withWayland) "-DLEGACY=on";
 
   env.NIX_CFLAGS_COMPILE = toString (
     [ ]
@@ -134,7 +129,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       mpickering
       nagisa
-      paveloom
     ];
     platforms = platforms.linux ++ platforms.darwin;
   };

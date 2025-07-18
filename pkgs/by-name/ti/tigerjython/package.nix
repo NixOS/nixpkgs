@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   makeWrapper,
+  writeText,
   makeDesktopItem,
   copyDesktopItems,
   jre,
@@ -23,15 +24,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # We cache potentially unstable upstream input (.tar.gz file) via https://web.archive.org - this is a common procedure in Nixpkgs.
   #
   # - Open https://tigerjython.ch/en/products/download and identify the new version string for "TigerJython IDE for Linux"
-  version = "2.39";
+  version = "2.40";
 
-  # - and copy download link (most likely https://tigerjython.ch/user/pages/download/TigerJython.tar.gz) to clipboard.
+  # - and copy download link (most likely https://tjgroup.ch/user/pages/download/TigerJython.tar.gz) to clipboard.
   # - Open http://web.archive.org and paste download link from clipboard into "Save Page Now" field and hit the "Save Page" button.
   # - Unselect "Save Error Pages" and hit "Save Page" again.
   # - Wait for the archive link to be generated and copy it to the url field - adjust hash accordingly.
   src = fetchurl {
-    url = "http://web.archive.org/web/20240119124245/https://tigerjython.ch/user/pages/download/TigerJython.tar.gz";
-    hash = "sha256-PdoAOjr19aLmXYrLtMCq/tZ2Fqq7pINTuhFyMMiC0yM=";
+    url = "http://web.archive.org/web/20250104142121/https://tjgroup.ch/download/TigerJython.tar.gz";
+    hash = "sha256-V/POFftRs/jjgNaHOrKcW2AdlQY2yjO+xiwJi63oECo=";
   };
 
   nativeBuildInputs = [
@@ -57,16 +58,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  # https://tobiaskohn.ch/jython/faq.html
+  # Q: Can I install TigerJython for multiple users?
+  # A: Yes, create a config file.
+  # This file must be named tigerjython2.cfg and located
+  # in the same folder as tigerjython2.jar
+  tjconfig = writeText "tjconfig" ''
+    configfile = sys.userpath + ".tjython.cfg"
+    jython.cachedir = sys.userpath + ".jython.cache"
+  '';
+
   installPhase = ''
     runHook preInstall
 
     export CUSTOM_LIBS=$out/share/java
     export JAR=$CUSTOM_LIBS/tigerjython2.jar
-    export EXAMPLES_DIR=$CUSTOM_LIBS/Examples
+    export CFG=$CUSTOM_LIBS/tigerjython2.cfg
+    export ADDITIONAL_LIBS_DIR=$CUSTOM_LIBS/Lib
+    export EXAMPLES_DIR=$CUSTOM_LIBS/TestSamples
 
     install -Dm444 bin/tigerjython2.jar $JAR
-    install -Dm444 bin/Lib/* --target-directory=$CUSTOM_LIBS
+    install -Dm444 bin/Lib/* --target-directory=$ADDITIONAL_LIBS_DIR
     install -Dm444 bin/TestSamples/* --target-directory=$EXAMPLES_DIR
+
+    install -Dm444 $tjconfig $CFG
 
     makeWrapper ${jre}/bin/java $out/bin/tigerjython \
       --add-flags "-Duser.dir=$CUSTOM_LIBS/" \

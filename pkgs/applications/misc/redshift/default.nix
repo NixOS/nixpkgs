@@ -19,7 +19,6 @@
   pyxdg,
 
   withQuartz ? stdenv.hostPlatform.isDarwin,
-  ApplicationServices,
   withRandr ? stdenv.hostPlatform.isLinux,
   libxcb,
   withDrm ? stdenv.hostPlatform.isLinux,
@@ -29,9 +28,6 @@
 
   withGeolocation ? true,
   withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin,
-  CoreLocation,
-  Foundation,
-  Cocoa,
   withGeoclue ? withGeolocation && stdenv.hostPlatform.isLinux,
   geoclue,
   withAppIndicator ? stdenv.hostPlatform.isLinux,
@@ -54,11 +50,6 @@ let
         src
         meta
         ;
-
-      patches = lib.optionals (pname != "gammastep") [
-        # https://github.com/jonls/redshift/pull/575
-        ./575.patch
-      ];
 
       strictDeps = true;
 
@@ -99,12 +90,6 @@ let
         ++ lib.optional withGeoclue geoclue
         ++ lib.optional withDrm libdrm
         ++ lib.optional withVidmode libXxf86vm
-        ++ lib.optional withQuartz ApplicationServices
-        ++ lib.optionals withCoreLocation [
-          CoreLocation
-          Foundation
-          Cocoa
-        ]
         ++ lib.optional withAppIndicator (
           if (pname != "gammastep") then libappindicator else libayatana-appindicator
         );
@@ -180,13 +165,13 @@ rec {
 
   gammastep = mkRedshift rec {
     pname = "gammastep";
-    version = "2.0.9";
+    version = "2.0.11";
 
     src = fetchFromGitLab {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-EdVLBBIEjMu+yy9rmcxQf4zdW47spUz5SbBDbhmLjOU=";
+      hash = "sha256-c8JpQLHHLYuzSC9bdymzRTF6dNqOLwYqgwUOpKcgAEU=";
     };
 
     meta = redshift.meta // {
@@ -194,7 +179,7 @@ rec {
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ primeos ]) ++ redshift.meta.maintainers;
+      maintainers = (with lib.maintainers; [ ]) ++ redshift.meta.maintainers;
     };
   };
 }

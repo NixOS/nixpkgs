@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "python-aodhclient";
-  version = "3.6.0";
+  version = "3.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
     tag = version;
-    hash = "sha256-FArXBkDOY0Weu3Fm/M0Qgg0XHTy95MqlUidZ/hUZfB8=";
+    hash = "sha256-99oErtl1clqsMx/ZOTJZ4sNOUqiE2t/NtDQDrZaIV3Y=";
   };
 
   env.PBR_VERSION = version;
@@ -77,6 +77,6 @@ buildPythonPackage rec {
     description = "Client library for OpenStack Aodh API";
     license = lib.licenses.asl20;
     mainProgram = "aodh";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

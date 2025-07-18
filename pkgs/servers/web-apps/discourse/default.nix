@@ -9,7 +9,7 @@
   bundlerEnv,
   callPackage,
 
-  ruby_3_2,
+  ruby_3_3,
   replace,
   gzip,
   gnutar,
@@ -17,7 +17,7 @@
   cacert,
   util-linux,
   gawk,
-  nettools,
+  net-tools,
   imagemagick,
   optipng,
   pngquant,
@@ -34,11 +34,9 @@
   procps,
   rsync,
   icu,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
+  pnpm_9,
   nodePackages,
-  nodejs_18,
+  nodejs,
   jq,
   moreutils,
   terser,
@@ -48,16 +46,16 @@
 }@args:
 
 let
-  version = "3.3.2";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
+    sha256 = "sha256-rA42fOhSJVrNPcFSB2+On7JVeZch8t2yNo+36UK+QcA=";
   };
 
-  ruby = ruby_3_2;
+  ruby = ruby_3_3;
 
   runtimeDeps = [
     # For backups, themes and assets
@@ -67,14 +65,14 @@ let
     gnutar
     git
     brotli
-    nodejs_18
+    nodejs
 
     # Misc required system utils
     which
     procps # For ps and kill
     util-linux # For renice
     gawk
-    nettools # For hostname
+    net-tools # For hostname
 
     # Image optimization
     imagemagick
@@ -189,9 +187,9 @@ let
               cd ../..
 
               mkdir -p vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/
-              ln -s "${nodejs_18.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
+              ln -s "${nodejs.libv8}/lib/libv8.a" vendor/v8/${stdenv.hostPlatform.system}/libv8/obj/libv8_monolith.a
 
-              ln -s ${nodejs_18.libv8}/include vendor/v8/include
+              ln -s ${nodejs.libv8}/include vendor/v8/include
 
               mkdir -p ext/libv8-node
               echo '--- !ruby/object:Libv8::Node::Location::Vendor {}' >ext/libv8-node/.location.yml
@@ -232,9 +230,11 @@ let
     pname = "discourse-assets";
     inherit version src;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/yarn.lock";
-      hash = "sha256-cSQofaULCmPuWGxS+hK4KlRq9lSkCPiYvhax9X6Dor8=";
+    pnpmDeps = pnpm_9.fetchDeps {
+      pname = "discourse-assets";
+      inherit version src;
+      fetcherVersion = 1;
+      hash = "sha256-WyRBnuKCl5NJLtqy3HK/sJcrpMkh0PjbasGPNDV6+7Y=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -242,10 +242,10 @@ let
       redis
       uglify-js
       terser
-      yarn
       jq
       moreutils
-      fixup-yarn-lock
+      nodejs
+      pnpm_9.configHook
     ];
 
     outputs = [
@@ -281,31 +281,9 @@ let
     # run. This means that Redis and PostgreSQL has to be running and
     # database migrations performed.
     preBuild = ''
-      # Yarn wants a real home directory to write cache, config, etc to
-      export HOME=$NIX_BUILD_TOP/fake_home
-
-      yarn_install() {
-        local offlineCache=$1 yarnLock=$2
-
-        # Make yarn install packages from our offline cache, not the registry
-        yarn config --offline set yarn-offline-mirror $offlineCache
-
-        # Fixup "resolved"-entries in yarn.lock to match our offline cache
-        fixup-yarn-lock $yarnLock
-
-        # Install while ignoring hook scripts
-        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
-      }
-
-      # Install runtime and devDependencies.
-      # The dev deps are necessary for generating the theme-transpiler executed as dependent task
-      # assets:precompile:theme_transpiler before db:migrate and unfortunately also in the runtime
-      yarn_install $yarnOfflineCache yarn.lock
-
       # Patch before running postinstall hook script
       patchShebangs node_modules/
       patchShebangs --build app/assets/javascripts
-      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
       redis-server >/dev/null &
@@ -351,6 +329,10 @@ let
 
       runHook postInstall
     '';
+
+    # The node_modules output by design has broken symlinks, as it refers to the source code.
+    # They are resolved in the primary discourse derivation.
+    dontCheckForBrokenSymlinks = true;
   };
 
   discourse = stdenv.mkDerivation {
@@ -425,26 +407,17 @@ let
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
-      # This needs to be copied because of symlinks in node_modules
-      # Also this needs to be full node_modules (including dev deps) because without loader.js it just throws 500
-      cp -r ${assets.node_modules} $out/share/discourse/node_modules
+      ln -sf ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       rm -r $out/share/discourse/app/assets/javascripts
-      ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
+      # This needs to be copied because it contains symlinks to node_modules
+      cp -r ${assets.javascripts} $out/share/discourse/app/assets/javascripts
       ${lib.concatMapStringsSep "\n" (
         p: "ln -sf ${p} $out/share/discourse/plugins/${p.pluginName or ""}"
       ) plugins}
 
       runHook postInstall
     '';
-
-    meta = with lib; {
-      homepage = "https://www.discourse.org/";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ talyz ];
-      license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
-    };
 
     passthru = {
       inherit
@@ -466,6 +439,14 @@ let
         inherit pkgs;
         package = pkgs.discourse.override args;
       };
+    };
+
+    meta = with lib; {
+      homepage = "https://www.discourse.org/";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ talyz ];
+      license = licenses.gpl2Plus;
+      description = "Discourse is an open source discussion platform";
     };
   };
 in

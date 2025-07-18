@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.3.1";
+  version = "3.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "pylint-dev";
     repo = "pylint";
     tag = "v${version}";
-    hash = "sha256-cnMYHHtIRxIySfZV0jTn+OFji+72cOReyNNDiJ9pbAg=";
+    hash = "sha256-EMLnwFurIhTdUJqy9/DLTuucDhlmA5fCPZZ6TA87nEU=";
   };
 
   build-system = [ setuptools ];
@@ -60,17 +60,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: pyreverse will drop support for resolving and
     # displaying implemented interfaces in pylint 3.0. The
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
     "-v"
   ];
-
-  dontUseSetuptoolsCheck = true;
 
   preCheck = ''
     export HOME=$TEMPDIR

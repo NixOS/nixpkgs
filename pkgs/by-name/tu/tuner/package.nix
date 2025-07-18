@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   meson,
@@ -10,10 +10,8 @@
   itstool,
   wrapGAppsHook3,
   desktop-file-utils,
-  libsoup_2_4,
+  libsoup_3,
   json-glib,
-  geoclue2,
-  geocode-glib,
   libgee,
   gtk3,
   pantheon,
@@ -22,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuner";
-  version = "1.5.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "louis77";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-tG1AMEqHcp4jHNgWDy9fS2FtlxFTlpMD5MVbepIY+GY=";
+    repo = "tuner";
+    tag = "v${version}";
+    hash = "sha256-i6I5NSwiS8FJuZaHbrXvUcumo9RZvEVPcfKOkHUXiLo=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +41,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup_2_4
+    libsoup_3
     json-glib
-    geoclue2
-    geocode-glib
     libgee
     glib
     gtk3
@@ -58,13 +54,13 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/louis77/tuner";
     description = "App to discover and play internet radio stations";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "com.github.louis77.tuner";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       abbe
       aleksana
     ];

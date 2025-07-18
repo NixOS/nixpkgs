@@ -38,6 +38,6 @@ buildPythonApplication rec {
     description = "Curses-based MPD client with basic functionality that can also display an album art";
     homepage = "https://github.com/GuardKenzie/miniplayer";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
   };
 }

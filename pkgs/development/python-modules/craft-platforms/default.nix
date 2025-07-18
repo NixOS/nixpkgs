@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "craft-platforms";
-  version = "0.5.0";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-platforms";
     tag = version;
-    hash = "sha256-P7GC+t/rs49/a85Bxy6x4cRyCEaHG4b7SIb85sMj7Yk=";
+    hash = "sha256-Ec4zncigqampXND0YvDnExrrB9ls3Sf0KfYVbwLGbqY=";
   };
 
   postPatch = ''
@@ -45,7 +45,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_platforms" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
+
+  disabledTests = [
+    # Attempts to get distro information, and expects "ubuntu-ish"
+    # information to be returned, which doesn't work under NixOS
+    "test_fuzz_get_platforms_build_plan_single_base"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

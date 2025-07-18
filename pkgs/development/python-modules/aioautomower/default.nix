@@ -14,12 +14,13 @@
   pytestCheckHook,
   pythonOlder,
   syrupy,
+  time-machine,
   tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.12.0";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Thomas55555";
     repo = "aioautomower";
-    tag = version;
-    hash = "sha256-JLlmvd6Hgf1a3YU9xfbw8plEbRDNgCzxF3PpveGsrPg=";
+    tag = "v${version}";
+    hash = "sha256-6V3utjqCLQmO2iuWdn6kE8oz9XcJ/sCfeSMWmxL/2NE=";
   };
 
   postPatch = ''
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    time-machine
     syrupy
   ];
 
@@ -71,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to communicate with the Automower Connect API";
     homepage = "https://github.com/Thomas55555/aioautomower";
-    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${version}";
+    changelog = "https://github.com/Thomas55555/aioautomower/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

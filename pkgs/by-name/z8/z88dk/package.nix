@@ -25,7 +25,7 @@ let
       hash = "sha256-NbQIy9d4ZcMnRJJApPBSej+W6e/aJ8rkb5E7rD7GVgs=";
     };
     meta = {
-      description = "A date object with as little code as possible (and rw accessors)";
+      description = "Date object with as little code as possible (and rw accessors)";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -105,13 +105,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "z88dk";
-  version = "2.3";
+  version = "2.3-unstable-2025-01-08";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CHTORgK6FYIO6n+cvTUX4huY2Ek5FuHrs40QN5NZX44=";
+    rev = "e223137af42ed0332b11fa6185268246293245c4";
+    hash = "sha256-m0ZEAfKISEqzsh4VNXwRSceBC4uWmIIdi5cw+7lEC9o=";
     fetchSubmodules = true;
   };
 
@@ -199,7 +199,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
     license = licenses.clArtistic;
-    maintainers = [ maintainers.siraben ];
+    maintainers = with maintainers; [
+      siraben
+      hzeller
+    ];
     platforms = platforms.unix;
   };
 })

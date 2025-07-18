@@ -4,12 +4,12 @@
   buildPackages,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
   plymouth,
   pam,
   pkg-config,
-  autoconf,
-  automake,
+  autoreconfHook,
+  gettext,
   libtool,
   libxcb,
   glib,
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
     yelp-tools
     yelp-xsl
     gobject-introspection
@@ -85,10 +85,12 @@ stdenv.mkDerivation rec {
     # Hardcode plymouth to fix transitions.
     # For some reason it can't find `plymouth`
     # even when it's in PATH in environment.systemPackages.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
+
+    # glib gettext is deprecated and broken, so use regular gettext instead
+    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
@@ -129,6 +131,6 @@ stdenv.mkDerivation rec {
     description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

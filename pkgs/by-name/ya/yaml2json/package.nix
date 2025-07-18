@@ -2,17 +2,19 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yaml2json";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "bronze1man";
     repo = "yaml2json";
-    rev = "v${version}";
-    hash = "sha256-1VZosBcVaav7vEWWa/b6lTpK+Ctb4rRDoPbKF7oqooo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mIjtR1VsSeUhEgeSKDG0qT0kj+NCqVwn31m300cMDeU=";
   };
 
   vendorHash = "sha256-g+yaVIx4jxpAQ/+WrGKxhVeliYx7nLQe/zsGpxV4Fn4=";
@@ -24,11 +26,18 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/bronze1man/yaml2json";
+    changelog = "https://github.com/bronze1man/yaml2json/releases/tag/v${finalAttrs.version}";
     description = "Convert yaml to json";
     mainProgram = "yaml2json";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     maintainers = [ ];
   };
-}
+})

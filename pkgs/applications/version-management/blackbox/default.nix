@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Safely store secrets in a VCS repo";
-    maintainers = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/StackExchange/blackbox";
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
     platforms = platforms.all;
   };

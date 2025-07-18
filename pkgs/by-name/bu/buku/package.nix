@@ -23,15 +23,15 @@ let
 in
 with python3.pkgs;
 buildPythonApplication rec {
-  version = "4.8";
+  version = "5.0";
   pname = "buku";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    rev = "v${version}";
-    sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
+    tag = "v${version}";
+    sha256 = "sha256-b3j3WLMXl4sXZpIObC+F7RRpo07cwJpAK7lQ7+yIzro=";
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,14 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
     pytest-recording
     pyyaml
     mypy-extensions
     click
     pylint
     flake8
-    pytest-cov
+    pytest-cov-stub
     pyyaml
   ];
 

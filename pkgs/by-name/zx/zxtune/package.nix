@@ -1,35 +1,37 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, nix-update-script
-, boost
-, zlib
-# File backends (for decoding and encoding)
-, withMp3 ? true
-, lame
-, withOgg ? true
-, libvorbis
-, withFlac ? true
-, flac
-# Audio backends (for playback)
-, withOpenal ? false
-, openal
-, withSDL ? false
-, SDL
-, withOss ? false
-, withAlsa ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, withPulse ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-# GUI audio player
-, withQt ? true
-, qt5
-, zip
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  nix-update-script,
+  boost,
+  zlib,
+  # File backends (for decoding and encoding)
+  withMp3 ? true,
+  lame,
+  withOgg ? true,
+  libvorbis,
+  withFlac ? true,
+  flac,
+  # Audio backends (for playback)
+  withOpenal ? false,
+  openal,
+  withSDL ? false,
+  SDL,
+  withOss ? false,
+  withAlsa ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  withPulse ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  # GUI audio player
+  withQt ? true,
+  qt5,
+  zip,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 let
-  dlopenBuildInputs = []
+  dlopenBuildInputs =
+    [ ]
     ++ lib.optional withMp3 lame
     ++ lib.optional withOgg libvorbis
     ++ lib.optional withFlac flac
@@ -39,11 +41,14 @@ let
     ++ lib.optional withPulse libpulseaudio;
   supportWayland = (!stdenv.hostPlatform.isDarwin);
   platformName = "linux";
-  staticBuildInputs = [ boost zlib ]
-    ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
-in stdenv.mkDerivation rec {
+  staticBuildInputs = [
+    boost
+    zlib
+  ] ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+in
+stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5081";
+  version = "5100";
 
   outputs = [ "out" ];
 
@@ -51,11 +56,14 @@ in stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-gim73TF+zBnyxq2qu4uJnr0bCBfWlyYT/75UaZnij8c=";
+    hash = "sha256-SNHnpLAbiHCo11V090EY/vLH4seoZWpMHMMBLGkr88E=";
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "r([0-9]+)" ];
+    extraArgs = [
+      "--version-regex"
+      "r([0-9]+)"
+    ];
   };
 
   strictDeps = true;
@@ -78,56 +86,62 @@ in stdenv.mkDerivation rec {
       --replace "#include <OpenAL/" "#include <AL/"
   '';
 
-  buildPhase = let
-    setOptionalSupport = name: var:
-      "support_${name}=" + (if (var) then "1" else "");
-    makeOptsCommon = [
-      ''-j$NIX_BUILD_CORES''
-      ''root.version=${src.rev}''
-      ''system.zlib=1''
-      ''platform=${platformName}''
-      ''includes.dirs.${platformName}="${lib.makeSearchPathOutput "dev" "include" buildInputs}"''
-      ''libraries.dirs.${platformName}="${lib.makeLibraryPath staticBuildInputs}"''
-      ''ld_flags="-Wl,-rpath=\"${lib.makeLibraryPath dlopenBuildInputs}\""''
-      (setOptionalSupport "mp3" withMp3)
-      (setOptionalSupport "ogg" withOgg)
-      (setOptionalSupport "flac" withFlac)
-      (setOptionalSupport "openal" withOpenal)
-      (setOptionalSupport "sdl" withSDL)
-      (setOptionalSupport "oss" withOss)
-      (setOptionalSupport "alsa" withAlsa)
-      (setOptionalSupport "pulseaudio" withPulse)
-    ];
-    makeOptsQt = [
-      ''tools.uic=${qt5.qtbase.dev}/bin/uic''
-      ''tools.moc=${qt5.qtbase.dev}/bin/moc''
-      ''tools.rcc=${qt5.qtbase.dev}/bin/rcc''
-    ];
-  in ''
-    runHook preBuild
-    make ${builtins.toString makeOptsCommon} -C apps/xtractor
-    make ${builtins.toString makeOptsCommon} -C apps/zxtune123
-  '' + lib.optionalString withQt ''
-    make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
-  '' + ''
-    runHook postBuild
-  '';
+  buildPhase =
+    let
+      setOptionalSupport = name: var: "support_${name}=" + (if (var) then "1" else "");
+      makeOptsCommon = [
+        ''-j$NIX_BUILD_CORES''
+        ''root.version=${src.rev}''
+        ''system.zlib=1''
+        ''platform=${platformName}''
+        ''includes.dirs.${platformName}="${lib.makeSearchPathOutput "dev" "include" buildInputs}"''
+        ''libraries.dirs.${platformName}="${lib.makeLibraryPath staticBuildInputs}"''
+        ''ld_flags="-Wl,-rpath=\"${lib.makeLibraryPath dlopenBuildInputs}\""''
+        (setOptionalSupport "mp3" withMp3)
+        (setOptionalSupport "ogg" withOgg)
+        (setOptionalSupport "flac" withFlac)
+        (setOptionalSupport "openal" withOpenal)
+        (setOptionalSupport "sdl" withSDL)
+        (setOptionalSupport "oss" withOss)
+        (setOptionalSupport "alsa" withAlsa)
+        (setOptionalSupport "pulseaudio" withPulse)
+      ];
+      makeOptsQt = [
+        ''tools.uic=${qt5.qtbase.dev}/bin/uic''
+        ''tools.moc=${qt5.qtbase.dev}/bin/moc''
+        ''tools.rcc=${qt5.qtbase.dev}/bin/rcc''
+      ];
+    in
+    ''
+      runHook preBuild
+      make ${builtins.toString makeOptsCommon} -C apps/xtractor
+      make ${builtins.toString makeOptsCommon} -C apps/zxtune123
+    ''
+    + lib.optionalString withQt ''
+      make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+    ''
+    + ''
+      runHook postBuild
+    '';
 
   # Libs from dlopenBuildInputs are found with dlopen. Do not shrink rpath. Can
   # check output of 'out/bin/zxtune123 --list-backends' to verify all plugins
   # load ("Status: Available" or "Status: Failed to load dynamic library...").
   dontPatchELF = true;
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 bin/linux/release/xtractor -t $out/bin
-    install -Dm755 bin/linux/release/zxtune123 -t $out/bin
-  '' + lib.optionalString withQt ''
-    install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
-    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      install -Dm755 bin/linux/release/xtractor -t $out/bin
+      install -Dm755 bin/linux/release/zxtune123 -t $out/bin
+    ''
+    + lib.optionalString withQt ''
+      install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+      install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   # Only wrap the gui
   dontWrapQtApps = true;
@@ -135,16 +149,18 @@ in stdenv.mkDerivation rec {
     wrapQtApp "$out/bin/zxtune-qt"
   '';
 
-  desktopItems = lib.optionals withQt [(makeDesktopItem {
-    name = "ZXTune";
-    exec = "zxtune-qt";
-    icon = "zxtune";
-    desktopName = "ZXTune";
-    genericName = "ZXTune";
-    comment = meta.description;
-    categories = [ "Audio" ];
-    type = "Application";
-  })];
+  desktopItems = lib.optionals withQt [
+    (makeDesktopItem {
+      name = "ZXTune";
+      exec = "zxtune-qt";
+      icon = "zxtune";
+      desktopName = "ZXTune";
+      genericName = "ZXTune";
+      comment = meta.description;
+      categories = [ "Audio" ];
+      type = "Application";
+    })
+  ];
 
   meta = with lib; {
     description = "Crossplatform chiptunes player";

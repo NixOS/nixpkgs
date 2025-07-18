@@ -4,22 +4,34 @@
   rustPlatform,
   stdenv,
   installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lutgen";
-  version = "0.11.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
-    rev = "v${version}";
-    hash = "sha256-jmMVeDDVb/TuxulDYj+8y4Kl42EJTAWb3tAsanfWduE=";
+    tag = "lutgen-v${version}";
+    hash = "sha256-hJ5yD8Yu08kcr2rWY59iVEFJH+chroEWSsP2g5agFuo=";
   };
 
-  cargoHash = "sha256-cT999TukdiKmmNUpK7SE1uiuNoLhmjdtz/2cYXFC6dk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VsKRLxh6uRG2A5AvJBMdD+bXg/X9mp5o1iPR9MZhrbQ=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  cargoBuildFlags = [
+    "--bin"
+    "lutgen"
+  ];
+
+  cargoTestFlags = [
+    "-p"
+    "lutgen-cli"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lutgen \
@@ -27,6 +39,10 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/lutgen --bpaf-complete-style-fish) \
       --zsh <($out/bin/lutgen --bpaf-complete-style-zsh)
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^lutgen-v([0-9.]+)$" ];
+  };
 
   meta = with lib; {
     description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";

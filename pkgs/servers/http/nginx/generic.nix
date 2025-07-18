@@ -12,7 +12,7 @@ outer@{
 
   nixosTests,
   installShellFiles,
-  substituteAll,
+  replaceVars,
   removeReferencesTo,
   gd,
   geoip,
@@ -40,7 +40,7 @@ outer@{
   buildInputs ? [ ],
   extraPatches ? [ ],
   fixPatch ? p: p,
-  postPatch ? "",
+  postPatch ? null,
   preConfigure ? "",
   preInstall ? "",
   postInstall ? "",
@@ -170,6 +170,9 @@ stdenv.mkDerivation {
       [ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module"
     )
     ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
+    ++ lib.optional (
+      stdenv.buildPlatform != stdenv.hostPlatform
+    ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
 
@@ -214,29 +217,9 @@ stdenv.mkDerivation {
   patches =
     map fixPatch (
       [
-        (substituteAll {
-          src = ./nix-etag-1.15.4.patch;
-          preInstall = ''
-            export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
-          '';
-        })
+        ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
-      ++
-        lib.optionals
-          (lib.elem pname [
-            "nginx"
-            "nginxQuic"
-            "tengine"
-          ])
-          [
-            # https://github.com/NixOS/nixpkgs/issues/357522
-            # https://github.com/zlib-ng/patches/blob/5a036c0a00120c75ee573b27f4f44ade80d82ff2/nginx/README.md
-            (fetchpatch {
-              url = "https://raw.githubusercontent.com/zlib-ng/patches/38756e6325a5d2cc32709b8e9549984c63a78815/nginx/1.26.2-zlib-ng.patch";
-              hash = "sha256-LX5kP6jFiqgt4ApKw5eqOAFJNkc5QI6kX8ZRvBYTi9k=";
-            })
-          ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
@@ -255,7 +238,11 @@ stdenv.mkDerivation {
     )
     ++ extraPatches;
 
-  inherit postPatch;
+  postPatch = lib.defaultTo ''
+    substituteInPlace src/http/ngx_http_core_module.c \
+      --replace-fail '@nixStoreDir@' "$NIX_STORE" \
+      --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
+  '' postPatch;
 
   hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
 
@@ -301,7 +288,7 @@ stdenv.mkDerivation {
         nginx-unix-socket
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme;
+      acme-integration = nixosTests.acme.nginx;
     } // passthru.tests;
   };
 
@@ -315,14 +302,15 @@ stdenv.mkDerivation {
         mainProgram = "nginx";
         homepage = "http://nginx.org";
         license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        broken = lib.any (m: m.meta.broken or false) modules;
         platforms = platforms.all;
-        maintainers =
-          with maintainers;
-          [
-            fpletz
-            raitobezarius
-          ]
-          ++ teams.helsinki-systems.members
-          ++ teams.stridtech.members;
+        maintainers = with maintainers; [
+          fpletz
+          raitobezarius
+        ];
+        teams = with teams; [
+          helsinki-systems
+          stridtech
+        ];
       };
 }

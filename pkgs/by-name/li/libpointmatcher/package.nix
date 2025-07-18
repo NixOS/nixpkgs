@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpointmatcher";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "norlab-ulaval";
     repo = "libpointmatcher";
     rev = version;
-    hash = "sha256-ewsU3aCFPeem1pJpqKaceMhL7SwTYOaYlcwOfMxwkSs=";
+    hash = "sha256-OkfWdim0JDKiBx5spYpkMyFrLQP3AMWBVDpzmFwqNFM=";
   };
 
   nativeBuildInputs = [ cmake ];

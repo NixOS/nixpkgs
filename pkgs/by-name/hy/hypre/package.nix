@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "hypre";
-  version = "2.32.0";
+  pname = "hypre";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "hypre-space";
     repo = "hypre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h16+nZ6+GfddfBJDF6sphuZ9Sff++PxW2R58XgJsnsI=";
+    hash = "sha256-OrpClN9xd+8DdELVnI4xBg3Ih/BaoBiO0w/QrFjUclw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

@@ -94,7 +94,7 @@ let
         ++ optional (pskString != null) "psk=${pskString}"
         ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
         ++ optional (opts.priority != null) "priority=${toString opts.priority}"
-        ++ optional (opts.extraConfig != "") opts.extraConfig;
+        ++ filter (x: x != "") (splitString "\n" opts.extraConfig);
     in
     ''
       network={
@@ -220,8 +220,6 @@ in
             Whether to allow configuring networks "imperatively" (e.g. via
             `wpa_supplicant_gui`) and declaratively via
             [](#opt-networking.wireless.networks).
-
-            Please note that this adds a custom patch to `wpa_supplicant`.
           '';
         };
 

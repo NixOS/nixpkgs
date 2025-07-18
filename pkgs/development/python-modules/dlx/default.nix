@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dlx";
   version = "1.0.4";
   format = "setuptools";

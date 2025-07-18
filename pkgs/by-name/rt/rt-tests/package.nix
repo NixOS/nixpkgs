@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
     "DESTDIR="
     "PYLIB=$(out)/${python3.sitePackages}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
   ];
 
   postInstall = ''

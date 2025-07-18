@@ -8,21 +8,22 @@
   pyserial,
   pythonOlder,
   pyyaml,
+  rich,
+  ruamel-yaml,
   scp,
-  setuptools,
   textfsm,
 }:
 
 buildPythonPackage rec {
   pname = "netmiko";
-  version = "4.4.0";
+  version = "4.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jf8SN5dqo/8srPBJSTFGOMiZIgoWdb0CnjGwfOIM47Y=";
+    hash = "sha256-29/CC2yq+OXXpXC7G0Kia5pvjYI06R9cZfTb/gwOT1A=";
   };
 
   postPatch = ''
@@ -31,15 +32,16 @@ buildPythonPackage rec {
       --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ntc-templates
     paramiko
     pyserial
     pyyaml
+    rich
+    ruamel-yaml
     scp
-    setuptools
     textfsm
   ];
 

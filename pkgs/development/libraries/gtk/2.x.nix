@@ -22,18 +22,15 @@
   pango,
   perl,
   pkg-config,
-  substituteAll,
+  replaceVars,
   testers,
-  AppKit,
-  Cocoa,
   gdktarget ? if stdenv.hostPlatform.isDarwin then "quartz" else "x11",
   cupsSupport ? config.gtk2.cups or stdenv.hostPlatform.isLinux,
   xineramaSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 let
-  gtkCleanImmodulesCache = substituteAll {
-    src = ./hooks/clean-immodules-cache.sh;
+  gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
     gtk_module_path = "gtk-2.0";
     gtk_binary_version = "2.10.0";
   };
@@ -60,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = finalAttrs.setupHooks ++ [
+    gdk-pixbuf
     gettext
     gobject-introspection
     perl
@@ -103,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional cupsSupport cups
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libXdamage
-      AppKit
-      Cocoa
     ];
 
   preConfigure = lib.optionalString (

@@ -9,7 +9,7 @@
   libarchive,
   libjpeg,
   libGLU,
-  sfml,
+  sfml_2,
   zlib,
   openal,
   fontconfig,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       libarchive
       libjpeg
       libGLU
-      sfml
+      sfml_2
       zlib
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

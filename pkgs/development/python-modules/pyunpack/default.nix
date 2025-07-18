@@ -41,9 +41,14 @@ buildPythonPackage rec {
     cabextract
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlags = [ "-x" ];
 
   pythonImportsCheck = [ "pyunpack" ];
+
+  disabledTests = [
+    # pinning test of `--help` sensitive to python version
+    "test_help"
+  ];
 
   disabledTestPaths = [
     # unfree

@@ -13,22 +13,23 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EUUPVSpHc9tN1Hi7917hJ2psTZq5nnGw6PBeApvlVtw=";
   };
 
-  cargoHash = "sha256-1wAHd0WrJfjxDyGRAJjXGFY9ZBFlBOQFr2+cxoTufW0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WsbzlL+RbR8Hnrsbgr7gFpBlo3RBKcNYPbOsZWygyrI=";
 
   buildFeatures = [ "nu-ansi-term" ];
 
   # setid is not allowed in the sandbox
   checkFlags = [ "--skip=tests::style_for_setid" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "lscolors";
   };
 }

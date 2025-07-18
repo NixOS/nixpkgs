@@ -4,32 +4,38 @@
   fetchFromGitHub,
   autoreconfHook,
   ncurses,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmatrix";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "abishekvashok";
     repo = "cmatrix";
-    rev = "v${version}";
-    sha256 = "1h9jz4m4s5l8c3figaq46ja0km1gimrkfxm4dg7mf4s84icmasbm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dWlVWSRIE1fPa6R2N3ONL9QJlDQEqxfdYIgWTSr5MsE=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
+  meta = {
     description = "Simulates the falling characters theme from The Matrix movie";
-    license = licenses.gpl3;
     longDescription = ''
       CMatrix simulates the display from "The Matrix" and is based
       on the screensaver from the movie's website.
     '';
     homepage = "https://github.com/abishekvashok/cmatrix";
+    changelog = "https://github.com/abishekvashok/cmatrix/releases/tag/v${finalAttrs.version}";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Tert0 ];
     mainProgram = "cmatrix";
   };
-}
+})

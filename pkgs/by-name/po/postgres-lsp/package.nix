@@ -2,38 +2,56 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  protobuf,
+  rust-jemalloc-sys,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0-unstable-2024-03-24";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
-    owner = "supabase";
-    repo = "postgres_lsp";
-    rev = "43ca9b675cb152ca7f38cfa6aff6dd2131dfa9a2";
-    hash = "sha256-n7Qbt9fGzC0CcleAtTWDInPz4oaPjI+pvIPrR5EYJ9U=";
+    owner = "supabase-community";
+    repo = "postgres-language-server";
+    tag = finalAttrs.version;
+    hash = "sha256-MdEI/3oqTIJ4anG6jXO4SEkb4VDulzD3Ql+TiFdCQa8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-UEcHlkbYMA6xETMryWXsDHyAZYtLncRJn2jA6tvw7gQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vr84vwmDUpmyiX4TTTdR35Hjevi43+KgWxDhSbUKr+k=";
 
   nativeBuildInputs = [
-    protobuf
     rustPlatform.bindgenHook
   ];
 
-  cargoBuildFlags = [ "-p=postgres_lsp" ];
-  cargoTestFlags = cargoBuildFlags;
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
-  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
+  env = {
+    SQLX_OFFLINE = 1;
 
-  meta = with lib; {
-    description = "Language Server for Postgres";
-    homepage = "https://github.com/supabase/postgres_lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
-    mainProgram = "postgres_lsp";
+    # As specified in the upstream: https://github.com/supabase-community/postgres-language-server/blob/main/.github/workflows/release.yml
+    RUSTFLAGS = "-C strip=symbols -C codegen-units=1";
+    PGT_VERSION = finalAttrs.version;
   };
-}
+
+  cargoBuildFlags = [ "-p=pgt_cli" ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+  checkFlags = [
+    # Tries to write to the file system relatively to the current path
+    "--skip=syntax_error"
+    # Requires a database connection
+    "--skip=test_cli_check_command"
+  ];
+
+  meta = {
+    description = "Tools and language server for Postgres";
+    homepage = "https://pgtools.dev";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      myypo
+    ];
+    mainProgram = "postgrestools";
+  };
+})

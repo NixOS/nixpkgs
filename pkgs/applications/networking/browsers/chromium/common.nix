@@ -15,6 +15,7 @@
 
   # Native build inputs:
   ninja,
+  bashInteractive,
   pkg-config,
   python3,
   perl,
@@ -214,6 +215,8 @@ let
   };
 
   isElectron = packageName == "electron";
+  needsCompgen = chromiumVersionAtLeast "133";
+  rustcVersion = buildPackages.rustc.version;
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -291,6 +294,12 @@ let
     nativeBuildInputs =
       [
         ninja
+        gnChromium
+      ]
+      ++ lib.optionals needsCompgen [
+        bashInteractive # needed for compgen in buildPhase -> process_template
+      ]
+      ++ [
         pkg-config
         python3WithPackages
         perl
@@ -438,6 +447,12 @@ let
         # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
         ./patches/no-build-timestamps.patch
       ]
+      ++ lib.optionals (!chromiumVersionAtLeast "136") [
+        # Fix build with Pipewire 1.4
+        # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
+        # Got merged, started shipping with M136+.
+        ./patches/webrtc-pipewire-1.4.patch
+      ]
       ++ lib.optionals (packageName == "chromium") [
         # This patch is limited to chromium and ungoogled-chromium because electron-source sets
         # enable_widevine to false.
@@ -458,32 +473,6 @@ let
         # flag (declare_args) so we simply hardcode it to false.
         ./patches/widevine-disable-auto-download-allow-bundle.patch
       ]
-      ++ lib.optionals (versionRange "127" "128") [
-        # Fix missing chrome/browser/ui/webui_name_variants.h dependency
-        # and ninja 1.12 compat in M127.
-        # https://issues.chromium.org/issues/345645751
-        # https://issues.chromium.org/issues/40253918
-        # https://chromium-review.googlesource.com/c/chromium/src/+/5641516
-        (githubPatch {
-          commit = "2c101186b60ed50f2ba4feaa2e963bd841bcca47";
-          hash = "sha256-luu3ggo6XoeeECld1cKZ6Eh8x/qQYmmKI/ThEhuutuY=";
-        })
-        # https://chromium-review.googlesource.com/c/chromium/src/+/5644627
-        (githubPatch {
-          commit = "f2b43c18b8ecfc3ddc49c42c062d796c8b563984";
-          hash = "sha256-uxXxSsiS8R0827Oi3xsG2gtT0X+jJXziwZ1y8+7K+Qg=";
-        })
-        # https://chromium-review.googlesource.com/c/chromium/src/+/5646245
-        (githubPatch {
-          commit = "4ca70656fde83d2db6ed5a8ac9ec9e7443846924";
-          hash = "sha256-iQuRRZjDDtJfr+B7MV+TvUDDX3bvpCnv8OpSLJ1WqCE=";
-        })
-        # https://chromium-review.googlesource.com/c/chromium/src/+/5647662
-        (githubPatch {
-          commit = "50d63ffee3f7f1b1b9303363742ad8ebbfec31fa";
-          hash = "sha256-H+dv+lgXSdry3NkygpbCdTAWWdTVdKdVD3Aa62w091E=";
-        })
-      ]
       ++ [
         # Required to fix the build with a more recent wayland-protocols version
         # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
@@ -497,18 +486,16 @@ let
         # Rebased variant of patch to build M126+ with LLVM 17.
         # staging-next will bump LLVM to 18, so we will be able to drop this soon.
         ./patches/chromium-126-llvm-17.patch
-      ]
-      ++ lib.optionals (versionRange "126" "129") [
         # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
         # allowing us to use our rustc and our clang.
-        # Rebased variant of patch right above to build M126+ with our rust and our clang.
-        ./patches/chromium-126-rust.patch
-      ]
-      ++ lib.optionals (chromiumVersionAtLeast "129") [
-        # Rebased variant of patch right above to build M129+ with our rust and our clang.
         ./patches/chromium-129-rust.patch
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
+      ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
+        # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
+        # no longer need this patch. We opt to arbitrarily limit it to versions prior to M136 just
+        # because that's when this revert stopped applying cleanly and defer fully dropping it for
+        # the next cleanup to bundle rebuilding all of chromium and electron.
+        #
         # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
         # and std::hardware_constructive_interference_size.
         # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -541,11 +528,90 @@ let
           revert = true;
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
+      ]
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "137") [
+        # Backport "Add more CFI suppressions for inline PipeWire functions" from M137
+        # to fix SIGKILL (ud1) when screensharing with PipeWire 1.4+ and is_cfi = true.
+        # Our chromium builds set is_official_build = true, which in turn enables is_cfi.
+        # We don't apply this patch to electron, because we build electron with
+        # is_cfi = false and as such is not affected by this.
+        # https://chromium-review.googlesource.com/c/chromium/src/+/6421030
+        (fetchpatch {
+          name = "add-more-CFI-suppressions-for-inline-PipeWire-functions.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/0eebf40b9914bca8fe69bef8eea89522c1a5d4ce^!?format=TEXT";
+          decode = "base64 -d";
+          hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
+        })
+      ]
+      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "136") [
+        # Backport "Only call format_message when needed" to fix print() crashing with is_cfi = true.
+        # We build electron is_cfi = false and as such electron is not affected by this.
+        # Started shipping with M136+.
+        # https://github.com/NixOS/nixpkgs/issues/401326
+        # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/issues/13
+        # https://skia-review.googlesource.com/c/skia/+/961356
+        (fetchpatch {
+          name = "only-call-format_message-when-needed.patch";
+          url = "https://skia.googlesource.com/skia/+/71685eda67178fa374d473ec1431fc459c83bb21^!?format=TEXT";
+          decode = "base64 -d";
+          stripLen = 1;
+          extraPrefix = "third_party/skia/";
+          hash = "sha256-aMqDjt/0cowqSm5DqcD3+zX+mtjydk396LD+B5F/3cs=";
+        })
+      ]
+      ++ lib.optionals (chromiumVersionAtLeast "136") [
+        # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
+        # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
+        # preventing compilations of chromium with versions below their intended version, not about running the very
+        # exact version or even running a newer version.
+        ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
+      ]
+      ++ lib.optionals (versionRange "137" "138") [
+        (fetchpatch {
+          # Partial revert of upstream clang+llvm bump revert to fix the following error when building with LLVM < 21:
+          #  clang++: error: unknown argument: '-fextend-variable-liveness=none'
+          # https://chromium-review.googlesource.com/c/chromium/src/+/6514242
+          # Upstream relanded this in M138+ with <https://chromium-review.googlesource.com/c/chromium/src/+/6541127>.
+          name = "chromium-137-llvm-19.patch";
+          url = "https://chromium.googlesource.com/chromium/src/+/ddf8f8a465be2779bd826db57f1299ccd2f3aa25^!?format=TEXT";
+          includes = [ "build/config/compiler/BUILD.gn" ];
+          revert = true;
+          decode = "base64 -d";
+          hash = "sha256-wAR8E4WKMvdkW8DzdKpyNpp4dynIsYAbnJ2MqE8V2o8=";
+        })
+      ]
+      ++ lib.optionals (versionRange "137" "138") [
+        (fetchpatch {
+          # Backport "Fix build with system libpng" that fixes a typo in core/fxcodec/png/png_decoder.cpp that causes
+          # the build to fail at the final linking step.
+          # https://pdfium-review.googlesource.com/c/pdfium/+/132130
+          # Started shipping with M138+.
+          name = "pdfium-Fix-build-with-system-libpng.patch";
+          url = "https://pdfium.googlesource.com/pdfium.git/+/83f11d630aa1cb6d5ceb292364412f7b0585a201^!?format=TEXT";
+          extraPrefix = "third_party/pdfium/";
+          stripLen = 1;
+          decode = "base64 -d";
+          hash = "sha256-lDX0OLdxxTNLtViqEt0luJQ/H0mlvQfV0zbY1Ubqyq0=";
+        })
       ];
 
     postPatch =
-      lib.optionalString (!isElectron) ''
-        ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+      lib.optionalString (!isElectron)
+        # TODO: reuse mkGnFlags for this
+        (
+          if (chromiumVersionAtLeast "136") then
+            ''
+              cp ${./files/gclient_args.gni} build/config/gclient_args.gni
+              chmod u+w build/config/gclient_args.gni
+              echo 'checkout_mutter = false' >> build/config/gclient_args.gni
+              echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
+            ''
+          else
+            ''
+              ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+            ''
+        )
+      + lib.optionalString (!isElectron) ''
 
         echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
         echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
@@ -645,8 +711,8 @@ let
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin
-        ln -s${lib.optionalString (chromiumVersionAtLeast "127") "f"} "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
         # Allow building against system libraries in official builds
@@ -692,14 +758,14 @@ let
 
         # Build Chromium using the system toolchain (for Linux distributions):
         #
-        # What you would expect to be caled "target_toolchain" is
+        # What you would expect to be called "target_toolchain" is
         # actually called either "default_toolchain" or "custom_toolchain",
         # depending on which part of the codebase you are in; see:
         # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
         custom_toolchain = "//build/toolchain/linux/unbundle:default";
         host_toolchain = "//build/toolchain/linux/unbundle:default";
         # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
-        # end up building much more things than they need to (roughtly double the build steps and time/compute):
+        # end up building much more things than they need to (roughly double the build steps and time/compute):
       }
       // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
         host_toolchain = "//build/toolchain/linux/unbundle:host";
@@ -745,21 +811,36 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
-        use_qt = false;
+      }
+      // (
+        # M134 changed use_qt to use_qt5 (and use_qt6)
+        if chromiumVersionAtLeast "134" then
+          {
+            use_qt5 = false;
+            use_qt6 = false;
+          }
+        else
+          {
+            use_qt = false;
+          }
+      )
+      // lib.optionalAttrs (chromiumVersionAtLeast "136") {
+        # LLVM < v21 does not support --warning-suppression-mappings yet:
+        clang_warning_suppression_file = "";
+      }
+      // {
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
-      }
-      // lib.optionalAttrs (chromiumVersionAtLeast "127") {
         rust_bindgen_root = "${buildPackages.rust-bindgen}";
       }
       // {
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
-        rustc_version = buildPackages.rustc.version;
+        rustc_version = rustcVersion;
       }
       // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
         # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
@@ -770,6 +851,11 @@ let
         proprietary_codecs = true;
         enable_hangout_services_extension = true;
         ffmpeg_branding = "Chrome";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+        # Enable v4l2 video decoder for hardware acceleratation on aarch64:
+        use_vaapi = false;
+        use_v4l2_codec = true;
       }
       // lib.optionalAttrs pulseSupport {
         use_pulseaudio = true;
@@ -801,7 +887,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -809,10 +895,12 @@ let
       runHook postConfigure
     '';
 
-    # Don't spam warnings about unknown warning options. This is useful because
+    # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE =
+      "-Wno-unknown-warning-option"
+      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";
@@ -823,12 +911,12 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          (
+          ${lib.optionalString needsCompgen "bash -s << EOL\n"}(
             source chrome/installer/linux/common/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )
+          )${lib.optionalString needsCompgen "\nEOL"}
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;

@@ -1,15 +1,11 @@
 {
   fetchurl,
   lib,
-  virtualbox,
+  virtualboxVersion,
 }:
-
-let
-  inherit (virtualbox) version;
-in
 fetchurl {
-  url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-  sha256 = "80c91d35742f68217cf47b13e5b50d53f54c22c485bacce41ad7fdc321649e61";
+  url = "http://download.virtualbox.org/virtualbox/${virtualboxVersion}/VBoxGuestAdditions_${virtualboxVersion}.iso";
+  sha256 = "59c92f7f5fd7e081211e989f5117fc53ad8d8800ad74a01b21e97bb66fe62972";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''

@@ -9,8 +9,8 @@
   useQt5 ? false,
 }:
 let
-  latestVersion = "2.0.1";
-  latestSha256 = "sha256-4KvOhQSYmHV/5TxyeK4f1uUmHK5uR5xXC2MfPTM96SM=";
+  latestVersion = "2.1.1";
+  latestSha256 = "sha256-7mQnJCQr/zm9zEdg2JPr7jQn8uajyCXvyYRQZWxG+Q8=";
 
   qt5Version = "1.3.3";
   qt5Sha256 = "sha256-zTUTsSzy4p0Y7RPOidCtxTjjyvPRyWSQCxA5sUzXcLc=";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
-    rev = "V${version}";
+    rev = if version == "2.1.1" then "V.2.1.1" else "V${version}";
     sha256 = if useQt5 then qt5Sha256 else latestSha256;
   };
 

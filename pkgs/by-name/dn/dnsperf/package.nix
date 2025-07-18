@@ -3,6 +3,7 @@
   stdenv,
   autoreconfHook,
   fetchFromGitHub,
+  fetchpatch,
   ldns,
   libck,
   nghttp2,
@@ -33,16 +34,26 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # dnsperf doesn't have support for musl (https://github.com/DNS-OARC/dnsperf/issues/265)
+    # and strerror_r returns int on non-glibc: https://github.com/NixOS/nixpkgs/issues/370498
+    # TODO: remove if better non-glibc detection is ever upstreamed
+    (fetchpatch {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/5bd92b8f86a0bf15dddf8fa180adf14344d6cc15/testing/dnsperf/musl-perf_strerror_r.patch";
+      hash = "sha256-yTJHXkti/xSklmVfAV45lEsOiHy7oL1phImNTNtcPkM=";
+    })
+  ];
+
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
     changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     mainProgram = "dnsperf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       mfrw
     ];

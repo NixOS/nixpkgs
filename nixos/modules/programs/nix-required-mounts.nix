@@ -50,10 +50,10 @@ let
     pkgs.addDriverRunpath.driverLink
 
     # mesa:
-    config.hardware.opengl.package
+    config.hardware.graphics.package
 
     # nvidia_x11, etc:
-  ] ++ config.hardware.opengl.extraPackages; # nvidia_x11
+  ] ++ config.hardware.graphics.extraPackages; # nvidia_x11
 
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;
@@ -82,15 +82,15 @@ in
         default = { };
         defaultText = lib.literalExpression ''
           {
-            opengl.paths = config.hardware.opengl.extraPackages ++ [
-              config.hardware.opengl.package
+            opengl.paths = config.hardware.graphics.extraPackages ++ [
+              config.graphics.opengl.package
               pkgs.addDriverRunpath.driverLink
               "/dev/dri"
             ];
           }
         '';
         example.require-ipfs.paths = [ "/ipfs" ];
-        example.require-ipfs.onFeatures = [ "ifps" ];
+        example.require-ipfs.onFeatures = [ "ipfs" ];
       };
     extraWrapperArgs = lib.mkOption {
       type = with lib.types; listOf str;

@@ -19,13 +19,14 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.12.0";
+  version = "1.12.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = version;
-    hash = "sha256-dCb8mcwXoxD4abJjLEwk5tGp65XkvepmOX+Kc9Dl7fQ=";
+    hash = "sha256-xNy7quksnZ6BnZk5Rz9kwwoC4xitmfnSe5Zj6gZO8S4=";
   };
 
   patches = [
@@ -42,12 +43,6 @@ buildPythonApplication rec {
       url = "https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec.patch";
       revert = true;
       hash = "sha256-1U/LiAliKtk3ygbIBsmoavXN0RSykiiegtml+bO8CnI=";
-    })
-
-    # Fix test_run_no_args test
-    (fetchpatch2 {
-      url = "https://github.com/Matoking/protontricks/commit/ff2381ad379a612e73f0d4604f1c9c3a012b3355.patch";
-      hash = "sha256-aiafLbiqS6TBBiQpfTYPVqhQs2OXYg/4yCtbuTv6Ug8=";
     })
   ];
 
@@ -87,6 +82,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
+    changelog = "https://github.com/Matoking/protontricks/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     let
       patch =
         fname: sha256:
-        fetchurl rec {
+        fetchurl {
           url = "https://raw.githubusercontent.com/archlinux/svntogit-community/c0b0b6d4d6d7b79eca68123b20e0c9fb82e1c6e1/g15daemon/trunk/${pname}-${version}-${fname}.patch";
           name = "${fname}.patch";
           inherit sha256;

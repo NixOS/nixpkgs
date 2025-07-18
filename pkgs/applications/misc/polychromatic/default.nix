@@ -54,22 +54,25 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ qt6.qtwayland ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    openrazer
-    pyqt6
-    pyqt6-webengine
-    requests
-    setproctitle
-    libxcb
-    openrazer-daemon
-    ibus
-    usbutils
-  ] ++ [
-    libayatana-appindicator
-    psmisc
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      colorama
+      colour
+      openrazer
+      pyqt6
+      pyqt6-webengine
+      requests
+      setproctitle
+      libxcb
+      openrazer-daemon
+      ibus
+      usbutils
+    ]
+    ++ [
+      libayatana-appindicator
+      psmisc
+    ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;

@@ -212,7 +212,7 @@ in
     slackAuthentication = lib.mkOption {
       description = ''
         To configure Slack auth, you'll need to create an Application at
-        https://api.slack.com/apps
+        <https://api.slack.com/apps>
 
         When configuring the Client ID, add a redirect URL under "OAuth & Permissions"
         to `https://[publicUrl]/auth/slack.callback`.
@@ -237,7 +237,7 @@ in
     googleAuthentication = lib.mkOption {
       description = ''
         To configure Google auth, you'll need to create an OAuth Client ID at
-        https://console.cloud.google.com/apis/credentials
+        <https://console.cloud.google.com/apis/credentials>
 
         When configuring the Client ID, add an Authorized redirect URI to
         `https://[publicUrl]/auth/google.callback`.
@@ -428,7 +428,7 @@ in
       description = ''
         For a complete Slack integration with search and posting to channels
         this configuration is also needed. See here for details:
-        https://wiki.generaloutline.com/share/be25efd1-b3ef-4450-b8e5-c4a4fc11e02a
+        <https://wiki.generaloutline.com/share/be25efd1-b3ef-4450-b8e5-c4a4fc11e02a>
       '';
       default = null;
       type = lib.types.nullOr (
@@ -634,10 +634,10 @@ in
         wantedBy = [ "multi-user.target" ];
         after =
           [ "networking.target" ]
-          ++ lib.optional (cfg.databaseUrl == "local") "postgresql.service"
+          ++ lib.optional (cfg.databaseUrl == "local") "postgresql.target"
           ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
         requires =
-          lib.optional (cfg.databaseUrl == "local") "postgresql.service"
+          lib.optional (cfg.databaseUrl == "local") "postgresql.target"
           ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
         path = [
           pkgs.openssl # Required by the preStart script
@@ -781,7 +781,6 @@ in
           Group = cfg.group;
           Restart = "always";
           ProtectSystem = "strict";
-          PrivateHome = true;
           PrivateTmp = true;
           UMask = "0007";
 

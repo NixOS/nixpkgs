@@ -23,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "photutils";
-  version = "2.0.2";
+  version = "2.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "photutils";
     tag = version;
-    hash = "sha256-gXtC6O8rXBBa8VMuqxshnJieAahv3bCY2C1BXNmJxb4=";
+    hash = "sha256-DNdbCISuBAy3jbKgwWA0Adq2gpRP3AacU1ZorcBkjZo=";
   };
 
   build-system = [
