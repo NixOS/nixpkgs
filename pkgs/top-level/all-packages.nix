@@ -16298,6 +16298,10 @@ with pkgs;
 
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
+  wikidpad-master-2019-07-31 = callPackage ../applications/misc/wikidpad {
+    python3Packages = python37Packages;
+  };
+
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
