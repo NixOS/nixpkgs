@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     python-slugify
     raven
     requests
-    mozjpeg_lossless_optimization
+    mozjpeg-lossless-optimization
     natsort
     distro
     numpy
