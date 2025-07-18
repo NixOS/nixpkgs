@@ -7,9 +7,9 @@
   setuptools-scm,
   libxcrypt,
   numpy,
-  qt6,
+  qt5,
   qtpy,
-  pyqt6,
+  pyqt5,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -31,16 +31,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    qt6.wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = [
-    qt6.qtconnectivity
-    qt6.qtbase
-    qt6.qttools
-    pyqt6
+    qt5.qtconnectivity
+    qt5.qtbase
+    qt5.qttools
+    pyqt5
     numpy
     qtpy
   ];
