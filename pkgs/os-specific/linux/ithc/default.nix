@@ -4,17 +4,18 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ithc";
-  version = "unstable-2022-06-07";
+  version = "0-unstable-2025-07-30";
 
   src = fetchFromGitHub {
     owner = "quo";
     repo = "ithc-linux";
-    rev = "5af2a2213d2f3d944b19ec7ccdb96f16d56adddb";
-    hash = "sha256-p4TooWUOWPfNdePE18ESmRJezPDAl9nLb55LQtkJiSg=";
+    rev = "34539af4726d970f9765363bb78b5fd920611a0b";
+    hash = "sha256-M7AtkvWKlXJ6MuJoWqj9VuKvd4NJJEO0IAoH/OfbTT4=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,12 +31,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = with lib; {
     description = "Linux driver for Intel Touch Host Controller";
     homepage = "https://github.com/quo/ithc-linux";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ aacebedo ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.9" || kernel.kernelAtLeast "6.10";
+    broken = kernel.kernelOlder "5.9";
   };
 }
