@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 'libplist >= 1.0' 'libplist-2.0 >= 2.2'
   '';
 
+  preAutoreconf = ''
+    gettextize --force --copy
+    intltoolize --force --copy
+  '';
+
   configureFlags = [
     "--without-hal"
     "--enable-udev"
