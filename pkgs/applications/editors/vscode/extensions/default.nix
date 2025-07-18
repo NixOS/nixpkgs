@@ -3471,8 +3471,8 @@ let
         mktplcRef = {
           publisher = "ms-vscode";
           name = "cmake-tools";
-          version = "1.21.6";
-          hash = "sha256-Y+W5lknMiUTeKLnAIP/wAY9zn3QY+XvdPrl2GsdIb5o=";
+          version = "1.21.36";
+          hash = "sha256-IqgYnesIz46WmJ7kR8LYnr2kkD33oiupi7CrcV6rGRg=";
         };
         meta.license = lib.licenses.mit;
       };
