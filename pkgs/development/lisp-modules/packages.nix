@@ -101,6 +101,10 @@ let
         ];
       });
 
+      april = super.april.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "cape" ];
+      });
+
       cl-notify = build-asdf-system {
         pname = "cl-notify";
         version = "20080904-138ca7038";
