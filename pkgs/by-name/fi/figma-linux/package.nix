@@ -90,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
-      ercao
-      kashw2
-    ];
+    maintainers = with maintainers; [ kashw2 ];
     mainProgram = "figma-linux";
   };
 })
