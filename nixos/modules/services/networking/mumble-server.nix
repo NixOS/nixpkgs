@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.services.murmur;
+  cfg = config.services.mumble-server;
   forking = cfg.logFile != null;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=${cfg.stateDir}/murmur.sqlite
@@ -51,8 +51,12 @@ let
   '';
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "murmur" ] [ "services" "mumble-server" ])
+  ];
+
   options = {
-    services.murmur = {
+    services.mumble-server = {
       enable = lib.mkEnableOption "Mumble server";
 
       openFirewall = lib.mkEnableOption "opening ports in the firewall for the Mumble server";
@@ -133,7 +137,7 @@ in
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = lib.mkPackageOption pkgs "murmur" { };
+      package = lib.mkPackageOption pkgs "mumble-server" { };
 
       password = lib.mkOption {
         type = lib.types.str;
@@ -260,7 +264,7 @@ in
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        example = lib.literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
+        example = lib.literalExpression ''"''${config.services.mumble-server.stateDir}/murmurd.env"'';
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
@@ -270,7 +274,7 @@ in
 
           ```
             # snippet of murmur-related config
-            services.murmur.password = "$MURMURD_PASSWORD";
+            services.mumble-server.password = "$MURMURD_PASSWORD";
           ```
 
           ```
@@ -312,7 +316,7 @@ in
       allowedUDPPorts = [ cfg.port ];
     };
 
-    systemd.services.murmur = {
+    systemd.services.mumble-server = {
       description = "Murmur Chat Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

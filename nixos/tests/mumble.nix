@@ -25,11 +25,11 @@ in
       { config, ... }:
       {
         security.apparmor.enable = true;
-        services.murmur.enable = true;
-        services.murmur.registerName = "NixOS tests";
-        services.murmur.password = "$MURMURD_PASSWORD";
-        services.murmur.environmentFile = envFile;
-        networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];
+        services.mumble-server.enable = true;
+        services.mumble-server.registerName = "NixOS tests";
+        services.mumble-server.password = "$MURMURD_PASSWORD";
+        services.mumble-server.environmentFile = envFile;
+        networking.firewall.allowedTCPPorts = [ config.services.mumble-server.port ];
       };
 
     client1 = client;
