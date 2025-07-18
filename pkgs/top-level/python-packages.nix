@@ -17074,6 +17074,8 @@ self: super: with self; {
 
   squarify = callPackage ../development/python-modules/squarify { };
 
+  srctools = callPackage ../development/python-modules/srctools { };
+
   sre-yield = callPackage ../development/python-modules/sre-yield { };
 
   srp = callPackage ../development/python-modules/srp { };
