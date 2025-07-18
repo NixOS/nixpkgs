@@ -17,6 +17,7 @@
 
   # optional-dependencies
   fido2,
+  oauthlib,
   python3-openid,
   python3-saml,
   requests,
@@ -67,6 +68,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    idp-oidc = [
+      oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
     mfa = [
       fido2
       qrcode

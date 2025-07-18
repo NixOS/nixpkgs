@@ -36,8 +36,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     #  Network errors for all of these tests
     # "error reading DNS system conf: No such file or directory (os error 2)" } }
-    "--skip=archive::wayback::tests::wayback_suggestion"
-    "--skip=archive::wayback::tests::wayback_suggestion_unknown_url"
+    "--skip=archive::wayback::tests::wayback_suggestion_real_unknown"
     "--skip=archive::wayback::tests::wayback_api_no_breaking_changes"
     "--skip=cli::test_dont_dump_data_uris_by_default"
     "--skip=cli::test_dump_data_uris_in_verbose_mode"
