@@ -6,6 +6,7 @@
   stdenv,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 buildGoModule (finalAttrs: {
@@ -37,10 +38,9 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/glab" ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     make manpage
@@ -51,7 +51,14 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/glab completion -s zsh)
   '';
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    git init
+  '';
 
   passthru.updateScript = nix-update-script { };
 
