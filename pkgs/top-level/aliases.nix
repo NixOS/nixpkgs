@@ -10,6 +10,11 @@ lib: self: super:
 
 # A script to convert old aliases to throws and remove old
 # throws can be found in './maintainers/scripts/remove-old-aliases.py'.
+# We aim to run it after each nixos release branchoff. Feel free to
+# convert aliases 2-years older than the next nixos release to throws:
+#     major=$(nix eval --impure --expr 'with import ./lib; versions.major version' --raw)
+#     minor=$(nix eval --impure --expr 'with import ./lib; versions.minor version' --raw)
+#     echo ./maintainers/scripts/remove-old-aliases.py --year $(("20$major" - 2)) --month "$minor" --file ./pkgs/top-level/aliases.nix
 
 # Add 'preserve, reason: reason why' after the date if the alias should not be removed.
 # Try to keep them to a minimum.
