@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [ uv-build ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook
