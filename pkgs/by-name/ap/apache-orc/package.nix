@@ -49,6 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
+    (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")
+    (lib.cmakeFeature "HAS_POST_2038_EXITCODE" "0")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-parameter")
   ];
 
   env = {
