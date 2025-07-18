@@ -1,0 +1,44 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bbacd229..773738bd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,12 +8,6 @@
+ # be the maximum tested CMake version, matching requirements/dev_py38.txt
+ cmake_minimum_required(VERSION 3.19...3.25)
+ 
+-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.27)
+-  message(FATAL_ERROR
+-    "SymForce does not support CMake >=3.27: https://github.com/symforce-org/symforce/issues/356"
+-    )
+-endif()
+-
+ project(symforce)
+ 
+ set(CMAKE_CXX_STANDARD 17)
+@@ -369,6 +363,7 @@ if(SYMFORCE_BUILD_SYMENGINE)
+                -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
+                -DCMAKE_POLICY_DEFAULT_CMP0074=NEW
+                -DCMAKE_PREFIX_PATH=${EXTERNAL_PREFIX_PATH}
++    UPDATE_COMMAND ${CMAKE_COMMAND} -E echo "No update step"
+   )
+ 
+   # ------------------------------------------------------------------------------
+@@ -393,6 +388,7 @@ if(SYMFORCE_BUILD_SYMENGINE)
+         install
+         --prefix ${SYMFORCE_SYMENGINE_INSTALL_PREFIX}
+         --define CMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES}
++    UPDATE_COMMAND ${CMAKE_COMMAND} -E echo "No update step"
+   )
+ 
+   # Rebuild symengine[py] on changed files
+diff --git a/third_party/skymarshal/cmake/parse_types.py b/third_party/skymarshal/cmake/parse_types.py
+index 978e6daa..31eb2ddb 100644
+--- a/third_party/skymarshal/cmake/parse_types.py
++++ b/third_party/skymarshal/cmake/parse_types.py
+@@ -1,6 +1,5 @@
+ import argh
+ 
+-
+ def main(lcmtypes_dir: str) -> None:
+     import skymarshal.package_map
+ 
