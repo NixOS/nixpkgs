@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -32,7 +31,7 @@ let
     assertMsg
     concatStringsSep
     getVersion
-    optional
+    optionals
     optionalString
     toInt
     versions
@@ -67,11 +66,13 @@ let
       "${coreutils}/bin/env $out/bin/elixir"
     else
       "$out/bin/elixir";
+
+  erlc_opts = [ "deterministic" ] ++ optionals debugInfo [ "debug_info" ];
 in
 assert assertMsg (versionAtLeast (getVersion erlang) minimumOTPVersion) compatibilityMsg;
 assert assertMsg maxAssert compatibilityMsg;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = "${baseName}";
 
   inherit src version debugInfo;
@@ -79,20 +80,23 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ erlang ];
 
-  LANG = "C.UTF-8";
-  LC_TYPE = "C.UTF-8";
-
-  ERLC_OPTS =
-    let
-      erlc_opts = [ "deterministic" ] ++ optional debugInfo "debug_info";
-    in
-    "[${concatStringsSep "," erlc_opts}]";
+  env = {
+    LANG = "C.UTF-8";
+    LC_TYPE = "C.UTF-8";
+    DESTDIR = placeholder "out";
+    PREFIX = "/";
+    ERL_COMPILER_OPTIONS = "[${concatStringsSep "," erlc_opts}]";
+  };
 
   preBuild = ''
     patchShebangs ${escriptPath} || true
+  '';
 
-    substituteInPlace Makefile \
-      --replace "/usr/local" $out
+  # copy stdlib source files for LSP access
+  postInstall = ''
+    for d in lib/*; do
+      cp -R "$d/lib" "$out/lib/elixir/$d"
+    done
   '';
 
   postFixup = ''
@@ -134,4 +138,4 @@ stdenv.mkDerivation ({
     platforms = platforms.unix;
     teams = [ teams.beam ];
   };
-})
+}
