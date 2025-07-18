@@ -22065,6 +22065,11 @@
     githubId = 2660;
     name = "Russell Sim";
   };
+  rutgerdj = {
+    github = "rutgerdj";
+    githubId = 35080130;
+    name = "Rutger";
+  };
   rutherther = {
     name = "Rutherther";
     email = "rutherther@proton.me";
