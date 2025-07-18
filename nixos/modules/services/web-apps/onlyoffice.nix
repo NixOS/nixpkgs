@@ -80,6 +80,8 @@ in
       default = "amqp://guest:guest@localhost:5672";
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
+
+    wopi = lib.mkEnableOption "Enable WOPI support";
   };
 
   config = lib.mkIf cfg.enable {
@@ -295,7 +297,8 @@ in
               .services.CoAuthoring.secret.outbox.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
               .services.CoAuthoring.secret.session.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
             ''}
-              .rabbitmq.url = "${cfg.rabbitmqUrl}"
+              .rabbitmq.url = "${cfg.rabbitmqUrl}" |
+              .wopi.enable = "${toString cfg.wopi}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json
