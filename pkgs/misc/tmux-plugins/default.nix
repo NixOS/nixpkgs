@@ -870,12 +870,12 @@ in
 
   tmux-sessionx = mkTmuxPlugin {
     pluginName = "sessionx";
-    version = "0-unstable-2024-09-22";
+    version = "0-unstable-2025-01-07";
     src = fetchFromGitHub {
       owner = "omerxx";
       repo = "tmux-sessionx";
-      rev = "508359b8a6e2e242a9270292160624406be3bbca";
-      hash = "sha256-nbzn3qxMGRzxFnLBVrjqGl09++9YOK4QrLoYiHUS9jY=";
+      rev = "42c18389e73b80381d054dd1005b8c9a66942248";
+      hash = "sha256-SRKI4mliMSMp/Yd+oSn48ArbbRA+szaj70BQeTd8NhM=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postPatch = ''
