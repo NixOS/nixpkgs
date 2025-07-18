@@ -21,11 +21,12 @@
   speex,
   srtp,
   stdenv,
+  sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mediastreamer2";
-  version = "5.2.111";
+  version = "5.3.72";
 
   dontWrapQtApps = true;
 
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Le52tsyzOpepmvb+GOGCPwwTriPUjhYpa6GM+y/6USA=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-l3hLQixBviakKV9yzS+tBUpuvc+EJkP82/VgJbmeBW4=";
   };
 
   patches = [
@@ -48,8 +49,8 @@ stdenv.mkDerivation rec {
 
     # Port to ffmpeg 5.0 API
     (fetchpatch2 {
-      url = "https://salsa.debian.org/pkg-voip-team/linphone-stack/mediastreamer2/-/raw/4e7784802d2eac57dffe210c8c23e696f40ac6ec/debian/patches/ffmpeg_5_0_fixes.patch";
-      hash = "sha256-5ay4iVbx8IOX952HEFaKLBGKLRYUWRntufciApUVhh0=";
+      url = "https://salsa.debian.org/pkg-voip-team/linphone-stack/mediastreamer2/-/raw/debian/1%255.3.105+dfsg-5/debian/patches/0002-fix-build-ffmpeg5.patch?ref_type=tags";
+      hash = "sha256-65kWqbUmYZ6LA5PtzXqHEILfw9CtHxATF1TBoPQTJq0=";
     })
   ];
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     libv4l
     speex
     srtp
+    sqlite
 
     # Optional
     gsm # GSM audio codec
@@ -86,7 +88,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_QT_GL=ON" # Build necessary MSQOGL plugin for Linphone desktop
-    "-DCMAKE_C_FLAGS=-DGIT_VERSION=\"v${version}\""
+    "-DCMAKE_C_FLAGS=-DGIT_VERSION=\"v${finalAttrs.version}\""
     "-DENABLE_STRICT=NO" # Disable -Werror
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
@@ -100,4 +102,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})

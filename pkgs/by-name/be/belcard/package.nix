@@ -7,17 +7,17 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "belcard";
-  version = "5.2.98";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "belcard";
-    rev = version;
-    sha256 = "sha256-pRNJ1bDS2v0Cn+6cxMeFa0JQ27UZR6kCI9P6gQ5W2GA=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-bRJNlTPB3h4YRs3N2CyrjLCkuGKPDN4PQhU24Y4LFKQ=";
   };
 
   buildInputs = [
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})

@@ -5,9 +5,9 @@
   stdenv,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcunit";
-  version = "linphone-4.4.1";
+  version = "5.3.79";
 
   nativeBuildInputs = [ cmake ];
   src = fetchFromGitLab {
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
     owner = "public";
     group = "BC";
     repo = "bcunit";
-    rev = "c5eebcc7f794e9567d3c72d15d3f28bffe6bfd0f";
-    sha256 = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-awfkUvhJAfX5Ls93V5ttU/2AyEp3Ze3KBWc4Kldi82Y=";
   };
 
   meta = with lib; {
@@ -29,4 +29,4 @@ stdenv.mkDerivation {
     ];
     platforms = platforms.all;
   };
-}
+})

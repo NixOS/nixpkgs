@@ -9,15 +9,15 @@
 
 stdenv.mkDerivation rec {
   pname = "msopenh264";
-  version = "linphone-4.4.1";
+  version = "linphone-5.2.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "5603a432be2ed10f5d5a5ce068ef83ab2a996d6b";
-    sha256 = "sha256-AqZ7tsNZw2Djgyo1JBJbT/c3eQVyEn6r3CT6DQLD/B8=";
+    rev = "041b07a81f88f1dde2ebb7a1ea0b0e2ec281ab20";
+    sha256 = "sha256-IRdHDlcmiZp/FhuAg7pnY/pnuVaZzGB20zMO1kpHjkM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   # Do not build static libraries
   cmakeFlags = [
-    "-DENABLE_STATIC=NO"
+    "-DBUILD_SHARED_LIBS=ON"
     "-DCMAKE_SKIP_INSTALL_RPATH=ON"
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # https://gitlab.linphone.org/BC/public/msopenh264/issues/1
   installPhase = ''
     mkdir -p $out/lib/mediastreamer/plugins
-    cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
+    cp lib/mediastreamer2/plugins/libmsopenh264.so $out/lib/mediastreamer/plugins/
   '';
 
   meta = with lib; {

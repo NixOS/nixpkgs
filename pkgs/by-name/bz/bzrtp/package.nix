@@ -7,17 +7,17 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bzrtp";
-  version = "5.2.111";
+  version = "5.3.72";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "bzrtp";
-    rev = version;
-    hash = "sha256-sLvvQhJ9uVt/dx57xs9ftY/ETi46xmyGDH8372zpqj8=";
+    rev = finalAttrs.version;
+    hash = "sha256-yPwM8W4mc+zLudAS6mQM/buWEGjdYR75NXBkxHQUKK4=";
   };
 
   buildInputs = [
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };
-}
+})
