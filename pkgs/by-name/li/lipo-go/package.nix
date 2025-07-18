@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
   };
   vendorHash = "sha256-7M6CRxJd4fgYQLJDkNa3ds3f7jOp3dyloOZtwMtCBQk=";
 
+  hardeningDisable = [ "pie" ];
+
   buildPhase = ''
     runHook preBuild
 

@@ -25,6 +25,7 @@ buildGoModule rec {
   nativeBuildInputs = [ clang ];
 
   hardeningDisable = [
+    "pie"
     "zerocallusedregs"
   ];
 

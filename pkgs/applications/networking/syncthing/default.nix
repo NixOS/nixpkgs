@@ -41,6 +41,8 @@ let
 
       doCheck = false;
 
+      hardeningDisable = [ "pie" ];
+
       BUILD_USER = "nix";
       BUILD_HOST = "nix";
 

@@ -22,6 +22,8 @@ buildGoModule rec {
     }
   );
 
+  hardeningDisable = [ "pie" ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell git describe --tags)' v${version} \

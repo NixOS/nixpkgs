@@ -28,6 +28,8 @@ let
       sourceRoot = "${src.name}/${pname}";
       vendorHash = null;
 
+      hardeningDisable = [ "pie" ];
+
       # Fix build on Go 1.17 and later: panic: qtls.ClientHelloInfo doesn't match
       # See https://github.com/ipfs/fs-repo-migrations/pull/163
       postPatch =
