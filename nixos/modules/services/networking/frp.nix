@@ -44,6 +44,20 @@ in
           serverPort = 7000;
         };
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/var/lib/frp.env";
+        description = ''
+          Environment file as defined in `systemd.exec(5).
+
+          Variables can be referenced in the configuration file using the standard Go format
+          ```
+          serverAddr = "{{.Envs.FRP_SERVER_ADDR }}"
+          ```
+        '';
+      };
     };
   };
 
@@ -88,6 +102,7 @@ in
             PrivateMounts = true;
             SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" ];
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           };
         };
       };
