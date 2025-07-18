@@ -59,6 +59,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/torchbox/Willow/";
     changelog = "https://github.com/wagtail/Willow/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ desiderius ];
   };
 }
