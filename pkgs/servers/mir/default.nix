@@ -79,6 +79,18 @@ in
         ];
         hash = "sha256-jVhVR7wZZZGRS40z+HPNoGBLHulvE1nHRKgYhQ6/g9M=";
       })
+
+      # Fix compat with newer GTest
+      # Remove when version > 2.21.1
+      (fetchpatch {
+        name = "0201-Fix-gtest-nodiscard-error.patch";
+        url = "https://github.com/canonical/mir/commit/60dab2b197deb159087e44865e7314ad2865b79d.patch";
+        includes = [
+          "tests/integration-tests/input/test_single_seat_setup.cpp"
+          "tests/unit-tests/input/test_default_input_device_hub.cpp"
+        ];
+        hash = "sha256-gzLVQW9Z6y+s2D7pKtp0ondQrjkzZ5iUYhGDPqFXD5M=";
+      })
     ];
   };
 }
