@@ -346,7 +346,7 @@ let
         nix-script
         nix-tree
         nixfmt-classic
-        nixfmt-rfc-style
+        nixfmt
         nota
         nvfetcher
         oama

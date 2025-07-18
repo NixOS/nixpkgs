@@ -9,30 +9,37 @@ with pkgs.lib;
 
 let
   # A testScript fragment that prepares a disk with some empty, unpartitioned
-  # space. and uses it to boot the test with. Takes a single argument `machine`
-  # from which the diskImage is extracted.
-  useDiskImage = machine: ''
-    import os
-    import shutil
-    import subprocess
-    import tempfile
+  # space. and uses it to boot the test with.
+  # Takes two arguments, `machine` from which the diskImage is extracted,
+  # as well an optional `sizeDiff` (defaulting to +32M), describing how should
+  # be resized.
+  useDiskImage =
+    {
+      machine,
+      sizeDiff ? "+32M",
+    }:
+    ''
+      import os
+      import shutil
+      import subprocess
+      import tempfile
 
-    tmp_disk_image = tempfile.NamedTemporaryFile()
+      tmp_disk_image = tempfile.NamedTemporaryFile()
 
-    shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
+      shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
 
-    subprocess.run([
-      "${machine.virtualisation.qemu.package}/bin/qemu-img",
-      "resize",
-      "-f",
-      "raw",
-      tmp_disk_image.name,
-      "+32M",
-    ])
+      subprocess.run([
+        "${machine.virtualisation.qemu.package}/bin/qemu-img",
+        "resize",
+        "-f",
+        "raw",
+        tmp_disk_image.name,
+        "${sizeDiff}",
+      ])
 
-    # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
-    os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
-  '';
+      # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+    '';
 
   common =
     {
@@ -98,13 +105,78 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")
 
         systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
         assert "Growing existing partition 1." in systemd_repart_logs
+      '';
+  };
+
+  encrypt-tpm2 = makeTest {
+    name = "systemd-repart-encrypt-tpm2";
+    meta.maintainers = with maintainers; [ flokli ];
+
+    nodes.machine =
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
+      {
+        imports = [ common ];
+
+        boot.initrd.systemd.enable = true;
+
+        boot.initrd.availableKernelModules = [ "dm_crypt" ];
+        boot.initrd.luks.devices = lib.mkVMOverride {
+          created-crypt = {
+            device = "/dev/disk/by-partlabel/created-crypt";
+            crypttabExtraOpts = [ "tpm2-device=auto" ];
+          };
+        };
+        boot.initrd.systemd.repart.enable = true;
+        boot.initrd.systemd.repart.extraArgs = [
+          "--tpm2-pcrs=7"
+        ];
+        systemd.repart.partitions = {
+          "10-root" = {
+            Type = "linux-generic";
+          };
+          "10-crypt" = {
+            Type = "var";
+            Label = "created-crypt";
+            Format = "ext4";
+            Encrypt = "tpm2";
+          };
+        };
+        virtualisation.tpm.enable = true;
+        virtualisation.fileSystems = {
+          "/var" = {
+            device = "/dev/mapper/created-crypt";
+            fsType = "ext4";
+          };
+        };
+      };
+
+    testScript =
+      { nodes, ... }:
+      ''
+        ${useDiskImage {
+          inherit (nodes) machine;
+          sizeDiff = "+100M";
+        }}
+
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        systemd_repart_logs = machine.succeed("journalctl --boot --unit systemd-repart.service")
+        assert "Encrypting future partition 2" in systemd_repart_logs
+
+        assert "/dev/mapper/created-crypt" in machine.succeed("mount")
       '';
   };
 
@@ -128,7 +200,7 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")
@@ -196,7 +268,7 @@ in
     testScript =
       { nodes, ... }:
       ''
-        ${useDiskImage nodes.machine}
+        ${useDiskImage { inherit (nodes) machine; }}
 
         machine.start()
         machine.wait_for_unit("multi-user.target")

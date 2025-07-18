@@ -14,6 +14,7 @@
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
+
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
@@ -32,6 +33,7 @@ python3Packages.buildPythonApplication {
       junit-xml
       ptpython
       ipython
+      remote-pdb
     ]
     ++ extraPythonPackages python3Packages;
 
