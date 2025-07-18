@@ -5,6 +5,7 @@
   jre,
   unzip,
   makeWrapper,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,8 +32,16 @@ stdenv.mkDerivation rec {
     cp *.jar *.config $out/libexec/snpeff
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/snpeff --add-flags "-jar $out/libexec/snpeff/snpEff.jar"
-    makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
+    # Script to reorder arguments to allow for java additional arguments (-Xmx10M)
+    # Copied from bioconda
+    cp ${./snpeff.py} $out/libexec/snpeff/snpeff.py
+
+    makeWrapper ${python3}/bin/python3 $out/bin/snpEff \
+      --add-flags "$out/libexec/snpeff/snpeff.py" \
+      --set JAVA_HOME ${jre} \
+      --prefix PATH : ${lib.makeBinPath [ jre ]}
+
+    makeWrapper ${jre}/bin/java $out/bin/snpSift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
   '';
 
   meta = with lib; {
