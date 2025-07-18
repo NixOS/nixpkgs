@@ -12814,8 +12814,6 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   };
 
-  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
-
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney { };
