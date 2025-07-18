@@ -212,7 +212,11 @@ let
       name: value:
       if isDerivation value then
         f value
-      else if value.recurseForDerivations or false || value.recurseForRelease or false then
+      else if
+        value.recurseForDerivations or false
+        || value.recurseForRelease or false
+        || value.__recurseIntoDerivationForReleaseJobs or false
+      then
         recursiveMapPackages f value
       else
         [ ]
