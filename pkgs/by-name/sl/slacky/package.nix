@@ -61,7 +61,7 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/andirsun/Slacky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ awwpotato ];
-    platforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.all;
     mainProgram = "slacky";
   };
 })
