@@ -1,0 +1,41 @@
+diff --git a/testsuite/longdir.test b/testsuite/longdir.test
+index 8d66bb5f..22364dbe 100644
+--- a/testsuite/longdir.test
++++ b/testsuite/longdir.test
+@@ -15,11 +15,7 @@ longdir="$fromdir/$longname/$longname/$longname"
+ makepath "$longdir" || test_skipped "unable to create long directory"
+ touch "$longdir/1" || test_skipped "unable to create files in long directory"
+ date > "$longdir/1"
+-if [ -r /etc ]; then
+-    ls -la /etc >"$longdir/2"
+-else
+-    ls -la / >"$longdir/2"
+-fi
++ls -la "$srcdir" >"$longdir/2"
+ checkit "$RSYNC --delete -avH '$fromdir/' '$todir'" "$fromdir/" "$todir"
+ 
+ # The script would have aborted on error, so getting here means we've won.
+diff --git a/testsuite/rsync.fns b/testsuite/rsync.fns
+index 2ab97b69..ca8cc8a7 100644
+--- a/testsuite/rsync.fns
++++ b/testsuite/rsync.fns
+@@ -194,17 +194,9 @@ hands_setup() {
+     mkdir "$fromdir/dir/subdir"
+     echo some data > "$fromdir/dir/subdir/foobar.baz"
+     mkdir "$fromdir/dir/subdir/subsubdir"
+-    if [ -r /etc ]; then
+-	ls -ltr /etc > "$fromdir/dir/subdir/subsubdir/etc-ltr-list"
+-    else
+-	ls -ltr / > "$fromdir/dir/subdir/subsubdir/etc-ltr-list"
+-    fi
++    ls -ltr "$srcdir" > "$fromdir/dir/subdir/subsubdir/etc-ltr-list"
+     mkdir "$fromdir/dir/subdir/subsubdir2"
+-    if [ -r /bin ]; then
+-	ls -lt /bin > "$fromdir/dir/subdir/subsubdir2/bin-lt-list"
+-    else
+-	ls -lt / > "$fromdir/dir/subdir/subsubdir2/bin-lt-list"
+-    fi
++    ls -lt "$srcdir" > "$fromdir/dir/subdir/subsubdir2/bin-lt-list"
+ 
+ #      echo testing head:
+ #      ls -lR "$srcdir" | head -10 || echo failed
