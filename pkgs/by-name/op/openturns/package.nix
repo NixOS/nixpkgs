@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
-  version = "1.25";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lAFfOwriDdYvfRK/5vEQ/v97o3l/aH8jPHCVf9vlfV4=";
+    hash = "sha256-TwM6RvXG4+IBNxH2Ajg9atcaOGlC4kzusH8+6VbI6m4=";
   };
 
   nativeBuildInputs = [
