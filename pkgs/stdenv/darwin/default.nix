@@ -181,7 +181,7 @@ let
           inherit lib;
           stdenvNoCC = prevStage.ccWrapperStdenv or thisStdenv;
           curl = bootstrapTools;
-          inherit (config) rewriteURL;
+          inherit (config) mirrors rewriteURL;
         };
 
         inherit cc;
