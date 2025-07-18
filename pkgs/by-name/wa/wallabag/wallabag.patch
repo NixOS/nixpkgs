@@ -1,0 +1,58 @@
+diff --git a/app/AppKernel.php b/app/AppKernel.php
+index 61b734e06..0902c20fc 100644
+--- a/app/AppKernel.php
++++ b/app/AppKernel.php
+@@ -64,12 +64,12 @@ class AppKernel extends Kernel
+ 
+     public function getCacheDir()
+     {
+-        return dirname(__DIR__) . '/var/cache/' . $this->getEnvironment();
++        return getenv('CACHE_DIRECTORY') . '/' . $this->getEnvironment();
+     }
+ 
+     public function getLogDir()
+     {
+-        return dirname(__DIR__) . '/var/logs';
++        return getenv('LOGS_DIRECTORY');
+     }
+ 
+     public function registerContainerConfiguration(LoaderInterface $loader)
+     {
+-        $loader->load($this->getProjectDir() . '/app/config/config_' . $this->getEnvironment() . '.yml');
++
++        $loader->load(dirname(__DIR__) . '/app/config/config_' . $this->getEnvironment() . '.yml');
+diff --git a/app/config/config.yml b/app/config/config.yml
+index 7f0a4ca6c..77b5175c8 100644
+--- a/app/config/config.yml
++++ b/app/config/config.yml
+@@ -1,5 +1,7 @@
+ imports:
+-    - { resource: parameters.yml }
++    # Unfortunately, we cannot use %env(string:CONFIGURATION_DIRECTORY)%. Hardcoding the path for simplicity.
++    # https://symfony.com/doc/current/service_container/import.html#importing-configuration-with-imports
++    - { resource: '/etc/wallabag/parameters.yml' }
+     - { resource: security.yml }
+     - { resource: services.yml }
+     - { resource: wallabag.yml }
+@@ -28,7 +30,7 @@ framework:
+     session:
+         # handler_id set to null will use default session handler from php.ini
+         handler_id: session.handler.native_file
+-        save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
++        save_path: "%env(string:CACHE_DIRECTORY)%/sessions/%kernel.environment%"
+         cookie_secure: auto
+     fragments: ~
+     http_method_override: true
+diff --git a/app/config/wallabag.yml b/app/config/wallabag.yml
+index bd57d6377..8e1cd0970 100644
+--- a/app/config/wallabag.yml
++++ b/app/config/wallabag.yml
+@@ -35,7 +35,7 @@ wallabag_core:
+     fetching_error_message: |
+         wallabag can't retrieve contents for this article. Please <a href="https://doc.wallabag.org/en/user/errors_during_fetching.html#how-can-i-help-to-fix-that">troubleshoot this issue</a>.
+     api_limit_mass_actions: 10
+-    encryption_key_path: "%kernel.project_dir%/data/site-credentials-secret-key.txt"
++    encryption_key_path: "%env(string:STATE_DIRECTORY)%/site-credentials-secret-key.txt"
+     default_internal_settings:
+         -
+             name: share_public
