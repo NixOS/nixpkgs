@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
     (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.finalPackage.doCheck or false))
-    (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
+    (lib.cmakeBool "ENABLE_PROMETHEUS" false)
     (lib.cmakeBool "USE_SDL2" useSDL2)
     # Ensure we use system libraries
     (lib.cmakeBool "ENABLE_SYSTEM_GMP" true)
