@@ -748,18 +748,15 @@ let
     let
       mainProgram = meta.mainProgram or null;
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
-      envIsExportable = isAttrs env' && !isDerivation env';
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs (
-          [
-            "meta"
-            "passthru"
-            "pos"
-          ]
-          ++ optional (__structuredAttrs || envIsExportable) "env"
-        )
-        // optionalAttrs __structuredAttrs { env = checkedEnv; }
+        removeAttrs attrs ([
+          "meta"
+          "passthru"
+          "pos"
+          "env"
+        ])
+        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
@@ -787,8 +784,8 @@ let
               }";
           errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
         in
-        assert assertMsg envIsExportable
-          "When using structured attributes, `env` must be an attribute set of environment variables.";
+        assert assertMsg (isAttrs env && !isDerivation env)
+          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
         assert assertMsg (overlappingNames == [ ])
           "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
         mapAttrs (
@@ -882,7 +879,7 @@ let
         # should be made available to Nix expressions using the
         # derivation (e.g., in assertions).
         passthru
-    ) (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
+    ) (derivation (derivationArg // checkedEnv));
 
 in
 {
