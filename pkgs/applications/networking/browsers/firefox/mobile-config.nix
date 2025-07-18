@@ -10,7 +10,7 @@ let
     owner = "postmarketOS";
     repo = "mobile-config-firefox";
     rev = "3fbea365e9ea7bcd317d5d4ef7723f994bbdc381";
-    sha256 = "sha256-pgDMXnEdQg7d1lfGym4V+tsi6JAMgMVGI5ozSu0j0og=";
+    hash = "sha256-pgDMXnEdQg7d1lfGym4V+tsi6JAMgMVGI5ozSu0j0og=";
   };
   mobileConfigDir = runCommand "mobile-config-firefox" { } ''
     mkdir -p $out/mobile-config-firefox/{common,userChrome,userContent}
