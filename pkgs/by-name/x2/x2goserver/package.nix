@@ -29,11 +29,11 @@
 
 let
   pname = "x2goserver";
-  version = "4.1.0.3";
+  version = "4.1.0.5";
 
   src = fetchurl {
     url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "Z3aqo1T1pE40nws8F21JiMiKYYwu30bJijeuicBp3NA=";
+    hash = "sha256-Q1vbB84iQZ2eRWDf+Kyn+utrNgkdVayrwXZCm5Ia65Y=";
   };
 
   x2go-perl = perlPackages.buildPerlPackage {
@@ -135,11 +135,20 @@ stdenv.mkDerivation {
   postInstall = ''
     mv $out/etc/x2go/x2goserver.conf{,.example}
     mv $out/etc/x2go/x2goagent.options{,.example}
-    ln -sf ${nx-libs}/bin/nxagent $out/bin/x2goagent
-    for i in $out/sbin/x2go* $(find $out/bin -type f) \
-      $(ls $out/lib/x2go/x2go* | grep -v x2gocheckport)
+
+    # For unknown reason, the `make install` puts a `nix/store/...`
+    # store path into the `DESTDIR`; delete it. See:
+    #     https://github.com/NixOS/nixpkgs/issues/413544
+    rm -r $out/nix/
+
+    ln -sfv ${nx-libs}/bin/nxagent $out/bin/x2goagent
+    ln -sfv ${nx-libs}/share/nx/VERSION.nxagent $out/share/x2go/versions/VERSION.x2goserver-x2goagent
+
+    for i in $out/sbin/x2go* $(find $out/bin -type f -executable) \
+      $(find $out/lib/x2go/ -mindepth 1 -maxdepth 1 -type f -executable -name 'x2go*' -not -name x2gocheckport)
     do
-      wrapProgram $i --prefix PATH : ${lib.makeBinPath binaryDeps}:$out
+      echo wrapProgram: "$i"
+      wrapProgram "$i" --prefix PATH : ${lib.makeBinPath binaryDeps}:$out
     done
     # We're patching @INC of the setgid wrapper, because we can't mix
     # the perl wrapper (for PERL5LIB) with security.wrappers (for setgid)
