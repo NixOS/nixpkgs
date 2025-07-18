@@ -300,6 +300,7 @@ let
             bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
             after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [
+              "network.target"
               "network-setup.service"
               (subsystemDevice i.name)
             ];
@@ -326,6 +327,7 @@ let
             {
               description = "Bridge Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -429,6 +431,7 @@ let
             {
               description = "Open vSwitch Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ] ++ internalConfigs;
@@ -499,6 +502,7 @@ let
             {
               description = "Bond Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -547,6 +551,7 @@ let
             {
               description = "MACVLAN Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -590,6 +595,7 @@ let
             {
               description = "FOU endpoint ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -619,6 +625,7 @@ let
             {
               description = "6-to-4 Tunnel Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -661,6 +668,7 @@ let
             {
               description = "GRE Tunnel Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
@@ -695,6 +703,7 @@ let
             {
               description = "VLAN Interface ${n}";
               wantedBy = [
+                "network.target"
                 "network-setup.service"
                 (subsystemDevice n)
               ];
