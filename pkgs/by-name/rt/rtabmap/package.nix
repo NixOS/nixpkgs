@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.22.1";
+  version = "0.22.1-rolling";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-6kDjIfUgyaqrsVAWO6k0h1qIDN/idMOJJxLpqMQ6DFY=";
+    hash = "sha256-MOJkxGN6JrbkGQjBYIJETBOljMgZDQ0XfHh0ryGtVEQ=";
   };
 
   nativeBuildInputs = [
