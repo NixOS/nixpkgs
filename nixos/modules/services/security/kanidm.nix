@@ -144,7 +144,7 @@ let
   maybeRecoverAdmin = optionalString (cfg.provision.adminPasswordFile != null) ''
     KANIDM_ADMIN_PASSWORD=$(< ${cfg.provision.adminPasswordFile})
     # We always reset the admin account password if a desired password was specified.
-    if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_ADMIN_PASSWORD ${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} admin --from-environment >/dev/null; then
+    if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_ADMIN_PASSWORD ${lib.getExe' cfg.package "kanidmd"} recover-account -c ${serverConfigFile} admin --from-environment >/dev/null; then
       echo "Failed to recover admin account" >&2
       exit 1
     fi
@@ -158,7 +158,7 @@ let
       ''
         KANIDM_IDM_ADMIN_PASSWORD=$(< ${cfg.provision.idmAdminPasswordFile})
         # We always reset the idm_admin account password if a desired password was specified.
-        if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_IDM_ADMIN_PASSWORD ${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin --from-environment >/dev/null; then
+        if ! KANIDM_RECOVER_ACCOUNT_PASSWORD=$KANIDM_IDM_ADMIN_PASSWORD ${lib.getExe' cfg.package "kanidmd"} recover-account -c ${serverConfigFile} idm_admin --from-environment >/dev/null; then
           echo "Failed to recover idm_admin account" >&2
           exit 1
         fi
@@ -166,7 +166,7 @@ let
     else
       ''
         # Recover idm_admin account
-        if ! recover_out=$(${cfg.package}/bin/kanidmd recover-account -c ${serverConfigFile} idm_admin -o json); then
+        if ! recover_out=$(${lib.getExe' cfg.package "kanidmd"} recover-account -c ${serverConfigFile} idm_admin -o json); then
           echo "$recover_out" >&2
           echo "kanidm provision: Failed to recover admin account" >&2
           exit 1
@@ -186,7 +186,7 @@ let
     else
       provisionStateJson;
 
-  postStartScript = pkgs.writeShellScript "post-start" ''
+  provisionScript = pkgs.writeShellScriptBin "kanidm-provision" ''
     set -euo pipefail
 
     # Wait for the kanidm server to come online
@@ -197,7 +197,7 @@ let
     do
       sleep 1
       if [[ "$count" -eq 30 ]]; then
-        echo "Tried for at least 30 seconds, giving up..."
+        echo "Tried for at least 30 seconds, giving up..." >&2
         exit 1
       fi
       count=$((count++))
@@ -879,7 +879,7 @@ in
     };
 
     systemd.services.kanidm = mkIf cfg.enableServer {
-      description = "kanidm identity management daemon";
+      description = "Kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = mkMerge [
@@ -894,8 +894,7 @@ in
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
           RuntimeDirectory = "kanidmd";
-          ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
-          ExecStartPost = mkIf cfg.provision.enable postStartScript;
+          ExecStart = "${lib.getExe' cfg.package "kanidmd"} server -c ${serverConfigFile}";
           User = "kanidm";
           Group = "kanidm";
 
@@ -924,6 +923,24 @@ in
       ];
     };
 
+    systemd.services.kanidm-provision = mkIf cfg.provision.enable {
+      description = "Kanidm provisioning";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "kanidm.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = lib.getExe provisionScript;
+        inherit (config.systemd.services.kanidm.serviceConfig)
+          User
+          Group
+          BindPaths
+          BindReadOnlyPaths
+          ;
+      };
+      environment.RUST_LOG = "info";
+    };
+
     systemd.services.kanidm-unixd = mkIf cfg.enablePam {
       description = "Kanidm PAM daemon";
       wantedBy = [ "multi-user.target" ];
@@ -938,7 +955,7 @@ in
           CacheDirectory = "kanidm-unixd";
           CacheDirectoryMode = "0700";
           RuntimeDirectory = "kanidm-unixd";
-          ExecStart = "${cfg.package}/bin/kanidm_unixd";
+          ExecStart = lib.getExe' cfg.package "kanidm_unixd";
           User = "kanidm-unixd";
           Group = "kanidm-unixd";
 
@@ -980,7 +997,7 @@ in
         clientConfigFile
       ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
+        ExecStart = lib.getExe' cfg.package "kanidm_unixd_tasks";
 
         BindReadOnlyPaths = [
           "/nix/store"
