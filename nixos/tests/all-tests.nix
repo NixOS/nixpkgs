@@ -1121,6 +1121,7 @@ in
   osquery = handleTestOn [ "x86_64-linux" ] ./osquery.nix { };
   osrm-backend = runTest ./osrm-backend.nix;
   overlayfs = runTest ./overlayfs.nix;
+  oxidized = handleTest ./oxidized.nix { };
   pacemaker = runTest ./pacemaker.nix;
   packagekit = runTest ./packagekit.nix;
   paisa = runTest ./paisa.nix;
