@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pyvisa";
     repo = "pyvisa";
     tag = version;
-    hash = "sha256-GKrgUK2nSZi+8oJoS45MjpU9+INEgcla9Kaw6ceNVp0=";
+    hash = "sha256-cjKOyBn5O7ThZI7pi6JXeLhe47xGbhQaSRcAqXb3lV8=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,9 @@ buildPythonPackage rec {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
     license = licenses.mit;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [
+      mvnetbiz
+      xeniagda
+    ];
   };
 }
