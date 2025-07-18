@@ -315,6 +315,21 @@ rec {
         "nounset"
         "pipefail"
       ],
+
+      /*
+        The path to a custom shell binary.
+
+        :::{.note}
+        You probably need to unset `bashOptions`.
+        :::
+        :::{.note}
+        Shellcheck only supports some shell types.
+        :::
+
+        Type: Path
+      */
+      shell ? runtimeShell,
+
       /*
         Extra arguments to pass to `stdenv.mkDerivation`.
 
@@ -346,7 +361,7 @@ rec {
       preferLocalBuild = false;
       text =
         ''
-          #!${runtimeShell}
+          #!${shell}
           ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
         ''
         + lib.optionalString (runtimeEnv != null) (
