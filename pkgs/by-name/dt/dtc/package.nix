@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs setup.py
+
+    # Align the name with pypi
+    sed -i "s/name='libfdt',/name='pylibfdt',/" setup.py
   '';
 
   # Required for installation of Python library and is innocuous otherwise.
