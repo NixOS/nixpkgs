@@ -356,6 +356,26 @@ in
     };
   };
 
+  harpoon = mkTmuxPlugin {
+    pluginName = "harpoon";
+    rtpFilePath = "harpoon.tmux";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "chaitanyabsprip";
+      repo = "tmux-harpoon";
+      rev = "v0.4.0";
+      hash = "sha256-+IakWkPoQFhIQ4m/98NVYWe5tFKmtfKBnPXZcfU9iOk=";
+    };
+    meta = {
+      homepage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      downloadPage = "https://github.com/Chaitanyabsprip/tmux-harpoon";
+      description = "Tool to bookmark session supporting auto create for sessions";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
   jump = mkTmuxPlugin {
     pluginName = "jump";
     version = "2020-06-26";
