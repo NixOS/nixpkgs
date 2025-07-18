@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.1.7";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Doist";
     repo = "todoist-api-python";
     tag = "v${version}";
-    hash = "sha256-qOb9qAwjQ0MqR+mdNEkt7W8SiBhZ8gRf01TsHDkLPS4=";
+    hash = "sha256-zDbU+lmr8k5E4q+WrPMiKi+OPfVqKhTXk06UQgLMNs4=";
   };
 
   build-system = [ poetry-core ];
