@@ -64,6 +64,26 @@ let
 
       smartmon = smartmontools.override { inherit enableMail; };
 
+      kernelMakeFlagsMap = {
+        CC = "KERNEL_CC";
+        LD = "KERNEL_LD";
+        LLVM = "KERNEL_LLVM";
+        CROSS_COMPILE = "KERNEL_CROSS_COMPILE";
+        ARCH = "KERNEL_ARCH";
+        HOSTCC = "CC";
+      };
+
+      mappedKernelMakeFlags = builtins.map (
+        x:
+        let
+          parts = builtins.match "([^=]*)=(.*)" x;
+          name = builtins.elemAt parts 0;
+          value = builtins.elemAt parts 1;
+          mappedName = kernelMakeFlagsMap."${name}" or name;
+        in
+        "${mappedName}=${value}"
+      ) kernelModuleMakeFlags;
+
       buildKernel = any (n: n == configFile) [
         "kernel"
         "all"
@@ -196,10 +216,10 @@ let
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
             "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           ]
-          ++ kernelModuleMakeFlags
+          ++ mappedKernelMakeFlags
         );
 
-      makeFlags = optionals buildKernel kernelModuleMakeFlags;
+      makeFlags = optionals buildKernel mappedKernelMakeFlags;
 
       enableParallelBuilding = true;
 
