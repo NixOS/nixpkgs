@@ -13,17 +13,23 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-16";
-    format = "setuptools";
+    version = "0-unstable-2025-07-18";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
-      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
+      rev = "ff2e0ea2788a04ae5a13fc90b3725828a1ebc026";
+      hash = "sha256-Pxpozg3ecqGzwUCXL9zYsCivr9VpCVSYc/kjZn+V4xk=";
     };
 
     postPatch = ''
+      substituteInPlace requirements.txt \
+        --replace-fail "certifi==2025.7.14" "certifi" \
+        --replace-fail "lxml==6.0.0" "lxml" \
+        --replace-fail "pygments==2.19.2" "pygments>=2.19" \
+        --replace-fail "typer-slim==0.16.0" "typer"
+
       sed -i 's/==/>=/' requirements.txt
     '';
 
@@ -45,6 +51,8 @@ python.pkgs.toPythonModule (
         GIT_BRANCH="master"
         EOF
       '';
+
+    build-system = with python.pkgs; [ setuptools ];
 
     dependencies =
       with python.pkgs;
