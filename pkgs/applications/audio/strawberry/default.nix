@@ -13,7 +13,6 @@
   libXdmcp,
   libcdio,
   libebur128,
-  libgpod,
   libidn2,
   libmtp,
   libpthreadstubs,
@@ -36,10 +35,6 @@
   rapidjson,
 }:
 
-let
-  inherit (lib) optionals;
-
-in
 stdenv.mkDerivation rec {
   pname = "strawberry";
   version = "1.2.11";
@@ -78,8 +73,7 @@ stdenv.mkDerivation rec {
       sparsehash
       rapidjson
     ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      libgpod
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libpulseaudio
       libselinux
       libsepol
@@ -103,9 +97,11 @@ stdenv.mkDerivation rec {
       qttools
       wrapQtAppsHook
     ]
-    ++ optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
     ];
+
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_GPOD" false) ];
 
   postInstall = ''
     qtWrapperArgs+=(
