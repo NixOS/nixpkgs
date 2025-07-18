@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
   alsa-lib,
   ladspa-sdk,
   lash,
@@ -14,51 +13,52 @@
   libpulseaudio,
   libsndfile,
   lrdf,
-  qtbase,
-  qttools,
-  qtxmlpatterns,
+  qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hydrogen";
   version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
+    repo = "hydrogen";
+    tag = finalAttrs.version;
+    hash = "sha256-OMd8t043JVfMEfRjLdcE/R/4ymGp2yennkCjyX75r8Q=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = [
-    alsa-lib
-    ladspa-sdk
-    lash
-    libarchive
-    libjack2
-    liblo
-    libpulseaudio
-    libsndfile
-    lrdf
-    qtbase
-    qttools
-    qtxmlpatterns
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      ladspa-sdk
+      lash
+      libarchive
+      libjack2
+      liblo
+      libpulseaudio
+      libsndfile
+      lrdf
+    ]
+    ++ (with qt5; [
+      qtbase
+      qttools
+      qtxmlpatterns
+    ]);
 
   cmakeFlags = [
     "-DWANT_DEBUG=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
-}
+})
