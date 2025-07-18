@@ -30,6 +30,9 @@ writeShellApplication {
     dosbox ./KEEN4E.EXE -fullscreen -exit
   '';
 
+  # no .version attribute makes update script trip
+  passthru.updateScript = null;
+
   meta = {
     description = "Commander Keen Episode 4: Secret of the Oracle";
     homepage = "https://web.archive.org/web/20141013080934/http://www.3drealms.com/keen4/index.html";
