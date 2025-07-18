@@ -11,10 +11,10 @@ mattermost.override {
     # and make sure the version regex is up to date here.
     # Ensure you also check ../mattermost/package.nix for ESR releases.
     regex = "^v(10\\.[0-9]+\\.[0-9]+)$";
-    version = "10.9.2";
-    srcHash = "sha256-0el9PROsErFFnOIhv+TdFAXaXRECEeBqaiaPGMt5M5E=";
-    vendorHash = "sha256-+wmemZZyuz90VCXjO0ekplxdkv2p0s5h4qUObAA0XwU=";
-    npmDepsHash = "sha256-uAB599r3ZWjnt+jwk7sjSiPsc/tUyiBZzGqLZxuU3xE=";
+    version = "10.10.1";
+    srcHash = "sha256-tPjwtbGzg1G9fWoo8UC82RLm2GOQhvtQiw4vXKxz2ww=";
+    vendorHash = "sha256-hsTmqwISOln2YlMXNBXKu4iPwWsLEyoe5IIth9lYjbM=";
+    npmDepsHash = "sha256-Uv2lqcz2AV/gJJFWSN5cSP7JYgnEJBXzexruKqNU7p4=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
