@@ -2326,7 +2326,7 @@ self: super: with self; {
   catboost = callPackage ../development/python-modules/catboost {
     catboost = pkgs.catboost.override {
       pythonSupport = true;
-      python3Packages = self;
+      python3 = python;
     };
   };
 
