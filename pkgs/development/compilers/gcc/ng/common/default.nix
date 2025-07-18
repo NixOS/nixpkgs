@@ -115,6 +115,38 @@ makeScopeWithSplicing' {
       libsanitizer = callPackage ./libsanitizer { };
       libquadmath = callPackage ./libquadmath { };
 
+      grust-unwrapped = gccPackages.gcc-unwrapped.override {
+        stdenv = overrideCC stdenv buildGccPackages.gcc;
+        langRust = true;
+      };
+
+      libgrust = callPackage ./libgrust {
+        stdenv = overrideCC stdenv buildGccPackages.gcc;
+        grust = buildGccPackages.grustNoLibgrust;
+      };
+
+      grust = wrapCCWith rec {
+        cc = gccPackages.grust-unwrapped;
+        libcxx = targetGccPackages.libstdcxx;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        nixSupport.cc-cflags = gccPackages.grustNoLibgrust.nixSupport.cc-cflags ++ [
+          "-B${targetGccPackages.libgrust}/lib/"
+        ];
+      };
+
+      grustNoLibgrust = wrapCCWith rec {
+        cc = gccPackages.grust-unwrapped;
+        libcxx = targetGccPackages.libstdcxx;
+        bintools = binutils;
+        extraPackages = [
+          targetGccPackages.libgcc
+        ];
+        inherit (gccPackages.gcc) nixSupport;
+      };
+
       gfortran-unwrapped = gccPackages.gcc-unwrapped.override {
         stdenv = overrideCC stdenv buildGccPackages.gcc;
         langFortran = true;
@@ -127,10 +159,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
-          "-B${targetGccPackages.libatomic}/lib"
+        nixSupport.cc-cflags = gccPackages.gfortranNoLibgfortran.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libgfortran}/lib/"
         ];
       };
@@ -142,11 +171,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
-          "-B${targetGccPackages.libatomic}/lib"
-        ];
+        inherit (gccPackages.gcc) nixSupport;
       };
 
       gcc = wrapCCWith rec {
@@ -156,9 +181,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibatomic.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libatomic}/lib"
         ];
       };
@@ -200,8 +223,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibc.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libssp}/lib"
         ];
       };
@@ -217,9 +239,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetGccPackages.libgcc
         ];
-        nixSupport.cc-cflags = [
-          "-B${targetGccPackages.libgcc}/lib"
-          "-B${targetGccPackages.libssp}/lib"
+        nixSupport.cc-cflags = gccPackages.gccWithLibssp.nixSupport.cc-cflags ++ [
           "-B${targetGccPackages.libatomic}/lib"
         ];
       };
