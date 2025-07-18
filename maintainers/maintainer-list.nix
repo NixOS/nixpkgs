@@ -25985,6 +25985,11 @@
     githubId = 57819359;
     name = "Binh Nguyen";
   };
+  tuynia = {
+    github = "sovemi";
+    githubId = 220268909;
+    name = "Qylia Vorlaque";
+  };
   tv = {
     email = "tv@krebsco.de";
     github = "4z3";
