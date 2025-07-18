@@ -70,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       SuperSandro2000
       sciencentistguy
       _0x4A6F
+      rvdp
     ];
     mainProgram = "atuin";
   };
