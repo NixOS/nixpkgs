@@ -22,6 +22,12 @@ in
         description = "Open ports in the firewall for Homepage.";
       };
 
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
+        default = "localhost";
+        description = "Host name or address for Homepage to bind to.
+      };
+
       listenPort = lib.mkOption {
         type = lib.types.int;
         default = 8082;
@@ -225,6 +231,7 @@ in
       environment = {
         HOMEPAGE_CONFIG_DIR = "/etc/homepage-dashboard";
         NIXPKGS_HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
+        HOSTNAME = cfg.listenAddress;
         PORT = toString cfg.listenPort;
         LOG_TARGETS = "stdout";
         HOMEPAGE_ALLOWED_HOSTS = cfg.allowedHosts;
