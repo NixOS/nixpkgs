@@ -120,5 +120,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
+    # cross libgpg-error.dev has build tools compiled for host
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
