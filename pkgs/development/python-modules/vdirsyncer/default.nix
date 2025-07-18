@@ -80,12 +80,12 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
-  meta = with lib; {
+  meta = {
     description = "Synchronize calendars and contacts";
     homepage = "https://github.com/pimutils/vdirsyncer";
     changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stephen-huan ];
     mainProgram = "vdirsyncer";
   };
 }
