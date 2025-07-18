@@ -8,7 +8,7 @@
   atop,
   bmon,
   cmatrix,
-  pygments,
+  python3Packages,
   moreutils,
   util-linux,
   jp2a,
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
         atop
         bmon
         cmatrix
-        pygments
+        python3Packages.pygments
         moreutils
         util-linux
         man

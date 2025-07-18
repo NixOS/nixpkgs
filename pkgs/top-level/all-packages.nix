@@ -12502,10 +12502,6 @@ with pkgs;
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
-  hollywood = callPackage ../applications/misc/hollywood {
-    inherit (python3Packages) pygments;
-  };
-
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
