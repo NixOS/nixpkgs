@@ -74,7 +74,8 @@ buildGoModule (finalAttrs: {
       mkdir -p $out
       cp -r _output/* $out
       wrapProgram $out/bin/limactl \
-        --prefix PATH : ${lib.makeBinPath [ qemu ]}
+        --prefix PATH : ${lib.makeBinPath [ qemu ]}\
+        --argv0
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd limactl \
