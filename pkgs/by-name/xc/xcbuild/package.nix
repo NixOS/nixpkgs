@@ -93,6 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
         --replace-fail "/usr/bin/touch" "touch"
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/MakeDirectoryResolver.cpp \
+        --replace-fail "/bin/mkdir" "mkdir"
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/SymlinkResolver.cpp \
+        --replace-fail "/bin/ln" "ln"
+      substituteInPlace Libraries/pbxbuild/Sources/Tool/ScriptResolver.cpp \
+        --replace-fail "/bin/sh" "sh"
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Fix build on gcc-13 due to missing includes
