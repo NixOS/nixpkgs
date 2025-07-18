@@ -139,6 +139,9 @@ stdenv.mkDerivation {
     '';
 
   preBuild = ''
+    # two seconds after the default
+    # Error: --date 1980-01-01T00:00:00Z is out of the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
+    export SOURCE_DATE_EPOCH=315532802
     export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
     export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
   '';
