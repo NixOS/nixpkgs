@@ -17,6 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KmuJruzQRFunhwUGz3bHhXgtD2m4+5Vk0n7xhzVBMWs=";
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    SDL2
+  ];
+
   buildInputs = [
     SDL2
     xorg.libXcursor
