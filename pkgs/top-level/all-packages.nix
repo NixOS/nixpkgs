@@ -12518,8 +12518,6 @@ with pkgs;
 
   hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
 
-  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
-
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
