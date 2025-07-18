@@ -17120,6 +17120,8 @@ self: super: with self; {
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
+  stackprinter = callPackage ../development/python-modules/stackprinter { };
+
   stamina = callPackage ../development/python-modules/stamina { };
 
   standard-aifc =
