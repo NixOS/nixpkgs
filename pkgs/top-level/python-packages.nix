@@ -4549,6 +4549,8 @@ self: super: with self; {
 
   elasticsearchdsl = self.elasticsearch-dsl;
 
+  electrum-aionostr = callPackage ../development/python-modules/electrum-aionostr { };
+
   electrum-ecc = callPackage ../development/python-modules/electrum-ecc { };
 
   elegy = callPackage ../development/python-modules/elegy { };
