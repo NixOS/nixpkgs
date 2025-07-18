@@ -4192,6 +4192,8 @@ self: super: with self; {
 
   docling-ibm-models = callPackage ../development/python-modules/docling-ibm-models { };
 
+  docling-jobkit = callPackage ../development/python-modules/docling-jobkit { };
+
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
