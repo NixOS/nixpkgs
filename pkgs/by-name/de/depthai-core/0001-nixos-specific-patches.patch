@@ -1,0 +1,255 @@
+From 2a30d778794bf5a1e6ca1ddac231a214294dd0b0 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <petr.hodina@luxonis.com>
+Date: Wed, 28 May 2025 11:02:03 +0200
+Subject: [PATCH 1/3] nixos specific patches
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 91dddd03d..531553f27 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,6 +118,7 @@ set(PROJECT_EXPORT_GROUP "${PROJECT_NAME}Targets")
+ 
+ ## Check if cloned or sources
+ find_package(Git)
++find_package(foxglove-websocket)
+ if(GIT_FOUND)
+     execute_process(
+         COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+@@ -407,8 +408,8 @@ if(DEPTHAI_BUILD_ZOO_HELPER)
+         nlohmann_json::nlohmann_json
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+-        CURL::libcurl
+-        cpr::cpr
++        curl
++        cpr
+     )
+     target_compile_definitions(zoo_helper PRIVATE DEPTHAI_ENABLE_CURL)
+     add_executable(zoo_helper ${ZOO_HELPER_SOURCES})
+@@ -679,9 +680,6 @@ endif()
+ target_link_libraries(${TARGET_CORE_NAME}
+     PUBLIC
+         nlohmann_json::nlohmann_json
+-        libnop
+-    INTERFACE
+-        XLinkPublic
+     PRIVATE
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+@@ -692,10 +690,8 @@ target_link_libraries(${TARGET_CORE_NAME}
+         LibArchive::LibArchive
+         ZLIB::ZLIB
+         httplib::httplib
+-        semver::semver
+         magic_enum::magic_enum
+-        liblzma::liblzma
+-        lz4::lz4
++        lz4
+ )
+ 
+ if(DEPTHAI_ENABLE_MP4V2)
+@@ -713,9 +709,9 @@ if(DEPTHAI_ENABLE_PROTOBUF)
+ endif()
+ 
+ if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+-    target_link_libraries(${TARGET_CORE_NAME} PRIVATE
+-        foxglove-websocket::foxglove-websocket
+-    )
++	target_link_libraries(${TARGET_CORE_NAME} PRIVATE
++	    foxglove_websocket
++	)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_REMOTE_CONNECTION)
+ endif()
+ 
+@@ -727,8 +723,8 @@ endif()
+ 
+ if(DEPTHAI_ENABLE_CURL)
+     target_link_libraries(${TARGET_CORE_NAME} PRIVATE
+-        CURL::libcurl
+-        cpr::cpr
++        curl
++        cpr
+     )
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_CURL)
+ endif()
+@@ -750,12 +746,12 @@ target_compile_definitions(${TARGET_CORE_NAME}
+ if(DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_HAVE_LIBUSB_SUPPORT)
++    target_link_libraries(depthai-core PRIVATE PkgConfig::LIBUSB)
+     set(DEPTHAI_HAVE_LIBUSB_SUPPORT ON)
+ endif()
+ 
+ if(DEPTHAI_XTENSOR_SUPPORT)
+     target_compile_definitions(${TARGET_CORE_NAME} PUBLIC DEPTHAI_XTENSOR_SUPPORT)
+-    target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
+ endif()
+ 
+ # Specify available FW
+@@ -813,7 +809,7 @@ macro(add_runtime_dependencies depending_target dependency)
+     endif()
+ endmacro()
+ # Add libusb dll in build time
+-add_runtime_dependencies(${TARGET_CORE_NAME} usb-1.0)
++add_runtime_dependencies(${TARGET_CORE_NAME} PkgConfig::LIBUSB)
+ 
+ ########################
+ # OpenCV Support 2
+@@ -1048,7 +1044,7 @@ if(DEPTHAI_SANITIZE)
+     if(DEPTHAI_XLINK_LOCAL)
+         add_sanitizers(XLink)
+         if(XLINK_LIBUSB_LOCAL)
+-            add_sanitizers(usb-1.0)
++            add_sanitizers(PkgConfig::LIBUSB)
+         endif()
+     endif()
+ endif()
+@@ -1144,12 +1140,11 @@ include(CMakePackageConfigHelpers)
+ 
+ # Add additional targets to export group
+ if(NOT BUILD_SHARED_LIBS)
+-    list(APPEND targets_to_export ${DEPTHAI_RESOURCE_LIBRARY_NAME} cmrc-base XLink)
++    list(APPEND targets_to_export ${DEPTHAI_RESOURCE_LIBRARY_NAME} cmrc-base)
+     if(DEPTHAI_ENABLE_PROTOBUF)
+         list(APPEND targets_to_export messages)
+     endif()
+     if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+-        list(APPEND targets_to_export foxglove_websocket)
+     endif()
+ endif()
+ 
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 3a44e70f2..01d39912a 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -47,7 +47,6 @@ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+     endif()
+     # libarchive for firmware packages
+     find_package(LibArchive ${_QUIET}  REQUIRED)
+-    find_package(liblzma ${_QUIET} CONFIG REQUIRED)
+     # httplib for Gate communication
+     find_package(httplib ${_QUIET} CONFIG REQUIRED)
+     # ZLIB for compressing Apps
+@@ -168,24 +167,13 @@ set(BUILD_SHARED_LIBS OFF)
+ set(XLINK_ENABLE_LIBUSB ${DEPTHAI_ENABLE_LIBUSB} CACHE BOOL "Enable libusb" FORCE)
+ set(XLINK_INSTALL_PUBLIC_ONLY ON CACHE BOOL "Install only public headers" FORCE)
+ if(DEPTHAI_ENABLE_LIBUSB)
+-    find_package(usb-1.0 ${_QUIET} CONFIG REQUIRED)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(LIBUSB REQUIRED IMPORTED_TARGET libusb-1.0)
+ endif()
+ if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+     add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
+ else()
+-    FetchContent_Declare(
+-        XLink
+-        GIT_REPOSITORY https://github.com/luxonis/XLink.git
+-        GIT_TAG        87785828fabdb1718760bb0a044405d5bbfbb3a2
+-    )
+-
+-    FetchContent_MakeAvailable(
+-        XLink
+-    )
+ endif()
+-set(BUILD_SHARED_LIBS "${_BUILD_SHARED_LIBS_SAVED}")
+-unset(_BUILD_SHARED_LIBS_SAVED)
+-list(APPEND targets_to_export XLinkPublic)
+ 
+ # OpenCV 4 - (optional)
+ message("DEPTHAI_OPENCV_SUPPORT: ${DEPTHAI_OPENCV_SUPPORT}")
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 37894c5ea..e3e093b96 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -34,7 +34,7 @@ function(dai_add_example example_name example_src enable_test use_pcl)
+     elseif(NOT DEPTHAI_MERGED_TARGET)
+         set(DEPTHAI_TARGET depthai::opencv)
+     endif()
+-    target_link_libraries(${example_name} PRIVATE utility ${DEPTHAI_TARGET} ${OpenCV_LIBS} Threads::Threads)
++    target_link_libraries(${example_name} PRIVATE utility ${DEPTHAI_TARGET} ${OpenCV_LIBS} PkgConfig::LIBUSB Threads::Threads)
+     # Set compiler features (c++17), and disables extensions (g++17)
+     set_property(TARGET ${example_name} PROPERTY CXX_STANDARD 17)
+     set_property(TARGET ${example_name} PROPERTY CXX_STANDARD_REQUIRED ON)
+diff --git a/src/pipeline/node/NeuralNetwork.cpp b/src/pipeline/node/NeuralNetwork.cpp
+index 17dc177ea..30791dac4 100644
+--- a/src/pipeline/node/NeuralNetwork.cpp
++++ b/src/pipeline/node/NeuralNetwork.cpp
+@@ -1,6 +1,6 @@
+ #include "depthai/pipeline/node/NeuralNetwork.hpp"
+ 
+-#include <magic_enum.hpp>
++#include <magic_enum/magic_enum.hpp>
+ #include <stdexcept>
+ 
+ #include "common/ModelType.hpp"
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index b02900cd1..258d6e05b 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -21,6 +21,8 @@ set(test_env
+ 
+ include(CMakeParseArguments)
+ 
++include_directories(${CMAKE_SOURCE_DIR}/src)
++
+ # Function for adding new tests
+ function(dai_add_test test_name test_src)
+     # Parse arguments
+@@ -54,7 +56,7 @@ function(dai_add_test test_name test_src)
+     if(NOT DEPTHAI_MERGED_TARGET)
+         set(DEPTHAI_TARGET depthai::opencv)
+     endif()
+-    target_link_libraries(${test_name} PRIVATE ${DEPTHAI_TARGET} ${OpenCV_LIBS} Catch2::Catch2WithMain Threads::Threads spdlog::spdlog)
++    target_link_libraries(${test_name} PRIVATE ${DEPTHAI_TARGET} ${OpenCV_LIBS} PkgConfig::LIBUSB Catch2::Catch2WithMain Threads::Threads spdlog::spdlog)
+ 
+     # Add sanitizers for tests as well
+     if(COMMAND add_sanitizers)
+diff --git a/tests/integration/CMakeLists.txt b/tests/integration/CMakeLists.txt
+index 178f9fa0e..0a721a527 100644
+--- a/tests/integration/CMakeLists.txt
++++ b/tests/integration/CMakeLists.txt
+@@ -45,13 +45,13 @@ enable_testing()
+ # Create target dependant on depthai::core
+ add_executable(integration-test-core src/main.cpp)
+ target_link_libraries(integration-test-core PRIVATE depthai::core)
+-add_runtime_dependencies(integration-test-core usb-1.0)
++add_runtime_dependencies(integration-test-core PkgConfig::LIBUSB)
+ add_test(integration-test-core integration-test-core)
+ 
+ # Create target dependant on depthai::opencv (if available)
+ if(TARGET depthai::opencv)
+     add_executable(integration-test-opencv src/main.cpp)
+     target_link_libraries(integration-test-opencv PRIVATE depthai::opencv)
+-    add_runtime_dependencies(integration-test-opencv usb-1.0)
++    add_runtime_dependencies(integration-test-opencv PkgConfig::LIBUSB)
+     add_test(integration-test-opencv integration-test-opencv)
+ endif()
+diff --git a/tests/src/ondevice_tests/pipeline/node/neural_network_node_test.cpp b/tests/src/ondevice_tests/pipeline/node/neural_network_node_test.cpp
+index 3d43ef80a..b01026511 100644
+--- a/tests/src/ondevice_tests/pipeline/node/neural_network_node_test.cpp
++++ b/tests/src/ondevice_tests/pipeline/node/neural_network_node_test.cpp
+@@ -1,6 +1,6 @@
+ #include <catch2/catch_all.hpp>
+ #include <catch2/catch_test_macros.hpp>
+-#include <magic_enum.hpp>
++#include <magic_enum/magic_enum.hpp>
+ #include <opencv2/videoio.hpp>
+ 
+ #include "depthai/common/CameraBoardSocket.hpp"
+diff --git a/tests/src/onhost_tests/naming_test.cpp b/tests/src/onhost_tests/naming_test.cpp
+index d4ab66f33..19eb5615a 100644
+--- a/tests/src/onhost_tests/naming_test.cpp
++++ b/tests/src/onhost_tests/naming_test.cpp
+@@ -1,6 +1,7 @@
+ #include <catch2/catch_all.hpp>
+ 
+-#include "../../src/utility/EepromDataParser.hpp"
++#include <utility/Environment.hpp>
++#include <utility/EepromDataParser.hpp>
+ 
+ struct ProductDevice {
+     std::string oldProductName, productName, deviceName;
+-- 
+2.49.0
+
