@@ -6859,7 +6859,7 @@ with pkgs;
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
   autoconf271 = callPackage ../development/tools/misc/autoconf/2.71.nix { };
 
-  automake = automake116x;
+  automake = automake118x;
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
