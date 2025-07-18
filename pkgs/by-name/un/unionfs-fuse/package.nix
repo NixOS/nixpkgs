@@ -6,8 +6,12 @@
   cmake,
   pkg-config,
   fuse3,
+  fuse,
 }:
 
+let
+  fuseCustom = if stdenv.hostPlatform.isDarwin then fuse else fuse3;
+in
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
   version = "3.6";
@@ -29,14 +33,16 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuse3}/include/fuse'
+      --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuseCustom}/include/fuse'
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-  buildInputs = [ fuse3 ];
+  buildInputs = [
+    fuseCustom
+  ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:
@@ -54,7 +60,6 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = lib.licenses.bsd3;
