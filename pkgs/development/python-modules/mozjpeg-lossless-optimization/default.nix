@@ -10,8 +10,9 @@
   nix-update-script,
   cffi,
 }:
+
 buildPythonPackage rec {
-  pname = "mozjpeg_lossless_optimization";
+  pname = "mozjpeg-lossless-optimization";
   version = "1.3.0";
   pyproject = true;
 
