@@ -4,8 +4,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   electron,
-  nodejs_20,
-  nodePackages,
   makeDesktopItem,
   copyDesktopItems,
   runCommand,
@@ -28,7 +26,6 @@ in
 buildNpmPackage {
   pname = "sieve-editor-gui";
   version = "0.6.1-unstable-2025-03-12";
-  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "thsmi";
@@ -39,16 +36,10 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-w2i7XsTx3hlsh/JbvShaxvDyFGcBpL66lMy7KL2tnzM=";
 
-  nativeBuildInputs = [
-    electron
-    nodePackages.gulp
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ copyDesktopItems ];
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [ copyDesktopItems ];
 
-  dontNpmBuild = true;
-
-  buildPhase = ''
-    gulp -LLLL app:package
-  '';
+  npmBuildScript = "gulp";
+  npmBuildFlags = [ "app:package" ];
 
   installPhase = ''
     runHook preInstall
@@ -56,7 +47,10 @@ buildNpmPackage {
     ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       mv build/ $out
 
+      install -D $out/electron/resources/libs/icons/linux.png $out/share/icons/hicolor/64x64/apps/sieve.png
+
       makeWrapper ${lib.getExe electron} $out/bin/sieve-editor-gui \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/electron/resources/main_esm.js
     ''}
 
@@ -84,8 +78,12 @@ buildNpmPackage {
       name = "sieve-editor-gui";
       exec = "sieve-editor-gui";
       desktopName = "Sieve Editor";
-      icon = "sieve-editor-gui";
-      categories = [ "Utility" ];
+      icon = "sieve";
+      categories = [
+        "Utility"
+        "Email"
+      ];
+      comment = "Tool to Manage Sieve Message Filters";
     })
   ];
 
