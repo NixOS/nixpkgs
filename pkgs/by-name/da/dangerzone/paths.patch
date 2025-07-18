@@ -1,0 +1,21 @@
+diff --git a/dangerzone/util.py b/dangerzone/util.py
+index 6cae64377b..f626089f2f 100644
+--- a/dangerzone/util.py
++++ b/dangerzone/util.py
+@@ -26,7 +26,7 @@
+             app_path = bin_path.parent.parent
+             prefix = app_path / "Resources" / "share"
+         elif platform.system() == "Linux":
+-            prefix = Path(sys.prefix) / "share" / "dangerzone"
++            prefix = Path(__file__).parent.parent.parent.parent.parent / "share" / "dangerzone"
+         elif platform.system() == "Windows":
+             exe_path = Path(sys.executable)
+             dz_install_path = exe_path.parent
+@@ -54,6 +54,7 @@
+     #
+     # [1] https://tesseract-ocr.github.io/tessdoc/Installation.html
+     tessdata_dirs = [
++        get_resource_path("tessdata"),
+         Path("/usr/share/tessdata/"),  # on some Debian
+         Path("/usr/share/tesseract/tessdata/"),  # on Fedora
+         Path("/usr/share/tesseract-ocr/tessdata/"),  # ? (documented)
