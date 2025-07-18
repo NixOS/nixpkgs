@@ -144,11 +144,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-NghMNvsCRtgZjOTnnSYGn53KhP8ZY0hizkgEmI/+P6A=",
+    "hash": "sha256-2QWaPwqjgtzOoqGB91k2mKnMqhZ559rp4KJWQdkOjHE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.32.0",
+    "rev": "v4.37.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
