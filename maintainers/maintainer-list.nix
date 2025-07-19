@@ -23311,6 +23311,12 @@
     github = "silky";
     githubId = 129525;
   };
+  silmaril = {
+    name = "silmaril";
+    email = "nix@silmaril.de";
+    github = "silmaril42";
+    githubId = 31900904;
+  };
   sils = {
     name = "Silas Schöffel";
     email = "sils@sils.li";
@@ -23323,12 +23329,6 @@
     github = "silvanshade";
     githubId = 11022302;
     name = "silvanshade";
-  };
-  silmaril = {
-    name = "silmaril";
-    email = "nix@silmaril.de";
-    github = "silmaril42";
-    githubId = 31900904;
   };
   Silver-Golden = {
     name = "Brendan Golden";
