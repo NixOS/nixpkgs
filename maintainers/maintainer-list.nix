@@ -4206,6 +4206,12 @@
     githubId = 5241813;
     name = "Carter Sande";
   };
+  caryoscelus = {
+    email = "caryoscelus@gmx.com";
+    matrix = "@caryoscelus:matrix.org";
+    github = "caryoscelus";
+    githubId = 1758893;
+  };
   casaca = {
     name = "J McNutt";
     email = "jmacasac@hotmail.com";

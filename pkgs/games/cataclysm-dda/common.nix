@@ -4,6 +4,7 @@
   runtimeShell,
   pkg-config,
   gettext,
+  sqlite,
   ncurses,
   tiles,
   SDL2,
@@ -15,6 +16,7 @@
   zlib,
   debug,
   useXdgDir,
+  desktopFilePath,
 }:
 
 let
@@ -23,6 +25,7 @@ let
   commonDeps = [
     gettext
     zlib
+    sqlite
   ];
 
   cursesDeps = commonDeps ++ [ ncurses ];
@@ -36,10 +39,10 @@ let
     freetype
   ];
 
-  patchDesktopFile = ''
-    substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
+  patchDesktopFile = if desktopFilePath != "" then ''
+    substituteInPlace ${desktopFilePath} \
       --replace-fail "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
-  '';
+  '' else '''';
 
   installMacOSAppLauncher = ''
     app=$out/Applications/Cataclysm.app
