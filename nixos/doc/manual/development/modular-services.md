@@ -31,8 +31,8 @@ So note that the default value of `system.services.<name>` is not a complete ser
 <!-- Not using typical example syntax, because reading this is *not* optional, and should it should not be folded closed. -->
 ```nix
 {
-  system.services.httpd = {
-    imports = [ nixpkgs.modules.services.foo ];
+  system.services.my-service-instance = {
+    imports = [ pkgs.some-application.services.some-service-module ];
     foo.settings = {
       # ...
     };
