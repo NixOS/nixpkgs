@@ -175,8 +175,6 @@ in
 
       networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];
 
-      networking.resolvconf.package = pkgs.openresolv;
-
       environment.systemPackages = [ cfg.package ];
 
       systemd.services.resolvconf = {
