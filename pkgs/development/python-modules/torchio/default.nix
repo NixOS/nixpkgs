@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   deprecated,
@@ -29,18 +29,18 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.17";
+  version = "0.20.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-kZCbQGIkWmlXl25UviPrSDo0swCjWnvTTkBnxGI0Y7U=";
+    hash = "sha256-wxQKC+K010ARzxjh59/pAwDRDfukK1cvQ6uQoJUbWxM=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   dependencies = [
