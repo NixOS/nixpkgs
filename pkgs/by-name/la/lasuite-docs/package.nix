@@ -24,14 +24,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-docs";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-QAWwyFp9l+C0XfVu975zjiv61e/S2nYKkUSv4/p7gxw=";
+    hash = "sha256-uo49y+tJXdc8gfFIHSIEk0DEowMsHWA64IxlHpFHUTU=";
   };
 
   sourceRoot = "source/src/backend";
