@@ -3451,6 +3451,17 @@
     };
     meta.homepage = "https://github.com/tree-sitter-grammars/tree-sitter-xcompose";
   };
+  xit = buildGrammar {
+    language = "xit";
+    version = "2024-03-16";
+    src = fetchFromGitHub {
+      owner = "synaptiko";
+      repo = "tree-sitter-xit";
+      rev = "a4fad351bfa5efdcb379b40c36671413fbe9caac";
+      hash = "sha256-wTr7YyGnz/dWfA5oecRqxeR8Unoob6isGnQg4/iu+MI=";
+    };
+    meta.homepage = "https://github.com/synaptiko/tree-sitter-xit";
+  };
   xml = buildGrammar {
     language = "xml";
     version = "0.0.0+rev=87be254";
