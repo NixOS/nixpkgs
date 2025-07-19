@@ -35,8 +35,7 @@
   pkgsi686Linux,
   virtualgl,
   libglvnd,
-  automake111x,
-  autoconf,
+  autoreconfHook,
   # The below should only be non-null in a x86_64 system. On a i686
   # system the above nvidia_x11 and virtualgl will be the i686 packages.
   # TODO: Confusing. Perhaps use "SubArch" instead of i686?
@@ -124,10 +123,6 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # Don't use a special group, just reuse wheel.
-    substituteInPlace configure \
-      --replace 'CONF_GID="bumblebee"' 'CONF_GID="wheel"'
-
     # Apply configuration options
     substituteInPlace conf/xorg.conf.nvidia \
       --subst-var nvidiaDeviceOptions
@@ -148,8 +143,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     help2man
-    automake111x
-    autoconf
+    autoreconfHook
   ];
 
   # The order of LDPATH is very specific: First X11 then the host
@@ -162,6 +156,8 @@ stdenv.mkDerivation rec {
   configureFlags =
     [
       "--with-udev-rules=$out/lib/udev/rules.d"
+      # Don't use a special group, just reuse wheel.
+      "CONF_GID=wheel"
       # see #10282
       #"CONF_PRIMUS_LD_PATH=${primusLibs}"
     ]
