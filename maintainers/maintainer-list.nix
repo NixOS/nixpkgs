@@ -24520,6 +24520,12 @@
     githubId = 28858039;
     name = "Tuomas Mäkinen";
   };
+  taciturnaxolotl = {
+    email = "me@dunkirk.sh";
+    github = "taciturnaxolotl";
+    githubId = 92754843;
+    name = "Kieran Klukas";
+  };
   tadfisher = {
     email = "tadfisher@gmail.com";
     github = "tadfisher";
