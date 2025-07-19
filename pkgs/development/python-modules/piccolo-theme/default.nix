@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.24.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "piccolo_theme";
     inherit version;

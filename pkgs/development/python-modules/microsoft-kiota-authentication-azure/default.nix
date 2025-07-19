@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";

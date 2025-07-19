@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";

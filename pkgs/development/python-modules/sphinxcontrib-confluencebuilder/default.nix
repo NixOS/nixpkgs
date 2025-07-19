@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "sphinxcontrib_confluencebuilder";
     inherit version;

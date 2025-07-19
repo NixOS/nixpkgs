@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.17.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-ipp";

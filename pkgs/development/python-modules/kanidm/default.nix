@@ -27,8 +27,6 @@ buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "app-model";

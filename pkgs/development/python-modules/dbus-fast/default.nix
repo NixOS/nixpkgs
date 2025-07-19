@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.44.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";

@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry-core";

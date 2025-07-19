@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-forms";

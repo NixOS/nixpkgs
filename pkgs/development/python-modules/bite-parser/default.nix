@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.2.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "bite-parser";

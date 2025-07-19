@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "httpx-ws";

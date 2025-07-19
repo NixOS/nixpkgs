@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.0.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "cool-RR";
     repo = "python_toolbox";

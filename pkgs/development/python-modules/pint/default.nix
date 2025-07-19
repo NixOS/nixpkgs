@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "0.24.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";

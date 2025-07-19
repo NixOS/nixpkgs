@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.fve";

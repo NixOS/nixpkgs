@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "3.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";

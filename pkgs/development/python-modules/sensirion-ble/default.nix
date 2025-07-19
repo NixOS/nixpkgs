@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "akx";
     repo = "sensirion-ble";

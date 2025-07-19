@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.0.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mcaulifn";
     repo = "solcast";

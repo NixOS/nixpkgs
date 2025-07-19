@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "3.14.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";

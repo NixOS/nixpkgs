@@ -25,8 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-JAgorA2V+WHgqtwk8fEPjdwoog7Q3xk93aKSJ0mxHkQ=";
   };
 
-  disabled = pythonOlder "3.9";
-
   pythonRelaxDeps = [ "protobuf" ];
 
   build-system = [ poetry-core ];

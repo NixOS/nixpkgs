@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "44.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;

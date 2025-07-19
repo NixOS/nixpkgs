@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";

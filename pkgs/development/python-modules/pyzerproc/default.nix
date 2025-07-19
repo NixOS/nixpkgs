@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.4.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "emlove";
     repo = "pyzerproc";

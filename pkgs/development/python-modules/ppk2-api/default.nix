@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "IRNAS";
     repo = "ppk2-api-python";

@@ -25,8 +25,6 @@ buildPythonPackage rec {
     "dev"
   ];
 
-  disabled = pythonOlder "3.9";
-
   format = "other";
 
   src = fetchurl {

@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "3.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";

@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "4.27.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";

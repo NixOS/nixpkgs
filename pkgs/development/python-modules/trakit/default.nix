@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "0.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "trakit";

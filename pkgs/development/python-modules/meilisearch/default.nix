@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.36.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meilisearch-python";

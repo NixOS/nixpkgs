@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "22.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";

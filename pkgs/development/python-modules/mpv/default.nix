@@ -29,8 +29,6 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = pythonOlder "3.9";
-
   nativeBuildInputs = [ setuptools ];
 
   buildInputs = [ mpv ];

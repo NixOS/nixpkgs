@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "10.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "pytest_testinfra";
     inherit version;

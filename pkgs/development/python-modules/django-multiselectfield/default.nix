@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.1.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "django_multiselectfield";
     inherit version;

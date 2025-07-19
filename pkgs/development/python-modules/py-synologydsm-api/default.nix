@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.7.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-synologydsm-api";

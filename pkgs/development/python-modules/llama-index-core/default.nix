@@ -42,8 +42,6 @@ buildPythonPackage rec {
   version = "0.12.46";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";

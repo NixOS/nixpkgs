@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2025.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioecowitt";

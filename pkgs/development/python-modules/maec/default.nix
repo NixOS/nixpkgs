@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.1.0.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "MAECProject";
     repo = "python-maec";

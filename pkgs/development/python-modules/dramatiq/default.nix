@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";

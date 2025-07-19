@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.20";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "schemdraw";

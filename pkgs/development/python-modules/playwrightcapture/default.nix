@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "1.29.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";

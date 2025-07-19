@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "shmuelzon";
     repo = "pyituran";

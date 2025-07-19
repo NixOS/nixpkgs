@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "SasoPavlic";
     repo = "nianet";

@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "4.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;

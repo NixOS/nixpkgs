@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-gdacs";

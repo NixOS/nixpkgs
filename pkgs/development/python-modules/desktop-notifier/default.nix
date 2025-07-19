@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "6.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "desktop-notifier";

@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "9.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "python_cinderclient";
     inherit version;

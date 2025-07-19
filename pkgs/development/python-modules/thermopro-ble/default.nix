@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";

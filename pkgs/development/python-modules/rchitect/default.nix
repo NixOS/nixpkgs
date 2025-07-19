@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.4.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "rchitect";

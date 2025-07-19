@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.17.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";

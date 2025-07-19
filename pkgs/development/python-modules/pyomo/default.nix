@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "6.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";

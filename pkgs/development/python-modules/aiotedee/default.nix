@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aiotedee";

@@ -19,7 +19,6 @@ buildPythonPackage rec {
   pname = "pyogrio";
   version = "0.11.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";

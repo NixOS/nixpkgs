@@ -21,8 +21,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit version;
     pname = "scim2_client";

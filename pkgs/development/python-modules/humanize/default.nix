@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.12.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "python-humanize";
     repo = "humanize";

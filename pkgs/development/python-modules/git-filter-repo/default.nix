@@ -15,8 +15,6 @@ buildPythonPackage rec {
   docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "git_filter_repo";
     inherit version;

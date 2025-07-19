@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.0.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "vanstinator";
     repo = "melnor-bluetooth";

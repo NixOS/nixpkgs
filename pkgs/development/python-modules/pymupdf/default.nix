@@ -49,8 +49,6 @@ buildPythonPackage rec {
   version = "1.26.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";

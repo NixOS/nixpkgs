@@ -16,8 +16,6 @@ buildPythonPackage rec {
   format = "setuptools";
   prproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "casa_formats_io";
     inherit version;

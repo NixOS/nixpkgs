@@ -35,8 +35,6 @@ buildPythonPackage rec {
   version = "1.7.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "3.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   # the PyPi source distribution ships a broken setup.py, so use github instead
   src = fetchFromGitHub {
     owner = "darosior";

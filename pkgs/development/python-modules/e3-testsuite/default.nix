@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "27.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-testsuite";

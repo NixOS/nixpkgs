@@ -38,8 +38,6 @@ buildPythonPackage {
   inherit version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "xformers";
