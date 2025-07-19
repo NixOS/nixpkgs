@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   nix-update-script,
 
   cmake,
@@ -50,6 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix test_directory test on big-endian
+    # https://gitlab.com/libtiff/libtiff/-/issues/652
+    (fetchpatch {
+      name = "0001-Update-test_directory-not-to-fail-on-big-endian-machines";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/e8233c42f2e0a0ea7260c3cc7ebbaec8e5cb5e07.patch";
+      hash = "sha256-z5odG66j4U+WoUjTUuBIhcVUCGK1GYdvW/cVucawNZI=";
+    })
+
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
