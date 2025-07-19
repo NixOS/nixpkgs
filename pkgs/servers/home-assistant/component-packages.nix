@@ -1847,7 +1847,8 @@
       ];
     "free_mobile" =
       ps: with ps; [
-      ]; # missing inputs: freesms
+        freesms
+      ];
     "freebox" =
       ps: with ps; [
         freebox-api
