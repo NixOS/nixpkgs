@@ -12314,8 +12314,6 @@ with pkgs;
     ];
   };
 
-  firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
-
   floorp-unwrapped = import ../applications/networking/browsers/floorp {
     inherit
       stdenv
@@ -12515,8 +12513,6 @@ with pkgs;
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
   hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
-
-  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
@@ -12811,8 +12807,6 @@ with pkgs;
   klee = callPackage ../applications/science/logic/klee {
     llvmPackages = llvmPackages_13;
   };
-
-  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -14730,8 +14724,6 @@ with pkgs;
   freeciv_gtk = freeciv;
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
-
-  gcompris = kdePackages.callPackage ../games/gcompris { };
 
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;

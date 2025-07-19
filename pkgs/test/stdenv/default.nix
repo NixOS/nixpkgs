@@ -258,25 +258,6 @@ in
     stdenv' = bootStdenv;
   };
 
-  # Test compatibility with derivations using `env` as a regular variable.
-  test-env-derivation = bootStdenv.mkDerivation rec {
-    name = "test-env-derivation";
-    env = bootStdenv.mkDerivation {
-      name = "foo";
-      buildCommand = ''
-        mkdir "$out"
-        touch "$out/bar"
-      '';
-    };
-
-    passAsFile = [ "buildCommand" ];
-    buildCommand = ''
-      declare -p env
-      [[ $env == "${env}" ]]
-      touch "$out"
-    '';
-  };
-
   # Check that mkDerivation rejects MD5 hashes
   rejectedHashes = lib.recurseIntoAttrs {
     md5 =
