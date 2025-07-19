@@ -89,6 +89,8 @@ in
             include ${config.services.nginx.package}/conf/fastcgi_params;
             fastcgi_param GITWEB_CONFIG ${gitwebConfig.gitwebConfigFile};
             fastcgi_pass unix:/run/gitweb/gitweb.sock;
+            fastcgi_split_path_info ^(${cfg.location}/)(.*)$;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
           '';
         };
       };
