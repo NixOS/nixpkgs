@@ -73,6 +73,24 @@ let
       pages_parent_dir = cfg.settings.server.pages_parent_dir or cfg.package.src;
       keys_parent_dir = cfg.settings.server.keys_parent_dir or cfg.stateDir;
     };
+
+    "oauth.generic" = cfg.settings."oauth.generic" or { } // (if cfg.oauth.enable then {
+      client_id = cfg.oauth.clientId;
+      client_secret = "#oauth_client_secret#";
+      host = cfg.oauth.host;
+      display_name = cfg.oauth.displayName;
+      callback_proxy = cfg.oauth.callbackProxy;
+      callback_proxy_api = cfg.oauth.callbackProxyApi;
+      token_endpoint = cfg.oauth.tokenEndpoint;
+      inspect_endpoint = cfg.oauth.inspectEndpoint;
+      auth_endpoint = cfg.oauth.authEndpoint;
+      scope = lib.concatStringsSep " " cfg.oauth.scopes;
+      allow_disconnect = cfg.oauth.allowDisconnect;
+      map_user_id = cfg.oauth.mapUserId;
+      map_username = cfg.oauth.mapUsername;
+      map_display_name = cfg.oauth.mapDisplayName;
+      map_email = cfg.oauth.mapEmail;
+    } else { });
   };
 
   configFile = format.generate "config.ini" settings;
@@ -105,9 +123,15 @@ let
     db_pass=${
       optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"
     }
+    ${optionalString cfg.oauth.enable ''
+    oauth_client_secret="$(head -n1 ${cfg.oauth.clientSecretFile})"
+    ''}
 
     cp -f ${configFile} '${cfg.stateDir}/config.ini'
     sed -e "s,#dbpass#,$db_pass,g" -i '${cfg.stateDir}/config.ini'
+    ${optionalString cfg.oauth.enable ''
+    sed -e "s,#oauth_client_secret#,$oauth_client_secret,g" -i '${cfg.stateDir}/config.ini'
+    ''}
     chmod 440 '${cfg.stateDir}/config.ini'
 
     ${text}
@@ -276,6 +300,92 @@ in
           When {option}`services.writefreely.database.type` is set to
           `"mysql"`, this option will enable the MySQL service locally.
         '';
+      };
+    };
+
+    oauth = {
+      enable = lib.mkEnableOption "Enable generic OAuth authentication";
+      clientId = mkOption {
+        type = types.str;
+        description = "The client ID associated with WriteFreely in the OAuth provider application.";
+      };
+      clientSecretFile = mkOption {
+        type = types.str;
+        description = "The file to load the OAuth client secret from.";
+      };
+      host = mkOption {
+        type = types.str;
+        description = "The base url of the OAuth provider application, including the protocol.";
+        example = "https://example.com";
+      };
+      displayName = mkOption {
+        type = types.str;
+        description = "The human-readable name of the OAuth service that appears on the login button, will appear as `Log in with [display_name]`.";
+      };
+
+      callbackProxy = mkOption {
+        type = types.str;
+        default = "";
+        description = "The url of an inbound proxy that sits in front of the default `/oauth/callback/generic` endpoint. Use if you want the OAuth callback to be somewhere other than that generic location. Default is blank.";
+        example = "https://example.com/whatever/path";
+      };
+      callbackProxyApi = mkOption {
+        type = types.str;
+        default = "";
+        description = "The url of an outbound proxy to send your OAuth requests through. Default is blank.";
+        example = "https://my-proxy.example.com";
+      };
+
+      tokenEndpoint = mkOption {
+        type = types.str;
+        description = "The API endpoint of the OAuth provider implementation to obtain an access token by presenting an authorization grant or refresh token. This is a fragment of a url, appended to host as described above.";
+        example = "/oauth/token";
+      };
+      inspectEndpoint = mkOption {
+        type = types.str;
+        description = "The API endpoint of the OAuth provider that returns basic user info given their authentication information. This is a fragment of a url, appended to host as described above.";
+        example = "/oauth/userinfo";
+      };
+      authEndpoint = mkOption {
+        type = types.str;
+        description = "The API endpoint of the OAuth provider that returns an authorization grant. This is a fragment of a url, appended to host as described above.";
+        example = "public";
+      };
+
+      scopes = mkOption {
+        type = types.listOf types.str;
+        default = [ "read_user" ];
+        description = "A scope or set of scopes required by some OAuth providers. This will usually be blank in this config file, and is set to `read_user` by default.";
+      };
+      allowDisconnect = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether or not an individual user is allowed to disconnect this OAuth provider from their account.";
+      };
+
+      mapUserId = mkOption {
+        type = types.str;
+        default = "";
+        defaultText = "<none>";
+        description = "Use this User ID key in the provider's user info, instead of the default key (user_id).";
+      };
+      mapUsername = mkOption {
+        type = types.str;
+        default = "";
+        defaultText = "<none>";
+        description = "Use this Username key in the provider's user info, instead of the default key (username)";
+      };
+      mapDisplayName = mkOption {
+        type = types.str;
+        default = "";
+        defaultText = "<none>";
+        description = "Use this Display Name key in the provider's user info, instead of the default key (*none*)";
+      };
+      mapEmail = mkOption {
+        type = types.str;
+        default = "";
+        defaultText = "<none>";
+        description = "Use this Email key in the provider's user info, instead of the default key (email)";
       };
     };
 
