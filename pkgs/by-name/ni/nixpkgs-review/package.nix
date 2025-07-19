@@ -6,6 +6,8 @@
   installShellFiles,
   bubblewrap,
   nix-output-monitor,
+  delta,
+  glow,
   cacert,
   git,
   nix,
@@ -14,6 +16,8 @@
   withAutocomplete ? true,
   withSandboxSupport ? false,
   withNom ? false,
+  withDelta ? false,
+  withGlow ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -57,7 +61,9 @@ python3Packages.buildPythonApplication rec {
           git
         ]
         ++ lib.optional withSandboxSupport bubblewrap
-        ++ lib.optional withNom nix-output-monitor;
+        ++ lib.optional withNom nix-output-monitor
+        ++ lib.optional withDelta delta
+        ++ lib.optional withGlow glow;
     in
     [
       "--prefix PATH : ${lib.makeBinPath binPath}"
