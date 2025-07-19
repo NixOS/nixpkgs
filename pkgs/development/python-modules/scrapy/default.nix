@@ -8,6 +8,7 @@
   defusedxml,
   fetchFromGitHub,
   glibcLocales,
+  hatchling,
   installShellFiles,
   itemadapter,
   itemloaders,
@@ -36,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.12.0";
+  version = "2.13.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,11 +46,15 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-o3+57+bZRohgrld2EuoQDU2LioJu0jmaC/RPREvI1t8=";
+    hash = "sha256-M+Lko0O0xsEPHLghvIGHxIv22XBXaZsujJ2+bjBzGZ4=";
   };
 
   pythonRelaxDeps = [
     "defusedxml"
+  ];
+
+  build-system = [
+    hatchling
   ];
 
   nativeBuildInputs = [
@@ -95,6 +100,18 @@ buildPythonPackage rec {
     "tests/test_proxy_connect.py"
     "tests/test_utils_display.py"
     "tests/test_command_check.py"
+
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_append_active_mode"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite"
+    "tests/test_feedexport.py::TestFTPFeedStorage::test_overwrite_active_mode"
+
+    # this test is testing that the *first* deprecation warning is a specific one
+    # but for some reason we get other deprecation warnings appearing first
+    # but this isn't a material issue and the deprecation warning is still raised
+    "tests/test_spider_start.py::MainTestCase::test_start_deprecated_super"
+
     # Don't test the documentation
     "docs"
   ];

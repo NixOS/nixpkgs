@@ -143,17 +143,22 @@ buildPythonPackage {
     pytest-xdist
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # The following tests are broken on aarch64-darwin with newer compilers and library versions.
-    # See https://github.com/scipy/scipy/issues/18308
-    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
-    "test_dst4_definition_ortho"
-    "test_load_mat4_le"
-    "hyp2f1_test_case47"
-    "hyp2f1_test_case3"
-    "test_uint64_max"
-    "test_large_m4" # https://github.com/scipy/scipy/issues/22466
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+      # See https://github.com/scipy/scipy/issues/18308
+      "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+      "test_dst4_definition_ortho"
+      "test_load_mat4_le"
+      "hyp2f1_test_case47"
+      "hyp2f1_test_case3"
+      "test_uint64_max"
+      "test_large_m4" # https://github.com/scipy/scipy/issues/22466
+    ]
+    ++ lib.optionals (python.isPy311) [
+      # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
+      "test_funcs"
+    ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
