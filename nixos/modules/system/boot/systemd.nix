@@ -24,6 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
+    attrsToSection
     ;
 
   upstreamSystemUnits = [
@@ -423,6 +424,29 @@ in
       '';
     };
 
+    settings.Manager = mkOption {
+      default = { };
+      defaultText = lib.literalExpression ''
+        {
+          DefaultIOAccounting = true;
+          DefaultIPAccounting = true;
+        }
+      '';
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
+      description = ''
+        Options for the global systemd service manager. See {manpage}`systemd-system.conf(5)` man page
+        for available options.
+      '';
+    };
+
     sleep.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -664,6 +688,7 @@ in
           ''}
 
           ${cfg.extraConfig}
+          ${attrsToSection cfg.settings.Manager}
         '';
 
         "systemd/sleep.conf".text = ''
