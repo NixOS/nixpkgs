@@ -69,6 +69,17 @@ in
         '';
       };
 
+      perUser = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Run the garbage collector for each user.
+          This is only useful when using `--delete-old` or `--delete-older-than`.
+
+          This option can not be used with empty `options`.
+        '';
+      };
+
     };
 
   };
@@ -80,6 +91,11 @@ in
       {
         assertion = cfg.automatic -> config.nix.enable;
         message = ''nix.gc.automatic requires nix.enable'';
+      }
+
+      {
+        assertion = cfg.perUser -> cfg.options != "";
+        message = ''nix.gc.perUser can not be used with empty nix.gc.options'';
       }
     ];
 
@@ -93,6 +109,19 @@ in
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {
+      timerConfig = {
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+        Persistent = cfg.persistent;
+      };
+    };
+
+    systemd.user.services.nix-gc = lib.mkIf (config.nix.enable && cfg.perUser) {
+      description = "Nix Garbage Collector";
+      script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      startAt = optional cfg.automatic cfg.dates;
+    };
+
+    systemd.user.timers.nix-gc = lib.mkIf (cfg.automatic && cfg.perUser) {
       timerConfig = {
         RandomizedDelaySec = cfg.randomizedDelaySec;
         Persistent = cfg.persistent;
