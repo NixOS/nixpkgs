@@ -66,8 +66,8 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "d2a13712303498963395318a4eb42872e66aead7";
-    hash = "sha256-c8FL37kG0uo7o0Zp71WjCl7FD5BnVgqUCCXXX9gI0lg=";
+    rev = "fbf6b703dc93d17d75fa3664c5aa2c7873ebaf06";
+    hash = "sha256-/EsCItNay8Nn3g8cgaJ0fpNRAG9HVtG9YcaBGUneGIA=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -78,7 +78,7 @@ let
     hash = "sha256-gKEQc2RKpVp39RmuZbIeIXAwiAXDHGnLXF6VQuJtnRA=";
   };
 
-  version = "20.0.0";
+  version = "21.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-JFPdKraCU+xRkBTAHyY4QGnBVlOjQ1P5+gq9uxyqJtk=";
+    hash = "sha256-6RFa4GTNgjsHSX5LYp4t6p8ynmmr7Nuotj9C7mTmvlM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -107,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v2.0.6";
-    hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
+    rev = "v2.2.4";
+    hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
   };
 
   ARROW_XSIMD_URL = fetchFromGitHub {
