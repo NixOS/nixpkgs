@@ -8147,6 +8147,12 @@
     githubId = 1211003;
     name = "Fredrik Bergroth";
   };
+  fbettag = {
+    email = "franz@bett.ag";
+    github = "fbettag";
+    githubId = 79918;
+    name = "Franz Bettag";
+  };
   fbrs = {
     email = "yuuki@protonmail.com";
     github = "cideM";
