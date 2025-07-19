@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.24.0-unstable-2025-06-02";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
-    rev = "9c78f3b8d10f81b97fbb2181c9333323d6375480";
-    hash = "sha256-jPqTraGrYFXBlci4Zaleyp/NTQhvuI39tYWRckjnV2E=";
+    rev = "e07f6210ac461f65f0ad05ae57a491711d021c87";
+    hash = "sha256-UJS27nLyV46wKvWWuFFoEOvCYKKNrwerl4uSBTt+2hE=";
     fetchSubmodules = true;
   };
 
