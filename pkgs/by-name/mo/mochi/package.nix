@@ -10,7 +10,7 @@
 
 let
   pname = "mochi";
-  version = "1.18.11";
+  version = "1.19.0";
   appName = "Mochi";
 
   linux = appimageTools.wrapType2 rec {
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-NQ591KtWQz8hlXPhV83JEwGm+Au26PIop5KVzsyZKp4=";
+      hash = "";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -43,7 +43,7 @@ let
 
     src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.dmg";
-      hash = "sha256-Bv0EFBZVZMxHCvdDHfBdL267cwyeciBqZhrKgppxtm4=";
+      hash = "sha256-2y9gwO+l2Hs5+Le87vROYb7Nq2G/gYu0DUHJFfQ+Imw=";
     };
 
     sourceRoot = "${appName}.app";
