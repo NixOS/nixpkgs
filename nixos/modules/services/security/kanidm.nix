@@ -366,11 +366,6 @@ in
         freeformType = settingsFormat.type;
 
         options = {
-          pam_allowed_login_groups = mkOption {
-            description = "Kanidm groups that are allowed to login using PAM.";
-            example = "my_pam_group";
-            type = types.listOf types.str;
-          };
           hsm_pin_path = mkOption {
             description = "Path to a HSM pin.";
             default = "/var/cache/kanidm-unixd/hsm-pin";
@@ -380,8 +375,9 @@ in
       };
       description = ''
         Configure Kanidm unix daemon.
-        See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
-        and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
+        See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon),
+        [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
+        and the [source](https://github.com/kanidm/kanidm/blob/master/unix_integration/resolver/src/unix_config.rs)
         for possible values.
       '';
     };
