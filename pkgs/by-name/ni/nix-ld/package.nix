@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     EOF
   '';
 
-  passthru.tests = nixosTests.nix-ld;
+  passthru.tests = { inherit (nixosTests) nix-ld nix-ld-32bit; };
 
   meta = {
     description = "Run unpatched dynamic binaries on NixOS";
