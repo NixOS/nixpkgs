@@ -380,6 +380,14 @@ rec {
         extraPrefix = "src/s3select/";
       })
 
+      (fetchpatch2 {
+        name = "ceph-s3select-arrow-20-compat.patch";
+        url = "https://github.com/ceph/s3select/commit/58fe02f8c93cd7f4102b435ee7233aa555c7c305.patch";
+        hash = "sha256-RBNBZW8esbauDXM92y/pZOjDJCcvUkAeE+G8OJj84G0=";
+        stripLen = 1;
+        extraPrefix = "src/s3select/";
+      })
+
       ./boost-1.85.patch
 
       (fetchpatch2 {
