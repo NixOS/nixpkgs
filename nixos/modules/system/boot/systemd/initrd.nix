@@ -140,6 +140,12 @@ in
       It only saved ~1MiB of initramfs size, but caused a few issues
       like unloadable kernel modules.
     '')
+    (lib.mkRemovedOptionModule [
+      "boot"
+      "initrd"
+      "systemd"
+      "extraConfig"
+    ] "Use boot.initrd.systemd.settings.Manager instead.")
   ];
 
   options.boot.initrd.systemd = {
@@ -159,16 +165,6 @@ in
       defaultText = lib.literalExpression "config.systemd.package";
       description = ''
         The systemd package to use.
-      '';
-    };
-
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
-      description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
-        for available options.
       '';
     };
 
@@ -475,7 +471,6 @@ in
           "/etc/systemd/system.conf".text = ''
             [Manager]
             DefaultEnvironment=PATH=/bin:/sbin
-            ${cfg.extraConfig}
             ${attrsToSection cfg.settings.Manager}
             ManagerEnvironment=${
               lib.concatStringsSep " " (
