@@ -6,7 +6,6 @@
   libiconv,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   rustc,
   rustPlatform,
   stdenv,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "pyheck";
   version = "0.1.5";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kevinheavey";

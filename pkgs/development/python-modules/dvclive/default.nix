@@ -20,7 +20,6 @@
   pillow,
   psutil,
   pynvml,
-  pythonOlder,
   ruamel-yaml,
   scikit-learn,
   scmrepo,
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   pname = "dvclive";
   version = "3.48.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";

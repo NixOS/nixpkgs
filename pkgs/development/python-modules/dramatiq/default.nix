@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   gevent,
   pika,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "dramatiq";
   version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bogdanp";

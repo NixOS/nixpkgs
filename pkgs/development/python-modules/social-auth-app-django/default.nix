@@ -5,15 +5,12 @@
   social-auth-core,
   django,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "social-auth-app-django";
   version = "5.4.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";

@@ -5,15 +5,12 @@
   flake8,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flake8-length";
   version = "0.3.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

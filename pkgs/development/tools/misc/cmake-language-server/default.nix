@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonApplication,
-  pythonOlder,
   fetchFromGitHub,
   pdm-backend,
   cmake-format,
@@ -15,8 +14,6 @@ buildPythonApplication rec {
   pname = "cmake-language-server";
   version = "0.1.11";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "regen100";

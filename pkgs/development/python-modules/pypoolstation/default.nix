@@ -6,15 +6,12 @@
   fetchPypi,
   importlib-metadata,
   poetry-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pypoolstation";
   version = "0.5.7";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

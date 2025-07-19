@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   python-dotenv,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   httpx,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "msgraph-core";
   version = "1.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";

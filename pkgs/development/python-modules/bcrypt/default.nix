@@ -7,7 +7,6 @@
   setuptools,
   setuptoolsRustBuildHook,
   fetchPypi,
-  pythonOlder,
   pytestCheckHook,
   libiconv,
   stdenv,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "bcrypt";
   version = "4.3.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

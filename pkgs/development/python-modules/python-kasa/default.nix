@@ -16,7 +16,6 @@
   pytest-socket,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   rich,
   voluptuous,
 }:
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "python-kasa";
   version = "0.10.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-kasa";

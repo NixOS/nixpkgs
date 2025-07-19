@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "python-homewizard-energy";
   version = "9.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "DCSBL";

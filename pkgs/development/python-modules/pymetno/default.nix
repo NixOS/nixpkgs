@@ -5,15 +5,12 @@
   aiohttp,
   async-timeout,
   xmltodict,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymetno";
   version = "0.13.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

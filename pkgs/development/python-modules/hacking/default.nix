@@ -5,7 +5,6 @@
   fetchPypi,
   flake8,
   pbr,
-  pythonOlder,
   setuptools,
   stestr,
   testscenarios,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "hacking";
   version = "7.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

@@ -5,15 +5,12 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cdn";
   version = "13.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

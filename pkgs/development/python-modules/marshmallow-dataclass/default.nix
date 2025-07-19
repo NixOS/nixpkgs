@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "8.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";

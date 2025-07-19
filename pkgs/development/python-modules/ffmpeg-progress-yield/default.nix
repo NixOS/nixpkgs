@@ -5,7 +5,6 @@
   setuptools,
   tqdm,
   pytestCheckHook,
-  pythonOlder,
   ffmpeg,
   procps,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
   version = "0.11.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slhck";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   cyrus_sasl,
@@ -15,8 +14,6 @@
 buildPythonPackage rec {
   pname = "bonsai";
   version = "1.5.3";
-
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

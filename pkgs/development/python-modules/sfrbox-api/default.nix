@@ -9,7 +9,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   respx,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "sfrbox-api";
   version = "0.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";

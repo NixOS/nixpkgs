@@ -5,7 +5,6 @@
   fetchpatch2,
   pytestCheckHook,
   sphinxHook,
-  pythonOlder,
   libsodium,
   cffi,
   hypothesis,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
     "doc"
   ];
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;

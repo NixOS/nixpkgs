@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flask,
   pymongo,
-  pythonOlder,
   setuptools,
   simplejson,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "eve";
   version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pyeve";

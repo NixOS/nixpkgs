@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   opencv-python,
   torch,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "invisible-watermark";
   version = "0.2.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ShieldMnt";
@@ -57,11 +55,11 @@ buildPythonPackage rec {
       ];
       testCases = builtins.concatMap (method: [
         {
-          method = method;
+          inherit method;
           withOnnx = true;
         }
         {
-          method = method;
+          inherit method;
           withOnnx = false;
         }
       ]) methods;

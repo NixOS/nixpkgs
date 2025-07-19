@@ -10,7 +10,6 @@
   pandas,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "lmfit";
   version = "1.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

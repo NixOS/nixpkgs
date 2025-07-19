@@ -6,15 +6,12 @@
   poetry-core,
   prompt-toolkit,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "inquirerpy";
   version = "0.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kazhala";

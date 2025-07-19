@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   poetry-dynamic-versioning,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   version = "3.1.4";
 
   format = "pyproject";
-  # < 3.10 requires get-annotations which isn't packaged yet
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "eigenein";

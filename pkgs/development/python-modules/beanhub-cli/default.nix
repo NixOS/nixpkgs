@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
 
   # dependencies
@@ -31,7 +30,6 @@
   tomli,
 
   # tests
-  pytest,
   pytest-asyncio,
   pytest-httpx,
   pytest-mock,
@@ -41,8 +39,6 @@ buildPythonPackage rec {
   pname = "beanhub-cli";
   version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

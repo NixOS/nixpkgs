@@ -5,15 +5,12 @@
   morphys,
   pytestCheckHook,
   python-baseconv,
-  pythonOlder,
   six,
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
   version = "1.0.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

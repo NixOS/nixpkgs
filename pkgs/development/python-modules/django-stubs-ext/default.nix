@@ -5,7 +5,6 @@
   fetchPypi,
   oracledb,
   pytestCheckHook,
-  pythonOlder,
   redis,
   setuptools,
   typing-extensions,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "django-stubs-ext";
   version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     pname = "django_stubs_ext";

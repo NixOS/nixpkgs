@@ -4,17 +4,13 @@
   fetchPypi,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-stream";
   version = "3.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jaraco_stream";

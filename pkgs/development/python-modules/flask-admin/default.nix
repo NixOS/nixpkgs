@@ -13,7 +13,6 @@
   psycopg2,
   pymongo,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   shapely,
   sqlalchemy,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "flask-admin";
   version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "flask-admin";

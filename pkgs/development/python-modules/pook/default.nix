@@ -9,7 +9,6 @@
   pytest-httpbin,
   pytest-pook,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
 }:
 
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pook";
   version = "2.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";

@@ -7,7 +7,6 @@
   dissect-target,
   fetchFromGitHub,
   pycryptodome,
-  pythonOlder,
   rich,
   setuptools-scm,
   setuptools,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "dissect-fve";
   version = "4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

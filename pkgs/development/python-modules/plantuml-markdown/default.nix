@@ -9,15 +9,12 @@
   runCommand,
   writeText,
   plantuml-markdown,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "plantuml-markdown";
   version = "3.11.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikitex70";

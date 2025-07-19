@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
   pybind11,
   numpy,
@@ -13,10 +12,8 @@
 }:
 buildPythonPackage {
   pname = "highspy";
-  version = highs.version;
+  inherit (highs) version;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   inherit (highs) src;
 

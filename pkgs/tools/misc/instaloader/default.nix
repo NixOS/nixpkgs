@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   sphinx,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "instaloader";
   version = "4.14.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "instaloader";

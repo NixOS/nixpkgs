@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonAtLeast,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -48,8 +47,6 @@ buildPythonPackage rec {
   version = "4.2.23";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
@@ -83,8 +80,8 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals withGdal [
       (replaceVars ./django_4_set_geos_gdal_lib.patch {
-        geos = geos;
-        gdal = gdal;
+        inherit geos;
+        inherit gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;
       })
     ];

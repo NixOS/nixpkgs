@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   flask,
-  pythonOlder,
   setuptools,
   webob,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "bugsnag";
   version = "4.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

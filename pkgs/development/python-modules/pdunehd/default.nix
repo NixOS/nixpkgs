@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   requests,
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "pdunehd";
   version = "1.3.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "valentinalexeev";

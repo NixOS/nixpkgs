@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pefile,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "autoit-ripper";
   version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

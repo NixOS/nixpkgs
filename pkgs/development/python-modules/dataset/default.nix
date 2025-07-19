@@ -4,7 +4,6 @@
   banal,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sqlalchemy_1_4,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "dataset";
   version = "1.6.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

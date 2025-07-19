@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "regex";
   version = "2024.11.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

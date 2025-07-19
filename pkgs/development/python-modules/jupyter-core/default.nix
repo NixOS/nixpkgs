@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   platformdirs,
@@ -16,7 +15,6 @@
 buildPythonPackage rec {
   pname = "jupyter-core";
   version = "5.8.1";
-  disabled = pythonOlder "3.7";
 
   pyproject = true;
 

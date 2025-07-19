@@ -8,7 +8,6 @@
   pylsqpack,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   service-identity,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aioquic";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

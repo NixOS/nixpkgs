@@ -12,7 +12,6 @@
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
-  pythonOlder,
   rich,
   ruamel-yaml,
   scmrepo,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "gto";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";

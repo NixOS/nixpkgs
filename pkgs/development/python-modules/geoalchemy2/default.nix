@@ -9,15 +9,12 @@
   sqlalchemy,
   alembic,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
   version = "0.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geoalchemy";

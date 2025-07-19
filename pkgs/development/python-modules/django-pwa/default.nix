@@ -6,15 +6,12 @@
   hatch-vcs,
   hatchling,
   python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-pwa";
   version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "silviolleite";

@@ -6,7 +6,6 @@
   numpy,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   pyvips,
   scipy,
   setuptools-scm,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "scooby";
   version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";

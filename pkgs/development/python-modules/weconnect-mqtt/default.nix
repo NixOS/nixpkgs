@@ -6,7 +6,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   weconnect,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "weconnect-mqtt";
   version = "0.49.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tillsteinbach";

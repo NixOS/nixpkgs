@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
   openssl,
   pkg-config,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:
@@ -15,8 +13,6 @@ buildPythonPackage rec {
   pname = "typst";
   version = "0.13.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "messense";

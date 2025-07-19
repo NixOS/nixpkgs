@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   tree-sitter-python,
   tree-sitter-rust,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "tree-sitter";
   version = "0.24.0-unstable-2025-06-02";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";

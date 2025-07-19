@@ -6,7 +6,6 @@
   pybrowsers,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
   requests,
   selenium,
   setuptools,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "webdriver-manager";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SergeyPirogov";

@@ -7,7 +7,6 @@
   pylibmc,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-scm,
   toml,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pytest-services";
   version = "2.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";

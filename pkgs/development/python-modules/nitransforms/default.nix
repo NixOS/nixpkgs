@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   h5py,
   nibabel,
   numpy,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "nitransforms";
   version = "24.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

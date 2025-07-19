@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   ninja,
   numpy,
   packaging,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "monai";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";

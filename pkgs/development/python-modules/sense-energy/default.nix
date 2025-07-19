@@ -8,7 +8,6 @@
   async-timeout,
   kasa-crypt,
   orjson,
-  pythonOlder,
   requests,
   websocket-client,
   websockets,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "sense-energy";
   version = "0.13.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "scottbonline";

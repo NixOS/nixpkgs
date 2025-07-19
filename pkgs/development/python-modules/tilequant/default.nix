@@ -5,7 +5,6 @@
   fetchPypi,
   ordered-set,
   pillow,
-  pythonOlder,
   setuptools,
   setuptools-dso,
   sortedcollections,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "tilequant";
   version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

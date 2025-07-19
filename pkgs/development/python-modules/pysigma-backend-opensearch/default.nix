@@ -7,7 +7,6 @@
   pysigma-backend-elasticsearch,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
   version = "1.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";

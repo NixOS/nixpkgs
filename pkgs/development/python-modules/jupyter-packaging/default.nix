@@ -5,7 +5,6 @@
   fetchpatch,
   deprecation,
   hatchling,
-  pythonOlder,
   packaging,
   pytestCheckHook,
   pytest-timeout,
@@ -16,7 +15,6 @@
 buildPythonPackage rec {
   pname = "jupyter-packaging";
   version = "0.12.3";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {

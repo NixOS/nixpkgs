@@ -11,7 +11,6 @@
   packageurl-python,
   pbr,
   prettytable,
-  pythonOlder,
   pyyaml,
   regex,
   requests,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "tern";
   version = "2.12.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

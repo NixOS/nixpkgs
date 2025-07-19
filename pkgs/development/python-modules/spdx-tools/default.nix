@@ -7,7 +7,6 @@
   license-expression,
   ply,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdflib,
   semantic-version,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "spdx-tools";
   version = "0.8.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "spdx";

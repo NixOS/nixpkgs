@@ -7,7 +7,6 @@
   indexed-zstd,
   libarchive-c,
   python-xz,
-  pythonOlder,
   rapidgzip,
   rarfile,
   ratarmountcore,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ratarmount";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

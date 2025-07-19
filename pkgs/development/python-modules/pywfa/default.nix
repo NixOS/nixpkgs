@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cython,
   setuptools,
   wheel,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pywfa";
   version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kcleal";

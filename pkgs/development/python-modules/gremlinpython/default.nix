@@ -8,7 +8,6 @@
   isodate,
   nest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   mock,
   pyhamcrest,
   pyyaml,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "gremlinpython";
   version = "3.7.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "apache";

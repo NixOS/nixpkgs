@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   numpy,
   poetry-core,
   pyyaml,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "gguf";
   version = "0.17.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

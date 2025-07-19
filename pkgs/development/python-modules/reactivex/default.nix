@@ -5,7 +5,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "reactivex";
   version = "4.0.4";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ReactiveX";

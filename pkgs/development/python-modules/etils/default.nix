@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   flit-core,
 
   # tests
@@ -38,8 +37,6 @@ buildPythonPackage rec {
   pname = "etils";
   version = "1.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;

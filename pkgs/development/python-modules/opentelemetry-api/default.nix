@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   deprecated,
   hatchling,
@@ -16,8 +15,6 @@ let
     pname = "opentelemetry-api";
     version = "1.31.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     # to avoid breakage, every package in opentelemetry-python must inherit this version, src, and meta
     src = fetchFromGitHub {

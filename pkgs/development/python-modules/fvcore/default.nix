@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   # build inputs
   numpy,
   yacs,
@@ -27,8 +26,6 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-8vsLuQVyrmUcEceOIEk+0ZsiQFUKfku7LW3oe90DeGA=";
@@ -52,7 +49,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fvcore" ];
 
-  optional-dependencies = optional-dependencies;
+  inherit optional-dependencies;
 
   meta = with lib; {
     description = "Collection of common code that's shared among different research projects in FAIR computer vision team";

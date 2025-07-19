@@ -6,7 +6,6 @@
   tree-sitter,
   symlinkJoin,
   writeTextDir,
-  pythonOlder,
   # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
   name,
   grammarDrv,
@@ -159,8 +158,6 @@ buildPythonPackage {
     # https://github.com/NixOS/nixpkgs/issues/255262
     rm -r ${snakeCaseName}
   '';
-
-  disabled = pythonOlder "3.8";
 
   nativeCheckInputs = [
     tree-sitter

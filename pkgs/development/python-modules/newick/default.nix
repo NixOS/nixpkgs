@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "newick";
   version = "1.9.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dlce-eva";

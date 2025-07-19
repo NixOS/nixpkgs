@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   platformdirs,
   bokeh,
   buildPythonPackage,
@@ -18,7 +17,6 @@
   pyarrow,
   pytestCheckHook,
   python-snappy,
-  pythonOlder,
   pythonAtLeast,
   pyyaml,
   networkx,
@@ -32,8 +30,6 @@ buildPythonPackage rec {
   pname = "intake";
   version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "intake";

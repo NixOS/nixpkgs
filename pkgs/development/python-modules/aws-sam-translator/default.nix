@@ -10,7 +10,6 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   typing-extensions,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "aws-sam-translator";
   version = "1.95.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";

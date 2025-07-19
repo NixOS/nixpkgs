@@ -8,7 +8,6 @@
   pkg-config, # from pkgs
   pkgconfig, # from pythonPackages
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   vips,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyvips";
   version = "2.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libvips";

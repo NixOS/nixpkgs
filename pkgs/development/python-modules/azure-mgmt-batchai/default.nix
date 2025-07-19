@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "7.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "azure_mgmt_batchai";

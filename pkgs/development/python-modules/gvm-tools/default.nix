@@ -6,15 +6,12 @@
   pytestCheckHook,
   python-gvm,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "gvm-tools";
   version = "25.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";

@@ -8,7 +8,6 @@
   psutil,
   pyftpdlib,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   six,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "fs";
   version = "2.4.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -69,7 +66,7 @@ buildPythonPackage rec {
       # Tests require network access
       "TestFTPFS"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
       "test_ftpfs"
     ];

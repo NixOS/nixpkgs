@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   zope-interface,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "zope-exceptions";
   version = "5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zopefoundation";

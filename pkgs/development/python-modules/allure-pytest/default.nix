@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "allure-pytest";
   version = "2.13.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

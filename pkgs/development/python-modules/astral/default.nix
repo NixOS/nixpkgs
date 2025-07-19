@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build
   poetry-core,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "astral";
   version = "3.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

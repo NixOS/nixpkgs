@@ -12,7 +12,6 @@
   poetry-core,
   puremagic,
   pydub,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "playwrightcapture";
   version = "1.29.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Lookyloo";

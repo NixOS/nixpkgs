@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   unittestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
-  disabled = pythonOlder "3.8";
 
   unittestFlagsArray = [
     "-s"

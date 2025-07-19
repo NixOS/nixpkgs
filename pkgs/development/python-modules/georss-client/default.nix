@@ -5,7 +5,6 @@
   fetchFromGitHub,
   haversine,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "georss-client";
   version = "0.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

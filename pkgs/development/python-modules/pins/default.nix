@@ -17,7 +17,6 @@
   pytest-cases,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   s3fs,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "pins";
   version = "0.8.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstudio";

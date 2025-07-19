@@ -20,7 +20,6 @@
   pillow,
   pygments,
   pymdown-extensions,
-  pythonOlder,
   regex,
   requests,
   trove-classifiers,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "mkdocs-material";
   version = "9.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";

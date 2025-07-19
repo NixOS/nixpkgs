@@ -6,7 +6,6 @@
   fetchPypi,
   psycopg,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlparse,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pgspecial";
   version = "2.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

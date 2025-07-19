@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit,
   click,
   cryptography,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "solo-python";
   version = "0.1.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "solokeys";

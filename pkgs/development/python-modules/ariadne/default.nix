@@ -9,7 +9,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   python-multipart,
   starlette,
   syrupy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "ariadne";
   version = "0.26.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mirumee";

@@ -6,7 +6,6 @@
   flask,
   pytestCheckHook,
   python-http-client,
-  pythonOlder,
   pyyaml,
   setuptools,
   starkbank-ecdsa,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "sendgrid";
   version = "6.12.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;

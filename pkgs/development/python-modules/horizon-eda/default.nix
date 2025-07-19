@@ -4,11 +4,10 @@
   horizon-eda,
   pycairo,
   python,
-  pythonOlder,
 }:
 
 let
-  base = horizon-eda.passthru.base;
+  inherit (horizon-eda.passthru) base;
 in
 buildPythonPackage {
   inherit (base)
@@ -20,8 +19,6 @@ buildPythonPackage {
     ;
 
   pyproject = false;
-
-  disabled = pythonOlder "3.9";
 
   patches = [
     # Replaces osmesa with EGL_PLATFORM_SURFACELESS_MESA
@@ -37,7 +34,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ pycairo ];
 
-  nativeBuildInputs = base.nativeBuildInputs;
+  inherit (base) nativeBuildInputs;
 
   ninjaFlags = [ "horizon.so" ];
 

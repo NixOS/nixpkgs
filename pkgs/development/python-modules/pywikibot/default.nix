@@ -5,15 +5,12 @@
   mwparserfromhell,
   requests,
   packaging,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pywikibot";
   version = "10.2.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

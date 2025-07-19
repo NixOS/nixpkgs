@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   zeep,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-stdnum";
   version = "1.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

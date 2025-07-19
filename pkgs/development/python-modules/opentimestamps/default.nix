@@ -6,15 +6,12 @@
   gitpython,
   pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "opentimestamps";
   version = "0.4.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "opentimestamps";

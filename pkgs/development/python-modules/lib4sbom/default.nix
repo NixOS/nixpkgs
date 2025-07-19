@@ -4,7 +4,6 @@
   defusedxml,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semantic-version,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "lib4sbom";
   version = "0.8.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";

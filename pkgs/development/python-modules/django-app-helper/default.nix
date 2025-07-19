@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  django,
-  pythonOlder,
   setuptools,
   docopt,
   dj-database-url,
@@ -17,8 +15,6 @@ buildPythonPackage rec {
   pname = "django-app-helper";
   version = "3.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nephila";

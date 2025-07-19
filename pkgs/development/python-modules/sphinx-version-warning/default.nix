@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   setuptools,
   sphinx,
   sphinx-autoapi,
@@ -21,8 +20,6 @@ buildPythonPackage {
   pname = "sphinx-version-warning";
   version = "unstable-2019-08-10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   outputs = [
     "out"

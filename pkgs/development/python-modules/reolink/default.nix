@@ -6,7 +6,6 @@
   fetchFromGitHub,
   ffmpeg-python,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "reolink";
   version = "0053";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fwestenberg";

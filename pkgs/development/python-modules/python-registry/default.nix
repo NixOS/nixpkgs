@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   unicodecsv,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "python-registry";
   version = "1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "williballenthin";

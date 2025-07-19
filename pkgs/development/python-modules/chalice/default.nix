@@ -12,7 +12,6 @@
   mypy-extensions,
   pip,
   pytest7CheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pname = "chalice";
   version = "1.28.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";

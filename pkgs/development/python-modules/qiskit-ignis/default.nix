@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "0.7.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   # Pypi's tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "Qiskit";
@@ -44,9 +41,9 @@ buildPythonPackage rec {
       scikit-learn
       scipy
     ]
-    ++ lib.optionals (withCvx) [ cvxpy ]
-    ++ lib.optionals (withVisualization) [ matplotlib ]
-    ++ lib.optionals (withJit) [ numba ];
+    ++ lib.optionals withCvx [ cvxpy ]
+    ++ lib.optionals withVisualization [ matplotlib ]
+    ++ lib.optionals withJit [ numba ];
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];

@@ -11,7 +11,6 @@
   psutil,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   starlette,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "sse-starlette";
   version = "2.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sysid";

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   tenacity,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "basnijholt";

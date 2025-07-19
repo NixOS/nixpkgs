@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonApplication,
   gitUpdater,
-  pythonOlder,
   aiohttp,
   appdirs,
   beautifulsoup4,
@@ -34,8 +33,6 @@ buildPythonApplication rec {
   pname = "devpi-server";
   version = "6.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -117,7 +114,7 @@ buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    devpi-server = nixosTests.devpi-server;
+    inherit (nixosTests) devpi-server;
     version = testers.testVersion {
       package = devpi-server;
     };

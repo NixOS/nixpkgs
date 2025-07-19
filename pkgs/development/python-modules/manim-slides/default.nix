@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   hatchling,
   hatch-fancy-pypi-readme,
@@ -36,8 +35,6 @@ buildPythonPackage rec {
   pname = "manim-slides";
   version = "5.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jeertmans";

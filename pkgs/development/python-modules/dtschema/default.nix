@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
-  pythonOlder,
   rfc3987,
   ruamel-yaml,
   setuptools-scm,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "dtschema";
   version = "2024.02";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devicetree-org";
@@ -54,13 +51,11 @@ buildPythonPackage rec {
     ];
     maintainers = with maintainers; [ sorki ];
 
-    broken = (
-      # Library not loaded: @rpath/libfdt.1.dylib
+    broken =
       stdenv.hostPlatform.isDarwin
       ||
 
         # see https://github.com/devicetree-org/dt-schema/issues/108
-        versionAtLeast jsonschema.version "4.18"
-    );
+        versionAtLeast jsonschema.version "4.18";
   };
 }

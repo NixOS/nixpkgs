@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   twiggy,
   requests,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   pname = "bugwarrior";
   version = "1.8.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

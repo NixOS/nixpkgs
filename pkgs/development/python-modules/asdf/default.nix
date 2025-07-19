@@ -14,7 +14,6 @@
   psutil,
   pytest-remotedata,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   semantic-version,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "asdf";
   version = "4.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asdf-format";

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   stdenv,
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "albertosottile";
     repo = "darkdetect";
@@ -27,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "darkdetect" ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace darkdetect/_linux_detect.py \
       --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';

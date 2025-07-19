@@ -11,7 +11,6 @@
   pint,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   scipy,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "qcelemental";
   version = "0.29.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

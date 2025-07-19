@@ -5,15 +5,12 @@
   fetchFromGitHub,
   linetable,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kajiki";
   version = "0.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";

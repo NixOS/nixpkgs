@@ -8,7 +8,6 @@
   lxml,
   nodejs,
   pytestCheckHook,
-  pythonOlder,
   regex,
   setuptools,
   testers,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "readabilipy";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
@@ -33,7 +30,7 @@ buildPythonPackage rec {
     pname = "readabilipy-javascript";
     inherit version;
 
-    src = src;
+    inherit src;
     sourceRoot = "${src.name}/readabilipy/javascript";
     npmDepsHash = "sha256-LiPSCZamkJjivzpawG7H9IEXYjn3uzFeY2vfucyHfUo=";
 

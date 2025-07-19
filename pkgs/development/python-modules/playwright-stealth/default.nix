@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   playwright,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage {
   pname = "playwright-stealth";
   version = "1.0.6-unstable-2023-09-11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "AtuboDad";

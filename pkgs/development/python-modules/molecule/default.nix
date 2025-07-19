@@ -10,7 +10,6 @@
   molecule,
   packaging,
   pluggy,
-  pythonOlder,
   rich,
   setuptools,
   setuptools-scm,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "molecule";
   version = "25.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -61,7 +58,7 @@ buildPythonPackage rec {
       package = molecule;
       command = "PY_COLORS=0 ${pname} --version";
     }).overrideAttrs
-      (old: {
+      (_old: {
         # workaround the error: Permission denied: '/homeless-shelter'
         HOME = "$(mktemp -d)";
       });

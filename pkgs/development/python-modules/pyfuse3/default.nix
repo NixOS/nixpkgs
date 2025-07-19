@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   cython,
   pkg-config,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyfuse3";
   version = "3.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "libfuse";

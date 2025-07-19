@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit-hooks";

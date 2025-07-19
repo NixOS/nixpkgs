@@ -17,7 +17,6 @@
   mutatormath,
   ninja,
   pytestCheckHook,
-  pythonOlder,
   runAllTests ? false,
   scikit-build,
   setuptools-scm,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pname = "afdko";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
@@ -119,7 +116,7 @@ buildPythonPackage rec {
       # broke at some point
       "test_type1_supported_hint"
     ]
-    ++ lib.optionals (stdenv.cc.isGNU) [
+    ++ lib.optionals stdenv.cc.isGNU [
       # broke in the gcc 13 -> 14 update
       "test_dump"
       "test_input_formats"
@@ -140,7 +137,7 @@ buildPythonPackage rec {
       # https://github.com/adobe-type-tools/afdko/issues/1425
       "test_spec"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    ++ lib.optionals stdenv.hostPlatform.isi686 [
       "test_dump_option"
       "test_type1mm_inputs"
     ];

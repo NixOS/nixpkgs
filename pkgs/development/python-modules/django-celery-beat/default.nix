@@ -10,7 +10,6 @@
   pytest-timeout,
   pytestCheckHook,
   python-crontab,
-  pythonOlder,
   setuptools,
   tzdata,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "django-celery-beat";
   version = "2.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";

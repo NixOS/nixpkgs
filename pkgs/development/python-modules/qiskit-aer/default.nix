@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   # C Inputs
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   pname = "qiskit-aer";
   version = "0.16.0.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";

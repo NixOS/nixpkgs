@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   nodejs,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pscript";
   version = "0.7.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "flexxui";

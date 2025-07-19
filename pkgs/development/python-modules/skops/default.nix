@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pytestCheckHook,
   pytest-cov-stub,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "skops";
   version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "skops-dev";

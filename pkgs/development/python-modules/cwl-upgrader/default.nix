@@ -5,7 +5,6 @@
   mypy-extensions,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
   schema-salad,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "cwl-upgrader";
   version = "1.2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";

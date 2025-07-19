@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pyee,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   playwright-driver,
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   # run ./pkgs/development/python-modules/playwright/update.sh to update
   version = "1.53.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
@@ -93,7 +91,7 @@ buildPythonPackage rec {
     tests =
       {
         driver = playwright-driver;
-        browsers = playwright-driver.browsers;
+        inherit (playwright-driver) browsers;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit (nixosTests) playwright-python;

@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   valkey,
   redis,
   setuptools,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths =
-    lib.optionals (stdenv.hostPlatform.isDarwin) [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # Exception: unable to connect to Redis server
       "tests/test_redis.py"
     ]

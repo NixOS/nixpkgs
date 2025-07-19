@@ -14,7 +14,6 @@
   wheel,
   zope-event,
   zope-interface,
-  pythonOlder,
   c-ares,
   libuv,
 
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "gevent";
   version = "24.11.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -72,7 +69,7 @@ buildPythonPackage rec {
       gunicorn
       pika
       ;
-  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+  } // lib.filterAttrs (k: _v: lib.hasInfix "gevent" k) python.pkgs;
 
   GEVENTSETUP_EMBED = "0";
 

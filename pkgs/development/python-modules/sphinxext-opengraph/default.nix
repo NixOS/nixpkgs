@@ -5,7 +5,6 @@
   sphinx,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
   beautifulsoup4,
   setuptools-scm,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sphinxext-opengraph";
   version = "0.9.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wpilibsuite";

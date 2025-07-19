@@ -4,7 +4,6 @@
   fetchPypi,
   isPy3k,
   pygccxml,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pybindgen";
   version = "0.22.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyBindGen";
@@ -28,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pybindgen" ];
 
   # Fails to import module 'cxxfilt' from pygccxml on Py3k
-  doCheck = (!isPy3k);
+  doCheck = !isPy3k;
 
   meta = with lib; {
     description = "Python Bindings Generator";

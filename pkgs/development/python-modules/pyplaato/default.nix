@@ -4,15 +4,12 @@
   fetchPypi,
   aiohttp,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyplaato";
   version = "0.0.19";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -5,15 +5,12 @@
   fetchFromGitHub,
   matplotlib,
   pygithub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
   version = "0.5.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mrbean-bremen";

@@ -6,15 +6,12 @@
   py,
   pytestCheckHook,
   pytest-html,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cons";
   version = "0.4.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pythological";

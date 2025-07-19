@@ -4,7 +4,6 @@
   fetchFromGitHub,
   librosa,
   pytestCheckHook,
-  pythonOlder,
   resampy,
   scipy,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage {
   version = "0.0.23";
   pyproject = true;
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "maxrmorrison";

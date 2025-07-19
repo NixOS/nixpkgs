@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   flit-core,
   marshmallow,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
   version = "1.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "marshmallow_sqlalchemy";

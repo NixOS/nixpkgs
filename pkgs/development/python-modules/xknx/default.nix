@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknx";

@@ -11,9 +11,7 @@
   pandas,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   requests,
-  selenium,
   setuptools,
   setuptools-scm,
   xyzservices,
@@ -23,8 +21,6 @@ buildPythonPackage rec {
   pname = "folium";
   version = "0.19.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";

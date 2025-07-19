@@ -6,7 +6,6 @@
   fetchpatch,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   umodbus,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "async-modbus";
   version = "0.2.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";

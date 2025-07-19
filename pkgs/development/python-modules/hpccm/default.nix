@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "hpccm";
   version = "23.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

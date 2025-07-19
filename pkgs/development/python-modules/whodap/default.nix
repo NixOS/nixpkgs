@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   httpx,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "whodap";
   version = "0.1.12";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pogzyb";

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   python,
   python-fsutil,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "django-maintenance-mode";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";

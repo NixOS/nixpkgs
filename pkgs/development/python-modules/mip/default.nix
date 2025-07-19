@@ -9,7 +9,6 @@
   networkx,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "mip";
   version = "1.15.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

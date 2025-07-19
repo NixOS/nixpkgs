@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   django-parler,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "djangocms-alias";
   version = "2.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "django-cms";

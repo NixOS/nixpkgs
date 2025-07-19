@@ -7,7 +7,6 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   trustme,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiosmtplib";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cole";

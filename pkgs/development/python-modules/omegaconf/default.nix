@@ -11,7 +11,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   replaceVars,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";

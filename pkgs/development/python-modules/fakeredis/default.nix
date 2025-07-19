@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   redisTestHook,
   sortedcontainers,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "fakeredis";
   version = "2.29.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";

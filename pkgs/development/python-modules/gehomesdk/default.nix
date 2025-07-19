@@ -6,7 +6,6 @@
   fetchPypi,
   humanize,
   lxml,
-  pythonOlder,
   requests,
   setuptools,
   slixmpp,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "gehomesdk";
   version = "2025.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

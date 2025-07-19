@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   click,
   click-default-group,
   python-dateutil,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [ setuptools ];
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;

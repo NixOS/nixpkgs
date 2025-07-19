@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "flavors";

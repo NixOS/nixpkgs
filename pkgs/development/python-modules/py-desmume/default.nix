@@ -11,7 +11,6 @@
   pillow,
   pkg-config,
   pygobject3,
-  pythonOlder,
   SDL2,
   soundtouch,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "py-desmume";
   version = "0.0.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

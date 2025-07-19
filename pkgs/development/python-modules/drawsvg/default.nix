@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   numpy,
   imageio,
   cairosvg,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "drawsvg";
   version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cduck";

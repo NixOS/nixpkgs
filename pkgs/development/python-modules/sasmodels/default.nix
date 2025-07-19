@@ -12,15 +12,12 @@
   opencl-headers,
   pycuda,
   pyopencl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sasmodels";
   version = "1.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SasView";

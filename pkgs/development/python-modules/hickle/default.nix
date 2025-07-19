@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
-  pythonOlder,
   h5py,
   numpy,
   dill,
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   pname = "hickle";
   version = "5.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

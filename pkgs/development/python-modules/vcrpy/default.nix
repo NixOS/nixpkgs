@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-httpbin,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
   yarl,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "vcrpy";
   version = "7.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   beautifulsoup4,
   boto3,
@@ -20,8 +19,6 @@
 buildPythonPackage rec {
   pname = "bx-py-utils";
   version = "109";
-
-  disabled = pythonOlder "3.10";
 
   pyproject = true;
 

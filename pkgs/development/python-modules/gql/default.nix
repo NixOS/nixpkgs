@@ -14,7 +14,6 @@
   pytest-asyncio,
   pytest-console-scripts,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   setuptools,
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pname = "gql";
   version = "3.5.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "graphql-python";

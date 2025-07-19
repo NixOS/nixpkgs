@@ -8,7 +8,6 @@
   nats-server,
   nkeys,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uvloop,
 }:
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "nats-py";
   version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nats-io";

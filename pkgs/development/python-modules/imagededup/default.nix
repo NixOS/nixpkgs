@@ -8,7 +8,6 @@
   pillow,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pywavelets,
   scikit-learn,
   setuptools,
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   pname = "imagededup";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "idealo";

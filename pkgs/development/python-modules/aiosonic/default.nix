@@ -1,8 +1,6 @@
 {
-  nodejs,
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   # install_requires
@@ -25,8 +23,6 @@ buildPythonPackage rec {
   pname = "aiosonic";
   version = "0.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 

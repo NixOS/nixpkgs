@@ -11,7 +11,6 @@
   pyasn1,
   pyaxmlparser,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "gplaycli";
   version = "3.29";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "matlink";

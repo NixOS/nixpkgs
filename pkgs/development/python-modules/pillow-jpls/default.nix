@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   cmake,
   ninja,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "pillow-jpls";
   version = "1.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "planetmarshall";

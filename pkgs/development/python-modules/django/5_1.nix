@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   replaceVars,
 
   # build-system
@@ -46,8 +45,6 @@ buildPythonPackage rec {
   version = "5.1.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
@@ -74,8 +71,8 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals withGdal [
       (replaceVars ./django_5_set_geos_gdal_lib.patch {
-        geos = geos;
-        gdal = gdal;
+        inherit geos;
+        inherit gdal;
         extension = stdenv.hostPlatform.extensions.sharedLibrary;
       })
     ];

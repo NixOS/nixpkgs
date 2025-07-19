@@ -9,7 +9,6 @@
   oslo-serialization,
   oslo-utils,
   pbr,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "python-barbicanclient";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitea {
     domain = "opendev.org";

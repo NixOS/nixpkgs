@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   blessed,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "dashing";
   version = "0.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

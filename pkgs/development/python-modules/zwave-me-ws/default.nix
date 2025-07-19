@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   requests,
   websocket-client,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "zwave-me-ws";
   version = "0.4.3";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";

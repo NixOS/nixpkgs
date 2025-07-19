@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   voluptuous,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "solax";
   version = "3.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;

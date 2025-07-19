@@ -4,7 +4,6 @@
   fetchFromGitLab,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "et-xmlfile";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     domain = "foss.heptapod.net";

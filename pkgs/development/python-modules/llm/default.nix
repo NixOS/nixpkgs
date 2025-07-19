@@ -5,8 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   setuptools,
   click-default-group,
   condense-json,
@@ -61,45 +59,10 @@ let
   */
   withPlugins =
     # Keep this list up to date with the plugins in python3Packages!
-    {
-      llm-anthropic ? false,
-      llm-cmd ? false,
-      llm-command-r ? false,
-      llm-deepseek ? false,
-      llm-docs ? false,
-      llm-echo ? false,
-      llm-fragments-github ? false,
-      llm-fragments-pypi ? false,
-      llm-fragments-reader ? false,
-      llm-fragments-symbex ? false,
-      llm-gemini ? false,
-      llm-gguf ? false,
-      llm-git ? false,
-      llm-grok ? false,
-      llm-groq ? false,
-      llm-hacker-news ? false,
-      llm-jq ? false,
-      llm-llama-server ? false,
-      llm-mistral ? false,
-      llm-ollama ? false,
-      llm-openai-plugin ? false,
-      llm-openrouter ? false,
-      llm-pdf-to-images ? false,
-      llm-perplexity ? false,
-      llm-sentence-transformers ? false,
-      llm-templates-fabric ? false,
-      llm-templates-github ? false,
-      llm-tools-datasette ? false,
-      llm-tools-quickjs ? false,
-      llm-tools-simpleeval ? false,
-      llm-tools-sqlite ? false,
-      llm-venice ? false,
-      llm-video-frames ? false,
-      ...
-    }@args:
+    args:
     let
       # Filter to just the attributes which are set to a true value.
-      setArgs = lib.filterAttrs (name: lib.id) args;
+      setArgs = lib.filterAttrs (_name: lib.id) args;
 
       # Make the derivation name reflect what's inside it, up to a certain limit.
       setArgNames = lib.attrNames setArgs;
@@ -143,7 +106,7 @@ let
     '';
 
   # Uses the `withPlugins` names to make a Python environment with everything.
-  withAllPlugins = withPlugins (lib.genAttrs withPluginsArgNames (name: true));
+  withAllPlugins = withPlugins (lib.genAttrs withPluginsArgNames (_name: true));
 
   # The function signature of `withPlugins` is the list of all the plugins `llm` knows about.
   # The plugin directory is at <https://llm.datasette.io/en/stable/plugins/directory.html>
@@ -168,8 +131,6 @@ let
     pyproject = true;
 
     build-system = [ setuptools ];
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";

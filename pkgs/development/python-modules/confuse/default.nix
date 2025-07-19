@@ -5,15 +5,12 @@
   flit-core,
   pyyaml,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "confuse";
   version = "1.7.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "beetbox";

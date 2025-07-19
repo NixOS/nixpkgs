@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
   numpy,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "ubelt";
   version = "1.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Erotemic";

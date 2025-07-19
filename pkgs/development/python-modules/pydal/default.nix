@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
   legacy-cgi,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pydal";
   version = "20250607.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

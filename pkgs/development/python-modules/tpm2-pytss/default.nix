@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,
@@ -20,14 +19,12 @@
 }:
 
 let
-  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

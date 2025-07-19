@@ -8,7 +8,6 @@
   pillow,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "openpyxl";
   version = "3.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     domain = "foss.heptapod.net";

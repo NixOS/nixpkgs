@@ -5,7 +5,6 @@
   dnspython,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   tenacity,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "linear-garage-door";
   version = "0.2.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "IceBotYT";

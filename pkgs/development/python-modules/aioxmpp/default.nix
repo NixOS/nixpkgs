@@ -13,7 +13,6 @@
   pyopenssl,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   sortedcollections,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "aioxmpp";
   version = "0.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";

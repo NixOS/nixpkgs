@@ -4,7 +4,6 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   sphinx,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sphinx-thebe";
   version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   more-properties,
   typing-inspect,
@@ -14,9 +13,6 @@
 buildPythonPackage rec {
   pname = "dataclasses-serialization";
   version = "1.3.1";
-
-  # upstream requires >= 3.6 but only 3.7 includes dataclasses
-  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 

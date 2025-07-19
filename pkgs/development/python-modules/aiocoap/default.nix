@@ -10,8 +10,6 @@
   ge25519,
   pygments,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
   termcolor,
   websockets,
@@ -21,8 +19,6 @@ buildPythonPackage rec {
   pname = "aiocoap";
   version = "0.4.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "chrysn";

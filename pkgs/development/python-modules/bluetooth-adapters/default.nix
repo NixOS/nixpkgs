@@ -13,7 +13,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sphinx-rtd-theme,
   sphinxHook,
   uart-devices,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "bluetooth-adapters";
   version = "0.21.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";

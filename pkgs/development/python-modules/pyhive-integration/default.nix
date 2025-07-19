@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   unasync,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyhive-integration";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Pyhass";

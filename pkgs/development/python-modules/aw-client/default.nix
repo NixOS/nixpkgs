@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   aw-core,
   requests,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "aw-client";
   version = "0.5.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ActivityWatch";

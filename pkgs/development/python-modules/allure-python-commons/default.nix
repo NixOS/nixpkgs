@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   attrs,
   pluggy,
   six,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "allure-python-commons";
   version = "2.13.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

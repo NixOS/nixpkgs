@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   mkdocs,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "mkdocs-git-authors-plugin";
   version = "0.9.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "timvink";

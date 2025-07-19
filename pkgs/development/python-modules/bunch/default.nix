@@ -2,15 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage {
   pname = "bunch";
   version = "unstable-2017-11-21";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   # Use a fork as upstream is dead
   src = fetchFromGitHub {

@@ -11,15 +11,12 @@
   paramiko,
   requests,
   s3fs,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
   version = "1.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "juftin";

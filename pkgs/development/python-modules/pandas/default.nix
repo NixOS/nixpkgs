@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   cython,
@@ -66,8 +65,6 @@ let
     pname = "pandas";
     version = "2.2.3";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "pandas-dev";
@@ -196,11 +193,11 @@ let
         pytestCheckHook
       ]
       ++ lib.flatten (lib.attrValues optional-dependencies)
-      ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
         # for locale executable
         glibc
       ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # for locale executable
         adv_cmds
       ];

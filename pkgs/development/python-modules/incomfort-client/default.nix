@@ -6,17 +6,13 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "incomfort-client";
   version = "0.6.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zxdavb";

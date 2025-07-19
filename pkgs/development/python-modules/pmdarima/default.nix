@@ -11,7 +11,6 @@
   scipy,
   statsmodels,
   urllib3,
-  pythonOlder,
   python,
   pytest7CheckHook,
   setuptools,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pmdarima";
   version = "2.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";

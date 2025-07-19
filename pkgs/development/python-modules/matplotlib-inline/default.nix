@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   traitlets,
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "matplotlib-inline";
   version = "0.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ipython";

@@ -4,8 +4,6 @@
   docker,
   fetchFromGitHub,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,8 +11,6 @@ buildPythonPackage rec {
   pname = "pytest-docker-tools";
   version = "3.1.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";

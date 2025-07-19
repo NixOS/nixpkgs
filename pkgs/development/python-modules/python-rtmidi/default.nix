@@ -11,7 +11,6 @@
   meson-python,
   ninja,
   pkg-config,
-  pythonOlder,
   tox,
   wheel,
 }:
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "python-rtmidi";
   version = "1.5.8";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "python_rtmidi";
@@ -37,12 +34,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libjack2
-      alsa-lib
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libjack2
+    alsa-lib
+  ];
 
   nativeCheckInputs = [
     tox

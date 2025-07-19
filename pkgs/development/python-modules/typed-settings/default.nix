@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "24.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;

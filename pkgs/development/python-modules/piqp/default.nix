@@ -4,7 +4,6 @@
   buildPythonPackage,
   pytestCheckHook,
   stdenv,
-  pythonOlder,
   setuptools,
   cmake,
   ninja,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "piqp";
   version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PREDICT-EPFL";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   unasync,
   poetry-core,
   python,
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   pname = "redis-om";
   version = "0.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "redis";

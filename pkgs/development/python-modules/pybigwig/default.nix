@@ -4,7 +4,6 @@
   fetchFromGitHub,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   zlib,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pybigwig";
   version = "0.3.24";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deeptools";

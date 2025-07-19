@@ -5,7 +5,6 @@
   gemmi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   rdkit,
   scipy,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "meeko";
   version = "0.6.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "forlilab";

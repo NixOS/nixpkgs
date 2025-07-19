@@ -5,7 +5,6 @@
   future,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aurorapy";
   version = "0.2.7";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "energievalsabbia";
