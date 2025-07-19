@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "spdx_licenses";
-  version = "1.3.0";
+  version = "1.4.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/kit-ty-kate/spdx_licenses/releases/download/v${version}/spdx_licenses-${version}.tar.gz";
-    hash = "sha256-UkKAJ+MCCKr68p4sgTZ8/6NMJibWGCG6tQruMpMsjzA=";
+    hash = "sha256-slXewgDbf1US8kk/NaxOoicnkwdliUOq+SemkjvyUis=";
   };
 
   meta = {
