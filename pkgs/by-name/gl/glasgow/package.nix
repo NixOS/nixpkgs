@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "0-unstable-2025-01-26";
+  version = "0-unstable-2025-05-01";
   # from `pdm show`
   realVersion =
     let
@@ -25,8 +25,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "2a67f79d6025a06e98277956cbb036c4237960f1";
-    sha256 = "sha256-THunn3Oz+eldjQ72TGuq4Egnn6fiMiGG/UtYVRc/tfU=";
+    rev = "1b6abc1af7badfa66c19bc356094fd4456d03bdd";
+    sha256 = "sha256-tTV3H1E8OtLTEOQm8SUodS0S9PswFj4M4/MsF869uvE=";
   };
 
   nativeBuildInputs = [
