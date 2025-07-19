@@ -2,11 +2,12 @@
   lib,
   blinker,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   flask,
   pythonOlder,
   setuptools,
   webob,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,10 +17,17 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-m9YA/PauhWe20RZSJknqFzUXqpizc56bpzsf6ivIJEQ=";
+  src = fetchFromGitHub {
+    owner = "bugsnag";
+    repo = "bugsnag-python";
+    tag = "v${version}";
+    hash = "sha256-aN7/MpTdsRsAINPXOmSau4pG1+F8gmvjlx5czKpx7H8=";
   };
+
+  postPatch = ''
+    substituteInPlace tox.ini --replace-fail \
+      "--cov=bugsnag --cov-report html --cov-append --cov-report term" ""
+  '';
 
   build-system = [ setuptools ];
 
@@ -34,8 +42,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bugsnag" ];
 
-  # Module ha no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Extra dependencies
+    "tests/integrations"
+    # Flaky due to timeout
+    "tests/test_client.py::ClientTest::test_flush_waits_for_outstanding_events_before_returning"
+    # Flaky due to timeout
+    "tests/test_client.py::ClientTest::test_flush_waits_for_outstanding_sessions_before_returning"
+    # Flaky failure due to AssertionError: assert 0 == 3
+    "tests/test_client.py::ClientTest::test_aws_lambda_handler_decorator_warns_of_potential_timeout"
+    # Flaky failure due to AssertionError: assert 0 == 1
+    "tests/test_client.py::ClientTest::test_exception_hook_does_not_leave_a_breadcrumb_if_errors_are_disabled"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Automatic error monitoring for Python applications";
