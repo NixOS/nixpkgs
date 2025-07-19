@@ -247,9 +247,8 @@ stdenv.mkDerivation (finalAttrs: {
       ./0017-meson.build-do-not-create-systemdstatedir.patch
 
       # https://github.com/systemd/systemd/issues/33392
-      # This patch is a slightly modified version of this PR:
       # https://github.com/systemd/systemd/pull/33400
-      ./0018-bootctl-do-not-try-to-update-the-same-file-multiple-.patch
+      ./0018-bootctl-do-not-fail-when-the-same-file-is-updated-mu.patch
 
       # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
       # if the install prefix is not /usr, but that does not work for us
