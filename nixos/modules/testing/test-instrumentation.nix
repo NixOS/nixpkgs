@@ -115,7 +115,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        extraConfig = config.systemd.extraConfig;
+        inherit (config.systemd) systemConfig;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -210,13 +210,13 @@ in
       MaxLevelConsole=debug
     '';
 
-    systemd.extraConfig = ''
+    systemd.systemConfig = {
       # Don't clobber the console with duplicate systemd messages.
-      ShowStatus=no
+      ShowStatus = false;
       # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+      DefaultTimeoutStartSec = 300;
+      DefaultDeviceTimeoutSec = 300;
+    };
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
