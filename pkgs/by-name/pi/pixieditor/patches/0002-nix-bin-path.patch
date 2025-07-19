@@ -1,0 +1,13 @@
+diff --git a/src/PixiEditor/Models/ExceptionHandling/CrashReport.cs b/src/PixiEditor/Models/ExceptionHandling/CrashReport.cs
+index 036a04376..4cc86b708 100644
+--- a/src/PixiEditor/Models/ExceptionHandling/CrashReport.cs
++++ b/src/PixiEditor/Models/ExceptionHandling/CrashReport.cs
+@@ -521,7 +521,7 @@ internal class CrashReport : IDisposable
+                        $".Desktop{IOperatingSystem.Current.ExecutableExtension}";
+ #endif
+
+-        IOperatingSystem.Current.ProcessUtility.ShellExecute(fileName, $"--crash \"{Path.GetFullPath(FilePath)}\"");
++        IOperatingSystem.Current.ProcessUtility.ShellExecute("@NIX_BIN_PATH@", $"--crash \"{Path.GetFullPath(FilePath)}\"");
+     }
+
+     public bool TrySave(IEnumerable<DocumentViewModel> documents)
