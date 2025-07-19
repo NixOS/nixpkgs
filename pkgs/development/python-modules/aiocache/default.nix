@@ -48,11 +48,8 @@ buildPythonPackage rec {
     redisTestHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    # TypeError: object MagicMock can't be used in 'await' expression
-    "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
     # Tests can time out and leave redis/valkey in an unusable state for later tests
     "-x"
   ];
@@ -77,6 +74,9 @@ buildPythonPackage rec {
     "tests/performance/"
     # Full of timing-sensitive tests
     "tests/ut/backends/test_redis.py"
+
+    # TypeError: object MagicMock can't be used in 'await' expression
+    "tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
 
   __darwinAllowLocalNetworking = true;

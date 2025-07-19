@@ -75,9 +75,12 @@ buildPythonPackage rec {
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [
-    "--ignore=./autobahn/twisted"
+  enabledTestPaths = [
     "./autobahn"
+  ];
+
+  disabledTestPaths = [
+    "./autobahn/twisted"
   ];
 
   pythonImportsCheck = [ "autobahn" ];

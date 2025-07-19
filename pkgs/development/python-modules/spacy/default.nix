@@ -106,7 +106,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = [ "-m 'slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # touches network

@@ -63,9 +63,8 @@ buildPythonPackage rec {
     rm -r zmq
   '';
 
-  pytestFlagsArray = [
-    "-m"
-    "'not flaky'"
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [

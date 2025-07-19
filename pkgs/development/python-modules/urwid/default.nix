@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF8";
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Flaky tests

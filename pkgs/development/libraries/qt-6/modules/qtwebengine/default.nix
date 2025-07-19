@@ -101,30 +101,28 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
-  patches =
-    [
-      # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
-      # environment variable, since NixOS relies on it working.
-      # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
-      ./xkb-includes.patch
+  patches = [
+    # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
+    # environment variable, since NixOS relies on it working.
+    # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
+    ./xkb-includes.patch
 
-      ./link-pulseaudio.patch
+    ./link-pulseaudio.patch
 
-      # Override locales install path so they go to QtWebEngine's $out
-      ./locales-path.patch
+    # Override locales install path so they go to QtWebEngine's $out
+    ./locales-path.patch
 
-      # Reproducibility QTBUG-136068
-      ./gn-object-sorted.patch
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
-      (fetchpatch2 {
-        url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/chromium/";
-        hash = "sha256-wcby9uD8xb4re9+s+rdl1hcpxDcHxuI68vUNAC7Baas=";
-      })
-    ];
+    # Reproducibility QTBUG-136068
+    ./gn-object-sorted.patch
+
+    # https://chromium-review.googlesource.com/c/chromium/src/+/6445471
+    (fetchpatch2 {
+      url = "https://github.com/chromium/chromium/commit/f8f21fb4aa01f75acbb12abf5ea8c263c6817141.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+      hash = "sha256-wcby9uD8xb4re9+s+rdl1hcpxDcHxuI68vUNAC7Baas=";
+    })
+  ];
 
   postPatch =
     ''

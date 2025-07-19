@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pytestFlagsArray = [ "test/" ];
+  enabledTestPaths = [ "test/" ];
 
   preCheck = ''
     export SERVER=NONE

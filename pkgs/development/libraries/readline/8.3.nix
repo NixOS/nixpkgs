@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "readline";
-  version = "8.2p${toString (builtins.length finalAttrs.upstreamPatches)}";
+  version = "8.3p${toString (builtins.length finalAttrs.upstreamPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}.tar.gz";
-    sha256 = "sha256-P+txcfFqhO6CyhijbXub4QmlLAT0kqBTMx19EJUAfDU=";
+    hash = "sha256-/lODIERngozUle6NHTwDen66E4nCK8agQfYnl2+QYcw=";
   };
 
   outputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
       patch =
         nr: sha256:
         fetchurl {
-          url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}-patches/readline82-${nr}";
+          url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}-patches/readline83-${nr}";
           inherit sha256;
         };
     in
-    import ./readline-8.2-patches.nix patch
+    import ./readline-8.3-patches.nix patch
   );
 
   patches =
@@ -117,6 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ dtzWill ];
 
     platforms = platforms.unix ++ platforms.windows;
-    branch = "8.2";
+    branch = "8.3";
   };
 })

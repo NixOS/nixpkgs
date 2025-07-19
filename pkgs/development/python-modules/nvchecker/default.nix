@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvchecker" ];
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  disabledTestMarks = [ "needs_net" ];
 
   optional-dependencies = {
     # vercmp = [ pyalpm ];

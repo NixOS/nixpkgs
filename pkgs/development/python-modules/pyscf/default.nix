@@ -104,14 +104,14 @@ buildPythonPackage rec {
     "test_sacasscf_grad"
   ];
 
-  pytestFlagsArray = [
-    "--ignore=pyscf/pbc/tdscf"
-    "--ignore=pyscf/pbc/gw"
-    "--ignore-glob=*_slow.*py"
-    "--ignore-glob=*_kproxy_.*py"
-    "--ignore-glob=test_proxy.py"
-    "--ignore-glob=pyscf/nac/test/test_sacasscf.py"
-    "--ignore-glob=pyscf/grad/test/test_casscf.py"
+  disabledTestPaths = [
+    "pyscf/pbc/tdscf"
+    "pyscf/pbc/gw"
+    "*_slow.*py"
+    "*_kproxy_.*py"
+    "test_proxy.py"
+    "pyscf/nac/test/test_sacasscf.py"
+    "pyscf/grad/test/test_casscf.py"
   ];
 
   meta = {

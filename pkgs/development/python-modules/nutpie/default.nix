@@ -81,7 +81,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
   ];
 

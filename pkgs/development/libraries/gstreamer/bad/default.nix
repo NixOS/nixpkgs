@@ -24,6 +24,7 @@
   # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
   lcevcdecSupport ? false,
   lcevcdec,
+  ldacbtSupport ? lib.meta.availableOn stdenv.hostPlatform ldacbt,
   ldacbt,
   liblc3,
   libass,
@@ -31,6 +32,7 @@
   ladspaH,
   lcms2,
   libnice,
+  webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
   webrtc-audio-processing_1,
   lilv,
   lv2,
@@ -164,10 +166,8 @@ stdenv.mkDerivation (finalAttrs: {
       orc
       json-glib
       lcms2
-      ldacbt
       liblc3
       libass
-      webrtc-audio-processing_1
       libbs2b
       libmodplug
       openjpeg
@@ -269,6 +269,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals lcevcdecSupport [
       lcevcdec
+    ]
+    ++ lib.optionals ldacbtSupport [
+      ldacbt
+    ]
+    ++ lib.optionals webrtcAudioProcessingSupport [
+      webrtc-audio-processing_1
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_gstreamer

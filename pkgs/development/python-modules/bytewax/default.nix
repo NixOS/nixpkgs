@@ -84,8 +84,11 @@ buildPythonPackage rec {
     pytest-benchmark
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
+  ];
+
+  enabledTestPaths = [
     "pytests"
   ];
 

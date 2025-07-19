@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # errbot-backend-slackv3 has not been packaged
-  pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
+  disabledTestPaths = [ "tests/backend_tests/slack_test.py" ];
 
   disabledTests = [
     # require networking

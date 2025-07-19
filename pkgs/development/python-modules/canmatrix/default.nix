@@ -58,9 +58,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # long_envvar_name_imports requires stable key value pair ordering
-    "-s src/canmatrix"
+    "-s"
+  ];
+
+  enabledTestPaths = [
+    "src/canmatrix"
     "tests/"
   ];
 

@@ -517,21 +517,14 @@ python.pkgs.buildPythonApplication rec {
       "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
-    # AssertionError: assert 1 == 0
-    "--deselect tests/test_config.py::test_merge"
-    # checks whether pip is installed
-    "--deselect=tests/util/test_package.py::test_check_package_fragment"
-    # flaky
-    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
-    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
-    "--deselect=tests/helpers/test_event.py::test_track_time_interval_name"
+  ];
+
+  enabledTestPaths = [
     # tests are located in tests/
     "tests"
   ];
@@ -545,6 +538,16 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
+    # AssertionError: assert 1 == 0
+    "tests/test_config.py::test_merge"
+    # checks whether pip is installed
+    "tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "tests/test_test_fixtures.py::test_evict_faked_translations"
+    "tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "tests/helpers/test_event.py::test_track_time_interval_name"
   ];
 
   preCheck = ''

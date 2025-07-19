@@ -149,11 +149,11 @@ python.pkgs.buildPythonApplication rec {
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs);
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # blocks in poll()
-    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
-    "--deselect=tests/core/test_server_base.py::test_events"
+    "tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "tests/core/test_server_base.py::test_start_and_stop_server"
+    "tests/core/test_server_base.py::test_events"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
