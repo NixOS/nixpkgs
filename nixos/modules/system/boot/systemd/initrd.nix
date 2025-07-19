@@ -11,6 +11,7 @@ with lib;
 
 let
   inherit (utils) systemdUtils escapeSystemdPath;
+  inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
     generateUnits
     pathToUnit
@@ -22,7 +23,6 @@ let
     mountToUnit
     automountToUnit
     attrsToSection
-    unitOptions
     ;
 
   cfg = config.boot.initrd.systemd;
@@ -171,7 +171,7 @@ in
     systemConfig = mkOption {
       default = { };
       type = lib.types.submodule {
-        freeformType = types.attrsOf unitOptions.unitOption;
+        freeformType = types.attrsOf unitOption;
       };
       example = {
         DefaultLimitCORE = "infinity";
