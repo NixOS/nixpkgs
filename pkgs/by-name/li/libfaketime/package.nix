@@ -2,59 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  perl,
   coreutils,
+  perl,
 }:
-let
-  hashes = {
-    "0.9.10" = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
-    "0.9.11" = "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
-  };
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfaketime";
-  # 0.9.10 break dict-db-wiktionary and quartus-prime-lite on linux,
-  # and 0.9.11 break everything on darwin
-  version = if stdenv.hostPlatform.isDarwin then "0.9.10" else "0.9.11";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
     tag = "v${finalAttrs.version}";
-    hash = hashes.${finalAttrs.version};
+    hash = "sha256-Hd59b7pc6GIDvRR6EEosr/f8sKuV2q7RU7gDSaGFp3Y=";
   };
 
-  patches =
-    [
-      ./nix-store-date.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (fetchpatch {
-        name = "0001-libfaketime.c-wrap-timespec_get-in-TIME_UTC-macro.patch";
-        url = "https://github.com/wolfcw/libfaketime/commit/e0e6b79568d36a8fd2b3c41f7214769221182128.patch";
-        sha256 = "sha256-KwwP76v0DXNW73p/YBvwUOPdKMAcVdbQSKexD/uFOYo=";
-      })
-      (fetchpatch {
-        name = "LFS64.patch";
-        url = "https://github.com/wolfcw/libfaketime/commit/f32986867addc9d22b0fab29c1c927f079d44ac1.patch";
-        hash = "sha256-fIXuxxcV9J2IcgwcwSrMo4maObkH9WYv1DC/wdtbq/g=";
-      })
-      # https://github.com/wolfcw/libfaketime/issues/277
-      ./0001-Remove-unsupported-clang-flags.patch
-    ];
+  buildInputs = [ coreutils ];
 
-  postPatch = ''
-    patchShebangs test src
-    substituteInPlace test/functests/test_exclude_mono.sh src/faketime.c \
-      --replace-fail /bin/bash ${stdenv.shell}
-    substituteInPlace src/faketime.c \
-      --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
-  '';
+  postPatch =
+    let
+      dateCmd = lib.getExe' coreutils "date";
+    in
+    ''
+      substituteInPlace src/faketime.c \
+        --replace-fail 'date_cmd = "date"' 'date_cmd = "${dateCmd}"' \
+        --replace-fail 'date_cmd = "gdate"' 'date_cmd = "${dateCmd}"'
+    '';
 
-  PREFIX = placeholder "out";
-  LIBDIRNAME = "/lib";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LIBDIRNAME=/lib"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -71,12 +49,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  preCheck = ''
+    patchShebangs test
+    substituteInPlace test/functests/test_exclude_mono.sh \
+      --replace-fail '/bin/bash' '$0'
+  '';
+
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
     homepage = "https://github.com/wolfcw/libfaketime/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.bjornfor ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      usertam
+    ];
     mainProgram = "faketime";
   };
 })
