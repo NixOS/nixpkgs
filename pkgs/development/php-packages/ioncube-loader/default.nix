@@ -54,5 +54,6 @@ stdenv.mkDerivation {
       "aarch64-linux"
       "aarch64-darwin"
     ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

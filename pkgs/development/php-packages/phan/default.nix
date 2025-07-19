@@ -29,5 +29,6 @@
       mainProgram = "phan";
       maintainers = with lib.maintainers; [ apeschar ];
       teams = [ lib.teams.php ];
+      broken = lib.versionAtLeast php.version "8.5";
     };
   })
