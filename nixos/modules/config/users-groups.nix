@@ -535,7 +535,7 @@ let
         name = mkDefault name;
 
         members = mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+          filterAttrs (n: u: u.enable && elem config.name u.extraGroups) cfg.users
         );
       };
 
