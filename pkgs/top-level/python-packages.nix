@@ -14995,6 +14995,8 @@ self: super: with self; {
 
   pyvows = callPackage ../development/python-modules/pyvows { };
 
+  pyw215 = callPackage ../development/python-modules/pyw215 { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
