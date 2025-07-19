@@ -1,0 +1,11 @@
+--- a/src/gfxstream/guest/vulkan_enc/ResourceTracker.cpp
++++ b/src/gfxstream/guest/vulkan_enc/ResourceTracker.cpp
+@@ -1580,7 +1580,7 @@ void ResourceTracker::deviceMemoryTransform_tohost(VkDeviceMemory* memory, uint3
+ 
+             auto it = info_VkDeviceMemory.find(mem);
+             if (it == info_VkDeviceMemory.end()) {
+-                mesa_logw("%s cannot find memory %p!", __func__, mem);
++                mesa_logw("%s cannot find memory!", __func__);
+                 return;
+             }
+ 

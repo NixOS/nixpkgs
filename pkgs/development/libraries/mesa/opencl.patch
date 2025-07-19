@@ -1,23 +1,23 @@
 diff --git a/meson.build b/meson.build
-index c150bff74ff..37fa7f0531b 100644
+index 393f3ac1b93..fbc90b5645e 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -1850,7 +1850,7 @@ endif
+@@ -1836,7 +1836,7 @@ endif
  
  dep_clang = null_dep
- if with_clc or with_gallium_clover
+ if with_clc
 -  llvm_libdir = dep_llvm.get_variable(cmake : 'LLVM_LIBRARY_DIR', configtool: 'libdir')
 +  llvm_libdir = get_option('clang-libdir')
  
    dep_clang = cpp.find_library('clang-cpp', dirs : llvm_libdir, required : false)
  
-diff --git a/meson_options.txt b/meson_options.txt
-index 82324617884..4bde97a8568 100644
+diff --git a/meson.options b/meson.options
+index b1cdb06fcc9..3e8861979ae 100644
 --- a/meson.options
 +++ b/meson.options
-@@ -738,3 +738,10 @@ option(
-     'none', 'dri2'
-   ],
+@@ -856,3 +856,10 @@ option(
+   value : false,
+   description : 'Build virtgpu_kumquat (only useful with gfxstream currently)'
  )
 +
 +option(
@@ -26,24 +26,11 @@ index 82324617884..4bde97a8568 100644
 +  value : '',
 +  description : 'Locations to search for clang libraries.'
 +)
-diff --git a/src/gallium/targets/opencl/meson.build b/src/gallium/targets/opencl/meson.build
-index ab2c83556a8..a59e88e122f 100644
---- a/src/gallium/targets/opencl/meson.build
-+++ b/src/gallium/targets/opencl/meson.build
-@@ -56,7 +56,7 @@ if with_opencl_icd
-     configuration : _config,
-     input : 'mesa.icd.in',
-     output : 'mesa.icd',
--    install : true,
-+    install : false,
-     install_tag : 'runtime',
-     install_dir : join_paths(get_option('sysconfdir'), 'OpenCL', 'vendors'),
-   )
 diff --git a/src/gallium/targets/rusticl/meson.build b/src/gallium/targets/rusticl/meson.build
-index 35833dc7423..41a95927cab 100644
+index 2b214adbbf5..7f919397ad5 100644
 --- a/src/gallium/targets/rusticl/meson.build
 +++ b/src/gallium/targets/rusticl/meson.build
-@@ -63,7 +63,7 @@ configure_file(
+@@ -64,7 +64,7 @@ configure_file(
    configuration : _config,
    input : 'rusticl.icd.in',
    output : 'rusticl.icd',
