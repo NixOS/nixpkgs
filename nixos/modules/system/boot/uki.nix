@@ -96,6 +96,10 @@ in
 
     boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);
 
+    boot.bootspec.extensions."org.nixos.uki" = {
+      uki = "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+    };
+
     system.boot.loader.ukiFile =
       let
         name = config.boot.uki.name;
