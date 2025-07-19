@@ -2,48 +2,66 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  fetchzip,
   ncurses,
   db,
 }:
 
-stdenv.mkDerivation rec {
+# XXX: sendmail?
+
+let
   pname = "nvi";
   version = "1.81.6";
+  deb_version = "23";
+
+  base_url = "mirror://debian/pool/main/n/${pname}/${pname}_${version}";
+
+  debian-extras = fetchzip {
+    url = "${base_url}-${deb_version}.debian.tar.xz";
+    hash = "sha256-dR7vZtCV5PjUDlNTWxubxH7eucizkPRaMlyNdziud84=";
+  };
+in
+stdenv.mkDerivation rec {
+  inherit pname;
+  inherit version;
 
   src = fetchurl {
-    url = "https://deb.debian.org/debian/pool/main/n/nvi/nvi_${version}.orig.tar.gz";
+    url = "${base_url}.orig.tar.gz";
     sha256 = "13cp9iz017bk6ryi05jn7drbv7a5dyr201zqd3r4r8srj644ihwb";
   };
-
-  patches = [
-    # Fix runtime error with modern versions of db.
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-03-db4.patch";
-      sha256 = "1vpnly3dcldwl8gwl0jrh5yh0vhgbdhsh6xn7lnwhrawlvk6d55y";
-    })
-
-    # Fix build with Glibc.
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-20-glibc_has_grantpt.patch";
-      sha256 = "1ypqj263wh53m5rgiag5c4gy1rksj2waginny1lcj34n72p2dsml";
-    })
-  ];
 
   buildInputs = [
     ncurses
     db
   ];
 
+  # Debian maintains lots of patches for nvi. Let's include all of them.
+  prePatch = ''
+    patches="$patches $(cat ${debian-extras}/patches/series | sed 's|^|${debian-extras}/patches/|')"
+  '';
+
   preConfigure = ''
     cd build.unix
   '';
   configureScript = "../dist/configure";
-  configureFlags = [ "vi_cv_path_preserve=/tmp" ];
+  configureFlags = [
+    "--disable-curses"
+    "--disable-shared"
+    "--enable-static"
+    "--enable-widechar"
+    "--disable-threads"
+    "--without-x"
+    "--with-gnu-ld=yes"
+    # "ac_cv_path_vi_cv_path_sendmail=sendmail"
+    "vi_cv_path_preserve=/tmp"
+    "vi_cv_path_shell=/bin/sh"
+    "vi_cv_revoke=no"
+  ];
 
   meta = with lib; {
     description = "Berkeley Vi Editor";
     license = licenses.free;
+    maintainers = with maintainers; [ suominen ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin
   };
