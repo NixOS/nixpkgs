@@ -209,11 +209,11 @@ if [[ -e @out@/nix-support/add-local-cc-cflags-before.sh ]]; then
     source @out@/nix-support/add-local-cc-cflags-before.sh
 fi
 
-# As a very special hack, if the arguments are just `-v', then don't
-# add anything.  This is to prevent `gcc -v' (which normally prints
-# out the version number and returns exit code 0) from printing out
-# `No input files specified' and returning exit code 1.
-if [ "$*" = -v ]; then
+# As a very special hack, if the arguments are just `-v' (or similar), 
+# then don't add anything.  This is to prevent `gcc -v' (which normally
+# prints out the version number and returns exit code 0) from printing 
+# out `No input files specified' and returning exit code 1.
+if [ "$*" = -v ] || [ "$*" = --version ] || [ "$*" = -dumpversion ]; then
     extraAfter=()
     extraBefore=()
 fi
