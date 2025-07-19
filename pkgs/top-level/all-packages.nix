@@ -2930,6 +2930,8 @@ with pkgs;
     binutils = binutils-unwrapped;
   };
 
+  fls = callPackage ../tools/misc/fls { };
+
   fltrdr = callPackage ../tools/misc/fltrdr {
     icu = icu63;
   };
