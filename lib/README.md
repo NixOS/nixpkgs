@@ -136,6 +136,9 @@ path/tests/prop.sh
 
 # Run the lib.fileset tests
 fileset/tests.sh
+
+# Run the platform constraints algebra tests
+nix-instantiate --eval --strict tests/platform-constraints-algebra.nix
 ```
 
 ## Commit conventions
