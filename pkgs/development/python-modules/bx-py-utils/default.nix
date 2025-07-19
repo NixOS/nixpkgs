@@ -21,8 +21,6 @@ buildPythonPackage rec {
   pname = "bx-py-utils";
   version = "109";
 
-  disabled = pythonOlder "3.10";
-
   pyproject = true;
 
   src = fetchFromGitHub {

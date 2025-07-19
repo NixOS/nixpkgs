@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "jnsgruk";
     repo = "pytouchlinesl";

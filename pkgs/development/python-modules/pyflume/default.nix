@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.8.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";

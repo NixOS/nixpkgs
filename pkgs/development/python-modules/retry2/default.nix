@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.9.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "eSAMTrade";
     repo = "retry";

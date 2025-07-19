@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "6.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";

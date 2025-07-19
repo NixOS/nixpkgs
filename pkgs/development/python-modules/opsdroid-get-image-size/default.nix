@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     pname = "opsdroid_get_image_size";
     inherit version;

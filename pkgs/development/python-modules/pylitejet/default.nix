@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "joncar";
     repo = "pylitejet";

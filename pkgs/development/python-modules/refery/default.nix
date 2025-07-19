@@ -29,8 +29,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "refery" ];
 
-  disabled = pythonOlder "3.10";
-
   # No tests yet
   doCheck = false;
 

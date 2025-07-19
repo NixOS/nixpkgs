@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.10.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "volvooncall";

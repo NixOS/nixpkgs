@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";

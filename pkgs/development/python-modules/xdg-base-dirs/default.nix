@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "6.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "srstevenson";
     repo = "xdg-base-dirs";

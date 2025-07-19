@@ -11,7 +11,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.3.9";
 
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "unexpectedpanda";

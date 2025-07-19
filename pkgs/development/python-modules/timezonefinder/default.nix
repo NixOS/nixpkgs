@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "6.5.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";

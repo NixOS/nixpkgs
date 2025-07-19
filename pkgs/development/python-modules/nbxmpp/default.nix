@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "6.2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";

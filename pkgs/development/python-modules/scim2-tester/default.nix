@@ -18,8 +18,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit version;
     pname = "scim2_tester";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.10.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = "screenlogicpy";

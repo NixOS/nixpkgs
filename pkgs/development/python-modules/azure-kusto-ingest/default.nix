@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "4.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-kusto-python";

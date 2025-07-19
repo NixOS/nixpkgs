@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "3.2.15";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";

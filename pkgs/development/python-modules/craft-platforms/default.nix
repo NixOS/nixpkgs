@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-platforms";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2025.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "securetar";

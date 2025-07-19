@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.vmfs";

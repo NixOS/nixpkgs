@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "4.2.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.1.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "dotvav";
     repo = "py-palazzetti-api";

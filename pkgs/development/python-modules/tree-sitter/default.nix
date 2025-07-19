@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.24.0-unstable-2025-06-02";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";

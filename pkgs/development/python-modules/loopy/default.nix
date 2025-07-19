@@ -33,8 +33,6 @@ buildPythonPackage rec {
   version = "2025.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "loopy";
