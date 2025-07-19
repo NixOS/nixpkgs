@@ -38,11 +38,15 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.libc == "mlibc") {
+    NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  };
+
   nativeCheckInputs = [
     util-linuxMinimal
     which
   ];
-  doCheck = !(stdenv.targetPlatform.useLLVM or false);
+  doCheck = !(stdenv.targetPlatform.useLLVM or false) && stdenv.hostPlatform.libc != "mlibc";
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
