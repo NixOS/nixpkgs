@@ -1,0 +1,82 @@
+proc expect_line {line} {
+    set timeout 10
+    expect -re "\[\r\n \]($line)(?=\[\r\n>\])"
+    return $expect_out(1,string)
+}
+
+proc send_line {line {response "Done"}} {
+	send "$line\r"
+	expect_line $response
+}
+
+proc read_file {path description} {
+	if {![file exists $path]} {
+		send_error "Error: $description $path not found"
+		exit 1
+	}
+	set fp [open $path r]
+	set ret [string trim [read $fp]]
+	close $fp
+	return $ret
+}
+
+proc attach {} {
+    send_line "ifconfig up"
+    send_line "thread start"
+}
+
+proc setup_thread_network { networkName panID extendedPanID networkKey pskc meshLocalPrefix channelMask channel wakeUpChannel threadDomain } {
+
+	send_line "dataset init new"
+	send_line "dataset networkname $networkName"
+	send_line "dataset panid $panID"
+	send_line "dataset extpanid $extendedPanID"
+	# Note that the network key must be set /after/ the
+	# extpanid and network name.
+	if {$networkKey != "null"} {
+		send_line "dataset networkkey $networkKey"
+	}
+	send_line "dataset pskc -p $pskc"
+	send_line "dataset meshlocalprefix $meshLocalPrefix"
+	send_line "dataset channelmask $channelMask"
+	send_line "dataset channel $channel"
+	send_line "dataset wakeupchannel $wakeUpChannel"
+	send_line "domainname $threadDomain"
+
+	send_line "dataset commit active"
+
+	attach
+}
+
+
+
+if {$argc != 11} {
+	send_error "Usage: $argv0 <ot-ctl> <networkName> <panID> <extendedPanID> <networkKey_file or null> <pskc_file> <meshLocalPrefix> <channelMask> <channel> <wakeUpChannel> <threadDomain>"
+	exit 1
+}
+
+set otctl [lindex $argv 0]
+set networkName [lindex $argv 1]
+set panID [lindex $argv 2]
+set extendedPanID [lindex $argv 3]
+set networkKeyFile [lindex $argv 4]
+if {$networkKeyFile != "null"} {
+	set networkKey [read_file $networkKeyFile "Network key file"]
+} else {
+	set networkKey "null"
+}
+set pskcFile [lindex $argv 5]
+set pskc [read_file $pskcFile "PSKC file"]
+
+set meshLocalPrefix [lindex $argv 6]
+set channelMask [lindex $argv 7]
+set channel [lindex $argv 8]
+set wakeUpChannel [lindex $argv 9]
+set threadDomain [lindex $argv 10]
+
+sleep 2
+spawn $otctl
+
+setup_thread_network $networkName $panID $extendedPanID $networkKey $pskc $meshLocalPrefix $channelMask $channel $wakeUpChannel $threadDomain
+
+close
