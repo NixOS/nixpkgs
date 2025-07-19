@@ -1,0 +1,17 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index f3ef543..1207de5 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -102,6 +102,12 @@ dependencies {
+         implementation(compose.desktop.currentOs)
+         implementation(libs.jme3.lwjgl3)
+     }
++
++    implementation(compose.desktop.linux_x64)
++    implementation(compose.desktop.linux_arm64)
++    implementation(compose.desktop.macos_x64)
++    implementation(compose.desktop.macos_arm64)
++
+     implementation(compose.material3)
+     implementation(compose.components.resources)
+     implementation(libs.filekit)
