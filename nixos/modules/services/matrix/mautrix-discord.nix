@@ -101,7 +101,7 @@ in
               type = lib.types.attrs;
               default = {
                 username_template = "discord_{{.}}";
-                displayname_template = "{{or .GlobalName .Username}}{{if .Bot}} (bot){{end}}";
+                displayname_template = "{{if .Webhook}}Webhook{{else}}{{or .GlobalName .Username}}{{if .Bot}} (bot){{end}}{{end}}";
                 channel_name_template = "{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else}}#{{.Name}}{{end}}";
                 guild_name_template = "{{.Name}}";
                 private_chat_portal_meta = "default";
@@ -122,8 +122,8 @@ in
                 delete_portal_on_channel_delete = false;
                 delete_guild_on_leave = true;
                 federate_rooms = true;
-                prefix_webhook_messages = false;
-                enable_webhook_avatars = true;
+                prefix_webhook_messages = true;
+                enable_webhook_avatars = false;
                 use_discord_cdn_upload = true;
                 cache_media = "unencrypted";
                 direct_media = {
