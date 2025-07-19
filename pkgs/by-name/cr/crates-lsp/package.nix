@@ -18,6 +18,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-oS6xi8BH5vCVOimYWsDoW0Na7eUXzeHKKSOwpK9wbu8=";
 
+  checkFlags = [
+    # These tests fail on system `x86_64-darwin` with error:
+    # failed to create crates-lsp .gitignore file.: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "--skip=crates::api::tests::get_common_crates"
+    "--skip=crates::sparse::tests::get_common_crates"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
