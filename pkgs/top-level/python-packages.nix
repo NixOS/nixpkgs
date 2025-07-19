@@ -4192,6 +4192,8 @@ self: super: with self; {
 
   docling-ibm-models = callPackage ../development/python-modules/docling-ibm-models { };
 
+  docling-jobkit = callPackage ../development/python-modules/docling-jobkit { };
+
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
@@ -15962,6 +15964,8 @@ self: super: with self; {
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
+
+  scalar-fastapi = callPackage ../development/python-modules/scalar-fastapi { };
 
   scalene = callPackage ../development/python-modules/scalene { };
 
