@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   perlPackages,
+  gtk-doc,
   intltool,
   autoreconfHook,
   pkg-config,
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       autoreconfHook
+      gtk-doc
       intltool
       pkg-config
       udevCheckHook
