@@ -14611,8 +14611,6 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
-  chessx = libsForQt5.callPackage ../games/chessx { };
-
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
   chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };

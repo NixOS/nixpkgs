@@ -3,14 +3,9 @@
   lib,
   pkg-config,
   zlib,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtmultimedia,
-  qmake,
   fetchpatch,
   fetchurl,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,19 +17,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ (with libsForQt5; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    qtsvg
-    qttools
-    zlib
-  ];
+  buildInputs =
+    [
+      zlib
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qtmultimedia
+      qtsvg
+      qttools
+    ]);
 
   patches =
     # needed to backport patches to successfully build, due to broken release
@@ -63,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chessx.sourceforge.io/";
     description = "Browse and analyse chess games";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ luispedro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ luispedro ];
+    platforms = lib.platforms.linux;
     mainProgram = "chessx";
   };
 })
