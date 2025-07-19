@@ -12997,12 +12997,6 @@
     githubId = 56224949;
     name = "Mia Kanashi";
   };
-  kanielrkirby = {
-    email = "kanielrkirby@runbox.com";
-    github = "kanielrkirby";
-    githubId = 77940607;
-    name = "Kaniel Kirby";
-  };
   karantan = {
     name = "Gasper Vozel";
     email = "karantan@gmail.com";
