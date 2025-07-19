@@ -1,5 +1,4 @@
 {
-  alsa-lib,
   boost,
   catch2_3,
   cmake,
@@ -12,16 +11,14 @@
   fetchzip,
   fmt,
   ffmpeg_6-headless,
-  gamemode,
   glslang,
   httplib,
   inih,
   lib,
   libGL,
-  libjack2,
-  libpulseaudio,
   libunwind,
   libusb1,
+  moltenvk,
   nlohmann_json,
   openal,
   openssl,
@@ -30,7 +27,6 @@
   portaudio,
   robin-map,
   SDL2,
-  sndio,
   spirv-tools,
   soundtouch,
   stdenv,
@@ -45,10 +41,13 @@
   useDiscordRichPresence ? true,
   rapidjson,
   enableSSE42 ? true, # Disable if your hardware doesn't support SSE 4.2 (mainly CPUs before 2011)
+  gamemode,
+  enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
 }:
 let
   inherit (lib)
     optionals
+    optionalString
     cmakeBool
     getLib
     ;
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      alsa-lib
       boost
       catch2_3
       cryptopp
@@ -84,33 +82,35 @@ stdenv.mkDerivation (finalAttrs: {
       httplib
       inih
       libGL
-      libjack2
-      libpulseaudio
       libunwind
       libusb1
       nlohmann_json
       openal
       openssl
-      pipewire
       portaudio
       robin-map
       qt6.qtbase
       qt6.qtmultimedia
       qt6.qttools
-      qt6.qtwayland
       soundtouch
       SDL2
-      sndio
       spirv-tools
       vulkan-headers
       xbyak
-      xorg.libX11
-      xorg.libXext
       zstd
     ]
     ++ optionals enableQtTranslations [ qt6.qttools ]
     ++ optionals enableCubeb [ cubeb ]
-    ++ optionals useDiscordRichPresence [ rapidjson ];
+    ++ optionals useDiscordRichPresence [ rapidjson ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      pipewire
+      qt6.qtwayland
+      xorg.libX11
+      xorg.libXext
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+    ];
 
   patches = [
     # Fix boost errors
@@ -124,17 +124,22 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/Tatsh/tatsh-overlay/5c4497d9b67fa6f2fa327b2f2ce4cb5be8c9f2f7/games-emulation/lime3ds/files/lime3ds-0003-boost-1.87-fixes.patch";
       hash = "sha256-mwfI7fTx9aWF/EjMW3bxoz++A+6ONbNA70tT5nkhDUU=";
     })
+
+    # https://github.com/azahar-emu/azahar/pull/1165
+    ./update-cmake-lists.patch
   ];
 
-  postPatch = ''
-    # We already know the submodules are present
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "check_submodules_present()" ""
-
+  postPatch =
+    ''
+      # We already know the submodules are present
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "check_submodules_present()" ""
+    ''
     # Add gamemode
-    substituteInPlace externals/gamemode/include/gamemode_client.h \
-      --replace-fail "libgamemode.so.0" "${getLib gamemode}/lib/libgamemode.so.0"
-  '';
+    + optionalString enableGamemode ''
+      substituteInPlace externals/gamemode/include/gamemode_client.h \
+        --replace-fail "libgamemode.so.0" "${getLib gamemode}/lib/libgamemode.so.0"
+    '';
 
   cmakeFlags = [
     (cmakeBool "USE_SYSTEM_LIBS" true)
@@ -155,5 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
       marcin-serwin
     ];
     mainProgram = "azahar";
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
