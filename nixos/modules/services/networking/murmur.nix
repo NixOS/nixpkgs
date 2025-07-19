@@ -335,8 +335,8 @@ in
         Group = cfg.group;
 
         # service hardening
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
