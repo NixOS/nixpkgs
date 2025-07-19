@@ -13,12 +13,12 @@ let
   pname = "anytype-heart";
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.40.21";
+  version = "0.41.2";
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${version}";
-    hash = "sha256-53LSaETzxwhKkI9is6N6G1+f5Cnf7KStvHA9qeaWUNo=";
+    hash = "sha256-upqry+BgILZw9ZeVCmT+AvI2WTFsyC84R19TH3FOZIw=";
   };
 
   arch =
@@ -36,7 +36,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-WsYRkAIYDkKWkQpq843dD7Rqc993eHSgee2IX6PomcU=";
+  vendorHash = "sha256-LvMaQKabOhp5F6eV4ne71Y8XpHX41XmrIoEOOE0YPLI=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
