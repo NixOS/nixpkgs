@@ -15,6 +15,7 @@
   dbus,
   embree,
   fetchzip,
+  fetchFromGitHub,
   ffmpeg,
   fftw,
   fftwFloat,
@@ -48,6 +49,7 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
+  manifold,
   mesa,
   nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
@@ -72,7 +74,7 @@
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  tbb,
+  tbb_2022,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -100,25 +102,26 @@ let
     patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
   });
 
-  optix = fetchzip {
-    # Look at upstream Blender BuildBot logs to determine the current version,
-    # see Git blame here for historical details
-    url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
-    hash = "sha256-ca08XetwaUYC9foeP5bff9kcDfuFgEzopvjspn2s8RY=";
+  # See build_files/config/pipeline_config.yaml in upstream source for version
+  optix = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "optix-dev";
+    tag = "v8.0.0";
+    hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
   };
+
+  tbb = tbb_2022;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.3";
+  version = "4.5.0";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+    hash = "sha256-ERT/apulQ9ogA7Uk/AfjBee0rLjxEXItw6GwDOoysXk=";
   };
-
-  patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -247,13 +250,14 @@ stdenv'.mkDerivation (finalAttrs: {
       libsndfile
       libtiff
       libwebp
+      (manifold.override { tbb_2021 = tbb; })
       opencolorio
       openexr
       openimageio_2
       openjpeg
-      openpgl
+      (openpgl.override { inherit tbb; })
       (opensubdiv.override { inherit cudaSupport; })
-      openvdb
+      (openvdb.override { inherit tbb; })
       potrace
       pugixml
       python3
@@ -263,7 +267,7 @@ stdenv'.mkDerivation (finalAttrs: {
       zstd
     ]
     ++ lib.optional embreeSupport embree
-    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
+    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
     ++ (
       if (!stdenv.hostPlatform.isDarwin) then
         [
