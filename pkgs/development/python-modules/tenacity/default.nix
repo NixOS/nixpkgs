@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jd/tenacity";
-    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${src.tag}";
     description = "Retrying library for Python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
