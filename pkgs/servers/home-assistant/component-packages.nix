@@ -3567,7 +3567,8 @@
       ]; # missing inputs: microBeesPy
     "microsoft" =
       ps: with ps; [
-      ]; # missing inputs: pycsspeechtts
+        pycsspeechtts
+      ];
     "microsoft_face" =
       ps: with ps; [
         pyturbojpeg
@@ -7293,6 +7294,7 @@
     "meteoclimatic"
     "metoffice"
     "mfi"
+    "microsoft"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
