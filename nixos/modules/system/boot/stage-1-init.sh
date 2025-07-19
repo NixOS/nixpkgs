@@ -10,17 +10,16 @@ info() {
     fi
 }
 
-extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
-ln -s @extraUtils@/bin /bin
+ln -s "@extraUtils@/bin" /bin
 # hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
-ln -s @extraUtils@/bin /sbin
+ln -s "@extraUtils@/bin" /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
     for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         ln -s "@extraUtils@/secrets/$secret" "$secret"
     done
 fi
@@ -148,10 +147,11 @@ specialMount() {
   local options="$3"
   local fsType="$4"
 
-  mkdir -m 0755 -p "$mountPoint"
+  mkdir -p "$mountPoint"
+  chmod 0755 "$mountPoint"
   mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
 }
-source @earlyMountScript@
+source "@earlyMountScript@"
 
 # Copy initrd secrets from /.initrd-secrets to their actual destinations
 if [ -d "/.initrd-secrets" ]; then
@@ -160,7 +160,7 @@ if [ -d "/.initrd-secrets" ]; then
     # under /.initrd-secrets/
     #
     for secret in $(cd "/.initrd-secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         cp "/.initrd-secrets/$secret" "$secret"
     done
 fi
@@ -188,21 +188,21 @@ export stage2Init=/init
 for o in $(cat /proc/cmdline); do
     case $o in
         console=*)
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             params=$2
-            set -- $(IFS=,; echo $params)
+            set -- $(IFS=','; echo $params)
             console=$1
             ;;
         init=*)
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             stage2Init=$2
             ;;
         boot.persistence=*)
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             persistence=$2
             ;;
         boot.persistence.opt=*)
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             persistence_opt=$2
             ;;
         boot.trace|debugtrace)
@@ -231,7 +231,7 @@ for o in $(cat /proc/cmdline); do
             # If a root device is specified on the kernel command
             # line, make it available through the symlink /dev/root.
             # Recognise LABEL= and UUID= to support UNetbootin.
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             if [ $2 = "LABEL" ]; then
                 root="/dev/disk/by-label/$3"
             elif [ $2 = "UUID" ]; then
@@ -247,7 +247,7 @@ for o in $(cat /proc/cmdline); do
         findiso=*)
             # if an iso name is supplied, try to find the device where
             # the iso resides on
-            set -- $(IFS==; echo $o)
+            set -- $(IFS='='; echo $o)
             isoPath=$2
             ;;
     esac
@@ -258,10 +258,10 @@ done
 @setHostId@
 
 # Load the required kernel modules.
-echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+echo "@extraUtils@/bin/modprobe" > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
-    modprobe $i
+    modprobe "$i"
 done
 
 
@@ -273,9 +273,9 @@ ln -sfn /proc/self/fd/0 /dev/stdin
 ln -sfn /proc/self/fd/1 /dev/stdout
 ln -sfn /proc/self/fd/2 /dev/stderr
 mkdir -p /etc/systemd
-ln -sfn @linkUnits@ /etc/systemd/network
+ln -sfn "@linkUnits@" /etc/systemd/network
 mkdir -p /etc/udev
-ln -sfn @udevRules@ /etc/udev/rules.d
+ln -sfn "@udevRules@" /etc/udev/rules.d
 mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
@@ -390,7 +390,7 @@ mountFS() {
     fi
 
     # Filter out x- options, which busybox doesn't do yet.
-    local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+    local optionsFiltered="$(IFS=','; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
     # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
     local optionsPrefixed="$( echo "${optionsFiltered%,}" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
@@ -402,7 +402,8 @@ mountFS() {
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
              dir="$( echo "$optionsPrefixed" | grep -o "${i}dir=[^,]*" )"
-             mkdir -m 0700 -p "${dir##*=}"
+             mkdir -p "${dir##*=}"
+             chmod 0700 "${dir##*=}"
         done
     fi
 
@@ -448,7 +449,8 @@ lustrateRoot () {
     echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
-    mkdir -m 0755 -p "$root/old-root.tmp"
+    mkdir -p "$root/old-root.tmp"
+    chmod 0755 "$root/old-root.tmp"
 
     echo
     echo "Moving impurities out of the way:"
@@ -464,7 +466,8 @@ lustrateRoot () {
     # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
-    mkdir -m 0755 -p "$root/etc"
+    mkdir -p "$root/etc"
+    chmod 0755 "$root/etc"
     touch "$root/etc/NIXOS"
 
     exec 4< "$root/old-root/etc/NIXOS_LUSTRATE"
@@ -473,7 +476,8 @@ lustrateRoot () {
     echo "Restoring selected impurities:"
     while read -u 4 keeper; do
         dirname="$(dirname "$keeper")"
-        mkdir -m 0755 -p "$root/$dirname"
+        mkdir -p "$root/$dirname"
+        chmod 0755 "$root/$dirname"
         cp -av "$root/old-root/$keeper" "$root/$keeper"
     done
 
@@ -535,7 +539,7 @@ fi
 # Try to find and mount the root device.
 mkdir -p $targetRoot
 
-exec 3< @fsInfo@
+exec 3< "@fsInfo@"
 
 while read -u 3 mountPoint; do
     read -u 3 device
@@ -629,7 +633,7 @@ udevadm control --exit
 
 # Reset the logging file descriptors.
 # Do this just before pkill, which will kill the tee process.
-exec 1>&$logOutFd 2>&$logErrFd
+exec 1>&"$logOutFd" 2>&"$logErrFd"
 eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
@@ -666,12 +670,13 @@ if [ ! -e "$targetRoot/$stage2Init" ]; then
     fi
 fi
 
-mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
+mkdir -p "$targetRoot/proc" "$targetRoot/sys" "$targetRoot/dev" "$targetRoot/run"
+chmod 0755 "$targetRoot/proc" "$targetRoot/sys" "$targetRoot/dev" "$targetRoot/run"
 
-mount --move /proc $targetRoot/proc
-mount --move /sys $targetRoot/sys
-mount --move /dev $targetRoot/dev
-mount --move /run $targetRoot/run
+mount --move /proc "$targetRoot/proc"
+mount --move /sys "$targetRoot/sys"
+mount --move /dev "$targetRoot/dev"
+mount --move /run "$targetRoot/run"
 
 exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
 
