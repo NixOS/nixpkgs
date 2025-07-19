@@ -599,6 +599,7 @@ in
   gerrit = runTest ./gerrit.nix;
   geth = runTest ./geth.nix;
   ghostunnel = runTest ./ghostunnel.nix;
+  ghostunnel-modular = runTest ./ghostunnel-modular.nix;
   gitdaemon = runTest ./gitdaemon.nix;
   gitea = handleTest ./gitea.nix { giteaPackage = pkgs.gitea; };
   github-runner = runTest ./github-runner.nix;
