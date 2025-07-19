@@ -492,11 +492,11 @@ rec {
                 + "update an attribute inside of it."
               );
 
-          # We get the final result by applying all the updates on this level
-          # after having applied all the nested updates
-          # We use foldl instead of foldl' so that in case of multiple updates,
-          # intermediate values aren't evaluated if not needed
         in
+        # We get the final result by applying all the updates on this level
+        # after having applied all the nested updates
+        # We use foldl instead of foldl' so that in case of multiple updates,
+        # intermediate values aren't evaluated if not needed
         foldl (acc: el: el.update acc) withNestedMods split.right;
 
     in
@@ -870,6 +870,62 @@ rec {
       concatMap (collect pred) (attrValues attrs)
     else
       [ ];
+
+  /**
+    Recursively collect sets that verify a given predicate named `pred`
+    from the set `attrs`. The recursion is stopped when the predicate is
+    verified. This version of `collect` also collects the attribute paths
+    of the items.
+
+    # Inputs
+
+    `pred`
+
+    : Given an attribute's value, determine if recursion should stop.
+
+    `attrs`
+
+    : The attribute set to recursively collect.
+
+    # Type
+
+    ```
+    collect' :: (AttrSet -> Bool) -> AttrSet -> [{ path :: [ String ], value :: x }]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.collect'` usage example
+
+    ```nix
+    collect' isList { a = { b = ["b"]; }; c = [1]; }
+    => [
+      { path = [ "a" "b" ]; value = [ "b" ];
+      { path = [ "c" ]; value = [ 1 ]; }
+    ]
+
+    collect (x: x ? outPath)
+       { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+    => [
+      { path = [ "a" ]; value = { outPath = "a/"; }; }
+      { path = [ "b" ]; value = { outPath = "b/"; }; }
+    ]
+    ```
+
+    :::
+  */
+  collect' =
+    let
+      collect'' =
+        path: pred: value:
+        if pred value then
+          [ { inherit path value; } ]
+        else if isAttrs value then
+          concatMap ({ name, value }: collect'' (path ++ [ name ]) pred value) (attrsToList value)
+        else
+          [ ];
+    in
+    collect'' [ ];
 
   /**
     Return the cartesian product of attribute set value combinations.

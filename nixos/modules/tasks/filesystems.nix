@@ -404,7 +404,7 @@ in
 
   config = {
 
-    assertions =
+    assertions.fileSystems =
       let
         ls = sep: concatMapStringsSep sep (x: x.mountPoint);
         resizableFSes = [
@@ -413,43 +413,44 @@ in
           "btrfs"
           "xfs"
         ];
-        notAutoResizable = fs: fs.autoResize && !(builtins.elem fs.fsType resizableFSes);
       in
-      [
-        {
+      {
+        topologicallySorted = {
           assertion = !(fileSystems' ? cycle);
-          message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
-        }
-        {
-          assertion = !(any notAutoResizable fileSystems);
-          message =
-            let
-              fs = head (filter notAutoResizable fileSystems);
-            in
-            ''
-              Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
-              ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
-              only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
-            '';
-        }
-        {
-          assertion = !(any (fs: fs.formatOptions != null) fileSystems);
           message = ''
-            'fileSystems.<name>.formatOptions' has been removed, since
-            systemd-makefs does not support any way to provide formatting
-            options.
+            The ‘fileSystems’ option can't be topologically sorted:
+            mountpoint dependency path ${ls " -> " fileSystems'.cycle or [ ]} loops to ${
+              ls ", " fileSystems'.loops or [ ]
+            }
           '';
-        }
-      ]
-      ++ lib.map (fs: {
-        assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
-        message = ''
-          The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
-            label: ${toString fs.label}
-            device: ${toString fs.device}
-          'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
-        '';
-      }) fileSystems;
+        };
+        resizable = mapAttrs (name: fs: {
+          assertion = fs.autoResize -> builtins.elem fs.fsType resizableFSes;
+          message = ''
+            Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
+            ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
+            only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
+          '';
+        }) config.fileSystems;
+        formatOptionsDeprecated = mapAttrs (name: fs: {
+          assertion = fs.formatOptions == null;
+          message = ''
+            The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+              label: ${toString fs.label}
+              device: ${toString fs.device}
+            'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+          '';
+        }) config.fileSystems;
+        consistentDeviceLabelMountPoint = mapAttrs (name: fs: {
+          assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
+          message = ''
+            The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+              label: ${toString fs.label}
+              device: ${toString fs.device}
+            'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+          '';
+        }) config.fileSystems;
+      };
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
