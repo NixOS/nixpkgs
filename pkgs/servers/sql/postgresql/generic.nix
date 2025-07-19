@@ -102,11 +102,11 @@ let
       numaSupport ?
         lib.versionAtLeast version "18"
         && lib.meta.availableOn stdenv.hostPlatform numactl
-        # NUMA can fail in 18beta1 on some hardware with:
+        # NUMA can fail in 18beta2 on some hardware with:
         # ERROR:  invalid NUMA node id outside of allowed range [0, 0]: 1
         # https://github.com/NixOS/nixpkgs/pull/411958#issuecomment-3031680123
         # https://www.postgresql.org/message-id/flat/E1u1tr8-003BbN-2E%40gemulon.postgresql.org
-        && version != "18beta1",
+        && version != "18beta2",
       numactl,
 
       # PAM
