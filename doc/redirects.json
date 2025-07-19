@@ -23,6 +23,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-dockerTools-writeImageStream-streamNixShellImage": [
+    "index.html#ex-dockerTools-writeImageStream-streamNixShellImage"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
@@ -453,6 +456,18 @@
   ],
   "ssec-cosmic-settings-fallback": [
     "index.html#ssec-cosmic-settings-fallback"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-examples": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-examples"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-inputs": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-inputs"
+  ],
+  "ssec-pkgs-dockerTools-writeImageStream-passthru-outputs": [
+    "index.html#ssec-pkgs-dockerTools-writeImageStream-passthru-outputs"
   ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
