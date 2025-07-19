@@ -35,11 +35,11 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     pname = "knot-resolver";
-    version = "5.7.5";
+    version = "5.7.6";
 
     src = fetchurl {
       url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-      sha256 = "80239cf9aa92599d9cbad4642dea5520b2ccfbc9c6f968886ea46179cb3cdf66";
+      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
     };
 
     outputs = [
