@@ -1,26 +1,23 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitHub,
-  bencoder,
-  pyyaml,
-  requests,
+  python3Packages,
 }:
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gazelle-origin";
   version = "3.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "gazelle-origin";
     # Use the spinfast319 fork, since it seems that upstream
     # at <https://github.com/x1ppy/gazelle-origin> is inactive
     owner = "spinfast319";
-    rev = version;
+    tag = version;
     hash = "sha256-+yMKnfG2f+A1/MxSBFLaHfpCgI2m968iXqt+2QanM/c=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     bencoder
     pyyaml
     requests
@@ -28,12 +25,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "gazelleorigin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating origin files using the API of Gazelle-based torrent trackers";
     homepage = "https://github.com/spinfast319/gazelle-origin";
     # TODO license is unspecified in the upstream, as well as the fork
-    license = licenses.unfree;
-    maintainers = with maintainers; [ somasis ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ somasis ];
     mainProgram = "gazelle-origin";
   };
 }
