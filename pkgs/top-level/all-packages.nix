@@ -5756,7 +5756,7 @@ with pkgs;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
-  llvmPackages = llvmPackages_19;
+  llvmPackages = llvmPackages_20;
 
   inherit
     (rec {
@@ -5924,9 +5924,7 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_88 = callPackage ../development/compilers/rust/1_88.nix {
-    llvm_20 = llvmPackages_20.libllvm;
-  };
+  rust_1_88 = callPackage ../development/compilers/rust/1_88.nix { };
   rust = rust_1_88;
 
   mrustc = callPackage ../development/compilers/mrustc { };
