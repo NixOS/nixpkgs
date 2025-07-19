@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     ''
+      # GTest needs C++17
+      # Remove when https://gitlab.com/ubports/development/core/biometryd/-/merge_requests/39 merged & in release
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'std=c++14' 'std=c++17'
+
       # Substitute systemd's prefix in pkg-config call
       substituteInPlace data/CMakeLists.txt \
         --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'

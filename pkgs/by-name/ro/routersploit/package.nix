@@ -6,26 +6,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "routersploit";
-  version = "3.4.1-unstable-2025-04-24";
+  version = "3.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "routersploit";
-    rev = "0bf837f67ed2131077c4192c21909104aab9f13d";
-    hash = "sha256-IET0vL0VVP9ZNn75hKdTCiEmOZRHHYICykhzW2g3LEg=";
+    tag = "v${version}";
+    hash = "sha256-10NBSY/mYjOWoz2XCJ1UvXUIYUW4csRJHHtDlWMO420=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
-    future
     paramiko
     pycryptodome
     pysnmp
     requests
     setuptools
-    standard-telnetlib
   ];
 
   # Tests are out-dated and support for newer pysnmp is not implemented yet

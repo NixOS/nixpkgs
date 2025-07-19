@@ -88,7 +88,7 @@ in
 
   config.system.nixos.tags = [ "amazon" ];
   config.system.build.image = config.system.build.amazonImage;
-  config.image.extension = cfg.format;
+  config.image.extension = if cfg.format == "vpc" then "vhd" else cfg.format;
 
   config.system.build.amazonImage =
     let
