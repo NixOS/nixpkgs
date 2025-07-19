@@ -5,7 +5,14 @@ Status: in development. This functionality is new in NixOS 25.05, and significan
 
 Traditionally, NixOS services were defined using sets of options *in* modules, not *as* modules. This made them non-modular, resulting in problems with composability, reuse, and portability.
 
-A *modular service* is a [module] that defines values for a core set of options, including which program to run.
+A configuration management framework is an application of `evalModules` with the `class` and `specialArgs` input attribute set to particular values.
+NixOS is such a configuration management framework, and so are [Home Manager](https://github.com/nix-community/home-manager) and [`nix-darwin`](https://github.com/lnl7/nix-darwin).
+
+The service management component of a configuration management framework is the set of module options that connects Nix expressions with the underlying service (or process) manager.
+For NixOS this is the module wrapping [`systemd`](https://systemd.io/), on `nix-darwin` this is the module wrapping [`launchd`](https://en.wikipedia.org/wiki/Launchd).
+
+A *modular service* is a [module] that defines values for a core set of options declared in the service management component of a configuration management framework, including which program to run.
+Since it's a module, it can be composed with other modules via `imports` to extend its functionality.
 
 NixOS provides two options into which such modules can be plugged:
 
