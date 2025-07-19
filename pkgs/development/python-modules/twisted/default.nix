@@ -33,7 +33,7 @@
 
   # tests
   cython-test-exception-raiser,
-  git,
+  gitMinimal,
   glibcLocales,
   pyhamcrest,
   hypothesis,
@@ -196,7 +196,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs =
     [
-      git
+      gitMinimal
       glibcLocales
     ]
     ++ optional-dependencies.test
