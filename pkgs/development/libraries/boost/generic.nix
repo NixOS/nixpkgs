@@ -146,7 +146,6 @@ let
     ++ lib.optional (link != "static") "runtime-link=${runtime-link}"
     ++ lib.optional (variant == "release") "debug-symbols=off"
     ++ lib.optional (toolset != null) "toolset=${toolset}"
-    ++ lib.optional (!enablePython) "--without-python"
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -375,7 +374,7 @@ stdenv.mkDerivation {
       "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
     ]
     ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+    ++ [ (lib.optionalString enableIcu "--with-icu=${icu.dev}") ];
 
   buildPhase = ''
     runHook preBuild
