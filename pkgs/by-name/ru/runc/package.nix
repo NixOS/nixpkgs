@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.15";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    hash = "sha256-y8TcMyNRkVfmNkumhohBoyiU6GM8/yLXT/CTFPmXlU4=";
+    hash = "sha256-hRi7TJP73hRd/v8hisEUx9P2I2J5oF0Wv60NWHORI7Y=";
   };
 
   vendorHash = null;
@@ -49,7 +49,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make ${toString makeFlags} runc man
+    make ${toString makeFlags} runc man SHELL=$(command -v bash)
     runHook postBuild
   '';
 
