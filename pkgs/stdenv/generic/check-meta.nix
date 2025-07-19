@@ -137,7 +137,10 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  # Defaults to allow all names defined in config.allowUnfreePackages
+  allowUnfreePredicate =
+    config.allowUnfreePredicate
+      or (pkg: builtins.elem (lib.getName pkg) config.allowUnfreePackages or [ ]);
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitly allowed by the
