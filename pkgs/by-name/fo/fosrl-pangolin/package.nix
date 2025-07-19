@@ -4,6 +4,7 @@
   esbuild,
   buildNpmPackage,
   inter,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -54,6 +55,10 @@ buildNpmPackage rec {
     cp -r node_modules $out/
     runHook postInstall
   '';
+
+  passthru.tests = {
+    pangolin = nixosTests.pangolin;
+  };
 
   meta = {
     description = "Tunneled reverse proxy server with identity and access control";
