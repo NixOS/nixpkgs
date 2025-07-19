@@ -7,6 +7,8 @@
   icoutils,
   makeDesktopItem,
   dotnetCorePackages,
+  scarab,
+  testers,
 }:
 
 buildDotnetModule rec {
@@ -62,7 +64,10 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests.version = testers.testVersion { package = scarab; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Hollow Knight mod installer and manager";
