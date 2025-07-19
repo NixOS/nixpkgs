@@ -24,6 +24,10 @@ let
       fetchSubmodules = true;
     };
 
+    nativeBuildInputs = [
+      llvmPackages.llvm
+    ];
+
     buildInputs = [
       llvmPackages.libllvm
       elfutils
