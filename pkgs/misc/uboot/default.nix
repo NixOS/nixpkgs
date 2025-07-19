@@ -105,6 +105,7 @@ let
         enableParallelBuilding = true;
 
         makeFlags = [
+          "HOSTCC=$(CC_FOR_BUILD)"
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
         ] ++ extraMakeFlags;
@@ -114,7 +115,7 @@ let
         configurePhase = ''
           runHook preConfigure
 
-          make -j$NIX_BUILD_CORES $makeFlags ${defconfig}
+          make -j$NIX_BUILD_CORES HOSTCC=$CC_FOR_BUILD ${defconfig}
 
           cat $extraConfigPath >> .config
 
