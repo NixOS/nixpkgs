@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "ktnrg45";
     repo = "pyps4-2ndscreen";

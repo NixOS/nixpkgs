@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "3.0.0b2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "maximdanilchenko";
     repo = "aiohttp-apispec";

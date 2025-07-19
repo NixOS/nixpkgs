@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = "icontract";

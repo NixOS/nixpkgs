@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette-template-sql";

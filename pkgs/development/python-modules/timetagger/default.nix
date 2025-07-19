@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "25.06.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger";

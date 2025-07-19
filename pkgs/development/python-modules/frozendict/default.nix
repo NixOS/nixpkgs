@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";

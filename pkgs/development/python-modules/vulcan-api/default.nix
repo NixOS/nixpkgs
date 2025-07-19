@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "kapi2289";
     repo = "vulcan-api";

@@ -10,7 +10,6 @@ buildPythonPackage rec {
   pname = "bitvavo-aio";
   version = "1.0.3";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";

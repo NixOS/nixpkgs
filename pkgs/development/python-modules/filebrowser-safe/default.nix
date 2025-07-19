@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "filebrowser_safe";
     inherit version;

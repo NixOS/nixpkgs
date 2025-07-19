@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "2.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";

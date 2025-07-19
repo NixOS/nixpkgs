@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "pyyaml-env-tag";
   version = "0.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "pyyaml_env_tag";

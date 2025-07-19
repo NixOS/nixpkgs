@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spacy-lookups-data";

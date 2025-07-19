@@ -18,8 +18,6 @@ buildPythonPackage {
   version = "0.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "pynx584";

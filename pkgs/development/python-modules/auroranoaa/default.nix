@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "aurora-api";

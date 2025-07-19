@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.16.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";

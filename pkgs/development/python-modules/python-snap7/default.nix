@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";

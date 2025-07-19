@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "Thriftpy";
     repo = "thriftpy2";

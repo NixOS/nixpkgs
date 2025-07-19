@@ -17,8 +17,6 @@ buildPythonPackage {
   version = "0.6.1.0a1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = qemu.src;
 
   prePatch = ''

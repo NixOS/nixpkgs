@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "3.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit version;
     pname = "Quandl";

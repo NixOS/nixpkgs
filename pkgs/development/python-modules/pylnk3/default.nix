@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.4.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit version;
     pname = "pylnk3";

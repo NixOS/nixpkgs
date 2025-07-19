@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "2.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "bazwilliams";
     repo = "openhomedevice";

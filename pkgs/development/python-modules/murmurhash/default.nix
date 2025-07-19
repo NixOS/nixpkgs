@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.0.13";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-c3JG1B7gD/dLB7C9HwiIvjBNIDzmaOZCyGqmTt4w+Lc=";

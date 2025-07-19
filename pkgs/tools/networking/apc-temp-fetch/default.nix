@@ -12,8 +12,6 @@ buildPythonApplication rec {
   version = "0.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "APC-Temp-fetch";
     inherit version;

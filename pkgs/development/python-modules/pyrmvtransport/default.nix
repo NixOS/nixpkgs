@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.3.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "cgtobi";
     repo = "pyrmvtransport";

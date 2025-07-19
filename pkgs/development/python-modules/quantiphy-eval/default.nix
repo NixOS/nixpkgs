@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy_eval";

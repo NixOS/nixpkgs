@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "fastavro";
     repo = "fastavro";

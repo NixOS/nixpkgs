@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6"; # f-strings
-
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = "irctokens";

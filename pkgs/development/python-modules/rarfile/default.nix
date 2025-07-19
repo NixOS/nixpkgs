@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";

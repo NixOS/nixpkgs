@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "simple_di";
     inherit version;

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "32.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "pip-requirements-parser";

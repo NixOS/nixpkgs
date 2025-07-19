@@ -18,8 +18,6 @@ buildPythonPackage rec {
     hash = "sha256-P/t0aQLTAj/QnrRol2Cf3ubHexZB8Z4vyNmNdEvfyEU=";
   };
 
-  disabled = pythonOlder "3.6";
-
   nativeCheckInputs = [
     nose2
     msgpack

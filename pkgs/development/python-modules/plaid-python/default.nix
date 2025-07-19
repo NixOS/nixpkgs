@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "34.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "plaid_python";
     inherit version;

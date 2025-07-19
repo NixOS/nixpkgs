@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "22.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
