@@ -10356,6 +10356,8 @@ self: super: with self; {
 
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
 
+  noaa-coops = callPackage ../development/python-modules/noaa-coops { };
+
   nocasedict = callPackage ../development/python-modules/nocasedict { };
 
   nocaselist = callPackage ../development/python-modules/nocaselist { };
