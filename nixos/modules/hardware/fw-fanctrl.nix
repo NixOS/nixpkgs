@@ -48,51 +48,49 @@ in
           };
 
           strategies = lib.mkOption {
-            default = null;
+            default = { };
             description = ''
               Additional strategies which can be used by fw-fanctrl
             '';
-            type = lib.types.nullOr (
-              lib.types.attrsOf (
-                lib.types.submodule {
-                  options = {
-                    fanSpeedUpdateFrequency = lib.mkOption {
-                      type = lib.types.ints.unsigned;
-                      default = 5;
-                      description = "How often the fan speed should be updated in seconds";
-                    };
-
-                    movingAverageInterval = lib.mkOption {
-                      type = lib.types.ints.unsigned;
-                      default = 25;
-                      description = "Interval (seconds) of the last temperatures to use to calculate the average temperature";
-                    };
-
-                    speedCurve = lib.mkOption {
-                      default = [ ];
-                      description = "How should the speed curve look like";
-                      type = lib.types.listOf (
-                        lib.types.submodule {
-                          options = {
-                            temp = lib.mkOption {
-                              type = lib.types.int;
-                              default = 0;
-                              description = "Temperature in °C at which the fan speed should be changed";
-                            };
-
-                            speed = lib.mkOption {
-                              type = lib.types.ints.between 0 100;
-                              default = 0;
-                              description = "Percent how fast the fan should run at";
-                            };
-
-                          };
-                        }
-                      );
-                    };
+            type = lib.types.attrsOf (
+              lib.types.submodule {
+                options = {
+                  fanSpeedUpdateFrequency = lib.mkOption {
+                    type = lib.types.ints.unsigned;
+                    default = 5;
+                    description = "How often the fan speed should be updated in seconds";
                   };
-                }
-              )
+
+                  movingAverageInterval = lib.mkOption {
+                    type = lib.types.ints.unsigned;
+                    default = 25;
+                    description = "Interval (seconds) of the last temperatures to use to calculate the average temperature";
+                  };
+
+                  speedCurve = lib.mkOption {
+                    default = [ ];
+                    description = "How should the speed curve look like";
+                    type = lib.types.listOf (
+                      lib.types.submodule {
+                        options = {
+                          temp = lib.mkOption {
+                            type = lib.types.int;
+                            default = 0;
+                            description = "Temperature in °C at which the fan speed should be changed";
+                          };
+
+                          speed = lib.mkOption {
+                            type = lib.types.ints.between 0 100;
+                            default = 0;
+                            description = "Percent how fast the fan should run at";
+                          };
+
+                        };
+                      }
+                    );
+                  };
+                };
+              }
             );
           };
         };
