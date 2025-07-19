@@ -1,0 +1,4 @@
+runCommand: "echo 'Hello, file!'"
+image:
+  repository: test.local/test
+  tag: local
