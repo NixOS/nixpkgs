@@ -32,5 +32,14 @@
          machine.sleep(20)
 
          machine.screenshot("welcome-screen")
+
+         for s in machine.get_screen_text_variants():
+           if "error" in s.lower():
+             print("############################################")
+             print("# Error detected:")
+             print("############################################")
+             print(s)
+             print("############################################")
+             exit(1)
   '';
 }
