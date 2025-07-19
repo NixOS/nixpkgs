@@ -186,6 +186,10 @@ let
                           ) "dockerImage option is required for ${service.executor} executor (${name})"
                         );
                         [ "--docker-image ${service.dockerImage}" ]
+                        ++ [
+                          "--docker-host"
+                          service.dockerHost
+                        ]
                         ++ optional service.dockerDisableCache "--docker-disable-cache"
                         ++ optional service.dockerPrivileged "--docker-privileged"
                         ++ optional (service.dockerPullPolicy != null) "--docker-pull-policy ${service.dockerPullPolicy}"
@@ -474,6 +478,14 @@ in
               example = "http://gitlab.example.local";
               description = ''
                 Overwrite the URL for the GitLab instance. Used if the Runner can’t connect to GitLab on the URL GitLab exposes itself.
+              '';
+            };
+            dockerHost = mkOption {
+              type = types.str;
+              default = "unix:///var/run/docker.sock";
+              example = "unix:///run/user/1000/podman/podman.sock";
+              description = ''
+                The docker socket address. Useful for using rootless podman to run the docker executor.
               '';
             };
             dockerImage = mkOption {
