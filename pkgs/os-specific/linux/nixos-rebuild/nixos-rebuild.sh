@@ -37,8 +37,8 @@ noSSHTTY=
 verboseScript=
 noFlake=
 attr=
-buildFile=default.nix
-buildingAttribute=1
+buildFile=
+buildingFile=
 installBootloader=
 json=
 
@@ -69,7 +69,7 @@ while [ "$#" -gt 0 ]; do
             exit 1
         fi
         buildFile="$1"
-        buildingAttribute=
+        buildingFile=1
         shift 1
         ;;
       --attr|-A)
@@ -78,7 +78,7 @@ while [ "$#" -gt 0 ]; do
             exit 1
         fi
         attr="$1"
-        buildingAttribute=
+        buildingFile=1
         shift 1
         ;;
       --install-grub)
@@ -398,8 +398,41 @@ fi
 
 # Verify that user is not trying to use attribute building and flake
 # at the same time
-if [[ -z $buildingAttribute && -n $flake ]]; then
+if [[ -n $buildingFile && -n $flake ]]; then
     log "error: '--flake' cannot be used with '--file' or '--attr'"
+    exit 1
+fi
+
+# Finds a specific file in a directory or its parents
+findInParents() {
+    local dir=$1
+    local filename=$2
+    while [[ ! -f "$dir/$filename" ]] && [[ "$dir" != / ]]; do
+        dir=$(dirname "$dir")
+    done
+    if [[ -f "$dir/$filename" ]]; then
+        echo "$dir/$filename"
+    else
+        return 1
+    fi
+}
+
+# Default build file if none is specified in the arguments
+if [[ -z $buildFile ]]; then
+    # From NIX_PATH
+    if ! buildFile=$(runCmd nix-instantiate --find-file nixos-system 2>/dev/null); then
+        # From system.nix up from the current directory
+        if ! buildFile=$(findInParents "$PWD" system.nix); then
+            # Hardcoded to /etc/nixos/system.nix
+            if [[ -f "/etc/nixos/system.nix" ]]; then
+                buildFile=/etc/nixos/system.nix
+            fi
+        fi
+    fi
+fi
+
+if [[ -n $attr && -z $buildFile ]]; then
+    log "error: '--attr' cannot be used without '--file', a 'nixos-system' entry in 'NIX_PATH', or '/etc/nixos/system.nix' existing"
     exit 1
 fi
 
@@ -485,8 +518,8 @@ fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
-    if [[ -z $buildingAttribute ]]; then
-        p=$(runCmd nix-build --no-out-link $buildFile -A "${attr:+$attr.}config.system.build.nixos-rebuild" "${extraBuildFlags[@]}")
+    if [[ -n $buildingFile ]]; then
+        p=$(runCmd nix-build --no-out-link "$buildFile" -A "${attr:+$attr.}config.system.build.nixos-rebuild" "${extraBuildFlags[@]}")
         SHOULD_REEXEC=1
     elif [[ -z $flake ]]; then
         if p=$(runCmd nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
@@ -510,9 +543,8 @@ fi
 
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
-    if [[ -z $buildingAttribute ]]; then
-        log "error: '--file' and '--attr' are not supported with 'edit'"
-        exit 1
+    if [[ -n $buildingFile ]]; then
+        runCmd exec ${EDITOR:-nano} "$buildFile"
     elif [[ -z $flake ]]; then
         NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config)}
         if [[ -d $NIXOS_CONFIG ]]; then
@@ -556,8 +588,8 @@ prebuiltNix() {
 getNixDrv() {
     nixDrv=
 
-    if [[ -z $buildingAttribute ]]; then
-        if nixDrv="$(runCmd nix-instantiate $buildFile --add-root "$tmpDir/nix.drv" --indirect -A ${attr:+$attr.}config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
+    if [[ -n $buildingFile ]]; then
+        if nixDrv="$(runCmd nix-instantiate "$buildFile" --add-root "$tmpDir/nix.drv" --indirect -A ${attr:+$attr.}config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
     fi
     if nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
     if nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then return; fi
@@ -641,8 +673,8 @@ if [ "$action" = repl ]; then
     # This is a very end user command, implemented using sub-optimal means.
     # You should feel free to improve its behavior, as well as resolve tech
     # debt in "breaking" ways. Humans adapt quite well.
-    if [[ -z $buildingAttribute ]]; then
-        exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
+    if [[ -n $buildingFile ]]; then
+        exec nix repl --file "$buildFile" "$attr" "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
         exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
     else
@@ -795,8 +827,8 @@ fi
 if [ -z "$rollback" ]; then
     log "building the system configuration..."
     if [[ "$action" = switch || "$action" = boot ]]; then
-        if [[ -z $buildingAttribute ]]; then
-            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
+        if [[ -n $buildingFile ]]; then
+            pathToConfig="$(nixBuild "$buildFile" -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
@@ -805,24 +837,24 @@ if [ -z "$rollback" ]; then
         copyToTarget "$pathToConfig"
         targetHostSudoCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
-        if [[ -z $buildingAttribute ]]; then
-            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
+        if [[ -n $buildingFile ]]; then
+            pathToConfig="$(nixBuild "$buildFile" -A "${attr:+$attr.}config.system.build.toplevel" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm ]; then
-        if [[ -z $buildingAttribute ]]; then
-            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vm" "${extraBuildFlags[@]}")"
+        if [[ -n $buildingFile ]]; then
+            pathToConfig="$(nixBuild "$buildFile" -A "${attr:+$attr.}config.system.build.vm" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.vm" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
-        if [[ -z $buildingAttribute ]]; then
-            pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}")"
+        if [[ -n $buildingFile ]]; then
+            pathToConfig="$(nixBuild "$buildFile" -A "${attr:+$attr.}config.system.build.vmWithBootLoader" "${extraBuildFlags[@]}")"
         elif [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
