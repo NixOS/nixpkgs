@@ -11,7 +11,7 @@
   python,
   setuptools,
   bluez,
-  boost,
+  boost-python,
   glib,
 }:
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     bluez
-    boost
+    boost-python
     glib
   ];
 

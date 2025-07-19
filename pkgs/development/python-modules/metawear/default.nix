@@ -3,8 +3,8 @@
   buildPythonPackage,
   fetchPypi,
   cython,
-  boost,
   bluez,
+  distutils,
   nlohmann_json,
   pyserial,
   requests,
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
 
   buildInputs = [
-    boost
     bluez
+    distutils
     nlohmann_json
   ];
 

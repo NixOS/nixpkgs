@@ -7,7 +7,7 @@
   ninja,
   stdenv,
   llvmPackages,
-  boost,
+  boost-python,
   python,
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    boost
+    boost-python
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
