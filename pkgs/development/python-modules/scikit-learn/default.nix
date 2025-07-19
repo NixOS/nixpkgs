@@ -2,61 +2,60 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
+  meson-python,
+
+  # nativeBuildInputs
   cython,
   gfortran,
-  meson-python,
   numpy,
   scipy,
 
-  # native dependencies
+  # dependencies
   glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
-  pillow,
   joblib,
+  llvmPackages,
+  pillow,
+  pytest-xdist,
+  pytestCheckHook,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    pname = "scikit_learn";
-    inherit version;
-    hash = "sha256-tPwlJeyixppZJg9YPFanVXxszfjer9um4GD5TBxZc44=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn";
+    repo = "scikit-learn";
+    tag = version;
+    hash = "sha256-U5c79YeCK8tbKgWY2fWQE0BMjTcwn4kJO3QyQY3wOlI=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
+    substituteInPlace pyproject.toml \
+      --replace-fail "\"numpy>=2,<2.3.0\"," "\"numpy>=2,<2.4.0\","
   '';
 
-  buildInputs = [
-    numpy.blas
-    pillow
-    glibcLocales
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  build-system = [
+    meson-python
+  ];
 
   nativeBuildInputs = [
-    gfortran
-  ];
-
-  build-system = [
     cython
-    meson-python
+    gfortran
+    glibcLocales
     numpy
+    numpy.blas
+    pillow
     scipy
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [
     joblib
@@ -72,29 +71,16 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  disabledTests = [
+    # Skip test_feature_importance_regression - does web fetch
+    "test_feature_importance_regression"
+  ];
 
-  disabledTests =
-    [
-      # Skip test_feature_importance_regression - does web fetch
-      "test_feature_importance_regression"
-
-      # Fail due to new deprecation warnings in scipy
-      # FIXME: reenable when fixed upstream
-      "test_logistic_regression_path_convergence_fail"
-      "test_linalg_warning_with_newton_solver"
-      "test_newton_cholesky_fallback_to_lbfgs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # doesn't seem to produce correct results?
-      # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
-      "test_sparse_input"
-    ];
+  disabledTestPaths = [
+    "tests/test_build.py::test_openmp_parallelism_enabled"
+  ];
 
   pytestFlagsArray = [
-    # verbose build outputs needed to debug hard-to-reproduce hydra failures
-    "-v"
     "--pyargs"
     "sklearn"
 
@@ -115,17 +101,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sklearn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
-        major = versions.major version;
-        minor = versions.minor version;
-        dashVer = replaceStrings [ "." ] [ "-" ] version;
+        major = lib.versions.major version;
+        minor = lib.versions.minor version;
+        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
       in
       "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
     homepage = "https://scikit-learn.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ davhau ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      davhau
+      sarahec
+    ];
   };
 }
