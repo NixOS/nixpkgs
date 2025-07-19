@@ -63,7 +63,7 @@
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
-/pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
+/pkgs/by-name/au/autoPatchelfHook                @layus
 /pkgs/by-name/au/auto-patchelf                   @layus
 
 ## Format generators/serializers

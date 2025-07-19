@@ -4,7 +4,6 @@
   fetchurl,
   autoreconfHook,
   pkg-config,
-  pruneLibtoolFiles,
   flex,
   bison,
   libmnl,
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    pruneLibtoolFiles
     flex
     bison
   ];
