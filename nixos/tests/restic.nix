@@ -136,6 +136,13 @@ in
             pruneOpts = [ "--keep-last 1" ];
             checkOpts = [ "--some-check-option" ];
           };
+          customUnitConfig = {
+            inherit passwordFile paths;
+            repository = remoteRepository;
+            unitConfig = {
+              documentation = [ "custom-unit-config-was-written" ];
+            };
+          };
         };
 
         environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -235,6 +242,8 @@ in
         "systemctl start restic-backups-remoteprune.service",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+        # test that custom unit config is present
+        "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written"
     )
 
     # test that the inhibit option is working
