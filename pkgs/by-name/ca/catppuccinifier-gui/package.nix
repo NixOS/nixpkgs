@@ -11,7 +11,7 @@
   libsoup_2_4,
   fetchzip,
   openssl_3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   gdk-pixbuf,
   pkg-config,
   makeDesktopItem,
@@ -19,15 +19,15 @@
   autoPatchelfHook,
 }:
 let
-  version = "8.0.0";
+  version = "9.0.0";
 in
 stdenv.mkDerivation {
   pname = "catppuccinifier-gui";
   inherit version;
 
   src = fetchzip {
-    url = "https://github.com/lighttigerXIV/catppuccinifier/releases/download/${version}/Catppuccinifer-Linux-${version}.zip";
-    hash = "sha256-fG6YhLsjvMUIWsOnm+GSOh6LclCAISPSRiDQdWLlAR4=";
+    url = "https://github.com/lighttigerXIV/catppuccinifier/releases/download/${version}/Catppuccinifer-Linux-${version}.tar.xz";
+    hash = "sha256-FtsO+3C5Ll1aYYCuohrPI2IQZsLyvBseXPzfK1sQgNc=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     wget
-    webkitgtk_4_0
+    webkitgtk_4_1
     gtk3
     cairo
     gdk-pixbuf
