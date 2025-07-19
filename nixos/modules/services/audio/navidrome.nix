@@ -51,6 +51,7 @@ in
               description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
               type = bool;
             };
+            Plugins.Enabled = mkEnableOption "Enable running plugins";
           };
         };
         default = { };
@@ -161,7 +162,8 @@ in
             ];
             RestrictRealtime = true;
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            # Plugin Functionality uses mmap
+            MemoryDenyWriteExecute = !cfg.settings.Plugins.Enabled;
             UMask = "0066";
             ProtectHostname = true;
           };
