@@ -42,9 +42,11 @@ let
         if ! dev_exist $target; then
             echo -n "Waiting $secs seconds for $desc..."
             local success=false;
-            for try in $(seq $secs); do
+            local try=0
+            while [ $try -lt $secs ] ; do
                 echo -n "."
                 sleep 1
+                try=$((try+1))
                 if dev_exist $target; then
                     success=true
                     break
@@ -68,9 +70,11 @@ let
         if [ $? != 0 ]; then
             echo -n "Waiting $secs seconds for YubiKey to appear..."
             local success=false
-            for try in $(seq $secs); do
-                echo -n .
+            local try=0
+            while [ $try -lt $secs ] ; do
+                echo -n "."
                 sleep 1
+                try=$((try+1))
                 ykinfo -v 1>/dev/null 2>&1
                 if [ $? == 0 ]; then
                     success=true
@@ -95,9 +99,11 @@ let
         if [ $? != 0 ]; then
             echo -n "Waiting $secs seconds for GPG Card to appear"
             local success=false
-            for try in $(seq $secs); do
-                echo -n .
+            local try=0
+            while [ $try -lt $secs ] ; do
+                echo -n "."
                 sleep 1
+                try=$((try+1))
                 gpg --card-status > /dev/null 2> /dev/null
                 if [ $? == 0 ]; then
                     success=true
@@ -260,7 +266,8 @@ let
           ${
             if (dev.keyFile != null) then
               ''
-                if wait_target "key file" ${dev.keyFile}; then
+                local timeout=${optionalString (dev.keyFileTimeout != null) (toString dev.keyFileTimeout)}
+                if wait_target "key file" ${dev.keyFile} "$timeout"; then
                     ${csopen} --key-file=${dev.keyFile} \
                       ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
                       ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
@@ -1075,12 +1082,6 @@ in
           any (dev: dev.bypassWorkqueues) (attrValues luks.devices)
           -> versionAtLeast kernelPackages.kernel.version "5.9";
         message = "boot.initrd.luks.devices.<name>.bypassWorkqueues is not supported for kernels older than 5.9";
-      }
-
-      {
-        assertion =
-          !config.boot.initrd.systemd.enable -> all (x: x.keyFileTimeout == null) (attrValues luks.devices);
-        message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
       }
 
       {
