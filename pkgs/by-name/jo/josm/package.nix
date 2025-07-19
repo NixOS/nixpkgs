@@ -63,6 +63,11 @@ stdenv.mkDerivation {
           --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
       '';
 
+  passthru = {
+    inherit srcs;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
