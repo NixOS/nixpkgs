@@ -27,7 +27,9 @@
         };
       };
 
-      systemd.extraConfig = "DefaultEnvironment=\"XXX_SYSTEM=foo\"";
+      systemd.settings.Manager = {
+        DefaultEnvironment = "XXX_SYSTEM=foo";
+      };
       systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
       services.journald.extraConfig = "Storage=volatile";
       test-support.displayManager.auto.user = "alice";
