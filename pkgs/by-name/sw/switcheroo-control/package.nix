@@ -8,6 +8,7 @@
   pkg-config,
   glib,
   python3Packages,
+  wrapGAppsNoGuiHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     meson
     pkg-config
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
