@@ -16,6 +16,7 @@
   _experimental-update-script-combinators,
   gitUpdater,
   nurl,
+  nix,
   gitMinimal,
   writeShellScript,
 }:
@@ -137,6 +138,7 @@ buildGoModule rec {
           PATH="${
             lib.makeBinPath [
               gitMinimal
+              nix
               nurl
             ]
           }:$PATH"
