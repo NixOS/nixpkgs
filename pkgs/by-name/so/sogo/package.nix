@@ -25,14 +25,14 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sogo";
-  version = "5.12.1";
+  version = "5.12.3";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sogo";
     rev = "SOGo-${version}";
-    hash = "sha256-BBFo8h0YnE/qHbAwu+vHX+eu9f4WXMs1gQT2nAxiPgc=";
+    hash = "sha256-HTfe/ZiipqS6QdKQK0wf4Xl6xCTNw5fEdXfRFbBMWMY=";
   };
 
   nativeBuildInputs = [
