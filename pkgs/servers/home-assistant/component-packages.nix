@@ -1221,7 +1221,8 @@
       ];
     "dlink" =
       ps: with ps; [
-      ]; # missing inputs: pyW215
+        pyw215
+      ];
     "dlna_dmr" =
       ps: with ps; [
         async-upnp-client
@@ -6962,6 +6963,7 @@
     "discovergy"
     "dlib_face_detect"
     "dlib_face_identify"
+    "dlink"
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
