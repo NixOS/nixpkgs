@@ -9,7 +9,6 @@
   coreutils,
   fetchpatch2,
   flex,
-  git,
   gperf,
   ninja,
   pkg-config,
@@ -75,7 +74,6 @@ qtModule {
       bison
       coreutils
       flex
-      git
       gperf
       ninja
       pkg-config
