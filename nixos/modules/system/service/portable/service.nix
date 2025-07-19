@@ -21,6 +21,11 @@ let
     };
 in
 {
+  # https://nixos.org/manual/nixos/unstable/#modular-services
+  _class = "service";
+  imports = [
+    ../../../misc/assertions.nix
+  ];
   options = {
     services = mkOption {
       type = types.attrsOf (
