@@ -1,8 +1,13 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
+let
+  tls_chain = "${./common/acme/server}/ca.cert.pem";
+  tls_key = "${./common/acme/server}/ca.key.pem";
+in
 {
   name = "netbird";
 
   meta.maintainers = with pkgs.lib.maintainers; [
+    patrickdag
     nazarewk
   ];
 
@@ -12,6 +17,41 @@
       {
         services.netbird.enable = true;
         services.netbird.clients.custom.port = 51819;
+      };
+    kanidm = {
+      services.kanidm = {
+        # needed since default for nixos 24.11
+        # is kanidm 1.4.6 which is insecure
+        package = pkgs.kanidm_1_5;
+        enableServer = true;
+        serverSettings = {
+          inherit tls_key tls_chain;
+          domain = "localhost";
+          origin = "https://localhost";
+        };
+      };
+    };
+    server =
+      { ... }:
+      {
+        # netbirds needs an openid identity provider
+        services.netbird.server = {
+          enable = true;
+          coturn = {
+            enable = true;
+            coturn = {
+              enable = true;
+              password = "secure-password";
+            };
+            domain = "nixos-test.internal";
+            dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
+            management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
+            relay.authSecretFile = (pkgs.writeText "secure-secret" "secret-value");
+          };
+          domain = "nixos-test.internal";
+          dashboard.settings.AUTH_AUTHORITY = "https://kanidm/oauth2/openid/netbird";
+          management.oidcConfigEndpoint = "https://kanidm:8443/oauth2/openid/netbird/.well-known/openid-configuration";
+        };
       };
   };
 
@@ -31,26 +71,16 @@
         output = node.succeed(f"{name} status")
       assert "NeedsLogin" in output
 
-    did_start(clients, "netbird")
-    did_start(clients, "netbird-custom")
+       did_start(clients, "netbird")
+       did_start(clients, "netbird-custom")
+
+      kanidm.start()
+      kanidm.wait_for_unit("kanidm.service")
+
+      server.start()
+      with subtest("server starting"):
+        server.wait_for_unit("netbird-management.service")
+        server.wait_for_unit("netbird-signal.service")
+        server.wait_for_unit("netbird-relay.service")
   '';
-
-  /*
-    `netbird status` used to print `Daemon status: NeedsLogin`
-        https://github.com/netbirdio/netbird/blob/23a14737974e3849fa86408d136cc46db8a885d0/client/cmd/status.go#L154-L164
-    as the first line, but now it is just:
-
-        Daemon version: 0.26.3
-        CLI version: 0.26.3
-        Management: Disconnected
-        Signal: Disconnected
-        Relays: 0/0 Available
-        Nameservers: 0/0 Available
-        FQDN:
-        NetBird IP: N/A
-        Interface type: N/A
-        Quantum resistance: false
-        Routes: -
-        Peers count: 0/0 Connected
-  */
 }
