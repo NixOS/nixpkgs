@@ -75,5 +75,18 @@ buildPythonPackage rec {
     changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    # Waiting for:
+    # https://github.com/spatial-image/multiscale-spatial-image/pull/108 . Use
+    # zarr_2, with numcodecs_0_15 in a Python overlay, like this:
+    #
+    #
+    # python = python3.override {
+    #   self = python;
+    #   packageOverrides = self: super: {
+    #     zarr = super.zarr_2;
+    #     numcodecs = super.numcodecs_0_15;
+    #   };
+    # };
+    broken = lib.versionAtLeast zarr.version "3";
   };
 }

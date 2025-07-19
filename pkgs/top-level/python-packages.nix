@@ -10476,6 +10476,8 @@ self: super: with self; {
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
+  numcodecs_0_15 = callPackage ../development/python-modules/numcodecs_0_15 { };
+
   numdifftools = callPackage ../development/python-modules/numdifftools { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
@@ -19945,6 +19947,8 @@ self: super: with self; {
   zammad-py = callPackage ../development/python-modules/zammad-py { };
 
   zarr = callPackage ../development/python-modules/zarr { };
+
+  zarr_2 = callPackage ../development/python-modules/zarr_2 { };
 
   zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
