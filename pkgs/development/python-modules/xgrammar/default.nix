@@ -17,7 +17,7 @@
   torch,
   transformers,
   triton,
-
+  mlx-lm,
   # tests
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -56,16 +56,16 @@ buildPythonPackage rec {
       torch
       transformers
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
       triton
-    ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin mlx-lm;
 
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
     "-ffat-lto-objects"
   ];
