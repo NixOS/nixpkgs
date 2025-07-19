@@ -27,6 +27,16 @@
   requests,
   stevedore,
 
+  # optional dependencies
+  chardet,
+  citeproc-py,
+  jinja2,
+  markdownify,
+  whoosh,
+
+  # switch for optional dependencies
+  withOptDeps ? false,
+
   # tests
   docutils,
   git,
@@ -69,7 +79,17 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ];
+  ] ++ lib.optionals withOptDeps optional-dependencies.complete;
+
+  optional-dependencies = {
+    complete = [
+      chardet
+      citeproc-py
+      jinja2
+      markdownify
+      whoosh
+    ];
+  };
 
   pythonImportsCheck = [ "papis" ];
 
