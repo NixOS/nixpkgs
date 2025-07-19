@@ -78,7 +78,14 @@ class TypstPackage:
             "nix-command",
         ]
         result = subprocess.run(cmd + [url], capture_output=True, text=True)
-        hash = re.search(r"hash\s+\'(sha256-.{44})\'", result.stderr).groups()[0]
+        # We currently rely on Typst Universe's github repository to
+        # track package dependencies. However, there might be an
+        # inconsistency between the registry and the repository. We
+        # skip packages that cannot be fetched from the registry.
+        if re.search(r"error: unable to download", result.stderr):
+            return url, None
+        else:
+            hash = re.search(r"hash\s+\'(sha256-.{44})\'", result.stderr).groups()[0]
         return url, hash
 
     def to_name_full(self):
@@ -109,6 +116,9 @@ class TypstPackage:
             filter(lambda p: p[0] != self.pname or p[1] != self.version, deps)
         )
         source_url, source_hash = self.source()
+
+        if not source_hash:
+            return None
 
         return dict(
             url=source_url,
@@ -154,7 +164,9 @@ def generate_typst_packages(preview_dir, output_file):
             print(f"Generating metadata for {pname}")
             return {
                 pname: OrderedDict(
-                    (k, package_subtree[k].to_attrs()) for k in sorted_keys
+                    (k, a)
+                    for k, a in [(k, package_subtree[k].to_attrs()) for k in sorted_keys]
+                    if a is not None
                 )
             }
 
