@@ -298,6 +298,11 @@ in
         default = true;
         description = ''
           Whether to start the X server automatically.
+
+          ::: {.note}
+          If false, `systemd.defaultUnit = lib.mkForce "multi-user.target";`
+          may need to be set for this option to take effect.
+          :::
         '';
       };
 
