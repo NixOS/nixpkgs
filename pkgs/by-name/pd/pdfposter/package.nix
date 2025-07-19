@@ -1,35 +1,37 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
+  fetchFromGitHub,
 }:
-let
-  localPython = python3.override {
-    self = localPython;
-    packageOverrides = self: super: {
-      # Can be removed once this is merged
-      # https://gitlab.com/pdftools/pdfposter/-/merge_requests/7
-      pypdf2 = super.pypdf2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.11.1";
-        format = "setuptools";
-        pyproject = null;
-        src = fetchPypi {
-          pname = "PyPDF2";
-          inherit version;
-          hash = "sha256-PHut1RLCFxHrF4nC6tv5YnkonA+URS7lSoZHO/vv1zI=";
-        };
-      });
-    };
-  };
-in
-with localPython.pkgs;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pdfposter";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
-  propagatedBuildInputs = [ pypdf2 ];
+  dependencies = with python3Packages; [
+    (pypdf.overridePythonAttrs {
+      version = "4.3.1";
 
+      src = fetchFromGitHub {
+        owner = "py-pdf";
+        repo = "pypdf";
+        rev = "refs/tags/${version}";
+        # fetch sample files used in tests
+        fetchSubmodules = true;
+        hash = "sha256-wSF20I5WaxRoN0n0jxB5O3mAAIOxP/TclYBTRAUwYHo=";
+      };
+    })
+  ];
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  patches = [
+    # based on https://gitlab.com/pdftools/pdfposter/-/commit/066aeb918db7504f21ee9127b35603a06101a72a.patch
+    ./port-to-python-library-pypdf-version-3.patch
+  ];
   src = fetchPypi {
     pname = "pdftools.pdfposter";
     inherit version;
