@@ -16,8 +16,6 @@ buildPythonApplication rec {
   version = "3.13.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "protonvpn";
     repo = "linux-cli";

@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "xpath-expressions";
   version = "1.1.0";
   format = "pyproject";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "orf";

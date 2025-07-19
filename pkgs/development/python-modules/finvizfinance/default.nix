@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "lit26";
     repo = "finvizfinance";

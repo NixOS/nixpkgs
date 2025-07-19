@@ -26,8 +26,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  disabled = pythonOlder "3.5";
-
   src = fetchPypi {
     pname = "boltztrap2";
     inherit version;

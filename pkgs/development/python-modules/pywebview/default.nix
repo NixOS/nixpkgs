@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "5.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";

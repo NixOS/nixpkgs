@@ -9,7 +9,6 @@ buildPythonPackage {
   pname = "dpcontracts";
   version = "unstable-2018-11-20";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "deadpixi";
