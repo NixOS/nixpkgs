@@ -28,6 +28,15 @@ in
         omitted.
       '';
     };
+    overlayfsUsers = lib.mkOption {
+      type = listOf str;
+      default = [];
+      example = "[ \"somebody\" ]";
+      description = ''
+        The users to add to sudoers that can run psd-overlay-helper without
+        a password. See the manpage FAQ for an explanation.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -53,7 +62,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               RemainAfterExit = "yes";
-              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon sync";
+              ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon startup";
               ExecStop = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon unsync";
             };
           };
@@ -93,5 +102,10 @@ in
         };
       };
     };
+    security.sudo.extraRules = lib.mkAfter (lib.lists.optional (cfg.overlayfsUsers != []) {
+      users = cfg.overlayfsUsers;
+      runAs = "ALL";
+      commands = [ { command = "${pkgs.profile-sync-daemon}/bin/psd-overlay-helper"; options = [ "NOPASSWD" ]; } ];
+    });
   };
 }
