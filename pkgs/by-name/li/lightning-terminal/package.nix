@@ -23,12 +23,12 @@
 
 buildGoModule rec {
   pname = "lightning-terminal";
-  version = "0.15.0-alpha";
+  version = "0.15.1-alpha";
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lightning-terminal";
     tag = "v${version}";
-    hash = "sha256-g+pf2o0JFEFny/w5yn9KQswajw3gEBTPQjBY5ocdk0k=";
+    hash = "sha256-aCZ1dzbj1SYBYQ6ysnk9MQs4V6ysljZYOYp0gOw0WFQ=";
     leaveDotGit = true;
     # Populate values that require us to use git.
     postFetch = ''
@@ -41,7 +41,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-eGqM0cIC55/bZB1rcD9fKZ/CrP6w3HCZyZvFeUWnDZo=";
+  vendorHash = "sha256-tjNF6Llsaba/IlhtrOU4ebzSRHGVy+LPzwhBsS5xJgQ=";
 
   buildInputs = [ lightning-app ];
   postUnpack = ''
