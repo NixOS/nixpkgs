@@ -164,17 +164,23 @@ in an additional file like this:
     ```
     registration_shared_secret: your-very-secret-secret
     ```
-  - Deploy the file with a secret-manager such as
+  - Get systemd LoadCredential to read the file somewhere the service can access
+    ```
+    {
+      systemd.services.matrix-synapse.serviceConfig.LoadCredential =
+        "matrix-shared-secret:/etc/nixos/secrets/matrix-shared-secret";
+    }
+    ```
+    Alternatively, you can deploy the file with a secret-manager such as
     [{option}`deployment.keys`](https://nixops.readthedocs.io/en/latest/overview.html#managing-keys)
-    from {manpage}`nixops(1)` or [sops-nix](https://github.com/Mic92/sops-nix/) to
-    e.g. {file}`/run/secrets/matrix-shared-secret` and ensure that it's readable
-    by `matrix-synapse`.
+    from {manpage}`nixops(1)` or [sops-nix](https://github.com/Mic92/sops-nix/)
+    and ensure that it's readable by `matrix-synapse` manually.
   - Include the file like this in your configuration:
 
     ```nix
     {
       services.matrix-synapse.extraConfigFiles = [
-        "/run/secrets/matrix-shared-secret"
+        "/run/credentials/matrix-synapse.service/matrix-shared-secret"
       ];
     }
     ```
