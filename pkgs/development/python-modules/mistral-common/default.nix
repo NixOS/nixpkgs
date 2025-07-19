@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  setuptools,
   numpy,
   pydantic,
   jsonschema,
   opencv-python-headless,
+  huggingface-hub,
   sentencepiece,
   typing-extensions,
   tiktoken,
@@ -16,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.5.6";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mistral_common";
     inherit version;
-    hash = "sha256-TauSQwaEMhFKFfLEb/SRagViCnIrDfjetJ3POD+34r8=";
+    hash = "sha256-Qv/lOBUruLLrAOsfiSeBbfHPSEBamfiEQ25BdsXY/iY=";
   };
 
   pythonRelaxDeps = [
@@ -30,13 +31,14 @@ buildPythonPackage rec {
     "tiktoken"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
     pydantic
     jsonschema
     opencv-python-headless
+    huggingface-hub
     sentencepiece
     typing-extensions
     tiktoken
