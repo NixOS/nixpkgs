@@ -2,6 +2,7 @@
   boost178,
   cuda_cudart,
   cudaOlder,
+  e2fsprogs,
   gst_all_1,
   lib,
   nss,
@@ -77,6 +78,7 @@ in
     (qt.qtwayland or qt.full)
     boost178
     cuda_cudart.stubs
+    e2fsprogs
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     nss

@@ -95,6 +95,36 @@ self: super: {
     };
   });
 
+  # Full package set with cuda on rocm off
+  # Mostly useful for asserting pkgs.pkgsCuda.torchWithCuda == pkgs.torchWithCuda and similar
+  pkgsCuda = nixpkgsFun {
+    config = super.config // {
+      cudaSupport = true;
+      rocmSupport = false;
+    };
+  };
+
+  # `pkgsForCudaArch` maps each CUDA capability in _cuda.db.cudaCapabilityToInfo to a Nixpkgs variant configured for
+  # that target system. For example, `pkgsForCudaArch.sm_90a.python3Packages.torch` refers to PyTorch built for the
+  # Hopper architecture, leveraging architecture-specific features.
+  # NOTE: Not every package set is supported on every architecture!
+  # See `Using pkgsForCudaArch` in doc/languages-frameworks/cuda.section.md for more information.
+  pkgsForCudaArch = lib.listToAttrs (
+    lib.map (cudaCapability: {
+      name = self._cuda.lib.mkRealArchitecture cudaCapability;
+      value = nixpkgsFun {
+        config = super.config // {
+          cudaSupport = true;
+          rocmSupport = false;
+          # Not supported by architecture-specific feature sets, so disable for all.
+          # Users can choose to build for family-specific feature sets if they wish.
+          cudaForwardCompat = false;
+          cudaCapabilities = [ cudaCapability ];
+        };
+      };
+    }) (lib.attrNames self._cuda.db.cudaCapabilityToInfo)
+  );
+
   pkgsExtraHardening = nixpkgsFun {
     overlays = [
       (
