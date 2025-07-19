@@ -8,10 +8,13 @@
   atk,
   cairo,
   dbus-glib,
+  firefox-esr,
   gdk-pixbuf,
   glib,
   gtk3,
   libGL,
+  nspr,
+  nss,
   xorg,
   libgbm,
   pango,
@@ -20,15 +23,15 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.0-beta.111+b4f6c050e";
+  version = "7.1-beta.41+355c61e6d";
 
   src =
     let
-      escapedVersion = lib.replaceStrings [ "+" ] [ "%2B" ] version;
+      escapedVersion = lib.escapeURL version;
     in
     fetchurl {
       url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
-      hash = "sha256-pZsmS4gKCT8UAjz9IJg5C7n4kk7bWT/7H5ONF20CzPM=";
+      hash = "sha256-0eJYXBabYh8n1SHSy7j+jIkY9jMuxKhtieJy6Ewwpug=";
     };
 
   dontPatchELF = true;
@@ -82,11 +85,25 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    pkg_dir="$prefix/usr/lib/zotero-bin-${version}"
+
     # Copy package contents to the output directory
-    mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
-    cp -r * "$prefix/usr/lib/zotero-bin-${version}"
+    mkdir -p "$pkg_dir"
+    cp -r * "$pkg_dir"
+
+    ln -sf ${nss}/lib/libfreeblpriv3.so "$pkg_dir/libfreeblpriv3.so"
+    ln -sf ${firefox-esr}/lib/firefox/libgkcodecs.so "$pkg_dir/libgkcodecs.so"
+    ln -sf ${firefox-esr}/lib/firefox/libmozsqlite3.so "$pkg_dir/libmozsqlite3.so"
+    ln -sf ${nspr}/lib/libnspr4.so "$pkg_dir/libnspr4.so"
+    ln -sf ${nss}/lib/libnss3.so "$pkg_dir/libnss3.so"
+    ln -sf ${nss}/lib/libnssckbi.so "$pkg_dir/libnssckbi.so"
+    ln -sf ${nss}/lib/libnssutil3.so "$pkg_dir/libnssutil3.so"
+    ln -sf ${nss}/lib/libsoftokn3.so "$pkg_dir/libsoftokn3.so"
+    ln -sf ${nss}/lib/libssl3.so "$pkg_dir/libssl3.so"
+    ln -sf ${firefox-esr}/lib/firefox/libxul.so "$pkg_dir/libxul.so"
+
     mkdir -p "$out/bin"
-    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
+    ln -s "$pkg_dir/zotero" "$out/bin/"
 
     # Install desktop file and icons
     mkdir -p $out/share/applications
@@ -116,14 +133,15 @@ stdenv.mkDerivation rec {
         "$out/usr/lib/zotero-bin-${version}/{}" \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.zotero.org";
+    downloadPage = "https://www.zotero.org/support/beta_builds";
     description = "Collect, organize, cite, and share your research sources";
     mainProgram = "zotero";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       atila
       justanotherariel
     ];
