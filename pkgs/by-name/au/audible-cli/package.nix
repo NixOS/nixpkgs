@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "[0-9.]+"
+      "v([0-9.]+)"
     ];
   };
 
