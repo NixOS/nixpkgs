@@ -102,7 +102,11 @@ let
           hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
         })
       ];
-      postPatch = "";
+      postPatch = ''
+        # Fix multiple definition errors by using C++17 instead of C++11
+        substituteInPlace CMakeLists.txt \
+          --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+      '';
       postInstall = "";
 
       cmakeFlags =
