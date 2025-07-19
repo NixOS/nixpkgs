@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     raven
     requests
     natsort
-    mozjpeg_lossless_optimization
+    mozjpeg-lossless.optimization
     distro
     pyside6
     numpy
