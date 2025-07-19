@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  gettext,
   pkg-config,
   intltool,
   glib,
@@ -50,6 +51,11 @@ stdenv.mkDerivation rec {
   env.GPGME_CONFIG = lib.getExe' (lib.getDev gpgme) "gpgme-config";
 
   enableParallelBuilding = true;
+
+  preAutoreconf = ''
+    # error: possibly undefined macro: AM_NLS
+    cp ${gettext}/share/gettext/m4/nls.m4 m4
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
