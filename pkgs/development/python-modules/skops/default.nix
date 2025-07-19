@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "skops-dev";
     repo = "skops";
@@ -61,7 +59,11 @@ buildPythonPackage rec {
       # Segfaults on darwin
       "skops/io/tests/test_persist.py"
     ];
-
+  pytestFlags = [
+    # Warning from scipy.optimize in skops/io/tests/test_persist.py::test_dump_and_load_with_file_wrapper
+    # https://github.com/skops-dev/skops/issues/479
+    "-Wignore::DeprecationWarning"
+  ];
   pythonImportsCheck = [ "skops" ];
 
   meta = {
