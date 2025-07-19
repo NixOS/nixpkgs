@@ -19,6 +19,7 @@
   ujson,
   distutils,
   huggingface-hub,
+  nix-update-script,
 }:
 
 let
@@ -85,6 +86,8 @@ buildPythonPackage rec {
     gputil
     huggingface-hub
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";
