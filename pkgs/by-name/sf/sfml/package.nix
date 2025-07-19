@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
     (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
     (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
