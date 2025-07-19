@@ -18,10 +18,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
-  patches = [
-    ./dont-fail-ln.patch
-    ./do-link-so.patch
-  ];
+  patches =
+    [
+      ./dont-fail-ln.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      ./do-link-so.patch
+    ];
 
   nativeBuildInputs = [ which ];
   buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
       "install"
       "install-lib-headers"
     ]
-    ++ lib.optionals (!enableStatic) [
+    ++ lib.optionals (!enableStatic && !stdenv.hostPlatform.isWindows) [
       "install-lib-so-link"
     ];
 
