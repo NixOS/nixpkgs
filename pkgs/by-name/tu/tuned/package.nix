@@ -11,6 +11,7 @@
   hdparm,
   iproute2,
   nix-update-script,
+  nixosTests,
   pkg-config,
   powertop,
   python3Packages,
@@ -135,6 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos = nixosTests.tuned;
+    };
     updateScript = nix-update-script { };
   };
 
