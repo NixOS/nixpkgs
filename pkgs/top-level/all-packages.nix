@@ -5106,37 +5106,41 @@ with pkgs;
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
-    assert stdenv.targetPlatform != stdenv.hostPlatform;
-    let
-      libc1 = binutilsNoLibc.libc;
-    in
-    wrapCCWith {
-      cc = gccFun {
-        # copy-pasted
-        inherit noSysDirs;
-        majorMinorVersion = toString default-gcc-version;
+    if !config.allowAliases && stdenv.targetPlatform == stdenv.hostPlatform then
+      # Don't throw without aliases to not break CI.
+      null
+    else
+      assert stdenv.targetPlatform != stdenv.hostPlatform;
+      let
+        libc1 = binutilsNoLibc.libc;
+      in
+      wrapCCWith {
+        cc = gccFun {
+          # copy-pasted
+          inherit noSysDirs;
+          majorMinorVersion = toString default-gcc-version;
 
-        reproducibleBuild = true;
-        profiledCompiler = false;
+          reproducibleBuild = true;
+          profiledCompiler = false;
 
-        isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
+          isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
-        withoutTargetLibc = true;
-        langCC = false;
-        libcCross = libc1;
-        targetPackages.stdenv.cc.bintools = binutilsNoLibc;
-        enableShared =
-          stdenv.targetPlatform.hasSharedLibraries
+          withoutTargetLibc = true;
+          langCC = false;
+          libcCross = libc1;
+          targetPackages.stdenv.cc.bintools = binutilsNoLibc;
+          enableShared =
+            stdenv.targetPlatform.hasSharedLibraries
 
-          # temporarily disabled due to breakage;
-          # see https://github.com/NixOS/nixpkgs/pull/243249
-          && !stdenv.targetPlatform.isWindows
-          && !(stdenv.targetPlatform.useLLVM or false);
+            # temporarily disabled due to breakage;
+            # see https://github.com/NixOS/nixpkgs/pull/243249
+            && !stdenv.targetPlatform.isWindows
+            && !(stdenv.targetPlatform.useLLVM or false);
+        };
+        bintools = binutilsNoLibc;
+        libc = libc1;
+        extraPackages = [ ];
       };
-      bintools = binutilsNoLibc;
-      libc = libc1;
-      extraPackages = [ ];
-    };
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
     gcc9
