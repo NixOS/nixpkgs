@@ -13,7 +13,6 @@
   glew,
   libjpeg,
   libvorbis,
-  openal,
   udev,
   libXi,
   libX11,
@@ -21,6 +20,12 @@
   libXrandr,
   libXrender,
   xcbutilimage,
+
+  # miniaudio
+  alsa-lib,
+  libjack2,
+  libpulseaudio,
+  sndio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       glew
       libjpeg
       libvorbis
-      openal
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux udev
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -62,12 +66,25 @@ stdenv.mkDerivation (finalAttrs: {
       xcbutilimage
     ];
 
+  # We rely on RUNPATH
+  dontPatchELF = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
     (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
     (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
     (lib.cmakeBool "SFML_USE_SYSTEM_DEPS" true)
+
+    # FIXME: Unvendor miniaudio and move these deps there
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (
+      lib.makeLibraryPath [
+        alsa-lib
+        libjack2
+        libpulseaudio
+        sndio
+      ]
+    ))
   ];
 
   meta = {
