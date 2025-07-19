@@ -22,13 +22,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tomb";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Tomb";
     tag = "v${version}";
-    hash = "sha256-H9etbodTKxROJAITbViQQ6tkEr9rKNITTHfsGGQbyR0=";
+    hash = "sha256-P8YS6PlfrAHY2EsSyCG8QAeDbN7ChHmjxtqIAtMLomk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
