@@ -7,6 +7,7 @@
   stdenv,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   gitMinimal,
 }:
 
@@ -39,7 +40,10 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
   '';
 
-  nativeBuildInputs = [ installShellFiles makeBinaryWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   subPackages = [ "cmd/glab" ];
 
@@ -56,14 +60,20 @@ buildGoModule (finalAttrs: {
       --set-default GLAB_SEND_TELEMETRY 0
   '';
 
-  nativeCheckInputs = [
-    gitMinimal
-    writableTmpDirAsHomeHook
-  ];
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   preCheck = ''
     git init
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
