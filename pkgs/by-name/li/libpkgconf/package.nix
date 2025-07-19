@@ -2,17 +2,20 @@
   lib,
   stdenv,
   fetchurl,
+  autoconf,
+  automake,
+  libtool,
   removeReferencesTo,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-USA9me1XP6c0S/B8pibxDHzAlOCEasSqACO9DIPCWkE=";
+    url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
   };
 
   outputs = [
@@ -23,7 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+    removeReferencesTo
+  ];
+
+  preConfigure = "./autogen.sh";
 
   enableParallelBuilding = true;
 
@@ -50,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    url = "https://github.com/pkgconf/pkgconf";
     rev-prefix = "pkgconf-";
   };
 
   meta = {
-    homepage = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
       pkgconf is a program which helps to configure compiler and linker flags
@@ -66,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    changelog = "https://gitea.treehouse.systems/ariadne/pkgconf/src/tag/pkgconf-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [
