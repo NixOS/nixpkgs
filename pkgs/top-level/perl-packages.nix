@@ -29894,6 +29894,35 @@ with self;
     };
   };
 
+  RevBank = buildPerlPackage {
+    pname = "RevBank";
+    version = "10.6.0";
+    src = fetchFromGitHub {
+      owner = "revspace";
+      repo = "revbank";
+      rev = "78149ed94acf72525f0897b26224baad6fcde700";
+      hash = "sha256-WqfIeKrUtpSxKFqw3Fzy0m90KgV2VDrEZXAcZjJ09jU=";
+    };
+    propagatedBuildInputs = [
+      JSON
+      LWP
+      TermReadLineGnu
+    ];
+    nativeBuildInputs = [ shortenPerlShebang ];
+    postInstall = ''
+      shortenPerlShebang $out/bin/revbank
+      cp -r plugins $out/bin/plugins
+    '';
+    meta = {
+      description = "Prepaid bar tab payment system for hackerspaces";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with maintainers; [ polyfloyd ];
+    };
+  };
+
   RoleBasic = buildPerlModule {
     pname = "Role-Basic";
     version = "0.13";
