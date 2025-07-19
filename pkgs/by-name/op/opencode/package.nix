@@ -164,8 +164,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         "tui"
         "--subpackage"
         "node_modules"
-        "--subpackage"
-        "models-dev-data"
       ];
     };
   };
