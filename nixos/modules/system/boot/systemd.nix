@@ -24,6 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
+    attrsToSection
     ;
 
   upstreamSystemUnits =
@@ -414,12 +415,16 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
+    systemConfig = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        DefaultLimitCORE = "infinity";
+      };
       description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
+        Options for the global systemd config. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -664,7 +669,7 @@ in
             KExecWatchdogSec=${cfg.watchdog.kexecTime}
           ''}
 
-          ${cfg.extraConfig}
+          ${attrsToSection cfg.systemConfig}
         '';
 
         "systemd/sleep.conf".text = ''
@@ -855,5 +860,6 @@ in
       To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierarchy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
+    (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.systemConfig instead.")
   ];
 }
