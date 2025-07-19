@@ -34,20 +34,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/nh"
+        else
+          lib.getExe buildPackages.nh;
     in
     ''
       mkdir completions
 
       for shell in bash zsh fish; do
-        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+        NH_NO_CHECKS=1 ${exe} completions $shell > completions/nh.$shell
       done
 
       installShellCompletion completions/*
-    ''
-  );
+    '';
 
   postFixup = ''
     wrapProgram $out/bin/nh \

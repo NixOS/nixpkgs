@@ -35,17 +35,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/moon"
+        else
+          lib.getExe buildPackages.moon;
     in
     ''
       installShellCompletion --cmd moon \
-        --bash <(${emulator} $out/bin/moon completions --shell bash) \
-        --fish <(${emulator} $out/bin/moon completions --shell fish) \
-        --zsh <(${emulator} $out/bin/moon completions --shell zsh)
-    ''
-  );
+        --bash <(${exe} completions --shell bash) \
+        --fish <(${exe} completions --shell fish) \
+        --zsh <(${exe} completions --shell zsh)
+    '';
 
   # Some tests fail, because test using internet connection and install NodeJS by example
   doCheck = false;

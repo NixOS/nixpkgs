@@ -68,9 +68,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
+      jj =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/jj"
+        else
+          lib.getExe buildPackages.jujutsu;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       mkdir -p $out/share/man
       ${jj} util install-man-pages $out/share/man/
 

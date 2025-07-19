@@ -61,13 +61,17 @@ buildGoModule {
 
   postInstall =
     let
-      mrpack-install = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/mrpack-install";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/mrpack-install"
+        else
+          lib.getExe buildPackages.mrpack-install;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       installShellCompletion --cmd mrpack-install \
-        --bash <(${mrpack-install} completion bash) \
-        --fish <(${mrpack-install} completion fish) \
-        --zsh <(${mrpack-install} completion zsh)
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
     '';
 
   passthru.updateScript = nix-update-script { };

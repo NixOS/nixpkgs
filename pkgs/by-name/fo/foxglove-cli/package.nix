@@ -50,17 +50,20 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/foxglove"
+        else
+          lib.getExe buildPackages.foxglove-cli;
     in
     ''
       installShellCompletion --cmd foxglove \
-        --bash <(${emulator} $out/bin/foxglove completion bash) \
-        --fish <(${emulator} $out/bin/foxglove completion fish) \
-        --zsh <(${emulator} $out/bin/foxglove completion zsh)
-    ''
-  );
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -156,19 +156,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/rsvg-convert"
+        else
+          lib.getExe buildPackages.librsvg;
     in
-    lib.optionalString withPixbufLoader ''
+    ''
+      installShellCompletion --cmd rsvg-convert \
+        --bash <(${exe} --completion bash) \
+        --fish <(${exe} --completion fish) \
+        --zsh <(${exe} --completion zsh)
+    ''
+    + lib.optionalString withPixbufLoader ''
       # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
       mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
-    ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      installShellCompletion --cmd rsvg-convert \
-        --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
-        --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
-        --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
     '';
 
   postFixup = lib.optionalString withIntrospection ''

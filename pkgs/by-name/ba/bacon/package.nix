@@ -59,13 +59,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/bacon"
+        else
+          lib.getExe buildPackages.bacon;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       installShellCompletion --cmd bacon \
-        --bash <(COMPLETE=bash ${bacon}) \
-        --fish <(COMPLETE=fish ${bacon}) \
-        --zsh <(COMPLETE=zsh ${bacon})
+        --bash <(COMPLETE=bash ${exe}) \
+        --fish <(COMPLETE=fish ${exe}) \
+        --zsh <(COMPLETE=zsh ${exe})
     '';
 
   passthru = {

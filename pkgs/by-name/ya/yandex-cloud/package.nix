@@ -5,7 +5,6 @@
   makeBinaryWrapper,
   installShellFiles,
   buildPackages,
-  withShellCompletions ? stdenv.hostPlatform.emulatorAvailable buildPackages,
   # update script
   writers,
   python3Packages,
@@ -17,6 +16,11 @@ let
   pname = "yandex-cloud";
   sources = lib.importJSON ./sources.json;
   inherit (sources) version binaries;
+  exe =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "$out/bin/yc"
+    else
+      lib.getExe buildPackages.yandex-cloud;
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -32,30 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  emulator = lib.optionalString (
-    withShellCompletions && !stdenv.buildPlatform.canExecute stdenv.hostPlatform
-  ) (stdenv.hostPlatform.emulator buildPackages);
-
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p -- "$out/bin"
-      cp -- "$src" "$out/bin/yc"
-      chmod +x -- "$out/bin/yc"
-    ''
-    + lib.optionalString withShellCompletions ''
-      for shell in bash zsh; do
-        ''${emulator:+"$emulator"} "$out/bin/yc" completion $shell >yc.$shell
-        installShellCompletion yc.$shell
-      done
-    ''
-    + ''
-      makeWrapper "$out/bin/yc" "$out/bin/docker-credential-yc" \
-        --add-flags --no-user-output \
-        --add-flags container \
-        --add-flags docker-credential
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p -- "$out/bin"
+    cp -- "$src" "$out/bin/yc"
+    chmod +x -- "$out/bin/yc"
+    for shell in bash zsh; do
+      ${exe} completion $shell >yc.$shell
+      installShellCompletion yc.$shell
+    done
+    makeWrapper "$out/bin/yc" "$out/bin/docker-credential-yc" \
+      --add-flags --no-user-output \
+      --add-flags container \
+      --add-flags docker-credential
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = writers.writePython3 "${pname}-updater" {

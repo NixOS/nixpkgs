@@ -30,22 +30,22 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/gnmidiff"
+        else
+          lib.getExe' buildPackages.ygot "gnmidiff";
+    in
     ''
       # The normal binary names are far too generic
       mv $out/bin/generator $out/bin/ygot_generator
       mv $out/bin/proto_generator $out/bin/ygot_proto_generator
-    ''
-    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
         installShellCompletion --cmd gnmidiff \
-          --bash <(${emulator} $out/bin/gnmidiff completion bash) \
-          --zsh <(${emulator} $out/bin/gnmidiff completion zsh) \
-          --fish <(${emulator} $out/bin/gnmidiff completion fish)
-      ''
-    );
+          --bash <(${exe} completion bash) \
+          --zsh <(${exe} completion zsh) \
+          --fish <(${exe} completion fish)
+    '';
 
   passthru.updateScript = nix-update-script { };
 
