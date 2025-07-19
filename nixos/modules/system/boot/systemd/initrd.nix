@@ -21,6 +21,8 @@ let
     timerToUnit
     mountToUnit
     automountToUnit
+    attrsToSection
+    unitOptions
     ;
 
   cfg = config.boot.initrd.systemd;
@@ -166,6 +168,20 @@ in
       example = "DefaultLimitCORE=infinity";
       description = ''
         Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
+        for available options.
+      '';
+    };
+
+    systemConfig = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOptions.unitOption;
+      };
+      example = {
+        DefaultLimitCORE = "infinity";
+      };
+      description = ''
+        Options for the global systemd config used in initrd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -460,6 +476,7 @@ in
             [Manager]
             DefaultEnvironment=PATH=/bin:/sbin
             ${cfg.extraConfig}
+            ${attrsToSection cfg.systemConfig}
             ManagerEnvironment=${
               lib.concatStringsSep " " (
                 lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
