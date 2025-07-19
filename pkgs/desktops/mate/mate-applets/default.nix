@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     itstool
+    libxml2 # xmllint
     pkg-config
     wrapGAppsHook3
   ];

@@ -32,15 +32,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    dbus-glib # dbus-binding-tool
     gettext
+    itstool
     libtool
+    libxml2 # xmllint
     wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
-    itstool
-    libxml2
     libcanberra-gtk3
     gtk3
     libsecret
