@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abuild";
-  version = "3.15.0";
+  version = "3.15.0_rc3";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "abuild";
     tag = finalAttrs.version;
-    hash = "sha256-vHRh36igfb6WZ8JdtxW8OOqgiVBAXreTy+QOOKaWEwA=";
+    hash = "sha256-PtNidjXTV9mPq0vgZRUnoK5REJwViLk187n/MwRbihY=";
   };
 
   buildInputs = [
