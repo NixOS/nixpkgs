@@ -79,6 +79,7 @@ lib.checkListOfEnum "${pname}: platform"
       meta = {
         description = "Simple and easy-to-use library to enjoy videogames programming";
         homepage = "https://www.raylib.com/";
+        downloadPage = "https://github.com/raysan5/raylib";
         license = lib.licenses.zlib;
         maintainers = [ lib.maintainers.diniamo ];
         teams = [ lib.teams.ngi ];
