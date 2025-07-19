@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   alembic,
@@ -66,6 +67,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "optuna_dashboard" ];
+
+  # Temporarily disable tests as they hang due to a torch bug on darwin
+  # Will revert in https://github.com/NixOS/nixpkgs/pull/424873
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Real-time Web Dashboard for Optuna";
