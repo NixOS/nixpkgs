@@ -45,7 +45,7 @@ clangStdenv.mkDerivation rec {
     openssl
     zlib
   ]
-  ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.targetPlatform.isStatic) empty-libgcc_eh;
+  ++ lib.optional (clangStdenv.cc.isClang && clangStdenv.hostPlatform.isStatic) empty-libgcc_eh;
 
   # FIXME: separate the binaries from the stuff that user systems actually use
   # This runs into a terrible UX issue in Lix and I just don't want to debug it
