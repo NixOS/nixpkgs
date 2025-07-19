@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libsemanage";
-  version = "3.8.1";
+  version = "3.9";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
-    sha256 = "sha256-ezkSeyGcxwv9k1pK9rDyuoPUs1yRbyU8fpQsI6tJDwc=";
+    sha256 = "sha256-7AWFCu9Iv7jgITWn9PP37bo2cPY9XmfycI1L2AuaRjQ=";
   };
 
   outputs = [
