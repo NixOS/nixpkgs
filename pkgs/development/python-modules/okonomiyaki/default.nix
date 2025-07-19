@@ -68,10 +68,6 @@ buildPythonPackage rec {
     ''
       substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
         --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-        --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
     '';
 
   pythonImportsCheck = [ "okonomiyaki" ];
