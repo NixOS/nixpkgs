@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Split file into multiple chunks based on the given size";
     homepage = "https://github.com/ram-jayapalan/filesplit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

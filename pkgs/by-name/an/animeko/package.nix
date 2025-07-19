@@ -249,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/open-ani/animeko";
     mainProgram = "Ani";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
