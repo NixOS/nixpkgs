@@ -152,6 +152,8 @@ if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
     exec 1>&$logOutFd 2>&$logErrFd
     exec {logOutFd}>&- {logErrFd}>&-
 
+    # Ensure that / is owned by root
+    chown -f 0:0 /
 
     # Start systemd in a clean environment.
     echo "starting systemd..."
