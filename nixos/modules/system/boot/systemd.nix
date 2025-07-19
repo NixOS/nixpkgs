@@ -24,6 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
+    attrsToSection
     ;
 
   upstreamSystemUnits =
@@ -424,6 +425,20 @@ in
       '';
     };
 
+    systemConfig = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        DefaultLimitCORE = "infinity";
+      };
+      description = ''
+        Options for the global systemd config. See {manpage}`systemd-system.conf(5)` man page
+        for available options.
+      '';
+    };
+
     sleep.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -665,6 +680,7 @@ in
           ''}
 
           ${cfg.extraConfig}
+          ${attrsToSection cfg.systemConfig}
         '';
 
         "systemd/sleep.conf".text = ''
