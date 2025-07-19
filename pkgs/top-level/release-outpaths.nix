@@ -29,6 +29,7 @@ let
             allowBroken = includeBroken;
             allowUnfree = true;
             allowInsecurePredicate = x: true;
+            allowVariants = !attrNamesOnly;
             checkMeta = checkMeta;
 
             handleEvalIssue =
