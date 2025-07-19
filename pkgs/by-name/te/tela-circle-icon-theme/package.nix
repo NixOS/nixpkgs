@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   adwaita-icon-theme,
-  breeze-icons,
+  libsForQt5,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -44,7 +44,7 @@ lib.checkListOfEnum "${pname}: color variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = version;
+      tag = version;
       hash = "sha256-5Kqf6QNM+/JGGp2H3Vcl69Vh1iZYPq3HJxhvSH6k+eQ=";
     };
 
@@ -55,7 +55,7 @@ lib.checkListOfEnum "${pname}: color variants"
 
     propagatedBuildInputs = [
       adwaita-icon-theme
-      breeze-icons
+      libsForQt5.breeze-icons
       hicolor-icon-theme
     ];
 
@@ -84,11 +84,11 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Flat and colorful personality icon theme";
       homepage = "https://github.com/vinceliuice/Tela-circle-icon-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

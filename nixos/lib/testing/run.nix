@@ -7,6 +7,7 @@
 }:
 let
   inherit (lib) types mkOption;
+  inherit (hostPkgs.stdenv.hostPlatform) isDarwin isLinux;
 
   # TODO (lib): Also use lib equivalent in nodes.nix
   /**
@@ -26,7 +27,6 @@ let
     */
     f:
     lib.mkOverride (opt.highestPrio - 1) (f opt.value);
-
 in
 {
   options = {
@@ -39,6 +39,15 @@ in
         This is a bit like doing `drv // { myAttr = true; }` (which would be lost by `overrideAttrs`).
         It does not change the actual derivation, but adds the attribute nonetheless, so that
         consumers of what would be `drv` have more information.
+      '';
+    };
+
+    enableDebugHook = lib.mkEnableOption "" // {
+      description = ''
+        Halt test execution after any test fail and provide the possibility to
+        hook into the sandbox to connect with either the test driver via
+        `telnet localhost 4444` or with the VMs via SSH and vsocks (see also
+        `sshBackdoor.enable`).
       '';
     };
 
@@ -74,15 +83,23 @@ in
     rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
     rawTestDerivationArg =
       finalAttrs:
-      assert lib.assertMsg (!config.sshBackdoor.enable)
-        "The SSH backdoor is currently not supported for non-interactive testing! Please make sure to only set `interactive.sshBackdoor.enable = true;`!";
+      assert lib.assertMsg (
+        config.sshBackdoor.enable -> isLinux
+      ) "The SSH backdoor is not supported for macOS host systems!";
+
+      assert lib.assertMsg (
+        config.enableDebugHook -> isLinux
+      ) "The debugging hook is not supported for macOS host systems!";
       {
         name = "vm-test-run-${config.name}";
 
         requiredSystemFeatures =
-          [ "nixos-test" ]
-          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
-          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
+          [ "nixos-test" ] ++ lib.optional isLinux "kvm" ++ lib.optional isDarwin "apple-virt";
+
+        nativeBuildInputs = lib.optionals config.enableDebugHook [
+          hostPkgs.openssh
+          hostPkgs.inetutils
+        ];
 
         buildCommand = ''
           mkdir -p $out
@@ -90,7 +107,15 @@ in
           # effectively mute the XMLLogger
           export LOGFILE=/dev/null
 
-          ${config.driver}/bin/nixos-test-driver -o $out
+          ${lib.optionalString config.enableDebugHook ''
+            ln -sf \
+              ${hostPkgs.systemd}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf \
+              ssh_config
+          ''}
+
+          ${config.driver}/bin/nixos-test-driver \
+            -o $out \
+            ${lib.optionalString config.enableDebugHook "--debug-hook=${hostPkgs.breakpointHook.attach}"}
         '';
 
         passthru = config.passthru;

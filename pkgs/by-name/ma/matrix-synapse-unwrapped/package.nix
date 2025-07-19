@@ -18,14 +18,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.133.0";
+  version = "1.134.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-SCpLM/4sxE9xA781tgjrNNXpScCQOtgKnZKq64eCay8=";
+    hash = "sha256-q7+yVKFzyu8ccuroZsTSMRRKMwmr3TDojtXNx4bChTE";
   };
 
   patches = [
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-qgQU041VlAFFgEg2RhbK6g+aike+HN0FYuvHYtufzW8=";
+    hash = "sha256-BfLj+cqS6zpX2qLb+Rur4cy7CyPH2KzdXaTXpNK20DM=";
   };
 
   postPatch = ''
@@ -147,9 +147,6 @@ python3.pkgs.buildPythonApplication rec {
     ];
     cache-memory = [
       pympler
-    ];
-    user-search = [
-      pyicu
     ];
   };
 

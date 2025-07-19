@@ -126,6 +126,8 @@ buildPythonPackage rec {
     # require cffi<1.17
     "test_cffi_expression"
     "test_hexahedron_mesh"
+    # https://github.com/FEniCS/dolfinx/issues/1104
+    "test_cube_distance"
   ];
 
   passthru = {

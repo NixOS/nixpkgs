@@ -11668,10 +11668,6 @@ with pkgs;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
-    inherit (libsForQt5) breeze-icons;
-  };
-
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
@@ -12081,8 +12077,6 @@ with pkgs;
     };
   };
 
-  haruna = kdePackages.callPackage ../applications/video/haruna { };
-
   input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
@@ -12322,8 +12316,6 @@ with pkgs;
     ];
   };
 
-  firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
-
   floorp-unwrapped = import ../applications/networking/browsers/floorp {
     inherit
       stdenv
@@ -12508,10 +12500,6 @@ with pkgs;
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
-  hollywood = callPackage ../applications/misc/hollywood {
-    inherit (python3Packages) pygments;
-  };
-
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
@@ -12527,8 +12515,6 @@ with pkgs;
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
   hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
-
-  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
 
@@ -12823,8 +12809,6 @@ with pkgs;
   klee = callPackage ../applications/science/logic/klee {
     llvmPackages = llvmPackages_13;
   };
-
-  kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -14742,8 +14726,6 @@ with pkgs;
   freeciv_gtk = freeciv;
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
-
-  gcompris = kdePackages.callPackage ../games/gcompris { };
 
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;

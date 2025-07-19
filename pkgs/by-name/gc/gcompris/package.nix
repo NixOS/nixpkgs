@@ -6,16 +6,7 @@
   gettext,
   gst_all_1,
   ninja,
-  wrapQtAppsHook,
-  qmlbox2d,
-  qtbase,
-  qtcharts,
-  qtdeclarative,
-  qtimageformats,
-  qtmultimedia,
-  qtsensors,
-  qttools,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,20 +26,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
+    (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${kdePackages.qmlbox2d}/${kdePackages.qtbase.qtQmlPrefix}/Box2D.2.1")
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
     ninja
-    qttools
-    wrapQtAppsHook
+    kdePackages.qttools
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs =
+    with kdePackages;
     [
       qmlbox2d
       qtbase
