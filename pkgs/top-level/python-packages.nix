@@ -7302,6 +7302,8 @@ self: super: with self; {
 
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
 
+  jetpytools = callPackage ../development/python-modules/jetpytools { };
+
   jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
 
   jh2 = callPackage ../development/python-modules/jh2 { };
@@ -19161,6 +19163,8 @@ self: super: with self; {
 
   vapoursynth = callPackage ../development/python-modules/vapoursynth { inherit (pkgs) vapoursynth; };
 
+  vapoursynth-havsfunc = callPackage ../development/python-modules/vapoursynth-havsfunc { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
@@ -19302,6 +19306,8 @@ self: super: with self; {
   vprof = callPackage ../development/python-modules/vprof { };
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
+
+  vsjetpack = callPackage ../development/python-modules/vsjetpack { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 
