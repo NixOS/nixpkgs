@@ -2,7 +2,6 @@
   _7zz,
   appimageTools,
   fetchurl,
-  fetchzip,
   lib,
   stdenvNoCC,
   xorg,
@@ -35,21 +34,28 @@ let
   darwin = stdenvNoCC.mkDerivation {
     inherit pname version meta;
 
-    src = fetchzip {
+    src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.dmg";
-      hash = "sha256-5RM4eqHQoYfO5JiUH9ol+3XxOk4VX4ocE3Yia82sovI=";
-      stripRoot = false;
-      nativeBuildInputs = [ _7zz ];
+      hash = "sha256-Bv0EFBZVZMxHCvdDHfBdL267cwyeciBqZhrKgppxtm4=";
     };
+
+    sourceRoot = "Mochi.app";
+    nativeBuildInputs = [
+      _7zz
+    ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      mkdir -p $out/Applications/Mochi.app
+      cp -r . $out/Applications/Mochi.app
 
       runHook postInstall
     '';
+
+    dontUpdateAutotoolsGnuConfigScripts = true;
+    dontConfigure = true;
+    dontFixup = true;
   };
 
   meta = {
