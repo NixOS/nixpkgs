@@ -12516,6 +12516,8 @@ self: super: with self; {
 
   pycsdr = callPackage ../development/python-modules/pycsdr { };
 
+  pycsspeechtts = callPackage ../development/python-modules/pycsspeechtts { };
+
   pyct = callPackage ../development/python-modules/pyct { };
 
   pyctr = callPackage ../development/python-modules/pyctr { };
