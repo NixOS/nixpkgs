@@ -18909,6 +18909,12 @@
     github = "oosquare";
     githubId = 42143810;
   };
+  opdavies = {
+    email = "oliver@oliverdavies.uk";
+    github = "opdavies";
+    githubId = 339813;
+    name = "Oliver Davies";
+  };
   opeik = {
     email = "sandro@stikic.com";
     github = "opeik";
