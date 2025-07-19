@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
+    fetcherVersion = 1;
     hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
   };
 

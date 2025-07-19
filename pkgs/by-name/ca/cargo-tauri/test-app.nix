@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
 
+    fetcherVersion = 1;
     hash = "sha256-plANa/+9YEQ4ipgdQ7QzPyxgz6eDCBhO7qFlxK6Ab58=";
   };
 
