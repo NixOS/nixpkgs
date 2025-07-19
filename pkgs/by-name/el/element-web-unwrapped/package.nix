@@ -55,7 +55,7 @@ stdenv.mkDerivation (
       runHook preInstall
 
       cp -R webapp $out
-      tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
+      cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
       echo "${finalAttrs.version}" > "$out/version"
       jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
