@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pygame-sdl2";
-  version = "8.3.7.25031702";
+  version = "8.4.0.25071206";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "pygame_sdl2";
     tag = "renpy-${version}";
-    hash = "sha256-7MoQpCkBd20qck7eycs/MX0sjj4XRIrZmYPkKhuct6w=";
+    hash = "sha256-I4zk19aNfVZstkVDLkwI/TBXliGAqVmOjeQLbRFri8Y=";
   };
 
   build-system = [
