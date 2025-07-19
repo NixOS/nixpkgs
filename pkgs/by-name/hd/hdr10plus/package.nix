@@ -4,6 +4,7 @@
   rust,
   rustPlatform,
   hdr10plus_tool,
+  fetchFromGitHub,
   cargo-c,
   fontconfig,
 }:
@@ -16,14 +17,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "hdr10plus";
-  version = "2.1.4";
+  # Version of the library, not the tool
+  # See https://github.com/quietvoid/hdr10plus_tool/blob/main/hdr10plus/Cargo.toml
+  version = "2.1.3";
+
+  src = fetchFromGitHub {
+    owner = "quietvoid";
+    repo = "hdr10plus_tool";
+    # repo release snapshots are versioned per the tool
+    # https://github.com/quietvoid/hdr10plus_tool/releases/latest
+    tag = "1.7.0";
+    hash = "sha256-eueB+ZrOrnySEwUpCTvC4qARCsDcHJhm088XepLTlOE=";
+  };
+
+  cargoHash = "sha256-3D0HjDtKwYoi9bpQnosC/TPNBjfiWi5m1CH1eGQpGg0=";
 
   outputs = [
     "out"
     "dev"
   ];
-
-  inherit (hdr10plus_tool) src cargoDeps cargoHash;
 
   nativeBuildInputs = [ cargo-c ];
   buildInputs = [ fontconfig ];
