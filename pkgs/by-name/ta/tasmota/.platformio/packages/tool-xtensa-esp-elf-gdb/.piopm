@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "tool-xtensa-esp-elf-gdb",
+  "version": "14.2.0+20240403",
+  "spec": {
+    "owner": "platformio",
+    "id": 17547,
+    "name": "tool-xtensa-esp-elf-gdb",
+    "requirements": null,
+    "uri": null
+  }
+}

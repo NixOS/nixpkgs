@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "tool-esptoolpy",
+  "version": "4.8.4",
+  "spec": {
+    "owner": "tasmota",
+    "id": null,
+    "name": "tool-esptoolpy",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/esptool/releases/download/v4.8.4/esptool.zip"
+  }
+}

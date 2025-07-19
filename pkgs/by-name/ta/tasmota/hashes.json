@@ -1,0 +1,62 @@
+{
+  "packages": {
+    "toolchain-xtensa": {
+      "hash": "sha256:1jqg78ich1anxilj80fw0hn67hpfvri59sw8g0mrbyhxq25ydxci",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/toolchain-xtensa/2.40802.200502/toolchain-xtensa-linux_x86_64-2.40802.200502.tar.gz"
+    },
+    "framework-arduinoespressif8266": {
+      "hash": "sha256:1jpdfya64hrf3br2h83127x6f5jxlbgq67brw13zzshmgjpwi1yi",
+      "url": "https://github.com/tasmota/Arduino/releases/download/2.7.8/esp8266-2.7.8.zip"
+    },
+    "tool-scons": {
+      "hash": "sha256:0r4hsyqafp1cigk84ygghdxdk2icxgi3f1l2bqqwgp4jim0b3959",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-scons/4.40801.0/tool-scons-4.40801.0.tar.gz"
+    },
+    "framework-arduinoespressif32": {
+      "hash": "sha256:01jl3gyzykz7z0kklq0clg6avx4fhi80vnpq39fkjivgnbj4xngw",
+      "url": "https://github.com/tasmota/arduino-esp32/releases/download/3.1.0.241206/framework-arduinoespressif32.zip"
+    },
+    "toolchain-xtensa-esp-elf": {
+      "hash": "sha256:0gs62h91igg0d09xi4dkwb652kxmgfsrb34fpcw8ms1dwzfwvzxm",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/toolchain-xtensa-esp-elf/13.2.0+20240530/toolchain-xtensa-esp-elf-linux_x86_64-13.2.0+20240530.tar.gz"
+    },
+    "tool-xtensa-esp-elf-gdb": {
+      "hash": "sha256:0q16wscmsg20bg3vnjzjcyl82gn0f7mryznfw0i896g423dviv35",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-xtensa-esp-elf-gdb/14.2.0+20240403/tool-xtensa-esp-elf-gdb-linux_x86_64-14.2.0+20240403.tar.gz"
+    },
+    "tool-riscv32-esp-elf-gdb": {
+      "hash": "sha256:16sbankd8gi9yjrndm8n677ag0y7wfw4dmdwfkdqcg6mdafi01fx",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-riscv32-esp-elf-gdb/14.2.0+20240403/tool-riscv32-esp-elf-gdb-linux_x86_64-14.2.0+20240403.tar.gz"
+    },
+    "tool-mklittlefs": {
+      "hash": "sha256:0l18n8fp28pm4ycb0wz8dgg44dn4h9rijz46z2zhv1wg0hlvan03",
+      "url": "https://dl.registry.platformio.org/download/tasmota/tool/tool-mklittlefs/3.2.0/tool-mklittlefs-linux_x86_64-3.2.0.tar.gz"
+    },
+    "framework-arduino-solo1": {
+      "hash": "sha256:027n9y3bgync68g5xj7i1bxgxcw5ld1j9xr58a3z6rzsyvk1h7yr",
+      "url": "https://github.com/tasmota/arduino-esp32/releases/download/3.1.0.241206/framework-arduinoespressif32-solo1.zip"
+    },
+    "toolchain-riscv32-esp": {
+      "hash": "sha256:1vwy7g7ach4db5zj6d3rdwqxf61jaklz9wirhyk93sp9gyfh8k76",
+      "url": "https://dl.registry.platformio.org/download/platformio/tool/toolchain-riscv32-esp/13.2.0+20240530/toolchain-riscv32-esp-linux_x86_64-13.2.0+20240530.tar.gz"
+    },
+    "framework-arduino-ITEAD": {
+      "hash": "sha256:14gn8pp281m2i27sh235y5m893bxpz3c2av62b6q5k45swlaq1rb",
+      "url": "https://github.com/tasmota/arduino-esp32/releases/download/3.1.0.241206/framework-arduinoespressif32-ITEAD.zip"
+    },
+    "tool-esptoolpy": {
+      "hash": "sha256:166mn7ra5axpmc0bd22csw7nmr84kpxdvm6a637avnk5l497fgxk",
+      "url": "https://github.com/tasmota/esptool/releases/download/v4.8.4/esptool.zip"
+    }
+  },
+  "platforms": {
+    "espressif8266": {
+      "hash": "sha256:1yj232pl9kqwq5dmflzdv28l4g7pfqk14xnkry0wbxv8vglbbgrm",
+      "url": "https://github.com/tasmota/platform-espressif8266/releases/download/2024.09.00/platform-espressif8266.zip"
+    },
+    "espressif32": {
+      "hash": "sha256:1cx9dy847pn2lm1g4134wdaxb9gy02nwp39w13nbm54ldvqkqnld",
+      "url": "https://github.com/tasmota/platform-espressif32/releases/download/2024.12.30/platform-espressif32.zip"
+    }
+  }
+}

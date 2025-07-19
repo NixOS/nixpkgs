@@ -1,0 +1,12 @@
+{
+  "type": "platform",
+  "name": "espressif8266",
+  "version": "2024.9.0",
+  "spec": {
+    "owner": null,
+    "id": null,
+    "name": "platform-espressif8266",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/platform-espressif8266/releases/download/2024.09.00/platform-espressif8266.zip"
+  }
+}
