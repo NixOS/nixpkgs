@@ -200,6 +200,14 @@ let
       "dbus-org.freedesktop.portable1.service"
       "systemd-portabled.service"
     ]
+    ++ optionals cfg.package.withNsresourced [
+      "systemd-nsresourced.service"
+      "systemd-nsresourced.socket"
+    ]
+    ++ optionals cfg.package.withMountfsd [
+      "systemd-mountfsd.service"
+      "systemd-mountfsd.socket"
+    ]
     ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
