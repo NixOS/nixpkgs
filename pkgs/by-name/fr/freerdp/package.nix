@@ -43,9 +43,9 @@
   libpulseaudio,
   cups,
   pcsclite,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
+  sdl3,
+  sdl3-ttf,
+  sdl3-image,
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -136,9 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
       pcre2
       pcsclite
       pkcs11helper
-      SDL2
-      SDL2_ttf
-      SDL2_image
+      sdl3
+      sdl3-ttf
+      sdl3-image
       uriparser
       zlib
     ]
