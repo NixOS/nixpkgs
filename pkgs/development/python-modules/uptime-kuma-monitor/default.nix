@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "uptime_kuma_monitor";
     inherit version;

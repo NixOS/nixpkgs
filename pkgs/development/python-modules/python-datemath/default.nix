@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nickmaccarthy";
     repo = "python-datemath";

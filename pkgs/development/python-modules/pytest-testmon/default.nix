@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.1.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = "pytest-testmon";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";

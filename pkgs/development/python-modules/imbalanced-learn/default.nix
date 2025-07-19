@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "0.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.2.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";

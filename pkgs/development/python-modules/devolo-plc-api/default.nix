@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";

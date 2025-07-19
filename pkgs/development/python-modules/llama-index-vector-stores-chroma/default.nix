@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_vector_stores_chroma";
     inherit version;

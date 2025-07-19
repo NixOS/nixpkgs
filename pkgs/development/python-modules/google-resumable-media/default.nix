@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "google_resumable_media";
     inherit version;

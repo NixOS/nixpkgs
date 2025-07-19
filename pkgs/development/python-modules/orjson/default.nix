@@ -33,8 +33,6 @@ buildPythonPackage rec {
   version = "3.10.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ijl";
     repo = "orjson";

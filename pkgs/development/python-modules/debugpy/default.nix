@@ -28,8 +28,6 @@ buildPythonPackage rec {
   version = "1.8.15";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";

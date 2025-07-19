@@ -16,8 +16,6 @@ buildPythonApplication rec {
   version = "0.1.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "regen100";
     repo = "cmake-language-server";

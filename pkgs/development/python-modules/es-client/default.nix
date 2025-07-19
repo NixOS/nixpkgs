@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "8.17.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";

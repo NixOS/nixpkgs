@@ -20,8 +20,6 @@ buildPythonPackage {
   format = "pyproject";
   inherit (xgboost) version src meta;
 
-  disabled = pythonOlder "3.8";
-
   nativeBuildInputs = [
     cmake
     hatchling

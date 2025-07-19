@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "pycaption";
   version = "2.2.16";
 
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "2.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pygame-community";
     repo = "pygame-ce";

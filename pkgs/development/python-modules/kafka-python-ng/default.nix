@@ -19,8 +19,6 @@ buildPythonPackage rec {
   pname = "kafka-python-ng";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "wbarnha";
     repo = "kafka-python-ng";

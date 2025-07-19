@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "11.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";

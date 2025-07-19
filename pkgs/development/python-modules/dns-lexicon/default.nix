@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "3.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Analogj";
     repo = "lexicon";

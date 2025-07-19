@@ -36,8 +36,6 @@ buildPythonPackage rec {
   version = "6.23.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";

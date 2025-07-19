@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.6.46";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;

@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.26.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";

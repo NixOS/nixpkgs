@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";

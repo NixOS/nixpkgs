@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "pynuki";

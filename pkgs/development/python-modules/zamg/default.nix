@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.3.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "5.0.24";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysnmp";

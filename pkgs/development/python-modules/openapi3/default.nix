@@ -19,7 +19,6 @@ buildPythonPackage rec {
   version = "1.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
   src = fetchFromGitHub {
     owner = "Dorthu";
     repo = "openapi3";

@@ -15,8 +15,6 @@ buildPythonPackage rec {
   # TODO: typo; change to pyproject = true;
   pypropject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "h2non";
     repo = "jsonpath-ng";

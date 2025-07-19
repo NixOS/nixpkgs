@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.4.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "crownstone_cloud";
     inherit version;

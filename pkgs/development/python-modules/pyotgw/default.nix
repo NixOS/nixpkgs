@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "2.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = "pyotgw";

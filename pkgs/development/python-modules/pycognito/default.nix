@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "2024.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "pycognito";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.21";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "garbled1";
     repo = "pyecowitt";

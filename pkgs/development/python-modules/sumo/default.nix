@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "2.3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";

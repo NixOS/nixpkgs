@@ -16,8 +16,6 @@ let
     version = "0.9.0";
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
     src = fetchFromGitHub {
       owner = "samuelcolvin";
       repo = "dirty-equals";

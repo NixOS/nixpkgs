@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "1.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-czIea4gfL2hiNXIaffwCr2uw8DCiXv62Zjj2KxxgU6E=";

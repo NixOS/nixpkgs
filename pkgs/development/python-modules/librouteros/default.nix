@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";

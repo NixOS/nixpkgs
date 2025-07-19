@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.2.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Swamp-Ig";
     repo = "pizone";

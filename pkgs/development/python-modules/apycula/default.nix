@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version;
     pname = "Apycula";

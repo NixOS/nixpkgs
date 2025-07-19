@@ -25,8 +25,6 @@ buildPythonPackage rec {
   version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";

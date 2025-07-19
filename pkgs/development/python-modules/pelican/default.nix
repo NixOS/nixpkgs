@@ -40,8 +40,6 @@ buildPythonPackage rec {
   version = "4.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "tzlocal";
   version = "5.3.1"; # version needs to be compatible with APScheduler
 
-  disabled = pythonOlder "3.8";
-
   pyproject = true;
 
   src = fetchPypi {

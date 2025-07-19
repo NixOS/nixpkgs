@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "4.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "textile";
     repo = "python-textile";

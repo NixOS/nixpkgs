@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.5.44";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "detect-secrets";

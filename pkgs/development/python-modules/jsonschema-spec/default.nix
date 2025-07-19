@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.3.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-spec";

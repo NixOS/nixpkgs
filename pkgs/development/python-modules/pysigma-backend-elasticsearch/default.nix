@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";

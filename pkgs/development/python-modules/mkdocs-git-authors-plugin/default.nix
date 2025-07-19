@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.9.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-authors-plugin";

@@ -47,8 +47,6 @@ buildPythonPackage rec {
   version = "8.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "Nikola";
     inherit version;

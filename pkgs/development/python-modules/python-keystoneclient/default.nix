@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "5.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "python_keystoneclient";
     inherit version;

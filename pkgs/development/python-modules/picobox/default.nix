@@ -15,8 +15,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "picobox";

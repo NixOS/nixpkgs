@@ -15,8 +15,6 @@ buildPythonPackage rec {
   pname = "opt-einsum";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "opt_einsum";
     inherit version;

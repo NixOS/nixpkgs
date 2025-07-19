@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.8.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";

@@ -18,8 +18,6 @@ let
     version = "23.10.4";
     pyproject = true;
 
-    disabled = pythonOlder "3.8";
-
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";

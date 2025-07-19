@@ -17,8 +17,6 @@ buildPythonPackage {
   pname = "opentelemetry-instrumentation-aiohttp-client";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-aiohttp-client";
 
   build-system = [ hatchling ];

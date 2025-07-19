@@ -53,8 +53,6 @@ buildPythonPackage rec {
   version = "2.16.2.post";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "msticpy";

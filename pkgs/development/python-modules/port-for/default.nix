@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.7.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "kmike";
     repo = "port-for";

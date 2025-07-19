@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pyprusalink";

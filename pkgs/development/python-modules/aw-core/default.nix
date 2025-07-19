@@ -31,8 +31,6 @@ buildPythonPackage rec {
     sha256 = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
 
-  disabled = pythonOlder "3.8";
-
   nativeBuildInputs = [
     poetry-core
   ];

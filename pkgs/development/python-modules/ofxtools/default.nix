@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.9.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   # PyPI distribution does not include tests
   src = fetchFromGitHub {
     owner = "csingley";

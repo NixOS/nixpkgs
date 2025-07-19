@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "7.14.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "azure_servicebus";
     inherit version;

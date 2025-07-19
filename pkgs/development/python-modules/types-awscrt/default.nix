@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.27.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "types_awscrt";
     inherit version;

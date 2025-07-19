@@ -9,8 +9,6 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.1.1";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "stampery";
     repo = "mongoaudit";

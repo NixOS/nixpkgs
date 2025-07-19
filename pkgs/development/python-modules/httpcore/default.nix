@@ -27,8 +27,6 @@ buildPythonPackage rec {
   version = "1.0.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";

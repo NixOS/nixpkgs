@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "25.2.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {
     pname = "dataprep_ml";

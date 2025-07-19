@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2022.04.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "McSwindler";
     repo = "seventeentrack";

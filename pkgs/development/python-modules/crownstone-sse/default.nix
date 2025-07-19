@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "crownstone_sse";
     inherit version;

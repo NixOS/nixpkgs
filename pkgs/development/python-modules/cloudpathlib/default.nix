@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.21.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";

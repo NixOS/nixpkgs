@@ -13,7 +13,6 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman_web";
   version = "0.0.9";
-  disabled = pythonOlder "3.8";
   pyproject = true;
 
   src = fetchPypi {

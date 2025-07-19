@@ -16,8 +16,6 @@ buildPythonPackage {
   version = highs.version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   inherit (highs) src;
 
   build-system = [

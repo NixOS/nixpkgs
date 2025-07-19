@@ -23,8 +23,6 @@ buildPythonPackage {
     hash = "sha256-FA4IfhHViSL1u4pgd7jh40rEcS0BldSFDwCPG5irk1g=";
   };
 
-  disabled = pythonOlder "3.8";
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.20.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter-sphinx";

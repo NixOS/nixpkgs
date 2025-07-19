@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.1.33";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_cloud";
     inherit version;

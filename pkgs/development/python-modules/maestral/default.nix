@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "1.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";

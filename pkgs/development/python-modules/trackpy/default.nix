@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.6.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = "trackpy";

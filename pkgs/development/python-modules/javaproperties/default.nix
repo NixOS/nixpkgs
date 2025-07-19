@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "javaproperties";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "javaproperties";

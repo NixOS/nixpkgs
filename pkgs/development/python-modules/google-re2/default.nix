@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.1.20240702";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "google_re2";
     inherit version;

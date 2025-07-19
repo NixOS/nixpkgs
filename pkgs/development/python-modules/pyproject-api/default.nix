@@ -30,8 +30,6 @@ buildPythonPackage rec {
   version = "1.9.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";

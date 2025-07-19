@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "0.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";

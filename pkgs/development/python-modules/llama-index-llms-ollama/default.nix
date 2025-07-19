@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;

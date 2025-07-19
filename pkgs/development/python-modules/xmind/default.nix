@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "1.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "zhuifengshen";
     repo = "xmind";

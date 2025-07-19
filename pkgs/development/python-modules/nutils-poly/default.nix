@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nutils";
     repo = "poly-py";

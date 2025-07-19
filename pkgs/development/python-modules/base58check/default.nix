@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "joeblackwaslike";
     repo = "base58check";

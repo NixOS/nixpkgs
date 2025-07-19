@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.11.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "sqltrie";

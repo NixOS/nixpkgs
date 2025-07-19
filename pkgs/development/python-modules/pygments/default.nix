@@ -18,8 +18,6 @@ let
     version = "2.19.1";
     pyproject = true;
 
-    disabled = pythonOlder "3.8"; # 2.18.0 requirement
-
     src = fetchPypi {
       inherit pname version;
       hash = "sha256-YcFtKoV23AZJ2fOeCJtfArzSf7oQ2PtNzCgXP3pFFR8=";

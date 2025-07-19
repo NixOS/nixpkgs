@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "4.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "msiemens";
     repo = "tinydb";

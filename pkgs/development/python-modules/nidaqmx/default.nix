@@ -32,8 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-WNr+zVrA4X2AjizsmMEau54Vv1Svey3LNsCo8Bm/W+A=";
   };
 
-  disabled = pythonOlder "3.8";
-
   build-system = [ poetry-core ];
 
   prePatch = ''
