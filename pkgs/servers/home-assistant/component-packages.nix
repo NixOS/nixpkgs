@@ -4453,8 +4453,9 @@
       ];
     "playstation_network" =
       ps: with ps; [
+        psnawp
         pyrate-limiter
-      ]; # missing inputs: PSNAWP
+      ];
     "plex" =
       ps: with ps; [
         plexapi
@@ -7415,6 +7416,7 @@
     "ping"
     "plaato"
     "plant"
+    "playstation_network"
     "plex"
     "plugwise"
     "point"
