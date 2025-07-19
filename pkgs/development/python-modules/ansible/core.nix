@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
   pythonOlder,
   installShellFiles,
   docutils,
@@ -25,6 +26,8 @@
   windowsSupport ? false,
   pywinrm,
   xmltodict,
+  # Additional packages to add to dependencies
+  extraPackages ? _: [ ],
 }:
 
 buildPythonPackage rec {
@@ -66,28 +69,31 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    # depend on ansible instead of the other way around
-    ansible
-    # from requirements.txt
-    cryptography
-    jinja2
-    packaging
-    pyyaml
-    resolvelib
-    # optional dependencies
-    junit-xml
-    lxml
-    ncclient
-    paramiko
-    ansible-pylibssh
-    pexpect
-    psutil
-    pycrypto
-    requests
-    scp
-    xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  dependencies =
+    [
+      # depend on ansible instead of the other way around
+      ansible
+      # from requirements.txt
+      cryptography
+      jinja2
+      packaging
+      pyyaml
+      resolvelib
+      # optional dependencies
+      junit-xml
+      lxml
+      ncclient
+      paramiko
+      ansible-pylibssh
+      pexpect
+      psutil
+      pycrypto
+      requests
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals windowsSupport [ pywinrm ]
+    ++ extraPackages python.pkgs;
 
   pythonRelaxDeps = [ "resolvelib" ];
 
