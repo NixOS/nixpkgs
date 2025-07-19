@@ -9,7 +9,6 @@
   psycopg2,
   pymysql,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   sqlalchemy-i18n,
   sqlalchemy-utils,

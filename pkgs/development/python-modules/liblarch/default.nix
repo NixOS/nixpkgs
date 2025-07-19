@@ -6,7 +6,6 @@
   xvfb-run,
   gobject-introspection,
   gtk3,
-  pythonOlder,
   pytest,
   setuptools,
 }:

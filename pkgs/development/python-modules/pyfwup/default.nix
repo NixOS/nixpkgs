@@ -6,7 +6,6 @@
   tqdm,
   libusb1,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

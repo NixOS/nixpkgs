@@ -4,7 +4,6 @@
   fetchFromGitHub,
   requests,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
 }:

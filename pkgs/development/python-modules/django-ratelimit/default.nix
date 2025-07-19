@@ -5,7 +5,6 @@
   django-redis,
   fetchFromGitHub,
   pymemcache,
-  pythonOlder,
   setuptools,
 }:
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   httpx,
-  pythonOlder,
   setuptools,
 }:
 

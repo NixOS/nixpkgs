@@ -4,8 +4,6 @@
   docker,
   fetchFromGitHub,
   pytest,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

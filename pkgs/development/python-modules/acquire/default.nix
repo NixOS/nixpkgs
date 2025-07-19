@@ -8,7 +8,6 @@
   minio,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   rich,

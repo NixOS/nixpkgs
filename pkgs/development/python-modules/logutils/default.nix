@@ -5,7 +5,6 @@
   fetchPypi,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   valkey,
   redis,
   setuptools,
@@ -41,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths =
-    lib.optionals (stdenv.hostPlatform.isDarwin) [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # Exception: unable to connect to Redis server
       "tests/test_redis.py"
     ]

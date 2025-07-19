@@ -4,7 +4,6 @@
   fetchPypi,
   glibcLocales,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   six,
 }:

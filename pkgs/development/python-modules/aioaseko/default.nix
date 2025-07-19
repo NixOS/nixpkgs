@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   gql,
-  pythonOlder,
   setuptools,
 }:
 

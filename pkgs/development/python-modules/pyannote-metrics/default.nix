@@ -8,7 +8,6 @@
   pandas,
   pyannote-core,
   pyannote-database,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,

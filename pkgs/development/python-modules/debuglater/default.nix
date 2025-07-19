@@ -7,7 +7,6 @@
   numpy,
   pandas,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

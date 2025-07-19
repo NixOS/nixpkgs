@@ -6,7 +6,6 @@
   bash,
   openssh,
   pytestCheckHook,
-  pythonOlder,
   stdenv,
 }:
 

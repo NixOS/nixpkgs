@@ -2,8 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  stdenv,
-  pythonOlder,
   rustPlatform,
   bitstring,
   cachetools,

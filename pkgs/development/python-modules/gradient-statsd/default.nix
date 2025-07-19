@@ -9,7 +9,6 @@
   idna,
   requests,
   urllib3,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

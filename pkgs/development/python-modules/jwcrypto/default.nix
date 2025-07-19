@@ -5,7 +5,6 @@
   cryptography,
   deprecated,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

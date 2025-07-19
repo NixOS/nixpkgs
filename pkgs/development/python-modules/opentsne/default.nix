@@ -7,7 +7,6 @@
   scipy,
   scikit-learn,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

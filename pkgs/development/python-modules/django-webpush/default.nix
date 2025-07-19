@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pythonOlder,
   pywebpush,
   setuptools-scm,
 }:

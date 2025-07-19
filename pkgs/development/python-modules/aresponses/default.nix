@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,

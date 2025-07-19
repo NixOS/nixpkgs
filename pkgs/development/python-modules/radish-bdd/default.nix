@@ -11,7 +11,6 @@
   pysingleton,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   tag-expressions,
 }:

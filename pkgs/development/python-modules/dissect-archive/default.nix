@@ -4,7 +4,6 @@
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

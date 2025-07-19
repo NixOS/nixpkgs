@@ -5,7 +5,6 @@
   aiohttp,
   async-timeout,
   xmltodict,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

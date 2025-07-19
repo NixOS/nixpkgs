@@ -12,7 +12,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   python-dateutil,
-  pythonOlder,
   wsgidav,
 }:
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   crc16,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 

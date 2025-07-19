@@ -13,7 +13,6 @@
   spacy,
   pandas,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

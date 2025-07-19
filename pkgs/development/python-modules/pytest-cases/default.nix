@@ -5,7 +5,6 @@
   makefun,
   decopatch,
   packaging,
-  pythonOlder,
   pytest,
   setuptools-scm,
 }:

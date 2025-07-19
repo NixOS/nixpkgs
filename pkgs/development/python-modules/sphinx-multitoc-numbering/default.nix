@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   sphinx,
-  pythonOlder,
   setuptools,
 }:
 

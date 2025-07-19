@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 
   packaging,
@@ -61,13 +59,13 @@ buildPythonPackage rec {
   optional-dependencies = {
     all = [
       # prevent infinite recursion
-      (folium.overridePythonAttrs (prevAttrs: {
+      (folium.overridePythonAttrs (_prevAttrs: {
         doCheck = false;
       }))
       geoalchemy2
       geopy
       # prevent infinite recursion
-      (mapclassify.overridePythonAttrs (prevAttrs: {
+      (mapclassify.overridePythonAttrs (_prevAttrs: {
         doCheck = false;
       }))
       matplotlib

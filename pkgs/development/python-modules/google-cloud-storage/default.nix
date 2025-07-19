@@ -11,7 +11,6 @@
   mock,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

@@ -5,7 +5,6 @@
   aiohttp,
   aiozoneinfo,
   lxml,
-  pythonOlder,
   poetry-core,
 }:
 

@@ -7,7 +7,6 @@
   hypothesis,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   trio,
   trio-asyncio,

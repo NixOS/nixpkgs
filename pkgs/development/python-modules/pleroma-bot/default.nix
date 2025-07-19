@@ -8,7 +8,6 @@
   requests-oauthlib,
   requests,
   pyaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

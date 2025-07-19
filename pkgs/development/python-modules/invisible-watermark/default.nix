@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   opencv-python,
   torch,
@@ -56,11 +55,11 @@ buildPythonPackage rec {
       ];
       testCases = builtins.concatMap (method: [
         {
-          method = method;
+          inherit method;
           withOnnx = true;
         }
         {
-          method = method;
+          inherit method;
           withOnnx = false;
         }
       ]) methods;

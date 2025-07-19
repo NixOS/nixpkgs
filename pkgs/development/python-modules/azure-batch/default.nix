@@ -4,7 +4,6 @@
   fetchPypi,
   msrestazure,
   azure-common,
-  pythonOlder,
   setuptools,
 }:
 

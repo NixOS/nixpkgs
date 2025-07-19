@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   python,
-  pythonOlder,
   six,
 }:
 

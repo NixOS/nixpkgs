@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   hatchling,
   opentelemetry-api,

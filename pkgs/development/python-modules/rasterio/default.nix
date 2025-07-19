@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   stdenv,
   testers,
 
@@ -101,7 +100,7 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion {
     package = rasterio;
-    version = version;
+    inherit version;
     command = "${rasterio}/bin/rio --version";
   };
 

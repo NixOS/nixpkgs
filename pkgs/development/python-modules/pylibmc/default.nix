@@ -4,7 +4,6 @@
   cyrus_sasl,
   fetchPypi,
   libmemcached,
-  pythonOlder,
   zlib,
 }:
 

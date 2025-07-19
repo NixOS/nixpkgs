@@ -4,7 +4,6 @@
   buildPythonPackage,
   certifi,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 

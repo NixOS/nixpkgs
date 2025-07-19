@@ -6,7 +6,6 @@
   fetchPypi,
   msrest,
   msrestazure,
-  pythonOlder,
   setuptools,
 }:
 

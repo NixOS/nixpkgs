@@ -5,7 +5,6 @@
   parameterized,
   ply,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

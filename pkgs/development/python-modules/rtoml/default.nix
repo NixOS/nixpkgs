@@ -6,7 +6,6 @@
   dirty-equals,
   pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 

@@ -4,7 +4,6 @@
   cryptography,
   fetchPypi,
   jeepney,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

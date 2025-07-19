@@ -4,7 +4,6 @@
   coverage,
   fetchFromGitHub,
   pytest,
-  pythonOlder,
   setuptools,
 }:
 

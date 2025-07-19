@@ -7,7 +7,6 @@
   pillow,
   pypaInstallHook,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptoolsBuildHook,
 }:

@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-magic,
   yara-python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

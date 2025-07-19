@@ -5,7 +5,6 @@
   colorama,
   fetchFromGitHub,
   pycryptodomex,
-  pythonOlder,
   setuptools,
   tqdm,
   unicrypto,

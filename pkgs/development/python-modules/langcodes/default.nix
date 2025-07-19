@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   marisa-trie,
-  pythonOlder,
   fetchPypi,
   pytestCheckHook,
   language-data,

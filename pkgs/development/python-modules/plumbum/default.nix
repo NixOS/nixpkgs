@@ -10,7 +10,6 @@
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pandas,
   pyannote-core,
-  pythonOlder,
   pyyaml,
   setuptools,
   typer,

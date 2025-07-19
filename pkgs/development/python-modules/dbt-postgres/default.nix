@@ -8,7 +8,6 @@
   dbt-core,
   hatchling,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -5,7 +5,6 @@
   pymeeus,
   pytz,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

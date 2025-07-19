@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pycryptodome,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

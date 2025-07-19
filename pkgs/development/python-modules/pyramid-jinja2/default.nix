@@ -9,7 +9,6 @@
   pytest-cov-stub,
   zope-deprecation,
   pyramid,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

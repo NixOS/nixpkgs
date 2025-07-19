@@ -10,7 +10,6 @@
   pytest-timeout,
   pytestCheckHook,
   python-crontab,
-  pythonOlder,
   setuptools,
   tzdata,
 }:

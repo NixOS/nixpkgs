@@ -3,7 +3,6 @@
   buildPythonPackage,
   camel-converter,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
 }:

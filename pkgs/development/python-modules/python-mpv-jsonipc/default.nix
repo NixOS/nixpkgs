@@ -5,7 +5,6 @@
   requests,
   tqdm,
   websocket-client,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

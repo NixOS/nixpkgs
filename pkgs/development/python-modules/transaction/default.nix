@@ -5,7 +5,6 @@
   setuptools,
   zope-interface,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

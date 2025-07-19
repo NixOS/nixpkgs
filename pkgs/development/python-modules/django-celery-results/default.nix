@@ -4,7 +4,6 @@
   buildPythonPackage,
   celery,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

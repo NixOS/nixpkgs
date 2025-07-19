@@ -11,7 +11,6 @@
   pyspnego,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   requests-credssp,
@@ -48,7 +47,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     credssp = [ requests-credssp ];
-    kerberos = pyspnego.optional-dependencies.kerberos;
+    inherit (pyspnego.optional-dependencies) kerberos;
     named_pipe = [ psutil ];
     ssh = [ asyncssh ];
   };

@@ -11,7 +11,6 @@
   pyotp,
   pytestCheckHook,
   pytest-httpx,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

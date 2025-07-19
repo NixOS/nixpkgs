@@ -9,7 +9,6 @@
   mecab-python3,
   jieba,
   pytestCheckHook,
-  pythonOlder,
   fetchFromGitHub,
 }:
 

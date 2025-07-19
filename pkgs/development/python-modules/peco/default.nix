@@ -5,7 +5,6 @@
   fetchPypi,
   poetry-core,
   pydantic,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

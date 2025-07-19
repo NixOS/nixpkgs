@@ -8,7 +8,6 @@
   poetry-core,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

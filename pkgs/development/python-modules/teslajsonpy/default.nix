@@ -11,7 +11,6 @@
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   tenacity,
   wrapt,
 }:

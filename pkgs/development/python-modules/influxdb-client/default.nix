@@ -9,7 +9,6 @@
   numpy,
   pandas,
   python-dateutil,
-  pythonOlder,
   reactivex,
   setuptools,
   urllib3,

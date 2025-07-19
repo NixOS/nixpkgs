@@ -5,7 +5,6 @@
   poetry-core,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   retry2,
 }:

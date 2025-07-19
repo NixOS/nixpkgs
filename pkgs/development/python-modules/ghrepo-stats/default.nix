@@ -5,7 +5,6 @@
   fetchFromGitHub,
   matplotlib,
   pygithub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -10,7 +10,6 @@
   pycountry,
   pyicu,
   pytestCheckHook,
-  pythonOlder,
   rapidfuzz,
   rarfile,
   setuptools,

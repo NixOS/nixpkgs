@@ -4,7 +4,6 @@
   libmysqlclient,
   packaging,
   lib,
-  pythonOlder,
   setuptools,
 }:
 

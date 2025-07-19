@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pycryptodome,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

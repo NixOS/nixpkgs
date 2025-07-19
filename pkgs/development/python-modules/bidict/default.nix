@@ -7,7 +7,6 @@
   pytest-xdist,
   pytestCheckHook,
   typing-extensions,
-  pythonOlder,
   wheel,
 }:
 

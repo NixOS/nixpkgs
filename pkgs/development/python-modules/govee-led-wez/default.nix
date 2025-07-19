@@ -9,7 +9,6 @@
   hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage {

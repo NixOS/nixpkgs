@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pillow,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

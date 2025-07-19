@@ -5,7 +5,6 @@
   setuptools,
   sphinx,
   plantuml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

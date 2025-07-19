@@ -7,7 +7,6 @@
   fetchpatch,
   packaging,
   poetry-core,
-  pythonOlder,
   structlog,
 }:
 

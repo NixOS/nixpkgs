@@ -8,7 +8,6 @@
   packaging,
   pysolr,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools-scm,
   setuptools,

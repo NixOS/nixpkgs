@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "bech32";

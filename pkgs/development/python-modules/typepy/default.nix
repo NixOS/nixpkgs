@@ -8,7 +8,6 @@
   pytz,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   tcolorpy,
 }:
 

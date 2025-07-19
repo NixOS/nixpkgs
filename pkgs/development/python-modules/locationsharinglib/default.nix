@@ -4,7 +4,6 @@
   cachetools,
   coloredlogs,
   fetchPypi,
-  pythonOlder,
   pytz,
   requests,
   setuptools,

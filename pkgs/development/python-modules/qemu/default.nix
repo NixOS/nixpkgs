@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   qemu,
   setuptools,
   fuseSupport ? false,
@@ -17,7 +16,7 @@ buildPythonPackage {
   version = "0.6.1.0a1";
   pyproject = true;
 
-  src = qemu.src;
+  inherit (qemu) src;
 
   prePatch = ''
     cd python
@@ -35,8 +34,7 @@ buildPythonPackage {
   buildInputs = [ setuptools ];
 
   propagatedBuildInputs =
-    [ ]
-    ++ lib.optionals fuseSupport [ fusepy ]
+    lib.optionals fuseSupport [ fusepy ]
     ++ lib.optionals tuiSupport [
       urwid
       urwid-readline

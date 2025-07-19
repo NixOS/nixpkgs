@@ -5,7 +5,6 @@
   pytestCheckHook,
   setuptools,
   flask,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "Flask-HTTPAuth";
-    version = version;
+    inherit version;
     hash = "sha256-ZlaKBbxzlCxl8eIgGudGKVgW3ACe3YS0gsRMdY11CXo=";
   };
 

@@ -7,7 +7,6 @@
   propcache,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   aiohttp,
   setuptools,
 }:

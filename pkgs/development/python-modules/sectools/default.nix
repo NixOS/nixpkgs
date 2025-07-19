@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   ldap3,
-  pythonOlder,
   setuptools,
 }:
 

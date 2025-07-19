@@ -10,7 +10,6 @@
   pandas,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   setuptools-scm,
   setuptools,

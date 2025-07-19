@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytz,
-  pythonOlder,
   setuptools,
 }:
 

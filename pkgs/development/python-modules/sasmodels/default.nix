@@ -12,7 +12,6 @@
   opencl-headers,
   pycuda,
   pyopencl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

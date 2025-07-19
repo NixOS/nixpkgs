@@ -6,7 +6,6 @@
   mdformat,
   mdit-py-plugins,
   ruamel-yaml,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

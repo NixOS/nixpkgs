@@ -4,7 +4,6 @@
   fetchPypi,
   libftdi1,
   libusb1,
-  pythonOlder,
   poetry-core,
 }:
 

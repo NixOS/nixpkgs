@@ -10,7 +10,6 @@
   protobuf,
   pyarrow,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

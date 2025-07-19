@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   poetry-core,
-  pythonOlder,
   setuptools,
 }:
 

@@ -8,13 +8,12 @@
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   ruyaml,
   setuptools,
   writableTmpDirAsHomeHook,
 }:
 let
-  maison143 = maison.overridePythonAttrs (old: rec {
+  maison143 = maison.overridePythonAttrs (_old: rec {
     version = "1.4.3";
     src = fetchFromGitHub {
       owner = "dbatten5";

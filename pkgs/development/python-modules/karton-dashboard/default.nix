@@ -7,7 +7,6 @@
   mistune,
   networkx,
   prometheus-client,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

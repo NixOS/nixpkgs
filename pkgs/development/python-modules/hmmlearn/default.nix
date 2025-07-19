@@ -8,7 +8,6 @@
   setuptools-scm,
   cython,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

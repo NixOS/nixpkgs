@@ -22,7 +22,6 @@
   pyopenssl,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   queuelib,
   service-identity,
   setuptools,

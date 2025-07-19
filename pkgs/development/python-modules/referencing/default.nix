@@ -8,7 +8,6 @@
   jsonschema,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   rpds-py,
   typing-extensions,
 }:

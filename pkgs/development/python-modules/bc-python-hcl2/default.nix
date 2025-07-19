@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   lark,
-  pythonOlder,
   setuptools,
 }:
 

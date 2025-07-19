@@ -11,7 +11,6 @@
   cffi,
   zope-deferredimport,
   zope-interface,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

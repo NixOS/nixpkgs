@@ -9,7 +9,6 @@
   packaging,
   py,
   pytestCheckHook,
-  pythonOlder,
   termcolor,
   wireshark-cli,
 }:

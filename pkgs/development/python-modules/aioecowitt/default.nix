@@ -6,7 +6,6 @@
   meteocalc,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

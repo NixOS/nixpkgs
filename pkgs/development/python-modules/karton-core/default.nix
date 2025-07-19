@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
-  pythonOlder,
   redis,
   setuptools,
   unittestCheckHook,

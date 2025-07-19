@@ -9,7 +9,6 @@
   mkdocs,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   validator-collection,
 }:

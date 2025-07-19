@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pillow,
-  pythonOlder,
   reportlab,
   svglib,
   pytestCheckHook,

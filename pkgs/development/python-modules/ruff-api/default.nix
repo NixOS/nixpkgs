@@ -5,7 +5,6 @@
   cargo,
   fetchFromGitHub,
   libiconv,
-  pythonOlder,
   rustc,
   rustPlatform,
 }:

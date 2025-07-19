@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   libarchive,
-  pythonOlder,
   setuptools,
   # unrar is non-free software
   useUnrar ? false,

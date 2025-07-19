@@ -6,7 +6,6 @@
   fetchFromGitHub,
   google-crc32c,
   python-lzo,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   zstandard,

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatch-jupyter-builder,
   hatch-nodejs-version,
   hatchling,

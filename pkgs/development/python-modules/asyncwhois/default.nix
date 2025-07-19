@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socks,
-  pythonOlder,
   tldextract,
   whodap,
 }:

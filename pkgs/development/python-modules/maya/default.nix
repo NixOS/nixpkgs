@@ -8,7 +8,6 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   snaptime,

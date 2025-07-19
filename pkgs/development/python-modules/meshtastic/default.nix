@@ -23,7 +23,6 @@
   pyserial,
   pytap2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   riden,

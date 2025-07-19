@@ -13,7 +13,6 @@
   pbr,
   ply,
   pytest,
-  pythonOlder,
   pytz,
   pyyaml,
   requests,

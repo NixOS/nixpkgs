@@ -10,7 +10,6 @@
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
-  pythonOlder,
   setuptools,
 }:
 

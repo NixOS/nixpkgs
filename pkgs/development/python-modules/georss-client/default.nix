@@ -5,7 +5,6 @@
   fetchFromGitHub,
   haversine,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,

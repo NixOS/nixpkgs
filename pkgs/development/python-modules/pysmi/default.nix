@@ -8,7 +8,6 @@
   pysmi,
   pysnmp,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

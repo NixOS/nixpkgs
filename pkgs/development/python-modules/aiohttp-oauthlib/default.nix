@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   oauthlib,
   aiohttp,
   setuptools-scm,

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonApplication,
   gitUpdater,
-  pythonOlder,
   aiohttp,
   appdirs,
   beautifulsoup4,
@@ -115,7 +114,7 @@ buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    devpi-server = nixosTests.devpi-server;
+    inherit (nixosTests) devpi-server;
     version = testers.testVersion {
       package = devpi-server;
     };

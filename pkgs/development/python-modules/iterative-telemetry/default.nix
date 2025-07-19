@@ -7,7 +7,6 @@
   filelock,
   pytestCheckHook,
   pytest-mock,
-  pythonOlder,
   requests,
   setuptools-scm,
 }:

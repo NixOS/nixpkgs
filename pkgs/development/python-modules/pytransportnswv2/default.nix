@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   gtfs-realtime-bindings,
-  pythonOlder,
   requests,
   setuptools,
 }:

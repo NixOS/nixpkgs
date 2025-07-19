@@ -9,7 +9,6 @@
   poetry-core,
   pprintpp,
   pytestCheckHook,
-  pythonOlder,
   wrapt,
 }:
 

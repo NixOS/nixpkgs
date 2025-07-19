@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   marshmallow,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,

@@ -4,7 +4,6 @@
   fetchPypi,
   async-timeout,
   pysnmp,
-  pythonOlder,
   poetry-core,
 }:
 

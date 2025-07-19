@@ -5,7 +5,6 @@
   fetchPypi,
   pyface,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   traits,
   traitsui,

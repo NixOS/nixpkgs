@@ -8,7 +8,6 @@
   pyaes,
   pyopenssl,
   pyscard,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

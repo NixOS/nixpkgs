@@ -7,7 +7,6 @@
   isodate,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   xmlsec,
 }:

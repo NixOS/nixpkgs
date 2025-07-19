@@ -6,7 +6,6 @@
   ordered-set,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 

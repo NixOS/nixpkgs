@@ -12,7 +12,6 @@
   pyproject-metadata,
   pybind11,
   pytestCheckHook,
-  pythonOlder,
   scikit-build-core,
   scipy,
 }:

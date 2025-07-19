@@ -8,7 +8,6 @@
   mock,
   py-vapid,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   six,

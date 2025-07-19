@@ -4,7 +4,6 @@
   fetchFromGitHub,
   marshmallow,
   pytestCheckHook,
-  pythonOlder,
   flit-core,
 }:
 

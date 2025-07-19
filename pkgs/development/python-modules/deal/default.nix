@@ -11,7 +11,6 @@
   pygments,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pythonAtLeast,
   sphinx,
   typeguard,

@@ -16,7 +16,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
   setuptools,
   tornado,
@@ -45,14 +44,14 @@ buildPythonPackage rec {
     all = ext ++ http2 ++ passport ++ socks;
     callback-data = [ cachetools ];
     ext = callback-data ++ job-queue ++ rate-limiter ++ webhooks;
-    http2 = httpx.optional-dependencies.http2;
+    inherit (httpx.optional-dependencies) http2;
     job-queue = [
       apscheduler
       pytz
     ];
     passport = [ cryptography ] ++ lib.optionals (pythonAtLeast "3.13") [ cffi ];
     rate-limiter = [ aiolimiter ];
-    socks = httpx.optional-dependencies.socks;
+    inherit (httpx.optional-dependencies) socks;
     webhooks = [ tornado ];
   };
 

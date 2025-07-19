@@ -6,7 +6,6 @@
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zigpy,
 }:

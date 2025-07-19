@@ -5,7 +5,6 @@
   flask,
   logmatic-python,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

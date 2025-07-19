@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hypothesis,
-  pythonOlder,
   mock,
   nose2,
   pytestCheckHook,

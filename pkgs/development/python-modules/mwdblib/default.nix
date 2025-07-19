@@ -9,7 +9,6 @@
   keyring,
   unittestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
 }:
 

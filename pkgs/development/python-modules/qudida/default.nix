@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   opencv-python,
-  pythonOlder,
   scikit-learn,
   typing-extensions,
 }:

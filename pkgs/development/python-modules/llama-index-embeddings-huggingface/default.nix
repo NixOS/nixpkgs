@@ -4,7 +4,6 @@
   fetchPypi,
   llama-index-core,
   hatchling,
-  pythonOlder,
   sentence-transformers,
 }:
 

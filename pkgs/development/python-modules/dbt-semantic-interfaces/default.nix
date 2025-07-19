@@ -12,7 +12,6 @@
   more-itertools,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   typing-extensions,
 }:

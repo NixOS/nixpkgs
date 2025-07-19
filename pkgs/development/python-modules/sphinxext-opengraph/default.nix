@@ -5,7 +5,6 @@
   sphinx,
   matplotlib,
   pytestCheckHook,
-  pythonOlder,
   beautifulsoup4,
   setuptools-scm,
 }:

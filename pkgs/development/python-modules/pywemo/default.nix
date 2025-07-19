@@ -8,7 +8,6 @@
   poetry-core,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:

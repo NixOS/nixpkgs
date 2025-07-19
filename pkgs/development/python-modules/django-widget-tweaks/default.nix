@@ -5,8 +5,6 @@
   setuptools-scm,
   django,
   python,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {

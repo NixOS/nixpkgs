@@ -7,7 +7,6 @@
   pytz,
   textual,
   tzdata,
-  pythonOlder,
   polars,
   pytest-asyncio,
   pytest-textual-snapshot,

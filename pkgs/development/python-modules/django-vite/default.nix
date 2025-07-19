@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

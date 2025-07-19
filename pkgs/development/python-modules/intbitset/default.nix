@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

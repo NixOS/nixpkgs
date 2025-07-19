@@ -7,7 +7,6 @@
   fetchFromGitHub,
   gssapi,
   packaging,
-  pythonOlder,
   setuptools,
   typing-extensions,
   zlib,

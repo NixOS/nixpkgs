@@ -6,7 +6,6 @@
   pybrowsers,
   pytestCheckHook,
   python-dotenv,
-  pythonOlder,
   requests,
   selenium,
   setuptools,

@@ -4,8 +4,6 @@
   django-taggit,
   django,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

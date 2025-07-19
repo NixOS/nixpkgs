@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   std-uritemplate,
 }:
 

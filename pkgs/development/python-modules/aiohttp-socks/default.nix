@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   python-socks,
-  pythonOlder,
   setuptools,
 }:
 

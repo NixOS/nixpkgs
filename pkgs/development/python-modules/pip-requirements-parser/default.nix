@@ -5,7 +5,6 @@
   packaging,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

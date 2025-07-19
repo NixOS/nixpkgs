@@ -9,7 +9,6 @@
   pamqp,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   shortuuid,
   testcontainers,
   wrapt,

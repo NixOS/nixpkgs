@@ -3,7 +3,6 @@
   azure-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:

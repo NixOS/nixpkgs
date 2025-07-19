@@ -1,11 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   sphinx,
   setuptools,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {

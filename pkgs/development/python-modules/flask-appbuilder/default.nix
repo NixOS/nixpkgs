@@ -18,7 +18,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   python-dateutil,
-  pythonOlder,
   prison,
   pyjwt,
   pyyaml,

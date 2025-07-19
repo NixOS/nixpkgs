@@ -9,7 +9,6 @@
   pyee,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   syncer,
   tqdm,
   urllib3,

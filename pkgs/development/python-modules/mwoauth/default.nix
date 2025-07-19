@@ -4,7 +4,6 @@
   fetchPypi,
   oauthlib,
   pyjwt,
-  pythonOlder,
   requests,
   requests-oauthlib,
   six,

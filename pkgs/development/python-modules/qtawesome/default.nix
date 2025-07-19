@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
-  pythonOlder,
   qtpy,
 }:
 

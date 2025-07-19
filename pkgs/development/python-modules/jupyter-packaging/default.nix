@@ -5,7 +5,6 @@
   fetchpatch,
   deprecation,
   hatchling,
-  pythonOlder,
   packaging,
   pytestCheckHook,
   pytest-timeout,

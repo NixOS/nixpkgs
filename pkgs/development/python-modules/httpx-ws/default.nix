@@ -8,7 +8,6 @@
   httpx,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
   starlette,
   trio,
   uvicorn,

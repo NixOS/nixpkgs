@@ -5,7 +5,6 @@
   pdm-backend,
   pdm-pep517,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

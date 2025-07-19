@@ -15,7 +15,6 @@
   pypdf,
   pytestCheckHook,
   python-fontconfig,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

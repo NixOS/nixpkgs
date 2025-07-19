@@ -6,7 +6,6 @@
   asn1crypto,
   cbor2,
   cryptography,
-  pythonOlder,
   pyopenssl,
   pytestCheckHook,
 }:

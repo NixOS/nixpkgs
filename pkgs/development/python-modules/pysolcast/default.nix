@@ -7,7 +7,6 @@
   poetry-core,
   poetry-dynamic-versioning,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   responses,

@@ -9,7 +9,6 @@
   runCommand,
   writeText,
   plantuml-markdown,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

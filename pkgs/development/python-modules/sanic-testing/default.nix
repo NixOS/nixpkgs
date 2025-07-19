@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   httpx,
-  pythonOlder,
   sanic,
   setuptools,
   websockets,

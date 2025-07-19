@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fsspec,
   oss2,
-  pythonOlder,
   setuptools-scm,
 }:
 

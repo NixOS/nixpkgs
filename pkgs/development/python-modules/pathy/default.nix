@@ -5,7 +5,6 @@
   mock,
   pathlib-abc,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   smart-open,
   typer,

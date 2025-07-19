@@ -6,7 +6,6 @@
   fetchPypi,
   numpy,
   oldest-supported-numpy,
-  pythonOlder,
   setuptools-scm,
 }:
 

@@ -6,7 +6,6 @@
   http-sfv,
   requests,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 

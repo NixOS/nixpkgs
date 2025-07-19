@@ -12,7 +12,6 @@
   pytest-aiohttp,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

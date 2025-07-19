@@ -5,7 +5,6 @@
   pyparsing,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

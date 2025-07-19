@@ -6,7 +6,6 @@
   paramiko,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

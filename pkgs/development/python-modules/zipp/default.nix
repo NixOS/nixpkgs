@@ -4,7 +4,6 @@
   fetchPypi,
   func-timeout,
   jaraco-itertools,
-  pythonOlder,
   setuptools-scm,
 }:
 

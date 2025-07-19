@@ -6,7 +6,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   propcache,
 }:

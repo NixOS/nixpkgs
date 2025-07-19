@@ -4,7 +4,6 @@
   fetchPypi,
   isPy3k,
   pygccxml,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -26,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pybindgen" ];
 
   # Fails to import module 'cxxfilt' from pygccxml on Py3k
-  doCheck = (!isPy3k);
+  doCheck = !isPy3k;
 
   meta = with lib; {
     description = "Python Bindings Generator";

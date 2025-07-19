@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

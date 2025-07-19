@@ -6,7 +6,6 @@
   mock,
   pytest7CheckHook,
   pytest-cov-stub,
-  pythonOlder,
   setuptools,
   sphinx-rtd-theme,
   typing-extensions,

@@ -5,7 +5,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

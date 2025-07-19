@@ -5,7 +5,6 @@
   setuptools-scm,
   alarmdecoder,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

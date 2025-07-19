@@ -5,9 +5,7 @@
   construct,
   fetchPypi,
   hypothesis,
-  pytest,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

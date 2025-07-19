@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitLab,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   dataclasses-json,
   deprecated,

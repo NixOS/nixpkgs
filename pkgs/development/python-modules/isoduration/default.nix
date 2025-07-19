@@ -6,7 +6,6 @@
   hypothesis,
   isodate,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

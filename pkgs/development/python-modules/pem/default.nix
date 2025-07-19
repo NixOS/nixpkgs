@@ -10,7 +10,6 @@
   pretend,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   twisted,
 }:
 

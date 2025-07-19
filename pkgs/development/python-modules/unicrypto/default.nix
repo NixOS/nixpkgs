@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pycryptodome,
   pycryptodomex,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

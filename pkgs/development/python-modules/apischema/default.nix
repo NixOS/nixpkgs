@@ -5,7 +5,6 @@
   graphql-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

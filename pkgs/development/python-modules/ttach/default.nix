@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   torch,
   buildPythonPackage,

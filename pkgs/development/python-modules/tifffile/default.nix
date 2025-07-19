@@ -7,7 +7,6 @@
   lxml,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   zarr,
 }:

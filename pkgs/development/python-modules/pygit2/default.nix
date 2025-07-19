@@ -10,7 +10,6 @@
   libgit2,
   pycparser,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   twine,
 }:
 

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   # build inputs
   numpy,
   yacs,
@@ -50,7 +49,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fvcore" ];
 
-  optional-dependencies = optional-dependencies;
+  inherit optional-dependencies;
 
   meta = with lib; {
     description = "Collection of common code that's shared among different research projects in FAIR computer vision team";

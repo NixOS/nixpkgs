@@ -6,7 +6,6 @@
   cython,
   pdm-backend,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

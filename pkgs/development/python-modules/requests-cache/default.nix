@@ -15,7 +15,6 @@
   pytestCheckHook,
   pytest-rerunfailures,
   pytest-xdist,
-  pythonOlder,
   pyyaml,
   redis,
   requests,

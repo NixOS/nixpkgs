@@ -6,7 +6,6 @@
   fetchFromGitHub,
   ffmpeg-python,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

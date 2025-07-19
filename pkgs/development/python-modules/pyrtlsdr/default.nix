@@ -4,7 +4,6 @@
   fetchPypi,
   rtl-sdr,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

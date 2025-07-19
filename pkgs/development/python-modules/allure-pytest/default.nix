@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  pythonOlder,
   setuptools-scm,
 }:
 

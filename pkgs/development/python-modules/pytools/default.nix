@@ -6,7 +6,6 @@
   numpy,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
   siphash24,
 }:

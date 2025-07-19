@@ -5,7 +5,6 @@
   fetchPypi,
   freezegun,
   pytestCheckHook,
-  pythonOlder,
   selenium,
   setuptools,
 }:

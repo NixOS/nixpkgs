@@ -4,7 +4,6 @@
   fetchFromGitHub,
   morphys,
   pytestCheckHook,
-  pythonOlder,
   six,
   varint,
 }:

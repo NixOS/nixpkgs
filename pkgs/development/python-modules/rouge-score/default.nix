@@ -9,7 +9,6 @@
   numpy,
   six,
   pytestCheckHook,
-  pythonOlder,
 }:
 let
   testdata = fetchFromGitHub {

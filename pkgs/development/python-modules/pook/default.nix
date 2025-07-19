@@ -9,7 +9,6 @@
   pytest-httpbin,
   pytest-pook,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
 }:
 

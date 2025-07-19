@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   python-socks,
-  pythonOlder,
   setuptools,
 }:
 

@@ -6,7 +6,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   toml-adapt,
   tomli,

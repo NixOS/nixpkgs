@@ -7,7 +7,6 @@
   pep440,
   pip,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

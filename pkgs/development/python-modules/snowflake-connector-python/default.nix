@@ -21,7 +21,6 @@
   pyopenssl,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   setuptools,

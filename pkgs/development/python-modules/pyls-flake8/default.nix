@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flake8,
   python-lsp-server,
-  pythonOlder,
 }:
 
 buildPythonPackage {

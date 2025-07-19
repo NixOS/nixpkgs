@@ -6,7 +6,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 

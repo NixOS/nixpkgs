@@ -7,7 +7,6 @@
   mock-services,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   urllib3,
   requests-toolbelt,

@@ -4,7 +4,6 @@
   click,
   fetchPypi,
   future,
-  pythonOlder,
   ratelim,
   requests,
   setuptools,

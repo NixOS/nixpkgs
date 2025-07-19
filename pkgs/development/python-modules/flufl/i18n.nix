@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   atpublic,
   pdm-pep517,
   pytestCheckHook,

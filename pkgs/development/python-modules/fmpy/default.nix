@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cmake,
   sundials,
   lapack,

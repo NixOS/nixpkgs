@@ -6,7 +6,6 @@
   netaddr,
   poetry-core,
   pypykatz,
-  pythonOlder,
   rich,
 }:
 

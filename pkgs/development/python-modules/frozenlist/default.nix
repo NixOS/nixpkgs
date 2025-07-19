@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pep517,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:

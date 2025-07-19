@@ -3,10 +3,8 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
   pyhamcrest,
   python,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:

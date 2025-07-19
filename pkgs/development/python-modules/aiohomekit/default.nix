@@ -15,7 +15,6 @@
   poetry-core,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   zeroconf,
 }:
 

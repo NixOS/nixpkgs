@@ -5,7 +5,6 @@
 
   # pythonPackages
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 

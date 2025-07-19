@@ -5,7 +5,6 @@
   lib,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
 }:
 

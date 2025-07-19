@@ -4,7 +4,6 @@
   fetchFromGitHub,
   wcwidth,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

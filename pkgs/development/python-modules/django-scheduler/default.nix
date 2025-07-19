@@ -7,7 +7,6 @@
   pytestCheckHook,
   pytest-django,
   python-dateutil,
-  pythonOlder,
   pytz,
   setuptools,
 }:

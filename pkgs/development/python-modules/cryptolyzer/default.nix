@@ -11,7 +11,6 @@
   pathlib2,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

@@ -5,7 +5,6 @@
   fetchPypi,
   ordered-set,
   pillow,
-  pythonOlder,
   setuptools,
   setuptools-dso,
   sortedcollections,

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
 
   # build-system
   cython,
@@ -194,11 +193,11 @@ let
         pytestCheckHook
       ]
       ++ lib.flatten (lib.attrValues optional-dependencies)
-      ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
         # for locale executable
         glibc
       ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # for locale executable
         adv_cmds
       ];

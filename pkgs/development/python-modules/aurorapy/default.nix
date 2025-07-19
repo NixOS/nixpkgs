@@ -5,7 +5,6 @@
   future,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

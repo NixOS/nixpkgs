@@ -7,7 +7,6 @@
   numba,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scikit-learn,
   scipy,
   setuptools,

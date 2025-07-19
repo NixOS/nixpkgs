@@ -11,7 +11,6 @@
   poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   tzdata,
   tzlocal,

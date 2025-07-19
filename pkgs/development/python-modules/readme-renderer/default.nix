@@ -8,7 +8,6 @@
   nh3,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

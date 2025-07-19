@@ -7,7 +7,6 @@
   fetchFromGitHub,
   publicsuffix2,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

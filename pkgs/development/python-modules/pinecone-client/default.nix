@@ -7,7 +7,6 @@
   numpy,
   poetry-core,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,

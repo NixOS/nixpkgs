@@ -18,7 +18,6 @@
   pbr,
   prettytable,
   python-openstackclient,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools,

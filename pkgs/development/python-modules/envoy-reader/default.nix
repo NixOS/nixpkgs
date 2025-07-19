@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-raises,
-  pythonOlder,
   respx,
 }:
 

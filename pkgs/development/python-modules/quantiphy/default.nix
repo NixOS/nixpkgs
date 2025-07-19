@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   inform,
   parametrize-from-file,
   setuptools,

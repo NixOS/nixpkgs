@@ -5,7 +5,6 @@
   pandoc,
   pandocfilters,
   poetry-core,
-  pythonOlder,
   replaceVars,
   texliveSmall,
 }:

@@ -2,7 +2,6 @@
   lib,
   callPackage,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   cython,

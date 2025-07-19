@@ -5,7 +5,6 @@
   installShellFiles,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 

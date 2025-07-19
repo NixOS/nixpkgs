@@ -8,7 +8,6 @@
   openssl,
   pkg-config,
   protobuf,
-  pythonOlder,
   setuptools,
   zlib,
 }:

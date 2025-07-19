@@ -9,7 +9,6 @@
   cmake,
   laszip,
   ninja,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

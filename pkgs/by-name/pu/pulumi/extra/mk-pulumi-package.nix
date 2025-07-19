@@ -50,7 +50,6 @@ let
     python3Packages.callPackage (
       {
         buildPythonPackage,
-        pythonOlder,
         parver,
         pip,
         pulumi,

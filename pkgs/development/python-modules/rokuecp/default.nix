@@ -12,7 +12,6 @@
   pytest-cov-stub,
   pytest-freezegun,
   pytestCheckHook,
-  pythonOlder,
   xmltodict,
   yarl,
 }:

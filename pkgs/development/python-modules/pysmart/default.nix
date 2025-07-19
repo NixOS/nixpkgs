@@ -5,7 +5,6 @@
   chardet,
   humanfriendly,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   smartmontools,
 }:

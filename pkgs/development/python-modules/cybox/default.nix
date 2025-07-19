@@ -7,7 +7,6 @@
   mixbox,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
 }:
 

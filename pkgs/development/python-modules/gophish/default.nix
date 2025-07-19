@@ -9,7 +9,6 @@
   packaging,
   pyparsing,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   six,

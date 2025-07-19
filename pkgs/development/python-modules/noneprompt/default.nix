@@ -4,7 +4,6 @@
   lib,
   poetry-core,
   prompt-toolkit,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

@@ -11,7 +11,6 @@
   pathspec,
   pygit2,
   pygtrie,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   tqdm,

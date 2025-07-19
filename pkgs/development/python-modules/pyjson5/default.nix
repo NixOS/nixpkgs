@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:

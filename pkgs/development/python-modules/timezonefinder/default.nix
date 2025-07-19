@@ -8,7 +8,6 @@
   numpy,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

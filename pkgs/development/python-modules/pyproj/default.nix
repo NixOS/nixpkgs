@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
 
   certifi,
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   # force pyproj to use ${proj}
   patches = [
     (replaceVars ./001.proj.patch {
-      proj = proj;
+      inherit proj;
       projdev = proj.dev;
     })
   ];

@@ -11,7 +11,6 @@
   meson-python,
   ninja,
   pkg-config,
-  pythonOlder,
   tox,
   wheel,
 }:
@@ -35,12 +34,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libjack2
-      alsa-lib
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libjack2
+    alsa-lib
+  ];
 
   nativeCheckInputs = [
     tox

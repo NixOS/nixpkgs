@@ -5,7 +5,6 @@
   expandvars,
   fetchPypi,
   libssh,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   toml,

@@ -6,7 +6,6 @@
   fetchFromGitHub,
   lib,
   python,
-  pythonOlder,
   setuptools,
 }:
 

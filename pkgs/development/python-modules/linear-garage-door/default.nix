@@ -5,7 +5,6 @@
   dnspython,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   tenacity,
 }:
 

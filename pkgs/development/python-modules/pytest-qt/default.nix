@@ -5,7 +5,6 @@
   setuptools-scm,
   pytest,
   pyqt5,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

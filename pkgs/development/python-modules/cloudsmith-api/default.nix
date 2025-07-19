@@ -4,7 +4,6 @@
   certifi,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   six,
   urllib3,
 }:

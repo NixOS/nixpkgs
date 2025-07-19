@@ -11,7 +11,6 @@
   pytestCheckHook,
   responses,
   setuptools,
-  pythonOlder,
   nixosTests,
 }:
 

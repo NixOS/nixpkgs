@@ -7,7 +7,6 @@
   flask-sqlalchemy,
   ldap3,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

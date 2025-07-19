@@ -6,7 +6,6 @@
   keyring,
   ptpython,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-generate,
   setuptools-scm,

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   gql,
-  pythonOlder,
   pyyaml,
   requests-toolbelt,
   requests,

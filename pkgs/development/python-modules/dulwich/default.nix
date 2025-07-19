@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fastimport,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   gpgme,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-rust,
   urllib3,

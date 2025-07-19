@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
 }:
 

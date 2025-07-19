@@ -9,7 +9,6 @@
   mock,
   nix-update-script,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   setuptools,

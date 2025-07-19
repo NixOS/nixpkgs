@@ -3,7 +3,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
   rich,
   setuptools,
   typing-extensions,

@@ -6,7 +6,6 @@
   filetype,
   mutagen,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

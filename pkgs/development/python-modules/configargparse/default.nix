@@ -6,7 +6,6 @@
   pytestCheckHook,
   pyyaml,
   pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

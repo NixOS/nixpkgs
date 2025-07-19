@@ -4,7 +4,6 @@
   fetchPypi,
   pytest-httpbin,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   six,
   yarl,

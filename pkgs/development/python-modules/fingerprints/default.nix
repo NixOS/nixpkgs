@@ -4,7 +4,6 @@
   fetchFromGitHub,
   normality,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

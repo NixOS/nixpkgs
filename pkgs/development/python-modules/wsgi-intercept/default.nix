@@ -5,7 +5,6 @@
   six,
   httplib2,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   urllib3,

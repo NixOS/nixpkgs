@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   python,
-  pythonOlder,
   astropy,
   cloudpickle,
   cython,

@@ -4,7 +4,6 @@
   fastcore,
   fetchPypi,
   ipython,
-  pythonOlder,
   setuptools,
   traitlets,
 }:

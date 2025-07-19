@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pycognito,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,

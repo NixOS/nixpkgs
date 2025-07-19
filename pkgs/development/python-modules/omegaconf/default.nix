@@ -11,7 +11,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   pyyaml,
   replaceVars,
 }:

@@ -6,7 +6,6 @@
   loguru,
   mbstrdecoder,
   pytestCheckHook,
-  pythonOlder,
   tcolorpy,
   termcolor,
   typepy,

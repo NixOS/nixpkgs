@@ -7,7 +7,6 @@
   pillow,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

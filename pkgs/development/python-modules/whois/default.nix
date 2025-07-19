@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   inetutils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

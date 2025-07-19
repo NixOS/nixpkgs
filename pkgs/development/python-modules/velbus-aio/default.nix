@@ -4,7 +4,6 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pyserial,
   pyserial-asyncio-fast,
   pytest-asyncio,

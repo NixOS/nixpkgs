@@ -6,7 +6,6 @@
   hatchling,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sentinels,
 }:

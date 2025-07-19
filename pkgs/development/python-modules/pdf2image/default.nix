@@ -4,7 +4,6 @@
   fetchPypi,
   pillow,
   poppler-utils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

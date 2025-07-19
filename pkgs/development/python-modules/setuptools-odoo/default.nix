@@ -4,7 +4,6 @@
   fetchFromGitHub,
   git,
   pytestCheckHook,
-  pythonOlder,
   distutils,
   setuptools-scm,
   writeScript,

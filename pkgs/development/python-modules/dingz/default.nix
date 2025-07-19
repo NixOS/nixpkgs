@@ -5,7 +5,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

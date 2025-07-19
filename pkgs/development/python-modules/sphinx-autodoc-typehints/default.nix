@@ -4,7 +4,6 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
-  pythonOlder,
   sphinx,
   pytestCheckHook,
 }:

@@ -7,7 +7,6 @@
   grapheme,
   pytestCheckHook,
   python,
-  pythonOlder,
   setuptools,
 }:
 

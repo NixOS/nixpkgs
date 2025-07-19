@@ -6,7 +6,6 @@
   fetchurl,
   openssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   swig,
 }:

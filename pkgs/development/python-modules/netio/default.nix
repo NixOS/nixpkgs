@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pyopenssl,
-  pythonOlder,
   requests,
 }:
 

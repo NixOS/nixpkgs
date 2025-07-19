@@ -20,7 +20,6 @@
   pillow,
   pygments,
   pymdown-extensions,
-  pythonOlder,
   regex,
   requests,
   trove-classifiers,

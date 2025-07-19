@@ -6,7 +6,6 @@
   mock,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

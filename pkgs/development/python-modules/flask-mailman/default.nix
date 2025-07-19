@@ -7,7 +7,6 @@
   mkdocs-material-extensions,
   flask,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

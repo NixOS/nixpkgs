@@ -5,7 +5,6 @@
   fetchFromGitHub,
   justbackoff,
   pyserial-asyncio-fast,
-  pythonOlder,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,

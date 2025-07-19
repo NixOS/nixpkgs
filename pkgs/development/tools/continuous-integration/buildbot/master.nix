@@ -7,7 +7,6 @@
   # Tie withPlugins through the fixed point here, so it will receive an
   # overridden version properly
   buildbot,
-  pythonOlder,
   python,
   twisted,
   jinja2,

@@ -6,7 +6,6 @@
   setuptools,
   twisted,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

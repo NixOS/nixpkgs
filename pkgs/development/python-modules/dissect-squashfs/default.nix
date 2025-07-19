@@ -6,7 +6,6 @@
   fetchFromGitHub,
   lz4,
   python-lzo,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   zstandard,

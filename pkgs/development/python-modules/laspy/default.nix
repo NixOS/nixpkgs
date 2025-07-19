@@ -6,7 +6,6 @@
   laszip,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

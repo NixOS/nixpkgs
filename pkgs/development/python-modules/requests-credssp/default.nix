@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pyspnego,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
@@ -30,7 +29,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   optional-dependencies = {
-    kerberos = pyspnego.optional-dependencies.kerberos;
+    inherit (pyspnego.optional-dependencies) kerberos;
   };
 
   pythonImportsCheck = [ "requests_credssp" ];

@@ -5,7 +5,6 @@
   numpy,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   pywavelets,
   scipy,
   setuptools,

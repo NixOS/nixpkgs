@@ -4,7 +4,6 @@
   fetchFromGitHub,
   parver,
   pulumi,
-  pythonOlder,
   semver,
   setuptools,
 }:

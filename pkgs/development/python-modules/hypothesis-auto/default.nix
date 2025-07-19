@@ -7,7 +7,6 @@
   pydantic,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

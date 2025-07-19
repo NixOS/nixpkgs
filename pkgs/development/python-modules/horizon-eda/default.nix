@@ -4,11 +4,10 @@
   horizon-eda,
   pycairo,
   python,
-  pythonOlder,
 }:
 
 let
-  base = horizon-eda.passthru.base;
+  inherit (horizon-eda.passthru) base;
 in
 buildPythonPackage {
   inherit (base)
@@ -35,7 +34,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ pycairo ];
 
-  nativeBuildInputs = base.nativeBuildInputs;
+  inherit (base) nativeBuildInputs;
 
   ninjaFlags = [ "horizon.so" ];
 

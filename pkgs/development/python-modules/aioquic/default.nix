@@ -8,7 +8,6 @@
   pylsqpack,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   service-identity,
 }:

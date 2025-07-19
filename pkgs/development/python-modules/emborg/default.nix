@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   borgbackup,
   appdirs,
   arrow,

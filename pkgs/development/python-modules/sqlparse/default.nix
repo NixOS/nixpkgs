@@ -5,7 +5,6 @@
   hatchling,
   installShellFiles,
   pytestCheckHook,
-  pythonOlder,
 
   # for passthru.tests
   django,

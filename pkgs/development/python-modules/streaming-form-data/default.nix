@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cython,
   pytestCheckHook,
   requests-toolbelt,

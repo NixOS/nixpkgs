@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   regex,
 }:

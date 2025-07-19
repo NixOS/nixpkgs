@@ -6,7 +6,6 @@
   setuptools,
   cffi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

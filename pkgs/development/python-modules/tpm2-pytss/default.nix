@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
-  pythonOlder,
   asn1crypto,
   cffi,
   cryptography,
@@ -20,7 +19,7 @@
 }:
 
 let
-  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";

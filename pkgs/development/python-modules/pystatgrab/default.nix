@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
   libstatgrab,
   pkg-config,
-  pythonOlder,
   setuptools,
   unittestCheckHook,
 }:

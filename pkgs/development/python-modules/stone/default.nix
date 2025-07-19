@@ -6,7 +6,6 @@
   packaging,
   ply,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:

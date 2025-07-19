@@ -6,7 +6,6 @@
   dask,
   distributed,
   mpi4py,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

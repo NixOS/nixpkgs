@@ -4,7 +4,6 @@
   fetchPypi,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   simplejson,
 }:

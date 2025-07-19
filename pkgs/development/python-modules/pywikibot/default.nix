@@ -5,7 +5,6 @@
   mwparserfromhell,
   requests,
   packaging,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

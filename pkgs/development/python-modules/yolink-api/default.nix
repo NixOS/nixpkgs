@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
-  pythonOlder,
   setuptools,
   tenacity,
 }:

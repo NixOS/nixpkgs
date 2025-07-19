@@ -4,9 +4,7 @@
   fetchPypi,
   more-itertools,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
-  setuptools,
 }:
 
 buildPythonPackage rec {

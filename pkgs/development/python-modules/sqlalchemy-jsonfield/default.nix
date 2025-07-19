@@ -9,7 +9,6 @@
   pytest-sugar,
   pymysql,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

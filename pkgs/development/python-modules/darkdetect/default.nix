@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   stdenv,
 
@@ -25,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "darkdetect" ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace darkdetect/_linux_detect.py \
       --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';

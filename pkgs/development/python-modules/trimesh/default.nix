@@ -4,10 +4,8 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
   numpy,
   lxml,
-  trimesh,
 
   # optional deps
   colorlog,

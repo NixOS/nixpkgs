@@ -24,7 +24,6 @@
   psycopg2,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   uritemplate,

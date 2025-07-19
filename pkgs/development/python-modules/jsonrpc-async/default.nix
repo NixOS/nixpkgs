@@ -6,7 +6,6 @@
   jsonrpc-base,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

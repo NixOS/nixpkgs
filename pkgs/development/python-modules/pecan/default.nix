@@ -7,7 +7,6 @@
   jinja2,
   mako,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   sqlalchemy,
   virtualenv,

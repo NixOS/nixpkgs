@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   routerFeatures,
   setuptools,
   janus,
@@ -44,8 +43,6 @@ buildPythonPackage rec {
     hash = "sha256-PvsP6HXCllW102h3o7abz9uC2AZTwvg5qIqP+rdkk6Y=";
   };
 
-  # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
-
   # No useful tests
   doCheck = false;
 
@@ -56,7 +53,7 @@ buildPythonPackage rec {
     sanic
   ] ++ opts.extraBuildInputs;
 
-  prePatch = opts.prePatch;
+  inherit (opts) prePatch;
 
   meta = with lib; {
     description = "Server framework for web apps with an Elm frontend";

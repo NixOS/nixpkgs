@@ -13,11 +13,9 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   rich,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -56,9 +54,9 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    redis = limits.optional-dependencies.redis;
-    memcached = limits.optional-dependencies.memcached;
-    mongodb = limits.optional-dependencies.mongodb;
+    inherit (limits.optional-dependencies) redis;
+    inherit (limits.optional-dependencies) memcached;
+    inherit (limits.optional-dependencies) mongodb;
   };
 
   nativeCheckInputs = [

@@ -5,7 +5,6 @@
   httpbin,
   pytest,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:

@@ -9,7 +9,6 @@
   poetry-core,
   pontos,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 

@@ -11,7 +11,6 @@
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
-  pythonOlder,
   pyopenssl,
 }:
 

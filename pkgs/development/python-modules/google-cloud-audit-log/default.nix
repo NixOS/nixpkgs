@@ -4,7 +4,6 @@
   fetchPypi,
   googleapis-common-protos,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 

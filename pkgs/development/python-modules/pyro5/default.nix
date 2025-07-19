@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   serpent,
-  pythonOlder,
   pytestCheckHook,
 }:
 

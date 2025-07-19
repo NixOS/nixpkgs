@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pyasn1,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 

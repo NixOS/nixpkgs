@@ -15,7 +15,6 @@
   pyelftools,
   python-gnupg,
   python-u2flib-host,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   websocket-client,

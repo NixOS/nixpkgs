@@ -5,7 +5,6 @@
   lazy,
   packaging-legacy,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools-changelog-shortener,
   setuptools,

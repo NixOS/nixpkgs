@@ -9,7 +9,6 @@
   lsof,
   mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   twisted,
   zope-interface,

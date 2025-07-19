@@ -8,7 +8,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-vcr,
-  pythonOlder,
   requests,
   requests-toolbelt,
   testfixtures,

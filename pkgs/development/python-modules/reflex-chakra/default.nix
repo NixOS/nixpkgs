@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
   reflex,
   pytestCheckHook,
 }:

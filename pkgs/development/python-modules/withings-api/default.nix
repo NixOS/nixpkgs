@@ -7,7 +7,6 @@
   pydantic,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests-oauthlib,
   responses,
   typing-extensions,

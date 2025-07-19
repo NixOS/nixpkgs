@@ -3,7 +3,6 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 

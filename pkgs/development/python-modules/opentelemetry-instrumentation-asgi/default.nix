@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   asgiref,
   hatchling,
   opentelemetry-api,

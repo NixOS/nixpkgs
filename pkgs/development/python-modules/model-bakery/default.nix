@@ -5,7 +5,6 @@
   hatchling,
   django,
   pytestCheckHook,
-  pythonOlder,
   pytest-django,
 }:
 

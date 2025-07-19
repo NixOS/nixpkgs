@@ -6,7 +6,6 @@
   mock,
   netaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

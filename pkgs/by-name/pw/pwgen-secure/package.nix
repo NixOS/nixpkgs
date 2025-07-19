@@ -5,15 +5,13 @@
 }:
 
 let
-  inherit (python3Packages) buildPythonApplication pythonOlder;
+  inherit (python3Packages) buildPythonApplication;
 
 in
 buildPythonApplication rec {
   pname = "pwgen-secure";
   version = "0.9.1";
   pyproject = true;
-
-  # it needs `secrets` which was introduced in 3.6
 
   # GH is newer than Pypi and contains both library *and* the actual program
   # whereas Pypi only has the library

@@ -4,7 +4,6 @@
   fetchPypi,
   gmp,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {

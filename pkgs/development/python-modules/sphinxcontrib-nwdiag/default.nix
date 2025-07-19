@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   nwdiag,
-  pythonOlder,
   sphinx,
 }:
 

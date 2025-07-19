@@ -10,7 +10,6 @@
   opentelemetry-test-utils,
   opentelemetry-util-http,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 

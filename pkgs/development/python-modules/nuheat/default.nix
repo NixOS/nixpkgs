@@ -5,7 +5,6 @@
   mock,
   parameterized,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:

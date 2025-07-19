@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   flask,
-  pythonOlder,
   setuptools,
   webob,
 }:

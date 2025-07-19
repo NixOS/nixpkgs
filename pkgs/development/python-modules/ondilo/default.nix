@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   oauthlib,
-  pythonOlder,
   requests,
   requests-oauthlib,
   setuptools,

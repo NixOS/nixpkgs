@@ -5,7 +5,6 @@
   flit-core,
   fsspec,
   oci,
-  pythonOlder,
   requests,
 }:
 
