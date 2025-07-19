@@ -1,0 +1,28 @@
+diff --git a/pkg/tree-sitter-graphql/package.json b/pkg/tree-sitter-graphql/package.json
+index a9b682b..39b963f 100644
+--- a/pkg/tree-sitter-graphql/package.json
++++ b/pkg/tree-sitter-graphql/package.json
+@@ -48,8 +48,7 @@
+     "access": "public"
+   },
+   "devDependencies": {
+-    "globals": "15.10.0",
+-    "tree-sitter-cli": "0.24.1"
++    "globals": "15.10.0"
+   },
+   "dependencies": {
+     "node-addon-api": "8.1.0",
+diff --git a/pkg/tree-sitter/package.json b/pkg/tree-sitter/package.json
+index 452796f..b9675e4 100644
+--- a/pkg/tree-sitter/package.json
++++ b/pkg/tree-sitter/package.json
+@@ -48,8 +48,7 @@
+     "access": "public"
+   },
+   "devDependencies": {
+-    "globals": "15.10.0",
+-    "tree-sitter-cli": "0.24.1"
++    "globals": "15.10.0"
+   },
+   "dependencies": {
+     "node-addon-api": "8.1.0",
