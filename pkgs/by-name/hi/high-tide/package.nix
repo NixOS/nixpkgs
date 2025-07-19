@@ -9,6 +9,7 @@
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
+  glib-networking,
   gst_all_1,
   libsecret,
   libportal,
@@ -38,6 +39,7 @@ python313Packages.buildPythonApplication rec {
 
   buildInputs =
     [
+      glib-networking
       libadwaita
       libportal
     ]

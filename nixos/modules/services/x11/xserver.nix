@@ -768,6 +768,7 @@ in
             || dmConf.startx.enable
             || config.services.greetd.enable
             || config.services.displayManager.ly.enable
+            || config.services.displayManager.lemurs.enable
           );
       in
       mkIf (default) (mkDefault true);

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiorpcx";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kyuupichan";
     repo = "aiorpcX";
-    tag = "0.24"; # TODO: https://github.com/kyuupichan/aiorpcX/issues/52
-    hash = "sha256-0c4AqKDWAmAFR1t42VE54kgbupe4ljajCR/TB5fZfME=";
+    tag = version;
+    hash = "sha256-mFg9mWrlnfXiQpgZ1rxvUy9TBfwy41XEKmsCf2nvxGo=";
   };
 
   build-system = [ setuptools ];
