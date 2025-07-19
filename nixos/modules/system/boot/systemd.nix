@@ -414,16 +414,6 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
-      description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
-        for available options.
-      '';
-    };
-
     settings.Manager = mkOption {
       default = { };
       defaultText = lib.literalExpression ''
@@ -687,7 +677,6 @@ in
             KExecWatchdogSec=${cfg.watchdog.kexecTime}
           ''}
 
-          ${cfg.extraConfig}
           ${attrsToSection cfg.settings.Manager}
         '';
 
@@ -883,5 +872,6 @@ in
       To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierarchy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
+    (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
   ];
 }
