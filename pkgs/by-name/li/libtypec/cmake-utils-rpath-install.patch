@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7f617f..a46f096 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,3 +36,5 @@ configure_file(
+
+ install(FILES ${CMAKE_BINARY_DIR}/libtypec.pc
+     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
++
++add_subdirectory(utils)
+diff --git a/utils/CMakeLists.txt b/utils/CMakeLists.txt
+index b726a54..87a71e6 100644
+--- a/utils/CMakeLists.txt
++++ b/utils/CMakeLists.txt
+@@ -4,13 +4,13 @@ project(lstypec VERSION 0.4.0)
+ include(CTest)
+ enable_testing()
+
+-get_filename_component(libtypec_PROJECT_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+ add_executable(lstypec lstypec.c names.c)
+ add_executable(typecstatus typecstatus.c names.c)
+
+-target_link_libraries(lstypec "${CMAKE_CURRENT_LIST_DIR}/../bin/libtypec.so" udev)
+-target_link_libraries(typecstatus "${CMAKE_CURRENT_LIST_DIR}/../bin/libtypec.so" udev)
++target_link_libraries(lstypec libtypec udev)
++target_link_libraries(typecstatus libtypec udev)
+
++install(TARGETS lstypec typecstatus)
+
+ set(CMAKE_C_FLAGS "-g -O2 -fstack-protector-strong -Wformat=1 -Werror=format-security -Wdate-time -fasynchronous-unwind-tables -D_FORTIFY_SOURCE=2")
+ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
