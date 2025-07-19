@@ -57,14 +57,14 @@
   withML ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.3";
+  version = "2.6.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OdH6cQ2dYvbeLh9ljaqmdr02VN2qbvNUXbPNCEkNzxc=";
+    hash = "sha256-YKWkKyYB10UacaGDO+Q6LhPmhAmsbrP+vlY6uWBI8KA=";
     fetchSubmodules = true;
   };
 
@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
       --replace-fail \
         'GOPROXY=https://proxy.golang.org' \
-        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules}'
+        'GOPROXY=file://${finalAttrs.passthru.netdata-go-modules},file://${finalAttrs.passthru.nd-mcp}'
 
     # Prevent the path to be caught into the Nix store path.
     substituteInPlace CMakeLists.txt \
@@ -253,6 +253,32 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = rec {
+    nd-mcp =
+      (buildGoModule {
+        pname = "nd-mcp";
+        version = finalAttrs.version;
+        inherit (finalAttrs) src;
+
+        sourceRoot = "${finalAttrs.src.name}/src/web/mcp/bridges/stdio-golang";
+
+        vendorHash = "sha256-6JfHrBloJQ5wHyogIPTVDZjlITWZXbsv2m2lMlQmBUY=";
+
+        proxyVendor = true;
+        doCheck = false;
+
+        subPackages = [ "." ];
+
+        ldflags = [
+          "-s"
+          "-w"
+        ];
+
+        meta = {
+          description = "Netdata MCP (modular collection platform) bridge for stdio and Go plugins";
+          license = lib.licenses.gpl3Only;
+        };
+      }).goModules;
+
     netdata-go-modules =
       (buildGoModule {
         pname = "netdata-go-plugins";
@@ -260,7 +286,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-N03IGTtF78PCo4kf0Sdtzv6f8z47ohg8g3YIXtINRjU=";
+        vendorHash = "sha256-aOFmfBcBjnTfFHfMNemSJHbnMnhBojYrGe21zDxPxME=";
         doCheck = false;
         proxyVendor = true;
 
