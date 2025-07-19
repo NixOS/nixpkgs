@@ -283,7 +283,9 @@ def update_all_packages():
 
     new_content = [
         "flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });",
-        "flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });",
+        "flutterPackages-source = recurseIntoAttrs (",
+        "  callPackage ../development/compilers/flutter { useNixpkgsEngine = true; }",
+        ");",
         "flutterPackages = flutterPackages-bin;",
         "flutter = flutterPackages.stable;",
     ] + [
