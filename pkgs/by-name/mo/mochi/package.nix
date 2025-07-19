@@ -5,11 +5,13 @@
   lib,
   stdenvNoCC,
   xorg,
+  makeWrapper,
 }:
 
 let
   pname = "mochi";
   version = "1.18.11";
+  appName = "Mochi";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
@@ -32,23 +34,32 @@ let
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      appName
+      ;
 
     src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.dmg";
       hash = "sha256-Bv0EFBZVZMxHCvdDHfBdL267cwyeciBqZhrKgppxtm4=";
     };
 
-    sourceRoot = "Mochi.app";
+    sourceRoot = "${appName}.app";
     nativeBuildInputs = [
       _7zz
+      makeWrapper
     ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/Mochi.app
-      cp -r . $out/Applications/Mochi.app
+      # 7zz extracts all the entitlements, which trips the signature
+      find . -name '*com.apple.cs*' -exec rm {} \;
+      mkdir -p $out/{Applications/${appName}.app,bin}
+      cp -r . $out/Applications/${appName}.app
+      makeWrapper $out/Applications/${appName}.app/Contents/MacOS/${appName} $out/bin/${pname}
 
       runHook postInstall
     '';
@@ -62,6 +73,7 @@ let
     description = "Simple markdown-powered SRS app";
     homepage = "https://mochi.cards/";
     changelog = "https://mochi.cards/changelog.html";
+    mainProgram = "mochi";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ poopsicles ];
