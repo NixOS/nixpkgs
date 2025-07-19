@@ -32,10 +32,21 @@ in
         type = lib.types.bool;
         description = ''
           Enable in-memory compressed devices and swap space provided by the zram
-          kernel module.
+          kernel module. This is useful if you prefer to avoid setting up a
+          swap partition or swap file stored on a storage device.
+
           See [
             https://www.kernel.org/doc/Documentation/blockdev/zram.txt
           ](https://www.kernel.org/doc/Documentation/blockdev/zram.txt).
+
+          If you intend to use swap on-disk as well, then instead of using zramSwap,
+          consider enabling
+          [zswap](https://www.kernel.org/doc/html/latest/admin-guide/mm/zswap.html).
+          Zswap applies more suitable heuristics in this case when using disk swap.
+
+          Zswap can be enabled using `boot.kernelParams = [ "zswap.enabled=1" ];`.
+
+          Do keep zswap disabled when using this zramSwap module though.
         '';
       };
 
@@ -109,6 +120,29 @@ in
           as there's no gain from keeping them in RAM.
         '';
       };
+
+      recommendedTuningSettings = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          Applies some sysctls to optimize the virtual memory subsystem
+          for zramSwap.
+
+          - `vm.swappiness = 150` increase swapping aka compression to be
+            able to cache more file page data
+          - `vm.watermark_boost_factor = 0` watermark boosting can cause unpredictable stalls as seen here:
+            https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1861359
+          - `vm.watermark_scale_factor = 125` initiate kswapd much earlier
+            as zram will also apply pressure when requesting memory for
+            compressed swap
+          - `vm.page-cluster = 0` disables page prefetching
+
+          This option when enabled, sets these sysctls when you also
+          enable the zramSwap module.
+
+          When zramSwap is enabled, this defaults to `true`.
+        '';
+      };
     };
 
   };
@@ -143,6 +177,11 @@ in
       }) devices
     );
 
+    boot.kernel.sysctl = lib.mkIf cfg.recommendedTuningSettings {
+        "vm.swappiness" = 150;
+        "vm.watermark_boost_factor" = 0;
+        "vm.watermark_scale_factor" = 125;
+        "vm.page-cluster" = 0;
+    };
   };
-
 }
