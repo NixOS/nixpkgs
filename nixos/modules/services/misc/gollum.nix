@@ -106,6 +106,12 @@ in
       description = "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
+    init = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Initialize git repository if it does not exist. This should be disabled if stateDir is pointed at an existing bare repository.";
+    };
+
     package = lib.mkPackageOption pkgs "gollum" { };
 
     user = lib.mkOption {
@@ -139,9 +145,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.git ];
-
-      preStart = ''
-        # This is safe to be run on an existing repo
+      # This is safe to be run on an existing repo except if it is bare
+      preStart = lib.mkIf cfg.init
+      ''
         git init ${cfg.stateDir}
       '';
 
