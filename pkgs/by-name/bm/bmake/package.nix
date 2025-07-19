@@ -4,7 +4,7 @@
   fetchurl,
   getopt,
   ksh,
-  pkgsMusl,
+  pkgsMusl ? { },
   stdenv,
   tzdata,
 }:
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      bmakeMusl = pkgsMusl.bmake;
+      bmakeMusl = pkgsMusl.bmake or null;
     };
   };
 

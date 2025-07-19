@@ -24,7 +24,7 @@ let
       majorVersion = lib.versions.major ndkVersion;
     in
     import ./androidndk-pkgs.nix {
-      inherit lib;
+      inherit config lib;
       inherit (buildPackages)
         makeWrapper
         autoPatchelfHook
