@@ -48,7 +48,7 @@ It is possible to write service modules that are portable. This is done by eithe
 { config, options, lib, ... }: {
   _class = "service";
   config = {
-    process.executable = "${lib.getExe config.foo.program}";
+    process.argv = [ (lib.getExe config.foo.program) ];
   } // lib.optionalAttrs (options?systemd) {
     # ... systemd-specific definitions ...
   };

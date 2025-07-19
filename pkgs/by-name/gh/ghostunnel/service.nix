@@ -8,7 +8,7 @@
 let
   inherit (lib)
     concatStringsSep
-    escapeShellArg
+    getExe
     mkDefault
     mkIf
     mkOption
@@ -130,9 +130,9 @@ in
       };
 
       extraArguments = mkOption {
-        description = "Extra arguments to pass to `ghostunnel server` (shell syntax)";
-        type = types.separatedString " ";
-        default = "";
+        description = "Extra arguments to pass to `ghostunnel server`";
+        type = types.listOf types.str;
+        default = [ ];
       };
 
       unsafeTarget = mkOption {
@@ -181,32 +181,44 @@ in
     # TODO assertions
 
     process = {
-      executable = pkgs.writeScriptBin "run-ghostunnel" ''
-        #!${pkgs.runtimeShell}
-        exec ${lib.getExe cfg.package} ${
-          concatStringsSep " " (
-            optional (cfg.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
-            ++ optional (cfg.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
-            ++ optional (cfg.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
-            ++ optional (cfg.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
-            ++ [
-              "server"
-              "--listen"
-              cfg.listen
-              "--target"
-              cfg.target
-            ]
-            ++ optional cfg.allowAll "--allow-all"
-            ++ map (v: "--allow-cn=${escapeShellArg v}") cfg.allowCN
-            ++ map (v: "--allow-ou=${escapeShellArg v}") cfg.allowOU
-            ++ map (v: "--allow-dns=${escapeShellArg v}") cfg.allowDNS
-            ++ map (v: "--allow-uri=${escapeShellArg v}") cfg.allowURI
-            ++ optional cfg.disableAuthentication "--disable-authentication"
-            ++ optional cfg.unsafeTarget "--unsafe-target"
-            ++ [ cfg.extraArguments ]
+      argv =
+        # Use a shell if credentials need to be pulled from the environment.
+        optional
+          (builtins.any (v: v != null) [
+            cfg.keystore
+            cfg.cert
+            cfg.key
+            cfg.cacert
+          ])
+          (
+            pkgs.writeScript "load-credentials" ''
+              #!${pkgs.runtimeShell}
+              exec $@ ${
+                concatStringsSep " " (
+                  optional (cfg.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
+                  ++ optional (cfg.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
+                  ++ optional (cfg.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
+                  ++ optional (cfg.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
+                )
+              }
+            ''
           )
-        }
-      '';
+        ++ [
+          (getExe cfg.package)
+          "server"
+          "--listen"
+          cfg.listen
+          "--target"
+          cfg.target
+        ]
+        ++ optional cfg.allowAll "--allow-all"
+        ++ map (v: "--allow-cn=${v}") cfg.allowCN
+        ++ map (v: "--allow-ou=${v}") cfg.allowOU
+        ++ map (v: "--allow-dns=${v}") cfg.allowDNS
+        ++ map (v: "--allow-uri=${v}") cfg.allowURI
+        ++ optional cfg.disableAuthentication "--disable-authentication"
+        ++ optional cfg.unsafeTarget "--unsafe-target"
+        ++ cfg.extraArguments;
     };
 
     # refine the service
