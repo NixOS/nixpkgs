@@ -80,9 +80,5 @@ buildPythonPackage rec {
   meta = sqlite-vec-c.meta // {
     description = "Python bindings for sqlite-vec";
     maintainers = [ lib.maintainers.sarahec ];
-    badPlatforms = [
-      # segfaults during test
-      "x86_64-darwin"
-    ];
   };
 }
