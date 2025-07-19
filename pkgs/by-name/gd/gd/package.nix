@@ -3,8 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  autoconf,
-  automake,
+  autoreconfHook,
   pkg-config,
   zlib,
   libpng,
@@ -16,15 +15,16 @@
   libavif,
   fontconfig,
   freetype,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gd";
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
-    sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
+    url = "https://github.com/libgd/libgd/releases/download/gd-${finalAttrs.version}/libgd-${finalAttrs.version}.tar.xz";
+    hash = "sha256-P+gi7OIHlgYK9jt8YKyxUeWEQgTSidoM4I+P3xMeWmE=";
   };
 
   patches = [
@@ -32,11 +32,9 @@ stdenv.mkDerivation rec {
       # included in > 2.3.3
       name = "restore-GD_FLIP.patch";
       url = "https://github.com/libgd/libgd/commit/f4bc1f5c26925548662946ed7cfa473c190a104a.diff";
-      sha256 = "XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";
+      hash = "sha256-XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";
     })
   ];
-
-  hardeningDisable = [ "format" ];
 
   configureFlags =
     [
@@ -46,8 +44,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     pkg-config
   ];
 
@@ -55,6 +52,7 @@ stdenv.mkDerivation rec {
     [
       zlib
       freetype
+      fontconfig
       libpng
       libjpeg
       libwebp
@@ -62,7 +60,6 @@ stdenv.mkDerivation rec {
       libavif
     ]
     ++ lib.optionals withXorg [
-      fontconfig
       libXpm
     ];
 
@@ -74,13 +71,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # fails 2 tests
+  doCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gd-(.*)"
+    ];
+  };
+
+  meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = licenses.free; # some custom license
-    platforms = platforms.unix;
+    license = lib.licenses.gd;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
