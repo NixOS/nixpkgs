@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudio";
-  version = "0.11.22";
+  version = "0.11.23";
 
   src = fetchFromGitHub {
     owner = "mackron";
     repo = "miniaudio";
-    rev = finalAttrs.version;
-    hash = "sha256-o/7sfBcrhyXEakccOAogQqm8dO4Szj1QSpaIHg6OSt4=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZrfKw5a3AtIER2btCKWhuvygasNaHNf9EURf1Kv96Vc=";
   };
 
   postInstall = ''
