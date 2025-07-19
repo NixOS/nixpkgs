@@ -1590,22 +1590,22 @@ mapAliases {
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2024-03-24
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
 
-  cstore_fdw = postgresqlPackages.cstore_fdw;
-  pg_cron = postgresqlPackages.pg_cron;
-  pg_hll = postgresqlPackages.pg_hll;
-  pg_repack = postgresqlPackages.pg_repack;
-  pg_similarity = postgresqlPackages.pg_similarity;
-  pg_topn = postgresqlPackages.pg_topn;
+  cstore_fdw = throw "'cstore_fdw' has been removed. Use 'postgresqlPackages.cstore_fdw' instead."; # Added 2025-07-19
+  pg_cron = throw "'pg_cron' has been removed. Use 'postgresqlPackages.pg_cron' instead."; # Added 2025-07-19
+  pg_hll = throw "'pg_hll' has been removed. Use 'postgresqlPackages.pg_hll' instead."; # Added 2025-07-19
+  pg_repack = throw "'pg_repack' has been removed. Use 'postgresqlPackages.pg_repack' instead."; # Added 2025-07-19
+  pg_similarity = throw "'pg_similarity' has been removed. Use 'postgresqlPackages.pg_similarity' instead."; # Added 2025-07-19
+  pg_topn = throw "'pg_topn' has been removed. Use 'postgresqlPackages.pg_topn' instead."; # Added 2025-07-19
   pgf1 = throw "'pgf1' has been removed since it is unmaintained. Consider using 'pgf' instead"; # Added 2025-05-10
-  pgjwt = postgresqlPackages.pgjwt;
-  pgroonga = postgresqlPackages.pgroonga;
-  pgtap = postgresqlPackages.pgtap;
-  plv8 = postgresqlPackages.plv8;
+  pgjwt = throw "'pgjwt' has been removed. Use 'postgresqlPackages.pgjwt' instead."; # Added 2025-07-19
+  pgroonga = throw "'pgroonga' has been removed. Use 'postgresqlPackages.pgroonga' instead."; # Added 2025-07-19
+  pgtap = throw "'pgtap' has been removed. Use 'postgresqlPackages.pgtap' instead."; # Added 2025-07-19
+  plv8 = throw "'plv8' has been removed. Use 'postgresqlPackages.plv8' instead."; # Added 2025-07-19
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
-  postgis = postgresqlPackages.postgis;
+  postgis = throw "'postgis' has been removed. Use 'postgresqlPackages.postgis' instead."; # Added 2025-07-19
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
   texinfo5 = throw "'texinfo5' has been removed from nixpkgs"; # Added 2024-09-10
-  timescaledb = postgresqlPackages.timescaledb;
+  timescaledb = throw "'timescaledb' has been removed. Use 'postgresqlPackages.timescaledb' instead."; # Added 2025-07-19
   tsearch_extras = throw "'tsearch_extras' has been removed from nixpkgs"; # Added 2024-12-15
 
   postgresql_12 = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14
