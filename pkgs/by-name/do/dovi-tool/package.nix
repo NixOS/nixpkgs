@@ -5,7 +5,11 @@
   pkg-config,
   fontconfig,
   versionCheckHook,
-  nix-update-script,
+  writeShellApplication,
+  libdovi,
+  nixVersions,
+  nix-update,
+  tomlq,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -42,7 +46,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "update-${finalAttrs.pname}";
+    runtimeInputs = [
+      nixVersions.latest
+      nix-update
+      tomlq
+    ];
+
+    text = ''
+      nix-update ${finalAttrs.pname}
+      src="$(nix eval -f . --raw ${finalAttrs.pname}.src)"
+      libver="$(tq -f "$src/dolby_vision/Cargo.toml" package.version)"
+      nix-update ${libdovi.pname} --version "$libver"
+    '';
+  });
 
   meta = {
     description = "CLI tool combining multiple utilities for working with Dolby Vision";
