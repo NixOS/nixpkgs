@@ -11415,6 +11415,12 @@
     github = "jaredmontoya";
     githubId = 49511278;
   };
+  jaschutte = {
+    email = "snore-prize-landed@duck.com";
+    github = "jaschutte";
+    githubId = 34577095;
+    name = "James Schutte";
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
