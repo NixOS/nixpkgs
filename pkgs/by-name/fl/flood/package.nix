@@ -20,6 +20,7 @@ buildNpmPackage rec {
 
   npmConfigHook = pnpm_9.configHook;
   npmDeps = pnpmDeps;
+  dontNpmPrune = true;
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;

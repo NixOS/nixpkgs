@@ -6,10 +6,12 @@
   setuptools-scm,
   # python dependencies
   docling,
+  docling-jobkit,
   fastapi,
   httpx,
   pydantic-settings,
   python-multipart,
+  scalar-fastapi,
   uvicorn,
   websockets,
   tesserocr,
@@ -29,20 +31,15 @@
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "0.14.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-R8W/FXKj2wLJOcjwIsna/2wFOLGM80Qr3WlYPJTTSNU=";
+    hash = "sha256-kvtsutdQXk9mxx90fHXlzxFXrA7v+TdlgjrKCSFuuVU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"kfp[kubernetes]>=2.10.0",' ""
-  '';
 
   build-system = [
     hatchling
@@ -60,10 +57,12 @@ buildPythonPackage rec {
   dependencies =
     [
       docling
+      (docling-jobkit.override { inherit withTesserocr withRapidocr; })
       fastapi
       httpx
       pydantic-settings
       python-multipart
+      scalar-fastapi
       typer
       uvicorn
       websockets

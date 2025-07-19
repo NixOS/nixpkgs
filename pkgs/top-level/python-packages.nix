@@ -4192,6 +4192,8 @@ self: super: with self; {
 
   docling-ibm-models = callPackage ../development/python-modules/docling-ibm-models { };
 
+  docling-jobkit = callPackage ../development/python-modules/docling-jobkit { };
+
   docling-parse = callPackage ../development/python-modules/docling-parse {
     loguru-cpp = pkgs.loguru;
   };
@@ -5266,6 +5268,8 @@ self: super: with self; {
 
   flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
 
+  flask-session2 = callPackage ../development/python-modules/flask-session2 { };
+
   flask-simpleldap = callPackage ../development/python-modules/flask-simpleldap { };
 
   flask-sock = callPackage ../development/python-modules/flask-sock { };
@@ -5460,6 +5464,8 @@ self: super: with self; {
   freertos-gdb = callPackage ../development/python-modules/freertos-gdb { };
 
   freesasa = callPackage ../development/python-modules/freesasa { inherit (pkgs) freesasa; };
+
+  freesms = callPackage ../development/python-modules/freesms { };
 
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
@@ -7078,6 +7084,8 @@ self: super: with self; {
 
   ipdb = callPackage ../development/python-modules/ipdb { };
 
+  iperf3 = callPackage ../development/python-modules/iperf3 { };
+
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   iplotx = callPackage ../development/python-modules/iplotx { };
@@ -7784,6 +7792,8 @@ self: super: with self; {
   labmath = callPackage ../development/python-modules/labmath { };
 
   laces = callPackage ../development/python-modules/laces { };
+
+  lacrosse-view = callPackage ../development/python-modules/lacrosse-view { };
 
   lacuscore = callPackage ../development/python-modules/lacuscore { };
 
@@ -14999,6 +15009,8 @@ self: super: with self; {
 
   pyvows = callPackage ../development/python-modules/pyvows { };
 
+  pyw215 = callPackage ../development/python-modules/pyw215 { };
+
   pywal = callPackage ../development/python-modules/pywal { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
@@ -15952,6 +15964,8 @@ self: super: with self; {
   sbom2dot = callPackage ../development/python-modules/sbom2dot { };
 
   sbom4files = callPackage ../development/python-modules/sbom4files { };
+
+  scalar-fastapi = callPackage ../development/python-modules/scalar-fastapi { };
 
   scalene = callPackage ../development/python-modules/scalene { };
 
