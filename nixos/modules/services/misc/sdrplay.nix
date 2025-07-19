@@ -34,6 +34,7 @@
       };
     };
     services.udev.packages = [ pkgs.sdrplay ];
-
+    # Disable telemetry
+    networking.hosts = { "0.0.0.0" = [ "api.sdrplay.com" ]; };
   };
 }
