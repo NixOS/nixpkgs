@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "umr";
-  version = "1.0.10";
+  version = "1.0.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "tomstdenis";
     repo = "umr";
     rev = version;
-    hash = "sha256-i0pTcg1Y+G/nGZSbMtlg37z12gF4heitEl5L4gfVO9c=";
+    hash = "sha256-ODkTYHDrKWNvjiEeIyfsCByf7hyr5Ps9ytbKb3253bU=";
   };
 
   nativeBuildInputs = [
