@@ -450,14 +450,6 @@ in
           permissions = "u+rx,g+x,o-rwx";
         };
 
-        "systemd-journal.plugin" = {
-          source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
-          capabilities = "cap_dac_read_search,cap_syslog+ep";
-          owner = cfg.user;
-          group = cfg.group;
-          permissions = "u+rx,g+x,o-rwx";
-        };
-
         "slabinfo.plugin" = {
           source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
           capabilities = "cap_dac_override+ep";
@@ -476,6 +468,15 @@ in
           permissions = "u+rx,g+x,o-rwx";
         };
       }
+      // lib.optionalAttrs (cfg.package.withNdsudo) {
+        "ndsudo" = {
+          source = "${cfg.package}/libexec/netdata/plugins.d/ndsudo.org";
+          setuid = true;
+          owner = "root";
+          group = cfg.group;
+          permissions = "u+rx,g+x,o-rwx";
+        };
+      }
       // lib.optionalAttrs (cfg.package.withNetworkViewer) {
         "network-viewer.plugin" = {
           source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
@@ -485,11 +486,11 @@ in
           permissions = "u+rx,g+x,o-rwx";
         };
       }
-      // lib.optionalAttrs (cfg.package.withNdsudo) {
-        "ndsudo" = {
-          source = "${cfg.package}/libexec/netdata/plugins.d/ndsudo.org";
-          setuid = true;
-          owner = "root";
+      // lib.optionalAttrs (cfg.package.withSystemdJournal) {
+        "systemd-journal.plugin" = {
+          source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
+          capabilities = "cap_dac_read_search,cap_syslog+ep";
+          owner = cfg.user;
           group = cfg.group;
           permissions = "u+rx,g+x,o-rwx";
         };
