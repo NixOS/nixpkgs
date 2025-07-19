@@ -129,6 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/interfaces/libpq install
     make -C src/port install
 
+    substituteInPlace src/common/pg_config.env \
+      --replace-fail "$out" "@out@"
+
     install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
 
@@ -152,6 +155,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
     inherit (finalAttrs) finalPackage;
+    outputs = {
+      out = lib.getOutput "out" finalAttrs.finalPackage;
+    };
   };
 
   meta = {
