@@ -178,3 +178,20 @@ in
   ];
 }
 ```
+
+## Adding a downstream exporter {#module-services-prometheus-exporters-downstream-exporter}
+
+First create the exporter file, `EXPORTER-exporter.nix` as you would with an upstream exporter
+
+Then create a module that imports the exporter
+
+```nix
+{ modulesPath, ... }: {
+  imports = [
+    (import "${modulesPath}/services/monitoring/prometheus/mk-downstream-exporter.nix" {
+      name = "EXPORTER";
+      file = ./EXPORTER-exporter.nix;
+    })
+  ];
+}
+```
