@@ -193,14 +193,17 @@ in
             sleep 0.5
           done
           status=$(${statusCommand})
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
+          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" || "$status" == "Stopped" ]]; then
             ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
           fi
         '';
     };
 
     systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
-      after = [ "tailscaled.service" ];
+      after = [
+        "tailscaled.service"
+        "tailscaled-autoconnect.service"
+      ];
       wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
