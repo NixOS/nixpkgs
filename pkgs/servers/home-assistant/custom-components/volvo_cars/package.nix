@@ -16,14 +16,14 @@ buildHomeAssistantComponent rec {
     hash = "sha256-2eTUIbwAadJsOp1ETDY6+cEPVMOzhj1otEyzobysqaY=";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/thomasddn/ha-volvo-cars/releases/tag/${src.tag}";
     homepage = "https://github.com/thomasddn/ha-volvo-cars";
     description = "Volvo Cars Home Assistant integration";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matteopacini
       seberm
     ];
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
   };
 }
