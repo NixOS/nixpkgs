@@ -1,4 +1,7 @@
 { ... }:
+let
+  adminPassword = "mySecretPassword";
+in
 {
   name = "lldap";
 
@@ -7,6 +10,11 @@
     {
       services.lldap = {
         enable = true;
+
+        adminPasswordFile = toString (pkgs.writeText "adminPasswordFile" adminPassword);
+        resetAdminPassword = "always";
+        enforceEnsure = true;
+
         settings = {
           verbose = true;
           ldap_base_dn = "dc=example,dc=com";
@@ -22,8 +30,10 @@
 
     machine.succeed("curl --location --fail http://localhost:17170/")
 
-    print(
-      machine.succeed('ldapsearch -H ldap://localhost:3890 -D uid=admin,ou=people,dc=example,dc=com -b "ou=people,dc=example,dc=com" -w password')
-    )
+    response = machine.fail('ldapsearch -H ldap://localhost:3890 -D uid=admin,ou=people,dc=example,dc=com -b "ou=people,dc=example,dc=com" -w password')
+    print(response)
+
+    response = machine.succeed('ldapsearch -H ldap://localhost:3890 -D uid=admin,ou=people,dc=example,dc=com -b "ou=people,dc=example,dc=com" -w ${adminPassword}')
+    print(response)
   '';
 }
