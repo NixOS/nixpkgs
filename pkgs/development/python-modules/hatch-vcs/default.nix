@@ -4,7 +4,7 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
-  git,
+  gitMinimal,
   hatchling,
   setuptools-scm,
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
   ];
 
