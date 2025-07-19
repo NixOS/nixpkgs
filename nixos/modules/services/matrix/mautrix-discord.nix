@@ -372,18 +372,6 @@ in
           The option `services.mautrix-discord.settings.bridge.permissions` has to be set.
         '';
       }
-      {
-        assertion = cfg.settings.appservice.id != "";
-        message = ''
-          The option `services.mautrix-discord.settings.appservice.id` has to be set.
-        '';
-      }
-      {
-        assertion = cfg.settings.appservice.bot.username != "";
-        message = ''
-          The option `services.mautrix-discord.settings.appservice.bot.username` has to be set.
-        '';
-      }
     ];
 
     users.users.mautrix-discord = {
