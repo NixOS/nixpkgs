@@ -955,6 +955,7 @@ in
   nebula = runTest ./nebula.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
+  netbox-branching = runTest ./netbox-branching.nix;
   netdata = runTest ./netdata.nix;
   nimdow = runTest ./nimdow.nix;
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
