@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "hdr10plus";
+  # Version of the library, not the tool
+  # See https://github.com/quietvoid/hdr10plus_tool/blob/main/hdr10plus/Cargo.toml
   version = "2.1.4";
 
   outputs = [
