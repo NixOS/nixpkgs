@@ -14,7 +14,7 @@
 
   # tests
   cython,
-  git,
+  gitMinimal,
   pytestCheckHook,
   pytest-mock,
 }:
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cython
-    git
+    gitMinimal
     pytestCheckHook
     pytest-mock
   ];

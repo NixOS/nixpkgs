@@ -5,7 +5,7 @@
   elasticsearch,
   fetchFromGitHub,
   freezegun,
-  git,
+  gitMinimal,
   mercurial,
   nbmake,
   py-cpuinfo,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     mercurial
     nbmake
     pytestCheckHook

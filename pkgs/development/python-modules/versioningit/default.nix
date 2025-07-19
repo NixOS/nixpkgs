@@ -13,7 +13,7 @@
   pytest-cov-stub,
   pytest-mock,
   setuptools,
-  git,
+  gitMinimal,
   mercurial,
 }:
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     setuptools
-    git
+    gitMinimal
     mercurial
   ];
 
