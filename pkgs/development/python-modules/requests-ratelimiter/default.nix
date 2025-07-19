@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";

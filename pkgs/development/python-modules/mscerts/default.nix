@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2025.6.27";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "mscerts";

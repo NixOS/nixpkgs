@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "matthew-brett";
     repo = "transforms3d";

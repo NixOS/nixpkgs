@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.5.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "ultraheat_api";
     inherit version;

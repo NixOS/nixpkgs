@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "georss-generic-client";
   version = "0.8";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";

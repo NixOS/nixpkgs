@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "4.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "absperf";
     repo = "asyncinotify";

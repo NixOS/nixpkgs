@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.20.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "borisbabic";
     repo = "browser_cookie3";

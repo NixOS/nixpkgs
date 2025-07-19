@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "2.6.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mcmtroffaes";
     repo = "sphinxcontrib-bibtex";

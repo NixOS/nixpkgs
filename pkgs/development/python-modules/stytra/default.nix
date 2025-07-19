@@ -35,7 +35,6 @@ buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

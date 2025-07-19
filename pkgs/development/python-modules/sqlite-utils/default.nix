@@ -22,8 +22,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "sqlite_utils";

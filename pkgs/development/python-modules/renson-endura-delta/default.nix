@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   # github repo is gone
   src = fetchPypi {
     pname = "renson_endura_delta";

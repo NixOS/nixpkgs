@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.6.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";

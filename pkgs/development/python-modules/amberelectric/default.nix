@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "2.0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "madpilot";
     repo = "amberelectric.py";

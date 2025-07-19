@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "0.21.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";

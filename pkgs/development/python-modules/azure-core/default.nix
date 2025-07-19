@@ -24,8 +24,6 @@ buildPythonPackage rec {
   pname = "azure-core";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {

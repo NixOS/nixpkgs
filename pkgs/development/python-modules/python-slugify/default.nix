@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "8.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-slugify";

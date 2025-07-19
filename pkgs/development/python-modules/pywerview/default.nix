@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.7.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "the-useless-one";
     repo = "pywerview";

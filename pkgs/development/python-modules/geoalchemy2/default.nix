@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.17.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   pname = "asgiref";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "django";
     repo = "asgiref";

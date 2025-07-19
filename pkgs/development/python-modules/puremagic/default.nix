@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.28";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "puremagic";

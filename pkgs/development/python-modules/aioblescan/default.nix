@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.2.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "frawau";
     repo = "aioblescan";

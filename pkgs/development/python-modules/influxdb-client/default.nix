@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.49.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";

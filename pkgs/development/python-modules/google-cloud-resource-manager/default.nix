@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.14.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_resource_manager";
     inherit version;

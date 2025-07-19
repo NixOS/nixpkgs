@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "1.4.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";

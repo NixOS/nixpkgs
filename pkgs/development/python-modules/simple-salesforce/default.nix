@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "1.12.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "simple-salesforce";
     repo = "simple-salesforce";

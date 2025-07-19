@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.6.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_ai_generativelanguage";
     inherit version;

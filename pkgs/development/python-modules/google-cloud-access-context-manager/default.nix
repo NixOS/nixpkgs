@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_access_context_manager";
     inherit version;

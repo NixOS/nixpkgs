@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";

@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "3.20.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;

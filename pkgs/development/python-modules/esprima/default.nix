@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "4.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Kronuz";
     repo = "esprima-python";

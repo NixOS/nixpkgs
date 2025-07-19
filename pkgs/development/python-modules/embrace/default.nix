@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "4.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromSourcehut {
     vc = "hg";
     owner = "~olly";

@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.11.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "deep_translator";
     inherit version;

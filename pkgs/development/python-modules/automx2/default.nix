@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2025.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "automx2";

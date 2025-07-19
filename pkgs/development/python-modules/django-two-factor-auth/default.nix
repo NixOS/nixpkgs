@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "1.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-two-factor-auth";

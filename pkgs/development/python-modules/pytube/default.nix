@@ -10,8 +10,6 @@ buildPythonPackage rec {
   pname = "pytube";
   version = "15.0.0";
 
-  disabled = pythonOlder "3.7";
-
   format = "setuptools";
 
   src = fetchFromGitHub {

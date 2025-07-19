@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "2.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "django_celery_results";
     inherit version;

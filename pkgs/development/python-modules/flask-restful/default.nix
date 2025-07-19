@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "0.3.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "Flask-RESTful";
     inherit version;

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "bmcfee";
     repo = "resampy";

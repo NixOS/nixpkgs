@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.1.51";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "pierone-cli";

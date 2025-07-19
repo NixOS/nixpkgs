@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "0.2.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "energievalsabbia";
     repo = "aurorapy";

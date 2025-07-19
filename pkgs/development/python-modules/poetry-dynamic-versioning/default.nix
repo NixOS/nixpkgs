@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "poetry-dynamic-versioning";

@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.3.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";

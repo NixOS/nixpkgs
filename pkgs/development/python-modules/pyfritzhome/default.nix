@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.6.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";

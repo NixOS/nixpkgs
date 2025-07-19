@@ -11,7 +11,6 @@ buildPythonPackage rec {
   pname = "python-pae";
   version = "0.1.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
 
   # Tests are on GitHub
   src = fetchFromGitHub {

@@ -33,8 +33,6 @@ buildPythonPackage rec {
   version = "3.3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "breezy";

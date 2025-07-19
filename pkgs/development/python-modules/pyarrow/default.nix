@@ -31,8 +31,6 @@ buildPythonPackage rec {
   inherit (arrow-cpp) version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [

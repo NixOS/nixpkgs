@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "3.2.25";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "Django";
     inherit version;

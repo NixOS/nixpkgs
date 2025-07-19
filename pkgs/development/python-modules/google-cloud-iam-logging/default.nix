@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "1.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_iam_logging";
     inherit version;

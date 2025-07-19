@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = false;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Schrodinger-Hat";
     repo = "ImageGoNord-pip";

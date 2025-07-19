@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.6.7";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "logging-journald";

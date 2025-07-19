@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.0.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowrest";

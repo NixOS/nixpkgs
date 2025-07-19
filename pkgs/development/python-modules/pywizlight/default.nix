@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.6.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sbidy";
     repo = "pywizlight";

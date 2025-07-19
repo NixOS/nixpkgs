@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "2024.02";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "devicetree-org";
     repo = "dt-schema";

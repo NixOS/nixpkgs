@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "3.14.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ezhov-evgeny";
     repo = "webdav-client-python-3";

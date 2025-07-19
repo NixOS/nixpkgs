@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "1.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "pytest-reverse";

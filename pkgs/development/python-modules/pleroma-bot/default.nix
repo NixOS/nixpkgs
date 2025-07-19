@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.8.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "robertoszek";
     repo = "pleroma-bot";

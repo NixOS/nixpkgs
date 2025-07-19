@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "2.0.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";

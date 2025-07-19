@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.9.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "sphinxcontrib_katex";
     inherit version;

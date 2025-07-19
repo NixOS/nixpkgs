@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "0.7.0dev0-2024-06-18";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = "flask-login";

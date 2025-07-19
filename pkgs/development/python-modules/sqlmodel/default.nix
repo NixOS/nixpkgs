@@ -20,8 +20,6 @@ buildPythonPackage rec {
   version = "0.0.24";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";

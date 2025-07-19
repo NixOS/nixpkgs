@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "5.8.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";

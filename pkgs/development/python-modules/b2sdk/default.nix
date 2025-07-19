@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "2.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";

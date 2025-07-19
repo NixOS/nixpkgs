@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "querystring_parser";
     inherit version;

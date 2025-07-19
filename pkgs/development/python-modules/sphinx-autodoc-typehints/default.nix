@@ -18,8 +18,6 @@ buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;

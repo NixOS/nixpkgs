@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit version;
     pname = "validate_email";

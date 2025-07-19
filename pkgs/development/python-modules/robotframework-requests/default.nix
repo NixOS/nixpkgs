@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.9.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "robotframework-requests";

@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "monai-deploy-app-sdk";

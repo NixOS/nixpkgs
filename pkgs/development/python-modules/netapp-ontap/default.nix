@@ -15,8 +15,6 @@ buildPythonPackage rec {
   version = "9.16.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;

@@ -23,8 +23,6 @@ buildPythonPackage rec {
   version = "4.0.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";

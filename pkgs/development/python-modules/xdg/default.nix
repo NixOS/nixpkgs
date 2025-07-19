@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   version = "6.0.0";
   pname = "xdg";
-  disabled = pythonOlder "3.7";
   format = "pyproject";
 
   # the github source uses `xdg_base_dirs`, but pypi's sdist maintains `xdg` for compatibility.

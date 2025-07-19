@@ -10,8 +10,6 @@ buildPythonPackage rec {
   version = "0.2.1";
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit format version;
     pname = "unix_ar";

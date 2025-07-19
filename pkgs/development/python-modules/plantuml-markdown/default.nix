@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.11.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mikitex70";
     repo = "plantuml-markdown";

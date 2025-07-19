@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "1.14.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jschneier";
     repo = "django-storages";

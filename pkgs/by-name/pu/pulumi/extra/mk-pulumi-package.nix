@@ -66,8 +66,6 @@ let
           ;
         format = "pyproject";
 
-        disabled = pythonOlder "3.7";
-
         sourceRoot = "${src.name}/sdk/python";
 
         propagatedBuildInputs = [

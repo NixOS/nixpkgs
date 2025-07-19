@@ -24,8 +24,6 @@ buildPythonPackage rec {
   version = "9.6.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";

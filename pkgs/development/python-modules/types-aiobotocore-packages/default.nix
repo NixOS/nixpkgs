@@ -20,8 +20,6 @@ let
       inherit version;
       pyproject = true;
 
-      disabled = pythonOlder "3.7";
-
       oldStylePackages = [
         "gamesparks"
         "iot-roborunner"

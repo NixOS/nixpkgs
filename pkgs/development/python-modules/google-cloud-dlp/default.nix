@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "3.30.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_dlp";
     inherit version;

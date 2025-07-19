@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "1.31.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "google_cloud_compute";
     inherit version;

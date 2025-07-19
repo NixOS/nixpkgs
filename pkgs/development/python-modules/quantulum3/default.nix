@@ -30,8 +30,6 @@ buildPythonPackage {
     hash = "sha256-fHztPeTbMp1aYsj+STYWzHgwdY0Q9078qXpXxtA8pPs=";
   };
 
-  disabled = pythonOlder "3.7";
-
   propagatedBuildInputs = [
     inflect
     num2words

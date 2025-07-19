@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "dbt_extractor";
     inherit version;

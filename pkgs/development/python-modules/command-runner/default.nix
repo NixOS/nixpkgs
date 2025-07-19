@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "1.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "netinvent";
     repo = "command_runner";

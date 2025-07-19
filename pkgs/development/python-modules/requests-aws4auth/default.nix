@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "tedder";
     repo = "requests-aws4auth";

@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "0.0.75";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";

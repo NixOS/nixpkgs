@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";

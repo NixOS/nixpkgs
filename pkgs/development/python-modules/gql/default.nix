@@ -29,8 +29,6 @@ buildPythonPackage rec {
   version = "3.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "gql";

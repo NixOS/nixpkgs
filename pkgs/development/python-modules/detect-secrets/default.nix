@@ -19,8 +19,6 @@ buildPythonPackage rec {
   version = "1.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "detect-secrets";

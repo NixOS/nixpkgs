@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.5.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";

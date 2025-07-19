@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "3.1.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     domain = "foss.heptapod.net";
     owner = "openpyxl";

@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "supermihi";
     repo = "pytaglib";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";

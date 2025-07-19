@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     repo = "parsy";
     owner = "python-parsy";

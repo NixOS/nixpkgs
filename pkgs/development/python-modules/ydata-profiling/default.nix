@@ -34,8 +34,6 @@ buildPythonPackage rec {
   version = "4.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";

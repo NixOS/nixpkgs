@@ -17,8 +17,6 @@ buildPythonPackage rec {
   version = "4.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "flask_jwt_extended";
     inherit version;

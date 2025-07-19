@@ -42,7 +42,6 @@
 buildPythonPackage rec {
   pname = "nipype";
   version = "1.10.0";
-  disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchPypi {

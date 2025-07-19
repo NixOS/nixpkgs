@@ -7,7 +7,6 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "xcat";
   version = "1.2.0";
-  disabled = python3.pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {

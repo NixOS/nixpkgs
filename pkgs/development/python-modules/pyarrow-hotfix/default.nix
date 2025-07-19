@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pitrou";
     repo = "pyarrow-hotfix";

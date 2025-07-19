@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "0.3.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "datavaluepeople";
     repo = "kotsu";

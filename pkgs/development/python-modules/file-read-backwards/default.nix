@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "file_read_backwards";
     inherit version;

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "johnpaulett";
     repo = "python-hl7";

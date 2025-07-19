@@ -18,8 +18,6 @@ buildPythonPackage rec {
   version = "0.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "s3-credentials";

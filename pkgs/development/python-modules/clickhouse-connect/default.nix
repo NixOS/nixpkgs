@@ -28,8 +28,6 @@ buildPythonPackage rec {
 
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
     owner = "ClickHouse";

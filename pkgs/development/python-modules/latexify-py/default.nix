@@ -13,8 +13,6 @@ buildPythonPackage rec {
   version = "0.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "google";
     repo = "latexify_py";

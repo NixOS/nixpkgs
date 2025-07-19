@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "3.3.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "0.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "qubvel";
     repo = "ttach";

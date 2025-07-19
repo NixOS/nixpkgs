@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.0.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "cgarwood";
     repo = "python-fullykiosk";

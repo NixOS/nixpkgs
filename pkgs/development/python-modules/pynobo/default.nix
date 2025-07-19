@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "1.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "echoromeo";
     repo = "pynobo";

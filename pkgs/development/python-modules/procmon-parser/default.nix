@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "0.3.13";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "eronnen";
     repo = "procmon-parser";
