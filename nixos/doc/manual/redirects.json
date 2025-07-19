@@ -11,6 +11,24 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
+  ],
   "module-services-anubis": [
     "index.html#module-services-anubis"
   ],
