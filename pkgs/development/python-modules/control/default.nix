@@ -8,6 +8,7 @@
   setuptools,
   setuptools-scm,
   cvxopt,
+  slycot,
   pytest-timeout,
   pytestCheckHook,
 }:
@@ -36,9 +37,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    # slycot is not in nixpkgs
-    # slycot = [ slycot ];
     cvxopt = [ cvxopt ];
+    slycot = [ slycot ];
   };
 
   pythonImportsCheck = [ "control" ];
