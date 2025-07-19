@@ -8,8 +8,8 @@
   options.image = {
     baseName = lib.mkOption {
       type = lib.types.str;
-      default = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-      defaultText = lib.literalExpression "nixos-image-\${config.system.nixos.label}-\${pkgs.stdenv.hostPlatform.system}";
+      default = "nixos-image-${config.isoImage.edition}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+      defaultText = lib.literalExpression "nixos-image-\${config.isoImage.edition}-\${config.system.nixos.label}-\${pkgs.stdenv.hostPlatform.system}";
       description = ''
         Basename of the image filename without any extension (e.g. `image_1`).
       '';
