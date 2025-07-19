@@ -9,7 +9,6 @@
 
   bison,
   flex,
-  git,
   gperf,
   ninja,
   pkg-config,
@@ -96,7 +95,6 @@ qtModule (
       [
         bison
         flex
-        git
         gperf
         ninja
         pkg-config
