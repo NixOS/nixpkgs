@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   gradle_8,
+  jdk17_headless,
   jre,
   lib,
   makeWrapper,
@@ -24,24 +25,45 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.38.2";
+  version = "3.4.40.1";
 
   src = fetchFromGitHub {
     owner = "ATLauncher";
     repo = "ATLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x8ch8BdUckweuwEvsOxYG2M5UmbW4fRjF/jJ6feIjIA=";
+    hash = "sha256-oNWjYSz0lUuhcP/luSM/3u5+nB+g+0YLLyBanoMSmhQ=";
   };
 
   postPatch = ''
-    # exclude UI tests
+    # Strip out the foojay toolchains plugin and the toolchainmanagement
+    sed -i '/^plugins {/,/^}/d' settings.gradle
+    sed -i '/^toolchainManagement {/,/^}/d' settings.gradle
+
+    # Tell Gradle exactly which Java to use (bypass toolchains)
+    cat > gradle.properties <<EOF
+    # Use this JDK instead of any auto-detected one:
+    org.gradle.java.home=${jdk17_headless}
+    # Skip any auto-detection or downloads:
+    org.gradle.java.installations.auto-detect=false
+    EOF
+
+    # Exclude UI tests
     sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
+
+    # Re-add rootProject.name
+    sed -i 's|^rootProject\.name = .*|rootProject.name = "ATLauncher"|' settings.gradle
   '';
 
   nativeBuildInputs = [
     gradle
     makeWrapper
+    jdk17_headless
   ];
+
+  preBuild = ''
+    export JAVA_HOME=${jdk17_headless}
+    export PATH=$JAVA_HOME/bin:$PATH
+  '';
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
