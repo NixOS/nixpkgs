@@ -165,6 +165,10 @@ in
   enableSeparateDataOutput ? false,
   enableSeparateDocOutput ? doHaddock,
   enableSeparateIntermediatesOutput ? false,
+  # When enabled test suites are not run in the main deriviation.
+  # Instead they are built, installed in the 'tests' output, and
+  # a passthru.test derivation is created for test suites.
+  enableSeparateTestOutput ? false,
   # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -569,7 +573,8 @@ lib.fix (
         ++ (optional enableSeparateDataOutput "data")
         ++ (optional enableSeparateDocOutput "doc")
         ++ (optional enableSeparateBinOutput "bin")
-        ++ (optional enableSeparateIntermediatesOutput "intermediates");
+        ++ (optional enableSeparateIntermediatesOutput "intermediates")
+        ++ (optional enableSeparateTestOutput "tests");
 
       setOutputFlags = false;
 
@@ -859,6 +864,25 @@ lib.fix (
           mkdir -p $doc
         ''}
         ${optionalString enableSeparateDataOutput "mkdir -p $data"}
+        ${optionalString enableSeparateTestOutput (
+          # if no testTargets are specified but this flag is enabled, then we should query Cabal for the list of all test suites and install them
+          if testTargets == [ ] then
+            ''
+              mkdir -p $test/bin
+              tests="$(${setupCommand} test ${buildFlags} -v0 --test-wrapper echo)"
+              for t in $tests; do
+                install $t $test/bin/
+              done
+            ''
+          # otherwise just install the test suites specified by testTargets
+          else
+            ''
+              mkdir -p $test/bin
+              for t in ${testTargetsString}; do
+                install dist/build/$t/$t $test/bin/
+              done
+            ''
+        )}
 
         runHook postInstall
       '';
@@ -927,6 +951,41 @@ lib.fix (
               benchmarkSystemDepends
               benchmarkToolDepends
               ;
+          };
+        tests =
+          passthru.tests or { }
+          // lib.optionalAttrs enableSeparateTestOutput {
+            checks = (
+              stdenv.mkDerivation {
+                name = "${pname}-check";
+                inherit
+                  src
+                  preCheck
+                  postCheck
+                  patches
+                  ;
+                inherit (drv) meta LANG buildInputs;
+                phases = [
+                  "unpackPhase"
+                  "patchPhase"
+                  "checkPhase"
+                  "installPhase"
+                ];
+                checkPhase = ''
+                  runHook preCheck
+                  for t in ${drv.test}/bin/*; do
+                   $t $checkFlags ${lib.concatStringsSep " " testFlags} 2> >(tee $(basename $t)-stderr) | tee $(basename $t)-stdout
+                  done
+                  runHook postCheck
+                '';
+                installPhase = ''
+                  mkdir $out
+                  cp *-stderr $out/
+                  cp *-stdout $out/
+                '';
+              }
+              // lib.optionalAttrs (drv ? LOCALE_ARCHIVE) { inherit (drv) LOCALE_ARCHIVE; }
+            );
           };
 
         # Attributes for the old definition of `shellFor`. Should be removed but
