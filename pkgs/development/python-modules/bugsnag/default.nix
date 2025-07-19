@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.7.1";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mECP4X1KfzAKVlNUB6ZEi5hE2bUoxEUnkIho/DZG6HM=";
+    hash = "sha256-m9YA/PauhWe20RZSJknqFzUXqpizc56bpzsf6ivIJEQ=";
   };
 
   build-system = [ setuptools ];
