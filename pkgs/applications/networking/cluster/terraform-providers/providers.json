@@ -1237,13 +1237,13 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "sops": {
-    "hash": "sha256-VuQTJFI4KcSnaog9VTV+zBg0XAORvWzuCFYMB0BM6n4=",
+    "hash": "sha256-SBg46q9kggwXR142MpzwM5R4L2WfM07aJkGSLngAcFk=",
     "homepage": "https://registry.terraform.io/providers/carlpett/sops",
     "owner": "carlpett",
     "repo": "terraform-provider-sops",
-    "rev": "v1.2.0",
+    "rev": "v1.2.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-K/44Jio2a1kKYuyI6o/5wwMNRaZvx9zrNEC85v56xdU="
+    "vendorHash": "sha256-4gtM8U//RXpYc4klCgpZS/3ZRzAHfcbOPTnNqlX4H7M="
   },
   "spacelift": {
     "hash": "sha256-lBt1ZtQ5pxX/t4b264LzQwajXDozE9veYOOV3lhfTZQ=",
