@@ -16586,6 +16586,12 @@
     githubId = 92937;
     name = "Breland Miley";
   };
+  minegameYTB = {
+    name = "Minegame YTB";
+    github = "minegameYTB";
+    githubId = 53137994;
+    matrix = "@minegame2018:matrix.org";
+  };
   minersebas = {
     email = "scherthan_sebastian@web.de";
     github = "MinerSebas";
