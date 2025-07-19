@@ -791,6 +791,11 @@ in
   leaps = runTest ./leaps.nix;
   lemmy = runTest ./lemmy.nix;
   libinput = runTest ./libinput.nix;
+  lemurs = runTest ./lemurs/lemurs.nix;
+  lemurs-wayland = runTest ./lemurs/lemurs-wayland.nix;
+  lemurs-wayland-script = runTest ./lemurs/lemurs-wayland-script.nix;
+  lemurs-xorg = runTest ./lemurs/lemurs-xorg.nix;
+  lemurs-xorg-script = runTest ./lemurs/lemurs-xorg-script.nix;
   librenms = runTest ./librenms.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
