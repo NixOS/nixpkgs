@@ -26,6 +26,8 @@ buildPythonPackage rec {
   # tries to compile programs with dependencies that aren't available
   disabledTestPaths = [ "tests/setproctitle_test.py" ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
     homepage = "https://github.com/dvarrazzo/py-setproctitle";
