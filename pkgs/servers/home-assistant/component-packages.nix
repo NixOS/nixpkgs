@@ -2743,7 +2743,8 @@
       ];
     "iperf3" =
       ps: with ps; [
-      ]; # missing inputs: iperf3
+        iperf3
+      ];
     "ipma" =
       ps: with ps; [
         pyipma
