@@ -5461,6 +5461,8 @@ self: super: with self; {
 
   freesasa = callPackage ../development/python-modules/freesasa { inherit (pkgs) freesasa; };
 
+  freesms = callPackage ../development/python-modules/freesms { };
+
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
