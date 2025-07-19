@@ -209,8 +209,6 @@ let
 
               ssl_session_timeout 1d;
               ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
               # We don't enable insecure ciphers by default, so this allows
               # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
