@@ -24,32 +24,30 @@
   nix-update-script,
   p11-kit,
   pkg-config,
-  qtbase,
-  qttools,
+  qt6,
   sqlite,
   stdenv,
   taglib,
   util-linux,
-  wrapQtAppsHook,
   sparsehash,
   rapidjson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
   version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "jonaski";
-    repo = pname;
-    rev = version;
+    repo = "strawberry";
+    rev = finalAttrs.finalPackage.version;
     hash = "sha256-AhNx2CdfE7ff3+L47X6lYPD8GA7imkDIJD5ESndn/cc=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
   postPatch = ''
     substituteInPlace src/context/contextalbum.cpp \
-      --replace pictures/strawberry.png pictures/strawberry-grey.png
+      --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
   buildInputs =
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
       libmtp
       libpthreadstubs
       libtasn1
-      qtbase
+      qt6.qtbase
       sqlite
       taglib
       sparsehash
@@ -94,8 +92,8 @@ stdenv.mkDerivation rec {
       cmake
       ninja
       pkg-config
-      qttools
-      wrapQtAppsHook
+      qt6.qttools
+      qt6.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
@@ -115,11 +113,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
-    changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
+    changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${finalAttrs.finalPackage.version}/Changelog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = lib.platforms.linux;
     mainProgram = "strawberry";
   };
-}
+})
