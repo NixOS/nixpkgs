@@ -4,8 +4,9 @@ use log::{debug, info};
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
-    fs,
+    env, fs,
     io::Write,
+    path::PathBuf,
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
@@ -38,20 +39,20 @@ pub fn lockfile(
 
     let mut new = Vec::new();
 
-    for pkg in packages
-        .iter()
-        .filter(|p| matches!(p.specifics, Specifics::Git { .. }))
-    {
-        let dir = match &pkg.specifics {
-            Specifics::Git { workdir } => workdir,
-            Specifics::Registry { .. } => unimplemented!(),
+    for pkg in &packages {
+        let Specifics::Git {
+            workdir,
+            lockfile_path,
+        } = &pkg.specifics
+        else {
+            continue;
         };
 
-        let path = dir.path().join("package");
+        let path = workdir.path().join("package");
 
         info!("recursively parsing lockfile for {} at {path:?}", pkg.name);
 
-        let lockfile_contents = fs::read_to_string(path.join("package-lock.json"));
+        let lockfile_contents = fs::read_to_string(lockfile_path);
 
         let package_json_path = path.join("package.json");
         let mut package_json: Map<String, Value> =
@@ -109,8 +110,13 @@ pub struct Package {
 
 #[derive(Debug)]
 enum Specifics {
-    Registry { integrity: lock::Hash },
-    Git { workdir: TempDir },
+    Registry {
+        integrity: lock::Hash,
+    },
+    Git {
+        workdir: TempDir,
+        lockfile_path: PathBuf,
+    },
 }
 
 impl Package {
@@ -151,9 +157,17 @@ impl Package {
                     );
                 }
 
+                let lockfile_var = format!("NIX_NODEJS_BUILDNPMPACKAGE_LOCKFILE_{resolved}");
+                let lockfile_path = env::var_os(lockfile_var)
+                    .map(PathBuf::from)
+                    .unwrap_or_else(|| tar_path.join("package-lock.json").to_path_buf());
+
                 resolved = hosted;
 
-                Specifics::Git { workdir }
+                Specifics::Git {
+                    workdir,
+                    lockfile_path,
+                }
             }
             None => Specifics::Registry {
                 integrity: pkg
@@ -174,7 +188,7 @@ impl Package {
     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {
         match &self.specifics {
             Specifics::Registry { .. } => Ok(util::get_url_body_with_retry(&self.url)?),
-            Specifics::Git { workdir } => Ok(Command::new("tar")
+            Specifics::Git { workdir, .. } => Ok(Command::new("tar")
                 .args([
                     "--sort=name",
                     "--mtime=@0",
