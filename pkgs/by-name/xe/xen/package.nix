@@ -185,6 +185,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
+    })
+
     # XSA #469
     (fetchpatch {
       url = "https://xenbits.xenproject.org/xsa/xsa469/xsa469-4.20-01.patch";
