@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  fetchpatch,
   pkg-config,
   libuuid,
   gettext,
@@ -18,26 +17,12 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.2";
+  version = "1.47.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/tytso/e2fsprogs/v${version}/e2fsprogs-${version}.tar.xz";
-    hash = "sha256-CCQuZMoOgZTZwcqtSXYrGSCaBjGBmbY850rk7y105jw=";
+    hash = "sha256-hX5u+AD+qiu0V4+8gQIUvl08iLBy6lPFOEczqWVzcyk=";
   };
-
-  # 2025-05-31: Fix libarchive, from https://github.com/tytso/e2fsprogs/pull/230
-  patches = [
-    (fetchpatch {
-      name = "0001-create_inode_libarchive.c-define-libarchive-dylib-for-darwin.patch";
-      url = "https://github.com/tytso/e2fsprogs/commit/e86c65bc7ee276cd9ca920d96e18ed0cddab3412.patch";
-      hash = "sha256-HFZAznaNl5rzgVEvYx1LDKh2jd/VEXD/o0wypIh4TR8=";
-    })
-    (fetchpatch {
-      name = "0002-mkgnutar.pl-avoid-uninitialized-username-variable.patch";
-      url = "https://github.com/tytso/e2fsprogs/commit/9217c359db1d1b6d031a0e2ca9a885634fed00da.patch";
-      hash = "sha256-iDXmLq77eJolH1mkXSbvZ9tRVtGQt2F45CdkVphUZSs=";
-    })
-  ];
 
   # fuse2fs adds 14mb of dependencies
   outputs = [
