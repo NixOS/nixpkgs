@@ -303,12 +303,13 @@ rec {
     )
   );
 
-  # A disk image that can be imported to Amazon EC2 and registered as an AMI
-  amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
+  # The config for A disk image that can be imported to Amazon EC2 and registered as an AMI
+  # We do not actually build the AMI, but just the config that goes into the AMI.
+  # make-disk-image is already tested in other places.
+  # actual AMI build happens in https://github.com/NixOS/amis
+  amazonConfig = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
     system:
-
     with import ./.. { inherit system; };
-
     hydraJob (
       (import lib/eval-config.nix {
         inherit system;
@@ -317,26 +318,8 @@ rec {
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
         ];
-      }).config.system.build.amazonImage
+      }).config.system.build.toplevel
     )
-
-  );
-  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (
-    system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob (
-      (import lib/eval-config.nix {
-        inherit system;
-        modules = [
-          configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image-zfs.nix
-        ];
-      }).config.system.build.amazonImage
-    )
-
   );
 
   # An image that can be imported into incus and used for container creation
