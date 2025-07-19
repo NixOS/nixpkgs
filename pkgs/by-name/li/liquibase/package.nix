@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       # there’s a lot of escaping, but I’m not sure how to improve that
       cat > $out/bin/liquibase <<EOF
       #!/usr/bin/env bash
+      export LIQUIBASE_ANALYTICS_ENABLED="\''${LIQUIBASE_ANALYTICS_ENABLED:-false}"
       # taken from the executable script in the source
       CP=""
       ${addJars "$out/internal/lib"}
