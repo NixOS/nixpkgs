@@ -72,6 +72,7 @@ in
     };
 
     systemd.services.kadmind = {
+      enable = cfg.roles.administrationServer;
       description = "Kerberos Administration Daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
@@ -85,6 +86,7 @@ in
     };
 
     systemd.services.kdc = {
+      enable = cfg.roles.kdc;
       description = "Key Distribution Center daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
