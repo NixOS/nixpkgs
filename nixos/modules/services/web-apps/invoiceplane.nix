@@ -243,6 +243,16 @@ let
           };
         };
 
+        webserver.listenAddresses = mkOption {
+          type = types.listOf types.str;
+          description = ''
+            Listen addresses for the webserver. Equivalent to same option in
+            nginx or caddy configuration.
+          '';
+          default = [ ];
+          example = [ "100.100.100.103" ];
+        };
+
       };
 
     };
@@ -263,11 +273,14 @@ in
           type = types.enum [
             "caddy"
             "nginx"
+            "none"
           ];
           default = "caddy";
           example = "nginx";
           description = ''
-            Which webserver to use for virtual host management.
+            Which webserver to use for virtual host management. Choose `none` to
+            manage it on your own, in which case refer to this module's source
+            code for guidance.
           '';
         };
       };
@@ -402,6 +415,7 @@ in
         virtualHosts = mapAttrs' (
           hostName: cfg:
           (nameValuePair "http://${hostName}" {
+            inherit (cfg.webserver) listenAddresses;
             extraConfig = ''
               root * ${pkg hostName cfg}
               file_server
@@ -418,6 +432,7 @@ in
         virtualHosts = mapAttrs' (
           hostName: cfg:
           (nameValuePair hostName {
+            inherit (cfg.webserver) listenAddresses;
             root = pkg hostName cfg;
             extraConfig = ''
               index index.php index.html index.htm;
