@@ -2,7 +2,8 @@
   lib,
   runCommand,
   makeWrapper,
-  systemtap-unwrapped,
+  cpio,
+  boost,
   elfutils,
   kernel,
   gnumake,
@@ -12,7 +13,33 @@
 }:
 
 let
+  ## fetchgit info
+  url = "git://sourceware.org/git/systemtap.git";
+  rev = "release-${version}";
+  hash = "sha256-W9iJ+hyowqgeq1hGcNQbvPfHpqY0Yt2W/Ng/4p6asxc=";
+  version = "5.3";
+
   inherit (kernel) stdenv;
+
+  ## stap binaries
+  stapBuild = stdenv.mkDerivation {
+    pname = "systemtap";
+    inherit version;
+    src = fetchgit { inherit url rev hash; };
+    nativeBuildInputs = [
+      pkg-config
+      cpio
+      python3
+      python3.pkgs.setuptools
+    ];
+    buildInputs = [
+      boost
+      elfutils
+      gettext
+      python3
+    ];
+    enableParallelBuilding = true;
+  };
 
   ## symlink farm for --sysroot flag
   sysroot = runCommand "systemtap-sysroot-${kernel.version}" { } ''
