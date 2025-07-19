@@ -8619,7 +8619,7 @@ with pkgs;
     genPosixLockObjOnly = true;
   };
 
-  libgpod = callPackage ../development/libraries/libgpod {
+  libgpod = callPackage ../by-name/li/libgpod/package.nix {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
