@@ -6,33 +6,33 @@
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-dEwz052aYcJtKpRcP8t7gE2RHuHPQ4T0zHFMv6zVZ6g="
+    "rev": "2024.01.17",
+    "hash": "sha256-RaHbylQ8NrXB67MKCkNi3relxNp0wmldxboitdmaqJ0="
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.10.30",
-    "hash": "sha256-fuTQnnuWjIsABx457y+n6luLxQf+b9TiZGLXYjNsUrw="
+    "rev": "2024.01.25",
+    "hash": "sha256-E8DvGEMSQnmcjvSKtJtt8TcDJVZ0RmdIzKuH2eTh2ic="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-LGYGCxEPdZL4BU3TGiFxydu7AN8g5kqOdW+dcbiCf7E="
+    "rev": "2024.03.16",
+    "hash": "sha256-Huv5jVgkWnHNK5fJ/i4R4GmyyDgU2WKEFT7PXCCjQf0="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2023.05.31",
-    "hash": "sha256-QXu/p3o0RSwMyntFYrjIQBtOBGvL9rAsINaglG3fZvo="
+    "rev": "2024.03.07",
+    "hash": "sha256-U+HsG1CX9tI4Z1gPaCCsPbsJ0X6DTgSVhGM6RXqEw1A="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.11.16",
-    "hash": "sha256-FxUV+K9JRsdr0xqQzvg1UI4bBHyhqxiVoPN58h2+WVg="
+    "rev": "2024.01.10",
+    "hash": "sha256-r3hQS6IRwda0RxB6R2r+toBC/sNSQP8TFonBNFLphbg="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-RNXP8O3UF+hwA3TNzLorZqlt04Idnc4Z9LA87JJSsZE="
+    "rev": "2024.03.01",
+    "hash": "sha256-T60K/hmXrcT8edl8AiVh2km6sohGsHetDquZtfVxnsY="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-s9ZKrL+XIWIwejnLz+uuyDbbDuOZLJhiuiMChKB4Reg="
+    "rev": "2023.12.02",
+    "hash": "sha256-NDYhjmVGiw9UKfOQhXLdJiTaGZeTs8kr2hBujI2s+3E="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.5.6",
-    "hash": "sha256-7TuHCCaH8/RxiVQmDILPW4T6op/XW6djwA5iSh/Yb5w="
+    "rev": "v11.6",
+    "hash": "sha256-ZSWih6VmZXPWG3uIsemoJ65tqvEym2Ntd9tQMn3rBPU="
   }
 }
