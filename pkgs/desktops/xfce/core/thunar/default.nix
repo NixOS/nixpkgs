@@ -23,9 +23,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.20.3";
+  version = "4.20.4";
 
-  sha256 = "sha256-YOh7tuCja9F2VvzX+QqsKHJfebXWbhLqvcraq6PBOGo=";
+  sha256 = "sha256-0yDZI82ePjZSSd0aKlfjr2IVPyNkvSWqa4l6Dse98w8=";
 
   nativeBuildInputs =
     [
