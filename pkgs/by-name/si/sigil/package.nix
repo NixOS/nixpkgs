@@ -57,9 +57,27 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontWrapQtApps = true;
+
   preFixup = ''
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
+
+  fixupPhase =
+    let
+      sigil =
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/Sigil.app/Contents/MacOS/Sigil"
+        else
+          "$out/bin/sigil";
+    in
+    ''
+      runHook preFixup
+
+      wrapQtApp "${sigil}"
+
+      runHook postFixup
+    '';
 
   meta = {
     description = "Free, open source, multi-platform ebook (ePub) editor";
