@@ -386,26 +386,6 @@ in
       '';
     };
 
-    managerEnvironment = mkOption {
-      type =
-        with types;
-        attrsOf (
-          nullOr (oneOf [
-            str
-            path
-            package
-          ])
-        );
-      default = { };
-      example = {
-        SYSTEMD_LOG_LEVEL = "debug";
-      };
-      description = ''
-        Environment variables of PID 1. These variables are
-        *not* passed to started units.
-      '';
-    };
-
     enableCgroupAccounting = mkOption {
       default = true;
       type = types.bool;
@@ -424,6 +404,29 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
+        options = {
+          ManagerEnvironment = mkOption {
+            type =
+              with types;
+              attrsOf (
+                nullOr (oneOf [
+                  str
+                  path
+                  package
+                ])
+              );
+            default = { };
+            example = {
+              SYSTEMD_LOG_LEVEL = "debug";
+            };
+            description = ''
+              Environment variables of PID 1. These variables are
+              *not* passed to started units.
+            '';
+            apply =
+              env: lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") env);
+          };
+        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
@@ -652,11 +655,6 @@ in
 
         "systemd/system.conf".text = ''
           [Manager]
-          ManagerEnvironment=${
-            lib.concatStringsSep " " (
-              lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-            )
-          }
           ${optionalString cfg.enableCgroupAccounting ''
             DefaultCPUAccounting=yes
             DefaultIOAccounting=yes
@@ -747,7 +745,7 @@ in
       // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
     # Environment of PID 1
-    systemd.managerEnvironment = {
+    systemd.settings.Manager.ManagerEnvironment = {
       # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
       # util-linux is needed for the main fsck utility wrapping the fs-specific ones
       PATH = lib.makeBinPath (
@@ -873,5 +871,9 @@ in
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
     (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
+    (lib.mkRenamedOptionModule
+      [ "systemd" "managerEnvironment" ]
+      [ "systemd" "settings.Manager" "ManagerEnvironment" ]
+    )
   ];
 }
