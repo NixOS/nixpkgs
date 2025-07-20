@@ -942,7 +942,7 @@ in
         mkMerge (mapAttrsToList mapper config.containers);
     }
 
-    (mkIf (config.boot.enableContainers) (
+    (mkIf (config.boot.enableContainers && config.containers != { }) (
       let
         unit = {
           description = "Container '%i'";
