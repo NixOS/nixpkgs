@@ -897,11 +897,6 @@ stdenv.mkDerivation (finalAttrs: {
     # needed - and therefore `interfaceVersion` should be incremented.
     interfaceVersion = 2;
 
-    functions = import ./functions/default.nix {
-      inherit lib;
-      systemd = finalAttrs.finalPackage;
-    };
-
     inherit
       withBootloader
       withCryptsetup
@@ -1027,12 +1022,6 @@ stdenv.mkDerivation (finalAttrs: {
           pkgsCross.${systemString}.systemd;
 
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-
-        functions = import ./functions/test.nix {
-          inherit lib;
-          systemd = finalAttrs.finalPackage;
-          ok = buildPackages.emptyFile;
-        };
       };
   };
 
