@@ -144,7 +144,7 @@ let
       repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
-      orga = "cstrahan";
+      orga = "nix-community";
       repo = "tree-sitter-nix";
     };
     "tree-sitter-latex" = {

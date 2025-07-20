@@ -288,10 +288,6 @@ with pkgs;
   # many more scenarios than just opengl now.
   aocd = with python3Packages; toPythonApplication aocd;
 
-  archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix {
-    extraPackages = [ jdk17 ];
-  };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
@@ -2817,10 +2813,6 @@ with pkgs;
   rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
-
-  strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
-
-  strawberry = strawberry-qt6;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
@@ -8155,7 +8147,7 @@ with pkgs;
       wasilibc
     else if libc == "relibc" then
       relibc
-    else if name == "llvm" then
+    else if libc == "llvm" then
       llvmPackages_20.libc
     else
       throw "Unknown libc ${libc}";
@@ -11375,6 +11367,7 @@ with pkgs;
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   util-linuxMinimal = util-linux.override {
+    fetchurl = stdenv.fetchurlBoot;
     cryptsetupSupport = false;
     nlsSupport = false;
     ncursesSupport = false;

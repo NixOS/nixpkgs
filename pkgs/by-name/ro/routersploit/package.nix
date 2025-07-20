@@ -4,9 +4,12 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "routersploit";
+let
   version = "3.4.7";
+in
+python3.pkgs.buildPythonApplication {
+  pname = "routersploit";
+  inherit version;
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,11 +51,14 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_module_info.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      fab
+      thtrf
+    ];
     mainProgram = "rsf";
   };
 }
