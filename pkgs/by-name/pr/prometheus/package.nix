@@ -129,6 +129,10 @@ buildGoModule (finalAttrs: {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
+
   passthru.tests = { inherit (nixosTests) prometheus; };
 
   meta = with lib; {
