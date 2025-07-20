@@ -98,6 +98,8 @@
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  qt6Support ? false,
+  qt6,
 }:
 
 buildFun:
@@ -311,7 +313,12 @@ let
       ++ lib.optionals (!isElectron) [
         nodejs
         npmHooks.npmConfigHook
+      ]
+      ++ lib.optionals qt6Support [
+        qt6.qtbase
       ];
+
+    ${if qt6Support then "dontWrapQtApps" else null} = true;
 
     depsBuildBuild =
       [
@@ -817,7 +824,8 @@ let
         if chromiumVersionAtLeast "134" then
           {
             use_qt5 = false;
-            use_qt6 = false;
+            use_qt6 = qt6Support;
+            ${if qt6Support then "moc_qt6_path" else null} = "${qt6.qtbase}/libexec";
           }
         else
           {
