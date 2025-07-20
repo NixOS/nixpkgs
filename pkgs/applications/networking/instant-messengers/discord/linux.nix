@@ -57,6 +57,7 @@
   speechd-minimal,
   wayland,
   branch,
+  updateScript,
   withOpenASAR ? false,
   openasar,
   withVencord ? false,
@@ -232,7 +233,8 @@ stdenv.mkDerivation rec {
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
     inherit disableBreakingUpdates;
-    updateScript = writeScript "discord-update-script" ''
+    inherit updateScript;
+    actualUpdateScript = writeScript "discord-update-script" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl gnugrep common-updater-scripts
       set -eou pipefail;

@@ -4,6 +4,7 @@
   fetchurl,
   lib,
   stdenv,
+  writeScript,
 }:
 let
   versions =
@@ -87,6 +88,44 @@ let
   };
   package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
+  updateScript = writeScript "discord-update-all-script" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p git
+    set -euo pipefail
+
+    packages=(
+        discord
+        discord-ptb
+        discord-canary
+        discord-development
+        pkgsCross.aarch64-darwin.discord
+        pkgsCross.aarch64-darwin.discord-ptb
+        pkgsCross.aarch64-darwin.discord-canary
+        pkgsCross.aarch64-darwin.discord-development
+    )
+
+    for d in "''${packages[@]}"; do
+        nix-shell maintainers/scripts/update.nix \
+            --argstr commit true \
+            --argstr skip-prompt true \
+            --arg get-script 'pkg: pkg.actualUpdateScript or null' \
+            --argstr package "$d"
+    done
+
+    commit_amount="$(git rev-list --count master..HEAD)"
+
+    if [[ $commit_amount -eq 0 ]]; then
+        echo "No updates"
+        exit 0
+    fi
+
+    commit_msgs="$(git log -n $commit_amount --reverse --pretty=format:'%s%n%n%b' | sed '/^$/N;/^\n$/D')"
+
+    git reset --soft HEAD~"$commit_amount"
+
+    git commit -m "discord: Update all" -m "$commit_msgs"
+  '';
+
   packages = (
     builtins.mapAttrs
       (
@@ -94,7 +133,12 @@ let
         callPackage package (
           value
           // {
-            inherit src version branch;
+            inherit
+              src
+              version
+              branch
+              updateScript
+              ;
             meta = meta // {
               mainProgram = value.binaryName;
             };
