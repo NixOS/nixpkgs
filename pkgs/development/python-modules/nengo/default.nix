@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "nengo";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo";
     tag = "v${version}";
-    sha256 = "sha256-b9mPjKdewIqIeRrddV1/M3bghSyox7Lz6VbfSLCHZjA=";
+    hash = "sha256-yZDnttXU5qMmQwFESkhQb06BXcqPEiPYl54azS5b284=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       numpy
     ]
@@ -33,7 +33,6 @@ buildPythonPackage rec {
 
   # checks req missing:
   #   pytest-allclose
-  #   pytest-plt
   #   pytest-rng
   doCheck = false;
 
