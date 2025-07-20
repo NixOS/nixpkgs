@@ -1,19 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   asteval,
   dill,
-  fetchPypi,
-  matplotlib,
   numpy,
-  pandas,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
-  setuptools-scm,
-  setuptools,
   uncertainties,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
+  matplotlib,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -42,10 +48,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
     matplotlib
     pandas
-    pytest-cov-stub
-    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "lmfit" ];
