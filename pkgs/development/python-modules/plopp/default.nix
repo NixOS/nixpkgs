@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -36,22 +35,15 @@
 
 buildPythonPackage rec {
   pname = "plopp";
-  version = "25.07.0";
+  version = "25.07.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = version;
-    hash = "sha256-SwF0bUU/DAAJ5+0WvZgwqEw6IoaqdbKj0GkCgffGclA=";
+    hash = "sha256-SaUjRyPgh27YfV8Pvj0dA+e+oFcxqMo5LBJAbCy+svI=";
   };
-  patches = [
-    # https://github.com/scipp/plopp/issues/472
-    (fetchpatch {
-      url = "https://github.com/scipp/plopp/commit/7af8cbee85796005f2fea79171ae44aba9a8cfc7.patch";
-      hash = "sha256-uyCV/2tSvcnnw+ak6fT99ru+UrTZXsS3b4YGeXVykAY=";
-    })
-  ];
 
   build-system = [
     setuptools
