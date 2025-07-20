@@ -82,6 +82,18 @@ let
             # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
             # artifacts.
             "-p:SkipErrorOnPrebuilts=true"
+          ]
+          ++ lib.optionals (lib.versionAtLeast old.version "10") [
+            # eng/finish-source-only.proj(134,5): error : 2 new packages used not in baseline! See report at artifacts/log/Release/baseline-comparison.xml for more information. Package IDs are:
+            # eng/finish-source-only.proj(134,5): error : runtime.placeholder-rid.Microsoft.NETCore.ILAsm.10.0.0-preview.6.25302.104
+            # eng/finish-source-only.proj(134,5): error : runtime.placeholder-rid.Microsoft.NETCore.ILDAsm.10.0.0-preview.6.25302.104
+            # eng/finish-source-only.proj(134,5): error : Prebuilt usages are different from the baseline. If detected changes are acceptable, update baseline with:
+            #
+            # ValidateUsageAgainstBaseline is called with ContinueOnError=true,
+            # which demotes the above errors to warnings, but as of SDK 10, all
+            # warnings are promoted back to errors by default.
+            "--warnAsError"
+            "false"
           ];
 
         # https://github.com/dotnet/source-build/issues/4920
