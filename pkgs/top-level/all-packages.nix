@@ -2173,7 +2173,7 @@ with pkgs;
 
   espanso-wayland = espanso.override {
     x11Support = false;
-    waylandSupport = true;
+    waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
   fastly = callPackage ../misc/fastly {
