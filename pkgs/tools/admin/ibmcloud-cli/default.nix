@@ -30,19 +30,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibmcloud-cli";
-  version = "2.34.2";
+  version = "2.35.0";
 
   src = fetchurl {
     url = "https://download.clis.cloud.ibm.com/ibm-cloud-cli/${finalAttrs.version}/binaries/IBM_Cloud_CLI_${finalAttrs.version}_${platform}.tgz";
     hash =
       {
-        "x86_64-darwin" = "sha256-StOJEaQyPAObCz6DPO5i0Kj6s5RoHzyEWMh2C0sov3U=";
-        "aarch64-darwin" = "sha256-sur1M0PoRibj551iExCSyXYXlEGwjDqA2n7BP8JtCIU=";
-        "x86_64-linux" = "sha256-UoP9kPe+00jdwCQYbZB2z1OorZ8cvlQLjY0wWx/RukI=";
-        "aarch64-linux" = "sha256-FIYqbubVyuzn1yQ7jejG82ZHvPZD7NmTWUV1TD1LbuE=";
-        "i686-linux" = "sha256-JC8UIvMpENbucZ8aVeOr2PsqKa9xg2UXh7zLTPVQ1yg=";
-        "powerpc64le-linux" = "sha256-q8VqZkfCf6+K1aGheYgxQB06i8ua1AMojPp8U3flcmo=";
-        "s390x-linux" = "sha256-4wYEJZ/+65+1j3JdctY2ZIC5cNKLl8Kc3c9Azlh7HaM=";
+        "x86_64-darwin" = "sha256-YQEmeUi+I82NsI4tYRJG3C+iHBXB2pe4O5J5BGM8qck=";
+        "aarch64-darwin" = "sha256-tsaveUBBe2VvvIWLPKfOXICVBTh3XlpmVr/AV1wz2hs=";
+        "x86_64-linux" = "sha256-C2WaIxGSsaa2nJQn0TdjsX9jqppTuIZJxjHqf+P4/iQ=";
+        "aarch64-linux" = "sha256-yfWVLHGr4F0DwTwTKq7Ae/VqXbAyEGryXylwNbnmOSg=";
+        "i686-linux" = "sha256-M3Ec+JyAI06ifPfEoYxWPvtZ/iffFLSiVLuTOHm+WUo=";
+        "powerpc64le-linux" = "sha256-KYNrCaUJ1QBJwjZAgLlOkDuFO+llUkXF62zj8QbhBnE=";
+        "s390x-linux" = "sha256-9i+zdpVBfFCN9JUMgs7WekHTm+PZhwVDimO55BFHSLE=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
