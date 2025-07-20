@@ -1,7 +1,7 @@
 
 # Modular Services {#modular-services}
 
-Status: in development. This functionality is new in NixOS 25.05, and significant changes should be expected. We'd love to hear your feedback in <https://github.com/NixOS/nixpkgs/pull/372170>
+Status: in development. This functionality is new in NixOS 25.11, and significant changes should be expected. We'd love to hear your feedback in <https://github.com/NixOS/nixpkgs/pull/372170>
 
 Traditionally, NixOS services were defined using sets of options *in* modules, not *as* modules. This made them non-modular, resulting in problems with composability, reuse, and portability.
 
