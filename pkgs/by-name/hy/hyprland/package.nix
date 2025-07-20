@@ -73,7 +73,9 @@ let
 
   # possibility to add more adapters in the future, such as keepDebugInfo,
   # which would be controlled by the `debug` flag
-  adapters = [
+  # Condition on darwin to avoid breaking eval for darwin in CI,
+  # even though darwin is not supported anyway.
+  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
