@@ -292,11 +292,16 @@ module.exports = async function ({ github, context, core, dry }) {
         })
       ).data.workflow_runs[0]
 
-      // Go back as far as the last successful run of this workflow to make sure
-      // we are not leaving anyone behind on GHA failures.
-      // Defaults to go back 1 hour on the first run.
       const cutoff = new Date(
-        lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000,
+        Math.max(
+          // Go back as far as the last successful run of this workflow to make sure
+          // we are not leaving anyone behind on GHA failures.
+          // Defaults to go back 1 hour on the first run.
+          new Date(lastRun?.created_at ?? new Date().getTime() - 1 * 60 * 60 * 1000).getTime(),
+          // Go back max. 1 day to prevent hitting all API rate limits immediately,
+          // when GH API returns a wrong workflow by accident.
+          new Date().getTime() - 24 * 60 * 60 * 1000,
+        ),
       )
       core.info('cutoff timestamp: ' + cutoff.toISOString())
 
@@ -308,6 +313,7 @@ module.exports = async function ({ github, context, core, dry }) {
             'is:open',
             `updated:>=${cutoff.toISOString()}`,
           ].join(' AND '),
+          per_page: 100,
           // TODO: Remove in 2025-10, when it becomes the default.
           advanced_search: true,
         },
