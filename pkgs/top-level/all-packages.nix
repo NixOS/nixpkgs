@@ -2174,7 +2174,6 @@ with pkgs;
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = true;
-    espanso = espanso-wayland;
   };
 
   fastly = callPackage ../misc/fastly {
