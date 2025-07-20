@@ -37,7 +37,6 @@ let
   # Note(sewer56):
   # Fetch the papirus-folders script from upstream
   # Per instructions in the papirus-folders project.
-  # We fetch specific latest tested commit to ensure reproducibility.
   papirus-folders-script = fetchurl {
     url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-folders/0f838ee5679229e3a3e97e3b333c222c9e9615b4/papirus-folders";
     sha256 = "sha256-swpoSKAGkDAqzP/AUFSSGLCxFNMXiyi9OhaJGBeCGwY=";
