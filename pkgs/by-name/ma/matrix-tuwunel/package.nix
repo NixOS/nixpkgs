@@ -143,6 +143,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
+    tests =
+      {
+        version = testers.testVersion {
+          inherit (finalAttrs) version;
+          package = matrix-tuwunel;
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) matrix-tuwunel;
+      };
   };
 
   meta = {
