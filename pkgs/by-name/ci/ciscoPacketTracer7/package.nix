@@ -93,9 +93,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
