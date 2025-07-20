@@ -127,31 +127,10 @@ lib.warnIf (withDocs != null)
 
     enableParallelBuilding = true;
 
-    makeFlags =
-      lib.optionals stdenv.hostPlatform.isCygwin [
-        "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
-        "SHOBJ_LIBS=-lbash"
-      ]
-      # GNU Bash extensively uses function prototypes with unspecified signature, like
-      #
-      #     extern void add_unwind_protect ()
-      #
-      # to implicitly cast all kinds of word-sized arguments. GCC-15 switched C standard
-      # from gnu17 to gnu23, which changed the meaning of the prototype above to
-      #
-      #     extern void add_unwind_protect (void)
-      #
-      # Note that Bash 5.3, quoting the release announcement:
-      #
-      # > The source code has been updated for C23 conformance. This means that bash
-      # > will no longer compile with K&R-style C compilers.
-      #
-      # So this workaround won't be necessary after upgrade to bash=5.3.
-      #
-      # => https://lists.gnu.org/archive/html/bug-bash/2025-07/msg00005.html
-      #
-      #      ~kaction 2025-07-19
-      ++ [ "LOCAL_CFLAGS=-std=c99" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
+      "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
+      "SHOBJ_LIBS=-lbash"
+    ];
 
     nativeCheckInputs = [ util-linux ];
     doCheck = false; # dependency cycle, needs to be interactive
