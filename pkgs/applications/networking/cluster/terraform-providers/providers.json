@@ -1327,13 +1327,13 @@
     "vendorHash": "sha256-V0dK5G3zheyyqexBud+9Hg9ExYI/9X1wuYx+lEn6pVg="
   },
   "temporalcloud": {
-    "hash": "sha256-nm7YQNoVTy53GpXIu2gQhIblvZMIdCyDcXK9aCL+Xfg=",
+    "hash": "sha256-FTvTp2Mf8uz0e+y7AprAxgMEllGJFbWiPCzDZ8jzdrc=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v0.8.0",
+    "rev": "v0.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Sqi4MLQTF5n3AZyEkaI03KhFvgy34ROqbd8Rx1N6/oY="
+    "vendorHash": "sha256-PVN3oPT3cxsnWH03twbPSIIERGHCp3XAmcqrQAOULZ4="
   },
   "tencentcloud": {
     "hash": "sha256-MMmBhzhD5SPvTJPzuxAPEmE2ydcwVH4cYAx21ze/umk=",
