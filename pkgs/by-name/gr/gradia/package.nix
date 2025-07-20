@@ -20,14 +20,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gradia";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
     tag = "v${version}";
-    hash = "sha256-OfSqjxNfIk3dQZp4T6W1aL24FGEQKlFLGT+mV1+GR5o=";
+    hash = "sha256-EyO09tKv0SjqMyYM5J8wdeIH6/vJgF7p7FLaTfJDqXY=";
   };
 
   nativeBuildInputs = [
