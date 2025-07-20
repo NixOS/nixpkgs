@@ -55,7 +55,6 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
 
   # Zoom versions are released at different times for each platform
   # and often with different versions. We write them on three lines
@@ -83,9 +82,9 @@ let
 
   unpacked = stdenv.mkDerivation {
     pname = "zoom";
-    version = versions.${system} or throwSystem;
+    version = versions.${system} or "";
 
-    src = srcs.${system} or throwSystem;
+    src = srcs.${system};
 
     dontUnpack = stdenv.hostPlatform.isLinux;
     unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -129,7 +128,7 @@ let
             mv $out/usr/* $out/
           '';
         }
-        .${system} or throwSystem
+        .${system}
       }
       runHook postInstall
     '';
@@ -158,8 +157,6 @@ let
       mainProgram = "zoom";
     };
   };
-  packages.aarch64-darwin = unpacked;
-  packages.x86_64-darwin = unpacked;
 
   # linux definitions
 
@@ -236,13 +233,17 @@ let
     ++ targetPkgs pkgs
     ++ targetPkgsFixed;
 
+in
+if !stdenv.hostPlatform.isLinux then
+  unpacked
+else
   # We add the `unpacked` zoom archive to the FHS env
   # and also bind-mount its `/opt` directory.
   # This should assist Zoom in finding all its
   # files in the places where it expects them to be.
-  packages.x86_64-linux = buildFHSEnv {
+  buildFHSEnv {
     pname = "zoom"; # Will also be the program's name!
-    version = versions.${system} or throwSystem;
+    version = versions.${system} or "";
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
     extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
@@ -263,8 +264,4 @@ let
       inherit unpacked;
     };
     inherit (unpacked) meta;
-  };
-
-in
-
-packages.${system} or throwSystem
+  }
