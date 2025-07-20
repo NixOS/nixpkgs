@@ -240,6 +240,20 @@ in
                 example = "/path/to/my/token_file";
               };
 
+              environmentFile = lib.mkOption {
+                type = with lib.types; nullOr path;
+                default = null;
+                example = "/run/secrets/cloudflared.env";
+                description = ''
+                  The environment file Cloudflare tunnel will use, which can be used to set TUNNEL_TOKEN.
+
+                  Tunnel run parameters that can be set through environment variables can be found
+                  [here](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/cloudflared-parameters/run-parameters)
+
+                  The Environment file is as defined in {manpage}`systemd.exec(5)`.
+                '';
+              };
+
               warp-routing = {
                 enabled = lib.mkOption {
                   type = with lib.types; nullOr bool;
@@ -442,14 +456,17 @@ in
             (lib.optional (tunnel.tokenFile != null) "credentials.json:${tunnel.tokenFile}")
             (lib.optional (certFile != null) "cert.pem:${certFile}")
           ];
+          EnvironmentFile = lib.optional (tunnel.environmentFile != null) tunnel.environmentFile;
 
           ExecStart =
             if tunnel.token != null then
               "${cfg.package}/bin/cloudflared tunnel run --token ${lib.escapeShellArg tunnel.token}"
             else if tunnel.tokenFile != null then
               ''${cfg.package}/bin/cloudflared tunnel run --token-file "$CREDENTIALS_DIRECTORY/credentials.json"''
+            else if tunnel.credentialsFile != null then
+              "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run"
             else
-              "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+              "${cfg.package}/bin/cloudflared tunnel run";
           Restart = "on-failure";
           DynamicUser = true;
         };
