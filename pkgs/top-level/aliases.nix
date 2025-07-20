@@ -380,7 +380,7 @@ mapAliases {
   buildGoPackage = throw "`buildGoPackage` has been deprecated and removed, see the Go section in the nixpkgs manual for details"; # Added 2024-11-18
   buildXenPackage = throw "'buildXenPackage' has been removed as a custom Xen build can now be achieved by simply overriding 'xen'."; # Added 2025-05-12
 
-  inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
+  buho = libsForQt5.mauiPackages.buho; # added 2022-05-17
   bwidget = tclPackages.bwidget; # Added 2024-10-02
   # Shorter names; keep the longer name for back-compat. Added 2023-04-11. Warning added on 2024-12-16. Removed on 2025-05-31
   buildFHSUserEnv = throw "'buildFHSUserEnv' has been renamed to 'buildFHSEnv' and was removed in 25.11";
@@ -451,7 +451,7 @@ mapAliases {
   clang-sierraHack = throw "clang-sierraHack has been removed because it solves a problem that no longer seems to exist. Hey, what were you even doing with that thing anyway?"; # Added 2024-10-05
   clang-sierraHack-stdenv = clang-sierraHack; # Added 2024-10-05
   cli-visualizer = throw "'cli-visualizer' has been removed as the upstream repository is gone"; # Added 2025-06-05
-  inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
+  clip = libsForQt5.mauiPackages.clip; # added 2022-05-17
   cloudlogoffline = throw "cloudlogoffline has been removed"; # added 2025-05-18
   clwrapperFunction = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   CoinMP = coinmp; # Added 2024-06-12
@@ -479,7 +479,7 @@ mapAliases {
   clubhouse-cli = throw "'clubhouse-cli' has been removed due to lack of interest to maintain it in Nixpkgs and failing to build."; # added 2025-04-21
   cockroachdb-bin = cockroachdb; # 2024-03-15
   codimd = throw "'codimd' has been renamed to/replaced by 'hedgedoc'"; # Converted to throw 2024-10-17
-  inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
+  communicator = libsForQt5.mauiPackages.communicator; # added 2022-05-17
   concurrencykit = throw "'concurrencykit' has been renamed to/replaced by 'libck'"; # Converted to throw 2024-10-17
   containerpilot = throw "'containerpilot' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-09
   crack_attack = throw "'crack_attack' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
@@ -671,7 +671,7 @@ mapAliases {
   fastnlo_toolkit = fastnlo-toolkit; # Added 2024-01-03
   fcitx5-catppuccin = catppuccin-fcitx5; # Added 2024-06-19
   fdr = throw "fdr has been removed, as it cannot be built from source and depends on Python 2.x"; # Added 2025-03-19
-  inherit (luaPackages) fennel; # Added 2022-09-24
+  fennel = luaPackages.fennel; # Added 2022-09-24
   ferdi = throw "'ferdi' has been removed, upstream does not exist anymore and the package is insecure"; # Added 2024-08-22
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve
   ffmpeg_5 = throw "ffmpeg_5 has been removed, please use another version"; # Added 2024-07-12
@@ -1539,7 +1539,7 @@ mapAliases {
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
   paco = throw "'paco' has been removed as it has been abandoned"; # Added 2025-04-30
-  inherit (perlPackages) pacup;
+  pacup = perlPackages.pacup; # Added 2025-03-03
   panopticon = throw "'panopticon' has been removed because it is unmaintained upstream"; # Added 2025-01-25
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
   paperless = throw "'paperless' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2024-10-17
@@ -1816,7 +1816,7 @@ mapAliases {
   sexp = sexpp; # Added 2023-07-03
   sgrep = throw "'sgrep' has been removed as it was unmaintained upstream since 1998 and broken with gcc 14"; # Added 2025-05-17
   shallot = throw "'shallot' has been removed as it is broken and the upstream repository was removed. Consider using 'mkp224o'"; # Added 2025-03-16
-  inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
+  shelf = libsForQt5.mauiPackages.shelf; # added 2022-05-17
   shell-hist = throw "'shell-hist' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   shipyard = jumppad; # Added 2023-06-06
   siduck76-st = st-snazzy; # Added 2024-12-24
@@ -2113,7 +2113,7 @@ mapAliases {
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
-  inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
+  vvave = libsForQt5.mauiPackages.vvave; # added 2022-05-17
 
   ### W ###
   wakatime = wakatime-cli; # 2024-05-30
@@ -2134,7 +2134,7 @@ mapAliases {
   webmetro = throw "'webmetro' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   whatsapp-for-linux = wasistlos; # Added 2025-01-30
-  wineWayland = wine-wayland;
+  wineWayland = wine-wayland; # Added 2022-01-24
   winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   win-virtio = virtio-win; # Added 2023-10-17
   wireguard-vanity-address = throw "'wireguard-vanity-address' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
@@ -2147,7 +2147,7 @@ mapAliases {
   wordpress_6_5 = throw "'wordpress_6_5' has been removed in favor of the latest version"; # Added 2024-11-11
   wordpress_6_6 = throw "'wordpress_6_6' has been removed in favor of the latest version"; # Added 2024-11-17
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
-  wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant;
+  wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant; # Added 2024-07-28
   wrapLisp_old = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   wmii_hg = wmii;
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
@@ -2237,7 +2237,7 @@ mapAliases {
   zint = zint-qt; # Added 2025-05-15
   zplugin = throw "'zplugin' has been renamed to/replaced by 'zinit'"; # Converted to throw 2024-10-17
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
-  zkg = throw "'zkg' has been replaced by 'zeek'";
+  zkg = throw "'zkg' has been replaced by 'zeek'"; # Added 2023-10-21
   zsh-history = throw "'zsh-history' has been removed as it was unmaintained"; # Added 2025-04-17
   zq = zed.overrideAttrs (old: {
     meta = old.meta // {
@@ -2249,8 +2249,10 @@ mapAliases {
 
   ### UNSORTED ###
 
-  inherit (stdenv.hostPlatform) system; # Added 2021-10-22
-  inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
+  system = stdenv.hostPlatform.system; # Added 2021-10-22
+  buildPlatform = stdenv.buildPlatform; # Added 2023-01-09
+  hostPlatform = stdenv.hostPlatform; # Added 2023-01-09
+  targetPlatform = stdenv.targetPlatform; # Added 2023-01-09
 
   freebsdCross = freebsd; # Added 2024-09-06
   netbsdCross = netbsd; # Added 2024-09-06
@@ -2264,36 +2266,33 @@ mapAliases {
       between mixed versions of qt. See:
     https://github.com/NixOS/nixpkgs/pull/101369
   */
+  kalendar = merkuro; # Added 2023-08-25
+  kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08"; # Added 2023-08-25
 
-  kalendar = merkuro; # Renamed in 23.08
-  kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08";
-
-  inherit (pidginPackages)
-    pidgin-indicator
-    pidgin-latex
-    pidgin-msn-pecan
-    pidgin-mra
-    pidgin-skypeweb
-    pidgin-carbons
-    pidgin-xmpp-receipts
-    pidgin-otr
-    pidgin-osd
-    pidgin-sipe
-    pidgin-window-merge
-    purple-discord
-    purple-googlechat
-    purple-hangouts
-    purple-lurch
-    purple-matrix
-    purple-mm-sms
-    purple-plugin-pack
-    purple-slack
-    purple-vk-plugin
-    purple-xmpp-http-upload
-    tdlib-purple
-    pidgin-opensteamworks
-    purple-facebook
-    ;
+  pidgin-indicator = pidginPackages.pidgin-indicator; # Added 2023-07-16
+  pidgin-latex = pidginPackages.pidgin-latex; # Added 2023-07-16
+  pidgin-msn-pecan = pidginPackages.pidgin-msn-pecan; # Added 2023-07-16
+  pidgin-mra = pidginPackages.pidgin-mra; # Added 2023-07-16
+  pidgin-skypeweb = pidginPackages.pidgin-skypeweb; # Added 2023-07-16
+  pidgin-carbons = pidginPackages.pidgin-carbons; # Added 2023-07-16
+  pidgin-xmpp-receipts = pidginPackages.pidgin-xmpp-receipts; # Added 2023-07-16
+  pidgin-otr = pidginPackages.pidgin-otr; # Added 2023-07-16
+  pidgin-osd = pidginPackages.pidgin-osd; # Added 2023-07-16
+  pidgin-sipe = pidginPackages.pidgin-sipe; # Added 2023-07-16
+  pidgin-window-merge = pidginPackages.pidgin-window-merge; # Added 2023-07-16
+  purple-discord = pidginPackages.purple-discord; # Added 2023-07-16
+  purple-googlechat = pidginPackages.purple-googlechat; # Added 2023-07-16
+  purple-hangouts = pidginPackages.purple-hangouts; # Added 2023-07-16
+  purple-lurch = pidginPackages.purple-lurch; # Added 2023-07-16
+  purple-matrix = pidginPackages.purple-matrix; # Added 2023-07-16
+  purple-mm-sms = pidginPackages.purple-mm-sms; # Added 2023-07-16
+  purple-plugin-pack = pidginPackages.purple-plugin-pack; # Added 2023-07-16
+  purple-slack = pidginPackages.purple-slack; # Added 2023-07-16
+  purple-vk-plugin = pidginPackages.purple-vk-plugin; # Added 2023-07-16
+  purple-xmpp-http-upload = pidginPackages.purple-xmpp-http-upload; # Added 2023-07-16
+  tdlib-purple = pidginPackages.tdlib-purple; # Added 2023-07-16
+  pidgin-opensteamworks = pidginPackages.pidgin-opensteamworks; # Added 2023-07-16
+  purple-facebook = pidginPackages.purple-facebook; # Added 2023-07-16
 
 }
 // plasma5Throws
