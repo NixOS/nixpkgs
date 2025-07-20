@@ -2129,7 +2129,6 @@ with pkgs;
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = true;
-    espanso = espanso-wayland;
   };
 
   f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
