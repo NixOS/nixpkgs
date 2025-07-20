@@ -102,8 +102,8 @@ let
       homepage = "http://distcc.org";
       license = "GPL";
 
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ anderspapitto ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      maintainers = with lib.maintainers; [ pascalj ];
     };
   };
 in
