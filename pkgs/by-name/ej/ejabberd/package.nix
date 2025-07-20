@@ -224,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
       sander
       abbradar
       chuangzhu
+      toastal
     ];
   };
 })
