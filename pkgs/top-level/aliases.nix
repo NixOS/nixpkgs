@@ -386,11 +386,11 @@ mapAliases {
   buildFHSUserEnvChroot = throw "'buildFHSUserEnvChroot' has been renamed to 'buildFHSEnvChroot' and was removed in 25.11"; # Converted to throw 2025-06-01
   buildFHSUserEnvBubblewrap = throw "'buildFHSUserEnvBubblewrap' has been renamed to 'buildFHSEnvBubblewrap' and was removed in 25.11"; # Converted to throw 2025-06-01
 
-  bitwarden_rs = vaultwarden; # Added 2021-07-01
-  bitwarden_rs-mysql = vaultwarden-mysql; # Added 2021-07-01
-  bitwarden_rs-postgresql = vaultwarden-postgresql; # Added 2021-07-01
-  bitwarden_rs-sqlite = vaultwarden-sqlite; # Added 2021-07-01
-  bitwarden_rs-vault = vaultwarden-vault; # Added 2021-07-01
+  bitwarden_rs = lib.warnOnInstantiate "'bitwarden_rs' has been renamed to/replaced by 'vaultwarden'" vaultwarden; # Converted to warning 2025-07-20
+  bitwarden_rs-mysql = lib.warnOnInstantiate "'bitwarden_rs-mysql' has been renamed to/replaced by 'vaultwarden-mysql'" vaultwarden-mysql; # Converted to warning 2025-07-20
+  bitwarden_rs-postgresql = lib.warnOnInstantiate "'bitwarden_rs-postgresql' has been renamed to/replaced by 'vaultwarden-postgresql'" vaultwarden-postgresql; # Converted to warning 2025-07-20
+  bitwarden_rs-sqlite = lib.warnOnInstantiate "'bitwarden_rs-sqlite' has been renamed to/replaced by 'vaultwarden-sqlite'" vaultwarden-sqlite; # Converted to warning 2025-07-20
+  bitwarden_rs-vault = lib.warnOnInstantiate "'bitwarden_rs-vault' has been renamed to/replaced by 'vaultwarden-vault'" vaultwarden-vault; # Converted to warning 2025-07-20
 
   ### C ###
 
@@ -526,7 +526,7 @@ mapAliases {
   darling = throw "'darling' has been removed due to vendoring Python2"; # Added 2025-05-10
   dart_stable = throw "'dart_stable' has been renamed to/replaced by 'dart'"; # Converted to throw 2024-10-17
   dart-sass-embedded = throw "dart-sass-embedded has been removed from nixpkgs, as it is now included in Dart Sass itself."; # Added 2023-10-25
-  dat = nodePackages.dat; # Added 2020-02-04
+  dat = lib.warnOnInstantiate "'dat' has been renamed to/replaced by 'nodePackages.dat'" nodePackages.dat; # Converted to warning 2025-07-20
   dave = throw "'dave' has been removed as it has been archived upstream. Consider using 'webdav' instead"; # Added 2025-02-03
   dbeaver = throw "'dbeaver' has been renamed to/replaced by 'dbeaver-bin'"; # Added 2024-05-16
   dbench = throw "'dbench' has been removed as it is unmaintained for 14 years and broken"; # Added 2025-05-17
@@ -792,13 +792,13 @@ mapAliases {
   git-stree = throw "'git-stree' has been deprecated by upstream. Upstream recommends using 'git-subrepo' as a replacement."; # Added 2025-05-05
 
   gitAndTools = self // {
-    darcsToGit = darcs-to-git; # Added 2021-01-14
-    gitAnnex = git-annex; # Added 2021-01-14
-    gitBrunch = git-brunch; # Added 2021-01-14
-    gitFastExport = git-fast-export; # Added 2021-01-14
-    gitRemoteGcrypt = git-remote-gcrypt; # Added 2021-01-14
-    svn_all_fast_export = svn-all-fast-export; # Added 2021-01-14
-    topGit = top-git; # Added 2021-01-14
+    darcsToGit = lib.warnOnInstantiate "'darcsToGit' has been renamed to/replaced by 'darcs-to-git'" darcs-to-git; # Converted to warning 2025-07-20
+    gitAnnex = lib.warnOnInstantiate "'gitAnnex' has been renamed to/replaced by 'git-annex'" git-annex; # Converted to warning 2025-07-20
+    gitBrunch = lib.warnOnInstantiate "'gitBrunch' has been renamed to/replaced by 'git-brunch'" git-brunch; # Converted to warning 2025-07-20
+    gitFastExport = lib.warnOnInstantiate "'gitFastExport' has been renamed to/replaced by 'git-fast-export'" git-fast-export; # Converted to warning 2025-07-20
+    gitRemoteGcrypt = lib.warnOnInstantiate "'gitRemoteGcrypt' has been renamed to/replaced by 'git-remote-gcrypt'" git-remote-gcrypt; # Converted to warning 2025-07-20
+    svn_all_fast_export = lib.warnOnInstantiate "'svn_all_fast_export' has been renamed to/replaced by 'svn-all-fast-export'" svn-all-fast-export; # Converted to warning 2025-07-20
+    topGit = lib.warnOnInstantiate "'topGit' has been renamed to/replaced by 'top-git'" top-git; # Converted to warning 2025-07-20
   }; # Added 2021-01-14
   github-copilot-cli = throw "'github-copilot-cli' has been removed because GitHub has replaced it with 'gh-copilot'."; # Added 2025-06-01
   givaro_3 = throw "'givaro_3' has been removed as it is end-of-life. Consider using the up-to-date 'givaro' instead"; # Added 2025-05-07
@@ -927,7 +927,7 @@ mapAliases {
   incrtcl = tclPackages.incrtcl; # Added 2024-10-02
   input-utils = throw "The input-utils package was dropped since it was unmaintained."; # Added 2024-06-21
   index-fm = libsForQt5.mauiPackages.index; # added 2022-05-17
-  inotifyTools = inotify-tools; # Added 2015-09-01
+  inotifyTools = lib.warnOnInstantiate "'inotifyTools' has been renamed to/replaced by 'inotify-tools'" inotify-tools; # Converted to warning 2025-07-20
   insync-emblem-icons = throw "'insync-emblem-icons' has been removed, use 'insync-nautilus' instead"; # Added 2025-05-14
   inter-ui = throw "'inter-ui' has been renamed to/replaced by 'inter'"; # Converted to throw 2024-10-17
   ioccheck = throw "ioccheck was dropped since it was unmaintained."; # Added 2025-07-06
@@ -988,10 +988,10 @@ mapAliases {
   kibana = kibana7; # Added 2023-10-30
   kio-admin = makePlasma5Throw "kio-admin"; # Added 2023-03-18
   kiwitalk = throw "KiwiTalk has been removed because the upstream has been deprecated at the request of Kakao and it's now obsolete."; # Added 2024-10-10
-  kodiGBM = kodi-gbm; # Added 2021-03-09
-  kodiPlain = kodi; # Added 2021-03-09
-  kodiPlainWayland = kodi-wayland; # Added 2021-03-09
-  kodiPlugins = kodiPackages; # Added 2021-03-09
+  kodiGBM = lib.warnOnInstantiate "'kodiGBM' has been renamed to/replaced by 'kodi-gbm'" kodi-gbm; # Converted to warning 2025-07-20
+  kodiPlain = lib.warnOnInstantiate "'kodiPlain' has been renamed to/replaced by 'kodi'" kodi; # Converted to warning 2025-07-20
+  kodiPlainWayland = lib.warnOnInstantiate "'kodiPlainWayland' has been renamed to/replaced by 'kodi-wayland'" kodi-wayland; # Converted to warning 2025-07-20
+  kodiPlugins = lib.warnOnInstantiate "'kodiPlugins' has been renamed to/replaced by 'kodiPackages'" kodiPackages; # Converted to warning 2025-07-20
   kramdown-rfc2629 = throw "'kramdown-rfc2629' has been renamed to/replaced by 'rubyPackages.kramdown-rfc2629'"; # Converted to throw 2024-10-17
   krb5Full = krb5; # Added 2022-11-17
   kreative-square-fonts = throw "'kreative-square-fonts' has been renamed to 'kreative-square'"; # Added 2025-04-16
@@ -1007,7 +1007,7 @@ mapAliases {
   LASzip = laszip; # Added 2024-06-12
   LASzip2 = laszip_2; # Added 2024-06-12
   latencytop = throw "'latencytop' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
-  latinmodern-math = lmmath; # Added 2020-03-17
+  latinmodern-math = lib.warnOnInstantiate "'latinmodern-math' has been renamed to/replaced by 'lmmath'" lmmath; # Converted to warning 2025-07-20
   lazarus-qt = lazarus-qt5; # Added 2024-12-25
   leafpad = throw "'leafpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mousepad' instead"; # Added 2024-10-19
   ledger_agent = ledger-agent; # Added 2024-01-07
@@ -1076,7 +1076,7 @@ mapAliases {
   libungif = throw "'libungif' has been renamed to/replaced by 'giflib'"; # Converted to throw 2024-10-17
   libusb = throw "'libusb' has been renamed to/replaced by 'libusb1'"; # Converted to throw 2024-10-17
   libvpx_1_8 = throw "libvpx_1_8 has been removed because it is impacted by security issues and not used in nixpkgs, move to 'libvpx'"; # Added 2024-07-26
-  libwnck3 = libwnck; # Added 2021-06-23
+  libwnck3 = lib.warnOnInstantiate "'libwnck3' has been renamed to/replaced by 'libwnck'" libwnck; # Converted to warning 2025-07-20
   libxplayer-plparser = throw "libxplayer-plparser has been removed as the upstream project was archived"; # Added 2024-12-27
   libyamlcpp = yaml-cpp; # Added 2023-01-29
   libyamlcpp_0_3 = yaml-cpp_0_3; # Added 2023-01-29
@@ -1147,14 +1147,14 @@ mapAliases {
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
   linux_rpi4 = linuxKernel.kernels.linux_rpi4;
 
-  linuxPackages_xen_dom0 = linuxPackages; # Added 2021-04-04
-  linuxPackages_latest_xen_dom0 = linuxPackages_latest; # Added 2021-04-04
-  linuxPackages_xen_dom0_hardened = linuxPackages_hardened; # Added 2021-04-04
-  linuxPackages_latest_xen_dom0_hardened = linuxPackages_latest_hardened; # Added 2021-04-04
-  linuxPackages_6_13_hardened = linuxKernel.packages.linux_6_13_hardened; # Added 2021-08-16
-  linux_6_13_hardened = linuxKernel.kernels.linux_6_13_hardened; # Added 2021-08-16
-  linuxPackages_6_14_hardened = linuxKernel.packages.linux_6_14_hardened; # Added 2021-08-16
-  linux_6_14_hardened = linuxKernel.kernels.linux_6_14_hardened; # Added 2021-08-16
+  linuxPackages_xen_dom0 = lib.warnOnInstantiate "'linuxPackages_xen_dom0' has been renamed to/replaced by 'linuxPackages'" linuxPackages; # Converted to warning 2025-07-20
+  linuxPackages_latest_xen_dom0 = lib.warnOnInstantiate "'linuxPackages_latest_xen_dom0' has been renamed to/replaced by 'linuxPackages_latest'" linuxPackages_latest; # Converted to warning 2025-07-20
+  linuxPackages_xen_dom0_hardened = lib.warnOnInstantiate "'linuxPackages_xen_dom0_hardened' has been renamed to/replaced by 'linuxPackages_hardened'" linuxPackages_hardened; # Converted to warning 2025-07-20
+  linuxPackages_latest_xen_dom0_hardened = lib.warnOnInstantiate "'linuxPackages_latest_xen_dom0_hardened' has been renamed to/replaced by 'linuxPackages_latest_hardened'" linuxPackages_latest_hardened; # Converted to warning 2025-07-20
+  linuxPackages_6_13_hardened = lib.warnOnInstantiate "'linuxPackages_6_13_hardened' has been renamed to/replaced by 'linuxKernel.packages.linux_6_13_hardened'" linuxKernel.packages.linux_6_13_hardened; # Converted to warning 2025-07-20
+  linux_6_13_hardened = lib.warnOnInstantiate "'linux_6_13_hardened' has been renamed to/replaced by 'linuxKernel.kernels.linux_6_13_hardened'" linuxKernel.kernels.linux_6_13_hardened; # Converted to warning 2025-07-20
+  linuxPackages_6_14_hardened = lib.warnOnInstantiate "'linuxPackages_6_14_hardened' has been renamed to/replaced by 'linuxKernel.packages.linux_6_14_hardened'" linuxKernel.packages.linux_6_14_hardened; # Converted to warning 2025-07-20
+  linux_6_14_hardened = lib.warnOnInstantiate "'linux_6_14_hardened' has been renamed to/replaced by 'linuxKernel.kernels.linux_6_14_hardened'" linuxKernel.kernels.linux_6_14_hardened; # Converted to warning 2025-07-20
   linuxPackages_latest_hardened = throw ''
     The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
     frequently lag behind the upstream kernel. In some cases this meant that this attribute
@@ -1166,7 +1166,7 @@ mapAliases {
 
     [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
   ''; # Added 2021-08-16
-  linux_latest_hardened = linuxPackages_latest_hardened; # Added 2021-08-16
+  linux_latest_hardened = lib.warnOnInstantiate "'linux_latest_hardened' has been renamed to/replaced by 'linuxPackages_latest_hardened'" linuxPackages_latest_hardened; # Converted to warning 2025-07-20
 
   linuxPackages_testing_bcachefs = throw "'linuxPackages_testing_bcachefs' has been removed, please use 'linuxPackages_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support"; # Added 2023-11-18
   linux_testing_bcachefs = throw "'linux_testing_bcachefs' has been removed, please use 'linux_latest', any kernel version at least 6.7, or any other linux kernel with bcachefs support"; # Added 2023-11-18
@@ -1365,7 +1365,7 @@ mapAliases {
   ''; # Added 2024-06-25
   nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nextcloud-news-updater = throw "nextcloud-news-updater has been removed because the project is unmaintained"; # Added 2025-03-28
-  nagiosPluginsOfficial = monitoring-plugins; # Added 2017-08-07
+  nagiosPluginsOfficial = lib.warnOnInstantiate "'nagiosPluginsOfficial' has been renamed to/replaced by 'monitoring-plugins'" monitoring-plugins; # Converted to warning 2025-07-20
   neochat = makePlasma5Throw "neochat"; # added 2022-05-10
   nerdfonts = throw ''
     nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
@@ -1386,7 +1386,7 @@ mapAliases {
   networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
-  nix-direnv-flakes = nix-direnv; # Added 2021-11-09
+  nix-direnv-flakes = lib.warnOnInstantiate "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'" nix-direnv; # Converted to warning 2025-07-20
   nix-ld-rs = nix-ld; # Added 2024-08-17
   nix-plugin-pijul = throw "nix-plugin-pijul has been removed due to being discontinued"; # added 2025-05-18
   nix-repl = throw (
@@ -1560,7 +1560,7 @@ mapAliases {
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
-  pltScheme = racket; # Added 2013-02-24
+  pltScheme = lib.warnOnInstantiate "'pltScheme' has been renamed to/replaced by 'racket'" racket; # Converted to warning 2025-07-20
   poac = cabinpkg; # Added 2025-01-22
   podofo010 = podofo_0_10; # Added 2025-06-01
   polkit-kde-agent = throw ''
@@ -1668,7 +1668,7 @@ mapAliases {
   pxlib = throw "pxlib has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pxview = throw "pxview has been removed due to failing to build and lack of upstream maintenance"; # Added 2025-04-28
   pynac = throw "'pynac' has been removed as it was broken and unmaintained"; # Added 2025-03-18
-  pyo3-pack = maturin; # Added 2019-08-30
+  pyo3-pack = lib.warnOnInstantiate "'pyo3-pack' has been renamed to/replaced by 'maturin'" maturin; # Converted to warning 2025-07-20
   pypi2nix = throw "pypi2nix has been removed due to being unmaintained"; # Added 2023-06-02
   pypolicyd-spf = spf-engine; # Added 2022-10-09
   pypy39Packages = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-07
@@ -1729,7 +1729,7 @@ mapAliases {
   restinio_0_6 = throw "restinio_0_6 has been removed from nixpkgs as it's not needed by downstream packages"; # Added 2024-07-04
   retroarchBare = retroarch-bare; # Added 2024-11-23
   retroarchFull = retroarch-full; # Added 2024-11-23
-  retroshare06 = retroshare; # Added 2020-11-07
+  retroshare06 = lib.warnOnInstantiate "'retroshare06' has been renamed to/replaced by 'retroshare'" retroshare; # Converted to warning 2025-07-20
   responsively-app = throw "'responsively-app' has been removed due to lack of maintainance upstream."; # Added 2025-06-25
   rftg = throw "'rftg' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   rigsofrods = rigsofrods-bin; # Added 2023-03-22
@@ -1747,8 +1747,8 @@ mapAliases {
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
   rr-unstable = rr; # Added 2022-09-17
   rtx = mise; # Added 2024-01-05
-  runCommandNoCC = runCommand; # Added 2021-08-15
-  runCommandNoCCLocal = runCommandLocal; # Added 2021-08-15
+  runCommandNoCC = lib.warn "'runCommandNoCC' has been renamed to/replaced by 'runCommand'" runCommand; # Converted to warning 2025-07-20
+  runCommandNoCCLocal = lib.warn "'runCommandNoCCLocal' has been renamed to/replaced by 'runCommandLocal'" runCommandLocal; # Converted to warning 2025-07-20
   run-scaled = throw "run-scaled has been removed due to being deprecated. Consider using run_scaled from 'xpra' instead"; # Added 2025-03-17
   rust-synapse-state-compress = rust-synapse-compress-state; # Added 2025-03-08
   rustc-wasm32 = rustc; # Added 2023-12-01
@@ -1836,25 +1836,25 @@ mapAliases {
   spatialite_tools = throw "spatialite_tools has been renamed to spatialite-tools"; # Added 2025-02-06
 
   sourceHanSansPackages = {
-    japanese = source-han-sans; # Added 2020-02-10
-    korean = source-han-sans; # Added 2020-02-10
-    simplified-chinese = source-han-sans; # Added 2020-02-10
-    traditional-chinese = source-han-sans; # Added 2020-02-10
+    japanese = lib.warnOnInstantiate "'japanese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+    korean = lib.warnOnInstantiate "'korean' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+    simplified-chinese = lib.warnOnInstantiate "'simplified-chinese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+    traditional-chinese = lib.warnOnInstantiate "'traditional-chinese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
   }; # Added 2020-02-10
-  source-han-sans-japanese = source-han-sans; # Added 2020-02-10
-  source-han-sans-korean = source-han-sans; # Added 2020-02-10
-  source-han-sans-simplified-chinese = source-han-sans; # Added 2020-02-10
-  source-han-sans-traditional-chinese = source-han-sans; # Added 2020-02-10
+  source-han-sans-japanese = lib.warnOnInstantiate "'source-han-sans-japanese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+  source-han-sans-korean = lib.warnOnInstantiate "'source-han-sans-korean' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+  source-han-sans-simplified-chinese = lib.warnOnInstantiate "'source-han-sans-simplified-chinese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
+  source-han-sans-traditional-chinese = lib.warnOnInstantiate "'source-han-sans-traditional-chinese' has been renamed to/replaced by 'source-han-sans'" source-han-sans; # Converted to warning 2025-07-20
   sourceHanSerifPackages = {
-    japanese = source-han-serif; # Added 2020-02-10
-    korean = source-han-serif; # Added 2020-02-10
-    simplified-chinese = source-han-serif; # Added 2020-02-10
-    traditional-chinese = source-han-serif; # Added 2020-02-10
+    japanese = lib.warnOnInstantiate "'japanese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+    korean = lib.warnOnInstantiate "'korean' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+    simplified-chinese = lib.warnOnInstantiate "'simplified-chinese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+    traditional-chinese = lib.warnOnInstantiate "'traditional-chinese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
   }; # Added 2020-02-10
-  source-han-serif-japanese = source-han-serif; # Added 2020-02-10
-  source-han-serif-korean = source-han-serif; # Added 2020-02-10
-  source-han-serif-simplified-chinese = source-han-serif; # Added 2020-02-10
-  source-han-serif-traditional-chinese = source-han-serif; # Added 2020-02-10
+  source-han-serif-japanese = lib.warnOnInstantiate "'source-han-serif-japanese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+  source-han-serif-korean = lib.warnOnInstantiate "'source-han-serif-korean' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+  source-han-serif-simplified-chinese = lib.warnOnInstantiate "'source-han-serif-simplified-chinese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
+  source-han-serif-traditional-chinese = lib.warnOnInstantiate "'source-han-serif-traditional-chinese' has been renamed to/replaced by 'source-han-serif'" source-han-serif; # Converted to warning 2025-07-20
 
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   solana-validator = throw "'solana-validator' is obsoleted by solana-cli, which also includes the validator binary"; # Added 2024-12-20
@@ -2059,7 +2059,7 @@ mapAliases {
   v8 = throw "`v8` has been removed as it's unmaintained for several years and has vulnerabilites. Please migrate to `nodejs.libv8`"; # Added 2024-12-21
   validphys2 = throw "validphys2 has been removed, since it has a broken dependency that was removed"; # Added 2024-08-21
   vamp = {
-    vampSDK = vamp-plugin-sdk; # Added 2020-03-26
+    vampSDK = lib.warnOnInstantiate "'vampSDK' has been renamed to/replaced by 'vamp-plugin-sdk'" vamp-plugin-sdk; # Converted to warning 2025-07-20
   }; # Added 2020-03-26
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vaapiVdpau = libva-vdpau-driver; # Added 2024-06-05
@@ -2232,14 +2232,14 @@ mapAliases {
 
   ### UNSORTED ###
 
-  system = stdenv.hostPlatform.system; # Added 2021-10-22
-  buildPlatform = stdenv.buildPlatform; # Added 2023-01-09
-  hostPlatform = stdenv.hostPlatform; # Added 2023-01-09
-  targetPlatform = stdenv.targetPlatform; # Added 2023-01-09
+  system = lib.warn "'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'" stdenv.hostPlatform.system; # Converted to warning 2025-07-20
+  buildPlatform = stdenv.buildPlatform; # MANUAL, added 2023-01-09
+  hostPlatform = stdenv.hostPlatform; # MANUAL, added 2023-01-09
+  targetPlatform = stdenv.targetPlatform; # MANUAL, added 2023-01-09
 
-  freebsdCross = freebsd; # Added 2024-09-06
-  netbsdCross = netbsd; # Added 2024-09-06
-  openbsdCross = openbsd; # Added 2024-09-06
+  freebsdCross = freebsd; # MANUAL, added 2024-09-06
+  netbsdCross = netbsd; # MANUAL, added 2024-09-06
+  openbsdCross = openbsd; # MANUAL, added 2024-09-06
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_latest = llvmPackages_20;
