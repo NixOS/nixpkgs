@@ -424,15 +424,6 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
-        options = {
-          DefaultLimitCORE = mkOption {
-            type = types.nullOr types.str;
-            default = "infinity";
-            description = ''
-              Default for the maximum size of core files created by services.
-            '';
-          };
-        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
