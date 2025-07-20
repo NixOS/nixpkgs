@@ -863,4 +863,125 @@ rec {
         transformDrv
         ;
     };
+
+  /**
+    Removes a prefix from the attribute names of a set of splices.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to remove from splice attribute names
+
+    `splices`
+    : A set of splices with prefixed names
+
+    # Type
+
+    ```
+    renameSplicesFrom :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameSplicesFrom` usage example
+
+    ```nix
+    renameSplicesFrom "pkgs" { pkgsBuildBuild = ...; pkgsBuildHost = ...; ... }
+    => { buildBuild = ...; buildHost = ...; ... }
+    ```
+    :::
+  */
+  renameSplicesFrom = prefix: x: {
+    buildBuild = x."${prefix}BuildBuild";
+    buildHost = x."${prefix}BuildHost";
+    buildTarget = x."${prefix}BuildTarget";
+    hostHost = x."${prefix}HostHost";
+    hostTarget = x."${prefix}HostTarget";
+    targetTarget = x."${prefix}TargetTarget";
+  };
+
+  /**
+    Adds a prefix to the attribute names of a set of splices.
+
+    # Inputs
+
+    `prefix`
+    : The prefix to add to splice attribute names
+
+    `splices`
+    : A set of splices to be prefixed
+
+    # Type
+
+    ```
+    renameSplicesTo :: String -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.renameSplicesTo` usage example
+
+    ```nix
+    renameSplicesTo "self" { buildBuild = ...; buildHost = ...; ... }
+    => { selfBuildBuild = ...; selfBuildHost = ...; ... }
+    ```
+    :::
+  */
+  renameSplicesTo = prefix: x: {
+    "${prefix}BuildBuild" = x.buildBuild;
+    "${prefix}BuildHost" = x.buildHost;
+    "${prefix}BuildTarget" = x.buildTarget;
+    "${prefix}HostHost" = x.hostHost;
+    "${prefix}HostTarget" = x.hostTarget;
+    "${prefix}TargetTarget" = x.targetTarget;
+  };
+
+  /**
+    Takes a function and applies it pointwise to each splice.
+
+    # Inputs
+
+    `f`
+    : Function to apply to each splice value
+
+    `splices`
+    : A set of splices to transform
+
+    # Type
+
+    ```
+    mapSplices :: (a -> b) -> AttrSet -> AttrSet
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.mapSplices` usage example
+
+    ```nix
+    mapSplices (x: x * 10) { buildBuild = 1; buildHost = 2; ... }
+    => { buildBuild = 10; buildHost = 20; ... }
+    ```
+    :::
+  */
+  mapSplices =
+    f:
+    {
+      buildBuild,
+      buildHost,
+      buildTarget,
+      hostHost,
+      hostTarget,
+      targetTarget,
+    }:
+    {
+      buildBuild = f buildBuild;
+      buildHost = f buildHost;
+      buildTarget = f buildTarget;
+      hostHost = f hostHost;
+      hostTarget = f hostTarget;
+      targetTarget = f targetTarget;
+    };
 }
