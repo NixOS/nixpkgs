@@ -424,6 +424,38 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
+        options = {
+          DefaultCPUAccounting = mkOption {
+            type = types.bool;
+            default = cfg.enableCgroupAccounting;
+            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
+            description = "Turn on CPU usage accounting";
+          };
+
+          DefaultIOAccounting = mkOption {
+            type = types.bool;
+            default = cfg.enableCgroupAccounting;
+            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
+            description = "Turn on Block I/O accounting.";
+          };
+
+          DefaultBlockIOAccounting = mkOption {
+            type = types.bool;
+            default = cfg.enableCgroupAccounting;
+            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
+            description = "(Deprecated since systemd 252).";
+          };
+
+          DefaultIPAccounting = mkOption {
+            type = types.bool;
+            default = cfg.enableCgroupAccounting;
+            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
+            description = ''
+              If true, turns on IPv4 and IPv6 network traffic accounting for packets sent or received by the unit. When
+              this option is turned on, all IPv4 and IPv6 sockets created by any process are accounted for.
+            '';
+          };
+        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
@@ -599,12 +631,6 @@ in
 
         "systemd/system.conf".text = ''
           [Manager]
-          ${optionalString cfg.enableCgroupAccounting ''
-            DefaultCPUAccounting=yes
-            DefaultIOAccounting=yes
-            DefaultBlockIOAccounting=yes
-            DefaultIPAccounting=yes
-          ''}
           ${attrsToSection cfg.settings.Manager}
         '';
 
