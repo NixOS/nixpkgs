@@ -425,13 +425,6 @@ in
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
         options = {
-          DefaultCPUAccounting = mkOption {
-            type = types.bool;
-            default = cfg.enableCgroupAccounting;
-            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
-            description = "Turn on CPU usage accounting";
-          };
-
           DefaultIOAccounting = mkOption {
             type = types.bool;
             default = cfg.enableCgroupAccounting;
