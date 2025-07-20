@@ -54,10 +54,14 @@ let
           url = "https://www.netacad.com";
         };
 
+    nativeBuildInputs = [
+      dpkg
+      makeWrapper
+    ];
+
     buildInputs =
       [
         autoPatchelfHook
-        makeWrapper
         alsa-lib
         dbus
         expat
@@ -98,7 +102,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      ${lib.getExe' dpkg "dpkg-deb"} -x $src $out
+      dpkg-deb -x $src $out
       chmod 755 "$out"
 
       runHook postUnpack
@@ -117,7 +121,7 @@ let
   fhs-env = buildFHSEnv {
     name = "ciscoPacketTracer8-fhs-env";
     runScript = lib.getExe' unwrapped "packettracer8";
-    targetPkgs = pkgs: [ libudev0-shim ];
+    targetPkgs = _: [ libudev0-shim ];
   };
 in
 
