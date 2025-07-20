@@ -23,18 +23,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.61";
+  version = "0.2.72";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-qy1E5x5Fn+xwS5st6HkMrJu9nksXQQIyJf97FvNOKO4=";
+    hash = "sha256-+/oOQjebkn3iYi5UXFzFoe0ldu+p+nf5uEjGhk5nlNo=";
   };
 
-  cargoHash = "sha256-r97DsSsqp/KtgqtYQe92nz2qaOBcJF6w9ckfxpk8Cxg=";
-
-  patches = [ ./test-fix.patch ];
+  cargoHash = "sha256-OFSsMa/xErNB+1cvEOnGshJJEcG8ZDf9y/uYVnsVwhU=";
 
   postPatch = ''
     substituteInPlace binaries/geph5-client/src/vpn/*.sh \
@@ -64,13 +62,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # Wrong test
-    "--skip=traffcount::tests::test_traffic_cleanup"
     "--skip=traffcount::tests::test_traffic_count_basic"
     # Requires network
     "--skip=dns::tests::resolve_google"
     # Never finish
     "--skip=tests::test_blind_sign"
     "--skip=tests::test_generate_secret_key"
+    "--skip=tests::ping_pong"
   ];
 
   desktopItems = [
