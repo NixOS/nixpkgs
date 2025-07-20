@@ -999,90 +999,148 @@ optionalAttrs allowAliases aliases
     {
       type = (
         let
-          # https://github.com/kdl-org/kdl/blob/main/SPEC.md#value
-          untypedKdlValue =
-            (nullOr (oneOf [
-              str
-              bool
-              number
-              path
-            ]))
-            // {
-              description = "KDL value";
+          mergeUniq =
+            mergeOne:
+            lib.mergeUniqueOption {
+              message = "";
+              merge =
+                loc: defs:
+                let
+                  inherit (lib.head defs) file value;
+                in
+                mergeOne loc file value;
             };
-          kdlValue = coercedTo untypedKdlValue (value: { inherit value; }) (submoduleWith {
-            description = "submodule: { type = /* type annotation */; value = /* KDL value */; }";
-            modules = lib.toList {
-              options = {
-                type = lib.mkOption {
-                  type = nullOr str;
-                  default = null;
-                  description = ''
-                    [Type Annotation](https://github.com/kdl-org/kdl/blob/main/SPEC.md#type-annotation) of the value.
-                    Set to `null` to prevent generating a type annotation.
-                  '';
-                };
-                value = lib.mkOption {
-                  type = untypedKdlValue;
-                  description = ''
-                    The actual KDL value.
-                  '';
-                };
-              };
+
+          mergeFlat =
+            elemType: loc: file: value:
+            if value ? _type then
+              throw "${lib.showOption loc} has wrong type: expected '${elemType.description}', got `${value._type}`"
+            else
+              elemType.merge loc [ { inherit file value; } ];
+
+          uniqFlatListOf =
+            elemType:
+            lib.mkOptionType {
+              name = "uniqFlatListOf";
+              inherit (listOf elemType) description descriptionClass;
+              check = isList;
+              merge = mergeUniq (
+                loc: file: lib.imap1 (i: mergeFlat elemType (loc ++ [ "[entry ${toString i}]" ]) file)
+              );
             };
-          });
-          node = submoduleWith {
-            modules = lib.toList {
-              options = {
-                name = lib.mkOption {
-                  type = str;
-                  description = ''
-                    Name of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
-                  '';
-                };
-                type = lib.mkOption {
-                  type = nullOr str;
-                  default = null;
-                  description = ''
-                    [Type Annotation](https://github.com/kdl-org/kdl/blob/main/SPEC.md#type-annotation) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
-                    Set to `null` to prevent generating a type annotation.
-                  '';
-                };
-                arguments = lib.mkOption {
-                  type = listOf kdlValue;
-                  default = [ ];
-                  description = ''
-                    [Arguments](https://github.com/kdl-org/kdl/blob/main/SPEC.md#argument) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
-                  '';
-                };
-                properties = lib.mkOption {
-                  type = attrsOf kdlValue;
-                  default = { };
-                  description = ''
-                    [Properties](https://github.com/kdl-org/kdl/blob/main/SPEC.md#property) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
-                  '';
-                };
-                children = lib.mkOption {
-                  type = listOf (
-                    node
-                    // {
-                      # Prevent Nix from trying to recurse into suboptions or submodules, as this leads to a stack overflow
-                      getSubOptions = prefix: { };
-                      getSubModules = null;
-                    }
-                  );
-                  default = [ ];
-                  description = ''
-                    [Children](https://github.com/kdl-org/kdl/blob/main/SPEC.md#children-block) of [KDL node](https://github.com/kdl-org/kdl/blob/main/SPEC.md#node).
-                  '';
-                };
-              };
+
+          uniqFlatAttrsOf =
+            elemType:
+            lib.mkOptionType {
+              name = "uniqFlatAttrsOf";
+              inherit (attrsOf elemType) description descriptionClass;
+              check = isAttrs;
+              merge = mergeUniq (loc: file: lib.mapAttrs (name: mergeFlat elemType (loc ++ [ name ]) file));
             };
-            description = "KDL node";
+
+          kdlUntypedValue = lib.mkOptionType {
+            name = "kdlUntypedValue";
+            description = "KDL value without type annotation";
+            descriptionClass = "noun";
+
+            inherit
+              (nullOr (oneOf [
+                str
+                bool
+                number
+                path
+              ]))
+              check
+              merge
+              ;
           };
-          valueType = listOf node;
+
+          kdlTypedValue = lib.mkOptionType {
+            name = "kdlTypedValue";
+            description = "KDL value with type annotation";
+            descriptionClass = "noun";
+
+            check = isAttrs;
+            merge =
+              (submodule {
+                options = {
+                  type = lib.mkOption {
+                    type = nullOr str;
+                    default = null;
+                    description = ''
+                      [Type annotation](https://kdl.dev/spec/#name-type-annotation) of a [KDL value](https://kdl.dev/spec/#name-value).
+                    '';
+                  };
+                  value = lib.mkOption {
+                    type = kdlUntypedValue;
+                    description = ''
+                      Scalar part of a [KDL value](https://kdl.dev/spec/#name-value)
+                    '';
+                  };
+                };
+              }).merge;
+          };
+
+          # https://kdl.dev/spec/#name-value
+          kdlValue = lib.mkOptionType {
+            name = "kdlValue";
+            description = "KDL value";
+            descriptionClass = "noun";
+
+            inherit (coercedTo kdlUntypedValue (value: { inherit value; }) kdlTypedValue) check merge;
+          };
+
+          # https://kdl.dev/spec/#name-node
+          kdlNode = lib.mkOptionType {
+            name = "kdlNode";
+            description = "KDL node";
+            descriptionClass = "noun";
+
+            check = isAttrs;
+            merge =
+              (submodule {
+                options = {
+                  type = lib.mkOption {
+                    type = nullOr str;
+                    default = null;
+                    description = ''
+                      [Type annotation](https://kdl.dev/spec/#name-type-annotation) of a KDL node.
+                    '';
+                  };
+                  name = lib.mkOption {
+                    type = str;
+                    description = ''
+                      Name of a [KDL node](https://kdl.dev/spec/#name-node).
+                    '';
+                  };
+                  arguments = lib.mkOption {
+                    type = uniqFlatListOf kdlValue;
+                    default = [ ];
+                    description = ''
+                      [Arguments](https://kdl.dev/spec/#name-argument) of a KDL node.
+                    '';
+                  };
+                  properties = lib.mkOption {
+                    type = uniqFlatAttrsOf kdlValue;
+                    default = { };
+                    description = ''
+                      [Properties](https://kdl.dev/spec/#name-property) of a KDL node.
+                    '';
+                  };
+                  children = lib.mkOption {
+                    type = kdlDocument;
+                    default = [ ];
+                    description = ''
+                      [Children](https://kdl.dev/spec/#children-block) of a KDL node.
+                    '';
+                  };
+                };
+              }).merge;
+          };
+
+          kdlDocument = uniqFlatListOf kdlNode;
         in
-        valueType
+        kdlDocument
       );
 
       lib = {
