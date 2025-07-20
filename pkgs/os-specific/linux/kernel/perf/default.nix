@@ -170,12 +170,16 @@ stdenv.mkDerivation {
           python3.pkgs.packaging
         ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
     "-Wno-error=deprecated-declarations"
     "-Wno-error=stringop-truncation"
-  ];
+  ] ++ lib.optionals (lib.versionOlder kernel.version "5.10") [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=int-conversion"
+  ]);
 
   doCheck = false; # requires "sparse"
 
