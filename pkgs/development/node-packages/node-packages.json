@@ -3,6 +3,7 @@
 , "@antfu/ni"
 , "@babel/cli"
 , "@commitlint/cli"
+, "@commitlint/prompt-cli"
 , "@microsoft/rush"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"

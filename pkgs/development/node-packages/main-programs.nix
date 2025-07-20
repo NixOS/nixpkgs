@@ -10,6 +10,7 @@
   "@angular/cli" = "ng";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
+  "@commitlint/prompt-cli" = "commit";
   "@gitbeaker/cli" = "gitbeaker";
   "@uppy/companion" = "companion";
   "@webassemblyjs/repl-1.11.1" = "wasm";
