@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
       $out/share/icons/hicolor/256x256/apps/cider.png
   '';
 
+  passthru.updateScript = ./updater.sh;
+
   meta = {
     description = "Powerful music player that allows you listen to your favorite tracks with style";
     homepage = "https://cider.sh";
