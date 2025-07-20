@@ -18,7 +18,7 @@ flutter324.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  gitHashes = lib.importJSON ./git-hashes.json;
+  gitHashes.icon_font_generator = "sha256-QmChsa2qP+gZyZ2IrJMrY/zBP/J5QigidjIHahp3V0g=";
 
   buildInputs = [
     sqlite
