@@ -2128,7 +2128,7 @@ with pkgs;
 
   espanso-wayland = espanso.override {
     x11Support = false;
-    waylandSupport = true;
+    waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
   f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
