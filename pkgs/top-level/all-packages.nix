@@ -296,8 +296,6 @@ with pkgs;
     opencv = opencv.override { enableGtk3 = true; };
   };
 
-  beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
