@@ -16095,7 +16095,15 @@ with pkgs;
           };
     };
 
-  nixosOptionsDoc = attrs: (import ../../nixos/lib/make-options-doc) ({ inherit pkgs lib; } // attrs);
+  nixosOptionsDoc =
+    attrs:
+    (import ../../nixos/lib/make-options-doc) (
+      {
+        pkgs = pkgs.__splicedPackages;
+        inherit lib;
+      }
+      // attrs
+    );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
     nix = nixVersions.nix_2_29;
