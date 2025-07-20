@@ -597,6 +597,7 @@
   ./services/display-managers/default.nix
   ./services/display-managers/gdm.nix
   ./services/display-managers/greetd.nix
+  ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix

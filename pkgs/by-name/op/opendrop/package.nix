@@ -1,20 +1,12 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  fleep,
-  ifaddr,
-  libarchive-c,
-  pillow,
-  requests-toolbelt,
-  setuptools,
-  zeroconf,
-  pytestCheckHook,
   writableTmpDirAsHomeHook,
   openssl,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "opendrop";
   version = "0.13.0";
   format = "setuptools";
@@ -22,7 +14,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "seemoo-lab";
     repo = "opendrop";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4FeVQO7Z6t9mjIgesdjKx4Mi+Ro5EVGJpEFjCvB2SlA=";
   };
 
@@ -31,7 +23,7 @@ buildPythonApplication rec {
     openssl
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     fleep
     ifaddr
     libarchive-c
@@ -45,18 +37,18 @@ buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath nativeBuildInputs}"
   ];
 
-  checkInputs = [
+  checkInputs = with python3Packages; [
     pytestCheckHook
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Apple AirDrop implementation written in Python";
     homepage = "https://owlink.org/";
     changelog = "https://github.com/seemoo-lab/opendrop/releases/tag/${src.rev}";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "opendrop";
     platforms = [ "x86_64-linux" ];
   };

@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "tscli";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "jaxxstorm";
     repo = "tscli";
     tag = "v${version}";
-    hash = "sha256-+1meGROQvprReWSJMKutFcTjhw0YcIekDHml/A+RbN4=";
+    hash = "sha256-KncOCrpu0/72Nf9dOErKT45PxPECS50+wokO10sGUXc=";
   };
 
   vendorHash = "sha256-FmJoKADhcHk5mWjcXxXb7VszZhFfGWmBKUGxUjvA64U=";

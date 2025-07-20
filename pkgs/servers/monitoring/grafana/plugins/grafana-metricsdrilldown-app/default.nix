@@ -7,7 +7,7 @@ grafanaPlugin {
   meta = with lib; {
     description = "The Grafana Metrics Drilldown app provides a queryless experience for browsing Prometheus-compatible metrics. Quickly find related metrics without writing PromQL queries.";
     license = licenses.agpl3Only;
-    teams = [ lib.maintainers.marcel ];
+    maintainers = [ lib.maintainers.marcel ];
     platforms = platforms.unix;
   };
 }

@@ -543,8 +543,6 @@ with pkgs;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
-  opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
-
   pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
 
   magika = with python3Packages; toPythonApplication magika;
@@ -5894,9 +5892,12 @@ with pkgs;
     ocamlformat_0_26_1
     ;
 
+  inherit (ocaml-ng.ocamlPackages_5_2)
+    ocamlformat_0_26_2
+    ;
+
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_26_2
     ocamlformat_0_27_0
     ;
 
@@ -6281,10 +6282,13 @@ with pkgs;
     elixir_1_19
     elixir_1_18
     elixir_1_17
+    elixir-ls
+    ;
+
+  inherit (beam.packages.erlang_26.beamPackages)
     elixir_1_16
     elixir_1_15
     elixir_1_14
-    elixir-ls
     ;
 
   inherit (beam.packages.erlang)
@@ -8472,13 +8476,11 @@ with pkgs;
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
   keybinder = callPackage ../development/libraries/keybinder {
-    automake = automake111x;
     lua = lua5_1;
   };
 
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     gtk3 = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
-    automake = automake111x;
   };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {

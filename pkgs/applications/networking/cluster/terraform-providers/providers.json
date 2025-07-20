@@ -144,11 +144,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-NghMNvsCRtgZjOTnnSYGn53KhP8ZY0hizkgEmI/+P6A=",
+    "hash": "sha256-2QWaPwqjgtzOoqGB91k2mKnMqhZ559rp4KJWQdkOjHE=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.32.0",
+    "rev": "v4.37.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -162,11 +162,11 @@
     "vendorHash": null
   },
   "baiducloud": {
-    "hash": "sha256-rWLmDopC6m2tzh2NEYvclp0QVH0r/5toA+3jBUkcBaY=",
+    "hash": "sha256-9NarSg8uXhdx+kJK7M9ftDoWXr9St1CEqL0N9+OJAXE=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.21.16",
+    "rev": "v1.22.8",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -507,13 +507,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-VOmBHM5h/ZEkCPbsVRRM/Ygkfv7Dom41nlqJ/5+aZ4M=",
+    "hash": "sha256-1OzHzYnNlpHSVX3Q0JfjTTHJ1ux+YeRTe7ImtAsP8JU=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v18.0.0",
+    "rev": "v18.1.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-X0vbtUIKYzCeRD/BbMj3VPVAwx6d7gkbHV8j9JXlaFM="
+    "vendorHash": "sha256-G325isVj6JKs58i59V/A51vE8mzgxk/1EqSVvb6TiH4="
   },
   "google": {
     "hash": "sha256-i3gKrK5EcIQbVwJI7sfRam3H0mideGO1VgPuzL4l+Xw=",
@@ -651,13 +651,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-0LrWZQy/PNYcV4m/jeDmVh1LdjwCAqVNKPdDAopRPvg=",
+    "hash": "sha256-cZ7j/bhXxhTIU7J9XB4M4N3zteRKybmOIEeVw9XM62o=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.79.2",
+    "rev": "v1.80.4",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GAPhz2xKcLButNJCjHVVS+AbjHqDGY5EsoEtfUVb8zc="
+    "vendorHash": "sha256-lxd5op9QETBR7Q8ndgvYyYBy9URu16+DmtnFydpy3EA="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
