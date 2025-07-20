@@ -424,6 +424,60 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
+        options = {
+          WatchdogDevice = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            example = "/dev/watchdog";
+            description = ''
+              The path to a hardware watchdog device which will be managed by systemd.
+              If not specified, systemd will default to `/dev/watchdog`.
+            '';
+          };
+
+          RuntimeWatchdogSec = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "30s";
+            description = ''
+              The amount of time which can elapse before a watchdog hardware device
+              will automatically reboot the system.
+
+              Valid time units include "ms", "s", "min", "h", "d", and "w";
+              see {manpage}`systemd.time(7)`.
+            '';
+          };
+
+          RebootWatchdogSec = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10m";
+            description = ''
+              The amount of time which can elapse after a reboot has been triggered
+              before a watchdog hardware device will automatically reboot the system.
+              If left `null`, systemd will use its default of 10 minutes;
+              see {manpage}`systemd-system.conf(5)`.
+
+              Valid time units include "ms", "s", "min", "h", "d", and "w";
+              see also {manpage}`systemd.time(7)`.
+            '';
+          };
+
+          KExecWatchdogSec = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "10m";
+            description = ''
+              The amount of time which can elapse when `kexec` is being executed before
+              a watchdog hardware device will automatically reboot the system. This
+              option should only be enabled if `reloadTime` is also enabled;
+              see {manpage}`kexec(8)`.
+
+              Valid time units include "ms", "s", "min", "h", "d", and "w";
+              see also {manpage}`systemd.time(7)`.
+            '';
+          };
+        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
@@ -469,59 +523,6 @@ in
         {option}`systemd.additionalUpstreamSystemUnits`. The main purpose of this is to
         prevent a upstream systemd unit from being added to the initrd with any modifications made to it
         by other NixOS modules.
-      '';
-    };
-
-    watchdog.device = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      example = "/dev/watchdog";
-      description = ''
-        The path to a hardware watchdog device which will be managed by systemd.
-        If not specified, systemd will default to `/dev/watchdog`.
-      '';
-    };
-
-    watchdog.runtimeTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "30s";
-      description = ''
-        The amount of time which can elapse before a watchdog hardware device
-        will automatically reboot the system.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see {manpage}`systemd.time(7)`.
-      '';
-    };
-
-    watchdog.rebootTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "10m";
-      description = ''
-        The amount of time which can elapse after a reboot has been triggered
-        before a watchdog hardware device will automatically reboot the system.
-        If left `null`, systemd will use its default of 10 minutes;
-        see {manpage}`systemd-system.conf(5)`.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see also {manpage}`systemd.time(7)`.
-      '';
-    };
-
-    watchdog.kexecTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "10m";
-      description = ''
-        The amount of time which can elapse when `kexec` is being executed before
-        a watchdog hardware device will automatically reboot the system. This
-        option should only be enabled if `reloadTime` is also enabled;
-        see {manpage}`kexec(8)`.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see also {manpage}`systemd.time(7)`.
       '';
     };
   };
@@ -659,19 +660,6 @@ in
             DefaultIPAccounting=yes
           ''}
           DefaultLimitCORE=infinity
-          ${optionalString (cfg.watchdog.device != null) ''
-            WatchdogDevice=${cfg.watchdog.device}
-          ''}
-          ${optionalString (cfg.watchdog.runtimeTime != null) ''
-            RuntimeWatchdogSec=${cfg.watchdog.runtimeTime}
-          ''}
-          ${optionalString (cfg.watchdog.rebootTime != null) ''
-            RebootWatchdogSec=${cfg.watchdog.rebootTime}
-          ''}
-          ${optionalString (cfg.watchdog.kexecTime != null) ''
-            KExecWatchdogSec=${cfg.watchdog.kexecTime}
-          ''}
-
           ${attrsToSection cfg.settings.Manager}
         '';
 
@@ -871,5 +859,21 @@ in
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
     (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "device" ]
+      [ "systemd" "settings" "Manager" "WatchdogDevice" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "runtimeTime" ]
+      [ "systemd" "settings" "Manager" "RuntimeWatchdogSec" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "rebootTime" ]
+      [ "systemd" "settings" "Manager" "RebootWatchdogSec" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "kexecTime" ]
+      [ "systemd" "settings" "Manager" "KExecWatchdogSec" ]
+    )
   ];
 }
