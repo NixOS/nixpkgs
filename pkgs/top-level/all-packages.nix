@@ -8613,10 +8613,6 @@ with pkgs;
     genPosixLockObjOnly = true;
   };
 
-  libgpod = callPackage ../development/libraries/libgpod {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
