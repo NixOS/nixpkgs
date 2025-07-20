@@ -1,0 +1,31 @@
+diff --git a/bin/mangohud.in b/bin/mangohud.in
+index 4cffeed..c19b635 100755
+--- a/bin/mangohud.in
++++ b/bin/mangohud.in
+@@ -13,7 +13,9 @@ fi
+ DISABLE_LD_PRELOAD="cs2.sh
+ "
+ 
+-MANGOHUD_LIB_NAME="@ld_libdir_mangohud@libMangoHud_shim.so"
++LD_LIBRARY_PATH="@libraryPath@${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
++XDG_DATA_DIRS="@dataDir@${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
++MANGOHUD_LIB_NAME="libMangoHud_shim.so"
+ 
+ if [ "$1" = "--version" ]; then
+     echo @version@
+@@ -39,7 +41,7 @@ for exe in $DISABLE_LD_PRELOAD; do
+ done
+ 
+ if [ "$disable_preload" = true ]; then
+-    exec env MANGOHUD=1 "$@"
++    exec env MANGOHUD=1 LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" XDG_DATA_DIRS="${XDG_DATA_DIRS}" "$@"
+ else
+     # Make sure we don't append mangohud lib multiple times
+     # otherwise, this could cause issues with the steam runtime
+@@ -52,5 +54,5 @@ else
+             LD_PRELOAD="${LD_PRELOAD:+$LD_PRELOAD:}${MANGOHUD_LIB_NAME}"
+     esac
+ 
+-    exec env MANGOHUD=1 LD_PRELOAD="${LD_PRELOAD}" "$@"
++    exec env MANGOHUD=1 LD_PRELOAD="${LD_PRELOAD}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}" XDG_DATA_DIRS="${XDG_DATA_DIRS}" "$@"
+ fi

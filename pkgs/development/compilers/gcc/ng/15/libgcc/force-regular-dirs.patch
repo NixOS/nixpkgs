@@ -1,0 +1,49 @@
+From bb3277895d3bd77bcacb7c489ebb1390478bbc12 Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Thu, 17 Jul 2025 11:00:07 -0400
+Subject: [PATCH 2/2] Force regular dirs
+
+Override directories in libgcc so they are normal $out/lib and
+$dev/include. This is not suitable for upstreaming, but is done on top
+of a different patch which is, and which makes this smaller.
+
+---
+ libgcc/Makefile.in  | 6 +++---
+ libgcc/configure.ac | 3 ---
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/libgcc/Makefile.in b/libgcc/Makefile.in
+index 4661c36703d..986cd035148 100644
+--- a/libgcc/Makefile.in
++++ b/libgcc/Makefile.in
+@@ -202,10 +202,10 @@ STRIP = @STRIP@
+ STRIP_FOR_TARGET = $(STRIP)
+ 
+ # Used to install the shared libgcc.
+-slibdir = @slibdir@
++slibdir = $(libdir)
+ # Maybe used for DLLs on Windows targets.
+-toolexecdir = @toolexecdir@
+-toolexeclibdir = @toolexeclibdir@
++toolexecdir = $(bindir)
++toolexeclibdir = $(libdir)
+ 
+ export AR_FOR_TARGET
+ export AR_CREATE_FOR_TARGET
+diff --git a/libgcc/configure.ac b/libgcc/configure.ac
+index 5fdac5d95f2..89044cb65c9 100644
+--- a/libgcc/configure.ac
++++ b/libgcc/configure.ac
+@@ -479,9 +479,6 @@ if test x"$enable_as_accelerator_for" != x; then
+   accel_dir_suffix=/accel/${target_noncanonical}
+   real_host_noncanonical=${enable_as_accelerator_for}
+ fi
+-# Directory in which the compiler finds libraries etc.
+-libdir=${orig_libdir}/gcc/${real_host_noncanonical}/'$(version)'${accel_dir_suffix}
+-includedir=${libdir}/include
+ 
+ if test x"$enable_offload_targets" != x; then
+   extra_parts="${extra_parts} crtoffloadbegin.o crtoffloadend.o"
+-- 
+2.47.2
+

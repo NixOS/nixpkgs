@@ -1,0 +1,255 @@
+name: Eval
+
+on:
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        type: string
+      systems:
+        required: true
+        type: string
+    secrets:
+      OWNER_APP_PRIVATE_KEY:
+        required: false
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  eval:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        system: ${{ fromJSON(inputs.systems) }}
+    name: ${{ matrix.system }}
+    outputs:
+      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
+    steps:
+      - name: Enable swap
+        run: |
+          sudo fallocate -l 10G /swap
+          sudo chmod 600 /swap
+          sudo mkswap /swap
+          sudo swapon /swap
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.mergedSha }}
+          path: untrusted
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build untrusted/ci -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg chunkSize 10000 \
+            --out-link merged
+          # If it uses too much memory, slightly decrease chunkSize
+
+      - name: Upload the output paths and eval stats
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: merged-${{ matrix.system }}
+          path: merged/*
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Get target run id
+        if: inputs.targetSha
+        id: targetRunId
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+          TARGET_SHA: ${{ inputs.targetSha }}
+        with:
+          script: |
+            const system = process.env.MATRIX_SYSTEM
+            const targetSha = process.env.TARGET_SHA
+
+            let run_id
+            try {
+              run_id = (await github.rest.actions.listWorkflowRuns({
+                ...context.repo,
+                workflow_id: 'push.yml',
+                event: 'push',
+                head_sha: targetSha
+              })).data.workflow_runs[0].id
+            } catch {
+              throw new Error(`Could not find a push.yml workflow run for ${targetSha}.`)
+            }
+
+            // Waiting 120 * 5 sec = 10 min. max.
+            // Eval takes max 5-6 minutes, normally.
+            for (let i = 0; i < 120; i++) {
+              const result = await github.rest.actions.listWorkflowRunArtifacts({
+                ...context.repo,
+                run_id,
+                name: `merged-${system}`
+              })
+              if (result.data.total_count > 0) {
+                core.setOutput('targetRunId', run_id)
+                return
+              }
+              await new Promise(resolve => setTimeout(resolve, 5000))
+            }
+            // No artifact found at this stage. This usually means that Eval failed on the target branch.
+            // This should only happen when Eval is broken on the target branch and this PR fixes it.
+            // Continue without targetRunId to skip the remaining steps, but pass the job.
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - uses: actions/download-artifact@v4
+        if: steps.targetRunId.outputs.targetRunId
+        with:
+          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
+          name: merged-${{ matrix.system }}
+          path: target
+          github-token: ${{ github.token }}
+          merge-multiple: true
+
+      - name: Compare outpaths against the target branch
+        if: steps.targetRunId.outputs.targetRunId
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build untrusted/ci -A eval.diff \
+            --arg beforeDir ./target \
+            --arg afterDir "$(readlink ./merged)" \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --out-link diff
+
+      - name: Upload outpaths diff and stats
+        if: steps.targetRunId.outputs.targetRunId
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: diff-${{ matrix.system }}
+          path: diff/*
+
+  compare:
+    runs-on: ubuntu-24.04-arm
+    needs: [eval]
+    if: needs.eval.outputs.targetRunId
+    permissions:
+      statuses: write
+    steps:
+      - name: Download output paths and eval stats for all systems
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: diff-*
+          path: diff
+          merge-multiple: true
+
+      - name: Check out the PR at the target commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.targetSha }}
+          path: trusted
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - name: Combine all output paths and eval stats
+        run: |
+          nix-build trusted/ci -A eval.combine \
+            --arg diffDir ./diff \
+            --out-link combined
+
+      - name: Compare against the target branch
+        env:
+          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
+        run: |
+          git -C trusted fetch --depth 1 origin ${{ inputs.mergedSha }}
+          git -C trusted diff --name-only ${{ inputs.mergedSha }} \
+            | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
+
+          # Use the target branch to get accurate maintainer info
+          nix-build trusted/ci -A eval.compare \
+            --arg combinedDir "$(realpath ./combined)" \
+            --arg touchedFilesJson ./touched-files.json \
+            --argstr githubAuthorId "$AUTHOR_ID" \
+            --out-link comparison
+
+          cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the comparison results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: comparison
+          path: comparison/*
+
+      - name: Add eval summary to commit statuses
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
+            const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const description =
+              'Package: ' + [
+                `added ${changed.attrdiff.added.length}`,
+                `removed ${changed.attrdiff.removed.length}`,
+                `changed ${changed.attrdiff.changed.length}`
+              ].join(', ') +
+              ' — Rebuild: ' + [
+                `linux ${changed.rebuildCountByKernel.linux}`,
+                `darwin ${changed.rebuildCountByKernel.darwin}`
+              ].join(', ')
+
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
+
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.pull_request.head.sha,
+              context: 'Eval Summary',
+              state: 'success',
+              description,
+              target_url
+            })
+
+  misc:
+    if: ${{ github.event_name != 'push' }}
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - name: Ensure flake outputs on all systems still evaluate
+        run: nix flake check --all-systems --no-build ./untrusted
+
+      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
+        run: |
+          time nix-env -I ./untrusted -f ./untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null

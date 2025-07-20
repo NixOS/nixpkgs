@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/serenadeai/tree-sitter-scss",
+  "rev": "c478c6868648eff49eb04a4df90d703dc45b312a",
+  "date": "2022-02-03T21:48:21Z",
+  "path": "/nix/store/s49l3jbhjni3l1d0m3xrpzml39aq9yr3-tree-sitter-scss",
+  "sha256": "15r3jiv36hzx2pmjmp63am3pbc01s52z36xfraa1aw4wlx7lqnq4",
+  "hash": "sha256-BFtMT6eccBWUyq6b8UXRAbB1R1XD3CrrFf1DM3aUI5c=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

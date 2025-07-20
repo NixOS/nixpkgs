@@ -1,0 +1,66 @@
+From 640d11fae5bcf1fa8c1a54facbe168a256cacc1b Mon Sep 17 00:00:00 2001
+From: Morgan Helton <mhelton@gmail.com>
+Date: Sun, 26 May 2024 12:17:01 -0500
+Subject: [PATCH] envoy: allow specification of external binary
+
+---
+ pkg/envoy/envoy.go | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/pkg/envoy/envoy.go b/pkg/envoy/envoy.go
+index 85c725629..4a726a44b 100644
+--- a/pkg/envoy/envoy.go
++++ b/pkg/envoy/envoy.go
+@@ -8,9 +8,9 @@ import (
+ 	"errors"
+ 	"fmt"
+ 	"io"
++	"io/fs"
+ 	"os"
+ 	"os/exec"
+-	"path"
+ 	"path/filepath"
+ 	"regexp"
+ 	"runtime"
+@@ -36,8 +36,17 @@ import (
+ 
+ const (
+ 	configFileName = "envoy-config.yaml"
++	workingDirectoryName = ".pomerium-envoy"
++	embeddedEnvoyPermissions     fs.FileMode = 0o700
+ )
+ 
++var OverrideEnvoyPath = ""
++
++type serverOptions struct {
++	services string
++	logLevel config.LogLevel
++}
++
+ // A Server is a pomerium proxy implemented via envoy.
+ type Server struct {
+ 	ServerOptions
+@@ -95,14 +104,17 @@ func NewServer(ctx context.Context, src config.Source, builder *envoyconfig.Buil
+ 		log.Ctx(ctx).Debug().Err(err).Msg("couldn't preserve RLIMIT_NOFILE before starting Envoy")
+ 	}
+ 
+-	envoyPath, err := Extract()
++	envoyPath := OverrideEnvoyPath
++	wd := filepath.Join(os.TempDir(), workingDirectoryName)
++
++	err := os.MkdirAll(wd, embeddedEnvoyPermissions)
+ 	if err != nil {
+-		return nil, fmt.Errorf("extracting envoy: %w", err)
++		return nil, fmt.Errorf("error creating temporary working directory for envoy: %w", err)
+ 	}
+ 
+ 	srv := &Server{
+ 		ServerOptions: options,
+-		wd:            path.Dir(envoyPath),
++		wd:            wd,
+ 		builder:       builder,
+ 		grpcPort:      src.GetConfig().GRPCPort,
+ 		httpPort:      src.GetConfig().HTTPPort,
+-- 
+2.49.0
+

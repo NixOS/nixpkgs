@@ -1,0 +1,34 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    fusuma (3.7.0)
+    fusuma-plugin-appmatcher (0.7.1)
+      fusuma (>= 3.0)
+      rexml
+      ruby-dbus
+    fusuma-plugin-keypress (0.11.0)
+      fusuma (>= 3.1)
+    fusuma-plugin-sendkey (0.10.1)
+      fusuma (>= 3.1)
+      revdev
+    fusuma-plugin-wmctrl (1.3.1)
+      fusuma (>= 3.1)
+    revdev (0.2.1)
+    rexml (3.2.8)
+      strscan (>= 3.0.9)
+    ruby-dbus (0.23.1)
+      rexml
+    strscan (3.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fusuma (>= 3.0.0)
+  fusuma-plugin-appmatcher
+  fusuma-plugin-keypress
+  fusuma-plugin-sendkey
+  fusuma-plugin-wmctrl
+
+BUNDLED WITH
+   2.5.9
