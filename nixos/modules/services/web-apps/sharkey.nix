@@ -54,7 +54,7 @@ in
         description = ''
           Whether to automatically set up a local Meilisearch instance and configure Sharkey to use it.
 
-          You need to ensure `services.meilisearch.masterKeyEnvironmentFile` is correctly configured for a working
+          You need to ensure `services.meilisearch.masterKeyFile` is correctly configured for a working
           Meilisearch setup. You also need to configure Sharkey to use an API key obtained from Meilisearch with the
           `MK_CONFIG_MEILISEARCH_APIKEY` environment variable, and set `services.sharkey.settings.meilisearch.index` to
           the created index. See https://docs.joinsharkey.org/docs/customisation/search/meilisearch/ for how to create
@@ -240,7 +240,7 @@ in
       (mkIf cfg.setupMeilisearch {
         services.meilisearch = {
           enable = mkDefault true;
-          environment = mkDefault "production";
+          settings.env = mkDefault "production";
         };
 
         services.sharkey.settings = {

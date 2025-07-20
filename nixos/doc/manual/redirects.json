@@ -888,9 +888,7 @@
     "index.html#module-services-meilisearch-quickstart-search"
   ],
   "module-services-meilisearch-defaults": [
-    "index.html#module-services-meilisearch-defaults"
-  ],
-  "module-services-meilisearch-missing": [
+    "index.html#module-services-meilisearch-defaults",
     "index.html#module-services-meilisearch-missing"
   ],
   "module-services-networking-yggdrasil": [
