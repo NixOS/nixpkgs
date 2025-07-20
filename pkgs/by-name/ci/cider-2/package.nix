@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "cider-2";
     maintainers = with lib.maintainers; [
+      amadejkastelic
       itsvic-dev
       l0r3v
     ];
