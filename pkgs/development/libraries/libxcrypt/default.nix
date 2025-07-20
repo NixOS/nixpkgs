@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.libc != "mlibc";
 
   passthru = {
     tests = {

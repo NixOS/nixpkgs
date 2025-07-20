@@ -93,9 +93,10 @@ lib.warnIf (withDocs != null)
         "bash_cv_getcwd_malloc=yes"
         # This check cannot be performed when cross compiling. The "yes"
         # default is fine for static linking on Linux (weak symbols?) but
-        # not with BSDs, when it does clash with the regular `getenv`.
+        # not with BSDs or mlibc targets, when it does clash with the regular
+        # `getenv`.
         "bash_cv_getenv_redef=${
-          if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"
+          if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD || isMlibc)) then "yes" else "no"
         }"
       ]
       ++ lib.optionals stdenv.hostPlatform.isCygwin [

@@ -732,6 +732,8 @@ rec {
     };
     musl = { };
 
+    mlibc = { };
+
     uclibceabi = {
       float = "soft";
     };

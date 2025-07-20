@@ -318,7 +318,7 @@ let
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
-          if stdenv.hostPlatform.isLinux then
+          if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
             makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else
             stdenv.hostPlatform.parsed
