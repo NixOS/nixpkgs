@@ -14,7 +14,6 @@
   libsecret,
   libportal,
   nix-update-script,
-  glib-networking,
 }:
 
 python313Packages.buildPythonApplication rec {
@@ -43,7 +42,6 @@ python313Packages.buildPythonApplication rec {
       glib-networking
       libadwaita
       libportal
-      glib-networking
     ]
     ++ (with gst_all_1; [
       gstreamer
