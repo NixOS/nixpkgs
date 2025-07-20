@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
 
   # The test suite seems to have some glibc malloc hooks that don't exist/link on macOS
   # With pkgsLLVM: tests/test-winmsgcond.c:53: assertion 'wmc_end(&wmc, pos + 1, &chg) == pos' failed
-  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.useLLVM;
+  doCheck =
+    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.useLLVM && !stdenv.hostPlatform.isLoongArch64;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
