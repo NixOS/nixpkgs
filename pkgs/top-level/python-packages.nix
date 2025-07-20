@@ -15372,6 +15372,8 @@ self: super: with self; {
 
   readthedocs-sphinx-ext = callPackage ../development/python-modules/readthedocs-sphinx-ext { };
 
+  rebiber = callPackage ../development/python-modules/rebiber { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -18304,6 +18306,8 @@ self: super: with self; {
   );
 
   tskit = callPackage ../development/python-modules/tskit { };
+
+  tsv = callPackage ../development/python-modules/tsv { };
 
   ttach = callPackage ../development/python-modules/ttach { };
 
