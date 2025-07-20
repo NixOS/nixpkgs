@@ -220,9 +220,9 @@ module.exports = async function ({ github, context, core, dry }) {
         }
 
         core.summary.addRaw('<details><summary>Show diff</summary>')
-        core.summary.addRaw('\n\n```diff', true)
+        core.summary.addRaw('\n\n``````````diff', true)
         core.summary.addRaw(truncated.join('\n'), true)
-        core.summary.addRaw('```', true)
+        core.summary.addRaw('``````````', true)
         core.summary.addRaw('</details>')
       }
 
