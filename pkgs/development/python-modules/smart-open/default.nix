@@ -73,6 +73,5 @@ buildPythonPackage rec {
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
   };
 }

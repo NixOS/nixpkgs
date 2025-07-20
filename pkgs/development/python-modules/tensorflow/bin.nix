@@ -229,7 +229,6 @@ buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      jyp
       abbradar
     ];
     badPlatforms = [ "x86_64-darwin" ];
