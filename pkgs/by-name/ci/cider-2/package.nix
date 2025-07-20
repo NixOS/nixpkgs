@@ -1,41 +1,72 @@
 {
-  appimageTools,
   lib,
-  requireFile,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
   makeWrapper,
+
+  # Required dependencies for autoPatchelfHook
+  alsa-lib,
+  gtk3,
+  libgbm,
+  nspr,
+  nss,
 }:
-
-appimageTools.wrapType2 rec {
+stdenv.mkDerivation rec {
   pname = "cider-2";
-  version = "3.0.2";
+  version = "3.0.0";
 
-  src = requireFile {
-    name = "cider-linux-x64.AppImage";
-    url = "https://cidercollective.itch.io/cider";
-    sha256 = "1rfraf1r1zmp163kn8qg833qxrxmx1m1hycw8q9hc94d0hr62l2x";
+  src = fetchurl {
+    url = "https://repo.cider.sh/apt/pool/main/cider-v${version}-linux-x64.deb";
+    hash = "sha256-XKyzt8QkPNQlgFxR12KA5t+PCJki7UuFpn4SGmoGkpg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
-  extraInstallCommands =
-    let
-      contents = appimageTools.extract {
-        inherit version src;
-        # HACK: this looks for a ${pname}.desktop, where `cider-2.desktop` doesn't exist
-        pname = "Cider";
-      };
-    in
-    ''
-      wrapProgram $out/bin/${pname} \
-         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-         --add-flags "--no-sandbox --disable-gpu-sandbox" # Cider 2 does not start up properly without these from my preliminary testing
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libgbm
+    nspr
+    nss
+  ];
 
-      install -m 444 -D ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace-warn 'Exec=Cider' 'Exec=${pname}'
-      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
-                     $out/share/icons/hicolor/256x256/apps/cider.png
-    '';
+  unpackPhase = ''
+    runHook preUnpack
+    dpkg-deb --fsys-tarfile $src | tar --extract
+    runHook postUnpack
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,share,lib}
+    cp -r usr/share/* $out/share/
+    cp -r usr/lib/* $out/lib/
+
+    chmod +x $out/lib/cider/Cider
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    makeWrapper $out/lib/cider/Cider $out/bin/${pname} \
+      --add-flags "\$\{NIXOS_OZONE_WL:+\$\{WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true\}\}" \
+      --add-flags "--no-sandbox --disable-gpu-sandbox"
+
+    mv $out/share/applications/cider.desktop $out/share/applications/${pname}.desktop
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace-warn 'Exec=cider' 'Exec=${pname}' \
+      --replace-warn 'Exec=/usr/lib/cider/Cider' 'Exec=${pname}'
+
+    install -Dm444 $out/share/pixmaps/cider.png \
+      $out/share/icons/hicolor/256x256/apps/cider.png
+  '';
 
   meta = {
     description = "Powerful music player that allows you listen to your favorite tracks with style";
