@@ -424,60 +424,6 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
-        options = {
-          WatchdogDevice = mkOption {
-            type = types.nullOr types.path;
-            default = null;
-            example = "/dev/watchdog";
-            description = ''
-              The path to a hardware watchdog device which will be managed by systemd.
-              If not specified, systemd will default to `/dev/watchdog`.
-            '';
-          };
-
-          RuntimeWatchdogSec = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "30s";
-            description = ''
-              The amount of time which can elapse before a watchdog hardware device
-              will automatically reboot the system.
-
-              Valid time units include "ms", "s", "min", "h", "d", and "w";
-              see {manpage}`systemd.time(7)`.
-            '';
-          };
-
-          RebootWatchdogSec = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "10m";
-            description = ''
-              The amount of time which can elapse after a reboot has been triggered
-              before a watchdog hardware device will automatically reboot the system.
-              If left `null`, systemd will use its default of 10 minutes;
-              see {manpage}`systemd-system.conf(5)`.
-
-              Valid time units include "ms", "s", "min", "h", "d", and "w";
-              see also {manpage}`systemd.time(7)`.
-            '';
-          };
-
-          KExecWatchdogSec = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "10m";
-            description = ''
-              The amount of time which can elapse when `kexec` is being executed before
-              a watchdog hardware device will automatically reboot the system. This
-              option should only be enabled if `reloadTime` is also enabled;
-              see {manpage}`kexec(8)`.
-
-              Valid time units include "ms", "s", "min", "h", "d", and "w";
-              see also {manpage}`systemd.time(7)`.
-            '';
-          };
-        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
