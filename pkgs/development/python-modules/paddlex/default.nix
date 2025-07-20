@@ -19,6 +19,7 @@
   ujson,
   distutils,
   huggingface-hub,
+  nix-update-script,
 }:
 
 let
@@ -50,14 +51,14 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.1.1";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-vmb1A7AifQmWv31b847hP1lHeBe+ZDEGR3raIGykRoo=";
+    hash = "sha256-sNnaTB7wJFXVXnc7I1XufAWdTXHr1is3JdXdh6Ssc+s=";
   };
 
   build-system = [ setuptools ];
@@ -85,6 +86,8 @@ buildPythonPackage rec {
     gputil
     huggingface-hub
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";

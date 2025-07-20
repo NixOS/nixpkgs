@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.35.0";
-          hash = "sha256-wpWPT8BW2GPo2SCzM+l1HTpiXMTnbDOc9Oj9wDT/o/8=";
+          version = "4.37.2";
+          hash = "sha256-XUD5lXybUdUavbiqCqv561NAPAbZ0Q9oLsQkrSRUmsU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -1591,8 +1591,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "17.2.1";
-          hash = "sha256-1p4DDZEFFOIFHV6bkduXmrUGhjMDwrqf5/U2tO00iD0=";
+          version = "17.3.1";
+          hash = "sha256-qZBctE3R39WeU3Fc3pajrUSS6ncni7O+/oAOyZK2EnY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -2455,8 +2455,8 @@ let
         mktplcRef = {
           name = "vscode-vibrancy-continued";
           publisher = "illixion";
-          version = "1.1.57";
-          hash = "sha256-UJn+RFBlQXmPqKkFIBiD4AblnX4s0O2IK747fG+UC/0=";
+          version = "1.1.58";
+          hash = "sha256-oBm2j7fZBYALkstk1WMgC+o1sq2HY7tX+zLfo5PBMiM=";
         };
         meta = {
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=illixion.vscode-vibrancy-continued";
@@ -2979,6 +2979,8 @@ let
       };
 
       llvm-org.lldb-vscode = llvmPackages.lldb;
+
+      llvm-vs-code-extensions.lldb-dap = callPackage ./llvm-vs-code-extensions.lldb-dap { };
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
         mktplcRef = {

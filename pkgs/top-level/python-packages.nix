@@ -2763,6 +2763,8 @@ self: super: with self; {
 
   color-operations = callPackage ../development/python-modules/color-operations { };
 
+  color-parser-py = callPackage ../development/python-modules/color-parser-py { };
+
   colorama = callPackage ../development/python-modules/colorama { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
@@ -14267,6 +14269,8 @@ self: super: with self; {
   pytest-remotedata = callPackage ../development/python-modules/pytest-remotedata { };
 
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
+
+  pytest-reraise = callPackage ../development/python-modules/pytest-reraise { };
 
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
