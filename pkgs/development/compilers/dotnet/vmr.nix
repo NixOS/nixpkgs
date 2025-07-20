@@ -350,12 +350,16 @@ stdenv.mkDerivation rec {
       ''
     );
 
-  prepFlags = [
-    "--no-artifacts"
-    "--no-prebuilts"
-    "--with-packages"
-    bootstrapSdk.artifacts
-  ];
+  prepFlags =
+    [
+      "--no-artifacts"
+      "--no-prebuilts"
+      "--with-packages"
+      bootstrapSdk.artifacts
+
+    ]
+    # https://github.com/dotnet/source-build/issues/5286#issuecomment-3097872768
+    ++ lib.optional (lib.versionAtLeast version "10") "-p:SkipArcadeSdkImport=true";
 
   configurePhase =
     let
@@ -370,6 +374,12 @@ stdenv.mkDerivation rec {
       chmod -R +w .dotnet
 
       export HOME=$(mktemp -d)
+    ''
+    + lib.optionalString (lib.versionAtLeast version "10") ''
+      dotnet nuget add source "${bootstrapSdk.artifacts}"
+      dotnet nuget add source "${bootstrapSdk.artifacts}/SourceBuildReferencePackages"
+    ''
+    + ''
       ${prepScript} $prepFlags
 
       runHook postConfigure
@@ -432,6 +442,12 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
+      # 10.0.0-preview.6 ends up creating duplicate files in .nupkgs, for example in
+      # Microsoft.Internal.Runtime.AspNetCore.Transport.10.0.0-preview.6.25358.103.nupkg
+      #
+      # lib/net10.0//System.Diagnostics.EventLog.pdb
+      # lib/net10.0/System.Diagnostics.EventLog.pdb
+      unzipFlags = "-q" + lib.optionalString (lib.versionAtLeast version "10") "o" + "d";
     in
     ''
       runHook preInstall
@@ -451,7 +467,7 @@ stdenv.mkDerivation rec {
       local -r unpacked="$PWD/.unpacked"
       for nupkg in $out/Private.SourceBuilt.Artifacts.*.${targetRid}/{,SourceBuildReferencePackages/}*.nupkg; do
           rm -rf "$unpacked"
-          unzip -qd "$unpacked" "$nupkg"
+          unzip ${unzipFlags} "$unpacked" "$nupkg"
           chmod -R +rw "$unpacked"
           rm "$nupkg"
           mv "$unpacked" "$nupkg"
