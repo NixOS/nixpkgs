@@ -406,14 +406,6 @@ in
       '';
     };
 
-    enableCgroupAccounting = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable cgroup accounting; see {manpage}`cgroups(7)`.
-      '';
-    };
-
     settings.Manager = mkOption {
       default = { };
       defaultText = lib.literalExpression ''
@@ -424,24 +416,6 @@ in
       '';
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
-        options = {
-          DefaultIOAccounting = mkOption {
-            type = types.bool;
-            default = cfg.enableCgroupAccounting;
-            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
-            description = "Turn on Block I/O accounting.";
-          };
-
-          DefaultIPAccounting = mkOption {
-            type = types.bool;
-            default = cfg.enableCgroupAccounting;
-            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
-            description = ''
-              If true, turns on IPv4 and IPv6 network traffic accounting for packets sent or received by the unit. When
-              this option is turned on, all IPv4 and IPv6 sockets created by any process are accounted for.
-            '';
-          };
-        };
       };
       example = {
         WatchdogDevice = "/dev/watchdog";
@@ -703,9 +677,13 @@ in
         config.boot.extraSystemdUnitPaths != [ ]
       ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
     };
-    systemd.settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
-      lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-    );
+    systemd.settings.Manager = {
+      ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      DefaultIOAccounting = lib.mkDefault true;
+      DefaultIPAccounting = lib.mkDefault true;
+    };
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "DEVTMPFS"
@@ -832,5 +810,9 @@ in
       [ "systemd" "watchdog" "kexecTime" ]
       [ "systemd" "settings" "Manager" "KExecWatchdogSec" ]
     )
+    (mkRemovedOptionModule [
+      "systemd"
+      "enableCgroupAccounting"
+    ] "To disable cgroup accounting, disable systemd.settings.Manager.*Accounting directly.")
   ];
 }
