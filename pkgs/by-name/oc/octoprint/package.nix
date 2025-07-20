@@ -15,30 +15,26 @@ let
 
   py = python3.override {
     self = py;
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
-      (
-
-        self: super: {
-          # fix tornado.httputil.HTTPInputError: Multiple host headers not allowed
-          tornado = super.tornado.overridePythonAttrs (oldAttrs: {
-            version = "6.4.2";
-            format = "setuptools";
-            pyproject = null;
-            src = fetchFromGitHub {
-              owner = "tornadoweb";
-              repo = "tornado";
-              tag = "v6.4.2";
-              hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
-            };
-            doCheck = false;
-          });
-        })
-      # Built-in dependency
+    packageOverrides = lib.composeManyExtensions ([
       (self: super: {
+        # fix tornado.httputil.HTTPInputError: Multiple host headers not allowed
+        tornado = super.tornado.overridePythonAttrs (oldAttrs: {
+          version = "6.4.2";
+          src = fetchFromGitHub {
+            owner = "tornadoweb";
+            repo = "tornado";
+            tag = "v6.4.2";
+            hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
+          };
+
+          doCheck = false;
+        });
+
+        # Built-in dependency
         octoprint-filecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FileCheck";
           version = "2024.11.12";
-          format = "setuptools";
+          pyproject = true;
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -46,16 +42,17 @@ let
             rev = version;
             sha256 = "sha256-Y7yvImnYahmrf5GC4c8Ki8IsOZ8r9I4uk8mYBhEQZ28=";
           };
+
+          build-system = with self; [ setuptools ];
+
           doCheck = false;
         };
-      })
 
-      # Built-in dependency
-      (self: super: {
+        # Built-in dependency
         octoprint-firmwarecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FirmwareCheck";
           version = "2025.5.14";
-          format = "setuptools";
+          pyproject = true;
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -63,15 +60,16 @@ let
             rev = version;
             hash = "sha256-o+1apnQTkW/KFV5yoYw7ziAO2bpbKONgR3+9EAoKal0=";
           };
+
+          build-system = with self; [ setuptools ];
+
           doCheck = false;
         };
-      })
 
-      (self: super: {
         octoprint-pisupport = self.buildPythonPackage rec {
           pname = "OctoPrint-PiSupport";
           version = "2023.10.10";
-          format = "setuptools";
+          pyproject = true;
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -80,20 +78,20 @@ let
             hash = "sha256-VSzDoFq4Yn6KOn+RNi1uVJHzH44973kd/VoMjqzyBRA=";
           };
 
+          build-system = with self; [ setuptools ];
+
           # requires octoprint itself during tests
           doCheck = false;
           postPatch = ''
             substituteInPlace octoprint_pi_support/__init__.py \
-              --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
+              --replace-fail /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
           '';
         };
-      })
 
-      (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
           version = "1.11.2";
-          format = "setuptools";
+          pyproject = true;
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -102,7 +100,9 @@ let
             hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
           };
 
-          propagatedBuildInputs =
+          build-system = with self; [ setuptools ];
+
+          dependencies =
             with self;
             [
               argon2-cffi
@@ -175,33 +175,23 @@ let
             })
           ];
 
-          postPatch =
-            let
-              ignoreVersionConstraints = [
-                "cachelib"
-                "colorlog"
-                "emoji"
-                "immutabledict"
-                "PyYAML"
-                "sarge"
-                "sentry-sdk"
-                "watchdog"
-                "wrapt"
-                "zeroconf"
-                "Flask-Login"
-                "werkzeug"
-                "flask"
-                "Flask-Limiter"
-                "blinker"
-              ];
-            in
-            ''
-              sed -r -i \
-                ${lib.concatStringsSep "\n" (
-                  map (e: ''-e 's@${e}[<>=]+.*@${e}",@g' \'') ignoreVersionConstraints
-                )}
-                setup.py
-            '';
+          pythonRemoveDeps = [
+            "future" # does not work with python 3.13+
+          ];
+
+          pythonRelaxDeps = [
+            "babel"
+            "blinker"
+            "flask-login"
+            "flask-limiter"
+            "flask"
+            "limits"
+            "markdown"
+            "psutil"
+            "watchdog"
+            "werkzeug"
+            "zeroconf"
+          ];
 
           preCheck = ''
             export HOME=$(mktemp -d)
@@ -219,7 +209,7 @@ let
             inherit (self) python;
             updateScript = nix-update-script { };
             tests = {
-              plugins = (callPackage ./plugins.nix { }) super self;
+              plugins = (callPackage ./plugins.nix { }) self super;
               inherit (nixosTests) octoprint;
             };
           };
