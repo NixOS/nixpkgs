@@ -58,11 +58,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_check_ast_errors" ];
 
-  meta = with lib; {
+  meta = {
     description = "Least-Squares Minimization with Bounds and Constraints";
     homepage = "https://lmfit.github.io/lmfit-py/";
     changelog = "https://github.com/lmfit/lmfit-py/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nomeata ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nomeata ];
   };
 }
