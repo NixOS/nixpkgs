@@ -593,10 +593,7 @@ with lib.maintainers;
   };
 
   infisical = {
-    members = [
-      akhilmhdh
-      mahyarmirrashed
-    ];
+    members = [ akhilmhdh ];
     scope = "Maintain Infisical";
     shortName = "Infisical";
   };
