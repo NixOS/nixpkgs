@@ -4983,6 +4983,8 @@ let
         };
       };
 
+      ufo5260987423.magic-scheme = callPackage ./ufo5260987423.magic-scheme { };
+
       uiua-lang.uiua-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "uiua-vscode";
