@@ -5,7 +5,51 @@
   ...
 }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib)
+    concatMapStringsSep
+    isDerivation
+    isInt
+    isFloat
+    isPath
+    isString
+    mkOption
+    replaceStrings
+    types
+    ;
+  inherit (builtins) toJSON;
+
+  # Local copy of systemd exec argument escaping function.
+  # TODO: This could perhaps be deduplicated, but it is unclear where it should go.
+  #       Preferably, we don't create a hard dependency on NixOS here, so that this
+  #       module can be reused in a non-NixOS context, such as mutaable services
+  #       in /run/systemd/system.
+
+  # Quotes an argument for use in Exec* service lines.
+  # systemd accepts "-quoted strings with escape sequences, toJSON produces
+  # a subset of these.
+  # Additionally we escape % to disallow expansion of % specifiers. Any lone ;
+  # in the input will be turned it ";" and thus lose its special meaning.
+  # Every $ is escaped to $$, this makes it unnecessary to disable environment
+  # substitution for the directive.
+  escapeSystemdExecArg =
+    arg:
+    let
+      s =
+        if isPath arg then
+          "${arg}"
+        else if isString arg then
+          arg
+        else if isInt arg || isFloat arg || isDerivation arg then
+          toString arg
+        else
+          throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
+    in
+    replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
+
+  # Quotes a list of arguments into a single string for use in a Exec*
+  # line.
+  escapeSystemdExecArgs = concatMapStringsSep " " escapeSystemdExecArg;
+
 in
 {
   imports = [
@@ -69,7 +113,7 @@ in
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [
-          (systemdPackage.functions.escapeSystemdExecArgs config.process.argv)
+          (escapeSystemdExecArgs config.process.argv)
         ];
       };
     };
