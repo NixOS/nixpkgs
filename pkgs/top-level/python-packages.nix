@@ -13137,6 +13137,8 @@ self: super: with self; {
 
   pylsqpack = callPackage ../development/python-modules/pylsqpack { };
 
+  pylucidio = callPackage ../development/python-modules/pylucidio { };
+
   pylutron = callPackage ../development/python-modules/pylutron { };
 
   pylutron-caseta = callPackage ../development/python-modules/pylutron-caseta { };
