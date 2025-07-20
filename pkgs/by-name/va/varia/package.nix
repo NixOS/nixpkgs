@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "varia";
-  version = "2025.5.14";
+  version = "2025.7.19";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
     tag = "v${version}";
-    hash = "sha256-x2612aq/8YwDT3UYKW2P3PCVjhKhZJxH3JbY3A4IGq8=";
+    hash = "sha256-/u6Eb9Se/Lt8Hisv24zfOgNE9ZxC3AJXbZHmukVLSRA=";
   };
 
   postPatch = ''
