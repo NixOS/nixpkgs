@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmm";
-  version = "8.3.0";
+  version = "8.3.1";
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "openmm";
     rev = finalAttrs.version;
-    hash = "sha256-wXk5s6OascFWjHs4WpxGU9TcX0gSiOZ3BRusIH1NjpI=";
+    hash = "sha256-3e0+8f2V+UCrPJA1wQUZKPvjpmWU9FfOAt9Ako0Lnl0=";
   };
 
   # "This test is stochastic and may occasionally fail". It does.
