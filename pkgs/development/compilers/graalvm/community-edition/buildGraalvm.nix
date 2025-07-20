@@ -175,10 +175,11 @@ let
           rm -f $out/LICENSE_NATIVEIMAGE.txt
 
           # copy-paste openjdk's preFixup
-          # Set JAVA_HOME automatically.
+          # Set JAVA_HOME and GRAALVM_HOME automatically.
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook << EOF
           if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+          if [ -z "\''${GRAALVM_HOME-}" ]; then export GRAALVM_HOME=$out; fi
           EOF
 
           wrapProgram $out/bin/native-image \
