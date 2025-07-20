@@ -5,6 +5,7 @@ let
     escape
     flatten
     id
+    isBool
     isAttrs
     isFloat
     isInt
@@ -1008,7 +1009,7 @@ optionalAttrs allowAliases aliases
                 let
                   inherit (lib.head defs) file value;
                 in
-                mergeOne loc file value;
+                mergeOne file loc value;
             };
 
           mergeFlat =
@@ -1025,7 +1026,7 @@ optionalAttrs allowAliases aliases
               inherit (listOf elemType) description descriptionClass;
               check = isList;
               merge = mergeUniq (
-                loc: file: lib.imap1 (i: mergeFlat elemType (loc ++ [ "[entry ${toString i}]" ]) file)
+                file: loc: lib.imap1 (i: mergeFlat elemType (loc ++ [ "[entry ${toString i}]" ]) file)
               );
             };
 
@@ -1035,7 +1036,7 @@ optionalAttrs allowAliases aliases
               name = "uniqFlatAttrsOf";
               inherit (attrsOf elemType) description descriptionClass;
               check = isAttrs;
-              merge = mergeUniq (loc: file: lib.mapAttrs (name: mergeFlat elemType (loc ++ [ name ]) file));
+              merge = mergeUniq (file: loc: lib.mapAttrs (name: mergeFlat elemType (loc ++ [ name ]) file));
             };
 
           kdlUntypedValue = lib.mkOptionType {
@@ -1138,7 +1139,50 @@ optionalAttrs allowAliases aliases
               }).merge;
           };
 
-          kdlDocument = uniqFlatListOf kdlNode;
+          kdlDocument = lib.mkOptionType {
+            name = "kdlDocument";
+            description = "KDL document";
+            descriptionClass = "noun";
+
+            check = isList;
+            merge = mergeUniq (
+              file:
+              let
+                mergeDocument =
+                  loc: toplevel:
+                  builtins.concatLists (
+                    lib.imap1 (i: mergeDocumentEntry (loc ++ [ "[entry ${toString i}]" ])) toplevel
+                  );
+
+                mergeDocumentEntry =
+                  loc: value:
+                  let
+                    inherit (lib.options) showDefs;
+                    defs = [ { inherit file value; } ];
+                  in
+                  if isList value then
+                    mergeDocument loc value
+                  else if value ? _type then
+                    if value._type == "if" then
+                      if isBool value.condition then
+                        if value.condition then mergeDocumentEntry loc value.content else [ ]
+                      else
+                        throw "`mkIf` called with non-Boolean condition at ${lib.showOption loc}. Definition value:${showDefs defs}"
+                    else if value._type == "merge" then
+                      throw ''
+                        ${lib.showOption loc} has wrong type: expected a KDL node or document, got 'merge'.
+                        note: `mkMerge` is potentially ambiguous in a KDL document, as "merging" is application-specific. if you intended to "splat" all the nodes in a KDL document, you can just insert the list of nodes directly. you can arbitrarily nest KDL documents, and they will be concatenated.
+                      ''
+                    else
+                      throw "${lib.showOption loc} has wrong type: expected a KDL node or document, got '${value._type}'. Definition value:${showDefs defs}"
+                  else if kdlNode.check value then
+                    [ (kdlNode.merge loc [ { inherit file value; } ]) ]
+                  else
+                    throw "${lib.showOption loc} has wrong type: expected a KDL node or document. Definition value:${showDefs defs}";
+              in
+              mergeDocument
+            );
+          };
         in
         kdlDocument
       );
