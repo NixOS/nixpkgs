@@ -68,7 +68,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ charlesbaynham ];
+    maintainers = with maintainers; [
+      charlesbaynham
+      mdaniels5757
+    ];
     mainProgram = "pipdeptree";
   };
 }
