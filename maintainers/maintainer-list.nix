@@ -10573,6 +10573,13 @@
     name = "Hugo Reeves";
     keys = [ { fingerprint = "78C2 E81C 828A 420B 269A  EBC1 49FA 39F8 A7F7 35F9"; } ];
   };
+  huizengek = {
+    email = "25huizengek1@gmail.com";
+    github = "25huizengek1";
+    githubId = 50515369;
+    name = "Bart Oostveen";
+    keys = [ { fingerprint = "EE8C 31D4 55D8 EAA5 3730  395B 3180 5D46 50DE 1EC8"; } ];
+  };
   hulr = {
     github = "hulr";
     githubId = 17255815;
