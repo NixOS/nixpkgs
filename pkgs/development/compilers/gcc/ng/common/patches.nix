@@ -32,9 +32,29 @@
     }
   ];
 
-  # Submitted: https://gcc.gnu.org/pipermail/gcc-patches/2025-July/689429.html
-  # In Git: https://github.com/Ericson2314/gcc/tree/libgcc-custom-threading-model-15
-  "gcc/custom-threading-model.patch" = [
+  # In Git: https://github.com/Ericson2314/gcc/tree/regular-dirs-in-libgcc-15
+  "libgcc/force-regular-dirs.patch" = [
+    {
+      after = "15";
+      path = ../15;
+    }
+  ];
+  # In Git: https://github.com/Ericson2314/gcc/tree/regular-dirs-in-libssp-15
+  "libssp/force-regular-dirs.patch" = [
+    {
+      after = "15";
+      path = ../15;
+    }
+  ];
+  # In Git: https://github.com/Ericson2314/gcc/tree/libstdcxx-force-regular-dirs-15
+  "libstdcxx/force-regular-dirs.patch" = [
+    {
+      after = "15";
+      path = ../15;
+    }
+  ];
+  # In Git: https://github.com/Ericson2314/gcc/tree/libgfortran-force-regular-dirs-15
+  "libgfortran/force-regular-dirs.patch" = [
     {
       after = "15";
       path = ../15;
