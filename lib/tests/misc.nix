@@ -4432,10 +4432,10 @@ runTests {
     expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
   };
 
-  # Tests for splicing utilities
+  # Tests for cross index utilities
 
-  testRenameSplicesFrom = {
-    expr = lib.renameSplicesFrom "pkgs" {
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
       pkgsBuildBuild = "dummy-build-build";
       pkgsBuildHost = "dummy-build-host";
       pkgsBuildTarget = "dummy-build-target";
@@ -4453,8 +4453,8 @@ runTests {
     };
   };
 
-  testRenameSplicesTo = {
-    expr = lib.renameSplicesTo "self" {
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
       buildBuild = "dummy-build-build";
       buildHost = "dummy-build-host";
       buildTarget = "dummy-build-target";
@@ -4472,8 +4472,8 @@ runTests {
     };
   };
 
-  testMapSplices = {
-    expr = lib.mapSplices (x: x * 10) {
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
       buildBuild = 1;
       buildHost = 2;
       buildTarget = 3;
@@ -4491,8 +4491,8 @@ runTests {
     };
   };
 
-  testMapSplicesString = {
-    expr = lib.mapSplices (x: "prefix-${x}") {
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
       buildBuild = "bb";
       buildHost = "bh";
       buildTarget = "bt";

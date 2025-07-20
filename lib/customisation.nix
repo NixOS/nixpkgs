@@ -865,34 +865,37 @@ rec {
     };
 
   /**
-    Removes a prefix from the attribute names of a set of splices.
+    Removes a prefix from the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
 
     # Inputs
 
     `prefix`
-    : The prefix to remove from splice attribute names
+    : The prefix to remove from cross index attribute names
 
-    `splices`
-    : A set of splices with prefixed names
+    `crossIndex`
+    : A cross index with prefixed names
 
     # Type
 
     ```
-    renameSplicesFrom :: String -> AttrSet -> AttrSet
+    renameCrossIndexFrom :: String -> AttrSet -> AttrSet
     ```
 
     # Examples
 
     :::{.example}
-    ## `lib.customisation.renameSplicesFrom` usage example
+    ## `lib.customisation.renameCrossIndexFrom` usage example
 
     ```nix
-    renameSplicesFrom "pkgs" { pkgsBuildBuild = ...; pkgsBuildHost = ...; ... }
+    renameCrossIndexFrom "pkgs" { pkgsBuildBuild = ...; pkgsBuildHost = ...; ... }
     => { buildBuild = ...; buildHost = ...; ... }
     ```
     :::
   */
-  renameSplicesFrom = prefix: x: {
+  renameCrossIndexFrom = prefix: x: {
     buildBuild = x."${prefix}BuildBuild";
     buildHost = x."${prefix}BuildHost";
     buildTarget = x."${prefix}BuildTarget";
@@ -902,34 +905,37 @@ rec {
   };
 
   /**
-    Adds a prefix to the attribute names of a set of splices.
+    Adds a prefix to the attribute names of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
 
     # Inputs
 
     `prefix`
-    : The prefix to add to splice attribute names
+    : The prefix to add to cross index attribute names
 
-    `splices`
-    : A set of splices to be prefixed
+    `crossIndex`
+    : A cross index to be prefixed
 
     # Type
 
     ```
-    renameSplicesTo :: String -> AttrSet -> AttrSet
+    renameCrossIndexTo :: String -> AttrSet -> AttrSet
     ```
 
     # Examples
 
     :::{.example}
-    ## `lib.customisation.renameSplicesTo` usage example
+    ## `lib.customisation.renameCrossIndexTo` usage example
 
     ```nix
-    renameSplicesTo "self" { buildBuild = ...; buildHost = ...; ... }
+    renameCrossIndexTo "self" { buildBuild = ...; buildHost = ...; ... }
     => { selfBuildBuild = ...; selfBuildHost = ...; ... }
     ```
     :::
   */
-  renameSplicesTo = prefix: x: {
+  renameCrossIndexTo = prefix: x: {
     "${prefix}BuildBuild" = x.buildBuild;
     "${prefix}BuildHost" = x.buildHost;
     "${prefix}BuildTarget" = x.buildTarget;
@@ -939,34 +945,42 @@ rec {
   };
 
   /**
-    Takes a function and applies it pointwise to each splice.
+    Takes a function and applies it pointwise to each field of a cross index.
+
+    A cross index (short for "Cross Platform Pair Index") is a 6-field structure
+    organizing values by cross-compilation platform relationships.
 
     # Inputs
 
     `f`
-    : Function to apply to each splice value
+    : Function to apply to each cross index value
 
-    `splices`
-    : A set of splices to transform
+    `crossIndex`
+    : A cross index to transform
 
     # Type
 
     ```
-    mapSplices :: (a -> b) -> AttrSet -> AttrSet
+    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
     ```
 
     # Examples
 
     :::{.example}
-    ## `lib.customisation.mapSplices` usage example
+    ## `lib.customisation.mapCrossIndex` usage example
 
     ```nix
-    mapSplices (x: x * 10) { buildBuild = 1; buildHost = 2; ... }
+    mapCrossIndex (x: x * 10) { buildBuild = 1; buildHost = 2; ... }
     => { buildBuild = 10; buildHost = 20; ... }
+    ```
+
+    ```nix
+    # Extract a package from package sets
+    mapCrossIndex (pkgs: pkgs.hello) crossIndexedPackageSets
     ```
     :::
   */
-  mapSplices =
+  mapCrossIndex =
     f:
     {
       buildBuild,
