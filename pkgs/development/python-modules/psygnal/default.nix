@@ -48,9 +48,8 @@ buildPythonPackage rec {
     attrs
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
   pythonImportsCheck = [ "psygnal" ];

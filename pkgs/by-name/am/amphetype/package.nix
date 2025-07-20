@@ -13,7 +13,7 @@ let
   description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
-  format = "setuptools";
+  format = "pyproject";
   inherit pname version;
 
   src = fetchFromGitLab {
@@ -33,7 +33,11 @@ python3Packages.buildPythonApplication {
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     editdistance
     pyqt5
     translitcodec

@@ -331,6 +331,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ] ++ (lib.optional (!buildLibsOnly) "man");
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   hardeningDisable =
     [
@@ -882,7 +883,11 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences =
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
-      (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
+      (
+        builtins.map (p: p.__spliced.buildHost or p) (
+          builtins.filter (p: p != null) finalAttrs.nativeBuildInputs
+        )
+      );
 
   passthru = {
     # The `interfaceVersion` attribute below points out the incompatibilities

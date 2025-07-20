@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h5netcdf";
     repo = "h5netcdf";
     tag = "v${version}";
-    hash = "sha256-DQ4zGtX0+HvSuayyaCwO6NVSQWj8JRzYS/BfBtspZxI=";
+    hash = "sha256-frKnnUh5OFeQGAhf/y5idMWGb0ufHznz4u5A8FRJSuA=";
   };
 
   build-system = [

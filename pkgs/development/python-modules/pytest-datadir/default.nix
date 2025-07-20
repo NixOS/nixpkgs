@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-datadir";
-  version = "1.6.1";
+  version = "1.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "gabrielcnr";
     repo = "pytest-datadir";
     tag = "v${version}";
-    hash = "sha256-qyJlg9Ck128NpJhLw2x7LuNtdSx3AaTQEUQ7fb2Aglg=";
+    hash = "sha256-0y+1Al8nocCJXZyu8gLbYnXJzUu/oD31Zhn901XxWds=";
   };
 
   nativeBuildInputs = [

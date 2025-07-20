@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "ventura-psychrometric-panel";
-  version = "5.0.0";
-  zipHash = "sha256-g14Xosk48dslNROidRDRJGzrDSkeB3cr1PxNrsLMEAA=";
+  version = "5.0.1";
+  zipHash = "sha256-WcMgjgDobexUrfZOBmXRWv0FD3us3GgglxRdpo9BecA=";
   meta = with lib; {
     description = "Grafana plugin to display air conditions on a psychrometric chart.";
     license = licenses.bsd3Lbnl;

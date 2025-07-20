@@ -91,7 +91,10 @@ let
       dontWrapQtApps = true;
 
       patches =
-        [ ./autoconf-ar.patch ]
+        [
+          ./autoconf-ar.patch
+          ./gettext-0.25.patch
+        ]
         ++ lib.optionals (lib.elem "gtk2" buildFlavors) [
           (fetchpatch {
             url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";

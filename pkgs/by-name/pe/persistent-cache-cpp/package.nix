@@ -54,6 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     ''
+      # GTest needs C++17
+      # Remove when https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/merge_requests/19 merged & in release
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'std=c++14' 'std=c++17'
+
       # Wrong concatenation
       substituteInPlace data/libpersistent-cache-cpp.pc.in \
         --replace "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib"

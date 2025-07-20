@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sessreg";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/sessreg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AirNXegHfd3E+RmWH3nhAuzV8yKKMzaBr1zQ5zRPrMI=";
+    hash = "sha256-ToW1L09lqTRJdTv7AM61138zF+JNB9wjFH8vEWx4U1A=";
   };
 
   strictDeps = true;

@@ -129,7 +129,7 @@ buildPythonPackage {
       rm -r detectron2
     '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # prevent include $sourceRoot/projects/*/tests
     "tests"
   ];

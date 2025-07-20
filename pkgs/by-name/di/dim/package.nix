@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -s ${./package-lock.json} package-lock.json
     '';
 
-    npmDepsHash = "sha256-6oSm3H6RItHOrBIvP6uvR7sBboBRWFuP3VwU38GMfgQ=";
+    npmDepsHash = "sha256-yYTRoxKnTF9y3RA4fuDlVYxv9d37Fc905TYVc/gPIRw=";
 
     installPhase = ''
       runHook preInstall

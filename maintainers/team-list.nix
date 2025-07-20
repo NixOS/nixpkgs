@@ -1256,7 +1256,6 @@ with lib.maintainers;
   wdz = {
     members = [
       n0emis
-      vidister
       johannwagner
       yuka
     ];

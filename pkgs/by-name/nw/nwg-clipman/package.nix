@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nwg-clipman";
-  version = "0.2.5";
-  format = "setuptools";
+  version = "0.2.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-clipman";
     tag = "v${version}";
-    hash = "sha256-RKbFAgx+Er1l0s7SC4MwOxO9TXKI/SBhB0pfyX+NVWo=";
+    hash = "sha256-EBxt1OSwddlMIwEqc89rzak3jhPwOhZ61Rz5l2LU2kY=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -54,6 +54,8 @@ python3Packages.buildPythonPackage rec {
   '';
 
   strictDeps = true;
+
+  pythonImportsCheck = [ "nwg_clipman" ];
 
   passthru.updateScript = nix-update-script { };
 

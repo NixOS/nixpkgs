@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
 
     (
       if stdenv.hostPlatform.isDarwin then
-        ../openssl/3.4/use-etc-ssl-certs-darwin.patch
+        ../openssl/3.5/use-etc-ssl-certs-darwin.patch
       else
-        ../openssl/3.4/use-etc-ssl-certs.patch
+        ../openssl/3.5/use-etc-ssl-certs.patch
     )
   ];
 

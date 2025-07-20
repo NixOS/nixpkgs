@@ -3,32 +3,36 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  autoconf,
-  automake,
-  intltool,
+  meson,
+  ninja,
   pkg-config,
+  python3,
   gtk3,
   connman,
   openconnect,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "connman-gtk";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2018-06-26";
 
   src = fetchFromGitHub {
     owner = "jgke";
     repo = "connman-gtk";
-    rev = "v${version}";
-    hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
+    rev = "b72c6ab3bb19c07325c8e659902b046daa23c506";
+    hash = "sha256-6lX6FYERDgLj9G6nwnP35kF5x8dpRJqfJB/quZFtFzM=";
   };
 
+  postPatch = ''
+    patchShebangs --build data/meson_post_install.py
+  '';
+
   nativeBuildInputs = [
-    autoconf
-    automake
-    intltool
+    meson
+    ninja
     pkg-config
+    python3
     wrapGAppsHook3
   ];
 
@@ -45,12 +49,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = ''
-    # m4/intltool.m4 is an invalid symbolic link
-    rm m4/intltool.m4
-    ln -s ${intltool}/share/aclocal/intltool.m4 m4/
-    ./autogen.sh
-  '';
+  env.MESON_INSTALL_PREFIX = placeholder "out";
 
   meta = with lib; {
     description = "GTK GUI for Connman";

@@ -80,8 +80,7 @@ in
       type = types.int;
       default = 8;
       description = ''
-        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
-        bytes).
+        Gap in front of the /boot/firmware partition, in MiB (1024×1024 bytes).
         Can be increased to make more space for boards requiring to dd u-boot
         SPL before actual partitions.
 
@@ -206,7 +205,7 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     image.extension = if config.sdImage.compressImage then "img.zst" else "img";
-    image.filePath = "sd-card/${config.image.fileName}";
+    image.filePath = "sd-image/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage (

@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "macpm";
   version = "0.24-unstable-2024-11-19";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "visualcjy";
@@ -16,6 +16,16 @@ python3Packages.buildPythonApplication {
     rev = "7882d4c86c84bb23a8966ca57990de9b11397bd4";
     hash = "sha256-jqaPPvYbuL8q6grmBLyZLf8aDmjugYxMOWAh1Ix82jc=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    dashing
+    humanize
+    psutil
+  ];
 
   # has no tests
   doCheck = false;
@@ -25,11 +35,7 @@ python3Packages.buildPythonApplication {
     ln -rs $out/bin/macpm $out/bin/asitop
   '';
 
-  dependencies = with python3Packages; [
-    dashing
-    humanize
-    psutil
-  ];
+  pythonImportsCheck = [ "macpm" ];
 
   meta = {
     description = "Perf monitoring CLI tool for Apple Silicon; previously named 'asitop'";

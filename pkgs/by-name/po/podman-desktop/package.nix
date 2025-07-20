@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   copyDesktopItems,
-  electron_36,
+  electron_37,
   nodejs,
   pnpm_10,
   makeDesktopItem,
@@ -18,11 +18,11 @@
 }:
 
 let
-  electron = electron_36;
+  electron = electron_37;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.19.2";
+  version = "1.20.2";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -55,12 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yw4HPHtMMxaI7MLamZy+MglvHHpO6h4/kHY2TBXWErg=";
+    hash = "sha256-+UdVTTm528Q9TIZwznzseBn8JazvQJOxJyjdzBmVUaA=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-6xXTzqEeWpDKhZN6z4dSHrU7qWK9AAlD2DXnr7ac0So=";
+    fetcherVersion = 1;
+    hash = "sha256-GX33PE534jWX7v9jCwZALuCT6gQClBXlOTPZC09EuC8=";
   };
 
   patches = [
@@ -69,10 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  # Don't attempt to sign the darwin app bundle.
-  # It's impure and may fail in some restricted environments.
-  CSC_IDENTITY_AUTO_DISCOVERY = lib.optionals stdenv.hostPlatform.isDarwin "false";
 
   nativeBuildInputs =
     [
@@ -94,9 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     pnpm build
+
+    # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+    # See: https://github.com/electron-userland/electron-builder/pull/9007
     ./node_modules/.bin/electron-builder \
       --dir \
       --config .electron-builder.config.cjs \
+      -c.mac.identity=null \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 

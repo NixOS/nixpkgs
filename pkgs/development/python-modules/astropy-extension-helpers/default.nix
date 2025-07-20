@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   # avoid import mismatch errors, as conftest.py is copied to build dir
-  pytestFlagsArray = [ "extension_helpers" ];
+  enabledTestPaths = [ "extension_helpers" ];
 
   disabledTests = [
     # https://github.com/astropy/extension-helpers/issues/43

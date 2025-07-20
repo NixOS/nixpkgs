@@ -324,7 +324,21 @@ let
       doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
       doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      separateDebugInfo' =
+        let
+          actualValue = separateDebugInfo && stdenv.hostPlatform.isLinux;
+          conflictingOption =
+            attrs ? "disallowedReferences"
+            || attrs ? "disallowedRequisites"
+            || attrs ? "allowedRequisites"
+            || attrs ? "allowedReferences";
+        in
+        if actualValue && conflictingOption && !__structuredAttrs then
+          throw "separateDebugInfo = true in ${
+            attrs.pname or "mkDerivation argument"
+          } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
+        else
+          actualValue;
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
@@ -646,10 +660,26 @@ let
                 outputChecks = builtins.listToAttrs (
                   map (name: {
                     inherit name;
-                    value = zipAttrsWith (_: builtins.concatLists) [
-                      (makeOutputChecks attrs)
-                      (makeOutputChecks attrs.outputChecks.${name} or { })
-                    ];
+                    value =
+                      let
+                        raw = zipAttrsWith (_: builtins.concatLists) [
+                          (makeOutputChecks attrs)
+                          (makeOutputChecks attrs.outputChecks.${name} or { })
+                        ];
+                      in
+                      # separateDebugInfo = true will put all sorts of files in
+                      # the debug output which could carry references, but
+                      # that's "normal". Notably it symlinks to the source.
+                      # So disable reference checking for the debug output
+                      if separateDebugInfo' && name == "debug" then
+                        removeAttrs raw [
+                          "allowedReferences"
+                          "allowedRequisites"
+                          "disallowedReferences"
+                          "disallowedRequisites"
+                        ]
+                      else
+                        raw;
                   }) outputs
                 );
               }
@@ -716,18 +746,17 @@ let
       );
 
     let
-      envIsExportable = isAttrs env && !isDerivation env;
+      mainProgram = meta.mainProgram or null;
+      env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs (
-          [
-            "meta"
-            "passthru"
-            "pos"
-          ]
-          ++ optional (__structuredAttrs || envIsExportable) "env"
-        )
-        // optionalAttrs __structuredAttrs { env = checkedEnv; }
+        removeAttrs attrs ([
+          "meta"
+          "passthru"
+          "pos"
+          "env"
+        ])
+        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
@@ -746,17 +775,17 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
           prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
-            "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${
+            "  - ${name}: in `env`: ${prettyPrint env'.${name}}; in derivation arguments: ${
                 prettyPrint derivationArg.${name}
               }";
           errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
         in
-        assert assertMsg envIsExportable
-          "When using structured attributes, `env` must be an attribute set of environment variables.";
+        assert assertMsg (isAttrs env && !isDerivation env)
+          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
         assert assertMsg (overlappingNames == [ ])
           "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
         mapAttrs (
@@ -764,7 +793,7 @@ let
           assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
             "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
           v
-        ) env;
+        ) env';
 
       # Fixed-output derivations may not reference other paths, which means that
       # for a fixed-output derivation, the corresponding inputDerivation should
@@ -850,7 +879,7 @@ let
         # should be made available to Nix expressions using the
         # derivation (e.g., in assertions).
         passthru
-    ) (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
+    ) (derivation (derivationArg // checkedEnv));
 
 in
 {

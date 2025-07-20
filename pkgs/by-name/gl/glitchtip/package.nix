@@ -2,9 +2,7 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchFromGitHub,
   fetchPypi,
-  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -28,24 +26,6 @@ let
         # checks are failing with django 5
         doCheck = false;
       };
-      symbolic = prev.symbolic.overridePythonAttrs rec {
-        version = "10.2.1";
-        src = fetchFromGitHub {
-          owner = "getsentry";
-          repo = "symbolic";
-          tag = version;
-          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-          # the `py` directory is not included in the tarball, so we fetch the source via git instead
-          forceFetchGit = true;
-        };
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          inherit src postPatch;
-          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
-        };
-        postPatch = ''
-          ln -s ${./symbolic_Cargo.lock} Cargo.lock
-        '';
-      };
     };
   };
 
@@ -58,6 +38,7 @@ let
       brotli
       celery
       celery-batches
+      cxxfilt
       django
       django-allauth
       django-anymail
@@ -79,6 +60,9 @@ let
       orjson
       psycopg
       pydantic
+      # undocumented on django-allauth side
+      # https://codeberg.org/allauth/django-allauth/issues/4493
+      pyyaml
       sentry-sdk
       symbolic
       user-agents
@@ -102,14 +86,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.0.5";
+  version = "5.0.9";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7ulmrFOy14/Y/8LmKrmBzqrMPuwfdWOGMuhhhYI7+f4=";
+    hash = "sha256-yRXrcwE5DDJpDiX4XB18ezrLn62AV4w/ASvrOoKD6p4=";
   };
 
   propagatedBuildInputs = pythonPackages;

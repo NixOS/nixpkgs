@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.13";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-IOtdeYLrHj96av6wKupvmO39Zo5oIiCzQeqy0MnEvj0=";
+    hash = "sha256-oZNRQox1DyAca+adsqVyxWXKC1+BeUfTEOI6mzg7h8A=";
   };
 
   build-system = [ setuptools ];
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
   pythonImportsCheck = [
     "trimesh"

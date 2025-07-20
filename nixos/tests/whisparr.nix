@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "whisparr";
-  meta.maintainers = [ lib.maintainers.paveloom ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:

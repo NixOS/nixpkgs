@@ -18,20 +18,23 @@
   ctestCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.25";
+  version = "3.0.26";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    tag = "v${version}";
-    hash = "sha256-PYVVlSqeAZCWvnWPqqWGQIWatMfPYqnrXc7cqi8UseU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GuTxFgK5nfP4l36uqSOMrOkiwTi/T2ywcLh4LDNkKsI=";
   };
 
   patches =
     [
       ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch
+      # Fix vtk deprecated api, See https://docs.vtk.org/en/latest/release_details/9.3.html#id13.
+      # Upstream mailing list: https://sourceforge.net/p/gdcm/mailman/message/59197515.
+      ./fix-vtk-deprecated-api.patch
     ]
     ++ lib.optionals (lib.versionOlder vtk.version "9.3") [
       (fetchpatch2 {
@@ -86,8 +89,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString enablePython ''
     substitute \
       ${./python_gdcm.egg-info} \
-      $out/${python.sitePackages}/python_gdcm-${version}.egg-info \
-      --subst-var-by GDCM_VER "${version}"
+      $out/${python.sitePackages}/python_gdcm-${finalAttrs.version}.egg-info \
+      --subst-var-by GDCM_VER "${finalAttrs.version}"
   '';
 
   disabledTests =
@@ -117,18 +120,18 @@ stdenv.mkDerivation rec {
   # note that when the test data is available to the build via `fetchSubmodules = true`,
   # a number of additional but much slower tests are enabled
 
-  meta = with lib; {
+  meta = {
     description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.
     '';
-    homepage = "https://gdcm.sourceforge.net/";
-    license = with licenses; [
+    homepage = "https://gdcm.sourceforge.net";
+    license = with lib.licenses; [
       bsd3
       asl20
     ];
-    maintainers = with maintainers; [ tfmoraes ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ tfmoraes ];
+    platforms = lib.platforms.all;
   };
-}
+})

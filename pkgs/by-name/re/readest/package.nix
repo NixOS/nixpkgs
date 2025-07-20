@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.62";
+  version = "0.9.64";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DaDIx3AbW4JCiZrO4+dxAxue0vCaxbzAGEgKoERFK7g=";
+    hash = "sha256-J3AqZIbpf/B0KMFjjNRq97E5OWPt7wJvIlDdfb4sbvU=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lez75n3dIM4efpP+qPuDteCfMnC6wPD+L2173iJbTZM=";
+    fetcherVersion = 1;
+    hash = "sha256-nWDMtQZE+96gnvEwtp84iOcbfMAjnqKZK0cgQuh4+k8=";
   };
 
   pnpmRoot = "../..";
@@ -53,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "src-tauri";
 
   postPatch = ''
-    substituteInPlace src-tauri/Cargo.toml \
-      --replace-fail '"devtools"' '"devtools", "rustls-tls"'
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"Readest"' '"readest"'

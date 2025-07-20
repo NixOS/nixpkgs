@@ -34,14 +34,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.6.3";
+  version = "2025.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-3Xcxn12QKQg0jxdOPP7y01YaikvxmPPX9JL2JBvdsUM=";
+    hash = "sha256-3hhFY6qi8xOuTb8WXuVaTNpCqXXdSg3DXubnj+FG73A=";
   };
 
   build-system = with python.pkgs; [
@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     esphome-glyphsets
     freetype-py
     icmplib
+    jinja2
     kconfiglib
     packaging
     paho-mqtt
@@ -135,25 +136,9 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ [ versionCheckHook ];
 
-  disabledTests = [
-    # race condition, also visible in upstream tests
-    # tests/dashboard/test_web_server.py:78: IndexError
-    "test_devices_page"
-
+  disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
-    "test_api_message_size_batching"
-    "test_host_mode_basic"
-    "test_host_mode_batch_delay"
-    "test_host_mode_empty_string_options"
-    "test_host_mode_entity_fields"
-    "test_host_mode_fan_preset"
-    "test_host_mode_many_entities"
-    "test_host_mode_many_entities_multiple_connections"
-    "test_host_mode_noise_encryption"
-    "test_host_mode_noise_encryption_wrong_key"
-    "test_host_mode_reconnect"
-    "test_host_mode_with_sensor"
-    "test_large_message_batching"
+    "tests/integration"
   ];
 
   preCheck = ''

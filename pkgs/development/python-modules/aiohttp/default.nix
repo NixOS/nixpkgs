@@ -50,14 +50,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.10";
+  version = "3.12.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-ciZGOOfVXYoLzYNIkota3MXMRMxlztf+mFFo0y9r+Lk=";
+    hash = "sha256-/lzbGnF3+ufs+GPtm+avjQ+lGVCsiE2E64NkRHS3wCM=";
   };
 
   patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
@@ -130,6 +130,8 @@ buildPythonPackage rec {
       "test_client_session_timeout_zero"
       "test_mark_formdata_as_processed"
       "test_requote_redirect_url_default"
+      "test_tcp_connector_ssl_shutdown_timeout_nonzero_passed"
+      "test_tcp_connector_ssl_shutdown_timeout_zero_not_passed"
       # don't run benchmarks
       "test_import_time"
       # racy

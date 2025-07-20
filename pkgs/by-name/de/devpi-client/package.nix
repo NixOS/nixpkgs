@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # --fast skips tests which try to start a devpi-server improperly
     "--fast"
   ];

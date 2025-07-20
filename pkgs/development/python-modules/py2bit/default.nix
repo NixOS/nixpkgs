@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "py2bitTest/test.py" ];
+  enabledTestPaths = [ "py2bitTest/test.py" ];
 
   meta = {
     homepage = "https://github.com/deeptools/py2bit";

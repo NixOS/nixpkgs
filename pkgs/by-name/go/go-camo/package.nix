@@ -3,6 +3,7 @@
   buildGo124Module,
   fetchFromGitHub,
   installShellFiles,
+  nixosTests,
   scdoc,
 }:
 
@@ -42,6 +43,10 @@ buildGo124Module rec {
     # requires network access
     rm pkg/camo/proxy_{,filter_}test.go
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) go-camo;
+  };
 
   meta = {
     description = "Camo server is a special type of image proxy that proxies non-secure images over SSL/TLS";

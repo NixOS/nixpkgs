@@ -1,12 +1,11 @@
 diff --git a/tests/optional.test b/tests/optional.test
-index 2623731..85bc9e9 100644
+index 77354cc..6cc7c12 100644
 --- a/tests/optional.test
 +++ b/tests/optional.test
-@@ -12,11 +12,6 @@ last(range(365 * 67)|("1970-03-01T01:02:03Z"|strptime("%Y-%m-%dT%H:%M:%SZ")|mkti
- null
- [2037,1,11,1,2,3,3,41]
+@@ -1,10 +1,5 @@
+ # See tests/jq.test and the jq manual for more information.
  
--# Regression test for #3276
+-# Regression test for #3276 (fails on mingw/WIN32)
 -fromdate
 -"2038-01-19T03:14:08Z"
 -2147483648

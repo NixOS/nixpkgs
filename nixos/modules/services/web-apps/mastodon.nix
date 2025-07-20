@@ -355,6 +355,7 @@ in
               jobClasses = lib.mkOption {
                 type = listOf (enum [
                   "default"
+                  "fasp"
                   "push"
                   "pull"
                   "mailers"

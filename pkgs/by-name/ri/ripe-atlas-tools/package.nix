@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
   version = "3.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
@@ -24,13 +24,17 @@ python3.pkgs.buildPythonApplication rec {
     echo "include ripe/atlas/tools/user-agent" >> MANIFEST.in
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    sphinx-rtd-theme
-    sphinxHook
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    sphinx-rtd-theme
+    sphinxHook
+  ];
+
+  dependencies = with python3.pkgs; [
     ipy
     pyopenssl
     python-dateutil

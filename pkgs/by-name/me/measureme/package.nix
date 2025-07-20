@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "measureme";
-  version = "12.0.1";
+  version = "12.0.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "measureme";
     rev = version;
-    hash = "sha256-G6GCXMyjwx1yYuCwSRj8j76zLKShtPFfQmTQnnqpMlk=";
+    hash = "sha256-pejgWzHtpEBylFzG1+/8zTV7qR6gf6UuTmuH9GNPoD0=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

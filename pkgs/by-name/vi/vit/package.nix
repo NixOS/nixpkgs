@@ -11,7 +11,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "vit";
   version = "2.3.3";
-  format = "setuptools";
+  pyproject = true;
   disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
@@ -19,7 +19,9 @@ buildPythonApplication rec {
     hash = "sha256-+lrXGfhoB4z5IWkJTXMIm3GGVPfNGO9lUB3uFTx8hDY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = [
     tasklib
     urwid
   ];
@@ -36,6 +38,8 @@ buildPythonApplication rec {
   preCheck = ''
     export TERM=''${TERM-linux}
   '';
+
+  pythonImportsCheck = [ "vit" ];
 
   meta = with lib; {
     homepage = "https://github.com/scottkosty/vit";

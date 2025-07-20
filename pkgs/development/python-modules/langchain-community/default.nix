@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.25";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-community";
     tag = "libs/community/v${version}";
-    hash = "sha256-mAh5vq6Yi+ey9Yai0Hx2tHGE7OhVV98EuJfyhxrN9Fk=";
+    hash = "sha256-rGU8AYe7993+zMAtHLkNiK+wA+UtZnGkUQsOPMtUQ8w=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -104,7 +104,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit_tests"
   ];
 

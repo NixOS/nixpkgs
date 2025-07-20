@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
   version = "2.29";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thp";
@@ -16,7 +16,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-X1UR9JrQuujOIUg87W0YqfXsM3A5nttWjjJMIe3hgk8=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     cssselect
     jq
     keyring
@@ -34,6 +36,8 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "urlwatch" ];
 
   meta = with lib; {
     description = "Tool for monitoring webpages for updates";

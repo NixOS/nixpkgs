@@ -106,12 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "300";
+  version = "301";
   format = "setuptools";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-ByfAS1ygWex8FLGeaV1HouSb6ElDZjAhXV5xjpsltFE=";
+    hash = "sha256-piTdP812LgcxvvgvUOKUrkxVXCbclyQW8dp84beT7H4=";
   };
 
   outputs = [
@@ -260,7 +260,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Always show more information when tests fail
     "-vv"
   ];
@@ -278,10 +278,12 @@ python.pkgs.buildPythonApplication rec {
 
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
+
+      # Flaky test on Linux and Darwin
+      "test_non_unicode_filename"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
-      "test_non_unicode_filename"
       "test_listing"
       "test_symlink_root"
 

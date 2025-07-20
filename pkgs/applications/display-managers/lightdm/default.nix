@@ -8,8 +8,8 @@
   plymouth,
   pam,
   pkg-config,
-  autoconf,
-  automake,
+  autoreconfHook,
+  gettext,
   libtool,
   libxcb,
   glib,
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
     yelp-tools
     yelp-xsl
     gobject-introspection
@@ -88,6 +88,9 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
+
+    # glib gettext is deprecated and broken, so use regular gettext instead
+    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;

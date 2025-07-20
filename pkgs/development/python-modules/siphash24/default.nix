@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "siphash24"
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

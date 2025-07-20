@@ -587,17 +587,13 @@ in
 
         perf = callPackage ../os-specific/linux/kernel/perf { };
 
-        phc-intel =
-          if lib.versionAtLeast kernel.version "4.10" then
-            callPackage ../os-specific/linux/phc-intel { }
-          else
-            null;
-
         prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
         isgx = callPackage ../os-specific/linux/isgx { };
 
         rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
+
+        sheep-net = callPackage ../os-specific/linux/sheep-net { };
 
         shufflecake = callPackage ../os-specific/linux/shufflecake { };
 
@@ -721,6 +717,7 @@ in
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
+        phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
       }
     );
 

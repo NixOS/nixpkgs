@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   acl,
   attr,
   autoreconfHook,
   bzip2,
-  e2fsprogs,
+  fetchpatch,
   glibcLocalesUtf8,
   lzo,
   openssl,
@@ -33,27 +32,21 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
+    hash = "sha256-KN5SvQ+/g/OOa+hntMX3D8p5IEWO0smke5WK+DwrOH0=";
   };
 
   patches = [
-    # Remove in next release
-    #
-    # Fixes macOS metadata file handling when reading certain tarballs
-    # (e.g, bsdtar-produced tar containing a file with xattrs whose name is exactly 99 bytes long)
-    # <https://github.com/libarchive/libarchive/pull/2636>
-    #
-    # This also fixes test_copy in the test suite.
+    # https://github.com/libarchive/libarchive/pull/2689
+    # Remove after next release.
     (fetchpatch {
-      name = "reset-header-state-after-mac-metadata.patch";
-      url = "https://github.com/libarchive/libarchive/commit/5bb36db5e19aecabccec8f351ec22f8c3a8695f0.patch";
-      hash = "sha256-eNGSunYZ5b0TrkBUtOO7MYGXc+SEn1Sxm8MYyI+4JsQ=";
+      url = "https://github.com/libarchive/libarchive/commit/489d0b8e2f1fafd3b7ebf98f389ca67462c34651.patch?full_index=1";
+      hash = "sha256-r+tSJ+WA0VKCjg+8MfS5/RqcB+aAMZ2dK0YUh+U1q78=";
     })
   ];
 
@@ -112,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       acl
       attr
-      e2fsprogs
     ]
     ++ lib.optional xarSupport libxml2;
 

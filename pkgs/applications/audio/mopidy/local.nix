@@ -1,14 +1,14 @@
 {
   lib,
   mopidy,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "Mopidy-Local";
+pythonPackages.buildPythonApplication rec {
+  pname = "mopidy-local";
   version = "3.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -16,14 +16,20 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-y6btbGk5UiVan178x7d9jq5OTnKMbuliHv0aRxuZK3o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonPackages.setuptools
+  ];
+
+  dependencies = [
     mopidy
-    python3Packages.uritools
+    pythonPackages.uritools
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
+    pythonPackages.pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "mopidy_local" ];
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-local";

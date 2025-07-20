@@ -5,8 +5,7 @@
   xxd,
   zlib,
   llvmPackages,
-  star,
-  testers,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -50,10 +49,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = star;
-    command = "STAR --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/STAR";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -63,6 +62,7 @@ stdenv.mkDerivation rec {
       STAR (Spliced Transcripts Alignment to a Reference) is a fast RNA-seq
       read mapper, with support for splice-junction and fusion read detection.
     '';
+    mainProgram = "STAR";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

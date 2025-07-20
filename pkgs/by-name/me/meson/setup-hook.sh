@@ -63,9 +63,9 @@ mesonCheckPhase() {
         flagsArray+=("--timeout-multiplier=0")
     fi
 
-    # Parallel building is enabled by default.
+    # Parallel checking is enabled by default.
     local buildCores=1
-    if [ "${enableParallelBuilding-1}" ]; then
+    if [ "${enableParallelChecking-1}" ]; then
         buildCores="$NIX_BUILD_CORES"
     fi
 

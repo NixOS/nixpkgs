@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rmapi";
-  version = "0.0.30";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmapi";
     rev = "v${version}";
-    sha256 = "sha256-TD8edRMZEn05HHvSwwPpeA6AzXMNkNz6mrQl4zF8Kfk=";
+    sha256 = "sha256-8OzDXOyyz0VTeJg0P6jOBTA9OZbCLSK8SASSEHsrBxc=";
   };
 
   vendorHash = "sha256-Qisfw+lCFZns13jRe9NskCaCKVj5bV1CV8WPpGBhKFc=";

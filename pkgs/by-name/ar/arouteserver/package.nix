@@ -48,7 +48,7 @@ python3Packages.buildPythonPackage rec {
     "pierky.arouteserver"
   ];
 
-  pytestFlagsArray = [ "tests/static" ];
+  enabledTestPaths = [ "tests/static" ];
 
   disabledTests = [
     # disable copyright year check of files

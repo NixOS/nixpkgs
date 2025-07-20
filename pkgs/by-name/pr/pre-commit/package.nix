@@ -3,8 +3,6 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  julia,
-  julia-bin,
 
   # tests
   cabal-install,
@@ -25,7 +23,6 @@
 
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
-  julia' = if lib.meta.availableOn stdenv.hostPlatform julia then julia else julia-bin;
 in
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
@@ -64,7 +61,6 @@ python3Packages.buildPythonApplication rec {
       cargo
       gitMinimal
       go
-      julia'
       perl
       versionCheckHook
       writableTmpDirAsHomeHook
@@ -103,7 +99,7 @@ python3Packages.buildPythonApplication rec {
     patchShebangs pre_commit/resources/hook-tmpl
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--forked"
   ];
 

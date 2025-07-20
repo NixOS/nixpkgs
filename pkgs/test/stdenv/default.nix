@@ -258,25 +258,6 @@ in
     stdenv' = bootStdenv;
   };
 
-  # Test compatibility with derivations using `env` as a regular variable.
-  test-env-derivation = bootStdenv.mkDerivation rec {
-    name = "test-env-derivation";
-    env = bootStdenv.mkDerivation {
-      name = "foo";
-      buildCommand = ''
-        mkdir "$out"
-        touch "$out/bar"
-      '';
-    };
-
-    passAsFile = [ "buildCommand" ];
-    buildCommand = ''
-      declare -p env
-      [[ $env == "${env}" ]]
-      touch "$out"
-    '';
-  };
-
   # Check that mkDerivation rejects MD5 hashes
   rejectedHashes = lib.recurseIntoAttrs {
     md5 =
@@ -403,6 +384,50 @@ in
     name = "test-cc-wrapper-substitutions";
     stdenv' = bootStdenv;
   };
+
+  ensure-no-execve-in-setup-sh =
+    derivation {
+      name = "ensure-no-execve-in-setup-sh";
+      system = stdenv.system;
+      builder = "${stdenv.bootstrapTools}/bin/bash";
+      PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
+      initialPath = [
+        stdenv.bootstrapTools
+        pkgs.strace
+      ];
+      args = [
+        "-c"
+        ''
+          countCall() {
+            echo "$stats" | tr -s ' ' | grep "$1" | cut -d ' ' -f5
+          }
+
+          # prevent setup.sh from running `nproc` when cores=0
+          # (this would mess up the syscall stats)
+          export NIX_BUILD_CORES=1
+
+          echo "Analyzing setup.sh with strace"
+          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+          echo "$stats" | head -n15
+
+          # fail if execve calls is > 1
+          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+          execveCalls=$(countCall execve)
+          if [ "$execveCalls" -gt 1 ]; then
+            echo "execve calls: $execveCalls; expected: 1"
+            echo "ERROR: setup.sh should not launch additional processes when being sourced"
+            exit 1
+          else
+            echo "setup.sh doesn't launch extra processes when sourcing, as expected"
+          fi
+
+          touch $out
+        ''
+      ];
+    }
+    // {
+      meta = { };
+    };
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
@@ -570,6 +595,5 @@ in
           diff $out/json $goldenJson
         '';
       };
-
   };
 }

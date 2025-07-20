@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication {
   pname = "xkeysnail";
   version = "0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mooz";
@@ -24,7 +24,9 @@ python3Packages.buildPythonApplication {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     evdev
     xlib
     inotify-simple
@@ -37,6 +39,8 @@ python3Packages.buildPythonApplication {
     makeWrapper $out/bin/xkeysnail $out/bin/xkeysnail-browser \
       --add-flags "-q" --add-flags "$out/share/browser.py"
   '';
+
+  pythonImportsCheck = [ "xkeysnail" ];
 
   meta = {
     description = "Yet another keyboard remapping tool for X environment";

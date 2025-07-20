@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.3.0";
+  version = "2025.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-NZ3r/Dyw5bB4qOO29DUAARPzdJJxgR9OO9LxVu3YbNo=";
+    hash = "sha256-GtofpITO9QcwFcKyVTz7clquJy2tBTlkf3IR1cXlklM=";
   };
 
   build-system = [
@@ -113,7 +113,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

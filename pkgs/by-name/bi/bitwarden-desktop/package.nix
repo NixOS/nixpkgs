@@ -34,13 +34,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.6.0";
+  version = "2025.6.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-KI6oIMNtqfywVqeTdzthSHBnAlF55cINTr04LNSq0AM=";
+    hash = "sha256-dYeq0YkQwmRve++RcMWnAuJyslaTZ4VIV4V/lMgSauQ=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-52cLVrfbeNeRH7OKN5QZdGD5VkUVliN0Rn/cbdohsG0=";
+  npmDepsHash = "sha256-yzOz1X75Wz/NwjlGHL439bEek082vJBL/9imnla3SyU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit

@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-XLZsRqYKg7iihV5GYUi2+ieWLH/R3LP25dCrF+xf9t0=";
   };
 
+  patches = [
+    ./gettext-0.25.patch
+  ];
+
   buildInputs = [
     openssl
   ] ++ lib.optional odbcSupport unixODBC;

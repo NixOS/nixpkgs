@@ -73,7 +73,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
-      aaronjheng
       defelo
     ];
     mainProgram = "xh";

@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "codeberg-pages";
-  version = "6.2.1";
+  version = "6.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Codeberg";
     repo = "pages-server";
     rev = "v${version}";
-    hash = "sha256-kWEwKdm/GAUtsc4ZyCn7VJm9vVWDBOHJRer2FP1L/g0=";
+    hash = "sha256-5+4yKcXyKSg7Q2h7W3G6AYkIOmYA4D4DDjdLK57lwdw=";
   };
 
-  vendorHash = "sha256-qGjcMZhwflYdwOrGS9EApkwVLLSolQBBIeU8AU/fT/I=";
+  vendorHash = "sha256-EefUX5MEQrJGtUbX/bINcMSJQjnnLzKQt04hENY8G2E=";
 
   postPatch = ''
     # disable httptest

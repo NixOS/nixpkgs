@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "9.0";
+  version = "9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     tag = "v${version}";
-    hash = "sha256-Ef830yTY+g6ZPZ9h0lSktkewIerHbWVfXwrdQ6rzz6I=";
+    hash = "sha256-NmWoRDYOfSweqUhw0KTdXubWgXmVr+odrs1dMLXdHEI=";
   };
 
   build-system = [ flit-core ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numerical Utilities for Finite Element Analysis";
-    changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ Scriptkiddi ];

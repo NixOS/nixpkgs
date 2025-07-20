@@ -7,13 +7,13 @@
 
 buildDunePackage rec {
   pname = "pure-html";
-  version = "3.10.1";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "yawaramin";
     repo = "dream-html";
     tag = "v${version}";
-    hash = "sha256-LywQG5AaQrrq8lW+aN1doB1MKPSMciZISOeo583Kr9k=";
+    hash = "sha256-YBzL9B1mDbomGr1kT6RW+wg4y0JH6IiIlJYVMRptFFg=";
   };
 
   propagatedBuildInputs = [ uri ];

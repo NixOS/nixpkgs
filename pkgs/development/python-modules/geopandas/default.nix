@@ -85,8 +85,6 @@ buildPythonPackage rec {
     rtree
   ] ++ optional-dependencies.all;
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
@@ -96,7 +94,7 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 

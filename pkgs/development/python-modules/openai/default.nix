@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -52,16 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.91.0";
+  version = "1.97.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-5thOFxXIStNowiEz9IacAkAC611zzXXs0ZB1tyuR+Go=";
+    hash = "sha256-q+GUEHducm71Zqh7ZfRF217awFKQIsOSEWoe04M3DFM=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -118,9 +115,8 @@ buildPythonPackage rec {
     respx
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests =
@@ -139,12 +135,12 @@ buildPythonPackage rec {
     "tests/api_resources"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";
   };
 }

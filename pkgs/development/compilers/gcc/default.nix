@@ -39,7 +39,7 @@
   name ? "gcc",
   libcCross ? null,
   threadsCross ? { }, # for MinGW
-  withoutTargetLibc ? false,
+  withoutTargetLibc ? stdenv.targetPlatform.libc == null,
   flex,
   gnused ? null,
   buildPackages,
@@ -49,6 +49,7 @@
     !enablePlugin
     || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
   nukeReferences,
+  sanitiseHeaderPathsHook,
   callPackage,
   majorMinorVersion,
   apple-sdk,
@@ -179,6 +180,7 @@ let
       pkgsBuildTarget
       profiledCompiler
       reproducibleBuild
+      sanitiseHeaderPathsHook
       staticCompiler
       stdenv
       targetPackages

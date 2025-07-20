@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromGitea,
   pythonOlder,
   python,
 
@@ -17,6 +17,7 @@
 
   # optional-dependencies
   fido2,
+  oauthlib,
   python3-openid,
   python3-saml,
   requests,
@@ -40,16 +41,17 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "65.7.0";
+  version = "65.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "pennersr";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "allauth";
     repo = "django-allauth";
     tag = version;
-    hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+    hash = "sha256-gusA9TnsgSSnWBPwHsNYeESD9nX5DWh4HqMgcsoJRw0=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -66,6 +68,10 @@ buildPythonPackage rec {
   '';
 
   optional-dependencies = {
+    idp-oidc = [
+      oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
     mfa = [
       fido2
       qrcode
@@ -101,10 +107,10 @@ buildPythonPackage rec {
   passthru.tests = { inherit dj-rest-auth; };
 
   meta = {
-    changelog = "https://github.com/pennersr/django-allauth/blob/${version}/ChangeLog.rst";
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
-    downloadPage = "https://github.com/pennersr/django-allauth";
-    homepage = "https://www.intenct.nl/projects/django-allauth";
+    changelog = "https://codeberg.org/allauth/django-allauth/src/tag/${version}/ChangeLog.rst";
+    downloadPage = "https://codeberg.org/allauth/django-allauth";
+    homepage = "https://allauth.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

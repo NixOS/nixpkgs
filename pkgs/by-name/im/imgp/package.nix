@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "imgp";
   version = "2.9";
-  format = "setuptools";
+  format = "pyproject";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -17,7 +17,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-yQ2BzOBn6Bl9ieZkREKsj1zLnoPcf0hZhZ90Za5kiKA=";
   };
 
-  propagatedBuildInputs = [ python3Packages.pillow ];
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [ python3Packages.pillow ];
 
   installFlags = [
     "DESTDIR=$(out)"

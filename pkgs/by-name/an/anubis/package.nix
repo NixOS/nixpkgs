@@ -13,16 +13,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pdfe2D9KAg/vesTgOi+b5ZVkUkuWhmZC/xYXiiYzlPs=";
+    hash = "sha256-FKX8E32unAKK8e/Nlrj24FU1amc7AJw28hzmZDbIcIc=";
   };
 
-  vendorHash = "sha256-cOl+eVnj6aMKIJCjCM0aacp4/Jg5BhZqFwum+u9tOKE=";
+  vendorHash = "sha256-cWkC3Bqut5h3hHh5tPIPeHMnkwoqKMnG1x40uCtUIwI=";
 
   nativeBuildInputs = [
     esbuild
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     pname = "anubis-xess";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-kBnexaBAMgA7QdKevW3mmlSn+QEbkTW//hYVTRFLQeQ=";
+    npmDepsHash = "sha256-jvYmAbbMRy8fK2Y0YC0UJGhNRLzk1kjzGvRbqhWFzS4=";
 
     buildPhase = ''
       runHook preBuild

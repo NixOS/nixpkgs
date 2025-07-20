@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
   version = "1.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
@@ -16,6 +16,8 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-FQbY9j6eJtupBiYTSCEJHAAlpDltb6U5hgWet42AKho=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [ "nvidia-ml-py" ];
 
@@ -29,6 +31,8 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+
+  pythonImportsCheck = [ "nvitop" ];
 
   meta = {
     description = "Interactive NVIDIA-GPU process viewer, the one-stop solution for GPU process management";

@@ -14,6 +14,7 @@
   pandas,
   pydantic,
   typeguard,
+  typing-extensions,
   typing-inspect,
 
   # optional-dependencies
@@ -22,6 +23,7 @@
   fastapi,
   geopandas,
   hypothesis,
+  ibis-framework,
   pandas-stubs,
   polars,
   pyyaml,
@@ -29,8 +31,10 @@
   shapely,
 
   # tests
+  duckdb,
   joblib,
   pyarrow,
+  pyarrow-hotfix,
   pytestCheckHook,
   pytest-asyncio,
   pythonAtLeast,
@@ -38,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-S5y717M3rGGO39TOh1X5yePvdcF6ct1Jk51/bbM6X6M=";
+    hash = "sha256-0YeLeGpunjHRWFvSvz0r2BokM4/eJKXuBajgcGquca4=";
   };
 
   build-system = [
@@ -56,11 +60,10 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
-    numpy
     packaging
-    pandas
     pydantic
     typeguard
+    typing-extensions
     typing-inspect
   ];
 
@@ -96,6 +99,14 @@ buildPythonPackage rec {
           geopandas
           shapely
         ];
+        ibis = [
+          ibis-framework
+          duckdb
+        ];
+        pandas = [
+          numpy
+          pandas
+        ];
         polars = [ polars ];
       };
     in
@@ -106,6 +117,7 @@ buildPythonPackage rec {
     pytest-asyncio
     joblib
     pyarrow
+    pyarrow-hotfix
   ] ++ optional-dependencies.all;
 
   pytestFlagsArray = [
@@ -145,7 +157,7 @@ buildPythonPackage rec {
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/v${version}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

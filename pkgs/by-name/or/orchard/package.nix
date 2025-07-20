@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "orchard";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "orchard";
     rev = version;
-    hash = "sha256-K9lPI1wl+F6piksRMh7WgRPIAXpAvSTPjX+5MIddIZQ=";
+    hash = "sha256-1i62fKxuLYtLIUSbUZ4nu3I1r9V6PUhaWpspH/H7k+Q=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +24,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-+lH9TNceOYmGeoWUy4xnDr1TtSW81ZELljPfCv8zwEE=";
+  vendorHash = "sha256-dWx4Ivw25H07rd0pNC3VecS7QcIc9ikEwjjUS53SefU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -10,7 +10,7 @@ in
 python3Packages.buildPythonApplication {
   pname = "legendary-heroic";
   inherit version;
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
@@ -19,12 +19,14 @@ python3Packages.buildPythonApplication {
     sha256 = "sha256-mOys7lOPrrzBUBMIM/JvKygFQ/qIGD68BDNigk5BCIo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     requests
     filelock
   ];
-
-  disabled = python3Packages.pythonOlder "3.8";
 
   pythonImportsCheck = [ "legendary" ];
 
