@@ -543,8 +543,6 @@ with pkgs;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
-  opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
-
   pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear { };
 
   magika = with python3Packages; toPythonApplication magika;

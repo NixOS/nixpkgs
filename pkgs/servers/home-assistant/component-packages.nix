@@ -3567,7 +3567,8 @@
       ]; # missing inputs: microBeesPy
     "microsoft" =
       ps: with ps; [
-      ]; # missing inputs: pycsspeechtts
+        pycsspeechtts
+      ];
     "microsoft_face" =
       ps: with ps; [
         pyturbojpeg
@@ -3983,7 +3984,8 @@
       ];
     "noaa_tides" =
       ps: with ps; [
-      ]; # missing inputs: noaa-coops
+        noaa-coops
+      ];
     "nobo_hub" =
       ps: with ps; [
         pynobo
@@ -7293,6 +7295,7 @@
     "meteoclimatic"
     "metoffice"
     "mfi"
+    "microsoft"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
