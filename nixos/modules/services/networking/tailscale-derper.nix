@@ -20,7 +20,7 @@ in
         description = "Domain name under which the derper server is reachable.";
       };
 
-      enableNginx = lib.mkOption {
+      configureNginx = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = ''
@@ -70,12 +70,12 @@ in
 
   config = lib.mkIf cfg.enable {
     networking.firewall = lib.mkIf cfg.openFirewall {
-      # port 80 and 443 are opened by nginx already when enableNginx is true
+      # port 80 and 443 are opened by nginx already when configureNginx is true
       allowedUDPPorts = [ cfg.stunPort ];
     };
 
     services = {
-      nginx = lib.mkIf cfg.enableNginx {
+      nginx = lib.mkIf cfg.configureNginx {
         enable = true;
         virtualHosts."${cfg.domain}" = {
           addSSL = true; # this cannot be forceSSL as derper sends some information over port 80, too.
