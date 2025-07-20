@@ -10,7 +10,7 @@
   withGUI ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lshw";
   # Fix repology.org by not including the prefixed B, otherwise the `pname` attr
   # gets filled as `lshw-B.XX.XX` in `nix-env --query --available --attr nixpkgs.lshw --meta`
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lyonel";
     repo = "lshw";
-    rev = "B.${version}";
+    tag = "B.${finalAttrs.version}";
     hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "VERSION=${src.rev}"
+    "VERSION=B.${finalAttrs.version}"
   ];
 
   buildFlags = [ "all" ] ++ lib.optional withGUI "gui";
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lyonel/lshw/blob/master/docs/Changelog";
     description = "Provide detailed information on the hardware configuration of the machine";
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "lshw";
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ thiagokokada ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -395,8 +395,6 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
-  lshw-gui = lshw.override { withGUI = true; };
-
   kdePackages = callPackage ../kde { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
