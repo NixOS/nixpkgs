@@ -12893,12 +12893,6 @@
     githubId = 20658981;
     name = "Jarosław Wygoda";
   };
-  jyp = {
-    email = "jeanphilippe.bernardy@gmail.com";
-    github = "jyp";
-    githubId = 27747;
-    name = "Jean-Philippe Bernardy";
-  };
   jzellner = {
     email = "jeffz@eml.cc";
     github = "sofuture";
