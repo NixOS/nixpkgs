@@ -118,9 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
       cxxPrefixForStdenv =
         stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
-      setBuild = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
-      setHost = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
-      setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+      setBuild = "--set=target.\"${stdenv.buildPlatform.rust.rustcTarget}\"";
+      setHost = "--set=target.\"${stdenv.hostPlatform.rust.rustcTarget}\"";
+      setTarget = "--set=target.\"${stdenv.targetPlatform.rust.rustcTarget}\"";
       ccForBuild = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       cxxForBuild = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
       ccForHost = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
