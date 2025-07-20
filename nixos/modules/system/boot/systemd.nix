@@ -439,13 +439,6 @@ in
             description = "Turn on Block I/O accounting.";
           };
 
-          DefaultBlockIOAccounting = mkOption {
-            type = types.bool;
-            default = cfg.enableCgroupAccounting;
-            defaultText = lib.literalExpression "config.systemd.enableCgroupAccounting";
-            description = "(Deprecated since systemd 252).";
-          };
-
           DefaultIPAccounting = mkOption {
             type = types.bool;
             default = cfg.enableCgroupAccounting;
