@@ -34,7 +34,6 @@ let
     "@obsolete"
     "@privileged"
     "@setuid"
-    "@spawn"
   ];
 
   cfgService = {
