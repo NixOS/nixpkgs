@@ -28,6 +28,7 @@ let
     ./nodes.nix
     ./pkgs.nix
     ./run.nix
+    ./test-configuration.nix
     ./testScript.nix
   ];
 
