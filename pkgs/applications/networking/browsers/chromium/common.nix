@@ -215,7 +215,6 @@ let
   };
 
   isElectron = packageName == "electron";
-  needsCompgen = chromiumVersionAtLeast "133";
   rustcVersion = buildPackages.rustc.version;
 
   chromiumDeps = lib.mapAttrs (
@@ -295,11 +294,7 @@ let
       [
         ninja
         gnChromium
-      ]
-      ++ lib.optionals needsCompgen [
         bashInteractive # needed for compgen in buildPhase -> process_template
-      ]
-      ++ [
         pkg-config
         python3WithPackages
         perl
@@ -513,7 +508,7 @@ let
           revert = true;
         })
       ]
-      ++ lib.optionals (chromiumVersionAtLeast "131" && stdenv.hostPlatform.isAarch64) [
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         # Reverts decommit pooled pages which causes random crashes of tabs on systems
         # with page sizes different than 4k. It 'supports' runtime page sizes, but has
         # a hardcode for aarch64 systems.
@@ -529,70 +524,12 @@ let
           hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
       ]
-      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "137") [
-        # Backport "Add more CFI suppressions for inline PipeWire functions" from M137
-        # to fix SIGKILL (ud1) when screensharing with PipeWire 1.4+ and is_cfi = true.
-        # Our chromium builds set is_official_build = true, which in turn enables is_cfi.
-        # We don't apply this patch to electron, because we build electron with
-        # is_cfi = false and as such is not affected by this.
-        # https://chromium-review.googlesource.com/c/chromium/src/+/6421030
-        (fetchpatch {
-          name = "add-more-CFI-suppressions-for-inline-PipeWire-functions.patch";
-          url = "https://chromium.googlesource.com/chromium/src/+/0eebf40b9914bca8fe69bef8eea89522c1a5d4ce^!?format=TEXT";
-          decode = "base64 -d";
-          hash = "sha256-xMqGdu5Q8BGF/OIRdmMzPrrrMGDOSY2xElFfhRsJlDU=";
-        })
-      ]
-      ++ lib.optionals (!isElectron && !chromiumVersionAtLeast "136") [
-        # Backport "Only call format_message when needed" to fix print() crashing with is_cfi = true.
-        # We build electron is_cfi = false and as such electron is not affected by this.
-        # Started shipping with M136+.
-        # https://github.com/NixOS/nixpkgs/issues/401326
-        # https://gitlab.archlinux.org/archlinux/packaging/packages/chromium/-/issues/13
-        # https://skia-review.googlesource.com/c/skia/+/961356
-        (fetchpatch {
-          name = "only-call-format_message-when-needed.patch";
-          url = "https://skia.googlesource.com/skia/+/71685eda67178fa374d473ec1431fc459c83bb21^!?format=TEXT";
-          decode = "base64 -d";
-          stripLen = 1;
-          extraPrefix = "third_party/skia/";
-          hash = "sha256-aMqDjt/0cowqSm5DqcD3+zX+mtjydk396LD+B5F/3cs=";
-        })
-      ]
       ++ lib.optionals (chromiumVersionAtLeast "136") [
         # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
         # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
         # preventing compilations of chromium with versions below their intended version, not about running the very
         # exact version or even running a newer version.
         ./patches/chromium-136-nodejs-assert-minimal-version-instead-of-exact-match.patch
-      ]
-      ++ lib.optionals (versionRange "137" "138") [
-        (fetchpatch {
-          # Partial revert of upstream clang+llvm bump revert to fix the following error when building with LLVM < 21:
-          #  clang++: error: unknown argument: '-fextend-variable-liveness=none'
-          # https://chromium-review.googlesource.com/c/chromium/src/+/6514242
-          # Upstream relanded this in M138+ with <https://chromium-review.googlesource.com/c/chromium/src/+/6541127>.
-          name = "chromium-137-llvm-19.patch";
-          url = "https://chromium.googlesource.com/chromium/src/+/ddf8f8a465be2779bd826db57f1299ccd2f3aa25^!?format=TEXT";
-          includes = [ "build/config/compiler/BUILD.gn" ];
-          revert = true;
-          decode = "base64 -d";
-          hash = "sha256-wAR8E4WKMvdkW8DzdKpyNpp4dynIsYAbnJ2MqE8V2o8=";
-        })
-      ]
-      ++ lib.optionals (versionRange "137" "138") [
-        (fetchpatch {
-          # Backport "Fix build with system libpng" that fixes a typo in core/fxcodec/png/png_decoder.cpp that causes
-          # the build to fail at the final linking step.
-          # https://pdfium-review.googlesource.com/c/pdfium/+/132130
-          # Started shipping with M138+.
-          name = "pdfium-Fix-build-with-system-libpng.patch";
-          url = "https://pdfium.googlesource.com/pdfium.git/+/83f11d630aa1cb6d5ceb292364412f7b0585a201^!?format=TEXT";
-          extraPrefix = "third_party/pdfium/";
-          stripLen = 1;
-          decode = "base64 -d";
-          hash = "sha256-lDX0OLdxxTNLtViqEt0luJQ/H0mlvQfV0zbY1Ubqyq0=";
-        })
       ];
 
     postPatch =
@@ -811,19 +748,10 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
+
+        use_qt5 = false;
+        use_qt6 = false;
       }
-      // (
-        # M134 changed use_qt to use_qt5 (and use_qt6)
-        if chromiumVersionAtLeast "134" then
-          {
-            use_qt5 = false;
-            use_qt6 = false;
-          }
-        else
-          {
-            use_qt = false;
-          }
-      )
       // lib.optionalAttrs (chromiumVersionAtLeast "136") {
         # LLVM < v21 does not support --warning-suppression-mappings yet:
         clang_warning_suppression_file = "";
@@ -906,12 +834,14 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          ${lib.optionalString needsCompgen "bash -s << EOL\n"}(
+          bash -s << EOL
+          (
             source chrome/installer/linux/common/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )${lib.optionalString needsCompgen "\nEOL"}
+          )
+          EOL
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;
