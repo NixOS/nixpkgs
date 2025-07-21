@@ -1,0 +1,184 @@
+id: native-build-tools-in-build-inputs
+language: nix
+message: Build tools (pkg-config, cmake, meson, etc.) must be in nativeBuildInputs, not buildInputs
+severity: error
+rule:
+  kind: binding
+  all:
+    - has:
+        field: attrpath
+        has:
+          kind: identifier
+          pattern: buildInputs
+    - has:
+        field: expression
+        kind: list_expression
+        has:
+          kind: variable_expression
+          has:
+            field: name
+            any:
+              # Package configuration tools
+              - pattern: pkg-config
+              - pattern: pkgconfig
+              - pattern: pkgconf
+
+              # Build systems
+              - pattern: cmake
+              - pattern: cmakeMinimal
+              - pattern: meson
+              - pattern: ninja
+              - pattern: scons
+              - pattern: bazel
+              - pattern: gnumake
+              - pattern: bmake
+              - pattern: jam
+              - pattern: qmake
+              - pattern: bear
+
+              # Autotools and related
+              - pattern: autoreconfHook
+              - pattern: autoreconfHook269
+              - pattern: autoreconfHook213
+              - pattern: autoconf
+              - pattern: autoconf269
+              - pattern: autoconf213
+              - pattern: automake
+              - pattern: libtool
+              - pattern: intltool
+              - pattern: autoPatchelfHook
+
+              # Compiler toolchains
+              - pattern: cargo
+              - pattern: rustc
+              - pattern: rustPlatform.buildRustPackage
+              - pattern: go
+              - pattern: buildGoModule
+              - pattern: buildGoPackage
+              - pattern: ghc
+              - pattern: cabal-install
+              - pattern: stack
+              - pattern: dotnet-sdk
+              - pattern: dotnet-sdk_7
+              - pattern: dotnet-sdk_8
+              - pattern: mono
+              - pattern: fsharp
+              - pattern: javac
+              - pattern: ant
+              - pattern: maven
+              - pattern: gradle
+
+              # Wrappers and hooks
+              - pattern: makeWrapper
+              - pattern: makeBinaryWrapper
+              - pattern: wrapGAppsHook
+              - pattern: wrapGAppsHook3
+              - pattern: wrapGAppsHook4
+              - pattern: wrapQtAppsHook
+              - pattern: wrapProgram
+
+              # Desktop and icon tools
+              - pattern: desktop-file-utils
+              - pattern: copyDesktopItems
+              - pattern: makeDesktopItem
+              - pattern: icoutils
+              - pattern: imagemagick
+              - pattern: inkscape # when used for icon generation
+
+              # Localization and internationalization
+              - pattern: po4a
+              - pattern: msgfmt
+              # Note: gettext is excluded as it provides runtime libraries too
+
+              # Documentation generators
+              - pattern: doxygen
+              - pattern: gtk-doc
+              - pattern: gi-docgen
+              - pattern: sphinx
+              - pattern: help2man
+              - pattern: texinfo
+              - pattern: groff
+              - pattern: mandoc
+              - pattern: ronn
+              - pattern: scdoc
+              - pattern: asciidoc
+              - pattern: asciidoctor
+              - pattern: pandoc
+              - pattern: docbook_xsl
+              - pattern: docbook_xml_dtd_42
+              - pattern: docbook_xml_dtd_43
+              - pattern: docbook_xml_dtd_44
+              - pattern: docbook_xml_dtd_45
+              - pattern: docbook5
+              - pattern: xmlto
+
+              # Parser and lexer generators
+              - pattern: bison
+              - pattern: flex
+              - pattern: yacc
+              - pattern: antlr
+              - pattern: ragel
+              - pattern: re2c
+              - pattern: lemon
+
+              # File manipulation and analysis tools
+              - pattern: patchelf
+              - pattern: fixDarwinDylibNames
+              - pattern: nukeReferences
+              - pattern: removeReferencesTo
+              - pattern: installShellFiles
+              - pattern: substituteAll
+              - pattern: substituteAllFiles
+              - pattern: install_name_tool
+              - pattern: dos2unix
+              - pattern: unix2dos
+
+              # Code and protocol generators
+              - pattern: m4
+              - pattern: gnum4
+              - pattern: protobuf
+              - pattern: protoc-gen-go
+              - pattern: protoc-gen-grpc
+              - pattern: qt5.qttools
+              - pattern: qt6.qttools
+              - pattern: moc
+              - pattern: uic
+              - pattern: rcc
+              - pattern: sass
+              - pattern: sassc
+              - pattern: less
+              - pattern: lessc
+              - pattern: wayland-scanner
+              - pattern: glib-compile-schemas
+              - pattern: glib-compile-resources
+
+              # Testing frameworks (when used for build-time tests)
+              - pattern: check
+              - pattern: dejagnu
+              - pattern: cppunit
+              - pattern: gtest
+              - pattern: catch2
+              - pattern: cmocka
+
+              # Build utilities
+              - pattern: file
+              - pattern: bintools
+              - pattern: binutils
+              - pattern: elfutils
+              - pattern: patchutils
+              - pattern: chrpath
+              - pattern: cpio
+              - pattern: rpm
+              - pattern: dpkg
+              - pattern: fakeroot
+              - pattern: fakechroot
+files:
+  - pkgs/**/*.nix
+note: |
+  Move build tools from buildInputs to nativeBuildInputs for cross-compilation.
+
+    nativeBuildInputs = [ cmake pkg-config ];  # ← Build tools here
+    buildInputs = [ libfoo gtk3 ];             # ← Runtime deps here
+metadata:
+  category: correctness
+  documentation: https://nixos.org/manual/nixpkgs/stable/#ssec-stdenv-dependencies

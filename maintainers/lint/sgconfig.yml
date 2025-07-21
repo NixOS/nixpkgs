@@ -1,0 +1,10 @@
+# ast-grep configuration for nixpkgs linting
+# Documentation: https://ast-grep.github.io/reference/sgconfig.html
+ruleDirs:
+  - rules/pkgs
+  - rules/general
+  - rules/nixos
+  - rules/experimental
+
+testConfigs:
+  - testDir: tests

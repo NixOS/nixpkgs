@@ -1,0 +1,299 @@
+id: native-build-tools-in-build-inputs
+snapshots:
+  ? |
+    # Wrong: Go compiler in buildInputs
+    {
+      buildInputs = [ go libfoo ];
+    }
+  : labels:
+      - source: buildInputs = [ go libfoo ];
+        style: primary
+        start: 40
+        end: 68
+      - source: buildInputs
+        style: secondary
+        start: 40
+        end: 51
+      - source: buildInputs
+        style: secondary
+        start: 40
+        end: 51
+      - source: go
+        style: secondary
+        start: 56
+        end: 58
+      - source: go
+        style: secondary
+        start: 56
+        end: 58
+      - source: '[ go libfoo ]'
+        style: secondary
+        start: 54
+        end: 67
+  ? |
+    # Wrong: Go compiler in buildInputs
+    {
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [ go libfoo ];
+    }
+  : labels:
+      - source: buildInputs = [ go libfoo ];
+        style: primary
+        start: 73
+        end: 101
+      - source: buildInputs
+        style: secondary
+        start: 73
+        end: 84
+      - source: buildInputs
+        style: secondary
+        start: 73
+        end: 84
+      - source: go
+        style: secondary
+        start: 89
+        end: 91
+      - source: go
+        style: secondary
+        start: 89
+        end: 91
+      - source: '[ go libfoo ]'
+        style: secondary
+        start: 87
+        end: 100
+  ? |
+    # Wrong: Rust toolchain in buildInputs
+    {
+      buildInputs = [ cargo rustc ];
+    }
+  : labels:
+      - source: buildInputs = [ cargo rustc ];
+        style: primary
+        start: 43
+        end: 73
+      - source: buildInputs
+        style: secondary
+        start: 43
+        end: 54
+      - source: buildInputs
+        style: secondary
+        start: 43
+        end: 54
+      - source: cargo
+        style: secondary
+        start: 59
+        end: 64
+      - source: cargo
+        style: secondary
+        start: 59
+        end: 64
+      - source: '[ cargo rustc ]'
+        style: secondary
+        start: 57
+        end: 72
+  ? |
+    # Wrong: autoreconfHook in buildInputs
+    {
+      buildInputs = [ autoreconfHook automake libtool ];
+    }
+  : labels:
+      - source: buildInputs = [ autoreconfHook automake libtool ];
+        style: primary
+        start: 43
+        end: 93
+      - source: buildInputs
+        style: secondary
+        start: 43
+        end: 54
+      - source: buildInputs
+        style: secondary
+        start: 43
+        end: 54
+      - source: autoreconfHook
+        style: secondary
+        start: 59
+        end: 73
+      - source: autoreconfHook
+        style: secondary
+        start: 59
+        end: 73
+      - source: '[ autoreconfHook automake libtool ]'
+        style: secondary
+        start: 57
+        end: 92
+  ? |
+    # Wrong: cmake in buildInputs
+    {
+      buildInputs = [ cmake libfoo ];
+    }
+  : labels:
+      - source: buildInputs = [ cmake libfoo ];
+        style: primary
+        start: 34
+        end: 65
+      - source: buildInputs
+        style: secondary
+        start: 34
+        end: 45
+      - source: buildInputs
+        style: secondary
+        start: 34
+        end: 45
+      - source: cmake
+        style: secondary
+        start: 50
+        end: 55
+      - source: cmake
+        style: secondary
+        start: 50
+        end: 55
+      - source: '[ cmake libfoo ]'
+        style: secondary
+        start: 48
+        end: 64
+  ? |
+    # Wrong: documentation tools in buildInputs
+    {
+      buildInputs = [ doxygen help2man pandoc ];
+    }
+  : labels:
+      - source: buildInputs = [ doxygen help2man pandoc ];
+        style: primary
+        start: 48
+        end: 90
+      - source: buildInputs
+        style: secondary
+        start: 48
+        end: 59
+      - source: buildInputs
+        style: secondary
+        start: 48
+        end: 59
+      - source: doxygen
+        style: secondary
+        start: 64
+        end: 71
+      - source: doxygen
+        style: secondary
+        start: 64
+        end: 71
+      - source: '[ doxygen help2man pandoc ]'
+        style: secondary
+        start: 62
+        end: 89
+  ? |
+    # Wrong: makeWrapper in buildInputs
+    {
+      buildInputs = [ makeWrapper gtk3 ];
+    }
+  : labels:
+      - source: buildInputs = [ makeWrapper gtk3 ];
+        style: primary
+        start: 40
+        end: 75
+      - source: buildInputs
+        style: secondary
+        start: 40
+        end: 51
+      - source: buildInputs
+        style: secondary
+        start: 40
+        end: 51
+      - source: makeWrapper
+        style: secondary
+        start: 56
+        end: 67
+      - source: makeWrapper
+        style: secondary
+        start: 56
+        end: 67
+      - source: '[ makeWrapper gtk3 ]'
+        style: secondary
+        start: 54
+        end: 74
+  ? "# Wrong: multiple build tools in buildInputs\n{\n  buildInputs = [ \n    meson\n    ninja\n    pkg-config\n    libfoo \n  ];\n}\n"
+  : labels:
+      - source: "buildInputs = [ \n    meson\n    ninja\n    pkg-config\n    libfoo \n  ];"
+        style: primary
+        start: 49
+        end: 117
+      - source: buildInputs
+        style: secondary
+        start: 49
+        end: 60
+      - source: buildInputs
+        style: secondary
+        start: 49
+        end: 60
+      - source: meson
+        style: secondary
+        start: 70
+        end: 75
+      - source: meson
+        style: secondary
+        start: 70
+        end: 75
+      - source: "[ \n    meson\n    ninja\n    pkg-config\n    libfoo \n  ]"
+        style: secondary
+        start: 63
+        end: 116
+  ? |
+    # Wrong: pkg-config in buildInputs
+    {
+      buildInputs = [ pkg-config ];
+    }
+  : labels:
+      - source: buildInputs = [ pkg-config ];
+        style: primary
+        start: 39
+        end: 68
+      - source: buildInputs
+        style: secondary
+        start: 39
+        end: 50
+      - source: buildInputs
+        style: secondary
+        start: 39
+        end: 50
+      - source: pkg-config
+        style: secondary
+        start: 55
+        end: 65
+      - source: pkg-config
+        style: secondary
+        start: 55
+        end: 65
+      - source: '[ pkg-config ]'
+        style: secondary
+        start: 53
+        end: 67
+  ? |-
+    # Wrong: wrappers in buildInputs
+    {
+      buildInputs = [ wrapGAppsHook wrapQtAppsHook libgtk ];
+    }
+  : labels:
+      - source: buildInputs = [ wrapGAppsHook wrapQtAppsHook libgtk ];
+        style: primary
+        start: 37
+        end: 91
+      - source: buildInputs
+        style: secondary
+        start: 37
+        end: 48
+      - source: buildInputs
+        style: secondary
+        start: 37
+        end: 48
+      - source: wrapGAppsHook
+        style: secondary
+        start: 53
+        end: 66
+      - source: wrapGAppsHook
+        style: secondary
+        start: 53
+        end: 66
+      - source: '[ wrapGAppsHook wrapQtAppsHook libgtk ]'
+        style: secondary
+        start: 51
+        end: 90
