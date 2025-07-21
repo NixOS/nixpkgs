@@ -55,6 +55,7 @@ in pythonpkgs.buildPythonApplication rec {
       orjson
       paho-mqtt
       pillow-heif
+      psycopg2
       pydantic-settings
       pyhumps
       pyjwt
