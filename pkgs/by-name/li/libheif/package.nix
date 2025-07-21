@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
+    "lib"
   ];
 
   src = fetchFromGitHub {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix installation path for gdk-pixbuf module
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
 
   # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
   postFixup = ''
