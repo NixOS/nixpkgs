@@ -72,12 +72,6 @@ let
 
 in
 
-assert
-  withPlugin
-  ->
-    builtins.elem hplipArch pluginArches
-    || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
-
 python3Packages.buildPythonApplication {
   inherit pname version;
   format = "other";
@@ -361,13 +355,7 @@ python3Packages.buildPythonApplication {
           bsd2
           gpl2Plus
         ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "armv6l-linux"
-      "armv7l-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.attrNames hplipPlatforms;
     maintainers = with maintainers; [ ttuegel ];
   };
 }
