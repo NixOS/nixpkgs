@@ -62,14 +62,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    description = "Free Photo Gallery Software for Any Website";
-    homepage = "https://jalbum.net";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ silmaril ];
-  };
-
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "update-jalbum";
     runtimeInputs = [
@@ -82,4 +74,14 @@ stdenv.mkDerivation rec {
       update-source-version jalbum "$LATEST_VERSION"
     '';
   });
+
+  meta = {
+    description = "Free Photo Gallery Software for Any Website";
+    homepage = "https://jalbum.net";
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ silmaril ];
+    mainProgram = "jalbum";
+    platforms = lib.platforms.unix;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+  };
 }
