@@ -128,6 +128,9 @@ buildPythonPackage rec {
     "test_serializable_mapping"
     "test_person"
     "test_aliases_hidden"
+    # AssertionError: (failed string match due to terminal control chars in output)
+    # https://github.com/langchain-ai/langchain/issues/32150
+    "test_filecallback"
   ];
 
   disabledTestPaths = [
@@ -143,6 +146,13 @@ buildPythonPackage rec {
     "tests/unit_tests/output_parsers/test_retry.py"
     # pydantic.errors.PydanticUserError: `LLMSummarizationCheckerChain` is not fully defined; you should define `BaseCache`, then call `LLMSummarizationCheckerChain.model_rebuild()`.
     "tests/unit_tests/chains/test_llm_summarization_checker.py"
+
+    # TODO Remove on next update
+    # NotImplemented Error / AssertionError re: _HashedDocument
+    # HashedDocument was removed as a public entry in langchain-core > 0.3.66
+    # and langchain is still using the old code. (Will be fixed on next update)
+    "tests/unit_tests/indexes/test_hashed_document.py"
+    "tests/unit_tests/indexes/test_indexing.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
@@ -150,6 +160,8 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater {
     rev-prefix = "langchain==";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Building applications with LLMs through composability";
