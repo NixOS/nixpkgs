@@ -1478,8 +1478,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.24.3";
-          hash = "sha256-OfkZdF5Qz3VketCIjWuwd08EI7e/II9c7G4a3O2mW+s=";
+          version = "2.26.3";
+          hash = "sha256-0kcRegl+TIjAoK3+AwxO07TJ7h64F1eIPAauav2z4vI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -4696,8 +4696,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.296.0";
-          hash = "sha256-LQzVo7NKJvjQ/eUOzXtDEDCSnSIjACPgZFwp87qG/JM=";
+          version = "3.297.0";
+          hash = "sha256-K5XRBefGWG3BGyBCK0QIpZ6Jjm+qNjVEyMucCGs+LKs=";
         };
         meta = {
           license = lib.licenses.mit;
