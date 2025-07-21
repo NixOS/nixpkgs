@@ -15,8 +15,8 @@ let
   updateScript = ./update.sh;
 
   meta = {
-    description = "Jetbrains Toolbox";
-    homepage = "https://jetbrains.com/";
+    description = "JetBrains Toolbox";
+    homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ners ];
@@ -91,6 +91,11 @@ selectKernel {
         ]
         ++ appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";
+
+      extraInstallCommands = ''
+        install -Dm0644 ${src}/bin/jetbrains-toolbox.desktop -t $out/share/applications
+        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/jetbrains-toolbox.png
+      '';
     };
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {

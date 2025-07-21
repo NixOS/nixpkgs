@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kevinkreiser/prime_server";
     license = licenses.bsd2;
     maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

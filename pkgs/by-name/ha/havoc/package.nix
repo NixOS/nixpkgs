@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     mainProgram = "havoc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ videl ];
     inherit (wayland.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };

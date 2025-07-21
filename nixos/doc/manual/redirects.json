@@ -857,6 +857,12 @@
   "modules-services-akkoma-distributed-deployment": [
     "index.html#modules-services-akkoma-distributed-deployment"
   ],
+  "module-services-atalkd": [
+    "index.html#module-services-atalkd"
+  ],
+  "module-services-atalkd-basic-usage": [
+    "index.html#module-services-atalkd-basic-usage"
+  ],
   "module-services-systemd-lock-handler": [
     "index.html#module-services-systemd-lock-handler"
   ],
