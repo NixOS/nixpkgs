@@ -176,6 +176,10 @@ in
             krdp
             xwaylandvideobridge # exposes Wayland windows to X11 screen capture
           ]
+          ++ lib.optionals config.hardware.sensor.iio.enable [
+            # This is required for autorotation in Plasma 6
+            qtsensors
+          ]
           ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
             # only install discover if flatpak is enabled.
