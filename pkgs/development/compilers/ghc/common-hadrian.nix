@@ -346,7 +346,8 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert stdenv.buildPlatform == stdenv.hostPlatform;
+assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+  "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
