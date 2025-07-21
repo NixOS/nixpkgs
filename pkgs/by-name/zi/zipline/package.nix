@@ -117,8 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     homepage = "https://zipline.diced.sh/";
+    downloadPage = "https://github.com/diced/zipline";
+    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
