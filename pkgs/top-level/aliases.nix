@@ -1215,6 +1215,8 @@ mapAliases {
   ma1sd = throw "ma1sd was dropped as it is unmaintained"; # Added 2024-07-10
   mac = monkeysAudio; # Added 2024-11-30
   MACS2 = macs2; # Added 2023-06-12
+  magma_2_6_2 = throw "'magma_2_6_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
+  magma_2_7_2 = throw "'magma_2_7_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailctl = throw "mailctl has been renamed to oama"; # Added 2024-08-19
   mailman-rss = throw "The mailman-rss package was dropped since it was unmaintained."; # Added 2024-06-21

@@ -1331,7 +1331,7 @@ in
   ssh-audit = runTest ./ssh-audit.nix;
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
-  stalwart-mail = runTest ./stalwart-mail.nix;
+  stalwart-mail = runTest ./stalwart/stalwart-mail.nix;
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = runTest ./starship.nix;
   stash = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stash.nix { };
