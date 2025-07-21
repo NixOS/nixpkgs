@@ -7587,10 +7587,6 @@ with pkgs;
 
   vcpkg-tool-unwrapped = vcpkg-tool.override { doWrap = false; };
 
-  wails = callPackage ../development/tools/wails {
-    stdenv = gccStdenv;
-  };
-
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;
   };
