@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchzip,
   makeWrapper,
   jre_headless,
@@ -22,12 +22,12 @@ let
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
   version = "26.2.5";
 
   src = fetchzip {
-    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
+    url = "https://github.com/keycloak/keycloak/releases/download/${finalAttrs.version}/keycloak-${finalAttrs.version}.zip";
     hash = "sha256-yXbHdznZlrz4T2+154cM+eAmPO/TR5kRCVVi26H66ok=";
   };
 
@@ -103,5 +103,4 @@ stdenv.mkDerivation rec {
       leona
     ];
   };
-
-}
+})
