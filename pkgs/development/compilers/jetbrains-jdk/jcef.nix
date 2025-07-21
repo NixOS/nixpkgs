@@ -46,9 +46,6 @@
   thrift,
 }:
 
-assert !stdenv.hostPlatform.isDarwin;
-# I can't test darwin
-
 let
   rpath = lib.makeLibraryPath [
     glib
@@ -306,5 +303,9 @@ stdenv.mkDerivation rec {
     description = "Jetbrains' fork of JCEF";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/JetBrains/JCEF";
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

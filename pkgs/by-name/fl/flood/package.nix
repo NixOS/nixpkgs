@@ -24,7 +24,7 @@ buildNpmPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-i1szy2JVKvq2rcL0l51vmsLano4l88s97EQPN9g4Qq4=";
+    hash = "sha256-xoCRZUJkdR4X5hszM5gaOyWXLNCbzG5CzF+6OXGEy1k=";
   };
 
   passthru = {

@@ -6701,6 +6701,8 @@ self: super: with self; {
 
   httpx = callPackage ../development/python-modules/httpx { };
 
+  httpx-aiohttp = callPackage ../development/python-modules/httpx-aiohttp { };
+
   httpx-auth = callPackage ../development/python-modules/httpx-auth { };
 
   httpx-ntlm = callPackage ../development/python-modules/httpx-ntlm { };

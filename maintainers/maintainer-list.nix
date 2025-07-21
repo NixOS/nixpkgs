@@ -6204,12 +6204,6 @@
     githubId = 21953890;
     name = "Tim Digel";
   };
-  desiderius = {
-    email = "didier@devroye.name";
-    github = "desiderius";
-    githubId = 1311761;
-    name = "Didier J. Devroye";
-  };
   desttinghim = {
     email = "opensource@louispearson.work";
     matrix = "@desttinghim:matrix.org";
@@ -11273,6 +11267,13 @@
     github = "jacobkoziej";
     githubId = 45084216;
     keys = [ { fingerprint = "1BF9 8D10 E0D0 0B41 5723  5836 4C13 3A84 E646 9228"; } ];
+  };
+  JacoMalan1 = {
+    name = "Jaco Malan";
+    email = "jacom@codelog.co.za";
+    github = "JacoMalan1";
+    githubId = 10290409;
+    keys = [ { fingerprint = "339C 9213 7F2D 5D6E 2B6A  6E98 240B B4C4 27BC 327A"; } ];
   };
   jaculabilis = {
     name = "Tim Van Baak";
@@ -22479,10 +22480,10 @@
     name = "Sauyon Lee";
   };
   savalet = {
-    email = "savinien.petitjean@gmail.com";
+    email = "me@savalet.dev";
     github = "savalet";
     githubId = 73446695;
-    name = "savalet";
+    name = "Savinien Petitjean";
   };
   savannidgerinel = {
     email = "savanni@luminescent-dreams.com";
