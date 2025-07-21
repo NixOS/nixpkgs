@@ -3237,6 +3237,7 @@ with haskellLib;
 
   # 2025-7-21: Jailbreak to relax bounds lens <5.3, megaparsec <9.7.
   # The test suite does not know how to find the 'smh' binary. (Expects a ./smh executable.)
+  # Test files are not included in installation tar, so fetch them from GitHub repo.
   smh = overrideCabal (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "DanRyba253";
