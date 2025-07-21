@@ -1514,7 +1514,15 @@ let
 
         ocsipersist-pgsql = callPackage ../development/ocaml-modules/ocsipersist/pgsql.nix { };
 
+        ocsipersist-pgsql-config =
+          callPackage ../development/ocaml-modules/ocsipersist/pgsql-config.nix
+            { };
+
         ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
+
+        ocsipersist-sqlite-config =
+          callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix
+            { };
 
         octavius = callPackage ../development/ocaml-modules/octavius { };
 
