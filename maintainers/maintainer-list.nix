@@ -22479,10 +22479,10 @@
     name = "Sauyon Lee";
   };
   savalet = {
-    email = "savinien.petitjean@gmail.com";
+    email = "me@savalet.dev";
     github = "savalet";
     githubId = 73446695;
-    name = "savalet";
+    name = "Savinien Petitjean";
   };
   savannidgerinel = {
     email = "savanni@luminescent-dreams.com";
