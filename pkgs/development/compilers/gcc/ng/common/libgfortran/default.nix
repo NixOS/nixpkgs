@@ -5,10 +5,11 @@
   gcc_meta,
   release_version,
   version,
+  getVersionFile,
   monorepoSrc ? null,
-  buildPackages,
   autoreconfHook269,
   libiberty,
+  buildPackages,
   libgcc,
   libbacktrace,
 }:
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook269
     libiberty
     gfortran
+  ];
+
+  patches = [
+    (getVersionFile "libgfortran/force-regular-dirs.patch")
   ];
 
   autoreconfFlags = "--install --force --verbose . libgfortran";
@@ -161,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     "gcc_cv_target_thread_file=single"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
+    "--with-toolexeclibdir=${builtins.placeholder "dev"}/lib"
   ];
 
   # Set the variable back the way it was, see corresponding code in
@@ -170,13 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [ "MULTIBUILDTOP:=../" ];
-
-  postInstall = ''
-    moveToOutput "lib/gcc/${stdenv.hostPlatform.config}/${version}/include" "$dev"
-    mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${version}/include"/* "$dev/include/"
-  '';
 
   doCheck = true;
 
