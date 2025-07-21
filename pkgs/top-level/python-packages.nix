@@ -13945,6 +13945,8 @@ self: super: with self; {
 
   pysol-cards = callPackage ../development/python-modules/pysol-cards { };
 
+  pysolarmanv5 = callPackage ../development/python-modules/pysolarmanv5 { };
+
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
   pysolr = callPackage ../development/python-modules/pysolr { };
