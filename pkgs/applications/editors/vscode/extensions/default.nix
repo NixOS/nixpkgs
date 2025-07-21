@@ -4055,6 +4055,8 @@ let
 
       reditorsupport.r = callPackage ./reditorsupport.r { };
 
+      release-candidate.vscode-scheme-repl = callPackage ./release-candidate.vscode-scheme-repl { };
+
       reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "reloaded-cpp";
