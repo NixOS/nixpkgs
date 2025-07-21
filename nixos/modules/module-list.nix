@@ -334,6 +334,7 @@
   ./programs/virt-manager.nix
   ./programs/vivid.nix
   ./programs/wavemon.nix
+  ./programs/way-shell.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/dwl.nix
   ./programs/wayland/gtklock.nix
