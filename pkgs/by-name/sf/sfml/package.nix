@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -12,7 +13,6 @@
   glew,
   libjpeg,
   libvorbis,
-  openal,
   udev,
   libXi,
   libX11,
@@ -20,18 +20,32 @@
   libXrandr,
   libXrender,
   xcbutilimage,
+
+  # miniaudio
+  alsa-lib,
+  libjack2,
+  libpulseaudio,
+  sndio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
     tag = finalAttrs.version;
-    hash = "sha256-e6x/L2D3eT6F/DBLQDZ+j0XD5NL9RalWZA8kcm9lZ3g=";
+    hash = "sha256-yTNoDHcBRzk270QHjSFVpjFKm2+uVvmVLg6XlAppwYk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Fix-pkg-config-when-SFML_PKGCONFIG_INSTALL_DIR-is-unset.patch";
+      url = "https://github.com/SFML/SFML/commit/a87763becbc4672b38f1021418ed94caa0f6540a.patch?full_index=1";
+      hash = "sha256-tJmXTdhwtWq6XfUPBzw47yTrc6EzwmSiVj9n6jQwHig=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
@@ -41,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       glew
       libjpeg
       libvorbis
-      openal
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux udev
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -53,11 +66,25 @@ stdenv.mkDerivation (finalAttrs: {
       xcbutilimage
     ];
 
+  # We rely on RUNPATH
+  dontPatchELF = true;
+
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)
     (lib.cmakeFeature "SFML_MISC_INSTALL_PREFIX" "share/SFML")
     (lib.cmakeBool "SFML_BUILD_FRAMEWORKS" false)
     (lib.cmakeBool "SFML_USE_SYSTEM_DEPS" true)
+
+    # FIXME: Unvendor miniaudio and move these deps there
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (
+      lib.makeLibraryPath [
+        alsa-lib
+        libjack2
+        libpulseaudio
+        sndio
+      ]
+    ))
   ];
 
   meta = {

@@ -26,7 +26,7 @@ For new packages please briefly describe the package or provide a link to its ho
 - NixOS Release Notes
   - [ ] Module addition: when adding a new NixOS module.
   - [ ] Module update: when the change is significant.
-- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and others READMEs.
+- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other READMEs.
 
 [NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
 [Package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests

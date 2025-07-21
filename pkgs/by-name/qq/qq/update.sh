@@ -7,8 +7,7 @@ cd $(readlink -e $(dirname "${BASH_SOURCE[0]}"))
 
 # darwin
 
-darwin_url=$(curl -s https://im.qq.com/macqq/index.shtml | grep -oP 'var rainbowConfigUrl = "\K.*(?=";)')
-darwin_payload=$(curl "$darwin_url" | grep -oP "var params= \K\{.*\}(?=;)")
+darwin_payload=$(curl https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/macOSConfig.js | grep -oP "var params= \K\{.*\}(?=;)")
 darwin_version=$(jq -r .version <<< "$darwin_payload" | awk -F\  '{print $1}')-$(jq -r .updateDate <<< "$darwin_payload")
 
 darwin_url=$(jq -r .downloadUrl <<< "$darwin_payload")
@@ -20,8 +19,7 @@ darwin_hash=$(nix --extra-experimental-features nix-command hash convert --to sr
 
 # linux
 
-linux_url=$(curl -s https://im.qq.com/linuxqq/index.shtml | grep -oP 'var rainbowConfigUrl = "\K.*(?=";)')
-linux_payload=$(curl "$linux_url" | grep -oP "var params= \K\{.*\}(?=;)")
+linux_payload=$(curl https://cdn-go.cn/qq-web/im.qq.com_new/latest/rainbow/linuxConfig.js | grep -oP "var params= \K\{.*\}(?=;)")
 linux_version=$(jq -r .version <<< "$linux_payload")-$(jq -r .updateDate <<< "$linux_payload")
 
 linux_aarch64_url=$(jq -r .armDownloadUrl.deb <<< "$linux_payload")

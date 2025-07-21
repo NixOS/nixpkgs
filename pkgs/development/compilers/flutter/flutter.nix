@@ -198,6 +198,7 @@ let
         "x86_64-darwin"
         "aarch64-darwin"
       ];
+      mainProgram = "flutter";
       maintainers = with maintainers; [
         ericdallo
       ];

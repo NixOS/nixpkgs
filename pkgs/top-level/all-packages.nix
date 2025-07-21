@@ -288,10 +288,6 @@ with pkgs;
   # many more scenarios than just opengl now.
   aocd = with python3Packages; toPythonApplication aocd;
 
-  archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix {
-    extraPackages = [ jdk17 ];
-  };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
@@ -2132,8 +2128,7 @@ with pkgs;
 
   espanso-wayland = espanso.override {
     x11Support = false;
-    waylandSupport = true;
-    espanso = espanso-wayland;
+    waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
   f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
@@ -2817,10 +2812,6 @@ with pkgs;
   rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
-
-  strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
-
-  strawberry = strawberry-qt6;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
@@ -5106,11 +5097,10 @@ with pkgs;
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
-    assert stdenv.targetPlatform != stdenv.hostPlatform;
     let
       libc1 = binutilsNoLibc.libc;
     in
-    wrapCCWith {
+    (wrapCCWith {
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
@@ -5136,7 +5126,14 @@ with pkgs;
       bintools = binutilsNoLibc;
       libc = libc1;
       extraPackages = [ ];
-    };
+    }).overrideAttrs
+      (prevAttrs: {
+        meta = prevAttrs.meta // {
+          badPlatforms =
+            (prevAttrs.meta.badPlatforms or [ ])
+            ++ lib.optionals (stdenv.targetPlatform == stdenv.hostPlatform) [ stdenv.hostPlatform.system ];
+        };
+      });
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
     gcc9
@@ -8155,7 +8152,7 @@ with pkgs;
       wasilibc
     else if libc == "relibc" then
       relibc
-    else if name == "llvm" then
+    else if libc == "llvm" then
       llvmPackages_20.libc
     else
       throw "Unknown libc ${libc}";
@@ -8619,10 +8616,6 @@ with pkgs;
   # https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=README;h=fd6e1a83f55696c1f7a08f6dfca08b2d6b7617ec;hb=70058cd9f944d620764e57c838209afae8a58c78#l118
   libgpg-error-gen-posix-lock-obj = libgpg-error.override {
     genPosixLockObjOnly = true;
-  };
-
-  libgpod = callPackage ../development/libraries/libgpod {
-    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
@@ -11379,6 +11372,7 @@ with pkgs;
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
 
   util-linuxMinimal = util-linux.override {
+    fetchurl = stdenv.fetchurlBoot;
     cryptsetupSupport = false;
     nlsSupport = false;
     ncursesSupport = false;
