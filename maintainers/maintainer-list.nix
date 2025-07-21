@@ -6204,12 +6204,6 @@
     githubId = 21953890;
     name = "Tim Digel";
   };
-  desiderius = {
-    email = "didier@devroye.name";
-    github = "desiderius";
-    githubId = 1311761;
-    name = "Didier J. Devroye";
-  };
   desttinghim = {
     email = "opensource@louispearson.work";
     matrix = "@desttinghim:matrix.org";
