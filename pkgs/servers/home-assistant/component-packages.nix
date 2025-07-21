@@ -6006,7 +6006,8 @@
       ];
     "tilt_pi" =
       ps: with ps; [
-      ]; # missing inputs: tilt-pi
+        tilt-pi
+      ];
     "time" =
       ps: with ps; [
       ];
@@ -7640,6 +7641,7 @@
     "tibber"
     "tile"
     "tilt_ble"
+    "tilt_pi"
     "time"
     "time_date"
     "timer"
