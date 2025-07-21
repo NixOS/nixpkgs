@@ -1445,12 +1445,6 @@
     githubId = 5149377;
     name = "Amine Chikhaoui";
   };
-  amorsillo = {
-    email = "andrew.morsillo@gmail.com";
-    github = "evelant";
-    githubId = 858965;
-    name = "Andrew Morsillo";
-  };
   amozeo = {
     email = "wroclaw223@outlook.com";
     github = "amozeo";

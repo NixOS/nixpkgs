@@ -296,8 +296,6 @@ with pkgs;
     opencv = opencv.override { enableGtk3 = true; };
   };
 
-  beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
@@ -5784,6 +5782,13 @@ with pkgs;
       llvm_20 = llvmPackages_20.llvm;
       bolt_20 = llvmPackages_20.bolt;
 
+      llvmPackages_21 = llvmPackagesSet."21";
+      clang_21 = llvmPackages_21.clang;
+      lld_21 = llvmPackages_21.lld;
+      lldb_21 = llvmPackages_21.lldb;
+      llvm_21 = llvmPackages_21.llvm;
+      bolt_21 = llvmPackages_21.bolt;
+
       mkLLVMPackages = llvmPackagesSet.mkPackage;
     })
     llvmPackages_12
@@ -5809,6 +5814,12 @@ with pkgs;
     lldb_20
     llvm_20
     bolt_20
+    llvmPackages_21
+    clang_21
+    lld_21
+    lldb_21
+    llvm_21
+    bolt_21
     mkLLVMPackages
     ;
 
@@ -14602,8 +14613,6 @@ with pkgs;
   cataclysm-dda = cataclysmDDA.stable.tiles;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
-
-  chessx = libsForQt5.callPackage ../games/chessx { };
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 

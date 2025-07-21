@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.amorsillo ];
   };
 }
