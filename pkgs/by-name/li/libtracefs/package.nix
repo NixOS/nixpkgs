@@ -8,13 +8,11 @@
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
-  valgrind,
   sourceHighlight,
   meson,
   flex,
   bison,
   ninja,
-  cunit,
   gitUpdater,
 }:
 
@@ -46,7 +44,6 @@ stdenv.mkDerivation rec {
     xmlto
     docbook_xml_dtd_45
     docbook_xsl
-    valgrind
     sourceHighlight
     flex
     bison
@@ -58,8 +55,7 @@ stdenv.mkDerivation rec {
     "docs"
   ];
 
-  doCheck = true;
-  checkInputs = [ cunit ];
+  doCheck = false; # needs root
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
