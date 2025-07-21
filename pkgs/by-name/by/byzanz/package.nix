@@ -4,6 +4,7 @@
   fetchgit,
   wrapGAppsHook3,
   cairo,
+  gettext,
   glib,
   gnome-common,
   gst_all_1,
@@ -25,7 +26,10 @@ stdenv.mkDerivation {
     hash = "sha256-3DUwXCPBAmeCRlDkiPUgwNyBa6bCvC/TLguMCK3bo4E=";
   };
 
-  patches = [ ./add-amflags.patch ];
+  patches = [
+    ./add-amflags.patch
+    ./gettext-0.25.patch
+  ];
 
   preBuild = ''
     ./autogen.sh --prefix=$out
@@ -36,6 +40,11 @@ stdenv.mkDerivation {
     "-Wno-error=incompatible-pointer-types"
     "-Wno-error=discarded-qualifiers"
   ];
+
+  preAutoreconf = ''
+    # error: possibly undefined macro: AM_NLS
+    cp ${gettext}/share/gettext/m4/nls.m4 macros/
+  '';
 
   nativeBuildInputs = [
     pkg-config
