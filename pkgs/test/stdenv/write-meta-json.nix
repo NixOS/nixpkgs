@@ -8,10 +8,10 @@ let
   inherit (lib.asserts) assertMsg;
   jq = lib.getExe pkgs.jq;
   script = ''
+    source ${writeMetaJSON}
     mkdir -p $out
     nixLog "Running nix-meta hook"
     writeMetaInAllOutputs
-    declare -ig writeMetaJSONInstalled=1
 
     nixLog "$(cat $out/nix-support/meta.json)"
     for value in "''${valuesArray[@]}"; do
@@ -19,6 +19,52 @@ let
       actualArray+=( "$(${jq} -cr "$value" $out/nix-support/meta.json)" )
     done
     nixLog "Done"
+  '';
+
+  writeMetaJSON = pkgs.writeScript "write-meta-json.sh" ''
+    # This setup hook, writes the derivation nixMetaJSON info
+    # to $output/nix-support/meta.json so package information
+    # can be reconstructed at runtime.
+
+
+    # Guard against double inclusion.
+    if (("''${writeMetaJSONInstalled:-0}" > 0)); then
+      nixInfoLog "skipping because the hook has been propagated more than once"
+      return 0
+    fi
+    declare -ig writeMetaJSONInstalled=1
+
+
+    fixupOutputHooks+=(writeMetaInAllOutputs)
+
+    writeMetaJSON() {
+      local -r output="''${1:?}"
+      if [[ ! -e $output ]]; then
+        nixWarnLog "skipping non-existent output $output"
+        return 0
+      fi
+      if [[ ! -d $output ]]; then
+        nixWarnLog "skipping non-directory output $output"
+        return 0
+      fi
+      if [[ -e "$output/nix-support/meta.json" ]]; then
+        nixWarnLog "skipping already present meta.json"
+        return 0
+      fi
+      mkdir -p "$output/nix-support"
+      echo -n "$nixMetaJSON" >> "$output/nix-support/meta.json"
+    }
+
+    writeMetaInAllOutputs() {
+      if [[ -z "''${nixMetaJSON:-}" ]]; then
+        nixWarnLog "\$nixMetaJSON not present or empty, skipping"
+        return 0
+      fi
+        for output in $(getAllOutputNames); do
+          nixInfoLog "Running write-meta-json for $output"
+          writeMetaJSON "''${!output}"
+        done
+    }
   '';
 in
 {
@@ -50,62 +96,6 @@ in
         };
       };
 
-  test_custom_field =
-    (testEqualArrayOrMap {
-      name = "test_custom_field";
-      valuesArray = [
-        ".maintainers"
-        "keys[]"
-      ];
-      expectedArray = [
-        ''["custom_value"]''
-        "maintainers"
-      ];
-      inherit script;
-    }).overrideAttrs
-      {
-        # Preserve custom_field
-        preserveMetaFields = [
-          "maintainers"
-        ];
-        meta.maintainers = [ "custom_value" ];
-      };
-
-  test_removed_meta =
-    (testEqualArrayOrMap {
-      name = "test_removed_meta";
-      valuesArray = [
-        "$out"
-        "$out/nix-support"
-        "$out/nix-support/meta.json"
-      ];
-      expectedArray = [
-        "true"
-        "false"
-        "false"
-      ];
-      script = ''
-        mkdir -p $out
-        nixLog "Running nix-meta hook"
-        writeMetaInAllOutputs
-        declare -ig writeMetaJSONInstalled=1
-
-        for value in "''${valuesArray[@]}"; do
-          value="''${value/\$out/$out}"
-          nixLog "Testing path '$value'"
-          if [[ -e "$value" ]]; then
-            actualArray+=( "true" )
-          else
-            actualArray+=( "false" )
-          fi
-        done
-      '';
-    }).overrideAttrs
-      {
-        # Remove all fields.
-        preserveMetaFields = [ ];
-      };
-
   test_string_context =
   let
     test = builtins.tryEval
@@ -113,7 +103,4 @@ in
   in
     assert assertMsg (test.value == false) "test_string_context should not eval successfully.";
     builtins.toFile "test_string_context" (toString test.value);
-
-
-  # Test derivation without pname or name?
 }

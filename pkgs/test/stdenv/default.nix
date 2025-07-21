@@ -229,6 +229,12 @@ in
     }
   );
 
+  write-meta-json = lib.recurseIntoAttrs (
+    import ./write-meta-json.nix {
+      inherit lib pkgs;
+    }
+  );
+
   outputs-no-out =
     runCommand "outputs-no-out-assert"
       {
