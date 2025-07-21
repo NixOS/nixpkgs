@@ -230,11 +230,6 @@ with pkgs;
     } ../build-support/setup-hooks/autoreconf.sh
   ) { };
 
-  autoreconfHook264 = autoreconfHook.override {
-    autoconf = autoconf264;
-    automake = automake111x;
-  };
-
   autoreconfHook269 = autoreconfHook.override {
     autoconf = autoconf269;
   };
