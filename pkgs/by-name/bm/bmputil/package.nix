@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm 444 ${blackmagic.src}/driver/99-blackmagic.rules $out/lib/udev/rules.d/99-blackmagic.rules
+    install -Dm 444 ${blackmagic.src}/driver/99-blackmagic-plugdev.rules $out/lib/udev/rules.d/99-blackmagic-plugdev.rules
   '';
 
   doCheck = false; # fails at least 1 test
