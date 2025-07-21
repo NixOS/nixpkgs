@@ -1,39 +1,45 @@
 src: version:
 {
   lib,
+  fetchFromGitHub,
   fetchYarnDeps,
-  nodejs_20,
+  dart,
+  dart-sass,
+  nodePackages_latest,
   fixup-yarn-lock,
   stdenv,
   yarn,
-}:
-stdenv.mkDerivation {
+}: let
+  nodejs = nodePackages_latest.nodejs;
+in stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
+    hash = "sha256-712mc/xksjXgnc0inthxE+ztSDl/4107oXw3vKcZD2g=";
   };
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_20
-    (yarn.override { nodejs = nodejs_20; })
+    nodejs
+    (yarn.override { inherit nodejs; })
   ];
 
   configurePhase = ''
     runHook preConfigure
 
+    sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
+
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    # TODO: Remove --ignore-engines once upstream supports nodejs_20+
-    # https://github.com/mealie-recipes/mealie/issues/5400
-    # https://github.com/mealie-recipes/mealie/pull/5184
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-engines
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive
     patchShebangs node_modules/
+
+    mkdir -p node_modules/sass-embedded/dist/lib/src/vendor/dart-sass
+    ln -s ${dart-sass}/bin/dart-sass node_modules/sass-embedded/dist/lib/src/vendor/dart-sass/sass
 
     runHook postConfigure
   '';
@@ -50,7 +56,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mv dist $out
+    mv .output/public $out
     runHook postInstall
   '';
 
