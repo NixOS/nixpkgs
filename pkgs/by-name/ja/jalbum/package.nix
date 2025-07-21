@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://download.jalbum.net/download/${version}/jAlbum.zip";
-    sha256 = "QGy8agZ88Q0npcodnP6S/BF4lQEGbUMlQa8v7T2kNWU=";
+    hash = "sha256-kQTBd7WkR6cgUl4Gke9ZcHBtizNS4uYCFaqexpRjLZE=";
   };
 
   nativeBuildInputs = [
