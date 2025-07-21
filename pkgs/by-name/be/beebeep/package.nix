@@ -32,7 +32,7 @@ libsForQt5.mkDerivation rec {
 
   meta = {
     homepage = "https://www.beebeep.net/";
-    description = "BeeBEEP is the free office messenger that is indispensable in all those places where privacy and security are an essential requirement";
+    description = "Free office messenger that is indispensable in all those places where privacy and security are an essential requirement";
     mainProgram = "beebeep";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
