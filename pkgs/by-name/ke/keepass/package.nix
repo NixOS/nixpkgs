@@ -165,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
     maintainers = with lib.maintainers; [
-      amorsillo
       obadz
     ];
     platforms = with lib.platforms; all;
