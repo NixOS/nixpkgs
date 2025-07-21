@@ -240,12 +240,32 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
+      let
+        isSupported = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
+      in
+      if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (self': super': {
-              pkgsi686Linux = super';
-            })
+            (
+              self': super':
+              {
+                pkgsi686Linux = super';
+              }
+              // lib.optionalAttrs (!isSupported) {
+                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+                # when used on a non x86_64-linux platform in CI.
+                # TODO: Remove this, once pkgsi686Linux can become a variant.
+                stdenv = super'.stdenv // {
+                  mkDerivation =
+                    args:
+                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                      meta = prevAttrs.meta or { } // {
+                        broken = true;
+                      };
+                    });
+                };
+              }
+            )
           ] ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
             config = lib.systems.parse.tripleFromSystem (
