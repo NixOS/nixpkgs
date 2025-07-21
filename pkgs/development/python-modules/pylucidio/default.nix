@@ -6,25 +6,25 @@
   pyserial,
 }:
 
+let
+  version = "2.4.0";
+  majorMinor = lib.versions.majorMinor version;
+in
 buildPythonPackage rec {
   pname = "pylucidio";
-  version = "2.4";
+  inherit version;
   pyproject = true;
 
   src = fetchzip {
-    url = "https://www.lucid-control.com/wp-content/uploads/Software/LucidControlAPI/PyLucidIo/${version}/pyLucidIo-${version}.zip";
-    hash = "sha256-uIG5f26oXPSpWkqZSq5Voq7hZwUkQ1oQQutpxDYW834=";
+    url = "https://www.lucid-control.com/wp-content/uploads/Software/LucidControlAPI/PyLucidIo/${majorMinor}/pyLucidIo-${majorMinor}.zip";
+    hash = "sha256-//TkFhHQorTRCF1ucLGf0/1B/6thmXWhnB7pwXpw1QE=";
     stripRoot = false;
+    postFetch = ''
+      cd $out
+      tar -xf pylucidio-${version}.tar.gz --strip-components=1
+      rm pylucidio-${version}.tar.gz *.whl
+    '';
   };
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    tar xf $src/pylucidio-${version}*.tar.gz
-    sourceRoot=$(echo pylucidio-${version}*)
-
-    runHook postUnpack
-  '';
 
   build-system = [ pdm-backend ];
 
