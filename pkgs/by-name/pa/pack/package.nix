@@ -7,14 +7,14 @@
   pack,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pack";
   version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/buildpacks/pack.Version=${version}"
+    "-X github.com/buildpacks/pack.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -40,4 +40,4 @@ buildGoModule rec {
     mainProgram = "pack";
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})
