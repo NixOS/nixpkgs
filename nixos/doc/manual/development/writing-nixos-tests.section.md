@@ -343,6 +343,15 @@ source: @NIXOS_TEST_OPTIONS_JSON@
 
 ## Accessing VMs in the sandbox with SSH {#sec-test-sandbox-breakpoint}
 
+::: {.note}
+For debugging with SSH access into the machines, it's recommended to try using
+[the interactive driver](#sec-running-nixos-tests-interactively) with its
+[SSH backdoor](#sec-nixos-test-ssh-access) first.
+
+This feature is mostly intended to debug flaky test failures that aren't
+reproducible elsewhere.
+:::
+
 As explained in [](#sec-nixos-test-ssh-access), it's possible to configure an
 SSH backdoor based on AF_VSOCK. This can be used to SSH into a VM of a running
 build in a sandbox.
