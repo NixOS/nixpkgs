@@ -23,8 +23,7 @@ assert
     inherit (lib) intersectLists platforms concatStringsSep;
     workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
   in
-  (enableCrossCompilation -> !(isLinux && is64bit))
-  -> builtins.throw ''
+  lib.assertMsg (enableCrossCompilation -> isLinux && is64bit) ''
     The cross-compilation toolchains may only be enabled on the following platforms:
     ${concatStringsSep "\n" workingPlatforms}
   '';
