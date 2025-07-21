@@ -28,6 +28,7 @@
   efiSupport ? false,
   zfsSupport ? false,
   xenSupport ? false,
+  xenPvhSupport ? false,
   kbdcompSupport ? false,
   ckbcomp,
 }:
@@ -58,6 +59,12 @@ let
     loongarch64-linux.target = "loongarch64";
     riscv32-linux.target = "riscv32";
     riscv64-linux.target = "riscv64";
+  };
+
+  xenPvhSystemsBuild = {
+    i686-linux.target = "i386";
+    x86_64-linux.target = "i386"; # Xen PVH is only i386 on x86.
+    aarch64-linux.target = "arm64";
   };
 
   canEfi = lib.any (system: stdenv.hostPlatform.system == system) (
@@ -92,7 +99,8 @@ in
 
   assert efiSupport -> canEfi;
   assert zfsSupport -> zfs != null;
-  assert !(efiSupport && xenSupport);
+  assert !(efiSupport && (xenSupport || xenPvhSupport));
+  assert !(xenSupport && xenPvhSupport);
 
   stdenv.mkDerivation rec {
     pname = "grub";
@@ -614,6 +622,10 @@ in
       ++ lib.optionals xenSupport [
         "--with-platform=xen"
         "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
+      ]
+      ++ lib.optionals xenPvhSupport [
+        "--with-platform=xen_pvh"
+        "--target=${xenPvhSystemsBuild.${stdenv.hostPlatform.system}.target}"
       ];
 
     # save target that grub is compiled for
