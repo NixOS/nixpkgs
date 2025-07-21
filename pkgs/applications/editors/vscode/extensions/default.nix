@@ -1347,8 +1347,8 @@ let
         mktplcRef = {
           name = "composer-php-vscode";
           publisher = "devsense";
-          version = "1.59.17515";
-          hash = "sha256-unqWaEtShJHqol0tV4ocb0nI81rWFQuv/W1i+2zMeZM=";
+          version = "1.59.17674";
+          hash = "sha256-pt5wmWvuUgZGiXgYfcHVvGxz24GDrSLAXXV14kn5UIo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
