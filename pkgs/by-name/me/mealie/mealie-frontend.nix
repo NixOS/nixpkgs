@@ -9,9 +9,11 @@ src: version:
   fixup-yarn-lock,
   stdenv,
   yarn,
-}: let
+}:
+let
   nodejs = nodePackages_latest.nodejs;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
