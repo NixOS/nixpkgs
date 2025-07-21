@@ -1,0 +1,14 @@
+diff --git a/frm/frm.h b/frm/frm.h
+index 178b87d54..7931faada 100644
+--- a/frm/frm.h
++++ b/frm/frm.h
+@@ -34,6 +34,9 @@
+ #ifdef HAVE_ICONV_H
+ # include <iconv.h>
+ #endif
++#ifdef HAVE_LIMITS_H
++# include <limits.h>
++#endif
+ #ifndef MB_LEN_MAX
+ # define MB_LEN_MAX 4
+ #endif

@@ -1,0 +1,30 @@
+diff --git a/src/progs/dyecmd/client.cpp b/src/progs/dyecmd/client.cpp
+index 6321da0d2..bb655519b 100644
+--- a/src/progs/dyecmd/client.cpp
++++ b/src/progs/dyecmd/client.cpp
+@@ -86,9 +86,7 @@ PRAGMA48(GCC diagnostic pop)
+ #include <sys/time.h>
+ #include "fs/specialfolder.h"
+ #undef ERROR
+-#endif  // WIN32
+-
+-#ifdef __clang__
++#else
+ #include <ctime>
+ #endif  // __clang__
+ 
+diff --git a/src/resources/wallpaper.cpp b/src/resources/wallpaper.cpp
+index 2df412b7d..1658e3d4a 100644
+--- a/src/resources/wallpaper.cpp
++++ b/src/resources/wallpaper.cpp
+@@ -37,9 +37,7 @@
+ 
+ #ifdef WIN32
+ #include <sys/time.h>
+-#endif  // WIN32
+-
+-#ifdef __clang__
++#else
+ #include <ctime>
+ #endif  // __clang__
+ 

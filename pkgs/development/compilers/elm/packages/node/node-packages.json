@@ -1,0 +1,16 @@
+[
+  "elm-analyse",
+  "elm-doc-preview",
+  "@elm-tooling/elm-language-server",
+  "elm-live",
+  "elm-spa",
+  "elm-test",
+  "elm-upgrade",
+  "elm-verify-examples",
+  "elm-xref",
+  "create-elm-app",
+  "elm-optimize-level-2",
+  "elm-pages",
+  "elm-git-install",
+  "@dillonkearns/elm-graphql"
+]

@@ -1,0 +1,29 @@
+diff --git a/crates/simd/build.rs b/crates/simd/build.rs
+index 12ce198..aed5588 100644
+--- a/crates/simd/build.rs
++++ b/crates/simd/build.rs
+@@ -17,17 +17,24 @@ use std::error::Error;
+ 
+ fn main() -> Result<(), Box<dyn Error>> {
+     println!("cargo::rerun-if-changed=cshim");
++    println!("cargo:rerun-if-env-changed=BINDGEN_EXTRA_CLANG_ARGS");
+     let target_arch = var("CARGO_CFG_TARGET_ARCH")?;
+     match target_arch.as_str() {
+         "aarch64" => {
+             let mut build = cc::Build::new();
+             build.file("./cshim/aarch64.c");
++            build.compiler("@clang@");
++            // read env var set by rustPlatform.bindgenHook
++            build.try_flags_from_environment("BINDGEN_EXTRA_CLANG_ARGS").expect("the BINDGEN_EXTRA_CLANG_ARGS environment variable must be specified and UTF-8");
+             build.opt_level(3);
+             build.compile("simd_cshim");
+         }
+         "x86_64" => {
+             let mut build = cc::Build::new();
+             build.file("./cshim/x86_64.c");
++            build.compiler("@clang@");
++            // read env var set by rustPlatform.bindgenHook
++            build.try_flags_from_environment("BINDGEN_EXTRA_CLANG_ARGS").expect("the BINDGEN_EXTRA_CLANG_ARGS environment variable must be specified and UTF-8");
+             build.opt_level(3);
+             build.compile("simd_cshim");
+         }

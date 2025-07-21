@@ -1,0 +1,13 @@
+diff --git a/src/error.rs b/src/error.rs
+index 4563e1e..050610d 100644
+--- a/src/error.rs
++++ b/src/error.rs
+@@ -34,7 +34,7 @@ impl fmt::Display for Error {
+ }
+ 
+ impl error::Error for Error {
+-    fn source<'a>(&'a self) -> Option<&(dyn error::Error + 'static)> {
++    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+         self.reason.as_deref()
+     }
+ }
