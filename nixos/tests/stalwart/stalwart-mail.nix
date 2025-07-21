@@ -10,7 +10,7 @@ in
 {
   name = "stalwart-mail";
 
-  nodes.main.configuration = import ./stalwart-mail-config.nix;
+  configuration.main.module = ./stalwart-mail-config.nix;
   nodes.main =
     { pkgs, ... }:
     {
