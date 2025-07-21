@@ -23,7 +23,6 @@
   ...
 }@args:
 
-assert useMusl -> stdenv.hostPlatform.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
     "lib"
