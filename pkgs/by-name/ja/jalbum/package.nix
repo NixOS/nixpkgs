@@ -11,6 +11,7 @@
   curl,
   gnused,
 }:
+
 let
   openjdk = openjdk23.override { enableJavaFX = true; };
 in
