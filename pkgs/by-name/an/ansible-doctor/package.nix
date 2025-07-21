@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ansible-doctor";
-  version = "7.0.8";
+  version = "7.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     tag = "v${version}";
-    hash = "sha256-BwmmAd1mmyGQ5QQo6uS3+JmPP9kmZe2OOBDNAKFqEl0=";
+    hash = "sha256-d7KPn+nCrGEYE9lzfV3+Fl8MDUq8x5S8MPKrwX8XZ5w=";
   };
 
   build-system = with python3Packages; [
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
-    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/v${version}";
+    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tboerger ];
   };
