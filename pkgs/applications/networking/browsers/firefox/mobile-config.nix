@@ -7,10 +7,11 @@
 
 let
   pkg = fetchFromGitLab {
+    domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "mobile-config-firefox";
     rev = "4.6.0";
-    hash = "sha256-pgDMXnEdQg7d1lfGym4V+tsi6JAMgMVGI5ozSu0j0og=";
+    hash = "sha256-tISfxN/04spgtKStkkn+zlCtFU6GbtwuZubqpGN2olA=";
   };
   mobileConfigDir = runCommand "mobile-config-firefox" { } ''
     mkdir -p $out/mobile-config-firefox/{common,userChrome,userContent}
