@@ -15,8 +15,8 @@ let
   updateScript = ./update.sh;
 
   meta = {
-    description = "Jetbrains Toolbox";
-    homepage = "https://jetbrains.com/";
+    description = "JetBrains Toolbox";
+    homepage = "https://www.jetbrains.com/toolbox-app";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ners ];
