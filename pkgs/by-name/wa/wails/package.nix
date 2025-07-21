@@ -8,6 +8,7 @@
   go,
   nodejs,
   zlib,
+  nix-update-script,
   # Linux specific dependencies
   gtk3,
   webkitgtk_4_0,
@@ -15,18 +16,18 @@
 
 buildGoModule rec {
   pname = "wails";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src =
     fetchFromGitHub {
       owner = "wailsapp";
       repo = "wails";
       tag = "v${version}";
-      hash = "sha256-PLlr2iBvYwJBvozQGvM68Xp3ts7Pt75hGhNZmMhNqbI=";
+      hash = "sha256-b0ns2cXlUT5tPbVEOzQGftxoUqGEDuzj+2KDxNnfs4c=";
     }
     + "/v2";
 
-  vendorHash = "sha256-7f7QJv2PM7/CG30bWSDP4+wuhi5Aa9rXT5voHm+QivE=";
+  vendorHash = "sha256-u1NoAHxBSzw44W3l5MzMxMUjgrfM9EDkKwR4GAPQBVE=";
 
   proxyVendor = true;
 
@@ -84,11 +85,13 @@ buildGoModule rec {
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Build applications using Go + HTML + CSS + JS";
+    description = "Build desktop applications using Go & Web Technologies";
     homepage = "https://wails.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ thtrf ];
     mainProgram = "wails";
     platforms = lib.platforms.unix;
   };
