@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "25.4.0";
+  version = "25.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${version}";
-    hash = "sha256-AX/yqxWHlLvS0K3Axhukzimi7IZYY6+IwkB9+tiqHTM=";
+    hash = "sha256-k6JFaB5VbUCwknN8SkNotdPRvSvW1tFmTx5p3hGfesg=";
   };
 
   postPatch = ''
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests =
     [

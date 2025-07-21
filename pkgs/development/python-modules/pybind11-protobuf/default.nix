@@ -4,8 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp,
-  protobuf,
+  abseil-cpp_202407, # downgrade, same reason as toplevel protobuf_29
+  protobuf_29,
   pybind11,
   zlib,
 }:
@@ -31,8 +31,8 @@ buildPythonPackage {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    abseil-cpp
-    protobuf
+    abseil-cpp_202407
+    protobuf_29
     pybind11
     zlib
   ];

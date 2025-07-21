@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "greek-accentuation";
   version = "1.2.0";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-l2HZXdqlLubvy2bWhhZVYGMpF0DXVKTDFehkcGF5xdk=";

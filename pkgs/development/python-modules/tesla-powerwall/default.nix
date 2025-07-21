@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_parse_endpoint"
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "tesla_powerwall" ];
 

@@ -1,20 +1,26 @@
 {
   lib,
+  libiconv,
   python3,
   fetchFromGitHub,
   gitUpdater,
   makeWrapper,
+  rustPlatform,
+  stdenvNoCC,
   e2fsprogs,
+  erofs-utils,
   jefferson,
   lz4,
   lziprecover,
   lzop,
   p7zip,
+  partclone,
   sasquatch,
   sasquatch-v4be,
   simg2img,
   ubi_reader,
   unar,
+  upx,
   zstd,
   versionCheckHook,
 }:
@@ -23,6 +29,7 @@ let
   # These dependencies are only added to PATH
   runtimeDeps = [
     e2fsprogs
+    erofs-utils
     jefferson
     lziprecover
     lzop
@@ -32,13 +39,14 @@ let
     ubi_reader
     simg2img
     unar
+    upx
     zstd
     lz4
-  ];
+  ] ++ lib.optional stdenvNoCC.isLinux partclone;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.1.8";
+  version = "25.5.26";
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.9";
 
@@ -46,14 +54,21 @@ python3.pkgs.buildPythonApplication rec {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-PGpJPAo9q52gQ3EGusYtDA2e0MG5kFClqCYPB2DvuMs=";
+    hash = "sha256-vTakXZFAcD3cmd+y4CwYg3X4O4NmtOzuqMLWLMX2Duk=";
     forceFetchGit = true;
     fetchLFS = true;
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-NirDPuAcKuNquMs9mBZoEkQf+QJ+cMd7JXjj1anB9Zw=";
   };
 
   strictDeps = true;
 
   build-system = with python3.pkgs; [ poetry-core ];
+
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = with python3.pkgs; [
     arpy
@@ -69,15 +84,17 @@ python3.pkgs.buildPythonApplication rec {
     pyfatfs
     pyperscan
     python-magic
+    pyzstd
     rarfile
     rich
     structlog
     treelib
-    unblob-native
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with rustPlatform; [
     makeWrapper
+    maturinBuildHook
+    cargoSetupHook
   ];
 
   # These are runtime-only CLI dependencies, which are used through
@@ -87,7 +104,7 @@ python3.pkgs.buildPythonApplication rec {
     "ubi-reader"
   ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [ "lz4" ];
 
   pythonImportsCheck = [ "unblob" ];
 
@@ -99,7 +116,7 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov # cannot use stub
       versionCheckHook
     ]
     ++ runtimeDeps;
@@ -112,13 +129,6 @@ python3.pkgs.buildPythonApplication rec {
       disabled = [
         # https://github.com/tytso/e2fsprogs/issues/152
         "test_all_handlers[filesystem.extfs]"
-
-        # Should be dropped after upgrading to next version
-        # Needs https://github.com/onekey-sec/unblob/pull/1128/commits/c6af67f0c6f32fa01d7abbf495eb0293e9184438
-        # Unfortunately patches touching LFS stored assets cannot be applied
-        "test_all_handlers[filesystem.ubi.ubi]"
-        "test_all_handlers[archive.dlink.encrpted_img]"
-        "test_all_handlers[archive.dlink.shrs]"
       ];
     in
     [

@@ -4,8 +4,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
-  unstableGitUpdater,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

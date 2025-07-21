@@ -17,9 +17,6 @@
   pcaudiolib,
   sonicSupport ? true,
   sonic,
-  CoreAudio,
-  AudioToolbox,
-  AudioUnit,
   alsa-plugins,
   makeWrapper,
 }:
@@ -63,12 +60,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
-    ++ lib.optional sonicSupport sonic
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      AudioToolbox
-      AudioUnit
-    ];
+    ++ lib.optional sonicSupport sonic;
 
   # touch ChangeLog to avoid below error on darwin:
   # Makefile.am: error: required file './ChangeLog.md' not found

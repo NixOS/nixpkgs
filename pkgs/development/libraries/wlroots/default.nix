@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -129,7 +130,6 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [
-          primeos
           synthetica
           rewine
         ];
@@ -149,6 +149,15 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
+    patches = [
+      (fetchpatch {
+        # SIGCHLD here isn't fatal: we have other means of notifying that things were
+        # successful or failure, and it causes many compositors to have to do a bunch
+        # of extra work: https://github.com/qtile/qtile/issues/5101
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/631e5be0d7a7e4c7086b9778bc8fac809f96d336.patch";
+        hash = "sha256-3Jnx4ZeKc3+NxraK2T7nZ2ibtWJuTEFmxa976fjAqsM=";
+      })
+    ];
   };
 
   wlroots_0_18 = generic {
@@ -159,5 +168,11 @@ rec {
     ];
   };
 
-  wlroots = wlroots_0_18;
+  wlroots_0_19 = generic {
+    version = "0.19.0";
+    hash = "sha256-I8z50yA/ukvXEC5TksG84+GrQpfC4drBJDRGw0R8RLk=";
+    extraBuildInputs = [
+      lcms2
+    ];
+  };
 }

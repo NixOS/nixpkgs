@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ hidapi ];
 
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Communicate with Nitrokey devices in a clean and easy manner";
     homepage = "https://github.com/Nitrokey/libnitrokey";

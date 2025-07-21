@@ -9,6 +9,7 @@
   # dependencies
   filelock,
   fsspec,
+  hf-xet,
   packaging,
   pyyaml,
   requests,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.30.2";
+  version = "0.33.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-6nE6iKIC6ymI+NMOw/xQT4l5nshDyPdGI0YhqK7tQRE=";
+    hash = "sha256-AYTK/PO4fcG0g3I03Vf8FAbeqegijNMeFDCHCcXASac=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     fsspec
+    hf-xet
     packaging
     pyyaml
     requests
@@ -93,7 +95,7 @@ buildPythonPackage rec {
       keras
     ];
     hf_xet = [
-      # hf-xet (unpackaged)
+      hf-xet
     ];
   };
 

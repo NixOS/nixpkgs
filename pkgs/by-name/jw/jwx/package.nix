@@ -4,29 +4,30 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jwx";
-  version = "2.1.5";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "lestrrat-go";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JDv1lqfhE16v3hJhf9OD2P2IS1KeLyewHxNlS7Ci2bk=";
+    repo = "jwx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IorB1Zga4cDdeQv2QTc0qKvefIysxLz8StWMyqAWrTs=";
   };
 
-  vendorHash = "sha256-ZS7xliFymXTE8hlc3GEMNonP5sJTZGirw5YQNzPCl3Y=";
+  vendorHash = "sha256-HXf6H3FF3N5xLlO2Ux5tuN/ompfzQTAytUdGPbURw44=";
 
-  sourceRoot = "${src.name}/cmd/jwx";
+  sourceRoot = "${finalAttrs.src.name}/cmd/jwx";
 
-  meta = with lib; {
+  meta = {
     description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
     mainProgram = "jwx";
     homepage = "https://github.com/lestrrat-go/jwx";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/lestrrat-go/jwx/blob/v${finalAttrs.version}/Changes";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       arianvp
       flokli
     ];
   };
-}
+})

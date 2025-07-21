@@ -232,6 +232,17 @@ lib.mapAttrs mkLicense (
       fullName = "Lawrence Berkeley National Labs BSD variant license";
     };
 
+    bsd3TheodoreTso = {
+      fullName = "BSD 3 Clause Theodore Tso Variant";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace all references with bsd3
+      # https://tools.spdx.org/app/license_requests/442/
+      # https://github.com/spdx/license-list-XML/issues/2702
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
       fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
       url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
@@ -255,6 +266,11 @@ lib.mapAttrs mkLicense (
     bsdProtection = {
       spdxId = "BSD-Protection";
       fullName = "BSD Protection License";
+    };
+
+    bsdSourceCode = {
+      spdxId = "BSD-Source-Code";
+      fullName = "BSD Source Code Attribution";
     };
 
     bsl11 = {
@@ -452,6 +468,11 @@ lib.mapAttrs mkLicense (
       fullName = "Common Public License 1.0";
     };
 
+    cronyx = {
+      spdxId = "Cronyx";
+      fullName = "Cronyx License";
+    };
+
     curl = {
       spdxId = "curl";
       fullName = "curl License";
@@ -641,6 +662,11 @@ lib.mapAttrs mkLicense (
       url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
     };
 
+    gpl2UBDLPlus = {
+      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
+      url = "https://spdx.org/licenses/UBDL-exception.html";
+    };
+
     gpl2Oss = {
       fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
       url = "https://www.mysql.com/about/legal/licensing/foss-exception";
@@ -674,6 +700,18 @@ lib.mapAttrs mkLicense (
     hpnd = {
       spdxId = "HPND";
       fullName = "Historic Permission Notice and Disclaimer";
+    };
+
+    hpndDifferentDisclaimer = {
+      fullName = "HPND with different disclaimer";
+      url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/1914233e662d23ffb3812b80fadd0bbd064ad91c/COPYING-x11proto#L69-88";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://tools.spdx.org/app/license_requests/456
+      # https://github.com/spdx/license-list-xml/issues/2753
     };
 
     hpndSellVariant = {
@@ -935,6 +973,11 @@ lib.mapAttrs mkLicense (
     mit0 = {
       spdxId = "MIT-0";
       fullName = "MIT No Attribution";
+    };
+
+    mitOpenGroup = {
+      spdxId = "MIT-open-group";
+      fullName = "MIT Open Group variant";
     };
 
     mpl10 = {
@@ -1326,6 +1369,11 @@ lib.mapAttrs mkLicense (
     unicode-dfs-2016 = {
       spdxId = "Unicode-DFS-2016";
       fullName = "Unicode License Agreement - Data Files and Software (2016)";
+    };
+
+    unicodeTOU = {
+      spdxId = "Unicode-TOU";
+      fullName = "Unicode Terms of Use";
     };
 
     unlicense = {

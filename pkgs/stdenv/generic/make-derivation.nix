@@ -33,9 +33,11 @@ let
     optionalAttrs
     optionalString
     optionals
+    pipe
     remove
     splitString
     subtractLists
+    toFunction
     unique
     zipAttrsWith
     ;
@@ -61,12 +63,7 @@ let
     Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
-  mkDerivation =
-    fnOrAttrs:
-    if builtins.isFunction fnOrAttrs then
-      makeDerivationExtensible fnOrAttrs
-    else
-      makeDerivationExtensibleConst fnOrAttrs;
+  mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
 
   checkMeta = import ./check-meta.nix {
     inherit lib config;
@@ -87,38 +84,67 @@ let
       args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
-      overrideAttrs = f0: makeDerivationExtensible (lib.extends (lib.toExtension f0) rattrs);
+      overrideAttrs =
+        f0:
+        let
+          extends' =
+            overlay: f:
+            (
+              final:
+              let
+                prev = f final;
+                thisOverlay = overlay final prev;
+                warnForBadVersionOverride = (
+                  thisOverlay ? version
+                  && prev ? version
+                  # We could check that the version is actually distinct, but that
+                  # would probably just delay the inevitable, or preserve tech debt.
+                  # && prev.version != thisOverlay.version
+                  && !(thisOverlay ? src)
+                  && !(thisOverlay.__intentionallyOverridingVersion or false)
+                );
+                pname = args.pname or "<unknown name>";
+                version = args.version or "<unknown version>";
+                pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+              in
+              lib.warnIf warnForBadVersionOverride ''
+                ${
+                  args.name or "${pname}-${version}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  builtins.toString pos.line or "<unknown line>"
+                }:${builtins.toString pos.column or "<unknown column>"}.
+
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
+
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
+
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              '' (prev // (builtins.removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+            );
+        in
+        makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
 
       finalPackage = mkDerivationSimple overrideAttrs args;
 
     in
     finalPackage;
 
-  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
-  # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst =
-    attrs:
-    mkDerivationSimple (
-      f0:
-      let
-        f =
-          self: super:
-          let
-            x = f0 super;
-          in
-          if builtins.isFunction x then f0 self super else x;
-      in
-      makeDerivationExtensible (
-        self: attrs // (if builtins.isFunction f0 || f0 ? __functor then f self attrs else f0)
-      )
-    ) attrs;
-
   knownHardeningFlags = [
     "bindnow"
     "format"
     "fortify"
     "fortify3"
+    "strictflexarrays1"
+    "strictflexarrays3"
     "shadowstack"
+    "nostrictaliasing"
     "pacret"
     "pic"
     "pie"
@@ -298,7 +324,21 @@ let
       doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
       doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      separateDebugInfo' =
+        let
+          actualValue = separateDebugInfo && stdenv.hostPlatform.isLinux;
+          conflictingOption =
+            attrs ? "disallowedReferences"
+            || attrs ? "disallowedRequisites"
+            || attrs ? "allowedRequisites"
+            || attrs ? "allowedReferences";
+        in
+        if actualValue && conflictingOption && !__structuredAttrs then
+          throw "separateDebugInfo = true in ${
+            attrs.pname or "mkDerivation argument"
+          } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
+        else
+          actualValue;
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
@@ -314,14 +354,18 @@ let
         ) == 0;
       dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
 
-      hardeningDisable' =
-        if
-          any (x: x == "fortify") hardeningDisable
-        # disabling fortify implies fortify3 should also be disabled
-        then
-          unique (hardeningDisable ++ [ "fortify3" ])
-        else
-          hardeningDisable;
+      concretizeFlagImplications =
+        flag: impliesFlags: list:
+        if any (x: x == flag) list then (list ++ impliesFlags) else list;
+
+      hardeningDisable' = unique (
+        pipe hardeningDisable [
+          # disabling fortify implies fortify3 should also be disabled
+          (concretizeFlagImplications "fortify" [ "fortify3" ])
+          # disabling strictflexarrays1 implies strictflexarrays3 should also be disabled
+          (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
+        ]
+      );
       defaultHardeningFlags =
         (if stdenv.hasCC then stdenv.cc else { }).defaultHardeningFlags or
         # fallback safe-ish set of flags
@@ -528,11 +572,29 @@ let
           // optionalAttrs (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) {
             NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
           }
-          // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-            requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
-              "gccarch-${stdenv.hostPlatform.gcc.arch}"
-            ];
-          }
+          //
+            # TODO: remove platform condition
+            # Enabling this check could be a breaking change as it requires to edit nix.conf
+            # NixOS module already sets gccarch, unsure of nix installers and other distributions
+            optionalAttrs
+              (
+                stdenv.buildPlatform ? gcc.arch
+                && !(
+                  stdenv.buildPlatform.isAarch64
+                  && (
+                    # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
+                    stdenv.buildPlatform.isDarwin
+                    ||
+                      # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
+                      stdenv.buildPlatform.gcc.arch == "armv8-a"
+                  )
+                )
+              )
+              {
+                requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
+                  "gccarch-${stdenv.buildPlatform.gcc.arch}"
+                ];
+              }
           // optionalAttrs (stdenv.buildPlatform.isDarwin) (
             let
               allDependencies = concatLists (concatLists dependencies);
@@ -598,10 +660,26 @@ let
                 outputChecks = builtins.listToAttrs (
                   map (name: {
                     inherit name;
-                    value = zipAttrsWith (_: builtins.concatLists) [
-                      (makeOutputChecks attrs)
-                      (makeOutputChecks attrs.outputChecks.${name} or { })
-                    ];
+                    value =
+                      let
+                        raw = zipAttrsWith (_: builtins.concatLists) [
+                          (makeOutputChecks attrs)
+                          (makeOutputChecks attrs.outputChecks.${name} or { })
+                        ];
+                      in
+                      # separateDebugInfo = true will put all sorts of files in
+                      # the debug output which could carry references, but
+                      # that's "normal". Notably it symlinks to the source.
+                      # So disable reference checking for the debug output
+                      if separateDebugInfo' && name == "debug" then
+                        removeAttrs raw [
+                          "allowedReferences"
+                          "allowedRequisites"
+                          "disallowedReferences"
+                          "disallowedRequisites"
+                        ]
+                      else
+                        raw;
                   }) outputs
                 );
               }
@@ -668,18 +746,17 @@ let
       );
 
     let
-      envIsExportable = isAttrs env && !isDerivation env;
+      mainProgram = meta.mainProgram or null;
+      env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs (
-          [
-            "meta"
-            "passthru"
-            "pos"
-          ]
-          ++ optional (__structuredAttrs || envIsExportable) "env"
-        )
-        // optionalAttrs __structuredAttrs { env = checkedEnv; }
+        removeAttrs attrs ([
+          "meta"
+          "passthru"
+          "pos"
+          "env"
+        ])
+        // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
           mesonFlags = makeMesonFlags attrs;
@@ -698,17 +775,17 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
           prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
-            "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${
+            "  - ${name}: in `env`: ${prettyPrint env'.${name}}; in derivation arguments: ${
                 prettyPrint derivationArg.${name}
               }";
           errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
         in
-        assert assertMsg envIsExportable
-          "When using structured attributes, `env` must be an attribute set of environment variables.";
+        assert assertMsg (isAttrs env && !isDerivation env)
+          "`env` must be an attribute set of environment variables. Set `env.env` or pick a more specific name.";
         assert assertMsg (overlappingNames == [ ])
           "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
         mapAttrs (
@@ -716,7 +793,7 @@ let
           assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
             "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
           v
-        ) env;
+        ) env';
 
       # Fixed-output derivations may not reference other paths, which means that
       # for a fixed-output derivation, the corresponding inputDerivation should
@@ -802,7 +879,7 @@ let
         # should be made available to Nix expressions using the
         # derivation (e.g., in assertions).
         passthru
-    ) (derivation (derivationArg // optionalAttrs envIsExportable checkedEnv));
+    ) (derivation (derivationArg // checkedEnv));
 
 in
 {

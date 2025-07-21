@@ -108,7 +108,7 @@ let
             ninja
             pkg-config
           ];
-          buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreFoundation ++ extraCppBuildInputs;
+          buildInputs = extraCppBuildInputs;
 
           cmakeDir = "../runtime/Cpp";
 

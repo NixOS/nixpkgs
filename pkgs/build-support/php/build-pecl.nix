@@ -65,7 +65,7 @@ stdenv.mkDerivation (
       # PHP extensions correctly.
       # See the corresponding PR: https://github.com/Mic92/nix-update/pull/123
       isPhpExtension = true;
-      updateScript = nix-update-script { };
+      updateScript = passthru.updateScript or (nix-update-script { });
     };
   }
 )

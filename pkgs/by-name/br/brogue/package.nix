@@ -14,9 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7.5";
 
   src = fetchurl {
-    url = "https://sites.google.com/site/broguegame/brogue-${finalAttrs.version}-linux-amd64.tbz2";
-    sha256 = "0i042zb3axjf0cpgpdh8hvfn66dbfizidyvw0iymjk2n760z2kx7";
+    url = "https://drive.google.com/uc?export=download&id=1ED_2nPubP-P0e_PHKYVzZF42M1Y9pUb4";
+    hash = "sha256-p0/xgTlWTFl9BHz7Fn90qxlj3YYItvsuA052NdYXBEQ=";
+    name = "brogue.tbz2";
   };
+
   patches = [
     # Pull upstream fix for -fno-common toolchains:
     #  https://github.com/tmewett/BrogueCE/pull/63
@@ -25,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/tmewett/BrogueCE/commit/2c7ed0c48d9efd06bf0a2589ba967c0a22a8fa87.patch";
       sha256 = "19lr2fa25dh79klm4f4kqyyqq7w5xmw9z0fvylkcckqvcv7dwhp3";
     })
+    # error: passing argument 4 of 'buildAMachine' makes integer from pointer without a cast []
+    ./fix-compilation.diff
   ];
 
   prePatch = ''

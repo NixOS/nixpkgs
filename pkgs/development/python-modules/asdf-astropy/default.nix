@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "asdf-astropy";
     tag = version;
-    hash = "sha256-hP77qhNTE89cuz9Z8vWlWYo2En0SV4uoHaBnxQDNEvI=";
+    hash = "sha256-CCLoG3zV34kmdGYN6RLi5u2v0RDvEqVN6VcdrX7L4uY=";
   };
 
   build-system = [

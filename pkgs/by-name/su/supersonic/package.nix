@@ -13,7 +13,6 @@
   libxkbcommon,
   libglvnd,
   mpv-unwrapped,
-  darwin,
   waylandSupport ? false,
 }:
 
@@ -21,16 +20,16 @@ assert waylandSupport -> stdenv.hostPlatform.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.15.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-grVZgsoehx32zpdKXuy78gcBb/ESZtzyizRuRKIjgwM=";
+    hash = "sha256-+MgDCI/wz5yfdpSy0Gh85ZWUAuL2wijixYskx/jH7Vw=";
   };
 
-  vendorHash = "sha256-fc86z8bvdFI3LdlyHej2G42O554hpRszqre+e3WUOKI=";
+  vendorHash = "sha256-v6tPGjeJhRdSJpVPQAERRM7cpXO7Ut7kLF3EdNcDFgM=";
 
   nativeBuildInputs =
     [
@@ -64,13 +63,6 @@ buildGoModule rec {
       wayland
       wayland-protocols
       libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
-      darwin.apple_sdk_11_0.frameworks.OpenGL
-      darwin.apple_sdk_11_0.frameworks.UserNotifications
-      darwin.apple_sdk_11_0.frameworks.MediaPlayer
     ];
 
   postInstall =
@@ -103,7 +95,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
-    description = "A lightweight cross-platform desktop client for Subsonic music servers";
+    description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;

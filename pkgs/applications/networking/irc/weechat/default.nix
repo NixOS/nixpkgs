@@ -13,7 +13,6 @@
   pkg-config,
   libgcrypt,
   cmake,
-  libobjc,
   libresolv,
   libiconv,
   asciidoctor, # manpages
@@ -104,11 +103,11 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
-  version = "4.6.2";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-    hash = "sha256-D6AkKhgRb+J/dG27giEhgF2mu129QHUNQsYzBuSJZig=";
+    hash = "sha256-RdwDlgYMhjFphoNJ7CgK8cb0rFJKpJJYDhoGXhQsLNg=";
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -150,7 +149,6 @@ stdenv.mkDerivation rec {
       libgcrypt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libobjc
       libresolv
     ]
     ++ lib.concatMap (p: p.buildInputs) enabledPlugins

@@ -1,17 +1,15 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   rustPlatform,
   withRuffleTools ? false,
   fetchFromGitHub,
   jre_minimal,
   pkg-config,
-  wrapGAppsHook3,
-  darwin,
+  autoPatchelfHook,
   alsa-lib,
-  gtk3,
-  openssl,
   wayland,
+  xorg,
   vulkan-loader,
   udev,
   libxkbcommon,
@@ -23,17 +21,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruffle";
-  version = "0-nightly-2025-04-22";
+  version = "0-nightly-2025-07-19";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = "ruffle";
     tag = lib.strings.removePrefix "0-" finalAttrs.version;
-    hash = "sha256-jOTwDH5R1OfsRIeGBo/LquAuQzbKiD8NrHcB76zB5eg=";
+    hash = "sha256-2EDKnuWE1VHsw7UkMCbmREVRsB1CgwrxnC1x2lvCi+0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oDFB4cWcrzXRG5VOIsblf4/mERJQfRew67MDSXyW644=";
+  cargoHash = "sha256-BRfljhOQ9X4LBQ14tLmd6M3N19nOMwk3AC02iclATm4=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
   env =
@@ -50,22 +48,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs =
     [ jre_minimal ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
-      wrapGAppsHook3
+      autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      openssl
-      wayland
-      vulkan-loader
-      udev
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    udev
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  # Prevents ruffle from downloading openh264 at runtime for Linux
+  openh264-241 =
+    if stdenv.hostPlatform.isLinux then
+      openh264.overrideAttrs (_: rec {
+        version = "2.4.1";
+        src = fetchFromGitHub {
+          owner = "cisco";
+          repo = "openh264";
+          tag = "v${version}";
+          hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+        };
+      })
+    else
+      null;
+
+  runtimeDependencies = [
+    wayland
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libX11
+    xorg.libxcb
+    libxkbcommon
+    vulkan-loader
+    finalAttrs.openh264-241
+  ];
 
   postInstall =
     ''
@@ -73,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm644 LICENSE.md -t $out/share/doc/ruffle
       install -Dm644 README.md -t $out/share/doc/ruffle
     ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.desktop \
                      -t $out/share/applications/
 
@@ -83,33 +103,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm644 desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml \
                      -t $out/share/metainfo/
     '';
-
-  # Prevents ruffle from downloading openh264 at runtime for Linux
-  openh264-241 =
-    if stdenvNoCC.hostPlatform.isLinux then
-      openh264.overrideAttrs (_: rec {
-        version = "2.4.1";
-        src = fetchFromGitHub {
-          owner = "cisco";
-          repo = "openh264";
-          tag = "v${version}";
-          hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
-        };
-        postPatch = null;
-      })
-    else
-      null;
-
-  preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libxkbcommon
-        finalAttrs.openh264-241
-        vulkan-loader
-        wayland
-      ]
-    })
-  '';
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {

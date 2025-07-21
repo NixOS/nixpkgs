@@ -11,18 +11,19 @@
   cython,
   ninja,
   meson-python,
+  pyproject-metadata,
+  nix-update-script,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
   libpng,
   libX11,
   portmidi,
-  SDL2_classic,
-  SDL2_classic_image,
-  SDL2_classic_mixer,
-  SDL2_classic_ttf,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
   numpy,
 
   pygame-gui,
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.5.3";
+  version = "2.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
-    hash = "sha256-Vl9UwCknbMHdsB1wwo/JqybWz3UbAMegIcO0GpiCxig=";
+    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -60,12 +61,16 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
+    # https://github.com/libsdl-org/sdl2-compat/issues/476
+    ./skip-rle-tests.patch
   ];
 
   postPatch =
     ''
+      # "pyproject-metadata!=0.9.1" was pinned due to https://github.com/pygame-community/pygame-ce/pull/3395
       # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
       substituteInPlace pyproject.toml \
+        --replace-fail '"pyproject-metadata!=0.9.1",' '"pyproject-metadata",' \
         --replace-fail '"meson<=1.7.0",' '"meson",' \
         --replace-fail '"meson-python<=0.17.1",' '"meson-python",' \
         --replace-fail '"ninja<=1.12.1",' "" \
@@ -91,6 +96,7 @@ buildPythonPackage rec {
     setuptools
     ninja
     meson-python
+    pyproject-metadata
   ];
 
   buildInputs = [
@@ -99,11 +105,11 @@ buildPythonPackage rec {
     libjpeg
     libpng
     portmidi
-    SDL2_classic
-    (SDL2_classic_image.override { enableSTB = false; })
-    SDL2_classic_mixer
-    SDL2_classic_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+    SDL2
+    (SDL2_image.override { enableSTB = false; })
+    SDL2_mixer
+    SDL2_ttf
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -115,7 +121,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = lib.getExe' (lib.getDev SDL2_classic) "sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
@@ -152,6 +158,8 @@ buildPythonPackage rec {
     "pygame.sysfont"
     "pygame.version"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     inherit pygame-gui;

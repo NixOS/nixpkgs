@@ -20,7 +20,6 @@
   libwebp,
   libxcb,
   openjpeg,
-  tkinter,
   zlib-ng,
 
   # optional dependencies
@@ -44,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.2.0";
+  version = "11.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
     tag = version;
-    hash = "sha256-gr6S0FTM/VMnqj35E9U5G3BJ203f0XQzgzYCQ81WL/Y=";
+    hash = "sha256-VOOIxzTyERI85CvA2oIutybiivU14kIko8ysXpmwUN8=";
   };
 
   build-system = [ setuptools ];
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     libwebp
     libxcb
     openjpeg
-    tkinter
     zlib-ng
   ];
 

@@ -5,6 +5,9 @@
   pkg-config,
   openssl,
   cmake,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+
   # deps for audio backends
   alsa-lib,
   libpulseaudio,
@@ -46,23 +49,26 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.4";
+  version = "0.20.6";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-5N/zTkNgcIk/Ml11Oo+jyoO0r2Hh9SxFL+tdhD/1X/4=";
+    hash = "sha256-PYf8Ms0hmG4EWDjb+er6YvY/UFiQbIF6dtCL87O4rOs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0vIhAJ3u+PfujUGI07fddDs33P35Q4CSDz1sMuQwVws=";
+  cargoHash = "sha256-ec4rIYZsIvYIezDm956aYSM75e/GEoNilVjm40691Ys=";
 
   nativeBuildInputs =
     [
       pkg-config
       cmake
       rustPlatform.bindgenHook
+      installShellFiles
+      # Tries to access $HOME when installing shell files, and on Darwin
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeBinaryWrapper
@@ -105,16 +111,21 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals withSixel [ "sixel" ]
     ++ lib.optionals withFuzzy [ "fzf" ];
 
-  # tries to access HOME only in aarch64-darwin environment when building mac-notification-sys
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    export HOME=$TMPDIR
-  '';
-
-  # sixel-sys is dynamically linked to libsixel
-  postInstall = lib.optionals (stdenv.hostPlatform.isDarwin && withSixel) ''
-    wrapProgram $out/bin/spotify_player \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
-  '';
+  postInstall =
+    let
+      inherit (lib.strings) optionalString;
+    in
+    # sixel-sys is dynamically linked to libsixel
+    optionalString (stdenv.hostPlatform.isDarwin && withSixel) ''
+      wrapProgram $out/bin/spotify_player \
+        --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
+    ''
+    + optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd spotify_player \
+        --bash <($out/bin/spotify_player generate bash) \
+        --fish <($out/bin/spotify_player generate fish) \
+         --zsh <($out/bin/spotify_player generate zsh)
+    '';
 
   passthru = {
     updateScript = nix-update-script { };

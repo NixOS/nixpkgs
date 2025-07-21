@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.8.20250205075315";
+  version = "8.9.20250408123006";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-Lev5daC3RCuXN1GJjOwplTx9PB3HTNZdNNzusn2dBaI=";
+    hash = "sha256-sPPHz43zvqdQ3eruRlVxLLP1ZU/UoVdtDhtQRAo8vNg=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+    sed -i "/black>=/d" pyproject.toml
   '';
 
   build-system = [ setuptools-scm ];
@@ -84,7 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
-    changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${version}";
+    changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

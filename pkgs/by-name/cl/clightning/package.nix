@@ -19,6 +19,7 @@
   sqlite,
   zlib,
   jq,
+  libpq,
 }:
 let
   py3 = python3.withPackages (p: [
@@ -28,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "25.02.1";
+  version = "25.05";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-0eRLc/bR4sjnNIKzhkX9yVCAoypf1TVhpa884mmVC54=";
+    hash = "sha256-ANYzpjVw9kGdsNvXW1A7sEug9utGmJTab87SqJSdgAc=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
       py3
       unzip
       which
+      libpq.pg_config
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools

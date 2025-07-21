@@ -45,7 +45,7 @@ let
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
-  # These defaults are from https://minecraft.gamepedia.com/Server.properties#Java_Edition_3
+  # These defaults are from https://minecraft.wiki/w/Server.properties#Java_Edition
   defaultServerPort = 25565;
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
@@ -93,10 +93,8 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether you agree to
-          [
-          Mojangs EULA](https://account.mojang.com/documents/minecraft_eula). This option must be set to
-          `true` to run Minecraft server.
+          Whether you agree to [Mojangs EULA](https://www.minecraft.net/eula).
+          This option must be set to `true` to run Minecraft server.
         '';
       };
 
@@ -167,10 +165,10 @@ in
           }
         '';
         description = ''
-          Minecraft server properties for the server.properties file. Only has
+          Minecraft server properties forthe server.properties file. Only has
           an effect when {option}`services.minecraft-server.declarative`
           is set to `true`. See
-          <https://minecraft.gamepedia.com/Server.properties#Java_Edition_3>
+          <https://minecraft.wiki/w/Server.properties#Java_Edition>
           for documentation on these values.
         '';
       };
@@ -182,7 +180,7 @@ in
       jvmOpts = lib.mkOption {
         type = lib.types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
-        # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
+        # Example options from https://minecraft.wiki/w/Tutorial:Server_startup_script
         example =
           "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "

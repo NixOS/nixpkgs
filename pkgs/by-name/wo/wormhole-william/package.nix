@@ -37,12 +37,12 @@ buildGoModule rec {
       --zsh <($out/bin/wormhole-william shell-completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/psanford/wormhole-william";
     description = "End-to-end encrypted file transfers";
     changelog = "https://github.com/psanford/wormhole-william/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psanford ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psanford ];
     mainProgram = "wormhole-william";
   };
 }

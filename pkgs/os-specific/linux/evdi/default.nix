@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.9";
+  version = "1.14.10";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkDsVa2A8DQkMAYerx7CEtPUQYG7RomNc/UsN9tZpqo=";
+    hash = "sha256-xB3AHg9t/X8vw5p7ohFQ+WuMjb1P8DAP3pROiwWkVPs=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [

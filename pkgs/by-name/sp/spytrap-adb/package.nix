@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spytrap-adb";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "spytrap-org";
     repo = "spytrap-adb";
     tag = "v${version}";
-    hash = "sha256-Yqa+JmqYCmy9ehxmRebPNlU5U2RPHtnHDHiqSg8EvAo=";
+    hash = "sha256-t5MNgsuH5FVEjUP9FFxbjXs5BVim0ZyfNKUTQOjKpqg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hXDxo0b2nJbPyo99Qc39LM0P41SDbyfadHLIRrbQdj0=";
+  cargoHash = "sha256-VoUzAHTxJLeyi60ftuOkI6PAuLUsSsQSUjk9rcGz86A=";
 
   env.SPYTRAP_ADB_BINARY = lib.getExe' android-tools "adb";
 

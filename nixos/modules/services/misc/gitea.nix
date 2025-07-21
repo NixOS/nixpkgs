@@ -27,6 +27,9 @@ let
 
     ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
+
+  inherit (cfg.settings) mailer;
+  useSendmail = mailer.ENABLED && mailer.PROTOCOL == "sendmail";
 in
 
 {
@@ -79,8 +82,13 @@ in
     )
 
     (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ]
-      "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted"
+      "It has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "gitea"
+      "useWizard"
+    ] "Has been removed because it was broken and lacked automated testing.")
   ];
 
   options = {
@@ -92,12 +100,6 @@ in
       };
 
       package = mkPackageOption pkgs "gitea" { };
-
-      useWizard = mkOption {
-        default = false;
-        type = types.bool;
-        description = "Do not generate a configuration and use gitea' installation wizard instead. The first registered user will be administrator.";
-      };
 
       stateDir = mkOption {
         default = "/var/lib/gitea";
@@ -374,6 +376,20 @@ in
         description = "Path to a file containing the metrics authentication token.";
       };
 
+      minioAccessKeyId = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/minio_access_key_id";
+        description = "Path to a file containing the Minio access key id.";
+      };
+
+      minioSecretAccessKey = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/minio_secret_access_key";
+        description = "Path to a file containing the Minio secret access key.";
+      };
+
       settings = mkOption {
         default = { };
         description = ''
@@ -389,131 +405,168 @@ in
             };
             mailer = {
               ENABLED = true;
-              MAILER_TYPE = "sendmail";
-              FROM = "do-not-reply@example.org";
-              SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
+              PROTOCOL = "smtp+starttls";
+              SMTP_ADDR = "smtp.example.org";
+              SMTP_PORT = "587";
+              FROM = "Gitea Service <do-not-reply@example.org>";
+              USER = "do-not-reply@example.org";
             };
             other = {
               SHOW_FOOTER_VERSION = false;
             };
           }
         '';
-        type = types.submodule {
-          freeformType = format.type;
-          options = {
-            log = {
-              ROOT_PATH = mkOption {
-                default = "${cfg.stateDir}/log";
-                defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
-                type = types.str;
-                description = "Root path for log files.";
+        type = types.submodule (
+          { config, options, ... }:
+          {
+            freeformType = format.type;
+            options = {
+              log = {
+                ROOT_PATH = mkOption {
+                  default = "${cfg.stateDir}/log";
+                  defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
+                  type = types.str;
+                  description = "Root path for log files.";
+                };
+                LEVEL = mkOption {
+                  default = "Info";
+                  type = types.enum [
+                    "Trace"
+                    "Debug"
+                    "Info"
+                    "Warn"
+                    "Error"
+                    "Critical"
+                  ];
+                  description = "General log level.";
+                };
               };
-              LEVEL = mkOption {
-                default = "Info";
-                type = types.enum [
-                  "Trace"
-                  "Debug"
-                  "Info"
-                  "Warn"
-                  "Error"
-                  "Critical"
-                ];
-                description = "General log level.";
+
+              mailer = {
+                ENABLED = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Whether to use an email service to send notifications.";
+                };
+
+                PROTOCOL = lib.mkOption {
+                  type = lib.types.enum [
+                    null
+                    "smtp"
+                    "smtps"
+                    "smtp+starttls"
+                    "smtp+unix"
+                    "sendmail"
+                    "dummy"
+                  ];
+                  default = null;
+                  description = "Which mail server protocol to use.";
+                };
+
+                SENDMAIL_PATH = lib.mkOption {
+                  type = lib.types.str;
+                  # somewhat duplicated with useSendmail but cannot be deduped because of infinite recursion
+                  default =
+                    if config.mailer.ENABLED && config.mailer.PROTOCOL == "sendmail" then
+                      "/run/wrappers/bin/sendmail"
+                    else
+                      "sendmail";
+                  defaultText = lib.literalExpression ''if config.${options.mailer.ENABLED} && config.${options.mailer.PROTOCOL} == "sendmail" then "/run/wrappers/bin/sendmail" else "sendmail"'';
+                  description = "Path to sendmail binary or script.";
+                };
+              };
+
+              server = {
+                PROTOCOL = mkOption {
+                  type = types.enum [
+                    "http"
+                    "https"
+                    "fcgi"
+                    "http+unix"
+                    "fcgi+unix"
+                  ];
+                  default = "http";
+                  description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
+                };
+
+                HTTP_ADDR = mkOption {
+                  type = types.either types.str types.path;
+                  default =
+                    if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
+                  defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
+                  description = "Listen address. Must be a path when using a unix socket.";
+                };
+
+                HTTP_PORT = mkOption {
+                  type = types.port;
+                  default = 3000;
+                  description = "Listen port. Ignored when using a unix socket.";
+                };
+
+                DOMAIN = mkOption {
+                  type = types.str;
+                  default = "localhost";
+                  description = "Domain name of your server.";
+                };
+
+                ROOT_URL = mkOption {
+                  type = types.str;
+                  default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
+                  defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                  description = "Full public URL of gitea server.";
+                };
+
+                STATIC_ROOT_PATH = mkOption {
+                  type = types.either types.str types.path;
+                  default = cfg.package.data;
+                  defaultText = literalExpression "config.${opt.package}.data";
+                  example = "/var/lib/gitea/data";
+                  description = "Upper level of template and static files path.";
+                };
+
+                DISABLE_SSH = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Disable external SSH feature.";
+                };
+
+                SSH_PORT = mkOption {
+                  type = types.port;
+                  default = 22;
+                  example = 2222;
+                  description = ''
+                    SSH port displayed in clone URL.
+                    The option is required to configure a service when the external visible port
+                    differs from the local listening port i.e. if port forwarding is used.
+                  '';
+                };
+              };
+
+              service = {
+                DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
+                  description = ''
+                    By default any user can create an account on this `gitea` instance.
+                    This can be disabled by using this option.
+
+                    *Note:* please keep in mind that this should be added after the initial
+                    deploy as the first registered user will be the administrator.
+                  '';
+                };
+              };
+
+              session = {
+                COOKIE_SECURE = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = ''
+                    Marks session cookies as "secure" as a hint for browsers to only send
+                    them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
+                  '';
+                };
               };
             };
-
-            server = {
-              PROTOCOL = mkOption {
-                type = types.enum [
-                  "http"
-                  "https"
-                  "fcgi"
-                  "http+unix"
-                  "fcgi+unix"
-                ];
-                default = "http";
-                description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
-              };
-
-              HTTP_ADDR = mkOption {
-                type = types.either types.str types.path;
-                default =
-                  if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
-                defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
-                description = "Listen address. Must be a path when using a unix socket.";
-              };
-
-              HTTP_PORT = mkOption {
-                type = types.port;
-                default = 3000;
-                description = "Listen port. Ignored when using a unix socket.";
-              };
-
-              DOMAIN = mkOption {
-                type = types.str;
-                default = "localhost";
-                description = "Domain name of your server.";
-              };
-
-              ROOT_URL = mkOption {
-                type = types.str;
-                default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
-                defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
-                description = "Full public URL of gitea server.";
-              };
-
-              STATIC_ROOT_PATH = mkOption {
-                type = types.either types.str types.path;
-                default = cfg.package.data;
-                defaultText = literalExpression "config.${opt.package}.data";
-                example = "/var/lib/gitea/data";
-                description = "Upper level of template and static files path.";
-              };
-
-              DISABLE_SSH = mkOption {
-                type = types.bool;
-                default = false;
-                description = "Disable external SSH feature.";
-              };
-
-              SSH_PORT = mkOption {
-                type = types.port;
-                default = 22;
-                example = 2222;
-                description = ''
-                  SSH port displayed in clone URL.
-                  The option is required to configure a service when the external visible port
-                  differs from the local listening port i.e. if port forwarding is used.
-                '';
-              };
-            };
-
-            service = {
-              DISABLE_REGISTRATION = mkEnableOption "the registration lock" // {
-                description = ''
-                  By default any user can create an account on this `gitea` instance.
-                  This can be disabled by using this option.
-
-                  *Note:* please keep in mind that this should be added after the initial
-                  deploy unless [](#opt-services.gitea.useWizard)
-                  is `true` as the first registered user will be the administrator if
-                  no install wizard is used.
-                '';
-              };
-            };
-
-            session = {
-              COOKIE_SECURE = mkOption {
-                type = types.bool;
-                default = false;
-                description = ''
-                  Marks session cookies as "secure" as a hint for browsers to only send
-                  them via HTTPS. This option is recommend, if gitea is being served over HTTPS.
-                '';
-              };
-            };
-          };
-        };
+          }
+        );
       };
 
       extraConfig = mkOption {
@@ -658,6 +711,15 @@ in
         };
 
         packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
+
+        storage = mkMerge [
+          (mkIf (cfg.minioAccessKeyId != null) {
+            MINIO_ACCESS_KEY_ID = "#minioaccesskeyid#";
+          })
+          (mkIf (cfg.minioSecretAccessKey != null) {
+            MINIO_SECRET_ACCESS_KEY = "#miniosecretaccesskey#";
+          })
+        ];
       };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -721,10 +783,10 @@ in
       description = "gitea";
       after =
         [ "network.target" ]
-        ++ optional usePostgresql "postgresql.service"
+        ++ optional usePostgresql "postgresql.target"
         ++ optional useMysql "mysql.service";
       requires =
-        optional (cfg.database.createDatabase && usePostgresql) "postgresql.service"
+        optional (cfg.database.createDatabase && usePostgresql) "postgresql.target"
         ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [
@@ -752,62 +814,67 @@ in
         in
         ''
           # copy custom configuration and generate random secrets if needed
-          ${optionalString (!cfg.useWizard) ''
-            function gitea_setup {
-              cp -f '${configFile}' '${runConfig}'
+          function gitea_setup {
+            cp -f '${configFile}' '${runConfig}'
 
-              if [ ! -s '${secretKey}' ]; then
-                  ${exe} generate secret SECRET_KEY > '${secretKey}'
+            if [ ! -s '${secretKey}' ]; then
+                ${exe} generate secret SECRET_KEY > '${secretKey}'
+            fi
+
+            # Migrate LFS_JWT_SECRET filename
+            if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
+                mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
+            fi
+
+            if [ ! -s '${oauth2JwtSecret}' ]; then
+                ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
+            fi
+
+            ${lib.optionalString cfg.lfs.enable ''
+              if [ ! -s '${lfsJwtSecret}' ]; then
+                  ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
               fi
+            ''}
 
-              # Migrate LFS_JWT_SECRET filename
-              if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
-                  mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
-              fi
+            if [ ! -s '${internalToken}' ]; then
+                ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
+            fi
 
-              if [ ! -s '${oauth2JwtSecret}' ]; then
-                  ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
-              fi
+            chmod u+w '${runConfig}'
+            ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
+            ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
+            ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
 
-              ${lib.optionalString cfg.lfs.enable ''
-                if [ ! -s '${lfsJwtSecret}' ]; then
-                    ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
-                fi
-              ''}
+            ${lib.optionalString cfg.lfs.enable ''
+              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
 
-              if [ ! -s '${internalToken}' ]; then
-                  ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
-              fi
+            ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
+              ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
+            ''}
 
-              chmod u+w '${runConfig}'
-              ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
-              ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
-              ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
-              ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+            ${lib.optionalString (cfg.mailerPasswordFile != null) ''
+              ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
+            ''}
 
-              ${lib.optionalString cfg.lfs.enable ''
-                ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
-              ''}
+            ${lib.optionalString (cfg.metricsTokenFile != null) ''
+              ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
+            ''}
 
-              ${lib.optionalString (cfg.camoHmacKeyFile != null) ''
-                ${replaceSecretBin} '#hmackey#' '${cfg.camoHmacKeyFile}' '${runConfig}'
-              ''}
+            ${lib.optionalString (cfg.minioAccessKeyId != null) ''
+              ${replaceSecretBin} '#minioaccesskeyid#' '${cfg.minioAccessKeyId}' '${runConfig}'
+            ''}
+            ${lib.optionalString (cfg.minioSecretAccessKey != null) ''
+              ${replaceSecretBin} '#miniosecretaccesskey#' '${cfg.minioSecretAccessKey}' '${runConfig}'
+            ''}
 
-              ${lib.optionalString (cfg.mailerPasswordFile != null) ''
-                ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
-              ''}
-
-              ${lib.optionalString (cfg.metricsTokenFile != null) ''
-                ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
-              ''}
-
-              ${lib.optionalString (cfg.captcha.secretFile != null) ''
-                ${replaceSecretBin} '#captchasecret#' '${cfg.captcha.secretFile}' '${runConfig}'
-              ''}
-              chmod u-w '${runConfig}'
-            }
-            (umask 027; gitea_setup)
-          ''}
+            ${lib.optionalString (cfg.captcha.secretFile != null) ''
+              ${replaceSecretBin} '#captchasecret#' '${cfg.captcha.secretFile}' '${runConfig}'
+            ''}
+            chmod u-w '${runConfig}'
+          }
+          (umask 027; gitea_setup)
 
           # run migrations/init the database
           ${exe} migrate
@@ -842,18 +909,18 @@ in
           cfg.repositoryRoot
           cfg.stateDir
           cfg.lfs.contentDir
-        ];
+        ] ++ lib.optional (useSendmail && config.services.postfix.enable) "/var/lib/postfix/queue/maildrop";
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
         # Security
-        NoNewPrivileges = true;
+        NoNewPrivileges = !useSendmail;
         # Sandboxing
         ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
-        PrivateUsers = true;
+        PrivateUsers = !useSendmail;
         ProtectHostname = true;
         ProtectClock = true;
         ProtectKernelTunables = true;
@@ -864,7 +931,7 @@ in
           "AF_UNIX"
           "AF_INET"
           "AF_INET6"
-        ];
+        ] ++ lib.optional (useSendmail && config.services.postfix.enable) "AF_NETLINK";
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -874,10 +941,14 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
-          "setrlimit"
-        ];
+        SystemCallFilter =
+          [
+            "~@cpu-emulation @debug @keyring @mount @obsolete @setuid"
+            "setrlimit"
+          ]
+          ++ lib.optionals (!useSendmail) [
+            "~@privileged"
+          ];
       };
 
       environment = {
@@ -953,8 +1024,8 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+
   meta.maintainers = with lib.maintainers; [
-    ma27
     techknowlogick
     SuperSandro2000
   ];

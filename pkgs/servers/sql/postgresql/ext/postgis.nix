@@ -4,7 +4,6 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  file,
   gdalMinimal,
   geos,
   jitSupport,
@@ -36,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.2";
+  version = "3.5.3";
 
   outputs = [
     "out"
@@ -47,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
+    hash = "sha256-rJxIZGsQhh8QAacgkepBzzC79McVhY9wFphQIVRQHA8=";
   };
 
   buildInputs =
@@ -83,7 +82,6 @@ postgresqlBuildExtension (finalAttrs: {
   ];
 
   postgresqlTestUserOptions = "LOGIN SUPERUSER";
-  failureHook = "postgresqlStop";
 
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";

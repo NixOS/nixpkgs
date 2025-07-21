@@ -382,6 +382,15 @@ pkgs.mkShell {
 ```
 will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
 
+:::{.note}
+Commands like `npm install` & `npm add` that writes packages & executables needs to be used with `--package-lock-only`.
+
+This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. Installation happens through reloading the devShell.
+This might be best practice since it gives the `nix shell` virtually exclusive ownership over your `node_modules` folder.
+
+It's recommended to set `package-lock-only = true` in your project-local [`.npmrc`](https://docs.npmjs.com/cli/v11/configuring-npm/npmrc).
+:::
+
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
@@ -434,6 +443,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
     hash = "...";
   };
 })
@@ -549,6 +559,41 @@ set `prePnpmInstall` to the right commands to run. For example:
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
 
+#### PNPM `fetcherVersion` {#javascript-pnpm-fetcherVersion}
+
+This is the version of the output of `pnpm.fetchDeps`, if you haven't set it already, you can use `1` with your current hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 1;
+    hash = "..."; # you can use your already set hash here
+  };
+}
+```
+
+After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
+
+```nix
+{
+  # ...
+  pnpmDeps = pnpm.fetchDeps {
+    # ...
+    fetcherVersion = 2;
+    hash = "..."; # clear this hash and generate a new one
+  };
+}
+```
+
+This variable ensures that we can make changes to the output of `pnpm.fetchDeps` without breaking existing hashes.
+Changes can include workarounds or bug fixes to existing PNPM issues.
+
+##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
+
+- 1: Initial version, nothing special
+- 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 
 ### Yarn {#javascript-yarn}
 
@@ -681,7 +726,11 @@ The configure phase can sometimes fail because it makes many assumptions which m
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     ln -s $node_modules node_modules
+
+    runHook postConfigure
   '';
 }
 ```
@@ -691,8 +740,12 @@ or if you need a writeable node_modules directory:
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     cp -r $node_modules node_modules
     chmod +w node_modules
+
+    runHook postConfigure
   '';
 }
 ```

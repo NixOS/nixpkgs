@@ -13,7 +13,6 @@
   pyright,
   pytestCheckHook,
   typeguard,
-  types-beautifulsoup4,
   types-html5lib,
   typing-extensions,
   urllib3,
@@ -31,11 +30,13 @@ buildPythonPackage rec {
     hash = "sha256-dA9sspqEChHarwk2LrK2F7Ehri2ffjOlGk3nj4KFsfU=";
   };
 
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
   build-system = [ pdm-backend ];
 
   dependencies = [
     cssselect
-    types-beautifulsoup4
+    beautifulsoup4
     types-html5lib
     typing-extensions
   ];

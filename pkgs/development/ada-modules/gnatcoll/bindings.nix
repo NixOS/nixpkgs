@@ -14,7 +14,6 @@
   zlib,
   python3,
   ncurses,
-  darwin,
 }:
 
 let
@@ -50,10 +49,6 @@ stdenv.mkDerivation rec {
     gprbuild
     gnat
     python3
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # propagate since gprbuild needs to find referenced .gpr files

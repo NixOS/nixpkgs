@@ -10,7 +10,7 @@ index dfccc661..85233f3b 100644
                  }
                  "dir" => {
                      if self.copy {
-@@ -135,6 +136,175 @@ impl Package for DirectoryPackage {
+@@ -135,6 +136,176 @@ impl Package for DirectoryPackage {
      }
  }
  
@@ -53,6 +53,7 @@ index dfccc661..85233f3b 100644
 +fn nix_patchelf_if_needed(dest_path: &Path) {
 +    use std::fs::File;
 +    use std::os::unix::fs::FileExt;
++    use tracing::{debug, warn};
 +
 +    struct ELFReader<'a> {
 +        file: &'a mut File,

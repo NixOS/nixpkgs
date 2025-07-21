@@ -26,6 +26,7 @@
   gobject-introspection,
   meson,
   ninja,
+  protobuf,
   protobufc,
   shared-mime-info,
   vala,
@@ -49,9 +50,11 @@
   libqmi,
   libuuid,
   libxmlb,
+  libxml2,
   modemmanager,
   pango,
   polkit,
+  readline,
   sqlite,
   tpm2-tss,
   valgrind,
@@ -72,6 +75,8 @@
   bubblewrap,
   efibootmgr,
   tpm2-tools,
+
+  fetchpatch2,
 
   # passthru
   nixosTests,
@@ -130,7 +135,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.8";
+  version = "2.0.12";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -148,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-8IFopG/EY/UAB3JSyBJsGmlwGiMufn7rfkeJ9iYfCGU=";
+    hash = "sha256-AYPrQzk28CS4Yhj2+KARt3b1SC02YifEftsSF+fKJ+Y=";
   };
 
   patches = [
@@ -169,14 +174,21 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
+
+    (fetchpatch2 {
+      url = "https://github.com/fwupd/fwupd/pull/8959.diff?full_index=1";
+      hash = "sha256-w4uf1CXSyy1pqqM4lzMZoOFhDxadcU3Tdnz0dJgLW7w=";
+    })
   ];
 
   postPatch =
     ''
       patchShebangs \
-        contrib/generate-version-script.py \
-        contrib/generate-man.py \
-        po/test-deps
+        generate-build/generate-version-script.py \
+        generate-build/generate-man.py \
+        po/test-deps \
+        plugins/uefi-capsule/tests/grub2-mkconfig \
+        plugins/uefi-capsule/tests/grub2-reboot
     ''
     # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
     + ''
@@ -201,10 +213,12 @@ stdenv.mkDerivation (finalAttrs: {
       gettext
       gi-docgen
       gobject-introspection
+      libxml2
       meson
       ninja
       pkg-config
-      protobufc # for protoc
+      protobuf # for protoc
+      protobufc # for protoc-gen-c
       shared-mime-info
       vala
       wrapGAppsNoGuiHook
@@ -237,6 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
       polkit
       protobufc
+      readline
       sqlite
       tpm2-tss
       valgrind

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter,
+  flutter332,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -9,16 +9,16 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.16-beta";
+  version = "0.9.18-beta";
 in
-flutter.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-AmxQyDV0AiS2qzAsrgBm0SqH0CaLi3W1A3gcsk65dj0=";
+    hash = "sha256-ea3+L6M2iaT1Rfy7tH1+3VpnjV+T8S86ZWc9l7pwW/4=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -31,6 +31,7 @@ flutter.buildFlutterApplication {
   gitHashes = {
     balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
     isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
+    isar_flutter_libs = "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=";
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
     palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";

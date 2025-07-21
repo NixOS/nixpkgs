@@ -1,17 +1,23 @@
 {
+  lib,
   stdenv,
   fetchurl,
-  sane-backends,
-  nss,
   autoPatchelfHook,
-  lib,
   libsForQt5,
+  cups,
+  libinput,
+  mtdev,
+  nss,
   pkcs11helper,
+  sane-backends,
+  common-updater-scripts,
+  nix-update,
+  writeShellScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
-  version = "5.9.86";
+  version = "5.9.89";
 
   src =
     let
@@ -19,12 +25,12 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = selectSystem {
-        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64-qt_include.tar.gz";
-        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.arm64.tar.gz";
+        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.x86_64-qt_include.tar.gz";
+        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-QBwcsEz13+EdgkKJRdmdsb6f3dt3N6WR/EEACdWbYNo=";
-        aarch64-linux = "sha256-OTn5Z82fRMLQwVSLwoGAaj9c9SfEicyl8e1A1ICOUf0=";
+        x86_64-linux = "sha256-HTYFo3tZD1JiYpsx/q9mr1Sp9JIWA6Kp0ThzmDcvxmo=";
+        aarch64-linux = "sha256-uxCp9iv4923Qbyd2IldHm1/a50GU6VISSG6jfVzQqq4=";
       };
     };
 
@@ -33,13 +39,16 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = with libsForQt5; [
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    cups
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libinput
+    mtdev
     nss
-    qtbase
-    qtsvg
-    sane-backends
-    stdenv.cc.cc
     pkcs11helper
+    sane-backends
   ];
 
   dontStrip = true;
@@ -47,26 +56,28 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    p=$out/opt/masterpdfeditor
-    mkdir -p $out/bin
-
-    substituteInPlace masterpdfeditor5.desktop \
-      --replace-fail 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
-      --replace-fail 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
-      --replace-fail 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
-
-    install -Dm644 -t $out/share/pixmaps      masterpdfeditor5.png
-    install -Dm644 -t $out/share/applications masterpdfeditor5.desktop
-    install -Dm755 -t $p                      masterpdfeditor5
-    install -Dm644 license_en.txt $out/share/$name/LICENSE
-    ln -s $p/masterpdfeditor5 $out/bin/masterpdfeditor5
-    cp -v -r stamps templates lang fonts $p
+    substituteInPlace usr/share/applications/net.code-industry.masterpdfeditor5.desktop \
+      --replace-fail "Exec=/opt/master-pdf-editor-5/masterpdfeditor5" "Exec=masterpdfeditor5" \
+      --replace-fail "Path=/opt/master-pdf-editor-5" "Path=$out/share/masterpdfeditor" \
+      --replace-fail "/opt/master-pdf-editor-5/masterpdfeditor5.png" "masterpdfeditor5"
+    cp -r usr $out
+    install -Dm755 masterpdfeditor5 -t $out/share/masterpdfeditor
+    cp -r stamps templates lang fonts $out/share/masterpdfeditor
+    mkdir $out/bin
+    ln -s $out/share/masterpdfeditor/masterpdfeditor5 $out/bin/masterpdfeditor5
 
     runHook postInstall
   '';
 
   preFixup = ''
-    patchelf $out/opt/masterpdfeditor/masterpdfeditor5 --add-needed libsmime3.so
+    patchelf $out/share/masterpdfeditor/masterpdfeditor5 \
+      --add-needed libsmime3.so
+  '';
+
+  passthru.updateScript = writeShellScript "update-masterpdfeditor" ''
+    latestVersion=$(curl -s https://code-industry.net/downloads/ | grep -A1 "fa-linux" | grep -oP 'Version\s+\K[\d.]+' | head -n 1)
+    ${lib.getExe nix-update} masterpdfeditor --version $latestVersion --system x86_64-linux
+    ${lib.getExe' common-updater-scripts "update-source-version"} masterpdfeditor $latestVersion --system=aarch64-linux --ignore-same-version
   '';
 
   meta = {
@@ -81,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ cmcdragonkai ];
     mainProgram = "masterpdfeditor5";
   };
-}
+})

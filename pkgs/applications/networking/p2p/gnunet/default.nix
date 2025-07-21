@@ -12,6 +12,7 @@
 
   # runtime deps
   adns,
+  bashNonInteractive,
   curl,
   gettext,
   gmp,
@@ -38,17 +39,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnunet";
-  version = "0.24.1";
+  version = "0.24.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-xPj50l06APgHCVg7h6qDEtAUVAkLc6QTtD7H7HwHujk=";
+    hash = "sha256-WwaJew6ESJu7Q4J47HPkNiRCsuBaY+QAI+wdDMzGxXY=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    libtool
+    gettext # msgfmt
     makeWrapper
     meson
     ninja
@@ -57,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     adns
+    bashNonInteractive
     curl
-    gettext
     gmp
     gnutls
     jansson
@@ -71,12 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     libpulseaudio
     libsodium
+    libtool
     libunistring
     libxml2
     ncurses
     sqlite
     zlib
   ] ++ lib.optional postgresqlSupport libpq;
+
+  strictDeps = true;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
@@ -120,7 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gnunet.org/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ pstn ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${finalAttrs.version}";
+    # meson: "Can not run test applications in this cross environment." (for dane_verify_crt_raw)
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 })

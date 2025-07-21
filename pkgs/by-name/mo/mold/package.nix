@@ -7,7 +7,7 @@
   cmake,
   mimalloc,
   ninja,
-  tbb,
+  tbb_2022,
   zlib,
   zstd,
 
@@ -20,17 +20,19 @@
   runCommandCC,
   testers,
   useMoldLinker,
+
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mold";
-  version = "2.38.0";
+  version = "2.40.2";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
-    rev = "v${version}";
-    hash = "sha256-qtSnzCgWcx1YEcN0LlQ0SNBvciu2Rj1bmekBhcB/la4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Db2IxHCQWb6JdJROi+nOi0pV4zb+8/TcFrJWUCdH6N8=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      tbb
+      tbb_2022
       zlib
       zstd
     ]
@@ -52,6 +54,10 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -110,7 +116,7 @@ stdenv.mkDerivation rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
     longDescription = ''
       mold is a faster drop-in replacement for existing Unix linkers. It is
@@ -119,13 +125,11 @@ stdenv.mkDerivation rec {
       rapid debug-edit-rebuild cycles.
     '';
     homepage = "https://github.com/rui314/mold";
-    changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "mold";
-    maintainers = with maintainers; [
-      azahi
-      paveloom
-    ];
+    maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

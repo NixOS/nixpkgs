@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
   version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
@@ -49,7 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
+  env = {
+    XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
+    ORCA = "orca"; # get orca from $PATH
+  };
 
   passthru = {
     providedSessions = [ "cosmic" ];

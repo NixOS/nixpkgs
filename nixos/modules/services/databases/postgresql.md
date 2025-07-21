@@ -21,7 +21,10 @@ To enable PostgreSQL, add the following to your {file}`configuration.nix`:
   services.postgresql.package = pkgs.postgresql_15;
 }
 ```
-Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
+
+The default PostgreSQL version is approximately the latest major version available on the NixOS release matching your [`system.stateVersion`](#opt-system.stateVersion).
+This is because PostgreSQL upgrades require a manual migration process (see below).
+Hence, upgrades must happen by setting [`services.postgresql.package`](#opt-services.postgresql.package) explicitly.
 
 <!--
 After running {command}`nixos-rebuild`, you can verify
@@ -86,29 +89,29 @@ database migrations.
 
 **NOTE:** please make sure that any added migrations are idempotent (re-runnable).
 
-#### as superuser {#module-services-postgres-initializing-extra-permissions-superuser}
+#### in database's setup `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
 
-**Advantage:** compatible with postgres < 15, because it's run
-as the database superuser `postgres`.
-
-##### in database `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
-
-**Disadvantage:** need to take care of ordering yourself. In this
-example, `mkAfter` ensures that permissions are assigned after any
-databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
-are already created.
+`ensureUsers` is run in `postgresql-setup`, so this is where `postStart` must be added to:
 
 ```nix
   {
-    systemd.services.postgresql.postStart = lib.mkAfter ''
-      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    systemd.services.postgresql-setup.postStart = ''
+      psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
   }
 ```
 
-##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
+#### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
+
+Make sure to run this service after `postgresql.target`, not `postgresql.service`.
+
+They differ in two aspects:
+- `postgresql.target` includes `postgresql-setup`, so users managed via `ensureUsers` are already created.
+- `postgresql.target` will wait until PostgreSQL is in read-write mode after restoring from backup, while `postgresql.service` will already be ready when PostgreSQL is still recovering in read-only mode.
+
+Both can lead to unexpected errors either during initial database creation or restore, when using `postgresql.service`.
 
 ```nix
   {
@@ -116,59 +119,50 @@ are already created.
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
-      after = "postgresql.service";
+      after = "postgresql.target";
       serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+      environment.PGPORT = toString services.postgresql.settings.port;
       path = [ postgresql ];
       script = ''
-        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
         # ....
       '';
     };
   }
 ```
 
-#### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
+## Authentication {#module-services-postgres-authentication}
 
-**Advantage:** re-uses systemd's dependency ordering;
+Local connections are made through unix sockets by default and support [peer authentication](https://www.postgresql.org/docs/current/auth-peer.html).
+This allows system users to login with database roles of the same name.
+For example, the `postgres` system user is allowed to login with the database role `postgres`.
 
-**Disadvantage:** relies on service user having grant permission. To be combined with `ensureDBOwnership`.
+System users and database roles might not always match.
+In this case, to allow access for a service, you can create a [user name map](https://www.postgresql.org/docs/current/auth-username-maps.html) between system roles and an existing database role.
 
-##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
+### User Mapping {#module-services-postgres-authentication-user-mapping}
 
-```nix
-  {
-    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
-    path = [ postgresql ];
-    systemd.services."service1".preStart = ''
-      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
-```
-
-##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
+Assume that your app creates a role `admin` and you want the `root` user to be able to login with it.
+You can then use [](#opt-services.postgresql.identMap) to define the map and [](#opt-services.postgresql.authentication) to enable it:
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.service";
-      serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
-      path = [ postgresql ];
-      script = ''
-        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+services.postgresql = {
+  identMap = ''
+    admin root admin
+  '';
+  authentication = ''
+    local all admin peer map=admin
+  '';
+}
 ```
+
+::: {.warning}
+To avoid conflicts with other modules, you should never apply a map to `all` roles.
+Because PostgreSQL will stop on the first matching line in `pg_hba.conf`, a line matching all roles would lock out other services.
+Each module should only manage user maps for the database roles that belong to this module.
+Best practice is to name the map after the database role it manages to avoid name conflicts.
+:::
 
 ## Upgrading {#module-services-postgres-upgrading}
 
@@ -257,14 +251,38 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 
 Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in February of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
 
-Thus:
-- In September/October the new major version will be released and added to nixos-unstable.
+Thus, our release workflow is as follows:
+
+- In May, `nixpkgs` packages the beta release for an upcoming major version. This is packaged for nixos-unstable only and will not be part of any stable NixOS release.
+- In September/October the new major version will be released, replacing the beta package in nixos-unstable.
 - In November the last minor version for the oldest major will be released.
 - Both the current stable .05 release and nixos-unstable should be updated to the latest minor that will usually be released in November.
   - This is relevant for people who need to use this major for as long as possible. In that case its desirable to be able to pin nixpkgs to a commit that still has it, at the latest minor available.
 - In November, before branch-off for the .11 release and after the update to the latest minor, the EOL-ed major will be removed from nixos-unstable.
 
 This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
+
+## `pg_config` {#module-services-postgres-pg_config}
+
+`pg_config` is not part of the `postgresql`-package itself.
+It is available under `postgresql_<major>.pg_config` and `libpq.pg_config`.
+Use the `pg_config` from the postgresql package you're using in your build.
+
+Also, `pg_config` is a shell-script that replicates the behavior of the upstream `pg_config` and ensures at build-time that the output doesn't change.
+
+This approach is done for the following reasons:
+
+* By using a shell script, cross compilation of extensions is made easier.
+
+* The separation allowed a massive reduction of the runtime closure's size.
+  Any attempts to move `pg_config` into `$dev` resulted in brittle and more complex solutions
+  (see commits [`0c47767`](https://github.com/NixOS/nixpkgs/commit/0c477676412564bd2d5dadc37cf245fe4259f4d9), [`435f51c`](https://github.com/NixOS/nixpkgs/commit/435f51c37faf74375134dfbd7c5a4560da2a9ea7)).
+
+* `pg_config` is only needed to build extensions or in some exceptions for building client libraries linking to `libpq.so`.
+  If such a build works without `pg_config`, this is strictly preferable over adding `pg_config` to the build environment.
+
+  With the current approach it's now explicit that this is needed.
+
 
 ## Options {#module-services-postgres-options}
 

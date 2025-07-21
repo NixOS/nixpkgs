@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   glib-networking,
   gobject-introspection,
@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "gp-saml-gui";
   version = "0.1+20240731-${lib.strings.substring 0 7 src.rev}";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dlenski";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     requests
     pygobject3
     openconnect
-  ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_0;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
   preFixup = ''
     gappsWrapperArgs+=(

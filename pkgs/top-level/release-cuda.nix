@@ -14,20 +14,7 @@
 
 let
   lib = import ../../lib;
-  ensureList = x: if builtins.isList x then x else [ x ];
-  allowUnfreePredicate =
-    p:
-    builtins.all (
-      license:
-      license.free
-      || builtins.elem license.shortName [
-        "CUDA EULA"
-        "cuDNN EULA"
-        "cuSPARSELt EULA"
-        "cuTENSOR EULA"
-        "NVidia OptiX EULA"
-      ]
-    ) (ensureList p.meta.license);
+  cudaLib = (import ../development/cuda-modules/_cuda).lib;
 in
 
 {
@@ -40,7 +27,7 @@ in
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
-      inherit allowUnfreePredicate;
+      allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
       "${variant}Support" = true;
       inHydra = true;
 
@@ -100,8 +87,11 @@ let
       ctranslate2 = linux;
       ffmpeg-full = linux;
       gimp = linux;
+      gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
+      kdePackages.kdenlive = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -109,6 +99,7 @@ let
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -132,6 +123,7 @@ let
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
+        flashinfer = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;

@@ -1,10 +1,13 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   name = "zipline";
   meta.maintainers = with lib.maintainers; [ defelo ];
 
   nodes.machine = {
+    # On x86, testing with a CPU without SSE 4.2 support
+    # to ensure native libvips is used
+    virtualisation.qemu.options = lib.mkIf pkgs.stdenv.hostPlatform.isx86 [ "-cpu core2duo" ];
     services.zipline = {
       enable = true;
       settings = {
@@ -38,7 +41,7 @@
     import re
 
     machine.wait_for_unit("zipline.service")
-    machine.wait_for_open_port(8000)
+    machine.wait_for_open_port(8000, timeout=300)
 
     resp = machine.succeed("curl zipline.local:8000/api/setup -v -X POST -H 'Content-Type: application/json' -d '{\"username\": \"administrator\", \"password\": \"password\"}' 2>&1")
     data = json.loads(resp.splitlines()[-1])

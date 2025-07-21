@@ -36,7 +36,7 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "qogir-theme";
       rev = version;
       sha256 = "Q9DWBzaLZjwXsYRa/oDIrccypO3TCbSRXTkbXWRmm70=";
     };
@@ -72,8 +72,8 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
         ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
         --dest $out/share/themes
 
-      mkdir -p $out/share/doc/${pname}
-      cp -a src/firefox $out/share/doc/${pname}
+      mkdir -p $out/share/doc/qogir-theme
+      cp -a src/firefox $out/share/doc/qogir-theme
 
       rm $out/share/themes/*/{AUTHORS,COPYING}
 

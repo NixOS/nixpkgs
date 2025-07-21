@@ -4,7 +4,6 @@
   mkMesonLibrary,
 
   unixtools,
-  darwin,
 
   nix-util,
   boost,
@@ -39,7 +38,6 @@ mkMesonLibrary (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
     # There have been issues building these dependencies
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.sandbox
     ++ lib.optional (
       stdenv.hostPlatform == stdenv.buildPlatform && (stdenv.isLinux || stdenv.isDarwin)
     ) aws-sdk-cpp;
@@ -57,13 +55,6 @@ mkMesonLibrary (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
     ];
-
-  env = lib.optionalAttrs (!lib.versionAtLeast version "2.27") {
-    # Needed for Meson to find Boost.
-    # https://github.com/NixOS/nixpkgs/issues/86131.
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

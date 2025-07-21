@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,13 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  # FIXME: checkPhase on darwin will leave some zombie spawn processes
-  # see https://github.com/NixOS/nixpkgs/issues/205620
-  doCheck = !stdenv.hostPlatform.isDarwin;
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"

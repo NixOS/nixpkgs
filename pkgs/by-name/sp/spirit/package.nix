@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "cashapp";
+    owner = "block";
     repo = "spirit";
     tag = "v${finalAttrs.version}";
     hash = "sha256-bGKqiCd9dggppORouoWlAoAaYdx4vAivsP22KWm1fxU=";
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/cashapp/spirit";
+    homepage = "https://github.com/block/spirit";
     description = "Online schema change tool for MySQL";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];

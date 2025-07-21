@@ -26,9 +26,10 @@ nix-update --version=$latestVersion windsend
 
 export HOME="$(mktemp -d)"
 src="$(nix-build --no-link "$NIXPKGS_DIR" -A windsend.src)"
-TMPDIR="$(mktemp -d)"
-cp --recursive --no-preserve=mode "$src"/* $TMPDIR
-cd "$TMPDIR"/flutter/wind_send
+tmp="$(mktemp -d)"
+cp --recursive --no-preserve=mode "$src"/* $tmp
+pushd "$tmp"/flutter/wind_send
 flutter pub get
 yq . pubspec.lock >"$PACKAGE_DIR"/pubspec.lock.json
-rm -rf $TMPDIR
+popd
+rm -rf $tmp

@@ -18,7 +18,7 @@ fi
 
 sed -i "s/\(tag = \"v\${version}+\)[0-9]\+/\1${RunNumber}/" "$ROOT/package.nix"
 
-hash=$(nix hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/HemantKArya/BloomeeTunes/archive/refs/tags/${latestTag}.tar.gz"))
+hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(nix-prefetch-url --unpack "https://github.com/HemantKArya/BloomeeTunes/archive/refs/tags/${latestTag}.tar.gz"))
 update-source-version bloomeetunes $latestVersion $hash
 
 curl https://raw.githubusercontent.com/HemantKArya/BloomeeTunes/${latestTag}/pubspec.lock | yq . >$ROOT/pubspec.lock.json

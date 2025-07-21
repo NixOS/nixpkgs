@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "7.1.1-1";
+  version = "7.1.1-7";
 in
 
 (ffmpeg_7-full.override {
@@ -14,7 +14,7 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-gu6+fOCcrGIZiR2hMl9tk97OmCmewOVJibz52DNpL1Q=";
+    hash = "sha256-QzmMhLwlFO9TOCLQaTpoCgNwPpertRA3h1+JMzOEULE=";
   };
 }).overrideAttrs
   (old: {
@@ -24,6 +24,9 @@ in
       "--extra-version=Jellyfin"
       "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
     ];
+
+    # Clobber upstream patches as they don't apply to the Jellyfin fork
+    patches = [ ];
 
     postPatch = ''
       for file in $(cat debian/patches/series); do

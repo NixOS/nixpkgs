@@ -264,8 +264,8 @@ with self;
 
   base = janePackage {
     pname = "base";
-    version = "0.17.1";
-    hash = "sha256-5wqBpOHhiIy9JUuxb3OnpZHrHSM7VODuLSihaIyeFn0=";
+    version = "0.17.2";
+    hash = "sha256-GMUlo77IKXwsldZYK5uRcmjj2RyaDhdfFo1KRCJl9Dc=";
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [
@@ -935,7 +935,16 @@ with self;
     meta.description = "A library of intrinsics for OCaml";
     buildInputs = [
       dune-configurator
+    ];
+    propagatedBuildInputs = [
       ocaml_intrinsics_kernel
+    ];
+    patches = [
+      # This patch is needed because of an issue with the aarch64 CRC32
+      # intrinsics that was introduced with ocaml_intrinsics v0.17. It should
+      # be removed as soon as
+      # https://github.com/janestreet/ocaml_intrinsics/pull/11 is merged.
+      ./ocaml_intrinsics-fix-aarch64-crc32-intrinsics.patch
     ];
   };
 
@@ -1142,6 +1151,7 @@ with self;
       sedlex
       virtual_dom
     ];
+    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
@@ -1222,7 +1232,8 @@ with self;
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
-    hash = "sha256-m4Nr48ZET632I6vw5RjpNA0elW3lpN3aPmfA3RzsEn8=";
+    version = "0.17.2";
+    hash = "sha256-na9n/+shkiHIIUQ2ZitybQ6NNsSS9gWFNAFxij+JNVo=";
     meta.description = "Cram like framework for OCaml";
     propagatedBuildInputs = [
       ppx_here

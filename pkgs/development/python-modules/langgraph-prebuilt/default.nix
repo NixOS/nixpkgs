@@ -24,7 +24,7 @@
   xxhash,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
@@ -73,11 +73,9 @@ buildPythonPackage rec {
     export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::pytest.PytestDeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -86,17 +84,14 @@ buildPythonPackage rec {
     "tests/test_react_agent.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "prebuilt==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "prebuilt==";
   };
 
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
-    homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };

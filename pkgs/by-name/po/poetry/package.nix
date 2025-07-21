@@ -17,12 +17,12 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "2.1.2";
+        version = "2.1.3";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           tag = version;
-          hash = "sha256-fNj/LI4A4RjjPzYT+0ekwqmm3qzzZL3aACOe8BHviuk=";
+          hash = "sha256-CgaWlqjvBTN7GuerzmO5IiEdXxYH6pmTDj9IsNJlCBE=";
         };
       });
     }

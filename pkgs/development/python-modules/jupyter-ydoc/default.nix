@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "3.0.4";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${version}";
-    hash = "sha256-dD4ZLT5yKGdvWnsPd3nAKmi6Ca+MK5f/ufyNfbGMmoM=";
+    hash = "sha256-AI/Ml1MgMFaclJxuHbZMXT8Cf531tzX0uaWPVg6SgMM=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/jupyter_ydoc/blob/${src.tag}/CHANGELOG.md";
     description = "Document structures for collaborative editing using Ypy";
     homepage = "https://github.com/jupyter-server/jupyter_ydoc";
     license = lib.licenses.bsd3;

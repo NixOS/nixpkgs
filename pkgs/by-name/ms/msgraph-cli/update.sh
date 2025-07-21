@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused nixfmt-rfc-style common-updater-scripts
+#!nix-shell -i bash -p curl gnused common-updater-scripts
 set -eEuo pipefail
 [ -z "${DEBUG:-}" ] || set -x
 cd "${BASH_SOURCE[0]%/*}"

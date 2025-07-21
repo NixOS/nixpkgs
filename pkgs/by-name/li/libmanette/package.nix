@@ -12,18 +12,17 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
+  gi-docgen,
   glib,
   libgudev,
   libevdev,
+  hidapi,
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmanette";
-  version = "0.2.9";
+  version = "0.2.12";
 
   outputs = [
     "out"
@@ -31,9 +30,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-KTZr5UUvYKdMZfxk/+LXTt3U5uaCTCzvpWekO9kraI8=";
+    url = "mirror://gnome/sources/libmanette/${lib.versions.majorMinor finalAttrs.version}/libmanette-${finalAttrs.version}.tar.xz";
+    hash = "sha256-SLNJJnGA8dw01AWp4ekLoW8FShnOkHkw5nlJPZEeodg=";
   };
+
+  depsBuildBuild = lib.optionals withIntrospection [
+    pkg-config
+  ];
 
   nativeBuildInputs =
     [
@@ -45,9 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withIntrospection [
       vala
       gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
+      gi-docgen
     ]
     ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     [
       glib
       libevdev
+      hidapi
     ]
     ++ lib.optionals withIntrospection [
       libgudev
@@ -70,10 +72,16 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  strictDeps = true;
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libmanette";
       versionPolicy = "odd-unstable";
     };
   };
@@ -86,4 +94,4 @@ stdenv.mkDerivation rec {
     teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
-}
+})

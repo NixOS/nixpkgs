@@ -100,12 +100,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    teams = [ teams.freedesktop ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    teams = with lib.teams; [ freedesktop ];
+    platforms = lib.platforms.linux;
   };
 }

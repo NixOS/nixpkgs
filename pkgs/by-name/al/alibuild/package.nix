@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alibuild";
-  version = "1.17.18";
+  version = "1.17.21";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-771XCMYNJsQzD7rb/7q5rheeIL8X2bvMWwLkA40CJ9Y=";
+    hash = "sha256-bUZJs1FnKbPCQYCURynN2L/6qu1w80aMxnWL4oYEJgI=";
   };
 
   build-system = with python3Packages; [

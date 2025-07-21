@@ -6,39 +6,31 @@
   installShellFiles,
   dbus,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.15.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-PeRz44agIKDPsgUhjPgm1Pn1oJb7Epyw0oj3xPCkj4k=";
+    hash = "sha256-YMJUxeCc9b7EObkQHTkP34JCYVFYhh6aUp4fLBQINP0=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PD1S9h4cGGgfRBB0iZzY7GRTeclRhwWLrxvNVEs8OJY=";
+  cargoHash = "sha256-2+3UlnIZIRJv+pZhFa8NU+S6/D5eHhuYZ095HUygPSk=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd veryl \
@@ -68,6 +60,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=path::directory_target"
     "--skip=path::source_directory"
     "--skip=path::source_target"
+    "--skip=path::rootdir_directory_directory"
+    "--skip=path::rootdir_directory_target"
+    "--skip=path::rootdir_source_directory"
+    "--skip=path::rootdir_source_target"
+    "--skip=path::subdir_directory_directory"
+    "--skip=path::subdir_directory_target"
+    "--skip=path::subdir_source_directory"
+    "--skip=path::subdir_source_target"
   ];
 
   meta = {

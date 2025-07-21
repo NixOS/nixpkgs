@@ -1,0 +1,13 @@
+diff --git a/clash_lib/src/lib.rs b/clash_lib/src/lib.rs
+index 6ada034..420e465 100644
+--- a/clash_lib/src/lib.rs
++++ b/clash_lib/src/lib.rs
+@@ -2,7 +2,7 @@
+ #![feature(ip)]
+ #![feature(sync_unsafe_cell)]
+ #![feature(let_chains)]
+-#![cfg_attr(not(version("1.86.0")), feature(unbounded_shifts))]
++#![feature(unbounded_shifts)]
+ 
+ #[macro_use]
+ extern crate anyhow;

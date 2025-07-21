@@ -8,18 +8,26 @@
   pkg-config,
   stdenv,
   installShellFiles,
-  darwin,
+  nix-update-script,
   crates ? [ "attic-client" ],
 }:
+
+let
+  # Only the attic-client crate builds against the Nix C++ libs
+  # This derivation is also used to build the server
+  needNixInclude = lib.elem "attic-client" crates;
+  nix = nixVersions.nix_2_28;
+in
+
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-02-02";
+  version = "0-unstable-2025-07-11";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "ff8a897d1f4408ebbf4d45fa9049c06b3e1e3f4e";
-    hash = "sha256-hPYEJ4juK3ph7kbjbvv7PlU1D9pAkkhl+pwx8fZY53U=";
+    rev = "24fad0622fc9404c69e83bab7738359c5be4988e";
+    hash = "sha256-5TomR72rn4q+5poQcN6EnanxeXKqJSqWVAoDAFN0lUc=";
   };
 
   nativeBuildInputs = [
@@ -27,24 +35,15 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      nixVersions.nix_2_24
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        SystemConfiguration
-      ]
-    );
+  buildInputs = lib.optional needNixInclude nix ++ [ boost ];
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
-  cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
+  cargoHash = "sha256-NdzwYnD0yMEI2RZwwXl/evYx9zdBVMOUee+V7uq1cf0=";
   useFetchCargoVendor = true;
 
-  ATTIC_DISTRIBUTOR = "nixpkgs";
-  NIX_INCLUDE_PATH = "${lib.getDev nixVersions.nix_2_24}/include";
+  env = {
+    ATTIC_DISTRIBUTOR = "nixpkgs";
+  } // lib.optionalAttrs needNixInclude { NIX_INCLUDE_PATH = "${lib.getDev nix}/include"; };
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
@@ -60,22 +59,21 @@ rustPlatform.buildRustPackage {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) atticd;
-    };
+    tests = { inherit (nixosTests) atticd; };
 
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       zhaofengli
       aciceri
+      defelo
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "attic";
   };
 }

@@ -23,6 +23,7 @@
 let
   cef = cef-binary.overrideAttrs (oldAttrs: {
     version = "126.2.18";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "3647d39";
     chromiumVersion = "126.0.6478.183";
 
@@ -37,14 +38,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.15.0";
+    version = "0.17.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-zEExwQRzDmV0xd3lcxFE2ZVfkyTFYZQe3/c0IWJ9C/c=";
+      hash = "sha256-RlWJcxSCKTbj6MNeQwweu20rPBQGzumEk42MtTAhGRU=";
     };
 
     nativeBuildInputs = [
@@ -65,11 +66,15 @@ let
       jdk17
     ];
 
-    cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
-      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-      "-G Ninja"
-    ];
+    cmakeFlags =
+      [
+        "-D CMAKE_BUILD_TYPE=Release"
+        "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
+        "-G Ninja"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+        (lib.cmakeFeature "PROJECT_ARCH" "arm64")
+      ];
 
     preConfigure = ''
       mkdir -p cef
@@ -110,6 +115,7 @@ buildFHSEnv {
       xorg.libSM
       xorg.libXxf86vm
       xorg.libX11
+      xorg.libXext
       glib
       pango
       cairo
@@ -118,6 +124,7 @@ buildFHSEnv {
       libcap
       libsecret
       SDL2
+      sdl3
       libGL
     ])
     ++ lib.optionals enableRS3 (
@@ -141,12 +148,15 @@ buildFHSEnv {
 
   meta = {
     homepage = "https://github.com/Adamcake/Bolt";
-    description = "An alternative launcher for RuneScape.";
+    description = "Alternative launcher for RuneScape";
     longDescription = ''
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
     '';
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nezia ];
+    maintainers = with lib.maintainers; [
+      nezia
+      jaspersurmont
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";
   };

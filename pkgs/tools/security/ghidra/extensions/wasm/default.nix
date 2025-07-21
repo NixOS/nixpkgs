@@ -5,17 +5,14 @@
   ghidra,
   ant,
 }:
-let
-  version = "2.3.1";
-in
-buildGhidraExtension {
+buildGhidraExtension (finalAttrs: {
   pname = "wasm";
-  inherit version;
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "nneonneo";
     repo = "ghidra-wasm-plugin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aoSMNzv+TgydiXM4CbvAyu/YsxmdZPvpkZkYEE3C+V4=";
   };
 
@@ -35,9 +32,9 @@ buildGhidraExtension {
   meta = {
     description = "Ghidra Wasm plugin with disassembly and decompilation support";
     homepage = "https://github.com/nneonneo/ghidra-wasm-plugin";
-    downloadPage = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${version}";
-    changelog = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${version}";
+    downloadPage = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/nneonneo/ghidra-wasm-plugin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.BonusPlay ];
   };
-}
+})

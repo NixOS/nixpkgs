@@ -55,6 +55,7 @@ buildGoModule rec {
     pnpmDeps = pnpm_8.fetchDeps {
       inherit pname version src;
       sourceRoot = "${src.name}/frontend";
+      fetcherVersion = 1;
       hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
     };
 

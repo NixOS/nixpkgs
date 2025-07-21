@@ -1,5 +1,3 @@
-diff --git a/src/validate-sound.c b/src/validate-sound.c
-index 7348d46..8b87c78 100644
 --- a/src/validate-sound.c
 +++ b/src/validate-sound.c
 @@ -234,7 +234,7 @@ flatpak_get_bwrap (void)
@@ -12,9 +10,9 @@ index 7348d46..8b87c78 100644
    g_autoptr(GPtrArray) args = g_ptr_array_new_with_free_func (g_free);
    char validate_sound[PATH_MAX + 1];
 @@ -255,8 +255,7 @@ rerun_in_sandbox (int input_fd)
-             "--unshare-ipc",
-             "--unshare-net",
-             "--unshare-pid",
+             "--tmpfs", "/tmp",
+             "--proc", "/proc",
+             "--dev", "/dev",
 -            "--ro-bind", "/usr", "/usr",
 -            "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
 +            "--ro-bind", "@storeDir@", "@storeDir@",

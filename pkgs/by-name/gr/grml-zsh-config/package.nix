@@ -2,30 +2,25 @@
   stdenv,
   fetchFromGitHub,
   lib,
-  zsh,
-  coreutils,
-  inetutils,
-  procps,
+  asciidoctor,
   txt2tags,
 }:
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";
-  version = "0.19.14";
+  version = "0.19.23";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-7UiP6CUP/qArOfcrFtpiNUBBwkcCSrvsPb29SSqSkmg=";
+    sha256 = "sha256-kaVDX+f2WeRjrpyW5pKkamNIKemdUq+1AU+8W+0vAx8=";
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ txt2tags ];
-  buildInputs = [
-    zsh
-    coreutils
-    procps
-  ] ++ lib.optional stdenv.hostPlatform.isLinux inetutils;
+  nativeBuildInputs = [
+    asciidoctor
+    txt2tags
+  ];
 
   buildPhase = ''
     cd doc

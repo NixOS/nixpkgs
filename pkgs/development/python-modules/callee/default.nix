@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Xion";
-    repo = pname;
+    repo = "callee";
     tag = version;
     hash = "sha256-dsXMY3bW/70CmTfCuy5KjxPa+NLCzxzWv5e1aV2NEWE=";
   };

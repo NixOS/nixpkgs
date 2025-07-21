@@ -22,7 +22,8 @@
         && lib.isDerivation o.value
         && o.value ? outputs
         && builtins.elem "terminfo" o.value.outputs
-        && !o.value.meta.broken;
+        && !o.value.meta.broken
+        && lib.meta.availableOn pkgs.stdenv.hostPlatform o.value;
       terminfos = lib.filterAttrs infoFilter pkgs;
       excludedTerminfos = lib.filterAttrs (
         _: drv: !(builtins.elem drv.terminfo config.environment.systemPackages)

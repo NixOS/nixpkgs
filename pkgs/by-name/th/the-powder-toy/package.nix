@@ -1,6 +1,5 @@
 {
   bzip2,
-  Cocoa,
   copyDesktopItems,
   curl,
   fetchFromGitHub,
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 

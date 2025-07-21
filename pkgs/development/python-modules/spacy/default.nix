@@ -6,7 +6,7 @@
 
   # build-system
   cymem,
-  cython_0,
+  cython,
   murmurhash,
   numpy,
   preshed,
@@ -47,19 +47,19 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.5";
+  version = "3.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${version}";
-    hash = "sha256-rgMstGSscUBACA5+veXD9H/lHuvWKs7hJ6hz6aKOB/0=";
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
   };
 
   build-system = [
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
@@ -129,7 +129,7 @@ buildPythonPackage rec {
         ]
       }
 
-      nix-update python3Packages.spacy
+      nix-update python3Packages.spacy --version-regex 'release-v([0-9.]+)'
 
       # update spacy models as well
       echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy-models.en_core_web_sm
@@ -144,7 +144,5 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "spacy";
-    # Cython.Compiler.Errors.CompileError: spacy/ml/parser_model.pyx
-    broken = true;
   };
 }

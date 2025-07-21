@@ -199,6 +199,14 @@ let
         znver3 = versionAtLeast ccVersion "11.0";
         znver4 = versionAtLeast ccVersion "13.0";
         znver5 = versionAtLeast ccVersion "14.0";
+
+        # LoongArch64
+        # https://gcc.gnu.org/gcc-12/changes.html#loongarch
+        # la464 was added together with loongarch64 support
+        # https://gcc.gnu.org/gcc-14/changes.html#loongarch
+        "la64v1.0" = versionAtLeast ccVersion "14.0";
+        "la64v1.1" = versionAtLeast ccVersion "14.0";
+        la664 = versionAtLeast ccVersion "14.0";
       }
       .${arch} or true
     else if isClang then
@@ -223,6 +231,14 @@ let
         znver3 = versionAtLeast ccVersion "12.0";
         znver4 = versionAtLeast ccVersion "16.0";
         znver5 = versionAtLeast ccVersion "19.1";
+
+        # LoongArch64
+        # https://releases.llvm.org/16.0.0/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        # la464 was added together with loongarch64 support
+        # https://releases.llvm.org/19.1.0/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        "la64v1.0" = versionAtLeast ccVersion "19.1";
+        "la64v1.1" = versionAtLeast ccVersion "19.1";
+        la664 = versionAtLeast ccVersion "19.1";
       }
       .${arch} or true
     else
@@ -316,7 +332,17 @@ let
     ++ optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}"
     ++ optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}"
     ++ optional (targetPlatform ? gcc.thumb) "-m${thumb}"
-    ++ optional (tune != null) "-mtune=${tune}";
+    ++ optional (tune != null) "-mtune=${tune}"
+    ++
+      optional (targetPlatform ? gcc.strict-align)
+        "-m${optionalString (!targetPlatform.gcc.strict-align) "no-"}strict-align"
+    ++ optional (
+      targetPlatform ? gcc.cmodel
+      &&
+        # TODO: clang on powerpcspe also needs a condition: https://github.com/llvm/llvm-project/issues/71356
+        # https://releases.llvm.org/18.1.6/tools/clang/docs/ReleaseNotes.html#loongarch-support
+        ((targetPlatform.isLoongArch64 && isClang) -> versionAtLeast ccVersion "18.1")
+    ) "-mcmodel=${targetPlatform.gcc.cmodel}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
@@ -700,6 +726,15 @@ stdenvNoCC.mkDerivation {
       echo "-isystem ${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     ''
+    # GCC NG friendly libc++
+    + optionalString (libcxx != null && libcxx.isGNU or false) ''
+      for dir in ${getDev libcxx}/include/c++/*; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+      for dir in ${getDev libcxx}/include/c++/*/${targetPlatform.config}; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+    ''
 
     ##
     ## Initial CFLAGS
@@ -775,8 +810,27 @@ stdenvNoCC.mkDerivation {
       export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
+    # Do not prevent omission of framepointers on x86 32bit due to the small
+    # number of general purpose registers. Keeping EBP available provides
+    # non-trivial performance benefits.
+    + (
+      let
+        enable_fp = !targetPlatform.isx86_32;
+        enable_leaf_fp =
+          enable_fp
+          && (
+            targetPlatform.isx86_64
+            || targetPlatform.isAarch64
+            || (targetPlatform.isRiscV && (!isGNU || versionAtLeast ccVersion "15.1"))
+          );
+      in
+      optionalString enable_fp ''
+        echo " -fno-omit-frame-pointer ${optionalString enable_leaf_fp "-mno-omit-leaf-frame-pointer "}" >> $out/nix-support/cc-cflags-before
+      ''
+    )
+
     # For clang, this is handled in add-clang-cc-cflags-before.sh
-    + lib.optionalString (!isClang && machineFlags != [ ]) ''
+    + optionalString (!isClang && machineFlags != [ ]) ''
       printf "%s\n" ${lib.escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
     ''
 
@@ -888,7 +942,7 @@ stdenvNoCC.mkDerivation {
       # These will become empty strings when not targeting Darwin.
       inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
     }
-    // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
       # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
       fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
     };

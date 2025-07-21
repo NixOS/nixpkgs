@@ -6,7 +6,6 @@
   openssl,
   stdenv,
   libiconv,
-  darwin,
   nix,
   testers,
   nixtract,
@@ -32,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   nativeCheckInputs = [ nix ];

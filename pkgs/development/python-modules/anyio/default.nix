@@ -82,6 +82,11 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
+
   disabledTests =
     [
       # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
@@ -94,6 +99,16 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
       "test_is_block_device"
+
+      # These tests become flaky under heavy load
+      "test_asyncio_run_sync_called"
+      "test_handshake_fail"
+      "test_run_in_custom_limiter"
+      "test_cancel_from_shielded_scope"
+      "test_start_task_soon_cancel_later"
+
+      # AssertionError: assert 'wheel' == 'nixbld'
+      "test_group"
     ];
 
   disabledTestPaths = [

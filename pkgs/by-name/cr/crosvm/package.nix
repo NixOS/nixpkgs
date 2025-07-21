@@ -21,19 +21,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "crosvm";
-  version = "0-unstable-2025-04-25";
+  version = "0-unstable-2025-07-15";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "6b75e831de4d5f44a362142d25b77d9c4d7988aa";
-    hash = "sha256-hqnzKFdjM32omoECKYTGkSukkpy837e44vMMnN5B05I=";
+    rev = "940eaae7246300bb01e1efb8c3d21ea93e0e63cd";
+    hash = "sha256-UD2/mGZ9eBxYcf7QR+SATooxxdo9dG9U4DSSF5u8s4Y=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-A5yHGG5KEsSUlDb+m+R6NnKEvReClPaGRxWjNjXlgys=";
+  cargoHash = "sha256-k4lVgUNvQ8ySYs33nlyTcUgGxtXpiNEG/cFCAJNpJ+c=";
 
   nativeBuildInputs = [
     pkg-config

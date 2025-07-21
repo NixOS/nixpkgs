@@ -19,24 +19,19 @@
   libX11,
   SDL2,
   zlib,
-  Cocoa,
-  AudioToolbox,
-  Carbon,
-  CoreMIDI,
-  AudioUnit,
   cctools,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
-    hash = "sha256-4/h1bzauYWNvG7skn6afF79t0KEdgYLZoeqeqRudH7I=";
+    hash = "sha256-+MM47piuXuIBmAQd0g/cAg5t02qSQ0sw/DwFrMUSIAA=";
   };
 
   nativeBuildInputs = [ nasm ];
@@ -46,13 +41,6 @@ stdenv.mkDerivation rec {
       alsa-lib
       libGLU
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AudioToolbox
-      Carbon
-      CoreMIDI
-      AudioUnit
     ]
     ++ [
       curl
@@ -86,8 +74,7 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace config.mk \
-        --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
-        --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
+        --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
     '';
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];

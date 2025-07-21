@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pcre,
   pcre2,
   jemalloc,
@@ -56,6 +57,24 @@ let
 
       buildFlags = [ "localstatedir=/var/run" ];
 
+      patches =
+        lib.optionals (stdenv.isDarwin && lib.versionAtLeast version "7.7") [
+          # Fix VMOD section attribute on macOS
+          # Unreleased commit on master
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+            hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+          })
+          # Fix endian.h compatibility on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+          ./patches/0001-fix-endian-h-compatibility-on-macos.patch
+        ]
+        ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
+          # Fix duplicate OS_CODE definitions on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4347
+          ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
+        ];
+
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
       '';
@@ -91,17 +110,12 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.13";
-    hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
-  };
-  # EOL 2025-09-15
-  varnish76 = common {
-    version = "7.6.2";
-    hash = "sha256-OFxhDsxj3P61PXb0fMRl6J6+J9osCSJvmGHE+o6dLJo=";
+    version = "6.0.14";
+    hash = "sha256-tZlBf3ppntxxYSufEJ86ot6ujvnbfIyZOu9B3kDJ72k=";
   };
   # EOL 2026-03-15
   varnish77 = common {
-    version = "7.7.0";
-    hash = "sha256-aZSPIVEfgc548JqXFdmodQ6BEWGb1gVaPIYTFaIQtOQ=";
+    version = "7.7.1";
+    hash = "sha256-TAbFyZaApCm3KTT5/VE5Y/fhuoVTszyn7BLIWlwrdRo=";
   };
 }

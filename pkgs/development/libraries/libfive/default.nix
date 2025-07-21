@@ -12,20 +12,19 @@
   libpng,
   boost,
   guile,
-  python,
+  python3,
   qtbase,
-  darwin,
 }:
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "0-unstable-2024-10-10";
+  version = "0-unstable-2025-07-07";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "71899313d36ce14de6646ef760fa6bbc5c0cc067";
-    hash = "sha256-bA+4wGAygdbHcOMGFwNyzn2daQ8E7NeOTUF2Tr3RQww=";
+    rev = "ba841d3ba91b885ba19c40e382d6ae6f3534a4b5";
+    hash = "sha256-YVqP4k8KBLMYZOuWYLXijZBEiNGhQaaVNBVQtpIgvjc=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,7 @@ stdenv.mkDerivation {
     cmake
     ninja
     pkg-config
-    python.pkgs.pythonImportsCheckHook
+    python3.pkgs.pythonImportsCheckHook
   ];
   buildInputs = [
     eigen_3_4_0
@@ -41,9 +40,9 @@ stdenv.mkDerivation {
     libpng
     boost
     guile
-    python
+    python3
     qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
+  ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
@@ -60,11 +59,11 @@ stdenv.mkDerivation {
 
     substituteInPlace libfive/bind/python/CMakeLists.txt \
       --replace ' ''${PYTHON_SITE_PACKAGES_DIR}' \
-                " $out/${python.sitePackages}" \
+                " $out/${python3.sitePackages}" \
 
     substituteInPlace libfive/bind/python/libfive/ffi.py \
       --replace "os.path.join('libfive', folder)" \
-                "os.path.join('$out/${python.sitePackages}/libfive', folder)" \
+                "os.path.join('$out/${python3.sitePackages}/libfive', folder)" \
 
     export XDG_CACHE_HOME=$(mktemp -d)/.cache
   '';
@@ -92,14 +91,14 @@ stdenv.mkDerivation {
       ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
 
       # Create links since libfive looks for the library in a specific path.
-      mkdir -p "$out/${python.sitePackages}/libfive/src"
-      ln -s "$out"/lib/libfive.* "$out/${python.sitePackages}/libfive/src/"
-      mkdir -p "$out/${python.sitePackages}/libfive/stdlib"
-      ln -s "$out"/lib/libfive-stdlib.* "$out/${python.sitePackages}/libfive/stdlib/"
+      mkdir -p "$out/${python3.sitePackages}/libfive/src"
+      ln -s "$out"/lib/libfive.* "$out/${python3.sitePackages}/libfive/src/"
+      mkdir -p "$out/${python3.sitePackages}/libfive/stdlib"
+      ln -s "$out"/lib/libfive-stdlib.* "$out/${python3.sitePackages}/libfive/stdlib/"
 
       # Create links so Studio can find the bindings.
       mkdir -p "$out/libfive/bind"
-      ln -s "$out/${python.sitePackages}" "$out/libfive/bind/python"
+      ln -s "$out/${python3.sitePackages}" "$out/libfive/bind/python"
     '';
 
   pythonImportsCheck = [

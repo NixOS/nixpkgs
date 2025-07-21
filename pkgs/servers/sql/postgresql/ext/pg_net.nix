@@ -4,23 +4,20 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_net";
-  version = "0.14.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "pg_net";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1pxhTyrE5j6dY+M5eKAboQNofIORS+Dccz+7HKEKQI=";
+    hash = "sha256-Sy2PG1zCB6tNbcMNMWvl/Fe2Zu1stvEIqGrLsRF09GY=";
   };
 
   buildInputs = [ curl ];
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = {
     description = "Async networking for Postgres";

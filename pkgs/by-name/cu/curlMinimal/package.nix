@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
   pkg-config,
   perl,
   nixosTests,
@@ -92,7 +91,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.12.1";
+  version = "8.14.1";
 
   src = fetchurl {
     urls = [
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-A0Hx7ZeibIEauuvTfWK4M5VnkrdgfqPxXQAWE8dt4gI=";
+    hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -135,6 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
+  nativeCheckInputs = [
+    # See https://github.com/curl/curl/pull/16928
+    openssl'
+  ];
+
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
@@ -158,15 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional wolfsslSupport wolfssl
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
-    ++ lib.optional zstdSupport zstd
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+    ++ lib.optional zstdSupport zstd;
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''

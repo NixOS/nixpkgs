@@ -3,7 +3,7 @@
   fetchurl,
   buildPythonApplication,
   libjack2,
-  pyliblo,
+  pyliblo3,
   pyqt5,
   which,
   bash,
@@ -39,8 +39,8 @@ buildPythonApplication rec {
     libjack2
     bash
   ];
-  propagatedBuildInputs = [
-    pyliblo
+  dependencies = [
+    pyliblo3
     pyqt5
   ];
 

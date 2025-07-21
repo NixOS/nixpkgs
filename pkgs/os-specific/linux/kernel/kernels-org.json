@@ -1,38 +1,34 @@
 {
     "testing": {
-        "version": "6.15-rc4",
-        "hash": "sha256:0zg817b9bbpl80cjmxgmxivi6xr80hng704mdl6m5knrl0v4ay5j"
+        "version": "6.16-rc6",
+        "hash": "sha256:03sz5gbnz1s763nlq2sbqk3bmjca24hq2n9wrpqhy6gyrd11s22f"
     },
     "6.1": {
-        "version": "6.1.135",
-        "hash": "sha256:1fbyjprj65b1blb033lcy9y4bkh9jb7m06h6qph739wnzzhpmlg9"
+        "version": "6.1.146",
+        "hash": "sha256:117gyi8zym09z2qarnv02i7v23v8596nqvllid07aydlcpihl9pv"
     },
     "5.15": {
-        "version": "5.15.180",
-        "hash": "sha256:0ffdy7zhp25z75n49j4rs8fs79icbmz1yy7k3xgcl2p6pfw6h7zm"
+        "version": "5.15.189",
+        "hash": "sha256:1hshd26ahn6dbw6jnqi0v5afpk672w7p09mk7iri93i7hxdh5l73"
     },
     "5.10": {
-        "version": "5.10.236",
-        "hash": "sha256:12gv03hbddwm4nl8xxdvdr983nbh2lzrl4jr9p5kmv9rgn7wr9bd"
+        "version": "5.10.240",
+        "hash": "sha256:04sdcf4aqsqchii38anzmk9f9x65wv8q1x3m9dandmi6fabw724d"
     },
     "5.4": {
-        "version": "5.4.292",
-        "hash": "sha256:11dy6zvxnripwr4lfg357wdl70kcg5ljs3wxhz2klqpas60gbjqb"
+        "version": "5.4.296",
+        "hash": "sha256:0fm73yqzbzclh2achcj8arpg428d412k2wgmlfmyy6xzb1762qrx"
     },
     "6.6": {
-        "version": "6.6.88",
-        "hash": "sha256:0l0697dcfdjkl80c7x1nfvw3n6390nnbznlpfbg51sgp7sv8kpqr"
+        "version": "6.6.99",
+        "hash": "sha256:0dmbi7g156gknglcgb47kl1i29fa6q4rkx99m2glpiqykxr7k1mh"
     },
     "6.12": {
-        "version": "6.12.25",
-        "hash": "sha256:141visdf85iw011ncp77csmkahvn598lqvhi493a4g31dw7piby8"
+        "version": "6.12.39",
+        "hash": "sha256:0iakbyipani7rcm37xb0bsl5zn7h1m7vfhwfangn64gxm012amkf"
     },
-    "6.13": {
-        "version": "6.13.12",
-        "hash": "sha256:0hhj49k3ksjcp0dg5yiahqzryjfdpr9c1a9ph6j9slzmkikbn7v1"
-    },
-    "6.14": {
-        "version": "6.14.4",
-        "hash": "sha256:0fak7y9dr5rxzmi4m545kz7pyk2c91dkj4k7i2jgnl80ga6z4lll"
+    "6.15": {
+        "version": "6.15.7",
+        "hash": "sha256:1sgq32ivnrvlqskmz6i5k9157y6c5x3r9lj3pl0i23habc8ds1rm"
     }
 }

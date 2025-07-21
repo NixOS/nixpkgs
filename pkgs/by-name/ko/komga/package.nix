@@ -4,16 +4,17 @@
   fetchurl,
   makeWrapper,
   jdk23_headless,
+  libwebp, # Fixes https://github.com/gotson/komga/issues/1294
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "komga";
-  version = "1.21.2";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-FYw519VT40PU3fVEb7DBoST2bqhPXcEqquHkGeULQ3k=";
+    sha256 = "sha256-MAMHrYJva1n7TtYNjoN4Yb1+mApWfjpXxgFWgkeFc3g=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +22,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
+    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libwebp ]}
   '';
 
   passthru.tests = {

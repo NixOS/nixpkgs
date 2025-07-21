@@ -296,7 +296,7 @@ let
       with subtest("Test nixos-option"):
           kernel_modules = target.succeed("nixos-option boot.initrd.kernelModules")
           assert "virtio_console" in kernel_modules
-          assert "List of modules" in kernel_modules
+          assert "list of modules" in kernel_modules
           assert "qemu-guest.nix" in kernel_modules
 
       target.shutdown()
@@ -632,32 +632,30 @@ let
       grubUseEfi ? false,
       enableOCR ? false,
       meta ? { },
+      passthru ? { },
       testSpecialisationConfig ? false,
       testFlakeSwitch ? false,
       testByAttrSwitch ? false,
       clevisTest ? false,
       clevisFallbackTest ? false,
       disableFileSystems ? false,
-      selectNixPackage ? pkgs: pkgs.nixStable,
+      selectNixPackage ? pkgs: pkgs.nixVersions.stable,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
     in
     makeTest {
-      inherit enableOCR;
+      inherit enableOCR passthru;
       name = "installer-" + name;
       meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or [ ]);
         # non-EFI tests can only run on x86
-        platforms =
-          if isEfi then
-            platforms.linux
-          else
-            [
-              "x86_64-linux"
-              "i686-linux"
-            ];
+        platforms = mkIf (!isEfi) [
+          "x86_64-linux"
+          "x86_64-darwin"
+          "i686-linux"
+        ];
       };
       nodes =
         let
@@ -681,7 +679,7 @@ let
         {
           # The configuration of the system used to run "nixos-install".
           installer =
-            { config, ... }:
+            { config, pkgs, ... }:
             {
               imports = [
                 commonConfig
@@ -724,6 +722,10 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
+                  (nixos-rebuild-ng.override {
+                    withNgSuffix = false;
+                    withReexec = true;
+                  })
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp
@@ -739,6 +741,11 @@ let
                   unionfs-fuse
                   xorg.lndir
                   shellcheck-minimal
+
+                  # Only the out output is included here, which is what is
+                  # required to build the NixOS udev rules
+                  # See the comment in services/hardware/udev.nix
+                  systemdMinimal.out
 
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download
@@ -1104,10 +1111,12 @@ in
 
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
-  simple = makeInstallerTest "simple" simple-test-config;
-  lix-simple = makeInstallerTest "simple" simple-test-config // {
-    selectNixPackage = pkgs: pkgs.lix;
-  };
+  simple = makeInstallerTest "simple" (
+    simple-test-config
+    // {
+      passthru.override = args: makeInstallerTest "simple" (simple-test-config // args);
+    }
+  );
 
   switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 

@@ -9,8 +9,6 @@
 
   # native darwin dependencies
   libiconv,
-  Security,
-  SystemConfiguration,
 
   # tests
   pytestCheckHook,
@@ -19,31 +17,33 @@
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.14.6";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-x0DxoEKXgMMIlebzL6xVedViGGra2Bx/aox0XiXi+Dc=";
+    hash = "sha256-js9n+m5xDlzxMbXtN74klS0rjTCsHL3LhVAp0tx48b0=";
   };
 
   postPatch = ''
     cd bindings/python
     ln -s ${./Cargo.lock} Cargo.lock
+
+    # don't rebuild std
+    rm .cargo/config.toml
   '';
 
   # call `cargo build --release` in bindings/python and copy the
   # resulting lock file
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     postPatch = ''
       cd bindings/python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    name = "${pname}-${version}";
-    hash = "sha256-4zi29ZdALummwcWxYqDDEPAjKptmLqyYUJzWMrEK4os=";
+    hash = "sha256-4DVLcJrK2at1vlThey0N97IWFHd1NM2MEXXA74BYfZs=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +53,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
-    SystemConfiguration
   ];
 
   pythonImportsCheck = [ "css_inline" ];

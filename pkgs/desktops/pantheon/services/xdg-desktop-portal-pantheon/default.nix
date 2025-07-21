@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "8.0.0";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-pf7xQwsBRjjyOMUPe7fJp1vOhhBmuXJ6Uf4YosxbHtw=";
+    sha256 = "sha256-I0GsdpaH4SoOVPLLZa0da8+rwmJs1HtLrhkglNmYtrQ=";
   };
 
   nativeBuildInputs = [

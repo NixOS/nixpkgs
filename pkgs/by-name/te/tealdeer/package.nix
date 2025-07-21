@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
       davidak
       newam
       mfrw
+      ryan4yin
     ];
     license = with licenses; [
       asl20

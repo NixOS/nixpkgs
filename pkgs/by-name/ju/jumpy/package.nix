@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   makeWrapper,
   pkg-config,
   zstd,
@@ -12,22 +13,29 @@
   vulkan-loader,
   wayland,
   xorg,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jumpy";
-  version = "0.8.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = "jumpy";
-    rev = "v${version}";
-    sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g/CpSycTCM1i6O7Mir+3huabvr4EXghDApquEUNny8c=";
   };
 
+  # This patch may be removed in the next release
+  cargoPatches = [
+    (fetchpatch2 {
+      url = "https://github.com/fishfolk/jumpy/commit/8234e6d2c0b33c75e2112596ded1734fdba50fb8.patch?full_index=1";
+      hash = "sha256-IWjBw1Wj/6CT/x6xm6vfpUMfk7A5/EsdbPDvWywRFc8=";
+    })
+  ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hVEpTNTXwOQoxlhOewUvHyfBh+APnx8Fox90CmdMRQ4=";
+  cargoHash = "sha256-2I9s1zH94GRqXGBxZYyXOQwNeYrpV1UhUSKGCs9Ce9Q=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -50,7 +58,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
       rustPlatform.bindgenHook
     ];
 
@@ -76,15 +83,17 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tactical 2D shooter played by up to 4 players online or on a shared screen";
     mainProgram = "jumpy";
-    homepage = "https://fishfight.org/";
-    changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
-    license = with licenses; [
+    homepage = "https://fishfolk.org/games/jumpy";
+    changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       mit # or
       asl20
+      # Assets
+      cc-by-nc-40
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
-}
+})

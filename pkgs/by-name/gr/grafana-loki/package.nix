@@ -12,14 +12,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.4.3";
+  version = "3.5.2";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-1tI9X2eIKuWEWJBbN4UAw8yeRrjgfqcenJyTNMk5rqU=";
+    hash = "sha256-sgAcrW5TpiCjnouvpYwo26eJ1Cfe7XPWNeWG8/59wSQ=";
   };
 
   vendorHash = null;
@@ -69,20 +69,20 @@ buildGoModule rec {
       "-X ${t}.Revision=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Like Prometheus, but for logs";
     mainProgram = "promtail";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [
-      willibutz
+    maintainers = with lib.maintainers; [
       globin
       mmahut
       emilylange
+      ryan4yin
     ];
   };
 }

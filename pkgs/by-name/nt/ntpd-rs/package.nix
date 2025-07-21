@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     tag = "v${version}";
-    hash = "sha256-APQHxlsyUMA1N6FatQvotOokxNikOO22GGyXUMh3ABo=";
+    hash = "sha256-1GnJFiptSzj5zI8IlcrFjwooujUM9ouzcIgghUEs518=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-BiLYKOgmmqOesfl/8y4590Xo2Z4+u/Rn7CglNjQk2bU=";
+  cargoHash = "sha256-Wk9KxNgIGDEIEYIl7O+3eamUHuBSBMxZgUob9FryuGI=";
 
   nativeBuildInputs = [
     pandoc
@@ -38,14 +38,6 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     source utils/generate-man.sh
   '';
-
-  # lots of flaky tests
-  doCheck = false;
-
-  checkFlags = [
-    # doesn't find the testca
-    "--skip=daemon::keyexchange::tests"
-  ];
 
   postInstall = ''
     install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service

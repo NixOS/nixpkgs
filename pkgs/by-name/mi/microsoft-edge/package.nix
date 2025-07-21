@@ -1,9 +1,11 @@
 {
-  fetchurl,
   lib,
+  stdenvNoCC,
+  fetchurl,
   makeWrapper,
   patchelf,
-  stdenv,
+  bintools,
+  dpkg,
 
   # Linked dynamic libraries.
   alsa-lib,
@@ -92,6 +94,9 @@
   # For Vulkan support (--enable-features=Vulkan)
   addDriverRunpath,
 
+  # For QT support
+  qt6,
+
   # Edge AAD sync
   cacert,
   libsecret,
@@ -163,22 +168,22 @@ let
       wget
       libsecret
       libuuid
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
       gtk3
       gtk4
-    ];
+      qt6.qtbase
+      qt6.qtwayland
+    ]
+    ++ lib.optionals pulseSupport [ libpulseaudio ]
+    ++ lib.optionals libvaSupport [ libva ];
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "135.0.3179.85";
+  version = "138.0.3351.95";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-x1YpKsvj2Jx1/VE13eE/aCkv+b7rGOQo4xcRYu2GQGA=";
+    hash = "sha256-Q5TdmqLlRITWDRZwUTMiOOjXQm09Cq+bK6N5XNew6R8=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -188,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     patchelf
+    dpkg
   ];
 
   buildInputs = [
@@ -200,13 +206,6 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    ar x $src
-    tar xf data.tar.xz
-    runHook postUnpack
-  '';
-
   rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
   binpath = lib.makeBinPath deps;
 
@@ -218,9 +217,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     exe=$out/bin/microsoft-edge
 
-    mkdir -p $out/bin $out/share
-    cp -v -a opt/* $out/share
-    cp -v -a usr/share/* $out/share
+    mkdir -p $out/bin
+    cp -v -a usr/share $out/share
+    cp -v -a opt/microsoft $out/share/microsoft
 
     # replace bundled vulkan-loader
     rm -v $out/share/microsoft/$appname/libvulkan.so.1
@@ -229,6 +228,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/share/microsoft/$appname/microsoft-edge \
       --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
     substituteInPlace $out/share/applications/microsoft-edge.desktop \
+      --replace-fail /usr/bin/microsoft-edge-$dist $exe
+    substituteInPlace $out/share/applications/com.microsoft.Edge.desktop \
       --replace-fail /usr/bin/microsoft-edge-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
       --replace-fail /opt/microsoft/msedge $exe
@@ -251,13 +252,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
     makeWrapper "$out/share/microsoft/$appname/microsoft-edge" "$exe" \
+      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins" \
+      --prefix QT_PLUGIN_PATH  : "${qt6.qtwayland}/lib/qt-6/plugins" \
+      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
       --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set CHROME_WRAPPER  "microsoft-edge-$dist" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
@@ -269,7 +273,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
     runHook postInstall
@@ -284,9 +288,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     mainProgram = "microsoft-edge";
     maintainers = with lib.maintainers; [
-      zanculmarktum
-      kuwii
-      rhysmdnz
+      cholli
+      ulrikstrid
+      maeve-oake
+      leleuvilela
+      bricklou
+      jonhermansen
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

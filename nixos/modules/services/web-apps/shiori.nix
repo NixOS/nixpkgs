@@ -62,7 +62,7 @@ in
       description = "Shiori simple bookmarks manager";
       wantedBy = [ "multi-user.target" ];
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
       ];
       environment =

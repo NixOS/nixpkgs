@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.4.0";
+  version = "3.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-CyEBgB3YgTQDzqJloL0XaRF0h6soNOWmtWTjP423MmY=";
+    hash = "sha256-kYGoJpFkZo4kZmbmak/+nOS2gzDO/xAwfbcGPOFxyrY=";
   };
 
   patches = [
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";
     homepage = "https://github.com/pyupio/safety";
-    changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyupio/safety/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thomasdesr

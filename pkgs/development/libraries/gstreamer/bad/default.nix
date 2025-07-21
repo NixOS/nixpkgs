@@ -20,6 +20,9 @@
   opencvSupport ? false,
   opencv4,
   faad2,
+  # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
+  # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
+  lcevcdecSupport ? false,
   lcevcdec,
   ldacbt,
   liblc3,
@@ -95,14 +98,6 @@
   libfreeaptx,
   zxing-cpp,
   usrsctp,
-  VideoToolbox,
-  AudioToolbox,
-  AVFoundation,
-  Cocoa,
-  CoreMedia,
-  CoreVideo,
-  Foundation,
-  MediaToolbox,
   directoryListingUpdater,
   enableGplPlugins ? true,
   bluezSupport ? stdenv.hostPlatform.isLinux,
@@ -113,7 +108,7 @@
   hotdoc,
   guiSupport ? true,
   gst-plugins-bad,
-  apple-sdk_13,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -182,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       curl.dev
       fdk_aac
       gsm
-      lcevcdec
       libaom
       libdc1394
       libde265
@@ -273,19 +267,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals guiSupport [
       gtk3
     ]
+    ++ lib.optionals lcevcdecSupport [
+      lcevcdec
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # For unknown reasons the order is important, e.g. if
-      # VideoToolbox is last, we get:
-      #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
-      VideoToolbox
-      AudioToolbox
-      AVFoundation
-      Cocoa
-      CoreMedia
-      CoreVideo
-      Foundation
-      MediaToolbox
-      apple-sdk_13
+      apple-sdk_gstreamer
     ];
 
   mesonFlags =
@@ -340,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "openh264" openh264Support)
       (lib.mesonEnable "doc" enableDocumentation)
       (lib.mesonEnable "directfb" false)
+      (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only

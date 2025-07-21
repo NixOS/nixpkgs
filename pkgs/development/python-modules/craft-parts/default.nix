@@ -25,11 +25,12 @@
   ant,
   maven,
   jdk,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.8.0";
+  version = "2.18.0";
 
   pyproject = true;
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-1SnT/yB6vJm82yhszBRjeph13B91KYap8/KR4L9VcjM=";
+    hash = "sha256-mjmWB6kgQNY++aAb9Ql/1cISGqX1mivz62y0Sa65FwM=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -76,13 +77,10 @@ buildPythonPackage rec {
     requests-mock
     socat
     squashfsTools
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)
@@ -111,6 +109,8 @@ buildPythonPackage rec {
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
+      # Hard-coded assumptions about arguments relating to 'x86_64'
+      "tests/unit/plugins/test_dotnet_v2_plugin.py"
     ];
 
   passthru.updateScript = nix-update-script { };

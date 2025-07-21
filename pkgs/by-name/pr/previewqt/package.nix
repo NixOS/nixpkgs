@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
@@ -36,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       exiv2
-      extra-cmake-modules
       imagemagick
       libarchive
       libdevil

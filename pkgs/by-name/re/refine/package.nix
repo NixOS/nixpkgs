@@ -19,23 +19,9 @@
   glib,
 }:
 
-let
-  libadwaita' = libadwaita.overrideAttrs (oldAttrs: {
-    version = "1.6.2-unstable-2025-01-02";
-    src = oldAttrs.src.override {
-      tag = null;
-      rev = "f5f0e7ce69405846a8f8bdad11cef2e2a7e99010";
-      hash = "sha256-n5RbGHtt2g627T/Tg8m3PjYIl9wfYTIcrplq1pdKAXk=";
-    };
-
-    # `test-application-window` is flaky on aarch64-linux
-    doCheck = false;
-  });
-in
-
 python3Packages.buildPythonApplication rec {
   pname = "refine";
-  version = "0.5.7";
+  version = "0.5.10";
   pyproject = false; # uses meson
 
   src = fetchFromGitLab {
@@ -43,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     owner = "TheEvilSkeleton";
     repo = "Refine";
     tag = version;
-    hash = "sha256-Ew/FCCJxgc5ybc/o6tEYP65G24sEmVLoeMTu9/cCjVQ=";
+    hash = "sha256-/CyenSdF0dZR6HLw9FTv+OhJfNg55/dGE9y1A1hbcPA=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +47,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libxml2
-    libadwaita'
+    libadwaita
   ];
 
   dependencies =

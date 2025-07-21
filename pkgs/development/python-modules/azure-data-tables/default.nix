@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-data-tables";
-  version = "12.6.0";
+  version = "12.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_data_tables";
     inherit version;
-    hash = "sha256-4NVZgROFX5EU/XZxYj01UJ+Ddylwz9xZeQGzX0LcMTQ=";
+    hash = "sha256-sU/JSjIjooNf9WiOF9jhB7J8fNfEEUE48qyBNzcjcF0=";
   };
 
   build-system = [ setuptools ];

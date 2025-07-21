@@ -3,6 +3,7 @@
   aiosqlite,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   pyaes,
   pysocks,
@@ -24,6 +25,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-QpweUDCypTxOOWL08gCUuMgbuE4130iNyxRpUNuSBac=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-async-in-test.patch";
+      excludes = [ ".github/workflows/code-style.yml" ];
+      url = "https://github.com/hydrogram/hydrogram/commit/7431319a1d990aa838012bd566a9746da7df2a6e.patch";
+      hash = "sha256-MPv13cxnNPDD+p9EPjDPFqydGy57oXzLeRxL3lG8JKU=";
+    })
+  ];
 
   build-system = [ hatchling ];
 

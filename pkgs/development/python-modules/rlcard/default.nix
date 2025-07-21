@@ -34,6 +34,16 @@ buildPythonPackage rec {
     })
   ];
 
+  # AttributeError: 'numpy.ndarray' object has no attribute 'tostring'
+  # tobytes() has the exact same behavior as tostring()
+  # https://github.com/datamllab/rlcard/pull/328
+  postPatch = ''
+    substituteInPlace rlcard/agents/cfr_agent.py \
+      --replace-fail \
+        "state['obs'].tostring()" \
+        "state['obs'].tobytes()"
+  '';
+
   build-system = [
     setuptools
     wheel

@@ -4,14 +4,14 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "smbscan";
   version = "unstable-2022-05-26";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "jeffhacks";
-    repo = pname;
+    repo = "smbscan";
     rev = "1b19d6040cab279b97bf002934bf6f8b34d6a8b4";
     hash = "sha256-cL1mnyzIbHB/X4c7sZKVv295LNnjqwR8TZBMe9s/peg=";
   };

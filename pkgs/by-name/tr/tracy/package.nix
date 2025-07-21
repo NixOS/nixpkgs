@@ -9,7 +9,6 @@
   wayland-scanner,
 
   capstone,
-  darwin,
   dbus,
   freetype,
   glfw,
@@ -68,11 +67,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && !withWayland)) [
       glfw
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ]
-    ++ lib.optionals (
-      stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"
-    ) [ darwin.apple_sdk.frameworks.UniformTypeIdentifiers ];
+    ];
 
   cmakeFlags =
     [
@@ -134,7 +129,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       mpickering
       nagisa
-      paveloom
     ];
     platforms = platforms.linux ++ platforms.darwin;
   };

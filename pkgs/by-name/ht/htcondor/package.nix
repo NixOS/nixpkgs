@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];
-    # cannot find -lpthread: No such file or directory
-    broken = stdenv.hostPlatform.isAarch64;
+    # On Aarch64: ld: cannot find -lpthread: No such file or directory
+    # On x86_64:  ld: cannot find -ldl:      No such file or directory
+    broken = true;
   };
 }

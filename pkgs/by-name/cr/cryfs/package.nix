@@ -90,16 +90,16 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic filesystem for the cloud";
     homepage = "https://www.cryfs.org/";
     changelog = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
       peterhoeg
       c0bw3b
       sigmasquadron
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

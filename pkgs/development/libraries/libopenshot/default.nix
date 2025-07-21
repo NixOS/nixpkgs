@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9X2UIRDD+1kNLbV8AnnPabdO2M0OfTDxQ7xyZtsE10k=";
+    hash = "sha256-zroTnJRYIIglhha6jQvaVNTgnIV6kUWcu7s5zEvgH6Q=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -69,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_RUBY" false)
+    (lib.cmakeBool "ENABLE_PYTHON" true)
+    (lib.cmakeOptionType "filepath" "PYTHON_EXECUTABLE" (lib.getExe python3))
     (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
   ];
 

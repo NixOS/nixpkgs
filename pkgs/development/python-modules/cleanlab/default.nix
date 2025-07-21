@@ -81,6 +81,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # Incorrect snapshots (AssertionError)
+      "test_color_sentence"
+
       # Requires the datasets we prevent from downloading
       "test_create_imagelab"
 

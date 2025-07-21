@@ -5,35 +5,28 @@
   pkg-config,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.53.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-RXt9qcLepJJA+MMFm26UMLuwgh8V13DoBueY1Z+W63w=";
+    hash = "sha256-Fr31BNTI8pVXHSSu46XPvlb0ic/S011OLWsLEfAZI4M=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zaI/W92XyuAXs+wF1KOBEiCRqHiTTMGPiq2wrAbCDH4=";
+  cargoHash = "sha256-2YnwBAt2M2MkMhraKlk+BXxaNQ+iZSKzlUER1GBPbCI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   cargoBuildFlags = [
     "-p"

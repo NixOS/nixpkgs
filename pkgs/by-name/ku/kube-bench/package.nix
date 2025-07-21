@@ -2,28 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+
   installShellFiles,
+
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-bench";
-  version = "0.10.5";
+  version = "0.11.1";
+
+  __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-SI7rkJdl54e6b+zZEsj7CIU0wheDRcrAmCLoNWr7O8E=";
+    repo = "kube-bench";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3P5Cgnq7a/02c8zE6Rx1CUSwaq9K9EjfF0/AwarO4UE=";
   };
 
-  vendorHash = "sha256-BB7DHACKELwvquOwmBSXl1kwKw43mNnpp5yY33wwdVo=";
+  vendorHash = "sha256-xgvK6se9f0c6pI3+rcj0+/bogvSYJkyMzVGrwv2gi84=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=v${version}"
+    "-X github.com/aquasecurity/kube-bench/cmd.KubeBenchVersion=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -36,20 +41,16 @@ buildGoModule rec {
       --zsh <($out/bin/kube-bench completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/kube-bench --help
-    $out/bin/kube-bench version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aquasecurity/kube-bench";
-    changelog = "https://github.com/aquasecurity/kube-bench/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/kube-bench/releases/tag/v${finalAttrs.version}";
     description = "Checks whether Kubernetes is deployed according to security best practices as defined in the CIS Kubernetes Benchmark";
     mainProgram = "kube-bench";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

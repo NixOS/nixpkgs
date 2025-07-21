@@ -13,6 +13,7 @@
 pypy2Packages.buildPythonApplication rec {
   pname = "cvs2svn";
   version = "2.5.0";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://github.com/mhagger/cvs2svn/releases/download/${version}/${pname}-${version}.tar.gz";

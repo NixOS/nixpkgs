@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "scandir";
   version = "1.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -16,7 +16,7 @@
   jdk,
   jdk8,
   gsettings-desktop-schemas,
-  webkitgtk_4_0 ? null, # for internal web browser
+  webkitgtk_4_1 ? null, # for internal web browser
   buildEnv,
   runCommand,
   callPackage,
@@ -64,7 +64,7 @@ let
       gtk
       libXtst
       gsettings-desktop-schemas
-      webkitgtk_4_0
+      webkitgtk_4_1
       makeWrapper
       ;
   };

@@ -179,22 +179,6 @@ in
           ];
         };
 
-        linux_ham = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.13";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-            {
-              name = "ax25-ham";
-              patch = null;
-              extraStructuredConfig = {
-                HAMRADIO = lib.kernel.yes;
-                AX25 = lib.kernel.module;
-              };
-            }
-          ];
-        };
-
         linux_rt_6_1 = callPackage ../os-specific/linux/kernel/linux-rt-6.1.nix {
           kernelPatches = [
             kernelPatches.bridge_stp_helper
@@ -227,16 +211,8 @@ in
           ];
         };
 
-        linux_6_13 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.13";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_6_14 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.14";
+        linux_6_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.15";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -326,7 +302,6 @@ in
         linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
         linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
-        linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
 
       }
       // lib.optionalAttrs config.allowAliases {
@@ -334,11 +309,17 @@ in
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
+        linux_6_13 = throw "linux 6.13 was removed because it has reached its end of life upstream";
+        linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
 
         linux_4_19_hardened = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
+        linux_6_13_hardened = throw "linux 6.13 was removed because it has reached its end of life upstream";
+        linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
+
+        linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
       }
     )
   );
@@ -416,6 +397,11 @@ in
 
         dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
+        ecapture = callPackage ../by-name/ec/ecapture/package.nix {
+          withNonBTF = true;
+          inherit kernel;
+        };
+
         exfat-nofuse =
           if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
 
@@ -460,8 +446,6 @@ in
         it87 = callPackage ../os-specific/linux/it87 { };
 
         asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors { };
-
-        asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors { };
 
         ena = callPackage ../os-specific/linux/ena { };
 
@@ -603,17 +587,13 @@ in
 
         perf = callPackage ../os-specific/linux/kernel/perf { };
 
-        phc-intel =
-          if lib.versionAtLeast kernel.version "4.10" then
-            callPackage ../os-specific/linux/phc-intel { }
-          else
-            null;
-
         prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
         isgx = callPackage ../os-specific/linux/isgx { };
 
         rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
+
+        sheep-net = callPackage ../os-specific/linux/sheep-net { };
 
         shufflecake = callPackage ../os-specific/linux/shufflecake { };
 
@@ -630,6 +610,8 @@ in
         tmon = callPackage ../os-specific/linux/tmon { };
 
         tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+
+        tt-kmd = callPackage ../os-specific/linux/tt-kmd { };
 
         turbostat = callPackage ../os-specific/linux/turbostat { };
 
@@ -735,6 +717,7 @@ in
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
+        phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
       }
     );
 
@@ -749,14 +732,15 @@ in
       linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
       linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
       linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-      linux_6_13 = recurseIntoAttrs (packagesFor kernels.linux_6_13);
-      linux_6_14 = recurseIntoAttrs (packagesFor kernels.linux_6_14);
+      linux_6_15 = recurseIntoAttrs (packagesFor kernels.linux_6_15);
     }
     // lib.optionalAttrs config.allowAliases {
       linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
       linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
       linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
       linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
+      linux_6_13 = throw "linux 6.13 was removed because it reached its end of life upstream"; # Added 2025-06-22
+      linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
     };
 
   rtPackages = {
@@ -792,7 +776,6 @@ in
       linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
       linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
-      linux_6_13_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_13_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -802,8 +785,6 @@ in
 
       linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
-      linux_ham = recurseIntoAttrs (packagesFor kernels.linux_ham);
-
       linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
       __recurseIntoDerivationForReleaseJobs = true;
     }
@@ -812,6 +793,9 @@ in
       linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
       linux_6_10_hardened = throw "linux 6.10 was removed because it has reached its end of life upstream";
       linux_6_11_hardened = throw "linux 6.11 was removed because it has reached its end of life upstream";
+      linux_6_13_hardened = throw "linux 6.13 was removed because it has reached its end of life upstream";
+      linux_6_14_hardened = throw "linux 6.14 was removed because it has reached its end of life upstream";
+      linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
     }
   );
 
@@ -819,7 +803,7 @@ in
     {
       linux_default = packages.linux_6_12;
       # Update this when adding the newest kernel major version!
-      linux_latest = packages.linux_6_14;
+      linux_latest = packages.linux_6_15;
       linux_rt_default = packages.linux_rt_5_15;
       linux_rt_latest = packages.linux_rt_6_6;
     }

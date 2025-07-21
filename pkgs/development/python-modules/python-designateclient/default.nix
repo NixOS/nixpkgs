@@ -22,17 +22,17 @@
 
 buildPythonPackage rec {
   pname = "python-designateclient";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitea {
     domain = "opendev.org";
     owner = "openstack";
     repo = "python-designateclient";
     rev = version;
-    hash = "sha256-MwcpRQXH8EjWv41iHxorbFL9EpYu8qOLkDeUx6inEAU=";
+    hash = "sha256-Upfu6FDaCRXniJLacuIt6K0qi8aOvHU0t43F3uWvhG8=";
   };
 
   env.PBR_VERSION = version;

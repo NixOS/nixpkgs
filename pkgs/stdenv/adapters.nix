@@ -198,7 +198,8 @@ rec {
             {
               env = prevAttrs.env // {
                 NIX_CFLAGS_LINK =
-                  toString args.env.NIX_CFLAGS_LINK + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+                  toString (args.env.NIX_CFLAGS_LINK or "")
+                  + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
               };
             }
           else
@@ -294,6 +295,7 @@ rec {
         dontStrip = true;
         env = (args.env or { }) // {
           NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+          NIX_RUSTFLAGS = toString (args.env.NIX_RUSTFLAGS or "") + " -g -C opt-level=0 -C strip=none";
         };
       });
     });
@@ -350,8 +352,9 @@ rec {
       let
         bintools = stdenv.cc.bintools.override {
           extraBuildCommands = ''
-            wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-            wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+            wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+            wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+            wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
           '';
         };
       in
@@ -419,15 +422,7 @@ rec {
       });
     });
 
-  # Overriding the SDK changes the Darwin SDK used to build the package, which:
-  # * Ensures that the compiler and bintools have the correct Libsystem version; and
-  # * Replaces any SDK references with those in the SDK corresponding to the requested SDK version.
-  #
-  # `sdkVersion` can be any of the following:
-  # * A version string indicating the requested SDK version; or
-  # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
-  #
-  # Note: `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
+  # `overrideSDK` is deprecated. Add the versioned variants of `apple-sdk` to `buildInputs` change the SDK.
   overrideSDK = pkgs.callPackage ./darwin/override-sdk.nix { inherit lib extendMkDerivationArgs; };
 
   withDefaultHardeningFlags =

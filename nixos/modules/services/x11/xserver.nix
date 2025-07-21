@@ -761,13 +761,14 @@ in
         dmConf = cfg.displayManager;
         default =
           !(
-            dmConf.gdm.enable
+            config.services.displayManager.gdm.enable
             || config.services.displayManager.sddm.enable
             || dmConf.xpra.enable
             || dmConf.sx.enable
             || dmConf.startx.enable
             || config.services.greetd.enable
             || config.services.displayManager.ly.enable
+            || config.services.displayManager.lemurs.enable
           );
       in
       mkIf (default) (mkDefault true);

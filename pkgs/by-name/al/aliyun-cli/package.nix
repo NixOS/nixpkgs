@@ -8,24 +8,24 @@
 
 buildGoModule rec {
   pname = "aliyun-cli";
-  version = "3.0.266";
+  version = "3.0.290";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
     tag = "v${version}";
-    hash = "sha256-HXjqtNx/f4vbT6Jk/r1zjHQhHpexWICDTcaMF8Fy0+w=";
+    hash = "sha256-mYWG3L2qFNd2QqYiHiNPl2TgvGKJlFkPP6GEurkmSB8=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-XpsMnt3AYHMn/js1E88RBxegKrTeaZYpRhHEuq4HDjM=";
+  vendorHash = "sha256-pa60hGn1UmzSgmopw+OAFgsL0o7mjEXTpYLAHgdTcMI=";
 
   subPackages = [ "main" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aliyun/aliyun-cli/cli.Version=${version}"
+    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${version}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -41,7 +41,10 @@ buildGoModule rec {
     homepage = "https://github.com/aliyun/aliyun-cli";
     changelog = "https://github.com/aliyun/aliyun-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ornxka ];
+    maintainers = with lib.maintainers; [
+      ornxka
+      ryan4yin
+    ];
     mainProgram = "aliyun";
   };
 }

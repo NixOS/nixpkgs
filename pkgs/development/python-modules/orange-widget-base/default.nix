@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.25.1";
+  version = "4.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-widget-base";
     tag = version;
-    hash = "sha256-ENP3Xyubsx7Q2w4cTQCsZuvC0cbm3KwaoDGbF0fk3dg=";
+    hash = "sha256-XoQlZaY6pAflL0vWzSALDABOPybqV28xB/AS8L0DcBc=";
   };
 
   build-system = [ setuptools ];

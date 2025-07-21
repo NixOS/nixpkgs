@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = "wvkbd";
     tag = "v${version}";
-    hash = "sha256-8KRJsx0Zv1VH/lR/QEE9kkzEY2qWihHaog2YxgNd4Rs=";
+    hash = "sha256-Vjbj3rxTe60Q+6IcX43WCBHMyPFECjc8w9D6qed0w0I=";
   };
 
   postPatch = ''

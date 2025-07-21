@@ -21,9 +21,14 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
-  ppc64 = {
+  ppc64-elfv1 = {
+    config = "powerpc64-unknown-linux-gnuabielfv1";
+    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
+  };
+  ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
   };
+  ppc64 = ppc64-elfv2;
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
     gcc = {
@@ -146,6 +151,10 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  riscv64-musl = {
+    config = "riscv64-unknown-linux-musl";
+  };
+
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
@@ -166,8 +175,16 @@ rec {
     libc = "newlib";
   };
 
-  loongarch64-linux = {
+  # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
+  loongarch64-linux = lib.recursiveUpdate platforms.loongarch64-multiplatform {
     config = "loongarch64-unknown-linux-gnu";
+  };
+  loongarch64-linux-embedded = lib.recursiveUpdate platforms.loongarch64-multiplatform {
+    config = "loongarch64-unknown-linux-gnu";
+    gcc = {
+      arch = "loongarch64";
+      strict-align = true;
+    };
   };
 
   mmix = {

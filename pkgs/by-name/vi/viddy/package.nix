@@ -18,9 +18,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-Bp3t/fjaFeouIoKlRvQPVDlc46Ggitfx6HUXE+RZN0A=";
 
-  # requires nightly features
-  env.RUSTC_BOOTSTRAP = 1;
-
   env.VERGEN_BUILD_DATE = "2024-11-28"; # managed via the update script
   env.VERGEN_GIT_DESCRIBE = "Nixpkgs";
 

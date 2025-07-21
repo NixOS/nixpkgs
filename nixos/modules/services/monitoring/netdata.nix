@@ -367,19 +367,25 @@ in
           # AmbientCapabilities
           AmbientCapabilities = lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
           # Capabilities
-          CapabilityBoundingSet = [
-            "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
-            "CAP_DAC_READ_SEARCH" # is required for apps and systemd-journal plugin
-            "CAP_FOWNER" # is required for freeipmi plugin
-            "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
-            "CAP_SYS_ADMIN" # is required for perf plugin
-            "CAP_SYS_PTRACE" # is required for apps plugin
-            "CAP_SYS_RESOURCE" # is required for ebpf plugin
-            "CAP_NET_RAW" # is required for fping app
-            "CAP_SYS_CHROOT" # is required for cgroups plugin
-            "CAP_SETUID" # is required for cgroups and cgroups-network plugins
-            "CAP_SYSLOG" # is required for systemd-journal plugin
-          ] ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
+          CapabilityBoundingSet =
+            [
+              "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
+              "CAP_DAC_READ_SEARCH" # is required for apps and systemd-journal plugin
+              "CAP_NET_RAW" # is required for fping app
+              "CAP_PERFMON" # is required for perf plugin
+              "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
+              "CAP_SETUID" # is required for cgroups and cgroups-network plugins
+              "CAP_SYSLOG" # is required for systemd-journal plugin
+              "CAP_SYS_ADMIN" # is required for perf plugin
+              "CAP_SYS_CHROOT" # is required for cgroups plugin
+              "CAP_SYS_PTRACE" # is required for apps plugin
+              "CAP_SYS_RESOURCE" # is required for ebpf plugin
+            ]
+            ++ lib.optionals cfg.package.withIpmi [
+              "CAP_FOWNER"
+              "CAP_SYS_RAWIO"
+            ]
+            ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
           # Sandboxing
           ProtectSystem = "full";
           ProtectHome = "read-only";
@@ -464,7 +470,7 @@ in
       // lib.optionalAttrs (cfg.package.withIpmi) {
         "freeipmi.plugin" = {
           source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
-          capabilities = "cap_dac_override,cap_fowner+ep";
+          capabilities = "cap_dac_override,cap_fowner,cap_sys_rawio+ep";
           owner = cfg.user;
           group = cfg.group;
           permissions = "u+rx,g+x,o-rwx";

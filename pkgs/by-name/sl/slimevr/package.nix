@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     rev = "v${version}";
-    hash = "sha256-7b2IlMYpOVvthOUNr63PUsZyr2JH37O2DVWH9N6M8Xg=";
+    hash = "sha256-ZYL+aBrADbzSXnhFzxNk8xRrY0WHmHCtVaC6VfXfLJw=";
     # solarxr
     fetchSubmodules = true;
   };
@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
-    hash = "sha256-IoLY3ByDQGfbkWjxlEHHTiKiE3+tpwCrYLUDE8zPkeQ=";
+    fetcherVersion = 1;
+    hash = "sha256-lh5IKdBXuH9GZFUTrzaQFDWCEYj0UJhKwCdPmsiwfCs=";
   };
 
   nativeBuildInputs = [

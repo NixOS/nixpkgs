@@ -30,7 +30,6 @@ assert (hash == null) -> (src != null);
   callPackage,
   cmake,
   curl,
-  darwin,
   doxygen,
   editline,
   flex,
@@ -59,13 +58,16 @@ assert (hash == null) -> (src != null);
   pkg-config,
   rapidcheck,
   rsync,
-  Security,
   sqlite,
   util-linuxMinimal,
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
@@ -152,9 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (lib.versionAtLeast version "2.26") [
       libblake3
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-    ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       libcpuid
     ]
@@ -163,9 +162,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withAWS [
       aws-sdk-cpp
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.libs.sandbox
     ];
 
   propagatedBuildInputs = [
@@ -246,7 +242,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl-bindings = perl.pkgs.toPerlModule (
       callPackage ./nix-perl.nix {
         nix = finalAttrs.finalPackage;
-        inherit Security;
       }
     );
 
@@ -283,6 +278,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     inherit maintainers teams;
     platforms = platforms.unix;
+    # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
+    # https://hydra.nixos.org/build/298175022
+    # probably https://github.com/NixOS/nix/issues/13042
+    broken = stdenv.hostPlatform.system == "i686-linux" && stdenv.buildPlatform != stdenv.hostPlatform;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
   };

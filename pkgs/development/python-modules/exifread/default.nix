@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "exifread";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ExifRead";

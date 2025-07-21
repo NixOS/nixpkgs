@@ -4,8 +4,6 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,19 +22,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   # There is no tests
   doCheck = false;
 
   meta = {
-    description = "A TUI for the Transmission daemon";
+    description = "TUI for the Transmission daemon";
     homepage = "https://github.com/intuis/rustmission";
     changelog = "https://github.com/intuis/rustmission/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

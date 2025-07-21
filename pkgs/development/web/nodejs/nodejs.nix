@@ -25,10 +25,8 @@
   jq,
   curl,
   common-updater-scripts,
-  nix,
   runtimeShell,
   gnupg,
-  darwin,
   installShellFiles,
 }:
 
@@ -40,7 +38,6 @@
 }@args:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
@@ -176,6 +173,8 @@ let
       done
     '';
 
+  downloadDir = if lib.strings.hasInfix "-rc." version then "download/rc" else "dist";
+
   package = stdenv.mkDerivation (
     finalAttrs:
     let
@@ -188,7 +187,7 @@ let
       inherit pname version;
 
       src = fetchurl {
-        url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+        url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
         inherit sha256;
       };
 
@@ -213,20 +212,14 @@ let
       # NB: technically, we do not need bash in build inputs since all scripts are
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
-      buildInputs =
-        lib.optionals stdenv.hostPlatform.isDarwin [
-          CoreServices
-          ApplicationServices
-        ]
-        ++ [
-          zlib
-          libuv
-          openssl
-          http-parser
-          icu
-          bash
-        ]
-        ++ lib.optionals useSharedSQLite [ sqlite ];
+      buildInputs = [
+        zlib
+        libuv
+        openssl
+        http-parser
+        icu
+        bash
+      ] ++ lib.optionals useSharedSQLite [ sqlite ];
 
       nativeBuildInputs =
         [
@@ -435,6 +428,9 @@ let
                 "test-debugger-random-port-with-inspect-port"
                 "test-debugger-launch"
                 "test-debugger-pid"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-wasi"
               ]
               ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
                 # These tests fail on x86_64-darwin (even without sandbox).
@@ -442,7 +438,13 @@ let
                 "test-fs-readv"
                 "test-fs-readv-sync"
                 "test-vm-memleak"
+
+                # Those are annoyingly flaky, but not enough to be marked as such upstream.
+                "test-tick-processor-arguments"
+                "test-set-raw-mode-reset-signal"
               ]
+              # Those are annoyingly flaky, but not enough to be marked as such upstream.
+              ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             )
           }"
         ];
@@ -483,7 +485,7 @@ let
           ''}
 
           # install the missing headers for node-gyp
-          # TODO: add dev output and use propagatedBuildInputs instead of copying headers.
+          # TODO: use propagatedBuildInputs instead of copying headers.
           cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
 
           # assemble a static v8 library and put it in the 'libv8' output
@@ -514,25 +516,28 @@ let
           Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
           Cflags: -I$libv8/include
           EOF
+        ''
+        + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+          cp -r $out/include $dev/include
         '';
 
       passthru.tests = {
         version = testers.testVersion {
           package = self;
-          version = "v${version}";
+          version = "v${lib.head (lib.strings.splitString "-rc." version)}";
         };
       };
 
       passthru.updateScript = import ./update.nix {
         inherit
           writeScript
-          coreutils
-          gnugrep
-          jq
-          curl
           common-updater-scripts
+          coreutils
+          curl
+          fetchurl
+          gnugrep
           gnupg
-          nix
+          jq
           runtimeShell
           ;
         inherit lib;

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
   gl_cv_func_fstatat_zero_flag = "yes";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/zile/";
     changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${version}";
     description = "Zile Implements Lua Editors";
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
       Lossy Emacs.  Zile has been written to be as similar as possible to Emacs;
       every Emacs user should feel at home.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.unix;
     mainProgram = "zile";
   };
 }

@@ -16,14 +16,15 @@
   xcbutilkeysyms,
   xcbutilrenderutil,
   xcbutilwm,
+  libxml2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "4.2.6455";
+  version = "5.0.7648";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20241209150225/https://cdn.binary.ninja/installers/binaryninja_free_linux.zip";
-    hash = "sha256-NOVuLmko8iYcJ/0fr0DNw7xPEC8EhT/SzcFWtNmjlYI=";
+    url = "https://github.com/Vector35/binaryninja-api/releases/download/v${finalAttrs.version}-stable/binaryninja_free_linux.zip";
+    hash = "sha256-CBRoQaVQ3/wlRA2SE3EOgM9BiU+WlT2nGi3CkBTrT+g=";
   };
 
   icon = fetchurl {
@@ -66,6 +67,12 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
+  preFixup = ''
+    # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+    mkdir -p "$out/lib"
+    ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/
@@ -74,12 +81,15 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     ln -s $out/binaryninja $out/bin/binaryninja
 
-    install -Dm644 ${icon} $out/share/icons/hicolor/256x256/apps/binaryninja.png
+    install -Dm644 ${finalAttrs.icon} $out/share/icons/hicolor/256x256/apps/binaryninja.png
 
     runHook postInstall
   '';
 
   meta = {
+    changelog = "https://binary.ninja/changelog/#${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     description = "Interactive decompiler, disassembler, debugger";
     homepage = "https://binary.ninja/";
     license = {
@@ -91,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ scoder12 ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

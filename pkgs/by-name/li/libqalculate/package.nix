@@ -14,18 +14,26 @@
   libxml2,
   mpfr,
   icu,
+  # Upstream's `plot` UX is not ideal - it doesn't write a good message
+  # suggesting the user to install this optional dependency when they write
+  # `plot(..)`. Not to mention support for non-x dependent `gnuplot_qt`
+  # executable. Hence we hardcode a path to a gnuplot binary by default, and
+  # changing this is possible via putting an empty string as a `gnuplotBinary`
+  # - to let `libqalculate` pick it from $PATH during runtime. See also:
+  # https://github.com/Qalculate/libqalculate/issues/796
   gnuplot,
+  gnuplotBinary ? lib.getExe gnuplot,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqalculate";
-  version = "5.5.2";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-sjVvsgDQbKXU+N7JrA36zezDfAGcDbyQ0fn1zMThYXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VYnJPXbWxfWtcIiTYGDO3ULtKTNtdBviFUUrXywxDcw=";
   };
 
   outputs = [
@@ -61,32 +69,21 @@ stdenv.mkDerivation (finalAttrs: {
     intltoolize -f
   '';
 
-  patchPhase =
-    ''
-      substituteInPlace libqalculate/Calculator-plot.cc \
-        --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-        --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace src/qalc.cc \
-        --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
-    '';
-
-  preBuild = ''
-    pushd docs/reference
-    doxygen Doxyfile
-    popd
+  postPatch = lib.optionalString (gnuplotBinary != "") ''
+    substituteInPlace libqalculate/Calculator-plot.cc \
+      --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplotBinary}"' \
+      --replace-fail '"gnuplot - ' '"${gnuplotBinary} - '
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced calculator library";
     homepage = "http://qalculate.github.io";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       doronbehar
-      alyaeanyx
+      pentane
     ];
     mainProgram = "qalc";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

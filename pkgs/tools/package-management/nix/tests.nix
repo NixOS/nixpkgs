@@ -23,10 +23,27 @@
         srcVersion=$(cat ${src}/.version)
         echo "Version in nix nix expression: $version"
         echo "Version in nix.src: $srcVersion"
-        if [ "$version" != "$srcVersion" ]; then
-          echo "Version mismatch!"
-          exit 1
-        fi
+        ${
+          if self_attribute_name == "git" then
+            # Major and minor must match, patch can be missing or have a suffix like a commit hash. That's all fine.
+            ''
+              majorMinor() {
+                echo "$1" | sed -n -e 's/\([0-9]*\.[0-9]*\).*/\1/p'
+              }
+              if (set -x; [ "$(majorMinor "$version")" != "$(majorMinor "$srcVersion")" ]); then
+                echo "Version mismatch!"
+                exit 1
+              fi
+            ''
+          else
+            # exact match
+            ''
+              if [ "$version" != "$srcVersion" ]; then
+                echo "Version mismatch!"
+                exit 1
+              fi
+            ''
+        }
         touch $out
       '';
 

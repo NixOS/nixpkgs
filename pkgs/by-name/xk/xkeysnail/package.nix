@@ -5,13 +5,14 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "xkeysnail";
   version = "0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mooz";
-    repo = pname;
+    repo = "xkeysnail";
     rev = "bf3c93b4fe6efd42893db4e6588e5ef1c4909cfb";
     hash = "sha256-12AkB6Zb1g9hY6mcphO8HlquxXigiiFhadr9Zsm6jF4=";
   };
@@ -23,7 +24,9 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     evdev
     xlib
     inotify-simple
@@ -37,11 +40,13 @@ python3Packages.buildPythonApplication rec {
       --add-flags "-q" --add-flags "$out/share/browser.py"
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "xkeysnail" ];
+
+  meta = {
     description = "Yet another keyboard remapping tool for X environment";
     homepage = "https://github.com/mooz/xkeysnail";
-    platforms = platforms.linux;
-    license = licenses.gpl1Only;
-    maintainers = with maintainers; [ bb2020 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl1Only;
+    maintainers = with lib.maintainers; [ bb2020 ];
   };
 }

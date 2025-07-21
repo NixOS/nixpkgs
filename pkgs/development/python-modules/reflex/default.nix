@@ -5,17 +5,13 @@
   alembic,
   attrs,
   build,
-  charset-normalizer,
   ruff,
   dill,
-  distro,
   fastapi,
   granian,
-  gunicorn,
   hatchling,
   httpx,
   jinja2,
-  lazy-loader,
   numpy,
   packaging,
   pandas,
@@ -29,7 +25,6 @@
   pytest-mock,
   python-dotenv,
   pytestCheckHook,
-  python-engineio,
   python-multipart,
   python-socketio,
   redis,
@@ -37,28 +32,25 @@
   rich,
   sqlmodel,
   starlette-admin,
-  tomlkit,
-  twine,
   typer,
   typing-extensions,
   unzip,
   uvicorn,
   versionCheckHook,
-  wheel,
   wrapt,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.8";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-/Kf1V1goGaoYarhJ9wlZ2lf6e3BUH/F7UJqoPEnMnk0=";
+    hash = "sha256-yuVBQYP0YlvAIWF/+oSfCLbfj1GLtnYajU3WoolyTjY=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -70,7 +62,6 @@ buildPythonPackage rec {
     "rich"
     # preventative
     "fastapi"
-    "gunicorn"
   ];
 
   build-system = [ hatchling ];
@@ -78,35 +69,24 @@ buildPythonPackage rec {
   dependencies = [
     alembic
     build # used in custom_components/custom_components.py
-    charset-normalizer
-    ruff
-    dill
-    distro
+    dill # used in state.py
     fastapi
     granian
     granian.optional-dependencies.reload
-    gunicorn
     httpx
     jinja2
-    lazy-loader
-    packaging
+    packaging # used in utils/prerequisites.py
     platformdirs
     psutil
     pydantic
-    python-engineio
     python-multipart
     python-socketio
     redis
     reflex-hosting-cli
     rich
     sqlmodel
-    starlette-admin
-    tomlkit
-    twine # used in custom_components/custom_components.py
-    typer
+    typer # optional dep
     typing-extensions
-    uvicorn
-    wheel
     wrapt
   ];
 
@@ -123,6 +103,8 @@ buildPythonPackage rec {
     pandas
     pillow
     unzip
+    uvicorn
+    starlette-admin
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
@@ -143,6 +125,9 @@ buildPythonPackage rec {
     "test_state_with_invalid_yield"
     # tries to run bun or npm
     "test_output_system_info"
+    # Comparison with magic string
+    # TODO Recheck on next update as it appears to be fixed in 8.0.x
+    "test_background_task_no_block"
   ];
 
   disabledTestPaths = [

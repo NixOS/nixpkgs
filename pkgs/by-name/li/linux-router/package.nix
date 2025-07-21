@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       makeWrapper $out/.bin-wrapped/lnxrouter $out/bin/lnxrouter --prefix PATH : ${binPath}
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/garywill/linux-router";
     description = "Set Linux as router / Wifi hotspot / proxy in one command";
     longDescription = ''
@@ -107,9 +107,9 @@ stdenv.mkDerivation rec {
       - Compatible with NetworkManager (automatically set interface as unmanaged)
     '';
     changelog = "https://github.com/garywill/linux-router/releases/tag/${version}";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ x3ro ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ x3ro ];
+    platforms = lib.platforms.linux;
     mainProgram = "lnxrouter";
   };
 }

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flac,
   fluidsynth,
-  libmodplug,
   libogg,
   libvorbis,
   mpg123,
@@ -19,6 +18,7 @@
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_mixer";
   version = "2.8.1";
@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     flac
     fluidsynth
-    libmodplug
     libogg
     libvorbis
     mpg123

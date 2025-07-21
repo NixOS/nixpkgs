@@ -9,6 +9,11 @@ with lib;
 
 let
   cfg = config.services.nextcloud;
+
+  overridePackage = cfg.package.override {
+    inherit (config.security.pki) caBundle;
+  };
+
   fpm = config.services.phpfpm.pools.nextcloud;
 
   jsonFormat = pkgs.formats.json { };
@@ -51,13 +56,13 @@ let
   };
 
   webroot =
-    pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps"
+    pkgs.runCommand "${overridePackage.name or "nextcloud"}-with-apps"
       {
         preferLocalBuild = true;
       }
       ''
         mkdir $out
-        ln -sfv "${cfg.package}"/* "$out"
+        ln -sfv "${overridePackage}"/* "$out"
         ${concatStrings (
           mapAttrsToList (
             name: store:
@@ -90,6 +95,7 @@ let
         ++ optional cfg.caching.apcu apcu
         ++ optional cfg.caching.redis redis
         ++ optional cfg.caching.memcached memcached
+        ++ optional (cfg.settings.log_type == "systemd") systemd
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
     extraConfig = toKeyValue cfg.phpOptions;
@@ -116,7 +122,8 @@ let
     ++ (lib.optional (cfg.config.objectstore.s3.enable) "s3_secret:${cfg.config.objectstore.s3.secretFile}")
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
-    ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}");
+    ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
+    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
 
@@ -184,18 +191,9 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
-  nextcloudOlderThan = versionOlder cfg.package.version;
-
-  # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore =
-    nextcloudGreaterOrEqualThan "27.1.2"
-    || (nextcloudOlderThan "27.0.0" && nextcloudGreaterOrEqualThan "26.0.8");
-
   overrideConfig =
     let
       c = cfg.config;
-      requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
       objectstoreConfig =
         let
           s3 = c.objectstore.s3;
@@ -232,7 +230,7 @@ let
     in
     pkgs.writeText "nextcloud-config.php" ''
       <?php
-      ${optionalString requiresReadSecretFunction ''
+      ${optionalString requiresRuntimeSystemdCredentials ''
         function nix_read_secret($credential_name) {
           $credentials_directory = getenv("CREDENTIALS_DIRECTORY");
           if (!$credentials_directory) {
@@ -253,7 +251,19 @@ let
           }
 
           return trim(file_get_contents($credential_path));
-        }''}
+        }
+
+        function nix_read_secret_and_decode_json_file($credential_name) {
+          $decoded = json_decode(nix_read_secret($credential_name), true);
+
+          if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+            exit(1);
+          }
+
+          return $decoded;
+        }
+      ''}
       function nix_decode_json_file($file, $error) {
         if (!file_exists($file)) {
           throw new \RuntimeException(sprintf($error, $file));
@@ -287,10 +297,7 @@ let
       ));
 
       ${optionalString (cfg.secretFile != null) ''
-        $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
-          "${cfg.secretFile}",
-          "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
-        ));
+        $CONFIG = array_replace_recursive($CONFIG, nix_read_secret_and_decode_json_file('secret_file'));
       ''}
     '';
 in
@@ -382,7 +389,7 @@ in
       '';
       example = literalExpression ''
         {
-          inherit (pkgs.nextcloud31Packages.apps) mail calendar contact;
+          inherit (pkgs.nextcloud31Packages.apps) mail calendar contacts;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
@@ -570,11 +577,14 @@ in
 
     config = {
       dbtype = mkOption {
-        type = types.enum [
-          "sqlite"
-          "pgsql"
-          "mysql"
-        ];
+        type = types.nullOr (
+          types.enum [
+            "sqlite"
+            "pgsql"
+            "mysql"
+          ]
+        );
+        default = null;
         description = "Database type.";
       };
       dbname = mkOption {
@@ -853,7 +863,7 @@ in
             default = "syslog";
             description = ''
               Logging backend to use.
-              systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+              systemd automatically adds the php-systemd extensions to services.nextcloud.phpExtraExtensions.
               See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
             '';
           };
@@ -976,6 +986,23 @@ in
           directive and header.
         '';
       };
+      enableFastcgiRequestBuffering = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to buffer requests against fastcgi requests. This is a workaround
+          for `PUT` requests with the `Transfer-Encoding: chunked` header set and
+          an unspecified `Content-Length`. Without request buffering for these requests,
+          Nextcloud will create files with zero bytes length as described in
+          [nextcloud/server#7995](https://github.com/nextcloud/server/issues/7995).
+
+          ::: {.note}
+          Please keep in mind that upstream suggests to not enable this as it might
+          lead to timeouts on large files being uploaded as described in the
+          [administrator manual](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/big_file_upload_configuration.html#nginx).
+          :::
+        '';
+      };
     };
 
     cli.memoryLimit = mkOption {
@@ -1019,12 +1046,12 @@ in
           If you have an existing installation with a custom table prefix, make sure it is
           set correctly in `config.php` and remove the option from your NixOS config.
         '')
-        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"))
-        ++ (optional (versionOlder cfg.package.version "31") (upgradeWarning 30 "25.05"));
+        ++ (optional (versionOlder overridePackage.version "26") (upgradeWarning 25 "23.05"))
+        ++ (optional (versionOlder overridePackage.version "27") (upgradeWarning 26 "23.11"))
+        ++ (optional (versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
+        ++ (optional (versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
+        ++ (optional (versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
+        ++ (optional (versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"));
 
       services.nextcloud.package =
         with pkgs;
@@ -1077,6 +1104,17 @@ in
             unset `services.nextcloud.config.dbpassFile` and
             `services.nextcloud.config.dbhost` to use socket authentication
             instead of password.
+          '';
+        }
+        {
+          assertion = cfg.config.dbtype != null;
+          message = ''
+            `services.nextcloud.config.dbtype` must be set explicitly (pgsql, mysql, or sqlite)
+
+            Before 25.05, it used to default to sqlite but that is not recommended by upstream.
+            Either set it to sqlite as it used to be, or convert to another type as described
+            in the official db conversion page:
+            https://docs.nextcloud.com/server/latest/admin_manual/configuration_database/db_conversion.html
           '';
         }
       ];
@@ -1152,7 +1190,7 @@ in
               imap0 (i: v: ''
                 ${lib.getExe occ} config:system:set trusted_domains \
                   ${toString i} --value="${toString v}"
-              '') ([ cfg.hostName ] ++ cfg.settings.trusted_domains)
+              '') (lib.unique ([ cfg.hostName ] ++ cfg.settings.trusted_domains))
             );
 
           in
@@ -1160,8 +1198,8 @@ in
             wantedBy = [ "multi-user.target" ];
             wants = [ "nextcloud-update-db.service" ];
             before = [ "phpfpm-nextcloud.service" ];
-            after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
-            requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+            after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
+            requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
             path = [ occ ];
             restartTriggers = [ overrideConfig ];
             script = ''
@@ -1221,7 +1259,7 @@ in
             ] ++ runtimeSystemdCredentials;
             # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
             # an automatic creation of the database user.
-            environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
+            environment.NC_setup_create_db_user = "false";
           };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
@@ -1377,6 +1415,8 @@ in
             datadirectory = lib.mkDefault "${datadir}/data";
             trusted_domains = [ cfg.hostName ];
             "upgrade.disable-web" = true;
+            # NixOS already provides its own integrity check and the nix store is read-only, therefore Nextcloud does not need to do its own integrity checks.
+            "integrity.check.disabled" = true;
           })
           (lib.mkIf cfg.configureRedis {
             "memcache.distributed" = ''\OC\Memcache\Redis'';
@@ -1441,9 +1481,7 @@ in
             priority = 500;
             extraConfig = ''
               # legacy support (i.e. static files and directories in cfg.package)
-              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${
-                optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"
-              }]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|ocs-provider\/.+|.+\/richdocumentscode(_arm64)?\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1455,11 +1493,11 @@ in
               fastcgi_param front_controller_active true;
               fastcgi_pass unix:${fpm.socket};
               fastcgi_intercept_errors on;
-              fastcgi_request_buffering off;
+              fastcgi_request_buffering ${if cfg.nginx.enableFastcgiRequestBuffering then "on" else "off"};
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
-          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
+          "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
             ''
               try_files $uri /index.php$request_uri;
               expires 6M;
@@ -1471,13 +1509,10 @@ in
                 default_type application/wasm;
               }
             '';
-          "~ ^\\/(?:updater|ocs-provider${
-            optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"
-          })(?:$|\\/)".extraConfig =
-            ''
-              try_files $uri/ =404;
-              index index.php;
-            '';
+          "~ ^\\/(?:updater|ocs-provider)(?:$|\\/)".extraConfig = ''
+            try_files $uri/ =404;
+            index index.php;
+          '';
           "/remote" = {
             priority = 1500;
             extraConfig = ''
@@ -1497,7 +1532,6 @@ in
             add_header X-Content-Type-Options nosniff;
             add_header X-XSS-Protection "1; mode=block";
             add_header X-Robots-Tag "noindex, nofollow";
-            add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
             add_header Referrer-Policy no-referrer;
@@ -1513,7 +1547,7 @@ in
           gzip_comp_level 4;
           gzip_min_length 256;
           gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-          gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+          gzip_types application/atom+xml text/javascript application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/wasm application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
 
           ${optionalString cfg.webfinger ''
             rewrite ^/.well-known/host-meta /public.php?service=host-meta last;

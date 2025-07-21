@@ -1,8 +1,8 @@
 {
   lib,
+  cargo,
   desktop-file-utils,
   fetchFromGitLab,
-  gobject-introspection,
   gtk4,
   gtksourceview5,
   libadwaita,
@@ -10,29 +10,37 @@
   meson,
   ninja,
   pkg-config,
-  python3,
+  rustPlatform,
+  rustc,
   stdenv,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.9.10";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
     tag = finalAttrs.version;
-    hash = "sha256-amWfrZX1b1OmLhL7w8j/+iEwYRnO1DVR580pLkjtS/g=";
+    hash = "sha256-81riamRKzV4wXVTXkp1ngO/5mG7leRJMw/r2DDHl8LU=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-fwXeXaoC/Uh9eMEkRjhpAouxOrlRWX2n2r4pgIe83S0=";
   };
 
   nativeBuildInputs = [
+    cargo
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
     wrapGAppsHook4
   ];
 
@@ -41,18 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libspelling
-    (python3.withPackages (
-      ps: with ps; [
-        pygobject3
-      ]
-    ))
   ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$out/${python3.sitePackages}"
-    )
-  '';
 
   meta = {
     description = "Minimal editing space for all those things that don't need keeping";

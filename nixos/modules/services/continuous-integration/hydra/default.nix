@@ -334,8 +334,8 @@ in
 
     systemd.services.hydra-init = {
       wantedBy = [ "multi-user.target" ];
-      requires = lib.optional haveLocalDB "postgresql.service";
-      after = lib.optional haveLocalDB "postgresql.service";
+      requires = lib.optional haveLocalDB "postgresql.target";
+      after = lib.optional haveLocalDB "postgresql.target";
       environment = env // {
         HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
       };
@@ -423,11 +423,11 @@ in
         "network.target"
       ];
       path = [
-        hydra-package
-        pkgs.nettools
-        pkgs.openssh
-        pkgs.bzip2
         config.nix.package
+        hydra-package
+        pkgs.bzip2
+        pkgs.hostname-debian
+        pkgs.openssh
       ];
       restartTriggers = [ hydraConf ];
       environment = env // {
@@ -458,8 +458,8 @@ in
         "network-online.target"
       ];
       path = with pkgs; [
+        hostname-debian
         hydra-package
-        nettools
         jq
       ];
       restartTriggers = [ hydraConf ];
@@ -564,16 +564,14 @@ in
     services.postgresql.enable = lib.mkIf haveLocalDB true;
 
     services.postgresql.identMap = lib.optionalString haveLocalDB ''
-      hydra-users hydra hydra
-      hydra-users hydra-queue-runner hydra
-      hydra-users hydra-www hydra
-      hydra-users root hydra
-      # The postgres user is used to create the pg_trgm extension for the hydra database
-      hydra-users postgres postgres
+      hydra hydra hydra
+      hydra hydra-queue-runner hydra
+      hydra hydra-www hydra
+      hydra root hydra
     '';
 
     services.postgresql.authentication = lib.optionalString haveLocalDB ''
-      local hydra all ident map=hydra-users
+      local all hydra peer map=hydra
     '';
 
   };

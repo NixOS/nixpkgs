@@ -28,7 +28,7 @@
   unicode ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
   withWebKit ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 let
   catch = fetchFromGitHub {
@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.7.1";
+  version = "3.2.8.1";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-CKU0Aa78YrtGKLE9/MF9VNc2fmzPZ1j4lviX1aAv9cQ=";
+    hash = "sha256-aXI59oN5qqds6u2/6MI7BYLbFPy3Yrfn2FGTfxlPG7o=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       xorgproto
     ]
     ++ lib.optional withMesa libGLU
-    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
+    ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_1
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       expat
     ];

@@ -31,10 +31,9 @@
   libcap_ng,
   socat,
   libslirp,
+  libcbor,
   apple-sdk_13,
   darwinMinVersionHook,
-  rez,
-  setfile,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -145,11 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "9.2.2";
+  version = "10.0.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dS6u63cpI6c9U2sjHgW8wJybH1FpCkGtmXPZAOTsn78=";
+    hash = "sha256-73hvI5jLUYRgD2mu9NXWke/URXajz/QSbTjUxv7Id1k=";
   };
 
   depsBuildBuild =
@@ -179,8 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       sigtool
-      rez
-      setfile
     ]
     ++ lib.optionals (!userOnly) [ dtc ];
 
@@ -199,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       snappy
       libtasn1
       libslirp
+      libcbor
     ]
     ++ lib.optionals (!userOnly) [ curl ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -262,6 +260,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-qemu-ga.patch
+
+    # On macOS, QEMU uses `Rez(1)` and `SetFile(1)` to attach its icon
+    # to the binary. Unfortunately, those commands are proprietary,
+    # deprecated since Xcode 6, and operate on resource forks, which
+    # these days are stored in extended attributes, which aren’t
+    # supported in the Nix store. So we patch out the calls.
+    ./skip-macos-icon.patch
 
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {

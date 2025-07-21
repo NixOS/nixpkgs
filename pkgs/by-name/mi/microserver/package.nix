@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-IPJJ9kv7gf5l7Y2JLCLjkNFao42h/VmkTd3LF5BCMLU=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ Security ]
-  );
 
   meta = with lib; {
     homepage = "https://github.com/robertohuertasm/microserver";

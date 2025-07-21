@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   testers,
   gitMinimal,
   serie,
@@ -23,20 +21,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-Bdk553tECJiMxJlXj147Sv2LzH+nM+/Cm5BpBr78I4o=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreGraphics
-      AppKit
-    ]
-  );
-
   nativeCheckInputs = [ gitMinimal ];
 
   passthru.tests.version = testers.testVersion { package = serie; };
 
   meta = with lib; {
-    description = "A rich git commit graph in your terminal, like magic";
+    description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ matthiasbeyer ];

@@ -126,7 +126,7 @@ let
       "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
       "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
       "zstd-seekable" =
-        "zeekstd --quiet --max-frame-size 2M --compression-level ${toString compression.level}";
+        "zeekstd --no-progress --frame-size 2M --compression-level ${toString compression.level}";
     }
     ."${compression.algorithm}";
 in
@@ -173,10 +173,12 @@ stdenvNoCC.mkDerivation (
         "--architecture=${systemdArch}"
         "--dry-run=no"
         "--size=auto"
-        "--seed=${seed}"
         "--definitions=${finalAttrs.finalRepartDefinitions}"
         "--split=${lib.boolToString split}"
         "--json=pretty"
+      ]
+      ++ lib.optionals (seed != null) [
+        "--seed=${seed}"
       ]
       ++ lib.optionals createEmpty [
         "--empty=create"
@@ -187,6 +189,7 @@ stdenvNoCC.mkDerivation (
 
     dontUnpack = true;
     dontConfigure = true;
+    dontFixup = true;
     doCheck = false;
 
     patchPhase = ''

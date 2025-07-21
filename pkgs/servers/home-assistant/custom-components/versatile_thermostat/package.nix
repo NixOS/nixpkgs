@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "jmcollin78";
   domain = "versatile_thermostat";
-  version = "7.2.10";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     rev = "refs/tags/${version}";
-    hash = "sha256-cg2FinRkQ8jNUNah+CovbNAE3uHpnrZAkmDJtl62VLY=";
+    hash = "sha256-kUA9ApJsrKIqo7M9HPI3DLh+vzOwdSuDrdycUvrzhxU=";
   };
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(Alpha|Beta|alpha|beta).*"; };

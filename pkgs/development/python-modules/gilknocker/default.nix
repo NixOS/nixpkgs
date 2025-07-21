@@ -28,9 +28,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-cUv0CT8d6Nxjzh/S/hY9jcpeFX/5KvBxSkqOkt4htyU=";
   };
 
@@ -55,6 +53,8 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-rerunfailures
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = {
     description = "Knock on the Python GIL, determine how busy it is";

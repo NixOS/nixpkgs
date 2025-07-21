@@ -1,33 +1,29 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     tag = "v${version}";
-    hash = "sha256-ilqIqw0N4Xsfw7ntLxoz4Ogn2e3NH8VnqAgowbvfZ+0=";
+    hash = "sha256-FR+XHgL/DfVFeEbAT1h1nwBnJkG7jnHfd+JRLVTY0LE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-acWEinwYCCtoapFkL6XyASvFX4bqYS/HrKjlaAZabi4=";
+  cargoHash = "sha256-qRqdNCeVb7dD91q6gEK1c5rQ8LhcwJ5hwn1TfSPseO4=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
-
-  meta = with lib; {
+  meta = {
     description = "Terminal-based HTTP/REST client";
     homepage = "https://slumber.lucaspickering.me";
     changelog = "https://github.com/LucasPickering/slumber/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "slumber";
-    maintainers = with maintainers; [ javaes ];
+    maintainers = with lib.maintainers; [ javaes ];
   };
 }

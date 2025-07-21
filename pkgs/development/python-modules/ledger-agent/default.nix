@@ -38,5 +38,6 @@ buildPythonPackage rec {
       np
       mmahut
     ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -17,14 +17,16 @@
   iproute2,
   openvpn,
   electron,
+  wireguard-tools,
+  withWireguard ? stdenv.hostPlatform.isLinux,
 }:
 let
-  version = "1.3.4099.99";
+  version = "1.3.4275.94";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-bxCGZ2Jm2rPKRH6Uj0JmQ3MQ3zRd6kXjOVeAOHBl1lA=";
+    sha256 = "sha256-a1arRI4qQy5niKV8JAyusAjheMa/LtEXPZGhngsH+TU=";
   };
 
   cli = buildGoModule {
@@ -32,7 +34,7 @@ let
     inherit version src;
 
     modRoot = "cli";
-    vendorHash = "sha256-wwPgyIo14zpA+oCJH0CQ4+7zyP+Itxbd6S0P7t01wBw=";
+    vendorHash = "sha256-xozdrNKBgrrCZ5WYHGWKOuuGrEhx/VzOKLZTGq3scoo=";
 
     postInstall = ''
       mv $out/bin/cli $out/bin/pritunl-client
@@ -45,7 +47,7 @@ let
     inherit version src;
 
     modRoot = "service";
-    vendorHash = "sha256-uy8+R4l3e4YAWMxWWbVHhkwxvbOsY5PF7fs1dVyMIAg=";
+    vendorHash = "sha256-3dgBiCqWj+nwWn9mFARBKIpgjn2aJYvVUrqMIzhToQs=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -97,10 +99,19 @@ let
                 --prefix PATH : ${lib.makeBinPath hookScriptsDeps} \
                 --add-flags "--setenv PATH \$PATH"
             '';
+        pritunlDeps =
+          [
+            openvpn-wrapped
+          ]
+          ++ lib.optionals withWireguard [
+            openresolv
+            coreutils
+            wireguard-tools
+          ];
       in
       lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/pritunl-client-service \
-          --prefix PATH : "${lib.makeBinPath ([ openvpn-wrapped ])}"
+          --prefix PATH : "${lib.makeBinPath pritunlDeps}"
       '';
     passthru.updateScript = nix-update-script { };
   };

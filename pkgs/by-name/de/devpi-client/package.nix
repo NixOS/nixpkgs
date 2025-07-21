@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # --fast skips tests which try to start a devpi-server improperly
     "--fast"
   ];
@@ -69,12 +69,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Client for devpi, a pypi index server and packaging meta tool";
     homepage = "http://doc.devpi.net";
     changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lewo
       makefu
     ];

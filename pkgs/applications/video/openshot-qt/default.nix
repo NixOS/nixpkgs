@@ -26,6 +26,7 @@ let
   };
 in
 mkDerivationWith python3.pkgs.buildPythonApplication {
+  format = "setuptools";
   inherit pname version src;
 
   outputs = [ "out" ]; # "lib" can't be split

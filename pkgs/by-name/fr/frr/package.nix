@@ -34,7 +34,7 @@
   zeromq,
 
   # tests
-  nettools,
+  net-tools,
   nixosTests,
 
   # general options
@@ -82,13 +82,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.3";
+  version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-o/BG12FVypIaInXDeOj2Ymdgv1mxof9Sl0ZQA8o3YLs=";
+    hash = "sha256-54LMy2gBVp/BwTOlfQiE6TAMvx8Citn4QF6lvyvrFOo=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp
@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
-    nettools
+    net-tools
     python3.pkgs.pytest
   ];
 

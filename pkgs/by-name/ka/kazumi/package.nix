@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter329,
+  flutter332,
   webkitgtk_4_1,
   alsa-lib,
   libayatana-appindicator,
@@ -18,15 +18,15 @@
   gitUpdater,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "kazumi";
-  version = "1.6.8";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-/FaGK1CHo1KUo8gJ0t4lNFdkG7slpskPD/kHhbavi3o=";
+    hash = "sha256-Tzg8vFu2/ZLHQ1Ijp4et+qNPX0ytTZ//zVqQHJ6QBxs=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -95,7 +95,7 @@ flutter329.buildFlutterApplication rec {
 
   gitHashes =
     let
-      media_kit-hash = "sha256-cfk3Lpahqs0S/Uq8sfj1N03GOClw66+teTdF1/vs+7I=";
+      media_kit-hash = "sha256-N6QoktM8u9NYF8MAXLsxM9RlV8nICM4NbnmABHTRkZg=";
     in
     {
       desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.22.0";
+  version = "1.23.0-unstable-2025-04-21";
   pyproject = true;
 
-  # No tags on GitHub
-  src = fetchPypi {
-    pname = "dbt_common";
-    inherit version;
-    hash = "sha256-6cdTMVCCB6SNEUsQtzKUBnKuJgwfttl7o2+zBp8Fu5g=";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-common";
+    rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
+    hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
   };
 
   build-system = [ hatchling ];
@@ -46,6 +46,7 @@ buildPythonPackage rec {
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
+    "protobuf"
   ];
 
   dependencies = [
@@ -70,14 +71,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion errors (TODO: Notify upstream)
-    "test_create_print_json"
-    "test_events"
-    "test_extra_dict_on_event"
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
   ];
-
-  # No tests in the pypi archive
-  doCheck = false;
 
   pythonImportsCheck = [ "dbt_common" ];
 

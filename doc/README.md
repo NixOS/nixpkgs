@@ -34,25 +34,43 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
-### devmode
+### Development environment
 
-The shell in the manual source directory makes available a command, `devmode`.
-It is a daemon, that:
-1. watches the manual's source for changes and when they occur — rebuilds
-2. HTTP serves the manual, injecting a script that triggers reload on changes
-3. opens the manual in the default browser
+In order to reduce repetition, consider using tools from the provided development environment:
+
+Load it from the Nixpkgs documentation directory with
+
+```ShellSession
+$ cd /path/to/nixpkgs/doc
+$ nix-shell
+```
+
+To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+
+Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+#### `devmode`
+
+Use [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview when editing the manual.
 
 ### Testing redirects
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
 
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
+Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
+This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
-Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
+Additional syntax extensions are available, all of which can be used in NixOS option documentation.
+The following extensions are currently used:
 
 #### Tables
 
@@ -60,7 +78,8 @@ Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gf
 
 #### Anchors
 
-Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+Explicitly defined **anchors** on headings, to allow linking to sections.
+These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
 
 It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
 
@@ -83,18 +102,21 @@ They are defined using a hybrid of the link syntax with the attributes syntax kn
 
 #### Automatic links
 
-If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example `[](#chap-contributing)`.
+If you **omit a link text** for a link pointing to a section, the text will be substituted automatically.
+For example `[](#chap-contributing)`.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 
 #### HTML
 
-Inlining HTML is not allowed. Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Inlining HTML is not allowed.
+Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
-If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``.
+The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
 Please keep the `manpage-urls.json` file alphabetically sorted.
 
 A few markups for other kinds of literals are also available:
@@ -107,7 +129,8 @@ A few markups for other kinds of literals are also available:
 
 These literal kinds are used mostly in NixOS option documentation.
 
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
+Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
 They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
@@ -310,8 +333,11 @@ Otherwise, just describe the single argument or start the arguments' definition 
 
 Checklist:
 - Start with a synopsis, to show the order of positional arguments.
-- Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
-- Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+- Metavariables are in emphasized code spans: ``` *`arg1`* ```.
+  Metavariables are placeholders where users may write arbitrary expressions.
+  This includes positional arguments.
+- Attribute names are regular code spans: ``` `attr1` ```.
+  These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
 - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
 - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
 - Nix types aren't in code spans, because they are not code
@@ -388,7 +414,8 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 
 #### Typographic replacements
 
-Typographic replacements are enabled. Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Typographic replacements are enabled.
+Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 

@@ -133,6 +133,7 @@ python3Packages.buildPythonApplication rec {
     "lxml"
     "pypdf"
     "regex"
+    "tornado"
   ];
 
   nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);

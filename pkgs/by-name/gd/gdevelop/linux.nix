@@ -6,13 +6,14 @@
   version,
   pname,
   meta,
+  passthru,
 }:
 let
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}.AppImage";
-        hash = "sha256-KV6gzPiu/45ibdzMG707vd10F6qLcm+afwJWa6WlywU=";
+        hash = "sha256-6EB2QhjZU0i2j5W/4ZfByPaYeHD4qiPM5wGOzKvRqsI=";
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
@@ -29,6 +30,7 @@ appimageTools.wrapType2 {
     version
     src
     meta
+    passthru
     ;
 
   extraInstallCommands = ''

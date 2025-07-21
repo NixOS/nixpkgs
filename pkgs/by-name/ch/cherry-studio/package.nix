@@ -18,20 +18,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.2.7";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pxxv6f6YHjc1BAT93ASY2XUsB0CGVo4F/DcM7tReS9U=";
+    hash = "sha256-1uATq0ov0qn5yVmKPyxqb5KNj3bQBe/pEu2+JLuuv34=";
   };
+
+  postPatch = ''
+    substituteInPlace src/main/services/ConfigManager.ts \
+      --replace-fail "ConfigKeys.AutoUpdate, true" "ConfigKeys.AutoUpdate, false" \
+      --replace-fail "ConfigKeys.AutoUpdate, value" "ConfigKeys.AutoUpdate, false"
+    substituteInPlace src/main/services/AppUpdater.ts \
+      --replace-fail " = isActive" " = false"
+    substituteInPlace src/renderer/src/hooks/useSettings.ts \
+      --replace-fail "isAutoUpdate)" "false)"
+  '';
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-I5K0JEFOuk9ugLBz/TON8RxBx4MojMk8Ol9XRg0Rxi8=";
+    hash = "sha256-YgDrdUylQNTsgtOKQUzV5aQD9vbK6LFMguvgBLN6i70=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "cherry-studio --no-sandbox %U";
       terminal = false;
       icon = "cherry-studio";
-      startupWMClass = "Cherry Studio";
+      startupWMClass = "CherryStudio";
       categories = [ "Utility" ];
       mimeTypes = [ "x-scheme-handler/cherrystudio" ];
     })
@@ -78,12 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/cherry-studio
-    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
+    mkdir -p $out/opt/cherry-studio
+    ${
+      if stdenv.hostPlatform.isAarch64 then
+        "cp -r dist/linux-arm64-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+      else
+        "cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+    }
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
-      --add-flags $out/lib/cherry-studio/resources/app.asar \
+      --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 

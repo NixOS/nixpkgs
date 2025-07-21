@@ -7,20 +7,20 @@
 
 buildNpmPackage rec {
   pname = "protoc-gen-es";
-  version = "2.2.5";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protobuf-es";
     tag = "v${version}";
-    hash = "sha256-7g7DZSSFyidgpWJQNuKQRpyDuCDQT6gGgIKNk1JsbEk=";
+    hash = "sha256-9urMliPPZf2cGX6esbS+GdyXFct389TJr8XafrebAxA=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-NclrKsBBHlcYIgWf0bEq7xI3pUq2RvZ+0Ebj77ICars=";
+  npmDepsHash = "sha256-UaHINeTL69vRmnxpezpzgOh1wtiZ7QKb2N5RXxSFV6I=";
 
   npmWorkspace = "packages/protoc-gen-es";
 
@@ -47,12 +47,12 @@ buildNpmPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating ECMAScript code";
     homepage = "https://github.com/bufbuild/protobuf-es";
     changelog = "https://github.com/bufbuild/protobuf-es/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       felschr
       jtszalay
     ];

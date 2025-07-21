@@ -130,13 +130,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-04-16";
+  version = "0-unstable-2025-06-15";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "bdde73acbd66c569e8171b42b810adf92a56f76a";
-    hash = "sha256-1hj8JJ4ngqzJ8Xt3WvCBnQmwTnzzaZaQlCJcPWQvvM4=";
+    rev = "ed500ca4345f7edaa6c3d84027a7599d38b15a29";
+    hash = "sha256-Mxz4n40VKxA2ILtIHX6fObgcy2WlgsM+ERfpjuVJ0BU=";
   };
 
   outputs = [
@@ -239,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
         read -n 4 chars < $i
         if [[ $chars =~ ELF ]]; then continue; fi
         wrapProgram $i \
-            --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
+            --prefix PERL5LIB ':' "$out/libexec/hydra/lib:${perlPackages.makePerlPath [ perlDeps ]}" \
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \

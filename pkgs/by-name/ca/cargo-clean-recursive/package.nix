@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-clean-recursive";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "IgaguriMK";
     repo = "cargo-clean-recursive";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-H/t9FW7zxS+58lrvay/lmb0xFgpeJQ1dCIm0oSEtflA=";
+    sha256 = "sha256-9+FqRvd0s9N7mQwIf+f3+vBhaa0YQWUR0j0lv4CBOkM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PcUKvVm9pKyw4sxJo9m6UJhsVURdlAwp1so199DAQBI=";
+  cargoHash = "sha256-KIoRsCy/Cei1YM/94kUcgI2Twgi8kEFVNiUM+sCPMyo=";
 
   nativeBuildInputs = [ makeWrapper ];
 

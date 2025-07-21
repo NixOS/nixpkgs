@@ -31,12 +31,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = features;
 
-  meta = with lib; {
+  meta = {
     description = "Opinionated Lua code formatter";
     homepage = "https://github.com/johnnymorganz/stylua";
     changelog = "https://github.com/johnnymorganz/stylua/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "stylua";
   };
 }

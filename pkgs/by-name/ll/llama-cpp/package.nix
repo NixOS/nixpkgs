@@ -2,7 +2,6 @@
   lib,
   autoAddDriverRunpath,
   cmake,
-  darwin,
   fetchFromGitHub,
   nix-update-script,
   stdenv,
@@ -50,15 +49,6 @@ let
     optionalString
     ;
 
-  darwinBuildInputs =
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      CoreVideo
-      CoreGraphics
-    ]
-    ++ optionals metalSupport [ MetalKit ];
-
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
 
@@ -82,13 +72,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "5186";
+  version = "5916";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-f07FvHgRobUbei06kcKHJ1ulLCYARAvo64oWsDBwHO0=";
+    hash = "sha256-qXvxFbU6n4RrPFKs3t+4GT46vUDZHLS5JM2tC6OemEo=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -126,8 +116,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs =
-    optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
-    ++ optionals cudaSupport cudaBuildInputs
+    optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]

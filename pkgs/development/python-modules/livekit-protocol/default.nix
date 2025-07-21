@@ -4,18 +4,19 @@
   fetchFromGitHub,
   setuptools,
   protobuf,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "livekit-protocol";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "protocol-v${version}";
-    hash = "sha256-1La7XYTo9onQFNx84CwabPM6N6LXIn/7swH50hFQvB8=";
+    hash = "sha256-W9WmruzN5Nm9vrjG1Kcf3Orst0b2Mxm80hKLjwXowl8=";
   };
 
   pypaBuildFlags = [ "livekit-protocol" ];
@@ -31,6 +32,8 @@ buildPythonPackage rec {
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "livekit" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "protocol-v"; };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";

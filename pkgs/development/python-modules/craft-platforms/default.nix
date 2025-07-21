@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "craft-platforms";
-  version = "0.8.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-platforms";
     tag = version;
-    hash = "sha256-U57hmQ3UPuwoue8kAxAXiH8ecViryFqIxmpnaAdQnZo=";
+    hash = "sha256-86dUeMb3yL1ilbHxmknFaRH4Ce9AEl+5rSVW0WGaZV8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "craft_platforms" ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Attempts to get distro information, and expects "ubuntu-ish"

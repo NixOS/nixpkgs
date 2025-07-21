@@ -8,22 +8,17 @@ mkRocqDerivation {
 
   pname = "stdlib";
   repo = "stdlib";
-  owner = "coq";
+  owner = "rocq-prover";
   opam-name = "rocq-stdlib";
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch rocq-core.version [
-      {
-        case = isEq "9.0";
-        out = "9.0.0";
-      }
-      # the one below is artificial as stdlib was included in Coq before
-      {
-        case = isLt "9.0";
-        out = "9.0.0";
-      }
+      (case (range "9.0" "9.1") "9.0.0")
     ] null;
   releaseRev = v: "V${v}";
 

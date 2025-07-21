@@ -16,9 +16,9 @@
 {
   application-insights = mkAzExtension rec {
     pname = "application-insights";
-    version = "1.2.3";
+    version = "2.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
-    hash = "sha256-yUHCMtBDZmNuE1TP4AcIUhAT+IpbHnR0DYBH7EbZBZk=";
+    hash = "sha256-4akS+zbaKxFrs0x0uKP/xX28WyK5KLduOkgZaBYeANM=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
@@ -36,7 +36,7 @@
 
   azure-iot = mkAzExtension rec {
     pname = "azure-iot";
-    description = "The Azure IoT extension for Azure CLI.";
+    description = "Azure IoT extension for Azure CLI";
     version = "0.25.0";
     url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
     hash = "sha256-fbS8B2Z++oRyUT2eEh+yVR/K6uaCVce8B2itQXfBscY=";
@@ -83,9 +83,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "1.1.0b4";
+    version = "1.2.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    hash = "sha256-d2pqanDERA54NGQwzO1S2D+WM1q5w1dmKjYbEdbknik=";
+    hash = "sha256-tayDzAbvPjCRjJMdV6BOSd9Sgcj8bnEuZI9khKGCyrM=";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -130,9 +130,9 @@
 
   storage-preview = mkAzExtension rec {
     pname = "storage-preview";
-    version = "1.0.0b5";
+    version = "1.0.0b6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
-    hash = "sha256-gs4uQrnpXm03iPyP+i5DnFWvQ43+ZHN4wSZiNRVZU7g=";
+    hash = "sha256-467PbUh6rCPndvAXeZ5tMgCH34HL36Kzd9DzYlM63EA=";
     description = "Provides a preview for upcoming storage features";
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
@@ -151,9 +151,15 @@
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
   adp = throw "The 'adp' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8038
+  azurestackhci = throw "The 'azurestackhci' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8898
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26, https://github.com/Azure/azure-cli-extensions/pull/7370
   compute-diagnostic-rp = throw "The 'compute-diagnostic-rp' extension for azure-cli was deprecated upstream"; # Added 2024-11-12, https://github.com/Azure/azure-cli-extensions/pull/8240
   connection-monitor-preview = throw "The 'connection-monitor-preview' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8194
   deidservice = throw "The 'deidservice' extension for azure-cli was moved under healthcareapis"; # Added 2024-11-19, https://github.com/Azure/azure-cli-extensions/pull/8224
   logz = throw "The 'logz' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8459
+  pinecone = throw "The 'pinecone' extension for azure-cli was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8763
+  sap-hana = throw "The 'sap-hana' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8904
+  spring = throw "The 'spring' extension for azure-cli was deprecated upstream"; # Added 2025-05-07, https://github.com/Azure/azure-cli-extensions/pull/8652
+  spring-cloud = throw "The 'spring-cloud' extension for azure-cli was deprecated upstream"; # Added 2025-07-01 https://github.com/Azure/azure-cli-extensions/pull/8897
+  weights-and-biases = throw "The 'weights-and-biases' was removed upstream"; # Added 2025-06-03, https://github.com/Azure/azure-cli-extensions/pull/8764
 }

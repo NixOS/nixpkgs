@@ -34,16 +34,16 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.34.0";
-    rev = "d7809ba2b07fd869d49bfb122b27f6a7977b4d94";
-    hash = "sha256-SKdUrBXe0E3fMo73NROFO9Ck5FZidF/awP+QRA5t3VM=";
+    version = "1.34.2";
+    rev = "c657e59fac461e406c8fdbe57ced833ddc236ee1";
+    hash = "sha256-f9JsgHEyOg1ZoEb7d3gy3+qoovpA3oOx6O8yL0U8mhI=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-CiP9qH8/+nNZM8BNz84eVwWphVyDNo2KOYcK0wOsXn0=";
-      aarch64-linux = "sha256-9HGg68R546JY1EOm22tg9CuPt0nU+FooFcLG9A2hkzE=";
+      x86_64-linux = "sha256-CczmVD/3tWR3LygXc3cTAyrMPZUTajqtRew85wBM5mY=";
+      aarch64-linux = "sha256-GemlfXHlaHPn1/aBxj2Ve9tuwsEdlQQCU1v57378Dgs=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -297,13 +297,13 @@ buildBazelPackage rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://envoyproxy.io";
     changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
     mainProgram = "envoy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

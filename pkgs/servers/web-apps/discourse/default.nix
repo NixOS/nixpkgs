@@ -17,7 +17,7 @@
   cacert,
   util-linux,
   gawk,
-  nettools,
+  net-tools,
   imagemagick,
   optipng,
   pngquant,
@@ -46,13 +46,13 @@
 }@args:
 
 let
-  version = "3.4.2";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-glTuY9aQ7wYvFZstOP579RkdSwKKh3q9mJt4wqg3zYk=";
+    sha256 = "sha256-rA42fOhSJVrNPcFSB2+On7JVeZch8t2yNo+36UK+QcA=";
   };
 
   ruby = ruby_3_3;
@@ -72,7 +72,7 @@ let
     procps # For ps and kill
     util-linux # For renice
     gawk
-    nettools # For hostname
+    net-tools # For hostname
 
     # Image optimization
     imagemagick
@@ -233,6 +233,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       pname = "discourse-assets";
       inherit version src;
+      fetcherVersion = 1;
       hash = "sha256-WyRBnuKCl5NJLtqy3HK/sJcrpMkh0PjbasGPNDV6+7Y=";
     };
 

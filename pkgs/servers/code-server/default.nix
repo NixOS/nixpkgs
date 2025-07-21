@@ -18,10 +18,6 @@
   libsecret,
   xorg,
   ripgrep,
-  AppKit,
-  Cocoa,
-  CoreServices,
-  Security,
   cctools,
   xcbuild,
   quilt,
@@ -149,10 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsecret
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      CoreServices
-      Security
       cctools
       xcbuild
     ];

@@ -14,6 +14,7 @@
   pytestCheckHook,
   pytest-asyncio,
   tree-sitter-python,
+  tree-sitter-sql,
 }:
 
 buildPythonPackage rec {
@@ -48,19 +49,12 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     tree-sitter-python
+    tree-sitter-sql
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
 
-  pytestFlagsArray = [
-    # "--deselect=tests/functional_tests/test_comments.py::test_comments[sql--- ]"
-  ];
-
   disabledTests = [
-    # Requires unpackaged tree-sitter-sql
-    #  textual.widgets._text_area.LanguageDoesNotExist
-    "test_comments"
-
     # AssertionError: assert Selection(sta...), end=(0, 6)) == Selection(sta...), end=(1, 0))
     # https://github.com/tconbeer/textual-textarea/issues/296
     "test_keys"

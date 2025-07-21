@@ -9,6 +9,17 @@ let
   cfg = config.services.ntpd-rs;
   format = pkgs.formats.toml { };
   configFile = format.generate "ntpd-rs.toml" cfg.settings;
+
+  validateConfig =
+    file:
+    pkgs.runCommand "validate-ntpd-rs.toml"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      ''
+        ntp-ctl validate -c ${file}
+        ln -s "${file}" "$out"
+      '';
 in
 {
   options.services.ntpd-rs = {
@@ -63,7 +74,7 @@ in
       };
       source = lib.mkIf cfg.useNetworkingTimeServers (
         map (ts: {
-          mode = "server";
+          mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
           address = ts;
         }) config.networking.timeServers
       );
@@ -77,7 +88,7 @@ in
         DynamicUser = true;
         ExecStart = [
           ""
-          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}"
+          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${validateConfig configFile}"
         ];
       };
     };
@@ -90,7 +101,7 @@ in
         DynamicUser = true;
         ExecStart = [
           ""
-          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}"
+          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${validateConfig configFile}"
         ];
       };
     };

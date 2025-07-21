@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchurl,
   freetype,
   harfbuzz,
@@ -35,9 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   configureFlags = [

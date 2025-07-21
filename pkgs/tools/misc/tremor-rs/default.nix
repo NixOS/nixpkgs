@@ -7,7 +7,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  Security,
   libiconv,
   protobuf,
 }:
@@ -36,7 +35,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ];
 

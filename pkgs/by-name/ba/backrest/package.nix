@@ -8,16 +8,17 @@
   restic,
   stdenv,
   util-linux,
+  makeBinaryWrapper,
 }:
 let
   pname = "backrest";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-p2CKXQeA0rHhS6uP0x2tNsFzHBCOi6sRDlr+o4HeBjk=";
+    hash = "sha256-lpYny+5bXIxj+ZFhbSn200sBrDShISESZw+L5sy+X+Q=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,8 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
-      hash = "sha256-rBu+6QwTmQsjHh0yd8QjdHPc3VOmadJQ+NK9X6qbSx8=";
+      fetcherVersion = 1;
+      hash = "sha256-q7VMQb/FRT953yT2cyGMxUPp8p8XkA9mvqGI7S7Eifg=";
     };
 
     buildPhase = ''
@@ -53,9 +55,19 @@ in
 buildGoModule {
   inherit pname src version;
 
-  vendorHash = "sha256-OVJnJ5fdpa1vpYTCxtvRGbnICbfwZeYiCwAS8c4Tg2Y=";
+  postPatch = ''
+    sed -i -e \
+      '/func installRestic(targetPath string) error {/a\
+        return fmt.Errorf("installing restic from an external source is prohibited by nixpkgs")' \
+      internal/resticinstaller/resticinstaller.go
+  '';
 
-  nativeBuildInputs = [ gzip ];
+  vendorHash = "sha256-AINnBkP+e9C/f/C3t6NK+6PYSVB4NON0C71S6SwUXbE=";
+
+  nativeBuildInputs = [
+    gzip
+    makeBinaryWrapper
+  ];
 
   preBuild = ''
     mkdir -p ./webui/dist
@@ -87,12 +99,17 @@ buildGoModule {
     export HOME=$(pwd)
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/backrest \
+      --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
+  '';
+
   meta = {
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ interdependence ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };

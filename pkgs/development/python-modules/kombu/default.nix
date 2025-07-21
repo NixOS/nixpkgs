@@ -13,6 +13,7 @@
   hypothesis,
   kazoo,
   msgpack,
+  packaging,
   pycurl,
   pymongo,
   #, pyro4
@@ -30,20 +31,21 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.5.2";
+  version = "5.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LdJ+yE/YQ6Tgpxh0JDE/h1FLNEgSy5jCXa3a+7an/w4=";
+    hash = "sha256-iGYAFoJ16+rak7iI6DE1L+V4FoNC8NHVgz2Iug2Ec2M=";
   };
 
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     amqp
+    packaging
     tzdata
     vine
   ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];

@@ -2,11 +2,11 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  python3,
+  python3Packages,
   enableUsageTracking ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tftui";
   version = "0.13.5";
   pyproject = true;
@@ -19,15 +19,17 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "posthog"
     "textual"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     makeWrapper
-    poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ python3Packages.poetry-core ];
+
+  dependencies = with python3Packages; [
     posthog
     pyperclip
     requests
@@ -44,12 +46,12 @@ python3.pkgs.buildPythonApplication rec {
       --add-flags "--disable-usage-tracking"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Textual UI to view and interact with Terraform state";
     homepage = "https://github.com/idoavrah/terraform-tui";
     changelog = "https://github.com/idoavrah/terraform-tui/releases/tag/v${version}";
-    license = licenses.asl20;
-    teams = [ teams.bitnomial ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.bitnomial ];
     mainProgram = "tftui";
   };
 }

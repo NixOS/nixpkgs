@@ -2,7 +2,6 @@
   bash,
   cargo,
   fetchFromGitHub,
-  hatch,
   lib,
   nix-update-script,
   python3Packages,
@@ -14,18 +13,18 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
-  version = "1.2.6";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "Open-Wine-Components";
     repo = "umu-launcher";
     tag = version;
-    hash = "sha256-DkfB78XhK9CXgN/OpJZTjwHB7IcLC4h2HM/1JW42ZO0=";
+    hash = "sha256-nqI2XmMS28dvYrgD9kh7Xc510CvG7ifIybj+HlrU3qI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-JhNErFDJsM20BhgIgJSUBeNzAst8f+s1NzpLfl2m2es=";
+    hash = "sha256-qGkEc4VPShMMNgSB4JmSf7Mq4jEOxEK+BqlR680ZO9k=";
   };
 
   nativeCheckInputs = [
@@ -35,9 +34,10 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
-    hatch
     python3Packages.build
     python3Packages.installer
+    python3Packages.hatchling
+    python3Packages.hatch-vcs
     rustPlatform.cargoSetupHook
     scdoc
   ];

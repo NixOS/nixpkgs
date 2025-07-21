@@ -10,21 +10,21 @@
   ffmpeg-headless,
 
   # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
-  useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
+  useLibTensorflow ? stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux,
 
   ncVersion,
 }:
 let
   latestVersionForNc = {
     "31" = {
-      version = "9.0.0";
-      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
-      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+      version = "9.0.3";
+      appHash = "sha256-G7SDE72tszifozfT3vNxHW6WmMqQKhrSayQVANQaMbs=";
+      modelHash = "sha256-dB4ot/65xisR700kUXg3+Y+SkrpQO4mWrFfp+En0QEE=";
     };
     "30" = {
-      version = "8.2.0";
-      appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
-      modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+      version = "8.2.1";
+      appHash = "sha256-xSJbfL5HI1bo5KYvk/ssEjSUsWF1hFQkl5MOm/kXYDE=";
+      modelHash = "sha256-O1gh3d0MGQOHUbrIyX3f+R7lGJ7+i8tTmrnfKlczrsk=";
     };
   };
   currentVersionInfo =
@@ -38,22 +38,19 @@ stdenv.mkDerivation rec {
   srcs =
     [
       (fetchurl {
-        inherit version;
         url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
         hash = currentVersionInfo.appHash;
       })
 
       (fetchurl {
-        inherit version;
         url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
         hash = currentVersionInfo.modelHash;
       })
     ]
     ++ lib.optionals useLibTensorflow [
-      (fetchurl rec {
+      (fetchurl {
         # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
-        version = "2.9.1";
-        url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-${version}.tar.gz";
+        url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
         hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
       })
     ];
@@ -61,7 +58,7 @@ stdenv.mkDerivation rec {
   unpackPhase =
     ''
       # Merge the app and the models from github
-      tar -xzpf "${builtins.elemAt srcs 0}" recognize;
+      tar -xzpf "${builtins.elemAt srcs 0}" recognize
       tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
     ''
     + lib.optionalString useLibTensorflow ''
@@ -80,8 +77,6 @@ stdenv.mkDerivation rec {
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
-
-
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
@@ -103,17 +98,17 @@ stdenv.mkDerivation rec {
     # Install tfjs dependency
     export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
-    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}
     cd -
 
     # Test tfjs returns exit code 0
     node src/test_libtensorflow.js
     cd ..
   '';
+
   installPhase = ''
     approot="$(dirname $(dirname $(find -path '*/appinfo/info.xml' | head -n 1)))"
-    if [ -d "$approot" ];
-    then
+    if [ -d "$approot" ]; then
       mv "$approot/" $out
       chmod -R a-w $out
     fi

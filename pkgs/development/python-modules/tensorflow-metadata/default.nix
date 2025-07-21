@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
-  version = "1.17.1";
+  version = "1.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     tag = "v${version}";
-    hash = "sha256-/jVAGt3nKPwVk+poXzQ9tVCi9HEZENrbjeN4dcOfWeo=";
+    hash = "sha256-YqFQOm8K4WFUlpWqkZm8pZpfupf7ZtJTODJodjLnzK4=";
   };
 
   patches = [ ./build.patch ];

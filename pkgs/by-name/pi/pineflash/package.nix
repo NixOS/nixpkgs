@@ -17,14 +17,14 @@
   nix-update-script,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pineflash";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "Spagett1";
     repo = "pineflash";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4tcwEok36vuXbtlZNUkLNw1kHFQPBEJM/gWRhRWNLPg=";
   };
 
@@ -81,11 +81,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "GUI tool to flash IronOS to the Pinecil V1 and V2";
     homepage = "https://github.com/Spagett1/pineflash";
-    changelog = "https://github.com/Spagett1/pineflash/releases/tag/${version}";
+    changelog = "https://github.com/Spagett1/pineflash/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       acuteaangle
     ];
     mainProgram = "pineflash";
   };
-}
+})

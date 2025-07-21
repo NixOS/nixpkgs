@@ -79,20 +79,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "4.9.1";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NmvZR0NSo9y3vvdLqtyVKUlhCGq4Qu7Pbz/7Ufvf7rQ=";
+    hash = "sha256-JLOwWJvBfwqvAfaFn5qr8lsHL7/u97qYjZsckBjAu6I=";
     fetchSubmodules = true;
   };
 
+  # copy currentAniBuildConfig from upstream release asset to local.properties
   postPatch = ''
     echo "jvm.toolchain.version=21" >> local.properties
+    echo "ani.dandanplay.app.id=2qkvdr35cy" >> local.properties
+    echo "ani.dandanplay.app.secret=WspqhGkCD4DQbIUiXTPprrGmpn3YHFeX" >> local.properties
+    echo "ani.sentry.dsn=https://e548a2f9a8d7dbf1785da0b1a90e1595@o4508788947615744.ingest.us.sentry.io/4508788953448448" >> local.properties
+    echo "ani.analytics.server=https://us.i.posthog.com" >> local.properties
+    echo "ani.analytics.key=phc_7uXkMsKVXfFP9ERNbTT5lAHjVLYAskiRiakjxLROrHw" >> local.properties
+    echo "kotlin.native.ignoreDisabledTargets=true" >> local.properties
     sed -i "s/^version.name=.*/version.name=${finalAttrs.version}/" gradle.properties
     sed -i "s/^package.version=.*/package.version=${finalAttrs.version}/" gradle.properties
+    substituteInPlace gradle/libs.versions.toml \
+      --replace-fail 'antlr-kotlin = "1.0.2"' 'antlr-kotlin = "1.0.3"'
   '';
 
   gradleBuildTask = "createReleaseDistributable";
@@ -198,6 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
     "libdca.so.0"
     "liba52-0.7.4.so"
     "libFLAC.so.12"
+    "libtheoradec.so.1"
+    "libtheoraenc.so.1"
+    "libxml2.so.2"
   ];
 
   dontWrapQtApps = true;

@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
     maintainers = with maintainers; [
-      domenkozar
       fpletz
     ];
   };

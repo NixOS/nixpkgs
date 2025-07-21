@@ -6,28 +6,39 @@
   setuptools-scm,
   # python dependencies
   docling,
+  docling-jobkit,
   fastapi,
   httpx,
   pydantic-settings,
   python-multipart,
+  scalar-fastapi,
   uvicorn,
   websockets,
+  tesserocr,
+  typer,
+  rapidocr-onnxruntime,
+  onnxruntime,
+  torch,
+  torchvision,
   gradio,
   nodejs,
   which,
   withUI ? false,
+  withTesserocr ? false,
+  withRapidocr ? false,
+  withCPU ? false,
 }:
 
 buildPythonPackage rec {
   pname = "docling-serve";
-  version = "0.8.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-serve";
     tag = "v${version}";
-    hash = "sha256-ACoqhaGiYHf2dqulxfHQDH/JIhuUlH7wyu0JY4hd0U8=";
+    hash = "sha256-kvtsutdQXk9mxx90fHXlzxFXrA7v+TdlgjrKCSFuuVU=";
   };
 
   build-system = [
@@ -39,21 +50,44 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  dependencies = [
-    docling
-    fastapi
-    httpx
-    pydantic-settings
-    python-multipart
-    uvicorn
-    websockets
-  ] ++ lib.optionals withUI optional-dependencies.ui;
+  pythonRemoveDeps = [
+    "mlx-vlm" # not yet available on nixpkgs
+  ];
+
+  dependencies =
+    [
+      docling
+      (docling-jobkit.override { inherit withTesserocr withRapidocr; })
+      fastapi
+      httpx
+      pydantic-settings
+      python-multipart
+      scalar-fastapi
+      typer
+      uvicorn
+      websockets
+    ]
+    ++ lib.optionals withUI optional-dependencies.ui
+    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+    ++ lib.optionals withCPU optional-dependencies.cpu;
 
   optional-dependencies = {
     ui = [
       gradio
       nodejs
       which
+    ];
+    tesserocr = [
+      tesserocr
+    ];
+    rapidocr = [
+      rapidocr-onnxruntime
+      onnxruntime
+    ];
+    cpu = [
+      torch
+      torchvision
     ];
   };
 

@@ -1220,12 +1220,6 @@ in
               type = types.bool;
             };
 
-            editors_can_admin = mkOption {
-              description = "Editors can administrate dashboards, folders and teams they create.";
-              default = false;
-              type = types.bool;
-            };
-
             user_invite_max_lifetime_duration = mkOption {
               description = ''
                 The duration in time a user invitation remains valid before expiring.
@@ -1969,6 +1963,12 @@ in
 
     assertions = [
       {
+        assertion = !(cfg.settings.users ? editors_can_admin);
+        message = ''
+          Option `services.grafana.settings.users.editors_can_admin` has been removed in Grafana 12.
+        '';
+      }
+      {
         assertion = cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
         message = "Cannot set both datasources settings and datasources path";
       }
@@ -2020,7 +2020,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after =
         [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.service"
+        ++ lib.optional usePostgresql "postgresql.target"
         ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace

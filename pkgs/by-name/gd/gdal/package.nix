@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -83,14 +84,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.10.3";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dILIEg5BXRbRcHEh6U1FfPgR/U3J0q4ypRMM6yakuwc=";
+    hash = "sha256-8HcbA9Cj2i6DuqcJGiwqd6GkqbJP9oLdmA34g7kc/ng=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/gdal/issues/12511
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/1dd320b086606958fe970457a0640bdc4c4d494a.patch";
+      hash = "sha256-SXlNjgR4q7i3PrFfh/wzEFMrSGHQuB+ecXbGJgsROe0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/6da26aec591656f97fd882b07d37c21aabd06373.patch";
+      hash = "sha256-s70j/S9YKGRqxwrabsV3ePeGSsnDh/ouGLtLEm+z0lU=";
+    })
+  ];
 
   nativeBuildInputs =
     [
@@ -255,7 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
     filelock
     lxml
   ];
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
   ];
   disabledTestPaths = [
@@ -284,6 +297,11 @@ stdenv.mkDerivation (finalAttrs: {
       "test_ogr_gpkg_background_rtree_build"
       "test_vsiaz_fake_write"
       "test_vsioss_6"
+      # flaky?
+      "test_tiledb_read_arbitrary_array"
+      # tests for magic numbers, seem to change with different poppler versions,
+      # and architectures
+      "test_pdf_extra_rasters"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
       # likely precision-related expecting x87 behaviour
@@ -292,6 +310,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky on macos
       "test_rda_download_queue"
+      # https://github.com/OSGeo/gdal/commit/fa0ac7544af837613e9831d4d2841dd6bf735e1f
+      "test_ogr_gpkg_arrow_stream_huge_array"
     ]
     ++ lib.optionals (lib.versionOlder proj.version "8") [
       "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"

@@ -8,10 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "mymcplus";
   version = "3.0.5";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~thestr4ng3r";
-    repo = pname;
+    repo = "mymcplus";
     rev = "v${version}";
     sha256 = "sha256-GFReOgM8zi5oyePpJm5HxtizUVqqUUINTRwyG/LGWB8=";
   };
@@ -20,10 +21,14 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pyopengl
     wxpython
   ];
+
+  pythonImportsCheck = [ "mymcplus" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~thestr4ng3r/mymcplus";

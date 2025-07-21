@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.quitte.de/dsp/caps.html";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.linux;
   };
 }

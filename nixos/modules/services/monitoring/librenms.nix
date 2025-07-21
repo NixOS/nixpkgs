@@ -354,7 +354,7 @@ in
       description = ''
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
+        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
@@ -596,7 +596,9 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${configJson} -o ${cfg.dataDir}/config.json
           export PHPRC=${phpIni}
 
+          INIT=false
           if [[ ! -s ${cfg.dataDir}/.env ]]; then
+            INIT=true
             # init .env file
             echo "APP_KEY=" > ${cfg.dataDir}/.env
             ${artisanWrapper}/bin/librenms-artisan key:generate --ansi
@@ -653,6 +655,10 @@ in
           if [[ $OLD_VERSION != "${package.version}" ]]; then
             ${artisanWrapper}/bin/librenms-artisan migrate --force --no-interaction
             echo "${package.version}" > ${cfg.dataDir}/version
+          fi
+
+          if [[ $INIT == "true" ]]; then
+            ${artisanWrapper}/bin/librenms-artisan db:seed --force --no-interaction
           fi
 
           # regenerate cache if package has changed

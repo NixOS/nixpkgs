@@ -3,23 +3,9 @@
   qtbase,
   qtsvg,
   libsForQt5,
-  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "breeze";
-
-  # Backport fixes for Qt 6.9
-  # FIXME: remove in 6.3.5 / 6.4
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/breeze/-/commit/098ad3facb3d76fe4476424f1b7bf3c9c2c1b142.patch";
-      hash = "sha256-o9XrhYJIvygZ6nfcDKL22jxP7eaHeN3RGBixiOZh9O8=";
-    })
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/breeze/-/commit/e2f16562b64c63b623def44476eadc635a82c7de.patch";
-      hash = "sha256-hPbLEfD3mhPfpoDfVUolUZ4+Pip5VNj8di/0ZDj7Jzw=";
-    })
-  ];
 
   outputs = [
     "out"

@@ -26,6 +26,7 @@ let
     isAttrs
     isString
     mapAttrs
+    filterAttrs
     ;
 
   inherit (lib.lists)
@@ -109,9 +110,19 @@ let
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
   hasNoMaintainers =
+    # To get usable output, we want to avoid flagging "internal" derivations.
+    # Because we do not have a way to reliably decide between internal or
+    # external derivation, some heuristics are required to decide.
+    #
+    # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+    # If `description` is not defined, the derivation is probably not a package.
+    # Simply checking whether `meta` is defined is insufficient,
+    # as some fetchers and trivial builders do define meta.
     attrs:
-    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
-    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
+    (!attrs ? outputHash)
+    && (attrs ? meta.description)
+    && (attrs.meta.maintainers or [ ] == [ ])
+    && (attrs.meta.teams or [ ] == [ ]);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -119,7 +130,7 @@ let
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
-  # Alow granular checks to allow only some unfree packages
+  # Allow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {
@@ -411,6 +422,10 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
+
+      # Used for the original location of the maintainer and team attributes to assist with pings.
+      maintainersPosition = any;
+      teamsPosition = any;
     };
 
   checkMetaAttr =
@@ -589,10 +604,24 @@ let
         )
       ] ++ optional (hasOutput "man") "man";
     }
+    // (filterAttrs (_: v: v != null) {
+      # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
+      # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
+      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+    })
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
     // optionalAttrs (pos != null) {
       position = pos.file + ":" + toString pos.line;
+    }
+    // {
+      # Maintainers should be inclusive of teams.
+      # Note that there may be external consumers of this API (repology, for instance) -
+      # if you add a new maintainer or team attribute please ensure that this expectation is still met.
+      maintainers =
+        attrs.meta.maintainers or [ ]
+        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
     }
     // {
       # Expose the result of the checks for everyone to see.

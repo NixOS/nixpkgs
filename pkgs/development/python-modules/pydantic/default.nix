@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.11.1";
+  version = "2.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-82knT2Dzm/p0dz56bH0sZ4WffgFnN5cukbipPBO65fQ=";
+    hash = "sha256-/LMemrO01KnhDrqKbH1qBVyO/uAiqTh5+FHnrxE8BUo=";
   };
 
   postPatch = ''

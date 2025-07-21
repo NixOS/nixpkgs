@@ -76,8 +76,12 @@ in
 
     javaArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "-Xmx4G" ];
-      description = "Java options passed to JVM";
+      default = [ ];
+      example = lib.literalExpression ''[ "-Xmx16G" ] '';
+      description = ''
+        Java options passed to JVM. Configuring this is usually not necessary, but for small systems
+        it can be useful to tweak the JVM heap size.
+      '';
     };
 
     database = {
@@ -535,9 +539,9 @@ in
     };
 
     systemd.services.dependency-track-postgresql-init = lib.mkIf cfg.database.createLocally {
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [ "dependency-track.service" ];
-      bindsTo = [ "postgresql.service" ];
+      bindsTo = [ "postgresql.target" ];
       path = [ config.services.postgresql.package ];
       serviceConfig = {
         Type = "oneshot";
@@ -572,7 +576,7 @@ in
           if cfg.database.createLocally then
             [
               "dependency-track-postgresql-init.service"
-              "postgresql.service"
+              "postgresql.target"
             ]
           else
             [ ];

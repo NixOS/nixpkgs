@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2025.4.0";
+  version = "2025.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     tag = version;
-    hash = "sha256-RgPobb9RhM+eFX3Y+wSKlDQ6SddnGKlNTG1nIeEVDFs=";
+    hash = "sha256-XfYoui3xo8l3wi8nqvyzfYhsHsY8T1t/iYS4ZHNjGUE=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with Schlage Encode WiFi locks";
     homepage = "https://github.com/dknowles2/pyschlage";
-    changelog = "https://github.com/dknowles2/pyschlage/releases/tag/${version}";
+    changelog = "https://github.com/dknowles2/pyschlage/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

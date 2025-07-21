@@ -6,7 +6,7 @@
   darwin,
   fetchFromGitHub,
   coreutils,
-  nettools,
+  net-tools,
   util-linux,
   stdenv,
   dmidecode,
@@ -92,7 +92,7 @@ buildGoModule rec {
 
       substituteInPlace agent/platform/platform_unix.go \
         --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
-        --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+        --replace-fail '"/bin", "hostname"' '"${net-tools}/bin/hostname"' \
         --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
       substituteInPlace agent/session/shell/shell_unix.go \
@@ -169,13 +169,13 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       manveru
       anthonyroussel
       arianvp

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
-  poetry,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -59,7 +58,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-    poetry
     poetry-core
     jsonschema
     openpyxl

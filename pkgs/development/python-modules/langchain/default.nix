@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -38,18 +37,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.24";
+  version = "0.3.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-Up/pH2TxLPiPO49oIa2ZlNeH3TyN9sZSlNsqOIRmlxc=";
+    hash = "sha256-xxkayOtC2GtgtF3tPkTGKOS9VQ/y2gRPopvKq48/Kq0=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -60,7 +62,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
     "tenacity"
@@ -141,17 +143,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "langchain==([0-9.]+)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "langchain==";
   };
 
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

@@ -3,6 +3,8 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,12 +34,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=runs_regex_from_input_file_badline_j1"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Rust shell tool to run commands in parallel with a similar interface to GNU parallel";
     homepage = "https://github.com/aaronriekenberg/rust-parallel";
     license = lib.licenses.mit;
     mainProgram = "rust-parallel";
     maintainers = with lib.maintainers; [ sedlund ];
-    platforms = lib.platforms.linux;
   };
 }

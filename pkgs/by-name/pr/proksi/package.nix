@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proksi";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "luizfonseca";
     repo = "proksi";
     tag = "proksi-v${finalAttrs.version}";
-    hash = "sha256-zwLF6yL/EqyBtZ+hHXLJRe2UaZyhSzotEFYlpoLXKZ4=";
+    hash = "sha256-AVNQBrFxkFPgnVbh3Y0CQ3RajMmh/M6ee/QkumdLDs4=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vFZUcHh/gI4fdlM6LcN+6kjweLUnPNYNq6Y+XxWoSl8=";
+  cargoHash = "sha256-MYyPYZFmbQZszYViaGZdbUZWM739MN14J1ckyR8hXZc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,12 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "proksi-v(.*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=proksi-v(.*)" ]; };
 
   meta = {
     description = "Batteries-included CDN, reverse proxy and Load Balancer using Cloudflare Pingora";

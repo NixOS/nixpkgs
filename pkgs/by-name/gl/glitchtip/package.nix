@@ -2,8 +2,7 @@
   lib,
   python313,
   fetchFromGitLab,
-  fetchFromGitHub,
-  rustPlatform,
+  fetchPypi,
   callPackage,
   stdenv,
   makeWrapper,
@@ -14,24 +13,18 @@ let
   python = python313.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5;
-      symbolic = prev.symbolic.overridePythonAttrs rec {
-        version = "10.2.1";
-        src = fetchFromGitHub {
-          owner = "getsentry";
-          repo = "symbolic";
-          tag = version;
-          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
-          # the `py` directory is not included in the tarball, so we fetch the source via git instead
-          forceFetchGit = true;
+      django = final.django_5_2;
+      django-csp = prev.django-csp.overridePythonAttrs rec {
+        version = "4.0";
+        src = fetchPypi {
+          inherit version;
+          pname = "django_csp";
+          hash = "sha256-snAQu3Ausgo9rTKReN8rYaK4LTOLcPvcE8OjvShxKDM=";
         };
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          inherit src postPatch;
-          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
-        };
-        postPatch = ''
-          ln -s ${./symbolic_Cargo.lock} Cargo.lock
-        '';
+      };
+      django-ninja-cursor-pagination = prev.django-ninja-cursor-pagination.overridePythonAttrs {
+        # checks are failing with django 5
+        doCheck = false;
       };
     };
   };
@@ -45,6 +38,7 @@ let
       brotli
       celery
       celery-batches
+      cxxfilt
       django
       django-allauth
       django-anymail
@@ -55,7 +49,9 @@ let
       django-import-export
       django-ipware
       django-ninja
+      django-ninja-cursor-pagination
       django-organizations
+      django-postgres-partition
       django-prometheus
       django-redis
       django-storages
@@ -64,6 +60,9 @@ let
       orjson
       psycopg
       pydantic
+      # undocumented on django-allauth side
+      # https://codeberg.org/allauth/django-allauth/issues/4493
+      pyyaml
       sentry-sdk
       symbolic
       user-agents
@@ -87,14 +86,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "4.2.10";
+  version = "5.0.9";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EGk/mhDlqGrJm/j5rTKeKRkJ/fRTspwtPJ+5OHwplfM=";
+    hash = "sha256-yRXrcwE5DDJpDiX4XB18ezrLn62AV4w/ASvrOoKD6p4=";
   };
 
   propagatedBuildInputs = pythonPackages;

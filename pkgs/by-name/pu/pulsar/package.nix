@@ -36,14 +36,14 @@
 
 let
   pname = "pulsar";
-  version = "1.127.1";
+  version = "1.128.0";
 
   sourcesPath =
     {
       x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-      x86_64-linux.hash = "sha256-qcsnYrfrKD9QKcV2eEYVcHNKxpGUtC9G2D3G/ceuWCw=";
+      x86_64-linux.hash = "sha256-LDr5H2VchlTzHtwcDo0za9GWfKZTpXx6LZVwtgKWxxY=";
       aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-      aarch64-linux.hash = "sha256-V40O0M6H7sveuYpHB9vdatUR+r7q0YKTI4XcGOQXffo=";
+      aarch64-linux.hash = "sha256-tT55J2TDRiEcsh5vNVl2dapRdYj3yZsn0ZrfjO5qnqE=";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

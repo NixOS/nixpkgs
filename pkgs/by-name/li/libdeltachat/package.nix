@@ -15,19 +15,18 @@
   sqlcipher,
   sqlite,
   fixDarwinDylibNames,
-  darwin,
   libiconv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.159.3";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
     tag = "v${version}";
-    hash = "sha256-ghUPbHwOEND/ab8PELCJn3ADBWBe2v8u5xMrp9wiwjY=";
+    hash = "sha256-Evk2g2fqEmo/cd6+Sd76U0Byj6OEm99OZuUkoxTELbM=";
   };
 
   patches = [
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "deltachat-core-rust";
     inherit version src;
-    hash = "sha256-S46y3By/81qEOY54JqMJtnb6zXvd+e7PG4THmxPRQcY=";
+    hash = "sha256-vnnROLmsAh6mSPuQzTSbYSgxGfrKaanuLcADFE+kQeM=";
   };
 
   nativeBuildInputs =
@@ -59,9 +58,6 @@ stdenv.mkDerivation rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

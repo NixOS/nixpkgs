@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
   ];
-  buildInputs = lib.optionals (stdenv.isLinux) [ stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [ stdenv.cc.libc.static ];
 
   src = fetchFromGitHub {
     owner = "0vercl0k";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp rp-${if stdenv.isDarwin then "osx" else "lin"} $out/bin/rp
+    cp rp-${if stdenv.hostPlatform.isDarwin then "osx" else "lin"} $out/bin/rp
   '';
 
   meta = with lib; {

@@ -119,7 +119,7 @@ in
     systemd.services.synapse-auto-compressor = {
       description = "synapse-auto-compressor";
       requires = lib.optionals synapseUsesLocalPostgresql [
-        "postgresql.service"
+        "postgresql.target"
       ];
       inherit (cfg) startAt;
       serviceConfig = {

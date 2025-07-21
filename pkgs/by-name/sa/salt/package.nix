@@ -12,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3007.1";
+  version = "3007.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
+    hash = "sha256-F2qLl8Q8UO2H3xInmz3SSLu2q0jNMrLekPRSNMfE0JQ=";
   };
 
   patches = [
@@ -71,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
   # as is it rather long.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://saltproject.io/";
     changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ Flakebi ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
   };
 }

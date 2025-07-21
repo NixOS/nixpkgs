@@ -22,11 +22,11 @@ openvpn.overrideAttrs (
   in
   rec {
     pname = "openvpn-mullvad";
-    version = "2.6.0";
+    version = "2.6.8";
 
     src = fetchurl {
       url = "https://swupdate.openvpn.net/community/releases/openvpn-${version}.tar.gz";
-      sha256 = "sha256-6+yTMmPJhQ72984SXi8iIUvmCxy7jM/xiJJkP+CDro8=";
+      sha256 = "sha256-Xt4VZcim2IAQD38jUxen7p7qg9UFLbVUfxOp52r3gF0=";
     };
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [
@@ -69,38 +69,38 @@ openvpn.overrideAttrs (
       # https://github.com/mullvad/openvpn/tags
       (fetchMullvadPatch {
         # "Reduce PUSH_REQUEST_INTERVAL to one second"
-        commit = "4084b49de84e64c56584a378e85faf37973b6d6d";
+        commit = "6fb5e33345831e2bb1df884343893b67ecb83be3";
         sha256 = "sha256-MmYeFSw6c/QJh0LqLgkx+UxrbtTVv6zEFcnYEqznR1c=";
       })
       (fetchMullvadPatch {
         # "Send an event to any plugins when authentication fails"
-        commit = "f24de7922d70c6e1ae06acf18bce1f62d9fa6b07";
-        sha256 = "sha256-RvlQbR6/s4NorYeA6FL7tE6geg6MIoZJtHeYxkVbdwA=";
+        commit = "96d5bf40610927684ed5d13f8b512b63e8f764ef";
+        sha256 = "sha256-HsVx0ZlK7VIFSFet4bG+UEG9W38tavNIP/udesH+Mmg=";
       })
       (fetchMullvadPatch {
         # "Shutdown when STDIN is closed"
-        commit = "81ae84271c044359b67991b15ebfb0cf9a32b3ad";
-        sha256 = "sha256-ilKMyU97ha2m0p1FD64aNQncnKo4Tyi/nATuD5yPmVw=";
+        commit = "30708cefbd067928c896e3ef2420b22b82167ab8";
+        sha256 = "sha256-apL5CWc470DvleQ/pjracsTL+v0zT00apj5cTHWPQZs=";
       })
       (fetchMullvadPatch {
         # "Undo dependency on Python docutils"
-        commit = "a5064b4b6c598b68d8cabc3f4006e5addef1ec1e";
-        sha256 = "sha256-+B6jxL0M+W5LzeukXkir26hn1OaYnycVNBwMYFq6gsE=";
+        commit = "debde9db82d8c2bd4857482c5242722eb1c08e6a";
+        sha256 = "sha256-UKbQa3MDTJLKg0kZ47N7Gier3a6HP2yB6A551yqhWZU=";
       })
       (fetchMullvadPatch {
         # "Prevent signal when stdin is closed from being cleared (#10)"
-        commit = "abe529e6d7f71228a036007c6c02624ec98ad6c1";
-        sha256 = "sha256-qJQeEtZO/+8kenXTKv4Bx6NltUYe8AwzXQtJcyhrjfc=";
+        commit = "78812c51f3b2b6cb9efb73225e1002d055800889";
+        sha256 = "sha256-XaAE90nMgS862NZ5PWcdWKa0YClxr4S24Nq1OVXezTc=";
       })
       (fetchMullvadPatch {
         # "Disable libcap-ng"
-        commit = "598014de7c063fa4e8ba1fffa01434229faafd04";
-        sha256 = "sha256-+cFX5gmMuG6XFkTs6IV7utiKRF9E47F5Pgo93c+zBXo=";
+        commit = "ca3d25f2eff82b5fbfe1012ce900a961d35b35de";
+        sha256 = "sha256-6bEUJ1FHXi1mzxkAaNdrMIHVrhewWenhRnW53rr2o6E=";
       })
       (fetchMullvadPatch {
         # "Remove libnsl dep"
-        commit = "845727e01ab3ec9bd58fcedb31b3cf2ebe2d5226";
-        sha256 = "sha256-Via62wKVfMWHTmO7xIXXO7b5k0KYHs1D0JVg3qnXkeM=";
+        commit = "2d9821971fb29fff7243b49292a74eedb4036236";
+        sha256 = "sha256-Eeci6U6go1ujmbVQvIVM/xa4GSambLPSaowVIvtYlzQ=";
       })
     ];
     postPatch =

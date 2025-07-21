@@ -8,7 +8,6 @@
   swiftpm,
   swiftpm2nix,
   swiftPackages,
-  darwin,
   libarchive,
   p7zip,
   # Building from source on x86_64 fails (among other things) due to:
@@ -55,8 +54,6 @@ let
       swift
       swiftpm
     ];
-
-    buildInputs = with darwin.apple_sdk.frameworks; [ Cocoa ];
 
     configurePhase = generated.configure;
 

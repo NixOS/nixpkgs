@@ -42,7 +42,7 @@ let
       # values must be separated by whitespace or even commas.
       # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
       # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
-      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      # for each. But fortunately this fact is documented for most of them in the manpage.
       commaSeparated = [
         "Ciphers"
         "KexAlgorithms"
@@ -366,13 +366,11 @@ in
             type = "rsa";
             bits = 4096;
             path = "/etc/ssh/ssh_host_rsa_key";
-            rounds = 100;
             openSSHFormat = true;
           }
           {
             type = "ed25519";
             path = "/etc/ssh/ssh_host_ed25519_key";
-            rounds = 100;
             comment = "key comment";
           }
         ];
@@ -798,7 +796,6 @@ in
               ssh-keygen \
                 -t "${k.type}" \
                 ${lib.optionalString (k ? bits) "-b ${toString k.bits}"} \
-                ${lib.optionalString (k ? rounds) "-a ${toString k.rounds}"} \
                 ${lib.optionalString (k ? comment) "-C '${k.comment}'"} \
                 ${lib.optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                 -f "${k.path}" \

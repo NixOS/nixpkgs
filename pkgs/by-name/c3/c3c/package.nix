@@ -19,13 +19,13 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   pname = "c3c${optionalString debug "-debug"}";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2nTFQNoSAdD12BiwWMtrD9SeelTUOM3DYUdjBSjWnVU=";
+    hash = "sha256-MOnYWlGcxLX+agChuk0BPq8BWsVvNP2QYqaGk24lb5Q=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -33,6 +33,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace git_hash.cmake \
       --replace-fail "\''${GIT_HASH}" "${rev}"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-Werror" ""
   '';
 
   nativeBuildInputs = [ cmake ];

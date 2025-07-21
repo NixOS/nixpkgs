@@ -88,6 +88,16 @@ in
     };
 
     package = lib.mkPackageOption pkgs "tandoor-recipes" { };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Tandoor Recipes.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -104,6 +114,9 @@ in
 
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
+
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
 
       serviceConfig = {
         ExecStart = ''
@@ -169,6 +182,24 @@ in
       environment = env // {
         PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/tandoor-recipes";
       };
+    };
+
+    services.paperless.settings = lib.mkIf cfg.database.createLocally {
+      DB_ENGINE = "django.db.backends.postgresql";
+      POSTGRES_HOST = "/run/postgresql";
+      POSTGRES_USER = "tandoor_recipes";
+      POSTGRES_DB = "tandoor_recipes";
+    };
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "tandoor_recipes" ];
+      ensureUsers = [
+        {
+          name = "tandoor_recipes";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }

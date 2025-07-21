@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.18.1-1";
+  version = "0.19.3-3";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-7CnNcaZ2jLlLx211DA5Zk3uf724yCMpt/0zgjvZl3fM=";
+    hash = "sha256-CrjI6jwktBxKn7hgL8+pCikbtCFUK6z90Do9fWmLZlQ=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = (
     if stdenv.hostPlatform.isDarwin then
       toString [
-        "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"
+        "-Wno-error=sometimes-uninitialized"
       ]
     else
       "-Wno-error=maybe-uninitialized"
@@ -111,13 +111,13 @@ stdenv.mkDerivation rec {
     version = "myloader v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance MySQL backup tool";
     homepage = "https://github.com/mydumper/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       izorkin
       michaelglass
     ];

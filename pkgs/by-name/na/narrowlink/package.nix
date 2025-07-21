@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
-    darwin.apple_sdk.frameworks.Security
   ];
 
   meta = {

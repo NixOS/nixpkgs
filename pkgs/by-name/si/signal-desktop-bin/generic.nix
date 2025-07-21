@@ -51,6 +51,9 @@
   libpulseaudio,
   xdg-utils,
   wayland,
+
+  # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs,
 }:
 
 {
@@ -255,12 +258,15 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
     )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram} \
       --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
+
+    mv $out/share/applications/signal{-desktop,}.desktop
 
     # Note: The following path contains bundled libraries:
     # $out/lib/signal-desktop/resources/app.asar.unpacked/node_modules/
@@ -295,7 +301,6 @@ stdenv.mkDerivation rec {
       equirosa
       urandom
       bkchr
-      teutat3s
       emily
       Gliczy
     ];

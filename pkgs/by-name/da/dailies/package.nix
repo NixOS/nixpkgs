@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dailies";
   version = "0.1.0";
 
@@ -16,11 +14,6 @@ rustPlatform.buildRustPackage rec {
     rev = "66938203c644a54adcc1dbbe44ad37d348f3e986";
     hash = "sha256-hT+tffJ4F4VfblfYmb1o0hl5EZjU/QOgDYudKS8EvJg=";
   };
-
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   cargoHash = "sha256-R8r6YFo0Ih7esJl/OpcNNmmmB9pGxOXCc+3/ZivaWSw=";
 

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "3.1.2";
+  version = "3.1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
     tag = "v${version}";
-    hash = "sha256-OZuPJgcLyxZ+z3U3vraTq4MwgyMkBOHVJxB/y3qd7qw=";
+    hash = "sha256-az1rQlXwYUyPA4wP5wxBZtmJhQlvHxhRZF2O141i76o=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-mock
   ] ++ lib.optional (pythonAtLeast "3.12") distutils;
 
-  pytestFlagsArray = [ "ipi_tests/unit_tests" ];
+  enabledTestPaths = [ "ipi_tests/unit_tests" ];
   disabledTests = [
     "test_driver_base"
     "test_driver_forcebuild"
@@ -65,7 +65,7 @@ buildPythonPackage rec {
       gpl3Only
       mit
     ];
-    homepage = "http://ipi-code.org/";
+    homepage = "https://ipi-code.org/";
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };

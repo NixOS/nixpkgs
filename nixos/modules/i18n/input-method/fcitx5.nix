@@ -155,9 +155,10 @@ in
       // lib.optionalAttrs (!cfg.waylandFrontend) {
         GTK_IM_MODULE = "fcitx";
         QT_IM_MODULE = "fcitx";
-      }
-      // lib.optionalAttrs cfg.ignoreUserConfig {
-        SKIP_FCITX_USER_PATH = "1";
       };
+
+    environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
+      SKIP_FCITX_USER_PATH = "1";
+    };
   };
 }

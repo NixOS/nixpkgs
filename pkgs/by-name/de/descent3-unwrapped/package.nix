@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
   # the wrapped version of Descent 3. Once there’s a stable version of Descent
   # 3 that supports the -additionaldir command-line option, we can stop using
   # an unstable version of Descent 3.
-  version = "1.5.0-beta-unstable-2025-03-25";
+  version = "1.5.0-beta-unstable-2025-06-15";
   src = fetchFromGitHub {
     owner = "DescentDevelopers";
     repo = "Descent3";
-    rev = "67244d953588c8c63baa17c150076153c526258b";
+    rev = "0171d7b76a0c6d77908169af8ff3ea8d4d1cd930";
     leaveDotGit = true;
     # Descent 3 is supposed to display its Git commit hash in the bottom right
     # corner of the main menu. That feature only works if either the .git
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       git rev-parse --verify HEAD | tr --delete '\n' > git-hash.txt
       rm -r .git
     '';
-    hash = "sha256-lRTzy5GQJ5J9ban7Q6pBmHHXgHNpgemlYYlzmUnvFW0=";
+    hash = "sha256-/lJlrV1OswlNa8nMfiUdQof7zb+wgwI97MwNCZFNd8g=";
   };
 
   hardeningDisable = [ "format" ];

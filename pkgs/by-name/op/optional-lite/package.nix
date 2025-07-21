@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A C++17-like optional, a nullable object for C++98, C++11 and later in a single-file header-only library";
+    description = "C++17-like optional, a nullable object for C++98, C++11 and later in a single-file header-only library";
     homepage = "https://github.com/martinmoene/optional-lite";
     changelog = "https://github.com/martinmoene/optional-lite/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.boost;

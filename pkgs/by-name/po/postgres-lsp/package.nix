@@ -2,24 +2,29 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "supabase-community";
     repo = "postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-PL8irQ3R8m//BbtTjODBrBcG/bAdK+t6GZGAj0PkJwE=";
+    hash = "sha256-MdEI/3oqTIJ4anG6jXO4SEkb4VDulzD3Ql+TiFdCQa8=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lUZpjX3HljOXi0Wt2xZCUru8uinWlngLEs5wlqfFiJA=";
+  cargoHash = "sha256-vr84vwmDUpmyiX4TTTdR35Hjevi43+KgWxDhSbUKr+k=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    rust-jemalloc-sys
   ];
 
   env = {
@@ -35,13 +40,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # Tries to write to the file system relatively to the current path
     "--skip=syntax_error"
+    # Requires a database connection
+    "--skip=test_cli_check_command"
   ];
 
   meta = {
     description = "Tools and language server for Postgres";
     homepage = "https://pgtools.dev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      myypo
+    ];
     mainProgram = "postgrestools";
   };
 })

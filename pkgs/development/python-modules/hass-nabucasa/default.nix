@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.95.0";
+  version = "0.105.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -32,12 +32,15 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = version;
-    hash = "sha256-KSGEgMgZ0fHot7hfT0sDl/4aZOsWT8CE+R5ebCqhLAA=";
+    hash = "sha256-KH6wUh5BRsYox0BPo7BNCS+8KaRtpoWvaQHbcuN89hE=";
   };
 
-  pythonRelaxDeps = [ "acme" ];
-
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+    "josepy"
+  ];
 
   dependencies = [
     acme

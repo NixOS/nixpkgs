@@ -13,7 +13,7 @@
   wayland,
   wayland-protocols,
   libxkbcommon,
-  wlr-protocols,
+  libdecor,
   pulseaudio,
   nixosTests,
   withWayland ? false,
@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2025-03-18";
+  version = "0-unstable-2025-06-29";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "0b43ac046ca81d78e9eca535ab1e92971d30405a";
-    hash = "sha256-L0a81zwzIKwnRK/Mu/kW1oHoJCroa+VDNGj7CI90WMQ=";
+    rev = "903bcd8dba9cb9dfc70707a28089c469e5302539";
+    hash = "sha256-gZAPNRzAuvpIAV7ArPGsqVv6SYBJkqA+Okf6FmStvsU=";
   };
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       wayland
       wayland-protocols
       libxkbcommon
-      wlr-protocols
+      libdecor
     ]
     ++ lib.optionals withXorg [
       xorg.libX11

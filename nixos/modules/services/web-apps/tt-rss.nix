@@ -667,11 +667,11 @@ in
         };
 
         wantedBy = [ "multi-user.target" ];
-        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+        requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
         after =
           [ "network.target" ]
           ++ optional mysqlLocal "mysql.service"
-          ++ optional pgsqlLocal "postgresql.service";
+          ++ optional pgsqlLocal "postgresql.target";
       };
     };
 

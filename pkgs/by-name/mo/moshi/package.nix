@@ -27,7 +27,7 @@
 
 let
   minRequiredCudaCapability = "6.1"; # build fails with 6.0
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
       (builtins.head (
@@ -38,30 +38,22 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moshi";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "kyutai-labs";
     repo = "moshi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tQQTMwvJauzF24S1N2m2slZAHZvklCkPOTrhLvlsNVg=";
+    hash = "sha256-MkZsLRQE5Swdyp9l/cvPvznWxRfKuYecj+TTgb3ufKU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/rust";
 
-  # Upstream does not track their Cargo.lock
-  # https://github.com/kyutai-labs/moshi/issues/256
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-BxV8oZlN+6cVb3GwhY7TKWxHEpY3WVEhN6A6+5NMOyU=";
 
   nativeBuildInputs =
     [

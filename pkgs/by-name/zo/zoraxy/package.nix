@@ -4,19 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zoraxy";
-  version = "3.1.9";
+  version = "3.2.4";
+
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
-    tag = "v${version}";
-    hash = "sha256-zE8ksuZhoi/wPTpo/jq7c5sx0B6hwBr8djvzo9ea9DI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vcsN75o5olK/yQln77OJeq/PmUX1c/RYLBHyP8mRs8Q=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-XHnDlGIb2K28udWHdkfXt0dPUGmGAjfULB9fykAlsJU=";
+  vendorHash = "sha256-Bl3FI8lodSV5kzHvM8GHbQsep0W8s2BG8IbGf2AahZc=";
 
   checkFlags =
     let
@@ -29,6 +30,9 @@ buildGoModule rec {
         "TestHandlePing"
         "TestListTable"
         "TestWriteAndRead"
+        "TestHTTP1p1KeepAlive"
+        "TestGetPluginListFromURL"
+        "TestUpdateDownloadablePluginList"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -36,10 +40,10 @@ buildGoModule rec {
   meta = {
     description = "General purpose HTTP reverse proxy and forwarding tool written in Go";
     homepage = "https://zoraxy.arozos.com/";
-    changelog = "https://github.com/tobychui/zoraxy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tobychui/zoraxy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     mainProgram = "zoraxy";
     platforms = lib.platforms.linux;
   };
-}
+})

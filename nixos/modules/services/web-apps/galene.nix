@@ -128,23 +128,13 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
-        message = ''
-          Galene needs both certFile and keyFile defined for encryption, or
-          the insecure flag.
-        '';
-      }
-    ];
-
     systemd.services.galene = {
       description = "galene";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ${optionalString (cfg.insecure != true) ''
+        ${optionalString (cfg.insecure != true && cfg.certFile != null && cfg.keyFile != null) ''
           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
           install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
         ''}

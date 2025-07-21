@@ -31,6 +31,7 @@
   gtk-doc,
   libxslt,
   enableDaemon ? true,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
       shared-mime-info
       vala
       wrapGAppsNoGuiHook
+      udevCheckHook
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -115,6 +117,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableDaemon [
       polkit
     ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas

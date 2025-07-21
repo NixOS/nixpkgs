@@ -81,6 +81,8 @@ let
 
     arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
 
+    bluetooth-manager = callPackage ../applications/video/kodi/addons/bluetooth-manager { };
+
     controller-topology-project =
       callPackage ../applications/video/kodi/addons/controller-topology-project
         { };
@@ -134,6 +136,8 @@ let
     raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
     robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
+
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
 
     skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 

@@ -2,7 +2,7 @@
   lib,
   flutter324,
   fetchFromGitHub,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   sqlite,
   libayatana-appindicator,
   makeDesktopItem,
@@ -18,14 +18,14 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.3.5";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-kM1y3Q5Z8J84qHhki9A+I/uY7xYQNMlfh2ZhxzpUBHM=";
+    hash = "sha256-bwLEOmdDiD7X2o9PshDBf+Y1s6KYT7xGhqCu4nNAchI=";
   };
 
   sourceRoot = "${src.name}/auth";
@@ -49,7 +49,7 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_0
+    webkitgtk_4_1
     sqlite
     libayatana-appindicator
     # The networking client used by ente-auth (native_dio_adapter)

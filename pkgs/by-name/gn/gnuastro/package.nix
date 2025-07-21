@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU astronomy utilities and library";
     homepage = "https://www.gnu.org/software/gnuastro/";
     changelog = "https://git.savannah.gnu.org/cgit/gnuastro.git/plain/NEWS?id=gnuastro_v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

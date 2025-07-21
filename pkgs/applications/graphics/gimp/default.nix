@@ -66,8 +66,7 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  AppKit,
-  Cocoa,
+  fetchpatch,
 }:
 
 let
@@ -79,7 +78,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.2";
+  version = "3.0.4";
 
   outputs = [
     "out"
@@ -89,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VG3cMMstDnkSPH/LTXghHh7npqrOkaagrYy8v26lcaI=";
+    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
   };
 
   patches = [
@@ -111,6 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
     # so we need to pick up the one from the package.
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
+    })
+
+    # Fix a crash that occurs when trying to pick a color for text outline
+    # TODO: remove after GIMP 3.2 is released, per https://gitlab.gnome.org/GNOME/gimp/-/issues/14047#note_2491655
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/1685c86af5d6253151d0056a9677ba469ea10164.diff";
+      hash = "sha256-Rb3ANXWki21thByEIWkBgWEml4x9Qq2HAIB9ho1bygw=";
     })
   ];
 
@@ -202,8 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       llvmPackages.openmp
-      AppKit
-      Cocoa
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libgudev
@@ -246,9 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs \
-      app/tests/create_test_env.sh \
-      tools/gimp-mkenums
+    patchShebangs tools/gimp-mkenums
 
     # GIMP is executed at build time so we need to fix this.
     # TODO: Look into if we can fix the interp thing.

@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   version = "0.27.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "gnome-pomodoro";
+    repo = "gnome-pomodoro";
     rev = version;
     hash = "sha256-ZdTMaCzjA7tsXmnlHGl8MFGGViVPwMZuiu91q5v/v9U=";
   };

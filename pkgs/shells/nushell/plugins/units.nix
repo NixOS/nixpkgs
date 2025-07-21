@@ -5,38 +5,30 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
-  IOKit,
-  Foundation,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "nushell_plugin_units";
-  version = "0.1.5";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nu_plugin_units";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
-    repo = "nu_plugin_units";
     owner = "JosephTLyons";
-    rev = "v${version}";
-    hash = "sha256-Uw8OcfSETRceaoEnJP1B++v0SqGjzaYz1wCMVMe774s=";
+    repo = "nu_plugin_units";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4donh0UlBbaEwgDxUECKTPWGLuAc9KUmrRty2Ob7ZMA=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3v9jP8nL0JqtC76igsCytkQAVTgWqzHH0KQX3o6bi0c=";
+
+  cargoHash = "sha256-MjalDrjJTAHay9zcPhA8br2tOkkIzE4etL+yF5MKetY=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    IOKit
-    Foundation
-  ];
-  cargoBuildFlags = [ "--package nu_plugin_units" ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "A nushell plugin for easily converting between common units.";
+  meta = {
+    description = "Nushell plugin for easily converting between common units";
     mainProgram = "nu_plugin_units";
     homepage = "https://github.com/JosephTLyons/nu_plugin_units";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mgttlinger ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mgttlinger ];
   };
-}
+})

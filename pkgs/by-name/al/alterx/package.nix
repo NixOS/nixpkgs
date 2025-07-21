@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-aTA5KGeYmJnbVRbEhT9LigQoJFLD17q9spzBV4BGhNw=";
 
-  meta = with lib; {
+  meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
     mainProgram = "alterx";
     homepage = "https://github.com/projectdiscovery/alterx";
     changelog = "https://github.com/projectdiscovery/alterx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

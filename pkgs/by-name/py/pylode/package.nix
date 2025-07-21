@@ -7,18 +7,20 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pylode";
   version = "2.13.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
-    repo = pname;
+    repo = "pylode";
     tag = version;
     sha256 = "sha256-AtqkxnpEL+580S/iKCaRcsQO6LLYhkJxyNx6fi3atbE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     falcon
     jinja2

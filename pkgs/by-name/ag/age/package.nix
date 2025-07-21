@@ -3,12 +3,13 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  age-plugin-tpm,
+  age-plugin-fido2-hmac,
+  age-plugin-ledger,
   age-plugin-se,
   age-plugin-sss,
-  age-plugin-ledger,
+  age-plugin-tpm,
   age-plugin-yubikey,
-  age-plugin-fido2-hmac,
+  age-plugin-1p,
   makeWrapper,
   runCommand,
 }:
@@ -20,7 +21,7 @@ buildGoModule (final: {
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    rev = "v${final.version}";
+    tag = "v${final.version}";
     hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
   };
 
@@ -59,12 +60,13 @@ buildGoModule (final: {
   # group age plugins together
   passthru.plugins = {
     inherit
-      age-plugin-tpm
+      age-plugin-fido2-hmac
+      age-plugin-ledger
       age-plugin-se
       age-plugin-sss
-      age-plugin-ledger
+      age-plugin-tpm
       age-plugin-yubikey
-      age-plugin-fido2-hmac
+      age-plugin-1p
       ;
   };
 

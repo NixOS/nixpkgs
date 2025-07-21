@@ -121,7 +121,7 @@ let
           description = ''
             If this option is set, ‘device’ is interpreted as the
             path of a swapfile that will be created automatically
-            with the indicated size (in megabytes).
+            with the indicated size in MiB (1024×1024 bytes).
           '';
         };
 
@@ -277,6 +277,7 @@ in
             # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
+            requiredBy = lib.optionals sw.randomEncryption.enable [ "${realDevice'}.swap" ];
             before = [
               "${realDevice'}.swap"
               "shutdown.target"

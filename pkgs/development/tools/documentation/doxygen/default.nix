@@ -7,21 +7,20 @@
   flex,
   bison,
   qt5,
-  CoreServices,
   libiconv,
   spdlog,
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doxygen";
-  version = "1.13.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-tet2Ep2Mvucg2QBJbo9A6531cJhQ9L7+ZMmo07S8cwY=";
+    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-d90fIP8rDQ30fY1vF3wAPlIa8xrSEOdHTpPjYnduZdI=";
   };
 
   # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
@@ -51,11 +50,9 @@ stdenv.mkDerivation rec {
         qtbase
         wrapQtAppsHook
       ]
-    )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+    );
 
   cmakeFlags = [
-    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
@@ -87,4 +84,4 @@ stdenv.mkDerivation rec {
     '';
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})

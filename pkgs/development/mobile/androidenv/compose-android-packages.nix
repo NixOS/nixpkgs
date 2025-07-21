@@ -31,7 +31,7 @@ in
     # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
     if repoXmls != null then
       let
-        # Uses mkrepo.rb to create a repo spec.
+        # Uses update.rb to create a repo spec.
         mkRepoJson =
           {
             packages ? [ ],
@@ -43,6 +43,7 @@ in
               ruby.withPackages (
                 pkgs: with pkgs; [
                   slop
+                  curb
                   nokogiri
                 ]
               )
@@ -68,7 +69,7 @@ in
             preferLocalBuild = true;
             unpackPhase = "true";
             buildPhase = ''
-              ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
+              env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
             '';
             installPhase = ''
               mv repo.json $out
@@ -630,32 +631,32 @@ lib.recurseIntoAttrs rec {
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
-  androidsdk =
-    if !licenseAccepted then
-      throw ''
-        ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
+  androidsdk = callPackage ./cmdline-tools.nix {
+    inherit
+      deployAndroidPackage
+      os
+      arch
+      meta
+      ;
 
-        You must accept the following licenses:
-        ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
+    package = cmdline-tools-package;
 
-        a)
-          by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-        b)
-          by an environment variable for a single invocation of the nix tools.
-            $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
-      ''
-    else
-      callPackage ./cmdline-tools.nix {
-        inherit
-          deployAndroidPackage
-          os
-          arch
-          meta
-          ;
+    postInstall =
+      if !licenseAccepted then
+        throw ''
+          ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
 
-        package = cmdline-tools-package;
+          You must accept the following licenses:
+          ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-        postInstall = ''
+          a)
+            by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+          b)
+            by an environment variable for a single invocation of the nix tools.
+              $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
+        ''
+      else
+        ''
           # Symlink all requested plugins
           ${linkPlugin {
             name = "platform-tools";
@@ -768,5 +769,5 @@ lib.recurseIntoAttrs rec {
             ''
           ) licenseNames}
         '';
-      };
+  };
 }

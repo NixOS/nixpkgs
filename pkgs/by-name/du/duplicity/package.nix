@@ -22,13 +22,14 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
-    version = "3.0.4";
+    version = "3.0.5.1";
+    format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
-      hash = "sha256-FoaKuB0mo2RFksMHnIUx984+h/U0tdvk+bvsuYt3r5g=";
+      hash = "sha256-fL4rvXcLKfEXuy5LKpFjFu+P3be7/T342+BgeO/dfp8=";
     };
 
     patches = [
@@ -92,7 +93,6 @@ let
         pycrypto
         # Currently marked as broken.
         # pydrive2
-        future
       ]
       ++ paramiko.optional-dependencies.invoke;
 

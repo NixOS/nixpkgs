@@ -1,25 +1,22 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
-  cacert,
-  gitMinimal,
-  nodejs_20,
+  nodejs_22,
   python3,
-  yarn,
+  yarn-berry_4,
   nixosTests,
-  nix-update-script,
 }:
 let
-  version = "25.4.0";
+  yarn-berry = yarn-berry_4;
+  version = "25.7.1";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-+XYl4Bh0+8bs/FCqlig9egLg3SJCy2SRN2ovxWRE1Ok=";
+    hash = "sha256-BXF9VL2HTNOOsX+l6G+5CHRi+ycGJTizky8cypijR7M=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -27,178 +24,92 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "312fce7791e6722357e5d2f851407f4b7cf4ecb9";
-    hash = "sha256-kDArpSFiNJJF5ZGCtcn7Ci7wCpI1cTSknDZ4sQgy/Nc=";
+    rev = "319e1b8f099b77c2ff939c8728182a0a3afdec49";
+    hash = "sha256-63Uc/2HTYOm2hQEr7grhNTLWtage6oyl4J/a6fGonVI=";
   };
 
-  yarn_20 = yarn.override { nodejs = nodejs_20; };
-
-  SUPPORTED_ARCHITECTURES = builtins.toJSON {
-    os = [
-      "darwin"
-      "linux"
-    ];
-    cpu = [
-      "arm"
-      "arm64"
-      "ia32"
-      "x64"
-    ];
-    libc = [
-      "glibc"
-      "musl"
-    ];
-  };
-
-  # We cannot use fetchYarnDeps because that doesn't support yarn2/berry
-  # lockfiles (see https://github.com/NixOS/nixpkgs/issues/254369)
-  offlineCache = stdenvNoCC.mkDerivation {
-    name = "actual-server-${version}-offline-cache";
-    inherit src;
-
-    nativeBuildInputs = [
-      cacert # needed for git
-      gitMinimal # needed to download git dependencies
-      yarn_20
-    ];
-
-    inherit SUPPORTED_ARCHITECTURES;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      # At this stage we don't need binaries yet, so we can skip preinstall
-      # scripts here.
-      yarn config set enableScripts false
-      yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
-
-      # Install dependencies for all workspaces, and include devDependencies,
-      # to build web UI. Dependencies will be re-created in offline mode in the
-      # package's install phase.
-      yarn install --immutable
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r ./node_modules $out/node_modules
-
-      runHook postInstall
-    '';
-    dontFixup = true;
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-Tac2gOkdc2tzNKB3ARMfJad1MkOphudvN74gI8bGMtY=";
-  };
-
-  webUi = stdenvNoCC.mkDerivation {
-    pname = "actual-server-webui";
-    inherit version;
-    srcs = [
-      src
-      translations
-    ];
-    sourceRoot = "${src.name}/";
-
-    nativeBuildInputs = [
-      nodejs_20
-      yarn_20
-    ];
-
-    inherit SUPPORTED_ARCHITECTURES;
-
-    postPatch = ''
-      ln -sv ../../../${translations.name} ./packages/desktop-client/locale
-      cp -r ${offlineCache}/node_modules ./node_modules
-
-      patchShebangs --build ./bin ./packages/*/bin
-
-      # Patch all references to `git` to a no-op `true`. This neuter automatic
-      # translation update.
-      substituteInPlace bin/package-browser \
-        --replace-fail "git" "true"
-
-      # Allow `remove-untranslated-languages` to do its job.
-      chmod -R u+w ./packages/desktop-client/locale
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder ${offlineCache}
-      yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
-
-      yarn build:server
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cp -r packages/desktop-client/build $out
-
-      runHook postInstall
-    '';
-    dontFixup = true;
-  };
 in
-stdenv.mkDerivation {
-  pname = "actual-server";
-  inherit version src;
+stdenv.mkDerivation (finalAttrs: {
+  srcs = [
+    src
+    translations
+  ];
+  sourceRoot = "${src.name}/";
 
   nativeBuildInputs = [
-    makeWrapper
+    yarn-berry
+    nodejs_22
+    yarn-berry.yarnBerryConfigHook
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
-    yarn_20
+    makeWrapper
   ];
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    NODE_JQ_SKIP_INSTALL_BINARY = "true";
+  };
 
-  inherit SUPPORTED_ARCHITECTURES;
+  postPatch = ''
+    ln -sv ../../../${translations.name} ./packages/desktop-client/locale
+
+    patchShebangs --build ./bin ./packages/*/bin
+
+    # Patch all references to `git` to a no-op `true`. This neuter automatic
+    # translation update.
+    substituteInPlace bin/package-browser \
+      --replace-fail "git" "true"
+
+    # Allow `remove-untranslated-languages` to do its job.
+    chmod -R u+w ./packages/desktop-client/locale
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    export HOME=$(mktemp -d)
+
+    yarn build:server
+    yarn workspace @actual-app/sync-server build
+
+    runHook postBuild
+  '';
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-SPLosaI2r8PshhqG+dbJktVmjcaDX1GmIXBO0bF+mY4=";
+  };
+
+  pname = "actual-server";
+  inherit version src;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
-    cp -r ./packages/sync-server/{app.js,src,migrations,package.json} $out/lib/actual/packages/sync-server
+    cp -r ./packages/sync-server/build/{app.js,src,migrations,bin} $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
     cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
-    cp -r ${webUi} $out/lib/actual/packages/desktop-client/build
+    cp -r packages/desktop-client/build $out/lib/actual/packages/desktop-client/build
 
     # Re-create node_modules/ to contain just production packages required for
     # sync-server itself, using existing offline cache. This will also now build
     # binaries.
     export HOME=$(mktemp -d)
-    yarn config set enableNetwork false
-    yarn config set enableOfflineMode true
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder ${offlineCache}
-    yarn config set --json supportedArchitectures "$SUPPORTED_ARCHITECTURES"
-
-    export npm_config_nodedir=${nodejs_20}
 
     yarn workspaces focus @actual-app/sync-server --production
+    rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs_20} "$out/bin/actual-server" \
-      --add-flags "$out/lib/actual/packages/sync-server/app.js" \
+    makeWrapper ${lib.getExe nodejs_22} "$out/bin/actual-server" \
+      --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit offlineCache webUi;
+    inherit (finalAttrs) offlineCache;
     tests = nixosTests.actual;
-    passthru.updateScript = nix-update-script { };
   };
 
   meta = {
@@ -207,9 +118,11 @@ stdenv.mkDerivation {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    # https://github.com/NixOS/nixpkgs/issues/403846
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag
     ];
   };
-}
+})

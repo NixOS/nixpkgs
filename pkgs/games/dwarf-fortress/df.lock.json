@@ -1,28 +1,28 @@
 {
   "game": {
     "latest": {
-      "linux": "51.10",
+      "linux": "51.11",
       "darwin": "0.47.05"
     },
     "versions": {
-      "51.10": {
+      "51.11": {
         "df": {
-          "version": "51.10",
+          "version": "51.11",
           "urls": {
             "linux": {
-              "url": "https://www.bay12games.com/dwarves/df_51_10_linux.tar.bz2",
-              "outputHash": "sha256-r4dadc/nch2smNHt4Ixa2FG2Sc1NFmY88iSnFFeMcz0="
+              "url": "https://www.bay12games.com/dwarves/df_51_11_linux.tar.bz2",
+              "outputHash": "sha256-51cwIFMm5cwSaXjjhpz4pS3D8B5/Mt5+k1ALu1F+JWc="
             }
           }
         },
         "hack": {
-          "version": "51.10-r1",
+          "version": "51.11-r1.2",
           "git": {
             "url": "https://github.com/DFHack/dfhack.git",
-            "revision": "51.10-r1",
-            "outputHash": "sha256-TsgafCiLX/IZXgBdqQaRt7hmATwKz80x2xclCwdE3fM="
+            "revision": "51.11-r1.2",
+            "outputHash": "sha256-x8zY8IGDhnyoeNz24Mt00o+2XLzSHZG165MXQHXW+YA="
           },
-          "xmlRev": "ec3ab067aef716817d9c5b84a6fb85bc22516caa"
+          "xmlRev": "6502bdefd1796315365a7bb58e30e0ce34359bea"
         }
       },
       "50.15": {
@@ -96,12 +96,12 @@
     }
   },
   "therapist": {
-    "version": "42.1.12",
-    "maxDfVersion": "51.10",
+    "version": "42.1.13",
+    "maxDfVersion": "51.11",
     "git": {
       "url": "https://github.com/Dwarf-Therapist/Dwarf-Therapist.git",
-      "revision": "v42.1.12",
-      "outputHash": "sha256-/6tiFjfrAziw7XeEzPoNFgrsXk8Z7ea2PGjCvJlRt+A="
+      "revision": "v42.1.13",
+      "outputHash": "sha256-y/kUur/BTArznrEzw54FZBrxnD2KXHcwfrHE4WvoemA="
     }
   }
 }

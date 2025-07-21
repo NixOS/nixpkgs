@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.1.6";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2EzFaBTyKEEArTQ5pDCDe7IfD5jUbg0rWGifLBlwjwQ=";
+    hash = "sha256-SrRG1YsQx2KDInplSHuLvbdLpQCentIwRfz6i6P7KGE=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Glycin loaders for several formats";
-    homepage = "https://gitlab.gnome.org/sophie-h/glycin";
+    homepage = "https://gitlab.gnome.org/GNOME/glycin";
     teams = [ teams.gnome ];
     license = with licenses; [
       mpl20 # or

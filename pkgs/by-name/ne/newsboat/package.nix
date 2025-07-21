@@ -11,7 +11,6 @@
   libxml2,
   json_c,
   ncurses,
-  darwin,
   asciidoctor,
   libiconv,
   makeWrapper,
@@ -20,17 +19,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "newsboat";
-  version = "2.39";
+  version = "2.40";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-ypAn9Z27S20f82wqsZIELO1DHN0deqcTHYA77ddtb8g=";
+    hash = "sha256-BxZq+y2MIIKAaXi7Z2P8JqTfHtX2BBY/ShUhGk7Cf/8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LDv5Rrv5ZKs7cspPTWt49omvLWY01y1TDGrfl7Jea3g=";
+  cargoHash = "sha256-lIK7F52pxMMhrImtO+bAR/iGOvuhhe/g+oWn6iNA1mY=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -59,15 +58,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       json_c
       ncurses
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        Foundation
-        libiconv
-        gettext
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      gettext
+    ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   postBuild = ''
     make -j $NIX_BUILD_CORES prefix="$out"

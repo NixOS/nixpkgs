@@ -1,5 +1,6 @@
 {
   buildPgrxExtension,
+  cargo-pgrx_0_12_6,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -8,6 +9,7 @@
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   pname = "pgx_ulid";
   version = "0.2.0";

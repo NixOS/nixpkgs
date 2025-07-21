@@ -37,11 +37,11 @@ gccStdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
   hardeningDisable = [ "all" ]; # Someday the upstream will update the code...
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hackndev/0verkill";
     description = "ASCII-ART bloody 2D action deathmatch-like game";
-    license = with licenses; gpl2Only;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

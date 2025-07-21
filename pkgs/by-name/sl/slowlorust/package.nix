@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
@@ -27,20 +25,18 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'version = "1.0"' 'version = "${version}"'
   '';
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
     changelog = "https://github.com/MJVL/slowlorust/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "slowlorust";
   };
 }

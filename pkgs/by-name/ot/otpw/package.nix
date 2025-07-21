@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." "${coreutils}/bin/ls -lu /etc/. /tmp/. / /usr/. /bin/. /usr/bin/." \
       --replace "PATH=/usr/ucb:/bin:/usr/bin;ps lax" "PATH=/usr/ucb:/bin:/usr/bin;${unixtools.procps}/bin/ps lax" \
       --replace "last | head -50" "${util-linux}/bin/last | ${coreutils}/bin/head -50" \
-      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.nettools}/bin/netstat -n; ${unixtools.nettools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
+      --replace "uptime;netstat -n;hostname;date;w" "${coreutils}/bin/uptime; ${unixtools.net-tools}/bin/netstat -n; ${unixtools.net-tools}/bin/hostname; ${coreutils}/bin/date; ${procps}/bin/w"
   '';
 
   buildInputs = [

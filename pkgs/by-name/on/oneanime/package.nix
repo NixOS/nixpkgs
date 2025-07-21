@@ -60,13 +60,13 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "oneanime";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-1rNnJF16YEj6akq4jtIzI2skl/qxYgi/VQSeo1J87JM=";
+    hash = "sha256-VZdqbdKxzfGlS27WUSvSR2x7wU8uYMkWRU9QvxW22uQ=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

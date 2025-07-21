@@ -5,15 +5,16 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python312Packages,
   squashfsTools,
+  cacert,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.8.1";
+  version = "8.10.1";
 
   pyproject = true;
 
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-gn2roiwNLUFJsuen2qGPvl4DyE6gPUQibS1Cn7cj2L8=";
+    hash = "sha256-WGCbqtuCOF5X8yOVrgLKWyDcqjpb8sbTPRZzVesnAIY=";
   };
 
   patches = [
@@ -57,7 +58,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     attrs
     catkin-pkg
     click
@@ -101,7 +102,7 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python312Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "click"
@@ -110,6 +111,7 @@ python3Packages.buildPythonApplication rec {
     "docutils"
     "jsonschema"
     "pygit2"
+    "requests"
     "urllib3"
     "validators"
   ];
@@ -118,8 +120,13 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
+  preCheck = ''
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
   nativeCheckInputs =
-    with python3Packages;
+    with python312Packages;
     [
       pytest-check
       pytest-cov-stub
@@ -135,7 +142,7 @@ python3Packages.buildPythonApplication rec {
       squashfsTools
     ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     "test_bin_echo"

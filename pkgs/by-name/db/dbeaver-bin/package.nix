@@ -4,20 +4,21 @@
   fetchurl,
   undmg,
   makeWrapper,
-  openjdk17,
+  openjdk21,
   gnused,
   autoPatchelfHook,
+  autoSignDarwinBinariesHook,
   wrapGAppsHook3,
   gtk3,
   glib,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.0.2";
+  version = "25.1.2";
 
   src =
     let
@@ -30,10 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-UmTy4Flxz/zIh3cLxRi7EhNDf0Ojc7fuzCbRKIE/+CQ=";
-        aarch64-linux = "sha256-I+V/2kfdxGx8zNkH98b2685IQPbVPSe9++qS4QEg0LU=";
-        x86_64-darwin = "sha256-8Qf69OHXPiqdMs//f1jbKbyKoll+oX+P+l3mpdOvraI=";
-        aarch64-darwin = "sha256-bGxn8y9hvJyqj1/i5tScufO5/ZjdlOlPChmeL+DWwoY=";
+        x86_64-linux = "sha256-jyqUIar/RnUvcnXOB3/c7F5BAcpUVL3ufnGuKNGHq0M=";
+        aarch64-linux = "sha256-1aEbrgPVIaWG3rUwHQCcnVTQtRgS2ksjqH5l13eR7NY=";
+        x86_64-darwin = "sha256-n6cu7wzC4GowWGUMF2vg+kA+tiOWzgaWLcUw0I/fCXU=";
+        aarch64-darwin = "sha256-XRFg11t6kiBTPhX8wZbVkHotacjRu3BK1MMGaHDJs6s=";
       };
     in
     fetchurl {
@@ -50,23 +51,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+      undmg
+      autoSignDarwinBinariesHook
+    ];
 
   dontConfigure = true;
   dontBuild = true;
 
-  prePatch = ''
-    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
-      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
-  '';
+  prePatch =
+    ''
+      substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+        --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+    ''
+    # remove the bundled JRE configuration on Darwin
+    # dont use substituteInPlace here because it would match "-vmargs"
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
+    '';
 
-  preInstall = ''
-    # most directories are for different architectures, only keep what we need
-    shopt -s extglob
-    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
-    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
-    popd
-  '';
+  preInstall =
+    ''
+      # most directories are for different architectures, only keep what we need
+      shopt -s extglob
+      pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
+      rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+      popd
+    ''
+    # remove the bundled JRE on Darwin
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      rm -r Contents/Eclipse/jre/
+    '';
 
   installPhase =
     if !stdenvNoCC.hostPlatform.isDarwin then
@@ -76,14 +91,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         mkdir -p $out/opt/dbeaver $out/bin
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}" \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
               gtk3
               glib
-              webkitgtk_4_0
+              webkitgtk_4_1
               glib-networking
             ]
           }"
@@ -108,9 +123,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
-          --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}"
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
+          --prefix PATH : "${openjdk21}/bin" \
+          --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';

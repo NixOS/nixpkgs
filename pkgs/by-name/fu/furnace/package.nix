@@ -19,7 +19,6 @@
   withJACK ? stdenv.hostPlatform.isUnix,
   libjack2,
   withGUI ? true,
-  darwin,
   portaudio,
   alsa-lib,
   # Enable GL/GLES rendering
@@ -30,14 +29,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.8.1";
+  version = "0.6.8.3";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-R4yQqTPVNx5i9AeY06T0QdNN22ImLvD0bH96r5ojPLo=";
+    hash = "sha256-miS0CMeb0KNIsFtGBDM73U/mZyDhT6hQ6o4Vc0gVNM4=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -77,13 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
       alsa-lib
       libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-      ]
-    );
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_GUI" withGUI)

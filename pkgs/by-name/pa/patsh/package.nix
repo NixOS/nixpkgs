@@ -43,12 +43,12 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for patching shell scripts inspired by resholve";
     mainProgram = "patsh";
     homepage = "https://github.com/nix-community/patsh";
     changelog = "https://github.com/nix-community/patsh/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

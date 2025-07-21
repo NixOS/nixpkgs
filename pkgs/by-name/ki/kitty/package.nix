@@ -28,11 +28,6 @@
   installShellFiles,
   dbus,
   sudo,
-  Libsystem,
-  Cocoa,
-  Kernel,
-  UniformTypeIdentifiers,
-  UserNotifications,
   libcanberra,
   libicns,
   wayland-scanner,
@@ -50,27 +45,26 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.41.1";
+  version = "0.42.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-oTkzFEPgbFa2wPBJxh/9ZbK8liM9isWGEwExJq5/h2o=";
+    hash = "sha256-YDfKYzj5LRx1XaKUpBKo97CMW4jPhVQq0aXx/Qfcdzo=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-ld3cGJUjoi3od6gINyGE7fQodl9CSKmakJ1CPLMX+Ss=";
+      vendorHash = "sha256-q5LMyogAqgUFfln7LVkhuXzYSMuYmOif5sj15KkOjB4=";
     }).goModules;
 
   buildInputs =
@@ -85,16 +79,9 @@ buildPythonApplication rec {
       xxHash
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Kernel
-      UniformTypeIdentifiers
-      UserNotifications
       libpng
       python3
       zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       fontconfig
@@ -147,9 +134,6 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    # Gets `test_ssh_env_vars` to pass when `bzip2` is in the output of `env`.
-    ./fix-test_ssh_env_vars.patch
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
@@ -160,11 +144,6 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
-    # Makes man page generation respect SOURCE_DATE_EPOCH. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-timestamp-reproducibility.patch
-
-    # Ensures deterministic ordering of fish shell completions. Drop on next kitty release https://github.com/kovidgoyal/kitty/pull/8509
-    ./fix-fish-completion-ordering.patch
   ];
 
   hardeningDisable = [
@@ -333,7 +312,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
-    description = "The fast, feature-rich, GPU based terminal emulator";
+    description = "Fast, feature-rich, GPU based terminal emulator";
     license = licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"

@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.24.3";
+  version = "8.27.2";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
     tag = "v${version}";
-    hash = "sha256-P5PHugSYkC6GSxbbsuA8nvPn9fLjTJOU3yOecntAVEE=";
+    hash = "sha256-MuFIQYQb+KqxR/KyFrGnDMvwwH9WZ+AupFhc8RgMHTo=";
   };
 
-  vendorHash = "sha256-MSF9N9kXsIM2WKsjKAVztYypwGPng2EElHx7p6vADqc=";
+  vendorHash = "sha256-vd39TbooEdmYa6QZGEnYOmYU9p+9mV+SrLKVY+h/PEM=";
 
   ldflags = [
     "-s"
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Scan git repos (or files) for secrets";
     longDescription = ''
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
@@ -54,8 +54,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/zricethezav/gitleaks";
     changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gitleaks";
   };
 }

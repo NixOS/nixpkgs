@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  strictDpes = true;
+  strictDeps = true;
   nativeBuildInputs = [
     makeWrapper
     perlPackages.perl
@@ -51,6 +51,11 @@ stdenv.mkDerivation rec {
       XMLParser
       XMLNamespaceSupport
     ]);
+
+  # configure tries to find osx in PATH and hardcodes the resulting path
+  # (if any) on the Perl code. this fails under strictDeps, so override
+  # the autoconf test:
+  OSX = "${opensp}/bin/osx";
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal

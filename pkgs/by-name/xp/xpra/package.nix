@@ -37,7 +37,6 @@
   x264,
   x265,
   libavif,
-  libspng,
   openh264,
   libyuv,
   xauth,
@@ -48,6 +47,7 @@
   clang,
   withHtml ? true,
   xpra-html5,
+  udevCheckHook,
 }@args:
 
 let
@@ -89,7 +89,8 @@ let
 in
 buildPythonApplication rec {
   pname = "xpra";
-  version = "6.2.5";
+  version = "6.3";
+  format = "setuptools";
 
   stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 
@@ -97,7 +98,7 @@ buildPythonApplication rec {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-XY8NZhWCRLjpgq0dOClzftvMR7g/X64b+OYyjOGC/lM=";
+    hash = "sha256-m0GafyzblXwLBBn/eoSmcsLz1r4nzFIQzCOXVXvQB8Q=";
   };
 
   patches = [
@@ -120,6 +121,7 @@ buildPythonApplication rec {
     pkg-config
     wrapGAppsHook3
     pandoc
+    udevCheckHook
   ] ++ lib.optional withNvenc cudatoolkit;
 
   buildInputs =
@@ -164,7 +166,6 @@ buildPythonApplication rec {
       x264
       x265
       libavif
-      libspng
       openh264
       libyuv
       xxHash
@@ -273,7 +274,7 @@ buildPythonApplication rec {
       ln -s ${xpra-html5}/share/xpra/www $out/share/xpra/www;
     '';
 
-  doCheck = false;
+  # doCheck = false;
 
   enableParallelBuilding = true;
 

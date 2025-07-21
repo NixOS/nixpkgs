@@ -89,6 +89,7 @@ in
         ];
         requires = [
           "nextcloud-setup.service"
+          "phpfpm-nextcloud.service"
         ];
         wantedBy = [ "multi-user.target" ];
         environment = {
@@ -150,6 +151,11 @@ in
           LoadCredential = config.systemd.services.nextcloud-cron.serviceConfig.LoadCredential;
           RestartMode = "direct";
           Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        unitConfig = {
+          StartLimitIntervalSec = 30;
+          StartLimitBurst = 5;
         };
       };
     };
@@ -164,7 +170,7 @@ in
         nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
           proxyPass = "http://unix:${cfg.socketPath}";
           proxyWebsockets = true;
-          recommendedProxySettings = true;
+          recommendedProxySettings = lib.mkDefault true;
           extraConfig = # nginx
             ''
               # disable in case it was configured on a higher level

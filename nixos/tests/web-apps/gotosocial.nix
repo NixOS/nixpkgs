@@ -20,7 +20,7 @@
 
   testScript = ''
     machine.wait_for_unit("gotosocial.service")
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     machine.wait_for_open_port(8081)
     # Database migrations are running, wait until gotosocial no longer serves 503
     machine.wait_until_succeeds("curl -sS -f http://localhost:8081/readyz", timeout=300)

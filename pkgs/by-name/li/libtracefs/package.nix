@@ -8,33 +8,22 @@
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
-  valgrind,
   sourceHighlight,
   meson,
   flex,
   bison,
   ninja,
-  cunit,
   gitUpdater,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtracefs";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
-    hash = "sha256-2UiEgY4mQRLpWah+2rVfPiiUYBSSzRAy5gOv4YELQFQ=";
+    hash = "sha256-rpZUa34HMnDMSsGGwtOriEEHDfnW8emRSHZxzRkY3c4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-missing-documentation-to-meson-build.patch";
-      url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/patch/?id=4cbebed79b1fe933367e298ea7ddef694b9f98d0";
-      hash = "sha256-tSaR0wpxrm50IyMgMoUCcHBB9r8lQQZZYGru6Znre50=";
-    })
-  ];
 
   postPatch = ''
     chmod +x samples/extract-example.sh
@@ -55,7 +44,6 @@ stdenv.mkDerivation rec {
     xmlto
     docbook_xml_dtd_45
     docbook_xsl
-    valgrind
     sourceHighlight
     flex
     bison
@@ -67,8 +55,7 @@ stdenv.mkDerivation rec {
     "docs"
   ];
 
-  doCheck = true;
-  checkInputs = [ cunit ];
+  doCheck = false; # needs root
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

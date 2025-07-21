@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "pygtfs/test/test.py" ];
+  enabledTestPaths = [ "pygtfs/test/test.py" ];
 
   pythonImportsCheck = [ "pygtfs" ];
 

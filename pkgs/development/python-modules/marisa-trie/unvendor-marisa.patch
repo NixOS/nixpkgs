@@ -1,0 +1,30 @@
+diff --git a/setup.py b/setup.py
+index c0c5c03..6373a2a 100755
+--- a/setup.py
++++ b/setup.py
+@@ -71,15 +71,6 @@ setup(
+     license=LICENSE,
+     url="https://github.com/pytries/marisa-trie",
+     classifiers=CLASSIFIERS,
+-    libraries=[
+-        (
+-            "libmarisa-trie",
+-            {
+-                "sources": MARISA_FILES,
+-                "include_dirs": [MARISA_SOURCE_DIR, MARISA_INCLUDE_DIR],
+-            },
+-        )
+-    ],
+     ext_modules=[
+         Extension(
+             "marisa_trie",
+@@ -94,7 +85,8 @@ setup(
+                 "src/std_iostream.cpp",
+                 "src/trie.cpp",
+             ],
+-            include_dirs=[MARISA_INCLUDE_DIR],
++            include_dirs=["@marisa@/include"],
++            libraries=["marisa"],
+         )
+     ],
+     python_requires=">=3.8",

@@ -32,11 +32,10 @@
   curl,
   texinfo,
   texliveSmall,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.02";
+  version = "3.05";
   pname = "asymptote";
 
   outputs = [
@@ -49,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-Z5bec53elWwwxon7DPOSenEUe0lho32IOTPgJxM/xwo=";
+    hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
@@ -126,15 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       libGLU
       libGL
       libglvnd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        GLUT
-        Cocoa
-      ]
-    );
+    ];
 
   dontWrapQtApps = true;
 

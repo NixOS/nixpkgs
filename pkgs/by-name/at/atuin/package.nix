@@ -8,19 +8,19 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.5.0";
+  version = "18.7.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
-    rev = "v${version}";
-    hash = "sha256-VXbnf/TfMWGHHXccKZBX4/RWDT/J1kpSBzhML4973mo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KHATm505ysJAIGCd2UvkMEIFhp7huPYW5ly+jq1HLdc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-MQNveOBItVOHFNarU5xXl8xHoooSAVbA7JnxxuRI9To=";
+  cargoHash = "sha256-ZzMNU3FqD4bD96gEXaTphuM7MqRBBSYZTxIJSNtw+EI=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -70,7 +70,8 @@ rustPlatform.buildRustPackage rec {
       SuperSandro2000
       sciencentistguy
       _0x4A6F
+      rvdp
     ];
     mainProgram = "atuin";
   };
-}
+})

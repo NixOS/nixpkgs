@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "1fpsvideo";
     repo = "1fps";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3uPGFxEWmKQxQWPmotZI29GykUGQDjtDjFPps4QMs0M=";
   };
 

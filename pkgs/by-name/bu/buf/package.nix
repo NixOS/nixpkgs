@@ -2,25 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  protobuf_26,
+  protobuf,
   git,
   testers,
-  buf,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buf";
-  version = "1.52.1";
+  version = "1.55.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
-    rev = "v${version}";
-    hash = "sha256-oHmTOQBvuJWQdmC/LL72r+n2uwaQC8z3/1BRM0NzMbI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-41IY2P2s9kCV6aQh5vg7xVmu4Ovl9gakGmgcI/QSwfw=";
   };
 
-  vendorHash = "sha256-+zJ2pCLyXnqFOIWWfnhAzSnUOjQSDo4AqCxBNNZED7E=";
+  vendorHash = "sha256-2kg7VXIFKXXY1uDUSV3+4vo6GYwnxyvJIZ/a8j99lhk=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -36,7 +35,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf_26 # Required for buftesting.GetProtocFilePaths
+    protobuf # Required for buftesting.GetProtocFilePaths
   ];
 
   checkFlags = [
@@ -81,18 +80,17 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     homepage = "https://buf.build";
-    changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
+    changelog = "https://github.com/bufbuild/buf/releases/tag/v${finalAttrs.version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
       lrewega
-      aaronjheng
     ];
     mainProgram = "buf";
   };
-}
+})

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     with finalAttrs;
     fetchFromGitHub {
       owner = "anholt";
-      repo = pname;
+      repo = "libepoxy";
       rev = version;
       sha256 = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
     };
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
+  propagatedBuildInputs =
     lib.optionals (x11Support && !stdenv.hostPlatform.isDarwin) [
       libGL
     ]

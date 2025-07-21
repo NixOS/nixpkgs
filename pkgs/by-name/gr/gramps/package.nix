@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   gtk3,
@@ -10,6 +11,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   gettext,
+  desktopToDarwinBundle,
   # Optional packages:
   enableOSM ? true,
   osm-gps-map,
@@ -20,21 +22,16 @@
   ghostscript,
 }:
 
-let
-  inherit (python3Packages) buildPythonApplication pythonOlder;
-in
-buildPythonApplication rec {
-  version = "5.2.4";
+python3Packages.buildPythonApplication rec {
+  version = "6.0.3";
   pname = "gramps";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
+    hash = "sha256-dmokrAN6ZC7guMYHifNifL9rXqZPW+Z5LudQhIUxMs8=";
   };
 
   patches = [
@@ -44,21 +41,37 @@ buildPythonApplication rec {
     ./disable-gtk-warning-dialog.patch
   ];
 
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    berkeleydb
+    orjson
+    pyicu
+    pygobject3
+    pycairo
+  ];
+
   nativeBuildInputs = [
     wrapGAppsHook3
     intltool
     gettext
     gobject-introspection
-    python3Packages.setuptools
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    python3Packages.unittestCheckHook
-    python3Packages.jsonschema
-    python3Packages.mock
-    python3Packages.lxml
-  ];
+  nativeCheckInputs =
+    [
+      glibcLocales
+      python3Packages.unittestCheckHook
+      python3Packages.jsonschema
+      python3Packages.mock
+      python3Packages.lxml
+    ]
+    # TODO: use JHBuild to build the Gramps' bundle
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs =
     [
@@ -75,13 +88,6 @@ buildPythonApplication rec {
     ++ lib.optional enableGraphviz graphviz
     # Ghostscript support
     ++ lib.optional enableGhostscript ghostscript;
-
-  propagatedBuildInputs = with python3Packages; [
-    berkeleydb
-    pyicu
-    pygobject3
-    pycairo
-  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.9.0";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
     tag = "v${version}";
-    hash = "sha256-3WafrcJH9pD1u0FEJzYaVWLWb2Ur1sCHYHFON4DXLpo=";
+    hash = "sha256-xz5NilxPN5KyC4NYmx4Ax0L3khtD2oo3s7gxXWclCI4=";
   };
 
   build-system = [ poetry-core ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control Vodafon Station";
     homepage = "https://github.com/chemelli74/aiovodafone";
-    changelog = "https://github.com/chemelli74/aiovodafone/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/chemelli74/aiovodafone/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

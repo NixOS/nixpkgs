@@ -119,6 +119,11 @@ in
         url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=53a5dada413662389a17c551a00d215e51f5049f";
         hash = "sha256-AEvsQfpdR18z6VroJkWoC3sBoApIYQQgeF/P2DprPQ8=";
       })
+      (fetchpatch {
+        # bug#76573
+        url = "https://git.savannah.gnu.org/cgit/emacs.git/patch/?id=05ecb2b8f0216aa3f391ee661aad4d61fd6aed0e";
+        hash = "sha256-fvnHMvuqwQseVrDpVpnzSaoWfXrR5tsjIib7+lhRGII=";
+      })
     ];
   });
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-http-v${version}";
-    hash = "sha256-FUfVkJbpD0X7U7DPzyoh+84Bk7C07iLT9dmbUeliFu8=";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-59vuJc7Wb/6PsPA4taAFA2UK8bdz+raZ+NB4S8LahtM=";
   };
 
-  sourceRoot = "source/packages/http/httpx/";
+  sourceRoot = "${src.name}/packages/http/httpx/";
 
   build-system = [ poetry-core ];
 

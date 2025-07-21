@@ -1,6 +1,6 @@
 { mkDerivation }:
 
 mkDerivation {
-  version = "27.3.3";
-  sha256 = "sha256-OTCCfVeJADxKlmgk8rRE3uzY8Y9qYwY/ubiopWG/0ao=";
+  version = "27.3.4.2";
+  sha256 = "sha256-wbaRSTwTrNADbShNHoWorWyD+2ul6NZbRs6isP3g+OI=";
 }

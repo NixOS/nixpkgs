@@ -11,7 +11,7 @@
   pkg-config,
   clang,
   bintools,
-  python3Packages,
+  python312Packages,
   git,
   fetchpatch,
   fetchpatch2,
@@ -48,7 +48,8 @@ let
     else
       targetPlatform.darwinMinVersion;
 
-  python3 = python3Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
+  # Use Python 3.12 for now because Swift 5.8 depends on Python's PyEval_ThreadsInitialized(), which was removed in 3.13.
+  python3 = python312Packages.python.withPackages (p: [ p.setuptools ]); # python 3.12 compat.
 
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -72,7 +73,11 @@ let
     else
       targetPlatform.parsed.kernel.name;
 
-  swiftArch = stdenv.hostPlatform.darwinArch;
+  # This causes swiftPackages.XCTest to fail to build on aarch64-linux
+  # as I believe this is because Apple calls the architecture aarch64
+  # on Linux rather than arm64 when used with macOS.
+  swiftArch =
+    if hostPlatform.isDarwin then hostPlatform.darwinArch else targetPlatform.parsed.cpu.name;
 
   # On Darwin, a `.swiftmodule` is a subdirectory in `lib/swift/<OS>`,
   # containing binaries for supported archs. On other platforms, binaries are
@@ -479,6 +484,7 @@ stdenv.mkDerivation {
             "aarch64" = "AArch64";
           }
           .${targetPlatform.parsed.cpu.name}
+            or (throw "Unsupported CPU architecture: ${targetPlatform.parsed.cpu.name}")
         }
       "
       buildProject llvm llvm-project/llvm

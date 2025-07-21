@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "erofs-utils";
-  version = "1.8.6";
+  version = "1.8.10";
   outputs = [
     "out"
     "man"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot/erofs-utils-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WyIdw/1tFRQlswU07eRvt6kNwjOoZZy6A3J5awoGZUc=";
+    hash = "sha256-BetO3r4R3szm7LNOmNL4DIzSg8Lyln2Lp+/VhBhXBRQ=";
   };
 
   nativeBuildInputs = [
@@ -59,16 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional fuseSupport "--enable-fuse"
     ++ lib.optional selinuxSupport "--with-selinux";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/about/";
     description = "Userspace utilities for linux-erofs file system";
-    changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${version}";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    changelog = "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       ehmry
       nikstur
       jmbaur
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

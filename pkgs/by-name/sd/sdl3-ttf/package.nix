@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   testers,
   validatePkgConfig,
@@ -12,26 +11,20 @@
   harfbuzz,
   glib,
   ninja,
+  plutosvg,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-ttf";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_ttf";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-eq7yWw7PWIeXWjuNHaQUiV+x0qng4FJNscsYRALK40I=";
+    hash = "sha256-g7LfLxs7yr7bezQWPWn8arNuPxCfYLCO4kzXmLRUUSY=";
   };
-
-  # fix CMake path handling (remove on next update)
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libsdl-org/SDL_ttf/commit/ad2ffa825d4535ddfb57861a7e33dff4a9bc6a94.patch?full_index=1";
-      hash = "sha256-emf7UnfB6Rl1+R74lsoIvm9ezDZtjHUS/t4k/RxbaYg=";
-    })
-  ];
 
   strictDeps = true;
   doCheck = true;
@@ -40,24 +33,29 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [
     sdl3
     freetype
     harfbuzz
     glib
+    plutosvg
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDLTTF_STRICT" true)
     (lib.cmakeBool "SDLTTF_HARFBUZZ" true)
-    # disable plutosvg (not in nixpkgs)
-    (lib.cmakeBool "SDLTTF_PLUTOSVG" false)
+    (lib.cmakeBool "SDLTTF_PLUTOSVG" true)
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-(3\\..*)"
+      ];
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
@@ -70,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       charain
       Emin017
     ];
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl3-ttf" ];
     platforms = lib.platforms.all;
   };

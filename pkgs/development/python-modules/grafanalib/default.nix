@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = pname;
+    repo = "grafanalib";
     tag = "v${version}";
     hash = "sha256-vXnyAfC9avKz8U4+MJVnu2zoPD0nR2qarWYidhEPW5s=";
   };

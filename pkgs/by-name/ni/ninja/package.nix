@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -17,26 +18,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ninja";
-  version = lib.removePrefix "v" finalAttrs.src.rev;
-
-  src =
+  version =
     {
-      # TODO: Remove Ninja 1.11 as soon as possible.
-      "1.11" = fetchFromGitHub {
-        owner = "ninja-build";
-        repo = "ninja";
-        rev = "v1.11.1";
-        hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
-      };
-
-      latest = fetchFromGitHub {
-        owner = "ninja-build";
-        repo = "ninja";
-        rev = "v1.12.1";
-        hash = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
-      };
+      "1.11" = "1.11.1";
+      latest = "1.12.1";
     }
-    .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
+    .${ninjaRelease};
+
+  src = fetchFromGitHub {
+    owner = "ninja-build";
+    repo = "ninja";
+    rev = "v${finalAttrs.version}";
+    hash =
+      {
+        # TODO: Remove Ninja 1.11 as soon as possible.
+        "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+        latest = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
+      }
+      .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
+  };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -52,6 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xsl
       libxslt.bin
     ];
+
+  # TODO: remove together with ninja 1.11
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
+    (fetchpatch {
+      name = "ninja1.11-python3.13-compat.patch";
+      url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
+      hash = "sha256-zlMs9LDJ2thtiSUjbsONyqoyYxrB/Ilt2Ljr0nCU6nQ=";
+    })
+  ];
 
   postPatch = ''
     # write rebuild args to file after bootstrap

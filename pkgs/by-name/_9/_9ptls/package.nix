@@ -17,16 +17,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   installTargets = "mount.9ptls.install";
 
-  meta = with lib; {
+  meta = {
     description = "mount.9ptls mount helper";
     longDescription = ''
       mount.9ptls wraps the v9fs mount type in a dp9ik authenticated
       tls tunnel using tlsclient.
     '';
     homepage = "https://git.sr.ht/~moody/tlsclient";
-    license = licenses.mit;
-    maintainers = with maintainers; [ moody ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ moody ];
     mainProgram = "mount.9ptls";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -1,38 +1,48 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "jetbrains-mono";
   version = "2.304";
 
-  src = fetchzip {
-    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
-    sha256 = "sha256-rv5A3F1zdcUJkmw09st1YxmEIkIoYJaMYGyZjic8jfc=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "jetbrains";
+    repo = "jetbrainsmono";
+    rev = "v${version}";
+    hash = "sha256-SW9d5yVud2BWUJpDOlqYn1E1cqicIHdSZjbXjqOAQGw=";
   };
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  doCheck = false;
-  dontFixup = true;
+  env."PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION" = "python";
+
+  nativeBuildInputs = [
+    python3Packages.gftools
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    gftools builder sources/config.yaml
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 -t $out/share/fonts/truetype/ fonts/ttf/*.ttf
-    install -Dm644 -t $out/share/fonts/truetype/ fonts/variable/*.ttf
+    install -Dm644 -t "$out/share/fonts/opentype/" fonts/otf/*.otf
+    install -Dm644 -t "$out/share/fonts/truetype/" fonts/ttf/*.ttf
+    install -Dm644 -t "$out/share/fonts/truetype/" fonts/variable/*.ttf
+    install -Dm644 -t "$out/share/fonts/WOFF2/" fonts/webfonts/*.woff2
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
     changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ vinnymeller ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ vinnymeller ];
+    platforms = lib.platforms.all;
   };
 }

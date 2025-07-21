@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  AppKit,
   DarwinTools,
   alsa-utils,
   at-spi2-core,
@@ -36,8 +35,6 @@
   lz4,
   libmpg123,
   makeWrapper,
-  pcre,
-  pcre2,
   pkg-config,
   portaudio,
   rapidjson,
@@ -86,9 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       flac
       gitMinimal
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      AppKit
-    ]
     ++ [
       glew
       jasper
@@ -107,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       libxkbcommon
       lz4
       libmpg123
-      pcre
-      pcre2
       portaudio
       rapidjson
       sqlite

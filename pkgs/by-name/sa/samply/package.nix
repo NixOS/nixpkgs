@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
   versionCheckHook,
   nix-update-script,
 }:
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-mQykzO9Ldokd3PZ1fY4pK/GtLmYMVas2iHj1Pqi9WqQ=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

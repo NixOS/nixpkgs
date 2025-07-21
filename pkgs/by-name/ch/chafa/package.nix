@@ -18,15 +18,15 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.14.5";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.16.2";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
-    rev = version;
-    sha256 = "sha256-9RkN0yZnHf5cx6tsp3P6jsi0/xtplWxMm3hYCPjWj0M=";
+    tag = finalAttrs.version;
+    hash = "sha256-bIFPnbciaog9piqBMSpe9zLwH7irp5CW1WG5frAMqpI=";
   };
 
   outputs = [
@@ -69,15 +69,20 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    installShellCompletion --cmd chafa tools/completions/zsh-completion.zsh
+    installShellCompletion --cmd chafa \
+      --fish tools/completions/fish-completion.fish \
+      --zsh tools/completions/zsh-completion.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.mog ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      mog
+      prince213
+    ];
     mainProgram = "chafa";
   };
-}
+})

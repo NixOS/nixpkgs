@@ -10,7 +10,6 @@
   hidapi,
   libusb1,
   udev,
-  darwin,
 }:
 
 buildPythonPackage rec {
@@ -39,16 +38,7 @@ buildPythonPackage rec {
     HIDAPI_SYSTEM_HIDAPI = true;
   };
 
-  propagatedBuildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreFoundation
-        IOKit
-      ]
-    );
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   pythonImportsCheck = [ "hid" ];
 

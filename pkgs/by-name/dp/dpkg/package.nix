@@ -15,17 +15,16 @@
   pkg-config,
   diffutils,
   glibc ? !stdenv.hostPlatform.isDarwin,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.22.11";
+  version = "1.22.20";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
-    hash = "sha256-mKyS0lPTG3ROcw8AhB4IdjNjvZK2YTGV9pbpjz/OLAc=";
+    hash = "sha256-Sw4darMZNFWwvDVBuf0EEdG5Qo2ceiooBrbXWJfCw4o=";
   };
 
   configureFlags = [
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
     xz
     zstd
     libmd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  ];
   nativeBuildInputs = [
     makeWrapper
     perl
@@ -113,6 +112,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ siriobalmelli ];
   };
 }

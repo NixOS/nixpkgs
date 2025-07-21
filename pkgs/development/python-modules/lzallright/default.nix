@@ -14,14 +14,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vlaci";
-    repo = pname;
+    repo = "lzallright";
     rev = "v${version}";
     hash = "sha256-E4Eaah58JCbxXfmpqFS2Emi1/eo2L3qyJP+vWH3PHPg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-2AR9slC/vWv5Ump1DLE2em8LLSTXHVkI/PBW5PxCXXg=";
   };
 

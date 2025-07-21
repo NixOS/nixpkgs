@@ -1,0 +1,21 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 62fb04f2e..bb5b279dd 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -12,7 +12,6 @@ from typing import Any, AsyncIterator, Callable, Generator, Iterator
+ from unittest import mock
+ from uuid import uuid4
+ 
+-import isal.isal_zlib
+ import pytest
+ import zlib_ng.zlib_ng
+ from blockbuster import blockbuster_ctx
+@@ -333,7 +332,7 @@ def unused_port_socket() -> Generator[socket.socket, None, None]:
+         s.close()
+ 
+ 
+-@pytest.fixture(params=[zlib, zlib_ng.zlib_ng, isal.isal_zlib])
++@pytest.fixture(params=[zlib, zlib_ng.zlib_ng])
+ def parametrize_zlib_backend(
+     request: pytest.FixtureRequest,
+ ) -> Generator[None, None, None]:

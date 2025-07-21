@@ -1,18 +1,18 @@
 {
   lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  # Mitmproxy requirements
   aioquic,
   argon2-cffi,
   asgiref,
   brotli,
+  buildPythonPackage,
   certifi,
   cryptography,
+  fetchFromGitHub,
   flask,
   h11,
   h2,
   hyperframe,
+  hypothesis,
   kaitaistruct,
   ldap3,
   mitmproxy-rs,
@@ -22,6 +22,11 @@
   pyopenssl,
   pyparsing,
   pyperclip,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
   ruamel-yaml,
   setuptools,
   sortedcontainers,
@@ -29,34 +34,27 @@
   urwid,
   wsproto,
   zstandard,
-  # Additional check requirements
-  hypothesis,
-  pytest-asyncio,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.1.3";
+  version = "12.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-gTeXxNQWVMQYiGdIyy7SS6JcuYG16KLnjxBBdjhi+lE=";
+    hash = "sha256-RTHL5+lbR+AbkiE4+z4ZbxZSV2E4NGTmShbMIMRKJPA=";
   };
 
   pythonRelaxDeps = [
+    "cryptography"
+    "flask"
     "h2"
     "passlib"
-    "protobuf"
-    "pyparsing"
-    "ruamel.yaml"
-    "urwid"
+    "pyopenssl"
+    "tornado"
   ];
 
   build-system = [ setuptools ];
@@ -146,7 +144,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

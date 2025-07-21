@@ -42,9 +42,12 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
     hash = "sha256-pZHu3Oo9DWRAtldU0UvrH1FIg0bEvyfizPUhj9IBL58=";
   };
 
@@ -82,7 +85,6 @@ buildPythonPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -100,7 +102,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pytestFlagsArray = [ "--disable-pytest-warnings" ];
+  pytestFlags = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths =
     [

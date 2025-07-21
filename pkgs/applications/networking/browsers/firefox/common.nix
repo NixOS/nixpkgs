@@ -44,7 +44,6 @@ in
   lib,
   pkgs,
   stdenv,
-  fetchpatch,
   patchelf,
 
   # build time
@@ -77,6 +76,7 @@ in
   gnum4,
   gtk3,
   icu73,
+  icu77, # if you fiddle with the icu parameters, please check Thunderbird's overrides
   libGL,
   libGLU,
   libevent,
@@ -152,7 +152,10 @@ in
   # Set to `!privacySupport` or `false`.
 
   crashreporterSupport ?
-    !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl,
+    !privacySupport
+    && !stdenv.hostPlatform.isLoongArch64
+    && !stdenv.hostPlatform.isRiscV
+    && !stdenv.hostPlatform.isMusl,
   curl,
   geolocationSupport ? !privacySupport,
   webrtcSupport ? !privacySupport,
@@ -303,72 +306,33 @@ buildStdenv.mkDerivation {
       ./env_var_for_system_dir-ff111.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "133") [ ./env_var_for_system_dir-ff133.patch ]
-    ++ lib.optionals (lib.versionAtLeast version "96" && lib.versionOlder version "121") [
-      ./no-buildconfig-ffx96.patch
-    ]
     ++ lib.optionals (lib.versionAtLeast version "121" && lib.versionOlder version "136") [
       ./no-buildconfig-ffx121.patch
     ]
     ++ lib.optionals (lib.versionAtLeast version "136") [ ./no-buildconfig-ffx136.patch ]
-    ++
-      lib.optionals
-        (
-          lib.versionOlder version "128.2"
-          || (lib.versionAtLeast version "129" && lib.versionOlder version "130")
-        )
-        [
-          (fetchpatch {
-            # https://bugzilla.mozilla.org/show_bug.cgi?id=1912663
-            name = "cbindgen-0.27.0-compat.patch";
-            url = "https://hg.mozilla.org/integration/autoland/raw-rev/98cd34c7ff57";
-            hash = "sha256-MqgWHgbDedVzDOqY2/fvCCp+bGwFBHqmaJLi/mllZug=";
-          })
-        ]
-    ++ lib.optionals (lib.versionOlder version "122") [ ./bindgen-0.64-clang-18.patch ]
-    ++ lib.optionals (lib.versionOlder version "123") [
-      (fetchpatch {
-        name = "clang-18.patch";
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
-        hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
-      })
+    ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1955112
+      # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
+      ./139-wayland-drag-animation.patch
     ]
-    ++
-      lib.optionals
-        (
-          (lib.versionAtLeast version "129" && lib.versionOlder version "134")
-          || lib.versionOlder version "128.6.0"
-        )
-        [
-          # Python 3.12.8 compat
-          # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
-          # https://phabricator.services.mozilla.com/D231480
-          ./mozbz-1935621-attachment-9442305.patch
-        ]
-    ++ [
-      # LLVM 19 turned on WASM reference types by default, exposing a bug
-      # that broke the Mozilla WASI build. Supposedly, it has been fixed
-      # upstream in LLVM, but the build fails in the same way for us even
-      # with LLVM 19 versions that contain the upstream patch.
-      #
-      # Apply the temporary patch Mozilla used to work around this bug
-      # for now until someone can investigate what’s going on here.
-      #
-      # TODO: Please someone figure out what’s up with this.
-      #
-      # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
-      # See: <https://github.com/llvm/llvm-project/pull/97451>
-      (fetchpatch {
-        name = "wasi-sdk-disable-reference-types.patch";
-        url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
-        hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
-      })
+    ++ lib.optionals (lib.versionAtLeast version "139") [ ./139-relax-apple-sdk.patch ]
+    ++ lib.optionals (lib.versionOlder version "139") [
       # Fix for missing vector header on macOS
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1939405
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1959377
+      # Fixed on Firefox 139
       ./firefox-mac-missing-vector-header.patch
-
+    ]
+    ++ lib.optionals (lib.versionOlder version "140") [
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1962497
       # https://phabricator.services.mozilla.com/D246545
+      # Fixed on Firefox 140
       ./build-fix-RELRHACK_LINKER-setting-when-linker-name-i.patch
+    ]
+    ++ lib.optionals (lib.versionOlder version "138") [
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1941479
+      # https://phabricator.services.mozilla.com/D240572
+      # Fixed on Firefox 138
+      ./firefox-cannot-find-type-Allocator.patch
     ]
     ++ extraPatches;
 
@@ -376,6 +340,10 @@ buildStdenv.mkDerivation {
     ''
       rm -rf obj-x86_64-pc-linux-gnu
       patchShebangs mach build
+    ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
+    + lib.optionalString (lib.versionAtLeast version "134") ''
+      sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
     ''
     + extraPostPatch;
 
@@ -516,13 +484,12 @@ buildStdenv.mkDerivation {
     ]
     ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
     ++ lib.optional (!drmSupport) "--disable-eme"
-    ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
+    ++ lib.optional allowAddonSideload "--allow-addon-sideload"
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
       "--enable-system-pixman"
       "--with-system-ffi"
-      # Firefox 136 fails to link with our icu76.1
-      (lib.optionalString (lib.versionOlder version "136") "--with-system-icu")
+      "--with-system-icu"
       "--with-system-jpeg"
       "--with-system-libevent"
       "--with-system-libvpx"
@@ -606,7 +573,7 @@ buildStdenv.mkDerivation {
         xorg.xorgproto
         zlib
         (
-          if (lib.versionAtLeast version "116") then nss_latest else nss_esr # 3.90
+          if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
         )
       ]
       ++ lib.optional alsaSupport alsa-lib
@@ -618,7 +585,7 @@ buildStdenv.mkDerivation {
         libdrm
       ]
     ))
-    ++ lib.optionals (lib.versionOlder version "136") [ icu73 ]
+    ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
     ++ lib.optional gssSupport libkrb5
     ++ lib.optional jemallocSupport jemalloc
     ++ extraBuildInputs;

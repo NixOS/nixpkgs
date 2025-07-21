@@ -137,6 +137,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

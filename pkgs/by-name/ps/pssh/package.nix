@@ -8,14 +8,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pssh";
-  version = "2.3.4";
+  version = "2.3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "pssh";
-    rev = "v${version}";
-    hash = "sha256-B1dIa6hNeq4iE8GKVhTp3Gzq7vp+v5Yyzj8uF8X71yg=";
+    tag = "v${version}";
+    hash = "sha256-JZOO5xmW34lvWzGL4tC9fquZOOYhub0/aa/iQ63rjHE=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   postPatch = ''
     for f in bin/*; do
@@ -36,6 +39,7 @@ python3Packages.buildPythonApplication rec {
       including pssh, pscp, prsync, pnuke and pslurp.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/lilydjwg/pssh/blob/${src.tag}/ChangeLog";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ chris-martin ];

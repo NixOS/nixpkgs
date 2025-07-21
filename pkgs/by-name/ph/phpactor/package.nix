@@ -21,6 +21,15 @@ php.buildComposerProject2 (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  php = php.withExtensions (
+    { all, ... }:
+    with all;
+    [
+      mbstring
+      tokenizer
+    ]
+  );
+
   postInstall = ''
     installShellCompletion --cmd phpactor \
     --bash <(php $out/bin/phpactor completion bash)

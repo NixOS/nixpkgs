@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "48.0";
+  version = "48.1";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Incubator";
     repo = "showtime";
     rev = "refs/tags/${version}";
-    hash = "sha256-w6ERJNBw+YgPHfm24KKYFS6T4EKEguHOeron0ofLxIg=";
+    hash = "sha256-uk3KgiLsYjqBhlKssnkWO6D4ufwJb/o+rQYSA7pa1lU=";
   };
 
   strictDeps = true;

@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-store";
   version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";

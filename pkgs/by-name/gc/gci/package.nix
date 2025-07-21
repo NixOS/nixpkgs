@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "daixiang0";
-    repo = pname;
+    repo = "gci";
     rev = "v${version}";
     sha256 = "sha256-BlR7lQnp9WMjSN5IJOK2HIKXIAkn5Pemf8qbMm83+/w=";
   };

@@ -4,7 +4,7 @@
 }:
 
 lib.makeScope newScope (self: {
-  mkLibretroCore = self.callPackage ./mkLibretroCore.nix;
+  mkLibretroCore = self.callPackage ./mkLibretroCore.nix { };
 
   atari800 = self.callPackage ./cores/atari800.nix { };
 

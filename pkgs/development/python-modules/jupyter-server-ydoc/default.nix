@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server-ydoc";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_server_ydoc";
     inherit version;
-    hash = "sha256-9P2n9D0HUkU+lmIffniD7tAJEUbe7Q7jjC/l+Cxps/U=";
+    hash = "sha256-tSa+aEqmIev9lywYpUynxhPGfy0FHPUteiaqCS9zWkY=";
   };
 
   build-system = [ hatchling ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration.tests;
+  passthru.tests = jupyter-collaboration;
 
   meta = {
     description = "Jupyter-server extension integrating collaborative shared models";

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "awsiotsdk";
-  version = "1.22.2";
+  version = "1.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-iot-device-sdk-python-v2";
     tag = "v${version}";
-    hash = "sha256-vqx/OgQ/hgH6ULBI1I9+fD4CswQZDzfdNlhImbnQiKg=";
+    hash = "sha256-bjUppd1neOEeaY+RGcyqXpjhq+plJcopxPRLUBGhks8=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Next generation AWS IoT Client SDK for Python using the AWS Common Runtime";
     homepage = "https://github.com/aws/aws-iot-device-sdk-python-v2";
-    changelog = "https://github.com/aws/aws-iot-device-sdk-python-v2/releases/tag/v${version}";
+    changelog = "https://github.com/aws/aws-iot-device-sdk-python-v2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.16.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
-    repo = pname;
+    repo = "gum";
     rev = "v${version}";
-    hash = "sha256-77102I7pOGfpPBSGelsA/9GJYos05akF0kdmr522RC0=";
+    hash = "sha256-Qs7I9AdJx1FwQK+stgLJbXAIiL+zOYCDf1u+kT7u+Bg=";
   };
 
-  vendorHash = "sha256-wrl4Zo5NSaTTMrc95Fs9cevG7ITJtHuV3pGkFd8jpxU=";
+  vendorHash = "sha256-jCJUT7RXXPMgKgP48qip8MxcNB+EkrxUruOAj9WRSQA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,12 +44,12 @@ buildGoModule rec {
       --zsh <($out/bin/gum completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tasty Bubble Gum for your shell";
     homepage = "https://github.com/charmbracelet/gum";
     changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maaslalani ];
     mainProgram = "gum";
   };
 }

@@ -8,7 +8,7 @@
   mailcap,
   buildPackages,
   pkgsBuildTarget,
-  threadsCross,
+  targetPackages,
   testers,
   skopeo,
   buildGo124Module,
@@ -19,28 +19,6 @@ let
 
   skopeoTest = skopeo.override { buildGoModule = buildGo124Module; };
 
-  goarch =
-    platform:
-    {
-      "aarch64" = "arm64";
-      "arm" = "arm";
-      "armv5tel" = "arm";
-      "armv6l" = "arm";
-      "armv7l" = "arm";
-      "i686" = "386";
-      "loongarch64" = "loong64";
-      "mips" = "mips";
-      "mips64el" = "mips64le";
-      "mipsel" = "mipsle";
-      "powerpc64" = "ppc64";
-      "powerpc64le" = "ppc64le";
-      "riscv64" = "riscv64";
-      "s390x" = "s390x";
-      "x86_64" = "amd64";
-      "wasm32" = "wasm";
-    }
-    .${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
-
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
@@ -49,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24.2";
+  version = "1.24.4";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-ncd/+twW2DehvzLZnGJMtN8GR87nsRnt2eexvMBfLgA=";
+    hash = "sha256-WoaoOjH5+oFJC4xUIKw4T9PZWj5x+6Zlx7P5XR3+8rQ=";
   };
 
   strictDeps = true;
@@ -64,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .
@@ -88,22 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.23.patch
   ];
 
-  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
+  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
   # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
   CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
 
-  GOARM = toString (
-    lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]
-  );
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
@@ -189,6 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+    badPlatforms = [
+      # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
+      # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
+      # https://github.com/golang/go/issues/19074 - Dropped support for big-endian POWER < 8, with community pushback
+      # https://github.com/golang/go/issues/73349 - upstream will not accept submissions to fix this
+      "powerpc64-linux"
+    ];
     mainProgram = "go";
   };
 })

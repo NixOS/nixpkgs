@@ -40,7 +40,6 @@
   docbook_xml_dtd_412,
   docbook_xml_dtd_42,
   docbook_xml_dtd_43,
-  openconnect,
   curl,
   meson,
   mesonEmulatorHook,
@@ -52,6 +51,7 @@
   nixosTests,
   systemd,
   udev,
+  udevCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -60,11 +60,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.52.0";
+  version = "1.52.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NW8hoV2lHkIY/U0P14zqYeBnsRFqJc3e5K+d8FBi6S0=";
+    hash = "sha256-ixIsc0k6cvK65SfBJc69h3EWcbkDUtvisXiKupV1rG8=";
   };
 
   outputs = [
@@ -129,13 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       inherit
         iputils
-        openconnect
         ethtool
         gnused
         ;
       inherit runtimeShell;
-      # patch context
-      OUTPUT = null;
     })
 
     # Meson does not support using different directories during build and
@@ -186,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_43
       pythonForDocs
+      udevCheckHook
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -221,6 +219,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${buildPackages.networkmanager.man} $man
   '';
 
+  doInstallCheck = true;
+
   passthru = {
     updateScript = gitUpdater {
       odd-unstable = true;
@@ -237,7 +237,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
     maintainers = with maintainers; [
-      domenkozar
       obadz
     ];
     teams = [ teams.freedesktop ];

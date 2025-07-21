@@ -12,15 +12,15 @@
   makeDesktopItem,
   nix-update-script,
 }:
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "msbuild-structured-log-viewer";
-  version = "2.2.476";
+  version = "2.3.17";
 
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
-    rev = "v${version}";
-    hash = "sha256-HZhfrU7zPRaJWryEexf5/f3V22k5pdNMlVqDhOUw/UM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5kbLUeD/q8BHj1DIJzyvsmkSvLms2E2oOuO+SINzCRA=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -48,10 +48,10 @@ buildDotnetModule (finalAttrs: rec {
 
   postFixup =
     ''
-      wrapDotnetProgram $out/lib/${finalAttrs.pname}/StructuredLogViewer.Avalonia $out/bin/${meta.mainProgram}
+      wrapDotnetProgram $out/lib/msbuild-structured-log-viewer/StructuredLogViewer.Avalonia $out/bin/${finalAttrs.meta.mainProgram}
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/${finalAttrs.pname}.png
+      install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/msbuild-structured-log-viewer.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
@@ -60,15 +60,15 @@ buildDotnetModule (finalAttrs: rec {
       install -Dm444 src/StructuredLogViewer.Avalonia/Info.plist $out/Applications/StructuredLogViewer.app/Contents/Info.plist
       install -Dm444 src/StructuredLogViewer.Avalonia/StructuredLogViewer.icns $out/Applications/StructuredLogViewer.app/Contents/Resources/StructuredLogViewer.icns
       mkdir -p $out/Applications/StructuredLogViewer.app/Contents/MacOS
-      ln -s $out/bin/${meta.mainProgram} $out/Applications/StructuredLogViewer.app/Contents/MacOS/StructuredLogViewer.Avalonia
+      ln -s $out/bin/${finalAttrs.meta.mainProgram} $out/Applications/StructuredLogViewer.app/Contents/MacOS/StructuredLogViewer.Avalonia
     '';
 
   desktopItems = makeDesktopItem {
-    name = finalAttrs.pname;
+    name = "msbuild-structured-log-viewer";
     desktopName = "MSBuild Structured Log Viewer";
     comment = finalAttrs.meta.description;
-    icon = finalAttrs.pname;
-    exec = meta.mainProgram;
+    icon = "msbuild-structured-log-viewer";
+    exec = finalAttrs.meta.mainProgram;
     categories = [ "Development" ];
   };
 

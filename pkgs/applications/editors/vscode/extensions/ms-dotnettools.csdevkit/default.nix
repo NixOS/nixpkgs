@@ -8,25 +8,27 @@
   libz,
   glibc,
   libxml2,
+  libkrb5,
+  patchelf,
 }:
 let
   extInfo = (
     {
       x86_64-linux = {
         arch = "linux-x64";
-        hash = "sha256-NTmo45hhvVp5atYWt3046Fe7AtHouH6UBF/FPUllIQQ=";
+        hash = "sha256-vGHRgaqoxRU14BjmQM68SVdhe6ElvJrp6NUQXkVU5OU=";
       };
       aarch64-linux = {
         arch = "linux-arm64";
-        hash = "sha256-7K7i+4NtoTmwT1a3dIBF7M2oXyqc66Evos8q1B1RWkk=";
+        hash = "sha256-aGRXxUpuOhsxULg7mAe1t04hfwLF5t4bSSthLlz7Mes=";
       };
       x86_64-darwin = {
         arch = "darwin-x64";
-        hash = "sha256-O/bpKFoCqtzwdNjwWA4WfaeFPUdZtfn14opiSXtjD90=";
+        hash = "sha256-e4+rr3k9SYIVH01wG0RxL+sush0rTuvkJu08cctXmYo=";
       };
       aarch64-darwin = {
         arch = "darwin-arm64";
-        hash = "sha256-9kNKHg8lpXf94RT1/oYYeSOX0uHqjpg+zW64NNMQs7A=";
+        hash = "sha256-iOF9aDk9okoZsHvaW4mDOulLPGxVViAk1TQkIH0XK+A=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -36,21 +38,23 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "csdevkit";
     publisher = "ms-dotnettools";
-    version = "1.18.25";
+    version = "1.30.44";
     inherit (extInfo) hash arch;
   };
   sourceRoot = "extension"; # This has more than one folder.
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-    (lib.getLib glibc) # libgcc_s.so.1
-    (lib.getLib libxml2) # libxml2.so.2
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    patchelf
   ];
-  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.getLib openssl) # libopenssl.so.3
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib glibc) # libgcc_s.so.1
     (lib.getLib icu) # libicui18n.so libicuuc.so
+    (lib.getLib libkrb5) # libgssapi_krb5.so
+    (lib.getLib libxml2) # libxml2.so.2
     (lib.getLib libz) # libz.so.1
+    (lib.getLib openssl) # libopenssl.so.3
+    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
   ];
 
   postPatch = ''
@@ -64,21 +68,66 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   preFixup = ''
     (
+      set -euo pipefail
       shopt -s globstar
       shopt -s dotglob
+
+      # Fix all binaries.
       for file in "$out"/**/*; do
-        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.dylib ]] ||
+        if [[ ! -f "$file" || "$file" == *.so || "$file" == *.a || "$file" == *.dylib ]] ||
             (! isELF "$file" && ! isMachO "$file"); then
             continue
         fi
 
         echo Making "$file" executable...
         chmod +x "$file"
+
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''
+          # Add .NET deps if it is an apphost.
+          if grep 'You must install .NET to run this application.' "$file" > /dev/null; then
+            echo "Adding .NET needed libraries to: $file"
+            patchelf \
+              --add-needed libicui18n.so \
+              --add-needed libicuuc.so \
+              --add-needed libgssapi_krb5.so \
+              --add-needed libssl.so \
+              "$file"
+          fi
+        ''}
       done
+
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        # Add the ICU libraries as needed to the globalization DLLs.
+        for file in "$out"/**/{libcoreclr.so,*System.Globalization.Native.so}; do
+          echo "Adding ICU libraries to: $file"
+          patchelf \
+            --add-needed libicui18n.so \
+            --add-needed libicuuc.so \
+            "$file"
+        done
+
+        # Add the Kerberos libraries as needed to the native security DLL.
+        for file in "$out"/**/*System.Net.Security.Native.so; do
+          echo "Adding Kerberos libraries to: $file"
+          patchelf \
+            --add-needed libgssapi_krb5.so \
+            "$file"
+        done
+
+        # Add the OpenSSL libraries as needed to the OpenSSL native security DLL.
+        for file in "$out"/**/*System.Security.Cryptography.Native.OpenSsl.so; do
+          echo "Adding OpenSSL libraries to: $file"
+          patchelf \
+            --add-needed libssl.so \
+            "$file"
+        done
+
+        # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
+        mkdir -p "$out/lib"
+        ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
+      ''}
     )
   '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.csdevkit/changelog";

@@ -11,8 +11,6 @@
   nettle,
   openssl,
   sqlite,
-  stdenv,
-  darwin,
   openssh,
   # Arguments not supplied by callPackage
   pname,
@@ -60,18 +58,11 @@ rustPlatform.buildRustPackage {
       --zsh  shell_completions/_${pname}
   '';
 
-  buildInputs =
-    [
-      nettle
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.IOKit
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    nettle
+    openssl
+    sqlite
+  ];
 
   doCheck = true;
   nativeCheckInputs = [

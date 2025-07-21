@@ -3,31 +3,25 @@
   rustPlatform,
   fetchFromGitHub,
   rust-jemalloc-sys,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.16.7";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "web-infra-dev";
+    owner = "oxc-project";
     repo = "oxc";
-    rev = "oxlint_v${version}";
-    hash = "sha256-bnfo/4hRO9ZT9Rj1NX9o4Z8pbWKux7L08YH+owolYXI=";
+    tag = "oxlint_v${version}";
+    hash = "sha256-+K8hc6uU/p/hT3bkaGPZpVcK9itSGJM9Mdhfw3DSZJw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OdV80+B/H/xMfZDeFw+oaoFLgJrIDsR3mDkfaSw5+W4=";
+  cargoHash = "sha256-D0YEodCzBpf7g3VnKyydEDtjzGUu+XsGc2BpXU4CR6Q=";
 
-  buildInputs =
-    [
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   env.OXC_VERSION = version;
 
@@ -37,12 +31,12 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoTestFlags = cargoBuildFlags;
 
-  meta = with lib; {
-    description = "Suite of high-performance tools for JavaScript and TypeScript written in Rust";
-    homepage = "https://github.com/web-infra-dev/oxc";
-    changelog = "https://github.com/web-infra-dev/oxc/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+  meta = {
+    description = "Collection of JavaScript tools written in Rust";
+    homepage = "https://github.com/oxc-project/oxc";
+    changelog = "https://github.com/oxc-project/oxc/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "oxlint";
   };
 }

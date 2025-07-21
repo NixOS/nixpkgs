@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       supports applying themes to match its appearance to your window
       manager, Gtk, or any other theme.
     '';
-    homepage = "http://gkrellm.srcbox.net";
+    homepage = "https://gkrellm.srcbox.net";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

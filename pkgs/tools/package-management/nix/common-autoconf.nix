@@ -11,6 +11,7 @@
     inherit hash;
   },
   patches ? [ ],
+  knownVulnerabilities ? [ ],
   maintainers ? [
     lib.maintainers.lovesegfault
     lib.maintainers.artturin
@@ -37,7 +38,6 @@ in
   callPackage,
   coreutils,
   curl,
-  darwin,
   docbook_xsl_ns,
   docbook5,
   editline,
@@ -67,13 +67,16 @@ in
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
   util-linuxMinimal,
   xz,
   enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
@@ -113,7 +116,7 @@ let
       "shadowstack"
     ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-    nativeInstallCheckInputs = lib.optional atLeast224 [
+    nativeInstallCheckInputs = lib.optionals atLeast224 [
       git
       man
     ];
@@ -169,9 +172,6 @@ let
       ++ lib.optionals (atLeast225 && enableDocumentation) [
         python3
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Security
-      ]
       ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
         libcpuid
       ]
@@ -180,9 +180,6 @@ let
       ]
       ++ lib.optionals withAWS [
         aws-sdk-cpp
-      ]
-      ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin) [
-        darwin.apple_sdk.libs.sandbox
       ];
 
     propagatedBuildInputs =
@@ -309,7 +306,6 @@ let
       perl-bindings = perl.pkgs.toPerlModule (
         callPackage ./nix-perl.nix {
           nix = self;
-          inherit Security;
         }
       );
 
@@ -344,7 +340,7 @@ let
       '';
       homepage = "https://nixos.org/";
       license = licenses.lgpl21Plus;
-      inherit maintainers teams;
+      inherit knownVulnerabilities maintainers teams;
       platforms = platforms.unix;
       outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
       mainProgram = "nix";

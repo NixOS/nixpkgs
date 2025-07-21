@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  apple-sdk_13,
   cmake,
   coreutils,
+  darwinMinVersionHook,
   libxml2,
   lto ? true,
   makeWrapper,
@@ -17,7 +19,7 @@
   which,
   z3,
   cctools,
-  darwin,
+  procps,
 }:
 
 stdenv.mkDerivation (rec {
@@ -26,7 +28,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchFromGitHub {
     owner = "ponylang";
-    repo = pname;
+    repo = "ponyc";
     rev = version;
     hash = "sha256-4gDv8UWTk0RWVNC4PU70YKSK9fIMbWBsQbHboVls2BA=";
     fetchSubmodules = true;
@@ -48,13 +50,20 @@ stdenv.mkDerivation (rec {
     hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    which
-    python3
-    git
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
+  nativeBuildInputs =
+    [
+      cmake
+      makeWrapper
+      which
+      python3
+      git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Keep in sync with `PONY_OSX_PLATFORM`.
+      apple-sdk_13
+      (darwinMinVersionHook "13.0")
+      cctools.libtool
+    ];
 
   buildInputs = [
     libxml2
@@ -65,10 +74,11 @@ stdenv.mkDerivation (rec {
     [
       # Sandbox disallows network access, so disabling problematic networking tests
       ./disable-networking-tests.patch
+      ./disable-process-tests.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (replaceVars ./fix-darwin-build.patch {
-        libSystem = darwin.Libsystem;
+        apple-sdk = apple-sdk_13;
       })
     ];
 
@@ -94,10 +104,19 @@ stdenv.mkDerivation (rec {
         --replace-fail "https://github.com/google/googletest/archive/refs/tags/v$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
 
-  preBuild = ''
-    make libs build_flags=-j$NIX_BUILD_CORES
-    make configure build_flags=-j$NIX_BUILD_CORES
-  '';
+  preBuild =
+    ''
+      extraFlags=(build_flags=-j$NIX_BUILD_CORES)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      # See this relnote about building on Raspbian:
+      # https://github.com/ponylang/ponyc/blob/0.46.0/.release-notes/0.45.2.md
+      extraFlags+=(pic_flag=-fPIC)
+    ''
+    + ''
+      make libs "''${extraFlags[@]}"
+      make configure "''${extraFlags[@]}"
+    '';
 
   makeFlags = [
     "PONYC_VERSION=${version}"
@@ -109,8 +128,9 @@ stdenv.mkDerivation (rec {
     "-Wno-error=implicit-fallthrough"
   ];
 
-  # make: *** [Makefile:222: test-full-programs-release] Killed: 9
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
+
+  nativeCheckInputs = [ procps ];
 
   installPhase =
     ''

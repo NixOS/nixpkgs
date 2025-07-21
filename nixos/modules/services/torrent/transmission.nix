@@ -366,6 +366,7 @@ in
       };
 
       serviceConfig = {
+        Type = "notify";
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
         ExecStartPre = [
           (

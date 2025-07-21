@@ -47,8 +47,6 @@
   libgudev,
   openexr,
   desktopToDarwinBundle,
-  AppKit,
-  Cocoa,
   gtk-mac-integration-gtk2,
   withPython ? false,
   python2,
@@ -90,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     # (see https://gitlab.gnome.org/GNOME/gimp/-/issues/9080)
     ./force-enable-libheif.patch
   ];
+
+  # error: possibly undefined macro: AM_NLS
+  preAutoreconf = ''
+    cp ${gettext}/share/gettext/m4/nls.m4 m4macros
+  '';
 
   nativeBuildInputs =
     [
@@ -144,8 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
       mypaint-brushes1
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
       gtk-mac-integration-gtk2
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

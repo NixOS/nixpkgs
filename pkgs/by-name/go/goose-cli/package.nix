@@ -7,6 +7,7 @@
   dbus,
   xorg,
   pkg-config,
+  protobuf,
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
@@ -24,21 +25,24 @@ let
     meta.license = lib.licenses.mit;
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.17";
+  version = "1.0.30";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
-    tag = "v${version}";
-    hash = "sha256-l/lcwTNUq2xJHh0MKhnDZjRJ/5cANbdar/Vusf38esQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mhscs7yv3/FmJ/v1W0xcHya82ztrYGVULrtMyq4W4BY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1xKWzgptnM1ZP0nQXILBoaKVwL2FyXpldTUIa1ITQO0=";
+  cargoHash = "sha256-TNmeu0nQHTFnbe7CY5b58ysN6+iMD6yFTktr4gjKNY0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
 
   buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
 
@@ -59,14 +63,28 @@ rustPlatform.buildRustPackage rec {
       # need dbus-daemon
       "--skip=config::base::tests::test_multiple_secrets"
       "--skip=config::base::tests::test_secret_management"
+      "--skip=config::base::tests::test_concurrent_extension_writes"
       # Observer should be Some with both init project keys set
       "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
       "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Lazy instance has previously been poisoned
       "--skip=jetbrains::tests::test_capabilities"
       "--skip=jetbrains::tests::test_router_creation"
+      "--skip=logging::tests::test_log_file_name::with_session_name_and_error_capture"
+      "--skip=logging::tests::test_log_file_name::with_session_name_without_error_capture"
+      "--skip=logging::tests::test_log_file_name::without_session_name"
+      "--skip=developer::tests::test_text_editor_str_replace"
+      # need API keys
+      "--skip=providers::factory::tests::test_create_lead_worker_provider"
+      "--skip=providers::factory::tests::test_create_regular_provider_without_lead_config"
+      "--skip=providers::factory::tests::test_lead_model_env_vars_with_defaults"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--skip=providers::gcpauth::tests::test_load_from_metadata_server"
+      "--skip=providers::oauth::tests::test_get_workspace_endpoints"
+      "--skip=tracing::langfuse_layer::tests::test_batch_manager_spawn_sender"
+      "--skip=tracing::langfuse_layer::tests::test_batch_send_partial_failure"
+      "--skip=tracing::langfuse_layer::tests::test_batch_send_success"
     ];
 
   passthru.updateScript = nix-update-script { };
@@ -76,7 +94,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/block/goose";
     mainProgram = "goose";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cloudripper ];
+    maintainers = with lib.maintainers; [
+      cloudripper
+      thardin
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

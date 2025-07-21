@@ -62,11 +62,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2502.0";
+  version = "8.2506.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-AvoZfSHVGfWiWpKN65OXzTh7pzgrm0SXgrox2PMRggY=";
+    hash = "sha256-bW/QJXyV51Z2XU1YWoM9VN06Dl7rgwi4YqgbNop0u3s=";
   };
 
   nativeBuildInputs = [

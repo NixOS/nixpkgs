@@ -33,9 +33,6 @@
   blas,
   lapack,
   curl,
-  Cocoa,
-  Foundation,
-  libobjc,
   tzdata,
   withRecommendedPackages ? true,
   enableStrictBarrier ? false,
@@ -50,7 +47,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.4.3";
+  version = "4.5.1";
 
   src =
     let
@@ -58,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      sha256 = "sha256-DZPSJEQt6iU8KwhvCI220NPP2bWSzVSW6MshQ+kPyeg=";
+      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
     };
 
   outputs = [
@@ -76,50 +73,44 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
     which
   ];
-  buildInputs =
-    [
-      bzip2
-      gfortran
-      libX11
-      libXmu
-      libXt
-      libXt
-      libjpeg
-      libpng
-      libtiff
-      ncurses
-      pango
-      pcre2
-      readline
-      (texliveSmall.withPackages (
-        ps: with ps; [
-          inconsolata
-          helvetic
-          ps.texinfo
-          fancyvrb
-          cm-super
-          rsfs
-        ]
-      ))
-      xz
-      zlib
-      less
-      texinfo
-      graphviz
-      icu
-      which
-      blas
-      lapack
-      curl
-      tcl
-      tk
-      jdk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Foundation
-      libobjc
-    ];
+  buildInputs = [
+    bzip2
+    gfortran
+    libX11
+    libXmu
+    libXt
+    libXt
+    libjpeg
+    libpng
+    libtiff
+    ncurses
+    pango
+    pcre2
+    readline
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        inconsolata
+        helvetic
+        ps.texinfo
+        fancyvrb
+        cm-super
+        rsfs
+      ]
+    ))
+    xz
+    zlib
+    less
+    texinfo
+    graphviz
+    icu
+    which
+    blas
+    lapack
+    curl
+    tcl
+    tk
+    jdk
+  ];
   strictDeps = true;
 
   patches = [

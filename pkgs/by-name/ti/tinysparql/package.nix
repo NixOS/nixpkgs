@@ -15,8 +15,6 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   vala,
   python3,
-  gi-docgen,
-  graphviz,
   libxml2,
   glib,
   wrapGAppsNoGuiHook,
@@ -28,7 +26,6 @@
   libsoup_3,
   json-glib,
   avahi,
-  systemd,
   dbus,
   man-db,
   writeText,
@@ -37,7 +34,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.8.2";
+  version = "3.9.2";
 
   outputs = [
     "out"
@@ -49,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-u4ZDOGyO3FkaAyBdSg7aZh3N0glEc7/7m725TpNYnLI=";
+    hash = "sha256-FM4DkCQTXhgQIrzOSxqtLgA3fdnH2BK5g5HM/HVtrY4=";
   };
 
   strictDeps = true;
@@ -67,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       gettext
       glib
       wrapGAppsNoGuiHook
-      gi-docgen
-      graphviz
       (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
     ]
     ++ lib.optionals withIntrospection [
@@ -79,22 +74,17 @@ stdenv.mkDerivation (finalAttrs: {
       mesonEmulatorHook
     ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      sqlite
-      icu
-      libsoup_3
-      libuuid
-      json-glib
-      avahi
-      libstemmer
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
-    ];
+  buildInputs = [
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup_3
+    libuuid
+    json-glib
+    avahi
+    libstemmer
+  ];
 
   nativeCheckInputs = [
     dbus
@@ -104,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags =
     [
       "-Ddocs=true"
+      "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
       (lib.mesonEnable "introspection" withIntrospection)
       (lib.mesonEnable "vapi" withIntrospection)
     ]
@@ -118,21 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
       [
         "--cross-file=${crossFile}"
       ]
-    )
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dsystemd_user_services=false"
-    ];
+    );
 
   doCheck = true;
 
   postPatch = ''
-    chmod +x \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
     patchShebangs \
-      utils/data-generators/cc/generate \
-      docs/reference/libtracker-sparql/embed-files.py \
-      docs/reference/libtracker-sparql/generate-svgs.sh
+      utils/data-generators/cc/generate
 
     # File "/build/tinysparql-3.8.0/tests/functional-tests/test_cli.py", line 233, in test_help
     # self.assertIn("TINYSPARQL-IMPORT(1)", output, "Manpage not found")
@@ -155,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       # though, so we need to replace the absolute path with a local one during build.
       # We are using a symlink that will be overridden during installation.
       mkdir -p $out/lib
-      ln -s $PWD/src/libtracker-sparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
+      ln -s $PWD/src/libtinysparql/libtinysparql-3.0${darwinDot0}${extension} $out/lib/libtinysparql-3.0${darwinDot0}${extension}${linuxDot0}
     '';
 
   checkPhase = ''

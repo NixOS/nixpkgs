@@ -2,12 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
 
   # dependencies
   addict,
+  distutils,
   matplotlib,
   numpy,
   opencv4,
@@ -41,10 +43,38 @@ buildPythonPackage rec {
     hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
 
+  patches = [
+    # Explicitly disable weights_only in torch.load calls
+    # https://github.com/open-mmlab/mmengine/pull/1650
+    (fetchpatch {
+      name = "torch-2.6.0-compat.patch";
+      url = "https://github.com/open-mmlab/mmengine/pull/1650/commits/c21b8431b2c625560a3866c65328cff0380ba1f8.patch";
+      hash = "sha256-SLr030IdYD9wM/jPJuZd+Dr1jjFx/5/YkJj/IwhnNQg=";
+    })
+  ];
+
+  postPatch =
+    # Fails in python >= 3.13
+    # exec(compile(f.read(), version_file, "exec")) does not populate the locals() namesp
+    # In python 3.13, the locals() dictionary in a function does not automatically update with
+    # changes made by exec().
+    # https://peps.python.org/pep-0558/
+    ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "return locals()['__version__']" \
+          "return '${version}'"
+    ''
+    + ''
+      substituteInPlace tests/test_config/test_lazy.py \
+        --replace-fail "import numpy.compat" ""
+    '';
+
   build-system = [ setuptools ];
 
   dependencies = [
     addict
+    distutils
     matplotlib
     numpy
     opencv4

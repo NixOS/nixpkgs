@@ -41,6 +41,7 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
@@ -69,7 +70,7 @@ lib:
   sqlite,
   stdenv,
   systemd,
-  util-linux,
+  util-linuxMinimal,
   yq-go,
   zstd,
 }:
@@ -377,7 +378,7 @@ buildGoModule rec {
     ipset
     bridge-utils
     ethtool
-    util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    util-linuxMinimal # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash

@@ -1,29 +1,26 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
   rocksdb,
   testers,
-  surrealdb,
-  darwin,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surrealdb";
-  version = "2.2.2";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
-    tag = "v${version}";
-    hash = "sha256-NUmv/Ue14xrmBCxOkVXvcPmOwAA8L6LLPRu5E5Zkxw0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gZICuvgMOdwa39i+5ETUDuFfBtSiZuuFOYW5pHPkoms=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NkAove8RlLkNI1KnMfJPnoqUswJ22Z2FOcpl05lqpKM=";
+  cargoHash = "sha256-KndVaz7o0kMtMvQf4NK0pNMaC518keWddmGkYtemeWg=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -45,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   doCheck = false;
 
@@ -57,19 +54,19 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
-    package = surrealdb;
+    package = finalAttrs.finalPackage;
     command = "surreal version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       sikmir
       happysalada
       siriobalmelli
     ];
   };
-}
+})

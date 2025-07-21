@@ -27,10 +27,21 @@
   requests,
   stevedore,
 
+  # optional dependencies
+  chardet,
+  citeproc-py,
+  jinja2,
+  markdownify,
+  whoosh,
+
+  # switch for optional dependencies
+  withOptDeps ? false,
+
   # tests
   docutils,
   git,
   pytestCheckHook,
+  pytest-cov-stub,
   sphinx,
   sphinx-click,
 }:
@@ -68,12 +79,17 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-  ];
+  ] ++ lib.optionals withOptDeps optional-dependencies.complete;
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=papis" ""
-  '';
+  optional-dependencies = {
+    complete = [
+      chardet
+      citeproc-py
+      jinja2
+      markdownify
+      whoosh
+    ];
+  };
 
   pythonImportsCheck = [ "papis" ];
 
@@ -81,6 +97,7 @@ buildPythonPackage rec {
     docutils
     git
     pytestCheckHook
+    pytest-cov-stub
     sphinx
     sphinx-click
   ];
@@ -89,7 +106,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "papis"
     "tests"
   ];

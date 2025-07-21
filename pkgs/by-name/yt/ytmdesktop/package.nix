@@ -20,7 +20,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -34,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-QiV7U7LoJWvBqjVm7oVfHIiyw10cLSAk4lCQGO8hXtY=";
+    hash = "sha256-uDm8jDkPwxLa+LUK8fPlJMvXInD7T7B+641YyCgYvnI=c";
   };
 
   patches = [
-    # instead of runnning git during the build process
+    # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
   ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-piHpm7eeOoDmpgc1SmeJ3wLZHZiUZZGu+Pl30qQYqps=";
+    hash = "sha256-bBd5wWr+j3HQY2+VIAATYVdCh+0tIRlLg68bx4z1+Ys=";
   };
 
   nativeBuildInputs = [
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";
-    description = "A Desktop App for YouTube Music";
+    description = "Desktop App for YouTube Music";
     downloadPage = "https://github.com/ytmdesktop/ytmdesktop/releases";
     homepage = "https://ytmdesktop.app/";
     license = lib.licenses.gpl3Only;

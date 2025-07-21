@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
   fetchPypi,
   setuptools,
-  IOKit,
   pytestCheckHook,
   python,
   pythonOlder,
@@ -35,11 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Segfaults on darwin:
@@ -50,7 +43,7 @@ buildPythonPackage rec {
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sandboxing (missing specific errors)
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
     "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
   ];

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "gwcs";
-  version = "0.24.0";
+  version = "0.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "spacetelescope";
     repo = "gwcs";
     tag = version;
-    hash = "sha256-XxC61AzyZt0lVVwOr2yiN0/ldjcq/ABtzNDSQaGo9as=";
+    hash = "sha256-jGO3/qFNL8aovlU/jXIZpk2GHmwZ+o8tSSqnPHgtFqU=";
   };
 
   build-system = [

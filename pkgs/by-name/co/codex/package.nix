@@ -1,80 +1,62 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  nodejs_22, # Node ≥22 is required by codex-cli
-  pnpm_10,
-  makeBinaryWrapper,
-  installShellFiles,
+  nix-update-script,
+  pkg-config,
+  openssl,
   versionCheckHook,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.1.2504251709"; # from codex-cli/package.json
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
-    rev = "103093f79324482020490cb658cc1a696aece3bc";
-    hash = "sha256-GmMQi67HRanGKhiTKX8wgnpUbA1UwkPVe3siU4qC02Y=";
+    tag = "rust-v${finalAttrs.version}";
+    hash = "sha256-rRe0JFEO5ixxrZYDL8kxXDOH0n7lqabkXNNaSlNnQDg=";
   };
 
-  pnpmWorkspaces = [ "@openai/codex" ];
+  sourceRoot = "${finalAttrs.src.name}/codex-rs";
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QIZ3V4NUo1VxJN3cwdQf3S0zwePnwdKKfch0jlIJacU=";
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_10.configHook
-    makeBinaryWrapper
-    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
   ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      pnpmWorkspaces
-      ;
-    hash = "sha256-pPwHjtqqaG+Zqmq6x5o+WCT1H9XuXAqFNKMzevp7wTc=";
-  };
-
-  buildPhase = ''
-    runHook preBuild
-    pnpm --filter @openai/codex run build
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    dest=$out/lib/node_modules/@openai/codex
-    mkdir -p "$dest"
-    cp -r codex-cli/dist codex-cli/bin codex-cli/package.json "$dest"
-    cp LICENSE README.md "$dest"
-
-    mkdir -p $out/bin
-    makeBinaryWrapper ${nodejs_22}/bin/node $out/bin/codex --add-flags "$dest/bin/codex.js"
-
-    # Install shell completions
-    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      $out/bin/codex completion bash > codex.bash
-      $out/bin/codex completion zsh > codex.zsh
-      $out/bin/codex completion fish > codex.fish
-      installShellCompletion codex.{bash,zsh,fish}
-    ''}
-
-    runHook postInstall
-  '';
+  checkFlags = [
+    "--skip=keeps_previous_response_id_between_tasks" # Requires network access
+    "--skip=retries_on_early_close" # Requires network access
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^rust-v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Lightweight coding agent that runs in your terminal";
     homepage = "https://github.com/openai/codex";
+    changelog = "https://raw.githubusercontent.com/openai/codex/refs/tags/rust-v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.malo ];
     mainProgram = "codex";
+    maintainers = with lib.maintainers; [
+      malo
+      delafthi
+    ];
+    platforms = lib.platforms.unix;
   };
 })

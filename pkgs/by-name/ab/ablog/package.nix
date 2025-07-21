@@ -39,13 +39,10 @@ python3Packages.buildPythonApplication rec {
     defusedxml
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
-    "--rootdir"
-    "src/ablog"
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+  pytestFlags = [
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning"
+    "--rootdir=src/ablog"
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
   # assert "post 1" not in html

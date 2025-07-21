@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "algia";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-dpvBlFI6xmQOwui7Ma1ewIoxgFctG9fK+pLhjK/71XI=";
   };
 

@@ -17,10 +17,11 @@
   libuchardet,
   libusb1,
   libwebp,
+  nix-update-script,
   optipng,
   piper-tts,
   pkg-config,
-  podofo,
+  podofo_0_10,
   poppler-utils,
   python3Packages,
   qt6,
@@ -35,11 +36,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.2.100";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lUHnaorIUwoac1YgYimxF8KTJOPSUiJg5BKC+hFy0lc=";
+    hash = "sha256-5uexcItbBgO2Tv52clS0N+IhplqpKwq43p2yqSxANek=";
   };
 
   patches = [
@@ -89,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
     libusb1
     piper-tts
-    podofo
+    podofo_0_10
     poppler-utils
     qt6.qtbase
     qt6.qtwayland
@@ -155,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo_0_10}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
     export PIPER_TTS_DIR=${piper-tts}/bin
@@ -227,6 +228,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
+  };
 
   meta = {
     homepage = "https://calibre-ebook.com";

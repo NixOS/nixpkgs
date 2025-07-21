@@ -29,25 +29,31 @@
   pytest-xdist,
   pytestCheckHook,
   syrupy,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.56";
+  version = "0.3.66";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-gsjYr22Phb71oKN4iVGsi6r1iETDhFHCKKOiwp0SuLU=";
+    hash = "sha256-k9B2ApNyX3w6RTt/XdOl2FvU87NuZSi96vvfJOnBltM=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "tenacity"
+  ];
 
   dependencies = [
     jsonpatch
@@ -78,16 +84,15 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   passthru = {
     tests.pytest = langchain-core.overridePythonAttrs (_: {
       doCheck = true;
     });
 
-    updateScript = {
-      command = [ ./update.sh ];
-      supportedFeatures = [ "commit" ];
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-core==";
     };
   };
 
@@ -135,7 +140,7 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

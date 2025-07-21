@@ -53,13 +53,7 @@
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
   enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tcl,
-  tk,
   tkinter,
-
-  # Ghostscript
-  enableGhostscript ? true,
-  ghostscript,
 
   # Qt
   enableQt ? false,
@@ -72,9 +66,6 @@
   # nbagg
   enableNbagg ? false,
   ipykernel,
-
-  # darwin
-  Cocoa,
 
   # required for headless detection
   libX11,
@@ -89,7 +80,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.1";
+  version = "3.10.3";
   pname = "matplotlib";
   pyproject = true;
 
@@ -97,7 +88,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
+    hash = "sha256-L4LSxbt66TqqpM1CrKZdds5jdvgzBPo6YwtWmsonTfA=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -130,17 +121,10 @@ buildPythonPackage rec {
       freetype
       qhull
     ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
     ++ lib.optionals enableGtk3 [
       cairo
       gtk3
-    ]
-    ++ lib.optionals enableTk [
-      libX11
-      tcl
-      tk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+    ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];

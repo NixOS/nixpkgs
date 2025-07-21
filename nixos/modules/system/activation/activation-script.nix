@@ -90,7 +90,6 @@ let
       getent
       stdenv.cc.libc # nscd in update-users-groups.pl
       shadow
-      nettools # needed for hostname
       util-linux # needed for mount and mountpoint
     ];
 
@@ -256,7 +255,7 @@ in
       description = ''
         A program that writes a bootloader installation script to the path passed in the first command line argument.
 
-        See `nixos/modules/system/activation/switch-to-configuration.pl`.
+        See `pkgs/by-name/sw/switch-to-configuration-ng/src/src/main.rs`.
       '';
       type = types.unique {
         message = ''

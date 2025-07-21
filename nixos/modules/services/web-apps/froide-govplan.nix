@@ -163,9 +163,9 @@ in
     systemd = {
       services = {
 
-        postgresql.serviceConfig.ExecStartPost =
+        postgresql-setup.serviceConfig.ExecStartPost =
           let
-            sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+            sqlFile = pkgs.writeText "froide-govplan-postgis-setup.sql" ''
               CREATE EXTENSION IF NOT EXISTS postgis;
             '';
           in
@@ -182,16 +182,17 @@ in
             StateDirectory = lib.mkIf (cfg.dataDir == "/var/lib/froide-govplan") "froide-govplan";
             User = "govplan";
             Group = "govplan";
+            TimeoutStartSec = "5m";
           };
           after = [
-            "postgresql.service"
+            "postgresql.target"
             "network.target"
             "systemd-tmpfiles-setup.service"
           ];
           wantedBy = [ "multi-user.target" ];
           environment =
             {
-              PYTHONPATH = pkg.pythonPath;
+              PYTHONPATH = "${pkg.pythonPath}:${pkg}/${pkg.python.sitePackages}";
               GDAL_LIBRARY_PATH = "${pkgs.gdal}/lib/libgdal.so";
               GEOS_LIBRARY_PATH = "${pkgs.geos}/lib/libgeos_c.so";
             }

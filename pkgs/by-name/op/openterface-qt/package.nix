@@ -22,12 +22,12 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "openterface-qt";
-  version = "0.3.9";
+  version = "0.3.17";
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
     rev = "${final.version}";
-    hash = "sha256-hJxouOB4J0E0tm2Vr0OcqSMi4CDpjckPPMd/dWDsu4k=";
+    hash = "sha256-kXDiQINbP7D2qUqKUAZXEW2iJqKEH/AqMSE2zU+jRHg=";
   };
   nativeBuildInputs = [
     copyDesktopItems
@@ -55,6 +55,8 @@ stdenv.mkDerivation (final: {
     cp ${udevRules} $out/etc/udev/rules.d/60-openterface.rules
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   desktopItems = [
     (makeDesktopItem {

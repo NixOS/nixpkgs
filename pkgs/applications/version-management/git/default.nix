@@ -37,12 +37,11 @@
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
-  withManual ? true,
+  # Disable the manual since libxslt doesn't seem to parse the files correctly.
+  withManual ? !stdenv.hostPlatform.useLLVM,
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
-  Security,
-  CoreServices,
   nixosTests,
   withLibsecret ? false,
   pkg-config,
@@ -61,7 +60,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.49.0";
+  version = "2.50.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [
     CGI
@@ -90,11 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
         }.tar.xz"
       else
         "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-YYGQz1kLfp9sEfkfI7HSZ82Yw6szuFBBbYdY+LWoVig=";
+    hash = "sha256-3/PAAOQArOOmO4pvizt2uI7P3/1FBKBKukJINyzewEU=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   hardeningDisable = [ "format" ];
 
@@ -117,7 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix references to gettext introduced by ./git-sh-i18n.patch
       substituteInPlace git-sh-i18n.sh \
           --subst-var-by gettext ${gettext}
-
+    ''
+    + lib.optionalString doInstallCheck ''
       # ensure we are using the correct shell when executing the test scripts
       patchShebangs t/*.sh
     ''
@@ -160,17 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
       tk
     ]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreServices
-    ]
     ++ lib.optionals withLibsecret [
       glib
       libsecret
     ];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS =
+  env.NIX_LDFLAGS =
     lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
     + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
 
@@ -238,7 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Need to build the main Git documentation before building the
       # contrib/subtree documentation, as the latter depends on the
       # asciidoc.conf file created by the former.
-      make -C Documentation "''${flagsArray[@]}"
+      make -C Documentation PERL_PATH=${lib.getExe buildPackages.perlPackages.perl} "''${flagsArray[@]}"
     ''
     + ''
       make -C contrib/subtree "''${flagsArray[@]}" all ${lib.optionalString withManual "doc"}
@@ -265,22 +262,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall =
     lib.optionalString osxkeychainSupport ''
+      mkdir -p $out/libexec/git-core
+      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
+
+      # ideally unneeded, but added for backwards compatibility
       mkdir -p $out/bin
-      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
+      ln -s $out/libexec/git-core/git-credential-osxkeychain $out/bin/
+
       rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
     ''
     + lib.optionalString withLibsecret ''
+      mkdir -p $out/libexec/git-core
+      ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/libexec/git-core/
+
+      # ideally unneeded, but added for backwards compatibility
       mkdir -p $out/bin
-      ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
+      ln -s $out/libexec/git-core/git-credential-libsecret $out/bin/
+
       rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
     '';
 
   postInstall =
     ''
-      notSupported() {
-        unlink $1 || true
-      }
-
       # Set up the flags array for make in the same way as for the main install
       # phase from stdenv.
       local flagsArray=(
@@ -298,7 +301,6 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
-      ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
       # only readme, developed in another repo
       rm -r contrib/hooks/multimail
@@ -340,8 +342,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString perlSupport ''
       # wrap perl commands
-      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
+      makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/libexec/git-core/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
+      # ideally unneeded, but added for backwards compatibility
+      ln -s $out/libexec/git-core/git-credential-netrc $out/bin/
+
       wrapProgram $out/libexec/git-core/git-cvsimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
@@ -374,8 +379,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-svn by notification script
-          notSupported $out/libexec/git-core/git-svn
+          rm $out/libexec/git-core/git-svn
         ''
     )
 
@@ -388,14 +392,13 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-send-email by notification script
-          notSupported $out/libexec/git-core/git-send-email
+          rm $out/libexec/git-core/git-send-email
         ''
     )
 
     + lib.optionalString withManual ''
       # Install man pages
-      make "''${flagsArray[@]}" cmd-list.made install install-html \
+      make "''${flagsArray[@]}" install install-html \
         -C Documentation
     ''
 
@@ -412,14 +415,12 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # Don't wrap Tcl/Tk, replace them by notification scripts
           for prog in bin/gitk libexec/git-core/git-gui; do
-            notSupported "$out/$prog"
+            rm "$out/$prog"
           done
         ''
     )
     + lib.optionalString osxkeychainSupport ''
-      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
       # enable git-credential-osxkeychain on darwin if desired (default)
       mkdir -p $out/etc
       cat > $out/etc/gitconfig << EOF
@@ -450,6 +451,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstallCheck =
     ''
+      # Some tests break with high concurrency
+      # https://github.com/NixOS/nixpkgs/pull/403237
+      if ((NIX_BUILD_CORES > 32)); then
+        NIX_BUILD_CORES=32
+      fi
+
       installCheckFlagsArray+=(
         GIT_PROVE_OPTS="--jobs $NIX_BUILD_CORES --failures --state=failed,save"
         GIT_TEST_INSTALLED=$out/bin
@@ -488,7 +495,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       # Flaky tests:
+      disable_test t0027-auto-crlf
+      disable_test t1451-fsck-buffer
+      disable_test t5319-multi-pack-index
       disable_test t6421-merge-partial-clone
+      disable_test t7504-commit-msg-hook
 
       # Fails reproducibly on ZFS on Linux with formD normalization
       disable_test t0021-conversion
@@ -553,10 +564,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      primeos
       wmertens
       globin
       kashw2
+      me-and
+      philiptaron
     ];
     mainProgram = "git";
   };

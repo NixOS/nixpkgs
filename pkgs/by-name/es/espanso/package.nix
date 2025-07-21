@@ -23,13 +23,12 @@
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
-  espanso,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -130,7 +129,7 @@ rustPlatform.buildRustPackage {
       '';
 
   passthru.tests.version = testers.testVersion {
-    package = espanso;
+    package = finalAttrs.finalPackage;
     # remove when updating to a release version
     version = "2.2.1";
   };
@@ -151,4 +150,4 @@ rustPlatform.buildRustPackage {
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';
   };
-}
+})

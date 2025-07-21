@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2025.4.0";
+  version = "2025.6.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = version;
-    hash = "sha256-PKF7wP/ueLLhV8k3nMUm/c5fkg+7CwRf1oLnx0qbcA0=";
+    hash = "sha256-eCNGNEoKljIKCvEU220/OUIxc+i4I+4wVJEjjmWROew=";
   };
 
   vendorHash = null;
@@ -77,13 +77,13 @@ buildGoModule rec {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";
     homepage = "https://www.cloudflare.com/products/tunnel";
     changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [
       bbigras
       enorris
       thoughtpolice

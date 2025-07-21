@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  strictDeps = true;
+
   passthru =
     {
       updateScript = nix-update-script { };
@@ -46,9 +48,13 @@ stdenv.mkDerivation rec {
       driver = "lib/psqlodbcw.so";
     };
 
-  configureFlags = [
-    "--with-libpq=${lib.getDev libpq}"
-  ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
+  configureFlags =
+    [
+      "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
+      "--with-libpq=${lib.getDev libpq}"
+    ]
+    ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+    ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
   meta = with lib; {
     homepage = "https://odbc.postgresql.org/";

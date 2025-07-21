@@ -1,7 +1,5 @@
 {
   lib,
-  stdenv,
-  darwin,
   rustPlatform,
   buildNpmPackage,
   fetchFromGitHub,
@@ -37,8 +35,6 @@ rustPlatform.buildRustPackage {
   preBuild = ''
     cp -pr --reflink=auto -- ${ui} ui/dist
   '';
-
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   meta = {
     description = "SQL Database Explorer [SQLite, libSQL, PostgreSQL, MySQL/MariaDB, ClickHouse, Microsoft SQL Server]";

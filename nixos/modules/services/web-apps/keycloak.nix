@@ -602,9 +602,9 @@ in
         ];
 
       systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
-        after = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
         before = [ "keycloak.service" ];
-        bindsTo = [ "postgresql.service" ];
+        bindsTo = [ "postgresql.target" ];
         path = [ config.services.postgresql.package ];
         serviceConfig = {
           Type = "oneshot";
@@ -631,6 +631,7 @@ in
           psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
         '';
+        enableStrictShellChecks = true;
       };
 
       systemd.services.keycloakMySQLInit = mkIf createLocalMySQL {
@@ -662,6 +663,7 @@ in
             echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
           ) | mysql -N
         '';
+        enableStrictShellChecks = true;
       };
 
       systemd.tmpfiles.settings."10-keycloak" =
@@ -688,7 +690,7 @@ in
             if createLocalPostgreSQL then
               [
                 "keycloakPostgreSQLInit.service"
-                "postgresql.service"
+                "postgresql.target"
               ]
             else if createLocalMySQL then
               [
@@ -699,7 +701,7 @@ in
               [ ];
           secretPaths = catAttrs "_secret" (collect isSecret cfg.settings);
           mkSecretReplacement = file: ''
-            replace-secret ${hashString "sha256" file} $CREDENTIALS_DIRECTORY/${baseNameOf file} /run/keycloak/conf/keycloak.conf
+            replace-secret ${hashString "sha256" file} "$CREDENTIALS_DIRECTORY/${baseNameOf file}" /run/keycloak/conf/keycloak.conf
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
         in
@@ -760,11 +762,12 @@ in
             ''
             + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
               mkdir -p /run/keycloak/ssl
-              cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
+              cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
             ''
             + ''
               kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
             '';
+          enableStrictShellChecks = true;
         };
 
       services.postgresql.enable = mkDefault createLocalPostgreSQL;

@@ -37,6 +37,7 @@ in
   libX11,
 
   vmopts ? null,
+  forceWayland ? false,
 }:
 
 let
@@ -77,14 +78,19 @@ let
       extraWrapperArgs ? [ ],
       extraLdPath ? [ ],
       extraBuildInputs ? [ ],
+      extraTests ? { },
     }:
     mkJetBrainsProductCore {
       inherit
         pname
         jdk
-        extraWrapperArgs
         extraBuildInputs
         ;
+      extraWrapperArgs =
+        extraWrapperArgs
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
+          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
+        ];
       extraLdPath = extraLdPath ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libGL ];
       src =
         if fromSource then
@@ -100,6 +106,9 @@ let
       inherit (ideInfo."${pname}") wmClass product;
       productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
       meta = mkMeta ideInfo."${pname}".meta fromSource;
+      passthru.tests = extraTests // {
+        plugins = callPackage ./plugins/tests.nix { ideName = pname; };
+      };
       libdbm =
         if ideInfo."${pname}".meta.isOpenSource then
           communitySources."${pname}".libdbm

@@ -106,11 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "293";
+  version = "301";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-DZLeZhhWHcBGbO0lCucs5+6kXfwKk71Iwxhjej0ClLE=";
+    hash = "sha256-piTdP812LgcxvvgvUOKUrkxVXCbclyQW8dp84beT7H4=";
   };
 
   outputs = [
@@ -259,7 +260,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Always show more information when tests fail
     "-vv"
   ];
@@ -277,10 +278,12 @@ python.pkgs.buildPythonApplication rec {
 
       # Fails because it fails to determine llvm version
       "test_item3_deflate_llvm_bitcode"
+
+      # Flaky test on Linux and Darwin
+      "test_non_unicode_filename"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable flaky tests on Darwin
-      "test_non_unicode_filename"
       "test_listing"
       "test_symlink_root"
 
@@ -315,7 +318,7 @@ python.pkgs.buildPythonApplication rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories
@@ -329,13 +332,13 @@ python.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dezgeg
       danielfullmer
       raitobezarius
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "diffoscope";
   };
 }

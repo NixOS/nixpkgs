@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bridge for UDP tunnels, Ethernet, TAP, and VMnet interfaces";
     longDescription = ''
       uBridge is a simple application to create user-land bridges between
@@ -53,12 +53,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/GNS3/ubridge";
     changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "ubridge";
-    maintainers = with maintainers; [
-      primeos
+    maintainers = with lib.maintainers; [
       anthonyroussel
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

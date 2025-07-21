@@ -6,16 +6,18 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "veikk-linux-driver";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "jlam55555";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "11mg74ds58jwvdmi3i7c4chxs6v9g09r9ll22pc2kbxjdnrp8zrn";
+    repo = "veikk-linux-driver";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-Nn90s22yrynYFYLSlBN4aRvdISPsxBFr21yiohs5r4Y=";
   };
+
+  patches = [ ./fix-6.12-build.patch ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -26,16 +28,20 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/veikk
     install -Dm755 veikk.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/veikk
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux driver for VEIKK-brand digitizers";
     homepage = "https://github.com/jlam55555/veikk-linux-driver/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nicbk ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nicbk ];
     broken = kernel.kernelOlder "4.19";
   };
-}
+})

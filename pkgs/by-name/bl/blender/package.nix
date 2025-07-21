@@ -1,12 +1,8 @@
 {
-  Cocoa,
-  CoreGraphics,
-  ForceFeedback,
-  OpenAL,
-  OpenGL,
   SDL,
   addDriverRunpath,
   alembic,
+  apple-sdk_15,
   blender,
   boost,
   brotli,
@@ -53,6 +49,7 @@
   llvmPackages,
   makeWrapper,
   mesa,
+  nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
   openal,
   opencollada-blender,
@@ -63,7 +60,7 @@
   openjpeg,
   openpgl,
   opensubdiv,
-  openvdb_11,
+  openvdb,
   openxr-loader,
   pkg-config,
   potrace,
@@ -104,20 +101,21 @@ let
   });
 
   optix = fetchzip {
-    # URL from https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/commit/333add667b43255dcb011215a2d2af48281e83cf#9b9baac1eb9b72790eef5540a1685306fc43fd6c_30_30
-    url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
-    hash = "sha256-aMrp0Uff4c3ICRn4S6zedf6Q4Mc0/duBhKwKgYgMXVU=";
+    # Look at upstream Blender BuildBot logs to determine the current version,
+    # see Git blame here for historical details
+    url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
+    hash = "sha256-ca08XetwaUYC9foeP5bff9kcDfuFgEzopvjspn2s8RY=";
   };
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.1";
+  version = "4.4.3";
 
-  srcs = fetchzip {
+  src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5MsJ7UFpwwtaq905CiTkas/qPYOaeiacSSl3qu9h5w0=";
+    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
   };
 
   patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
@@ -136,8 +134,8 @@ stdenv'.mkDerivation (finalAttrs: {
                   '${lib.getLib brotli}/lib/libbrotlidec.dylib'
     '')
     + (lib.optionalString hipSupport ''
-      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
     '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
@@ -255,7 +253,7 @@ stdenv'.mkDerivation (finalAttrs: {
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
-      openvdb_11
+      openvdb
       potrace
       pugixml
       python3
@@ -281,12 +279,10 @@ stdenv'.mkDerivation (finalAttrs: {
         ]
       else
         [
-          Cocoa
-          CoreGraphics
-          ForceFeedback
-          OpenAL
-          OpenGL
           SDL
+          # blender chooses Metal features based on runtime system version
+          # lets use the latest SDK and let Blender handle falling back on older systems.
+          apple-sdk_15
           brotli
           llvmPackages.openmp
           sse2neon
@@ -414,6 +410,12 @@ stdenv'.mkDerivation (finalAttrs: {
         }], check=True)  # noqa: E501
       '';
     };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--url=https://projects.blender.org/blender/blender"
+      ];
+    };
   };
 
   meta = {
@@ -432,7 +434,6 @@ stdenv'.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    broken = stdenv.hostPlatform.isDarwin; # fails due to too-old SDK, using newer SDK fails to compile
     maintainers = with lib.maintainers; [
       amarshall
       veprbl

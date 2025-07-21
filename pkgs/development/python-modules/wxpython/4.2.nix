@@ -30,7 +30,7 @@
   libglvnd,
   libgbm,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK,
   xorgproto,
 
@@ -92,7 +92,7 @@ buildPythonPackage rec {
       libXxf86vm
       libglvnd
       libgbm
-      webkitgtk_4_0
+      webkitgtk_4_1
       xorgproto
     ];
 

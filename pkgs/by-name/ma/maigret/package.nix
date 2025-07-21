@@ -3,17 +3,17 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  python3,
+  python312,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
-    repo = pname;
+    repo = "maigret";
     tag = "v${version}";
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
@@ -27,7 +27,9 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python312.pkgs; [ setuptools ];
+
+  dependencies = with python312.pkgs; [
     aiodns
     aiohttp
     aiohttp-socks
@@ -68,20 +70,19 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  __darwinAllowLocalNetworking = true;
-
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python312.pkgs; [
     pytest-httpserver
     pytest-asyncio
     pytestCheckHook
   ];
 
   pythonRelaxDeps = true;
+
   pythonRemoveDeps = [ "future-annotations" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # DeprecationWarning: There is no current event loop
-    "-W ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests =
@@ -100,14 +101,16 @@ python3.pkgs.buildPythonApplication rec {
       "test_asyncio_progressbar_executor"
     ];
 
-  pythonImportsCheck = [
-    "maigret"
-  ];
+  pythonImportsCheck = [ "maigret" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      fab
+      thtrf
+    ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

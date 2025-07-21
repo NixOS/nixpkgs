@@ -12,11 +12,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "invoice2data";
   version = "0.4.4";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "invoice-x";
-    repo = pname;
+    repo = "invoice2data";
     rev = "v${version}";
     hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
   };
@@ -30,16 +30,17 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
     setuptools-git
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     dateparser
     pdfminer-six
     pillow
     pyyaml
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
 
   makeWrapperArgs = [

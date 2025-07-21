@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VYt2so2k3Rk3sLSV1Tf1G2pESYiXygrKr9Koop8ChCg=";
   };
 
+  patches = [
+    ./autoconf.patch
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     intltool

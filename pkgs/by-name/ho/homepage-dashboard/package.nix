@@ -7,7 +7,6 @@
   python3,
   stdenv,
   cctools,
-  darwin,
   lib,
   nixosTests,
   enableLocalIcons ? false,
@@ -29,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
-  version = "1.2.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B6hgQWAILfZNRFN4APX/3T2LcVj2FQPS/CAUdUA+drU=";
+    hash = "sha256-45Z2XS+ij6J6WSCb9/oDQa2eC9wKu+D7ncYwcB6K5gQ=";
   };
 
   # This patch ensures that the cache implementation respects the env
@@ -51,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    hash = "sha256-1WsiSG+dZVpd28bBjf3EYn95sxMCXsQPd27/otWW0nI=";
+    fetcherVersion = 1;
+    hash = "sha256-aPkXHKG3vDsfYqYx9q9+2wZhuFqmPcXdoBqOfAvW9oA=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -112,6 +112,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

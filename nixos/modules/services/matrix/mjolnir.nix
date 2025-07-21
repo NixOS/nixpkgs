@@ -40,7 +40,7 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/lib/node_modules/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 

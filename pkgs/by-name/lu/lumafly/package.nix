@@ -68,7 +68,7 @@ buildDotnetModule rec {
   ];
 
   meta = {
-    description = "A cross platform mod manager for Hollow Knight written in Avalonia";
+    description = "Cross platform mod manager for Hollow Knight written in Avalonia";
     homepage = "https://themulhima.github.io/Lumafly/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "Lumafly";

@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.14";
+  version = "1.8.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-IOR6Dbbg/HK4/1re0BEWafwmpBMnQJCo5ojDMB2KgV4=";
+    hash = "sha256-neo7A+bjAhuvqYY4YA3O0v5aWUKV91mqajI8gpY0QYs=";
   };
 
   patches =
@@ -84,8 +84,9 @@ buildPythonPackage rec {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
-            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
+            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
         }
@@ -154,6 +155,7 @@ buildPythonPackage rec {
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
   };
 }

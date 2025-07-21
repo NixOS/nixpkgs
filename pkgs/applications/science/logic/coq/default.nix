@@ -19,6 +19,7 @@
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  rocqPackages, # for versions >= 9.0 that are transition shims on top of Rocq
   ncurses,
   buildIde ? null, # default is true for Coq < 8.14 and false for Coq >= 8.14
   glib,
@@ -27,7 +28,6 @@
   makeDesktopItem,
   copyDesktopItems,
   csdp ? null,
-  rocq-core, # for versions >= 9.0 that are transition shims on top of Rocq
   version,
   coq-version ? null,
 }@args:
@@ -77,6 +77,7 @@ let
     "8.20.0".sha256 = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
     "8.20.1".sha256 = "sha256-nRaLODPG4E3gUDzGrCK40vhl4+VhPyd+/fXFK/HC3Ig=";
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
+    "9.1+rc1".sha256 = "sha256-GShKHQ9EdvyNe9WlkzF6KLYybc5dPeVrh4bpkVy6pY4=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -147,7 +148,6 @@ let
   self = stdenv.mkDerivation {
     pname = "coq";
     inherit (fetched) version src;
-    exact-version = args.version;
 
     passthru = {
       inherit coq-version;
@@ -160,6 +160,7 @@ let
         findlib
         num
         ;
+      rocqPackages = lib.optionalAttrs (coqAtLeast "8.21") rocqPackages;
       emacsBufferSetup = pkgs: ''
         ; Propagate coq paths to children
         (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
@@ -333,7 +334,7 @@ if coqAtLeast "8.21" then
   self.overrideAttrs (o: {
     # coq-core is now a shim for rocq
     propagatedBuildInputs = o.propagatedBuildInputs ++ [
-      (rocq-core.override { version = o.exact-version; })
+      rocqPackages.rocq-core
     ];
     buildPhase = ''
       runHook preBuild

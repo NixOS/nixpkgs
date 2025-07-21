@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   pkg-config,
+  buildPackages,
   cmake,
   extra-cmake-modules,
   wayland-scanner,
@@ -29,7 +30,6 @@
   libthai,
   libdatrie,
   xcbutilkeysyms,
-  pcre,
   xcbutil,
   xcbutilwm,
   xcb-imdkit,
@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -89,13 +88,16 @@ stdenv.mkDerivation rec {
     libsepol
     libXdmcp
     libxkbcommon
-    pcre
     xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit
     xkeyboard_config
     libxkbfile
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
   ];
 
   strictDeps = true;

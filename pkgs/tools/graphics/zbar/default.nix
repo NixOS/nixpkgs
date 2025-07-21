@@ -25,7 +25,6 @@
   enableDbus ? false,
   libintl,
   libiconv,
-  Foundation,
   bash,
   python3,
   argp-standalone,
@@ -84,7 +83,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Foundation
     ]
     ++ lib.optionals enableDbus [
       dbus
@@ -107,6 +105,11 @@ stdenv.mkDerivation rec {
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
   ];
+
+  # fix iconv linking on macOS
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LDFLAGS="-liconv"
+  '';
 
   # Note: postConfigure instead of postPatch in order to include some
   # autoconf-generated files. The template files for the autogen'd scripts are

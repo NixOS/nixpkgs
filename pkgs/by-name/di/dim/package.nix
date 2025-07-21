@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   buildNpmPackage,
-  darwin,
   makeWrapper,
   ffmpeg,
   git,
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -s ${./package-lock.json} package-lock.json
     '';
 
-    npmDepsHash = "sha256-6oSm3H6RItHOrBIvP6uvR7sBboBRWFuP3VwU38GMfgQ=";
+    npmDepsHash = "sha256-yYTRoxKnTF9y3RA4fuDlVYxv9d37Fc905TYVc/gPIRw=";
 
     installPhase = ''
       runHook preInstall
@@ -46,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  patches = [
+  cargoPatches = [
     # Upstream uses a 'ffpath' function to look for config directory and
     # (ffmpeg) binaries in the same directory as the binary. Patch it to use
     # the working dir and PATH instead.
@@ -55,6 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Bump the first‐party nightfall dependency to the latest Git
     # revision for FFmpeg >= 6 support.
     ./bump-nightfall.patch
+
+    # Bump the time dependency to fix build failure with rust 1.80+
+    # https://github.com/Dusk-Labs/dim/pull/614
+    ./bump-time.patch
 
     # Upstream has some unused imports that prevent things from compiling...
     # Remove for next release.
@@ -65,6 +68,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T0v7pajg3UfRnVOx3ie6rOf+vJSW2l7yoCsJrtxIwcg=";
+
   postPatch = ''
     substituteInPlace dim-core/src/lib.rs \
       --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
@@ -72,7 +78,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
     substituteInPlace dim-database/src/lib.rs \
       --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
-    ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
   postConfigure = ''
@@ -85,24 +90,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git
   ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ]
-    ++ lib.optional libvaSupport libva;
+  buildInputs = [ sqlite ] ++ lib.optional libvaSupport libva;
 
   buildFeatures = lib.optional libvaSupport "vaapi";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mp4-0.8.2" = "sha256-OtVRtOTU/yoxxoRukpUghpfiEgkKoJZNflMQ3L26Cno=";
-      "nightfall-0.3.12-rc4" = "sha256-AbSuLe3ySOla3NB+mlfHRHqHuMqQbrThAaUZ747GErE=";
-    };
-  };
 
   checkFlags = [
     # Requires network

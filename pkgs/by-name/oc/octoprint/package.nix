@@ -16,11 +16,29 @@ let
   py = python3.override {
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
+      (
+
+        self: super: {
+          # fix tornado.httputil.HTTPInputError: Multiple host headers not allowed
+          tornado = super.tornado.overridePythonAttrs (oldAttrs: {
+            version = "6.4.2";
+            format = "setuptools";
+            pyproject = null;
+            src = fetchFromGitHub {
+              owner = "tornadoweb";
+              repo = "tornado";
+              tag = "v6.4.2";
+              hash = "sha256-qgJh8pnC1ALF8KxhAYkZFAc0DE6jHVB8R/ERJFL4OFc=";
+            };
+            doCheck = false;
+          });
+        })
       # Built-in dependency
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FileCheck";
           version = "2024.11.12";
+          format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -37,6 +55,7 @@ let
         octoprint-firmwarecheck = self.buildPythonPackage rec {
           pname = "OctoPrint-FirmwareCheck";
           version = "2021.10.11";
+          format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
@@ -73,13 +92,14 @@ let
       (self: super: {
         octoprint = self.buildPythonPackage rec {
           pname = "OctoPrint";
-          version = "1.11.0";
+          version = "1.11.2";
+          format = "setuptools";
 
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
             rev = version;
-            hash = "sha256-HvIMssPpRhzG//eyf0SfM5ddTUMr82F4ZS7c9tp88qw=";
+            hash = "sha256-D6lIEa7ee44DWavMLaXIo7RsKwaMneYqOBQk626pI20=";
           };
 
           propagatedBuildInputs =
@@ -132,7 +152,7 @@ let
               zeroconf
               zipstream-ng
               class-doc
-              pydantic_1
+              pydantic
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ py.pkgs.appdirs ]
             ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ octoprint-pisupport ];

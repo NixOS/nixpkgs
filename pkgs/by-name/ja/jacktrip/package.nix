@@ -5,6 +5,7 @@
   pkg-config,
   help2man,
   libjack2,
+  libsamplerate,
   dbus,
   qt6,
   meson,
@@ -16,7 +17,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.1";
+  version = "2.7.1";
   pname = "jacktrip";
 
   src = fetchFromGitHub {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "jacktrip";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-WXUqMKCfZ/ZQLKpfye5cwju4IynitcBPEJwlQ2/+aoo=";
+    hash = "sha256-47CgvaNgAr3PP61vS28hU4jTljukFGbGkAYJVHNoR9U=";
   };
 
   preConfigure = ''
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtwayland
     libjack2
+    libsamplerate
     dbus
   ];
 
@@ -55,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
     pkg-config
   ];
-
-  # Can't link to libsamplerate
-  # https://github.com/jacktrip/jacktrip/issues/1380
-  mesonFlags = [ "-Dlibsamplerate=disabled" ];
 
   qmakeFlags = [ "jacktrip.pro" ];
 

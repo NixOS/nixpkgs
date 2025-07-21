@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk-pyocd";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   # Latest tag missing on GitHub
   src = fetchPypi {
     pname = "spsdk_pyocd";
     inherit version;
-    hash = "sha256-yVQtX2T1l0TmFwaZDSFCXMuoFxTalfOr3b4CCTeteKI=";
+    hash = "sha256-OcRGYZ1U5jQyRv2OSKwS3uJpvRQRW6Fbm/rDxlzyxPg=";
   };
 
   build-system = [

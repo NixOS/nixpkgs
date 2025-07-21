@@ -2,6 +2,7 @@
   aiosqlite,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   flask,
   flit-core,
   lib,
@@ -20,6 +21,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-LpdPp5Gp74DSJqD1DJqwNeaMKdN5pEAUkxnKGYZcVis=";
   };
+
+  patches = [
+    # fix python3.13 compat
+    (fetchpatch2 {
+      url = "https://github.com/pallets-eco/flask-sqlalchemy-lite/commit/b4117beaa6caa0a5945d6e3451db8b80dc4cc8cf.patch?full_index=1";
+      hash = "sha256-zCeUWB3iuKqco030pULaRpRsIOpSRz9+VYxI/RQhIyw=";
+    })
+  ];
 
   build-system = [ flit-core ];
 

@@ -3,31 +3,32 @@
   stdenv,
   fetchurl,
   gettext,
+  meson,
+  ninja,
   pkg-config,
   libxfce4util,
   xfce4-panel,
   libxfce4ui,
   glib,
   gtk3,
-  hicolor-icon-theme,
   gitUpdater,
 }:
 
-let
-  category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-timer-plugin";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-rPTIYa+IYIuegCp2pLBYRr0wGJ4AhegmaAzBebbfTNM=";
+    url = "mirror://xfce/src/panel-plugins/xfce4-timer-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-timer-plugin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-HTrDqixDRUAMAlZCd452Q6q0EEdiK6+c3AC7rHjon5k=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     gettext
+    meson
+    ninja
     pkg-config
   ];
 
@@ -37,21 +38,18 @@ stdenv.mkDerivation rec {
     xfce4-panel
     glib
     gtk3
-    hicolor-icon-theme
   ];
 
-  hardeningDisable = [ "format" ];
-
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
-    rev-prefix = "${pname}-";
+    url = "https://gitlab.xfce.org/panel-plugins/xfce4-timer-plugin";
+    rev-prefix = "xfce4-timer-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-timer-plugin";
     description = "Simple countdown and alarm plugin for the Xfce panel";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    teams = [ teams.xfce ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

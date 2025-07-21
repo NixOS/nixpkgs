@@ -1,28 +1,20 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 with haskellLib;
 
 let
   inherit (pkgs) lib;
 
-  jailbreakWhileRevision =
-    rev:
-    overrideCabal (old: {
-      jailbreak =
-        assert old.revision or "0" == toString rev;
-        true;
-    });
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc96.${pkg.pname} may no longer be needed" pkg;
 
 in
 
-self: super:
 {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
@@ -62,12 +54,18 @@ self: super:
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   xhtml = null;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   #
   # Version deviations from Stackage LTS
@@ -78,7 +76,8 @@ self: super:
   th-extras = doJailbreak super.th-extras;
 
   # not in Stackage, needs to match ghc-lib
-  ghc-tags = doDistribute self.ghc-tags_1_7;
+  # since expression is generated for 9.8, ghc-lib dep needs to be added manually
+  ghc-tags = doDistribute (addBuildDepends [ self.ghc-lib ] self.ghc-tags_1_8);
 
   #
   # Too strict bounds without upstream fix
@@ -95,13 +94,11 @@ self: super:
   cabal-install = doJailbreak super.cabal-install;
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
-  newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
+  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
-  lifted-base = dontCheck super.lifted-base;
-  hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
   hiedb = dontCheck super.hiedb;
@@ -124,9 +121,6 @@ self: super:
   #   A factor of 100 is insufficient, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # Doctest comments have bogus imports.
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
   # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
   # is merged and in a release that's being tracked.
   ascii-predicates = appendPatch (pkgs.fetchpatch {
@@ -145,6 +139,9 @@ self: super:
     sha256 = "sha256-buw1UeW57CFefEfqdDUraSyQ+H/NvCZOv6WF2ORiYQg=";
   }) super.ascii-numbers;
 
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
@@ -158,6 +155,9 @@ self: super:
       })
     ];
   }) super.ConfigFile;
+
+  # https://github.com/NixOS/nixpkgs/pull/367998#issuecomment-2598941240
+  libtorch-ffi-helper = unmarkBroken (doDistribute super.libtorch-ffi-helper);
 
   # Compatibility with core libs of GHC 9.6
   # Jailbreak to lift bound on time
@@ -187,6 +187,9 @@ self: super:
     ;
 
   singletons-base = dontCheck super.singletons-base;
+
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = addBuildDepend self.extra super.ghc-exactprint_1_7_1_0;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 //

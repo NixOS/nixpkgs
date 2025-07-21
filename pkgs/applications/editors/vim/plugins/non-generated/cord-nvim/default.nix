@@ -7,26 +7,25 @@
   vimUtils,
 }:
 let
-  version = "2.2.3";
+  version = "2.2.7";
   src = fetchFromGitHub {
     owner = "vyfor";
     repo = "cord.nvim";
     tag = "v${version}";
-    hash = "sha256-MhUjQxwATAGxIC8ACNDFDm249GzX4Npq3S+sHoUMuos=";
+    hash = "sha256-SONErPOIaRltx51+GCsGtR0FDSWp/36x3lDbYLSMxXM=";
   };
   cord-server = rustPlatform.buildRustPackage {
     pname = "cord";
-    version = "2.2.3";
-    inherit src;
+    inherit src version;
 
     # The version in .github/server-version.txt differs from the one in Cargo.toml
     postPatch = ''
       substituteInPlace .github/server-version.txt \
-        --replace-fail "2.0.0-beta.30" "${version}"
+        --replace-fail "2.2.6" "${version}"
     '';
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-hKt9d2u/tlD7bgo49O8oHDLljRvad9dEpGdFt+LH6Ec=";
+    cargoHash = "sha256-14u3rhpDYNKZ4YLoGp6OPeeXDo3EzGYO3yhE9BkDSC0=";
 
     # cord depends on nightly features
     RUSTC_BOOTSTRAP = 1;

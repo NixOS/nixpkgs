@@ -17,7 +17,7 @@
   ./update-from-overlay
 
   It will update both melpa and elpa packages using
-  https://github.com/nix-community/emacs-overlay. It's almost instantenous and
+  https://github.com/nix-community/emacs-overlay. It's almost instantaneous and
   formats commits for you.
 */
 
@@ -810,12 +810,6 @@ let
           osx-dictionary =
             if pkgs.stdenv.hostPlatform.isDarwin then
               super.osx-dictionary.overrideAttrs (old: {
-                buildInputs =
-                  old.buildInputs
-                  ++ (with pkgs.darwin.apple_sdk.frameworks; [
-                    CoreServices
-                    Foundation
-                  ]);
                 postBuild =
                   (old.postBuild or "")
                   + ''
@@ -834,8 +828,11 @@ let
             else
               super.osx-dictionary;
 
+          # keep-sorted start block=yes newline_separated=yes
           # https://github.com/skeeto/at-el/issues/9
           "@" = ignoreCompilationErrorIfOlder super."@" "20240923.1318";
+
+          "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
 
           abgaben = addPackageRequires (mkHome super.abgaben) [ self.mu4e ];
 
@@ -853,9 +850,6 @@ let
 
           # Optimizer error: too much on the stack
           ack-menu = ignoreCompilationError super.ack-menu;
-
-          # https://github.com/skeeto/emacs-aio/issues/31
-          aio = ignoreCompilationError super.aio;
 
           # https://github.com/gongo/airplay-el/issues/2
           airplay = addPackageRequires super.airplay [ self.request-deferred ];
@@ -888,13 +882,13 @@ let
 
           auctex-latexmk = mkHome super.auctex-latexmk;
 
-          auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
-
           # missing optional dependencies
           auto-complete-auctex = addPackageRequires (mkHome super.auto-complete-auctex) [ self.auctex ];
 
           # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
           auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
+
+          auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
 
           auto-virtualenv = super.auto-virtualenv.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1153,6 +1147,8 @@ let
           # missing optional dependencies
           ekg = addPackageRequires super.ekg [ self.denote ];
 
+          el-secretario-mu4e = addPackageRequires super.el-secretario-mu4e [ self.mu4e ];
+
           elfeed = super.elfeed.overrideAttrs (attrs: {
             postPatch =
               attrs.postPatch or ""
@@ -1176,16 +1172,15 @@ let
             ];
           });
 
-          el-secretario-mu4e = addPackageRequires super.el-secretario-mu4e [ self.mu4e ];
-
           embark-vc = buildWithGit super.embark-vc;
 
           # https://github.com/nubank/emidje/issues/23
           emidje = addPackageRequires super.emidje [ self.pkg-info ];
 
+          emms-player-mpv-jp-radios = ignoreCompilationError super.emms-player-mpv-jp-radios;
+
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
-          emms-player-mpv-jp-radios = ignoreCompilationError super.emms-player-mpv-jp-radios;
 
           # missing optional dependencies
           # https://github.com/isamert/empv.el/pull/96
@@ -1279,17 +1274,26 @@ let
 
           gh-notify = buildWithGit super.gh-notify;
 
-          "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
+          # https://gitlab.com/emacs-stuff/git-commit-insert-issue/-/issues/24
+          git-commit-insert-issue = addPackageRequires super.git-commit-insert-issue [ self.glab ];
 
           # https://github.com/nlamirault/emacs-gitlab/issues/68
           gitlab = addPackageRequires super.gitlab [ self.f ];
 
+          # https://github.com/TxGVNN/gitlab-pipeline/issues/8
+          gitlab-pipeline = addPackageRequires super.gitlab-pipeline [ self.glab ];
+
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
+
+          gnosis = mkHome super.gnosis;
 
           go = ignoreCompilationError super.go; # elisp error
 
           graphene = ignoreCompilationError super.graphene; # elisp error
+
+          # https://github.com/ppareit/graphviz-dot-mode/issues/85
+          graphviz-dot-mode = addPackageRequires super.graphviz-dot-mode [ self.flycheck ];
 
           greader = ignoreCompilationError super.greader; # elisp error
 
@@ -1316,6 +1320,9 @@ let
 
           helm-ext = ignoreCompilationError super.helm-ext; # elisp error
 
+          # TODO report to upstream
+          helm-flycheck = fixRequireHelmCore super.helm-flycheck;
+
           # https://github.com/iory/emacs-helm-ghs/issues/1
           helm-ghs = addPackageRequires super.helm-ghs [ self.helm-ghq ];
 
@@ -1324,9 +1331,6 @@ let
             self.helm
             self.magit
           ];
-
-          # TODO report to upstream
-          helm-flycheck = fixRequireHelmCore super.helm-flycheck;
 
           # https://github.com/yasuyk/helm-git-grep/issues/54
           helm-git-grep = addPackageRequires super.helm-git-grep [ self.helm ];
@@ -1361,7 +1365,7 @@ let
           hyperbole = ignoreCompilationError (addPackageRequires (mkHome super.hyperbole) [ self.el-mock ]); # elisp error
 
           # needs non-existent "browser database directory" during compilation
-          # TODO report to upsteam about missing dependency websocket
+          # TODO report to upstream about missing dependency websocket
           ibrowse = ignoreCompilationError (addPackageRequires super.ibrowse [ self.websocket ]);
 
           # elisp error and missing optional dependencies
@@ -1374,7 +1378,7 @@ let
 
           indium = mkHome super.indium;
 
-          # TODO report to upsteam
+          # TODO report to upstream
           inlineR = addPackageRequires super.inlineR [ self.ess ];
 
           # https://github.com/duelinmarkers/insfactor.el/issues/7
@@ -1457,6 +1461,9 @@ let
             self.auto-complete
             self.flycheck
           ];
+
+          # https://gitlab.com/arvidnl/magit-gitlab/-/issues/8
+          magit-gitlab = addPackageRequires super.magit-gitlab [ self.glab ];
 
           # missing optional dependencies
           magnatune = addPackageRequires super.magnatune [ self.helm ];
@@ -1553,28 +1560,14 @@ let
 
           org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
-          # needs newer org than the Eamcs 29.4 builtin one
+          # TODO report to upstream
+          org-kindle = addPackageRequires super.org-kindle [ self.dash ];
+
+          # needs newer org than the Emacs 29.4 builtin one
           org-link-beautify = addPackageRequires super.org-link-beautify [
             self.org
             self.qrencode
           ];
-
-          # TODO report to upstream
-          org-kindle = addPackageRequires super.org-kindle [ self.dash ];
-
-          org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
-
-          # https://github.com/ichernyshovvv/org-timeblock/issues/65
-          org-timeblock = markBroken super.org-timeblock;
-
-          org-trello = ignoreCompilationError super.org-trello; # elisp error
-
-          # Requires xwidgets compiled into emacs, so mark this package
-          # as broken if emacs hasn't been compiled with the flag.
-          org-xlatex = if self.emacs.withXwidgets then super.org-xlatex else markBroken super.org-xlatex;
-
-          # Optimizer error: too much on the stack
-          orgnav = ignoreCompilationError super.orgnav;
 
           org-noter = super.org-noter.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1595,15 +1588,6 @@ let
 
           org-noter-pdftools = mkHome super.org-noter-pdftools;
 
-          # elisp error and missing optional dependencies
-          org-ref = ignoreCompilationError super.org-ref;
-
-          # missing optional dependencies
-          org-roam-bibtex = addPackageRequires super.org-roam-bibtex [
-            self.helm-bibtex
-            self.ivy-bibtex
-          ];
-
           org-pdftools = mkHome super.org-pdftools;
 
           org-projectile = super.org-projectile.overrideAttrs (
@@ -1622,6 +1606,29 @@ let
 
           # https://github.com/colonelpanic8/org-project-capture/issues/66
           org-projectile-helm = addPackageRequires super.org-projectile-helm [ self.helm-org ];
+
+          # elisp error and missing optional dependencies
+          org-ref = ignoreCompilationError super.org-ref;
+
+          # missing optional dependencies
+          org-roam-bibtex = addPackageRequires super.org-roam-bibtex [
+            self.helm-bibtex
+            self.ivy-bibtex
+          ];
+
+          org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
+
+          # https://github.com/ichernyshovvv/org-timeblock/issues/65
+          org-timeblock = markBroken super.org-timeblock;
+
+          org-trello = ignoreCompilationError super.org-trello; # elisp error
+
+          # Requires xwidgets compiled into emacs, so mark this package
+          # as broken if emacs hasn't been compiled with the flag.
+          org-xlatex = if self.emacs.withXwidgets then super.org-xlatex else markBroken super.org-xlatex;
+
+          # Optimizer error: too much on the stack
+          orgnav = ignoreCompilationError super.orgnav;
 
           origami-predef = ignoreCompilationError super.origami-predef; # elisp error
 
@@ -1783,9 +1790,6 @@ let
           # optional dependency spamfilter is not on any ELPA
           wanderlust = ignoreCompilationError (addPackageRequires super.wanderlust [ self.shimbun ]);
 
-          # https://github.com/nicklanasa/xcode-mode/issues/28
-          xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];
-
           weechat = ignoreCompilationError super.weechat; # elisp error
 
           weechat-alert = ignoreCompilationError super.weechat-alert; # elisp error
@@ -1794,16 +1798,19 @@ let
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
+          # https://github.com/nicklanasa/xcode-mode/issues/28
+          xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];
+
           xenops = mkHome super.xenops;
 
           # missing optional dependencies
           xmlunicode = addPackageRequires super.xmlunicode [ self.helm ];
 
-          # https://github.com/canatella/xwwp/issues/18
-          xwwp-follow-link-ivy = addPackageRequires super.xwwp-follow-link-ivy [ self.ivy ];
-
           # https://github.com/canatella/xwwp/issues/19
           xwwp-follow-link-helm = addPackageRequires super.xwwp-follow-link-helm [ self.helm ];
+
+          # https://github.com/canatella/xwwp/issues/18
+          xwwp-follow-link-ivy = addPackageRequires super.xwwp-follow-link-ivy [ self.ivy ];
 
           yara-mode = ignoreCompilationError super.yara-mode; # elisp error
 
@@ -1824,6 +1831,8 @@ let
 
           # missing optional dependencies
           zotxt = addPackageRequires super.zotxt [ self.org-noter ];
+
+          # keep-sorted end
         };
 
     in

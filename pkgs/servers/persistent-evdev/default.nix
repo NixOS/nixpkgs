@@ -4,6 +4,7 @@
   fetchFromGitHub,
   evdev,
   pyudev,
+  udevCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,12 @@ buildPythonPackage rec {
     pyudev
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   postPatch = ''
     patchShebangs bin/persistent-evdev.py
   '';
@@ -30,15 +37,16 @@ buildPythonPackage rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/persistent-evdev.py $out/bin
 
     mkdir -p $out/etc/udev/rules.d
     cp udev/60-persistent-input-uinput.rules $out/etc/udev/rules.d
-  '';
 
-  # has no tests
-  doCheck = false;
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/aiberia/persistent-evdev";

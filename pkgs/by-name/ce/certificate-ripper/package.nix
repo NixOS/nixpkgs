@@ -5,18 +5,18 @@
   buildGraalvmNativeImage,
 }:
 
-let
+buildGraalvmNativeImage (finalAttrs: {
   pname = "certificate-ripper";
   version = "2.4.1";
 
-  jar = maven.buildMavenPackage {
-    pname = "${pname}-jar";
-    inherit version;
+  src = maven.buildMavenPackage {
+    pname = "certificate-ripper-jar";
+    inherit (finalAttrs) version;
 
     src = fetchFromGitHub {
       owner = "Hakky54";
       repo = "certificate-ripper";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-qQ5BHH+DT1sGNDGzSbclqc6+byBxyP16qvm3k9E/Yks=";
     };
 
@@ -46,13 +46,6 @@ let
       install -Dm644 target/crip.jar $out
     '';
   };
-in
-buildGraalvmNativeImage {
-  inherit pname version;
-
-  src = jar;
-
-  executable = "crip";
 
   # Copied from pom.xml
   extraNativeImageBuildArgs = [
@@ -62,10 +55,11 @@ buildGraalvmNativeImage {
   ];
 
   meta = {
-    changelog = "https://github.com/Hakky54/certificate-ripper/releases/tag/${jar.src.tag}";
+    changelog = "https://github.com/Hakky54/certificate-ripper/releases/tag/${finalAttrs.version}";
     description = "CLI tool to extract server certificates";
     homepage = "https://github.com/Hakky54/certificate-ripper";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tomasajt ];
+    mainProgram = "crip";
   };
-}
+})

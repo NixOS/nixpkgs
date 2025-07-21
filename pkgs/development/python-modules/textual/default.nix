@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "3.1.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-emF6LpjVCgxC+Cf+LhFrawc3rxfMnZtyijmoVg0ZJbQ=";
+    hash = "sha256-rVDr4Snp5qnErxWRM9yoxnzzX8gg8nD3RbBkL1rmgqI=";
   };
 
   build-system = [ poetry-core ];
@@ -79,7 +79,7 @@ buildPythonPackage rec {
     "test_textual_env_var"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Some tests in groups require state from previous tests
     # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
     "--dist=loadgroup"
@@ -95,5 +95,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
+    # https://github.com/Textualize/textual/issues/5868
+    broken = true;
   };
 }

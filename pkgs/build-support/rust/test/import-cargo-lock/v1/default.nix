@@ -1,22 +1,13 @@
-{ lib, rustPlatform }:
-let
-  fs = lib.fileset;
-in
+{ rustPlatform }:
+
 rustPlatform.buildRustPackage {
   pname = "v1";
   version = "0.1.0";
 
-  src = fs.toSource {
-    root = ./.;
-    fileset = fs.unions [
-      ./Cargo.toml
-      ./Cargo.lock
-      ./src
-    ];
-  };
+  src = ./package;
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = ./package/Cargo.lock;
   };
 
   doInstallCheck = true;

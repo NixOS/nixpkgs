@@ -1,6 +1,4 @@
 {
-  lib,
-  esbuild,
   buildNpmPackage,
 
   pname,
@@ -12,8 +10,6 @@
 buildNpmPackage {
   inherit version src npmDepsHash;
   pname = "${pname}-frontend";
-
-  nativeBuildInputs = [ esbuild ];
 
   buildPhase = ''
     runHook preBuild
@@ -37,6 +33,5 @@ buildNpmPackage {
 
   env = {
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = 1;
-    ESBUILD_BINARY_PATH = lib.getExe esbuild;
   };
 }

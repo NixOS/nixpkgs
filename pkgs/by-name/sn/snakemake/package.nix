@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "9.3.3";
+  version = "9.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
     tag = "v${version}";
-    hash = "sha256-XmKwK52njnREOogI/kSIaMoZSbYmMGXiL0tPmJvVutA=";
+    hash = "sha256-cSFqPSLeM7hw1bxQZ2FhlHUP+O3iyrwBz4+Jz90Zck8=";
   };
 
   postPatch = ''
@@ -88,7 +88,7 @@ python3Packages.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/tests.py"
     "tests/test_expand.py"
     "tests/test_io.py"

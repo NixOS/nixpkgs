@@ -9,19 +9,19 @@
   makeWrapper,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kickoff";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "j0ru";
     repo = "kickoff";
-    rev = "v${version}";
-    hash = "sha256-q/+Ik8L58LxOllpEosYyvD38RJb+NIQHslYpgGSwjKc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-V4MkVjg5Q8eAJ80V/4SvEIwjVy35/HVewaR1caYLguw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iTTwclBbmOALjMnT89w6k8Ix8HKTbBOxKHVgePbbXkA=";
+  cargoHash = "sha256-bkum6NOQL0LVsLvOmKljFHE86ZU3lLDR8+I3wL0Efmk=";
 
   libPath = lib.makeLibraryPath [
     wayland
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/kickoff" --prefix LD_LIBRARY_PATH : "${libPath}"
+    wrapProgram "$out/bin/kickoff" --prefix LD_LIBRARY_PATH : "${finalAttrs.libPath}"
   '';
 
   meta = with lib; {
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ pyxels ];
     platforms = platforms.linux;
   };
-}
+})

@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "6.5.0";
+  version = "6.5.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-UOF0/RBceuRX6AtI1p5qqHhbRDAhA7i0+seOrkAFFgI=";
+    hash = "sha256-xLlWQaoKC+/jgDD9sBikh5Z1QqDuCFcMulo0vqxJM7k=";
   };
 
   postPatch = ''

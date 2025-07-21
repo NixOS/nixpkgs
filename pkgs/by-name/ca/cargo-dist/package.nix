@@ -7,39 +7,33 @@
   bzip2,
   xz,
   zstd,
-  stdenv,
-  darwin,
   git,
   rustup,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.28.0";
+  version = "0.28.1-prerelease.2";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-0mKCwb7nvl8BRtQyweItkMT0PrKRGTvpB9Acgro7QSM=";
+    hash = "sha256-aO8pQ1JTazHPVUOP7qNm2qZbXlL0n1MBsdD18UePTOs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Aoz+H817jeWkZt1NwcF5SVQsjbk4CRIhUQeq4A2nxM8=";
+  cargoHash = "sha256-7rt/E51D+ciIyVaX56tK82bbps9TKlesU0PP+aFS9iM=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    xz
+    zstd
+  ];
 
   nativeCheckInputs = [
     git

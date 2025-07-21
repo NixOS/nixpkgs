@@ -11,18 +11,17 @@
   openssl,
   snappy,
   zlib,
-  darwin,
 }:
 
 buildPecl rec {
   pname = "mongodb";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-php-driver";
     rev = version;
-    hash = "sha256-o4fy46oh3iWLAcszcFo1m5GdalQs6OswT+OQTYo2cZc=";
+    hash = "sha256-qvylwn4wHBWUcyqGWKUt7MMmTsttDQGmN5ySj1pHnkU=";
     fetchSubmodules = true;
   };
 
@@ -37,8 +36,6 @@ buildPecl rec {
       pcre2
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.Libsystem
       libiconv
     ];
 

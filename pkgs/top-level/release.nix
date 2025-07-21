@@ -19,7 +19,7 @@
   system ? builtins.currentSystem,
   officialRelease ? false,
   # The platform doubles for which we build Nixpkgs.
-  supportedSystems ? import ../../ci/supportedSystems.nix,
+  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
     "aarch64-apple-darwin"
@@ -37,13 +37,15 @@
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
+      allowAliases = false;
       allowUnfree = false;
       inHydra = true;
       # Exceptional unsafe packages that we still build and distribute,
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_4-1.4.6"
+        "kanidm_1_5-1.5.0"
+        "kanidmWithSecretProvisioning_1_5-1.5.0"
       ];
     };
 
@@ -85,6 +87,7 @@ let
     id
     isDerivation
     optionals
+    recursiveUpdate
     ;
 
   inherit (release-lib.lib.attrsets) unionOfDisjoint;
@@ -94,8 +97,15 @@ let
     "aarch64"
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
-  nonPackageJobs = {
-    tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+  nonPackageJobs = rec {
+    tarball = import ./make-tarball.nix {
+      inherit
+        pkgs
+        lib-tests
+        nixpkgs
+        officialRelease
+        ;
+    };
 
     release-checks = import ./nixpkgs-basic-release-checks.nix {
       inherit pkgs nixpkgs supportedSystems;
@@ -103,7 +113,20 @@ let
 
     manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
     metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-    lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
+    lib-tests = import ../../lib/tests/release.nix {
+      pkgs = import nixpkgs (
+        recursiveUpdate
+          (recursiveUpdate {
+            inherit system;
+            config.allowUnsupportedSystem = true;
+          } nixpkgsArgs)
+          {
+            config.permittedInsecurePackages = nixpkgsArgs.config.permittedInsecurePackages or [ ] ++ [
+              "nix-2.3.18"
+            ];
+          }
+      );
+    };
     pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
     darwin-tested =
@@ -251,11 +274,7 @@ let
             jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
           */
         ]
-        # FIXME: the aarch64-darwin stdenvBootstrapTools are broken
-        #  due to some locale impurity changing in macOS 15.4
-        ++ release-lib.lib.filter (j: j.system != "aarch64-darwin") (
-          collect isDerivation jobs.stdenvBootstrapTools
-        )
+        ++ collect isDerivation jobs.stdenvBootstrapTools
         ++ optionals supportDarwin.x86_64 [
           jobs.stdenv.x86_64-darwin
           jobs.cargo.x86_64-darwin
@@ -369,6 +388,7 @@ let
               "ghc96"
               "ghc98"
               "ghc910"
+              "ghc912"
             ]
             (compilerName: {
               inherit (packagePlatforms pkgs.haskell.packages.${compilerName})

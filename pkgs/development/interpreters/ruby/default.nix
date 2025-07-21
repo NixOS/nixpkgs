@@ -17,9 +17,7 @@
   bison,
   autoconf,
   libiconv,
-  libobjc,
   libunwind,
-  Foundation,
   buildEnv,
   bundler,
   bundix,
@@ -121,9 +119,7 @@ let
           bundler,
           bundix,
           libiconv,
-          libobjc,
           libunwind,
-          Foundation,
           makeBinaryWrapper,
           buildRubyGem,
           defaultGemConfig,
@@ -185,9 +181,7 @@ let
             ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
             ++ ops stdenv.hostPlatform.isDarwin [
               libiconv
-              libobjc
               libunwind
-              Foundation
             ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
@@ -213,7 +207,7 @@ let
               # When using a baseruby, ruby always sets "libdir" to the build
               # directory, which nix rejects due to a reference in to /build/ in
               # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compliation.
+              # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
             ];
 
@@ -222,8 +216,7 @@ let
           cargoDeps =
             if yjitSupport then
               rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) src;
-                sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
+                inherit (finalAttrs) src cargoRoot;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
@@ -435,14 +428,14 @@ in
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "7" "";
-    hash = "sha256-nDfDsSKIx67CDKEhznaEW+W7XXdmKiSRllGq8dEshig=";
+    version = rubyVersion "3" "3" "8" "";
+    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "3" "";
-    hash = "sha256-VaTNHcvlyifPZeiak1pILCuyKEgyk5JmVRwOxotDf0Y=";
+    version = rubyVersion "3" "4" "5" "";
+    hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 }

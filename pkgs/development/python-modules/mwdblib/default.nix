@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "mwdblib";
     tag = "v${version}";
     hash = "sha256-+hh7SJFITpLumIuzNgBbXtFh+26tUG66UFv6DLDk5ag=";
   };

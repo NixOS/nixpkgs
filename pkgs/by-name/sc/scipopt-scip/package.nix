@@ -11,7 +11,7 @@
   scipopt-papilo,
   scipopt-zimpl,
   ipopt,
-  tbb_2021_11,
+  tbb_2021,
   boost,
   gfortran,
   criterion,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.1";
+  version = "9.2.2";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-xYxbMZYYqFNInlct8Ju0SrksfJlwV9Q+AHjxq7xhfAs=";
+    hash = "sha256-gxR308XrlmuUym/ujwGcD9a7Z+Z7vQNHaK4zO/PWPBQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gmp
     readline
     zlib
-    tbb_2021_11
+    tbb_2021
     boost
     gfortran
     criterion

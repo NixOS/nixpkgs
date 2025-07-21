@@ -6,7 +6,6 @@
   makeWrapper,
   nix-update-script,
   versionCheckHook,
-  darwin,
   libsecret,
   nodejs,
   perl,
@@ -15,16 +14,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "filen-cli";
-  version = "0.0.33";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
     owner = "FilenCloudDienste";
     repo = "filen-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-piGXcPUwJDOg8EAYML0BiSPRM+1LogU8s2BXtBud5ww=";
+    hash = "sha256-iISW9EAk8haWUCh9I8qHhrBKLqHeBUC8sWA0MnXqQSA=";
   };
 
-  npmDepsHash = "sha256-4GdipHnaqv3LrejMXF73duNyZKgD/0ApzUjiI/QQ30g=";
+  npmDepsHash = "sha256-0DpiUjUFc0ThzP6/qrSEebKDq2fnr/CpcmtPFaIVHhU=";
 
   inherit nodejs;
 
@@ -42,12 +41,7 @@ buildNpmPackage (finalAttrs: {
     ];
 
   # for keytar
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
   postPatch = ''
     # The version string is substituted during publishing:

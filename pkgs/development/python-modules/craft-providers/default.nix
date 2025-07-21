@@ -16,11 +16,12 @@
   freezegun,
   pytest-subprocess,
   logassert,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.2.0";
+  version = "2.3.1";
 
   pyproject = true;
 
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-HCt6xdUu8+6CtkLeUrY2KYnULLwLLobDDm4O1DAiZrc=";
+    hash = "sha256-MeQOqw0F4OwaooHHrUh3qITTOFNXG1Qg1oJcYxRQTz0=";
   };
 
   patches = [
@@ -75,14 +76,10 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
-
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # Relies upon "logassert" python package which isn't in nixpkgs

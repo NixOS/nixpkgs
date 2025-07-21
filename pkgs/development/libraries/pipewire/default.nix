@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   buildPackages,
   fetchFromGitLab,
   python3,
@@ -27,7 +28,6 @@
   vulkan-headers,
   vulkan-loader,
   webrtc-audio-processing,
-  webrtc-audio-processing_1,
   ncurses,
   readline, # meson can't find <7 as those versions don't have a .pc file
   lilv,
@@ -69,19 +69,15 @@
 }:
 
 let
-  webrtc-audio-processings = lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-    webrtc-audio-processing_1
-    webrtc-audio-processing
-  ];
-
   modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
   libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
   ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
+  webrtcAudioProcessingSupport = lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.1";
+  version = "1.4.6";
 
   outputs = [
     "out"
@@ -97,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
+    sha256 = "sha256-Hk43rKrKCJA6njQ9ap/Pje9AQKygrDc+GTlimaMh/pg=";
   };
 
   patches = [
@@ -155,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       epoll-shim
       freebsd.libstdthreads
     ]
-    ++ lib.take 1 webrtc-audio-processings
+    ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional ldacbtSupport ldacbt
     ++ lib.optional libcameraSupport libcamera
@@ -194,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
-    (lib.mesonEnable "echo-cancel-webrtc" (webrtc-audio-processings != [ ]))
+    (lib.mesonEnable "echo-cancel-webrtc" webrtcAudioProcessingSupport)
     (lib.mesonEnable "libcamera" (lib.meta.availableOn stdenv.hostPlatform libcamera))
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)
@@ -243,6 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
+  doInstallCheck = true;
 
   postUnpack = ''
     patchShebangs ${finalAttrs.src.name}/doc/*.py
@@ -253,7 +250,12 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pw-jack" "$jack"
   '';
 
-  passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.pipewire;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
@@ -264,6 +266,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       kranzes
       k900
+    ];
+    pkgConfigModules = [
+      "libpipewire-0.3"
+      "libspa-0.2"
     ];
   };
 })

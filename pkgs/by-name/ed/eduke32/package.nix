@@ -9,23 +9,17 @@
   copyDesktopItems,
   alsa-lib,
   flac,
-  gtk2,
   libvorbis,
   libvpx,
   libGL,
   SDL2,
   SDL2_mixer,
-  darwin,
+  xorg,
   graphicsmagick,
+  unstableGitUpdater,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AGL
-    Cocoa
-    GLUT
-    OpenGL
-    ;
   wrapper = "eduke32-wrapper";
   swWrapper = "voidsw-wrapper";
   furyWrapper = "fury-wrapper";
@@ -33,14 +27,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2025-04-11";
+  version = "0-unstable-2025-07-04";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "b8759847124c2c53a165a02efef4a0c778674baf";
-    hash = "sha256-PudO6EKCh6UpoY6GT/J0hkVteKNIAO4Q454jIzaegMg=";
+    rev = "388752735c68456b89d8acffcb836e6802308007";
+    hash = "sha256-QQ0qKY/ZK0SwxMkZ76792w7iCO+ZpGWGJutHJW1e5+Q=";
+    deepClone = true;
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-list --count HEAD > VC_REV
+      rm -rf .git
+    '';
   };
 
   patches = [
@@ -59,14 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-      gtk2
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AGL
-      Cocoa
-      GLUT
-      OpenGL
+      xorg.libX11
     ];
 
   nativeBuildInputs =
@@ -96,16 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
-    # git rev-list --count HEAD
-    "VC_REV=10619"
     "VC_HASH=${lib.substring 0 9 finalAttrs.src.rev}"
     "VC_BRANCH=master"
+    "HAVE_GTK2=0"
   ];
 
   buildFlags = [
     "duke3d"
     "sw"
   ];
+
+  preConfigure = ''
+    appendToVar makeFlags "VC_REV=$(cat VC_REV)"
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -181,6 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       runHook postInstall
     '';
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Enhanched port of Duke Nukem 3D for various platforms";

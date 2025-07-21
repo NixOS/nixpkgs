@@ -8,7 +8,7 @@
   sphinx,
   coreutils,
   iptables,
-  nettools,
+  net-tools,
   openssh,
   procps,
 }:
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             iptables
-            nettools
+            net-tools
           ]
         )
       }" \
@@ -73,7 +73,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/sshuttle/sshuttle/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
-      domenkozar
       carlosdagos
     ];
   };

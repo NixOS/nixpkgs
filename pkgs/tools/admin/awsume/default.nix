@@ -15,6 +15,7 @@
 buildPythonApplication rec {
   pname = "awsume";
   version = "4.5.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trek10inc";

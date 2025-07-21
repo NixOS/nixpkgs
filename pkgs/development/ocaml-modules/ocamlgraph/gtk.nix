@@ -2,8 +2,6 @@
   buildDunePackage,
   lablgtk,
   ocamlgraph,
-  stdlib-shims,
-  ...
 }:
 
 buildDunePackage {
@@ -13,6 +11,5 @@ buildDunePackage {
   propagatedBuildInputs = [
     lablgtk
     ocamlgraph
-    stdlib-shims
   ];
 }

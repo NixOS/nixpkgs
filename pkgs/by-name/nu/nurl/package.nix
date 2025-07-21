@@ -4,8 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   makeBinaryWrapper,
-  stdenv,
-  darwin,
   gitMinimal,
   mercurial,
   nixForLinking,
@@ -30,10 +28,6 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
   # tests require internet access
   doCheck = false;
 
@@ -54,12 +48,12 @@ rustPlatform.buildRustPackage rec {
     GEN_ARTIFACTS = "artifacts";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to generate Nix fetcher calls from repository URLs";
     homepage = "https://github.com/nix-community/nurl";
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "nurl";
   };
 }

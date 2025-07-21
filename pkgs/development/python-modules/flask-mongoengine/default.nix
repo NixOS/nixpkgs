@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
-    repo = pname;
+    repo = "flask-mongoengine";
     rev = "d4526139cb1e2e94111ab7de96bb629d574c1690";
     hash = "sha256-oMQU9Z8boc0q+0KzIQAZ8qSyxiITDY0M9FCg75S9MEY=";
   };

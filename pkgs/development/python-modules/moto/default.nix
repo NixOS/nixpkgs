@@ -10,6 +10,7 @@
   cryptography,
   docker,
   fetchFromGitHub,
+  fetchpatch,
   flask-cors,
   flask,
   freezegun,
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.1";
+  version = "5.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,8 +47,17 @@ buildPythonPackage rec {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-KMIOLM7KQqF2JwYWHWAD9GVKRTd2adVBubwWrnlHGoQ=";
+    hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
   };
+
+  # Fix tests with botocore 1.38.32
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/getmoto/moto/commit/8dcaaca0eefdf9ac957650c1562317b6d07fadf9.diff";
+      hash = "sha256-5zaerJR1rsMZQLn8cXjS8RYiKlSQ6azp7dk7JzLp+7I=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -354,6 +364,11 @@ buildPythonPackage rec {
 
     # Requires newer botocore version
     "test_dynamodb_with_account_id_routing"
+
+    # Assumes too much about threading.Timer() behavior (that it honors the
+    # timeout precisely and that the thread handler will complete in just 0.1s
+    # from the requested timeout)
+    "test_start_and_fire_timer_decision"
   ];
 
   disabledTestPaths = [
@@ -375,6 +390,9 @@ buildPythonPackage rec {
 
     # Infinite recursion with pycognito
     "tests/test_cognitoidp/test_cognitoidp.py"
+
+    # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
+    "tests/test_workspaces/test_workspaces.py"
   ];
 
   meta = {

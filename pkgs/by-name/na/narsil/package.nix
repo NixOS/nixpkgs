@@ -8,19 +8,18 @@
   enableSdl2 ? true,
   SDL2,
   SDL2_image,
-  SDL2_sound,
   SDL2_mixer,
   SDL2_ttf,
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "1.4.0-49-g64a513fe4";
+  version = "1.4.0-63-g4f6423d2f";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
     tag = version;
-    hash = "sha256-YSPaquQfWTRGswttA+z7zIDJu+i8bDegzAetQMKlgZA=";
+    hash = "sha256-IxnXlWzPxBBLnxSFLRHojoEHr3dq2eO8RNmr/Oposew=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableSdl2 [
       SDL2
       SDL2_image
-      SDL2_sound
       SDL2_mixer
       SDL2_ttf
     ];

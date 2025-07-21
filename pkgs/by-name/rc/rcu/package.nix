@@ -11,24 +11,27 @@
   gnutar,
   libsForQt5,
   makeDesktopItem,
-  nettools,
+  net-tools,
   protobuf,
-  python3Packages,
+  python312Packages,
   system-config-printer,
   wget,
 }:
 
+let
+  python3Packages = python312Packages;
+in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "2025.001s";
+  version = "4.0.24";
 
   format = "other";
 
   src =
     let
       src-tarball = requireFile {
-        name = "rcu-d${version}-source.tar.gz";
-        hash = "sha256-QC9ieulYAmE9pwt1/eZmyI5MZfRV0f24Pe5oKtuXNok=";
+        name = "rcu-${version}-source.tar.gz";
+        hash = "sha256-3rZiqg8Uuta3kI2m+2rBZ1XzN9bFds+emhivH5X7sJg=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -153,7 +156,7 @@ python3Packages.buildPythonApplication rec {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       --prefix PATH : ${
         lib.makeBinPath [
-          nettools
+          net-tools
           system-config-printer
         ]
       }

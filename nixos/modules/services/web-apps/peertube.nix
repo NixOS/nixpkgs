@@ -20,6 +20,8 @@ let
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
+    # Used for auto video transcription
+    HF_HOME = "/var/cache/peertube/huggingface";
   };
 
   systemCallsList = [
@@ -32,11 +34,11 @@ let
     "@obsolete"
     "@privileged"
     "@setuid"
+    "@spawn"
   ];
 
   cfgService = {
     # Proc filesystem
-    ProcSubset = "pid";
     ProtectProc = "invisible";
     # Access write directories
     UMask = "0027";
@@ -163,7 +165,39 @@ in
     };
 
     settings = lib.mkOption {
-      type = settingsFormat.type;
+      type = lib.types.submodule (
+        { config, ... }:
+        {
+          freeformType = settingsFormat.type;
+          options = {
+            video_transcription = {
+              enabled = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Enable automatic transcription of videos.";
+              };
+              engine_path = lib.mkOption {
+                type = with lib.types; either path str;
+                default =
+                  if config.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    # This will be in the error message when someone enables
+                    # transcription manually in the web UI and tries to run a
+                    # transcription job.
+                    "Set `services.peertube.settings.video_transcription.enabled = true`.";
+                defaultText = lib.literalExpression ''
+                  if config.services.peertube.settings.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    "Set `services.peertube.settings.video_transcription.enabled = true`."
+                '';
+                description = "Custom engine path for local transcription.";
+              };
+            };
+          };
+        }
+      );
       example = lib.literalExpression ''
         {
           listen = {
@@ -420,6 +454,9 @@ in
             };
           };
         };
+        video_transcription = {
+          engine = lib.mkDefault "whisper-ctranslate2";
+        };
       }
       (lib.mkIf cfg.redis.enableUnixSocket {
         redis = {
@@ -439,9 +476,9 @@ in
       description = "Initialization database for PeerTube daemon";
       after = [
         "network.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
-      requires = [ "postgresql.service" ];
+      requires = [ "postgresql.target" ];
 
       script =
         let
@@ -475,13 +512,13 @@ in
         [ "network.target" ]
         ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       requires =
         lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
-          "postgresql.service"
+          "postgresql.target"
           "peertube-init-db.service"
         ];
       wantedBy = [ "multi-user.target" ];

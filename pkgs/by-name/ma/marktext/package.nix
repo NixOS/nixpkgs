@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
-  version = "0.17.0-unstable-2024-06-10";
+  version = "0.17.1-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "marktext";
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/opt/marktext $out/bin
 
-    install -Dm644 resources/linux/marktext.desktop $out/share/application/marktext.desktop
+    install -Dm644 resources/linux/marktext.desktop $out/share/applications/marktext.desktop
 
     pushd resources/icons/
 

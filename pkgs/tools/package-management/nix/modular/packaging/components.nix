@@ -155,6 +155,7 @@ let
       // lib.optionalAttrs (
         stdenv.isLinux
         && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
+        && !(stdenv.system == "loongarch64-linux")
         && !(stdenv.hostPlatform.useLLVM or false)
       ) { LDFLAGS = "-fuse-ld=gold"; };
   };

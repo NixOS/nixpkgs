@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   alsa-lib,
   copyDesktopItems,
   wrapGAppsHook3,
@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.2.8";
+  version = "3.3.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "thomasokken";
     repo = "free42";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hvq5YoiBVgKjz/+SVeF5WTj7CUZ7MrrFIAeesH3we68=";
+    hash = "sha256-77A7YpoGLpzEU01c635DveybS5qvvC/sKdxmwV9HHAc=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/thomasokken/free42";
+    homepage = "https://thomasokken.com/free42/";
+    changelog = "https://thomasokken.com/free42/history.html";
     description = "Software clone of HP-42S Calculator";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ ];

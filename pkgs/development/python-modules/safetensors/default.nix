@@ -26,22 +26,25 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
+    hash = "sha256-wAr/jvr0w+vOHjjqE7cPcAM/IMz+58YhfoJ2XC4987M=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src sourceRoot;
-    hash = "sha256-hjV2cfS/0WFyAnATt+A8X8sQLzQViDzkNI7zN0ltgpU=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -87,7 +90,22 @@ buildPythonPackage rec {
     pytestCheckHook
     torch
   ];
-  pytestFlagsArray = [ "tests" ];
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    # AttributeError: module 'torch' has no attribute 'float4_e2m1fn_x2'
+    "test_odd_dtype_fp4"
+
+    # AssertionError: 'No such file or directory: notafile' != 'No such file or directory: "notafile"'
+    "test_file_not_found"
+
+    # AssertionError:
+    #    'Erro[41 chars] 5]: index 20 out of bounds for tensor dimension #1 of size 5'
+    # != 'Erro[41 chars] 5]:  SliceOutOfRange { dim_index: 1, asked: 20, dim_size: 5 }'
+    "test_numpy_slice"
+  ];
+
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
   disabledTestPaths =
     [

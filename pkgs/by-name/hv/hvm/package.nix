@@ -13,6 +13,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AD8mv47m4E6H8BVkxTExyhrR7VEnuB/KxnRl2puPnX4=";
   };
 
+  # Insert empty line in expected output of rust panic in a test
+  postPatch = ''
+    sed -i '6G' tests/snapshots/run__file@empty.hvm.snap
+  '';
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-nLcT+o6xrxPmQqK7FQpCqTlxOOUA1FzqRGQIypcq4fo=";
 

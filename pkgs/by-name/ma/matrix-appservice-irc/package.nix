@@ -89,13 +89,13 @@ stdenv.mkDerivation {
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/matrix-org/matrix-appservice-irc/releases/tag/${version}";
     description = "Node.js IRC bridge for Matrix";
     mainProgram = "matrix-appservice-irc";
-    maintainers = with maintainers; [ rhysmdnz ];
+    maintainers = with lib.maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
 }

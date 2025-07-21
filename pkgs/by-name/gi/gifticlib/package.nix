@@ -6,6 +6,7 @@
   expat,
   nifticlib,
   zlib,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -33,11 +34,11 @@ stdenv.mkDerivation {
 
   # without the test data, this is only a few basic tests
   doCheck = !stdenv.hostPlatform.isDarwin;
-  checkPhase = ''
-    runHook preCheck
-    ctest -LE 'NEEDS_DATA'
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "-LE"
+    "NEEDS_DATA"
+  ];
 
   meta = with lib; {
     homepage = "https://www.nitrc.org/projects/gifti";

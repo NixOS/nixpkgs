@@ -5,10 +5,10 @@ version to nixpkgs, we override this requirement and use the latest v9 release.
 ---
 --- a/package.json
 +++ b/package.json
-@@ -33,7 +33,7 @@
+@@ -32,7 +32,7 @@
      "turbo": "^2.1.2"
    },
-   "prettier": "@hoarder/prettier-config",
+   "prettier": "@karakeep/prettier-config",
 -  "packageManager": "pnpm@9.0.0-alpha.8+sha256.a433a59569b00389a951352956faf25d1fdf43b568213fbde591c36274d4bc30",
 +  "packageManager": "pnpm",
    "pnpm": {

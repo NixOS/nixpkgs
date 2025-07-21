@@ -1,6 +1,5 @@
 {
   curl,
-  esbuild,
   fetchFromGitHub,
   git,
   jq,
@@ -15,18 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.9";
+  version = "1.12.6";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/CJt4CZ9R1xB72Zwc76te51Fb3q4KHuzDxP3jWGzW8E=";
+    hash = "sha256-7JT8BMKUhIwYMkIwr2mD8IQLDpldcDtAKh6R1tbAKMw=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname src;
-    hash = "sha256-hO6QKRr4jTfesRDAEGcpFeJmGTGLGMw6EgIvD23DNzw=";
+    fetcherVersion = 2;
+    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
   };
 
   nativeBuildInputs = [
@@ -36,20 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.overrideAttrs (
-        final: _: {
-          version = "0.25.1";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${final.version}";
-            hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      )
-    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     VENCORD_HASH = "${finalAttrs.version}";
   };
@@ -97,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       FlafyDev
+      Gliczy
       NotAShelf
       Scrumplex
     ];

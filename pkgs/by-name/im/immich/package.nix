@@ -31,12 +31,31 @@
   perl,
   pixman,
   vips,
+  buildPackages,
   sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
+
+  esbuild' = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.5";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
 
   buildLock = {
     sources =
@@ -206,6 +225,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   preBuild = ''
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH

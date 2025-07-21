@@ -29,6 +29,7 @@
   pyphen,
   pyrss2gen,
   pytestCheckHook,
+  pytest-cov-stub,
   python-dateutil,
   pythonOlder,
   requests,
@@ -53,11 +54,6 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-IfJB2Rl3c1MyEiuyNpT3udfpM480VvFD8zosJFDHr7k=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov nikola --cov-report term-missing" ""
-  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -100,6 +96,7 @@ buildPythonPackage rec {
     freezegun
     mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   disabledTests = [

@@ -49,6 +49,7 @@
       "extra-cmake-modules",
       "grantleetheme",
       "kcodecs",
+      "kcolorscheme",
       "kcontacts",
       "kmime",
       "ktextaddons",
@@ -251,7 +252,19 @@
       "kcrash",
       "ki18n",
       "kirigami",
+      "kitemmodels",
       "knewstuff"
+    ],
+    "atcore": [
+      "extra-cmake-modules"
+    ],
+    "atelier": [
+      "atcore",
+      "extra-cmake-modules",
+      "kconfig",
+      "ki18n",
+      "ktexteditor",
+      "kxmlgui"
     ],
     "atlantik": [
       "extra-cmake-modules",
@@ -568,6 +581,19 @@
       "ktextwidgets",
       "kwidgetsaddons"
     ],
+    "chessament": [
+      "extra-cmake-modules",
+      "kconfig",
+      "kcoreaddons",
+      "ki18n",
+      "kiconthemes",
+      "kirigami",
+      "kirigami-addons",
+      "kitemmodels",
+      "qcoro",
+      "qqc2-desktop-style",
+      "qtkeychain"
+    ],
     "codevis": [
       "extra-cmake-modules",
       "kcmutils",
@@ -661,6 +687,7 @@
       "kbookmarks",
       "kcmutils",
       "kcodecs",
+      "kcolorscheme",
       "kcompletion",
       "kconfig",
       "kcoreaddons",
@@ -699,20 +726,12 @@
     "dragon": [
       "extra-cmake-modules",
       "kconfig",
-      "kconfigwidgets",
       "kcoreaddons",
       "kcrash",
-      "kdbusaddons",
       "kdoctools",
       "ki18n",
       "kio",
-      "kjobwidgets",
-      "kparts",
-      "kwidgetsaddons",
-      "kwindowsystem",
-      "kxmlgui",
-      "phonon",
-      "solid"
+      "kirigami"
     ],
     "drkonqi": [
       "extra-cmake-modules",
@@ -777,6 +796,7 @@
       "extra-cmake-modules",
       "kcalendarcore",
       "kcalutils",
+      "kcolorscheme",
       "kdiagram",
       "kmime",
       "libkdepim"
@@ -926,7 +946,6 @@
       "kwindowsystem",
       "kxmlgui",
       "libkdcraw",
-      "phonon",
       "plasma-activities",
       "purpose",
       "wayland",
@@ -1055,8 +1074,7 @@
       "kwallet",
       "kwidgetsaddons",
       "kwindowsystem",
-      "kxmlgui",
-      "phonon"
+      "kxmlgui"
     ],
     "k3b": [
       "extra-cmake-modules",
@@ -1112,7 +1130,6 @@
       "kio",
       "kservice",
       "kwidgetsaddons",
-      "kwindowsystem",
       "kxmlgui"
     ],
     "kaddressbook": [
@@ -1121,6 +1138,7 @@
       "akonadi-search",
       "extra-cmake-modules",
       "grantleetheme",
+      "kcolorscheme",
       "kiconthemes",
       "kontactinterface",
       "kuserfeedback",
@@ -2262,6 +2280,7 @@
     ],
     "kgeotag": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kconfigwidgets",
       "kcoreaddons",
       "kcrash",
@@ -2476,6 +2495,7 @@
     ],
     "kile": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kconfig",
       "kcoreaddons",
       "kcrash",
@@ -2716,6 +2736,7 @@
     ],
     "kitinerary-workbench": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kio",
       "kitinerary",
       "ktexteditor"
@@ -2730,7 +2751,9 @@
       "extra-cmake-modules",
       "kcoreaddons",
       "kcrash",
-      "ki18n"
+      "ki18n",
+      "kirigami",
+      "kirigami-addons"
     ],
     "kjumpingcube": [
       "extra-cmake-modules",
@@ -3251,6 +3274,7 @@
       "kiconthemes",
       "kio",
       "kparts",
+      "ktexteditor",
       "kwindowsystem",
       "plasma-activities"
     ],
@@ -3447,6 +3471,7 @@
     ],
     "kphotoalbum": [
       "karchive",
+      "kcolorscheme",
       "kcompletion",
       "kconfig",
       "kcoreaddons",
@@ -3524,6 +3549,8 @@
     "kpublictransport": [
       "extra-cmake-modules",
       "ki18n",
+      "kirigami-addons",
+      "kitemmodels",
       "networkmanager-qt"
     ],
     "kqtquickcharts": [
@@ -3675,6 +3702,7 @@
       "karchive",
       "kbookmarks",
       "kcodecs",
+      "kcolorscheme",
       "kcompletion",
       "kconfig",
       "kcoreaddons",
@@ -3915,6 +3943,7 @@
       "kiconthemes",
       "knotifications",
       "knotifyconfig",
+      "kstatusnotifieritem",
       "ktextwidgets",
       "kxmlgui"
     ],
@@ -3940,6 +3969,7 @@
       "extra-cmake-modules",
       "karchive",
       "kauth",
+      "kcolorscheme",
       "kconfig",
       "kguiaddons",
       "ki18n",
@@ -3955,7 +3985,6 @@
     ],
     "ktextwidgets": [
       "extra-cmake-modules",
-      "kcolorscheme",
       "kcompletion",
       "kconfig",
       "ki18n",
@@ -4105,7 +4134,8 @@
       "kcmutils",
       "kcoreaddons",
       "ki18n",
-      "kservice"
+      "kservice",
+      "solid"
     ],
     "kunitconversion": [
       "extra-cmake-modules",
@@ -4214,10 +4244,12 @@
       "extra-cmake-modules"
     ],
     "kwin": [
+      "aurorae",
       "breeze",
       "breeze-icons",
       "extra-cmake-modules",
       "kcmutils",
+      "kcolorscheme",
       "kconfig",
       "kconfigwidgets",
       "kcoreaddons",
@@ -4249,6 +4281,7 @@
       "wayland-protocols"
     ],
     "kwin-x11": [
+      "aurorae",
       "breeze",
       "breeze-icons",
       "extra-cmake-modules",
@@ -4268,7 +4301,6 @@
       "knewstuff",
       "knotifications",
       "kpackage",
-      "kpipewire",
       "kscreenlocker",
       "kservice",
       "ksvg",
@@ -4555,6 +4587,7 @@
     ],
     "lokalize": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kconfig",
       "kcoreaddons",
       "kcrash",
@@ -4586,6 +4619,7 @@
       "extra-cmake-modules",
       "karchive",
       "kcodecs",
+      "kcolorscheme",
       "kmailtransport",
       "kmime",
       "libkdepim",
@@ -4710,6 +4744,9 @@
       "mauikit",
       "syntax-highlighting"
     ],
+    "mauiman": [
+      "extra-cmake-modules"
+    ],
     "mbox-importer": [
       "akonadi",
       "extra-cmake-modules",
@@ -4806,6 +4843,7 @@
       "kquickcharts",
       "kquickimageeditor",
       "kstatusnotifieritem",
+      "kunifiedpush",
       "kwindowsystem",
       "libquotient",
       "prison",
@@ -5027,6 +5065,7 @@
       "extra-cmake-modules",
       "kcalendarcore",
       "kcmutils",
+      "kcolorscheme",
       "kconfig",
       "kcontacts",
       "kcrash",
@@ -5137,7 +5176,6 @@
       "baloo",
       "breeze",
       "extra-cmake-modules",
-      "kaccounts-integration",
       "kactivitymanagerd",
       "kauth",
       "kcmutils",
@@ -5380,6 +5418,7 @@
       "kcompletion",
       "kconfig",
       "kcoreaddons",
+      "kcrash",
       "kdbusaddons",
       "ki18n",
       "kiconthemes",
@@ -5493,6 +5532,7 @@
       "kbookmarks",
       "kcmutils",
       "kcodecs",
+      "kcolorscheme",
       "kcompletion",
       "kconfig",
       "kconfigwidgets",
@@ -5501,7 +5541,6 @@
       "kdbusaddons",
       "kdeclarative",
       "kded",
-      "kdesu",
       "kfilemetadata",
       "kglobalaccel",
       "kglobalacceld",
@@ -5607,6 +5646,7 @@
       "kcrash",
       "kdbusaddons",
       "ki18n",
+      "knotifications",
       "kwindowsystem",
       "polkit-qt-1"
     ],
@@ -5711,8 +5751,7 @@
       "kcoreaddons",
       "kguiaddons",
       "kiconthemes",
-      "kirigami",
-      "kquickcharts"
+      "kirigami"
     ],
     "qqc2-desktop-style": [
       "extra-cmake-modules",
@@ -5798,6 +5837,7 @@
     ],
     "rsibreak": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kconfig",
       "kconfigwidgets",
       "kcoreaddons",
@@ -6097,6 +6137,7 @@
     "systemsettings": [
       "extra-cmake-modules",
       "kcmutils",
+      "kcolorscheme",
       "kconfig",
       "kcrash",
       "kdbusaddons",
@@ -6119,6 +6160,7 @@
     ],
     "tellico": [
       "extra-cmake-modules",
+      "kcolorscheme",
       "kconfig",
       "kconfigwidgets",
       "kcrash",
@@ -6127,6 +6169,7 @@
       "ki18n",
       "kiconthemes",
       "kio",
+      "kio-extras",
       "kitemmodels",
       "knewstuff",
       "kwidgetsaddons",
@@ -6193,9 +6236,6 @@
       "kconfig",
       "kcoreaddons",
       "kcrash",
-      "kdev-php",
-      "kdevelop",
-      "kdevelop-pg-qt",
       "kdoctools",
       "ki18n",
       "kiconthemes",
@@ -6305,6 +6345,7 @@
     "yakuake": [
       "extra-cmake-modules",
       "karchive",
+      "kcolorscheme",
       "kconfig",
       "kcoreaddons",
       "kcrash",
@@ -6334,5 +6375,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "f0a9ee94"
+  "version": "53cdc203"
 }

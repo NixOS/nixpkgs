@@ -24,20 +24,22 @@
   xxHash,
   zstd,
   libarchive,
-  withBlas ? true,
+  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+  # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  withBlas ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.11.1";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
+    hash = "sha256-bAkT0msUkgGkjAIlF7lnJbimBKW1NSn2zjkCj3ErJ1I=";
   };
 
   hardeningEnable = [ "pie" ];

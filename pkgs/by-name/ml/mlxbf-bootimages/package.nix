@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mlxbf-bootimages";
-  version = "4.10.0-13520";
+  version = "4.11.0-13611";
 
   src = fetchurl {
     url = "https://linux.mellanox.com/public/repo/bluefield/${version}/bootimages/prod/${pname}-signed_${version}_arm64.deb";
-    hash = "sha256-lPclxhKmn1hvGXWI1A+Q1yXK7FZzKUcOtBoXG6KRsCA=";
+    hash = "sha256-bZpZ6qnC3Q/BuOngS4ZoU6vjeekPjVom0KdDoJF5iko=";
   };
 
   nativeBuildInputs = [

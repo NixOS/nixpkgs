@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pcsclite,
-  PCSC,
   pkg-config,
   cmake,
   zlib,
@@ -40,9 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       pcsclite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
     ];
 
   cmakeFlags = [

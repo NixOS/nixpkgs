@@ -371,7 +371,7 @@ for package in "${packages[@]}"; do
 
   url="https://pypi.io/packages/source/t/${package}/${package//-/_}-${version}.tar.gz"
   hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash convert --hash-algo sha256 --to sri $hash)"
+  sri_hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $hash)"
   package_short="${package#types-aiobotocore-}"
 
   awk -i inplace -v pkg="$package" -v pkg_short="$package_short" -v ver="$version" -v hash="$sri_hash" '

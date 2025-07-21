@@ -58,7 +58,6 @@ buildRubyGem rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       auntie
-      ericsagnes
     ];
     platforms = platforms.unix;
     mainProgram = "tmuxinator";

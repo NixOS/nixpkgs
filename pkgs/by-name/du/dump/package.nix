@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dump";
-  version = "0.4b48";
+  version = "0.4b51";
 
   src = fetchurl {
     url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
-    sha256 = "sha256-qT6WPMIMXUfq2dedK0OeDV12gV7ewlFpEVUckOYOxRk=";
+    sha256 = "sha256-huaDpzNVNMkVzwpQUlPay/RrYiSnD79or3RgsWPkU+s=";
   };
 
   nativeBuildInputs = [ pkg-config ];

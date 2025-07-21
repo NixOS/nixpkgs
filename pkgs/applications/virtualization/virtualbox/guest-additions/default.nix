@@ -12,9 +12,9 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.1.8";
+  virtualboxVersion = "7.1.12";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "3f7132c55ac6c5f50585bfaa115d29e30b47ccf535cb0a12ff50214ddae2f63d";
+  virtualboxSha256 = "6f9618f39168898134975f51df7c2d6d5129c0aa82b6ae11cf47f920c70df276";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
     inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;

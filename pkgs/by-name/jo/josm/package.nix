@@ -11,21 +11,21 @@
 }:
 let
   pname = "josm";
-  version = "19369";
+  version = "19423";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-rcnfrKaKVWvPLdr8hab380Ao661NVj+pCZMIGiUM0aQ=";
+      hash = "sha256-s8aMV31NsDFE5XLP523PH3RNvq78eTAa+UvmjyY5a+E=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-zIiOq14o972Z+V4Cc3IFjcgd50G1VDEoxbcYVtOR5C4=";
+      hash = "sha256-8eps1eTUn9FHHYwECH/742PV7wnnRO08dlZmaxd1aZU=";
     };
     pkg = fetchFromGitHub {
       owner = "JOSM";
       repo = "josm";
       tag = "${version}-tested";
-      hash = "sha256-mPuf98HfvmAHcnOiFKHUtqNVg7sy5XZP2hnm7ZdaUQo=";
+      hash = "sha256-ke8+JMFx95WyYR+ZIbjUVh3CT72bAfiMBGkc0Mim+60=";
     };
   };
 
@@ -63,6 +63,11 @@ stdenv.mkDerivation {
           --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
       '';
 
+  passthru = {
+    inherit srcs;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
@@ -72,6 +77,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       rycee
       sikmir
+      starsep
     ];
     platforms = lib.platforms.all;
     mainProgram = "josm";

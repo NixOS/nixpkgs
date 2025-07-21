@@ -58,7 +58,7 @@ let
         // lib.optionalAttrs (cfg.database.type == "postgresql") {
           withPostgreSQL = true;
         }
-        // lib.optionalAttrs (cfg.database.type == "mysql") {
+        // lib.optionalAttrs (cfg.database.type == "mariadb") {
           withMySQL = true;
         }
       );
@@ -165,10 +165,10 @@ let
   fpm = config.services.phpfpm.pools.${pool};
   phpExecutionUnit = "phpfpm-${pool}";
 
-  dbService =
+  dbUnit =
     {
-      "postgresql" = "postgresql.service";
-      "mysql" = "mysql.service";
+      "postgresql" = "postgresql.target";
+      "mariadb" = "mysql.service";
     }
     .${cfg.database.type};
 
@@ -475,10 +475,10 @@ in
       database = {
         type = mkOption {
           type = types.enum [
-            "mysql"
+            "mariadb"
             "postgresql"
           ];
-          example = "mysql";
+          example = "mariadb";
           default = "postgresql";
           description = "Database engine to use.";
         };
@@ -621,7 +621,7 @@ in
             DB_DRIVER =
               {
                 "postgresql" = "pgsql";
-                "mysql" = "mysql";
+                "mariadb" = "mysql";
               }
               .${cfg.database.type};
             DB_HOST = "localhost";
@@ -791,7 +791,7 @@ in
         }
       );
 
-      mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mysql") {
+      mysql = mkIf (cfg.database.createLocally && cfg.database.type == "mariadb") {
         enable = mkDefault true;
         package = mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
@@ -843,8 +843,8 @@ in
         requiredBy = [ "${phpExecutionUnit}.service" ];
         before = [ "${phpExecutionUnit}.service" ];
         wants = [ "local-fs.target" ];
-        requires = lib.optional cfg.database.createLocally dbService;
-        after = lib.optional cfg.database.createLocally dbService;
+        requires = lib.optional cfg.database.createLocally dbUnit;
+        after = lib.optional cfg.database.createLocally dbUnit;
 
         serviceConfig =
           {
@@ -899,8 +899,8 @@ in
         requiredBy = [ "movim.service" ];
         before = [ "movim.service" ] ++ lib.optional (webServerService != null) webServerService;
         wants = [ "network.target" ];
-        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
-        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbService;
+        requires = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbUnit;
+        after = [ "movim-data-setup.service" ] ++ lib.optional cfg.database.createLocally dbUnit;
       };
 
       services.movim = {
@@ -915,14 +915,14 @@ in
             "movim-data-setup.service"
             "${phpExecutionUnit}.service"
           ]
-          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional cfg.database.createLocally dbUnit
           ++ lib.optional (webServerService != null) webServerService;
         after =
           [
             "movim-data-setup.service"
             "${phpExecutionUnit}.service"
           ]
-          ++ lib.optional cfg.database.createLocally dbService
+          ++ lib.optional cfg.database.createLocally dbUnit
           ++ lib.optional (webServerService != null) webServerService;
         environment = {
           PUBLIC_URL = "//${cfg.domain}";

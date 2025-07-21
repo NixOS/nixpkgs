@@ -10,7 +10,7 @@
   iptables,
   iputils,
   kmod,
-  nettools,
+  net-tools,
   procps,
   tcpdump,
   traceroute,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     iptables
     iputils
     kmod
-    nettools
+    net-tools
     procps
     tcpdump
     traceroute

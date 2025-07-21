@@ -22,21 +22,22 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
-  version = "0.9.3";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h+zj4Hm7v8SU6Zy0rIWbOknXVdSDf8b1d4q6M12J5Lc=";
+    hash = "sha256-1+Fmc8qyU3hCZmRNgp90nuvFgaB/GOH6SNc9AyWZYn0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RrXSBgVh4UZFHcgUWhUjE7rEm/RZFDSDCpXS22gVjZ0=";
+  cargoHash = "sha256-6hEnXzaL6PnME9s+T+MtmoTQmaux/0m/6xaQ99lwM2I=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-nFuPFgwJw38XVxhW0QXmU31o+hqJKGJysnPg2YSg2D0=";
+    fetcherVersion = 1;
+    hash = "sha256-Q6e942R+3+511qFe4oehxdquw1TgaWMyOGOmP3me54o=";
   };
 
   nativeBuildInputs = [

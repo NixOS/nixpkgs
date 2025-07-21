@@ -2,6 +2,7 @@
   lib,
   stdenv,
   aiohttp,
+  aiomqtt,
   aioresponses,
   async-timeout,
   buildPythonPackage,
@@ -14,6 +15,7 @@
   poetry-core,
   pycryptodome,
   pycryptodomex,
+  pyrate-limiter,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -22,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.16.1";
+  version = "2.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,7 +33,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-zQlNBQm+dBmw+kydNlqJU1D0KKuywyuNCqm0/BslWi0=";
+    hash = "sha256-TMnJMAK0MHswT1vPH1OnC35hrEOCHyH2YodNpM/VjC8=";
   };
 
   postPatch = ''
@@ -45,12 +47,14 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    aiomqtt
     async-timeout
     click
     construct
     dacite
     paho-mqtt
     pycryptodome
+    pyrate-limiter
     vacuum-map-parser-roborock
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 

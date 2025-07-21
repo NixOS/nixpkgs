@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wipeout-rewrite";
-  version = "0-unstable-2025-04-17";
+  version = "0-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "phoboslab";
     repo = "wipeout-rewrite";
-    rev = "c2b7f2cbac2bc6ce9d56876765a2351d1b1a3401";
-    hash = "sha256-Z2AOXzpcBMSpM/zU4spIcoLBW59AHU1wQmOY9nT5mdc=";
+    rev = "e510130d893f24f9524c1413a4587996b9ff867c";
+    hash = "sha256-qKtOdDzRP0IjwS6dXEya06nJ9AMCpUNLwtf4RF3o9r4=";
   };
 
   enableParallelBuilding = true;

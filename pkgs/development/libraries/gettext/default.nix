@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.22.5";
+  version = "0.25";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-7BcFselpuDqfBzFE7IBhUduIEn9eQP5alMtsj6SJlqA=";
+    hash = "sha256-ruAtq3nZE4/cxyJrZ+yYUSG85gB+3r4w0OOdQvaaNA4=";
   };
   patches = [
     ./absolute-paths.diff
@@ -95,9 +95,16 @@ stdenv.mkDerivation rec {
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  env = {
-    gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
-  };
+  env =
+    {
+      gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # macOS iconv implementation is slightly broken since Sonoma
+      # https://github.com/Homebrew/homebrew-core/pull/199639
+      # https://savannah.gnu.org/bugs/index.php?66541
+      am_cv_func_iconv_works = "yes";
+    };
 
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes

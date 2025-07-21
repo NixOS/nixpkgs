@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comma";
-  version = "1.9.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";
     rev = "v${version}";
-    hash = "sha256-XXe0SSdH2JZLx0o+vHDtdlDRtVn7nouIngipbXhmhiQ=";
+    hash = "sha256-mhSX2yx+/xDwCtLVb+aSFFxP2TOJek/ZX/28khvetwE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vNXczPhCfoXHy5IT/ybuKEQ7I08eJJdP+6+iXfwWjdU=";
+  cargoHash = "sha256-6BsRgxcUtVuN1gp3VVXkNQzqb9hD5rWWctieJvFdyrQ=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

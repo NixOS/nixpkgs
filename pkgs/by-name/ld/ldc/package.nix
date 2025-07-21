@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   callPackage,
   makeWrapper,
   removeReferencesTo,
@@ -16,7 +17,6 @@
   lit,
   gdb,
   unzip,
-  darwin,
 
   ldcBootstrap ? callPackage ./bootstrap.nix { },
 }:
@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.40.1";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WdnwdH25A5oMNNY3uWG2hxnaAT+S1hNuP7LElH3uuuk=";
+    hash = "sha256-6LcpY3LSFK4KgEiGrFp/LONu5Vr+/+vI04wEEpF3s+s=";
     fetchSubmodules = true;
   };
 
@@ -76,9 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper
       ninja
       unzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818

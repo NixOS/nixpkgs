@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geany";
-  version = "2.0";
+  version = "2.1";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.geany.org/geany-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-VltM0vAxHB46Fn7HHEoy26ZC4P5VSuW7a4F3t6dMzJI=";
+    hash = "sha256-a5aohERjMAwQuWkqCl7a2CNu7J6ENC9XX4PU/IkzEig=";
   };
 
   patches = [
@@ -46,9 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs = [ gtk3 ];
 
   preCheck = ''
     patchShebangs --build tests/ctags/runner.sh

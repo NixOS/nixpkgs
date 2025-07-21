@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpsolve";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "robol";
     repo = "MPSolve";
-    rev = finalAttrs.version;
-    hash = "sha256-7lYwInodKj02G76xqhp/6e9MCzPY80gsAW3vTMNsfdA=";
+    rev = "de7ebfc7afc4834a0c9f92a04be7abdf5943d446";
+    hash = "sha256-BGXvNxWUbto0yMIpEIxZ9wOYv9w0ev4OgVcniNYIKoU=";
   };
 
   nativeBuildInputs = [

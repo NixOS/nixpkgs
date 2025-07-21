@@ -2,31 +2,41 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  protobuf_26,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.8.0";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = "amazon-q-developer-cli";
-    tag = "v${version}";
-    hash = "sha256-fOz9oz+xNwX2Bzl6szgQ9oai6lqP+EzbaCNzHPUT2cA=";
+    repo = "amazon-q-developer-cli-autocomplete";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-juZuqZkBsIHhLOCZk+QpTaO1BsHj2RZyCvkvc0G5KbU=";
   };
+
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-H9bCke3vQDuS6RDEg8dzeFiBWCex64A8KSRhfgyp8e8=";
+  cargoHash = "sha256-BT3LNOkRf4gfBy5SwuAnMoJVF9PmwiLsS5phdtEgIrs=";
 
   cargoBuildFlags = [
     "-p"
-    "q_cli"
+    "chat_cli"
   ];
+
+  postInstall = ''
+    install -m 0755 $out/bin/chat_cli $out/bin/amazon-q
+    rm -f $out/bin/chat_cli $out/bin/test_mcp_server
+  '';
+
   cargoTestFlags = [
     "-p"
-    "q_cli"
+    "chat_cli"
   ];
 
   # skip integration tests that have external dependencies
@@ -50,15 +60,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=init_lint_zsh_post_zshrc"
     "--skip=init_lint_zsh_pre_zprofile"
     "--skip=init_lint_zsh_pre_zshrc"
+    "--skip=telemetry::cognito::test::pools"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_state_mismatch_throws_err"
+    "--skip=auth::pkce::tests::test_pkce_flow_completes_successfully"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_authorization_redirect_error"
+    "--skip=auth::pkce::tests::test_pkce_flow_with_timeout"
+    "--skip=request::tests::request_test"
   ];
 
-  nativeBuildInputs = [
-    protobuf_26
-  ];
-
-  postInstall = ''
-    mv $out/bin/q_cli $out/bin/amazon-q
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/amazon-q";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Amazon Q Developer AI coding agent CLI";
@@ -67,7 +80,8 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
+    mainProgram = "amazon-q";
     maintainers = [ lib.maintainers.jamesward ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

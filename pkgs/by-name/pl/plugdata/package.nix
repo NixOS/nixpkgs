@@ -9,7 +9,7 @@
   pkg-config,
   alsa-lib,
   freetype,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   zenity,
   curl,
   xorg,
@@ -23,7 +23,6 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_2_4,
   libGL,
   libjack2,
   lerc,
@@ -60,7 +59,7 @@ stdenv.mkDerivation {
     alsa-lib
     curl
     freetype
-    webkitgtk_4_0
+    webkitgtk_4_1
     xorg.libX11
     xorg.libXcursor
     xorg.libXext
@@ -80,7 +79,6 @@ stdenv.mkDerivation {
     libxkbcommon
     libdatrie
     libepoxy
-    libsoup_2_4
     lerc
     libjack2
     expat

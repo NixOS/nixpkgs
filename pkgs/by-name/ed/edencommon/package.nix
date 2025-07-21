@@ -6,7 +6,7 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
+  sanitiseHeaderPathsHook,
 
   glog,
   gflags,
@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2025.02.10.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wY6HEIQZdyyglXADxq9zaCrRCneqQEBs+EqoY3mNY3E=";
+    hash = "sha256-WlLQb4O4rGhXp+bQrJA12CvrwcIS6vzO4W6bX04vKMM=";
   };
 
   patches =
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
+    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
@@ -96,18 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2 py)' \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2)'
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
   '';
 
   passthru.updateScript = nix-update-script { };

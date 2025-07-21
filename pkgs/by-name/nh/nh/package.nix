@@ -4,7 +4,6 @@
   rustPlatform,
   installShellFiles,
   makeBinaryWrapper,
-  darwin,
   fetchFromGitHub,
   nix-update-script,
   nvd,
@@ -19,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.0.3";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pqff6gVSNP2kA0Oo0t9CUy9cdf2yGnwSfwlOvS5LtKM=";
+    hash = "sha256-v02NsZ589zzPq5xsCxyrG1/ZkFbbMkUthly50QdmYKo=";
   };
 
   strictDeps = true;
@@ -35,19 +34,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
-
-  preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
     ''
       mkdir completions
-      ${emulator} $out/bin/nh completions bash > completions/nh.bash
-      ${emulator} $out/bin/nh completions zsh > completions/nh.zsh
-      ${emulator} $out/bin/nh completions fish > completions/nh.fish
+
+      for shell in bash zsh fish; do
+        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+      done
 
       installShellCompletion completions/*
     ''
@@ -59,9 +55,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-alZFjeBJskp4vu+uaEy9tMkdS1aXcv8d6AQ8jeJKEOA=";
+  cargoHash = "sha256-R2S0gbT3DD/Dtx8edqhD0fpDqe8AJgyLmlPoNEKm4BA=";
 
   passthru.updateScript = nix-update-script { };
+
+  env.NH_REV = finalAttrs.src.tag;
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";

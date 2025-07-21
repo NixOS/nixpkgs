@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "TUI-based bluetooth connection manager";
     longDescription = ''
       Bluetuith can transfer files via OBEX, perform authenticated pairing,
@@ -38,11 +38,11 @@ buildGoModule (finalAttrs: {
       devices. The TUI has mouse support.
     '';
     homepage = "https://github.com/darkhz/bluetuith";
-    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    changelog = "https://github.com/darkhz/bluetuith/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pyrox0
       katexochen
     ];

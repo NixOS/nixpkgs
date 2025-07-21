@@ -283,7 +283,22 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optionals (lib.versionOlder version "9.4") [
+      [
+        # Determine size of time related types using hsc2hs instead of assuming CLong.
+        # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+        # https://github.com/haskell/ghcup-hs/issues/1107
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+        # Note that in normal situations this shouldn't be the case since nixpkgs
+        # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+        (fetchpatch {
+          name = "unix-fix-ctimeval-size-32-bit.patch";
+          url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+          sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+          stripLen = 1;
+          extraPrefix = "libraries/unix/";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder version "9.4") [
         # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
         (fetchpatch {
           url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
@@ -349,7 +364,58 @@ stdenv.mkDerivation (
           else
             ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
         )
-      ];
+      ]
+
+      # Fixes stack overrun in rts which crashes an process whenever
+      # freeHaskellFunPtr is called with nixpkgs' hardening flags.
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
+      # TODO: patch doesn't apply for < 9.4, but may still be necessary?
+      ++ lib.optionals (lib.versionAtLeast version "9.4") [
+        (fetchpatch {
+          name = "ghc-rts-adjustor-fix-i386-stack-overrun.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
+          sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
+        })
+      ]
+
+      # Before GHC 9.6, GHC, when used to compile C sources (i.e. to drive the CC), would first
+      # invoke the C compiler to generate assembly and later call the assembler on the result of
+      # that operation. Unfortunately, that is brittle in a lot of cases, e.g. when using mismatched
+      # CC / assembler (https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12005). This issue
+      # does not affect us. However, LLVM 18 introduced a check in clang that makes sure no
+      # non private labels occur between .cfi_startproc and .cfi_endproc which causes the
+      # assembly that the same version (!) of clang generates from rts/StgCRun.c to be rejected.
+      # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
+      # LLVM 19.
+      #
+      # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+      # the solution is to backport those changes from GHC 9.6 that skip the intermediate
+      # assembly step.
+      #
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25608#note_622589
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6877
+      ++ (
+        if lib.versionAtLeast version "9.4" then
+          [
+            # Need to use this patch so the next one applies, passes file location info to the cc phase
+            (fetchpatch {
+              name = "ghc-add-location-to-cc-phase.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4a7256a75af2fc0318bef771a06949ffb3939d5a.patch";
+              hash = "sha256-DnTI+i1zMebeWvw75D59vMaEEBb2Nr9HusxTyhmdy2M=";
+            })
+            # Makes Cc phase directly generate object files instead of assembly
+            (fetchpatch {
+              name = "ghc-cc-directly-emit-object.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/96811ba491495b601ec7d6a32bef8563b0292109.patch";
+              hash = "sha256-G8u7/MK/tGOEN8Wxccxj/YIOP7mL2G9Co1WKdHXOo6I=";
+            })
+          ]
+        else
+          [
+            # TODO(@sternenseemann): backport changes to GHC < 9.4 if possible
+          ]
+      );
 
     postPatch = "patchShebangs .";
 
@@ -578,6 +644,13 @@ stdenv.mkDerivation (
     # Hydra which already warrants a significant speedup
     requiredSystemFeatures = [ "big-parallel" ];
 
+    # Install occasionally fails due to a race condition in minimal builds.
+    # > /nix/store/wyzpysxwgs3qpvmylm9krmfzh2plicix-coreutils-9.7/bin/install -c -m 755 -d "/nix/store/xzb3390rhvhg2a0cvzmrvjspw1d8nf8h-ghc-riscv64-unknown-linux-gnu-9.4.8/bin"
+    # > install: cannot create regular file '/nix/store/xzb3390rhvhg2a0cvzmrvjspw1d8nf8h-ghc-riscv64-unknown-linux-gnu-9.4.8/lib/ghc-9.4.8': No such file or directory
+    preInstall = ''
+      mkdir -p "$out/lib/${passthru.haskellCompilerName}"
+    '';
+
     postInstall =
       ''
         settingsFile="$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings"
@@ -630,6 +703,8 @@ stdenv.mkDerivation (
 
       # Our Cabal compiler name
       haskellCompilerName = "ghc-${version}";
+
+      bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
 
     meta = {

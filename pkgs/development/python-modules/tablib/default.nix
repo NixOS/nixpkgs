@@ -7,6 +7,7 @@
   openpyxl,
   pandas,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   pyyaml,
   setuptools-scm,
@@ -27,11 +28,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-lNi83GWnFaACSm1bcBpfMeRb0VkmnmLHNzHeefBI2ys=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
-  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -61,6 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
+    pytest-cov-stub
     unicodecsv
   ];
 

@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "avell-unofficial-control-center";
   version = "1.0.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rodgomesc";

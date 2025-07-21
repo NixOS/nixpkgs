@@ -193,6 +193,9 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
+34a5b1eb23129f8fb62c677e3760903f6d43228f
+
 # fetchurl: nixfmt-rfc-style
 ce21e97a1f20dee15da85c084f9d1148d84f853b
 
@@ -266,3 +269,15 @@ a034fb50f79816c6738fb48b48503b09ea3b0132
 
 # treewide: switch instances of lib.teams.*.members to the new meta.teams attribute
 05580f4b4433fda48fff30f60dfd303d6ee05d21
+
+# nixos/redmine: Get rid of global lib expansions
+d7f1102f04c58b2edfc74c9a1d577e3aebfca775
+
+# **/README.md: one sentence per line
+3d505c03610b6102af6d870ae3506a151cef1f68
+60e35e4ded6e91524364a74b3b4ec233ed9321f2
+99f2e655d9db009ee0b4ede3edced5f6c882c7f4
+b4532efe93882ae2e3fc579929a42a5a56544146
+
+# emacs: keep elpa/nongnu/melpa package overrides sorted
+9f2faf683ed48704aa17f693208a13aa64e22181

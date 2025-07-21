@@ -14,12 +14,12 @@
   # buildInputs
   opencl-headers,
   pybind11,
-  darwin,
   ocl-icd,
 
   # dependencies
   platformdirs,
   pytools,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2025.1";
+  version = "2025.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-wAZBDPMJbTmujP1j7LjK28ZozZaUwKPDPZLZbFFTeAs=";
+    hash = "sha256-VmnCMaq6op/7M+n1U9mPgRpCyZtkgmzMXQuWW6Clbd4=";
   };
 
   build-system = [
@@ -61,6 +61,7 @@ buildPythonPackage rec {
     numpy
     platformdirs
     pytools
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -68,7 +69,7 @@ buildPythonPackage rec {
     mako
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ] ++ pytools.optional-dependencies.siphash;
+  ];
 
   env = {
     CL_INC_DIR = "${opencl-headers}/include";
@@ -92,7 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

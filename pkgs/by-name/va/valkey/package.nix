@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.2";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-05EuPjVokzfJxhrnvFHD7prwt5y7gPxemeDIkLML7lw=";
+    hash = "sha256-5wSUDNFQ6GWT9aGO3Msm+GFSXpNcty8L8UdGw4R0GDw=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -85,12 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
-    # skip some more flaky tests
+    # Skip some more flaky tests.
+    # Skip test requiring custom jemalloc (unit/memefficiency).
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit unit/memefficiency \
       --skipunit integration/failover \
       --skipunit integration/aof-multi-part
 

@@ -4,11 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  libgit2,
-  libssh2,
-  openssl,
-  git,
+  gitMinimal,
   gnupg,
   openssh,
   buildPackages,
@@ -18,31 +14,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.28.2";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EAD40ZZr6VK4w9OuYzx2YcVgOODopF7IWN7GVjTlblE=";
+    hash = "sha256-4zDHSpi7Kk7rramrWFOlBelZnOxt0zgXIrHucYQUOz0=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-WOzzBhZLV4kfsmTGreg1m+sPcDjznB4Kh8ONVNZkp5A=";
+  cargoHash = "sha256-QmMc7pG2FMJBI9AIGPRRh2juFoz7gRFw5CQIcNK6QZI=";
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
   ];
 
-  buildInputs = [
-    libgit2
-    libssh2
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
-
   nativeCheckInputs = [
-    git
+    gitMinimal
     gnupg
     openssh
   ];

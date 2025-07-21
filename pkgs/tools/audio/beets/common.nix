@@ -101,8 +101,6 @@ python3Packages.buildPythonApplication {
       pyyaml
       unidecode
       typing-extensions
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
@@ -147,12 +145,10 @@ python3Packages.buildPythonApplication {
     with python3Packages;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       mock
       rarfile
       responses
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.2.0-unstable-2025-03-12") [
       requests-mock
     ]
     ++ [
@@ -176,10 +172,8 @@ python3Packages.buildPythonApplication {
       "test/plugins/test_player.py"
     ];
   disabledTests = disabledTests ++ [
-    # beets.ui.UserError: unknown command 'autobpm'
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
-    # AssertionError: assert 0 == 117
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+    # https://github.com/beetbox/beets/issues/5880
+    "test_reject_different_art"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

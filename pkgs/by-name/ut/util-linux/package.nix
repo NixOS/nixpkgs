@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoconf,
+  automake116x,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
@@ -32,20 +34,33 @@
 let
   isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackage: rec {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.40.4";
+  version = "2.41";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-XB2vczsE6YWa/cO9h8xIEYDuD4i1wJRrFv3skxl1+3k=";
+    hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
   };
 
-  patches = [
-    ./rtcwake-search-PATH-for-shutdown.patch
-    # https://github.com/util-linux/util-linux/pull/3013
-    ./fix-darwin-build.patch
-  ];
+  patches =
+    [
+      ./rtcwake-search-PATH-for-shutdown.patch
+      # https://github.com/util-linux/util-linux/pull/3013
+      ./fix-darwin-build.patch
+      # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
+      ./fix-mount-regression.patch
+      # https://github.com/util-linux/util-linux/pull/3530
+      ./libmount-subdir-remove-unused-code.patch
+      ./libmount-subdir-restrict-for-real-mounts-only.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      (fetchurl {
+        name = "bits-only-build-when-cpu_set_t-is-available.patch";
+        url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
+        hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
+      })
+    ];
 
   # We separate some of the utilities into their own outputs. This
   # allows putting together smaller systems depending on only part of
@@ -67,7 +82,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      patchShebangs tests/run.sh tools/all_syscalls
+      patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
       substituteInPlace sys-utils/eject.c \
         --replace "/bin/umount" "$bin/bin/umount"
@@ -107,6 +122,7 @@ stdenv.mkDerivation rec {
       (lib.withFeature systemdSupport "systemd")
       (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
       (lib.withFeatureAs systemdSupport "tmpfilesdir" "${placeholder "out"}/lib/tmpfiles.d")
+      (lib.withFeatureAs systemdSupport "sysusersdir" "${placeholder "out"}/lib/sysusers.d")
       (lib.enableFeature translateManpages "poman")
       "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
     ]
@@ -136,6 +152,10 @@ stdenv.mkDerivation rec {
     [
       pkg-config
       installShellFiles
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      autoconf
+      automake116x
     ]
     ++ lib.optionals translateManpages [ po4a ]
     ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
@@ -222,4 +242,4 @@ stdenv.mkDerivation rec {
     ];
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
-}
+})

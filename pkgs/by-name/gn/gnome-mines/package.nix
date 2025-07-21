@@ -7,26 +7,25 @@
   vala,
   pkg-config,
   gnome,
-  adwaita-icon-theme,
-  gtk3,
-  wrapGAppsHook3,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
   librsvg,
   gettext,
   itstool,
-  python3,
   libxml2,
-  libgnome-games-support,
+  libgnome-games-support_2_0,
   libgee,
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mines";
-  version = "40.1";
+  version = "48.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mines/${lib.versions.major version}/gnome-mines-${version}.tar.xz";
-    hash = "sha256-NQLps/ccs7LnEcDmAZGH/rzCvKh349RW3KtwD3vjEnI=";
+    url = "mirror://gnome/sources/gnome-mines/${lib.versions.major finalAttrs.version}/gnome-mines-${finalAttrs.version}.tar.xz";
+    hash = "sha256-70stLd477GFBV+3eTZGJzGr+aSlSot1VsocOLmLtgQQ=";
   };
 
   nativeBuildInputs = [
@@ -36,27 +35,23 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    python3
     libxml2
-    wrapGAppsHook3
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    libadwaita
+    libgnome-games-support_2_0
     librsvg
-    adwaita-icon-theme
-    libgnome-games-support
     libgee
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson_post_install.py
-    patchShebangs build-aux/meson_post_install.py
-  '';
-
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-mines"; };
+    updateScript = gnome.updateScript {
+      packageName = "gnome-mines";
+    };
   };
 
   meta = with lib; {
@@ -67,4 +62,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
-}
+})

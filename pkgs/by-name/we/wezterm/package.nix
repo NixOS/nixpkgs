@@ -29,14 +29,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-23";
+  version = "0-unstable-2025-06-24";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "4ff581a8aa3460d04f859fdadb50f29b3c507763";
+    rev = "2deb317ec069b8f94ec1282253faaa71a8d997fc";
     fetchSubmodules = true;
-    hash = "sha256-KKfGB1vM8ytpNieWD6CHD5zVyUe17tFAegZFzLx7QfE=";
+    hash = "sha256-danJcaG4ZyMbqR+4xaVOVM7a+4Sehq5cum40iRt/HQ8=";
   };
 
   postPatch =
@@ -55,7 +55,12 @@ rustPlatform.buildRustPackage rec {
       rm -r wezterm-ssh/tests
     '';
 
-  cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
+  # dep: syntax causes build failures in rare cases
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124
+  # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
+  auditable = false;
+
+  cargoHash = "sha256-uYx5OykWHN4B73rXWMYg3Sl7B+o7uFJMyAFiLMlLCsA=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
@@ -114,7 +119,12 @@ rustPlatform.buildRustPackage rec {
       cp -r assets/macos/WezTerm.app "$OUT_APP"
       rm $OUT_APP/*.dylib
       cp -r assets/shell-integration/* "$OUT_APP"
-      ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      # https://github.com/wezterm/wezterm/pull/6886
+      # macOS will only recognize our application bundle
+      # if the binaries are inside of it. Move them there
+      # and create symbolic links for them in bin/.
+      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
+      ln -s "$OUT_APP"/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$out/bin"
     '';
 
   passthru = {
@@ -158,7 +168,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       mimame
       SuperSandro2000
-      thiagokokada
     ];
   };
 }

@@ -237,6 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
         "1100"
         "1101"
         "1102"
+        "1200" # RX 9070
+        "1201" # RX 9070 XT
       ] (target: "gfx${target}");
 
       inherit hipClangPath;

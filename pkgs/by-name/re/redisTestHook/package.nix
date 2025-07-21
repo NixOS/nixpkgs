@@ -3,6 +3,7 @@
   callPackage,
   makeSetupHook,
   valkey,
+  python3Packages,
 }:
 
 makeSetupHook {
@@ -13,5 +14,6 @@ makeSetupHook {
   };
   passthru.tests = {
     simple = callPackage ./test.nix { };
+    python3-valkey = python3Packages.valkey;
   };
 } ./redis-test-hook.sh

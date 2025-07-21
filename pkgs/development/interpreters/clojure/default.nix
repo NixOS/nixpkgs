@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
   fetchurl,
   installShellFiles,
   jdk,
@@ -11,18 +12,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.0.1530";
+  version = "1.12.1.1550";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-D/JLioEmujnTLeeEoIdnxd8lk4TLdsbuPbTWECcF7Uk=";
+    hash = "sha256-kGxiVnnHLnA1h1mIpGOSodg9Fu4d9ZmlYaL9M0JLDT8=";
   };
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   # See https://github.com/clojure/brew-install/blob/1.10.3/src/main/resources/clojure/install/linux-install.sh
   installPhase =

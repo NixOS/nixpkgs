@@ -12,7 +12,6 @@
   # buildInputs
   openssl,
   stdenv,
-  darwin,
   libiconv,
 }:
 
@@ -29,8 +28,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-O4aKqVSShFpt8mdZkY3WV55j9CIczRSRkIMC7dJoGv0=";
   };
 
@@ -47,8 +45,6 @@ buildPythonPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
       libiconv
     ];
 

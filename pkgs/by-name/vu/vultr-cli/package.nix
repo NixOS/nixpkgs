@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "vultr-cli";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "vultr";
-    repo = pname;
+    repo = "vultr-cli";
     rev = "v${version}";
-    hash = "sha256-uk0tG66u0gQgEzpiFAeMC0qPrd+Pk6nbrXuuyOtVLe4=";
+    hash = "sha256-ljFtla6aWrrQACIzKqbxW0Naf+iArqO3kpbjOfu3RDU=";
   };
 
-  vendorHash = "sha256-qf0l76MGIFv5m7uSjo4FgS6XxYzCT4+Efgt6W6jA1i8=";
+  vendorHash = "sha256-OoXsKBzNK6DtuA0yc21IAty8p0uv043BYMX3oT/5QN8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,12 +33,12 @@ buildGoModule rec {
       --zsh <($out/bin/vultr-cli completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official command line tool for Vultr services";
     homepage = "https://github.com/vultr/vultr-cli";
     changelog = "https://github.com/vultr/vultr-cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
     mainProgram = "vultr-cli";
   };
 }

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.17";
+  version = "3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.hypervisor";
     tag = version;
-    hash = "sha256-3seluZDN5rfJ2XQPblNpEXZQwjxTZB10IwYNZirb7J0=";
+    hash = "sha256-1M9KDbLNFBmB/iSMqRdNlW3WEZugJxhXJJgcijK61kA=";
   };
 
   build-system = [

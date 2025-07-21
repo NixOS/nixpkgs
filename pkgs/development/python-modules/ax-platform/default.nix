@@ -1,40 +1,42 @@
 {
   lib,
-  botorch,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  hypothesis,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  botorch,
   ipywidgets,
   jinja2,
-  jupyter,
-  mercurial,
+  markdown,
   pandas,
   plotly,
-  pyfakefs,
   pyre-extensions,
+  scikit-learn,
+  scipy,
+  sympy,
+
+  # tests
+  pyfakefs,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
   sqlalchemy,
   tabulate,
-  typeguard,
-  yappi,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.5.0";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     tag = version;
-    hash = "sha256-CMKdnPvzQ9tvU9/01mRaWi/Beuyo19CtaXNJCoiwLOw=";
+    hash = "sha256-DFsV1w6J7bTZNUq9OYExDvfc7IfTcthGKAnRMNujRKI=";
   };
 
   env.ALLOW_BOTORCH_LATEST = "1";
@@ -48,39 +50,47 @@ buildPythonPackage rec {
     botorch
     ipywidgets
     jinja2
+    markdown
     pandas
     plotly
-    typeguard
     pyre-extensions
+    scikit-learn
+    scipy
+    sympy
   ];
 
-  optional-dependencies = {
-    mysql = [ sqlalchemy ];
-    notebook = [ jupyter ];
-  };
-
   nativeCheckInputs = [
-    hypothesis
-    mercurial
     pyfakefs
+    # pytest-xdist
     pytestCheckHook
+    sqlalchemy
     tabulate
-    yappi
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ];
+  pytestFlagsArray = [
+    # Hangs forever
+    "--deselect=ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
+  ];
 
   disabledTestPaths = [
     "ax/benchmark"
     "ax/runners/tests/test_torchx.py"
+
     # broken with sqlalchemy 2
     "ax/core/tests/test_experiment.py"
     "ax/service/tests/test_ax_client.py"
     "ax/service/tests/test_scheduler.py"
     "ax/service/tests/test_with_db_settings_base.py"
-    "ax/storage"
   ];
 
   disabledTests =
     [
+      # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
+      "SQAStoreUtilsTest"
+      "SQAStoreTest"
+
+      # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+      "test_get_next_trials_with_db"
+
       # exact comparison of floating points
       "test_optimize_l0_homotopy"
       # AssertionError: 5 != 2
@@ -92,16 +102,9 @@ buildPythonPackage rec {
       # broken with sqlalchemy 2
       "test_sql_storage"
     ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      #  Both `metric_aggregation` and `criterion` must be `ReductionCriterion`
-      "test_SingleDiagnosticBestModelSelector_max_mean"
-      "test_SingleDiagnosticBestModelSelector_min_mean"
-      "test_SingleDiagnosticBestModelSelector_min_min"
-      "test_SingleDiagnosticBestModelSelector_model_cv_kwargs"
-      "test_init"
-      "test_gen"
-      # "use MIN or MAX" does not match "Both `metric_aggregation` and `criterion` must be `ReductionCriterion`
-      "test_user_input_error"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # flaky on x86
+      "test_gen_with_expanded_parameter_space"
     ];
 
   pythonImportsCheck = [ "ax" ];

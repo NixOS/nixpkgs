@@ -7,15 +7,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teapot";
   version = "2.3.0";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}";
     owner = "museoa";
-    repo = pname;
-    rev = version;
+    repo = "teapot";
+    tag = finalAttrs.version;
     hash = "sha256-38XFjRzOGasr030f+mRYT+ptlabpnVJfa+1s7ZAjS+k=";
   };
 
@@ -47,8 +46,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_HELP=OFF"
   ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
     description = "Table Editor And Planner, Or: Teapot";
     longDescription = ''
       Teapot is a compact spreadsheet software originally written by Michael
@@ -71,11 +69,13 @@ stdenv.mkDerivation rec {
       spreadsheets still inherit from the days of VisiCalc on ancient CP/M
       systems.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "teapot";
+    homepage = "https://github.com/museoa/teapot";
+    changelog = "https://github.com/museoa/teapot/releases/tag/${finalAttrs.version}";
   };
-}
+})
 # TODO: patch/fix FLTK building
 # TODO: add documentation

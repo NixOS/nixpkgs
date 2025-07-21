@@ -10,16 +10,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "12.1.3";
+  version = "12.2.7";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     tag = finalAttrs.version;
-    hash = "sha256-JwEeH3oMiiIa1awLwOrtGfkwN3srhPErkpHaAJ2IFVE=";
+    hash = "sha256-pSmxvDGsD2NFKwP0tA8LTBxfZEXDJFwLACdmK//6Ks8=";
   };
 
-  vendorHash = "sha256-3wwv+g9VsNzqgj1m9fea6OhWzbU203I8CPXcJRyWEpg=";
+  vendorHash = "sha256-py1mJRNb8Wcsw9sq0sGZc7lHzi52Ui4HmTUeAvTaXwY=";
 
   passthru = {
     updateScript = nix-update-script { };

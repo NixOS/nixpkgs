@@ -51,13 +51,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.24.1";
+  version = "25.6.1";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aWQcGIrBoDAO7XqWb3dQLBKg5RZYxC7JxwZ+OBSwmEs=";
+    hash = "sha256-DqgayLXI+RPIb8tLzJoHi+Z12px4pdzU50C0UBSa2u4=";
   };
 
   monado = applyPatches {
@@ -65,13 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "848a24aa106758fd6c7afcab6d95880c57dbe450";
-      hash = "sha256-+rax9/CG/3y8rLYwGqoWJa4FxH+Z3eREiwhuxDOUzLs=";
+      rev = "bb9bcee2a3be75592de819d9e3fb2c8ed27bb7dc";
+      hash = "sha256-+PiWxnvMXaSFc+67r17GBRXo7kbjikSElawNMJCydrk=";
     };
-
-    patches = [
-      ./force-enable-steamvr_lh.patch
-    ];
 
     postPatch = ''
       ${finalAttrs.src}/patches/apply.sh ${finalAttrs.src}/patches/monado/*
@@ -83,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Let's make sure our monado source revision matches what is used by WiVRn upstream
   postUnpack = ''
     ourMonadoRev="${finalAttrs.monado.src.rev}"
-    theirMonadoRev=$(sed -n '/FetchContent_Declare(monado/,/)/p' ${finalAttrs.src.name}/CMakeLists.txt | grep "GIT_TAG" | awk '{print $2}')
+    theirMonadoRev=$(cat ${finalAttrs.src.name}/monado-rev)
     if [ ! "$theirMonadoRev" == "$ourMonadoRev" ]; then
       echo "Our Monado source revision doesn't match CMakeLists.txt." >&2
       echo "  theirs: $theirMonadoRev" >&2
@@ -171,8 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
     ];
 
-  postFixup = ''
-    wrapProgram $out/bin/wivrn-dashboard \
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp "$out/bin/wivrn-dashboard" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
@@ -191,14 +189,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "An OpenXR streaming application to a standalone headset";
+  meta = {
+    description = "OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
-    changelog = "https://github.com/WiVRn/WiVRn/releases/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/WiVRn/WiVRn/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ImSapphire
+      passivelemon
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 })

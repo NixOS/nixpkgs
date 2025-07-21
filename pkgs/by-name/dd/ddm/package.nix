@@ -16,11 +16,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ddm";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = requireFile {
     name = "DungeonDuelMonsters-linux-x64.zip";
-    hash = "sha256-Ycy5Cbd4NR/TptVnl5wV154uA0JU0UzIRHTAi/xm0cs=";
+    hash = "sha256-gq2nGwpaStqaVI1pL63xygxOI/z53o+zLwiKizG98Ks=";
     url = "https://mikaygo.itch.io/ddm";
   };
 

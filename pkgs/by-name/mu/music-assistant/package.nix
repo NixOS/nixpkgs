@@ -48,14 +48,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-yugtL3dCuGb2OSTy49V4mil9EnfACcGrYCA1rW/lo+4=";
+    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
   };
 
   patches = [
@@ -173,7 +173,7 @@ python.pkgs.buildPythonApplication rec {
     tests = nixosTests.music-assistant;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/music-assistant/server/releases/tag/${version}";
     description = "Music Assistant is a music library manager for various music sources which can easily stream to a wide range of supported players";
     longDescription = ''
@@ -182,8 +182,8 @@ python.pkgs.buildPythonApplication rec {
       always-on device like a Raspberry Pi, a NAS or an Intel NUC or alike.
     '';
     homepage = "https://github.com/music-assistant/server";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "mass";
   };
 }

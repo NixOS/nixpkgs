@@ -3,7 +3,6 @@
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
-  darwin,
   fetchzip,
   ispc,
   lib,
@@ -42,14 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [ tbb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Accelerate
-        MetalKit
-        MetalPerformanceShadersGraph
-      ]
-    )
+
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl
@@ -61,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "TBB_ROOT" "${tbb}")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openimagedenoise.org";
     description = "High-Performance Denoising Library for Ray Tracing";
-    license = licenses.asl20;
-    maintainers = [ maintainers.leshainc ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/RenderKit/oidn/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.leshainc ];
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/RenderKit/oidn/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
 })

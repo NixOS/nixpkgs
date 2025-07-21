@@ -208,16 +208,16 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++
-        lib.optional (lib.versionOlder release_version "16")
-          # Fix musl build.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
-              relative = "llvm";
-              hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
-            }
-          )
+      ++ lib.optionals (lib.versionOlder release_version "16") [
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+        # Fix for Python 3.13
+        (getVersionFile "llvm/no-pipes.patch")
+      ]
       ++ lib.optionals (lib.versionOlder release_version "14") [
         # Backport gcc-13 fixes with missing includes.
         (fetchpatch {
@@ -516,6 +516,8 @@ stdenv.mkDerivation (
         optionalString stdenv.hostPlatform.isFreeBSD ''
           rm test/tools/llvm-libtool-darwin/L-and-l.test
           rm test/ExecutionEngine/Interpreter/intrinsics.ll
+          # Fails in sandbox
+          substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
@@ -559,19 +561,11 @@ stdenv.mkDerivation (
         ));
 
     # Workaround for configure flags that need to have spaces
-    preConfigure =
-      if lib.versionAtLeast release_version "15" then
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
-          )
-        ''
-      else
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
-          )
-        '';
+    preConfigure = ''
+      cmakeFlagsArray+=(
+        -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
+      )
+    '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (

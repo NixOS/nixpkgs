@@ -5,7 +5,7 @@
 }:
 fetchurl {
   url = "http://download.virtualbox.org/virtualbox/${virtualboxVersion}/VBoxGuestAdditions_${virtualboxVersion}.iso";
-  sha256 = "0001ed19cc389f04723c9b911338559b9b74bea0d24edf794d8d2ce5b5cb14e0";
+  sha256 = "256883e2eabf7ab5c10fb3b6831c294942ce34bc615807f9d0cf6c3d2e882236";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''

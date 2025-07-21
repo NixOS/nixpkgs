@@ -11,7 +11,6 @@
   # tests
   pandas,
   pytestCheckHook,
-  undefined,
 }:
 
 buildPythonPackage rec {
@@ -33,10 +32,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    undefined
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "pyfakefs/tests"
   ];
 

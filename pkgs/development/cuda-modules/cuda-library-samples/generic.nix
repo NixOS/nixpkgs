@@ -1,36 +1,33 @@
 {
-  lib,
-  backendStdenv,
-  fetchFromGitHub,
-  cmake,
   addDriverRunpath,
   autoAddDriverRunpath,
-  cudatoolkit,
-  cutensor,
-  cusparselt,
-  cudaPackages,
-  setupCudaHook,
   autoPatchelfHook,
+  backendStdenv,
+  cmake,
+  cuda_cccl ? null,
+  cuda_cudart ? null,
+  cuda_nvcc ? null,
+  cudaAtLeast,
+  cudaOlder,
+  cudatoolkit,
+  cusparselt ? null,
+  cutensor ? null,
+  fetchFromGitHub,
+  lib,
+  libcusparse ? null,
+  setupCudaHook,
 }:
 
 let
-  inherit (cudaPackages)
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    libcusparse
-    cudaAtLeast
-    cudaOlder
-    ;
-  rev = "e57b9c483c5384b7b97b7d129457e5a9bdcdb5e1";
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "CUDALibrarySamples";
-    inherit rev;
-    sha256 = "0g17afsmb8am0darxchqgjz1lmkaihmnn7k1x4ahg5gllcmw8k3l";
-  };
-  commonAttrs = {
-    version = lib.strings.substring 0 7 rev + "-" + lib.versions.majorMinor cudatoolkit.version;
+  base = backendStdenv.mkDerivation (finalAttrs: {
+    src = fetchFromGitHub {
+      owner = "NVIDIA";
+      repo = "CUDALibrarySamples";
+      rev = "e57b9c483c5384b7b97b7d129457e5a9bdcdb5e1";
+      sha256 = "0g17afsmb8am0darxchqgjz1lmkaihmnn7k1x4ahg5gllcmw8k3l";
+    };
+    version =
+      lib.strings.substring 0 7 finalAttrs.src.rev + "-" + lib.versions.majorMinor cudatoolkit.version;
     nativeBuildInputs = [
       cmake
       addDriverRunpath
@@ -53,64 +50,63 @@ let
       maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
       teams = [ lib.teams.cuda ];
     };
-  };
+  });
 in
 
 {
-  cublas = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cublas = base.overrideAttrs (
+    finalAttrs: _: {
       pname = "cuda-library-samples-cublas";
-
-      src = "${src}/cuBLASLt";
+      sourceRoot = "${finalAttrs.src.name}/cuBLASLt";
     }
   );
 
-  cusolver = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cusolver = base.overrideAttrs (
+    finalAttrs: _: {
       pname = "cuda-library-samples-cusolver";
-
-      src = "${src}/cuSOLVER";
-
-      sourceRoot = "cuSOLVER/gesv";
+      sourceRoot = "${finalAttrs.src.name}/cuSOLVER/gesv";
     }
   );
 
-  cutensor = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cutensor = base.overrideAttrs (
+    finalAttrs: prevAttrs: {
       pname = "cuda-library-samples-cutensor";
 
-      src = "${src}/cuTENSOR";
+      sourceRoot = "${finalAttrs.src.name}/cuTENSOR";
 
-      buildInputs = [ cutensor ];
+      buildInputs = prevAttrs.buildInputs or [ ] ++ [ cutensor ];
 
-      cmakeFlags = [ "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin" ];
+      cmakeFlags = prevAttrs.cmakeFlags or [ ] ++ [
+        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
+      ];
 
       # CUTENSOR_ROOT is double escaped
-      postPatch = ''
-        substituteInPlace CMakeLists.txt \
-          --replace-fail "\''${CUTENSOR_ROOT}/include" "${cutensor.dev}/include"
-      '';
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          substituteInPlace CMakeLists.txt \
+            --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
+        '';
 
       CUTENSOR_ROOT = cutensor;
+
+      meta = prevAttrs.meta or { } // {
+        broken = cutensor == null;
+      };
     }
   );
 
-  cusparselt = backendStdenv.mkDerivation (
-    commonAttrs
-    // {
+  cusparselt = base.overrideAttrs (
+    finalAttrs: prevAttrs: {
       pname = "cuda-library-samples-cusparselt";
 
-      src = "${src}/cuSPARSELt";
+      sourceRoot = "${finalAttrs.src.name}/cuSPARSELt/matmul";
 
-      sourceRoot = "cuSPARSELt/matmul";
-
-      buildInputs = lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
+      buildInputs = prevAttrs.buildInputs or [ ] ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
 
       nativeBuildInputs =
-        [
+        prevAttrs.nativeBuildInputs or [ ]
+        ++ [
           cmake
           addDriverRunpath
           (lib.getDev cusparselt)
@@ -125,22 +121,34 @@ in
           cuda_cccl # <nv/target>
         ];
 
-      postPatch = ''
-        substituteInPlace CMakeLists.txt \
-          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
-          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
-      '';
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          substituteInPlace CMakeLists.txt \
+            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
+            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+        '';
 
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/bin
-        cp matmul_example $out/bin/
-        cp matmul_example_static $out/bin/
-        runHook postInstall
-      '';
+      postInstall =
+        prevAttrs.postInstall or ""
+        + ''
+          mkdir -p $out/bin
+          cp matmul_example $out/bin/
+          cp matmul_example_static $out/bin/
+        '';
 
       CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
       CUSPARSELT_PATH = lib.getLib cusparselt;
+
+      meta = prevAttrs.meta or { } // {
+        broken =
+          # Base dependencies
+          (cusparselt == null || libcusparse == null)
+          # CUDA 11.4+ dependencies
+          || (cudaAtLeast "11.4" && (cuda_nvcc == null || cuda_cudart == null))
+          # CUDA 12.0+ dependencies
+          || (cudaAtLeast "12.0" && cuda_cccl == null);
+      };
     }
   );
 }

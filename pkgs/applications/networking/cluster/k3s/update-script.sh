@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq nurl yq-go
+#!nix-shell -i bash -p curl git gnugrep gnused go jq nurl yq-go
 
 set -x -eu -o pipefail
 
@@ -35,6 +35,7 @@ cd "$K3S_STORE_PATH"
 # Set the DRONE variables as they are expected to be set in version.sh
 DRONE_TAG="$LATEST_TAG_NAME"
 DRONE_COMMIT="$K3S_COMMIT"
+NO_DAPPER="" # Source git_version.sh in scripts/version.sh#L8
 source "${K3S_STORE_PATH}/scripts/version.sh"
 
 K3S_ROOT_SHA256=$(nix-prefetch-url --quiet --unpack \

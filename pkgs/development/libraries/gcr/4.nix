@@ -1,4 +1,5 @@
 {
+  pkgs,
   stdenv,
   lib,
   fetchurl,
@@ -25,10 +26,12 @@
   shared-mime-info,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
-
+let
+  ini = pkgs.formats.ini { };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
-  version = "4.3.1";
+  version = "4.4.0.1";
 
   outputs = [
     "out"
@@ -39,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gcr/${lib.versions.majorMinor finalAttrs.version}/gcr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-svBw//GEDu9wVGoovoAjVCfBFqrcWTtbaMzIab46oJ0=";
+    hash = "sha256-DDw0Hkn59PJTKkiEUJgEGQoMJmPmEgNguymMXRdKgJg=";
   };
 
   strictDeps = true;
@@ -80,11 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    # We are still using ssh-agent from gnome-keyring.
-    # https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh_agent=false"
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
     (lib.mesonEnable "systemd" systemdSupport)
+    "--cross-file=${
+      ini.generate "cross-file.conf" {
+        binaries =
+          {
+            ssh-add = "'${lib.getExe' openssh "ssh-add"}'";
+            ssh-agent = "'${lib.getExe' openssh "ssh-agent"}'";
+          }
+          // lib.optionalAttrs systemdSupport {
+            systemctl = "'${lib.getExe' systemd "systemctl"}'";
+          };
+      }
+    }"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon

@@ -1,25 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
+  python,
   fetchFromGitHub,
   setuptools,
   python-dateutil,
   drf-yasg,
   netbox,
+  netaddr,
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "mlebreuil";
     repo = "netbox-contract";
     tag = "v${version}";
-    hash = "sha256-e3N0m+oj2CMUXwI4dF/tXA+Lz+9+ZlbJAy+zHoRDNtw=";
+    hash = "sha256-duA53cuJ3q6CRp239xNMXQhGZHGn7IBIGNLoxt7hZh8=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   # running tests requires initialized django project
   nativeCheckInputs = [
     netbox
+    netaddr
   ];
 
   preFixup = ''

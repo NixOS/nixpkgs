@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchurl,
   runCommand,
-  writeText,
   biber,
 
   # nativeBuildInputs
@@ -95,19 +94,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "miktex";
-  version = "25.2";
+  version = "25.4";
 
   src = fetchFromGitHub {
     owner = "miktex";
     repo = "miktex";
     tag = finalAttrs.version;
-    hash = "sha256-egN9+BRO/EAcbrn/jZac4Lb79H5N/LEjReMPGHVM/yM=";
+    hash = "sha256-3QGW8rsettA+Jtrsi9C5ONIG4vP+iuUEUi9dGHfWMSY=";
   };
 
   patches = [
     ./startup-config-support-nix-store.patch
     # Miktex will search exectables in "GetMyPrefix(true)/bin".
-    # The path evalutate to "/usr/bin" in FHS style linux distrubution,
+    # The path evaluate to "/usr/bin" in FHS style linux distribution,
     # compared to "/nix/store/.../bin" in NixOS.
     # As a result, miktex will fail to find e.g. 'pkexec','ksudo','gksu'
     # under /run/wrappers/bin in NixOS.
@@ -231,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    description = "A modern TeX distribution";
+    description = "Modern TeX distribution";
     homepage = "https://miktex.org";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
@@ -240,8 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       publicDomain
     ];
-    maintainers = with lib.maintainers; [
-      qbisi
-    ];
+    maintainers = with lib.maintainers; [ qbisi ];
   };
 })

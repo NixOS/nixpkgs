@@ -12,20 +12,22 @@
   wrapGAppsHook4,
   glib,
   gtk4,
+  json-glib,
   libadwaita,
   libgee,
   libgtop,
+  networkmanager,
   gnome,
   tinysparql,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-usage";
-  version = "46.0";
+  version = "48.rc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-GGrajgAYjIn4yrVPNZmO2XpG6rb9shiRAoNhvzhqybI=";
+    url = "mirror://gnome/sources/gnome-usage/${lib.versions.major finalAttrs.version}/gnome-usage-${finalAttrs.version}.tar.xz";
+    hash = "sha256-LUbc2QcKkY/sMUdxaaQDI2CdCFa5XHo3wBusqULTk+w=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +44,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk4
+    json-glib
     libadwaita
     libgee
     libgtop
+    networkmanager
     tinysparql
   ];
 
@@ -55,7 +59,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-usage";
     };
   };
 
@@ -67,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     teams = [ teams.gnome ];
   };
-}
+})

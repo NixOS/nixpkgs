@@ -7,17 +7,9 @@
   python3Packages,
   makeWrapper,
   libsamplerate,
-  libsndfile,
-  readline,
-  eigen,
-  celt,
   wafHook,
   # Darwin Dependencies
   aften,
-  AudioUnit,
-  CoreAudio,
-  libobjc,
-  Accelerate,
 
   # BSD Dependencies
   freebsd,
@@ -26,7 +18,6 @@
   dbus ? null,
   libffado ? null,
   alsa-lib ? null,
-  libopus ? null,
 
   # Extra options
   prefix ? "",
@@ -45,7 +36,6 @@ let
   optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
   optAlsaLib = if libOnly then null else shouldUsePkg alsa-lib;
-  optLibopus = shouldUsePkg libopus;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
@@ -71,22 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       libsamplerate
-      libsndfile
-      readline
-      eigen
-      celt
       optDbus
       optPythonDBus
       optLibffado
       optAlsaLib
-      optLibopus
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       aften
-      AudioUnit
-      CoreAudio
-      Accelerate
-      libobjc
     ]
     ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
       freebsd.libsysinfo
@@ -131,17 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace "$dev/lib/pkgconfig/jack.pc" \
-      --replace "$out/include" "$dev/include"
+      --replace-fail "$out/include" "$dev/include"
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
     homepage = "https://jackaudio.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "jack" ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

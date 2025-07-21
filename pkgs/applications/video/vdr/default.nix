@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://www.tvdr.de/";
+    homepage = "https://www.tvdr.de/";
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
     platforms = platforms.linux;

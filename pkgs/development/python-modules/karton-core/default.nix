@@ -1,6 +1,6 @@
 {
   lib,
-  boto3,
+  aioboto3,
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.6.1";
+  version = "5.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = "karton";
     tag = "v${version}";
-    hash = "sha256-fOnOZJKjlcF00FHGd/MTWo3Z7ZYdN2olOWzl/R39IWI=";
+    hash = "sha256-OWaGjH9FKv5FOG6ttoT+zvLKcrD4j6y1cSpArtCEn4w=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "boto3" ];
 
   dependencies = [
-    boto3
+    aioboto3
     orjson
     redis
   ];

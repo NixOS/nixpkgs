@@ -18,25 +18,24 @@
   libadwaita,
   pango,
   gettext,
-  darwin,
   blueprint-compiler,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "diebahn";
-  version = "2.7.3";
+  version = "2.8.2";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
     tag = version;
-    hash = "sha256-PD76zxgQJ332MVu5LL9SNDrf66xmE/td4uDv/FYq0aU=";
+    hash = "sha256-pPjOl46R8hBpyKdwq/gwHv/qCtFkI0LVDsqxcQOgtkU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-3+UTN0KKnbpPm948XW4NSZkMYJUv974VtTqtG8orR/E=";
+    hash = "sha256-kxt6z2RaSnlso/Jz36B9VNwti2o3b8+Ggd4zDIjFf2c=";
   };
 
   nativeBuildInputs = [
@@ -51,24 +50,15 @@ stdenv.mkDerivation rec {
     blueprint-compiler
   ];
 
-  buildInputs =
-    [
-      cairo
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      openssl
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Foundation
-        Security
-      ]
-    );
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    openssl
+    pango
+  ];
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.

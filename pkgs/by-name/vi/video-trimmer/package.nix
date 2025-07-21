@@ -20,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "0.9.0";
+  version = "25.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "video-trimmer";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4B3NNGww+UjI/VbsKL62vWlKye7NYXYPzlJ4TfywJDw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pJCXL0voOoc8KpYECYRWGefYMrsApNPST4wv8SQlH34=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-H7KB4O3Wyp2YdMLFwvQuYLhk7Ei7SecnMN9wg60FIm8=";
+    hash = "sha256-3ycc4jXneGsz9Jp9Arzf224JPAKM+PxUkitWcIXre8Y=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
+    changelog = "https://gitlab.gnome.org/YaLTeR/video-trimmer/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       doronbehar
     ];

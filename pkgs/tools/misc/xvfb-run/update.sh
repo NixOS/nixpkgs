@@ -7,7 +7,7 @@ set -e
 info=$(nix-prefetch-git --quiet --url "https://github.com/archlinux/svntogit-packages" --rev "refs/heads/packages/xorg-server")
 
 rev=$(jq -r '.rev' <<< "$info")
-sha256=$(nix hash to-sri --type sha256 "$(jq -r '.sha256' <<< "$info")")
+sha256=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(jq -r '.sha256' <<< "$info")")
 dir=$(jq -r '.path' <<< "$info")
 
 newXvfbsha=$(sha256sum "$dir/trunk/xvfb-run")

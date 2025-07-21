@@ -1,6 +1,6 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
   mpv,
@@ -8,15 +8,15 @@
   copyDesktopItems,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.7";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-NK1qIlxgSZQ1Es3KhMcUc1Je5ATq53kXcBqLBQVw5DQ=";
+    hash = "sha256-6kEty4QZZQW3Xzz4213ThC4FF+quMNE4oAuZ1limxFg=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -18,6 +17,11 @@
   sniffio,
   tqdm,
   typing-extensions,
+
+  # `httpx_aiohttp` not currently in `nixpkgs`
+  # optional-dependencies (aiohttp)
+  # aiohttp,
+  # httpx_aiohttp,
 
   # optional-dependencies (datalib)
   numpy,
@@ -37,6 +41,7 @@
   nest-asyncio,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
 
   # optional-dependencies toggle
@@ -46,16 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.76.2";
+  version = "1.97.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-MywcdSFOFKfq6MPRAfsbJzu82IKCOLSU3JbnwHvkHsA=";
+    hash = "sha256-q+GUEHducm71Zqh7ZfRF217awFKQIsOSEWoe04M3DFM=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -80,6 +83,11 @@ buildPythonPackage rec {
     ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    # `httpx_aiohttp` not currently in `nixpkgs`
+    # aiohttp = [
+    #   aiohttp
+    #   httpx_aiohttp
+    # ];
     datalib = [
       numpy
       pandas
@@ -103,14 +111,12 @@ buildPythonPackage rec {
     nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    # snapshot mismatches
-    "--inline-snapshot=update"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests =
@@ -129,12 +135,12 @@ buildPythonPackage rec {
     "tests/api_resources"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";
   };
 }

@@ -6,13 +6,13 @@
   },
   {
     "pname": "Azure.Storage.Blobs",
-    "version": "12.23.0",
-    "hash": "sha256-SMSelOQaPwRTv4qrgM1oIW0122KaMt4nBhHW1EzQg7Q="
+    "version": "12.24.0",
+    "hash": "sha256-PcI3Jf9VrDfkr0YfoR89us45HE1DE8g5J3ZpZ8vZkLs="
   },
   {
     "pname": "Azure.Storage.Common",
-    "version": "12.22.0",
-    "hash": "sha256-mgE5u4uqEN/qxSE2K6d/nr3uIW9ZBXFkBKBUKWJwzwM="
+    "version": "12.23.0",
+    "hash": "sha256-DAMzFlls76hH5jtXtU89SvbQWhhELaQq+PfG4SK7W+Q="
   },
   {
     "pname": "Castle.Core",
@@ -31,13 +31,13 @@
   },
   {
     "pname": "Microsoft.CodeCoverage",
-    "version": "17.12.0",
-    "hash": "sha256-lGjifppD0OBMBp28pjUfPipaeXg739n8cPhtHWoo5RE="
+    "version": "17.13.0",
+    "hash": "sha256-GKrIxeyQo5Az1mztfQgea1kGtJwonnNOrXK/0ULfu8o="
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
-    "version": "17.12.0",
-    "hash": "sha256-DKFEbhh2wPzahNeHdEoFig8tZh/LEVrFc5+zpT43Btg="
+    "version": "17.13.0",
+    "hash": "sha256-sc2wvyV8cGm1FrNP2GGHEI584RCvRPu15erYCsgw5QY="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -96,13 +96,13 @@
   },
   {
     "pname": "Microsoft.TestPlatform.ObjectModel",
-    "version": "17.12.0",
-    "hash": "sha256-3XBHBSuCxggAIlHXmKNQNlPqMqwFlM952Av6RrLw1/w="
+    "version": "17.13.0",
+    "hash": "sha256-6S0fjfj8vA+h6dJVNwLi6oZhYDO/I/6hBZaq2VTW+Uk="
   },
   {
     "pname": "Microsoft.TestPlatform.TestHost",
-    "version": "17.12.0",
-    "hash": "sha256-rf8Sh0fQq44Sneuvs64unkkIHg8kOjDGWE35j9iLx5I="
+    "version": "17.13.0",
+    "hash": "sha256-L/CJzou7dhmShUgXq3aXL3CaLTJll17Q+JY2DBdUUpo="
   },
   {
     "pname": "Microsoft.Win32.Primitives",
@@ -481,8 +481,8 @@
   },
   {
     "pname": "System.Diagnostics.EventLog",
-    "version": "8.0.0",
-    "hash": "sha256-rt8xc3kddpQY4HEdghlBeOK4gdw5yIj4mcZhAVtk2/Y="
+    "version": "8.0.1",
+    "hash": "sha256-zvqd72pwgcGoa1nH3ZT1C0mP9k53vFLJ69r5MCQ1saA="
   },
   {
     "pname": "System.Diagnostics.Tools",
@@ -836,8 +836,8 @@
   },
   {
     "pname": "System.ServiceProcess.ServiceController",
-    "version": "8.0.0",
-    "hash": "sha256-mq/Qm8JeMUvitHf32/F8uvw1YJGx4prGnEI/VzdaFAI="
+    "version": "8.0.1",
+    "hash": "sha256-2cXTzNOyXqJinFPzdVJ9Gu6qrFtycfivu7RHDzBJic8="
   },
   {
     "pname": "System.Text.Encoding",
@@ -971,8 +971,8 @@
   },
   {
     "pname": "xunit.runner.visualstudio",
-    "version": "2.5.8",
-    "hash": "sha256-71EXxeR3yiZTAWCVnjIx9o4Lme6MVY04KXch9qZETQU="
+    "version": "2.8.2",
+    "hash": "sha256-UlfK348r8kJuraywfdCtpJJxHkv04wPNzpUaz4UM/60="
   },
   {
     "pname": "YamlDotNet.Signed",

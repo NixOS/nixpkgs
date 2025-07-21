@@ -8,6 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
   version = "0.2.0";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "mikr";
     repo = pname;

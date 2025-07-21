@@ -6,7 +6,6 @@
   stdenv,
   curl,
   openssl,
-  darwin,
   libgit2,
 }:
 
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
       libgit2
     ];
 

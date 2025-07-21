@@ -35,6 +35,7 @@
   libXft,
   libXi,
   libXpm,
+  libXrandr,
   libgccjit,
   libjpeg,
   libotf,
@@ -66,11 +67,7 @@
   zlib,
 
   # Boolean flags
-
-  # FIXME: Native compilation breaks build and runtime on macOS 15.4;
-  # see <https://github.com/NixOS/nixpkgs/issues/395169>.
-  withNativeCompilation ?
-    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin,
+  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   noGui ? false,
   srcRepo ? true,
   withAcl ? false,
@@ -82,7 +79,8 @@
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  withImageMagick ? lib.versionOlder version "27" && (withX || withNS),
+  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  withImageMagick ? false,
   # Emacs 30+ has native JSON support
   withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
@@ -90,13 +88,13 @@
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
-  withSQLite3 ? lib.versionAtLeast version "29",
+  withSQLite3 ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,
-  withTreeSitter ? lib.versionAtLeast version "29",
-  withWebP ? lib.versionAtLeast version "29",
+  withTreeSitter ? true,
+  withWebP ? true,
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
-  withXinput2 ? withX && lib.versionAtLeast version "29",
+  withXinput2 ? withX,
   withXwidgets ?
     !stdenv.hostPlatform.isDarwin
     && !noGui
@@ -118,21 +116,6 @@
       "lucid"
   ),
 
-  # macOS dependencies for NS and macPort
-  Accelerate,
-  AppKit,
-  Carbon,
-  Cocoa,
-  GSS,
-  IOKit,
-  ImageCaptureCore,
-  ImageIO,
-  OSAKit,
-  Quartz,
-  QuartzCore,
-  UniformTypeIdentifiers,
-  WebKit,
-
   # test
   callPackage,
 }:
@@ -143,6 +126,7 @@ assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
 assert withAcl -> stdenv.hostPlatform.isLinux;
 assert withAlsaLib -> stdenv.hostPlatform.isLinux;
 assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
@@ -185,9 +169,7 @@ mkDerivation (finalAttrs: {
     ++ lib.optionals withNativeCompilation [
       (replaceVars
         (
-          if lib.versionOlder finalAttrs.version "29" then
-            ./native-comp-driver-options-28.patch
-          else if lib.versionOlder finalAttrs.version "30" then
+          if lib.versionOlder finalAttrs.version "30" then
             ./native-comp-driver-options.patch
           else
             ./native-comp-driver-options-30.patch
@@ -354,6 +336,7 @@ mkDerivation (finalAttrs: {
       giflib
       libXaw
       libXpm
+      libXrandr
       libjpeg
       libpng
       librsvg
@@ -376,27 +359,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withNS [
       librsvg
-      AppKit
-      GSS
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport") [
-      Accelerate
-      AppKit
-      Carbon
-      Cocoa
-      IOKit
-      OSAKit
-      Quartz
-      QuartzCore
-      WebKit
-      # TODO are these optional?
-      GSS
-      ImageCaptureCore
-      ImageIO
-    ]
-    ++ lib.optionals (variant == "macport" && stdenv.hostPlatform.isAarch64) [
-      UniformTypeIdentifiers
     ];
 
   # Emacs needs to find movemail at run time, see info (emacs) Movemail

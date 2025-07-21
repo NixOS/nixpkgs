@@ -9,6 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -42,6 +43,7 @@ assert lib.assertMsg (
   libarchive,
   libcpuid,
   libsodium,
+  libsystemtap,
   llvmPackages,
   lowdown,
   lowdown-unsandboxed,
@@ -58,11 +60,12 @@ assert lib.assertMsg (
   python3,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
+  systemtap-sdt,
   util-linuxMinimal,
   removeReferencesTo,
   xz,
+  yq,
   nixosTests,
   rustPlatform,
   # Only used for versions before 2.92.
@@ -77,9 +80,15 @@ assert lib.assertMsg (
   enableStrictLLVMChecks ? true,
   withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   aws-sdk-cpp,
+  # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
+  withDtrace ?
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap
+    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
 
   confDir,
   stateDir,
@@ -89,6 +98,8 @@ let
   isLLVMOnly = lib.versionAtLeast version "2.92";
   hasExternalLixDoc = lib.versionOlder version "2.92";
   isLegacyParser = lib.versionOlder version "2.91";
+  hasDtraceSupport = lib.versionAtLeast version "2.93";
+  parseToYAML = lib.versionAtLeast version "2.93";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -120,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We don't want the underlying GCC neither!
     stdenv.cc.cc.stdenv.cc.cc
   ];
+  __structuredAttrs = true;
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
@@ -131,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
         p.pytest
         p.pytest-xdist
         p.python-frontmatter
+        p.toml
       ]))
       pkg-config
       flex
@@ -160,6 +173,9 @@ stdenv.mkDerivation (finalAttrs: {
       mdbook-linkcheck
       doxygen
     ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+    ++ lib.optionals pastaFod [ passt ]
+    ++ lib.optionals parseToYAML [ yq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
 
   buildInputs =
@@ -182,14 +198,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals hasExternalLixDoc [ lix-doc ]
     ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
     # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
     # libunwind library path directly in the wrappers, but it does inject
     # -lunwind without injecting the library path...
     ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
     ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
     ++ lib.optionals withLibseccomp [ libseccomp ]
-    ++ lib.optionals withAWS [ aws-sdk-cpp ];
+    ++ lib.optionals withAWS [ aws-sdk-cpp ]
+    ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
 
   inherit cargoDeps;
 
@@ -244,7 +260,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Enable LTO, since it improves eval performance a fair amount
       # LTO is disabled on:
       # - static builds (strange linkage errors)
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && (isLLVMOnly || stdenv.cc.isGNU)))
+      # - darwin builds (install test failures. see fj#568 & fj#832)
+      (lib.mesonBool "b_lto" (
+        !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+      ))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
@@ -257,6 +276,9 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "store-dir" storeDir)
       (lib.mesonOption "state-dir" stateDir)
       (lib.mesonOption "sysconfdir" confDir)
+    ]
+    ++ lib.optionals hasDtraceSupport [
+      (lib.mesonEnable "dtrace-probes" withDtrace)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
@@ -349,8 +371,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
     tests = {
-      misc = nixosTests.nix-misc.lix;
-      installer = nixosTests.installer.lix-simple;
+      misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
+      installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
     };
   };
 
@@ -372,5 +394,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })

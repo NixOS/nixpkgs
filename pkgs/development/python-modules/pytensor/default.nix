@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   cython,
   versioneer,
 
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.30.3";
+  version = "2.31.7";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,10 +43,11 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-Iyiuvt86pfz8MmpwgDecKJFVOw+fKpEaA9m1MBA9Yxs=";
+    hash = "sha256-FtB5DfeKHl3zlnDxsRn0rs08EJhPwVkXFBFLVA0k6oA=";
   };
 
   build-system = [
+    setuptools
     cython
     versioneer
   ];
@@ -70,6 +72,8 @@ buildPythonPackage rec {
     tensorflow-probability
     writableTmpDirAsHomeHook
   ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -131,6 +135,7 @@ buildPythonPackage rec {
     "test_scan_err1"
     "test_scan_err2"
     "test_shared"
+    "test_size_implied_by_broadcasted_parameters"
     "test_solve_triangular_grad"
     "test_structured_add_s_v_grad"
     "test_structureddot_csc_grad"

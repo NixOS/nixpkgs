@@ -26,6 +26,7 @@
   libgbm,
   nixosTests,
   nvidia_cg_toolkit,
+  pipewire,
   pkg-config,
   python3,
   qt5,
@@ -58,12 +59,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-ER90i0BlHC8SXfz6DzoIPCP1G8n4NNyJcRE88YY0gXk=";
+    hash = "sha256-OewUmnYpRByOgTi42G2reoaSuwxyPGHwP0+Uts/pg54=";
     rev = "v${version}";
   };
 
@@ -108,6 +109,7 @@ stdenv.mkDerivation rec {
       libv4l
       libxkbcommon
       libgbm
+      pipewire
       udev
     ];
 

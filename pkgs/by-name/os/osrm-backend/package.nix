@@ -10,13 +10,13 @@
   boost,
   lua,
   luabind,
-  tbb_2022_0,
+  tbb_2022,
   expat,
   nixosTests,
 }:
 
 let
-  tbb = tbb_2022_0;
+  tbb = tbb_2022;
 in
 stdenv.mkDerivation rec {
   pname = "osrm-backend";

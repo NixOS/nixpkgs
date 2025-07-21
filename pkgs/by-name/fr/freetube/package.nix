@@ -20,13 +20,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.4";
+  version = "0.23.5";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-JQob4NyZ00iOnRbSyNWjL4xyNQ14ixyZDXsJ7KBd9ZM=";
+    hash = "sha256-tVe//h20cTVgpHeo3IlfGfuAH+dM6H5MEfGny5Uhrjk=";
   };
 
   # Darwin requires writable Electron dist
@@ -106,9 +106,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ryneeverett
-      alyaeanyx
+      pentane
       ryand56
       sigmasquadron
+      ddogfoodd
     ];
     badPlatforms = [
       # output app is called "Electron.app" while derivation expects "FreeTube.app"

@@ -1,6 +1,5 @@
 {
   haskellPackages,
-  mkDerivation,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -13,6 +12,8 @@
 }:
 
 let
+  inherit (haskellPackages) mkDerivation;
+
   version = "1.10.0";
   src = fetchFromGitHub {
     owner = "tamarin-prover";

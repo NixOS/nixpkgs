@@ -2,27 +2,21 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste-cli";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "rustypaste-cli";
     rev = "v${version}";
-    hash = "sha256-ziIY/dz/2nwv0S6gUbVsrTXTNkGLh9MRNXnhhVOnCvA=";
+    hash = "sha256-tv5nAs5g7NWVakKUyw5PVxHJYQniV9OYm7yDXhooWU4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-R6mdHoARtnIRpN18KF1TVIgBzEtCinb0xfCM3nz2sxk=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-Z8rybofRp4hzTbn3iT0X50fcJCn2tT3HTYTLLWTJBek=";
 
   meta = with lib; {
     description = "CLI tool for rustypaste";

@@ -113,6 +113,7 @@ let
                       -s //Project -t elem -n Import \
                       -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
                       repo-projects/Directory.Build.targets
+
                     # make nuget-client use the standard arcade package-cache dir, which
                     # is where we scan for dependencies
                     xmlstarlet ed \
@@ -121,6 +122,15 @@ let
                       -s \$prev -t elem -n EnvironmentVariables \
                       -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
                       repo-projects/nuget-client.proj
+
+                    # https://github.com/dotnet/dotnet/pull/546
+                    for proj in arcade nuget-client; do
+                      xmlstarlet ed \
+                        --inplace \
+                        -s //Project -t elem -n PropertyGroup \
+                        -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1901' \
+                        src/$proj/Directory.Build.props
+                    done
                   '';
                 buildFlags = [ "--online" ] ++ old.buildFlags;
                 prebuiltPackages = null;
@@ -142,13 +152,18 @@ let
                 configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
                 genericBuild
 
+              # intentionally after calling stdenv
+              set -Eeuo pipefail
+              shopt -s nullglob
+
               depsFiles=(./src/*/deps.json)
 
-              jq . $(nix-build ${toString ./combine-deps.nix} \
+              combined=$(nix-build ${toString ./combine-deps.nix} \
                 --arg list "[ ''${depsFiles[*]} ]" \
                 --argstr baseRid ${targetRid} \
-                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-                ) > deps.json
+                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
+
+              jq . "$combined" > deps.json
 
               mv deps.json "${toString prebuiltPackages.sourceFile}"
               EOF

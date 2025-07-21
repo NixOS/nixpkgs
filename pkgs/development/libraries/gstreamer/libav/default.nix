@@ -14,6 +14,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,11 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
       hotdoc
     ];
 
-  buildInputs = [
-    gstreamer
-    gst-plugins-base
-    ffmpeg-headless
-  ];
+  buildInputs =
+    [
+      gstreamer
+      gst-plugins-base
+      ffmpeg-headless
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ];
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)

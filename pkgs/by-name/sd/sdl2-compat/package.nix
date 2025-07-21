@@ -2,32 +2,39 @@
   cmake,
   lib,
   fetchFromGitHub,
-  monado,
   ninja,
+  sdl3,
+  stdenv,
+  testers,
+  libX11,
+  libGL,
   nix-update-script,
+
+  # passthru tests
   SDL2_ttf,
   SDL2_net,
   SDL2_gfx,
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
-  sdl3,
-  stdenv,
-  testers,
-  libX11,
-  libGL,
-  testSupport ? true,
+  SDL_compat,
+  ffmpeg,
+  qemu,
 }:
-
+let
+  # tray support on sdl3 pulls in gtk3, which is quite an expensive dependency.
+  # sdl2 does not support the tray, so we can just disable that requirement.
+  sdl3' = sdl3.override { traySupport = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.52";
+  version = "2.32.56";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-adtFcBFclfub//KGpxqObuTIZbh9r4k/jdJEnP1Hzpw=";
+    hash = "sha256-Xg886KX54vwGANIhTAFslzPw/sZs2SvpXzXUXcOKgMs=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    sdl3
+    sdl3'
     libX11
   ];
 
@@ -54,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "SDL2COMPAT_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3 ]))
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3' ]))
   ];
 
   # skip timing-based tests as those are flaky
   env.SDL_TESTS_QUICK = 1;
 
-  doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = true;
 
   patches = [ ./find-headers.patch ];
   setupHook = ./setup-hook.sh;
@@ -68,25 +75,27 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # allow as a drop in replacement for SDL2
     # Can be removed after treewide switch from pkg-config to pkgconf
-    ln -s $dev/lib/pkgconfig/sdl2_compat.pc $dev/lib/pkgconfig/sdl2.pc
+    ln -s $dev/lib/pkgconfig/sdl2-compat.pc $dev/lib/pkgconfig/sdl2.pc
   '';
 
   passthru = {
     tests =
-      let
-        replaceSDL2 = drv: drv.override { SDL2 = finalAttrs.finalPackage; };
-      in
       {
-        pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-        SDL2_ttf = replaceSDL2 SDL2_ttf;
-        SDL2_net = replaceSDL2 SDL2_net;
-        SDL2_gfx = replaceSDL2 SDL2_gfx;
-        SDL2_sound = replaceSDL2 SDL2_sound;
-        SDL2_mixer = replaceSDL2 SDL2_mixer;
-        SDL2_image = replaceSDL2 SDL2_image;
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+        inherit
+          SDL_compat
+          SDL2_ttf
+          SDL2_net
+          SDL2_gfx
+          SDL2_sound
+          SDL2_mixer
+          SDL2_image
+          ffmpeg
+          ;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        monado = replaceSDL2 monado;
+        inherit qemu;
       };
 
     updateScript = nix-update-script {
@@ -104,10 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
       nadiaholmquist
-      grimmauld
-      marcin-serwin
     ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
-    pkgConfigModules = [ "sdl2_compat" ];
+    pkgConfigModules = [
+      "sdl2-compat"
+      "sdl2"
+    ];
   };
 })

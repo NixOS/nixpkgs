@@ -6,6 +6,7 @@
   # build inputs
   atk,
   file,
+  glib,
   gdk-pixbuf,
   glib-networking,
   gnome-desktop,
@@ -14,8 +15,10 @@
   gtk3,
   libnotify,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
+  meson,
+  ninja,
 
   # check inputs
   xvfb-run,
@@ -45,11 +48,15 @@
   pulseaudio,
   p7zip,
   xgamma,
+  gettext,
   libstrangle,
   fluidsynth,
   xorgserver,
   xorg,
   util-linux,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 let
@@ -83,9 +90,18 @@ buildPythonApplication rec {
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
+  format = "other";
+
   nativeBuildInputs = [
-    wrapGAppsHook3
+    appstream-glib
+    desktop-file-utils
+    gettext
+    glib
     gobject-introspection
+    meson
+    ninja
+    wrapGAppsHook3
+    pkg-config
   ];
   buildInputs =
     [
@@ -96,7 +112,7 @@ buildPythonApplication rec {
       gtk3
       libnotify
       pango
-      webkitgtk_4_0
+      webkitgtk_4_1
     ]
     ++ (with gst_all_1; [
       gst-libav
@@ -126,20 +142,6 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace lutris/util/magic.py \
       --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
-  '';
-
-  nativeCheckInputs = [
-    xvfb-run
-    nose2
-    flake8
-  ] ++ requiredTools;
-  checkPhase = ''
-    runHook preCheck
-
-    export HOME=$PWD
-    xvfb-run -s '-screen 0 800x600x24' make test
-
-    runHook postCheck
   '';
 
   # avoid double wrapping

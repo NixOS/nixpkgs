@@ -17,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-WUAyGx7RcLlQsYpfcbV69k1ESaif5VraxUFAslMi5lo=";
+        hash = "sha256-5OYlKorjv80QaTruGyp8x4m2vp3Q4Ol6Hf1wN+8m6bs=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-fB6DCp2+7T9ozHuMdsv6IwwIyD6+t7LxVWMj9lDJ5Fw=";
+        hash = "sha256-pZIEOGJxEo0Z5Z8iTC0YTRTJOS8J4AvJGWq10Sl2zCQ=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +30,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.8.8";
+  version = "0.9.4";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "An open-source alternative to Notion";
+    description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;

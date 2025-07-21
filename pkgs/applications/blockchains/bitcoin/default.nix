@@ -22,6 +22,7 @@
   nixosTests,
   withGui,
   withWallet ? true,
+  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
 }:
 
 let
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       zeromq
       zlib
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
+    ++ lib.optionals enableTracing [ libsystemtap ]
     ++ lib.optionals withWallet [ sqlite ]
     # building with db48 (for legacy descriptor wallet support) is broken on Darwin
     ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
@@ -98,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "WITH_ZMQ" true)
       # building with db48 (for legacy wallet support) is broken on Darwin
       (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
-      (lib.cmakeBool "WITH_USDT" (stdenv.hostPlatform.isLinux))
+      (lib.cmakeBool "WITH_USDT" enableTracing)
     ]
     ++ lib.optionals (!finalAttrs.doCheck) [
       (lib.cmakeBool "BUILD_TESTS" false)
@@ -111,6 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withGui [
       (lib.cmakeBool "BUILD_GUI" true)
     ];
+
+  NIX_LDFLAGS = lib.optionals (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+  ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 

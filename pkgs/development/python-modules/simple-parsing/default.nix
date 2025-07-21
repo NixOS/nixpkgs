@@ -66,6 +66,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   disabledTests = [
     # AssertionError
     # https://github.com/lebrice/SimpleParsing/issues/338

@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   removeReferencesTo,
-  darwin,
   perl,
   pkg-config,
   libcap,
@@ -28,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.7";
+  version = "9.20.10";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QzI8jSLSFEKCw3tAYOwR6Ywkg14iVoiHb60IunuV3KY=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-D7O6LDN7tIjKaPXfKWxDXNJVBY+2PQgi6R2wI1yQVxY=";
   };
 
   outputs = [
@@ -66,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -138,13 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-      inherit (nixosTests) bind;
-      prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-    };
+    tests =
+      {
+        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+        inherit (nixosTests) bind;
+        prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+      };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
 
     outputsToInstall = [

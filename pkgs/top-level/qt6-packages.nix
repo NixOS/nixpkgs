@@ -82,10 +82,11 @@ makeScopeWithSplicing' {
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-      qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
+      qca = callPackage ../development/libraries/qca {
         inherit (qt6) qtbase qt5compat;
       };
       qcoro = callPackage ../development/libraries/qcoro { };
+      qcustomplot = callPackage ../development/libraries/qcustomplot { };
       qgpgme = callPackage ../development/libraries/gpgme { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -96,9 +97,7 @@ makeScopeWithSplicing' {
 
       qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
-      qtkeychain = callPackage ../development/libraries/qtkeychain {
-        inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
-      };
+      qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
       qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
@@ -117,6 +116,8 @@ makeScopeWithSplicing' {
       qwlroots = callPackage ../development/libraries/qwlroots {
         wlroots = pkgs.wlroots_0_18;
       };
+
+      qwt = callPackage ../development/libraries/qwt/default.nix { };
 
       qxlsx = callPackage ../development/libraries/qxlsx { };
 

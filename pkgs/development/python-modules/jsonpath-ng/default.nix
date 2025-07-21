@@ -11,6 +11,8 @@
 buildPythonPackage rec {
   pname = "jsonpath-ng";
   version = "1.7.0";
+  format = "setuptools";
+  # TODO: typo; change to pyproject = true;
   pypropject = true;
 
   disabled = pythonOlder "3.8";
