@@ -85,5 +85,6 @@ ocamlPackages.buildDunePackage rec {
     maintainers = [ lib.maintainers.ethancedwards8 ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "owi";
+    badPlatforms = lib.platforms.darwin;
   };
 }
