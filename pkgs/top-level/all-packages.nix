@@ -6868,8 +6868,6 @@ with pkgs;
 
   automake = automake116x;
 
-  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
-
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
   automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
