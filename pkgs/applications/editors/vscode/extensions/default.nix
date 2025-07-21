@@ -4929,6 +4929,8 @@ let
         };
       };
 
+      tsyesika.guile-scheme-enhanced = callPackage ./tsyesika.guile-scheme-enhanced { };
+
       tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emacs-mcx";
