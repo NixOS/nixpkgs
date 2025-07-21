@@ -152,7 +152,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/rancher/rke2";
-    description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution";
+    description = "Rancher's next-generation Kubernetes distribution, also known as RKE Government";
     changelog = "https://github.com/rancher/rke2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

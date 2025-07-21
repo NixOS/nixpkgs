@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
   };
 
   meta = {
-    description = "visual scope for coffee roasters";
+    description = "Visual scope for coffee roasters";
     homepage = "https://artisan-scope.org/";
     changelog = "https://github.com/artisan-roaster-scope/artisan/releases/tag/v${version}";
     downloadPage = "https://github.com/artisan-roaster-scope/artisan/releases";
