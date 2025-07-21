@@ -17918,6 +17918,8 @@ self: super: with self; {
 
   tilt-ble = callPackage ../development/python-modules/tilt-ble { };
 
+  tilt-pi = callPackage ../development/python-modules/tilt-pi { };
+
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeago = callPackage ../development/python-modules/timeago { };
