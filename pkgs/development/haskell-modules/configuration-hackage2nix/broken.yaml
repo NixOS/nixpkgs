@@ -5622,7 +5622,6 @@ broken-packages:
   - smawk # failure in job https://hydra.nixos.org/build/233258699 at 2023-09-02
   - sme # failure in job https://hydra.nixos.org/build/233208306 at 2023-09-02
   - smerdyakov # failure in job https://hydra.nixos.org/build/233238735 at 2023-09-02
-  - smh # failure in job https://hydra.nixos.org/build/253695707 at 2024-03-31
   - smiles # failure in job https://hydra.nixos.org/build/233197831 at 2023-09-02
   - SmithNormalForm # failure in job https://hydra.nixos.org/build/233253620 at 2023-09-02
   - smoothie # failure in job https://hydra.nixos.org/build/233250042 at 2023-09-02

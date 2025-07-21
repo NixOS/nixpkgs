@@ -3234,6 +3234,21 @@ with haskellLib;
   # and therefore aren't uploaded to hackage
   # Needs to be fixed upstream
   haskore = dontCheck (doJailbreak super.haskore);
+
+  # 2025-7-21: Jailbreak to relax bounds lens <5.3, megaparsec <9.7.
+  # The test suite does not know how to find the 'smh' binary. (Expects a ./smh executable.)
+  smh = overrideCabal (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "DanRyba253";
+      repo = "smh";
+      rev = "b791ee558d2a2e5c0eb7653c68f3f8a8ae58a551";
+      sha256 = "sha256-p4Q4z2iQeO7PqKk1Ou4EVaMZkjIGmEV9PjFfi5Fz+LA=";
+    };
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.which ];
+    preCheck = ''ln -sf dist/build/smh/smh ./smh
+               chmod +x ./smh'';
+   }) (doJailbreak super.smh);
+
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
