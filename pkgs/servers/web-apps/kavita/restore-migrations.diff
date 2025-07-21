@@ -122,7 +122,7 @@ index 00000000..07e98ef6
 +    }
 +}
 diff --git a/API/Startup.cs b/API/Startup.cs
-index 21c4fa45..04f4a077 100644
+index 04f4a077..21c4fa45 100644
 --- a/API/Startup.cs
 +++ b/API/Startup.cs
 @@ -232,11 +232,19 @@ public class Startup
@@ -132,16 +132,16 @@ index 21c4fa45..04f4a077 100644
 +                    var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
                      var dataContext = serviceProvider.GetRequiredService<DataContext>();
  
- 
                      logger.LogInformation("Running Migrations");
  
+                     #region Migrations
++
 +                    // v0.7.2
 +                    await MigrateLoginRoles.Migrate(unitOfWork, userManager, logger);
 +                    // v0.7.3
 +                    await MigrateRemoveWebPSettingRows.Migrate(unitOfWork, logger);
 +                    // v0.7.4
 +                    await MigrateDisableScrobblingOnComicLibraries.Migrate(unitOfWork, dataContext, logger);
-+
+ 
                      // v0.7.9
                      await MigrateUserLibrarySideNavStream.Migrate(unitOfWork, dataContext, logger);
- 
