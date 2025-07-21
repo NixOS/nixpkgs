@@ -62,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
         + lib.optionalString (lib.versionAtLeast release_version "14") ''
           cp -r ${monorepoSrc}/cmake "$out"
         ''
+        + lib.optionalString (lib.versionAtLeast release_version "21") ''
+          cp -r ${monorepoSrc}/third-party "$out"
+        ''
         + ''
           cp -r ${monorepoSrc}/compiler-rt "$out"
         ''
