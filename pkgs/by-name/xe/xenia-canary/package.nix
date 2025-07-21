@@ -55,7 +55,7 @@ llvmPackages_20.stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
     python3 xenia-build setup
-    python3 xenia-build build --config=release -j $NIX_BUILD_CORES
+    python3 xenia-build build --config=release
     runHook postBuild
   '';
 
