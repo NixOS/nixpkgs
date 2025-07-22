@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.0.3";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
     tag = version;
-    hash = "sha256-eN/tjlnNla6RHYOXcprVVqtec1nwCEGn+MBcV/5mHJg=";
+    hash = "sha256-Hm+x79utOrjAbprud2MECgakyOzgShSwNuoyZUcTluQ=";
   };
 
   build-system = [
@@ -51,6 +51,10 @@ buildPythonPackage rec {
     "test/test_util_pool.py"
     "demo/futures/test_futures.py"
   ];
+
+  # avoid a few tests that don't work with openmpi, see:
+  # https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
+  env.MPI4PY_TEST_SPAWN = if (mpi.pname != "openmpi") then "1" else "0";
 
   __darwinAllowLocalNetworking = true;
 
