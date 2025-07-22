@@ -1,13 +1,13 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   hyprutils,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlang";
   version = "0.6.3";
 

@@ -1097,8 +1097,6 @@ with pkgs;
 
   kanata-with-cmd = kanata.override { withCmd = true; };
 
-  ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
-
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
   makehuman = libsForQt5.callPackage ../applications/misc/makehuman { };
@@ -2204,12 +2202,72 @@ with pkgs;
     cairo = cairo.override { xcbSupport = true; };
   };
 
+  aquamarine = callPackage ../by-name/aq/aquamarine/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprcursor = callPackage ../by-name/hy/hyprcursor/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprgraphics = callPackage ../by-name/hy/hyprgraphics/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hypridle = callPackage ../by-name/hy/hypridle/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
   hyprland = callPackage ../by-name/hy/hyprland/package.nix {
     stdenv = gcc15Stdenv;
   };
 
+  hyprland-protocols = callPackage ../by-name/hy/hyprland-protocols/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprland-qt-support = callPackage ../by-name/hy/hyprland-qt-support/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprland-qtutils = callPackage ../by-name/hy/hyprland-qtutils/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprlang = callPackage ../by-name/hy/hyprlang/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprlock = callPackage ../by-name/hy/hyprlock/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprpaper = callPackage ../by-name/hy/hyprpaper/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprpicker = callPackage ../by-name/hy/hyprpicker/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
   hyprpolkitagent = callPackage ../by-name/hy/hyprpolkitagent/package.nix {
-    stdenv = gcc14Stdenv;
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprsunset = callPackage ../by-name/hy/hyprsunset/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprsysteminfo = callPackage ../by-name/hy/hyprsysteminfo/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprutils = callPackage ../by-name/hy/hyprutils/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
+  hyprwayland-scanner = callPackage ../by-name/hy/hyprwayland-scanner/package.nix {
+    stdenv = gcc15Stdenv;
   };
 
   hyprshade = python3Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
@@ -13756,8 +13814,6 @@ with pkgs;
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
-  spek = callPackage ../applications/audio/spek { };
-
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {
     audioBackend = "pulse";
   };
@@ -14311,6 +14367,7 @@ with pkgs;
   xdg-desktop-portal-hyprland =
     callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
       {
+        stdenv = gcc15Stdenv;
         inherit (qt6)
           qtbase
           qttools
@@ -16427,8 +16484,6 @@ with pkgs;
   discord-screenaudio =
     qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio
       { };
-
-  discordo = callPackage ../applications/networking/discordo/default.nix { };
 
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;

@@ -354,7 +354,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.7.1";
+  hassVersion = "2025.7.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -375,13 +375,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-KaepdkW1PLbWf7yl90ZqmZ6OIgZlRcaw2pSf2wTev+Q=";
+    hash = "sha256-aBIG4dxCdj1dQP5wMd5ySXggUvspGlnh7btxmMr/51Y=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gmq42r4O6mNNXaVwTlC3UjeAsu8TOm417WCm/2E3I6E=";
+    hash = "sha256-J8KH9y8dNsKW+jc5Wkqnw9VreKoUQH0dEBbne/6xiMw=";
   };
 
   build-system = with python.pkgs; [
@@ -548,6 +548,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/helpers/test_backup.py::test_async_get_manager"
     # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
     "tests/helpers/test_event.py::test_track_time_interval_name"
+    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
+    "tests/test_core.py::test_services_call_return_response_requires_blocking"
   ];
 
   preCheck = ''

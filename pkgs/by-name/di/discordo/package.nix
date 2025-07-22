@@ -8,13 +8,13 @@
   wl-clipboard,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "discordo";
   version = "0-unstable-2025-06-26";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
-    repo = pname;
+    repo = "discordo";
     rev = "d701e7d15ba07457aa41ab1d1d02ce2c565c7736";
     hash = "sha256-E8Et8w8ebDjNKPnPIFHC+Ut2IfOCnNJKRwVFUVNf7+8=";
   };
@@ -25,7 +25,6 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   # Clipboard support on X11 and Wayland
@@ -45,11 +44,11 @@ buildGoModule rec {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, secure, and feature-rich Discord terminal client";
     homepage = "https://github.com/ayn2op/discordo";
-    license = licenses.mit;
-    maintainers = [ maintainers.arian-d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arian-d ];
     mainProgram = "discordo";
   };
-}
+})

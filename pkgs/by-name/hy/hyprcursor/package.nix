@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -12,7 +12,7 @@
   tomlplusplus,
   nix-update-script,
 }:
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
   version = "0.1.12";
 
