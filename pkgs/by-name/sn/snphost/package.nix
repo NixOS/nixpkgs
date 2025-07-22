@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snphost";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snphost";
     tag = "v${version}";
-    hash = "sha256-sBEIQQ0vfwQh5eqsC6x37VDlbXuBUybRh4LNUjfEJ5A=";
+    hash = "sha256-FvHawwoIqCiZ+Jm1itDWspaI+vDN6xDfeI11KoiO/DU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-aNXv6Av3JvnTqTbxX70FmwEF4jJaQmD6FHjvh7om9iE=";
+  cargoHash = "sha256-ZOXOfFYingTBq5LfJqHRf6ZdvrdY1Zve/ZMnAE25kPM=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
   ];
+
+  env.OPENSSL_NO_VENDOR = true;
 
   # man page is placed in cargo's $OUT_DIR, which is randomized.
   # Contacted upstream about it, for now use find to locate it.
