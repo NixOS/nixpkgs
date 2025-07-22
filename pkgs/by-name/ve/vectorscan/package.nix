@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vectorscan";
-  version = "5.4.11";
+  version = "5.4.12";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${version}";
-    hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
+    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
   };
 
   postPatch = ''
