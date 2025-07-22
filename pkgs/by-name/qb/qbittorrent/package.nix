@@ -16,6 +16,7 @@
   webuiSupport ? true,
   wrapGAppsHook3,
   zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+    tests.testService = nixosTests.qbittorrent;
+  };
 
   meta = {
     description = "Featureful free software BitTorrent client";
