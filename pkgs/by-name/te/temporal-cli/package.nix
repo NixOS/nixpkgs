@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y4NS9IoGknHOKLJtAZBbruwRTqjUmQTKtEYNlixwyL8=";
+    hash = "sha256-fbaqRjYFDeGuCheg3EIUVh/QMhFzLNUb6MUoc/J51Ko=";
   };
 
   vendorHash = "sha256-dWcf4X8/Wy/TULdT6PbiMaOd1d+haBlnII+6VKazrD4=";
