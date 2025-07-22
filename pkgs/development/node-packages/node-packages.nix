@@ -58963,7 +58963,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source ";
+      description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source";
       homepage = "https://github.com/mathjax/MathJax#readme";
       license = "Apache-2.0";
     };

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python CommonMark parser ";
+    description = "Python CommonMark parser";
     mainProgram = "cmark";
     homepage = "https://github.com/readthedocs/commonmark.py";
     license = licenses.bsd3;
