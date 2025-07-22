@@ -5,6 +5,13 @@
   pam,
   scdoc,
   installShellFiles,
+  # legacy passthrus
+  greetd,
+  gtkgreet,
+  qtgreet,
+  regreet,
+  tuigreet,
+  wlgreet,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +43,18 @@ rustPlatform.buildRustPackage rec {
     done
     installManPage man/*
   '';
+
+  # Added 2025-07-23. To be deleted on 26.05
+  passthru = lib.mapAttrs (k: lib.warnOnInstantiate "`greetd.${k}` was renamed to `${k}`") {
+    inherit
+      greetd
+      gtkgreet
+      qtgreet
+      regreet
+      tuigreet
+      wlgreet
+      ;
+  };
 
   meta = with lib; {
     description = "Minimal and flexible login manager daemon";

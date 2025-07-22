@@ -21,14 +21,14 @@ in
   options.services.greetd = {
     enable = lib.mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
-    package = lib.mkPackageOption pkgs [ "greetd" "greetd" ] { };
+    package = lib.mkPackageOption pkgs "greetd" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       example = lib.literalExpression ''
         {
           default_session = {
-            command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
+            command = "''${pkgs.greetd}/bin/agreety --cmd sway";
           };
         }
       '';
