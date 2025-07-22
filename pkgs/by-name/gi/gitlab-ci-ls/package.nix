@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-yJA6xdeLJVPbHI2VdRAmsYvuULCJk40ntIJ0JIWsZds=";
+    hash = "sha256-0AVi/DyaWh+dCXm/jUf3M63KjobJWCCKHDvm1xGUzCw=";
   };
 
   useFetchCargoVendor = true;
