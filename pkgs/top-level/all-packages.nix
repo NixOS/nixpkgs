@@ -16409,8 +16409,6 @@ with pkgs;
 
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
-  xp-pen-g430-driver = libsForQt5.xp-pen-g430-driver;
-
   newlib = callPackage ../development/misc/newlib {
     stdenv = stdenvNoLibc;
   };
