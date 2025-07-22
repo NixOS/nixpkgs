@@ -39,7 +39,8 @@ lib.makeExtensible (
                 inherit (packageSpec) description;
                 maintainers = with lib.maintainers; [ cherrypiejam ];
                 license = lib.map (lib.flip lib.getAttr lib.licensesSpdx) packageSpec.license;
-              } // (if packageSpec ? "homepage" then { inherit (packageSpec) homepage; } else { });
+              }
+              // (if packageSpec ? "homepage" then { inherit (packageSpec) homepage; } else { });
             })
           ) { };
         }

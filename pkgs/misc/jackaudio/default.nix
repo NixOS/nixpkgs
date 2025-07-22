@@ -57,21 +57,21 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python
     wafHook
-  ] ++ lib.optionals (optDbus != null) [ makeWrapper ];
-  buildInputs =
-    [
-      libsamplerate
-      optDbus
-      optPythonDBus
-      optLibffado
-      optAlsaLib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      aften
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      freebsd.libsysinfo
-    ];
+  ]
+  ++ lib.optionals (optDbus != null) [ makeWrapper ];
+  buildInputs = [
+    libsamplerate
+    optDbus
+    optPythonDBus
+    optLibffado
+    optAlsaLib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    aften
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    freebsd.libsysinfo
+  ];
 
   patches = [
     (fetchpatch2 {
@@ -86,17 +86,16 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build svnversion_regenerate.sh
   '';
 
-  wafConfigureFlags =
-    [
-      "--classic"
-      "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
-    ]
-    ++ lib.optional (optDbus != null) "--dbus"
-    ++ lib.optional (optLibffado != null) "--firewire"
-    ++ lib.optional (optAlsaLib != null) "--alsa"
-    ++ lib.optional (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
+  wafConfigureFlags = [
+    "--classic"
+    "--autostart=${if (optDbus != null) then "dbus" else "classic"}"
+  ]
+  ++ lib.optional (optDbus != null) "--dbus"
+  ++ lib.optional (optLibffado != null) "--firewire"
+  ++ lib.optional (optAlsaLib != null) "--alsa"
+  ++ lib.optional (
+    stdenv.hostPlatform != stdenv.buildPlatform
+  ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
 
   postInstall = (
     if libOnly then

@@ -56,7 +56,8 @@ buildPythonPackage rec {
     matplotlib
     pandas
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"

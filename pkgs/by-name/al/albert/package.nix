@@ -31,26 +31,25 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      kdePackages.qtkeychain
-      libqalculate
-      libarchive
-      muparser
-    ]
-    ++ (with qt6; [
-      qt5compat
-      qtbase
-      qtdeclarative
-      qtscxml
-      qtsvg
-      qttools
-      qtwayland
-    ])
-    ++ (with python3Packages; [
-      python
-      pybind11
-    ]);
+  buildInputs = [
+    kdePackages.qtkeychain
+    libqalculate
+    libarchive
+    muparser
+  ]
+  ++ (with qt6; [
+    qt5compat
+    qtbase
+    qtdeclarative
+    qtscxml
+    qtsvg
+    qttools
+    qtwayland
+  ])
+  ++ (with python3Packages; [
+    python
+    pybind11
+  ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;

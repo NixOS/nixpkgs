@@ -27,12 +27,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config # for openssl
   ];
 
-  buildInputs =
-    [ openssl.dev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      libz
-    ];
+  buildInputs = [
+    openssl.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    libz
+  ];
 
   meta = with lib; {
     description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";

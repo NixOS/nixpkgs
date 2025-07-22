@@ -125,13 +125,12 @@ buildPythonPackage rec {
     "test_document_viewer"
   ];
 
-  preCheck =
-    ''
-      export DJANGO_SETTINGS_MODULE="test_project.settings"
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
-      export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
-    '';
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE="test_project.settings"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isRiscV) ''
+    export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+  '';
 
   pythonImportsCheck = [ "filingcabinet" ];
 

@@ -32,26 +32,26 @@ rustPlatform.buildRustPackage rec {
     asciidoctor
   ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          libiconv
-        ]
-      else
-        [
-          openssl
-        ]
-    );
+  buildInputs = [
+    sqlite
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        libiconv
+      ]
+    else
+      [
+        openssl
+      ]
+  );
 
-  buildFeatures =
-    [
-      "shell_completion"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "systemd"
-    ];
+  buildFeatures = [
+    "shell_completion"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "systemd"
+  ];
 
   postInstall = ''
     installShellCompletion \

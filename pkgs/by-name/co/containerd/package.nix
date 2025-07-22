@@ -21,7 +21,8 @@ buildGoModule rec {
   outputs = [
     "out"
     "doc"
-  ] ++ lib.optional withMan "man";
+  ]
+  ++ lib.optional withMan "man";
 
   src = fetchFromGitHub {
     owner = "containerd";
@@ -38,7 +39,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     util-linux
-  ] ++ lib.optional withMan go-md2man;
+  ]
+  ++ lib.optional withMan go-md2man;
 
   buildInputs = lib.optional btrfsSupport btrfs-progs;
 
@@ -55,7 +57,8 @@ buildGoModule rec {
   installTargets = [
     "install"
     "install-doc"
-  ] ++ lib.optional withMan "install-man";
+  ]
+  ++ lib.optional withMan "install-man";
 
   buildPhase = ''
     runHook preBuild

@@ -77,19 +77,18 @@ stdenv.mkDerivation (
     env.CMAKE_CXX_COMPILER = lib.getExe' clr "amdclang++";
     requiredSystemFeatures = [ "big-parallel" ];
 
-    outputs =
-      [
-        "out"
-      ]
-      ++ lib.optionals buildTests [
-        "test"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "benchmark"
-      ]
-      ++ lib.optionals buildSamples [
-        "sample"
-      ];
+    outputs = [
+      "out"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ]
+    ++ lib.optionals buildSamples [
+      "sample"
+    ];
 
     postPatch = ''
       mkdir -p build/Tensile/library
@@ -137,64 +136,62 @@ stdenv.mkDerivation (
       # so deliberately not using ninja
     ];
 
-    buildInputs =
-      [
-        hipblas-common
-        tensile'
-        openmp
-        libffi
-        ncurses
+    buildInputs = [
+      hipblas-common
+      tensile'
+      openmp
+      libffi
+      ncurses
 
-        # Tensile deps - not optional, building without tensile isn't actually supported
-        msgpack # FIXME: not included in cmake!
-        libxml2
-        python3Packages.msgpack
-        python3Packages.joblib
-        zlib
-        zstd
-      ]
-      ++ lib.optionals buildTests [
-        gtest
-      ]
-      ++ lib.optionals (buildTests || buildBenchmarks) [
-        lapack-reference
-      ];
+      # Tensile deps - not optional, building without tensile isn't actually supported
+      msgpack # FIXME: not included in cmake!
+      libxml2
+      python3Packages.msgpack
+      python3Packages.joblib
+      zlib
+      zstd
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      lapack-reference
+    ];
 
-    cmakeFlags =
-      [
-        "-Wno-dev"
-        "-DCMAKE_BUILD_TYPE=Release"
-        "-DCMAKE_VERBOSE_MAKEFILE=ON"
-        "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
-        "-DTENSILE_USE_HIP=ON"
-        "-DTENSILE_BUILD_CLIENT=OFF"
-        "-DTENSILE_USE_FLOAT16_BUILTIN=ON"
-        "-DCMAKE_CXX_COMPILER=${compiler}"
-        # Manually define CMAKE_INSTALL_<DIR>
-        # See: https://github.com/NixOS/nixpkgs/pull/197838
-        "-DCMAKE_INSTALL_BINDIR=bin"
-        "-DCMAKE_INSTALL_LIBDIR=lib"
-        "-DCMAKE_INSTALL_INCLUDEDIR=include"
-        "-DHIPBLASLT_ENABLE_MARKER=Off"
-        # FIXME what are the implications of hardcoding this?
-        "-DTensile_CODE_OBJECT_VERSION=V5"
-        "-DTensile_COMPILER=${compiler}"
-        "-DAMDGPU_TARGETS=${gpuTargets'}"
-        "-DGPU_TARGETS=${gpuTargets'}"
-        "-DTensile_LIBRARY_FORMAT=msgpack"
-      ]
-      ++ lib.optionals (!supportsTargetArches) [
-        "-DBUILD_WITH_TENSILE=OFF"
-      ]
-      ++ lib.optionals buildTests [
-        "-DBUILD_CLIENTS_TESTS=ON"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "-DBUILD_CLIENTS_BENCHMARKS=ON"
-      ]
-      ++ lib.optionals buildSamples [
-        "-DBUILD_CLIENTS_SAMPLES=ON"
-      ];
+    cmakeFlags = [
+      "-Wno-dev"
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCMAKE_VERBOSE_MAKEFILE=ON"
+      "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
+      "-DTENSILE_USE_HIP=ON"
+      "-DTENSILE_BUILD_CLIENT=OFF"
+      "-DTENSILE_USE_FLOAT16_BUILTIN=ON"
+      "-DCMAKE_CXX_COMPILER=${compiler}"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DHIPBLASLT_ENABLE_MARKER=Off"
+      # FIXME what are the implications of hardcoding this?
+      "-DTensile_CODE_OBJECT_VERSION=V5"
+      "-DTensile_COMPILER=${compiler}"
+      "-DAMDGPU_TARGETS=${gpuTargets'}"
+      "-DGPU_TARGETS=${gpuTargets'}"
+      "-DTensile_LIBRARY_FORMAT=msgpack"
+    ]
+    ++ lib.optionals (!supportsTargetArches) [
+      "-DBUILD_WITH_TENSILE=OFF"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_CLIENTS_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ]
+    ++ lib.optionals buildSamples [
+      "-DBUILD_CLIENTS_SAMPLES=ON"
+    ];
 
     postInstall =
       lib.optionalString buildTests ''

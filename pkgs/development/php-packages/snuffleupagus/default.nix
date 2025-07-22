@@ -19,11 +19,12 @@ buildPecl rec {
     hash = "sha256-W+EQXjvmDHih5YW/SjRcEdUELePUPKrNWB8vW9dLK/g=";
   };
 
-  buildInputs =
-    [ pcre2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   internalDeps = with php.extensions; [ session ];
 

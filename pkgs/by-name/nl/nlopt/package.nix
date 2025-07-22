@@ -86,42 +86,42 @@ clangStdenv.mkDerivation (finalAttrs: {
       --replace-fail 'libdir=''${exec_prefix}/@NLOPT_INSTALL_LIBDIR@' 'libdir=@NLOPT_INSTALL_LIBDIR@'
   '';
 
-  nativeBuildInputs =
-    [ cmake ]
-    ## Building the python bindings requires SWIG, and numpy in addition to the CXX routines.
-    ## The tests also make use of the same interpreter to test the bindings.
-    ++ lib.optionals withPython [
-      swig
-      buildPythonBindingsEnv
-    ]
-    ## Building the java bindings requires SWIG, C++, JNI and Java
-    ++ lib.optionals withJava [
-      swig
-      jdk
-    ]
-    ## Building octave bindings requires `mkoctfile` to be installed.
-    ++ lib.optional withOctave octave;
+  nativeBuildInputs = [
+    cmake
+  ]
+  ## Building the python bindings requires SWIG, and numpy in addition to the CXX routines.
+  ## The tests also make use of the same interpreter to test the bindings.
+  ++ lib.optionals withPython [
+    swig
+    buildPythonBindingsEnv
+  ]
+  ## Building the java bindings requires SWIG, C++, JNI and Java
+  ++ lib.optionals withJava [
+    swig
+    jdk
+  ]
+  ## Building octave bindings requires `mkoctfile` to be installed.
+  ++ lib.optional withOctave octave;
 
   # Python bindings depend on numpy at import time.
   propagatedBuildInputs = lib.optional withPython python3Packages.numpy;
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!withStatic))
-      (lib.cmakeBool "NLOPT_CXX" true)
-      (lib.cmakeBool "NLOPT_PYTHON" withPython)
-      (lib.cmakeBool "NLOPT_OCTAVE" withOctave)
-      (lib.cmakeBool "NLOPT_JAVA" withJava)
-      (lib.cmakeBool "NLOPT_SWIG" (withPython || withJava))
-      (lib.cmakeBool "NLOPT_FORTRAN" false)
-      (lib.cmakeBool "NLOPT_MATLAB" false)
-      (lib.cmakeBool "NLOPT_GUILE" false)
-      (lib.cmakeBool "NLOPT_LUKSAN" (!withoutLuksanSolvers))
-      (lib.cmakeBool "NLOPT_TESTS" finalAttrs.doCheck)
-    ]
-    ++ lib.optional withPython (
-      lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
-    );
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!withStatic))
+    (lib.cmakeBool "NLOPT_CXX" true)
+    (lib.cmakeBool "NLOPT_PYTHON" withPython)
+    (lib.cmakeBool "NLOPT_OCTAVE" withOctave)
+    (lib.cmakeBool "NLOPT_JAVA" withJava)
+    (lib.cmakeBool "NLOPT_SWIG" (withPython || withJava))
+    (lib.cmakeBool "NLOPT_FORTRAN" false)
+    (lib.cmakeBool "NLOPT_MATLAB" false)
+    (lib.cmakeBool "NLOPT_GUILE" false)
+    (lib.cmakeBool "NLOPT_LUKSAN" (!withoutLuksanSolvers))
+    (lib.cmakeBool "NLOPT_TESTS" finalAttrs.doCheck)
+  ]
+  ++ lib.optional withPython (
+    lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"
+  );
 
   postBuild = ''
     ${buildDocsEnv.interpreter} -m mkdocs build \

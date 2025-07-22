@@ -28,7 +28,8 @@ self: super: {
       (self': super': {
         pkgsLLVM = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the LLVM toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -43,7 +44,8 @@ self: super: {
       (self': super': {
         pkgsArocc = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the Aro C compiler.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -58,7 +60,8 @@ self: super: {
       (self': super': {
         pkgsZig = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the Zig toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -78,7 +81,8 @@ self: super: {
           (self': super': {
             pkgsMusl = super';
           })
-        ] ++ overlays;
+        ]
+        ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
           config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
         };
@@ -152,6 +156,7 @@ self: super: {
           pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
         }
       )
-    ] ++ overlays;
+    ]
+    ++ overlays;
   };
 }

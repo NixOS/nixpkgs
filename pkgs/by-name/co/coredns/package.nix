@@ -92,29 +92,28 @@ buildGoModule (finalAttrs: {
     GOOS= GOARCH= go generate
   '';
 
-  postPatch =
-    ''
-      substituteInPlace test/file_cname_proxy_test.go \
-        --replace-fail \
-          "TestZoneExternalCNAMELookupWithProxy" \
-          "SkipZoneExternalCNAMELookupWithProxy"
+  postPatch = ''
+    substituteInPlace test/file_cname_proxy_test.go \
+      --replace-fail \
+        "TestZoneExternalCNAMELookupWithProxy" \
+        "SkipZoneExternalCNAMELookupWithProxy"
 
-      substituteInPlace test/readme_test.go \
-        --replace-fail "TestReadme" "SkipReadme"
+    substituteInPlace test/readme_test.go \
+      --replace-fail "TestReadme" "SkipReadme"
 
-      # this test fails if any external plugins were imported.
-      # it's a lint rather than a test of functionality, so it's safe to disable.
-      substituteInPlace test/presubmit_test.go \
-        --replace-fail "TestImportOrdering" "SkipImportOrdering"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # loopback interface is lo0 on macos
-      sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
+    # this test fails if any external plugins were imported.
+    # it's a lint rather than a test of functionality, so it's safe to disable.
+    substituteInPlace test/presubmit_test.go \
+      --replace-fail "TestImportOrdering" "SkipImportOrdering"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # loopback interface is lo0 on macos
+    sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
 
-      # test is apparently outdated but only exhibits this on darwin
-      substituteInPlace test/corefile_test.go \
-        --replace-fail "TestCorefile1" "SkipCorefile1"
-    '';
+    # test is apparently outdated but only exhibits this on darwin
+    substituteInPlace test/corefile_test.go \
+      --replace-fail "TestCorefile1" "SkipCorefile1"
+  '';
 
   __darwinAllowLocalNetworking = true;
 

@@ -68,19 +68,18 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
-  dependencies =
-    [
-      anyio
-      distro
-      httpx
-      jiter
-      pydantic
-      sniffio
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals withRealtime optional-dependencies.realtime
-    ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
+  dependencies = [
+    anyio
+    distro
+    httpx
+    jiter
+    pydantic
+    sniffio
+    tqdm
+    typing-extensions
+  ]
+  ++ lib.optionals withRealtime optional-dependencies.realtime
+  ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
 
   optional-dependencies = {
     # `httpx_aiohttp` not currently in `nixpkgs`
@@ -119,16 +118,15 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests =
-    [
-      # Tests make network requests
-      "test_copy_build_request"
-      "test_basic_attribute_access_works"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-      "test_multi_byte_character_multiple_chunks"
-    ];
+  disabledTests = [
+    # Tests make network requests
+    "test_copy_build_request"
+    "test_basic_attribute_access_works"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
+    "test_multi_byte_character_multiple_chunks"
+  ];
 
   disabledTestPaths = [
     # Test makes network requests

@@ -137,11 +137,9 @@ with haskellLib;
 
   # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
   alex = overrideCabal (drv: {
-    preCheck =
-      drv.preCheck or ""
-      + ''
-        export alex_datadir="$(pwd)/data"
-      '';
+    preCheck = drv.preCheck or "" + ''
+      export alex_datadir="$(pwd)/data"
+    '';
   }) super.alex;
 
   # https://github.com/sjakobi/newtype-generics/pull/28/files

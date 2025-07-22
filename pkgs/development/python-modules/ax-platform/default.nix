@@ -82,30 +82,29 @@ buildPythonPackage rec {
     "ax/service/tests/test_with_db_settings_base.py"
   ];
 
-  disabledTests =
-    [
-      # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
-      "SQAStoreUtilsTest"
-      "SQAStoreTest"
+  disabledTests = [
+    # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
+    "SQAStoreUtilsTest"
+    "SQAStoreTest"
 
-      # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
-      "test_get_next_trials_with_db"
+    # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+    "test_get_next_trials_with_db"
 
-      # exact comparison of floating points
-      "test_optimize_l0_homotopy"
-      # AssertionError: 5 != 2
-      "test_get_standard_plots_moo"
-      # AssertionError: Expected 'warning' to be called once. Called 3 times
-      "test_validate_kwarg_typing"
-      # uses torch.equal
-      "test_convert_observations"
-      # broken with sqlalchemy 2
-      "test_sql_storage"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # flaky on x86
-      "test_gen_with_expanded_parameter_space"
-    ];
+    # exact comparison of floating points
+    "test_optimize_l0_homotopy"
+    # AssertionError: 5 != 2
+    "test_get_standard_plots_moo"
+    # AssertionError: Expected 'warning' to be called once. Called 3 times
+    "test_validate_kwarg_typing"
+    # uses torch.equal
+    "test_convert_observations"
+    # broken with sqlalchemy 2
+    "test_sql_storage"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky on x86
+    "test_gen_with_expanded_parameter_space"
+  ];
 
   pythonImportsCheck = [ "ax" ];
 

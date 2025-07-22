@@ -44,18 +44,17 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   checkFeatures = [ "isolated-tests" ];
-  checkFlags =
-    [
-      # requires networking
-      "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
-      "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
-      "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-      "--skip=system::watcher::test::should_poll_file_removed"
-      "--skip=system::watcher::test::should_poll_file_update"
-      "--skip=system::watcher::test::should_poll_nothing"
-    ];
+  checkFlags = [
+    # requires networking
+    "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
+    "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    "--skip=system::watcher::test::should_poll_file_removed"
+    "--skip=system::watcher::test::should_poll_file_update"
+    "--skip=system::watcher::test::should_poll_nothing"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

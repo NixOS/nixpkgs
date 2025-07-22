@@ -218,14 +218,13 @@ in
           ProtectSystem = "strict";
           ReadOnlyPaths = [ "/etc/postfix-tlspol/config.yaml" ];
           RemoveIPC = true;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-            ]
-            ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
-              "AF_UNIX"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ]
+          ++ lib.optionals (lib.hasPrefix "unix:" cfg.settings.server.address) [
+            "AF_UNIX"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

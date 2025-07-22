@@ -34,7 +34,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't test sending
     "SendTargetTestCase"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.10") [ "HelpFormattingParserTestCase" ];
 
   pythonImportsCheck = [ "gvmtools" ];
 

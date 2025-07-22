@@ -50,15 +50,14 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      packaging
-      pathspec
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
+  dependencies = [
+    packaging
+    pathspec
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+    tomli
+  ];
 
   nativeCheckInputs = [
     build

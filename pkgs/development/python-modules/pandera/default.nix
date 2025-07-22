@@ -118,7 +118,8 @@ buildPythonPackage rec {
     joblib
     pyarrow
     pyarrow-hotfix
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # KeyError: 'dask'

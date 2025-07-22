@@ -97,77 +97,76 @@ python3Packages.buildPythonApplication rec {
     "tests/test_api.py"
   ];
 
-  disabledTests =
-    [
-      # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
-      "test_ancient"
-      "test_conda_create_envs_only"
-      "test_env_modules"
-      "test_generate_unit_tests"
-      "test_modules_prefix"
-      "test_strict_mode"
-      # Requires perl
-      "test_shadow"
-      # Require peppy and eido
-      "test_peppy"
-      "test_modules_peppy"
-      "test_pep_pathlib"
+  disabledTests = [
+    # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
+    "test_ancient"
+    "test_conda_create_envs_only"
+    "test_env_modules"
+    "test_generate_unit_tests"
+    "test_modules_prefix"
+    "test_strict_mode"
+    # Requires perl
+    "test_shadow"
+    # Require peppy and eido
+    "test_peppy"
+    "test_modules_peppy"
+    "test_pep_pathlib"
 
-      # CalledProcessError
-      "test_filegraph" # requires graphviz
-      "test_github_issue1384"
+    # CalledProcessError
+    "test_filegraph" # requires graphviz
+    "test_github_issue1384"
 
-      # AssertionError: assert 127 == 1
-      "test_issue1256"
-      "test_issue2574"
+    # AssertionError: assert 127 == 1
+    "test_issue1256"
+    "test_issue2574"
 
-      # Require `snakemake-storage-plugin-fs` (circular dependency)
-      "test_default_storage"
-      "test_default_storage_local_job"
-      "test_deploy_sources"
-      "test_output_file_cache_storage"
-      "test_storage"
+    # Require `snakemake-storage-plugin-fs` (circular dependency)
+    "test_default_storage"
+    "test_default_storage_local_job"
+    "test_deploy_sources"
+    "test_output_file_cache_storage"
+    "test_storage"
 
-      # Tries to access internet
-      "test_report_after_run"
+    # Tries to access internet
+    "test_report_after_run"
 
-      # Needs stress-ng
-      "test_benchmark"
-      "test_benchmark_jsonl"
+    # Needs stress-ng
+    "test_benchmark"
+    "test_benchmark_jsonl"
 
-      # Needs unshare
-      "test_nodelocal"
+    # Needs unshare
+    "test_nodelocal"
 
-      # Requires snakemake-storage-plugin-http
-      "test_keep_local"
-      "test_retrieve"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Unclear failure:
-      # AssertionError: expected successful execution
-      # `__darwinAllowLocalNetworking` doesn't help
-      "test_excluded_resources_not_submitted_to_cluster"
-      "test_group_job_resources_with_pipe"
-      "test_group_jobs_resources"
-      "test_group_jobs_resources_with_limited_resources"
-      "test_group_jobs_resources_with_max_threads"
-      "test_issue850"
-      "test_issue860"
-      "test_multicomp_group_jobs"
-      "test_queue_input"
-      "test_queue_input_dryrun"
-      "test_queue_input_forceall"
-      "test_resources_submitted_to_cluster"
-      "test_scopes_submitted_to_cluster"
+    # Requires snakemake-storage-plugin-http
+    "test_keep_local"
+    "test_retrieve"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Unclear failure:
+    # AssertionError: expected successful execution
+    # `__darwinAllowLocalNetworking` doesn't help
+    "test_excluded_resources_not_submitted_to_cluster"
+    "test_group_job_resources_with_pipe"
+    "test_group_jobs_resources"
+    "test_group_jobs_resources_with_limited_resources"
+    "test_group_jobs_resources_with_max_threads"
+    "test_issue850"
+    "test_issue860"
+    "test_multicomp_group_jobs"
+    "test_queue_input"
+    "test_queue_input_dryrun"
+    "test_queue_input_forceall"
+    "test_resources_submitted_to_cluster"
+    "test_scopes_submitted_to_cluster"
 
-      # Issue with /dev/stderr in sandbox
-      "test_protected_symlink_output"
+    # Issue with /dev/stderr in sandbox
+    "test_protected_symlink_output"
 
-      # Unclear issue:
-      #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
-      # but pulp solver is not default
-      "test_access_patterns"
-    ];
+    # Unclear issue:
+    #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
+    # but pulp solver is not default
+    "test_access_patterns"
+  ];
 
   pythonImportsCheck = [ "snakemake" ];
 

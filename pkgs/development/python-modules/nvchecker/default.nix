@@ -47,7 +47,8 @@ buildPythonPackage rec {
     platformdirs
     tornado
     pycurl
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 

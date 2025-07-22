@@ -51,20 +51,19 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  dependencies =
-    [
-      docling
-      pydantic-settings
-      typer
-      boto3
-      pandas
-      fastparquet
-      pyarrow
-      httpx
-    ]
-    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-    ++ lib.optionals withRay optional-dependencies.ray;
+  dependencies = [
+    docling
+    pydantic-settings
+    typer
+    boto3
+    pandas
+    fastparquet
+    pyarrow
+    httpx
+  ]
+  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+  ++ lib.optionals withRay optional-dependencies.ray;
 
   optional-dependencies = {
     tesserocr = [ tesserocr ];

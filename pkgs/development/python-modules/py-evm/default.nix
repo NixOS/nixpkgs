@@ -55,7 +55,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   disabledTests = [
     # side-effect: runs pip online check and is blocked by sandbox

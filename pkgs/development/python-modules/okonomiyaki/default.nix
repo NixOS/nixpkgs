@@ -62,17 +62,17 @@ buildPythonPackage rec {
     parameterized
     pytestCheckHook
     testfixtures
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck =
-    ''
-      substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
-        --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-        --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
-    '';
+  preCheck = ''
+    substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
+      --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
+      --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
+  '';
 
   pythonImportsCheck = [ "okonomiyaki" ];
 

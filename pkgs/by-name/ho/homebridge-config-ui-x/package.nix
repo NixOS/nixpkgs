@@ -50,7 +50,8 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cacert ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cacert ];
 
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";

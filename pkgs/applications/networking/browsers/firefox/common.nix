@@ -292,7 +292,8 @@ buildStdenv.mkDerivation {
 
   outputs = [
     "out"
-  ] ++ lib.optionals crashreporterSupport [ "symbols" ];
+  ]
+  ++ lib.optionals crashreporterSupport [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
@@ -336,16 +337,15 @@ buildStdenv.mkDerivation {
     ]
     ++ extraPatches;
 
-  postPatch =
-    ''
-      rm -rf obj-x86_64-pc-linux-gnu
-      patchShebangs mach build
-    ''
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
-    + lib.optionalString (lib.versionAtLeast version "134") ''
-      sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
-    ''
-    + extraPostPatch;
+  postPatch = ''
+    rm -rf obj-x86_64-pc-linux-gnu
+    patchShebangs mach build
+  ''
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1927380
+  + lib.optionalString (lib.versionAtLeast version "134") ''
+    sed -i "s/icu-i18n/icu-uc &/" js/moz.configure
+  ''
+  + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
   # ./env_var_for_system_dir-*.patch with Firefox >=65 without having to track
@@ -359,236 +359,232 @@ buildStdenv.mkDerivation {
   HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
   HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
 
-  nativeBuildInputs =
-    [
-      autoconf
-      cargo
-      gnum4
-      llvmPackagesBuildBuild.bintools
-      makeWrapper
-      nodejs
-      perl
-      python3
-      rust-cbindgen
-      rustPlatform.bindgenHook
-      rustc
-      unzip
-      which
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
-    ++ lib.optionals crashreporterSupport [
-      dump_syms
-      patchelf
-    ]
-    ++ lib.optionals pgoSupport [ xvfb-run ]
-    ++ extraNativeBuildInputs;
+  nativeBuildInputs = [
+    autoconf
+    cargo
+    gnum4
+    llvmPackagesBuildBuild.bintools
+    makeWrapper
+    nodejs
+    perl
+    python3
+    rust-cbindgen
+    rustPlatform.bindgenHook
+    rustc
+    unzip
+    which
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
+  ++ lib.optionals crashreporterSupport [
+    dump_syms
+    patchelf
+  ]
+  ++ lib.optionals pgoSupport [ xvfb-run ]
+  ++ extraNativeBuildInputs;
 
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
-  preConfigure =
-    ''
-      # Runs autoconf through ./mach configure in configurePhase
-      configureScript="$(realpath ./mach) configure"
+  preConfigure = ''
+    # Runs autoconf through ./mach configure in configurePhase
+    configureScript="$(realpath ./mach) configure"
 
-      # Set reproducible build date; https://bugzilla.mozilla.org/show_bug.cgi?id=885777#c21
-      export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
+    # Set reproducible build date; https://bugzilla.mozilla.org/show_bug.cgi?id=885777#c21
+    export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
 
-      # Set predictable directories for build and state
-      export MOZ_OBJDIR=$(pwd)/objdir
-      export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
+    # Set predictable directories for build and state
+    export MOZ_OBJDIR=$(pwd)/objdir
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
 
-      # Don't try to send libnotify notifications during build
-      export MOZ_NOSPAM=1
+    # Don't try to send libnotify notifications during build
+    export MOZ_NOSPAM=1
 
-      # Set consistent remoting name to ensure wmclass matches with desktop file
-      export MOZ_APP_REMOTINGNAME="${binaryName}"
+    # Set consistent remoting name to ensure wmclass matches with desktop file
+    export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-      # AS=as in the environment causes build failure
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
-      unset AS
+    # AS=as in the environment causes build failure
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+    unset AS
 
-      # Use our own python
-      export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+    # Use our own python
+    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
-      # RBox WASM Sandboxing
-      export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-      export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
-    ''
-    + lib.optionalString pgoSupport ''
-      if [ -e "$TMPDIR/merged.profdata" ]; then
-        echo "Configuring with profiling data"
-        for i in "''${!configureFlagsArray[@]}"; do
-          if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-            unset 'configureFlagsArray[i]'
-          fi
-        done
-        appendToVar configureFlags --enable-profile-use=cross
-        appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
-        appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
-        ${lib.optionalString stdenv.hostPlatform.isMusl ''
-          LDFLAGS="$OLD_LDFLAGS"
-          unset OLD_LDFLAGS
-        ''}
-      else
-        echo "Configuring to generate profiling data"
-        configureFlagsArray+=(
-          "--enable-profile-generate=cross"
-        )
-        ${lib.optionalString stdenv.hostPlatform.isMusl
-          # Set the rpath appropriately for the profiling run
-          # During the profiling run, loading libraries from $out would fail,
-          # since the profiling build has not been installed to $out
-          ''
-            OLD_LDFLAGS="$LDFLAGS"
-            LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
-          ''
-        }
-      fi
-    ''
-    + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
-      export MOZILLA_OFFICIAL=1
-    ''
-    + lib.optionalString (!requireSigning) ''
-      export MOZ_REQUIRE_SIGNING=
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
-      # TODO: Default vm.max_map_count has been increased, retest without this
-      export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-    '';
+    # RBox WASM Sandboxing
+    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+  ''
+  + lib.optionalString pgoSupport ''
+    if [ -e "$TMPDIR/merged.profdata" ]; then
+      echo "Configuring with profiling data"
+      for i in "''${!configureFlagsArray[@]}"; do
+        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+          unset 'configureFlagsArray[i]'
+        fi
+      done
+      appendToVar configureFlags --enable-profile-use=cross
+      appendToVar configureFlags --with-pgo-profile-path=$TMPDIR/merged.profdata
+      appendToVar configureFlags --with-pgo-jarlog=$TMPDIR/jarlog
+      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+        LDFLAGS="$OLD_LDFLAGS"
+        unset OLD_LDFLAGS
+      ''}
+    else
+      echo "Configuring to generate profiling data"
+      configureFlagsArray+=(
+        "--enable-profile-generate=cross"
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl
+        # Set the rpath appropriately for the profiling run
+        # During the profiling run, loading libraries from $out would fail,
+        # since the profiling build has not been installed to $out
+        ''
+          OLD_LDFLAGS="$LDFLAGS"
+          LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
+        ''
+      }
+    fi
+  ''
+  + lib.optionalString (enableOfficialBranding && !stdenv.hostPlatform.is32bit) ''
+    export MOZILLA_OFFICIAL=1
+  ''
+  + lib.optionalString (!requireSigning) ''
+    export MOZ_REQUIRE_SIGNING=
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
+    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
+  '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
 
-  configureFlags =
+  configureFlags = [
+    "--disable-tests"
+    "--disable-updater"
+    "--enable-application=${application}"
+    "--enable-default-toolkit=${toolkit}"
+    "--with-app-name=${binaryName}"
+    "--with-distribution-id=org.nixos"
+    "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
+    "--with-wasi-sysroot=${wasiSysRoot}"
+    # for firefox, host is buildPlatform, target is hostPlatform
+    "--host=${buildStdenv.buildPlatform.config}"
+    "--target=${buildStdenv.hostPlatform.config}"
+  ]
+  # LTO is done using clang and lld on Linux.
+  ++ lib.optionals ltoSupport [
+    "--enable-lto=cross,full" # Cross-Language LTO
+    "--enable-linker=lld"
+  ]
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
+  ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional allowAddonSideload "--allow-addon-sideload"
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
+    "--enable-system-pixman"
+    "--with-system-ffi"
+    "--with-system-icu"
+    "--with-system-jpeg"
+    "--with-system-libevent"
+    "--with-system-libvpx"
+    "--with-system-nspr"
+    "--with-system-nss"
+    "--with-system-png" # needs APNG support
+    "--with-system-webp"
+    "--with-system-zlib"
+
+    # These options are not available on MacOS, even --disable-*
+    (enableFeature alsaSupport "alsa")
+    (enableFeature jackSupport "jack")
+    (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature sndioSupport "sndio")
+  ]
+  ++ [
+    (enableFeature crashreporterSupport "crashreporter")
+    (enableFeature ffmpegSupport "ffmpeg")
+    (enableFeature geolocationSupport "necko-wifi")
+    (enableFeature gssSupport "negotiateauth")
+    (enableFeature jemallocSupport "jemalloc")
+    (enableFeature webrtcSupport "webrtc")
+
+    (enableFeature debugBuild "debug")
+    (if debugBuild then "--enable-profiling" else "--enable-optimize")
+    # --enable-release adds -ffunction-sections & LTO that require a big amount
+    # of RAM, and the 32-bit memory space cannot handle that linking
+    (enableFeature (!debugBuild && !stdenv.hostPlatform.is32bit) "release")
+    (enableFeature enableDebugSymbols "debug-symbols")
+  ]
+  ++ lib.optionals enableDebugSymbols [
+    "--disable-strip"
+    "--disable-install-strip"
+  ]
+  # As of Firefox 137 (https://bugzilla.mozilla.org/show_bug.cgi?id=1943009),
+  # the --enable-official-branding flag overrides the --with-branding flag.
+  ++ lib.optional (enableOfficialBranding && branding == null) "--enable-official-branding"
+  ++ lib.optional (branding != null) "--with-branding=${branding}"
+  ++ extraConfigureFlags;
+
+  buildInputs = [
+    bzip2
+    file
+    libGL
+    libGLU
+    libstartup_notification
+    perl
+    zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
+    cups
+  ]
+  ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
     [
-      "--disable-tests"
-      "--disable-updater"
-      "--enable-application=${application}"
-      "--enable-default-toolkit=${toolkit}"
-      "--with-app-name=${binaryName}"
-      "--with-distribution-id=org.nixos"
-      "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
-      "--with-wasi-sysroot=${wasiSysRoot}"
-      # for firefox, host is buildPlatform, target is hostPlatform
-      "--host=${buildStdenv.buildPlatform.config}"
-      "--target=${buildStdenv.hostPlatform.config}"
+      dbus
+      dbus-glib
+      fontconfig
+      freetype
+      glib
+      gtk3
+      libffi
+      libevent
+      libjpeg
+      libpng
+      libvpx
+      libwebp
+      nspr
+      pango
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXft
+      xorg.libXi
+      xorg.libXrender
+      xorg.libXt
+      xorg.libXtst
+      xorg.pixman
+      xorg.xorgproto
+      zlib
+      (
+        if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
+      )
     ]
-    # LTO is done using clang and lld on Linux.
-    ++ lib.optionals ltoSupport [
-      "--enable-lto=cross,full" # Cross-Language LTO
-      "--enable-linker=lld"
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional jackSupport libjack2
+    ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
+    ++ lib.optional sndioSupport sndio
+    ++ lib.optionals waylandSupport [
+      libxkbcommon
+      libdrm
     ]
-    ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
-    ++ lib.optional (!drmSupport) "--disable-eme"
-    ++ lib.optional allowAddonSideload "--allow-addon-sideload"
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
-      "--enable-system-pixman"
-      "--with-system-ffi"
-      "--with-system-icu"
-      "--with-system-jpeg"
-      "--with-system-libevent"
-      "--with-system-libvpx"
-      "--with-system-nspr"
-      "--with-system-nss"
-      "--with-system-png" # needs APNG support
-      "--with-system-webp"
-      "--with-system-zlib"
-
-      # These options are not available on MacOS, even --disable-*
-      (enableFeature alsaSupport "alsa")
-      (enableFeature jackSupport "jack")
-      (enableFeature pulseaudioSupport "pulseaudio")
-      (enableFeature sndioSupport "sndio")
-    ]
-    ++ [
-      (enableFeature crashreporterSupport "crashreporter")
-      (enableFeature ffmpegSupport "ffmpeg")
-      (enableFeature geolocationSupport "necko-wifi")
-      (enableFeature gssSupport "negotiateauth")
-      (enableFeature jemallocSupport "jemalloc")
-      (enableFeature webrtcSupport "webrtc")
-
-      (enableFeature debugBuild "debug")
-      (if debugBuild then "--enable-profiling" else "--enable-optimize")
-      # --enable-release adds -ffunction-sections & LTO that require a big amount
-      # of RAM, and the 32-bit memory space cannot handle that linking
-      (enableFeature (!debugBuild && !stdenv.hostPlatform.is32bit) "release")
-      (enableFeature enableDebugSymbols "debug-symbols")
-    ]
-    ++ lib.optionals enableDebugSymbols [
-      "--disable-strip"
-      "--disable-install-strip"
-    ]
-    # As of Firefox 137 (https://bugzilla.mozilla.org/show_bug.cgi?id=1943009),
-    # the --enable-official-branding flag overrides the --with-branding flag.
-    ++ lib.optional (enableOfficialBranding && branding == null) "--enable-official-branding"
-    ++ lib.optional (branding != null) "--with-branding=${branding}"
-    ++ extraConfigureFlags;
-
-  buildInputs =
-    [
-      bzip2
-      file
-      libGL
-      libGLU
-      libstartup_notification
-      perl
-      zip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (if lib.versionAtLeast version "138" then apple-sdk_15 else apple-sdk_14)
-      cups
-    ]
-    ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) (
-      [
-        dbus
-        dbus-glib
-        fontconfig
-        freetype
-        glib
-        gtk3
-        libffi
-        libevent
-        libjpeg
-        libpng
-        libvpx
-        libwebp
-        nspr
-        pango
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXft
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXt
-        xorg.libXtst
-        xorg.pixman
-        xorg.xorgproto
-        zlib
-        (
-          if (lib.versionAtLeast version "129") then nss_latest else nss_esr # 3.90
-        )
-      ]
-      ++ lib.optional alsaSupport alsa-lib
-      ++ lib.optional jackSupport libjack2
-      ++ lib.optional pulseaudioSupport libpulseaudio # only headers are needed
-      ++ lib.optional sndioSupport sndio
-      ++ lib.optionals waylandSupport [
-        libxkbcommon
-        libdrm
-      ]
-    ))
-    ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
-    ++ lib.optional gssSupport libkrb5
-    ++ lib.optional jemallocSupport jemalloc
-    ++ extraBuildInputs;
+  ))
+  ++ [ (if (lib.versionAtLeast version "138") then icu77 else icu73) ]
+  ++ lib.optional gssSupport libkrb5
+  ++ lib.optional jemallocSupport jemalloc
+  ++ extraBuildInputs;
 
   profilingPhase = lib.optionalString pgoSupport ''
     # Package up Firefox for profiling
@@ -706,7 +702,8 @@ buildStdenv.mkDerivation {
     inherit gtk3;
     inherit wasiSysRoot;
     version = packageVersion;
-  } // extraPassthru;
+  }
+  // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
 

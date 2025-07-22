@@ -27,16 +27,15 @@ buildGoModule rec {
     go test ./...
   '';
 
-  postInstall =
-    ''
-      mv $out/bin/ctl $out/bin/conduktor
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd conduktor \
-        --bash <($out/bin/conduktor completion bash) \
-        --fish <($out/bin/conduktor completion fish) \
-        --zsh <($out/bin/conduktor completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/ctl $out/bin/conduktor
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd conduktor \
+      --bash <($out/bin/conduktor completion bash) \
+      --fish <($out/bin/conduktor completion fish) \
+      --zsh <($out/bin/conduktor completion zsh)
+  '';
 
   doInstallCheck = true;
 

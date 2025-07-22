@@ -16,7 +16,8 @@
 let
   versions = {
     "15.1.0".officialRelease.sha256 = "sha256-4rCewhZg8B/s/7cV4BICZSFpQ/A40OSKmGhxPlTwbOo=";
-  } // gccVersions;
+  }
+  // gccVersions;
 
   mkPackage =
     {

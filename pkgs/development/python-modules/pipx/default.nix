@@ -39,7 +39,8 @@ buildPythonPackage rec {
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeBuildInputs = [
     installShellFiles

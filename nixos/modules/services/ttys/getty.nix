@@ -10,20 +10,19 @@ with lib;
 let
   cfg = config.services.getty;
 
-  baseArgs =
-    [
-      "--login-program"
-      "${cfg.loginProgram}"
-    ]
-    ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
-      "--autologin"
-      cfg.autologinUser
-    ]
-    ++ optionals (cfg.loginOptions != null) [
-      "--login-options"
-      cfg.loginOptions
-    ]
-    ++ cfg.extraArgs;
+  baseArgs = [
+    "--login-program"
+    "${cfg.loginProgram}"
+  ]
+  ++ optionals (cfg.autologinUser != null && !cfg.autologinOnce) [
+    "--autologin"
+    cfg.autologinUser
+  ]
+  ++ optionals (cfg.loginOptions != null) [
+    "--login-options"
+    cfg.loginOptions
+  ]
+  ++ cfg.extraArgs;
 
   gettyCmd = args: "${lib.getExe' pkgs.util-linux "agetty"} ${escapeShellArgs baseArgs} ${args}";
 

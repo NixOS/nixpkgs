@@ -47,7 +47,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 

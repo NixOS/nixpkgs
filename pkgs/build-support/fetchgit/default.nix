@@ -109,13 +109,12 @@ lib.makeOverridable (
         builder = ./builder.sh;
         fetcher = ./nix-prefetch-git;
 
-        nativeBuildInputs =
-          [
-            git
-            cacert
-          ]
-          ++ lib.optionals fetchLFS [ git-lfs ]
-          ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          git
+          cacert
+        ]
+        ++ lib.optionals fetchLFS [ git-lfs ]
+        ++ nativeBuildInputs;
 
         inherit outputHash outputHashAlgo;
         outputHashMode = "recursive";

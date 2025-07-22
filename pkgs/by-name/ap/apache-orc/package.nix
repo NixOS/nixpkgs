@@ -44,20 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-      (lib.cmakeBool "BUILD_JAVA" false)
-      (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
-      (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
-    ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # Fix (RiscV) cross-compilation
-      # See https://github.com/apache/orc/issues/2334
-      (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")
-      (lib.cmakeFeature "HAS_POST_2038_EXITCODE" "0")
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-parameter")
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_JAVA" false)
+    (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
+    (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Fix (RiscV) cross-compilation
+    # See https://github.com/apache/orc/issues/2334
+    (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")
+    (lib.cmakeFeature "HAS_POST_2038_EXITCODE" "0")
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-unused-parameter")
+  ];
 
   env = {
     GTEST_HOME = gtest.dev;

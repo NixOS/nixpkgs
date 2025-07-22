@@ -252,7 +252,8 @@ let
           lines = [
             labels
             labelDefaults
-          ] ++ (map (l: lib.init l ++ [ "" ]) masterCf);
+          ]
+          ++ (map (l: lib.init l ++ [ "" ]) masterCf);
         in
         lib.foldr foldLine (lib.genList (lib.const 0) (lib.length labels)) lines;
 
@@ -991,7 +992,8 @@ in
           // lib.optionalAttrs haveLocalRecipients {
             local_recipient_maps = [
               "hash:/etc/postfix/local_recipients"
-            ] ++ lib.optional haveAliases "$alias_maps";
+            ]
+            ++ lib.optional haveAliases "$alias_maps";
           }
           // lib.optionalAttrs (cfg.dnsBlacklists != [ ]) { smtpd_client_restrictions = clientRestrictions; }
           // lib.optionalAttrs cfg.enableHeaderChecks {
@@ -1002,138 +1004,137 @@ in
             smtp_tls_security_level = lib.mkDefault "may";
           };
 
-        services.postfix.masterConfig =
-          {
-            pickup = {
-              private = false;
-              wakeup = 60;
-              maxproc = 1;
-            };
-            cleanup = {
-              private = false;
-              maxproc = 0;
-            };
-            qmgr = {
-              private = false;
-              wakeup = 300;
-              maxproc = 1;
-            };
-            tlsmgr = {
-              wakeup = 1000;
-              wakeupUnusedComponent = false;
-              maxproc = 1;
-            };
-            rewrite = {
-              command = "trivial-rewrite";
-            };
-            bounce = {
-              maxproc = 0;
-            };
-            defer = {
-              maxproc = 0;
-              command = "bounce";
-            };
-            trace = {
-              maxproc = 0;
-              command = "bounce";
-            };
-            verify = {
-              maxproc = 1;
-            };
-            flush = {
-              private = false;
-              wakeup = 1000;
-              wakeupUnusedComponent = false;
-              maxproc = 0;
-            };
-            proxymap = {
-              command = "proxymap";
-            };
-            proxywrite = {
-              maxproc = 1;
-              command = "proxymap";
-            };
-            showq = {
-              private = false;
-            };
-            error = { };
-            retry = {
-              command = "error";
-            };
-            discard = { };
-            local = {
-              privileged = true;
-            };
-            virtual = {
-              privileged = true;
-            };
-            lmtp = {
-            };
-            anvil = {
-              maxproc = 1;
-            };
-            scache = {
-              maxproc = 1;
-            };
-          }
-          // lib.optionalAttrs cfg.enableSubmission {
-            submission = {
-              type = "inet";
-              private = false;
-              command = "smtpd";
-              args =
-                let
-                  mkKeyVal = opt: val: [
-                    "-o"
-                    (opt + "=" + val)
-                  ];
-                in
-                lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
-            };
-          }
-          // lib.optionalAttrs cfg.enableSmtp {
-            smtp_inet = {
-              name = "smtp";
-              type = "inet";
-              private = false;
-              command = "smtpd";
-            };
-            smtp = { };
-            relay = {
-              command = "smtp";
-              args = [
-                "-o"
-                "smtp_fallback_relay="
-              ];
-            };
-          }
-          // lib.optionalAttrs cfg.enableSubmissions {
-            submissions = {
-              type = "inet";
-              private = false;
-              command = "smtpd";
-              args =
-                let
-                  mkKeyVal = opt: val: [
-                    "-o"
-                    (opt + "=" + val)
-                  ];
-                  adjustSmtpTlsSecurityLevel =
-                    !(cfg.submissionsOptions ? smtpd_tls_security_level)
-                    || cfg.submissionsOptions.smtpd_tls_security_level == "none"
-                    || cfg.submissionsOptions.smtpd_tls_security_level == "may";
-                  submissionsOptions =
-                    cfg.submissionsOptions
-                    // {
-                      smtpd_tls_wrappermode = "yes";
-                    }
-                    // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
-                      smtpd_tls_security_level = "encrypt";
-                    };
-                in
-                lib.concatLists (lib.mapAttrsToList mkKeyVal submissionsOptions);
-            };
+        services.postfix.masterConfig = {
+          pickup = {
+            private = false;
+            wakeup = 60;
+            maxproc = 1;
           };
+          cleanup = {
+            private = false;
+            maxproc = 0;
+          };
+          qmgr = {
+            private = false;
+            wakeup = 300;
+            maxproc = 1;
+          };
+          tlsmgr = {
+            wakeup = 1000;
+            wakeupUnusedComponent = false;
+            maxproc = 1;
+          };
+          rewrite = {
+            command = "trivial-rewrite";
+          };
+          bounce = {
+            maxproc = 0;
+          };
+          defer = {
+            maxproc = 0;
+            command = "bounce";
+          };
+          trace = {
+            maxproc = 0;
+            command = "bounce";
+          };
+          verify = {
+            maxproc = 1;
+          };
+          flush = {
+            private = false;
+            wakeup = 1000;
+            wakeupUnusedComponent = false;
+            maxproc = 0;
+          };
+          proxymap = {
+            command = "proxymap";
+          };
+          proxywrite = {
+            maxproc = 1;
+            command = "proxymap";
+          };
+          showq = {
+            private = false;
+          };
+          error = { };
+          retry = {
+            command = "error";
+          };
+          discard = { };
+          local = {
+            privileged = true;
+          };
+          virtual = {
+            privileged = true;
+          };
+          lmtp = {
+          };
+          anvil = {
+            maxproc = 1;
+          };
+          scache = {
+            maxproc = 1;
+          };
+        }
+        // lib.optionalAttrs cfg.enableSubmission {
+          submission = {
+            type = "inet";
+            private = false;
+            command = "smtpd";
+            args =
+              let
+                mkKeyVal = opt: val: [
+                  "-o"
+                  (opt + "=" + val)
+                ];
+              in
+              lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
+          };
+        }
+        // lib.optionalAttrs cfg.enableSmtp {
+          smtp_inet = {
+            name = "smtp";
+            type = "inet";
+            private = false;
+            command = "smtpd";
+          };
+          smtp = { };
+          relay = {
+            command = "smtp";
+            args = [
+              "-o"
+              "smtp_fallback_relay="
+            ];
+          };
+        }
+        // lib.optionalAttrs cfg.enableSubmissions {
+          submissions = {
+            type = "inet";
+            private = false;
+            command = "smtpd";
+            args =
+              let
+                mkKeyVal = opt: val: [
+                  "-o"
+                  (opt + "=" + val)
+                ];
+                adjustSmtpTlsSecurityLevel =
+                  !(cfg.submissionsOptions ? smtpd_tls_security_level)
+                  || cfg.submissionsOptions.smtpd_tls_security_level == "none"
+                  || cfg.submissionsOptions.smtpd_tls_security_level == "may";
+                submissionsOptions =
+                  cfg.submissionsOptions
+                  // {
+                    smtpd_tls_wrappermode = "yes";
+                  }
+                  // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
+                    smtpd_tls_security_level = "encrypt";
+                  };
+              in
+              lib.concatLists (lib.mapAttrsToList mkKeyVal submissionsOptions);
+          };
+        };
       }
 
       (lib.mkIf haveAliases {

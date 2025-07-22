@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   optional-dependencies = {
     all = [

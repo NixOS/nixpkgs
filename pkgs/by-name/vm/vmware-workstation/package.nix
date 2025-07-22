@@ -79,19 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  nativeBuildInputs =
-    [
-      python3
-      finalAttrs.vmware-unpack-env
-      autoPatchelfHook
-      makeWrapper
-    ]
-    ++ lib.optionals enableInstaller [
-      bzip2
-      sqlite
-      finalAttrs.readline70_compat63
-    ]
-    ++ lib.optionals enableMacOSGuests [ unzip ];
+  nativeBuildInputs = [
+    python3
+    finalAttrs.vmware-unpack-env
+    autoPatchelfHook
+    makeWrapper
+  ]
+  ++ lib.optionals enableInstaller [
+    bzip2
+    sqlite
+    finalAttrs.readline70_compat63
+  ]
+  ++ lib.optionals enableMacOSGuests [ unzip ];
 
   buildInputs = [
     libxslt

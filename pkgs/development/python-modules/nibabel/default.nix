@@ -45,13 +45,12 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies =
-    [
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
+  dependencies = [
+    numpy
+    packaging
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
+  ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   optional-dependencies = rec {
     all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
@@ -70,7 +69,8 @@ buildPythonPackage rec {
     pytest-httpserver
     pytest-xdist
     pytest7CheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH

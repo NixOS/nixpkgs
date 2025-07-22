@@ -40,32 +40,31 @@ rustPlatform.buildRustPackage rec {
 
   # maa-cli would only search libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67
-  postInstall =
-    ''
-      mkdir -p $out/share/maa-assistant-arknights/
-      ln -s ${maa-assistant-arknights}/share/maa-assistant-arknights/* $out/share/maa-assistant-arknights/
-      ln -s ${maa-assistant-arknights}/lib/* $out/share/maa-assistant-arknights/
-      mv $out/bin/maa $out/share/maa-assistant-arknights/
+  postInstall = ''
+    mkdir -p $out/share/maa-assistant-arknights/
+    ln -s ${maa-assistant-arknights}/share/maa-assistant-arknights/* $out/share/maa-assistant-arknights/
+    ln -s ${maa-assistant-arknights}/lib/* $out/share/maa-assistant-arknights/
+    mv $out/bin/maa $out/share/maa-assistant-arknights/
 
-      makeWrapper $out/share/maa-assistant-arknights/maa $out/bin/maa \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            android-tools
-            git
-          ]
-        }"
+    makeWrapper $out/share/maa-assistant-arknights/maa $out/bin/maa \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          android-tools
+          git
+        ]
+      }"
 
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd maa \
-        --bash <($out/bin/maa complete bash) \
-        --fish <($out/bin/maa complete fish) \
-        --zsh <($out/bin/maa complete zsh)
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd maa \
+      --bash <($out/bin/maa complete bash) \
+      --fish <($out/bin/maa complete fish) \
+      --zsh <($out/bin/maa complete zsh)
 
-      mkdir -p manpage
-      $out/bin/maa mangen --path manpage
-      installManPage manpage/*
-    '';
+    mkdir -p manpage
+    $out/bin/maa mangen --path manpage
+    installManPage manpage/*
+  '';
 
   meta = with lib; {
     description = "Simple CLI for MAA by Rust";

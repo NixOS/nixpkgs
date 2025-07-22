@@ -26,27 +26,25 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-PD6HycP6+/tKafirCc2Oj0MffHizLqTmDIrdIOmXY/w=";
 
-  nativeBuildInputs =
-    [
-      cmake
-      installShellFiles
-      pkg-config
-      ronn
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    pkg-config
+    ronn
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
-  buildInputs =
-    [
-      libgit2
-      libssh2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libgit2
+    libssh2
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.

@@ -466,26 +466,25 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  passthru =
-    {
-      inherit airgapImages;
-      k3sCNIPlugins = k3sCNIPlugins;
-      k3sContainerd = k3sContainerd;
-      k3sRepo = k3sRepo;
-      k3sRoot = k3sRoot;
-      k3sBundle = k3sBundle;
-      mkTests =
-        version:
-        let
-          k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
-        in
-        lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
-      tests = passthru.mkTests k3sVersion;
-      updateScript = updateScript;
-    }
-    // (lib.mapAttrs' (
-      name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
-    ) imagesVersions);
+  passthru = {
+    inherit airgapImages;
+    k3sCNIPlugins = k3sCNIPlugins;
+    k3sContainerd = k3sContainerd;
+    k3sRepo = k3sRepo;
+    k3sRoot = k3sRoot;
+    k3sBundle = k3sBundle;
+    mkTests =
+      version:
+      let
+        k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+      in
+      lib.mapAttrs (name: value: nixosTests.k3s.${name}.${k3s_version}) nixosTests.k3s;
+    tests = passthru.mkTests k3sVersion;
+    updateScript = updateScript;
+  }
+  // (lib.mapAttrs' (
+    name: _: lib.nameValuePair (kebabToCamel name) (fetchurl imagesVersions.${name})
+  ) imagesVersions);
 
   meta = baseMeta;
 }

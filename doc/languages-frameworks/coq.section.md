@@ -177,10 +177,8 @@ For instance, here is how you could add some code to be performed in the derivat
 
 ```nix
 coqPackages.multinomials.overrideAttrs (oldAttrs: {
-  postInstall =
-    oldAttrs.postInstall or ""
-    + ''
-      echo "you can do anything you want here"
-    '';
+  postInstall = oldAttrs.postInstall or "" + ''
+    echo "you can do anything you want here"
+  '';
 })
 ```

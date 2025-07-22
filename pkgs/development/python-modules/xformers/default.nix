@@ -82,13 +82,12 @@ buildPythonPackage {
       ]
     );
 
-  nativeBuildInputs =
-    [
-      ninja
-      which
-    ]
-    ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
-    ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
+  nativeBuildInputs = [
+    ninja
+    which
+  ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ])
+  ++ lib.optional stdenv.hostPlatform.isDarwin openmp.dev;
 
   dependencies = [
     numpy

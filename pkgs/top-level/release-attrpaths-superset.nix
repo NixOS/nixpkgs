@@ -130,7 +130,8 @@ let
       "pkgsMusl"
       "stdenv"
     ]
-  ] ++ justAttrNames [ ] releaseOutpaths;
+  ]
+  ++ justAttrNames [ ] releaseOutpaths;
 
   names = map (path: (lib.concatStringsSep "." path)) paths;
 

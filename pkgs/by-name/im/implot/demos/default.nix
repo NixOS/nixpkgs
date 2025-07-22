@@ -61,7 +61,8 @@ stdenv.mkDerivation {
     imnodes
     implot
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
 
   meta = {
     description = "Standalone ImPlot Demos";

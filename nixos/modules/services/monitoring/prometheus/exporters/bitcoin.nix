@@ -87,6 +87,7 @@ in
       METRICS_ADDR = cfg.listenAddress;
       METRICS_PORT = toString cfg.port;
       REFRESH_SECONDS = toString cfg.refreshSeconds;
-    } // cfg.extraEnv;
+    }
+    // cfg.extraEnv;
   };
 }

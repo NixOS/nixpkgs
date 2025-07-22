@@ -29,51 +29,48 @@ buildGoModule rec {
 
   vendorHash = "sha256-v6tPGjeJhRdSJpVPQAERRM7cpXO7Ut7kLF3EdNcDFgM=";
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   # go-glfw doesn't support both X11 and Wayland in single build
   tags = lib.optionals waylandSupport [ "wayland" ];
 
-  buildInputs =
-    [
-      libglvnd
-      mpv-unwrapped
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libXxf86vm
-      xorg.libX11
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
-      xorg.libXrandr
-      xorg.libXinerama
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXext
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
-      wayland
-      wayland-protocols
-      libxkbcommon
-    ];
+  buildInputs = [
+    libglvnd
+    mpv-unwrapped
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libXxf86vm
+    xorg.libX11
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXext
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ];
 
-  postInstall =
-    ''
-      for dimension in 128 256 512;do
-          dimensions=''${dimension}x''${dimension}
-          mkdir -p $out/share/icons/hicolor/$dimensions/apps
-          cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
-      done
-    ''
-    + lib.optionalString waylandSupport ''
-      mv $out/bin/supersonic $out/bin/${meta.mainProgram}
-    '';
+  postInstall = ''
+    for dimension in 128 256 512;do
+        dimensions=''${dimension}x''${dimension}
+        mkdir -p $out/share/icons/hicolor/$dimensions/apps
+        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
+    done
+  ''
+  + lib.optionalString waylandSupport ''
+    mv $out/bin/supersonic $out/bin/${meta.mainProgram}
+  '';
 
   desktopItems = [
     (makeDesktopItem {

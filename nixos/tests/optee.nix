@@ -15,12 +15,10 @@ import ./make-test-python.nix (
         # Default environment for qemu-arm64 uboot does not work well with
         # large nixos kernel/initrds.
         uboot = ubootQemuAarch64.overrideAttrs (old: {
-          postPatch =
-            (old.postPatch or "")
-            + ''
-              substituteInPlace board/emulation/qemu-arm/qemu-arm.env \
-                --replace-fail "ramdisk_addr_r=0x44000000" "ramdisk_addr_r=0x46000000"
-            '';
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace board/emulation/qemu-arm/qemu-arm.env \
+              --replace-fail "ramdisk_addr_r=0x44000000" "ramdisk_addr_r=0x46000000"
+          '';
         });
 
         bios = armTrustedFirmwareQemu.override {

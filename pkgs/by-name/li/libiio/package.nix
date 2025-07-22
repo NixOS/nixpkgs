@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     "out"
     "lib"
     "dev"
-  ] ++ lib.optional pythonSupport "python";
+  ]
+  ++ lib.optional pythonSupport "python";
 
   src = fetchFromGitHub {
     owner = "analogdevicesinc";
@@ -39,54 +40,50 @@ stdenv.mkDerivation rec {
     ./cmake-fix-libxml2-find-package.patch
   ];
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    flex
+    bison
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport (
     [
-      cmake
-      flex
-      bison
-      pkg-config
+      python3
     ]
-    ++ lib.optionals pythonSupport (
-      [
-        python3
-      ]
-      ++ lib.optional python3.isPy3k python3.pkgs.setuptools
-    );
+    ++ lib.optional python3.isPy3k python3.pkgs.setuptools
+  );
 
-  buildInputs =
-    [
-      libxml2
-      libusb1
-    ]
-    ++ lib.optional avahiSupport avahi
-    ++ lib.optional stdenv.hostPlatform.isLinux libaio;
+  buildInputs = [
+    libxml2
+    libusb1
+  ]
+  ++ lib.optional avahiSupport avahi
+  ++ lib.optional stdenv.hostPlatform.isLinux libaio;
 
   doInstallCheck = true;
 
-  cmakeFlags =
-    [
-      "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
-      # osx framework is disabled,
-      # the linux-like directory structure is used for proper output splitting
-      "-DOSX_PACKAGE=off"
-      "-DOSX_FRAMEWORK=off"
-    ]
-    ++ lib.optionals pythonSupport [
-      "-DPython_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
-      "-DPYTHON_BINDINGS=on"
-    ]
-    ++ lib.optionals (!avahiSupport) [
-      "-DHAVE_DNS_SD=OFF"
-    ];
+  cmakeFlags = [
+    "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
+    # osx framework is disabled,
+    # the linux-like directory structure is used for proper output splitting
+    "-DOSX_PACKAGE=off"
+    "-DOSX_FRAMEWORK=off"
+  ]
+  ++ lib.optionals pythonSupport [
+    "-DPython_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
+    "-DPYTHON_BINDINGS=on"
+  ]
+  ++ lib.optionals (!avahiSupport) [
+    "-DHAVE_DNS_SD=OFF"
+  ];
 
-  postPatch =
-    ''
-      patchShebangs libiio.rules.cmakein
-    ''
-    + lib.optionalString pythonSupport ''
-      # Hardcode path to the shared library into the bindings.
-      sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
-    '';
+  postPatch = ''
+    patchShebangs libiio.rules.cmakein
+  ''
+  + lib.optionalString pythonSupport ''
+    # Hardcode path to the shared library into the bindings.
+    sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
+  '';
 
   postInstall = lib.optionalString pythonSupport ''
     # Move Python bindings into a separate output.

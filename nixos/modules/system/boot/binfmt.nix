@@ -387,8 +387,7 @@ in
     );
     nix.settings = lib.mkIf (cfg.addEmulatedSystemsToNixSandbox && cfg.emulatedSystems != [ ]) {
       extra-platforms =
-        cfg.emulatedSystems
-        ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
+        cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
       extra-sandbox-paths =
         let
           ruleFor = system: cfg.registrations.${system};
@@ -405,13 +404,12 @@ in
 
     systemd = lib.mkMerge [
       ({
-        tmpfiles.rules =
-          [
-            "d /run/binfmt 0755 -"
-          ]
-          ++ lib.mapAttrsToList (name: interpreter: "L+ /run/binfmt/${name} - - - - ${interpreter}") (
-            lib.mapAttrs mkInterpreter config.boot.binfmt.registrations
-          );
+        tmpfiles.rules = [
+          "d /run/binfmt 0755 -"
+        ]
+        ++ lib.mapAttrsToList (name: interpreter: "L+ /run/binfmt/${name} - - - - ${interpreter}") (
+          lib.mapAttrs mkInterpreter config.boot.binfmt.registrations
+        );
       })
 
       (lib.mkIf (config.boot.binfmt.registrations != { }) {

@@ -50,54 +50,52 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
-  buildInputs =
-    [
-      alsa-lib
-      boost
-      chromaprint
-      fftw
-      gnutls
-      kdsingleapplication
-      libXdmcp
-      libcdio
-      libebur128
-      libidn2
-      libmtp
-      libpthreadstubs
-      libtasn1
-      qt6.qtbase
-      sqlite
-      taglib
-      sparsehash
-      rapidjson
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      libselinux
-      libsepol
-      p11-kit
-    ]
-    ++ (with gst_all_1; [
-      glib-networking
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    alsa-lib
+    boost
+    chromaprint
+    fftw
+    gnutls
+    kdsingleapplication
+    libXdmcp
+    libcdio
+    libebur128
+    libidn2
+    libmtp
+    libpthreadstubs
+    libtasn1
+    qt6.qtbase
+    sqlite
+    taglib
+    sparsehash
+    rapidjson
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    libselinux
+    libsepol
+    p11-kit
+  ]
+  ++ (with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      qt6.qttools
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      util-linux
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    util-linux
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "ENABLE_GPOD" false) ];
 

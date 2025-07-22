@@ -78,7 +78,8 @@ buildPythonPackage rec {
     opentelemetry-semantic-conventions
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # prevent google directory from shadowing google imports

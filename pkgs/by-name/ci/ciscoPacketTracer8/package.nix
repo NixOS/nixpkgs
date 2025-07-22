@@ -68,46 +68,45 @@ let
           url = "https://www.netacad.com";
         };
 
-    buildInputs =
-      [
-        autoPatchelfHook
-        makeWrapper
-        alsa-lib
-        dbus
-        expat
-        fontconfig
-        glib
-        libdrm
-        libglvnd
-        libpulseaudio
-        libudev0-shim
-        libxkbcommon
-        libxml2'
-        libxslt
-        nspr
-        nss
-        wayland
-      ]
-      ++ (with xorg; [
-        libICE
-        libSM
-        libX11
-        libXScrnSaver
-        libXcomposite
-        libXcursor
-        libXdamage
-        libXext
-        libXfixes
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libxcb
-        xcbutilimage
-        xcbutilkeysyms
-        xcbutilrenderutil
-        xcbutilwm
-      ]);
+    buildInputs = [
+      autoPatchelfHook
+      makeWrapper
+      alsa-lib
+      dbus
+      expat
+      fontconfig
+      glib
+      libdrm
+      libglvnd
+      libpulseaudio
+      libudev0-shim
+      libxkbcommon
+      libxml2'
+      libxslt
+      nspr
+      nss
+      wayland
+    ]
+    ++ (with xorg; [
+      libICE
+      libSM
+      libX11
+      libXScrnSaver
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libxcb
+      xcbutilimage
+      xcbutilkeysyms
+      xcbutilrenderutil
+      xcbutilwm
+    ]);
 
     unpackPhase = ''
       runHook preUnpack

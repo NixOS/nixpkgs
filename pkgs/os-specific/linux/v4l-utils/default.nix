@@ -41,13 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wc9UnC7DzznrXse/FXMTSeYbJqIbXpY5IttCIzO64Zc=";
   };
 
-  outputs =
-    [ "out" ]
-    ++ lib.optional withUtils "lib"
-    ++ [
-      "doc"
-      "dev"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optional withUtils "lib"
+  ++ [
+    "doc"
+    "dev"
+  ];
 
   mesonFlags = [
     (lib.mesonBool "v4l-utils" withUtils)
@@ -70,22 +71,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     udevCheckHook
-  ] ++ lib.optional withQt wrapQtAppsHook;
+  ]
+  ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs =
-    [
-      json_c
-      libbpf
-      libelf
-      udev
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
-    ++ lib.optionals withQt [
-      alsa-lib
-      qt5compat
-      qtbase
-      libGLU
-    ];
+  buildInputs = [
+    json_c
+    libbpf
+    libelf
+    udev
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+  ++ lib.optionals withQt [
+    alsa-lib
+    qt5compat
+    qtbase
+    libGLU
+  ];
 
   hardeningDisable = [ "zerocallusedregs" ];
 

@@ -325,7 +325,8 @@ in
               ExecStart = "${package}/bin/kea-ctrl-agent -c /etc/kea/ctrl-agent.conf ${lib.escapeShellArgs cfg.ctrl-agent.extraArgs}";
               KillMode = "process";
               Restart = "on-failure";
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
           };
         })
 
@@ -377,7 +378,8 @@ in
                 "CAP_NET_BIND_SERVICE"
                 "CAP_NET_RAW"
               ];
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
           };
         })
 
@@ -427,7 +429,8 @@ in
               CapabilityBoundingSet = [
                 "CAP_NET_BIND_SERVICE"
               ];
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
           };
         })
 
@@ -474,7 +477,8 @@ in
               CapabilityBoundingSet = [
                 "CAP_NET_BIND_SERVICE"
               ];
-            } // commonServiceConfig;
+            }
+            // commonServiceConfig;
           };
         })
 

@@ -201,43 +201,41 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      acpica-tools
-      autoPatchelfHook
-      bison
-      cmake
-      dev86
-      flex
-      pandoc
-      perl
-      pkg-config
+  nativeBuildInputs = [
+    acpica-tools
+    autoPatchelfHook
+    bison
+    cmake
+    dev86
+    flex
+    pandoc
+    perl
+    pkg-config
 
-      # oxenstored
-      ocamlPackages.findlib
-      ocamlPackages.ocaml
-    ]
-    ++ (with python3Packages; [
-      python
-      setuptools
-      wrapPython
-    ]);
+    # oxenstored
+    ocamlPackages.findlib
+    ocamlPackages.ocaml
+  ]
+  ++ (with python3Packages; [
+    python
+    setuptools
+    wrapPython
+  ]);
 
-  buildInputs =
-    [
-      bzip2
-      e2fsprogs.dev
-      libnl
-      libuuid
-      lzo
-      ncurses
-      xz
-      yajl
-      zlib
-      zstd
-    ]
-    ++ optionals withFlask [ checkpolicy ]
-    ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ];
+  buildInputs = [
+    bzip2
+    e2fsprogs.dev
+    libnl
+    libuuid
+    lzo
+    ncurses
+    xz
+    yajl
+    zlib
+    zstd
+  ]
+  ++ optionals withFlask [ checkpolicy ]
+  ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ];
 
   configureFlags = [
     "--enable-systemd"
@@ -249,29 +247,28 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFlask "xsmpolicy")
   ];
 
-  makeFlags =
-    [
-      "SUBSYSTEMS=${toString finalAttrs.buildFlags}"
+  makeFlags = [
+    "SUBSYSTEMS=${toString finalAttrs.buildFlags}"
 
-      "PREFIX=$(out)"
-      "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
+    "PREFIX=$(out)"
+    "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
 
-      "XEN_WHOAMI=${finalAttrs.pname}"
-      "XEN_DOMAIN=${finalAttrs.vendor}"
+    "XEN_WHOAMI=${finalAttrs.pname}"
+    "XEN_DOMAIN=${finalAttrs.vendor}"
 
-      "GIT=${getExe' coreutils "false"}"
-      "WGET=${getExe' coreutils "false"}"
-      "EFI_VENDOR=${finalAttrs.vendor}"
-      "INSTALL_EFI_STRIP=1"
-      "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
-    ]
-    # These flags set the CONFIG_* options in /boot/xen.config
-    # and define if the default policy file is built. However,
-    # the Flask binaries always get compiled by default.
-    ++ optionals withFlask [
-      "XSM_ENABLE=y"
-      "FLASK_ENABLE=y"
-    ];
+    "GIT=${getExe' coreutils "false"}"
+    "WGET=${getExe' coreutils "false"}"
+    "EFI_VENDOR=${finalAttrs.vendor}"
+    "INSTALL_EFI_STRIP=1"
+    "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
+  ]
+  # These flags set the CONFIG_* options in /boot/xen.config
+  # and define if the default policy file is built. However,
+  # the Flask binaries always get compiled by default.
+  ++ optionals withFlask [
+    "XSM_ENABLE=y"
+    "FLASK_ENABLE=y"
+  ];
 
   buildFlags = [
     "xen"
@@ -310,17 +307,16 @@ stdenv.mkDerivation (finalAttrs: {
       wrapPythonProgramsIn "$out/libexec/xen/bin" "$out $pythonPath"
     '';
 
-  postFixup =
-    ''
-      addAutoPatchelfSearchPath $out/lib
-      autoPatchelf $out/libexec/xen/bin
-    ''
-    # Flask is particularly hard to disable. Even after
-    # setting the make flags to `n`, it still gets compiled.
-    # If withFlask is disabled, delete the extra binaries.
-    + optionalString (!withFlask) ''
-      rm -f $out/bin/flask-*
-    '';
+  postFixup = ''
+    addAutoPatchelfSearchPath $out/lib
+    autoPatchelf $out/libexec/xen/bin
+  ''
+  # Flask is particularly hard to disable. Even after
+  # setting the make flags to `n`, it still gets compiled.
+  # If withFlask is disabled, delete the extra binaries.
+  + optionalString (!withFlask) ''
+    rm -f $out/bin/flask-*
+  '';
 
   passthru = {
     efi = "boot/xen-${finalAttrs.upstreamVersion}.efi";
@@ -359,22 +355,21 @@ stdenv.mkDerivation (finalAttrs: {
     branch = versions.majorMinor finalAttrs.version;
 
     description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
-    longDescription =
-      ''
-        The Xen Project Hypervisor is a virtualisation technology defined as a *type-1
-        hypervisor*, which allows multiple virtual machines, known as domains, to run
-        concurrently with the host on the physical machine. On a typical *type-2
-        hypervisor*, the virtual machines run as applications on top of the
-        host. NixOS runs as the privileged **Domain 0**, and can paravirtualise or fully
-        virtualise **Unprivileged Domains**.
+    longDescription = ''
+      The Xen Project Hypervisor is a virtualisation technology defined as a *type-1
+      hypervisor*, which allows multiple virtual machines, known as domains, to run
+      concurrently with the host on the physical machine. On a typical *type-2
+      hypervisor*, the virtual machines run as applications on top of the
+      host. NixOS runs as the privileged **Domain 0**, and can paravirtualise or fully
+      virtualise **Unprivileged Domains**.
 
-        Use with the `qemu_xen` package.
-      ''
-      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${finalAttrs.meta.branch}-testing/misc/efi.html), available on the `boot` output of this package."
-      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy` file is available on the `boot` output of this package."
-      + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
-      + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
-      + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
+      Use with the `qemu_xen` package.
+    ''
+    + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${finalAttrs.meta.branch}-testing/misc/efi.html), available on the `boot` output of this package."
+    + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy` file is available on the `boot` output of this package."
+    + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
+    + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
+    + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
 
     homepage = "https://xenproject.org/";
     downloadPage = "https://downloads.xenproject.org/release/xen/${finalAttrs.version}/";

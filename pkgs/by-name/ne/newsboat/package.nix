@@ -38,30 +38,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      asciidoctor
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-      ncurses
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+    ncurses
+  ];
 
-  buildInputs =
-    [
-      stfl
-      sqlite
-      curl
-      libxml2
-      json_c
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      gettext
-    ];
+  buildInputs = [
+    stfl
+    sqlite
+    curl
+    libxml2
+    json_c
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    gettext
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
@@ -82,15 +80,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     make -j $NIX_BUILD_CORES test
   '';
 
-  postInstall =
-    ''
-      make -j $NIX_BUILD_CORES prefix="$out" install
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-      done
-    '';
+  postInstall = ''
+    make -j $NIX_BUILD_CORES prefix="$out" install
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+    done
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

@@ -18,21 +18,20 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  subPackages =
-    [
-      "cmd/mimir"
-      "cmd/mimirtool"
-    ]
-    ++ (map (pathName: "tools/${pathName}") [
-      "compaction-planner"
-      "copyblocks"
-      "copyprefix"
-      "delete-objects"
-      "list-deduplicated-blocks"
-      "listblocks"
-      "mark-blocks"
-      "undelete-blocks"
-    ]);
+  subPackages = [
+    "cmd/mimir"
+    "cmd/mimirtool"
+  ]
+  ++ (map (pathName: "tools/${pathName}") [
+    "compaction-planner"
+    "copyblocks"
+    "copyprefix"
+    "delete-objects"
+    "list-deduplicated-blocks"
+    "listblocks"
+    "mark-blocks"
+    "undelete-blocks"
+  ]);
 
   passthru = {
     updateScript = nix-update-script {

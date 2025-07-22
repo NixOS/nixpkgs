@@ -129,7 +129,8 @@ buildPythonPackage rec {
     addBinToPathHook
     pytestCheckHook
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck =
     # ensure tests can find these
@@ -137,42 +138,41 @@ buildPythonPackage rec {
       export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
     '';
 
-  disabledTests =
-    [
-      # Flaky
-      "test_numerical_eos_values"
-      "test_pca"
-      "test_static_si_no_kgrid"
-      "test_thermal_conductivity"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # AttributeError: 'NoneType' object has no attribute 'items'
-      "test_mean_field"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fatal Python error: Aborted
-      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
-      # https://github.com/materialsproject/pymatgen/issues/4452
-      "test_angle"
-      "test_as_dict_from_dict"
-      "test_attributes"
-      "test_basic"
-      "test_core_state_eigen"
-      "test_eos_func"
-      "test_get_info_cohps_to_neighbors"
-      "test_get_plot"
-      "test_get_point_group_operations"
-      "test_matplotlib_plots"
-      "test_ph_plot_w_gruneisen"
-      "test_plot"
-      "test_proj_bandstructure_plot"
-      "test_structure"
-      "test_structure_environments"
+  disabledTests = [
+    # Flaky
+    "test_numerical_eos_values"
+    "test_pca"
+    "test_static_si_no_kgrid"
+    "test_thermal_conductivity"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AttributeError: 'NoneType' object has no attribute 'items'
+    "test_mean_field"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+    # https://github.com/materialsproject/pymatgen/issues/4452
+    "test_angle"
+    "test_as_dict_from_dict"
+    "test_attributes"
+    "test_basic"
+    "test_core_state_eigen"
+    "test_eos_func"
+    "test_get_info_cohps_to_neighbors"
+    "test_get_plot"
+    "test_get_point_group_operations"
+    "test_matplotlib_plots"
+    "test_ph_plot_w_gruneisen"
+    "test_plot"
+    "test_proj_bandstructure_plot"
+    "test_structure"
+    "test_structure_environments"
 
-      # attempt to insert nil object from objects[1]
-      "test_timer_10_2_7"
-      "test_timer"
-    ];
+    # attempt to insert nil object from objects[1]
+    "test_timer_10_2_7"
+    "test_timer"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crash when running the pmg command

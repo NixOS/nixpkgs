@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
     getconf
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bubblewrap ];
 
   patches = [ ./opam-shebangs.patch ];
 

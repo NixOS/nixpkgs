@@ -235,18 +235,17 @@ in
 
     extraComponents = mkOption {
       type = types.listOf (types.enum availableComponents);
-      default =
-        [
-          # List of components required to complete the onboarding
-          "default_config"
-          "met"
-          "esphome"
-        ]
-        ++ optionals pkgs.stdenv.hostPlatform.isAarch [
-          # Use the platform as an indicator that we might be running on a RaspberryPi and include
-          # relevant components
-          "rpi_power"
-        ];
+      default = [
+        # List of components required to complete the onboarding
+        "default_config"
+        "met"
+        "esphome"
+      ]
+      ++ optionals pkgs.stdenv.hostPlatform.isAarch [
+        # Use the platform as an indicator that we might be running on a RaspberryPi and include
+        # relevant components
+        "rpi_power"
+      ];
       example = literalExpression ''
         [
           "analytics"
@@ -935,16 +934,15 @@ in
               allowPaths = if isList value then value else singleton value;
             in
             [ "${cfg.configDir}" ] ++ allowPaths;
-          RestrictAddressFamilies =
-            [
-              "AF_INET"
-              "AF_INET6"
-              "AF_NETLINK"
-              "AF_UNIX"
-            ]
-            ++ optionals (any useComponent componentsUsingBluetooth) [
-              "AF_BLUETOOTH"
-            ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+            "AF_UNIX"
+          ]
+          ++ optionals (any useComponent componentsUsingBluetooth) [
+            "AF_BLUETOOTH"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -952,15 +950,14 @@ in
             "dialout"
           ];
           SystemCallArchitectures = "native";
-          SystemCallFilter =
-            [
-              "@system-service"
-              "~@privileged"
-            ]
-            ++ optionals (any useComponent componentsUsingPing) [
-              "capset"
-              "setuid"
-            ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ]
+          ++ optionals (any useComponent componentsUsingPing) [
+            "capset"
+            "setuid"
+          ];
           UMask = "0077";
         };
       path = [

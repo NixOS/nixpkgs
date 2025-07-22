@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     opensp
     libxml2
     curl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";

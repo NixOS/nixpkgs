@@ -3134,19 +3134,18 @@ let
     };
 
   renderConfig = def: {
-    text =
-      ''
-        [Network]
-        ${attrsToSection def.networkConfig}
-      ''
-      + optionalString (def.dhcpV4Config != { }) ''
-        [DHCPv4]
-        ${attrsToSection def.dhcpV4Config}
-      ''
-      + optionalString (def.dhcpV6Config != { }) ''
-        [DHCPv6]
-        ${attrsToSection def.dhcpV6Config}
-      '';
+    text = ''
+      [Network]
+      ${attrsToSection def.networkConfig}
+    ''
+    + optionalString (def.dhcpV4Config != { }) ''
+      [DHCPv4]
+      ${attrsToSection def.dhcpV4Config}
+    ''
+    + optionalString (def.dhcpV6Config != { }) ''
+      [DHCPv6]
+      ${attrsToSection def.dhcpV6Config}
+    '';
   };
 
   mkUnitFiles =
@@ -3299,10 +3298,11 @@ let
       {
         systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
 
-        systemd.network.wait-online.extraArgs =
-          [ "--timeout=${toString cfg.wait-online.timeout}" ]
-          ++ optional cfg.wait-online.anyInterface "--any"
-          ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
+        systemd.network.wait-online.extraArgs = [
+          "--timeout=${toString cfg.wait-online.timeout}"
+        ]
+        ++ optional cfg.wait-online.anyInterface "--any"
+        ++ map (i: "--ignore=${i}") cfg.wait-online.ignoredInterfaces;
       }
 
       (mkIf config.systemd.network.enable {

@@ -111,7 +111,8 @@ stdenv.mkDerivation rec {
       "--disable-resample"
       "--disable-libwebrtc"
       "--with-gnutls=yes"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
 
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
@@ -275,7 +276,8 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtsvg
     qtwebchannel
-  ] ++ lib.optionals withWebengine [ qtwebengine ];
+  ]
+  ++ lib.optionals withWebengine [ qtwebengine ];
 
   cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 

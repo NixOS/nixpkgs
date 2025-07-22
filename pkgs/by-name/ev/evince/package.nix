@@ -73,54 +73,52 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
   ];
 
-  buildInputs =
+  buildInputs = [
+    atk
+    dbus # only needed to find the service directory
+    djvulibre
+    gdk-pixbuf
+    ghostscriptX
+    glib
+    gnome-desktop
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    libarchive
+    libgxps
+    libhandy
+    librsvg
+    libspectre
+    libxml2
+    pango
+    poppler
+    texlive.bin.core # kpathsea for DVI support
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals supportMultimedia (
+    with gst_all_1;
     [
-      atk
-      dbus # only needed to find the service directory
-      djvulibre
-      gdk-pixbuf
-      ghostscriptX
-      glib
-      gnome-desktop
-      gsettings-desktop-schemas
-      gspell
-      gtk3
-      libarchive
-      libgxps
-      libhandy
-      librsvg
-      libspectre
-      libxml2
-      pango
-      poppler
-      texlive.bin.core # kpathsea for DVI support
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
     ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals supportMultimedia (
-      with gst_all_1;
-      [
-        gstreamer
-        gst-plugins-base
-        gst-plugins-good
-        gst-plugins-bad
-        gst-plugins-ugly
-        gst-libav
-      ]
-    );
+  );
 
-  mesonFlags =
-    [
-      "-Dnautilus=false"
-      "-Dps=enabled"
-    ]
-    ++ lib.optionals (!withLibsecret) [
-      "-Dkeyring=disabled"
-    ]
-    ++ lib.optionals (!supportMultimedia) [
-      "-Dmultimedia=disabled"
-    ];
+  mesonFlags = [
+    "-Dnautilus=false"
+    "-Dps=enabled"
+  ]
+  ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
+  ]
+  ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")

@@ -42,23 +42,22 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-l+Y/ntuqaasDL0cEHSwscFxAs1jC0bm9oTU0J/K60AY=";
 
-  buildInputs =
-    [
-      gtk3
-      gdk-pixbuf
-      glib
-      gtk-layer-shell
-      glib-networking
-      shared-mime-info
-      adwaita-icon-theme
-      hicolor-icon-theme
-      gsettings-desktop-schemas
-      libxkbcommon
-    ]
-    ++ lib.optionals (hasFeature "http") [ openssl ]
-    ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
-    ++ lib.optionals (hasFeature "cairo") [ luajit ]
-    ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
+  buildInputs = [
+    gtk3
+    gdk-pixbuf
+    glib
+    gtk-layer-shell
+    glib-networking
+    shared-mime-info
+    adwaita-icon-theme
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libxkbcommon
+  ]
+  ++ lib.optionals (hasFeature "http") [ openssl ]
+  ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
+  ++ lib.optionals (hasFeature "cairo") [ luajit ]
+  ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
 
   nativeBuildInputs = [
     pkg-config
@@ -72,21 +71,20 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = features != [ ];
   buildFeatures = features;
 
-  gappsWrapperArgs =
-    ''
-      # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
-      --prefix XDG_DATA_DIRS : "${librsvg}/share"
-      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+  gappsWrapperArgs = ''
+    # Thumbnailers
+    --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+    --prefix XDG_DATA_DIRS : "${librsvg}/share"
+    --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
+    --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
 
-      # gtk-launch
-      --suffix PATH : "${lib.makeBinPath [ gtk3 ]}"
-    ''
-    + lib.optionalString (hasFeature "cairo") ''
-      --prefix LUA_PATH : "./?.lua;${luajitPackages.lgi}/share/lua/5.1/?.lua;${luajitPackages.lgi}/share/lua/5.1/?/init.lua;${luajit}/share/lua/5.1/\?.lua;${luajit}/share/lua/5.1/?/init.lua"
-      --prefix LUA_CPATH : "./?.so;${luajitPackages.lgi}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/loadall.so"
-    '';
+    # gtk-launch
+    --suffix PATH : "${lib.makeBinPath [ gtk3 ]}"
+  ''
+  + lib.optionalString (hasFeature "cairo") ''
+    --prefix LUA_PATH : "./?.lua;${luajitPackages.lgi}/share/lua/5.1/?.lua;${luajitPackages.lgi}/share/lua/5.1/?/init.lua;${luajit}/share/lua/5.1/\?.lua;${luajit}/share/lua/5.1/?/init.lua"
+    --prefix LUA_CPATH : "./?.so;${luajitPackages.lgi}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/?.so;${luajit}/lib/lua/5.1/loadall.so"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

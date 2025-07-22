@@ -66,25 +66,24 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      curl
-      boost
-      jsoncpp
-      libbsd
-      glibmm
-      hicolor-icon-theme
-      gsettings-desktop-schemas
-      libappindicator-gtk3
-      libnotify
-      libxdg_basedir
-      lsb-release
-      wxGTK
-      # for https gstreamer / libsoup
-      glib-networking
-    ]
-    ++ gstInputs
-    ++ pythonInputs;
+  buildInputs = [
+    curl
+    boost
+    jsoncpp
+    libbsd
+    glibmm
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libappindicator-gtk3
+    libnotify
+    libxdg_basedir
+    lsb-release
+    wxGTK
+    # for https gstreamer / libsoup
+    glib-networking
+  ]
+  ++ gstInputs
+  ++ pythonInputs;
 
   patches = [
     ./no-dl-googletest.patch

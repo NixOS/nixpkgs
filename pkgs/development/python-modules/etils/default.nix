@@ -53,36 +53,39 @@ buildPythonPackage rec {
     eapp = [
       absl-py
       simple-parsing
-    ] ++ epy;
-    ecolab =
-      [
-        jupyter
-        numpy
-        mediapy
-        packaging
-        protobuf
-      ]
-      ++ enp
-      ++ epy
-      ++ etree;
+    ]
+    ++ epy;
+    ecolab = [
+      jupyter
+      numpy
+      mediapy
+      packaging
+      protobuf
+    ]
+    ++ enp
+    ++ epy
+    ++ etree;
     edc = epy;
     enp = [
       numpy
       einops
-    ] ++ epy;
+    ]
+    ++ epy;
     epath = [
       fsspec
       importlib-resources
       typing-extensions
       zipp
-    ] ++ epy;
+    ]
+    ++ epy;
     epath-gcs = [ gcsfs ] ++ epath;
     epath-s3 = [ s3fs ] ++ epath;
     epy = [ typing-extensions ];
     etqdm = [
       absl-py
       tqdm
-    ] ++ epy;
+    ]
+    ++ epy;
     etree = array-types ++ epy ++ enp ++ etqdm;
     etree-dm = [ dm-tree ] ++ etree;
     etree-jax = [ jax ] ++ etree;
@@ -114,7 +117,8 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     yapf
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTests = [
     "test_public_access" # requires network access

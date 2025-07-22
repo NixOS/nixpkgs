@@ -21,18 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5KXVSIqWDkXnpO+qgBzFtbJb444RW8dIVXp8Y/aAOrk=";
   };
 
-  buildInputs =
-    [
-      boost
-      cgal
-      gpp
-      mpfr
-    ]
-    ++ (with qt6Packages; [
-      qtbase
-      qtimageformats
-      qtsvg
-    ]);
+  buildInputs = [
+    boost
+    cgal
+    gpp
+    mpfr
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    qtimageformats
+    qtsvg
+  ]);
 
   nativeBuildInputs = [
     cmake
