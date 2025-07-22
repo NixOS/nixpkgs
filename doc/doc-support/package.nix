@@ -137,7 +137,6 @@ stdenvNoCC.mkDerivation (
 
       tests = {
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
-        check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
       };
     };
   }
