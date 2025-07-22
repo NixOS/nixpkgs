@@ -147,6 +147,7 @@
 , "svgo"
 , "tern"
 , "tiddlywiki"
+, "tshy"
 , "tsun"
 , "ts-node"
 , "ttf2eot"
