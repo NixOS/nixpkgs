@@ -120,12 +120,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "v8.0.2020";
+  version = "8.0.2020";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
-    rev = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VHfMfICtvCHdFTIjiYw9tR5g9KycR7jqdg3wT+T37mA=";
   };
 
