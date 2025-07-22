@@ -1,3 +1,0 @@
-[presets.nixfmt]
-language = "nix"
-command = ["nixfmt"]
