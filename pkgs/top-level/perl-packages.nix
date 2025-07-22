@@ -12650,6 +12650,23 @@ with self;
     };
   };
 
+  ExtUtilsH2PM = buildPerlPackage {
+    pname = "ExtUtils-H2PM";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-H2PM-0.11.tar.gz";
+      hash = "sha256-RrSuyafSxXSSVtCdz3ukwtAM3dQRAUgkme2Ix2bp6No=";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      description = "Automatically generate perl modules to wrap C header files";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   ExtUtilsInstall = buildPerlPackage {
     pname = "ExtUtils-Install";
     version = "2.22";
