@@ -31,6 +31,9 @@
   util-linux,
   sparsehash,
   rapidjson,
+
+  # tests
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -98,6 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [ (lib.cmakeBool "ENABLE_GPOD" false) ];
+
+  checkInputs = [ gtest ];
+  checkTarget = "strawberry_tests";
+  preCheck = ''
+    # defaults to "xcb" otherwise, which requires a display
+    export QT_QPA_PLATFORM=offscreen
+  '';
+  doCheck = true;
 
   postInstall = ''
     qtWrapperArgs+=(
