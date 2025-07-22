@@ -234,5 +234,8 @@ in
       ++ optionals (cfg.torrentingPort != null) [ cfg.torrentingPort ]
     );
   };
-  meta.maintainers = with maintainers; [ fsnkty ];
+  meta.maintainers = with maintainers; [
+    fsnkty
+    undefined-landmark
+  ];
 }
