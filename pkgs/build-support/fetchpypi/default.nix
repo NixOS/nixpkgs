@@ -51,6 +51,8 @@ makeOverridable (
     format ? "setuptools",
     sha256 ? "",
     hash ? "",
+    pname,
+    version,
     ...
   }@attrs:
   let
@@ -60,8 +62,20 @@ makeOverridable (
         "hash"
       ]
     );
+    meta = {
+      identifiers.purlParts = {
+        type = "pypi";
+        # https://github.com/package-url/purl-spec/blob/main/PURL-TYPES.rst#pypi
+        spec = "${pname}@${version}";
+      };
+    };
   in
   fetchurl {
-    inherit url sha256 hash;
+    inherit
+      url
+      sha256
+      hash
+      meta
+      ;
   }
 )
