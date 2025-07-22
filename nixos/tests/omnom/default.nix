@@ -1,8 +1,8 @@
-{ config, lib, ... }:
+{ config, pkgs, ... }:
 {
   name = "Basic Omnom Test";
   meta = {
-    maintainers = lib.teams.ngi.members;
+    inherit (pkgs.omnom.meta) maintainers;
   };
 
   nodes = {
