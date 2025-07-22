@@ -2984,6 +2984,7 @@ with pkgs;
   };
 
   findutils = callPackage ../tools/misc/findutils { };
+  findutils-prefixed = findutils.override { withPrefix = true; };
 
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
@@ -3096,8 +3097,10 @@ with pkgs;
   gnucap-full = gnucap.withPlugins (p: [ p.verilog ]);
 
   gnugrep = callPackage ../tools/text/gnugrep { };
+  gnugrep-prefixed = gnugrep.override { withPrefix = true; };
 
   gnupatch = callPackage ../tools/text/gnupatch { };
+  gnupatch-prefixed = gnupatch.override { withPrefix = true; };
 
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat; # use config.packageOverrides if you prefer original gnupg1
@@ -3115,8 +3118,22 @@ with pkgs;
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
 
   gnused = callPackage ../tools/text/gnused { };
+  gnused-prefixed = gnused.override { withPrefix = true; };
 
   gnutar = callPackage ../tools/archivers/gnutar { };
+  gnutar-prefixed = gnutar.override { withPrefix = true; };
+
+  ed-prefixed = ed.override { withPrefix = true; };
+
+  indent-prefixed = indent.override { withPrefix = true; };
+
+  inetutils-prefixed = inetutils.override { withPrefix = true; };
+
+  time-prefixed = time.override { withPrefix = true; };
+
+  units-prefixed = units.override { withPrefix = true; };
+
+  which-prefixed = which.override { withPrefix = true; };
 
   inherit (callPackage ../development/tools/godot { })
     godot3
@@ -3731,6 +3748,7 @@ with pkgs;
   };
 
   man = man-db;
+  man-db-prefixed = man-db.override { withPrefix = true; };
 
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
@@ -7317,6 +7335,8 @@ with pkgs;
   m4 = gnum4;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
+  gnumake-prefixed = gnumake.override { withPrefix = true; };
+
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit
       jdk17
@@ -7388,10 +7408,12 @@ with pkgs;
   kustomize-sops = callPackage ../development/tools/kustomize/kustomize-sops.nix { };
 
   libtool = libtool_2;
+  libtool-prefixed = libtool-prefixed_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
+  libtool-prefixed_2 = libtool_2.override { withPrefix = true; };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
     inherit (darwin) sigtool;

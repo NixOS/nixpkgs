@@ -14,11 +14,13 @@
   stdenv,
   util-linuxMinimal,
   zstd,
+  withPrefix ? false,
 }:
 
 let
   libiconv' =
     if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
+  prefix = lib.optionalString withPrefix "g";
 in
 stdenv.mkDerivation rec {
   pname = "man-db";
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals util-linuxMinimal.hasCol [
       "--with-col=${util-linuxMinimal}/bin/col"
     ]
+    ++ lib.optional withPrefix "--program-prefix=g"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "ac_cv_func__set_invalid_parameter_handler=no"
       "ac_cv_func_posix_fadvise=no"
@@ -127,6 +130,6 @@ stdenv.mkDerivation rec {
     description = "Implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "man";
+    mainProgram = prefix + "man";
   };
 }

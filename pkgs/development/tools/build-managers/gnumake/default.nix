@@ -9,10 +9,12 @@
   inBootstrap ? false,
   pkg-config,
   gnumake,
+  withPrefix ? false,
 }:
 
 let
   guileEnabled = guileSupport && !inBootstrap;
+  prefix = lib.optionalString withPrefix "g";
 in
 
 stdenv.mkDerivation rec {
@@ -43,7 +45,9 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
-  configureFlags = lib.optional guileEnabled "--with-guile";
+  configureFlags =
+    lib.optional guileEnabled "--with-guile"
+    ++ lib.optional withPrefix "--program-prefix=g";
 
   outputs = [
     "out"
@@ -73,7 +77,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
     maintainers = [ ];
-    mainProgram = "make";
+    mainProgram = prefix + "make";
     platforms = platforms.all;
   };
 }

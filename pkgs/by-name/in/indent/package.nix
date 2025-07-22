@@ -7,7 +7,12 @@
   texinfo,
   buildPackages,
   pkgsStatic,
+  withPrefix ? false,
 }:
+
+let
+  prefix = lib.optionalString withPrefix "g";
+in
 
 stdenv.mkDerivation rec {
   pname = "indent";
@@ -30,6 +35,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-t+QF7N1aqQ28J2O8esZ2bc5K042cUuZR4MeMeuWIgPw=";
     })
   ];
+
+  configureFlags = lib.optional withPrefix "--program-prefix=g";
 
   # avoid https://savannah.gnu.org/bugs/?64751
   postPatch = ''
@@ -59,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
     description = "Source code reformatter";
-    mainProgram = "indent";
+    mainProgram = prefix + "indent";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.unix;
