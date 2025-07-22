@@ -164,16 +164,16 @@ mkDerivation rec {
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source painting application";
     homepage = "https://krita.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       abbradar
       sifmelcara
       nek0
     ];
     mainProgram = "krita";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
   };
 }
