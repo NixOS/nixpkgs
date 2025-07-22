@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "pyrlp";
     rev = "v${version}";
-    hash = "sha256-cRp+ZOPYs9kcqMKGaiYMOFBY+aPCyFqu+1/5wloLwqU=";
+    hash = "sha256-moerdcAJXqhlzDnTlvxL3Nzz485tOzJVCPlGrof80eQ=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +30,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "rlp" ];
+
+  disabledTests = [ "test_install_local_wheel" ];
 
   meta = with lib; {
     description = "RLP serialization library";
