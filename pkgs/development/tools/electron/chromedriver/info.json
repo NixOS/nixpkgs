@@ -1,15 +1,4 @@
 {
-    "33": {
-        "hashes": {
-            "aarch64-darwin": "8cccbac5a1922f47bff65734ea05cf4a5a96938bc6696c2bdb8d8ce4b9f4a3eb",
-            "aarch64-linux": "edbe9af31a18cef622386ba95cffd4f0d61fff386313297d204c06fad798134e",
-            "armv7l-linux": "da1077bf00682a01b02fa580e51f4df681016be0d58e981094463b818561c213",
-            "headers": "0gwin292x5ryx41kw0c801b4ipin9q1agnigdv31vcd4y0na2p3s",
-            "x86_64-darwin": "9056e5f4e7d7e6b99e22f4739668cf8425d44c21431b7218bda1720ee207593a",
-            "x86_64-linux": "acbebfaa77f32ff1c524f0f326f5f36cf35a3875d8a81f22c3b5c4664e34f7c7"
-        },
-        "version": "33.4.11"
-    },
     "35": {
         "hashes": {
             "aarch64-darwin": "392ec250c65a1448871369318ca15f50c1de1f2afe886fc9e23b31a6484dfaf9",
