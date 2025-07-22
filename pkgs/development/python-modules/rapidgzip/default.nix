@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rapidgzip";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sHtL5TKVR6iP9pRg0/omw0gXqxgEQG8VcTAzkL3jjWs=";
+    hash = "sha256-+u1GAToaYqUZPElhWolmg+pcFO1HRLy0vRhpsUIFUdg=";
   };
 
   prePatch = ''
