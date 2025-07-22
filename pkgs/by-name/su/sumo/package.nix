@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-yXXOCvlHAzGmNQeXyWQtmq1UdkQ6qt4L9noUii/voP4=";
+    hash = "sha256-xf7/hUJpl+XmXx5MmFzYu2geFNe7JVaxDrraoqLrSuk=";
     fetchSubmodules = true;
   };
 
