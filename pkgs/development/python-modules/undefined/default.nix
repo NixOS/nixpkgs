@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "undefined" ];
 
   meta = with lib; {
-    description = "Ever needed a global object that act as None but not quite?";
+    description = "Ever needed a global object that act as None but not quite";
     homepage = "https://github.com/Carreau/undefined";
     license = licenses.mit;
     maintainers = [ ];

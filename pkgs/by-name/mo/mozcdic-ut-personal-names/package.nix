@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   };
 
   meta = {
-    description = "Mozc UT Personal Name Dictionary is a dictionary for Mozc.";
+    description = "Mozc UT Personal Name Dictionary is a dictionary for Mozc";
     homepage = "https://github.com/utuhiro78/mozcdic-ut-personal-names";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pineapplehunter ];

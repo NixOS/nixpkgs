@@ -92,6 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";
-    description = "LLVM post-link optimizer.";
+    description = "LLVM post-link optimizer";
   };
 })

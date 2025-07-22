@@ -114,7 +114,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Funny turn-based artillery game, featuring fighting hedgehogs!";
+    description = "Funny turn-based artillery game, featuring fighting hedgehogs";
     homepage = "https://hedgewars.org/";
     license = with lib.licenses; [
       gpl2Only

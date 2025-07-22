@@ -28,7 +28,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ stdlib ];
 
   meta = {
-    description = "An implementation of bitvectors in Coq.";
+    description = "An implementation of bitvectors in Coq";
     license = lib.licenses.mit;
   };
 }

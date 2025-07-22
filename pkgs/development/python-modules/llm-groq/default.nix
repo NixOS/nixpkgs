@@ -34,7 +34,7 @@ buildPythonPackage rec {
   passthru.tests = llm.mkPluginTest llm-groq;
 
   meta = {
-    description = "LLM plugin providing access to Groqcloud models.";
+    description = "LLM plugin providing access to Groqcloud models";
     homepage = "https://github.com/angerman/llm-groq";
     changelog = "https://github.com/angerman/llm-groq/releases/tag/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

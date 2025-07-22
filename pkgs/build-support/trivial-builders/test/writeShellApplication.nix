@@ -38,7 +38,7 @@ linkFarm "writeShellApplication-tests" {
       script = writeShellApplication {
         name = "test-meta";
         text = "";
-        meta.description = "A test for the `writeShellApplication` `meta` argument.";
+        meta.description = "A test for the `writeShellApplication` `meta` argument";
       };
     in
     assert script.meta.mainProgram == "test-meta";
@@ -101,7 +101,7 @@ linkFarm "writeShellApplication-tests" {
         exit 1
       fi
     '';
-    meta.description = "A test checking that `writeShellApplication` forwards extra arguments to `stdenv.mkDerivation`.";
+    meta.description = "A test checking that `writeShellApplication` forwards extra arguments to `stdenv.mkDerivation`";
     expected = "";
   };
 

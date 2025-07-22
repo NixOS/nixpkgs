@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/jazzband/Watson";
-    description = "Wonderful CLI to track your time!";
+    description = "Wonderful CLI to track your time";
     mainProgram = "watson";
     license = licenses.mit;
     maintainers = with maintainers; [

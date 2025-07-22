@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   meta = {
     changelog = "https://github.com/richih/modbus_exporter/releases/tag/v${finalAttrs.version}";
     homepage = "https://paepcke.de/modbus_exporter";
-    description = "Prometheus exporter for the modbus interface. Basepackage for a large group of iot device exporters.";
+    description = "Prometheus exporter for the modbus interface. Basepackage for a large group of iot device exporters";
     license = lib.licenses.mit;
     mainProgram = "modbus_exporter";
     maintainers = with lib.maintainers; [ paepcke ];

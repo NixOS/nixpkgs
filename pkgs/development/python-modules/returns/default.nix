@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "--ignore=typesafety" ];
 
   meta = with lib; {
-    description = "Make your functions return something meaningful, typed, and safe!";
+    description = "Make your functions return something meaningful, typed, and safe";
     homepage = "https://github.com/dry-python/returns";
     changelog = "https://github.com/dry-python/returns/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;

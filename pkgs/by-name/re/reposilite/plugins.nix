@@ -32,7 +32,7 @@ makeScopeWithSplicing' {
             inherit version hash;
 
             meta = {
-              description = "${fancyName} plugin for Reposilite.";
+              description = "${fancyName} plugin for Reposilite";
               homepage = "https://github.com/dzikoysk/reposilite";
               sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
               license = lib.licenses.asl20;
