@@ -706,6 +706,7 @@ buildStdenv.mkDerivation {
     inherit gtk3;
     inherit wasiSysRoot;
     version = packageVersion;
+    release = version;
   } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
