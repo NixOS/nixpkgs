@@ -929,7 +929,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     }
   )
 
-  # This "no-op" stage is just a place to put the assertions about stage5.
+  # This stage introduces the autoconf cache which must be generated with the final stdenv
+  # It also serves as a place to put the assertions about stage5.
   (
     prevStage:
     # previous stage5 stdenv; see stage3 comment regarding gcc,
@@ -942,7 +943,16 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     {
-      inherit (prevStage) config overlays stdenv;
+      inherit (prevStage) config overlays;
+      stdenv = prevStage.stdenv.override (prevStdenv: {
+        extraNativeBuildInputs = prevStdenv.extraNativeBuildInputs ++ [
+          prevStage.autoconfCacheHook
+        ];
+        allowedRequisites = prevStdenv.allowedRequisites ++ [
+          prevStage.autoconfCacheHook
+          prevStage.autoconfCacheHook.passthru.cacheFile
+        ];
+      });
     }
   )
 ]

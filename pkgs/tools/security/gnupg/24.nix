@@ -163,6 +163,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  /*
+    enabling the cache results in the following error:
+      > *** It is now required to build with support for the
+      > *** New Portable Threads Library (nPth). Please install this
+      > *** library first.  The library is for example available at
+      > ***   https://gnupg.org/ftp/gcrypt/npth/
+  */
+  dontAutoconfCache = true;
+
   passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
