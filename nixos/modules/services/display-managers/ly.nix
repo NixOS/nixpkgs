@@ -33,6 +33,41 @@ let
     exec systemd-cat -t xserver-wrapper ${xdmcfg.xserverBin} ${toString xdmcfg.xserverArgs} "$@"
   '';
 
+  # handle shell sessions, otherwise call the default xsession-wrapper
+  sessionWrapper = pkgs.writeScript "xsession-wrapper" ''
+    #! ${pkgs.bash}/bin/bash
+    if [ "$XDG_SESSION_TYPE" = "tty" ]; then
+
+      . /etc/profile
+      if test -f ~/.profile; then
+          source ~/.profile
+      fi
+
+      cd "$HOME"
+
+      # Import environment variables into the systemd user environment.
+      # see config.services.xserver.displayManager.importedVariables
+      /run/current-system/systemd/bin/systemctl --user import-environment ${
+        toString [
+          "DBUS_SESSION_BUS_ADDRESS"
+          "XDG_SESSION_ID"
+        ]
+      }
+
+      if test "$1"; then
+        # Run the supplied session command. Remove any double quotes with eval.
+        eval exec "$@"
+      else
+        # TODO: Do we need this? Should not the session always exist?
+        echo "error: unknown session $1" 1>&2
+        exit 1
+      fi
+    else
+      # not a TTY session, but X11 or Wayland
+      source ${dmcfg.sessionData.wrapper};
+    fi
+  '';
+
   defaultConfig = {
     shutdown_cmd = "/run/current-system/systemd/bin/systemctl poweroff";
     restart_cmd = "/run/current-system/systemd/bin/systemctl reboot";
@@ -44,7 +79,7 @@ let
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    setup_cmd = dmcfg.sessionData.wrapper;
+    setup_cmd = sessionWrapper;
   };
 
   finalConfig = defaultConfig // cfg.settings;
