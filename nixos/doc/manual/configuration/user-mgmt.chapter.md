@@ -137,7 +137,9 @@ the Perl script. It aims to eventually replace the Perl script by default.
 You can enable Userborn via:
 
 ```nix
-services.userborn.enable = true;
+{
+  services.userborn.enable = true;
+}
 ```
 
 You can configure Userborn to store the password files
@@ -145,7 +147,9 @@ You can configure Userborn to store the password files
 location to `/etc`:
 
 ```nix
-services.userborn.passwordFilesLocation = "/persistent/etc";
+{
+  services.userborn.passwordFilesLocation = "/persistent/etc";
+}
 ```
 
 This is useful when you store `/etc` on a `tmpfs` or if `/etc` is immutable

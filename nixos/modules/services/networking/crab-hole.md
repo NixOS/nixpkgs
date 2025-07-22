@@ -103,7 +103,7 @@ Additionally you can set an optional timeout value.
       certificate = ./dns.example.com.crt;
       key = "/dns.example.com.key";
       # optional (default = 3000)
-      timeout_ms = 3000
+      timeout_ms = 3000;
     }
   ];
 }

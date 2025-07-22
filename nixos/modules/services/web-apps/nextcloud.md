@@ -208,7 +208,9 @@ release notes when upgrading.
     the cache size to zero:
 
     ```nix
-    services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    {
+      services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    }
     ```
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
@@ -276,9 +278,9 @@ that are managed by Nix:
 
 ```nix
 { config, pkgs, ... }: {
-  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; [
+  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; {
     inherit user_oidc calendar contacts;
-  ];
+  };
 }
 ```
 

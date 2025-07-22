@@ -15,11 +15,13 @@ This adds `jotta-cli` to `environment.systemPackages` and starts a user service 
 ## Example Configuration {#module-services-jotta-cli-example-configuration}
 
 ```nix
-services.jotta-cli = {
-  enable = true;
-  options = [ "slow" ];
-  package = pkgs.jotta-cli;
-};
+{
+  services.jotta-cli = {
+    enable = true;
+    options = [ "slow" ];
+    package = pkgs.jotta-cli;
+  };
+}
 ```
 
 This uses `jotta-cli` and `jottad` from the `pkgs.jotta-cli` package and starts `jottad` in low memory mode.

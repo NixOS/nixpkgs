@@ -102,34 +102,34 @@ databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
 are already created.
 
 ```nix
-  {
-    systemd.services.postgresql.postStart = lib.mkAfter ''
-      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
+{
+  systemd.services.postgresql.postStart = lib.mkAfter ''
+    $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+    $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    # ....
+  '';
+}
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.service";
-      serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
-      path = [ postgresql ];
-      script = ''
-        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+{
+  systemd.services."migrate-service1-db1" = {
+    serviceConfig.Type = "oneshot";
+    requiredBy = "service1.service";
+    before = "service1.service";
+    after = "postgresql.service";
+    serviceConfig.User = "postgres";
+    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+    path = [ postgresql ];
+    script = ''
+      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+  };
+}
 ```
 
 #### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
@@ -141,36 +141,36 @@ are already created.
 ##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
 
 ```nix
-  {
-    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
-    path = [ postgresql ];
-    systemd.services."service1".preStart = ''
-      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
+{
+  environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+  path = [ postgresql ];
+  systemd.services."service1".preStart = ''
+    $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+    $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    # ....
+  '';
+}
 ```
 
 ##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.service";
-      serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
-      path = [ postgresql ];
-      script = ''
-        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+{
+  systemd.services."migrate-service1-db1" = {
+    serviceConfig.Type = "oneshot";
+    requiredBy = "service1.service";
+    before = "service1.service";
+    after = "postgresql.service";
+    serviceConfig.User = "service1";
+    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+    path = [ postgresql ];
+    script = ''
+      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+  };
+}
 ```
 
 ## Authentication {#module-services-postgres-authentication}
@@ -188,13 +188,15 @@ Assume that your app creates a role `admin` and you want the `root` user to be a
 You can then use [](#opt-services.postgresql.identMap) to define the map and [](#opt-services.postgresql.authentication) to enable it:
 
 ```nix
-services.postgresql = {
-  identMap = ''
-    admin root admin
-  '';
-  authentication = ''
-    local all admin peer map=admin
-  '';
+{
+  services.postgresql = {
+    identMap = ''
+      admin root admin
+    '';
+    authentication = ''
+      local all admin peer map=admin
+    '';
+  };
 }
 ```
 

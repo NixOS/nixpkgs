@@ -99,9 +99,14 @@ Definitions like the following however, _can_ be transitioned:
 
 ```nix
 # all-packages.nix
-fooWithBaz = foo.override {
-  bar = baz;
-};
+{
+  fooWithBaz = foo.override {
+    bar = baz;
+  };
+}
+```
+
+```nix
 # turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
 {
   foo,

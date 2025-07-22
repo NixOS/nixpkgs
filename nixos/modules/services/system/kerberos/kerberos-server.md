@@ -24,7 +24,7 @@ To enable a Kerberos server:
         admin_server = "kerberos.example.com";
       };
     };
-  }
+  };
 
   services.kerberos-server = {
     enable = true;

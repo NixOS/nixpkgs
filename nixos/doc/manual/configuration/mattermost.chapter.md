@@ -33,7 +33,7 @@ To enable Mattermost using Postgres, use a config like this:
 
     # For example, to disable auto-installation of prepackaged plugins.
     settings.PluginSettings.AutomaticPrepackagedPlugins = false;
-  }
+  };
 }
 ```
 
