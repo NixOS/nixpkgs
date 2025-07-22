@@ -17,6 +17,84 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "cuda": [
+    "index.html#cuda"
+  ],
+  "cuda-configuring-nixpkgs-for-cuda": [
+    "index.html#cuda-configuring-nixpkgs-for-cuda"
+  ],
+  "cuda-contributing": [
+    "index.html#cuda-contributing"
+  ],
+  "cuda-docker-podman": [
+    "index.html#cuda-docker-podman"
+  ],
+  "cuda-extending-cuda-package-sets": [
+    "index.html#cuda-extending-cuda-package-sets"
+  ],
+  "cuda-modifying-cuda-package-sets": [
+    "index.html#cuda-modifying-cuda-package-sets",
+    "index.html#cuda-configuring-cuda-package-sets"
+  ],
+  "cuda-nixpkgs-cuda-variants": [
+    "index.html#cuda-nixpkgs-cuda-variants"
+  ],
+  "cuda-package-set-maintenance": [
+    "index.html#cuda-package-set-maintenance",
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "cuda-passthru-testers": [
+    "index.html#cuda-passthru-testers"
+  ],
+  "cuda-passthru-tests": [
+    "index.html#cuda-passthru-tests"
+  ],
+  "cuda-specifying-what-devices-to-expose-to-the-container": [
+    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
+    "index.html#specifying-what-devices-to-expose-to-the-container"
+  ],
+  "cuda-updating-redistributables": [
+    "index.html#cuda-updating-redistributables",
+    "index.html#updating-cuda-redistributables"
+  ],
+  "cuda-updating-cutensor": [
+    "index.html#cuda-updating-cutensor",
+    "index.html#updating-cutensor"
+  ],
+  "cuda-updating-supported-compilers-and-gpus": [
+    "index.html#cuda-updating-supported-compilers-and-gpus",
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "cuda-updating-the-cuda-package-set": [
+    "index.html#cuda-updating-the-cuda-package-set",
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-updating-the-cuda-toolkit": [
+    "index.html#cuda-updating-the-cuda-toolkit",
+    "index.html#updating-the-cuda-toolkit"
+  ],
+  "cuda-user-guide": [
+    "index.html#cuda-user-guide"
+  ],
+  "cuda-using-cudapackages": [
+    "index.html#cuda-using-cudapackages"
+  ],
+  "cuda-using-cudapackages-pkgs": [
+    "index.html#cuda-using-cudapackages-pkgs"
+  ],
+  "cuda-using-docker-compose": [
+    "index.html#cuda-using-docker-compose",
+    "index.html#using-docker-compose"
+  ],
+  "cuda-using-pkgscuda": [
+    "index.html#cuda-using-pkgscuda"
+  ],
+  "cuda-using-pkgsforcudaarch": [
+    "index.html#cuda-using-pkgsforcudaarch"
+  ],
+  "cuda-writing-tests": [
+    "index.html#cuda-writing-tests"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -2680,56 +2758,6 @@
   ],
   "building-a-crystal-package": [
     "index.html#building-a-crystal-package"
-  ],
-  "cuda": [
-    "index.html#cuda"
-  ],
-  "cuda-contributing": [
-    "index.html#cuda-contributing"
-  ],
-  "cuda-docker-podman": [
-    "index.html#cuda-docker-podman"
-  ],
-  "cuda-package-set-maintenance": [
-    "index.html#cuda-package-set-maintenance",
-    "index.html#adding-a-new-cuda-release"
-  ],
-  "cuda-passthru-testers": [
-    "index.html#cuda-passthru-testers"
-  ],
-  "cuda-passthru-tests": [
-    "index.html#cuda-passthru-tests"
-  ],
-  "cuda-specifying-what-devices-to-expose-to-the-container": [
-    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
-    "index.html#specifying-what-devices-to-expose-to-the-container"
-  ],
-  "cuda-updating-redistributables": [
-    "index.html#cuda-updating-redistributables",
-    "index.html#updating-cuda-redistributables"
-  ],
-  "cuda-updating-cutensor": [
-    "index.html#cuda-updating-cutensor",
-    "index.html#updating-cutensor"
-  ],
-  "cuda-updating-supported-compilers-and-gpus": [
-    "index.html#cuda-updating-supported-compilers-and-gpus",
-    "index.html#updating-supported-compilers-and-gpus"
-  ],
-  "cuda-updating-the-cuda-package-set": [
-    "index.html#cuda-updating-the-cuda-package-set",
-    "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-updating-the-cuda-toolkit": [
-    "index.html#cuda-updating-the-cuda-toolkit",
-    "index.html#updating-the-cuda-toolkit"
-  ],
-  "cuda-using-docker-compose": [
-    "index.html#cuda-using-docker-compose",
-    "index.html#using-docker-compose"
-  ],
-  "cuda-writing-tests": [
-    "index.html#cuda-writing-tests"
   ],
   "cuelang": [
     "index.html#cuelang"
