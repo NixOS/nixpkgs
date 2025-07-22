@@ -3,7 +3,10 @@
   name = "qbittorrent";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fsnkty ];
+    maintainers = [
+      fsnkty
+      undefined-landmark
+    ];
   };
 
   nodes = {
