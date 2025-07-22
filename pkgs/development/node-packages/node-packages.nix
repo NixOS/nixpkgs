@@ -44468,7 +44468,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A plugin that provides a composable API for giving elements a fixed aspect ratio";
+      description = "Composable API for giving elements a fixed aspect ratio";
       homepage = "https://github.com/tailwindlabs/tailwindcss-aspect-ratio#readme";
       license = "MIT";
     };
@@ -44490,7 +44490,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A plugin that provides a basic reset for form styles that makes form elements easy to override with utilities";
+      description = "Basic reset for form styles that makes form elements easy to override with utilities";
       homepage = "https://github.com/tailwindlabs/tailwindcss-forms#readme";
       license = "MIT";
     };
@@ -44511,7 +44511,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A plugin that provides utilities for visually truncating text after a fixed number of lines";
+      description = "Utilities for visually truncating text after a fixed number of lines";
       homepage = "https://github.com/tailwindlabs/tailwindcss-line-clamp#readme";
       license = "MIT";
     };
@@ -44538,7 +44538,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A Tailwind CSS plugin for automatically styling plain HTML content with beautiful typographic defaults";
+      description = "Tailwind CSS plugin for automatically styling plain HTML content with beautiful typographic defaults";
       homepage = "https://github.com/tailwindlabs/tailwindcss-typography#readme";
       license = "MIT";
     };
@@ -47285,7 +47285,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "This is the command line tool for Cloud Development Kit (CDK) for Kubernetes (cdk8s)";
+      description = "CLI tool for Cloud Development Kit (CDK) for Kubernetes (cdk8s)";
       homepage = "https://github.com/cdk8s-team/cdk8s-cli#readme";
       license = "Apache-2.0";
     };
@@ -50502,7 +50502,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A Spelling Checker for Code";
+      description = "Spelling Checker for Code";
       homepage = "https://cspell.org/";
       license = "MIT";
     };
@@ -50922,7 +50922,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A secrets manager for .env files – from the same people that pioneered dotenv";
+      description = "Secrets manager for .env files – from the same people that pioneered dotenv";
       homepage = "https://github.com/dotenv-org/dotenv-vault";
       license = "MIT";
     };
@@ -51827,7 +51827,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "EmojiOne is a complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG formats provided for the emoji images";
+      description = "Complete set of emojis designed for the web. It includes libraries to easily convert unicode characters to shortnames (:smile:) and shortnames to our custom emoji images. PNG formats provided for the emoji images";
       homepage = "https://www.emojione.com";
     };
     production = true;
@@ -54120,7 +54120,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The streaming build system";
+      description = "Streaming build system for JavaScript";
       homepage = "https://gulpjs.com";
       license = "MIT";
     };
@@ -54237,7 +54237,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A robust HTML entities encoder/decoder with full Unicode support";
+      description = "Robust HTML entities encoder/decoder with full Unicode support";
       homepage = "https://mths.be/he";
       license = "MIT";
     };
@@ -55785,7 +55785,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "An API documentation generator for JavaScript";
+      description = "API documentation generator for JavaScript";
       homepage = "https://github.com/jsdoc/jsdoc#readme";
       license = "Apache-2.0";
     };
@@ -56699,7 +56699,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A simple fake REST API server for testing and prototyping";
+      description = "Simple fake REST API server for testing and prototyping";
       homepage = "http://jsonplaceholder.typicode.com";
       license = "MIT";
     };
@@ -60486,7 +60486,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A bidirectional runtime wikitext parser. Converts back and forth between wikitext and HTML/XML DOM with RDFa";
+      description = "Bidirectional runtime wikitext parser. Converts back and forth between wikitext and HTML/XML DOM with RDFa";
       homepage = "https://github.com/wikimedia/parsoid#readme";
       license = "GPL-2.0+";
     };
@@ -61371,7 +61371,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A T-SQL formatting utility in JS, transpiled from the C# library of the same name";
+      description = "T-SQL formatting utility in JS, transpiled from the C# library of the same name";
       homepage = "https://github.com/TaoK/poor-mans-t-sql-formatter-npm-cli#readme";
       license = "AGPL-3.0";
     };
@@ -61966,7 +61966,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A syntax tidy-upper (formatter) for PureScript";
+      description = "Syntax tidy-upper (formatter) for PureScript";
       homepage = "https://github.com/natefaubion/purescript-tidy#readme";
       license = "MIT";
     };
@@ -62084,7 +62084,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "A pure JavaScript implementation of Sass";
+      description = "Pure JavaScript implementation of Sass";
       homepage = "https://github.com/sass/dart-sass";
       license = "MIT";
     };
@@ -62102,7 +62102,7 @@ in
     };
     buildInputs = globalBuildInputs;
     meta = {
-      description = "The semantic version parser used by npm";
+      description = "Semantic version parser used by npm";
       homepage = "https://github.com/npm/node-semver#readme";
       license = "ISC";
     };

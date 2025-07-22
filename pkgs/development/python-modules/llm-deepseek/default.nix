@@ -28,7 +28,7 @@ buildPythonPackage rec {
   passthru.tests = llm.mkPluginTest llm-deepseek;
 
   meta = {
-    description = "LLM plugin providing access to Deepseek models";
+    description = "LLM plugin providing access to Deepseek models.";
     homepage = "https://github.com/abrasumente233/llm-deepseek";
     changelog = "https://github.com/abrasumente233/llm-deepseek/releases/tag/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;

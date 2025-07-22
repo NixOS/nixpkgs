@@ -17246,7 +17246,7 @@ with self;
       hash = "sha256-VOIdJQwCKRJ+MLd6NGHhAHeFTsJE8m+2cPG0Re1MTVs=";
     };
     meta = {
-      description = "IO::All of it to Graham and Damian";
+      description = "Combines all of the best Perl IO modules into a single nifty object oriented interface";
       homepage = "https://github.com/ingydotnet/io-all-pm";
       license = with lib.licenses; [
         artistic1
@@ -26831,7 +26831,7 @@ with self;
     outputs = [ "out" ];
 
     meta = {
-      description = "maintainer helper tool to help maintainers update their pacscripts";
+      description = "Tool to help maintainers update their pacscripts";
       homepage = "https://github.com/pacstall/pacup";
       license = lib.licenses.gpl3Only;
     };

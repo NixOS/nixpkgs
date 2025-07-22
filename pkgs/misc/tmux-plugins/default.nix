@@ -775,7 +775,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
-      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
+      description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ redyf ];
