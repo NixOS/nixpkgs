@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       lostnet
       catap
     ];
-    broken = stdenv.hostPlatform.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+    broken = stdenv.hostPlatform.isDarwin; # 91 is broken, >=115 requires SDK 13.3 (see #242666).
     platforms = platforms.unix;
   };
 })
