@@ -13758,8 +13758,6 @@ with pkgs;
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
-  spek = callPackage ../applications/audio/spek { };
-
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {
     audioBackend = "pulse";
   };

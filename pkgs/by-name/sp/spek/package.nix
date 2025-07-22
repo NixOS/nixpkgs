@@ -11,15 +11,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spek";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "alexkay";
     repo = "spek";
-    rev = "v${version}";
-    sha256 = "sha256-VYt2so2k3Rk3sLSV1Tf1G2pESYiXygrKr9Koop8ChCg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VYt2so2k3Rk3sLSV1Tf1G2pESYiXygrKr9Koop8ChCg=";
   };
 
   patches = [
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analyse your audio files by showing their spectrogram";
-    mainProgram = "spek";
     homepage = "http://spek.cc/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.all;
+    mainProgram = "spek";
   };
-}
+})
