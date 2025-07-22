@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "github";
     name = "copilot";
-    version = "1.342.0";
-    hash = "sha256-81whQKh8CNNYk0tzgK77XeTmTxK1tiRzeuCIQ+7EgU4=";
+    version = "1.346.0";
+    hash = "sha256-1i2zGBOrGFSi6gg7Y/plm4d5MN6LCbR8W8vEmT+6cn0=";
   };
 
   meta = {
