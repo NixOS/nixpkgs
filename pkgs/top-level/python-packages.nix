@@ -12031,6 +12031,8 @@ self: super: with self; {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
+  psnawp = callPackage ../development/python-modules/psnawp { };
+
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   psutil = callPackage ../development/python-modules/psutil { };
@@ -17916,6 +17918,8 @@ self: super: with self; {
 
   tilt-ble = callPackage ../development/python-modules/tilt-ble { };
 
+  tilt-pi = callPackage ../development/python-modules/tilt-pi { };
+
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeago = callPackage ../development/python-modules/timeago { };
@@ -19208,6 +19212,8 @@ self: super: with self; {
   vega = callPackage ../development/python-modules/vega { };
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
+
+  vegehub = callPackage ../development/python-modules/vegehub { };
 
   vehicle = callPackage ../development/python-modules/vehicle { };
 

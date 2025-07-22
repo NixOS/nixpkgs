@@ -12,7 +12,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "gitlab-triage";
 
   meta = with lib; {
-    description = "GitLab's issues and merge requests triage, automated!";
+    description = "GitLab's issues and merge requests triage, automated";
     homepage = "https://gitlab.com/gitlab-org/ruby/gems/gitlab-triage";
     license = licenses.mit;
     maintainers = [ ];

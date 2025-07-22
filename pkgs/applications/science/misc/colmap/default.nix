@@ -81,7 +81,7 @@ stdenv'.mkDerivation rec {
     ];
 
   meta = with lib; {
-    description = "COLMAP - Structure-From-Motion and Multi-View Stereo pipeline";
+    description = "Structure-From-Motion and Multi-View Stereo pipeline";
     longDescription = ''
       COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
       with a graphical and command-line interface.

@@ -26,7 +26,7 @@
 let
   pname = "rxvt-unicode";
   version = "9.31";
-  description = "A clone of the well-known terminal emulator rxvt";
+  description = "Clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
     name = pname;

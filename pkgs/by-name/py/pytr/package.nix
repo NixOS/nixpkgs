@@ -44,7 +44,10 @@ python3Packages.buildPythonApplication rec {
       --zsh <($out/bin/pytr completion zsh)
   '';
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
 
   versionCheckProgramArg = "--version";
 

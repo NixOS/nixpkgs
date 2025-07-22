@@ -23,9 +23,6 @@
   polkitSupport ? false,
 }:
 
-assert polkitSupport -> dbusSupport;
-assert systemdSupport -> dbusSupport;
-
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "2.3.0";
@@ -132,5 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.anthonyroussel ];
     pkgConfigModules = [ "libpcsclite" ];
     platforms = lib.platforms.unix;
+    broken = !(polkitSupport -> dbusSupport) || !(systemdSupport -> dbusSupport);
   };
 })

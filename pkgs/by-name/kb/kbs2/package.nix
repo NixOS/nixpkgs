@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "kbs2";
     rev = "v${version}";
-    hash = "sha256-o8/ENAWzVqs7rokST6xnyu9Q/pKqq/UnKWOFRuIuGes=";
+    hash = "sha256-X+NhUQzxfok9amqAiim/vjkee45hjdPedsZc3zwcOXA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+TJ/QG+6ZILcSZEIXj6B4qYF0P5pQpo1kw2qEfE0FDw=";
+  cargoHash = "sha256-Auk/6ltjfXE1VzlxmKikcV6MHDczpuRqKJrg6UGgJZE=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 

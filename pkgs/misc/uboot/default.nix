@@ -315,10 +315,12 @@ in
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
-    assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
     buildUBoot {
       defconfig = "libretech-cc_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [ "u-boot.bin" ];
       postBuild = ''
         # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir

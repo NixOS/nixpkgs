@@ -4459,8 +4459,9 @@
       ];
     "playstation_network" =
       ps: with ps; [
+        psnawp
         pyrate-limiter
-      ]; # missing inputs: PSNAWP
+      ];
     "plex" =
       ps: with ps; [
         plexapi
@@ -6005,7 +6006,8 @@
       ];
     "tilt_pi" =
       ps: with ps; [
-      ]; # missing inputs: tilt-pi
+        tilt-pi
+      ];
     "time" =
       ps: with ps; [
       ];
@@ -6296,7 +6298,8 @@
       ];
     "vegehub" =
       ps: with ps; [
-      ]; # missing inputs: vegehub
+        vegehub
+      ];
     "velbus" =
       ps: with ps; [
         aiousbwatcher
@@ -7424,6 +7427,7 @@
     "ping"
     "plaato"
     "plant"
+    "playstation_network"
     "plex"
     "plugwise"
     "point"
@@ -7637,6 +7641,7 @@
     "tibber"
     "tile"
     "tilt_ble"
+    "tilt_pi"
     "time"
     "time_date"
     "timer"
@@ -7688,6 +7693,7 @@
     "vacuum"
     "vallox"
     "valve"
+    "vegehub"
     "velbus"
     "velux"
     "venstar"

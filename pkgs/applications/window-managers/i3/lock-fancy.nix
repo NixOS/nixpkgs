@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "i3lock is a bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+    description = "A bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/meskarune/i3lock-fancy";
     maintainers = [ maintainers.reedrw ];
     mainProgram = "i3lock-fancy";
