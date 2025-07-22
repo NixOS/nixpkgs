@@ -1037,6 +1037,7 @@ in
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
+  no-networking = handleTest ./no-networking.nix { };
   non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = runTest ./noto-fonts.nix;
   noto-fonts-cjk-qt-default-weight = runTest ./noto-fonts-cjk-qt-default-weight.nix;
