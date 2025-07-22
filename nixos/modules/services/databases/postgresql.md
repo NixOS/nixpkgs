@@ -202,6 +202,8 @@ For an upgrade, a script like this can be used to simplify the process:
       export OLDDATA="${cfg.dataDir}"
       export OLDBIN="${cfg.finalPackage}/bin"
 
+      unset LANG LC_CTYPE LC_COLLATE LC_MESSAGES LC_MONETARY LC_NUMERIC LC_TIME LC_ADDRESS LC_IDENTIFICATION LC_MEASUREMENT LC_NAME LC_PAPER LC_TELEPHONE
+
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
       sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
