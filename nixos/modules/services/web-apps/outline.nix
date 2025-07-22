@@ -312,7 +312,7 @@ in
               default = "";
               description = ''
                 Restrict logins to a specific server (optional, but recommended).
-                You can find a Discord server's  by right-clicking the server icon,
+                You can find a Discord server's ID by right-clicking the server icon,
                 and select “Copy Server ID”.
               '';
             };
