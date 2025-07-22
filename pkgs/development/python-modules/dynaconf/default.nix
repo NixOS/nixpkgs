@@ -97,6 +97,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dynaconf/dynaconf/blob/${src.tag}/CHANGELOG.md";
     mainProgram = "dynaconf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

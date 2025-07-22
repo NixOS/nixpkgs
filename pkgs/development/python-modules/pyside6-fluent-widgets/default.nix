@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zhiyiYo/PyQt-Fluent-Widgets";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
