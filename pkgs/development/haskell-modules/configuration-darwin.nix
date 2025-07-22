@@ -393,8 +393,12 @@ self: super:
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
     }) (disableCabalFlag "fixity-th" super.fourmolu);
 
-    # https://github.com/NixOS/nixpkgs/issues/149692
-    Agda = disableCabalFlag "optimise-heavily" super.Agda;
+    Agda = lib.pipe super.Agda [
+      # https://github.com/NixOS/nixpkgs/issues/149692
+      (disableCabalFlag "optimise-heavily")
+      # https://github.com/agda/agda/issues/8016
+      (appendConfigureFlag "--ghc-option=-Wwarn=deprecations")
+    ];
 
     # https://github.com/NixOS/nixpkgs/issues/198495
     eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;
