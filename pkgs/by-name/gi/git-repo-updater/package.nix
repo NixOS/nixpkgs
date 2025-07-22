@@ -1,24 +1,21 @@
 {
   lib,
-  buildPythonApplication,
-  hatchling,
-  colorama,
+  python3Packages,
   fetchPypi,
-  gitpython,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gitup";
   version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-51DWPJ9JOMrRdWGaiiL4qzo4VFFeT1rG5yyI6Ej+ZRw=";
+    hash = "sha256-51DWPJ9JOMrRdWGaiiL4qzo4VFFeT1rG5yyI6Ej+ZRw=";
   };
 
-  build-system = [ hatchling ];
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ hatchling ];
+  dependencies = with python3Packages; [
     colorama
     gitpython
   ];
@@ -26,11 +23,11 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Easily update multiple Git repositories at once";
     homepage = "https://github.com/earwig/git-repo-updater";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bdesham
       artturin
     ];

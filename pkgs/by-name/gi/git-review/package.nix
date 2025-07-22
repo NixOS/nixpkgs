@@ -1,19 +1,16 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchgit,
-  pbr,
-  requests,
-  setuptools,
   gitUpdater,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-review";
   version = "2.5.0";
   format = "setuptools";
 
-  # Manually set version because prb wants to get it from the git
+  # Manually set version because pbr wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
   PBR_VERSION = version;
 
@@ -29,11 +26,11 @@ buildPythonApplication rec {
     "man"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     pbr
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     requests
     setuptools # implicit dependency, used to get package version through pkg_resources
   ];
@@ -47,12 +44,12 @@ buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
     changelog = "https://docs.opendev.org/opendev/git-review/latest/releasenotes.html#relnotes-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     mainProgram = "git-review";
   };
 }
