@@ -15,16 +15,16 @@ NixOS lets you specify networks for wpa_supplicant declaratively:
 ```nix
 {
   networking.wireless.networks = {
+    # SSID with no spaces or special characters
     echelon = {
-      # SSID with no spaces or special characters
       psk = "abcdefgh";
     };
+    # SSID with spaces and/or special characters
     "echelon's AP" = {
-      # SSID with spaces and/or special characters
       psk = "ijklmnop";
     };
+    # Hidden SSID
     echelon = {
-      # Hidden SSID
       hidden = true;
       psk = "qrstuvwx";
     };
