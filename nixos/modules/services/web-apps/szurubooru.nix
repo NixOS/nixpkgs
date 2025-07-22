@@ -299,10 +299,10 @@ in
           ]);
 
         script = ''
-          export SZURUBOORU_SECRET="$(<${cfg.server.settings.secretFile})"
-          export SZURUBOORU_DATABASE_PASSWORD="$(<${cfg.database.passwordFile})"
+          export SZURUBOORU_SECRET="$(<$CREDENTIALS_DIRECTORY/secret)"
+          export SZURUBOORU_DATABASE_PASSWORD="$(<$CREDENTIALS_DIRECTORY/database)"
           ${lib.optionalString (cfg.server.settings.smtp.passFile != null) ''
-            export SZURUBOORU_SMTP_PASS=$(<${cfg.server.settings.smtp.passFile})
+            export SZURUBOORU_SMTP_PASS=$(<$CREDENTIALS_DIRECTORY/smtp)
           ''}
           install -m0640 ${cfg.server.package.src}/config.yaml.dist ${cfg.dataDir}/config.yaml.dist
           envsubst -i ${configFile} -o ${cfg.dataDir}/config.yaml
@@ -312,6 +312,15 @@ in
         '';
 
         serviceConfig = {
+          LoadCredential =
+            [
+              "secret:${cfg.server.settings.secretFile}"
+              "database:${cfg.database.passwordFile}"
+            ]
+            ++ (lib.optionals (cfg.server.settings.smtp.passFile != null) [
+              "smtp:${cfg.server.settings.smtp.passFile}"
+            ]);
+
           User = cfg.user;
           Group = cfg.group;
 
