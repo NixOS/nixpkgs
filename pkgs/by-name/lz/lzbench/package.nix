@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "In-memory benchmark of open-source LZ77/LZSS/LZMA compressors";
     license = licenses.free;
     platforms = platforms.all;
+    maintainers = with lib.maintainers; [ videl ];
     mainProgram = "lzbench";
   };
 }
