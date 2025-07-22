@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.21.1";
+  version = "1.22";
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
-    hash = "sha256-1tDHGSsCsFGckCqTcZBT6GWt5aeEo7Mn2T2IhFeyPEs=";
+    hash = "sha256-frIsMKmdzbUKhjDvf/PkZCSRrE+M0aqfMYImTfT0rQg=";
   };
 
   nativeBuildInputs = [ lzip ];
