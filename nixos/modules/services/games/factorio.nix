@@ -46,7 +46,7 @@ let
     lib.optionalString (
       list != [ ]
     ) "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
-  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
+  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat cfg.mods-list;
 in
 {
   options = {
@@ -194,6 +194,14 @@ in
           Mods settings can be changed by specifying a dat file, in the [mod
           settings file
           format](https://wiki.factorio.com/Mod_settings_file_format).
+        '';
+      };
+      mods-list = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Mods can be enabled and disabled by specifying a mod-list.json file.
+          Useful for disabling built-in mods.
         '';
       };
       game-name = lib.mkOption {
