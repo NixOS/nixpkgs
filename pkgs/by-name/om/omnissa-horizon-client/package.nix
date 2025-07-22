@@ -12,7 +12,7 @@
   configText ? "",
 }:
 let
-  version = "2406";
+  version = "2503";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -21,10 +21,10 @@ let
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
-  # For USB support, ensure that /var/run/vmware/<YOUR-UID>
-  # exists and is owned by you. Then run vmware-usbarbitrator as root.
+  # For USB support, ensure that /var/run/omnissa/<YOUR-UID>
+  # exists and is owned by you. Then run omnissa-usbarbitrator as root.
 
-  mainProgram = "vmware-view";
+  mainProgram = "horizon-client";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -32,15 +32,15 @@ let
     makeWrapper "$out/${path}/${name}" "$out/bin/${name}_wrapper" \
     --set GTK_THEME Adwaita \
     --suffix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-    --suffix LD_LIBRARY_PATH : "$out/lib/vmware/view/crtbora:$out/lib/vmware"
+    --suffix LD_LIBRARY_PATH : "$out/lib/omnissa/horizon/crtbora:$out/lib/omnissa"
   '';
 
-  vmwareHorizonClientFiles = stdenv.mkDerivation {
-    pname = "vmware-horizon-files";
+  omnissaHorizonClientFiles = stdenv.mkDerivation {
+    pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART25FQ2_LIN_2406_TARBALL/VMware-Horizon-Client-Linux-2406-8.13.0-9995429239.tar.gz";
-      sha256 = "d6bae5cea83c418bf3a9cb884a7d8351d8499f1858a1ac282fd79dc0c64e83f6";
+      url = "https://download3.omnissa.com/software/CART26FQ1_LIN_2503_TARBALL/Omnissa-Horizon-Client-Linux-2503-8.15.0-14256322247.tar.gz";
+      sha256 = "c7df084d717dc70ce53eadfbe5a9d0daa06931b640702a8355705fbd93e16bb4";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -56,27 +56,24 @@ let
       # when it cannot detect a new enough version already present on the system.
       # The checks are distribution-specific and do not function correctly on NixOS.
       # Deleting the bundled library is the simplest way to force it to use our version.
-      rm "$out/lib/vmware/gcc/libstdc++.so.6"
-
-      # This bundled version of libpng causes browser issues, and would prevent web-based sign-on.
-      rm "$out/lib/vmware/libpng16.so.16"
+      rm "$out/lib/omnissa/gcc/libstdc++.so.6"
 
       # This opensc library is required to support smartcard authentication during the
       # initial connection to Horizon.
-      mkdir $out/lib/vmware/view/pkcs11
-      ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
+      mkdir $out/lib/omnissa/horizon/pkcs11
+      ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/omnissa/horizon/pkcs11/libopenscpkcs11.so
 
-      ${wrapBinCommands "bin" "vmware-view"}
-      ${wrapBinCommands "lib/vmware/view/usb" "vmware-eucusbarbitrator"}
+      ${wrapBinCommands "bin" "horizon-client"}
+      ${wrapBinCommands "lib/omnissa/horizon/usb" "horizon-eucusbarbitrator"}
     '';
   };
 
-  vmwareFHSUserEnv =
+  omnissaFHSUserEnv =
     pname:
     buildFHSEnv {
       inherit pname version;
 
-      runScript = "${vmwareHorizonClientFiles}/bin/${pname}_wrapper";
+      runScript = "${omnissaHorizonClientFiles}/bin/${pname}_wrapper";
 
       targetPkgs =
         pkgs: with pkgs; [
@@ -100,12 +97,11 @@ let
           libudev0-shim
           libuuid
           libv4l
-          libxml2
           pango
           pcsclite
           pixman
           udev
-          vmwareHorizonClientFiles
+          omnissaHorizonClientFiles
           xorg.libX11
           xorg.libXau
           xorg.libXcursor
@@ -119,21 +115,40 @@ let
           xorg.libXtst
           zlib
 
-          (writeTextDir "etc/vmware/config" configText)
+          # c.f. https://github.com/NixOS/nixpkgs/pull/418543
+          (libxml2.overrideAttrs (oldAttrs: rec {
+            version = "2.13.8";
+            src = fetchurl {
+              url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+              hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
+            };
+            meta = oldAttrs.meta // {
+              knownVulnerabilities = oldAttrs.meta.knownVulnerabilities or [ ] ++ [
+                "CVE-2025-49794"
+                "CVE-2025-49796"
+                "CVE-2025-6021"
+              ];
+            };
+          }))
+
+          (writeTextDir "etc/omnissa/config" configText)
         ];
     };
 
   desktopItem = makeDesktopItem {
-    name = "vmware-view";
-    desktopName = "VMware Horizon Client";
-    icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
-    mimeTypes = [ "x-scheme-handler/vmware-view" ];
+    name = "horizon-client";
+    desktopName = "Omnissa Horizon Client";
+    icon = "${omnissaHorizonClientFiles}/share/icons/horizon-client.png";
+    exec = "${omnissaFHSUserEnv mainProgram}/bin/${mainProgram} %u";
+    mimeTypes = [
+      "x-scheme-handler/horizon-client"
+      "x-scheme-handler/vmware-view"
+    ];
   };
 
 in
 stdenv.mkDerivation {
-  pname = "vmware-horizon-client";
+  pname = "omnissa-horizon-client";
   inherit version;
 
   dontUnpack = true;
@@ -145,21 +160,21 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    ln -s ${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view $out/bin/
-    ln -s ${vmwareFHSUserEnv "vmware-usbarbitrator"}/bin/vmware-usbarbitrator $out/bin/
+    ln -s ${omnissaFHSUserEnv "horizon-client"}/bin/horizon-client $out/bin/
+    ln -s ${omnissaFHSUserEnv "omnissa-usbarbitrator"}/bin/omnissa-usbarbitrator $out/bin/
     runHook postInstall
   '';
 
-  unwrapped = vmwareHorizonClientFiles;
+  unwrapped = omnissaHorizonClientFiles;
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     inherit mainProgram;
-    description = "Allows you to connect to your VMware Horizon virtual desktop";
-    homepage = "https://www.vmware.com/go/viewclients";
+    description = "Allows you to connect to your Omnissa Horizon virtual desktop";
+    homepage = "https://www.omnissa.com/products/horizon-8/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ mhutter ];
   };
 }
