@@ -21,6 +21,7 @@
   readline,
   sqlite,
   zlib,
+  openssh,
   enableMinimal ? false,
   withPcsc ? !enableMinimal,
   pcsclite,
@@ -145,6 +146,8 @@ stdenv.mkDerivation rec {
   configureFlags =
     [
       "--sysconfdir=/etc"
+      # Needed for large RSA key support (patch 0033)
+      "--enable-large-secmem"
       "--with-libgpg-error-prefix=${libgpg-error.dev}"
       "--with-libgcrypt-prefix=${libgcrypt.dev}"
       "--with-libassuan-prefix=${libassuan.dev}"
@@ -179,6 +182,12 @@ stdenv.mkDerivation rec {
       '';
 
   enableParallelBuilding = true;
+
+  nativeCheckInputs = [
+    # A test would be skipped without SSH
+    openssh
+  ];
+  doCheck = !enableMinimal;
 
   passthru.tests = nixosTests.gnupg;
 
