@@ -31,19 +31,19 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "5.4.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-xWGcKJY5ov6SN8CCRK33rVDsDcvKtEnv7Zy9VBLJYYc=";
+    hash = "sha256-eNca9+CBAGTQe6URMUYRaJR7TXFJA+dWcYIJdKyB3bw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.8.0" "setuptools"
+      --replace-fail "setuptools==75.9.1" "setuptools"
 
       substituteInPlace craft_application/git/_utils.py \
         --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
@@ -98,6 +98,12 @@ buildPythonPackage rec {
     # derivation. Once charmcraft has moved to craft-application >= 5, `--replace-fail` can be added.
     substituteInPlace tests/conftest.py \
       --replace "include_lsb=False, include_uname=False, include_oslevel=False" "include_lsb=False, include_uname=False, include_oslevel=False, os_release_file='$HOME/os-release'"
+
+    # The project attempts to write into the user's runtime directory, usually
+    # '/run/user/<uid>', which fails in the build environment. By setting this
+    # variable, we redirect the runtime directory lookup to the temp directory
+    # created by the 'writableTmpDirAsHomeHook'.
+    export XDG_RUNTIME_DIR="$HOME"
   '';
 
   pythonImportsCheck = [ "craft_application" ];
