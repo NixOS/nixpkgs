@@ -80,6 +80,7 @@ needs to be. Instead of applying brittle substitutions the version constraint
 can be ignored on a per requirement basis.
 
 ```nix
+{
   dependencies = [
     pyemvue
   ];
@@ -88,5 +89,5 @@ can be ignored on a per requirement basis.
   ignoreVersionRequirement = [
     "pyemvue"
   ];
+}
 ```
-`

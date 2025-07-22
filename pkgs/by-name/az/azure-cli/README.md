@@ -56,6 +56,7 @@ The output should look something like this:
 Based on this, you can add an attribute to `extensions-manual.nix`:
 
 ```nix
+{
   azure-devops = mkAzExtension {
     pname = "azure-devops";
     version = "1.0.0";
@@ -67,6 +68,7 @@ Based on this, you can add an attribute to `extensions-manual.nix`:
     ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
+}
 ```
 
 * The attribute name should be the same as `pname`.
@@ -113,5 +115,7 @@ If extensions are removed upstream, an alias is added to the end of `extensions-
 this example:
 
 ```nix
-blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
+{
+  blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
+}
 ```

@@ -111,7 +111,7 @@ If there are shared libraries missing add them with
     extraPkgs = pkgs: [
       # missing libraries here, e.g.: `pkgs.libepoxy`
     ];
-  }
+  };
 }
 ```
 
