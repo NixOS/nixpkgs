@@ -8350,9 +8350,7 @@ with pkgs;
   hamlib_3 = callPackage ../development/libraries/hamlib { };
   hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzzFull = harfbuzz.override {
     withGraphite2 = true;
