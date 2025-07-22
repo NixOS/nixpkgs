@@ -10,19 +10,25 @@
   fetchYarnDeps,
   go,
   versionCheckHook,
-  testers,
+  runCommandWith,
   curl,
   lightning-terminal,
+  _experimental-update-script-combinators,
+  gitUpdater,
+  nurl,
+  nix,
+  gitMinimal,
+  writeShellScript,
 }:
 
 buildGoModule rec {
   pname = "lightning-terminal";
-  version = "0.14.1-alpha";
+  version = "0.15.1-alpha";
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lightning-terminal";
     tag = "v${version}";
-    hash = "sha256-sv/NsjAAF0vwD2xjRuGwHwV0L1gjCFQEw0SVp14Zyz0=";
+    hash = "sha256-aCZ1dzbj1SYBYQ6ysnk9MQs4V6ysljZYOYp0gOw0WFQ=";
     leaveDotGit = true;
     # Populate values that require us to use git.
     postFetch = ''
@@ -35,7 +41,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-Gbx4uz6q9Ef4QNv6DpIoCACjhT66iZ7GPNpd/g9MgKQ=";
+  vendorHash = "sha256-tjNF6Llsaba/IlhtrOU4ebzSRHGVy+LPzwhBsS5xJgQ=";
 
   buildInputs = [ lightning-app ];
   postUnpack = ''
@@ -94,24 +100,71 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  passthru.tests.litd-app = testers.runCommand {
-    name = "test-litd-app";
-    nativeBuildInputs = [
-      curl
-      lightning-terminal
-    ];
-    script = ''
-      litd \
-        --uipassword=12345678 \
-        --insecure-httplisten=127.0.0.1:8080 \
-        --httpslisten= &
-      sleep 2
-      GETindexHTTPCode=$(curl -o /dev/null -w "%{http_code}" -Lvs 127.0.0.1:8080/index.html)
-      if [ "$GETindexHTTPCode" = 200 ]; then
-        touch $out
-      fi
-    '';
-  };
+  passthru.tests.litd-app =
+    runCommandWith
+      {
+        name = "test-litd-app";
+        derivationArgs = {
+          nativeBuildInputs = [
+            curl
+            lightning-terminal
+          ];
+        };
+      }
+      ''
+        litd \
+          --uipassword=12345678 \
+          --insecure-httplisten=127.0.0.1:8080 \
+          --httpslisten= &
+        sleep 2
+        GETindexHTTPCode=$(curl -o /dev/null -w "%{http_code}" -Lvs 127.0.0.1:8080/index.html)
+        if [ "$GETindexHTTPCode" = 200 ]; then
+          touch $out
+        fi
+      '';
+
+  # Usage: nix-shell maintainers/scripts/update.nix --argstr package lightning-terminal --argstr commit true
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".*rc.*";
+    })
+    {
+      command = [
+        (writeShellScript "update-hashes.sh" ''
+          set -euxo pipefail
+
+          . ${stdenv}/setup
+          PATH="${
+            lib.makeBinPath [
+              gitMinimal
+              nix
+              nurl
+            ]
+          }:$PATH"
+
+          nixpkgs="$(git rev-parse --show-toplevel)"
+          packageVersion=$(nix --extra-experimental-features nix-command eval --impure --raw -f "$nixpkgs" "$UPDATE_NIX_ATTR_PATH.version")
+          if [ x"$UPDATE_NIX_OLD_VERSION" != x"$packageVersion" ]; then
+            vendorHashOld=${lightning-terminal.vendorHash}
+            vendorHashNew=$(nurl -e "(import $nixpkgs/. { }).$UPDATE_NIX_ATTR_PATH.goModules")
+            yarnOfflineCacheHashOld=${lightning-app.yarnOfflineCache.outputHash}
+            yarnOfflineCacheHashNew=$(nurl -e "let pkgs = (import $nixpkgs/. { }); in \
+              pkgs.fetchYarnDeps \
+                { yarnLock = pkgs.$UPDATE_NIX_ATTR_PATH.src + \"/app/yarn.lock\"; \
+                  hash = pkgs.lib.fakeHash; \
+                }")
+
+            substituteInPlace \
+              "$nixpkgs"/pkgs/by-name/li/lightning-terminal/package.nix \
+              --replace-fail "$vendorHashOld" "$vendorHashNew" \
+              --replace-fail "$yarnOfflineCacheHashOld" "$yarnOfflineCacheHashNew"
+          fi
+        '')
+      ];
+      supportedFeatures = [ "silent" ];
+    }
+  ];
 
   lightning-app = stdenv.mkDerivation {
     pname = "lightning-app";
@@ -119,7 +172,7 @@ buildGoModule rec {
     version = "0.0.1";
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/app/yarn.lock";
-      hash = "sha256-ulOgKQRLG4cRi1N1DajmbZ0L7d08g5cYDA9itXu+Esw=";
+      hash = "sha256-FYRWyZxTPo4YwN5AiXsuubZoCVRcOeCrsUU/+ON4gx4=";
     };
 
     # Remove this command from package.json. It requires Git and it is not

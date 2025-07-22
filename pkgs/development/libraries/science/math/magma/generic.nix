@@ -42,20 +42,7 @@ let
     ;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
-  # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
-  # If we're building a version prior to that, use the latest release of the 11.x series.
-  effectiveCudaPackages =
-    if strings.versionOlder version "2.7.1" then cudaPackages_11 else cudaPackages;
-
-  inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
-
-  effectiveRocmPackages =
-    if strings.versionOlder version "2.8.0" then
-      throw ''
-        the required ROCm 5.7 version for magma ${version} has been removed
-      ''
-    else
-      rocmPackages;
+  inherit (cudaPackages) cudaAtLeast flags cudaOlder;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -65,7 +52,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) effectiveRocmPackages.clr.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -123,19 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ];
 
-  postPatch =
-    ''
-      # For rocm version script invoked by cmake
-      patchShebangs tools/
-      # Fixup for the python test runners
-      patchShebangs ./testing/run_{tests,summarize}.py
-    ''
-    + lib.optionalString (strings.versionOlder version "2.9.0") ''
-      substituteInPlace ./testing/run_tests.py \
-        --replace-fail \
-          "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
-          "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
-    '';
+  postPatch = ''
+    # For rocm version script invoked by cmake
+    patchShebangs tools/
+    # Fixup for the python test runners
+    patchShebangs ./testing/run_{tests,summarize}.py
+  '';
 
   nativeBuildInputs =
     [
@@ -145,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       gfortran
     ]
     ++ lists.optionals cudaSupport [
-      effectiveCudaPackages.cuda_nvcc
+      cudaPackages.cuda_nvcc
     ];
 
   buildInputs =
@@ -157,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       (getLib gfortran.cc) # libgfortran.so
     ]
     ++ lists.optionals cudaSupport (
-      with effectiveCudaPackages;
+      with cudaPackages;
       [
         cuda_cccl # <nv/target> and <cuda/std/type_traits>
         cuda_cudart # cuda_runtime.h
@@ -172,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     )
     ++ lists.optionals rocmSupport (
-      with effectiveRocmPackages;
+      with rocmPackages;
       [
         clr
         hipblas
@@ -203,9 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
       # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
       # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
       # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
-      (strings.cmakeFeature "ROCM_CORE" "${effectiveRocmPackages.clr}")
-      (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
-      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
+      (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
     ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
@@ -241,8 +221,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    inherit cudaSupport rocmSupport gpuTargets;
-    cudaPackages = effectiveCudaPackages;
+    inherit
+      cudaPackages
+      cudaSupport
+      rocmSupport
+      gpuTargets
+      ;
     testers = {
       all =
         let
@@ -395,8 +379,6 @@ stdenv.mkDerivation (finalAttrs: {
       # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
       (cudaSupport && !static)
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
-      || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
-      || (rocmSupport && strings.versionOlder version "2.8.0");
+      || (cudaSupport && rocmSupport); # Mutually exclusive
   };
 })

@@ -728,12 +728,7 @@ stdenvNoCC.mkDerivation {
     ''
     # GCC NG friendly libc++
     + optionalString (libcxx != null && libcxx.isGNU or false) ''
-      for dir in ${getDev libcxx}/include/c++/*; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
-      done
-      for dir in ${getDev libcxx}/include/c++/*/${targetPlatform.config}; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
-      done
+      echo "-isystem ${getDev libcxx}/include" >> $out/nix-support/libcxx-cxxflags
     ''
 
     ##

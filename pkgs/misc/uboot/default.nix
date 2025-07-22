@@ -29,6 +29,7 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  darwin,
 }@pkgs:
 
 let
@@ -82,22 +83,25 @@ let
           patchShebangs scripts
         '';
 
-        nativeBuildInputs = [
-          ncurses # tools/kwboot
-          bc
-          bison
-          flex
-          installShellFiles
-          (buildPackages.python3.withPackages (p: [
-            p.libfdt
-            p.setuptools # for pkg_resources
-            p.pyelftools
-          ]))
-          swig
-          which # for scripts/dtc-version.sh
-          perl # for oid build (secureboot)
-        ] ++ lib.optionals (!crossTools) toolsDeps;
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
+        nativeBuildInputs =
+          [
+            ncurses # tools/kwboot
+            bc
+            bison
+            flex
+            installShellFiles
+            (buildPackages.python3.withPackages (p: [
+              p.libfdt
+              p.setuptools # for pkg_resources
+              p.pyelftools
+            ]))
+            swig
+            which # for scripts/dtc-version.sh
+            perl # for oid build (secureboot)
+          ]
+          ++ lib.optionals (!crossTools) toolsDeps
+          ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
+        depsBuildBuild = [ buildPackages.gccStdenv.cc ]; # gccStdenv is needed for Darwin buildPlatform
         buildInputs = lib.optionals crossTools toolsDeps;
 
         hardeningDisable = [ "all" ];
@@ -107,6 +111,7 @@ let
         makeFlags = [
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+          "HOSTCFLAGS=-fcommon"
         ] ++ extraMakeFlags;
 
         passAsFile = [ "extraConfig" ];
@@ -114,7 +119,7 @@ let
         configurePhase = ''
           runHook preConfigure
 
-          make ${defconfig}
+          make -j$NIX_BUILD_CORES ${defconfig}
 
           cat $extraConfigPath >> .config
 
@@ -310,10 +315,12 @@ in
         meta.license = lib.licenses.unfreeRedistributableFirmware;
       };
     in
-    assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
     buildUBoot {
       defconfig = "libretech-cc_defconfig";
-      extraMeta.platforms = [ "aarch64-linux" ];
+      extraMeta = {
+        broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+        platforms = [ "aarch64-linux" ];
+      };
       filesToInstall = [ "u-boot.bin" ];
       postBuild = ''
         # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir

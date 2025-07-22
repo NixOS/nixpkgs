@@ -6,6 +6,7 @@
   version,
   getVersionFile,
   monorepoSrc ? null,
+  fetchpatch,
   autoreconfHook269,
   buildGccPackages,
   buildPackages,
@@ -37,7 +38,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (getVersionFile "gcc/custom-threading-model.patch")
+    (fetchpatch {
+      name = "delete-MACHMODE_H.patch";
+      url = "https://github.com/gcc-mirror/gcc/commit/493aae4b034d62054d5e7e54dc06cd9a8be54e29.diff";
+      hash = "sha256-oEk0lnI96RlpALWpb7J+GnrtgQsFVqDO57I/zjiqqTk=";
+    })
+    (fetchpatch {
+      name = "custom-threading-model.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716204545.1063669-1-git@JohnEricson.me/raw";
+      hash = "sha256-NgiC4cFeFInXXg27me1XpSeImPaL0WHs50Tf1YHz4ps=";
+    })
+    (fetchpatch {
+      name = "libgcc.mvars-less-0.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716234028.1153560-1-John.Ericson@Obsidian.Systems/raw";
+      hash = "sha256-NEcieDCsy+7IRU3qQKVD3i57OuwGZKB/rmNF8X2I1n0=";
+    })
+    (fetchpatch {
+      name = "libgcc.mvars-less-1.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716234028.1153560-2-John.Ericson@Obsidian.Systems/raw";
+      hash = "sha256-nfRC4f6m3kHDro4+6E4y1ZPs+prxBQmn0H2rzIjaMWM=";
+    })
+    (fetchpatch {
+      name = "regular-libdir-includedir.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250717174911.1536129-1-git@JohnEricson.me/raw";
+      hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
+    })
+    (getVersionFile "libgcc/force-regular-dirs.patch")
   ];
 
   autoreconfFlags = "--install --force --verbose . libgcc";
@@ -95,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
         tm.h \
         options.h \
         insn-constants.h \
-        insn-modes.h \
         version.h
       )
       mkdir -p "$buildRoot/gcc/include"
@@ -186,11 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "MULTIBUILDTOP:=../" ];
 
   postInstall = ''
-    cp gthr-default.h "$out/lib/gcc/${stdenv.hostPlatform.config}/${version}/include"
-    moveToOutput "lib/gcc/${stdenv.hostPlatform.config}/${version}/include" "$dev"
-    mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${version}/include"/* "$dev/include/"
+    install -c -m 644 gthr-default.h "$dev/include"
   '';
 
   doCheck = true;

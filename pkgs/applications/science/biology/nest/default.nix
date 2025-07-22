@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "NEST is a command line tool for simulating neural networks";
+    description = "Command line tool for simulating neural networks";
     homepage = "https://www.nest-simulator.org/";
     changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
     license = lib.licenses.gpl2Plus;

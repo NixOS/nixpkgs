@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.RUSTFLAGS = toString (
     map (flag: "-C link-arg=" + flag) [
       "-Wl,--push-state,--no-as-needed"
-      "-lkrunfw"
+      (if sevVariant then "-lkrunfw-sev" else "-lkrunfw")
       "-Wl,--pop-state"
     ]
   );

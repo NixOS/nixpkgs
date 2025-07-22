@@ -4055,6 +4055,8 @@ let
 
       reditorsupport.r = callPackage ./reditorsupport.r { };
 
+      release-candidate.vscode-scheme-repl = callPackage ./release-candidate.vscode-scheme-repl { };
+
       reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "reloaded-cpp";
@@ -4929,6 +4931,8 @@ let
         };
       };
 
+      tsyesika.guile-scheme-enhanced = callPackage ./tsyesika.guile-scheme-enhanced { };
+
       tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emacs-mcx";
@@ -4982,6 +4986,8 @@ let
           license = lib.licenses.mit;
         };
       };
+
+      ufo5260987423.magic-scheme = callPackage ./ufo5260987423.magic-scheme { };
 
       uiua-lang.uiua-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
