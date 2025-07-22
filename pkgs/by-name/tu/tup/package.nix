@@ -35,7 +35,10 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  patches = [ ./fusermount-setuid.patch ];
+  patches = [
+    ./fusermount-setuid.patch
+    ./fuse_fs.patch
+  ];
 
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace-fail '`git describe' '`echo ${version}'
@@ -95,5 +98,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
