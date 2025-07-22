@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AcademySoftwareFoundation";
     repo = "OpenTimelineIO";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-53KXjbhHxuEtu6iRGWrirvFamuZ/WbOTcKCfs1iqKmM=";
+    hash = "sha256-53KXjbhHxuEtu6iRGWrirvFamuZ/WbOTcKCfs1iqKmM=";
   };
 
   nativeBuildInputs = [
