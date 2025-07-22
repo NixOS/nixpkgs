@@ -10,6 +10,7 @@
   nix-update-script,
   findutils,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,6 +47,9 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage $(find target/x86_64-unknown-linux-gnu/release/build -name "snphost.1")
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
