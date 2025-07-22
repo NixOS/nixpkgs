@@ -96,8 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [ "format" ];
-
   enableParallelBuilding = true;
   enableParallelInstalling = true;
 
