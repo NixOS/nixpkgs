@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/aptakube/aptakube/releases/download/${version}/Aptakube_${version}_universal.dmg";
-    sha256 = "sha256-ljVl490cZuIcRSP8RKmf8Eq5D4OibLfuA8SugUlf1Yw=";
+    sha256 = "sha256-v6ZDMo79QHNAtDX0idUn5EKQMaNd5PnuyA7QG91JzvI=";
   };
 
   nativeBuildInputs = [ undmg ];

@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/aptakube/aptakube/releases/download/${version}/aptakube_${version}_amd64.deb";
-    sha256 = "sha256-lT8v2nXVfZb5W/FP/ymWjGypQLz7ONlp9+GblMKKXuw=";
+    sha256 = "sha256-+bxuGdqcKl8YJXsWRU8JfpkE0THwYtynDTBxPdxNiqg=";
   };
 
   nativeBuildInputs = [
