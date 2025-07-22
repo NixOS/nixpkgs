@@ -10231,6 +10231,8 @@ with pkgs;
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or { });
 
+  nsdiff = perlPackages.nsdiff;
+
   outline = callPackage ../servers/web-apps/outline (
     lib.fix (super: {
       yarn = yarn.override { inherit (super) nodejs; };
