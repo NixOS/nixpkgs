@@ -23,6 +23,7 @@ buildDunePackage rec {
     yojson
     ppxlib
   ];
+  doCheck = false; # Fails due to missing "melange-jest", which in turn fails in command "npx jest"
   meta = {
     description = "Compositional JSON encode/decode library and PPX for Melange and OCaml";
     homepage = "https://github.com/melange-community/melange-json";
