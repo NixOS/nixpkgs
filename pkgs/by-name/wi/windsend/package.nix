@@ -49,7 +49,7 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "WindSend";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

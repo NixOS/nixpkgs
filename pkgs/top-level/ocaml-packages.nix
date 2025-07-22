@@ -1934,6 +1934,8 @@ let
 
         stdint = callPackage ../development/ocaml-modules/stdint { };
 
+        stdlib-random = callPackage ../development/ocaml-modules/stdlib-random { };
+
         stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
 
         stdune = callPackage ../development/ocaml-modules/stdune { };
@@ -1963,6 +1965,10 @@ let
         tar = callPackage ../development/ocaml-modules/tar { };
 
         tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
+          inherit (pkgs) git;
+        };
+
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
           inherit (pkgs) git;
         };
 

@@ -1,14 +1,14 @@
 diff --git a/pyproject.toml b/pyproject.toml
-index 451d83d9..817b27ea 100644
+index 7d665b6a..55f2f210 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -16,7 +16,7 @@ dependencies = [
    "img2pdf>=0.5",
    "packaging>=20",
    "pdfminer.six>=20220319",
--  "pi-heif",                   # Heif image format - maintainers: if this is removed, it will NOT break
-+  "pillow-heif",                   # Heif image format - maintainers: if this is removed, it will NOT break
-   "pikepdf>=8.10.1, != 9.8.0",
+-  "pi-heif",                 # Heif image format - maintainers: if this is removed, it will NOT break
++  "pillow-heif",                 # Heif image format - maintainers: if this is removed, it will NOT break
+   "pikepdf>=8.10.1,!=9.8.0",
    "Pillow>=10.0.1",
    "pluggy>=1",
 diff --git a/src/ocrmypdf/_pipeline.py b/src/ocrmypdf/_pipeline.py

@@ -7449,11 +7449,6 @@
     github = "EmanuelM153";
     githubId = 134736553;
   };
-  emaryn = {
-    name = "emaryn";
-    github = "emaryn";
-    githubId = 197520219;
-  };
   emattiza = {
     email = "nix@mattiza.dev";
     github = "emattiza";
@@ -18286,6 +18281,13 @@
     ];
     matrix = "@normalcea:matrix.org";
   };
+  norpol = {
+    name = "Syd Lightyear";
+    email = "norpol+nixpkgs@exaple.org";
+    matrix = "@phileas:asra.gr";
+    github = "norpol";
+    githubId = 98636020;
+  };
   nosewings = {
     name = "Nicholas Coltharp";
     email = "coltharpnicholas@gmail.com";
@@ -27540,7 +27542,7 @@
     name = "Guillermo NWDD";
   };
   xokdvium = {
-    email = "xokdvium@proton.me";
+    email = "sergei@zimmerman.foo";
     github = "xokdvium";
     githubId = 145775305;
     name = "Sergei Zimmerman";
