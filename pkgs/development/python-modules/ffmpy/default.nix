@@ -25,14 +25,15 @@ buildPythonPackage rec {
   };
 
   postPatch =
+    # Default to store ffmpeg.
     ''
-      # default to store ffmpeg
       substituteInPlace ffmpy/ffmpy.py \
         --replace-fail \
           'executable: str = "ffmpeg",' \
-          'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
-
-      #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+          'executable: str = "${lib.getExe ffmpeg-headless}",'
+    ''
+    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+    + ''
       for fname in tests/*.py; do
         echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
       done
