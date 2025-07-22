@@ -5243,6 +5243,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  fyler-nvim = buildVimPlugin {
+    pname = "fyler.nvim";
+    version = "2025-07-21";
+    src = fetchFromGitHub {
+      owner = "A7Lavinraj";
+      repo = "fyler.nvim";
+      rev = "6595c9ef272797aeb92aacdc392cf670c994e467";
+      sha256 = "14fbmhxw7xyg618g3pv7hq64ppcas997qvkbdnl2z0lqrk2nn3zy";
+    };
+    meta.homepage = "https://github.com/A7Lavinraj/fyler.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   fzf-checkout-vim = buildVimPlugin {
     pname = "fzf-checkout.vim";
     version = "2023-10-05";
