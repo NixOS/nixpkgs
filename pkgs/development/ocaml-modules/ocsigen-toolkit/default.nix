@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://ocsigen.org/ocsigen-toolkit/";
-    description = " User interface widgets for Ocsigen applications";
+    description = "User interface widgets for Ocsigen applications";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.gal_bolle ];
     inherit (ocaml.meta) platforms;
