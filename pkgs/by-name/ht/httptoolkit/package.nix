@@ -6,10 +6,12 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_35,
   httptoolkit-server,
 }:
-
+let
+  electron = electron_35;
+in
 buildNpmPackage rec {
   pname = "httptoolkit";
   version = "1.20.1";
