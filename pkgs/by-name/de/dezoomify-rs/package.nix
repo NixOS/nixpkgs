@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-Jh1a5DW25a4wzuZbOAoTn/crp/ioLsmq3jDiqIctCCM=";
 
-  checkFlags = [
-    # Tests failing due to networking errors in Nix build environment
-    "--skip=local_generic_tiles"
-    "--skip=custom_size_local_zoomify_tiles"
-  ];
+  # hyper uses SystemConfiguration.framework to read system proxy settings.
+  # Allow access to the Mach service to prevent the tests from failing.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
 
   meta = {
     description = "Zoomable image downloader for Google Arts & Culture, Zoomify, IIIF, and others";
