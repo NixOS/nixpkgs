@@ -1097,8 +1097,6 @@ with pkgs;
 
   kanata-with-cmd = kanata.override { withCmd = true; };
 
-  ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
-
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
   makehuman = libsForQt5.callPackage ../applications/misc/makehuman { };

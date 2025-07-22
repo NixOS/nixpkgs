@@ -2,26 +2,20 @@
   stdenv,
   lib,
   cmake,
-  extra-cmake-modules,
   fetchFromGitHub,
   fetchpatch,
-  kcolorpicker,
-  kimageannotator,
-  wrapQtAppsHook,
-  qtsvg,
-  qttools,
-  qtx11extras,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ksnip";
   version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
-    rev = "v${version}";
-    sha256 = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
   };
 
   patches = [
@@ -32,21 +26,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-    wrapQtAppsHook
-    qttools
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ (with libsForQt5; [
+      extra-cmake-modules
+      wrapQtAppsHook
+      qttools
+    ]);
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     kcolorpicker
     kimageannotator
     qtsvg
     qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ksnip/ksnip";
     description = "Cross-platform screenshot tool with many annotation features";
     longDescription = ''
@@ -80,9 +77,9 @@ stdenv.mkDerivation rec {
       - User-defined actions for taking screenshot and post-processing.
       - Many configuration options.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ x3ro ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ x3ro ];
+    platforms = lib.platforms.linux;
     mainProgram = "ksnip";
   };
-}
+})
