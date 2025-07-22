@@ -23,6 +23,8 @@
   cmocka,
   tzdata,
   gitUpdater,
+  fstrm,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       libuv
       nghttp2
       jemalloc
+      fstrm
+      protobufc
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
@@ -72,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [
       "--localstatedir=/var"
+      "--enable-dnstap"
       "--without-lmdb"
       "--with-libidn2"
     ]
