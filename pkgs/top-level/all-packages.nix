@@ -12508,8 +12508,6 @@ with pkgs;
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
 
-  hue-cli = callPackage ../tools/networking/hue-cli { };
-
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
   };
