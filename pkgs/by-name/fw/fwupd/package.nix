@@ -76,8 +76,6 @@
   efibootmgr,
   tpm2-tools,
 
-  fetchpatch2,
-
   # passthru
   nixosTests,
   nix-update-script,
@@ -135,7 +133,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.12";
+  version = "2.0.13";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -153,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-AYPrQzk28CS4Yhj2+KARt3b1SC02YifEftsSF+fKJ+Y=";
+    hash = "sha256-iarQfen2MCgQUDST5c81+KBd8gxBqM9EO6f0fN4fZbI=";
   };
 
   patches = [
@@ -174,11 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
-
-    (fetchpatch2 {
-      url = "https://github.com/fwupd/fwupd/pull/8959.diff?full_index=1";
-      hash = "sha256-w4uf1CXSyy1pqqM4lzMZoOFhDxadcU3Tdnz0dJgLW7w=";
-    })
   ];
 
   postPatch =
