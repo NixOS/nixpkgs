@@ -18,11 +18,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ melange ];
-  buildInputs = [
-    melange
-    yojson
-    ppxlib
-  ];
+  propagatedBuildInputs = [ melange ];
   doCheck = false; # Fails due to missing "melange-jest", which in turn fails in command "npx jest"
   meta = {
     description = "Compositional JSON encode/decode library and PPX for Melange and OCaml";
