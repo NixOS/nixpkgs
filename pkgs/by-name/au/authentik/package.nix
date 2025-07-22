@@ -29,7 +29,10 @@ let
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
     license = lib.licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [
       jvanbruegge
       risson
@@ -43,7 +46,13 @@ let
 
     sourceRoot = "${src.name}/website";
 
-    outputHash = "sha256-1qlJf4mVYM5znF3Ifi7CpGMfinUsb/YoXGeM6QLYMis=";
+    outputHash =
+      {
+        "aarch64-linux" = "sha256-+UObt/FhHkEzZUR24ND6phSDqvuzaOuUiyoW0dolsiY=";
+        "x86_64-linux" = "sha256-1qlJf4mVYM5znF3Ifi7CpGMfinUsb/YoXGeM6QLYMis=";
+      }
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported hust platform");
+
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -130,7 +139,12 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    outputHash = "sha256-m0vYUevOz6pof8XqiZHXzgPhkQLUUFOdblmfOjHJUJc=";
+    outputHash =
+      {
+        "aarch64-linux" = "sha256-e4v7f3+/e++CI9xa9G2/47y8Dga+vluyUtBXGyaWFcI=";
+        "x86_64-linux" = "sha256-m0vYUevOz6pof8XqiZHXzgPhkQLUUFOdblmfOjHJUJc=";
+      }
+      .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported hust platform");
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
