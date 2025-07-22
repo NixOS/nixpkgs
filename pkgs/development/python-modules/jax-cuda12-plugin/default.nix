@@ -36,45 +36,35 @@ let
 
   # upstream does not distribute jax-cuda12-plugin 0.4.38 binaries for aarch64-linux
   srcs = {
-    "3.10-x86_64-linux" = getSrcFromPypi {
-      platform = "manylinux2014_x86_64";
-      dist = "cp310";
-      hash = "sha256-F1H4iYkmmzzbDf5PewcqZEIUmBjJvJjDo5XIrK+RCnk=";
-    };
-    "3.10-aarch64-linux" = getSrcFromPypi {
-      platform = "manylinux2014_aarch64";
-      dist = "cp310";
-      hash = "sha256-vFw6ddBVGbTTJuRmnQ960P4PCs+HX5MT2RN0jMylqeo=";
-    };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-CJbLswjZUpHiBc2J0lQCne46HfQ9ZumDEzGpr9LSeHA=";
+      hash = "sha256-2MmZTNYm4vFQmhZOXgfBIiIN3QptiDRvika9U8tePhk=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-LNjieaWaOLoMl4qDHhOt627p5Fcvujh8eXW6OtU13Tg=";
+      hash = "sha256-JlpL8jjASPmJKeDa2XZCRtEkl73Yz98uIng6adc8xj4=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-/r0Jn5cNNQ64+losmi+0sOp7PWqJ3xSWZj7fp6/lkOU=";
+      hash = "sha256-q37GQziSIY8lvdWi0TddqQh+mB36CYJ6x/NzzNu/LE0=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-bJsALROx/LlANxPu3Th2oietH/vfs4EbH5+Jr0wlpfc=";
+      hash = "sha256-2UJ4q5a2ImQ3Ns3tt3eHA9MPL2T6SXrZ9bo13QyhBGQ=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-20xhA8kS2M0a35TDTTE7tHYMp/AciXynzWLmXyeZQZk=";
+      hash = "sha256-v94NtxSyrV/p6GwfbS5gx9TZgNAVAphYIIgoq82CdM8=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-dz76i1WoN0BsVh8O8CFE3akBkYEZN2DsVBnuyd0rmqw=";
+      hash = "sha256-5Nz+GFcW+0WsHti4kSIJbG2Tm0NRNxAzobz/JU3Rejg=";
     };
   };
 in
