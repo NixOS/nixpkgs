@@ -164,12 +164,12 @@ lib.mapAttrs mkLicense (
 
     bitTorrent10 = {
       spdxId = "BitTorrent-1.0";
-      fullName = " BitTorrent Open Source License v1.0";
+      fullName = "BitTorrent Open Source License v1.0";
     };
 
     bitTorrent11 = {
       spdxId = "BitTorrent-1.1";
-      fullName = " BitTorrent Open Source License v1.1";
+      fullName = "BitTorrent Open Source License v1.1";
     };
 
     bola11 = {
