@@ -6,16 +6,21 @@
 
 buildGoModule rec {
   pname = "go-licence-detector";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "go-licence-detector";
     rev = "v${version}";
-    hash = "sha256-mytZc5sfYkzvdv53EVnM97fvfOPh+Y06j+aB8bhFv5o=";
+    hash = "sha256-z2fJsDnDhD/0fF1QEQIKB398TqAsug1Ye5LbGpJWyfE=";
   };
 
-  vendorHash = "sha256-7vIP5pGFH6CbW/cJp+DiRg2jFcLFEBl8dQzUw1ogTTA=";
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.24.5" "go 1.24"
+  '';
+
+  vendorHash = "sha256-quFa2gBPsyRMOBde+KsIF8NCHYSF+X9skvIWnpm2Nss=";
 
   meta = with lib; {
     description = "Detect licences in Go projects and generate documentation";
