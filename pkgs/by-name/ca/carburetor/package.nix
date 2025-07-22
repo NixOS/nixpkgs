@@ -62,6 +62,8 @@ python3Packages.buildPythonApplication {
   dontWrapGApps = true;
 
   preFixup = ''
+    substituteInPlace $out/share/applications/io.frama.tractor.carburetor.desktop \
+      --replace-fail "Exec=gapplication launch io.frama.tractor.carburetor" "Exec=$out/bin/carburetor"
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
