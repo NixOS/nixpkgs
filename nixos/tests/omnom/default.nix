@@ -1,7 +1,4 @@
-{ lib, ... }:
-let
-  servicePort = 9090;
-in
+{ config, lib, ... }:
 {
   name = "Basic Omnom Test";
   meta = {
@@ -13,48 +10,18 @@ in
       { pkgs, ... }:
       {
         imports = [
-          ./common/x11.nix
+          ../common/x11.nix
+          ./config.nix
         ];
-
-        services.omnom = {
-          enable = true;
-          openFirewall = true;
-
-          port = servicePort;
-
-          settings = {
-            app = {
-              disable_signup = false; # restrict CLI user-creation
-              results_per_page = 50;
-            };
-            server.address = "0.0.0.0:${toString servicePort}";
-          };
-        };
-
-        programs.firefox = {
-          enable = true;
-          # librewolf allows installations of unsigned extensions
-          package = pkgs.wrapFirefox pkgs.librewolf-unwrapped {
-            nixExtensions = [
-              (
-                let
-                  # specified in manifest.json of the addon
-                  extid = "{f0bca7ce-0cda-41dc-9ea8-126a50fed280}";
-                in
-                pkgs.runCommand "omnom" { passthru = { inherit extid; }; } ''
-                  mkdir -p $out
-                  cp ${pkgs.omnom}/share/addons/omnom_ext_firefox.zip $out/${extid}.xpi
-                ''
-              )
-            ];
-          };
-        };
 
         environment.systemPackages = [ pkgs.xdotool ];
       };
   };
 
   testScript =
+    let
+      port = toString config.nodes.server.services.omnom.port;
+    in
     # python
     ''
       import re
@@ -68,11 +35,11 @@ in
         server.sleep(10)
 
 
-      service_url = "http://127.0.0.1:${toString servicePort}"
+      service_url = "http://127.0.0.1:${toString port}"
 
       server.start()
       server.wait_for_unit("omnom.service")
-      server.wait_for_open_port(${toString servicePort})
+      server.wait_for_open_port(${toString port})
       server.succeed(f"curl -sf '{service_url}'")
 
       output = server.succeed("omnom create-user user user@example.com")
