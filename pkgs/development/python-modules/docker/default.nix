@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "docker";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "docker";
@@ -68,11 +65,11 @@ buildPythonPackage rec {
     "socket_file"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/docker/docker-py/releases/tag/${version}";
     description = "API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }
