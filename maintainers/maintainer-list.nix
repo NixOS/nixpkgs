@@ -15345,12 +15345,12 @@
     name = "Lynn Dong";
   };
   lzcunt = {
-    email = "umutinanerdogan@proton.me";
+    email = "lzcunt@rawr.fun";
     github = "lzcunt";
     githubId = 40492846;
-    keys = [ { fingerprint = "B766 7717 1644 5ABC DE82  94AA 4679 BF7D CC04 4783"; } ];
+    keys = [ { fingerprint = "E6C7 B310 AA16 EF21 6FEC  ABCB 88DE 9D76 00BC 7937"; } ];
     matrix = "@sananatheskenana:matrix.org";
-    name = "sanana the skenana";
+    name = "lzcunt";
   };
   m00wl = {
     name = "Moritz Lumme";
