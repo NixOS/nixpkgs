@@ -197,6 +197,7 @@ let
         filterAttrsRecursive
         foldlAttrs
         foldAttrs
+        foldAttrs'
         collect
         nameValuePair
         mapAttrs
