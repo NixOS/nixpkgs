@@ -47,14 +47,20 @@ in
 
       listenAddress = lib.mkOption {
         type = lib.types.str;
-        description = "The address to listen on.";
+        description = ''
+          The address to listen on.
+          This option is ignored when using `nginx.createLocally` as that uses a unix socket.
+        '';
         default = "127.0.0.1";
         example = "0.0.0.0";
       };
 
       port = lib.mkOption {
         type = lib.types.port;
-        description = "The port to listen on.";
+        description = ''
+          The port to listen on.
+          This option is ignored when using `nginx.createLocally` as that uses a unix socket.
+        '';
         default = 8000;
       };
 
@@ -131,6 +137,24 @@ in
         '';
       };
 
+      nginx = {
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Whether to enable and configure a local Nginx server.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          example = "glitchtip.example.com";
+          description = ''
+            Domain under which GlitchTip will be reachable.
+            In contrast to `settings.GLITCHTIP_DOMAIN` this option has no protocol.
+            It will also set `settings.GLITCHTIP_DOMAIN` with the `https://` protocol.
+          '';
+        };
+      };
+
       redis.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -154,37 +178,37 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.glitchtip.settings = {
-      DEBUG = lib.mkDefault 0;
-      DEBUG_TOOLBAR = lib.mkDefault 0;
-      PYTHONPATH = "${python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/glitchtip";
-      DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://@/glitchtip";
-      REDIS_URL = lib.mkIf cfg.redis.createLocally "unix://${config.services.redis.servers.glitchtip.unixSocket}";
-      CELERY_BROKER_URL = lib.mkIf cfg.redis.createLocally "redis+socket://${config.services.redis.servers.glitchtip.unixSocket}";
-      GLITCHTIP_VERSION = pkg.version;
+    warnings =
+      lib.optional (cfg.nginx.createLocally -> (cfg.listenAddress != "127.0.0.1" || cfg.port != 8000))
+        "When services.glitchtip.nginx.createLocally is turned on, services.glitchtip.listenAddress and services.glitchtip.port have no effect.";
+
+    services.glitchtip = {
+      gunicorn.extraArgs = lib.mkMerge [
+        (lib.mkIf (!cfg.nginx.createLocally) [
+          "--bind=${cfg.listenAddress}:${toString cfg.port}"
+        ])
+        (lib.mkIf cfg.nginx.createLocally [
+          "--bind=/run/glitchtip/glitchtip.sock"
+          "--keep-alive=65"
+        ])
+      ];
+      settings = {
+        DEBUG = lib.mkDefault 0;
+        DEBUG_TOOLBAR = lib.mkDefault 0;
+        PYTHONPATH = "${python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/glitchtip";
+        DATABASE_URL = lib.mkIf cfg.database.createLocally "postgresql://@/glitchtip";
+        REDIS_URL = lib.mkIf cfg.redis.createLocally "unix://${config.services.redis.servers.glitchtip.unixSocket}";
+        CELERY_BROKER_URL = lib.mkIf cfg.redis.createLocally "redis+socket://${config.services.redis.servers.glitchtip.unixSocket}";
+        GLITCHTIP_DOMAIN = lib.mkIf cfg.nginx.createLocally "https://${cfg.nginx.domain}";
+        GLITCHTIP_VERSION = pkg.version;
+      };
     };
 
     systemd.services =
       let
-        commonService = {
-          wantedBy = [ "multi-user.target" ];
-
-          wants = [ "network-online.target" ];
-          requires =
-            lib.optional cfg.database.createLocally "postgresql.target"
-            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
-          after =
-            [ "network-online.target" ]
-            ++ lib.optional cfg.database.createLocally "postgresql.target"
-            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service";
-
-          inherit environment;
-        };
-
         commonServiceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          RuntimeDirectory = "glitchtip";
           StateDirectory = "glitchtip";
           EnvironmentFile = cfg.environmentFiles;
           WorkingDirectory = "${pkg}/lib/glitchtip";
@@ -224,26 +248,41 @@ in
         };
       in
       {
-        glitchtip = commonService // {
+        glitchtip = {
           description = "GlitchTip";
+          inherit environment;
+          bindsTo = [ "glitchtip-worker.service" ];
+          requires =
+            lib.optional cfg.database.createLocally "postgresql.target"
+            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service"
+            ++ lib.optional cfg.nginx.createLocally "glitchtip.socket";
+          after =
+            [
+              "glitchtip-worker.service"
+              "network-online.target"
+            ]
+            ++ lib.optional cfg.database.createLocally "postgresql.service"
+            ++ lib.optional cfg.redis.createLocally "redis-glitchtip.service"
+            ++ lib.optional cfg.nginx.createLocally "glitchtip.socket";
+          wants = [ "network-online.target" ];
 
-          preStart = ''
-            ${lib.getExe pkg} migrate
-          '';
+          preStart = "${lib.getExe pkg} migrate";
 
           serviceConfig = commonServiceConfig // {
             ExecStart = ''
               ${lib.getExe python.pkgs.gunicorn} \
-                --bind=${cfg.listenAddress}:${toString cfg.port} \
                 ${lib.concatStringsSep " " cfg.gunicorn.extraArgs} \
                 glitchtip.wsgi
             '';
+            RuntimeDirectory = "glitchtip";
           };
         };
 
-        glitchtip-worker = commonService // {
+        glitchtip-worker = {
           description = "GlitchTip Job Runner";
-
+          inherit environment;
+          wants = [ "glitchtip.service" ];
+          wantedBy = [ "multi-user.target" ];
           serviceConfig = commonServiceConfig // {
             ExecStart = ''
               ${lib.getExe python.pkgs.celery} \
@@ -254,6 +293,30 @@ in
           };
         };
       };
+
+    systemd.sockets = lib.mkIf cfg.nginx.createLocally {
+      glitchtip.socketConfig = {
+        ListenStream = "/run/glitchtip/glitchtip.sock";
+        SocketUser = "nginx";
+      };
+    };
+
+    services.nginx = lib.mkIf cfg.nginx.createLocally {
+      enable = true;
+      upstreams.glitchtip.servers."unix:/run/glitchtip/glitchtip.sock" = { };
+      virtualHosts.${cfg.nginx.domain} = {
+        forceSSL = lib.mkDefault true;
+        locations = {
+          "/".proxyPass = "http://glitchtip";
+          "/static/" = {
+            root = cfg.package;
+            extraConfig = ''
+              rewrite ^/(.*)$ /lib/glitchtip/$1 break;
+            '';
+          };
+        };
+      };
+    };
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
