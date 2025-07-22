@@ -30,7 +30,15 @@ To enable a Kerberos server:
     enable = true;
     settings = {
       realms."EXAMPLE.COM" = {
-        acl = [{ principal = "adminuser"; access=  ["add" "cpw"]; }];
+        acl = [
+          {
+            principal = "adminuser";
+            access = [
+              "add"
+              "cpw"
+            ];
+          }
+        ];
       };
     };
   };
