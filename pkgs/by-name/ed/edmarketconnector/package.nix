@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${finalAttrs.src}/io.edcd.EDMarketConnector.desktop" "$out/share/applications/"
 
     makeWrapper ${pythonEnv}/bin/python $out/bin/edmarketconnector \
-      --add-flags "${finalAttrs.src}/EDMarketConnector.py $@"
+      --add-flags "${finalAttrs.src}/EDMarketConnector.py"
 
     runHook postInstallPhase
   '';
