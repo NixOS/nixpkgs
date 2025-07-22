@@ -3722,8 +3722,6 @@ self: super: with self; {
 
   dj-static = callPackage ../development/python-modules/dj-static { };
 
-  dj-stripe = callPackage ../development/python-modules/dj-stripe { };
-
   # LTS with mainsteam support
   django = self.django_4;
 
