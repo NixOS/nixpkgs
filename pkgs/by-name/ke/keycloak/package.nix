@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  makeWrapper,
+  makeBinaryWrapper,
   jre_headless,
   nixosTests,
   callPackage,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     jre_headless
   ];
 
