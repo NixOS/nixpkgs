@@ -13227,12 +13227,12 @@ with pkgs;
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
-  murmur =
+  mumble-server =
     (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-    }).murmur;
+    }).mumble-server;
 
   mumble =
     (callPackages ../applications/networking/mumble {

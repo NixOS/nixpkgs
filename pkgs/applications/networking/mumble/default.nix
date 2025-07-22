@@ -192,7 +192,7 @@ let
   server =
     source:
     generic {
-      type = "murmur";
+      type = "mumble-server";
 
       cmakeFlags =
         [
@@ -235,6 +235,6 @@ let
 in
 {
   mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
-  murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
+  mumble-server = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
   overlay = overlay source;
 }
