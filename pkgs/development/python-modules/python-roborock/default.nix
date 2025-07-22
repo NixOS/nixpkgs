@@ -20,6 +20,7 @@
   pytestCheckHook,
   pythonOlder,
   vacuum-map-parser-roborock,
+  pyshark,
 }:
 
 buildPythonPackage rec {
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock
+    pyshark
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
