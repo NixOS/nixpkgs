@@ -1,0 +1,44 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 44a70e7..94ad1a1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -49,8 +49,7 @@ if(USE_STANDALONE)
+     # Because libgfxd is not a CMake project, we have to manually fetch it and add it to the build
+     FetchContent_Declare(
+         libgfxd
+-        GIT_REPOSITORY https://github.com/glankk/libgfxd.git
+-        GIT_TAG 96fd3b849f38b3a7c7b7f3ff03c5921d328e6cdf
++        URL @libgfxd_src@
+     )
+ 
+     FetchContent_GetProperties(libgfxd)
+@@ -231,8 +230,7 @@ set(YAML_CPP_BUILD_TESTS OFF)
+ set(YAML_CPP_DISABLE_UNINSTALL ON)
+ FetchContent_Declare(
+     yaml-cpp
+-    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+-    GIT_TAG 2f86d13775d119edbb69af52e5f566fd65c6953b
++    URL @yaml-cpp_src@
+ )
+ set(YAML_CPP_BUILD_TESTS OFF)
+ FetchContent_MakeAvailable(yaml-cpp)
+@@ -250,8 +248,7 @@ if(USE_STANDALONE)
+ 
+ 	FetchContent_Declare(
+ 		spdlog
+-		GIT_REPOSITORY https://github.com/gabime/spdlog.git
+-		GIT_TAG 79524ddd08a4ec981b7fea76afd08ee05f83755d
++        URL @spdlog_src@
+ 	)
+ 
+ 	FetchContent_MakeAvailable(spdlog)
+@@ -274,8 +271,7 @@ endif()
+ set(tinyxml2_BUILD_TESTING OFF)
+ FetchContent_Declare(
+     tinyxml2
+-    GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+-    GIT_TAG 10.0.0
++    URL @tinyxml2_src@
+     OVERRIDE_FIND_PACKAGE
+ )
+ FetchContent_MakeAvailable(tinyxml2)
