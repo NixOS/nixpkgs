@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "trie";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py-trie";
     tag = "v${version}";
-    hash = "sha256-kG/5ijckiEOfB5y1c3Yqudqnb1MDbPD25YZZM+H13Lw=";
+    hash = "sha256-QDywlAyFbQGgkATVifdixlnob4Tmsvr/VZ1rafzWKrU=";
   };
 
   build-system = [ setuptools ];
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     "test_fixtures_exist"
     "test_bin_trie_update_value"
     "test_branch_updates"
+    "test_install_local_wheel"
   ];
   disabledTestPaths = [ "tests/core/test_iter.py" ];
 
