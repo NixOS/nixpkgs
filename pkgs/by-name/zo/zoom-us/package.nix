@@ -50,18 +50,18 @@
   # This list can be overridden to add in extra packages
   # that are independent of the underlying package attrset
   targetPkgsFixed ? [ ],
-
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
-  # Zoom versions are released at different times for each platform
-  # and often with different versions. We write them on three lines
-  # like this (rather than using {}) so that the updater script can
+  # Zoom versions are released at different times per platform and often with different versions.
+  # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
   versions.aarch64-darwin = "6.5.7.60598";
   versions.x86_64-darwin = "6.5.7.60598";
+
+  # This is the fallback version so that evaluation can produce a meaningful result.
   versions.x86_64-linux = "6.5.7.3298";
 
   srcs = {
@@ -82,9 +82,9 @@ let
 
   unpacked = stdenv.mkDerivation {
     pname = "zoom";
-    version = versions.${system} or "";
+    version = versions.${system} or versions.x86_64-linux;
 
-    src = srcs.${system};
+    src = srcs.${system} or srcs.x86_64-linux;
 
     dontUnpack = stdenv.hostPlatform.isLinux;
     unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -112,26 +112,26 @@ let
       cpio
     ];
 
-    installPhase = ''
-      runHook preInstall
-      ${
-        rec {
-          aarch64-darwin = ''
+    installPhase =
+      ''
+        runHook preInstall
+      ''
+      + (
+        if stdenv.hostPlatform.isDarwin then
+          ''
             mkdir -p $out/Applications
             cp -R zoom.us.app $out/Applications/
-          '';
-          # darwin steps same on both architectures
-          x86_64-darwin = aarch64-darwin;
-          x86_64-linux = ''
+          ''
+        else
+          ''
             mkdir $out
             tar -C $out -xf $src
             mv $out/usr/* $out/
-          '';
-        }
-        .${system}
-      }
-      runHook postInstall
-    '';
+          ''
+      )
+      + ''
+        runHook postInstall
+      '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
@@ -238,13 +238,10 @@ in
 if !stdenv.hostPlatform.isLinux then
   unpacked
 else
-  # We add the `unpacked` zoom archive to the FHS env
-  # and also bind-mount its `/opt` directory.
-  # This should assist Zoom in finding all its
-  # files in the places where it expects them to be.
+  # We add the `unpacked` zoom archive to the FHS env and also bind-mount its `/opt` directory.
+  # This should assist Zoom in finding all its files in the places where it expects them to be.
   buildFHSEnv {
-    pname = "zoom"; # Will also be the program's name!
-    version = versions.${system} or "";
+    inherit (unpacked) pname version;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
@@ -256,7 +253,7 @@ else
           $out/share/applications/Zoom.desktop \
           --replace-fail Exec={/usr/bin/,}zoom
 
-      # Backwards compatibility: we used to call it zoom-us
+      # Backwards compatibility: we also call it zoom-us
       ln -s $out/bin/{zoom,zoom-us}
     '';
 
