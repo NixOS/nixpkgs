@@ -41,9 +41,7 @@ alice=>
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
 ```nix
-{
-  services.postgresql.dataDir = "/data/postgresql";
-}
+{ services.postgresql.dataDir = "/data/postgresql"; }
 ```
 
 ## Initializing {#module-services-postgres-initializing}
@@ -183,36 +181,44 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   environment.systemPackages = [
-    (let
-      # XXX specify the postgresql package you'd like to upgrade to.
-      # Do not forget to list the extensions you need.
-      newPostgres = pkgs.postgresql_13.withPackages (pp: [
-        # pp.plv8
-      ]);
-      cfg = config.services.postgresql;
-    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
+    (
+      let
+        # XXX specify the postgresql package you'd like to upgrade to.
+        # Do not forget to list the extensions you need.
+        newPostgres = pkgs.postgresql_13.withPackages (pp: [
+          # pp.plv8
+        ]);
+        cfg = config.services.postgresql;
+      in
+      pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
 
-      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
-      export NEWBIN="${newPostgres}/bin"
+        export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
+        export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${cfg.dataDir}"
-      export OLDBIN="${cfg.finalPackage}/bin"
+        export OLDDATA="${cfg.dataDir}"
+        export OLDBIN="${cfg.finalPackage}/bin"
 
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
-      sudo -u postgres "$NEWBIN/pg_upgrade" \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
-        "$@"
-    '')
+        sudo -u postgres "$NEWBIN/pg_upgrade" \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
+          "$@"
+      ''
+    )
   ];
 }
 ```
@@ -313,10 +319,11 @@ To add plugins via NixOS configuration, set `services.postgresql.extensions`:
 ```nix
 {
   services.postgresql.package = pkgs.postgresql_17;
-  services.postgresql.extensions = ps: with ps; [
-    pg_repack
-    postgis
-  ];
+  services.postgresql.extensions =
+    ps: with ps; [
+      pg_repack
+      postgis
+    ];
 }
 ```
 
@@ -333,7 +340,7 @@ self: super: {
 Here's a recipe on how to override a particular plugin through an overlay:
 ```nix
 self: super: {
-  postgresql_15 = super.postgresql_15// {
+  postgresql_15 = super.postgresql_15 // {
     pkgs = super.postgresql_15.pkgs // {
       pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
@@ -353,11 +360,12 @@ PostgreSQL ships the additional procedural languages PL/Perl, PL/Python and PL/T
 They are packaged as plugins and can be made available in the same way as external extensions:
 ```nix
 {
-  services.postgresql.extensions = ps: with ps; [
-    plperl
-    plpython3
-    pltcl
-  ];
+  services.postgresql.extensions =
+    ps: with ps; [
+      plperl
+      plpython3
+      pltcl
+    ];
 }
 ```
 
@@ -366,9 +374,8 @@ Each procedural language plugin provides a `.withPackages` helper to make langua
 For example, to make `python3Packages.base58` available:
 ```nix
 {
-  services.postgresql.extensions = pgps: with pgps; [
-    (plpython3.withPackages (pyps: with pyps; [ base58 ]))
-  ];
+  services.postgresql.extensions =
+    pgps: with pgps; [ (plpython3.withPackages (pyps: with pyps; [ base58 ])) ];
 }
 ```
 
@@ -385,9 +392,7 @@ is disabled by default because of the ~600MiB closure-size increase from the LLV
 can be optionally enabled in PostgreSQL with the following config option:
 
 ```nix
-{
-  services.postgresql.enableJIT = true;
-}
+{ services.postgresql.enableJIT = true; }
 ```
 
 This makes sure that the [`jit`](https://www.postgresql.org/docs/current/runtime-config-query.html#GUC-JIT)-setting
@@ -406,7 +411,9 @@ overlay) since all modifications are propagated to `withJIT`. I.e.
 with import <nixpkgs> {
   overlays = [
     (self: super: {
-      postgresql = super.postgresql.overrideAttrs (_: { pname = "foobar"; });
+      postgresql = super.postgresql.overrideAttrs (_: {
+        pname = "foobar";
+      });
     })
   ];
 };
@@ -428,9 +435,7 @@ several common hardening options from `systemd`, most notably:
   * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
     ```nix
     {
-      systemd.services.postgresql.serviceConfig.ReadWritePaths = [
-        "/path/to/tablespace/location"
-      ];
+      systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/path/to/tablespace/location" ];
     }
     ```
 

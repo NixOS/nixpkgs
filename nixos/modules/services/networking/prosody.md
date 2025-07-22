@@ -33,16 +33,14 @@ endpoint will look like this:
     ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
     ssl.key = "/var/lib/acme/example.org/key.pem";
     virtualHosts."example.org" = {
-        enabled = true;
-        domain = "example.org";
-        ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
-        ssl.key = "/var/lib/acme/example.org/key.pem";
+      enabled = true;
+      domain = "example.org";
+      ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
+      ssl.key = "/var/lib/acme/example.org/key.pem";
     };
-    muc = [ {
-        domain = "conference.example.org";
-    } ];
+    muc = [ { domain = "conference.example.org"; } ];
     uploadHttp = {
-        domain = "upload.example.org";
+      domain = "upload.example.org";
     };
   };
 }
@@ -68,7 +66,10 @@ a TLS certificate for the three endponits:
       "example.org" = {
         webroot = "/var/www/example.org";
         email = "root@example.org";
-        extraDomainNames = [ "conference.example.org" "upload.example.org" ];
+        extraDomainNames = [
+          "conference.example.org"
+          "upload.example.org"
+        ];
       };
     };
   };
