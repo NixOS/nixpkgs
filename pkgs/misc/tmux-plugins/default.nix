@@ -872,7 +872,7 @@ in
     '';
     meta = {
       homepage = "https://github.com/sainnhe/tmux-fzf";
-      description = "Use fzf to manage your tmux work environment!";
+      description = "Use fzf to manage your tmux work environment";
       longDescription = ''
         Features:
         * Manage sessions (attach, detach*, rename, kill*).
