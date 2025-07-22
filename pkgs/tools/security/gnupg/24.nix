@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
+  # Maintained by Andrew Gallapher, who's involved with GPG in multiple ways: https://andrewg.com/
   freepgPatches = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "freepg";
@@ -86,7 +87,16 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      # Without this, scdaemon isn't linked to libusb, causing smartcards to not work correctly
       ./fix-libusb-include-path.patch
+      # Use pkg-config to find tss2-esys to fix static building
+      # Submitted upstream: https://dev.gnupg.org/D606
+      # The diff is larger than upstream because configure.ac was modified,
+      # requiring configure to be regenerated. For reasons we don't totally
+      # understand, regenerating configure has all sorts of other undesirable
+      # side effects. So to unbreak things, instead of regenerating configure,
+      # we can include just the configure changes relevant to the static patch
+      # in the patch file.
       ./static.patch
     ]
     ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
@@ -116,6 +126,13 @@ stdenv.mkDerivation rec {
     ];
 
   postPatch =
+    # Switch the default key server to keys.openpgp.org
+    # The original motivation in 2019 was to switch away from the then-default SKS network: https://github.com/NixOS/nixpkgs/pull/63952
+    # In 2021 upstream also switched away, but to keyserver.ubuntu.com: https://dev.gnupg.org/rG47c4e3e00a7ef55f954c14b3c237496e54a853c1,
+    # while NixOS kept the keys.openpgp.org default: https://github.com/NixOS/nixpkgs/pull/159604
+    # TODO: Should this patch be removed so that the now-uncompromised default is used once again?
+    # A significant difference between the two seems to be that keys.openpgp.org is verifying keys, while keyserver.ubuntu.com isn't: https://unix.stackexchange.com/a/694528
+    # The keys.openpgp.org also has a great FAQ: https://keys.openpgp.org/about/faq
     ''
       sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
     ''
