@@ -25,7 +25,6 @@
 }:
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
-assert withWayland -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = if withWayland then "tracy-wayland" else "tracy-glfw";
@@ -131,6 +130,6 @@ stdenv.mkDerivation rec {
       nagisa
       paveloom
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ lib.optionals (!withWayland) platforms.darwin;
   };
 }
