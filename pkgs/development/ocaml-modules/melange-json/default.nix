@@ -27,6 +27,9 @@ buildDunePackage rec {
     description = "Compositional JSON encode/decode library and PPX for Melange and OCaml";
     homepage = "https://github.com/melange-community/melange-json";
     license = lib.licenses.lgpl3;
-    maintainers = [ lib.maintainers.GirardR1006 ];
+    maintainers = [
+      lib.maintainers.GirardR1006
+      lib.maintainers.vog
+    ];
   };
 }
