@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -18,11 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-gx/h9i+VPU0AtpQEkN/zCLmeyaW5wSUCfdY52hPwm3Q=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     openssl
   ];
 
