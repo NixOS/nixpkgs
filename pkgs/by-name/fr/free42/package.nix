@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.3.6";
+  version = "3.3.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "thomasokken";
     repo = "free42";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-77A7YpoGLpzEU01c635DveybS5qvvC/sKdxmwV9HHAc=";
+    hash = "sha256-L6WZM5/+ujM6hv85ppt9YiqHLkd0vYFx3nFVcJwzEBM=";
   };
 
   nativeBuildInputs = [
