@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.smallwm;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.smallwm.enable = mkEnableOption "smallwm";
+  options.services.xserver.windowManager.smallwm = {
+    enable = lib.mkEnableOption "smallwm";
+    package = lib.mkPackageOption pkgs "smallwm" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "smallwm";
       start = ''
-        ${pkgs.smallwm}/bin/smallwm &
+        ${cfg.package}/bin/smallwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.smallwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
