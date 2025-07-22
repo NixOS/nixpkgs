@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   cargoLock.lockFile = ./src/Cargo.lock;
 
   meta = {
-    description = "Output a path's realpath within a chroot.";
+    description = "Output a path's realpath within a chroot";
     maintainers = [ lib.maintainers.elvishjerricco ];
   };
 }

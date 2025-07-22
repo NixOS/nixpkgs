@@ -70,7 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "eth" ];
 
   meta = {
-    description = "A Python implementation of the Ethereum Virtual Machine.";
+    description = "Python implementation of the Ethereum Virtual Machine";
     homepage = "https://github.com/ethereum/py-evm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];

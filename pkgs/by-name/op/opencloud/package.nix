@@ -106,7 +106,7 @@ buildGoModule rec {
   versionCheckProgramArg = [ "version" ];
 
   meta = {
-    description = "OpenCloud gives you a secure and private way to store, access, and share your files.";
+    description = "OpenCloud gives you a secure and private way to store, access, and share your files";
     homepage = "https://github.com/opencloud-eu/opencloud";
     changelog = "https://github.com/opencloud-eu/opencloud/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
