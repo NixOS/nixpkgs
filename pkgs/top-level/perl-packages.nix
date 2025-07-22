@@ -30810,6 +30810,28 @@ with self;
     };
   };
 
+  SocketNetlink = buildPerlPackage {
+    pname = "Socket-Netlink";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Socket-Netlink-0.05.tar.gz";
+      hash = "sha256-2EfbWbFI0I1A/gndoswlfvcvsetaDWgVX77csfWF2L0=";
+    };
+    buildInputs = [
+      ExtUtilsCChecker
+      ExtUtilsH2PM
+      TestHexString
+      ModuleBuild
+    ];
+    meta = {
+      description = "Interface to Linux's C<PF_NETLINK> socket family";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   SoftwareLicense = buildPerlPackage {
     pname = "Software-License";
     version = "0.104004";
