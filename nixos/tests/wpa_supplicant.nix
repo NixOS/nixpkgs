@@ -94,20 +94,30 @@ let
           };
         };
 
+        # Note: secrets are stored outside /etc/ and /nix/store to
+        # test for accessibility of these paths
+        system.activationScripts.wpa-secrets = {
+          deps = [
+            "users"
+            "specialfs"
+          ];
+          text = ''
+            install -Dm600 -o wpa_supplicant ${pkgs.writeText "wpa" ''
+              psk_nixos_test=${naughtyPassphrase}
+            ''} /var/lib/secrets/wpa
+          '';
+        };
+
         # wireless client
         networking.wireless = lib.mkMerge [
           {
             # the override is needed because the wifi is
             # disabled with mkVMOverride in qemu-vm.nix.
             enable = lib.mkOverride 0 true;
-            userControlled.enable = true;
+            userControlled = true;
             interfaces = [ "wlan1" ];
             fallbackToWPA2 = lib.mkDefault true;
-
-            # secrets
-            secretsFile = pkgs.writeText "wpa-secrets" ''
-              psk_nixos_test=${naughtyPassphrase}
-            '';
+            secretsFile = "/var/lib/secrets/wpa";
           }
           extraConfig
         ];
@@ -142,7 +152,8 @@ in
         # the override is needed because the wifi is
         # disabled with mkVMOverride in qemu-vm.nix.
         enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
+        userControlled = true;
+        dbusControlled = true;
         fallbackToWPA2 = true;
 
         networks = {
@@ -198,9 +209,14 @@ in
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
 
-      # get the configuration file
-      cmdline = machine.succeed("cat /proc/$(pgrep wpa)/cmdline").split('\x00')
-      config_file = cmdline[cmdline.index("-c") + 1]
+      with subtest("D-Bus interface is working"):
+          dbus_command = "dbus-send --system --print-reply --dest=fi.w1.wpa_supplicant1 " \
+                         "/fi/w1/wpa_supplicant1 fi.w1.wpa_supplicant1.GetInterface string:wlan0"
+          machine.succeed(dbus_command)  # as root
+          machine.succeed(f"sudo -g wpa_supplicant {dbus_command}")  # as wpa_supplicant group
+
+      # generated configuration file
+      config_file = "/etc/static/wpa_supplicant/nixos.conf"
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1
@@ -218,6 +234,9 @@ in
 
       # save file for manual inspection
       machine.copy_from_vm(config_file)
+
+      # check hardening options
+      machine.succeed("systemd-analyze security wpa_supplicant >&2")
     '';
   };
 
@@ -233,25 +252,27 @@ in
       # wireless client
       networking.wireless = {
         enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
+        userControlled = true;
         allowAuxiliaryImperativeNetworks = true;
         interfaces = [ "wlan1" ];
       };
     };
 
     testScript = ''
+      wpa_cli = "sudo -u nobody -g wpa_supplicant wpa_cli"
+
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant-wlan1.service")
-          status = machine.wait_until_succeeds("wpa_cli -i wlan1 status")
+          status = machine.wait_until_succeeds(f"{wpa_cli} -i wlan1 status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
 
       with subtest("Daemon can be configured imperatively"):
-          machine.succeed("wpa_cli -i wlan1 add_network")
-          machine.succeed("wpa_cli -i wlan1 set_network 0 ssid '\"nixos-test\"'")
-          machine.succeed("wpa_cli -i wlan1 set_network 0 psk '\"reproducibility\"'")
-          machine.succeed("wpa_cli -i wlan1 save_config")
-          machine.succeed("grep -q nixos-test /etc/wpa_supplicant.conf")
+          machine.succeed(f"{wpa_cli} -i wlan1 add_network")
+          machine.succeed(f"{wpa_cli} -i wlan1 set_network 0 ssid '\"nixos-test\"'")
+          machine.succeed(f"{wpa_cli} -i wlan1 set_network 0 psk '\"reproducibility\"'")
+          machine.succeed(f"{wpa_cli} -i wlan1 save_config")
+          machine.succeed("grep -q nixos-test /etc/wpa_supplicant/imperative.conf")
     '';
   };
 

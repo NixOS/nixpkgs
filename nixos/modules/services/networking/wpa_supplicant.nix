@@ -48,31 +48,6 @@ let
     else
       networkList;
 
-  # Content of wpa_supplicant.conf
-  generatedConfig = concatStringsSep "\n" (
-    (map mkNetwork allNetworks)
-    ++ optional cfg.userControlled.enable (
-      concatStringsSep "\n" [
-        "ctrl_interface=/run/wpa_supplicant"
-        "ctrl_interface_group=${cfg.userControlled.group}"
-        "update_config=1"
-      ]
-    )
-    ++ [ "pmf=1" ]
-    ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
-    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
-    ++ optional (cfg.extraConfig != "") cfg.extraConfig
-  );
-
-  configIsGenerated = with cfg; networks != { } || extraConfig != "" || userControlled.enable;
-
-  # the original configuration file
-  configFile =
-    if configIsGenerated then
-      pkgs.writeText "wpa_supplicant.conf" generatedConfig
-    else
-      "/etc/wpa_supplicant.conf";
-
   # Creates a network block for wpa_supplicant.conf
   mkNetwork =
     opts:
@@ -104,6 +79,12 @@ let
       }
     '';
 
+  hasDeclarative = lib.any id [
+    (cfg.networks != { })
+    (cfg.extraConfig != "")
+    cfg.userControlled
+  ];
+
   # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
   mkUnit =
     iface:
@@ -114,9 +95,11 @@ let
       configStr =
         (
           if cfg.allowAuxiliaryImperativeNetworks then
-            "-c /etc/wpa_supplicant.conf -I ${configFile}"
+            "-c /etc/wpa_supplicant/imperative.conf -I /etc/wpa_supplicant/nixos.conf"
+          else if hasDeclarative then
+            "-c /etc/wpa_supplicant/nixos.conf"
           else
-            "-c ${configFile}"
+            "-c /etc/wpa_supplicant/imperative.conf"
         )
         + lib.concatMapStrings (p: " -I " + p) cfg.extraConfigFiles;
     in
@@ -128,30 +111,93 @@ let
       wants = [ "network.target" ];
       requires = deviceUnit;
       wantedBy = [ "multi-user.target" ];
+
       stopIfChanged = false;
+      restartTriggers = [ config.environment.etc."wpa_supplicant/nixos.conf".source ];
 
       path = [ pkgs.wpa_supplicant ];
-      # if `userControl.enable`, the supplicant automatically changes the permissions
-      #  and owning group of the runtime dir; setting `umask` ensures the generated
-      #  config file isn't readable (except to root);  see nixpkgs#267693
-      serviceConfig.UMask = "066";
-      serviceConfig.RuntimeDirectory = "wpa_supplicant";
-      serviceConfig.RuntimeDirectoryMode = "700";
+      serviceConfig = {
+        User = "wpa_supplicant";
+        Group = "wpa_supplicant";
+        RuntimeDirectory = "wpa_supplicant";
+        AmbientCapabilities = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        RootDirectory = "/run/wpa_supplicant";
+        RootDirectoryStartOnly = true;
+        BindPaths = [
+          "/etc/wpa_supplicant" # to write wpa_supplicant.conf{,.tmp}
+          "/run/wpa_supplicant" # to make control sockets
+          # to set up interfaces
+          "/proc/sys/net"
+          "/dev/rfkill"
+        ]
+        ++ lib.optional cfg.dbusControlled "/run/dbus"
+        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant";
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "/etc/"
+        ]
+        ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
+        DeviceAllow = "/dev/rfkill rw";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = false;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        IPAddressDeny = "any";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_PACKET"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallFilter = [
+          "@system-service"
+          "~@keyring"
+          "~@resources"
+        ];
+        SystemCallArchitectures = "native";
+        UMask = "0077";
+
+        ExecStartPre =
+          lib.optionals (cfg.allowAuxiliaryImperativeNetworks || !hasDeclarative) [
+            # set up imperative config file
+            "+${pkgs.coreutils}/bin/touch /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chmod 664 /etc/wpa_supplicant/imperative.conf"
+            "+${pkgs.coreutils}/bin/chown -R wpa_supplicant:wpa_supplicant /etc/wpa_supplicant"
+          ]
+          ++ lib.optionals cfg.userControlled [
+            # set up client sockets directory
+            "+${pkgs.coreutils}/bin/mkdir /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
+            "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
+          ];
+      };
 
       script = ''
-        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
-          if [ -f /etc/wpa_supplicant.conf ]; then
-            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
-          fi
-        ''}
-
-        # ensure wpa_supplicant.conf exists, or the daemon will fail to start
-        ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
-          touch /etc/wpa_supplicant.conf
-        ''}
-
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
-
         ${
           if iface == null then
             ''
@@ -503,27 +549,36 @@ in
         '';
       };
 
-      userControlled = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
-            This is useful for laptop users that switch networks a lot and don't want
-            to depend on a large package such as NetworkManager just to pick nearby
-            access points.
+      userControlled = mkOption {
+        type =
+          with types;
+          coercedTo attrs (
+            val:
+            if builtins.isAttrs val && val ? enable then
+              trace "Obsolete option `networking.wireless.userControlled.enable' is used. It was renamed to networking.wireless.userControlled" val.enable
+            else if builtins.isAttrs val && val ? group then
+              trace
+                "The option definition `networking.wireless.userControlled.group' no longer has any effect. The group is now fixed to `wpa_supplicant'."
+                (val.enable or false)
+            else if builtins.isBool val then
+              val
+            else
+              false
+          ) bool;
+        default = false;
+        description = ''
+          Allow users of the `wpa_supplicant` group to control wpa_supplicant
+          through wpa_gui or wpa_cli.
+          This is useful for laptop users that switch networks a lot and don't want
+          to depend on a large package such as NetworkManager just to pick nearby
+          access points.
 
-            When using a declarative network specification you cannot persist any
-            settings via wpa_gui or wpa_cli.
-          '';
-        };
-
-        group = mkOption {
-          type = types.str;
-          default = "wheel";
-          example = "network";
-          description = "Members of this group can control wpa_supplicant.";
-        };
+          ::: {.note}
+          When networks are configured declaratively, you cannot persist any settings
+          via wpa_gui or wpa_cli, unless {option}`allowAuxiliaryImperativeNetworks`
+          is used.
+          :::
+        '';
       };
 
       dbusControlled = mkOption {
@@ -624,9 +679,33 @@ in
         }
       ];
 
+    users.groups.wpa_supplicant = { };
+    users.users.wpa_supplicant = {
+      isSystemUser = true;
+      group = "wpa_supplicant";
+      description = "WPA Supplicant user";
+    };
+
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.systemPackages = [ pkgs.wpa_supplicant ];
+
+    # NixOS-generated configuration files
+    environment.etc."wpa_supplicant/nixos.conf".text = concatStringsSep "\n" (
+      (map mkNetwork allNetworks)
+      ++ optional cfg.userControlled (
+        concatStringsSep "\n" [
+          "ctrl_interface=/run/wpa_supplicant/control"
+          "ctrl_interface_group=wpa_supplicant"
+          "update_config=1"
+        ]
+      )
+      ++ [ "pmf=1" ]
+      ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
+      ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+      ++ optional (cfg.extraConfig != "") cfg.extraConfig
+    );
+
     services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
 
     systemd.services =
