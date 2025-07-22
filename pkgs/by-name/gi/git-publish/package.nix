@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python,
+  python3,
   perl,
   fetchFromGitHub,
   installShellFiles,
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     installShellFiles
   ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   installPhase = ''
     runHook preInstall
