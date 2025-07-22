@@ -1026,7 +1026,6 @@ dont-distribute-packages:
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
- - fs-sim
  - ftdi
  - ftp-client-conduit
  - FTPLine
@@ -1196,7 +1195,7 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - grisette_0_12_0_0
+ - grisette_0_13_0_0
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -1363,7 +1362,6 @@ dont-distribute-packages:
  - haskelldb-hsql-postgresql
  - haskelldb-hsql-sqlite3
  - haskelldb-th
- - HaskellNet-SSL
  - haskelm
  - haskey
  - haskey-mtl
@@ -1584,7 +1582,7 @@ dont-distribute-packages:
  - HPong
  - hpqtypes-effectful
  - hpqtypes-extras
- - hpqtypes-extras_1_17_0_1
+ - hpqtypes-extras_1_18_0_0
  - hprotoc
  - hprotoc-fork
  - hps
@@ -1872,7 +1870,6 @@ dont-distribute-packages:
  - json-pointer-hasql
  - json-query
  - json-rpc-client
- - json-schema
  - json-state
  - json-togo
  - json2-hdbc
@@ -1938,9 +1935,9 @@ dont-distribute-packages:
  - knit-haskell
  - koji-install
  - koji-tool
+ - koji-tool_1_3
  - korfu
  - ks-test
- - kubernetes-api-client
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
@@ -2062,7 +2059,6 @@ dont-distribute-packages:
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
- - list1
  - listenbrainz-client
  - ListT
  - liszt
@@ -2133,7 +2129,6 @@ dont-distribute-packages:
  - magic-wormhole
  - mahoro
  - maid
- - mail-pool
  - MailchimpSimple
  - mailgun
  - majordomo
@@ -2281,14 +2276,10 @@ dont-distribute-packages:
  - mpretty
  - mprover
  - mps
- - mptcp-pm
- - mptcpanalyzer
- - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
  - msgpack-idl
  - msgpack-persist
- - msgpack-rpc
  - msgpack-rpc-conduit
  - msgpack-testsuite
  - msi-kb-backlit
@@ -2632,7 +2623,6 @@ dont-distribute-packages:
  - polysemy-hasql
  - polysemy-hasql-test
  - polysemy-kvstore-jsonfile
- - polysemy-log-co
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
@@ -2815,6 +2805,7 @@ dont-distribute-packages:
  - rbr
  - rc
  - rdioh
+ - rds-data-polysemy
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -2862,7 +2853,6 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
- - registry-messagepack
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3769,7 +3759,6 @@ dont-distribute-packages:
  - xml-catalog
  - xml-enumerator
  - xml-enumerator-combinators
- - xml-isogen
  - xml-monad
  - xml-pipe
  - xml-push
