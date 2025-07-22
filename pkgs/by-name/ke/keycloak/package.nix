@@ -4,6 +4,8 @@
   fetchzip,
   makeBinaryWrapper,
   jre_headless,
+  junixsocket-common,
+  junixsocket-native-common,
   nixosTests,
   callPackage,
   confFile ? null,
@@ -57,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     }
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
+  ''
+  + ''
+    ln -s ${junixsocket-common}/share/java/* providers/
+    ln -s ${junixsocket-native-common}/share/java/* providers/
   ''
   + ''
     patchShebangs bin/kc.sh
