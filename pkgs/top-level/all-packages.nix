@@ -16430,8 +16430,6 @@ with pkgs;
     qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio
       { };
 
-  discordo = callPackage ../applications/networking/discordo/default.nix { };
-
   tomb = callPackage ../by-name/to/tomb/package.nix {
     pinentry = pinentry-curses;
   };
