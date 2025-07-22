@@ -27,8 +27,8 @@ jobs:
         include:
           - runner: ubuntu-24.04
             system: x86_64-linux
-            builds: [shell, manual-nixos, lib-tests]
-            desc: shell, docs, lib
+            builds: [shell, manual-nixos, lib-tests, tarball]
+            desc: shell, docs, lib, tarball
           - runner: ubuntu-24.04-arm
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
@@ -84,6 +84,10 @@ jobs:
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
         run: nix-build untrusted/ci -A lib-tests
+
+      - name: Build tarball
+        if: contains(matrix.builds, 'tarball') && !cancelled()
+        run: nix-build untrusted/ci -A tarball
 
       - name: Upload NixOS manual
         if: |
