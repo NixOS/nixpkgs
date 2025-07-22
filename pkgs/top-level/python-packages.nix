@@ -17479,6 +17479,8 @@ self: super: with self; {
 
   symfc = callPackage ../development/python-modules/symfc { };
 
+  symforce = callPackage ../development/python-modules/symforce { };
+
   sympy = callPackage ../development/python-modules/sympy { };
 
   symspellpy = callPackage ../development/python-modules/symspellpy { };

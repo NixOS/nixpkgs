@@ -1,0 +1,109 @@
+diff --git a/gen/cpp/sym/util/type_ops.h b/gen/cpp/sym/util/type_ops.h
+index b681ab85..e78113e4 100644
+--- a/gen/cpp/sym/util/type_ops.h
++++ b/gen/cpp/sym/util/type_ops.h
+@@ -8,7 +8,6 @@
+ 
+ #include <Eigen/Core>
+ #include <Eigen/SparseCore>
+-#include <fmt/ostream.h>
+ 
+ // Import all the known types.
+ #include <lcmtypes/sym/type_t.hpp>
+diff --git a/symforce/opt/CMakeLists.txt b/symforce/opt/CMakeLists.txt
+index 3c3feff3..2a42dbb8 100644
+--- a/symforce/opt/CMakeLists.txt
++++ b/symforce/opt/CMakeLists.txt
+@@ -12,7 +12,7 @@ include(FetchContent)
+ # ------------------------------------------------------------------------------
+ # fmtlib
+ 
+-find_package(fmt 8...<9 QUIET)
++find_package(fmt 8 QUIET)
+ if (NOT fmt_FOUND)
+   message(STATUS "fmt not found, adding with FetchContent")
+   function(add_fmt)
+diff --git a/symforce/opt/factor.cc b/symforce/opt/factor.cc
+index b423249c..78db61ff 100644
+--- a/symforce/opt/factor.cc
++++ b/symforce/opt/factor.cc
+@@ -6,7 +6,6 @@
+ #include "./factor.h"
+ 
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ #include <fmt/ranges.h>
+ 
+ #include "./assert.h"
+diff --git a/symforce/opt/internal/tic_toc.cc b/symforce/opt/internal/tic_toc.cc
+index a734695c..c84d42e7 100644
+--- a/symforce/opt/internal/tic_toc.cc
++++ b/symforce/opt/internal/tic_toc.cc
+@@ -8,7 +8,6 @@
+ #include <algorithm>
+ 
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ #include <spdlog/spdlog.h>
+ 
+ namespace sym {
+diff --git a/symforce/opt/tic_toc.h b/symforce/opt/tic_toc.h
+index ffeced74..1f87f201 100644
+--- a/symforce/opt/tic_toc.h
++++ b/symforce/opt/tic_toc.h
+@@ -34,7 +34,6 @@
+ 
+ #else  // if !defined(SYMFORCE_TIC_TOC_HEADER)
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ 
+ #include "./internal/tic_toc.h"
+ 
+diff --git a/symforce/opt/values.cc b/symforce/opt/values.cc
+index 5f2a67f1..1cb663da 100644
+--- a/symforce/opt/values.cc
++++ b/symforce/opt/values.cc
+@@ -6,7 +6,6 @@
+ #include "./values.h"
+ 
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ 
+ #include "./assert.h"
+ 
+diff --git a/symforce/pybind/cc_factor.cc b/symforce/pybind/cc_factor.cc
+index 910649c3..2ea5dbf5 100644
+--- a/symforce/pybind/cc_factor.cc
++++ b/symforce/pybind/cc_factor.cc
+@@ -10,7 +10,6 @@
+ 
+ #include <Eigen/Core>
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ #include <pybind11/eigen.h>
+ #include <pybind11/functional.h>
+ #include <pybind11/pybind11.h>
+diff --git a/symforce/pybind/cc_key.cc b/symforce/pybind/cc_key.cc
+index d6ca564f..a3566194 100644
+--- a/symforce/pybind/cc_key.cc
++++ b/symforce/pybind/cc_key.cc
+@@ -6,7 +6,6 @@
+ #include "./cc_key.h"
+ 
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ 
+ #include <symforce/opt/key.h>
+ 
+diff --git a/symforce/pybind/cc_values.cc b/symforce/pybind/cc_values.cc
+index 5258047f..151d7614 100644
+--- a/symforce/pybind/cc_values.cc
++++ b/symforce/pybind/cc_values.cc
+@@ -11,7 +11,6 @@
+ 
+ #include <Eigen/Core>
+ #include <fmt/format.h>
+-#include <fmt/ostream.h>
+ #include <pybind11/eigen.h>
+ #include <pybind11/pybind11.h>
+ #include <pybind11/stl.h>

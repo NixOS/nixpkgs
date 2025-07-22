@@ -1,29 +1,20 @@
 diff --git a/src/QGCApplication.cc b/src/QGCApplication.cc
-index 7992ed00d..a9e0f0ba7 100644
+index dec93db903c..2d36f710cb0 100644
 --- a/src/QGCApplication.cc
 +++ b/src/QGCApplication.cc
-@@ -207,24 +207,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
-                     "sudo apt-get remove modemmanager</pre>").arg(qgcApp()->applicationName())));
-             return;
-         }
--        // Determine if we have the correct permissions to access USB serial devices
--        QFile permFile("/etc/group");
--        if(permFile.open(QIODevice::ReadOnly)) {
--            while(!permFile.atEnd()) {
--                QString line = permFile.readLine();
--                if (line.contains("dialout") && !line.contains(getenv("USER"))) {
--                    permFile.close();
--                    _exitWithError(QString(
--                        tr("The current user does not have the correct permissions to access serial devices. "
--                           "You should also remove modemmanager since it also interferes.<br/><br/>"
--                           "If you are using Ubuntu, execute the following commands to fix these issues:<br/>"
--                           "<pre>sudo usermod -a -G dialout $USER<br/>"
--                           "sudo apt-get remove modemmanager</pre>")));
--                    return;
--                }
--            }
--            permFile.close();
--        }
+@@ -366,6 +366,7 @@ void QGCApplication::_initForNormalAppBoot()
+     #ifdef Q_OS_LINUX
+     #ifndef Q_OS_ANDROID
+     #ifndef QGC_NO_SERIAL_LINK
++    #ifndef QGC_DISABLE_ETC_GROUP_CHECKS
+         if (!_runningUnitTests) {
+             // Determine if we have the correct permissions to access USB serial devices
+             QFile permFile("/etc/group");
+@@ -389,6 +390,7 @@ void QGCApplication::_initForNormalAppBoot()
+     #endif
+     #endif
+     #endif
++    #endif
  
-         // Always set style to default, this way QT_QUICK_CONTROLS_STYLE environment variable doesn't cause random changes in ui
-         QQuickStyle::setStyle("Default");
+     // Now that main window is up check for lost log files
+     MAVLinkProtocol::instance()->checkForLostLogFiles();
