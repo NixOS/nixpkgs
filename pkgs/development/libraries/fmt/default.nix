@@ -87,14 +87,7 @@ in
   };
 
   fmt_11 = generic {
-    version = "11.0.2";
-    hash = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
-    patches = [
-      (fetchpatch {
-        name = "get-rid-of-std-copy-fix-clang.patch";
-        url = "https://github.com/fmtlib/fmt/commit/6e462b89aa22fd5f737ed162d0150e145ccb1914.patch";
-        hash = "sha256-tRU1y1VCxtQ5J2yvFmwUx+YNcQs8izzLImD37KBiCFk=";
-      })
-    ];
+    version = "11.2.0";
+    hash = "sha256-sAlU5L/olxQUYcv8euVYWTTB8TrVeQgXLHtXy8IMEnU=";
   };
 }
