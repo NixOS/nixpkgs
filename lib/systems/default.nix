@@ -505,7 +505,9 @@ let
             rustcTargetSpec =
               rust.rustcTargetSpec or (
                 if rust ? platform then
-                  builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
+                  lib.warnOnInstantiate
+                    "The Rust target JSON format is unstable, and may change between releases without warning."
+                    (builtins.toFile (final.rust.rustcTarget + ".json") (toJSON (rust.platform)))
                 else
                   final.rust.rustcTarget
               );
