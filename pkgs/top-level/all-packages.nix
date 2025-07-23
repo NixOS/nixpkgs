@@ -7237,9 +7237,7 @@ with pkgs;
 
   flow = callPackage ../development/tools/analysis/flow { };
 
-  fswatch = callPackage ../development/tools/misc/fswatch {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  fswatch = callPackage ../development/tools/misc/fswatch { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
