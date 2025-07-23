@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vmware-workstation";
-  version = "17.6.3";
-  build = "24583834";
+  version = "17.6.4";
+  build = "24832109";
 
   src = requireFile {
     name = "VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
     url = "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro&freeDownloads=true";
-    hash = "sha256-eVdZF3KN7UxtC4n0q2qBvpp3PADuto0dEqwNsSVHjuA=";
+    hash = "sha256-ZPv7rqzEiGVGgRQ2Kiu6rekRDMnoe8O9k4OWun8Zqb0=";
   };
 
   vmware-unpack-env = buildFHSEnv {
