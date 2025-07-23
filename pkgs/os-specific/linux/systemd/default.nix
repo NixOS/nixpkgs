@@ -56,7 +56,6 @@
   elfutils,
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   gnutls,
-  iptables,
   withSelinux ? false,
   libselinux,
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
@@ -205,7 +204,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "257.9";
+  version = "258";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -213,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3Ig5TXhK99iOu41k4c5CgC4R3HhBftSAb9UbXvFY6lo=";
+    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -225,6 +224,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all
   # patches
   patches = [
+    # https://github.com/systemd/systemd/pull/39094
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/0f44a6c64aebc64a0611a605831206afee9cb730.patch";
+      hash = "sha256-DO6q17mE2U8iLezMYt4PX5Ror20N1gCrUbXeQmrW1is=";
+    })
+
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
@@ -373,6 +378,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -854,7 +860,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
   '';

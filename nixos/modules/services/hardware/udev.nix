@@ -179,7 +179,8 @@ let
         for i in $packages; do
           echo "Adding hwdb files for package $i"
           for j in $i/{etc,lib}/udev/hwdb.d/*; do
-            ln -s $j etc/udev/hwdb.d/$(basename $j)
+            # This must be a copy, not a symlink, because --root below will chase links within the root argument.
+            cp $j etc/udev/hwdb.d/$(basename $j)
           done
         done
 
