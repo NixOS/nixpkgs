@@ -2786,9 +2786,7 @@ with pkgs;
     dub-to-nix
     ;
 
-  duff = callPackage ../tools/filesystems/duff {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  duff = callPackage ../tools/filesystems/duff { };
 
   dvtm = callPackage ../tools/misc/dvtm {
     # if you prefer a custom config, write the config.h in dvtm.config.h
