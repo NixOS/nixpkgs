@@ -4003,9 +4003,7 @@ with pkgs;
 
   parallel-full = callPackage ../tools/misc/parallel/wrapper.nix { };
 
-  parcellite = callPackage ../tools/misc/parcellite {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  parcellite = callPackage ../tools/misc/parcellite { };
 
   patchutils = callPackage ../tools/text/patchutils { };
 
