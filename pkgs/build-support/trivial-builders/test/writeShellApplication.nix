@@ -42,7 +42,7 @@ linkFarm "writeShellApplication-tests" {
       };
     in
     assert script.meta.mainProgram == "test-meta";
-    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument.";
+    assert script.meta.description == "A test for the `writeShellApplication` `meta` argument";
     script;
 
   test-runtime-inputs = checkShellApplication {

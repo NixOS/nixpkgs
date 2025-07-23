@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3vwFB+3LloumEAGlSJZc2+/I8uI6KLP/KuDGeDOj87k=";
+    hash = "sha256-+hVh5GgSz8MWib10dVV6gx9EvocvLAJm2Eid/4y//2E=";
   };
 
   patches = [
@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
         --replace-fail "GIT_TAG main" ""
       patchShebangs test/test_*.sh
+      substituteInPlace cmake/CheckGit.cmake \
+        --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace CMakeLists.txt \
@@ -74,7 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      macdylibbundler
+      (macdylibbundler.overrideAttrs {
+        # incompatible with darwin.sigtool in Nixpkgs
+        postPatch = ''
+          substituteInPlace src/Utils.cpp \
+            --replace-fail "--deep --preserve-metadata=entitlements,requirements,flags,runtime" ""
+        '';
+      })
       makeWrapper
       darwin.autoSignDarwinBinariesHook
       darwin.sigtool
