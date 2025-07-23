@@ -1154,8 +1154,6 @@ with pkgs;
 
   ufolint = with python3Packages; toPythonApplication ufolint;
 
-  valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
-
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-full = ventoy.override {
