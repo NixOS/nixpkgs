@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.17";
+  version = "1.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${version}";
-    hash = "sha256-NWWKDWcwRrQ2lrNSbkA2xepAoPP7+0G7g7eIjGLZSCw=";
+    hash = "sha256-/48gbsIS0bKbm98vzFKJQ8YD8H9z+iamN5keOYL5Lfk=";
   };
 
   build-system = [ pdm-backend ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch image models, scripts, and pretrained weights";
     homepage = "https://huggingface.co/docs/timm/index";
-    changelog = "https://github.com/huggingface/pytorch-image-models/blob/v${version}/README.md#whats-new";
+    changelog = "https://github.com/huggingface/pytorch-image-models/blob/${src.tag}/README.md#whats-new";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
