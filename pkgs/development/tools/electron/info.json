@@ -1366,10 +1366,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-/5e0R3R3RRsRNcYYHqb/VJ8DIXc528baIccnQocoxwU=",
+                    "hash": "sha256-XywLLfMxQEMkRW9yev9tz52GxW0Hkg8DkdcBg4hTmCw=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v36.7.1"
+                    "tag": "v36.7.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1695,10 +1695,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-UFKajmYdtI645aCY8lX8X7mCZv7/k458u72cnqk25RI=",
+                    "hash": "sha256-Qog6QBWGikETuaGj1rWTMe8q9bMu1HSK8HBUrldVnpI=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v22.17.0"
+                    "tag": "v22.17.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2628,10 +2628,10 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "10n86jnzcq8kh0nk29ljw9wi1fgj13f07h92b009i1dryagliyrs",
+        "electron_yarn_hash": "1lzjbq2r81hlzrhr7rxdfjq6z4h3k1106azn7mraj00d91cyp0af",
         "modules": "135",
-        "node": "22.17.0",
-        "version": "36.7.1"
+        "node": "22.17.1",
+        "version": "36.7.3"
     },
     "37": {
         "chrome": "138.0.7204.100",
