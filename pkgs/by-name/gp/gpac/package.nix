@@ -5,32 +5,95 @@
   cctools,
   pkg-config,
   zlib,
+  ffmpeg,
+  freetype,
+  libjpeg,
+  libpng,
+  libmad,
+  faad2,
+  libogg,
+  libvorbis,
+  libtheora,
+  a52dec,
+  nghttp2,
+  openjpeg,
+  libcaca,
+  libXv,
+  mesa,
+  mesa_glu,
+  xvidcore,
+  openssl,
+  jack2,
+  alsa-lib,
+  pulseaudio,
+  SDL2,
+  curl,
+
+  withFullDeps ? false,
+  withFfmpeg ? withFullDeps,
+  releaseChannel ? "stable",
 }:
 
 stdenv.mkDerivation rec {
   pname = "gpac";
-  version = "2.4.0";
+  version = if releaseChannel == "nightly" then "2.4-unstable-2025-07-11" else "2.4.0";
 
-  src = fetchFromGitHub {
-    owner = "gpac";
-    repo = "gpac";
-    rev = "v${version}";
-    hash = "sha256-RADDqc5RxNV2EfRTzJP/yz66p0riyn81zvwU3r9xncM=";
-  };
+  src =
+    if releaseChannel == "nightly" then
+      fetchFromGitHub {
+        owner = "gpac";
+        repo = "gpac";
+        rev = "fe88c3545aadd597b250ccf23271d5d3de50ccc8";
+        hash = "sha256-c6B9Y19ZZ3PLz82GCcjkWzcUQSEK7ufVNEzqHQqOvrI=";
+      }
+    else
+      fetchFromGitHub {
+        owner = "gpac";
+        repo = "gpac";
+        rev = "v${version}";
+        hash = "sha256-RADDqc5RxNV2EfRTzJP/yz66p0riyn81zvwU3r9xncM=";
+      };
 
-  # this is the bare minimum configuration, as I'm only interested in MP4Box
-  # For most other functionality, this should probably be extended
   nativeBuildInputs =
     [
       pkg-config
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
+    ]
+    ++ lib.optionals withFfmpeg [
+      ffmpeg
     ];
 
-  buildInputs = [
-    zlib
-  ];
+  # ref: https://wiki.gpac.io/Build/build/GPAC-Build-Guide-for-Linux/#gpac-easy-build-recommended-for-most-users
+  buildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals withFullDeps [
+      freetype
+      libjpeg
+      libpng
+      libmad
+      faad2
+      libogg
+      libvorbis
+      libtheora
+      a52dec
+      nghttp2
+      openjpeg
+      libcaca
+      libXv
+      mesa
+      mesa_glu
+      xvidcore
+      openssl
+      jack2
+      alsa-lib
+      pulseaudio
+      SDL2
+      curl
+    ];
 
   enableParallelBuilding = true;
 
@@ -52,6 +115,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [
       mgdelacroix
+      thesn
     ];
     platforms = platforms.unix;
   };
