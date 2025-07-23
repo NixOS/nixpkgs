@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   util-linux,
@@ -21,6 +22,7 @@
   python3,
   withGui,
   withWallet ? true,
+  gnupg,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +34,39 @@ stdenv.mkDerivation rec {
     hash = "sha256-DKO3+43Tn/BTKQVrLrCkeMtzm8SfbaJD8rPlb6lDA8A=";
   };
 
+  preUnpack =
+    let
+      majorVersion = lib.versions.major version;
+      publicKeys = import ./guix-sigs.nix { inherit stdenv fetchFromGitHub; };
+
+      checksums = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${version}/SHA256SUMS";
+        hash = "sha256-xWJKaZBLm9H6AuMBSC21FLy/5TRUI0AQVIUF/2PvDhs=";
+      };
+
+      signatures = fetchurl {
+        url = "https://bitcoinknots.org/files/${majorVersion}.x/${version}/SHA256SUMS.asc";
+        hash = "sha256-SywdBEzZqsf2aDeOs7J9n513RTCm+TJA/QYP5+h7Ifo=";
+      };
+    in
+    ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      ln -s ${checksums} ./SHA256SUMS
+      ln -s ${signatures} ./SHA256SUMS.asc
+      ln -s $src ./bitcoin-${version}.tar.gz
+      sha256sum -c --ignore-missing SHA256SUMS
+      gpg --import ${publicKeys}/*
+      gpg --verify SHA256SUMS.asc SHA256SUMS
+      popd
+    '';
+
   nativeBuildInputs =
     [
       autoreconfHook
       pkg-config
+      gnupg
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
