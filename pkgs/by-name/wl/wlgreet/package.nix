@@ -6,6 +6,7 @@
   gcc-unwrapped,
   wayland,
   libxkbcommon,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
     libxkbcommon
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
