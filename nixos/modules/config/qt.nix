@@ -227,9 +227,9 @@ in
       in
       [
         {
-          assertion = cfg.platformTheme == "gnome" -> (builtins.elem cfg.style gnomeStyles);
+          assertion = (cfg.platformTheme == "gnome" && cfg.style != null) -> (builtins.elem cfg.style gnomeStyles);
           message = ''
-            `qt.platformTheme` "gnome" must have `qt.style` set to a theme that supports both Qt and Gtk,
+            `qt.platformTheme` "gnome" must be unset or have `qt.style` set to a theme that supports both Qt and Gtk,
             for example: ${lib.concatStringsSep ", " gnomeStyles}.
           '';
         }
