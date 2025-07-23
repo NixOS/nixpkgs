@@ -10,18 +10,17 @@
   librsvg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regreet";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-f8Xvno5QqmWz4SUiFYDvs8lFU1ZaqQ8gpTaVzWxW4T8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-abCQ3RsnZ/a1DbjQFOiA7Xs7bbqSJxwNps8yV6Q4FIw=";
 
   buildFeatures = [ "gtk4_8" ];
@@ -37,12 +36,12 @@ rustPlatform.buildRustPackage rec {
     librsvg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean and customizable greeter for greetd";
     homepage = "https://github.com/rharish101/ReGreet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fufexan ];
+    platforms = lib.platforms.linux;
     mainProgram = "regreet";
   };
-}
+})
