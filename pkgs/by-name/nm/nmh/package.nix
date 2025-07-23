@@ -3,7 +3,6 @@
   stdenv,
   autoreconfHook,
   bison,
-  coreutils,
   cyrus_sasl,
   db,
   fetchurl,
@@ -28,16 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./reproducible-build-date.patch ];
 
-  postPatch = ''
-    substituteInPlace \
-      sbr/arglist.c \
-      uip/mhbuildsbr.c \
-      uip/whatnowsbr.c \
-      uip/slocal.c \
-      --replace-fail '"/bin/sh"' '"${runtimeShell}"'
+  postPatch =
+    # patch hardcoded shell
+    ''
+      substituteInPlace \
+        sbr/arglist.c \
+        uip/mhbuildsbr.c \
+        uip/whatnowsbr.c \
+        uip/slocal.c \
+        --replace-fail '"/bin/sh"' '"${runtimeShell}"'
+    ''
     # the "cleanup" pseudo-test makes diagnosing test failures a pain
-    ln -s -f ${stdenv}/bin/true test/cleanup
-  '';
+    + ''
+      ln -sf ${stdenv}/bin/true test/cleanup
+    '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -55,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-stringop-truncation";
   doCheck = true;
   enableParallelBuilding = true;
 
