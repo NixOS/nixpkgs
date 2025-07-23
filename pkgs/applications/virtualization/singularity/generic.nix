@@ -184,6 +184,8 @@ in
 
   configureFlags =
     [
+      "-V"
+      version
       "--localstatedir=${
         if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
       }"
@@ -236,26 +238,27 @@ in
   '';
 
   postConfigure = ''
-    # Code borrowed from pkgs/stdenv/generic/setup.sh configurePhase()
-
-    # set to empty if unset
-    : ''${configureFlags=}
-
-    # shellcheck disable=SC2086
-    $configureScript -V ${version} "''${prefixKey:---prefix=}$prefix" $configureFlags "''${configureFlagsArray[@]}"
-
-    # End of the code from pkgs/stdenv/generic/setup.sh configurPhase()
+    scriptConfigure
   '';
 
+  # Note: buildGoModule currently warns against using buildFlags even
+  # when custom buildPhase is specified.
+  # See #298847 for detail.
   buildPhase = ''
     runHook preBuild
-    make -C builddir -j"$NIX_BUILD_CORES"
+    pushd builddir
+    makeBuild
+    popd
     runHook postBuild
   '';
 
+  installFlags = [ "LOCALSTATEDIR=${placeholder "out"}/var/lib" ];
+
   installPhase = ''
     runHook preInstall
-    make -C builddir install LOCALSTATEDIR="$out/var/lib"
+    pushd builddir
+    makeInstall
+    popd
     runHook postInstall
   '';
 
