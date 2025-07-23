@@ -6,7 +6,6 @@
   scdoc,
   installShellFiles,
   # legacy passthrus
-  greetd,
   gtkgreet,
   qtgreet,
   regreet,
@@ -14,15 +13,15 @@
   wlgreet,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greetd";
   version = "0.10.3";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-jgvYnjt7j4uubpBxrYM3YiUfF1PWuHAN1kwnv6Y+bMg=";
+    repo = "greetd";
+    rev = finalAttrs.version;
+    hash = "sha256-jgvYnjt7j4uubpBxrYM3YiUfF1PWuHAN1kwnv6Y+bMg=";
   };
 
   cargoHash = "sha256-JwTLZawY9+M09IDbMPoNUcNrnW1C2OVlEVn1n7ol6dY=";
@@ -45,18 +44,24 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # Added 2025-07-23. To be deleted on 26.05
-  passthru = lib.mapAttrs (k: lib.warnOnInstantiate "`greetd.${k}` was renamed to `${k}`") {
-    inherit
-      greetd
-      gtkgreet
-      qtgreet
-      regreet
-      tuigreet
-      wlgreet
-      ;
-  };
+  passthru =
+    let
+      warnPassthru = name: lib.warnOnInstantiate "`greetd.${name}` was renamed to `${name}`";
+    in
+    lib.mapAttrs warnPassthru {
+      inherit
+        gtkgreet
+        qtgreet
+        regreet
+        tuigreet
+        wlgreet
+        ;
+    }
+    // {
+      greetd = warnPassthru "greetd" finalAttrs.finalPackage;
+    };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal and flexible login manager daemon";
     longDescription = ''
       greetd is a minimal and flexible login manager daemon
@@ -65,8 +70,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://sr.ht/~kennylevinsen/greetd/";
     mainProgram = "greetd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})
