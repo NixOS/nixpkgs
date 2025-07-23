@@ -121,6 +121,7 @@ rec {
         xorg.xrandr
         which
         perl
+        xdg-user-dirs # flutter desktop apps
         xdg-utils
         iana-etc
         krb5

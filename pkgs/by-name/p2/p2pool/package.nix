@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "4.8.1";
+  version = "4.9";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    hash = "sha256-UnvMR4s6o8n7K+9hig3iSFtbN/BmR6yqjc64X443ctk=";
+    hash = "sha256-nFoR5n6vm6Q1UBxX+3U6O6NExcrM1Mab+WjEOgRSKCE=";
     fetchSubmodules = true;
   };
 
@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "p2pool";
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

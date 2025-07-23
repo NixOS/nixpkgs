@@ -4,6 +4,7 @@
   stdenv,
   callPackages,
   runCommand,
+  cctools,
 }:
 
 let
@@ -204,11 +205,14 @@ lib.fix (self: {
       }
       // derivationArgs
       // {
-        nativeBuildInputs = [
-          nodejs
-          nodejs.passthru.python
-          hooks.npmConfigHook
-        ] ++ derivationArgs.nativeBuildInputs or [ ];
+        nativeBuildInputs =
+          [
+            nodejs
+            nodejs.passthru.python
+            hooks.npmConfigHook
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+          ++ derivationArgs.nativeBuildInputs or [ ];
 
         passAsFile = [
           "package"
