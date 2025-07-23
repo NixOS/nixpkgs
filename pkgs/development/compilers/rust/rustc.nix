@@ -82,13 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  # The Rust pkg-config crate does not support prefixed pkg-config executables[1],
-  # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
-  # environment variables.
-  # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings [ "-" ] [ "_" ] stdenv.buildPlatform.rust.rustcTarget}" =
-    "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
-
   NIX_LDFLAGS = toString (
     # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
     # This doesn't apply to cross-building for FreeBSD because the host
