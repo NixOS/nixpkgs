@@ -24,22 +24,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.3";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-IzerctJUc478dJu2AH20s/A3psiAZWDjQG3USQWqpos=";
+    hash = "sha256-JFtStE1avSWGptgj9KtfAr55+J1FydEzD5plvSe2mjM=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "CVE-2025-27151.patch";
-      url = "https://github.com/valkey-io/valkey/commit/73696bf6e2cf754acc3ec24eaf9ca6b879bfc5d7.patch?full_index=1";
-      hash = "sha256-9yt2GXfC8piyLskkMkXouEX5ZQwZLtL+MN6n6HuC/V4=";
-    })
-  ] ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
+  patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -92,12 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
-    # skip some more flaky tests
+    # Skip some more flaky tests.
+    # Skip test requiring custom jemalloc (unit/memefficiency).
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit unit/memefficiency \
       --skipunit integration/failover \
       --skipunit integration/aof-multi-part
 
