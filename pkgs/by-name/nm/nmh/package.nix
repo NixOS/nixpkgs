@@ -6,7 +6,7 @@
   coreutils,
   cyrus_sasl,
   db,
-  fetchFromSavannah,
+  fetchurl,
   flex,
   gdbm,
   liblockfile,
@@ -20,10 +20,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "nmh";
   version = "1.8";
-  src = fetchFromSavannah {
-    repo = "nmh";
-    rev = finalAttrs.version;
-    hash = "sha256-ShAdinvBA7guVBhjqTelBRiUzyo5KqHcawlQS9kXtqs=";
+
+  src = fetchurl {
+    url = "mirror://savannah/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Nmzgzj+URzAvVWcAkmnIuziC2AjzPu+shbo2fodchhU=";
   };
 
   patches = [ ./reproducible-build-date.patch ];
