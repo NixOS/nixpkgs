@@ -2,9 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-
   installShellFiles,
   scdoc,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuigreet";
@@ -28,6 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     scdoc < contrib/man/tuigreet-1.scd > tuigreet.1
     installManPage tuigreet.1
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Graphical console greeter for greetd";
