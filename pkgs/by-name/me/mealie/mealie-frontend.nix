@@ -3,7 +3,6 @@ src: version:
   lib,
   fetchFromGitHub,
   fetchYarnDeps,
-  dart,
   dart-sass,
   nodePackages_latest,
   fixup-yarn-lock,
