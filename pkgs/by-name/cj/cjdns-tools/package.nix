@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     description = "Tools for cjdns managment";
     license = licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "cjdns-tools";
   };
 }
