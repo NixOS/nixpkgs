@@ -2798,9 +2798,7 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
-  eid-mw = callPackage ../tools/security/eid-mw {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  eid-mw = callPackage ../tools/security/eid-mw { };
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
