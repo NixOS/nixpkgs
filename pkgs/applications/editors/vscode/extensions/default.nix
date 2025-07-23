@@ -4403,8 +4403,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.26.0";
-          hash = "sha256-Mru3dz0Dl/oDHd0tB/0Ixd+EselC+e70Cn7sdu1gkwk=";
+          version = "4.27.0";
+          hash = "sha256-0BqIJL9Vyccjsov1JQil3dRUdo9w8ecOUotVKzBlYGQ=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
