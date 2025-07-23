@@ -1,8 +1,7 @@
 {
-  fetchFromGitHub,
   lib,
   python3Packages,
-  ...
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "sncli";
@@ -12,17 +11,16 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "insanum";
     repo = "sncli";
-    rev = "0.4.4";
+    tag = version;
     hash = "sha256-Ldm8oQdJvZXjD2ZdnkK+HZjMkbDXGkJSkai3iuhNziw";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
-    urwid
     requests
     simperium3
-    setuptools
+    urwid
   ];
 
   pythonImportsCheck = [ "simplenote_cli" ];
