@@ -25,6 +25,7 @@ clangStdenv.mkDerivation rec {
 
   patches = [ ./CVE-2025-53603.patch ];
 
+  nativeBuildInputs = lib.optional (libpq != null) [ libpq.pg_config ];
   buildInputs = [
     gnustep-base
     libxml2
