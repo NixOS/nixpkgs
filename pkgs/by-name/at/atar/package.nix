@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-6q+0YQeY38tVQdnJw3x80binLw4dLQNGNMX0PH/+KjA=";
 
-  nativeInstallCheckInputs = [ lib.versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Ephemeral Terraform runner that applies a configuration on start, displays output variables, and automatically destroys all resources on exit or failure";
