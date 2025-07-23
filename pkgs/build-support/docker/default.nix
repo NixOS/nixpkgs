@@ -1331,6 +1331,9 @@ rec {
           TMP = sandboxBuildDir;
           TEMP = sandboxBuildDir;
 
+          # https://discourse.nixos.org/t/building-docker-image-in-github-actions-leads-to-skopeo-related-issues/40636/4
+          XDG_RUNTIME_DIR = sandboxBuildDir;
+
           # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
           PWD = sandboxBuildDir;
 
