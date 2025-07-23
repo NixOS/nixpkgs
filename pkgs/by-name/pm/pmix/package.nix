@@ -15,7 +15,6 @@
   hwloc,
   munge,
   zlib,
-  pandoc,
   gitMinimal,
 }:
 
@@ -39,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    pandoc
     perl
     autoconf
     automake

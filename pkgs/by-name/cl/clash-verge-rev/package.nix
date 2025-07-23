@@ -12,13 +12,13 @@
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-NNP/NDC/Y4oBQftM6Z+pOFMEtdtvcIMYyY3sGwkpmrc=";
+    hash = "sha256-Wdd1iZspVcCxifCYvST4vlatQJXnyeZkm3Ifc8Q2xtM=";
   };
 
   src-service = fetchFromGitHub {
@@ -29,8 +29,8 @@ let
   };
 
   service-cargo-hash = "sha256-HET7/Lyc0Ip1f9WMVzUWr0QFuL8YN3dgZdK0adl/rYc=";
-  pnpm-hash = "sha256-bhWaDP0gHJC6Mx9QFl4Ltk7y5jozt0eLtsPOWg821Yw=";
-  vendor-hash = "sha256-UkiPJNr5leKuffrrh8n2uhCe/QVjIb4S9heZXP7oKqw=";
+  pnpm-hash = "sha256-yizUju+AswVkbfPMxNhHkrkKsFIe7yedEUqS15uy+V0=";
+  vendor-hash = "sha256-u2y0fSx15Kbe3auL7c4enW0y6z4gjvTg4WIGkmXpMmI=";
 
   service = callPackage ./service.nix {
     inherit
