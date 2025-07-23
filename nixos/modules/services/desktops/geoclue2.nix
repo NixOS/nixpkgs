@@ -245,6 +245,19 @@ in
         '';
       };
 
+      extraConfig = lib.mkOption {
+        type = (pkgs.formats.ini { }).type;
+        default = { };
+        example = lib.literalExpression ''
+          {
+            network-nmea.nmea-socket = "/run/gnss-share.sock";
+          }
+        '';
+        description = ''
+          Extra configuration settings for geoclue2.
+        '';
+      };
+
     };
 
   };
@@ -323,42 +336,45 @@ in
     };
 
     environment.etc."geoclue/geoclue.conf".text = lib.generators.toINI { } (
-      {
-        agent = {
-          whitelist = lib.concatStringsSep ";" (
-            lib.lists.unique (
-              cfg.whitelistedAgents
-              ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
-            )
-          );
-        };
-        network-nmea = {
-          enable = cfg.enableNmea;
-        };
-        "3g" = {
-          enable = cfg.enable3G;
-        };
-        cdma = {
-          enable = cfg.enableCDMA;
-        };
-        modem-gps = {
-          enable = cfg.enableModemGPS;
-        };
-        wifi =
-          {
-            enable = cfg.enableWifi;
-          }
-          // lib.optionalAttrs cfg.enableWifi {
-            url = cfg.geoProviderUrl;
-            submit-data = lib.boolToString cfg.submitData;
-            submission-url = cfg.submissionUrl;
-            submission-nick = cfg.submissionNick;
+      lib.foldl' lib.recursiveUpdate { } [
+        {
+          agent = {
+            whitelist = lib.concatStringsSep ";" (
+              lib.lists.unique (
+                cfg.whitelistedAgents
+                ++ lib.optionals config.services.geoclue2.enableDemoAgent [ "geoclue-demo-agent" ]
+              )
+            );
           };
-        static-source = {
-          enable = cfg.enableStatic;
-        };
-      }
-      // lib.mapAttrs' appConfigToINICompatible cfg.appConfig
+          network-nmea = {
+            enable = cfg.enableNmea;
+          };
+          "3g" = {
+            enable = cfg.enable3G;
+          };
+          cdma = {
+            enable = cfg.enableCDMA;
+          };
+          modem-gps = {
+            enable = cfg.enableModemGPS;
+          };
+          wifi =
+            {
+              enable = cfg.enableWifi;
+            }
+            // lib.optionalAttrs cfg.enableWifi {
+              url = cfg.geoProviderUrl;
+              submit-data = lib.boolToString cfg.submitData;
+              submission-url = cfg.submissionUrl;
+              submission-nick = cfg.submissionNick;
+            };
+          static-source = {
+            enable = cfg.enableStatic;
+          };
+        }
+        (lib.mapAttrs' appConfigToINICompatible cfg.appConfig)
+        cfg.extraConfig
+      ]
     );
 
     environment.etc.geolocation = lib.mkIf cfg.enableStatic {
