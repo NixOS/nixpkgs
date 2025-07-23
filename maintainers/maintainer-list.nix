@@ -24467,6 +24467,12 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
+  synalice = {
+    email = "nikita.nikita.krasnov@gmail.com";
+    github = "synalice";
+    githubId = 61655860;
+    name = "Nikita Krasnov";
+  };
   synthetica = {
     email = "nix@hilhorst.be";
     github = "Synthetica9";
