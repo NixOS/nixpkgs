@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/foundry-rs/foundry";
-    description = "Portable, modular toolkit for Ethereum application development written in Rust.";
+    description = "Portable, modular toolkit for Ethereum application development written in Rust";
     changelog = "https://github.com/foundry-rs/foundry/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20

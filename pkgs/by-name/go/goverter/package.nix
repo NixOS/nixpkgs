@@ -22,7 +22,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Generate type-safe Go converters by defining function signatures.";
+    description = "Generate type-safe Go converters by defining function signatures";
     homepage = "https://github.com/jmattheis/goverter";
     changelog = "https://goverter.jmattheis.de/changelog";
     license = lib.licenses.mit;

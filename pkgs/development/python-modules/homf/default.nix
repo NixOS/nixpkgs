@@ -46,7 +46,7 @@ buildPythonPackage rec {
   passthru.tests = callPackage ./tests.nix { };
 
   meta = with lib; {
-    description = "Asset download tool for GitHub Releases, PyPi, etc.";
+    description = "Asset download tool for GitHub Releases, PyPi, etc";
     mainProgram = "homf";
     homepage = "https://github.com/duckinator/homf";
     license = licenses.mit;

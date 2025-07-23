@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Porn-Vault is a self hosted organizer for adult videos and imagery.";
+    description = "Self-hosted organizer for adult videos and imagery";
     homepage = "https://gitlab.com/porn-vault/porn-vault";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.luNeder ];

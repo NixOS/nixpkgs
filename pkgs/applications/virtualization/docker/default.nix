@@ -231,7 +231,7 @@ rec {
 
           meta = docker-meta // {
             homepage = "https://mobyproject.org/";
-            description = "A collaborative project for the container ecosystem to assemble container-based systems.";
+            description = "A collaborative project for the container ecosystem to assemble container-based systems";
           };
         }
       );

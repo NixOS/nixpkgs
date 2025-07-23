@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Cleans all projects under specified directory.";
+    description = "Cleans all projects under specified directory";
     mainProgram = "cargo-clean-recursive";
     homepage = "https://github.com/IgaguriMK/cargo-clean-recursive";
     license = with lib.licenses; [
