@@ -421,8 +421,6 @@ rec {
     ];
   };
 
-  plugins = callPackage ./plugins { } // {
-    __attrsFailEvaluation = true;
-  };
+  plugins = callPackage ./plugins { };
 
 }
