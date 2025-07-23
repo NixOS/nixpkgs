@@ -2,19 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cacert,
   unicode-emoji,
   unicode-character-database,
   unicode-idna,
   publicsuffix-list,
   cmake,
-  copyDesktopItems,
-  makeDesktopItem,
   ninja,
   pkg-config,
   curl,
   libavif,
-  libGL,
+  angle, # libEGL
   libjxl,
   libpulseaudio,
   libwebp,
@@ -23,6 +20,7 @@
   python3,
   qt6Packages,
   woff2,
+  fast-float,
   ffmpeg,
   fontconfig,
   simdutf,
@@ -33,19 +31,15 @@
   libtommath,
 }:
 
-let
-  # Note: The cacert version is synthetic and must match the version in the package's CMake
-  cacert_version = "2025-05-20";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-06-27";
+  version = "0-unstable-2025-08-04";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "831ba5d6550fd9dfaf90153876ff42396f7165ac";
-    hash = "sha256-7feXPFKExjuOGbitlAkSEEzYNEZb6hGSDUZW1EJGIW8=";
+    rev = "e4b2e7b131140072416d4301d5f60dea6d79b86d";
+    hash = "sha256-d3IRIzukntabRqWbOjjx8WgaiTMnFpFJT2tbMt5ws40=";
   };
 
   postPatch = ''
@@ -62,9 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
 
-    # Check that the versions match
-    grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
-
     mkdir -p build/Caches
 
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
@@ -74,17 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
 
-    mkdir build/Caches/CACERT
-    cp ${cacert}/etc/ssl/certs/ca-bundle.crt build/Caches/CACERT/cacert-${cacert_version}.pem
-    echo -n ${cacert_version} > build/Caches/CACERT/version.txt
-
     mkdir build/Caches/PublicSuffix
     cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
   '';
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     ninja
     pkg-config
     python3
@@ -94,10 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
+    fast-float
     ffmpeg
     fontconfig
     libavif
-    libGL
+    angle # libEGL
     libjxl
     libwebp
     libxcrypt
@@ -110,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
         # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
         # Remove when/if this gets upstreamed in skia.
-        "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
+        "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
       ];
     }))
     woff2
@@ -127,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Takes an enormous amount of resources, even with mold
     (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
     # Disable network operations
-    "-DSERENITY_CACHE_DIR=Caches"
+    "-DLADYBIRD_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -141,40 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
   env.NIX_LDFLAGS = "-lGL -lfontconfig";
 
-  postInstall = ''
-    for size in 48x48 128x128; do
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $out/share/Lagom/icons/$size/app-browser.png \
-        $out/share/icons/hicolor/$size/apps/ladybird.png
-    done
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
     mv $out/bundle/Ladybird.app $out/Applications
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ladybird";
-      desktopName = "Ladybird";
-      exec = "Ladybird -- %U";
-      icon = "ladybird";
-      categories = [
-        "Network"
-        "WebBrowser"
-      ];
-      mimeTypes = [
-        "text/html"
-        "application/xhtml+xml"
-        "x-scheme-handler/http"
-        "x-scheme-handler/https"
-      ];
-      actions.new-window = {
-        name = "New Window";
-        exec = "Ladybird --new-window -- %U";
-      };
-    })
-  ];
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
   # On linux we end up wraping some non-Qt apps, like headless-browser.
