@@ -17403,6 +17403,8 @@ self: super: with self; {
 
   supervise-api = callPackage ../development/python-modules/supervise-api { };
 
+  supervision = callPackage ../development/python-modules/supervision { };
+
   supervisor = callPackage ../development/python-modules/supervisor { };
 
   sure = callPackage ../development/python-modules/sure { };
