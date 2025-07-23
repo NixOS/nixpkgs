@@ -607,6 +607,7 @@ in
   gnupg = runTest ./gnupg.nix;
   goatcounter = runTest ./goatcounter.nix;
   go-camo = runTest ./go-camo.nix;
+  go-httpbin = runTest ./go-httpbin.nix;
   go-neb = runTest ./go-neb.nix;
   gobgpd = runTest ./gobgpd.nix;
   gocd-agent = runTest ./gocd-agent.nix;

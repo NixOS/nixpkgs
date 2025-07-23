@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -35,7 +36,10 @@ buildGoModule (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) go-httpbin; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Reasonably complete and well-tested golang port of httpbin, with zero dependencies outside the go stdlib";
