@@ -6,19 +6,14 @@
 
 buildGoModule rec {
   pname = "go-licence-detector";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "go-licence-detector";
     rev = "v${version}";
-    hash = "sha256-z2fJsDnDhD/0fF1QEQIKB398TqAsug1Ye5LbGpJWyfE=";
+    hash = "sha256-Mo4eBBP9UueLEMVnxndatizDaxVyZuHACvFoV38dRVI=";
   };
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.24.5" "go 1.24"
-  '';
 
   vendorHash = "sha256-quFa2gBPsyRMOBde+KsIF8NCHYSF+X9skvIWnpm2Nss=";
 
