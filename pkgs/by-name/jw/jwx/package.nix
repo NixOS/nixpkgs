@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/cmd/jwx";
 
   meta = {
-    description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
+    description = "Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
     mainProgram = "jwx";
     homepage = "https://github.com/lestrrat-go/jwx";
     changelog = "https://github.com/lestrrat-go/jwx/blob/v${finalAttrs.version}/Changes";
