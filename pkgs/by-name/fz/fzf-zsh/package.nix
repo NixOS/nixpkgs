@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/wyntau/fzf-zsh";
-    description = "wrap fzf to use in oh-my-zsh";
+    description = "Wrap fzf to use in oh-my-zsh";
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.unix;

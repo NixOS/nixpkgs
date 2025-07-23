@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/openvmm";
-    description = "modular, cross-platform Virtual Machine Monitor (VMM), written in Rust";
+    description = "Modular, cross-platform Virtual Machine Monitor (VMM), written in Rust";
     license = licenses.mit;
     mainProgram = "openvmm";
     maintainers = with maintainers; [ astro ];

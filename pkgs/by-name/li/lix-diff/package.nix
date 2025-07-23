@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/isabelroses/lix-diff";
-    description = "lix plugin for diffing two generations";
+    description = "Lix plugin for diffing two generations";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ isabelroses ];
     mainProgram = "lix-diff";

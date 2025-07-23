@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/pcffont";
-    description = "A library for manipulating Portable Compiled Format (PCF) Fonts";
+    description = "Library for manipulating Portable Compiled Format (PCF) Fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

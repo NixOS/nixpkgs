@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    description = "a lightweight way to check for container image updates. written in Rust";
+    description = "Lightweight way to check for container image updates. written in Rust";
     homepage = "https://cup.sergi0g.dev";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
