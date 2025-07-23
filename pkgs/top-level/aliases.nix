@@ -1593,6 +1593,7 @@ mapAliases {
   powerdns = pdns; # Added 2022-03-28
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2024-03-24
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
+  pruneLibtoolFiles = throw "pruneLibtoolFiles has been removed as it is part of the stdenv"; # Added 2025-07-16
 
   cstore_fdw = throw "'cstore_fdw' has been removed. Use 'postgresqlPackages.cstore_fdw' instead."; # Added 2025-07-19
   pg_cron = throw "'pg_cron' has been removed. Use 'postgresqlPackages.pg_cron' instead."; # Added 2025-07-19
@@ -1808,6 +1809,7 @@ mapAliases {
   semeru-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   semeru-jre-bin-16 = throw "Semeru 16 has been removed as it has reached its end of life"; # Added 2024-08-01
   sensu = throw "sensu has been removed as the upstream project is deprecated. Consider using `sensu-go`"; # Added 2024-10-28
+  separateDebugInfo = throw "separateDebugInfo has been removed as it is part of the stdenv"; # Added 2025-07-16
   serial-unit-testing = throw "'serial-unit-testing' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   serious-sans = throw "'serious-sans' has been renamed to 'serious-shanns', which is not currently packaged"; # Added 2025-01-26
   session-desktop-appimage = session-desktop;

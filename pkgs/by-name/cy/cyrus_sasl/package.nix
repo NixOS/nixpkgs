@@ -14,7 +14,6 @@
   autoreconfHook,
   enableLdap ? false,
   buildPackages,
-  pruneLibtoolFiles,
   nixosTests,
 }:
 
@@ -50,10 +49,11 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     autoreconfHook
-    pruneLibtoolFiles
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
   buildInputs =
     [
       openssl

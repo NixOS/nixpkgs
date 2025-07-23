@@ -194,13 +194,6 @@ with pkgs;
     in
     recurseIntoAttrs arrayUtilitiesPackages;
 
-  addBinToPathHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "add-bin-to-path-hook";
-    } ../build-support/setup-hooks/add-bin-to-path.sh
-  ) { };
-
   aider-chat-with-playwright = aider-chat.withOptional { withPlaywright = true; };
 
   aider-chat-with-browser = aider-chat.withOptional { withBrowser = true; };
@@ -210,25 +203,6 @@ with pkgs;
   aider-chat-with-bedrock = aider-chat.withOptional { withBedrock = true; };
 
   aider-chat-full = aider-chat.withOptional { withAll = true; };
-
-  autoreconfHook = callPackage (
-    {
-      makeSetupHook,
-      autoconf,
-      automake,
-      gettext,
-      libtool,
-    }:
-    makeSetupHook {
-      name = "autoreconf-hook";
-      propagatedBuildInputs = [
-        autoconf
-        automake
-        gettext
-        libtool
-      ];
-    } ../build-support/setup-hooks/autoreconf.sh
-  ) { };
 
   autoreconfHook264 = autoreconfHook.override {
     autoconf = autoconf264;
@@ -242,45 +216,11 @@ with pkgs;
     autoconf = autoconf271;
   };
 
-  autoPatchelfHook = makeSetupHook {
-    name = "auto-patchelf-hook";
-    propagatedBuildInputs = [
-      auto-patchelf
-      bintools
-    ];
-    substitutions = {
-      hostPlatform = stdenv.hostPlatform.config;
-    };
-  } ../build-support/setup-hooks/auto-patchelf.sh;
-
   appimageTools = callPackage ../build-support/appimage { };
 
   appimageupdate-qt = appimageupdate.override { withQtUI = true; };
 
-  stripJavaArchivesHook = makeSetupHook {
-    name = "strip-java-archives-hook";
-    propagatedBuildInputs = [ strip-nondeterminism ];
-  } ../build-support/setup-hooks/strip-java-archives.sh;
-
-  ensureNewerSourcesHook =
-    { year }:
-    makeSetupHook
-      {
-        name = "ensure-newer-sources-hook";
-      }
-      (
-        writeScript "ensure-newer-sources-hook.sh" ''
-          postUnpackHooks+=(_ensureNewerSources)
-          _ensureNewerSources() {
-            local r=$sourceRoot
-            # Avoid passing option-looking directory to find. The example is diffoscope-269:
-            #   https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/378
-            [[ $r == -* ]] && r="./$r"
-            '${findutils}/bin/find' "$r" \
-              '!' -newermt '${year}-01-01' -exec touch -h -d '${year}-01-02' '{}' '+'
-          }
-        ''
-      );
+  ensureNewerSourcesHook = callPackage ../build-support/setup-hooks/ensure-newer-sources { };
 
   alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
 
@@ -302,21 +242,6 @@ with pkgs;
   # wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
-
-  updateAutotoolsGnuConfigScriptsHook = makeSetupHook {
-    name = "update-autotools-gnu-config-scripts-hook";
-    substitutions = {
-      gnu_config = gnu-config;
-    };
-  } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
-
-  gogUnpackHook = makeSetupHook {
-    name = "gog-unpack-hook";
-    propagatedBuildInputs = [
-      innoextract
-      file-rename
-    ];
-  } ../build-support/setup-hooks/gog-unpack.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
@@ -423,10 +348,6 @@ with pkgs;
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
 
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
-
-  dieHook = makeSetupHook {
-    name = "die-hook";
-  } ../build-support/setup-hooks/die.sh;
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -720,19 +641,7 @@ with pkgs;
       inherit url;
     };
 
-  ld-is-cc-hook = makeSetupHook {
-    name = "ld-is-cc-hook";
-  } ../build-support/setup-hooks/ld-is-cc-hook.sh;
-
-  copyDesktopItems = makeSetupHook {
-    name = "copy-desktop-items-hook";
-  } ../build-support/setup-hooks/copy-desktop-items.sh;
-
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
-
-  copyPkgconfigItems = makeSetupHook {
-    name = "copy-pkg-config-items-hook";
-  } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
 
   makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
@@ -748,22 +657,6 @@ with pkgs;
   makeInitrdNGTool = callPackage ../build-support/kernel/make-initrd-ng-tool.nix { };
 
   makeWrapper = makeShellWrapper;
-
-  makeShellWrapper = makeSetupHook {
-    name = "make-shell-wrapper-hook";
-    propagatedBuildInputs = [ dieHook ];
-    substitutions = {
-      # targetPackages.runtimeShell only exists when pkgs == targetPackages (when targetPackages is not  __raw)
-      shell =
-        if targetPackages ? runtimeShell then
-          targetPackages.runtimeShell
-        else
-          throw "makeWrapper/makeShellWrapper must be in nativeBuildInputs";
-    };
-    passthru = {
-      tests = tests.makeWrapper;
-    };
-  } ../build-support/setup-hooks/make-wrapper.sh;
 
   compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
 
@@ -810,20 +703,11 @@ with pkgs;
     patchRcPathPosix
     ;
 
-  pruneLibtoolFiles = makeSetupHook {
-    name = "prune-libtool-files";
-  } ../build-support/setup-hooks/prune-libtool-files.sh;
-
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
   serverspec = callPackage ../tools/misc/serverspec { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
-
-  shortenPerlShebang = makeSetupHook {
-    name = "shorten-perl-shebang-hook";
-    propagatedBuildInputs = [ dieHook ];
-  } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
   sile = callPackage ../by-name/si/sile/package.nix {
     lua = luajit;
@@ -880,56 +764,12 @@ with pkgs;
 
   inherit (lib.systems) platforms;
 
-  setJavaClassPath = makeSetupHook {
-    name = "set-java-classpath-hook";
-  } ../build-support/setup-hooks/set-java-classpath.sh;
-
-  fixDarwinDylibNames = makeSetupHook {
-    name = "fix-darwin-dylib-names-hook";
-    substitutions = { inherit (darwin.binutils) targetPrefix; };
-    meta.platforms = lib.platforms.darwin;
-  } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
-
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
-
-  desktopToDarwinBundle = makeSetupHook {
-    name = "desktop-to-darwin-bundle-hook";
-    propagatedBuildInputs = [
-      writeDarwinBundle
-      librsvg
-      imagemagick
-      (onlyBin python3Packages.icnsutil)
-    ];
-  } ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
-
-  keepBuildTree = makeSetupHook {
-    name = "keep-build-tree-hook";
-  } ../build-support/setup-hooks/keep-build-tree.sh;
-
-  moveBuildTree = makeSetupHook {
-    name = "move-build-tree-hook";
-  } ../build-support/setup-hooks/move-build-tree.sh;
-
-  enableGCOVInstrumentation = makeSetupHook {
-    name = "enable-gcov-instrumentation-hook";
-  } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
-
-  makeGCOVReport = makeSetupHook {
-    name = "make-gcov-report-hook";
-    propagatedBuildInputs = [
-      lcov
-      enableGCOVInstrumentation
-    ];
-  } ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
   makeHardcodeGsettingsPatch = callPackage ../build-support/make-hardcode-gsettings-patch { };
 
   # intended to be used like nix-build -E 'with import <nixpkgs> { }; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
-
-  findXMLCatalogs = makeSetupHook {
-    name = "find-xml-catalogs-hook";
-  } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
   wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
     isGraphical = true;
@@ -943,33 +783,6 @@ with pkgs;
   wrapGAppsNoGuiHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
     makeWrapper = makeBinaryWrapper;
   };
-
-  separateDebugInfo = makeSetupHook {
-    name = "separate-debug-info-hook";
-  } ../build-support/setup-hooks/separate-debug-info.sh;
-
-  setupDebugInfoDirs = makeSetupHook {
-    name = "setup-debug-info-dirs-hook";
-  } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
-
-  writableTmpDirAsHomeHook = callPackage (
-    { makeSetupHook }:
-    makeSetupHook {
-      name = "writable-tmpdir-as-home-hook";
-    } ../build-support/setup-hooks/writable-tmpdir-as-home.sh
-  ) { };
-
-  useOldCXXAbi = makeSetupHook {
-    name = "use-old-cxx-abi-hook";
-  } ../build-support/setup-hooks/use-old-cxx-abi.sh;
-
-  validatePkgConfig = makeSetupHook {
-    name = "validate-pkg-config";
-    propagatedBuildInputs = [
-      findutils
-      pkg-config
-    ];
-  } ../build-support/setup-hooks/validate-pkg-config.sh;
 
   #package writers
   writers = callPackage ../build-support/writers { };
@@ -2312,31 +2125,6 @@ with pkgs;
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
   materialx = with python3Packages; toPythonApplication materialx;
-
-  # while building documentation meson may want to run binaries for host
-  # which needs an emulator
-  # example of an error which this fixes
-  # [Errno 8] Exec format error: './gdk3-scan'
-  mesonEmulatorHook =
-    makeSetupHook
-      {
-        name = "mesonEmulatorHook";
-        substitutions = {
-          crossFile = writeText "cross-file.conf" ''
-            [binaries]
-            exe_wrapper = '${lib.escape [ "'" "\\" ] (stdenv.targetPlatform.emulator pkgs)}'
-          '';
-        };
-      }
-      # The throw is moved into the `makeSetupHook` derivation, so that its
-      # outer level, but not its outPath can still be evaluated if the condition
-      # doesn't hold. This ensures that splicing still can work correctly.
-      (
-        if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) then
-          ../by-name/me/meson/emulator-hook.sh
-        else
-          throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression."
-      );
 
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
@@ -7722,11 +7510,6 @@ with pkgs;
       if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
   };
 
-  xcbuildHook = makeSetupHook {
-    name = "xcbuild-hook";
-    propagatedBuildInputs = [ xcbuild ];
-  } ../by-name/xc/xcbuild/setup-hook.sh;
-
   xcodebuild = xcbuild;
 
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
@@ -9780,15 +9563,7 @@ with pkgs;
   apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
   apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
 
-  darwinMinVersionHook =
-    deploymentTarget:
-    makeSetupHook {
-      name = "darwin-deployment-target-hook-${deploymentTarget}";
-      substitutions = {
-        darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
-        deploymentTarget = lib.escapeShellArg deploymentTarget;
-      };
-    } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
+  darwinMinVersionHook = callPackage ../os-specific/darwin/darwin-min-version-hook { };
 
   ### DEVELOPMENT / TESTING TOOLS
 
@@ -16554,10 +16329,6 @@ with pkgs;
     ;
 
   fts = if stdenv.hostPlatform.isMusl then musl-fts else null;
-
-  bsdSetupHook = makeSetupHook {
-    name = "bsd-setup-hook";
-  } ../os-specific/bsd/setup-hook.sh;
 
   freebsd = callPackage ../os-specific/bsd/freebsd { };
 
