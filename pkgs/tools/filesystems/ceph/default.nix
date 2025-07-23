@@ -25,7 +25,7 @@
   nixosTests,
 
   # Runtime dependencies
-  arrow-cpp,
+  thrift,
   babeltrace,
   # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
@@ -372,14 +372,6 @@ rec {
     inherit src version;
 
     patches = [
-      (fetchpatch2 {
-        name = "ceph-s3select-arrow-18-compat.patch";
-        url = "https://github.com/ceph/s3select/commit/f333ec82e6e8a3f7eb9ba1041d1442b2c7cd0f05.patch";
-        hash = "sha256-21fi5tMIs/JmuhwPYMWtampv/aqAe+EoPAXZLJlOvgo=";
-        stripLen = 1;
-        extraPrefix = "src/s3select/";
-      })
-
       ./boost-1.85.patch
 
       (fetchpatch2 {
@@ -426,7 +418,7 @@ rec {
     buildInputs =
       cryptoLibsMap.${cryptoStr}
       ++ [
-        arrow-cpp
+        thrift
         babeltrace
         boost'
         bzip2
@@ -544,7 +536,6 @@ rec {
       "-DWITH_TESTS:BOOL=OFF"
 
       # Use our own libraries, where possible
-      "-DWITH_SYSTEM_ARROW:BOOL=ON" # Only used if other options enable Arrow support.
       "-DWITH_SYSTEM_BOOST:BOOL=ON"
       "-DWITH_SYSTEM_GTEST:BOOL=ON"
       "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
