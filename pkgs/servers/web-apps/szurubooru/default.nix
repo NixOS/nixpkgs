@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "2.5-unstable-2025-02-11";
+  version = "2.5-unstable-2025-07-19";
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "szurubooru";
-    rev = "376f687c386f65522b2f65e98b998b21af26ee29";
-    hash = "sha256-4w1iOYp+CVg60dYxRilj08D4Hle6R9Y0v+Nd3fws1Zc=";
+    rev = "5a0f8867f3af1556d82c1ad7e29977903300c2dd";
+    hash = "sha256-ihocmBS4h23bb4ZRhHEXvnHiNfRMPdUe94B5K9bi2E4=";
   };
 in
 
