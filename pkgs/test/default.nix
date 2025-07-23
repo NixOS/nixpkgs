@@ -224,4 +224,10 @@ with pkgs;
   build-environment-info = callPackage ./build-environment-info { };
 
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
+
+  buildDenoPackage = {
+    inherit (callPackage ./build-deno-package/integration-tests/default.nix { })
+      test-fetch-deno-deps-scripts
+      ;
+  };
 }
