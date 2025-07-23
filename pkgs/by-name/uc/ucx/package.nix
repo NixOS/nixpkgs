@@ -36,14 +36,14 @@ let
   # rocm build fails with gcc stdenv due to unrecognised arg parallel-jobs
   stdenv' = if enableRocm then rocmPackages.stdenv else stdenv;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "ucx";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LW57wbQFwW14Z86p9jo1ervkCafVy+pnIQQ9t0i8enY=";
   };
 
@@ -110,4 +110,4 @@ stdenv'.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
   };
-}
+})
