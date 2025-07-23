@@ -12,6 +12,7 @@
   json_c,
   librsvg,
   scdoc,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # G_APPLICATION_FLAGS_NONE is deprecated in GLib 2.73.3+.
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK based greeter for greetd, to be run under cage or similar";
