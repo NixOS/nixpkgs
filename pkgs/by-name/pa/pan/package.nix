@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://pan.rebelbase.com";
     maintainers = with lib.maintainers; [
       aleksana
-      emaryn
     ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

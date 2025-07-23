@@ -1,8 +1,8 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchzip,
-  makeWrapper,
+  makeBinaryWrapper,
   jre_headless,
   nixosTests,
   callPackage,
@@ -22,17 +22,17 @@ let
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
   version = "26.3.1";
 
   src = fetchzip {
-    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
+    url = "https://github.com/keycloak/keycloak/releases/download/${finalAttrs.version}/keycloak-${finalAttrs.version}.zip";
     hash = "sha256-M3YbS/aK9y4N2kZrm1wNT1ZaWAaUwaRn9QQ8fMdOV5g=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     jre_headless
   ];
 
@@ -104,5 +104,4 @@ stdenv.mkDerivation rec {
       leona
     ];
   };
-
-}
+})

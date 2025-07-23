@@ -32,7 +32,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Standalone version of cables, a tool for creating beautiful interactive content.";
+    description = "Standalone version of cables, a tool for creating beautiful interactive content";
     homepage = "https://cables.gl";
     changelog = "https://cables.gl/changelog";
     license = licenses.mit;

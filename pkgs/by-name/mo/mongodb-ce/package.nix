@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
-    description = "MongoDB is a general purpose, document-based, distributed database.";
+    description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];
     longDescription = ''

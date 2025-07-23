@@ -57,6 +57,7 @@ let
         mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
+        broken = true; # Not compatible with ocamlPackages.tar ≥ 3
       };
     };
 

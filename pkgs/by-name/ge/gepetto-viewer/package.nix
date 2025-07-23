@@ -116,7 +116,7 @@ let
         '';
 
     meta = {
-      description = "Graphical Interface for Pinocchio and HPP.";
+      description = "Graphical Interface for Pinocchio and HPP";
       homepage = "https://github.com/gepetto/gepetto-viewer";
       license = lib.licenses.lgpl3Only;
       maintainers = [ lib.maintainers.nim65s ];

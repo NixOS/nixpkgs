@@ -354,7 +354,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.7.1";
+  hassVersion = "2025.7.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -375,13 +375,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-KaepdkW1PLbWf7yl90ZqmZ6OIgZlRcaw2pSf2wTev+Q=";
+    hash = "sha256-aBIG4dxCdj1dQP5wMd5ySXggUvspGlnh7btxmMr/51Y=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gmq42r4O6mNNXaVwTlC3UjeAsu8TOm417WCm/2E3I6E=";
+    hash = "sha256-J8KH9y8dNsKW+jc5Wkqnw9VreKoUQH0dEBbne/6xiMw=";
   };
 
   build-system = with python.pkgs; [
@@ -522,19 +522,9 @@ python.pkgs.buildPythonApplication rec {
     "--dist loadfile"
     # enable full variable printing on error
     "--showlocals"
-    # AssertionError: assert 1 == 0
-    "--deselect tests/test_config.py::test_merge"
-    # checks whether pip is installed
-    "--deselect=tests/util/test_package.py::test_check_package_fragment"
-    # flaky
-    "--deselect=tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "--deselect=tests/test_test_fixtures.py::test_evict_faked_translations"
-    "--deselect=tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
-    "--deselect=tests/helpers/test_event.py::test_track_time_interval_name"
-    # tests are located in tests/
-    "tests"
   ];
+
+  enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = [
     # we neither run nor distribute hassfest
@@ -545,6 +535,18 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_circular_imports.py"
     # don't bulk test all components
     "tests/components"
+    # AssertionError: assert 1 == 0
+    "tests/test_config.py::test_merge"
+    # checks whether pip is installed
+    "tests/util/test_package.py::test_check_package_fragment"
+    # flaky
+    "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    "tests/test_test_fixtures.py::test_evict_faked_translations"
+    "tests/helpers/test_backup.py::test_async_get_manager"
+    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
+    "tests/helpers/test_event.py::test_track_time_interval_name"
+    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
+    "tests/test_core.py::test_services_call_return_response_requires_blocking"
   ];
 
   preCheck = ''

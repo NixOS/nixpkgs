@@ -17,15 +17,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2025.6.3";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-6UZcIZlfcYcQgjR/jrNhsoLNQGml2tjK3LYLI0fdgMU=";
+    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./pnpm-lock.yaml.patch
+  ];
 
   nativeBuildInputs = [
     nodejs
@@ -36,9 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-T8LwpEjeWNmkIo3Dn1BCFHBsTzA/Dt6/pk/NMtvT0N4=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
 
   buildPhase = ''

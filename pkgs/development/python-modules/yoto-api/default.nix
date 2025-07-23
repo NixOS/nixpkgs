@@ -39,6 +39,6 @@ buildPythonPackage rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ seberm ];
     license = licenses.mit;
-    description = "A python package that makes it a bit easier to work with the yoto play API.";
+    description = "Python package that makes it a bit easier to work with the yoto play API";
   };
 }

@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Sway, but with eye candy!";
+    description = "Sway, but with eye candy";
     homepage = "https://github.com/WillPower3309/swayfx";
     changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

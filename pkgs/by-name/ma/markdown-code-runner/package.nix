@@ -2,22 +2,27 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markdown-code-runner";
-  version = "0-unstable-2025-04-18";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "markdown-code-runner";
-    rev = "9907df63574d714abcd78f9dfdf4bdda73ff30d6";
-    hash = "sha256-Bn+IsZzV07bm5TNRX3+OOuxi3kj7d73gYPzcdIxWMi8=";
+    tag = finalAttrs.version;
+    hash = "sha256-fmyjrsEBUskN/cYmsqOprw56vpjonXETRdBH3y0ypkA=";
   };
 
-  cargoHash = "sha256-HOJCnuzd6i4v1SpR4jstlpNkvSgH/4kvvE6Lsr4cgbI=";
+  cargoHash = "sha256-hBFUsluSZluWJIbvJjFSFe+Y2ICr+mug0Mxrz4pLW5E=";
 
   dontUseCargoParallelTests = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Configurable Markdown code runner that executes and optionally replaces code blocks using external commands";
@@ -35,4 +40,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
-}
+})

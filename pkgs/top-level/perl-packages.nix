@@ -901,7 +901,7 @@ with self;
       Mouse
     ];
     meta = {
-      description = "(DEPRECATED) use Moo instead!";
+      description = "(DEPRECATED) use Moo instead";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -10960,7 +10960,7 @@ with self;
     '';
     doCheck = false;
     meta = {
-      description = "Distribution builder; installer not included!";
+      description = "Distribution builder; installer not included";
       homepage = "https://dzil.org";
       license = with lib.licenses; [
         artistic1
@@ -12455,7 +12455,7 @@ with self;
     };
     buildInputs = [ TestFatal ];
     meta = {
-      description = "Configure-time utilities for using C headers,";
+      description = "Configure-time utilities for using C headers";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -17246,7 +17246,7 @@ with self;
       hash = "sha256-VOIdJQwCKRJ+MLd6NGHhAHeFTsJE8m+2cPG0Re1MTVs=";
     };
     meta = {
-      description = "IO::All of it to Graham and Damian!";
+      description = "Combines all of the best Perl IO modules into a single nifty object oriented interface";
       homepage = "https://github.com/ingydotnet/io-all-pm";
       license = with lib.licenses; [
         artistic1
@@ -26831,7 +26831,7 @@ with self;
     outputs = [ "out" ];
 
     meta = {
-      description = "maintainer helper tool to help maintainers update their pacscripts.";
+      description = "Tool to help maintainers update their pacscripts";
       homepage = "https://github.com/pacstall/pacup";
       license = lib.licenses.gpl3Only;
     };
@@ -30822,7 +30822,7 @@ with self;
     ];
     meta = {
       homepage = "https://github.com/asb-capfan/Spreadsheet-XLSX";
-      description = "Perl extension for reading MS Excel 2007 files;";
+      description = "Perl extension for reading MS Excel 2007 files";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -32032,7 +32032,7 @@ with self;
       YAMLLibYAML
     ];
     meta = {
-      description = "See What I Mean?!";
+      description = "See What I Mean";
       homepage = "https://github.com/ingydotnet/swim-pm";
       license = with lib.licenses; [
         artistic1
@@ -35976,7 +35976,7 @@ with self;
     };
     propagatedBuildInputs = [ PerlMinimumVersion ];
     meta = {
-      description = "Does your code require newer perl than you think?";
+      description = "Does your code require newer perl than you think";
       homepage = "https://github.com/rjbs/Test-MinimumVersion";
       license = with lib.licenses; [
         artistic1
@@ -36723,7 +36723,7 @@ with self;
       hash = "sha256-KeniEzlRBGx48gXxs+jfYskOEU8OCPoGuBd2ag+AixI=";
     };
     meta = {
-      description = "Variable ties made much easier: much, much, much easier.";
+      description = "Variable ties made much easier: much, much, much easier";
       license = with lib.licenses; [
         artistic1
         gpl1Plus

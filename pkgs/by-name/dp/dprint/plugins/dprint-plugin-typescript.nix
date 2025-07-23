@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "TypeScript/JavaScript code formatter.";
+  description = "TypeScript/JavaScript code formatter";
   hash = "sha256-u6DpQWhPyERphKmlXOTE6NW/08YzBDWgzWTJ4JLLAjE=";
   initConfig = {
     configExcludes = [ "**/node_modules" ];

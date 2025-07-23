@@ -36,7 +36,7 @@ buildPecl rec {
   '';
 
   meta = {
-    description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest!";
+    description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest";
     homepage = "https://github.com/jvoisin/snuffleupagus";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.zupo ];

@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjucks, and Vento formatter.";
+  description = "HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjucks, and Vento formatter";
   hash = "sha256-fCvurr8f79io/jIjwCfwr/WGjvcKZtptRrx9GFfytSI=";
   initConfig = {
     configExcludes = [ ];

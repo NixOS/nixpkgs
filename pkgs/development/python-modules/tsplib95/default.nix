@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tsplib95" ];
 
   meta = {
-    description = "Library for working with TSPLIB 95 files.";
+    description = "Library for working with TSPLIB 95 files";
     homepage = "https://github.com/rhgrant10/tsplib95";
     mainProgram = "tsplib95";
     license = lib.licenses.asl20;

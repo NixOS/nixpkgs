@@ -17,19 +17,17 @@
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${version}";
-    hash = "sha256-h49AD3ICh0NYyh2EDogynQ0qgkKCAQTVKS9rbXbrqPE=";
+    hash = "sha256-zxvYvPnL99yIVHrzbRbKmTazzlefOS+s2TAWLweRSYE=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "numpy" ];
 
   dependencies = [
     numpy

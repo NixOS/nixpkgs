@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "zapzap" ];
 
   meta = with lib; {
-    description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine.";
+    description = "WhatsApp desktop application written in Pyqt6 + PyQt6-WebEngine";
     homepage = "https://rtosta.com/zapzap-web/";
     mainProgram = "zapzap";
     license = licenses.gpl3Only;

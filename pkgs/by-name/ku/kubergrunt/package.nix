@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubergrunt";
-  version = "0.17.3";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
-    sha256 = "sha256-9ZF2O4/5n5uL+FA50Rfiq9gStQwNDWIhtz2GvJVu+u4=";
+    sha256 = "sha256-0rZjqMQK3DS7k+mtOTQQ9ZpO+1WrSS0RX8rbKHxM1aY=";
   };
 
   vendorHash = "sha256-6dFIW2wwu6HHvoMo0+MhvKOtAJNVhg7JyVlBPqLQerw=";
