@@ -22,6 +22,7 @@
   zfp,
   zlib,
   ucx,
+  libffi,
   yaml-cpp,
   nlohmann_json,
   llvmPackages,
@@ -94,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     sqlite
     zeromq
-    zfp
     zlib
     yaml-cpp
     nlohmann_json
@@ -104,8 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     # mgard
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
+  ++ lib.optional (stdenv.hostPlatform.isLoongArch64) libffi
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp
   # openmp required by zfp
-  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  ++ lib.optional (
+    lib.meta.availableOn stdenv.hostPlatform zfp && stdenv.cc.isClang
+  ) llvmPackages.openmp;
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
@@ -122,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
     (lib.cmakeBool "ADIOS2_USE_Blosc2" true)
     (lib.cmakeBool "ADIOS2_USE_BZip2" true)
-    (lib.cmakeBool "ADIOS2_USE_ZFP" true)
+    (lib.cmakeBool "ADIOS2_USE_ZFP" (lib.meta.availableOn stdenv.hostPlatform zfp))
     (lib.cmakeBool "ADIOS2_USE_SZ" false)
     (lib.cmakeBool "ADIOS2_USE_LIBPRESSIO" false)
     (lib.cmakeBool "ADIOS2_USE_MGARD" false)
