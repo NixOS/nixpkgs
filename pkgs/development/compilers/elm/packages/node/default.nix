@@ -53,7 +53,7 @@ with elmLib;
       with lib;
       nodePkgs."@dillonkearns/elm-graphql".meta
       // {
-        description = " Autogenerate type-safe GraphQL queries in Elm";
+        description = "Autogenerate type-safe GraphQL queries in Elm";
         license = licenses.bsd3;
         maintainers = [ maintainers.pedrohlc ];
       };

@@ -28,7 +28,7 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   meta = {
-    description = " Development Nextcloud app to enable apps to use hot module reloading";
+    description = "Development Nextcloud app to enable apps to use hot module reloading";
     homepage = "https://github.com/nextcloud/hmr_enabler";
     changelog = "https://github.com/nextcloud/hmr_enabler/blob/master/CHANGELOG.md";
     license = lib.licenses.agpl3Only;

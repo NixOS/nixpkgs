@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/realh/roxterm";
-    description = " A highly configurable terminal emulator";
+    description = "Highly configurable terminal emulator";
     longDescription = ''
       ROXTerm is a terminal emulator intended to provide similar features to
       gnome-terminal, based on the same VTE library. It was originally designed
