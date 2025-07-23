@@ -114,6 +114,7 @@ with haskellLib;
     self.syb
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
+  timezone-series = doJailbreak super.timezone-series; # time <1.14
 
   #
   # Test suite issues
