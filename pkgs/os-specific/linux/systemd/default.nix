@@ -205,7 +205,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "257.9";
+  version = "258";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3Ig5TXhK99iOu41k4c5CgC4R3HhBftSAb9UbXvFY6lo=";
+    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -418,7 +418,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSelinux libselinux
   ++ lib.optionals withRemote [
     libmicrohttpd
-    gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
@@ -854,7 +853,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
   '';
