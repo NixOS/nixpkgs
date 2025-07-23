@@ -208,7 +208,7 @@ let
   # Make sure that we are not shadowing something from all-packages.nix.
   checkInPkgs =
     n: alias:
-    if builtins.hasAttr n super then throw "Alias ${n} is still in all-packages.nix" else alias;
+    if builtins.hasAttr n super then abort "Alias ${n} is still in all-packages.nix" else alias;
 
   mapAliases =
     aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
