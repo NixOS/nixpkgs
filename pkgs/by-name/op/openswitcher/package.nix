@@ -79,5 +79,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://openswitcher.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "switcher-control";
   };
 }
