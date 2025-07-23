@@ -2039,6 +2039,7 @@ mapAliases {
   wrapLisp_old = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   wmii_hg = wmii;
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
+  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead."; # Added 2024-11-22
   write_stylus = styluslabs-write-bin; # Added 2024-10-09
   wtf = lib.warnOnInstantiate "'wtf' has been renamed to 'wtfutil'." wtfutil; # Added 2025-03-01
 
