@@ -80,6 +80,13 @@ let
           '';
         };
 
+        privateFilesDir = mkOption {
+          type = types.path;
+          default = "/var/lib/drupal/${name}/private";
+          defaultText = "/var/lib/drupal/<name>/private";
+          description = "The location of the Drupal private files directory.";
+        };
+
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}";
@@ -299,6 +306,7 @@ in
           "Z '${cfg.modulesDir}' 0750 ${user} ${webserver.group} - -"
           "d '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
           "Z '${cfg.themesDir}' 0750 ${user} ${webserver.group} - -"
+          "d '${cfg.privateFilesDir}' 0750 ${user} ${webserver.group} - -"
         ]) eachSite
       );
 
@@ -335,13 +343,17 @@ in
                   chown -R ${user}:${webserver.group} ${cfg.filesDir}
                 fi
 
-                settings="${cfg.stateDir}/sites/default/settings.php"
+                settings_file="${cfg.stateDir}/sites/default/settings.php"
                 defaultSettings="${cfg.package}/share/php/drupal/sites/default/default.settings.php"
 
                 if [ ! -f "$settings" ]; then
                   echo "Preparing settings.php for ${hostName}..."
-                  cp "$defaultSettings" "$settings"
-                  chmod 644 "$settings"
+                  cp "$defaultSettings" "$settings_file"
+                  chmod 644 "$settings_file"
+
+                  # Append settings to settings file
+                  printf "\n\n// NixOS Automatically Generated Settings\n" >> $settings_file
+                  printf "\$settings['file_private_path'] = '${cfg.privateFilesDir}';" >> $settings_file
                 fi
 
                 # Set or reset file permissions so that the web user and webserver owns them.
