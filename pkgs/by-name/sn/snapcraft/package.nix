@@ -26,6 +26,12 @@ python312Packages.buildPythonApplication rec {
   };
 
   patches = [
+    # We're using a later version of `craft-cli` than expected, which
+    # adds an extra deprecation warning to the CLI output, meaning that
+    # an expected error message looks slightly different. This patch corrects
+    # that by checking for the updated error message and can be dropped in a
+    # later release of snapcraft.
+    ./esm-test.patch
     # Snapcraft is only officially distributed as a snap, as is LXD. The socket
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.

@@ -1,6 +1,6 @@
 { mkDprintPlugin }:
 mkDprintPlugin {
-  description = "Biome (JS/TS) wrapper plugin.";
+  description = "Biome (JS/TS) wrapper plugin";
   hash = "sha256-CqsBSzhUD5OUqyXNIl2T8yb/QngR3ept1kTMUKu7vuc=";
   initConfig = {
     configExcludes = [ "**/node_modules" ];

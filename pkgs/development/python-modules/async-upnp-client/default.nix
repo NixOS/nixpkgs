@@ -3,8 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -24,27 +22,15 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.44.0";
+  version = "0.45.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     tag = version;
-    hash = "sha256-xtouCq8nkvXxgZ0jX4VuTU41xxrAkXqWEpZg/vms4Zo=";
+    hash = "sha256-bRUEnedPDFBgpJeDPRG6e6fQUJ/R2RaasVKHZX7COp8=";
   };
-
-  patches = [
-    # Fix tests with latest aiohttp
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://github.com/StevenLooman/async_upnp_client/commit/6ea1515890d588d353a9c263eca8fbf6571fbbec.diff";
-      includes = [ "async_upnp_client/*" ];
-      hash = "sha256-6DA+mIz76UE0xA0SSTGvhaf0dVAKT61ucsDeJDPoGAY=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "async-timeout"
@@ -68,6 +54,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_decode_ssdp_packet"
+    "test_microsoft_butchers_ssdp"
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"
@@ -80,12 +68,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_upnp_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
-    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "upnp-client";
   };
 }

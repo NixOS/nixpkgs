@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/Zuplu/postfix-tlspol/releases/tag/${src.tag}";
-    description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE.";
+    description = "Lightweight MTA-STS + DANE/TLSA resolver and TLS policy server for Postfix, prioritizing DANE";
     homepage = "https://github.com/Zuplu/postfix-tlspol";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pypinyin";
-  version = "0.54.0";
+  version = "0.55.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mozillazg";
     repo = "python-pinyin";
     tag = "v${version}";
-    hash = "sha256-kA6h2CPGhoZt8h3KEttegHhmMqVc72IkrkA3PonY3sY=";
+    hash = "sha256-Xd5dxEiaByjtZmlORyK4cBPfNyIcZwbF40SvEKZ24Ks=";
   };
 
   nativeCheckInputs = [

@@ -3722,8 +3722,6 @@ self: super: with self; {
 
   dj-static = callPackage ../development/python-modules/dj-static { };
 
-  dj-stripe = callPackage ../development/python-modules/dj-stripe { };
-
   # LTS with mainsteam support
   django = self.django_4;
 
@@ -13944,6 +13942,8 @@ self: super: with self; {
   pysocks = callPackage ../development/python-modules/pysocks { };
 
   pysol-cards = callPackage ../development/python-modules/pysol-cards { };
+
+  pysolarmanv5 = callPackage ../development/python-modules/pysolarmanv5 { };
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 

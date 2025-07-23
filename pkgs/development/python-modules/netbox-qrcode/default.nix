@@ -42,7 +42,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "netbox_qrcode" ];
 
   meta = {
-    description = "Netbox plugin for generate QR codes for objects: Rack, Device, Cable.";
+    description = "Netbox plugin for generate QR codes for objects: Rack, Device, Cable";
     homepage = "https://github.com/netbox-community/netbox-qrcode";
     changelog = "https://github.com/netbox-community/netbox-qrcode/releases/tag/${src.tag}";
     license = lib.licenses.asl20;

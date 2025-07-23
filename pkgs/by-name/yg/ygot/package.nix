@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ygot";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "ygot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rn5/eq8S2pu+3KYaB1gqN2uwA/pzFJjgX5pyXDE2eEA=";
+    hash = "sha256-O8nBcXRKKd+dV0jub5tVvG8WoxGMR4r1cqOmTzO+LDU=";
   };
 
   vendorHash = "sha256-AgSKfy8Dbc5fRhJ2oskmkShL/mHb2FKkGZoqPyagLfE=";
