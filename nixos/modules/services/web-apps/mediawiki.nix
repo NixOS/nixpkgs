@@ -714,7 +714,7 @@ in
         fi
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
         ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
