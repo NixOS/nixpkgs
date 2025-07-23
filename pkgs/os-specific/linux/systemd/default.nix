@@ -195,7 +195,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.8";
+  version = "258";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-XQ+IyRar74qQij96CKClHXW0kkPnGeKUgA8ULiWh5YY=";
+    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -426,7 +426,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSelinux libselinux
   ++ lib.optionals withRemote [
     libmicrohttpd
-    gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
   ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
@@ -862,7 +861,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       !buildLibsOnly
-    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+    ) "$out/bin/udevadm verify --resolve-names=late --no-style $out/lib/udev/rules.d"}
 
     runHook postInstallCheck
   '';
