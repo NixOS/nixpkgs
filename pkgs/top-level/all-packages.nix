@@ -2122,8 +2122,6 @@ with pkgs;
 
   fast-cli = nodePackages.fast-cli;
 
-  fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
-
   ### TOOLS/TYPESETTING/TEX
 
   advi = callPackage ../tools/typesetting/tex/advi {
