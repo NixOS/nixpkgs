@@ -5,6 +5,7 @@
   pam,
   scdoc,
   installShellFiles,
+  nix-update-script,
   # legacy passthrus
   gtkgreet,
   qtgreet,
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }
     // {
       greetd = warnPassthru "greetd" finalAttrs.finalPackage;
+      updateScript = nix-update-script { };
     };
 
   meta = {
