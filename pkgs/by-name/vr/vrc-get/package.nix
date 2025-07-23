@@ -25,17 +25,19 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-cG6fcSIQ0E1htEM4H914SSKDNRGM5fj52SUoLqRYzoc=";
 
-  # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
-  # If no emulator is available, then give up on generating shell completions
   postInstall =
     let
-      vrc-get = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/vrc-get";
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/vrc-get"
+        else
+          lib.getExe buildPackages.vrc-get;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    ''
       installShellCompletion --cmd vrc-get \
-        --bash <(${vrc-get} completion bash) \
-        --fish <(${vrc-get} completion fish) \
-        --zsh <(${vrc-get} completion zsh)
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
     '';
 
   meta = with lib; {

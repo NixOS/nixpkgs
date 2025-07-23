@@ -36,18 +36,21 @@ buildGoModule (finalAttrs: {
     unset subPackages
   '';
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/nelm"
+        else
+          lib.getExe buildPackages.nelm;
     in
     ''
       for shell in bash fish zsh; do
         installShellCompletion \
           --cmd nelm \
-          --$shell <(${emulator} $out/bin/nelm completion $shell)
+          --$shell <(${exe} completion $shell)
       done
-    ''
-  );
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

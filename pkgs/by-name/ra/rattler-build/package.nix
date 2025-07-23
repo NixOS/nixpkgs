@@ -39,17 +39,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--bin rattler-build" ]; # other bin like `generate-cli-docs` shouldn't be distributed.
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall =
     let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/rattler-build"
+        else
+          lib.getExe buildPackages.rattler-build;
     in
     ''
       installShellCompletion --cmd rattler-build \
-        --bash <(${emulator} $out/bin/rattler-build completion --shell bash) \
-        --fish <(${emulator} $out/bin/rattler-build completion --shell fish) \
-        --zsh <(${emulator} $out/bin/rattler-build completion --shell zsh)
-    ''
-  );
+        --bash <(${exe} completion --shell bash) \
+        --fish <(${exe} completion --shell fish) \
+        --zsh <(${exe} completion --shell zsh)
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
