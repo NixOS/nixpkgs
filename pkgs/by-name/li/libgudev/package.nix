@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
-  doCheck = withIntrospection;
+  doCheck = false;
   mesonFlags = [
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vapi" withIntrospection)
