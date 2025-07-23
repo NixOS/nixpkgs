@@ -2826,6 +2826,13 @@ in
 
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
+    nvimSkipModules = [
+      # requires config setup
+      "otter.keeper"
+      "otter.lsp.handlers"
+      "otter.lsp.init"
+      "otter.diagnostics"
+    ];
   };
 
   outline-nvim = super.outline-nvim.overrideAttrs {
@@ -2952,6 +2959,15 @@ in
     ];
   };
 
+  python-mode = super.python-mode.overrideAttrs {
+    postPatch = ''
+      # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
+      # https://github.com/python-mode/python-mode/pull/1189#issuecomment-3109528360
+      rm -f pymode/libs/pytoolconfig
+      ln -sf ../../submodules/pytoolconfig/src/pytoolconfig pymode/libs/pytoolconfig
+    '';
+  };
+
   pywal-nvim = super.pywal-nvim.overrideAttrs {
     # Optional feline integration
     nvimSkipModules = "pywal.feline";
@@ -2980,9 +2996,9 @@ in
       nvim-lspconfig
       otter-nvim
     ];
-  };
-
-  quicker-nvim = super.quicker-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "quarto.runner.init"
+    ];
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
