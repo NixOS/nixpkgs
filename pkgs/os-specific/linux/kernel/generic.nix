@@ -91,8 +91,6 @@ let
     # cgit) that are needed here should be included directly in Nixpkgs as
     # files.
 
-    assert stdenv.hostPlatform.isLinux;
-
     let
       # Dirty hack to make sure that `version` & `src` have
       # `<nixpkgs/pkgs/os-specific/linux/kernel/linux-x.y.nix>` as position
