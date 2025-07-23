@@ -1,14 +1,12 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  hatch-vcs,
-  hatchling,
-  pynput,
-  xdg-base-dirs,
+  dmenu,
+  wl-clipboard,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bitwarden-menu";
   version = "0.4.5";
   pyproject = true;
@@ -19,15 +17,21 @@ buildPythonApplication rec {
     hash = "sha256-vUlNqSVdGhfN5WjDjf1ub32Y2WoBndIdFzfCNwo5+Vg=";
   };
 
-  nativeBuildInputs = [
+  patches = [ ./fix-circular-imports.patch ];
+
+  build-system = with python3Packages; [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    dmenu
+    wl-clipboard
+  ]
+  ++ (with python3Packages; [
     pynput
     xdg-base-dirs
-  ];
+  ]);
 
   doCheck = false;
 
