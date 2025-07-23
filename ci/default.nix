@@ -5,6 +5,7 @@ in
   system ? builtins.currentSystem,
 
   nixpkgs ? null,
+  nixPath ? "nixVersions.latest",
 }:
 let
   nixpkgs' =
@@ -115,7 +116,7 @@ rec {
   # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
   # have eval divergence.
   eval = pkgs.callPackage ./eval {
-    nix = pkgs.nixVersions.latest;
+    nix = pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." nixPath) pkgs;
   };
 
   # CI jobs
