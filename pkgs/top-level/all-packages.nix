@@ -170,7 +170,6 @@ with pkgs;
         system = stdenv.hostPlatform.system;
         callTest = config: config.test.driver;
       };
-      __attrsFailEvaluation = true;
     };
 
   ### BUILD SUPPORT
@@ -10099,15 +10098,11 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
-  rPackages =
-    (dontRecurseIntoAttrs (
-      callPackage ../development/r-modules {
-        overrides = (config.rPackageOverrides or (_: { })) pkgs;
-      }
-    ))
-    // {
-      __attrsFailEvaluation = true;
-    };
+  rPackages = dontRecurseIntoAttrs (
+    callPackage ../development/r-modules {
+      overrides = (config.rPackageOverrides or (_: { })) pkgs;
+    }
+  );
 
   ### SERVERS
 

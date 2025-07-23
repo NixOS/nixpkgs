@@ -90,16 +90,7 @@ let
         inherit (luaPackages) requiredLuaModules;
       };
       withPackages = import ./with-packages.nix { inherit buildEnv luaPackages; };
-      pkgs =
-        let
-          lp = luaPackages;
-        in
-        lp
-        // {
-          luaPackages = lp.luaPackages // {
-            __attrsFailEvaluation = true;
-          };
-        };
+      pkgs = luaPackages;
       interpreter = "${self}/bin/${executable}";
       inherit executable luaversion;
       luaOnBuild = luaOnBuildForHost.override {
