@@ -6,7 +6,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  name = "nextcloud-spreed-signaling";
+  pname = "nextcloud-spreed-signaling";
   version = "2.0.3";
 
   src = fetchFromGitHub {
