@@ -59,6 +59,12 @@ buildPythonPackage rec {
     torch
   ];
 
+  disabledTests = [
+    # AttributeError: jax.sharding.GSPMDSharding was deprecated in JAX v0.6.0 and removed in JAX v0.7.0. Did you mean: 'NamedSharding'?
+    # https://github.com/google-deepmind/treescope/issues/67
+    "NdarrayAdaptersTest"
+  ];
+
   meta = {
     description = "Interactive HTML pretty-printer for machine learning research in IPython notebooks";
     homepage = "https://github.com/google-deepmind/treescope";
