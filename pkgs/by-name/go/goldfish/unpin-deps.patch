@@ -1,0 +1,26 @@
+diff --git a/xmake.lua b/xmake.lua
+index c76c270..eb44a6c 100644
+--- a/xmake.lua
++++ b/xmake.lua
+@@ -20,18 +20,18 @@ option("tbox")
+ option_end()
+ 
+ local S7_VERSION = "20250721"
+-add_requires("s7 "..S7_VERSION, {system=false})
++add_requires("s7")
+ 
+ local TBOX_VERSION = "1.7.6"
+ if has_config("tbox") then
+     add_requires("apt::libtbox-dev", {alias="tbox"})
+ else
+     tbox_configs = {hash=true, ["force-utf8"]=true}
+-    add_requires("tbox " .. TBOX_VERSION, {system=false, configs=tbox_configs})
++    add_requires("tbox", {configs=tbox_configs})
+ end
+ 
+ if is_plat("wasm") then
+-    add_requires("emscripten 3.1.55")
++    add_requires("emscripten")
+     set_toolchains("emcc@emscripten")
+ end
+ 
