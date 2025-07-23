@@ -5,6 +5,8 @@
   meson,
   ninja,
   stdenv,
+  pkg-config,
+  check,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       fixDarwinDylibNames
     ];
+
+  nativeCheckInputs = [
+    pkg-config
+    check
+  ];
+
+  mesonFlags = lib.optional finalAttrs.doCheck (lib.strings.mesonBool "test" true);
+
+  doCheck = true;
 
   meta = {
     description = "Client library for MPD (music player daemon)";
