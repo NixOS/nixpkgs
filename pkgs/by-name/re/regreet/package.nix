@@ -8,6 +8,7 @@
   gtk4,
   pango,
   librsvg,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
     librsvg
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Clean and customizable greeter for greetd";
