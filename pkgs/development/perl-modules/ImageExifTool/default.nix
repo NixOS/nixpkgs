@@ -1,12 +1,17 @@
 {
-  lib,
   buildPerlPackage,
+  ArchiveZip,
+  CompressRawLzma,
   exiftool,
   fetchFromGitHub,
+  IOCompress,
+  IOCompressBrotli,
+  lib,
   nix-update-script,
   shortenPerlShebang,
   stdenv,
   testers,
+  UnicodeLineBreak,
 }:
 
 buildPerlPackage rec {
@@ -20,11 +25,19 @@ buildPerlPackage rec {
     hash = "sha256-/qtG+xNDIFIb17ECMeVgl9cRfbfSEpZnJf6wrW9Nkv4=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-
   postPatch = ''
     patchShebangs exiftool
   '';
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  propagatedBuildInputs = [
+    ArchiveZip
+    CompressRawLzma
+    IOCompress
+    IOCompressBrotli
+    UnicodeLineBreak
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
