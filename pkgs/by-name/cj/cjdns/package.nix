@@ -85,6 +85,6 @@ rustPlatform.buildRustPackage rec {
     description = "Encrypted networking for regular people";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ehmry ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
