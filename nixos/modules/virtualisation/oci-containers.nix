@@ -405,7 +405,9 @@ let
   mkService =
     name: container:
     let
-      dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+      dependsOn = lib.attrsets.mapAttrsToList (k: v: "${v.serviceName}.service") (
+        lib.attrsets.getAttrs container.dependsOn cfg.containers
+      );
       escapedName = escapeShellArg name;
       preStartScript = pkgs.writeShellApplication {
         name = "pre-start";
@@ -558,7 +560,7 @@ let
           Restart = "always";
         }
         // optionalAttrs (cfg.backend == "podman") {
-          Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+          Environment = "PODMAN_SYSTEMD_UNIT=%n";
           Type = "notify";
           NotifyAccess = "all";
           Delegate = mkIf (container.podman.sdnotify == "healthy") true;
