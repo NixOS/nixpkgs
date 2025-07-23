@@ -1,68 +1,74 @@
 diff --git a/jadx-gui/build.gradle.kts b/jadx-gui/build.gradle.kts
-index 09f2c05f..bdb641b0 100644
+index bcd7fa16822e..b343d3328199 100644
 --- a/jadx-gui/build.gradle.kts
 +++ b/jadx-gui/build.gradle.kts
-@@ -1,7 +1,6 @@
- plugins {
+@@ -2,7 +2,6 @@ plugins {
  	id("jadx-kotlin")
  	id("application")
--	id("edu.sc.seis.launch4j") version "3.0.5"
- 	id("com.github.johnrengelman.shadow") version "8.1.1"
+ 	id("jadx-library")
+-	id("edu.sc.seis.launch4j") version "3.0.6"
+ 	id("com.gradleup.shadow") version "8.3.6"
  	id("org.beryx.runtime") version "1.13.1"
  }
-@@ -101,24 +100,6 @@
+@@ -136,30 +135,6 @@ tasks.startShadowScripts {
  	}
  }
  
 -launch4j {
 -	mainClassName.set(application.mainClass.get())
 -	copyConfigurable.set(listOf<Any>())
--	setJarTask(tasks.shadowJar.get())
+-	dontWrapJar.set(true)
 -	icon.set("$projectDir/src/main/resources/logos/jadx-logo.ico")
 -	outfile.set("jadx-gui-$jadxVersion.exe")
+-	version.set(jadxVersion)
 -	copyright.set("Skylot")
 -	windowTitle.set("jadx")
 -	companyName.set("jadx")
 -	jreMinVersion.set("11")
--	jvmOptions.set(application.applicationDefaultJvmArgs.toSet())
+-	jvmOptions.set(escapeJVMOptions())
 -	requires64Bit.set(true)
--	initialHeapPercent.set(5)
--	maxHeapSize.set(4096)
--	maxHeapPercent.set(70)
--	downloadUrl.set("https://www.oracle.com/java/technologies/downloads/#jdk17-windows")
+-	downloadUrl.set("https://www.oracle.com/java/technologies/downloads/#jdk21-windows")
+-	supportUrl.set("https://github.com/skylot/jadx")
+-
 -	bundledJrePath.set(if (project.hasProperty("bundleJRE")) "%EXEDIR%/jre" else "%JAVA_HOME%")
+-	classpath.set(tasks.getByName("shadowJar").outputs.files.map { "%EXEDIR%/lib/${it.name}" }.sorted().toList())
+-	println("Launch4J classpath: ${classpath.get()}")
+-
+-	chdir.set("") // don't change current dir
+-	libraryDir.set("") // don't add any libs
 -}
- 
- runtime {
- 	addOptions("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
-@@ -137,30 +118,6 @@
- 	}
+-
+ fun escapeJVMOptions(): List<String> {
+ 	return application.applicationDefaultJvmArgs
+ 		.toList()
+@@ -204,30 +179,6 @@ val copyDistWin by tasks.registering(Copy::class) {
+ 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
  }
  
 -val copyDistWinWithJre by tasks.registering(Copy::class) {
--	group = "jadx"
--	dependsOn(tasks.named("runtime"), tasks.named("createExe"))
--	from(runtime.jreDir) {
+-	description = "Copy files for Windows with JRE bundle"
+-
+-	val jreTask = tasks.runtime.get()
+-	dependsOn(jreTask)
+-	from(jreTask.jreDir) {
 -		include("**/*")
 -		into("jre")
 -	}
--	from(tasks.named("createExe").get().outputs) {
+-	val libTask = tasks.getByName("shadowJar")
+-	dependsOn(libTask)
+-	from(libTask.outputs) {
+-		include("*.jar")
+-		into("lib")
+-	}
+-	val exeTask = tasks.getByName("createExe")
+-	dependsOn(exeTask)
+-	from(exeTask.outputs) {
 -		include("*.exe")
 -	}
--	into(layout.buildDirectory.dir("jadx-gui-$jadxVersion-with-jre-win"))
+-	into(layout.buildDirectory.dir("jadx-gui-with-jre-win"))
 -	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 -}
 -
--val distWinWithJre by tasks.registering(Zip::class) {
--	group = "jadx"
--	dependsOn(copyDistWinWithJre)
--	archiveFileName.set("jadx-gui-$jadxVersion-with-jre-win.zip")
--	from(copyDistWinWithJre.get().outputs) {
--		include("**/*")
--	}
--	into(layout.buildDirectory.asFile)
--	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
--}
- 
- val addNewNLSLines by tasks.registering(JavaExec::class) {
- 	group = "jadx"
+ val syncNLSLines by tasks.registering(JavaExec::class) {
+ 	group = "jadx-dev"
+ 	description = "Utility task to sync new/missing translation using EN as a reference"

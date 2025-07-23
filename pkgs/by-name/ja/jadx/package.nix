@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vq+IrGos4BzYqumrjZ6SVBQrUf7aRSPk4jxP2r4djv0=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
     homepage = "https://github.com/skylot/jadx";
@@ -98,13 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 })
