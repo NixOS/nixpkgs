@@ -39,6 +39,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version;
       src = "${src}/rust/gui-client";
+      fetcherVersion = 1;
       hash = "sha256-bVWpyGwEaxYi3N6BJqOilnHJDgAykKHgRC2QKlvSm4Q=";
     };
     pnpmRoot = "rust/gui-client";

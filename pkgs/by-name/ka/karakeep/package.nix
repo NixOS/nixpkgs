@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
+    fetcherVersion = 1;
     hash = "sha256-2n61uKdT9Q1fobpHunRhC3Eql3fqsV+DcyaEGjYDOyY=";
   };
   buildPhase = ''

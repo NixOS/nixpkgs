@@ -30,6 +30,7 @@ let
     inherit version src;
     pnpmDeps = pnpm.fetchDeps {
       inherit pname version src;
+      fetcherVersion = 1;
       hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
     };
     nativeBuildInputs = [
