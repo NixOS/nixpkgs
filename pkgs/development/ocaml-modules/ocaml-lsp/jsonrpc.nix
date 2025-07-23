@@ -10,7 +10,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.3" then
-      "1.22.0"
+      "1.23.0"
     else if lib.versionAtLeast ocaml.version "5.2" then
       "1.21.0"
     else if lib.versionAtLeast ocaml.version "4.14" then
@@ -26,6 +26,11 @@
 let
   params =
     {
+      "1.23.0" = {
+        name = "lsp";
+        minimalOCamlVersion = "5.3";
+        sha256 = "sha256-fyvQI7VKgOrOFihtKIkcE2B2iUYFLJOZGKipzZU0Dn0=";
+      };
       "1.22.0" = {
         name = "lsp";
         minimalOCamlVersion = "5.2";

@@ -230,11 +230,6 @@ with pkgs;
     } ../build-support/setup-hooks/autoreconf.sh
   ) { };
 
-  autoreconfHook264 = autoreconfHook.override {
-    autoconf = autoconf264;
-    automake = automake111x;
-  };
-
   autoreconfHook269 = autoreconfHook.override {
     autoconf = autoconf269;
   };
@@ -6914,14 +6909,10 @@ with pkgs;
   electron-chromedriver = electron-chromedriver_37;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
-  autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
-  autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
   autoconf271 = callPackage ../development/tools/misc/autoconf/2.71.nix { };
 
   automake = automake116x;
-
-  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
@@ -12869,8 +12860,6 @@ with pkgs;
   kotatogram-desktop =
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
-
-  krane = callPackage ../applications/networking/cluster/krane { };
 
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
