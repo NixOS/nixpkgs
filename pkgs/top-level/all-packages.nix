@@ -7877,9 +7877,7 @@ with pkgs;
 
   makeDBusConf = callPackage ../development/libraries/dbus/make-dbus-conf.nix { };
 
-  dee = callPackage ../development/libraries/dee {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  dee = callPackage ../development/libraries/dee { };
 
   draco = callPackage ../development/libraries/draco {
     tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
