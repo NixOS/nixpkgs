@@ -6,20 +6,21 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nengo-gui";
-  version = "0.4.9";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nengo";
     repo = "nengo-gui";
     tag = "v${version}";
-    sha256 = "sha256-aBi4roe9pqPmpbW5zrbDoIvyH5mTKgIzL2O5j1+VBMY=";
+    hash = "sha256-nm5rHXKTzVxrhEJ/ajEFC7yMzYicn+5ubeB2fHhoLys=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ nengo ];
+  build-system = with python3Packages; [ setuptools ];
 
-  # checks req missing:
-  #   pyimgur
+  dependencies = with python3Packages; [ nengo ];
+
+  # selenium based tests don't seem to be working
   doCheck = false;
 
   meta = with lib; {
