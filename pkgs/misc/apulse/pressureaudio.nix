@@ -69,7 +69,7 @@ stdenv.mkDerivation {
   '';
 
   meta = apulse.meta // {
-    description = "libpulse without any sound daemons over pure ALSA";
+    description = "Libpulse without any sound daemons over pure ALSA";
     longDescription = ''
       apulse (${apulse.meta.homepage}) implements most of libpulse
       API over pure ALSA in 5% LOC of the original PulseAudio.

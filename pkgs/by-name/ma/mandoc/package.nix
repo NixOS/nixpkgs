@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.buildPlatform.system != stdenv.hostPlatform.system;
 
     homepage = "https://mandoc.bsd.lv/";
-    description = "suite of tools compiling mdoc and man";
+    description = "Suite of tools compiling mdoc and man";
     downloadPage = "http://mandoc.bsd.lv/snapshots/";
     license = licenses.bsd3;
     platforms = platforms.all;

@@ -514,7 +514,7 @@ let
           "fset/test"
         ];
         meta = {
-          description = "functional collections library";
+          description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
           license = pkgs.lib.licenses.llgpl21;
         };
@@ -534,7 +534,7 @@ let
         lispLibs = oa.lispLibs ++ [ self.fiasco ];
         nativeLibs = [ pkgs.mpfr ];
         meta = {
-          description = "statically typed functional programming language that supercharges Common Lisp";
+          description = "Statically typed functional programming language that supercharges Common Lisp";
           homepage = "https://coalton-lang.github.io";
           license = pkgs.lib.licenses.mit;
         };

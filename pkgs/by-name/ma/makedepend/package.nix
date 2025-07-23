@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "parse C sources to make dependency lists for Makefiles";
+    description = "Parse C sources to make dependency lists for Makefiles";
     homepage = "https://gitlab.freedesktop.org/xorg/util/makedepend";
     license = with lib.licenses; [
       mitOpenGroup

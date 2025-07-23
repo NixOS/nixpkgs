@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytouchlinesl" ];
 
   meta = {
-    description = "A Python API client for Roth's TouchlineSL API";
+    description = "Python API client for Roth's TouchlineSL API";
     homepage = "https://github.com/jnsgruk/pytouchlinesl";
     changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${version}";
     license = lib.licenses.asl20;

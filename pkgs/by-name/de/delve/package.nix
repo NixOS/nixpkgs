@@ -45,7 +45,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "debugger for the Go programming language";
+    description = "Debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ vdemeester ];
     license = licenses.mit;

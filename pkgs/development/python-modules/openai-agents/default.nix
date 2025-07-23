@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/openai/openai-agents-python/releases/tag/${version}";
     homepage = "https://github.com/openai/openai-agents-python";
-    description = "A lightweight, powerful framework for multi-agent workflows";
+    description = "Lightweight, powerful framework for multi-agent workflows";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bryanhonof ];
   };

@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://data-apis.org/array-api-strict";
     changelog = "https://github.com/data-apis/array-api-strict/releases/tag/${version}";
-    description = "A strict, minimal implementation of the Python array API";
+    description = "Strict, minimal implementation of the Python array API";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ berquist ];
   };

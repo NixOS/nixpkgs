@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   meta = {
-    description = "curl statistics made simple";
+    description = "Curl statistics made simple";
     mainProgram = "httpstat";
     homepage = "https://github.com/reorx/httpstat";
     license = lib.licenses.mit;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "easy-to-use X protocol tracing program";
+    description = "Easy-to-use X protocol tracing program";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];

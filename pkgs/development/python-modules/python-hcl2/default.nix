@@ -35,7 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A parser for HCL2 written in Python using Lark";
+    description = "Parser for HCL2 written in Python using Lark";
     homepage = "https://github.com/amplify-education/python-hcl2";
     changelog = "https://github.com/amplify-education/python-hcl2/releases/tag/${src.tag}";
     license = licenses.mit;

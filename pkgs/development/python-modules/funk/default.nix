@@ -31,7 +31,7 @@ buildPythonPackage rec {
   passthru.updateScripts = gitUpdater { };
 
   meta = {
-    description = "A mocking framework for Python, influenced by JMock";
+    description = "Mocking framework for Python, influenced by JMock";
     homepage = "https://github.com/mwilliamson/funk";
     changelog = "https://github.com/mwilliamson/funk/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;

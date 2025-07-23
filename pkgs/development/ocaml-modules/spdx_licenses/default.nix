@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/kit-ty-kate/spdx_licenses";
-    description = "A library providing a strict SPDX License Expression parser";
+    description = "Library providing a strict SPDX License Expression parser";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

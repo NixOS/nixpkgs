@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A simple Log Assertion mechanism for Python unittests";
+    description = "Simple Log Assertion mechanism for Python unittests";
     homepage = "https://github.com/facundobatista/logassert";
     changelog = "https://github.com/facundobatista/logassert/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;

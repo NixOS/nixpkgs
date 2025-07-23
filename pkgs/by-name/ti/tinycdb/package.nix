@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
 
-    description = "utility to manipulate constant databases (cdb)";
+    description = "Utility to manipulate constant databases (cdb)";
     mainProgram = "cdb";
 
     longDescription = ''

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "smart column output alignment library";
+    description = "Smart column output alignment library";
     homepage = "https://github.com/karelzak/util-linux/tree/master/libsmartcols";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -76,7 +76,7 @@ let
 
         meta = with lib; {
           homepage = "https://www.coreboot.org";
-          description = "coreboot toolchain for ${arch} targets";
+          description = "Coreboot toolchain for ${arch} targets";
           license = with licenses; [
             bsd2
             bsd3

@@ -56,7 +56,7 @@ let
     };
 
     meta = {
-      description = "A Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
+      description = "Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
       homepage = "https://github.com/CERTCC/kaiju";
       downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${finalAttrs.version}";
       license = lib.licenses.bsd3;

@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "An extension for colcon-core to support Rust packages built with Cargo";
+    description = "Extension for colcon-core to support Rust packages built with Cargo";
     homepage = "https://github.com/colcon/colcon-cargo";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];

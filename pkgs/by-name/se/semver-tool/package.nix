@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fsaintjacques/semver-tool";
-    description = "semver bash implementation";
+    description = "Semver bash implementation";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.qyliss ];

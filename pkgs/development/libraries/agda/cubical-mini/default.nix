@@ -35,7 +35,7 @@ mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/cmcmA20/cubical-mini";
-    description = "A nonstandard library for Cubical Agda";
+    description = "Nonstandard library for Cubical Agda";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thelissimus ];
