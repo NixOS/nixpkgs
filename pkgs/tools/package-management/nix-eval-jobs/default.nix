@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   # Since this package is intimately tied to a specific Nix release, we
   # propagate the Nix used for building it to make it easier for users
   # downstream to reference it.
