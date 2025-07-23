@@ -12037,9 +12037,7 @@ with pkgs;
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  elinks = callPackage ../applications/networking/browsers/elinks { };
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs30
