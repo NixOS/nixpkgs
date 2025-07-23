@@ -27,8 +27,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        system: ${{ fromJSON(inputs.systems) }}
-    name: ${{ matrix.system }}
+        system:
+          - x86_64-linux
+        chunkSize:
+          - "6000"
+          - "8000"
+          - "10000"
+          - "12000"
+          - "14000"
+          - "16000"
+        nix:
+          - "nixVersions.nix_2_24"
+          - "nixVersions.nix_2_28"
+          - "nixVersions.nix_2_29"
+          - "nixVersions.nix_2_30"
+          - "lixPackageSets.lix_2_91.lix"
+          - "lixPackageSets.lix_2_92.lix"
+          - "lixPackageSets.lix_2_93.lix"
+    name: ${{ matrix.system }} / ${{ matrix.chunkSize }} / ${{ matrix.nix }}
     outputs:
       targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
     steps:
@@ -56,7 +72,8 @@ jobs:
         run: |
           nix-build untrusted/ci -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
-            --arg chunkSize 10000 \
+            --arg chunkSize ${{ matrix.chunkSize }} \
+            --argstr nixPath ${{ matrix.nix }} \
             --out-link merged
           # If it uses too much memory, slightly decrease chunkSize
 
