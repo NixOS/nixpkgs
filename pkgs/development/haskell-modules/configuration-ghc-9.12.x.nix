@@ -115,6 +115,7 @@ with haskellLib;
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
   timezone-series = doJailbreak super.timezone-series; # time <1.14
+  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
 
   #
   # Test suite issues
