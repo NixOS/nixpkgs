@@ -2173,8 +2173,7 @@ with pkgs;
 
   espanso-wayland = espanso.override {
     x11Support = false;
-    waylandSupport = true;
-    espanso = espanso-wayland;
+    waylandSupport = !stdenv.hostPlatform.isDarwin;
   };
 
   fastly = callPackage ../misc/fastly {
@@ -5164,42 +5163,36 @@ with pkgs;
 
   wrapCCMulti =
     cc:
-    if stdenv.targetPlatform.system == "x86_64-linux" then
-      let
-        # Binutils with glibc multi
-        bintools = cc.bintools.override {
-          libc = glibc_multi;
-        };
-      in
-      lowPrio (wrapCCWith {
-        cc = cc.cc.override {
-          stdenv = overrideCC stdenv (wrapCCWith {
-            cc = cc.cc;
-            inherit bintools;
-            libc = glibc_multi;
-          });
-          profiledCompiler = false;
-          enableMultilib = true;
-        };
+    let
+      # Binutils with glibc multi
+      bintools = cc.bintools.override {
         libc = glibc_multi;
-        inherit bintools;
-        extraBuildCommands = ''
-          echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
-        '';
-      })
-    else
-      throw "Multilib ${cc.name} not supported for ‘${stdenv.targetPlatform.system}’";
+      };
+    in
+    lowPrio (wrapCCWith {
+      cc = cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith {
+          cc = cc.cc;
+          inherit bintools;
+          libc = glibc_multi;
+        });
+        profiledCompiler = false;
+        enableMultilib = true;
+      };
+      libc = glibc_multi;
+      inherit bintools;
+      extraBuildCommands = ''
+        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+      '';
+    });
 
   wrapClangMulti =
     clang:
-    if stdenv.targetPlatform.system == "x86_64-linux" then
-      callPackage ../development/compilers/llvm/multi.nix {
-        inherit clang;
-        gcc32 = pkgsi686Linux.gcc;
-        gcc64 = pkgs.gcc;
-      }
-    else
-      throw "Multilib ${clang.cc.name} not supported for '${stdenv.targetPlatform.system}'";
+    callPackage ../development/compilers/llvm/multi.nix {
+      inherit clang;
+      gcc32 = pkgsi686Linux.gcc;
+      gcc64 = pkgs.gcc;
+    };
 
   gcc_multi = wrapCCMulti gcc;
   clang_multi = wrapClangMulti clang;
@@ -5221,11 +5214,10 @@ with pkgs;
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
-    assert stdenv.targetPlatform != stdenv.hostPlatform;
     let
       libcCross1 = binutilsNoLibc.libc;
     in
-    wrapCCWith {
+    (wrapCCWith {
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
@@ -5251,7 +5243,14 @@ with pkgs;
       bintools = binutilsNoLibc;
       libc = libcCross1;
       extraPackages = [ ];
-    };
+    }).overrideAttrs
+      (prevAttrs: {
+        meta = prevAttrs.meta // {
+          badPlatforms =
+            (prevAttrs.meta.badPlatforms or [ ])
+            ++ lib.optionals (stdenv.targetPlatform == stdenv.hostPlatform) [ stdenv.hostPlatform.system ];
+        };
+      });
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
     gcc9
@@ -6019,9 +6018,12 @@ with pkgs;
     ocamlformat_0_26_1
     ;
 
+  inherit (ocaml-ng.ocamlPackages_5_2)
+    ocamlformat_0_26_2
+    ;
+
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_26_2
     ocamlformat_0_27_0
     ;
 
@@ -6409,10 +6411,13 @@ with pkgs;
     elixir
     elixir_1_18
     elixir_1_17
+    elixir-ls
+    ;
+
+  inherit (beam.packages.erlang_26.beamPackages)
     elixir_1_16
     elixir_1_15
     elixir_1_14
-    elixir-ls
     ;
 
   inherit (beam.packages.erlang)

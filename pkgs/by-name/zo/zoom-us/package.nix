@@ -50,42 +50,41 @@
   # This list can be overridden to add in extra packages
   # that are independent of the underlying package attrset
   targetPkgsFixed ? [ ],
-
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
 
-  # Zoom versions are released at different times for each platform
-  # and often with different versions. We write them on three lines
-  # like this (rather than using {}) so that the updater script can
+  # Zoom versions are released at different times per platform and often with different versions.
+  # We write them on three lines like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.4.6.53970";
-  versions.x86_64-darwin = "6.4.6.53970";
-  versions.x86_64-linux = "6.4.6.1370";
+  versions.aarch64-darwin = "6.5.7.60598";
+  versions.x86_64-darwin = "6.5.7.60598";
+
+  # This is the fallback version so that evaluation can produce a meaningful result.
+  versions.x86_64-linux = "6.5.7.3298";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-yNsiFZNte4432d8DUyDhPUOVbLul7gUdvr+3qK/Y+tk=";
+      hash = "sha256-o7ZxDYQS0J9Tl8kECSms1XQ6CVgxt453lDuFyZSZBv4=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-Ut93qQFFN0d58wXD5r8u0B17HbihFg3FgY3a1L8nsIA=";
+      hash = "sha256-y5/8xNtQTAbsXwbajFfzx0iNPEMQ0S+DAw2eS2mf5SQ=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-Y+8garSqDcKLCVv1cTiqGEfrGKpK3UoXIq8X4E8CF+8=";
+      hash = "sha256-6gzgJmB+/cwcEToQpniVVZyQZcqzblQG/num0X+xUIE=";
     };
   };
 
   unpacked = stdenv.mkDerivation {
     pname = "zoom";
-    version = versions.${system} or throwSystem;
+    version = versions.${system} or versions.x86_64-linux;
 
-    src = srcs.${system} or throwSystem;
+    src = srcs.${system} or srcs.x86_64-linux;
 
     dontUnpack = stdenv.hostPlatform.isLinux;
     unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -113,26 +112,26 @@ let
       cpio
     ];
 
-    installPhase = ''
-      runHook preInstall
-      ${
-        rec {
-          aarch64-darwin = ''
+    installPhase =
+      ''
+        runHook preInstall
+      ''
+      + (
+        if stdenv.hostPlatform.isDarwin then
+          ''
             mkdir -p $out/Applications
             cp -R zoom.us.app $out/Applications/
-          '';
-          # darwin steps same on both architectures
-          x86_64-darwin = aarch64-darwin;
-          x86_64-linux = ''
+          ''
+        else
+          ''
             mkdir $out
             tar -C $out -xf $src
             mv $out/usr/* $out/
-          '';
-        }
-        .${system} or throwSystem
-      }
-      runHook postInstall
-    '';
+          ''
+      )
+      + ''
+        runHook postInstall
+      '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
@@ -152,14 +151,13 @@ let
       license = lib.licenses.unfree;
       platforms = builtins.attrNames srcs;
       maintainers = with lib.maintainers; [
-        danbst
-        tadfisher
+        philiptaron
+        ryan4yin
+        yarny
       ];
       mainProgram = "zoom";
     };
   };
-  packages.aarch64-darwin = unpacked;
-  packages.x86_64-darwin = unpacked;
 
   # linux definitions
 
@@ -236,16 +234,16 @@ let
     ++ targetPkgs pkgs
     ++ targetPkgsFixed;
 
-  # We add the `unpacked` zoom archive to the FHS env
-  # and also bind-mount its `/opt` directory.
-  # This should assist Zoom in finding all its
-  # files in the places where it expects them to be.
-  packages.x86_64-linux = buildFHSEnv {
-    pname = "zoom"; # Will also be the program's name!
-    version = versions.${system} or throwSystem;
+in
+if !stdenv.hostPlatform.isLinux then
+  unpacked
+else
+  # We add the `unpacked` zoom archive to the FHS env and also bind-mount its `/opt` directory.
+  # This should assist Zoom in finding all its files in the places where it expects them to be.
+  buildFHSEnv {
+    inherit (unpacked) pname version;
 
     targetPkgs = pkgs: (linuxGetDependencies pkgs) ++ [ unpacked ];
-    extraPreBwrapCmds = "unset QT_PLUGIN_PATH";
     extraBwrapArgs = [ "--ro-bind ${unpacked}/opt /opt" ];
     runScript = "/opt/zoom/ZoomLauncher";
 
@@ -255,7 +253,7 @@ let
           $out/share/applications/Zoom.desktop \
           --replace-fail Exec={/usr/bin/,}zoom
 
-      # Backwards compatibility: we used to call it zoom-us
+      # Backwards compatibility: we also call it zoom-us
       ln -s $out/bin/{zoom,zoom-us}
     '';
 
@@ -263,8 +261,4 @@ let
       inherit unpacked;
     };
     inherit (unpacked) meta;
-  };
-
-in
-
-packages.${system} or throwSystem
+  }

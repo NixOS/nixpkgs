@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -56,6 +57,8 @@ let
       true
     else
       versionOlder (versions.major (getVersion erlang)) maxShiftMajor;
+  minAssert = versionAtLeast (getVersion erlang) minimumOTPVersion;
+  bothAssert = minAssert && maxAssert;
 
   elixirShebang =
     if stdenv.hostPlatform.isDarwin then
@@ -69,73 +72,75 @@ let
 
   erlc_opts = [ "deterministic" ] ++ optionals debugInfo [ "debug_info" ];
 in
-assert assertMsg (versionAtLeast (getVersion erlang) minimumOTPVersion) compatibilityMsg;
-assert assertMsg maxAssert compatibilityMsg;
+if !config.allowAliases && !bothAssert then
+  # Don't throw without aliases to not break CI.
+  null
+else
+  assert assertMsg bothAssert compatibilityMsg;
+  stdenv.mkDerivation {
+    pname = "${baseName}";
 
-stdenv.mkDerivation {
-  pname = "${baseName}";
+    inherit src version debugInfo;
 
-  inherit src version debugInfo;
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ erlang ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ erlang ];
+    env = {
+      LANG = "C.UTF-8";
+      LC_TYPE = "C.UTF-8";
+      DESTDIR = placeholder "out";
+      PREFIX = "/";
+      ERL_COMPILER_OPTIONS = "[${concatStringsSep "," erlc_opts}]";
+    };
 
-  env = {
-    LANG = "C.UTF-8";
-    LC_TYPE = "C.UTF-8";
-    DESTDIR = placeholder "out";
-    PREFIX = "/";
-    ERL_COMPILER_OPTIONS = "[${concatStringsSep "," erlc_opts}]";
-  };
-
-  preBuild = ''
-    patchShebangs ${escriptPath} || true
-  '';
-
-  # copy stdlib source files for LSP access
-  postInstall = ''
-    for d in lib/*; do
-      cp -R "$d/lib" "$out/lib/elixir/$d"
-    done
-  '';
-
-  postFixup = ''
-    # Elixir binaries are shell scripts which run erl. Add some stuff
-    # to PATH so the scripts can run without problems.
-
-    for f in $out/bin/*; do
-      b=$(basename $f)
-      if [ "$b" = mix ]; then continue; fi
-      wrapProgram $f \
-        --prefix PATH ":" "${
-          lib.makeBinPath [
-            erlang
-            coreutils
-            curl
-            bash
-          ]
-        }"
-    done
-
-    substituteInPlace $out/bin/mix \
-      --replace "/usr/bin/env elixir" "${elixirShebang}"
-  '';
-
-  pos = builtins.unsafeGetAttrPos "sha256" args;
-  meta = with lib; {
-    homepage = "https://elixir-lang.org/";
-    description = "Functional, meta-programming aware language built on top of the Erlang VM";
-
-    longDescription = ''
-      Elixir is a functional, meta-programming aware language built on
-      top of the Erlang VM. It is a dynamic language with flexible
-      syntax and macro support that leverages Erlang's abilities to
-      build concurrent, distributed and fault-tolerant applications
-      with hot code upgrades.
+    preBuild = ''
+      patchShebangs ${escriptPath} || true
     '';
 
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    teams = [ teams.beam ];
-  };
-}
+    # copy stdlib source files for LSP access
+    postInstall = ''
+      for d in lib/*; do
+        cp -R "$d/lib" "$out/lib/elixir/$d"
+      done
+    '';
+
+    postFixup = ''
+      # Elixir binaries are shell scripts which run erl. Add some stuff
+      # to PATH so the scripts can run without problems.
+
+      for f in $out/bin/*; do
+        b=$(basename $f)
+        if [ "$b" = mix ]; then continue; fi
+        wrapProgram $f \
+          --prefix PATH ":" "${
+            lib.makeBinPath [
+              erlang
+              coreutils
+              curl
+              bash
+            ]
+          }"
+      done
+
+      substituteInPlace $out/bin/mix \
+        --replace "/usr/bin/env elixir" "${elixirShebang}"
+    '';
+
+    pos = builtins.unsafeGetAttrPos "sha256" args;
+    meta = with lib; {
+      homepage = "https://elixir-lang.org/";
+      description = "Functional, meta-programming aware language built on top of the Erlang VM";
+
+      longDescription = ''
+        Elixir is a functional, meta-programming aware language built on
+        top of the Erlang VM. It is a dynamic language with flexible
+        syntax and macro support that leverages Erlang's abilities to
+        build concurrent, distributed and fault-tolerant applications
+        with hot code upgrades.
+      '';
+
+      license = licenses.asl20;
+      platforms = platforms.unix;
+      teams = [ teams.beam ];
+    };
+  }

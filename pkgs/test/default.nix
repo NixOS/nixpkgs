@@ -197,8 +197,6 @@ with pkgs;
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 
-  nixpkgs-check-by-name = throw "tests.nixpkgs-check-by-name is now specified in a separate repository: https://github.com/NixOS/nixpkgs-check-by-name";
-
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
