@@ -63,11 +63,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "YouTube Leanback on the desktop, with enhancements";
     homepage = "https://github.com/shy1132/VacuumTube";
     mainProgram = "VacuumTube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ theCapypara ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ theCapypara ];
   };
 }
