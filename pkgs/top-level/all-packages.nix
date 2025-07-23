@@ -12874,8 +12874,6 @@ with pkgs;
     callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop
       { };
 
-  krane = callPackage ../applications/networking/cluster/krane { };
-
   ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
 
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
