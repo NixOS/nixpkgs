@@ -16306,10 +16306,6 @@ with pkgs;
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
 
-  trufflehog = callPackage ../tools/security/trufflehog {
-    buildGoModule = buildGo123Module;
-  };
-
   unityhub = callPackage ../development/tools/unityhub { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
