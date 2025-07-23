@@ -3430,6 +3430,17 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  fetch-deno-deps-scripts = {
+    deno =
+      (callPackages ../build-support/deno/fetch-deno-deps/scripts/deno/default.nix { })
+      .fetch-deno-deps-scripts;
+    # rust =
+    #   (callPackages
+    #     ../build-support/deno/fetch-deno-deps/scripts/rust/file-structure-transformer-vendor/default.nix
+    #     { }
+    #   ).file-structure-transformer-vendor;
+  };
+
   ktailctl = kdePackages.callPackage ../applications/networking/ktailctl { };
 
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
