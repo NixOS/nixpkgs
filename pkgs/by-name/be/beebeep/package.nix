@@ -2,10 +2,11 @@
   lib,
   fetchzip,
   autoPatchelfHook,
-  libsForQt5,
+  stdenv,
+  qt5,
 }:
 
-libsForQt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "beebeep";
   version = "5.8.6";
 
@@ -15,11 +16,11 @@ libsForQt5.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
+    qt5.wrapQtAppsHook
     autoPatchelfHook
   ];
 
-  buildInputs = with libsForQt5; [
+  buildInputs = with qt5; [
     qtbase
     qtmultimedia
     qtx11extras
