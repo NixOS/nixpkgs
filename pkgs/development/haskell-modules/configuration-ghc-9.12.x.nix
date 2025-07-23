@@ -116,6 +116,7 @@ with haskellLib;
   ] super.ghc-exactprint_1_12_0_0;
   timezone-series = doJailbreak super.timezone-series; # time <1.14
   cabal-plan = doJailbreak super.cabal-plan; # base <4.21
+  dbus = doJailbreak super.dbus; # template-haskell <2.23
 
   #
   # Test suite issues
