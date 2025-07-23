@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fusermount-setuid.patch
-    ./fuse_fs.patch
+    # Taken from https://github.com/gittup/tup/issues/518#issuecomment-3014825681
+    ./fix_newer_fuse3_file_reads.patch
   ];
 
   configurePhase = ''
