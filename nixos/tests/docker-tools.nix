@@ -86,6 +86,12 @@ let
       ];
     };
   };
+
+  signingKeyForSignatureTests = pkgs.runCommand "signingKey" { } ''
+    NIX_STATE_DIR=$(mktemp -d) ${pkgs.nix}/bin/nix-store --generate-binary-cache-key key $out /dev/null
+  '';
+
+  signatureTests = import ./docker-tools-build.nix;
 in
 {
   name = "docker-tools";
@@ -96,6 +102,8 @@ in
     ];
   };
 
+  node.pkgsReadOnly = false;
+
   nodes = {
     docker =
       { ... }:
@@ -104,6 +112,45 @@ in
           diskSize = 3072;
           docker.enable = true;
         };
+      };
+
+    dockerBuild =
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
+      {
+        imports = [ ../modules/profiles/installation-device.nix ];
+
+        nix.settings = {
+          substituters = lib.mkForce [ ];
+          hashed-mirrors = null;
+          connect-timeout = 1;
+
+          sandbox = "relaxed";
+          secret-key-files = signingKeyForSignatureTests;
+        };
+
+        # include everything to build the image with & without signatures
+        environment.systemPackages = [
+          (pkgs.linkFarmFromDrvs "additional-packages" [
+            signatureTests.imageWithoutSigs
+            signatureTests.layeredImageWithoutSigs
+          ])
+        ];
+        system.includeBuildDependencies = true;
+
+        virtualisation = {
+          diskSize = 3072;
+          docker.enable = true;
+
+          cores = 2;
+          memorySize = 2048;
+          writableStore = true;
+        };
+
       };
   };
 
@@ -598,5 +645,30 @@ in
             "${nonRootTestImage} | docker load",
             "docker run --rm ${chownTestImage.imageName} | diff /dev/stdin <(echo 12345:12345)"
         )
+
+    dockerBuild.wait_for_unit("sockets.target")
+
+    with subtest("includeNixDBHostSignatures allows store verification"):
+        with subtest("for buildImage"):
+            docker.succeed("cat ${signatureTests.imageWithoutSigs} | docker load")
+            docker.fail("docker run --rm image-without-sigs:latest ${pkgs.nix}/bin/nix store verify --all --sigs-needed 1")
+            docker.succeed("docker image rm image-without-sigs:latest")
+
+            dockerBuild.fail("nix-build --option sandbox true -A imageWithSigs -o imageWithSigs ${pkgs.path}/nixos/tests/docker-tools-build.nix")
+            dockerBuild.succeed("nix-build -A imageWithSigs -o imageWithSigs ${pkgs.path}/nixos/tests/docker-tools-build.nix")
+            dockerBuild.succeed("cat ./imageWithSigs | docker load")
+            dockerBuild.fail("docker run --rm image-with-sigs:latest ${pkgs.nix}/bin/nix store verify --all --sigs-needed 1")
+            dockerBuild.succeed("docker image rm image-with-sigs:latest")
+
+        with subtest("for streamLayeredImage"):
+            docker.succeed("${signatureTests.layeredImageWithoutSigs} | docker load")
+            docker.fail("docker run --rm layered-image-without-sigs:latest ${pkgs.nix}/bin/nix store verify --all --sigs-needed 1")
+            docker.succeed("docker image rm layered-image-without-sigs:latest")
+
+            dockerBuild.fail("nix-build --option sandbox true -A layeredImageWithSigs -o layeredImageWithSigs ${pkgs.path}/nixos/tests/docker-tools-build.nix")
+            dockerBuild.succeed("nix-build -A layeredImageWithSigs -o layeredImageWithSigs ${pkgs.path}/nixos/tests/docker-tools-build.nix")
+            dockerBuild.succeed("./layeredImageWithSigs | docker load")
+            dockerBuild.fail("docker run --rm layered-image-with-sigs:latest ${pkgs.nix}/bin/nix store verify --all --sigs-needed 1")
+            dockerBuild.succeed("docker image rm layered-image-with-sigs:latest")
   '';
 }

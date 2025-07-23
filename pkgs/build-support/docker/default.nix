@@ -56,7 +56,10 @@ let
     ;
 
   mkDbExtraCommand =
-    contents:
+    {
+      contents,
+      includeNixDBHostSignatures ? false,
+    }:
     let
       contentsList = if builtins.isList contents then contents else [ contents ];
     in
@@ -73,9 +76,13 @@ let
       ${buildPackages.nix}/bin/nix-store --load-db < ${
         closureInfo { rootPaths = contentsList; }
       }/registration
+      ${lib.optionalString includeNixDBHostSignatures ''
+        # copy signatures from building system (-s "local?read-only=true") into "NIX_REMOTE=local?root=$PWD"
+        # readonly store is required to avoid write operations which might fail due to missing privileges
+        ${buildPackages.nix}/bin/nix store copy-sigs --all -s "local?read-only=true" --extra-experimental-features read-only-local-store --extra-experimental-features nix-command
+      ''}
       # Reset registration times to make the image reproducible
       ${buildPackages.sqlite}/bin/sqlite3 nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
-
       mkdir -p nix/var/nix/gcroots/docker/
       for i in ${lib.concatStringsSep " " contentsList}; do
       ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
@@ -646,6 +653,8 @@ rec {
       compressor ? "gz",
       # Populate the nix database in the image with the dependencies of `copyToRoot`.
       includeNixDB ? false,
+      # If signatures was present on the builder, it will get copied into the image
+      includeNixDBHostSignatures ? false,
       # Deprecated.
       contents ? null,
       # Meta options to set on the resulting derivation.
@@ -690,36 +699,49 @@ rec {
 
       # TODO: add the dependencies of the config json.
       extraCommandsWithDB =
-        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands else extraCommands;
+        if includeNixDB then
+          (mkDbExtraCommand {
+            contents = rootContents;
+            inherit includeNixDBHostSignatures;
+          })
+          + extraCommands
+        else
+          extraCommands;
 
       layer =
-        if runAsRoot == null then
-          mkPureLayer {
-            name = baseName;
-            inherit
-              baseJson
-              keepContentsDirlinks
-              uid
-              gid
-              ;
-            extraCommands = extraCommandsWithDB;
-            copyToRoot = rootContents;
-          }
-        else
-          mkRootLayer {
-            name = baseName;
-            inherit
-              baseJson
-              fromImage
-              fromImageName
-              fromImageTag
-              keepContentsDirlinks
-              runAsRoot
-              diskSize
-              buildVMMemorySize
-              ;
-            extraCommands = extraCommandsWithDB;
-            copyToRoot = rootContents;
+        (
+          if runAsRoot == null then
+            mkPureLayer {
+              name = baseName;
+              inherit
+                baseJson
+                keepContentsDirlinks
+                uid
+                gid
+                ;
+              extraCommands = extraCommandsWithDB;
+              copyToRoot = rootContents;
+            }
+          else
+            mkRootLayer {
+              name = baseName;
+              inherit
+                baseJson
+                fromImage
+                fromImageName
+                fromImageTag
+                keepContentsDirlinks
+                runAsRoot
+                diskSize
+                buildVMMemorySize
+                ;
+              extraCommands = extraCommandsWithDB;
+              copyToRoot = rootContents;
+            }
+        ).overrideAttrs
+          {
+            # enable host signature inclusion even with relaxed sandbox
+            __noChroot = includeNixDBHostSignatures;
           };
       result =
         runCommand "docker-image-${baseName}.tar${compress.ext}"
@@ -1017,6 +1039,7 @@ rec {
       enableFakechroot ? false,
       includeStorePaths ? true,
       includeNixDB ? false,
+      includeNixDBHostSignatures ? false,
       passthru ? { },
       meta ? { },
       # Pipeline used to produce docker layers. If not set, popularity contest
@@ -1071,7 +1094,12 @@ rec {
       customisationLayer = symlinkJoin {
         name = "${baseName}-customisation-layer";
         paths = contentsList;
-        extraCommands = (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+        extraCommands =
+          (lib.optionalString includeNixDB (mkDbExtraCommand {
+            contents = contentsList;
+            inherit includeNixDBHostSignatures;
+          }))
+          + extraCommands;
         inherit fakeRootCommands;
         nativeBuildInputs = [
           fakeroot
@@ -1122,6 +1150,9 @@ rec {
             | cut -f 1 -d ' ' \
             > $out/checksum
         '';
+
+        # enable host signature inclusion even with relaxed sandbox
+        __noChroot = includeNixDBHostSignatures;
       };
 
       closureRoots = optionals includeStorePaths [
