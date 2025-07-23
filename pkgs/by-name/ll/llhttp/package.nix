@@ -28,9 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isStatic) [
+      "-DBUILD_STATIC_LIBS=ON"
+    ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=release/v(.+)" ];
