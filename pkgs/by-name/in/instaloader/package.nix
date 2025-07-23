@@ -1,43 +1,37 @@
 {
   lib,
-  buildPythonPackage,
-  pythonOlder,
+  python3Packages,
   fetchFromGitHub,
-  setuptools,
-  sphinx,
-  requests,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "instaloader";
   version = "4.14.2";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "instaloader";
     repo = "instaloader";
     tag = "v${version}";
-    sha256 = "sha256-q5/lZ+BHnrod0vG/ZJw/5iJRKKaP3Gbns5yaZH0P2rE=";
+    hash = "sha256-q5/lZ+BHnrod0vG/ZJw/5iJRKKaP3Gbns5yaZH0P2rE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
+    python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [
-    requests
-    sphinx
+  dependencies = [
+    python3Packages.requests
+    python3Packages.sphinx
   ];
 
   pythonImportsCheck = [ "instaloader" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://instaloader.github.io/";
     description = "Download pictures (or videos) along with their captions and other metadata from Instagram";
-    maintainers = with maintainers; [ creator54 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ creator54 ];
+    license = lib.licenses.mit;
     mainProgram = "instaloader";
   };
 }
