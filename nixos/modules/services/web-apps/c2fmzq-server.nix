@@ -25,11 +25,16 @@ let
           str
         ])
       );
-    generate = lib.cli.toGNUCommandLineShell {
-      mkBool = k: v: [
-        "--${k}=${if v then "true" else "false"}"
-      ];
-    };
+    generate =
+      let
+        optionFormat =
+          optionName:
+          (lib.cli.gnuOptionFormat optionName)
+          // {
+            skipBool = false;
+          };
+      in
+      lib.cli.toCommandLineShell optionFormat;
   };
 in
 {
