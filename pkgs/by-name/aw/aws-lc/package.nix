@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = {
     version = testers.testVersion {
       package = aws-lc;
