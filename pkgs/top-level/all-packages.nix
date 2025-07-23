@@ -1086,8 +1086,6 @@ with pkgs;
     }
   );
 
-  gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
-
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   inherit (callPackages ../tools/networking/ivpn/default.nix { })
