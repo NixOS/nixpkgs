@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     tag = "v${version}";
-    hash = "sha256-4FgXX4ox7BkjmLecxsvg0/JpcrHPn6hlFw5rk4bn9Cc=";
+    hash = "sha256-LlWv4wWQWZsTB9JXS21O1WkIYhKkJwY5SM70hnzfnDQ=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
-    changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
+    changelog = "https://github.com/quantumlib/Cirq/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       drewrisinger
