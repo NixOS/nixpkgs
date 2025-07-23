@@ -48,6 +48,7 @@ stdenv.mkDerivation (
     patches =
       [
         (getVersionFile "clang/purity.patch")
+        (getVersionFile "clang/macro_file_mangling.patch")
         # Remove extraneous ".a" suffix from baremetal clang_rt.builtins when compiling for baremetal.
         # https://reviews.llvm.org/D51899
         (getVersionFile "clang/gnu-install-dirs.patch")
