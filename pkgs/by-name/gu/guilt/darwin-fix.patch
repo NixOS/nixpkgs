@@ -1,0 +1,20 @@
+uname -s is used to determine the differences between the command line
+utilities like stat or awk in linux and darwin. However, in nix, guilt
+will be using the nix versions of this programs, not the ones
+installed in the system.  Therefore, guilt should use the command-line
+parameters that the linux forms of these commands expect, even if it
+is being run on Darwin.
+
+diff --git a/guilt b/guilt
+index bf50343..cfc9332 100755
+--- a/guilt
++++ b/guilt
+@@ -986,7 +986,7 @@ guards_file="$GUILT_DIR/$branch/guards"
+ pager="more"
+ [ ! -z "$PAGER" ] && pager="$PAGER"
+ 
+-UNAME_S=`uname -s`
++UNAME_S="Linux"
+ 
+ if [ -r "$GUILT_PATH/os.$UNAME_S" ]; then
+ 	. "$GUILT_PATH/os.$UNAME_S"

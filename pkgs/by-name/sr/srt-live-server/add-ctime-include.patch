@@ -1,0 +1,11 @@
+diff --git a/slscore/common.hpp b/slscore/common.hpp
+index 30aeeea..bed0e62 100644
+--- a/slscore/common.hpp
++++ b/slscore/common.hpp
+@@ -29,6 +29,7 @@
+ #include <stddef.h>
+ #include <stdint.h>
+ #include <string>
++#include <ctime>
+ #include <vector>
+ #include <unistd.h>

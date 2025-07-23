@@ -1,0 +1,14 @@
+diff --git a/third_party/nvidia/backend/compiler.py b/third_party/nvidia/backend/compiler.py
+index 960334744..269e22e6e 100644
+--- a/third_party/nvidia/backend/compiler.py
++++ b/third_party/nvidia/backend/compiler.py
+@@ -38,6 +38,9 @@ def _path_to_binary(binary: str):
+         os.path.join(os.path.dirname(__file__), "bin", binary),
+     ]
+ 
++    import shlex
++    paths.extend(shlex.split("@nixpkgsExtraBinaryPaths@"))
++
+     for path in paths:
+         if os.path.exists(path) and os.path.isfile(path):
+             result = subprocess.check_output([path, "--version"], stderr=subprocess.STDOUT)

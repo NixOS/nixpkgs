@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/tree-sitter/tree-sitter-bash",
+  "rev": "56b54c61fb48bce0c63e3dfa2240b5d274384763",
+  "date": "2025-06-04T09:38:10-07:00",
+  "path": "/nix/store/zy2ii6304db3z54x2afg8as71wkbgffd-tree-sitter-bash",
+  "sha256": "1488r0lqldy92v8jr3n6w6iv99fdbcnmb1zxfshiz9azcgz8s5mx",
+  "hash": "sha256-vRaN/mNfpR+hdv2HVS1bzaW0o+HGjizRFsk3iinICJE=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

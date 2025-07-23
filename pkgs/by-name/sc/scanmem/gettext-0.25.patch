@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index f6ee0b9..378a3c9 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -111,6 +111,9 @@ AS_IF([test "x$with_readline" != "xno"], [
+   ])
+ ])
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ GETTEXT_PACKAGE=GameConqueror
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"],

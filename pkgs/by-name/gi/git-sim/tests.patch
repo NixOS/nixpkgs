@@ -1,0 +1,33 @@
+diff --git a/tests/e2e_tests/conftest.py b/tests/e2e_tests/conftest.py
+index 310197a..9e82a1e 100644
+--- a/tests/e2e_tests/conftest.py
++++ b/tests/e2e_tests/conftest.py
+@@ -22,9 +22,7 @@ def tmp_repo(tmp_path_factory):
+     # Create the sample repo for testing.
+     os.chdir(tmp_repo_dir)
+ 
+-    # When defining cmd, as_posix() is required for Windows compatibility.
+-    git_dummy_path = utils.get_venv_path() / "git-dummy"
+-    cmd = f"{git_dummy_path.as_posix()} --commits=10 --branches=4 --merge=1 --constant-sha --name=sample_repo --diverge-at=2"
++    cmd = "git-dummy --commits=10 --branches=4 --merge=1 --constant-sha --name=sample_repo --diverge-at=2"
+     cmd_parts = split(cmd)
+     subprocess.run(cmd_parts)
+ 
+diff --git a/tests/e2e_tests/utils.py b/tests/e2e_tests/utils.py
+index 8dfc623..41a4cf6 100644
+--- a/tests/e2e_tests/utils.py
++++ b/tests/e2e_tests/utils.py
+@@ -69,13 +69,6 @@ def get_cmd_parts(raw_command):
+         f"git-sim -d --output-only-path --img-format=png --font='{font_path}'",
+     )
+ 
+-    # Replace `git-sim` with the full path to the binary.
+-    #   as_posix() is needed for Windows compatibility.
+-    # The space is included in "git-sim " to avoid replacing any occurrences
+-    #   of git-sim in a font path.
+-    git_sim_path = get_venv_path() / "git-sim"
+-    cmd = cmd.replace("git-sim ", f"{git_sim_path.as_posix()} ")
+-
+     # Show full test command when run in diagnostic mode.
+     print(f"  Test command: {cmd}")
+ 
