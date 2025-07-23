@@ -31,13 +31,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "atar";
   };
 
-  passthru = {
-    versionCheckHook = true;
-    updateScript = lib.nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "v([0-9.]+)"
-      ];
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 })
