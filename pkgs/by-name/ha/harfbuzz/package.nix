@@ -41,15 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CTcUyFSKKFCUaF8L3JmeIC1ma1nus98v+SGraLgzakk=";
   };
 
-  postPatch =
-    ''
-      patchShebangs src/*.py test
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # ApplicationServices.framework headers have cast-align warnings.
-      substituteInPlace src/hb.hh \
-        --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
-    '';
+  postPatch = ''
+    patchShebangs src/*.py test
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+  '';
 
   outputs = [
     "out"
@@ -87,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ]
+  ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     glib
@@ -102,6 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   doCheck = true;
+
+  # test_native_coretext_variations depends on the system fonts.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts"
+  ];
 
   # Slightly hacky; some pkgs expect them in a single directory.
   postFixup = lib.optionalString withIcu ''
