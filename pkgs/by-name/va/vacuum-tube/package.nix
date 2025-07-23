@@ -68,6 +68,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/shy1132/VacuumTube";
     mainProgram = "VacuumTube";
     license = licenses.mit;
-    maintainers = with lib.maintainers; [ theCapypara ];
+    maintainers = with maintainers; [ theCapypara ];
   };
 }
