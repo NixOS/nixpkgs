@@ -57,6 +57,7 @@ lib.makeExtensible (
     audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
     copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
     filetote = callPackage ./plugins/filetote.nix { beets = self.beets-minimal; };
+    yearfixer = callPackage ./plugins/yearfixer.nix { beets = self.beets-minimal; };
   }
   // lib.optionalAttrs config.allowAliases {
     extrafiles = throw "extrafiles is unmaintained since 2020 and broken since beets 2.0.0";
