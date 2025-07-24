@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
     description = "Soundcard firmwares from the alsa project";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ l-as ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ l-as ];
   };
 })
