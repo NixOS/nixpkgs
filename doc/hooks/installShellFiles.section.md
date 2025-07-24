@@ -58,8 +58,8 @@ The `installShellCompletion` function takes one or more paths to shell
 completion files.
 
 By default it will autodetect the shell type from the completion file extension,
-but you may also specify it by passing one of `--bash`, `--fish`, or
-`--zsh`. These flags apply to all paths listed after them (up until another
+but you may also specify it by passing one of `--bash`, `--fish`, `--zsh`, or
+`--nushell`. These flags apply to all paths listed after them (up until another
 shell flag is given). Each path may also have a custom installation name
 provided by providing a flag `--name NAME` before the path. If this flag is not
 provided, zsh completions will be renamed automatically such that `foobar.zsh`
@@ -78,8 +78,9 @@ zsh).
     installShellCompletion --bash --name foobar.bash share/completions.bash
     installShellCompletion --fish --name foobar.fish share/completions.fish
     installShellCompletion --zsh --name _foobar share/completions.zsh
+    installShellCompletion --nushell --name foobar share/completions.nu
     # implicit behavior
-    installShellCompletion share/completions/foobar.{bash,fish,zsh}
+    installShellCompletion share/completions/foobar.{bash,fish,zsh, nu}
   '';
 }
 ```
@@ -104,7 +105,8 @@ failure. To prevent this, guard the completion generation commands.
     installShellCompletion --cmd foobar \
       --bash <($out/bin/foobar --bash-completion) \
       --fish <($out/bin/foobar --fish-completion) \
-      --zsh <($out/bin/foobar --zsh-completion)
+      --zsh <($out/bin/foobar --zsh-completion) \
+      --nushell <($out/bin/foobar --nushell-completion) \
   '';
 }
 ```
