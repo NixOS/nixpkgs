@@ -45,6 +45,7 @@ buildPythonApplication rec {
       hash = "sha256-yq+/QHCkhAkFND11MbKFiiWT3oF1cHhgWj5JkYjwuY0=";
       revert = true;
     })
+    ./builder-prioritize-python-env-in-path.patch
   ];
 
   postPatch = ''
@@ -74,8 +75,10 @@ buildPythonApplication rec {
       git
       lockfile
       marshmallow
+      pip
       pyelftools
       pyserial
+      pyyaml
       requests
       semantic-version
       setuptools
@@ -83,6 +86,7 @@ buildPythonApplication rec {
       starlette
       tabulate
       uvicorn
+      wheel
       wsproto
       zeroconf
     ]
