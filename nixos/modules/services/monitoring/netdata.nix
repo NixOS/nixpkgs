@@ -414,8 +414,6 @@ in
         });
     };
 
-    systemd.enableCgroupAccounting = true;
-
     security.wrappers =
       {
         "apps.plugin" = {

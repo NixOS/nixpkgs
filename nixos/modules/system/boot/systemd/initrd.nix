@@ -11,6 +11,7 @@ with lib;
 
 let
   inherit (utils) systemdUtils escapeSystemdPath;
+  inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
     generateUnits
     pathToUnit
@@ -21,6 +22,7 @@ let
     timerToUnit
     mountToUnit
     automountToUnit
+    attrsToSection
     ;
 
   cfg = config.boot.initrd.systemd;
@@ -138,6 +140,12 @@ in
       It only saved ~1MiB of initramfs size, but caused a few issues
       like unloadable kernel modules.
     '')
+    (lib.mkRemovedOptionModule [
+      "boot"
+      "initrd"
+      "systemd"
+      "extraConfig"
+    ] "Use boot.initrd.systemd.settings.Manager instead.")
   ];
 
   options.boot.initrd.systemd = {
@@ -160,12 +168,16 @@ in
       '';
     };
 
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
+    settings.Manager = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        DefaultLimitCORE = "infinity";
+      };
       description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
+        Options for the global systemd config used in initrd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -449,6 +461,10 @@ in
       };
 
       managerEnvironment.PATH = "/bin:/sbin";
+      settings.Manager.ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      settings.Manager.DefaultEnvironment = "PATH=/bin:/sbin";
 
       contents =
         {
@@ -458,13 +474,7 @@ in
 
           "/etc/systemd/system.conf".text = ''
             [Manager]
-            DefaultEnvironment=PATH=/bin:/sbin
-            ${cfg.extraConfig}
-            ManagerEnvironment=${
-              lib.concatStringsSep " " (
-                lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-              )
-            }
+            ${attrsToSection cfg.settings.Manager}
           '';
 
           "/lib".source = "${config.system.build.modulesClosure}/lib";
