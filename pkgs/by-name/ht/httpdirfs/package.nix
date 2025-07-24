@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=attribute-warning"
+    "-Wno-error=pedantic"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       command = "${lib.getExe finalAttrs.finalPackage} --version";
