@@ -37,9 +37,9 @@ import Data.Aeson (
    FromJSONKey,
    ToJSON,
    decodeFileStrict',
-   eitherDecodeStrict',
    encodeFile,
  )
+import Data.Aeson.Decoding (eitherDecodeStrictText)
 import Data.Foldable (Foldable (toList), foldl')
 import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
@@ -53,7 +53,6 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
-import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Text.IO as Text
 import Data.Time (defaultTimeLocale, formatTime, getCurrentTime)
 import Data.Time.Clock (UTCTime)
@@ -369,7 +368,7 @@ readJSONProcess
    -> IO a
 readJSONProcess exe args err = do
    output <- readProcess exe args ""
-   let eitherDecodedOutput = eitherDecodeStrict' . encodeUtf8 . Text.pack $ output
+   let eitherDecodedOutput = eitherDecodeStrictText . Text.pack $ output
    case eitherDecodedOutput of
      Left decodeErr -> error $ err <> decodeErr <> "\nRaw: '" <> take 1000 output <> "'"
      Right decodedOutput -> pure decodedOutput
