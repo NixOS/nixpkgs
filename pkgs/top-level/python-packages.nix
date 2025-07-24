@@ -1801,6 +1801,8 @@ self: super: with self; {
 
   bech32 = callPackage ../development/python-modules/bech32 { };
 
+  beetcamp = callPackage ../development/python-modules/beetcamp { };
+
   before-after = callPackage ../development/python-modules/before-after { };
 
   behave = callPackage ../development/python-modules/behave { };

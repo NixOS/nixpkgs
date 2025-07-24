@@ -31,7 +31,7 @@ buildPythonPackage {
   ];
 
   meta = {
-    description = "A color library for Python";
+    description = "Color library for Python";
     homepage = "https://pypi.org/project/coloraide/";
     license = lib.licenses.mit;
     maintainers = [
