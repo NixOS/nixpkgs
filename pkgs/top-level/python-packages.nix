@@ -9305,6 +9305,8 @@ self: super: with self; {
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
 
+  mkdocs-puml = callPackage ../development/python-modules/mkdocs-puml { };
+
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
 
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
