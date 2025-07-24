@@ -16,13 +16,7 @@ let
     else
       nixpkgs;
 
-  pkgs = import nixpkgs' {
-    inherit system;
-    config = {
-      permittedInsecurePackages = [ "nix-2.3.18" ];
-    };
-    overlays = [ ];
-  };
+  pkgs = import nixpkgs' { inherit system; };
 
   fmt =
     let
