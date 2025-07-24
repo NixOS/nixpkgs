@@ -3,16 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "timoni";
   version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iTVTlxMCLHTXQj3I+nDHhE5w4fDaaM7p52wuvZY2uy4=";
   };
 
@@ -24,12 +26,9 @@ buildGoModule rec {
   # Some tests require running Kubernetes instance
   doCheck = false;
 
-  passthru.updateScript = ./update.sh;
-
   ldflags = [
     "-s"
-    "-w"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -39,12 +38,22 @@ buildGoModule rec {
     --zsh <($out/bin/timoni completion zsh)
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://timoni.sh";
-    changelog = "https://github.com/stefanprodan/timoni/releases/tag/${src.rev}";
+    changelog = "https://github.com/stefanprodan/timoni/releases/tag/v${finalAttrs.version}";
     description = "Package manager for Kubernetes, powered by CUE and inspired by Helm";
     mainProgram = "timoni";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ votava ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ votava ];
   };
-}
+})

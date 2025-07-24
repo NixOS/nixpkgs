@@ -20,6 +20,7 @@
   setuptools,
   aiofiles,
   anyio,
+  brotli,
   diffusers,
   fastapi,
   ffmpy,
@@ -36,6 +37,7 @@
   packaging,
   pandas,
   pillow,
+  polars,
   pydantic,
   python-multipart,
   pydub,
@@ -73,20 +75,20 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.29.1";
+  version = "5.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-nL+m64JTLRS5UOB9WSl7lpsw8v0Vzkt7XWGl9a08Xko=";
+    hash = "sha256-NbVRbwqHUSwyG+v+cDKCrVtzjj6ThxGRfO+xjqXOy5I=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
+    hash = "sha256-E6dBajJoKzaJF67KRrSB/LNAyLDmT78mCmTar5G6P6g=";
   };
 
   pythonRelaxDeps = [
@@ -115,6 +117,7 @@ buildPythonPackage rec {
     setuptools # needed for 'pkg_resources'
     aiofiles
     anyio
+    brotli
     diffusers
     fastapi
     ffmpy
@@ -131,6 +134,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pillow
+    polars
     pydantic
     python-multipart
     pydub
@@ -152,6 +156,7 @@ buildPythonPackage rec {
     [
       altair
       boto3
+      brotli
       docker
       ffmpeg
       gradio-pdf
@@ -245,6 +250,10 @@ buildPythonPackage rec {
 
       # tests if pip and other tools are installed
       "test_get_executable_path"
+
+      # Flaky test (AssertionError when comparing to a fixed array)
+      # https://github.com/gradio-app/gradio/issues/11620
+      "test_auto_datatype"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
