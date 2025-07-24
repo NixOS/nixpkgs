@@ -1,0 +1,30 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "tremor-language-server";
+  version = "0.13.0-rc.11";
+
+  src = fetchFromGitHub {
+    owner = "tremor-rs";
+    repo = "tremor-language-server";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gooHNSBEcqyTMOSBG7T01kSdCWKK98dbE8+nuwvQkS0=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tMs5DRuWuMXIpj5YU4bR4mAlzv7nWycmzDOqMuihj7M=";
+
+  meta = {
+    description = "Tremor Language Server (Trill)";
+    homepage = "https://www.tremor.rs/docs/next/getting-started/tooling";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
+  };
+})
