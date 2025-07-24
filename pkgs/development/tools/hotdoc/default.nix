@@ -1,37 +1,21 @@
 {
   lib,
   stdenv,
-  buildPythonApplication,
+  python3Packages,
   fetchpatch,
   fetchPypi,
   replaceVars,
-  clang,
-  libclang,
-  pytestCheckHook,
   pkg-config,
   cmake,
   flex,
   glib,
   json-glib,
   libxml2,
-  appdirs,
-  backports-entry-points-selectable,
-  dbus-deviation,
-  faust-cchardet,
-  feedgen,
-  lxml,
-  networkx,
-  pkgconfig,
-  pyyaml,
-  schema,
-  setuptools,
-  toposort,
-  wheezy-template,
   llvmPackages,
   gst_all_1,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hotdoc";
   version = "0.17.4";
   pyproject = true;
@@ -43,8 +27,8 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./clang.patch {
-      clang = lib.getExe clang;
-      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+      clang = lib.getExe llvmPackages.clang;
+      libclang_lib_dir = "${lib.getLib llvmPackages.libclang}/lib";
     })
 
     # Fix build with gcc15
@@ -55,7 +39,9 @@ buildPythonApplication rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    patch -p1 -d cmark -i ${./fix-cmake-4.patch}
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -66,10 +52,12 @@ buildPythonApplication rec {
   buildInputs = [
     glib
     json-glib
-    libxml2.dev
+    libxml2
   ];
 
-  dependencies = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     appdirs
     backports-entry-points-selectable
     dbus-deviation
@@ -85,7 +73,7 @@ buildPythonApplication rec {
     wheezy-template
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
@@ -103,14 +91,6 @@ buildPythonApplication rec {
     "hotdoc"
   ];
 
-  disabledTestPaths = [
-    # Executing hotdoc exits with code 1
-    "tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
-  ];
-
   disabledTests = [
     # Test does not correctly handle path normalization for test comparison
     "test_cli_overrides"
@@ -119,20 +99,6 @@ buildPythonApplication rec {
     # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
     "test_index"
   ];
-
-  postPatch =
-    # Hardcode libclang paths
-    ''
-      substituteInPlace hotdoc/extensions/c/c_extension.py \
-        --replace "shutil.which('llvm-config')" 'True' \
-        --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-        --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-        --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
-    ''
-    # <https://github.com/MathieuDuponchelle/cmark/pull/2>
-    + ''
-      patch -p1 -d cmark -i ${./fix-cmake-4.patch}
-    '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''
