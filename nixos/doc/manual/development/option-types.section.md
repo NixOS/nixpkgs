@@ -430,10 +430,10 @@ Composed types are types that take a type as parameter. `listOf
     [`lazy`]{#sec-option-types-composed-attrsWith-lazy}
     : Determines whether the set of attribute names is evaluated before or after evaluating any attribute values.
 
-      `lazy = true` is a preferable choice in principle, but requires extra effort if the option value is used in aggregate (e.g. `attrNames` or `toJSON`).
+      `lazy = true` is a preferable choice in principle, but requires extra effort if the option value is used as a whole (e.g. `attrNames` or `toJSON`).
 
       When `lazy` is `true`, the attribute names are determined by looking at the definitions without evaluating them.
-      If only a `mkIf false` occurs in an attribute, this may result in an error when the attribute value is accessed.
+      If all definitions in the attribute are `mkIf false ...`, this may result in an error when the attribute value is accessed.
 
       When `lazy` is `false`, the attribute names are determined by evaluating the definitions to see if they are `mkIf` false, but this also causes the evaluation of regular non-`mkIf` definitions.
       Evaluating too much causes multiple problems:
@@ -441,12 +441,10 @@ Composed types are types that take a type as parameter. `listOf
         - irrelevant errors are triggered, despite an attribute not really being used
         - performance is worse, if any of the values are expensive to evaluate
 
-      **Recommendation**
-
-      If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;`, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
-
-      If the attribute set is used _individually_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
-      This will be more robust and efficient, as the attribute values are not computed until it is needed.
+      Maintainers of this code recommend:
+      - If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;`, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
+      - If attributes are accessed _in isolation_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
+        This will be more robust and efficient, as the attribute values are not computed until it is needed.
 
       It possible to combine both behaviors using `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments. See the following example.
 
