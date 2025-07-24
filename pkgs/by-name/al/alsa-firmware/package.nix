@@ -7,12 +7,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-firmware";
   version = "1.2.4";
 
   src = fetchurl {
-    url = "mirror://alsa/firmware/alsa-firmware-${version}.tar.bz2";
+    url = "mirror://alsa/firmware/alsa-firmware-${finalAttrs.version}.tar.bz2";
     hash = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ l-as ];
   };
-}
+})
