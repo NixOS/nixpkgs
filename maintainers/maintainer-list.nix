@@ -27996,12 +27996,6 @@
     githubId = 65394961;
     name = "Yves Straten";
   };
-  yvt = {
-    email = "i@yvt.jp";
-    github = "yvt";
-    githubId = 5253988;
-    name = "yvt";
-  };
   yzx9 = {
     email = "yuan.zx@outlook.com";
     github = "yzx9";
