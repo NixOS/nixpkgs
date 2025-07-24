@@ -12890,8 +12890,6 @@ with pkgs;
 
   kup = libsForQt5.callPackage ../applications/misc/kup { };
 
-  timoni = callPackage ../applications/networking/cluster/timoni { };
-
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
