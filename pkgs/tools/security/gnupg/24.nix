@@ -54,27 +54,26 @@ stdenv.mkDerivation rec {
     texinfo
     libgpg-error
   ];
-  buildInputs =
-    [
-      gettext
-      libassuan
-      libgcrypt
-      libgpg-error
-      libiconv
-      libksba
-      npth
-    ]
-    ++ lib.optionals (!enableMinimal) [
-      adns
-      bzip2
-      gnutls
-      libusb1
-      openldap
-      readline
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals withTpm2Tss [ tpm2-tss ];
+  buildInputs = [
+    gettext
+    libassuan
+    libgcrypt
+    libgpg-error
+    libiconv
+    libksba
+    npth
+  ]
+  ++ lib.optionals (!enableMinimal) [
+    adns
+    bzip2
+    gnutls
+    libusb1
+    openldap
+    readline
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
   freepgPatches = fetchFromGitLab {
     domain = "gitlab.com";
@@ -84,48 +83,45 @@ stdenv.mkDerivation rec {
     hash = "sha256-QOUY6EfJbTTN242BtzLojDgECGjUwbLfPJgzn/mj5L8=";
   };
 
-  patches =
-    [
-      ./fix-libusb-include-path.patch
-      ./CVE-2022-3219.patch
-      ./static.patch
-    ]
-    ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
-      "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
-      "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
-      "0004-tests-add-test-cases-for-import-without-uid.patch"
-      "0005-gpg-drop-import-clean-from-default-keyserver-import-.patch"
-      "0006-Do-not-use-OCB-mode-even-if-AEAD-OCB-key-preference-.patch"
-      "0007-Revert-the-introduction-of-the-RFC4880bis-draft-into.patch"
-      "0008-avoid-systemd-deprecation-warning.patch"
-      "0009-Add-systemd-support-for-keyboxd.patch"
-      "0010-doc-Remove-profile-and-systemd-example-files.patch"
-    ];
+  patches = [
+    ./fix-libusb-include-path.patch
+    ./CVE-2022-3219.patch
+    ./static.patch
+  ]
+  ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+    "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
+    "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
+    "0004-tests-add-test-cases-for-import-without-uid.patch"
+    "0005-gpg-drop-import-clean-from-default-keyserver-import-.patch"
+    "0006-Do-not-use-OCB-mode-even-if-AEAD-OCB-key-preference-.patch"
+    "0007-Revert-the-introduction-of-the-RFC4880bis-draft-into.patch"
+    "0008-avoid-systemd-deprecation-warning.patch"
+    "0009-Add-systemd-support-for-keyboxd.patch"
+    "0010-doc-Remove-profile-and-systemd-example-files.patch"
+  ];
 
-  postPatch =
-    ''
-      sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
-      sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-    '';
+  postPatch = ''
+    sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
+    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
 
-  configureFlags =
-    [
-      "--sysconfdir=/etc"
-      "--with-libgpg-error-prefix=${libgpg-error.dev}"
-      "--with-libgcrypt-prefix=${libgcrypt.dev}"
-      "--with-libassuan-prefix=${libassuan.dev}"
-      "--with-ksba-prefix=${libksba.dev}"
-      "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
-    ]
-    ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${
-      pinentry.binaryPath or "bin/pinentry"
-    }"
-    ++ lib.optional withTpm2Tss "--with-tss=intel"
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-libgpg-error-prefix=${libgpg-error.dev}"
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+    "--with-ksba-prefix=${libksba.dev}"
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
+  ]
+  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${
+    pinentry.binaryPath or "bin/pinentry"
+  }"
+  ++ lib.optional withTpm2Tss "--with-tss=intel"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
   postInstall =
     if enableMinimal then

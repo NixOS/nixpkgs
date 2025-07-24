@@ -44,16 +44,15 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  propagatedBuildInputs =
-    [
-      coreutils
-      unzip
-      zip
-    ]
-    ++ lib.optionals doCheck [
-      mtools
-      dosfstools
-    ];
+  propagatedBuildInputs = [
+    coreutils
+    unzip
+    zip
+  ]
+  ++ lib.optionals doCheck [
+    mtools
+    dosfstools
+  ];
 
   nativeCheckInputs = [
     which

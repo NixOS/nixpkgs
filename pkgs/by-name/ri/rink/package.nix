@@ -31,17 +31,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     asciidoctor
   ];
-  buildInputs =
-    [ ncurses ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        [
-          curl
-          libiconv
-        ]
-      else
-        [ openssl ]
-    );
+  buildInputs = [
+    ncurses
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      [
+        curl
+        libiconv
+      ]
+    else
+      [ openssl ]
+  );
 
   # Some tests fail and/or attempt to use internet servers.
   doCheck = false;

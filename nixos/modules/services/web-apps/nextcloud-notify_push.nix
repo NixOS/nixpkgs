@@ -11,71 +11,70 @@ let
   cfgN = config.services.nextcloud;
 in
 {
-  options.services.nextcloud.notify_push =
-    {
-      enable = lib.mkEnableOption "Notify push";
+  options.services.nextcloud.notify_push = {
+    enable = lib.mkEnableOption "Notify push";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nextcloud-notify_push;
-        defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
-        description = "Which package to use for notify_push";
-      };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.nextcloud-notify_push;
+      defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
+      description = "Which package to use for notify_push";
+    };
 
-      socketPath = lib.mkOption {
-        type = lib.types.str;
-        default = "/run/nextcloud-notify_push/sock";
-        description = "Socket path to use for notify_push";
-      };
+    socketPath = lib.mkOption {
+      type = lib.types.str;
+      default = "/run/nextcloud-notify_push/sock";
+      description = "Socket path to use for notify_push";
+    };
 
-      logLevel = lib.mkOption {
-        type = lib.types.enum [
-          "error"
-          "warn"
-          "info"
-          "debug"
-          "trace"
-        ];
-        default = "error";
-        description = "Log level";
-      };
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
+        "error"
+        "warn"
+        "info"
+        "debug"
+        "trace"
+      ];
+      default = "error";
+      description = "Log level";
+    };
 
-      nextcloudUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
-        defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
-        description = "Configure the nextcloud URL notify_push tries to connect to.";
-      };
+    nextcloudUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
+      defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
+      description = "Configure the nextcloud URL notify_push tries to connect to.";
+    };
 
-      bendDomainToLocalhost = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
+    bendDomainToLocalhost = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
 
-          This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
-        '';
-      };
-    }
-    // (lib.genAttrs
-      [
-        "dbtype"
-        "dbname"
-        "dbuser"
-        "dbpassFile"
-        "dbhost"
-        "dbport"
-        "dbtableprefix"
-      ]
-      (
-        opt:
-        options.services.nextcloud.config.${opt}
-        // {
-          default = config.services.nextcloud.config.${opt};
-          defaultText = lib.literalExpression "config.services.nextcloud.config.${opt}";
-        }
-      )
-    );
+        This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+      '';
+    };
+  }
+  // (lib.genAttrs
+    [
+      "dbtype"
+      "dbname"
+      "dbuser"
+      "dbpassFile"
+      "dbhost"
+      "dbport"
+      "dbtableprefix"
+    ]
+    (
+      opt:
+      options.services.nextcloud.config.${opt}
+      // {
+        default = config.services.nextcloud.config.${opt};
+        defaultText = lib.literalExpression "config.services.nextcloud.config.${opt}";
+      }
+    )
+  );
 
   config = lib.mkIf cfg.enable {
     systemd.services = {

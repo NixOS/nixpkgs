@@ -61,19 +61,18 @@ buildPythonPackage rec {
     email = [ email-validator ];
   };
 
-  nativeCheckInputs =
-    [
-      cloudpickle
-      dirty-equals
-      jsonschema
-      pytest-codspeed
-      pytest-mock
-      pytest-run-parallel
-      pytestCheckHook
-      rich
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies)
-    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
+  nativeCheckInputs = [
+    cloudpickle
+    dirty-equals
+    jsonschema
+    pytest-codspeed
+    pytest-mock
+    pytest-run-parallel
+    pytestCheckHook
+    rich
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies)
+  ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

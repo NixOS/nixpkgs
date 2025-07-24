@@ -60,15 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  mesonFlags =
-    [
-      "-Dgtk_doc=true"
-      "-Dvapi=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # mremap does not exist on darwin
-      "-Dmmap-buffer-backend=false"
-    ];
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

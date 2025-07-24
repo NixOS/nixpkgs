@@ -28,14 +28,13 @@ stdenvNoCC.mkDerivation rec {
     papirus-folders
   ];
 
-  propagatedBuildInputs =
-    [
-      breeze-icons
-      hicolor-icon-theme
-    ]
-    ++ lib.optional withElementary [
-      elementary-icon-theme
-    ];
+  propagatedBuildInputs = [
+    breeze-icons
+    hicolor-icon-theme
+  ]
+  ++ lib.optional withElementary [
+    elementary-icon-theme
+  ];
 
   dontDropIconThemeCache = true;
 

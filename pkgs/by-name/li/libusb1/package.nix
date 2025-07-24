@@ -27,12 +27,14 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocs [ "doc" ];
+  ]
+  ++ lib.optionals withDocs [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-  ] ++ lib.optionals withDocs [ doxygen ];
+  ]
+  ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs = lib.optional enableUdev udev;
 
   dontDisableStatic = withStatic;

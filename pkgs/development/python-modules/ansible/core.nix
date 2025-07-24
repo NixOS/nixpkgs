@@ -87,7 +87,8 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ];
 
   pythonRelaxDeps = [ "resolvelib" ];
 

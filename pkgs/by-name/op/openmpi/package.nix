@@ -91,37 +91,35 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  buildInputs =
-    [
-      zlib
-      libevent
-      hwloc
-      prrte
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libnl
-      numactl
-      pmix
-      ucx
-      ucc
-    ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
-    # needed for internal pmix
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
-    ++ lib.optionals fabricSupport [
-      libpsm2
-      libfabric
-    ];
+  buildInputs = [
+    zlib
+    libevent
+    hwloc
+    prrte
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnl
+    numactl
+    pmix
+    ucx
+    ucc
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
+  # needed for internal pmix
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
+  ++ lib.optionals fabricSupport [
+    libpsm2
+    libfabric
+  ];
 
-  nativeBuildInputs =
-    [
-      perl
-      removeReferencesTo
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals fortranSupport [ gfortran ];
+  nativeBuildInputs = [
+    perl
+    removeReferencesTo
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags = [
     (lib.enableFeature cudaSupport "mca-dso")
@@ -142,7 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
     # The flag --without-ofi-libdir is not supported from some reason, so we
     # don't use lib.withFeatureAs
-  ] ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+  ]
+  ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
 
   enableParallelBuilding = true;
 
@@ -151,60 +150,58 @@ stdenv.mkDerivation (finalAttrs: {
       # The file names we need to iterate are a combination of ${p}${s}, and there
       # are 7x3 such options. We use lib.mapCartesianProduct to iterate them all.
       fileNamesToIterate = {
-        p =
-          [
-            "mpi"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "shmem"
-            "osh"
-          ];
-        s =
-          [
-            "c++"
-            "cxx"
-            "cc"
-          ]
-          ++ lib.optionals fortranSupport [
-            "f77"
-            "f90"
-            "fort"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
+        p = [
+          "mpi"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          "shmem"
+          "osh"
+        ];
+        s = [
+          "c++"
+          "cxx"
+          "cc"
+        ]
+        ++ lib.optionals fortranSupport [
+          "f77"
+          "f90"
+          "fort"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
       };
-      wrapperDataSubstitutions =
-        {
-          # The attr key is the filename prefix. The list's 1st value is the
-          # compiler=_ line that should be replaced by a compiler=#2 string, where
-          # #2 is the 2nd value in the list.
-          "cc" = [
-            # "$CC" is expanded by the executing shell in the substituteInPlace
-            # commands to the name of the compiler ("clang" for Darwin and
-            # "gcc" for Linux)
-            "$CC"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
-          ];
-          "c++" = [
-            # Same as with $CC
-            "$CXX"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
-          ];
-        }
-        // lib.optionalAttrs fortranSupport {
-          "fort" = [
-            "gfortran"
-            "${targetPackages.gfortran or gfortran}/bin/${
-              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
-            }gfortran"
-          ];
-        };
+      wrapperDataSubstitutions = {
+        # The attr key is the filename prefix. The list's 1st value is the
+        # compiler=_ line that should be replaced by a compiler=#2 string, where
+        # #2 is the 2nd value in the list.
+        "cc" = [
+          # "$CC" is expanded by the executing shell in the substituteInPlace
+          # commands to the name of the compiler ("clang" for Darwin and
+          # "gcc" for Linux)
+          "$CC"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
+        ];
+        "c++" = [
+          # Same as with $CC
+          "$CXX"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
+        ];
+      }
+      // lib.optionalAttrs fortranSupport {
+        "fort" = [
+          "gfortran"
+          "${targetPackages.gfortran or gfortran}/bin/${
+            targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+          }gfortran"
+        ];
+      };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
       # well, here they start withw ${part1}${part2}, and we use
       # lib.mapCartesianProduct as well.
       wrapperDataFileNames = {
         part1 = [
           "mpi"
-        ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in

@@ -53,13 +53,15 @@ let
     configureFlags = [
       "--sysconfdir=/etc"
       "--with-libgsasl"
-    ] ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
 
     buildInputs = [
       gnutls
       gsasl
       libidn2
-    ] ++ optionals withKeyring [ libsecret ];
+    ]
+    ++ optionals withKeyring [ libsecret ];
 
     nativeBuildInputs = [
       autoreconfHook
@@ -118,15 +120,15 @@ let
           gnugrep
           netcat-gnu
           which
-        ] ++ optionals withSystemd [ systemd ];
-        execer =
-          [
-            "cannot:${getBin binaries}/bin/msmtp"
-            "cannot:${getBin netcat-gnu}/bin/nc"
-          ]
-          ++ optionals withSystemd [
-            "cannot:${getBin systemd}/bin/systemd-cat"
-          ];
+        ]
+        ++ optionals withSystemd [ systemd ];
+        execer = [
+          "cannot:${getBin binaries}/bin/msmtp"
+          "cannot:${getBin netcat-gnu}/bin/nc"
+        ]
+        ++ optionals withSystemd [
+          "cannot:${getBin systemd}/bin/systemd-cat"
+        ];
         fix."$MSMTP" = [ "msmtp" ];
         fake.external = [ "ping" ] ++ optionals (!withSystemd) [ "systemd-cat" ];
         keep.source = [ "~/.msmtpqrc" ];

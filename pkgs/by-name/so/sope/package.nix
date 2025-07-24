@@ -23,18 +23,17 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-6vec2ZgpK5jcKr3c2SLn6fLAun56MDjupWtR6dMdjag=";
   };
 
-  buildInputs =
-    [
-      gnustep-base
-      libxml2
-      openssl
-    ]
-    ++ lib.optional (openldap != null) openldap
-    ++ lib.optionals (mariadb != null) [
-      libmysqlclient
-      mariadb
-    ]
-    ++ lib.optional (libpq != null) libpq;
+  buildInputs = [
+    gnustep-base
+    libxml2
+    openssl
+  ]
+  ++ lib.optional (openldap != null) openldap
+  ++ lib.optionals (mariadb != null) [
+    libmysqlclient
+    mariadb
+  ]
+  ++ lib.optional (libpq != null) libpq;
 
   # Configure directories where files are installed to. Everything is automatically
   # put into $out (thanks GNUstep) apart from the makefiles location which is where
@@ -48,16 +47,15 @@ clangStdenv.mkDerivation rec {
     EOF
   '';
 
-  configureFlags =
-    [
-      "--prefix="
-      "--disable-debug"
-      "--enable-xml"
-      "--with-ssl=ssl"
-    ]
-    ++ lib.optional (openldap != null) "--enable-openldap"
-    ++ lib.optional (mariadb != null) "--enable-mysql"
-    ++ lib.optional (libpq != null) "--enable-postgresql";
+  configureFlags = [
+    "--prefix="
+    "--disable-debug"
+    "--enable-xml"
+    "--with-ssl=ssl"
+  ]
+  ++ lib.optional (openldap != null) "--enable-openldap"
+  ++ lib.optional (mariadb != null) "--enable-mysql"
+  ++ lib.optional (libpq != null) "--enable-postgresql";
 
   env = {
     GNUSTEP_CONFIG_FILE = "/build/GNUstep.conf";

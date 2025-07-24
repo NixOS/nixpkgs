@@ -202,7 +202,8 @@ let
       "pkgsMusl"
       "stdenv"
     ]
-  ] ++ justAttrNames [ ] filtered;
+  ]
+  ++ justAttrNames [ ] filtered;
 
   names = map (path: (lib.concatStringsSep "." path)) paths;
 

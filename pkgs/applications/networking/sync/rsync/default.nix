@@ -35,37 +35,35 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      libiconv
-      zlib
-      popt
-    ]
-    ++ lib.optional enableACLs acl
-    ++ lib.optional enableZstd zstd
-    ++ lib.optional enableLZ4 lz4
-    ++ lib.optional enableOpenSSL openssl
-    ++ lib.optional enableXXHash xxHash;
+  buildInputs = [
+    libiconv
+    zlib
+    popt
+  ]
+  ++ lib.optional enableACLs acl
+  ++ lib.optional enableZstd zstd
+  ++ lib.optional enableLZ4 lz4
+  ++ lib.optional enableOpenSSL openssl
+  ++ lib.optional enableXXHash xxHash;
 
-  configureFlags =
-    [
-      (lib.enableFeature enableLZ4 "lz4")
-      (lib.enableFeature enableOpenSSL "openssl")
-      (lib.enableFeature enableXXHash "xxhash")
-      (lib.enableFeature enableZstd "zstd")
-      # Feature detection does a runtime check which varies according to ipv6
-      # availability, so force it on to make reproducible, see #360152.
-      (lib.enableFeature true "ipv6")
-      "--with-nobody-group=nogroup"
+  configureFlags = [
+    (lib.enableFeature enableLZ4 "lz4")
+    (lib.enableFeature enableOpenSSL "openssl")
+    (lib.enableFeature enableXXHash "xxhash")
+    (lib.enableFeature enableZstd "zstd")
+    # Feature detection does a runtime check which varies according to ipv6
+    # availability, so force it on to make reproducible, see #360152.
+    (lib.enableFeature true "ipv6")
+    "--with-nobody-group=nogroup"
 
-      # disable the included zlib explicitly as it otherwise still compiles and
-      # links them even.
-      "--with-included-zlib=no"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
-      # fix `multiversioning needs 'ifunc' which is not supported on this target` error
-      "--disable-roll-simd"
-    ];
+    # disable the included zlib explicitly as it otherwise still compiles and
+    # links them even.
+    "--with-included-zlib=no"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
+    # fix `multiversioning needs 'ifunc' which is not supported on this target` error
+    "--disable-roll-simd"
+  ];
 
   enableParallelBuilding = true;
 

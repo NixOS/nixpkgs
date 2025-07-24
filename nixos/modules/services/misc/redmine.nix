@@ -24,27 +24,26 @@ let
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseSettings = {
-    production =
-      {
-        adapter = cfg.database.type;
-        database =
-          if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
-      }
-      // optionalAttrs (cfg.database.type != "sqlite3") {
-        host =
-          if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
-            cfg.database.socket
-          else
-            cfg.database.host;
-        port = cfg.database.port;
-        username = cfg.database.user;
-      }
-      // optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
-        password = "#dbpass#";
-      }
-      // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
-        socket = cfg.database.socket;
-      };
+    production = {
+      adapter = cfg.database.type;
+      database =
+        if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
+    }
+    // optionalAttrs (cfg.database.type != "sqlite3") {
+      host =
+        if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
+          cfg.database.socket
+        else
+          cfg.database.host;
+      port = cfg.database.port;
+      username = cfg.database.user;
+    }
+    // optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+      password = "#dbpass#";
+    }
+    // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      socket = cfg.database.socket;
+    };
   };
 
   databaseYml = format.generate "database.yml" databaseSettings;
@@ -413,10 +412,11 @@ in
     ];
 
     systemd.services.redmine = {
-      after =
-        [ "network.target" ]
-        ++ optional mysqlLocal "mysql.service"
-        ++ optional pgsqlLocal "postgresql.service";
+      after = [
+        "network.target"
+      ]
+      ++ optional mysqlLocal "mysql.service"
+      ++ optional pgsqlLocal "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";

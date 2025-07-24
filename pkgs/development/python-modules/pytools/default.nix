@@ -37,7 +37,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.siphash;
+  ]
+  ++ optional-dependencies.siphash;
 
   pythonImportsCheck = [
     "pytools"

@@ -50,28 +50,29 @@ stdenv.mkDerivation rec {
     "--without-hal"
     "--enable-udev"
     "--with-udev-dir=${placeholder "out"}/lib/udev"
-  ] ++ lib.optionals monoSupport [ "--with-mono" ];
+  ]
+  ++ lib.optionals monoSupport [ "--with-mono" ];
 
   dontStrip = monoSupport;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      intltool
-      pkg-config
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLParser
-    ])
-    ++ lib.optional monoSupport mono;
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    pkg-config
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLParser
+  ])
+  ++ lib.optional monoSupport mono;
 
   buildInputs = [
     libxml2
     sg3_utils
     sqlite
     taglib
-  ] ++ lib.optional monoSupport gtk-sharp-2_0;
+  ]
+  ++ lib.optional monoSupport gtk-sharp-2_0;
 
   propagatedBuildInputs = [
     gdk-pixbuf

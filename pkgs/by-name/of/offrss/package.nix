@@ -17,30 +17,28 @@ stdenv.mkDerivation (finalAttrs: {
     cp offrss $out/bin
   '';
 
-  buildInputs =
-    [
-      curl
-      libmrss
-    ]
-    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
+  buildInputs = [
+    curl
+    libmrss
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
+  ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
   #     offrss.o:offrss.h:75: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=implicit-function-declaration";
 
-  configurePhase =
-    ''
-      substituteInPlace Makefile \
-        --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
-      sed 's/#EXTRA/EXTRA/' -i Makefile
-    ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      sed 's/^PDF/#PDF/' -i Makefile
-    '';
+  configurePhase = ''
+    substituteInPlace Makefile \
+      --replace '$(CC) $(CFLAGS) $(LDFLAGS)' '$(CXX) $(CFLAGS) $(LDFLAGS)'
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
+    sed 's/#EXTRA/EXTRA/' -i Makefile
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed 's/^PDF/#PDF/' -i Makefile
+  '';
 
   src = fetchurl {
     url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${finalAttrs.version}.tar.gz";

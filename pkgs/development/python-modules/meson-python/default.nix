@@ -26,14 +26,16 @@ buildPythonPackage rec {
     ninja
     pyproject-metadata
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   propagatedBuildInputs = [
     meson
     ninja
     pyproject-metadata
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
   setupHooks = [ ./add-build-flags.sh ];
 
   meta = {

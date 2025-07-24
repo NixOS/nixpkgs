@@ -174,7 +174,8 @@ let
             nativeBuildInputs = [
               bc
               pythonEnv
-            ] ++ attrs.nativeBuildInputs or [ ];
+            ]
+            ++ attrs.nativeBuildInputs or [ ];
             strictDeps = true;
 
             ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;

@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     git
     libsass
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  ]
+  ++ lib.optional stdenv.isDarwin xcbuild;
 
   configurePhase = ''
     runHook preConfigure

@@ -22,20 +22,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-tuhJClSjah/ud6PVr6biOq5KdKtspJ7hpWZ350yzz+U=";
   };
 
-  postPatch =
-    ''
-      # Skipped test: ssidst
-      # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
-      substituteInPlace tests/meson.build --replace-fail \
-        "subdir('ssids')" \
-        ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Skipped test: lsmrt, segfault
-      substituteInPlace tests/meson.build --replace-fail \
-        "['lsmrt', files('lsmr.f90')]," \
-        ""
-    '';
+  postPatch = ''
+    # Skipped test: ssidst
+    # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
+    substituteInPlace tests/meson.build --replace-fail \
+      "subdir('ssids')" \
+      ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Skipped test: lsmrt, segfault
+    substituteInPlace tests/meson.build --replace-fail \
+      "['lsmrt', files('lsmr.f90')]," \
+      ""
+  '';
 
   nativeBuildInputs = [
     gfortran
@@ -47,7 +46,8 @@ stdenv.mkDerivation rec {
     blas
     lapack
     metis
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   mesonFlags = [ (lib.mesonBool "tests" true) ];
 

@@ -35,7 +35,8 @@ buildPythonPackage rec {
     pytz
     textual
     tzdata
-  ] ++ textual.optional-dependencies.syntax;
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   optional-dependencies = {
     polars = [ polars ];
@@ -45,7 +46,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-textual-snapshot
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 

@@ -43,7 +43,8 @@ buildPythonPackage rec {
     aiohttp
     attrs
     yarl
-  ] ++ lib.optionals withOlm optional-dependencies.encryption;
+  ]
+  ++ lib.optionals withOlm optional-dependencies.encryption;
 
   optional-dependencies = {
     detect_mimetype = [ python-magic ];

@@ -79,11 +79,9 @@ stdenv.mkDerivation rec {
   };
 
   # remove all non-essential packages (which take up a lot of space)
-  preConfigure =
-    lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep)
-    + ''
-      patchShebangs .
-    '';
+  preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
+    patchShebangs .
+  '';
 
   buildInputs = [
     readline

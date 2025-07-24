@@ -85,22 +85,22 @@ stdenv.mkDerivation (finalAttrs: {
       "allshared"
     ];
 
-  installPhase =
-    ''
-      mkdir $out
-      cp -r include lib $out
-    ''
-    + lib.optionalString (!mpiSupport) ''
-      # Install mumps_seq headers
-      install -Dm 444 -t $out/include/mumps_seq libseq/*.h
+  installPhase = ''
+    mkdir $out
+    cp -r include lib $out
+  ''
+  + lib.optionalString (!mpiSupport) ''
+    # Install mumps_seq headers
+    install -Dm 444 -t $out/include/mumps_seq libseq/*.h
 
-      # Add some compatibility with coin-or-mumps
-      ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
-    '';
+    # Add some compatibility with coin-or-mumps
+    ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
+  '';
 
   nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
   buildInputs =

@@ -48,7 +48,8 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   optional-dependencies = {
     async = [ asgiref ];

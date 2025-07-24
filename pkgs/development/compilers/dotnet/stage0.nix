@@ -57,23 +57,19 @@ let
           patchNupkgs
         ];
 
-        postPatch =
-          old.postPatch or ""
-          + ''
-            xmlstarlet ed \
-              --inplace \
-              -s //Project -t elem -n Import \
-              -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
-              src/*/Directory.Build.targets
-          '';
+        postPatch = old.postPatch or "" + ''
+          xmlstarlet ed \
+            --inplace \
+            -s //Project -t elem -n Import \
+            -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
+            src/*/Directory.Build.targets
+        '';
 
-        postConfigure =
-          old.postConfigure or ""
-          + ''
-            [[ ! -v prebuiltPackages ]] || \
-              ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
-            ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
-          '';
+        postConfigure = old.postConfigure or "" + ''
+          [[ ! -v prebuiltPackages ]] || \
+            ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+          ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+        '';
 
         buildFlags =
           old.buildFlags
@@ -118,33 +114,31 @@ let
                   nuget-to-json
                   jq
                 ];
-                postPatch =
-                  old.postPatch or ""
-                  + ''
+                postPatch = old.postPatch or "" + ''
+                  xmlstarlet ed \
+                    --inplace \
+                    -s //Project -t elem -n Import \
+                    -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
+                    repo-projects/Directory.Build.targets
+
+                  # make nuget-client use the standard arcade package-cache dir, which
+                  # is where we scan for dependencies
+                  xmlstarlet ed \
+                    --inplace \
+                    -s //Project -t elem -n ItemGroup \
+                    -s \$prev -t elem -n EnvironmentVariables \
+                    -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
+                    repo-projects/nuget-client.proj
+
+                  # https://github.com/dotnet/dotnet/pull/546
+                  for proj in arcade nuget-client; do
                     xmlstarlet ed \
                       --inplace \
-                      -s //Project -t elem -n Import \
-                      -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
-                      repo-projects/Directory.Build.targets
-
-                    # make nuget-client use the standard arcade package-cache dir, which
-                    # is where we scan for dependencies
-                    xmlstarlet ed \
-                      --inplace \
-                      -s //Project -t elem -n ItemGroup \
-                      -s \$prev -t elem -n EnvironmentVariables \
-                      -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
-                      repo-projects/nuget-client.proj
-
-                    # https://github.com/dotnet/dotnet/pull/546
-                    for proj in arcade nuget-client; do
-                      xmlstarlet ed \
-                        --inplace \
-                        -s //Project -t elem -n PropertyGroup \
-                        -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1901' \
-                        src/$proj/Directory.Build.props
-                    done
-                  '';
+                      -s //Project -t elem -n PropertyGroup \
+                      -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1901' \
+                      src/$proj/Directory.Build.props
+                  done
+                '';
                 buildFlags = [ "--online" ] ++ old.buildFlags;
                 prebuiltPackages = null;
               });

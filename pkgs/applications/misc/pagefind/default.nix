@@ -111,20 +111,19 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs =
-    [
-      binaryen
-      gzip
-      nodejs
-      rustc
-      rustc.llvmPackages.lld
-      wasm-bindgen-cli_0_2_92
-      wasm-pack
-      httplz
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      python3
-    ];
+  nativeBuildInputs = [
+    binaryen
+    gzip
+    nodejs
+    rustc
+    rustc.llvmPackages.lld
+    wasm-bindgen-cli_0_2_92
+    wasm-pack
+    httplz
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    python3
+  ];
 
   # build wasm and js assets
   # based on "test-and-build" in https://github.com/CloudCannon/pagefind/blob/main/.github/workflows/release.yml

@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libnotify
     sqlite
-  ] ++ lib.optionals withSystemd [ systemd ];
+  ]
+  ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
     (lib.enableFeature true "notifications")

@@ -31,7 +31,8 @@ buildPythonPackage rec {
     httpx
     yarl
     zeep
-  ] ++ zeep.optional-dependencies.async;
+  ]
+  ++ zeep.optional-dependencies.async;
 
   pythonImportsCheck = [ "onvif" ];
 

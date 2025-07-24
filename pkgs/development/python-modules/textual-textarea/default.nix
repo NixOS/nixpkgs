@@ -42,7 +42,8 @@ buildPythonPackage rec {
   dependencies = [
     pyperclip
     textual
-  ] ++ textual.optional-dependencies.syntax;
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   nativeCheckInputs = [
     pytestCheckHook

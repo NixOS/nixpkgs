@@ -92,25 +92,24 @@ stdenv.mkDerivation rec {
         xz
         kmod # (lsmod)
       ];
-      recommendedPrograms =
-        [
-          mcelog
-          hdparm
-          acpica-tools
-          drm_info
-          mesa-demos
-          memtester
-          sysstat # (iostat)
-          util-linuxMinimal # (rfkill)
-          xinput
-          libva-utils # (vainfo)
-          inxi
-          vulkan-tools
-          i2c-tools
-          opensc
-        ]
-        # cpuid is only compatible with i686 and x86_64
-        ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
+      recommendedPrograms = [
+        mcelog
+        hdparm
+        acpica-tools
+        drm_info
+        mesa-demos
+        memtester
+        sysstat # (iostat)
+        util-linuxMinimal # (rfkill)
+        xinput
+        libva-utils # (vainfo)
+        inxi
+        vulkan-tools
+        i2c-tools
+        opensc
+      ]
+      # cpuid is only compatible with i686 and x86_64
+      ++ lib.optional (lib.elem stdenv.hostPlatform.system cpuid.meta.platforms) cpuid;
       conditionallyRecommendedPrograms = lib.optional systemdSupport systemd; # (systemd-analyze)
       suggestedPrograms = [
         hplip # (hp-probe)

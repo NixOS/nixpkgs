@@ -54,34 +54,32 @@ buildPythonApplication rec {
     python3Packages.setuptools
   ];
 
-  nativeCheckInputs =
-    [
-      glibcLocales
-      python3Packages.unittestCheckHook
-      python3Packages.jsonschema
-      python3Packages.mock
-      python3Packages.lxml
-    ]
-    # TODO: use JHBuild to build the Gramps' bundle
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeCheckInputs = [
+    glibcLocales
+    python3Packages.unittestCheckHook
+    python3Packages.jsonschema
+    python3Packages.mock
+    python3Packages.lxml
+  ]
+  # TODO: use JHBuild to build the Gramps' bundle
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      gtk3
-      pango
-      gexiv2
-    ]
-    # Map support
-    ++ lib.optionals enableOSM [
-      osm-gps-map
-      glib-networking
-    ]
-    # Graphviz support
-    ++ lib.optional enableGraphviz graphviz
-    # Ghostscript support
-    ++ lib.optional enableGhostscript ghostscript;
+  buildInputs = [
+    gtk3
+    pango
+    gexiv2
+  ]
+  # Map support
+  ++ lib.optionals enableOSM [
+    osm-gps-map
+    glib-networking
+  ]
+  # Graphviz support
+  ++ lib.optional enableGraphviz graphviz
+  # Ghostscript support
+  ++ lib.optional enableGhostscript ghostscript;
 
   propagatedBuildInputs = with python3Packages; [
     berkeleydb

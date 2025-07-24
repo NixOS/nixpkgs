@@ -63,7 +63,8 @@ stdenv.mkDerivation {
   buildInputs = [
     bash
     perl
-  ] ++ lib.optional sensord rrdtool;
+  ]
+  ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -76,20 +77,20 @@ stdenv.mkDerivation {
 
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
+  ]
+  ++ lib.optional sensord "PROG_EXTRA=sensord";
 
   enableParallelBuilding = true;
 
   # Making regexp to patch-out installing of .so symlinks from Makefile is
   # complicated, it is easier to remove them post-install.
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc/lm_sensors
-      cp -r configs doc/* $doc/share/doc/lm_sensors
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      rm $out/lib/*.so*
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc/lm_sensors
+    cp -r configs doc/* $doc/share/doc/lm_sensors
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    rm $out/lib/*.so*
+  '';
 
   meta = {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";

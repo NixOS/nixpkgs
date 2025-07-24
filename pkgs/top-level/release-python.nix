@@ -67,6 +67,7 @@ let
       ];
     };
 
-  } // (mapTestOn (packagePython pkgs));
+  }
+  // (mapTestOn (packagePython pkgs));
 in
 jobs

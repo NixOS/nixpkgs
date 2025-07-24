@@ -44,7 +44,8 @@ buildPythonPackage rec {
     jax
     jaxlib
     numpy
-  ] ++ etils.optional-dependencies.epy;
+  ]
+  ++ etils.optional-dependencies.epy;
 
   postInstall = ''
     mkdir $testsout

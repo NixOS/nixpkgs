@@ -58,17 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "MinSizeRel";
 
-  cmakeFlags =
-    [
-      "-DQT_VERSION_MAJOR=6"
-    ]
-    ++ lib.optionals isThemed [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
-    ++ (
-      if themeBundle'.rightCharacter then
-        [ "-DCHARACTER_IS_RIGHT=ON" ]
-      else
-        [ "-DCHARACTER_IS_RIGHT=OFF" ]
-    );
+  cmakeFlags = [
+    "-DQT_VERSION_MAJOR=6"
+  ]
+  ++ lib.optionals isThemed [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
+  ++ (
+    if themeBundle'.rightCharacter then
+      [ "-DCHARACTER_IS_RIGHT=ON" ]
+    else
+      [ "-DCHARACTER_IS_RIGHT=OFF" ]
+  );
 
   postUnpack = ''
     cp -r $sourceRoot $TMPDIR/src

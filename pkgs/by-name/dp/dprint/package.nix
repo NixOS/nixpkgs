@@ -54,17 +54,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall =
-    ''
-      rm "$out/bin/test-process-plugin"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export DPRINT_CACHE_DIR="$(mktemp -d)"
-      installShellCompletion --cmd dprint \
-        --bash <($out/bin/dprint completions bash) \
-        --zsh <($out/bin/dprint completions zsh) \
-        --fish <($out/bin/dprint completions fish)
-    '';
+  postInstall = ''
+    rm "$out/bin/test-process-plugin"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export DPRINT_CACHE_DIR="$(mktemp -d)"
+    installShellCompletion --cmd dprint \
+      --bash <($out/bin/dprint completions bash) \
+      --zsh <($out/bin/dprint completions zsh) \
+      --fish <($out/bin/dprint completions fish)
+  '';
 
   passthru = {
     tests.version = testers.testVersion {

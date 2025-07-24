@@ -21,11 +21,12 @@ python3Packages.buildPythonApplication {
     "--set PYTHONUNBUFFERED 1"
   ];
 
-  pythonPath =
-    [ bcc ]
-    ++ (with python3Packages; [
-      hexdump
-    ]);
+  pythonPath = [
+    bcc
+  ]
+  ++ (with python3Packages; [
+    hexdump
+  ]);
 
   postPatch = ''
     substituteInPlace ebpf-usb.py \

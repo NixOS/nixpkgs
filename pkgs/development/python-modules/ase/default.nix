@@ -32,18 +32,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      numpy
-      scipy
-      matplotlib
-      flask
-      pillow
-      psycopg2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      tkinter
-    ];
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+    flask
+    pillow
+    psycopg2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tkinter
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -62,7 +61,8 @@ buildPythonPackage rec {
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
     "test_ipi_protocol" # flaky
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

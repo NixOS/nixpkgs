@@ -116,7 +116,8 @@ let
 
       outputs = [
         "out"
-      ] ++ lib.optional (editor) "man";
+      ]
+      ++ lib.optional (editor) "man";
       separateDebugInfo = true;
 
       # Set the build name which is part of the version. In official downloads, this
@@ -244,18 +245,17 @@ let
         ]
         ++ lib.optional withUdev udev;
 
-      nativeBuildInputs =
-        [
-          installShellFiles
-          perl
-          pkg-config
-          scons
-        ]
-        ++ lib.optionals withWayland [ wayland-scanner ]
-        ++ lib.optionals withMono [
-          dotnet-sdk
-          makeWrapper
-        ];
+      nativeBuildInputs = [
+        installShellFiles
+        perl
+        pkg-config
+        scons
+      ]
+      ++ lib.optionals withWayland [ wayland-scanner ]
+      ++ lib.optionals withMono [
+        dotnet-sdk
+        makeWrapper
+      ];
 
       postBuild = lib.optionalString (editor && withMono) ''
         echo "Generating Glue"
@@ -264,285 +264,283 @@ let
         python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
       '';
 
-      installPhase =
-        ''
-          runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-          mkdir -p "$out"/{bin,libexec}
-          cp -r bin/* "$out"/libexec
+        mkdir -p "$out"/{bin,libexec}
+        cp -r bin/* "$out"/libexec
 
-          cd "$out"/bin
-          ln -s ../libexec/${binary} godot${lib.versions.majorMinor version}${suffix}
-          ln -s godot${lib.versions.majorMinor version}${suffix} godot${lib.versions.major version}${suffix}
-          ln -s godot${lib.versions.major version}${suffix} godot${suffix}
-          cd -
-        ''
-        + (
-          if editor then
-            ''
-              installManPage misc/dist/linux/godot.6
+        cd "$out"/bin
+        ln -s ../libexec/${binary} godot${lib.versions.majorMinor version}${suffix}
+        ln -s godot${lib.versions.majorMinor version}${suffix} godot${lib.versions.major version}${suffix}
+        ln -s godot${lib.versions.major version}${suffix} godot${suffix}
+        cd -
+      ''
+      + (
+        if editor then
+          ''
+            installManPage misc/dist/linux/godot.6
 
-              mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-              cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
-              substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
-                --replace "Exec=godot" "Exec=$out/bin/godot${suffix}" \
-                --replace "Godot Engine" "Godot Engine ${
-                  lib.versions.majorMinor version + lib.optionalString withMono " (Mono)"
-                }"
-              cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
-              cp icon.png "$out/share/icons/godot.png"
-            ''
-            + lib.optionalString withMono ''
-              mkdir -p "$out"/share/nuget
-              mv "$out"/libexec/GodotSharp/Tools/nupkgs "$out"/share/nuget/source
+            mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
+            cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
+            substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
+              --replace "Exec=godot" "Exec=$out/bin/godot${suffix}" \
+              --replace "Godot Engine" "Godot Engine ${
+                lib.versions.majorMinor version + lib.optionalString withMono " (Mono)"
+              }"
+            cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
+            cp icon.png "$out/share/icons/godot.png"
+          ''
+          + lib.optionalString withMono ''
+            mkdir -p "$out"/share/nuget
+            mv "$out"/libexec/GodotSharp/Tools/nupkgs "$out"/share/nuget/source
 
-              wrapProgram $out/libexec/${binary} \
-                --set DOTNET_ROOT ${dotnet-sdk}/share/dotnet \
-                --prefix PATH : "${
-                  lib.makeBinPath [
-                    dotnet-sdk
-                  ]
-                }"
-            ''
-          else
-            let
-              template =
-                (lib.replaceStrings
-                  [ "template" ]
-                  [
-                    {
-                      linuxbsd = "linux";
-                    }
-                    .${withPlatform}
-                  ]
-                  target
-                )
-                + "."
-                + arch;
-            in
-            ''
-              templates="$out"/share/godot/export_templates/${dottedVersion}
-              mkdir -p "$templates"
-              ln -s "$out"/libexec/${binary} "$templates"/${template}
-            ''
-        )
-        + ''
-          runHook postInstall
-        '';
+            wrapProgram $out/libexec/${binary} \
+              --set DOTNET_ROOT ${dotnet-sdk}/share/dotnet \
+              --prefix PATH : "${
+                lib.makeBinPath [
+                  dotnet-sdk
+                ]
+              }"
+          ''
+        else
+          let
+            template =
+              (lib.replaceStrings
+                [ "template" ]
+                [
+                  {
+                    linuxbsd = "linux";
+                  }
+                  .${withPlatform}
+                ]
+                target
+              )
+              + "."
+              + arch;
+          in
+          ''
+            templates="$out"/share/godot/export_templates/${dottedVersion}
+            mkdir -p "$templates"
+            ln -s "$out"/libexec/${binary} "$templates"/${template}
+          ''
+      )
+      + ''
+        runHook postInstall
+      '';
 
-      passthru =
-        {
-          inherit updateScript;
+      passthru = {
+        inherit updateScript;
 
-          tests =
-            {
-              version = testers.testVersion {
-                package = finalAttrs.finalPackage;
-                version = dottedVersion;
-              };
-            }
-            // lib.optionalAttrs (editor) (
-              let
-                pkg = finalAttrs.finalPackage;
-
-                project-src = runCommand "${pkg.name}-project-src" { } (
-                  ''
-                    mkdir "$out"
-                    cd "$out"
-                    touch project.godot
-
-                    cat >create-scene.gd <<'EOF'
-                    extends SceneTree
-
-                    func _initialize():
-                      var node = Node.new()
-                      var script = ResourceLoader.load("res://test.gd")
-                      node.set_script(script)
-                  ''
-                  + lib.optionalString withMono ''
-                    ${""}
-                      var monoNode = Node.new()
-                      var monoScript = ResourceLoader.load("res://Test.cs")
-                      monoNode.set_script(monoScript)
-                      node.add_child(monoNode)
-                      monoNode.owner = node
-                  ''
-                  + ''
-                      var scene = PackedScene.new()
-                      var scenePath = "res://test.tscn"
-                      scene.pack(node)
-                      node.free()
-                      var x = ResourceSaver.save(scene, scenePath)
-                      ProjectSettings["application/run/main_scene"] = scenePath
-                      ProjectSettings.save()
-                      quit()
-                    EOF
-
-                    cat >test.gd <<'EOF'
-                    extends Node
-                    func _ready():
-                      print("Hello, World!")
-                      get_tree().quit()
-                    EOF
-
-                    cat >export_presets.cfg <<'EOF'
-                    [preset.0]
-                    name="build"
-                    platform="Linux"
-                    runnable=true
-                    export_filter="all_resources"
-                    include_filter=""
-                    exclude_filter=""
-                    [preset.0.options]
-                    binary_format/architecture="${arch}"
-                    EOF
-                  ''
-                  + lib.optionalString withMono ''
-                    cat >Test.cs <<'EOF'
-                    using Godot;
-                    using System;
-
-                    public partial class Test : Node
-                    {
-                      public override void _Ready()
-                      {
-                        GD.Print("Hello, Mono!");
-                        GetTree().Quit();
-                      }
-                    }
-                    EOF
-
-                    sdk_version=$(basename ${pkg}/share/nuget/packages/godot.net.sdk/*)
-                    cat >UnnamedProject.csproj <<EOF
-                    <Project Sdk="Godot.NET.Sdk/$sdk_version">
-                      <PropertyGroup>
-                        <TargetFramework>net8.0</TargetFramework>
-                        <EnableDynamicLoading>true</EnableDynamicLoading>
-                      </PropertyGroup>
-                    </Project>
-                    EOF
-                  ''
-                );
-
-                export-tests = lib.makeExtensible (final: {
-                  inherit (pkg) export-template;
-
-                  export = stdenvNoCC.mkDerivation {
-                    name = "${final.export-template.name}-export";
-
-                    nativeBuildInputs = [
-                      pkg
-                    ] ++ lib.optional withMono dotnet-sdk;
-
-                    src = project-src;
-
-                    postConfigure = lib.optionalString withMono ''
-                      dotnet new sln -n UnnamedProject
-                      message=$(dotnet sln add UnnamedProject.csproj)
-                      echo "$message"
-                      # dotnet sln doesn't return an error when it fails to add the project
-                      [[ $message == "Project \`UnnamedProject.csproj\` added to the solution." ]]
-                    '';
-
-                    exportTemplate = pkg.export-template;
-
-                    buildPhase = ''
-                      runHook preBuild
-
-                      export HOME=$(mktemp -d)
-                      mkdir -p $HOME/.local/share/godot/
-                      ln -s "${final.export-template}"/share/godot/export_templates "$HOME"/.local/share/godot/
-
-                      godot${suffix} --headless --build-solutions -s create-scene.gd
-
-                      runHook postBuild
-                    '';
-
-                    installPhase = ''
-                      runHook preInstall
-
-                      mkdir -p "$out"/bin
-                      godot${suffix} --headless --export-release build "$out"/bin/test
-
-                      runHook postInstall
-                    '';
-                  };
-
-                  run = runCommand "${final.export.name}-runs" { passthru = { inherit (final) export; }; } (
-                    ''
-                      (
-                        set -eo pipefail
-                        HOME=$(mktemp -d)
-                        "${final.export}"/bin/test --headless | tail -n+3 | (
-                    ''
-                    + lib.optionalString withMono ''
-                      # indent
-                          read output
-                          if [[ "$output" != "Hello, Mono!" ]]; then
-                            echo "unexpected output: $output" >&2
-                            exit 1
-                          fi
-                    ''
-                    + ''
-                          read output
-                          if [[ "$output" != "Hello, World!" ]]; then
-                            echo "unexpected output: $output" >&2
-                            exit 1
-                          fi
-                        )
-                        touch "$out"
-                      )
-                    ''
-                  );
-                });
-
-              in
-              {
-                export-runs = export-tests.run;
-
-                export-bin-runs =
-                  (export-tests.extend (
-                    final: prev: {
-                      export-template = pkg.export-templates-bin;
-
-                      export = prev.export.overrideAttrs (prev: {
-                        nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [
-                          autoPatchelfHook
-                        ];
-
-                        # stripping dlls results in:
-                        # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-                        stripExclude = lib.optional withMono [ "*.dll" ];
-
-                        runtimeDependencies =
-                          prev.runtimeDependencies or [ ]
-                          ++ map lib.getLib [
-                            alsa-lib
-                            libpulseaudio
-                            libX11
-                            libXcursor
-                            libXext
-                            libXi
-                            libXrandr
-                            udev
-                            vulkan-loader
-                          ];
-                      });
-                    }
-                  )).run;
-              }
-            );
+        tests = {
+          version = testers.testVersion {
+            package = finalAttrs.finalPackage;
+            version = dottedVersion;
+          };
         }
-        // lib.optionalAttrs editor {
-          export-template = mkTarget "template_release";
-          export-templates-bin = (
-            callPackage ./export-templates-bin.nix {
-              inherit version withMono;
-              godot = finalAttrs.finalPackage;
-              hash = exportTemplatesHash;
-            }
-          );
-        };
+        // lib.optionalAttrs (editor) (
+          let
+            pkg = finalAttrs.finalPackage;
+
+            project-src = runCommand "${pkg.name}-project-src" { } (
+              ''
+                mkdir "$out"
+                cd "$out"
+                touch project.godot
+
+                cat >create-scene.gd <<'EOF'
+                extends SceneTree
+
+                func _initialize():
+                  var node = Node.new()
+                  var script = ResourceLoader.load("res://test.gd")
+                  node.set_script(script)
+              ''
+              + lib.optionalString withMono ''
+                ${""}
+                  var monoNode = Node.new()
+                  var monoScript = ResourceLoader.load("res://Test.cs")
+                  monoNode.set_script(monoScript)
+                  node.add_child(monoNode)
+                  monoNode.owner = node
+              ''
+              + ''
+                  var scene = PackedScene.new()
+                  var scenePath = "res://test.tscn"
+                  scene.pack(node)
+                  node.free()
+                  var x = ResourceSaver.save(scene, scenePath)
+                  ProjectSettings["application/run/main_scene"] = scenePath
+                  ProjectSettings.save()
+                  quit()
+                EOF
+
+                cat >test.gd <<'EOF'
+                extends Node
+                func _ready():
+                  print("Hello, World!")
+                  get_tree().quit()
+                EOF
+
+                cat >export_presets.cfg <<'EOF'
+                [preset.0]
+                name="build"
+                platform="Linux"
+                runnable=true
+                export_filter="all_resources"
+                include_filter=""
+                exclude_filter=""
+                [preset.0.options]
+                binary_format/architecture="${arch}"
+                EOF
+              ''
+              + lib.optionalString withMono ''
+                cat >Test.cs <<'EOF'
+                using Godot;
+                using System;
+
+                public partial class Test : Node
+                {
+                  public override void _Ready()
+                  {
+                    GD.Print("Hello, Mono!");
+                    GetTree().Quit();
+                  }
+                }
+                EOF
+
+                sdk_version=$(basename ${pkg}/share/nuget/packages/godot.net.sdk/*)
+                cat >UnnamedProject.csproj <<EOF
+                <Project Sdk="Godot.NET.Sdk/$sdk_version">
+                  <PropertyGroup>
+                    <TargetFramework>net8.0</TargetFramework>
+                    <EnableDynamicLoading>true</EnableDynamicLoading>
+                  </PropertyGroup>
+                </Project>
+                EOF
+              ''
+            );
+
+            export-tests = lib.makeExtensible (final: {
+              inherit (pkg) export-template;
+
+              export = stdenvNoCC.mkDerivation {
+                name = "${final.export-template.name}-export";
+
+                nativeBuildInputs = [
+                  pkg
+                ]
+                ++ lib.optional withMono dotnet-sdk;
+
+                src = project-src;
+
+                postConfigure = lib.optionalString withMono ''
+                  dotnet new sln -n UnnamedProject
+                  message=$(dotnet sln add UnnamedProject.csproj)
+                  echo "$message"
+                  # dotnet sln doesn't return an error when it fails to add the project
+                  [[ $message == "Project \`UnnamedProject.csproj\` added to the solution." ]]
+                '';
+
+                exportTemplate = pkg.export-template;
+
+                buildPhase = ''
+                  runHook preBuild
+
+                  export HOME=$(mktemp -d)
+                  mkdir -p $HOME/.local/share/godot/
+                  ln -s "${final.export-template}"/share/godot/export_templates "$HOME"/.local/share/godot/
+
+                  godot${suffix} --headless --build-solutions -s create-scene.gd
+
+                  runHook postBuild
+                '';
+
+                installPhase = ''
+                  runHook preInstall
+
+                  mkdir -p "$out"/bin
+                  godot${suffix} --headless --export-release build "$out"/bin/test
+
+                  runHook postInstall
+                '';
+              };
+
+              run = runCommand "${final.export.name}-runs" { passthru = { inherit (final) export; }; } (
+                ''
+                  (
+                    set -eo pipefail
+                    HOME=$(mktemp -d)
+                    "${final.export}"/bin/test --headless | tail -n+3 | (
+                ''
+                + lib.optionalString withMono ''
+                  # indent
+                      read output
+                      if [[ "$output" != "Hello, Mono!" ]]; then
+                        echo "unexpected output: $output" >&2
+                        exit 1
+                      fi
+                ''
+                + ''
+                      read output
+                      if [[ "$output" != "Hello, World!" ]]; then
+                        echo "unexpected output: $output" >&2
+                        exit 1
+                      fi
+                    )
+                    touch "$out"
+                  )
+                ''
+              );
+            });
+
+          in
+          {
+            export-runs = export-tests.run;
+
+            export-bin-runs =
+              (export-tests.extend (
+                final: prev: {
+                  export-template = pkg.export-templates-bin;
+
+                  export = prev.export.overrideAttrs (prev: {
+                    nativeBuildInputs = prev.nativeBuildInputs or [ ] ++ [
+                      autoPatchelfHook
+                    ];
+
+                    # stripping dlls results in:
+                    # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
+                    stripExclude = lib.optional withMono [ "*.dll" ];
+
+                    runtimeDependencies =
+                      prev.runtimeDependencies or [ ]
+                      ++ map lib.getLib [
+                        alsa-lib
+                        libpulseaudio
+                        libX11
+                        libXcursor
+                        libXext
+                        libXi
+                        libXrandr
+                        udev
+                        vulkan-loader
+                      ];
+                  });
+                }
+              )).run;
+          }
+        );
+      }
+      // lib.optionalAttrs editor {
+        export-template = mkTarget "template_release";
+        export-templates-bin = (
+          callPackage ./export-templates-bin.nix {
+            inherit version withMono;
+            godot = finalAttrs.finalPackage;
+            hash = exportTemplatesHash;
+          }
+        );
+      };
 
       requiredSystemFeatures = [
         # fixes: No space left on device
@@ -557,7 +555,8 @@ let
         platforms = [
           "x86_64-linux"
           "aarch64-linux"
-        ] ++ lib.optional (!withMono) "i686-linux";
+        ]
+        ++ lib.optional (!withMono) "i686-linux";
         maintainers = with lib.maintainers; [
           shiryel
           corngood

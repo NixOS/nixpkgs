@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     mbuild
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
 
   buildPhase = ''
     patchShebangs mfile.py

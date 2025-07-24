@@ -19,17 +19,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-A1dRG2/tcOPmT051ql18wgAMsPJk7zAXArGBZCf3LyA=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
-      substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
-      patchShebangs bin/rebar
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
-      # (There are warnings, but no hard errors, and it produces an empty dylib.)
-      substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
-    '';
+  postPatch = ''
+    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
+    substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
+    patchShebangs bin/rebar
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
+    # (There are warnings, but no hard errors, and it produces an empty dylib.)
+    substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
+  '';
 
   nativeBuildInputs = [
     erlang

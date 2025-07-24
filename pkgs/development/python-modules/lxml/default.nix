@@ -33,7 +33,8 @@ buildPythonPackage rec {
     libxslt.dev
     cython
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
   buildInputs = [
     libxml2
     libxslt

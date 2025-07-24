@@ -66,7 +66,8 @@ buildPythonApplication rec {
     jinja2
     which
     prometheus-client
-  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   passthru.tests = {
     service = nixosTests.glances;

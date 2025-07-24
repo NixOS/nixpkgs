@@ -126,9 +126,7 @@ buildPythonPackage rec {
     pluggy
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-  ];
+  nativeCheckInputs = [ hypothesis ];
 
   meta = {
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
@@ -272,16 +270,8 @@ be used through out all of the Python package set:
   python3MyBlas = pkgs.python3.override {
     packageOverrides = self: super: {
       # We need toPythonModule for the package set to evaluate this
-      blas = super.toPythonModule (
-        super.pkgs.blas.override {
-          blasProvider = super.pkgs.mkl;
-        }
-      );
-      lapack = super.toPythonModule (
-        super.pkgs.lapack.override {
-          lapackProvider = super.pkgs.mkl;
-        }
-      );
+      blas = super.toPythonModule (super.pkgs.blas.override { blasProvider = super.pkgs.mkl; });
+      lapack = super.toPythonModule (super.pkgs.lapack.override { lapackProvider = super.pkgs.mkl; });
     };
   };
 }
@@ -324,9 +314,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     tornado
@@ -358,9 +346,7 @@ the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
-{
-  python3Packages,
-}:
+{ python3Packages }:
 
 python3Packages.toPythonApplication python3Packages.youtube-dl
 ```
@@ -396,9 +382,7 @@ mkPythonMetaPackage {
   pname = "psycopg2-binary";
   inherit (psycopg2) optional-dependencies version;
   dependencies = [ psycopg2 ];
-  meta = {
-    inherit (psycopg2.meta) description homepage;
-  };
+  meta = { inherit (psycopg2.meta) description homepage; };
 }
 ```
 
@@ -444,9 +428,7 @@ let
   pythonEnv = myPython.withPackages (ps: [ ps.my-editable ]);
 
 in
-pkgs.mkShell {
-  packages = [ pythonEnv ];
-}
+pkgs.mkShell { packages = [ pythonEnv ]; }
 ```
 
 #### `python.buildEnv` function {#python.buildenv-function}
@@ -943,9 +925,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # has no tests
   doCheck = false;
@@ -1002,9 +982,7 @@ with import <nixpkgs> { };
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
-      build-system = [
-        python312.pkgs.setuptools
-      ];
+      build-system = [ python312.pkgs.setuptools ];
 
       # has no tests
       doCheck = false;
@@ -1081,9 +1059,7 @@ buildPythonPackage rec {
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     multipledispatch
@@ -1091,9 +1067,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
@@ -1134,9 +1108,7 @@ buildPythonPackage rec {
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     libxml2
@@ -1198,9 +1170,7 @@ buildPythonPackage rec {
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     fftw
@@ -1301,11 +1271,7 @@ To use `pytestCheckHook`, add it to `nativeCheckInputs`.
 Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 ```nix
-{
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-}
+{ nativeCheckInputs = [ pytestCheckHook ]; }
 ```
 
 `pytestCheckHook` recognizes the following attributes:
@@ -1334,9 +1300,7 @@ The following example demonstrates usage of various `pytestCheckHook` attributes
 
 ```nix
 {
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Allow running the following test paths and test objects.
   enabledTestPaths = [
@@ -1396,9 +1360,7 @@ by disabling tests that match both `"Foo"` **and** `"bar"`:
 {
   __structuredAttrs = true;
 
-  disabledTests = [
-    "Foo and bar"
-  ];
+  disabledTests = [ "Foo and bar" ];
 }
 ```
 
@@ -1408,20 +1370,19 @@ This is especially helpful to select tests or specify flags conditionally:
 
 ```nix
 {
-  disabledTests =
-    [
-      # touches network
-      "download"
-      "update"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.8") [
-      # broken due to python3.8 async changes
-      "async"
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      # can fail when building with other packages
-      "socket"
-    ];
+  disabledTests = [
+    # touches network
+    "download"
+    "update"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.8") [
+    # broken due to python3.8 async changes
+    "async"
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # can fail when building with other packages
+    "socket"
+  ];
 }
 ```
 
@@ -1486,9 +1447,7 @@ we can do:
     "pkg1"
     "pkg3"
   ];
-  pythonRemoveDeps = [
-    "pkg2"
-  ];
+  pythonRemoveDeps = [ "pkg2" ];
 }
 ```
 
@@ -1503,9 +1462,7 @@ Another option is to pass `true`, that will relax/remove all dependencies, for
 example:
 
 ```nix
-{
-  pythonRelaxDeps = true;
-}
+{ pythonRelaxDeps = true; }
 ```
 
 which would result in the following `requirements.txt` file:
@@ -1541,9 +1498,7 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 ```nix
 {
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlags = [
     "-s"
@@ -1569,9 +1524,7 @@ render them using the default `html` style.
     "doc"
   ];
 
-  nativeBuildInputs = [
-    sphinxHook
-  ];
+  nativeBuildInputs = [ sphinxHook ];
 }
 ```
 
@@ -1646,9 +1599,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
@@ -1711,14 +1662,10 @@ with import <nixpkgs> { };
           });
         };
       in
-      pkgs.python310.override {
-        inherit packageOverrides;
-      };
+      pkgs.python310.override { inherit packageOverrides; };
 
   in
-  python.withPackages (ps: [
-    ps.pandas
-  ])
+  python.withPackages (ps: [ ps.pandas ])
 ).env
 ```
 
@@ -1737,16 +1684,9 @@ with import <nixpkgs> { };
 
 (
   let
-    packageOverrides = self: super: {
-      scipy = super.scipy_0_17;
-    };
+    packageOverrides = self: super: { scipy = super.scipy_0_17; };
   in
-  (pkgs.python310.override {
-    inherit packageOverrides;
-  }).withPackages
-    (ps: [
-      ps.blaze
-    ])
+  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -1994,11 +1934,7 @@ this snippet:
 
 ```nix
 {
-  myPythonPackages = python3Packages.override {
-    overrides = self: super: {
-      twisted = <...>;
-    };
-  };
+  myPythonPackages = python3Packages.override { overrides = self: super: { twisted = <...>; }; };
 }
 ```
 
@@ -2092,7 +2028,8 @@ and letting the package requiring the extra add the list to its dependencies
 {
   dependencies = [
     # ...
-  ] ++ dask.optional-dependencies.complete;
+  ]
+  ++ dask.optional-dependencies.complete;
 }
 ```
 

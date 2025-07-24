@@ -153,25 +153,24 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs =
-    [
-      dbus
-      systemd
-      dconf
-      gdk-pixbuf
-      python3.pkgs.pygobject3 # for pygobject overrides
-      gtk3
-      gtk4
-      isocodes
-      json-glib
-      libnotify
-      libdbusmenu-gtk3
-      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
-    ]
-    ++ lib.optionals withWayland [
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    dbus
+    systemd
+    dconf
+    gdk-pixbuf
+    python3.pkgs.pygobject3 # for pygobject overrides
+    gtk3
+    gtk4
+    isocodes
+    json-glib
+    libnotify
+    libdbusmenu-gtk3
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+  ]
+  ++ lib.optionals withWayland [
+    libxkbcommon
+    wayland
+  ];
 
   enableParallelBuilding = true;
 

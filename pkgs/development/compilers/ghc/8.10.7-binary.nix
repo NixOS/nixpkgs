@@ -213,19 +213,18 @@ let
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
 
-  runtimeDeps =
-    [
-      targetPackages.stdenv.cc
-      targetPackages.stdenv.cc.bintools
-      coreutils # for cat
-    ]
-    ++ lib.optionals useLLVM [
-      (lib.getBin llvmPackages.llvm)
-    ]
-    # On darwin, we need unwrapped bintools as well (for otool)
-    ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
-      targetPackages.stdenv.cc.bintools.bintools
-    ];
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
 
 in
 
@@ -246,16 +245,17 @@ stdenv.mkDerivation {
   #           https://gitlab.haskell.org/ghc/ghc/-/issues/20059
   #       and update this comment accordingly.
 
-  nativeBuildInputs =
-    [ perl ]
-    # Upstream binaries may not be linker-signed, which invalidates their signatures
-    # because `install_name_tool` will only replace a signature if it is both
-    # an ad hoc signature and the signature is flagged as linker-signed.
-    #
-    # rcodesign is used to replace the signature instead of sigtool because it
-    # supports setting the linker-signed flag, which will ensure future processing
-    # of the binaries does not invalidate their signatures.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ rcodesign ];
+  nativeBuildInputs = [
+    perl
+  ]
+  # Upstream binaries may not be linker-signed, which invalidates their signatures
+  # because `install_name_tool` will only replace a signature if it is both
+  # an ad hoc signature and the signature is flagged as linker-signed.
+  #
+  # rcodesign is used to replace the signature instead of sigtool because it
+  # supports setting the linker-signed flag, which will ensure future processing
+  # of the binaries does not invalidate their signatures.
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ rcodesign ];
 
   # Set LD_LIBRARY_PATH or equivalent so that the programs running as part
   # of the bindist installer can find the libraries they expect.
@@ -379,15 +379,14 @@ stdenv.mkDerivation {
   preConfigure = lib.optionalString stdenv.targetPlatform.isAarch32 "LD=ld.gold";
 
   configurePlatforms = [ ];
-  configureFlags =
-    [
-      "--with-gmp-includes=${lib.getDev gmp}/include"
-      # Note `--with-gmp-libraries` does nothing for GHC bindists:
-      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  configureFlags = [
+    "--with-gmp-includes=${lib.getDev gmp}/include"
+    # Note `--with-gmp-libraries` does nothing for GHC bindists:
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  # From: https://github.com/NixOS/nixpkgs/pull/43369/commits
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
@@ -507,26 +506,25 @@ stdenv.mkDerivation {
     [ $(./main) == "yes" ]
   '';
 
-  passthru =
-    {
-      targetPrefix = "";
-      enableShared = true;
+  passthru = {
+    targetPrefix = "";
+    enableShared = true;
 
-      inherit llvmPackages;
+    inherit llvmPackages;
 
-      # Our Cabal compiler name
-      haskellCompilerName = "ghc-${version}";
-    }
-    # We duplicate binDistUsed here since we have a sensible default even if no bindist is available,
-    # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
-    // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
-      # Normal GHC derivations expose the hadrian derivation used to build them
-      # here. In the case of bindists we just make sure that the attribute exists,
-      # as it is used for checking if a GHC derivation has been built with hadrian.
-      # The isHadrian mechanism will become obsolete with GHCs that use hadrian
-      # exclusively, i.e. 9.6 (and 9.4?).
-      hadrian = null;
-    };
+    # Our Cabal compiler name
+    haskellCompilerName = "ghc-${version}";
+  }
+  # We duplicate binDistUsed here since we have a sensible default even if no bindist is available,
+  # this makes sure that getting the `meta` attribute doesn't throw even on unsupported platforms.
+  // lib.optionalAttrs (ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
+  };
 
   meta = rec {
     homepage = "http://haskell.org/ghc";

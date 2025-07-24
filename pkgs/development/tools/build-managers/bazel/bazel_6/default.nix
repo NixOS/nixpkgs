@@ -292,7 +292,8 @@ stdenv.mkDerivation rec {
     (replaceVars ../bazel_rc.patch {
       bazelSystemBazelRCPath = bazelRC;
     })
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+  ]
+  ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
   # Additional tests that check bazel’s functionality. Execute
   #
@@ -673,24 +674,24 @@ stdenv.mkDerivation rec {
   buildInputs = [
     buildJdk
     bashWithDefaultShellUtils
-  ] ++ defaultShellUtils;
+  ]
+  ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeWrapper
-      python3
-      unzip
-      which
-      zip
-      python3.pkgs.absl-py # Needed to build fish completion
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      cctools
-      sigtool
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    python3
+    unzip
+    which
+    zip
+    python3.pkgs.absl-py # Needed to build fish completion
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    cctools
+    sigtool
+  ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -703,84 +704,82 @@ stdenv.mkDerivation rec {
     shopt -s dotglob extglob
     mv !(bazel_src) bazel_src
   '';
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      # Increasing memory during compilation might be necessary.
-      # export BAZEL_JAVAC_OPTS="-J-Xmx2g -J-Xms200m"
+    # Increasing memory during compilation might be necessary.
+    # export BAZEL_JAVAC_OPTS="-J-Xmx2g -J-Xms200m"
 
-      # If EMBED_LABEL isn't set, it'd be auto-detected from CHANGELOG.md
-      # and `git rev-parse --short HEAD` which would result in
-      # "3.7.0- (@non-git)" due to non-git build and incomplete changelog.
-      # Actual bazel releases use scripts/release/common.sh which is based
-      # on branch/tag information which we don't have with tarball releases.
-      # Note that .bazelversion is always correct and is based on bazel-*
-      # executable name, version checks should work fine
-      export EMBED_LABEL="${version}- (@non-git)"
-      ${bash}/bin/bash ./bazel_src/compile.sh
-      ./bazel_src/scripts/generate_bash_completion.sh \
-          --bazel=./bazel_src/output/bazel \
-          --output=./bazel_src/output/bazel-complete.bash \
-          --prepend=./bazel_src/scripts/bazel-complete-header.bash \
-          --prepend=./bazel_src/scripts/bazel-complete-template.bash
-      ${python3}/bin/python3 ./bazel_src/scripts/generate_fish_completion.py \
-          --bazel=./bazel_src/output/bazel \
-          --output=./bazel_src/output/bazel-complete.fish
-    ''
-    +
-      # disable execlog parser on darwin, since it fails to build
-      # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-      lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        # need to change directory for bazel to find the workspace
-        cd ./bazel_src
-        # build execlog tooling
-        export HOME=$(mktemp -d)
-        ./output/bazel build src/tools/execlog:parser_deploy.jar
-        cd -
+    # If EMBED_LABEL isn't set, it'd be auto-detected from CHANGELOG.md
+    # and `git rev-parse --short HEAD` which would result in
+    # "3.7.0- (@non-git)" due to non-git build and incomplete changelog.
+    # Actual bazel releases use scripts/release/common.sh which is based
+    # on branch/tag information which we don't have with tarball releases.
+    # Note that .bazelversion is always correct and is based on bazel-*
+    # executable name, version checks should work fine
+    export EMBED_LABEL="${version}- (@non-git)"
+    ${bash}/bin/bash ./bazel_src/compile.sh
+    ./bazel_src/scripts/generate_bash_completion.sh \
+        --bazel=./bazel_src/output/bazel \
+        --output=./bazel_src/output/bazel-complete.bash \
+        --prepend=./bazel_src/scripts/bazel-complete-header.bash \
+        --prepend=./bazel_src/scripts/bazel-complete-template.bash
+    ${python3}/bin/python3 ./bazel_src/scripts/generate_fish_completion.py \
+        --bazel=./bazel_src/output/bazel \
+        --output=./bazel_src/output/bazel-complete.fish
+  ''
+  +
+    # disable execlog parser on darwin, since it fails to build
+    # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # need to change directory for bazel to find the workspace
+      cd ./bazel_src
+      # build execlog tooling
+      export HOME=$(mktemp -d)
+      ./output/bazel build src/tools/execlog:parser_deploy.jar
+      cd -
 
-        runHook postBuild
-      '';
-
-  installPhase =
-    ''
-      runHook preInstall
-
-      mkdir -p $out/bin
-
-      # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
-      # if it can’t find something in tools, it calls $out/bin/bazel-{version}-{os_arch}
-      # The binary _must_ exist with this naming if your project contains a .bazelversion
-      # file.
-      cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
-      wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
-      mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
-
-    ''
-    +
-      # disable execlog parser on darwin, since it fails to build
-      # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-      (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        mkdir $out/share
-        cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
-        cat <<EOF > $out/bin/bazel-execlog
-        #!${runtimeShell} -e
-        ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
-        EOF
-        chmod +x $out/bin/bazel-execlog
-      '')
-    + ''
-      # shell completion files
-      installShellCompletion --bash \
-        --name bazel.bash \
-        ./bazel_src/output/bazel-complete.bash
-      installShellCompletion --zsh \
-        --name _bazel \
-        ./bazel_src/scripts/zsh_completion/_bazel
-      installShellCompletion --fish \
-        --name bazel.fish \
-        ./bazel_src/output/bazel-complete.fish
+      runHook postBuild
     '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+
+    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
+    # if it can’t find something in tools, it calls $out/bin/bazel-{version}-{os_arch}
+    # The binary _must_ exist with this naming if your project contains a .bazelversion
+    # file.
+    cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
+    wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
+    mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
+
+  ''
+  +
+    # disable execlog parser on darwin, since it fails to build
+    # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
+    (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir $out/share
+      cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
+      cat <<EOF > $out/bin/bazel-execlog
+      #!${runtimeShell} -e
+      ${runJdk}/bin/java -jar $out/share/parser_deploy.jar \$@
+      EOF
+      chmod +x $out/bin/bazel-execlog
+    '')
+  + ''
+    # shell completion files
+    installShellCompletion --bash \
+      --name bazel.bash \
+      ./bazel_src/output/bazel-complete.bash
+    installShellCompletion --zsh \
+      --name _bazel \
+      ./bazel_src/scripts/zsh_completion/_bazel
+    installShellCompletion --fish \
+      --name bazel.fish \
+      ./bazel_src/output/bazel-complete.fish
+  '';
 
   # Install check fails on `aarch64-darwin`
   # https://github.com/NixOS/nixpkgs/issues/145587
@@ -835,18 +834,17 @@ stdenv.mkDerivation rec {
 
   # Save paths to hardcoded dependencies so Nix can detect them.
   # This is needed because the templates get tar’d up into a .jar.
-  postFixup =
-    ''
-      mkdir -p $out/nix-support
-      echo "${defaultShellPath}" >> $out/nix-support/depends
-      # The string literal specifying the path to the bazel-rc file is sometimes
-      # stored non-contiguously in the binary due to gcc optimisations, which leads
-      # Nix to miss the hash when scanning for dependencies
-      echo "${bazelRC}" >> $out/nix-support/depends
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      echo "${cctools}" >> $out/nix-support/depends
-    '';
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${defaultShellPath}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
+  '';
 
   dontStrip = true;
   dontPatchELF = true;

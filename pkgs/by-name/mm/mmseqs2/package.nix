@@ -35,30 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nmvFoW+Ey18NcM2w14Ak/3D/Kic52Vka/RxvBd0YoKI=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      xxd
-      perl
-      installShellFiles
-      zstd
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+    xxd
+    perl
+    installShellFiles
+    zstd
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "HAVE_AVX2" enableAvx2)
-      (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
-      (lib.cmakeBool "HAVE_MPI" enableMpi)
-      (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
-      (lib.cmakeBool "HAVE_ARM8" stdenv.hostPlatform.isAarch64)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeBool "ENABLE_CUDA" true)
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "HAVE_AVX2" enableAvx2)
+    (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
+    (lib.cmakeBool "HAVE_MPI" enableMpi)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "HAVE_ARM8" stdenv.hostPlatform.isAarch64)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeBool "ENABLE_CUDA" true)
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ];
 
   buildInputs =
     lib.optionals stdenv.cc.isClang [

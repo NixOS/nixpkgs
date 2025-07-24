@@ -23,7 +23,8 @@ let
   rWithPackages = rWrapper.override {
     packages = [
       rPackages.rmarkdown
-    ] ++ extraRPackages;
+    ]
+    ++ extraRPackages;
   };
 
   pythonWithPackages = python3.withPackages (

@@ -31,7 +31,8 @@ python3Packages.buildPythonApplication rec {
     libunwind
     lz4
     elfutils # for `-ldebuginfod`
-  ] ++ (with python3Packages; [ cython ]);
+  ]
+  ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig

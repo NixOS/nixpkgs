@@ -45,27 +45,29 @@ buildPythonPackage rec {
     array-types = enp;
     eapp = [
       absl-py # FIXME package simple-parsing
-    ] ++ epy;
-    ecolab =
-      [
-        jupyter
-        numpy
-        mediapy
-      ]
-      ++ enp
-      ++ epy;
+    ]
+    ++ epy;
+    ecolab = [
+      jupyter
+      numpy
+      mediapy
+    ]
+    ++ enp
+    ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
     epath = [
       importlib-resources
       typing-extensions
       zipp
-    ] ++ epy;
+    ]
+    ++ epy;
     epy = [ typing-extensions ];
     etqdm = [
       absl-py
       tqdm
-    ] ++ epy;
+    ]
+    ++ epy;
     etree = array-types ++ epy ++ enp ++ etqdm;
     etree-dm = [ dm-tree ] ++ etree;
     etree-jax = [ jax ] ++ etree;
@@ -94,7 +96,8 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     yapf
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTests = [
     "test_public_access" # requires network access

@@ -46,37 +46,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      fftw
-      fmt
-      freetype
-      libsndfile
-      rtmidi
-      SDL2
-      zlib
-      portaudio
-    ]
-    ++ lib.optionals withGL [
-      libGL
-    ]
-    ++ lib.optionals withJACK [
-      libjack2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
-      alsa-lib
-      libX11
-    ];
+  buildInputs = [
+    fftw
+    fmt
+    freetype
+    libsndfile
+    rtmidi
+    SDL2
+    zlib
+    portaudio
+  ]
+  ++ lib.optionals withGL [
+    libGL
+  ]
+  ++ lib.optionals withJACK [
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
+    alsa-lib
+    libX11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_GUI" withGUI)

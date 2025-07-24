@@ -65,45 +65,43 @@ python3.pkgs.buildPythonApplication {
 
   build-system = [ python3.pkgs.setuptools ];
 
-  nativeBuildInputs =
-    [
-      gettext
-      gobject-introspection
-      wrapGAppsHook3
-    ]
-    ++ (with python3.pkgs; [
-      sphinx-rtd-theme
-      sphinxHook
-    ]);
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook3
+  ]
+  ++ (with python3.pkgs; [
+    sphinx-rtd-theme
+    sphinxHook
+  ]);
 
-  buildInputs =
+  buildInputs = [
+    adwaita-icon-theme
+    gdk-pixbuf
+    glib
+    glib-networking
+    gtk3
+    gtksourceview
+    kakasi
+    keybinder3
+    libappindicator-gtk3
+    libmodplug
+    libsoup_3
+  ]
+  ++ lib.optionals (withXineBackend) [ xine-lib ]
+  ++ lib.optionals (withGstreamerBackend) (
+    with gst_all_1;
     [
-      adwaita-icon-theme
-      gdk-pixbuf
-      glib
-      glib-networking
-      gtk3
-      gtksourceview
-      kakasi
-      keybinder3
-      libappindicator-gtk3
-      libmodplug
-      libsoup_3
+      gst-plugins-base
+      gstreamer
     ]
-    ++ lib.optionals (withXineBackend) [ xine-lib ]
-    ++ lib.optionals (withGstreamerBackend) (
-      with gst_all_1;
-      [
-        gst-plugins-base
-        gstreamer
-      ]
-      ++ lib.optionals (withGstPlugins) [
-        gst-libav
-        gst-plugins-bad
-        gst-plugins-good
-        gst-plugins-ugly
-      ]
-    );
+    ++ lib.optionals (withGstPlugins) [
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-ugly
+    ]
+  );
 
   dependencies =
     with python3.pkgs;
@@ -120,33 +118,31 @@ python3.pkgs.buildPythonApplication {
     ++ lib.optionals withPypresence [ pypresence ]
     ++ lib.optionals withSoco [ soco ];
 
-  nativeCheckInputs =
-    [
-      dbus
-      gdk-pixbuf
-      glibcLocales
-      hicolor-icon-theme
-      xvfb-run
-    ]
-    ++ (with python3.pkgs; [
-      polib
-      pytest
-      pytest-xdist
-    ]);
+  nativeCheckInputs = [
+    dbus
+    gdk-pixbuf
+    glibcLocales
+    hicolor-icon-theme
+    xvfb-run
+  ]
+  ++ (with python3.pkgs; [
+    polib
+    pytest
+    pytest-xdist
+  ]);
 
-  pytestFlags =
-    [
-      # missing translation strings in potfiles
-      "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
-      # require networking
-      "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
-      "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
-      # upstream does actually not enforce source code linting
-      "--ignore=tests/quality"
-    ]
-    ++ lib.optionals (withXineBackend || !withGstPlugins) [
-      "--ignore=tests/plugin/test_replaygain.py"
-    ];
+  pytestFlags = [
+    # missing translation strings in potfiles
+    "--deselect=tests/test_po.py::TPOTFILESIN::test_missing"
+    # require networking
+    "--deselect=tests/plugin/test_covers.py::test_live_cover_download"
+    "--deselect=tests/test_browsers_iradio.py::TInternetRadio::test_click_add_station"
+    # upstream does actually not enforce source code linting
+    "--ignore=tests/quality"
+  ]
+  ++ lib.optionals (withXineBackend || !withGstPlugins) [
+    "--ignore=tests/plugin/test_replaygain.py"
+  ];
 
   env.LC_ALL = "en_US.UTF-8";
 

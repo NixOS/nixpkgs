@@ -32,27 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      (lib.getDev llvmPackages.llvm.dev)
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # provides xcode-select, which is required for SDK detection
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cmake
+    (lib.getDev llvmPackages.llvm.dev)
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # provides xcode-select, which is required for SDK detection
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      libxml2
-      zlib
-    ]
-    ++ (with llvmPackages; [
-      libclang
-      lld
-      llvm
-    ]);
+  buildInputs = [
+    libxml2
+    zlib
+  ]
+  ++ (with llvmPackages; [
+    libclang
+    lld
+    llvm
+  ]);
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
@@ -155,14 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
     cc = wrapCCWith {
       cc = finalAttrs.finalPackage.cc-unwrapped;
       bintools = finalAttrs.finalPackage.bintools;
-      nixSupport.cc-cflags =
-        [
-          "-target"
-          "${stdenv.targetPlatform.config}"
-        ]
-        ++ lib.optional (
-          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
-        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
+      nixSupport.cc-cflags = [
+        "-target"
+        "${stdenv.targetPlatform.config}"
+      ]
+      ++ lib.optional (
+        stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
+      ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
     };
 
     stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;

@@ -57,18 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  buildInputs =
-    [
-      libgcrypt
-      libtasn1
-      pango
-      libsecret
-      openssh
-      gtk4
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ];
+  buildInputs = [
+    libgcrypt
+    libtasn1
+    pango
+    libsecret
+    openssh
+    gtk4
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ];
 
   propagatedBuildInputs = [
     glib

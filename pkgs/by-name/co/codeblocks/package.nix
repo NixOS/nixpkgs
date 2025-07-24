@@ -31,15 +31,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      wxGTK32
-      gtk3
-    ]
-    ++ lib.optionals contribPlugins [
-      hunspell
-      boost
-    ];
+  buildInputs = [
+    wxGTK32
+    gtk3
+  ]
+  ++ lib.optionals contribPlugins [
+    hunspell
+    boost
+  ];
 
   enableParallelBuilding = true;
 
@@ -49,15 +48,16 @@ stdenv.mkDerivation rec {
 
   postConfigure = lib.optionalString stdenv.hostPlatform.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
 
-  configureFlags =
-    [ "--enable-pch=no" ]
-    ++ lib.optionals contribPlugins [
-      (
-        "--with-contrib-plugins=all,-FileManager"
-        + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
-      )
-      "--with-boost-libdir=${boost}/lib"
-    ];
+  configureFlags = [
+    "--enable-pch=no"
+  ]
+  ++ lib.optionals contribPlugins [
+    (
+      "--with-contrib-plugins=all,-FileManager"
+      + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
+    )
+    "--with-boost-libdir=${boost}/lib"
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/codeblocks/plugins $out/share/codeblocks/plugins

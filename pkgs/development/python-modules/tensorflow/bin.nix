@@ -96,7 +96,8 @@ buildPythonPackage rec {
     termcolor
     typing-extensions
     wrapt
-  ] ++ lib.optional (!isPy3k) mock;
+  ]
+  ++ lib.optional (!isPy3k) mock;
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH

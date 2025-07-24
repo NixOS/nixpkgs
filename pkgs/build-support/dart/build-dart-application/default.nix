@@ -98,7 +98,8 @@ let
             exit 1
           fi
         '';
-    } // sdkSourceBuilders;
+    }
+    // sdkSourceBuilders;
   };
   packageConfig = generators.linkPackageConfig {
     packageConfig = pub2nix.generatePackageConfig {
@@ -149,7 +150,8 @@ let
       outputs = [
         "out"
         "pubcache"
-      ] ++ args.outputs or [ ];
+      ]
+      ++ args.outputs or [ ];
 
       dartEntryPoints =
         if (dartEntryPoints != null) then
@@ -177,11 +179,9 @@ let
           # Ensure that we inherit the propagated build inputs from the dependencies.
           builtins.attrValues pubspecLockData.dependencySources;
 
-      preConfigure =
-        args.preConfigure or ""
-        + ''
-          ln -sf "$pubspecLockFilePath" pubspec.lock
-        '';
+      preConfigure = args.preConfigure or "" + ''
+        ln -sf "$pubspecLockFilePath" pubspec.lock
+      '';
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.
@@ -191,7 +191,8 @@ let
 
       passthru = {
         pubspecLock = pubspecLockData;
-      } // (args.passthru or { });
+      }
+      // (args.passthru or { });
 
       meta = (args.meta or { }) // {
         platforms = args.meta.platforms or dart.meta.platforms;

@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fpc
     libpng
-  ] ++ sharedLibs;
+  ]
+  ++ sharedLibs;
 
   preBuild =
     let

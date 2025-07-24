@@ -90,68 +90,67 @@
 let
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      glib
-      fontconfig
-      freetype
-      pango
-      cairo
-      libX11
-      libXi
-      atk
-      nss
-      nspr
-      libXcursor
-      libXext
-      libXfixes
-      libXrender
-      libXScrnSaver
-      libXcomposite
-      libxcb
-      alsa-lib
-      libXdamage
-      libXtst
-      libXrandr
-      libxshmfence
-      expat
-      cups
-      dbus
-      gdk-pixbuf
-      gcc-unwrapped.lib
-      systemd
-      libexif
-      pciutils
-      liberation_ttf
-      curl
-      util-linux
-      wget
-      flac
-      harfbuzz
-      icu
-      libpng
-      opusWithCustomModes
-      snappy
-      speechd
-      bzip2
-      libcap
-      at-spi2-atk
-      at-spi2-core
-      libkrb5
-      libdrm
-      libglvnd
-      libgbm
-      coreutils
-      libxkbcommon
-      pipewire
-      wayland
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
-      gtk3
-      gtk4
-    ];
+  deps = [
+    glib
+    fontconfig
+    freetype
+    pango
+    cairo
+    libX11
+    libXi
+    atk
+    nss
+    nspr
+    libXcursor
+    libXext
+    libXfixes
+    libXrender
+    libXScrnSaver
+    libXcomposite
+    libxcb
+    alsa-lib
+    libXdamage
+    libXtst
+    libXrandr
+    libxshmfence
+    expat
+    cups
+    dbus
+    gdk-pixbuf
+    gcc-unwrapped.lib
+    systemd
+    libexif
+    pciutils
+    liberation_ttf
+    curl
+    util-linux
+    wget
+    flac
+    harfbuzz
+    icu
+    libpng
+    opusWithCustomModes
+    snappy
+    speechd
+    bzip2
+    libcap
+    at-spi2-atk
+    at-spi2-core
+    libkrb5
+    libdrm
+    libglvnd
+    libgbm
+    coreutils
+    libxkbcommon
+    pipewire
+    wayland
+  ]
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional libvaSupport libva
+  ++ [
+    gtk3
+    gtk4
+  ];
 
 in
 stdenv.mkDerivation (finalAttrs: {

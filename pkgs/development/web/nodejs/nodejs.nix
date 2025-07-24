@@ -126,16 +126,15 @@ let
     !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
   useSharedSQLite = lib.versionAtLeast version "22.5";
 
-  sharedLibDeps =
-    {
-      inherit openssl zlib libuv;
-    }
-    // (lib.optionalAttrs useSharedHttpParser {
-      inherit http-parser;
-    })
-    // (lib.optionalAttrs useSharedSQLite {
-      inherit sqlite;
-    });
+  sharedLibDeps = {
+    inherit openssl zlib libuv;
+  }
+  // (lib.optionalAttrs useSharedHttpParser {
+    inherit http-parser;
+  })
+  // (lib.optionalAttrs useSharedSQLite {
+    inherit sqlite;
+  });
 
   copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
     builtins.attrNames sharedLibDeps
@@ -193,21 +192,20 @@ let
 
       strictDeps = true;
 
-      env =
-        {
-          # Tell ninja to avoid ANSI sequences, otherwise we don’t see build
-          # progress in Nix logs.
-          #
-          # Note: do not set TERM=dumb environment variable globally, it is used in
-          # test-ci-js test suite to skip tests that otherwise run fine.
-          NINJA = "TERM=dumb ninja";
-        }
-        // lib.optionalAttrs (!canExecute && !canEmulate) {
-          # these are used in the --cross-compiling case. see comment at postConfigure.
-          CC_host = touchScript "${buildPackages.stdenv.cc}/bin/cc";
-          CXX_host = touchScript "${buildPackages.stdenv.cc}/bin/c++";
-          AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
-        };
+      env = {
+        # Tell ninja to avoid ANSI sequences, otherwise we don’t see build
+        # progress in Nix logs.
+        #
+        # Note: do not set TERM=dumb environment variable globally, it is used in
+        # test-ci-js test suite to skip tests that otherwise run fine.
+        NINJA = "TERM=dumb ninja";
+      }
+      // lib.optionalAttrs (!canExecute && !canEmulate) {
+        # these are used in the --cross-compiling case. see comment at postConfigure.
+        CC_host = touchScript "${buildPackages.stdenv.cc}/bin/cc";
+        CXX_host = touchScript "${buildPackages.stdenv.cc}/bin/c++";
+        AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
+      };
 
       # NB: technically, we do not need bash in build inputs since all scripts are
       # wrappers over the corresponding JS scripts. There are some packages though
@@ -219,23 +217,23 @@ let
         http-parser
         icu
         bash
-      ] ++ lib.optionals useSharedSQLite [ sqlite ];
+      ]
+      ++ lib.optionals useSharedSQLite [ sqlite ];
 
-      nativeBuildInputs =
-        [
-          installShellFiles
-          ninja
-          pkgconf
-          python
-        ]
-        ++ lib.optionals stdenv.buildPlatform.isDarwin [
-          # gyp checks `sysctl -n hw.memsize` if `sys.platform == "darwin"`.
-          unixtools.sysctl
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # For gyp-mac-tool if `flavor == "mac"`.
-          darwin-cctools-only-libtool
-        ];
+      nativeBuildInputs = [
+        installShellFiles
+        ninja
+        pkgconf
+        python
+      ]
+      ++ lib.optionals stdenv.buildPlatform.isDarwin [
+        # gyp checks `sysctl -n hw.memsize` if `sys.platform == "darwin"`.
+        unixtools.sysctl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # For gyp-mac-tool if `flavor == "mac"`.
+        darwin-cctools-only-libtool
+      ];
 
       # We currently rely on Makefile and stdenv for build phases, so do not let
       # ninja’s setup hook to override default stdenv phases.
@@ -246,44 +244,44 @@ let
       outputs = [
         "out"
         "libv8"
-      ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
+      ]
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
       setOutputFlags = false;
       moveToDev = false;
 
-      configureFlags =
-        [
-          "--ninja"
-          "--with-intl=system-icu"
-          "--openssl-use-def-ca-store"
-          # --cross-compiling flag enables use of CC_host et. al
-          (if canExecute || canEmulate then "--no-cross-compiling" else "--cross-compiling")
-          "--dest-os=${destOS}"
-          "--dest-cpu=${destCPU}"
-        ]
-        ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
-        ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
-        ++ lib.optionals (!canExecute && canEmulate) [
-          # Node.js requires matching bitness between build and host platforms, e.g.
-          # for V8 startup snapshot builder (see tools/snapshot) and some other
-          # tools. We apply a patch that runs these tools using a host platform
-          # emulator and avoid cross-compiling altogether (from the build system’s
-          # perspective).
-          "--emulator=${emulator}"
-        ]
-        ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
-        ++ lib.optionals (!enableNpm) [ "--without-npm" ]
-        ++ lib.concatMap (name: [
-          "--shared-${name}"
-          "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-          /**
-            Closure notes: we explicitly avoid specifying --shared-*-includes,
-            as that would put the paths into bin/nodejs.
-            Including pkg-config in build inputs would also have the same effect!
+      configureFlags = [
+        "--ninja"
+        "--with-intl=system-icu"
+        "--openssl-use-def-ca-store"
+        # --cross-compiling flag enables use of CC_host et. al
+        (if canExecute || canEmulate then "--no-cross-compiling" else "--cross-compiling")
+        "--dest-os=${destOS}"
+        "--dest-cpu=${destCPU}"
+      ]
+      ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
+      ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
+      ++ lib.optionals (!canExecute && canEmulate) [
+        # Node.js requires matching bitness between build and host platforms, e.g.
+        # for V8 startup snapshot builder (see tools/snapshot) and some other
+        # tools. We apply a patch that runs these tools using a host platform
+        # emulator and avoid cross-compiling altogether (from the build system’s
+        # perspective).
+        "--emulator=${emulator}"
+      ]
+      ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
+      ++ lib.optionals (!enableNpm) [ "--without-npm" ]
+      ++ lib.concatMap (name: [
+        "--shared-${name}"
+        "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
+        /**
+          Closure notes: we explicitly avoid specifying --shared-*-includes,
+          as that would put the paths into bin/nodejs.
+          Including pkg-config in build inputs would also have the same effect!
 
-            FIXME: the statement above is outdated, we have to include pkg-config
-            in build inputs for system-icu.
-          */
-        ]) (builtins.attrNames sharedLibDeps);
+          FIXME: the statement above is outdated, we have to include pkg-config
+          in build inputs for system-icu.
+        */
+      ]) (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
 
@@ -351,103 +349,102 @@ let
         ]
       );
 
-      checkFlags =
-        [
-          # Do not create __pycache__ when running tests.
-          "PYTHONDONTWRITEBYTECODE=1"
-        ]
-        ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-          # Python 3.12 introduced a warning for calling `os.fork()` in a
-          # multi‐threaded program. For some reason, the Node.js
-          # `tools/pseudo-tty.py` program used for PTY‐related tests
-          # triggers this warning on Hydra, on `x86_64-darwin` only,
-          # despite not creating any threads itself. This causes the
-          # Node.js test runner to misinterpret the warnings as part of the
-          # test output and fail. It does not reproduce reliably off Hydra
-          # on Intel Macs, or occur on the `aarch64-darwin` builds.
-          #
-          # This seems likely to be related to Rosetta 2, but it could also
-          # be some strange x86‐64‐only threading behaviour of the Darwin
-          # system libraries, or a bug in CPython, or something else
-          # haunted about the Nixpkgs/Hydra build environment. We silence
-          # the warnings in the hope that closing our eyes will make the
-          # ghosts go away.
-          "PYTHONWARNINGS=ignore::DeprecationWarning"
-        ]
-        ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
-          "FLAKY_TESTS=skip"
-          # Skip some tests that are not passing in this context
-          "CI_SKIP_TESTS=${
-            lib.concatStringsSep "," (
-              [
-                # Tests don't work in sandbox.
-                "test-child-process-exec-env"
-                "test-child-process-uid-gid"
-                "test-fs-write-stream-eagain"
-                "test-process-euid-egid"
-                "test-process-initgroups"
-                "test-process-setgroups"
-                "test-process-uid-gid"
-                "test-setproctitle"
-                # This is a bit weird, but for some reason fs watch tests fail with
-                # sandbox.
-                "test-fs-promises-watch"
-                "test-fs-watch"
-                "test-fs-watch-encoding"
-                "test-fs-watch-non-recursive"
-                "test-fs-watch-recursive-add-file"
-                "test-fs-watch-recursive-add-file-to-existing-subfolder"
-                "test-fs-watch-recursive-add-file-to-new-folder"
-                "test-fs-watch-recursive-add-file-with-url"
-                "test-fs-watch-recursive-add-folder"
-                "test-fs-watch-recursive-assert-leaks"
-                "test-fs-watch-recursive-promise"
-                "test-fs-watch-recursive-symlink"
-                "test-fs-watch-recursive-sync-write"
-                "test-fs-watch-recursive-update-file"
-                "test-fs-watchfile"
-                "test-runner-run"
-                "test-runner-watch-mode"
-                "test-watch-mode-files_watcher"
-              ]
-              ++ lib.optionals (!lib.versionAtLeast version "22") [
-                "test-tls-multi-key"
-              ]
-              ++ lib.optionals stdenv.hostPlatform.is32bit [
-                # utime (actually utimensat) fails with EINVAL on 2038 timestamp
-                "test-fs-utimes-y2K38"
-              ]
-              ++ lib.optionals stdenv.buildPlatform.isDarwin [
-                # Disable tests that don’t work under macOS sandbox.
-                "test-macos-app-sandbox"
-                "test-os"
-                "test-os-process-priority"
+      checkFlags = [
+        # Do not create __pycache__ when running tests.
+        "PYTHONDONTWRITEBYTECODE=1"
+      ]
+      ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
+        # Python 3.12 introduced a warning for calling `os.fork()` in a
+        # multi‐threaded program. For some reason, the Node.js
+        # `tools/pseudo-tty.py` program used for PTY‐related tests
+        # triggers this warning on Hydra, on `x86_64-darwin` only,
+        # despite not creating any threads itself. This causes the
+        # Node.js test runner to misinterpret the warnings as part of the
+        # test output and fail. It does not reproduce reliably off Hydra
+        # on Intel Macs, or occur on the `aarch64-darwin` builds.
+        #
+        # This seems likely to be related to Rosetta 2, but it could also
+        # be some strange x86‐64‐only threading behaviour of the Darwin
+        # system libraries, or a bug in CPython, or something else
+        # haunted about the Nixpkgs/Hydra build environment. We silence
+        # the warnings in the hope that closing our eyes will make the
+        # ghosts go away.
+        "PYTHONWARNINGS=ignore::DeprecationWarning"
+      ]
+      ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+        "FLAKY_TESTS=skip"
+        # Skip some tests that are not passing in this context
+        "CI_SKIP_TESTS=${
+          lib.concatStringsSep "," (
+            [
+              # Tests don't work in sandbox.
+              "test-child-process-exec-env"
+              "test-child-process-uid-gid"
+              "test-fs-write-stream-eagain"
+              "test-process-euid-egid"
+              "test-process-initgroups"
+              "test-process-setgroups"
+              "test-process-uid-gid"
+              "test-setproctitle"
+              # This is a bit weird, but for some reason fs watch tests fail with
+              # sandbox.
+              "test-fs-promises-watch"
+              "test-fs-watch"
+              "test-fs-watch-encoding"
+              "test-fs-watch-non-recursive"
+              "test-fs-watch-recursive-add-file"
+              "test-fs-watch-recursive-add-file-to-existing-subfolder"
+              "test-fs-watch-recursive-add-file-to-new-folder"
+              "test-fs-watch-recursive-add-file-with-url"
+              "test-fs-watch-recursive-add-folder"
+              "test-fs-watch-recursive-assert-leaks"
+              "test-fs-watch-recursive-promise"
+              "test-fs-watch-recursive-symlink"
+              "test-fs-watch-recursive-sync-write"
+              "test-fs-watch-recursive-update-file"
+              "test-fs-watchfile"
+              "test-runner-run"
+              "test-runner-watch-mode"
+              "test-watch-mode-files_watcher"
+            ]
+            ++ lib.optionals (!lib.versionAtLeast version "22") [
+              "test-tls-multi-key"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.is32bit [
+              # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+              "test-fs-utimes-y2K38"
+            ]
+            ++ lib.optionals stdenv.buildPlatform.isDarwin [
+              # Disable tests that don’t work under macOS sandbox.
+              "test-macos-app-sandbox"
+              "test-os"
+              "test-os-process-priority"
 
-                # Debugger tests failing on macOS 15.4
-                "test-debugger-extract-function-name"
-                "test-debugger-random-port-with-inspect-port"
-                "test-debugger-launch"
-                "test-debugger-pid"
+              # Debugger tests failing on macOS 15.4
+              "test-debugger-extract-function-name"
+              "test-debugger-random-port-with-inspect-port"
+              "test-debugger-launch"
+              "test-debugger-pid"
 
-                # Those are annoyingly flaky, but not enough to be marked as such upstream.
-                "test-wasi"
-              ]
-              ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-                # These tests fail on x86_64-darwin (even without sandbox).
-                # TODO: revisit at a later date.
-                "test-fs-readv"
-                "test-fs-readv-sync"
-                "test-vm-memleak"
-
-                # Those are annoyingly flaky, but not enough to be marked as such upstream.
-                "test-tick-processor-arguments"
-                "test-set-raw-mode-reset-signal"
-              ]
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
-              ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
-            )
-          }"
-        ];
+              "test-wasi"
+            ]
+            ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
+              # These tests fail on x86_64-darwin (even without sandbox).
+              # TODO: revisit at a later date.
+              "test-fs-readv"
+              "test-fs-readv-sync"
+              "test-vm-memleak"
+
+              # Those are annoyingly flaky, but not enough to be marked as such upstream.
+              "test-tick-processor-arguments"
+              "test-set-raw-mode-reset-signal"
+            ]
+            # Those are annoyingly flaky, but not enough to be marked as such upstream.
+            ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+          )
+        }"
+      ];
 
       postInstall =
         let

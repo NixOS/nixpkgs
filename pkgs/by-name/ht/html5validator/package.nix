@@ -17,13 +17,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
 
-  propagatedBuildInputs =
-    [
-      openjdk
-    ]
-    ++ (with python3.pkgs; [
-      pyyaml
-    ]);
+  propagatedBuildInputs = [
+    openjdk
+  ]
+  ++ (with python3.pkgs; [
+    pyyaml
+  ]);
 
   nativeCheckInputs = with python3.pkgs; [
     hacking

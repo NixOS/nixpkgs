@@ -73,7 +73,8 @@ buildPythonApplication rec {
     waitress
     py
     httpx
-  ] ++ passlib.optional-dependencies.argon2;
+  ]
+  ++ passlib.optional-dependencies.argon2;
 
   nativeCheckInputs = [
     beautifulsoup4

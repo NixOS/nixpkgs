@@ -39,7 +39,8 @@ let
 
     # oshi
     udev
-  ] ++ lib.optional textToSpeechSupport flite;
+  ]
+  ++ lib.optional textToSpeechSupport flite;
 in
 python3Packages.buildPythonApplication rec {
   pname = "portablemc";

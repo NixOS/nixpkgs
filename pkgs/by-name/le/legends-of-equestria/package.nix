@@ -47,37 +47,36 @@ let
     };
   };
 
-  runtimeDeps =
-    [
-      dbus.lib
-      xorg_sys_opengl
-      systemd
-      libcap.lib
-      libdrm
-      pulseaudio
-      libsndfile
-      flac
-      libvorbis
-      mpg123
-      lame.lib
-      libGL
-      vulkan-loader
-      libasyncns
-    ]
-    ++ (with xorg; [
-      libX11
-      libxcb
-      libXau
-      libXdmcp
-      libXext
-      libXcursor
-      libXrender
-      libXfixes
-      libXinerama
-      libXi
-      libXrandr
-      libXScrnSaver
-    ]);
+  runtimeDeps = [
+    dbus.lib
+    xorg_sys_opengl
+    systemd
+    libcap.lib
+    libdrm
+    pulseaudio
+    libsndfile
+    flac
+    libvorbis
+    mpg123
+    lame.lib
+    libGL
+    vulkan-loader
+    libasyncns
+  ]
+  ++ (with xorg; [
+    libX11
+    libxcb
+    libXau
+    libXdmcp
+    libXext
+    libXcursor
+    libXrender
+    libXfixes
+    libXinerama
+    libXi
+    libXrandr
+    libXScrnSaver
+  ]);
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -109,14 +108,13 @@ stdenv.mkDerivation {
   buildInputs = [
     libgcc
   ];
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+    autoPatchelfHook
+  ];
 
   installPhase =
     if stdenv.hostPlatform.isLinux then

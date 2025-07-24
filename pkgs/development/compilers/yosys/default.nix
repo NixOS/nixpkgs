@@ -71,7 +71,8 @@ let
   allPlugins = {
     bluespec = yosys-bluespec;
     ghdl = yosys-ghdl;
-  } // (yosys-symbiflow);
+  }
+  // (yosys-symbiflow);
 
   boost_python = boost.override {
     enablePython = true;
@@ -120,7 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
         click
       ]
     ))
-  ] ++ lib.optional enablePython boost_python;
+  ]
+  ++ lib.optional enablePython boost_python;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -136,21 +138,20 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild =
-    ''
-      chmod -R u+w .
-      make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
+  preBuild = ''
+    chmod -R u+w .
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
 
-      if ! grep -q "YOSYS_VER := $version" Makefile; then
-        echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
-        exit 1
-      fi
-    ''
-    + lib.optionalString enablePython ''
-      echo "ENABLE_PYOSYS := 1" >> Makefile.conf
-      echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
-      echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
-    '';
+    if ! grep -q "YOSYS_VER := $version" Makefile; then
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
+      exit 1
+    fi
+  ''
+  + lib.optionalString enablePython ''
+    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
+    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
+    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
+  '';
 
   preCheck = ''
     # autotest.sh automatically compiles a utility during startup if it's out of date.

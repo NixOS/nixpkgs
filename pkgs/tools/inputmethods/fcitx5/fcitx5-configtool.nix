@@ -52,38 +52,37 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
+  buildInputs = [
+    fcitx5
+    fcitx5-qt
+    qtbase
+    qtsvg
+    qtwayland
+    kitemviews
+    kwidgetsaddons
+    isocodes
+    xkeyboardconfig
+    libxkbfile
+  ]
+  ++ lib.optionals (lib.versions.major qtbase.version == "5") [
+    qtx11extras
+  ]
+  ++ lib.optionals kcmSupport (
     [
-      fcitx5
-      fcitx5-qt
-      qtbase
-      qtsvg
-      qtwayland
-      kitemviews
-      kwidgetsaddons
-      isocodes
-      xkeyboardconfig
-      libxkbfile
+      qtdeclarative
+      kcoreaddons
+      kdeclarative
     ]
     ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-      qtx11extras
+      qtquickcontrols2
+      plasma-framework
+      kirigami2
     ]
-    ++ lib.optionals kcmSupport (
-      [
-        qtdeclarative
-        kcoreaddons
-        kdeclarative
-      ]
-      ++ lib.optionals (lib.versions.major qtbase.version == "5") [
-        qtquickcontrols2
-        plasma-framework
-        kirigami2
-      ]
-      ++ lib.optionals (lib.versions.major qtbase.version == "6") [
-        libplasma
-        kirigami
-      ]
-    );
+    ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+      libplasma
+      kirigami
+    ]
+  );
 
   meta = with lib; {
     description = "Configuration Tool for Fcitx5";

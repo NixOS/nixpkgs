@@ -21,13 +21,12 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-qM1oPTKffJHlHWhF5huCBPmBSajiYstjhC2GB/iMQ7E=";
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   buildInputs = [
     unbound

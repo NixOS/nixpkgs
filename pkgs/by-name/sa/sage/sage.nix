@@ -44,20 +44,19 @@ stdenv.mkDerivation rec {
     "$out/bin/sage" -c 'browse_sage_doc._open("reference", testing=True)'
   '';
 
-  passthru =
-    {
-      tests = sage-tests;
-      quicktest = sage-tests.override {
-        longTests = false;
-        timeLimit = 600;
-      }; # as many tests as possible in ~10m
-      lib = sage-with-env.env.lib;
-      with-env = sage-with-env;
-      kernelspec = jupyter-kernel-definition;
-    }
-    // lib.optionalAttrs withDoc {
-      doc = sagedoc;
-    };
+  passthru = {
+    tests = sage-tests;
+    quicktest = sage-tests.override {
+      longTests = false;
+      timeLimit = 600;
+    }; # as many tests as possible in ~10m
+    lib = sage-with-env.env.lib;
+    with-env = sage-with-env;
+    kernelspec = jupyter-kernel-definition;
+  }
+  // lib.optionalAttrs withDoc {
+    doc = sagedoc;
+  };
 
   meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";

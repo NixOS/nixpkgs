@@ -33,17 +33,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure =
-    ''
-      cd ./INCHI_API/libinchi/gcc
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace makefile \
-        --replace ",--version-script=libinchi.map" "" \
-        --replace "LINUX_Z_RELRO = ,-z,relro" "" \
-        --replace "-soname" "-install_name" \
-        --replace "gcc" $CC
-    '';
+  preConfigure = ''
+    cd ./INCHI_API/libinchi/gcc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile \
+      --replace ",--version-script=libinchi.map" "" \
+      --replace "LINUX_Z_RELRO = ,-z,relro" "" \
+      --replace "-soname" "-install_name" \
+      --replace "gcc" $CC
+  '';
   installPhase =
     let
       versionOneDot = versionMajor + "." + removeDots versionMinor;

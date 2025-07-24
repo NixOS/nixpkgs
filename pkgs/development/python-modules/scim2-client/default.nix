@@ -41,7 +41,8 @@ buildPythonPackage rec {
     scim2-server
     werkzeug
     cacert
-  ] ++ optional-dependencies.httpx;
+  ]
+  ++ optional-dependencies.httpx;
 
   # Werkzeug returns 500, didn't deem it worth it to investigate
   disabledTests = [

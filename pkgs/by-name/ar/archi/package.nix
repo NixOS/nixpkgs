@@ -40,18 +40,17 @@ stdenv.mkDerivation rec {
     libsecret
   ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      _7zz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    _7zz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
 

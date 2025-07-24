@@ -26,13 +26,12 @@ mkXfceDerivation {
 
   sha256 = "sha256-Xw1hs854K5dZCAYoBMoqJzdSxPRFUYqEpWxg4DLSK5Q=";
 
-  nativeBuildInputs =
-    [
-      wayland-scanner
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    wayland-scanner
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   buildInputs = [
     glib

@@ -55,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags =
-    [
-      "-Ddocumentation=true"
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      "-Dtests=false"
-    ];
+  mesonFlags = [
+    "-Ddocumentation=true"
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dtests=false"
+  ];
 
   buildInputs = [
     appstream
@@ -72,13 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
   ];
 
-  nativeCheckInputs =
-    [
-      adwaita-icon-theme
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xvfb-run
-    ];
+  nativeCheckInputs = [
+    adwaita-icon-theme
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    xvfb-run
+  ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #

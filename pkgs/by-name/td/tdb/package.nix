@@ -46,15 +46,14 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ];
+  wafConfigureFlags = [
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
   postFixup =
     if stdenv.hostPlatform.isDarwin then

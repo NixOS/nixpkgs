@@ -95,72 +95,68 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      setuptools
-    ]
-    ++ lib.optionals withDocs [
-      git
-      graphviz-nox
-      doxygen
-    ]
-    ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    setuptools
+  ]
+  ++ lib.optionals withDocs [
+    git
+    graphviz-nox
+    doxygen
+  ]
+  ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alembic.dev
-      bison
-      draco
-      embree
-      flex
-      imath
-      materialx
-      opencolorio
-      openimageio_2
-      opensubdiv
-      ptex
-      tbb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
-    ++ lib.optionals withOsl [ osl ]
-    ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
+  buildInputs = [
+    alembic.dev
+    bison
+    draco
+    embree
+    flex
+    imath
+    materialx
+    opencolorio
+    openimageio_2
+    opensubdiv
+    ptex
+    tbb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXt
+  ]
+  ++ lib.optionals withOsl [ osl ]
+  ++ lib.optionals withUsdView [ qt6.qtbase ]
+  ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
-  propagatedBuildInputs =
-    [
-      boost
-      jinja2
-      numpy
-      pyopengl
-      distutils
-    ]
-    ++ lib.optionals (withTools || withUsdView) [
-      pyside-tools-uic
-      pyside6
-    ]
-    ++ lib.optionals withUsdView [ pyqt6 ];
+  propagatedBuildInputs = [
+    boost
+    jinja2
+    numpy
+    pyopengl
+    distutils
+  ]
+  ++ lib.optionals (withTools || withUsdView) [
+    pyside-tools-uic
+    pyside6
+  ]
+  ++ lib.optionals withUsdView [ pyqt6 ];
 
   pythonImportsCheck = [
     "pxr"
     "pxr.Usd"
   ];
 
-  postInstall =
-    ''
-      # Make python lib properly accessible
-      target_dir=$out/${python.sitePackages}
-      mkdir -p $(dirname $target_dir)
-      mv $out/lib/python $target_dir
-    ''
-    + lib.optionalString withDocs ''
-      mv $out/docs $doc
-    '';
+  postInstall = ''
+    # Make python lib properly accessible
+    target_dir=$out/${python.sitePackages}
+    mkdir -p $(dirname $target_dir)
+    mv $out/lib/python $target_dir
+  ''
+  + lib.optionalString withDocs ''
+    mv $out/docs $doc
+  '';
 
   meta = {
     description = "Universal Scene Description";

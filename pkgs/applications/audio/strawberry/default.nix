@@ -57,55 +57,53 @@ stdenv.mkDerivation rec {
       --replace pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
-  buildInputs =
-    [
-      alsa-lib
-      boost
-      chromaprint
-      fftw
-      gnutls
-      kdsingleapplication
-      libXdmcp
-      libcdio
-      libebur128
-      libidn2
-      libmtp
-      libpthreadstubs
-      libtasn1
-      qtbase
-      sqlite
-      taglib
-      sparsehash
-      rapidjson
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      libgpod
-      libpulseaudio
-      libselinux
-      libsepol
-      p11-kit
-    ]
-    ++ (with gst_all_1; [
-      glib-networking
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    alsa-lib
+    boost
+    chromaprint
+    fftw
+    gnutls
+    kdsingleapplication
+    libXdmcp
+    libcdio
+    libebur128
+    libidn2
+    libmtp
+    libpthreadstubs
+    libtasn1
+    qtbase
+    sqlite
+    taglib
+    sparsehash
+    rapidjson
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    libgpod
+    libpulseaudio
+    libselinux
+    libsepol
+    p11-kit
+  ]
+  ++ (with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      qttools
-      wrapQtAppsHook
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      util-linux
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    util-linux
+  ];
 
   postInstall = ''
     qtWrapperArgs+=(

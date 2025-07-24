@@ -34,15 +34,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     python3
   ];
-  buildInputs =
-    [
-      openssl
-      xorg.libxcb
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    openssl
+    xorg.libxcb
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

@@ -16,15 +16,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jE/zdVPL6JYY4Yfkx3n3GpuyqLJ7kfh+1AmHzJIz2PY=";
   };
 
-  patches =
-    [
-      # Add a "libs" field to the syntax recognized in the /etc/asound.conf file.
-      # The nixos modules for pulseaudio, jack, and pipewire are leveraging this
-      # "libs" field to declare locations for both native and 32bit plugins, in
-      # order to support apps with 32bit sound running on x86_64 architecture.
-      ./alsa-plugin-conf-multilib.patch
-    ]
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false)
+  patches = [
+    # Add a "libs" field to the syntax recognized in the /etc/asound.conf file.
+    # The nixos modules for pulseaudio, jack, and pipewire are leveraging this
+    # "libs" field to declare locations for both native and 32bit plugins, in
+    # order to support apps with 32bit sound running on x86_64 architecture.
+    ./alsa-plugin-conf-multilib.patch
+  ]
+  ++
+    lib.optional (stdenv.hostPlatform.useLLVM or false)
       # Fixes version script under LLVM, should be fixed in the next update.
       # Check if "pkgsLLVM.alsa-lib" builds on next version bump and remove this
       # if it succeeds.

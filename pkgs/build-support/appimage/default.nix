@@ -73,7 +73,8 @@ rec {
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-        } // meta;
+        }
+        // meta;
       }
       // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
     );

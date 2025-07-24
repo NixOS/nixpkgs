@@ -57,7 +57,8 @@ let
   secretPaths = [
     cfg.serverSettings.tls_chain
     cfg.serverSettings.tls_key
-  ] ++ optionals cfg.provision.enable provisionSecretFiles;
+  ]
+  ++ optionals cfg.provision.enable provisionSecretFiles;
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -899,14 +900,13 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths =
-            [
-              # To store backups
-              cfg.serverSettings.online_backup.path
-            ]
-            ++ optional (
-              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-            ) cfg.unixSettings.home_mount_prefix;
+          BindPaths = [
+            # To store backups
+            cfg.serverSettings.online_backup.path
+          ]
+          ++ optional (
+            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+          ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

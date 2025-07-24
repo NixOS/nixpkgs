@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     SDL2_ttf
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"

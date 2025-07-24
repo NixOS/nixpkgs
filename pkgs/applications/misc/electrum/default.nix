@@ -83,39 +83,38 @@ python3.pkgs.buildPythonApplication rec {
       pyqt6
     ];
 
-  postPatch =
-    ''
-      # fix compatibility with recent aiorpcx version
-      # (remove as soon as https://github.com/spesmilo/electrum/commit/171aa5ee5ad4e25b9da10f757d9d398e905b4945 is included in source tarball)
-      substituteInPlace ./contrib/requirements/requirements.txt \
-        --replace-fail "aiorpcx>=0.22.0,<0.24" "aiorpcx>=0.22.0,<0.25"
-      substituteInPlace ./run_electrum \
-        --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
-        --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
-      substituteInPlace ./electrum/electrum \
-        --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
-        --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
+  postPatch = ''
+    # fix compatibility with recent aiorpcx version
+    # (remove as soon as https://github.com/spesmilo/electrum/commit/171aa5ee5ad4e25b9da10f757d9d398e905b4945 is included in source tarball)
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace-fail "aiorpcx>=0.22.0,<0.24" "aiorpcx>=0.22.0,<0.25"
+    substituteInPlace ./run_electrum \
+      --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
+      --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
+    substituteInPlace ./electrum/electrum \
+      --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
+      --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
 
-      # make compatible with protobuf4 by easing dependencies ...
-      substituteInPlace ./contrib/requirements/requirements.txt \
-        --replace-fail "protobuf>=3.20,<4" "protobuf>=3.20"
-      # ... and regenerating the paymentrequest_pb2.py file
-      protoc --python_out=. electrum/paymentrequest.proto
+    # make compatible with protobuf4 by easing dependencies ...
+    substituteInPlace ./contrib/requirements/requirements.txt \
+      --replace-fail "protobuf>=3.20,<4" "protobuf>=3.20"
+    # ... and regenerating the paymentrequest_pb2.py file
+    protoc --python_out=. electrum/paymentrequest.proto
 
-      substituteInPlace ./electrum/ecc_fast.py \
-        --replace-fail ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + (
-      if enableQt then
-        ''
-          substituteInPlace ./electrum/qrscanner.py \
-            --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-        ''
-      else
-        ''
-          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-        ''
-    );
+    substituteInPlace ./electrum/ecc_fast.py \
+      --replace-fail ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+  ''
+  + (
+    if enableQt then
+      ''
+        substituteInPlace ./electrum/qrscanner.py \
+          --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      ''
+    else
+      ''
+        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \

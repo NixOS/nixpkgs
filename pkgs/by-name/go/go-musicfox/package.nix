@@ -36,13 +36,12 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      flac
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    flac
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -36,18 +36,17 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gst_all_1.gstreamer
-      mpv-unwrapped
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    dbus
+    glib
+    gst_all_1.gstreamer
+    mpv-unwrapped
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   meta = {
     description = "Terminal Music Player TUI written in Rust";
