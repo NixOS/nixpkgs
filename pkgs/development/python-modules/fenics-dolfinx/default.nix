@@ -32,7 +32,6 @@
   # nativeCheckInputs
   scipy,
   matplotlib,
-  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   mpiCheckPhaseHook,
@@ -108,7 +107,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     scipy
     matplotlib
-    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
     mpiCheckPhaseHook

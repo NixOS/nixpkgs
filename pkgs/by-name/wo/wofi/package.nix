@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   pname = "wofi";
   version = "1.4.1";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromSourcehut {
     repo = "wofi";
     owner = "~scoopta";
