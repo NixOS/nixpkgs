@@ -43,12 +43,12 @@ lib.overrideDerivation
       extraMeta =
         if (rpiVersion < 3) then
           {
-            platforms = with lib.platforms; arm;
+            platforms = with lib.platforms; lib.intersectLists arm linux;
             hydraPlatforms = [ ];
           }
         else
           {
-            platforms = with lib.platforms; arm ++ aarch64;
+            platforms = with lib.platforms; lib.intersectLists (arm ++ aarch64) linux;
             hydraPlatforms = [ "aarch64-linux" ];
           };
       ignoreConfigErrors = true;
