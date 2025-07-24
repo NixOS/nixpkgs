@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.26";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-xxkayOtC2GtgtF3tPkTGKOS9VQ/y2gRPopvKq48/Kq0=";
+    hash = "sha256-bqzJ0017Td65rhDCr2wfx+SCaJzPZTFzQpzy3RlaRj4=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -146,13 +146,6 @@ buildPythonPackage rec {
     "tests/unit_tests/output_parsers/test_retry.py"
     # pydantic.errors.PydanticUserError: `LLMSummarizationCheckerChain` is not fully defined; you should define `BaseCache`, then call `LLMSummarizationCheckerChain.model_rebuild()`.
     "tests/unit_tests/chains/test_llm_summarization_checker.py"
-
-    # TODO Remove on next update
-    # NotImplemented Error / AssertionError re: _HashedDocument
-    # HashedDocument was removed as a public entry in langchain-core > 0.3.66
-    # and langchain is still using the old code. (Will be fixed on next update)
-    "tests/unit_tests/indexes/test_hashed_document.py"
-    "tests/unit_tests/indexes/test_indexing.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
