@@ -125,7 +125,8 @@ let
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
     ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
-    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
+    ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}")
+    ++ (lib.mapAttrsToList (credential: file: "${credential}:${file}") cfg.extraSecrets);
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
 
@@ -292,6 +293,13 @@ let
         ) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
         ${lib.optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
+        ${lib.optionalString (cfg.extraSecrets != { })
+          "${
+            lib.concatStringsSep "\n," (
+              lib.mapAttrsToList (name: credential: "'${name}' => nix_read_secret('${name}')") cfg.extraSecrets
+            )
+          },"
+        }
         ${objectstoreConfig}
       ];
 
@@ -382,6 +390,19 @@ in
         This folder will be populated with a config.php file and a data folder which contains the state of the instance (excluding the database).";
       '';
       example = "/mnt/nextcloud-file";
+    };
+    extraSecrets = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      description = ''
+        Extra secret files to read into entries in `config.ini`.
+        This uses `nix_read_secret` and LoadCredential to read the contents of the file into the entry in `config.php`.
+      '';
+      example = lib.literalExpression ''
+        {
+          oidc_login_client_secret = "/run/secrets/nextcloud_oidc_secret";
+        }
+      '';
     };
     extraApps = lib.mkOption {
       type = lib.types.attrsOf lib.types.package;
