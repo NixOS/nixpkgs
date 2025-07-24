@@ -3527,8 +3527,6 @@ with pkgs;
 
   mhonarc = perlPackages.MHonArc;
 
-  mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
-
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   netdata = callPackage ../tools/system/netdata {
