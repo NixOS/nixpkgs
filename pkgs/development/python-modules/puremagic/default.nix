@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.28";
+  version = "1.30";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cdgriffith";
     repo = "puremagic";
     tag = version;
-    hash = "sha256-a7jRQUSbH3E6eJiXNKr4ikdSXRZ6+/csl/EMiKXMzmk=";
+    hash = "sha256-k2xrcML8XxI9cMTQTv0pDLkOrmEr5mbDnVsyWuD1rEc=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
-    changelog = "https://github.com/cdgriffith/puremagic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
