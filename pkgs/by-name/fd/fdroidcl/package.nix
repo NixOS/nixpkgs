@@ -5,20 +5,18 @@
   android-tools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fdroidcl";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
-    owner = "mvdan";
+    owner = "Hoverth";
     repo = "fdroidcl";
-    rev = "v${version}";
-    hash = "sha256-tqhs3b/DHfnGOm9qcM56NSzt1GJflJfbemkp7+nXbug=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SmPtMNHxktyhc0/izWmAzcfCXqF2BpPNJjsrqRlU1K0=";
   };
 
-  patches = [ ./go_mod_version_update.patch ];
-
-  vendorHash = "sha256-BWbwhHjfmMjiRurrZfW/YgIzJUH/hn+7qonD0BcTLxs=";
+  vendorHash = "sha256-PNj5gkFj+ruxv1I4SezJxebDO2e1qGTYp3ZgekRLNt0=";
 
   postPatch = ''
     substituteInPlace adb/{server,device}.go \
@@ -28,11 +26,11 @@ buildGoModule rec {
   # TestScript/search attempts to connect to fdroid
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "F-Droid command line interface written in Go";
     mainProgram = "fdroidcl";
-    homepage = "https://github.com/mvdan/fdroidcl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ aleksana ];
+    homepage = "https://github.com/Hoverth/fdroidcl";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})
