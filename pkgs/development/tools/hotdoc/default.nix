@@ -1,20 +1,36 @@
 {
   lib,
   stdenv,
-  python3Packages,
+  buildPythonApplication,
   fetchPypi,
   replaceVars,
+  clang,
+  libclang,
+  pytestCheckHook,
   pkg-config,
   cmake,
   flex,
   glib,
   json-glib,
   libxml2,
+  appdirs,
+  backports-entry-points-selectable,
+  dbus-deviation,
+  faust-cchardet,
+  feedgen,
+  lxml,
+  networkx,
+  pkgconfig,
+  pyyaml,
+  schema,
+  setuptools,
+  toposort,
+  wheezy-template,
   llvmPackages,
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "hotdoc";
   version = "0.17.4";
   pyproject = true;
@@ -26,10 +42,12 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     (replaceVars ./clang.patch {
-      clang = lib.getExe llvmPackages.clang;
-      libclang = "${lib.getLib llvmPackages.libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+      clang = lib.getExe clang;
+      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     pkg-config
@@ -40,12 +58,10 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     glib
     json-glib
-    libxml2
+    libxml2.dev
   ];
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
+  dependencies = [
     appdirs
     backports-entry-points-selectable
     dbus-deviation
@@ -61,7 +77,7 @@ python3Packages.buildPythonApplication rec {
     wheezy-template
   ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
