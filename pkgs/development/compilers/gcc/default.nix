@@ -44,6 +44,7 @@
   gnused ? null,
   buildPackages,
   pkgsBuildTarget,
+  pkgsTargetTarget,
   libxcrypt,
   disableGdbPlugin ?
     !enablePlugin
@@ -103,12 +104,15 @@ let
   #   "14.2.1.20250322" -> "14.2.1"
   #   "14.2.0" -> "14.2.0"
   baseVersion = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
-
   disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
-  targetConfig =
-    if (!lib.systems.equals targetPlatform hostPlatform) then targetPlatform.config else null;
+  targetConfig' =
+    targetPlatform.config
+    + lib.optionalString targetPlatform.isFreeBSD (
+      lib.versions.major targetPackages.stdenv.cc.libc.version
+    );
+  targetConfig = if (!lib.systems.equals targetPlatform hostPlatform) then targetConfig' else null;
 
   patches = callFile ./patches { };
 
@@ -129,6 +133,7 @@ let
       hostPlatform
       targetPlatform
       targetConfig
+      targetConfig'
       patches
       crossMingw
       stageNameAddon
@@ -178,6 +183,7 @@ let
       patchelf
       perl
       pkgsBuildTarget
+      pkgsTargetTarget
       profiledCompiler
       reproducibleBuild
       sanitiseHeaderPathsHook
@@ -485,6 +491,7 @@ pipe
           langCC
           langJit
           targetPlatform
+          targetConfig
           hostPlatform
           withoutTargetLibc
           enableShared

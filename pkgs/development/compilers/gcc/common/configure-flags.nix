@@ -2,6 +2,7 @@
   lib,
   stdenv,
   targetPackages,
+  targetConfig',
 
   withoutTargetLibc,
   libcCross,
@@ -306,7 +307,8 @@ let
       # Workaround build failures like:
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
       "--disable-werror"
-    ];
+    ]
+    ++ lib.optional stdenv.targetPlatform.isFreeBSD "--target=${targetConfig'}";
 
 in
 configureFlags
