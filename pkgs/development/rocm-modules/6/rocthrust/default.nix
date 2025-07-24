@@ -17,16 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -46,24 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  cmakeFlags =
-    [
-      "-DHIP_ROOT_DIR=${clr}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_TEST=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_BENCHMARKS=ON"
-    ];
+  cmakeFlags = [
+    "-DHIP_ROOT_DIR=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_TEST=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_BENCHMARKS=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''

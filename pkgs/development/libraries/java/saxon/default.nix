@@ -44,28 +44,27 @@ let
 
         sourceRoot = ".";
 
-        installPhase =
-          ''
-            runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-            install -Dm444 -t $out/share/java/ *.jar
-            mv doc $out/share
+          install -Dm444 -t $out/share/java/ *.jar
+          mv doc $out/share
 
-            mkdir -p $out/bin
-            makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
-              --add-flags "-jar $out/share/java/${jar'}.jar"
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
-            mv lib $out/share/java
-          ''
-          + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
-            makeWrapper ${lib.getExe jre} $out/bin/transform \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
+          mkdir -p $out/bin
+          makeWrapper ${lib.getExe jre} $out/bin/${mainProgram} \
+            --add-flags "-jar $out/share/java/${jar'}.jar"
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "11") ''
+          mv lib $out/share/java
+        ''
+        + lib.optionalString (versionAtLeast finalAttrs.version "8") ''
+          makeWrapper ${lib.getExe jre} $out/bin/transform \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Transform"
 
-            makeWrapper ${lib.getExe jre} $out/bin/query \
-              --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
-          ''
-          + "runHook postInstall";
+          makeWrapper ${lib.getExe jre} $out/bin/query \
+            --add-flags "-cp $out/share/java/${jar'}.jar net.sf.saxon.Query"
+        ''
+        + "runHook postInstall";
 
         passthru = lib.optionalAttrs (updateScript != null) {
           inherit updateScript;

@@ -148,11 +148,9 @@ import ../make-test-python.nix (
         package = pkgs.mattermost.overrideAttrs (prev: {
           webapp = prev.webapp.overrideAttrs (prevWebapp: {
             # Ensure that users can add patches.
-            postPatch =
-              prevWebapp.postPatch or ""
-              + ''
-                substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
-              '';
+            postPatch = prevWebapp.postPatch or "" + ''
+              substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
+            '';
           });
         });
         mutableConfig = false;

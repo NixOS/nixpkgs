@@ -34,15 +34,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeWrapper
-    ]
-    ++ lib.optionals withWayland [
-      pkg-config
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ]
+  ++ lib.optionals withWayland [
+    pkg-config
+    wayland-scanner
+  ];
 
   buildInputs =
     lib.optionals withWayland [
@@ -66,25 +65,24 @@ stdenv.mkDerivation {
       "CC=clang"
     ];
 
-  installPhase =
-    ''
-      installManPage drawterm.1
-    ''
-    + lib.optionalString withWayland ''
-      install -Dm755 -t $out/bin/ drawterm
-    ''
-    + lib.optionalString (!(withWayland || stdenv.hostPlatform.isDarwin)) ''
-      # wrapping the oss output with pulse seems to be the easiest
-      mv drawterm drawterm.bin
-      install -Dm755 -t $out/bin/ drawterm.bin
-      makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv gui-cocoa/drawterm.app $out/Applications/
-      mv drawterm $out/Applications/drawterm.app/
-      ln -s $out/Applications/drawterm.app/drawterm $out/bin/
-    '';
+  installPhase = ''
+    installManPage drawterm.1
+  ''
+  + lib.optionalString withWayland ''
+    install -Dm755 -t $out/bin/ drawterm
+  ''
+  + lib.optionalString (!(withWayland || stdenv.hostPlatform.isDarwin)) ''
+    # wrapping the oss output with pulse seems to be the easiest
+    mv drawterm drawterm.bin
+    install -Dm755 -t $out/bin/ drawterm.bin
+    makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv gui-cocoa/drawterm.app $out/Applications/
+    mv drawterm $out/Applications/drawterm.app/
+    ln -s $out/Applications/drawterm.app/drawterm $out/bin/
+  '';
 
   passthru = {
     updateScript = unstableGitUpdater { shallowClone = false; };

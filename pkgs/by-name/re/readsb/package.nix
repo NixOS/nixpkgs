@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     # set something for version, we removed the original value in postPatch
     "READSB_VERSION=${finalAttrs.version}"
-  ] ++ (lib.lists.optional (rtl-sdr != null) "RTLSDR=yes");
+  ]
+  ++ (lib.lists.optional (rtl-sdr != null) "RTLSDR=yes");
 
   doCheck = true;
   checkTarget = "cprtest";

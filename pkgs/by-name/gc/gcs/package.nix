@@ -37,21 +37,20 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      mupdf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXrandr
-      libXinerama
-      libXi
-      libXxf86vm
-      fontconfig
-      freetype
-    ];
+  buildInputs = [
+    mupdf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXrandr
+    libXinerama
+    libXi
+    libXxf86vm
+    fontconfig
+    freetype
+  ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a" ];

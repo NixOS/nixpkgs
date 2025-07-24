@@ -85,20 +85,19 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  postPatch =
-    ''
-      sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
-      sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.in.json > etc/repos.in.json.patched
-      mv etc/repos.in.json.patched etc/repos.in.json
-      jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.in.json > etc/repos.in.json.patched
-      mv etc/repos.in.json.patched etc/repos.in.json
-      jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
-      mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i -e 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
-    '';
+  postPatch = ''
+    sed -i -e 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
+    sed -i -e 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
+    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.in.json > etc/repos.in.json.patched
+    mv etc/repos.in.json.patched etc/repos.in.json
+    jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.in.json > etc/repos.in.json.patched
+    mv etc/repos.in.json.patched etc/repos.in.json
+    jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
+    mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i -e 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
+  '';
 
   /*
     The build phase follows the bootstrap procedure that is explained in

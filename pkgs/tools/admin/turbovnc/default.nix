@@ -64,34 +64,33 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      bzip2
-      dri-pkgconfig-stub
-      freetype
-      libGL # for -DTVNC_SYSTEMX11=1
-      libgbm
-      libjpeg_turbo
-      openssl
-      pam
-      perl
-    ]
-    ++ (with xorg; [
-      libfontenc # for -DTVNC_SYSTEMX11=1
-      libSM
-      libX11
-      libXdamage # for -DTVNC_SYSTEMX11=1
-      libXdmcp # for -DTVNC_SYSTEMX11=1
-      libXext
-      libXfont2 # for -DTVNC_SYSTEMX11=1
-      libxkbfile # for -DTVNC_SYSTEMX11=1
-      libxshmfence
-      libXi
-      mesa-gl-headers # for -DTVNC_SYSTEMX11=1
-      pixman # for -DTVNC_SYSTEMX11=1
-      xorgproto
-      xtrans # for -DTVNC_SYSTEMX11=1
-    ]);
+  buildInputs = [
+    bzip2
+    dri-pkgconfig-stub
+    freetype
+    libGL # for -DTVNC_SYSTEMX11=1
+    libgbm
+    libjpeg_turbo
+    openssl
+    pam
+    perl
+  ]
+  ++ (with xorg; [
+    libfontenc # for -DTVNC_SYSTEMX11=1
+    libSM
+    libX11
+    libXdamage # for -DTVNC_SYSTEMX11=1
+    libXdmcp # for -DTVNC_SYSTEMX11=1
+    libXext
+    libXfont2 # for -DTVNC_SYSTEMX11=1
+    libxkbfile # for -DTVNC_SYSTEMX11=1
+    libxshmfence
+    libXi
+    mesa-gl-headers # for -DTVNC_SYSTEMX11=1
+    pixman # for -DTVNC_SYSTEMX11=1
+    xorgproto
+    xtrans # for -DTVNC_SYSTEMX11=1
+  ]);
 
   postPatch = ''
     substituteInPlace unix/Xvnc/CMakeLists.txt --replace 'string(REGEX REPLACE "X11" "Xfont2" X11_Xfont2_LIB' 'set(X11_Xfont2_LIB ${xorg.libXfont2}/lib/libXfont2.so)  #'

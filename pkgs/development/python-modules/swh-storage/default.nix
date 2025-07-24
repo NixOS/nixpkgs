@@ -61,7 +61,8 @@ buildPythonPackage rec {
     swh-core
     swh-model
     swh-objstorage
-  ] ++ psycopg.optional-dependencies.pool;
+  ]
+  ++ psycopg.optional-dependencies.pool;
 
   pythonImportsCheck = [ "swh.storage" ];
 

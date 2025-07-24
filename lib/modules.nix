@@ -886,19 +886,18 @@ let
       path = showOption loc;
       depth = length loc;
 
-      paragraphs =
-        [
-          "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
-        ]
-        ++ optional (actualTag == "option-type") ''
-          When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
-              ${comment}
-              ${name} = lib.mkOption {
-                description = ...;
-                type = <the type you wrote for ${name}>;
-                ...
-              };
-        '';
+      paragraphs = [
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+      ]
+      ++ optional (actualTag == "option-type") ''
+        When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
+            ${comment}
+            ${name} = lib.mkOption {
+              description = ...;
+              type = <the type you wrote for ${name}>;
+              ...
+            };
+      '';
 
       # Ideally we'd know the exact syntax they used, but short of that,
       # we can only reliably repeat the last. However, we repeat the
@@ -1627,25 +1626,24 @@ let
         ) from
       );
 
-      config =
-        {
-          warnings = filter (x: x != "") (
-            map (
-              f:
-              let
-                val = getAttrFromPath f config;
-                opt = getAttrFromPath f options;
-              in
-              optionalString (val != "_mkMergedOptionModule")
-                "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-            ) from
-          );
-        }
-        // setAttrByPath to (
-          mkMerge (
-            optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
-          )
+      config = {
+        warnings = filter (x: x != "") (
+          map (
+            f:
+            let
+              val = getAttrFromPath f config;
+              opt = getAttrFromPath f options;
+            in
+            optionalString (val != "_mkMergedOptionModule")
+              "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
+          ) from
         );
+      }
+      // setAttrByPath to (
+        mkMerge (
+          optional (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from) (mergeFn config)
+        )
+      );
     };
 
   /**

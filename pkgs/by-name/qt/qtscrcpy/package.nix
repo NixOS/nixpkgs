@@ -63,17 +63,16 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      scrcpy
-      # Upstream vendors ffmpeg_4
-      ffmpeg
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtmultimedia
-      qtx11extras
-    ]);
+  buildInputs = [
+    scrcpy
+    # Upstream vendors ffmpeg_4
+    ffmpeg
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtmultimedia
+    qtx11extras
+  ]);
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=sign-compare"

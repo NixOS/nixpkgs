@@ -53,27 +53,26 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-Do-not-download-sources-in-cmake.patch
   ];
 
-  postPatch =
-    ''
-      # fix library_check.sh interpreter error
-      patchShebangs .
+  postPatch = ''
+    # fix library_check.sh interpreter error
+    patchShebangs .
 
-      mkdir -p srccadical
-      cp -r ${finalAttrs.srccadical}/* srccadical
+    mkdir -p srccadical
+    cp -r ${finalAttrs.srccadical}/* srccadical
 
-      mkdir -p srcglucose
-      cp -r ${finalAttrs.srcglucose}/* srcglucose
-      find -exec chmod +w {} \;
+    mkdir -p srcglucose
+    cp -r ${finalAttrs.srcglucose}/* srcglucose
+    find -exec chmod +w {} \;
 
-      substituteInPlace src/solvers/CMakeLists.txt \
-       --replace-fail "@srccadical@" "$PWD/srccadical" \
-       --replace-fail "@srcglucose@" "$PWD/srcglucose"
-    ''
-    + lib.optionalString (!stdenv.cc.isGNU) ''
-      # goto-gcc rely on gcc
-      substituteInPlace "regression/CMakeLists.txt" \
-        --replace-fail "add_subdirectory(goto-gcc)" ""
-    '';
+    substituteInPlace src/solvers/CMakeLists.txt \
+     --replace-fail "@srccadical@" "$PWD/srccadical" \
+     --replace-fail "@srcglucose@" "$PWD/srcglucose"
+  ''
+  + lib.optionalString (!stdenv.cc.isGNU) ''
+    # goto-gcc rely on gcc
+    substituteInPlace "regression/CMakeLists.txt" \
+      --replace-fail "add_subdirectory(goto-gcc)" ""
+  '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH

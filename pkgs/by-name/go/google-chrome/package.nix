@@ -103,71 +103,70 @@ let
 
   opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  deps =
-    [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      bzip2
-      cairo
-      coreutils
-      cups
-      curl
-      dbus
-      expat
-      flac
-      fontconfig
-      freetype
-      gcc-unwrapped.lib
-      gdk-pixbuf
-      glib
-      harfbuzz
-      icu
-      libcap
-      libdrm
-      liberation_ttf
-      libexif
-      libglvnd
-      libkrb5
-      libpng
-      libX11
-      libxcb
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libxkbcommon
-      libXrandr
-      libXrender
-      libXScrnSaver
-      libxshmfence
-      libXtst
-      libgbm
-      nspr
-      nss
-      opusWithCustomModes
-      pango
-      pciutils
-      pipewire
-      snappy
-      speechd-minimal
-      systemd
-      util-linux
-      vulkan-loader
-      wayland
-      wget
-    ]
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional libvaSupport libva
-    ++ [
-      gtk3
-      gtk4
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+  deps = [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    bzip2
+    cairo
+    coreutils
+    cups
+    curl
+    dbus
+    expat
+    flac
+    fontconfig
+    freetype
+    gcc-unwrapped.lib
+    gdk-pixbuf
+    glib
+    harfbuzz
+    icu
+    libcap
+    libdrm
+    liberation_ttf
+    libexif
+    libglvnd
+    libkrb5
+    libpng
+    libX11
+    libxcb
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libxkbcommon
+    libXrandr
+    libXrender
+    libXScrnSaver
+    libxshmfence
+    libXtst
+    libgbm
+    nspr
+    nss
+    opusWithCustomModes
+    pango
+    pciutils
+    pipewire
+    snappy
+    speechd-minimal
+    systemd
+    util-linux
+    vulkan-loader
+    wayland
+    wget
+  ]
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional libvaSupport libva
+  ++ [
+    gtk3
+    gtk4
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;

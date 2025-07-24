@@ -139,9 +139,8 @@ received by the instance.
 
 ```nix
 {
-  services.akkoma.config.":pleroma".":mrf".policies =
-    map (pkgs.formats.elixirConf { }).lib.mkRaw [
-      "Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy"
+  services.akkoma.config.":pleroma".":mrf".policies = map (pkgs.formats.elixirConf { }).lib.mkRaw [
+    "Pleroma.Web.ActivityPub.MRF.MediaProxyWarmingPolicy"
   ];
 }
 ```
@@ -171,29 +170,35 @@ derivation.
 
 ```nix
 {
-  services.akkoma.frontends.primary.package = pkgs.runCommand "akkoma-fe" {
-    config = builtins.toJSON {
-      expertLevel = 1;
-      collapseMessageWithSubject = false;
-      stopGifs = false;
-      replyVisibility = "following";
-      webPushHideIfCW = true;
-      hideScopeNotice = true;
-      renderMisskeyMarkdown = false;
-      hideSiteFavicon = true;
-      postContentType = "text/markdown";
-      showNavShortcuts = false;
-    };
-    nativeBuildInputs = with pkgs; [ jq xorg.lndir ];
-    passAsFile = [ "config" ];
-  } ''
-    mkdir $out
-    lndir ${pkgs.akkoma-frontends.akkoma-fe} $out
+  services.akkoma.frontends.primary.package =
+    pkgs.runCommand "akkoma-fe"
+      {
+        config = builtins.toJSON {
+          expertLevel = 1;
+          collapseMessageWithSubject = false;
+          stopGifs = false;
+          replyVisibility = "following";
+          webPushHideIfCW = true;
+          hideScopeNotice = true;
+          renderMisskeyMarkdown = false;
+          hideSiteFavicon = true;
+          postContentType = "text/markdown";
+          showNavShortcuts = false;
+        };
+        nativeBuildInputs = with pkgs; [
+          jq
+          xorg.lndir
+        ];
+        passAsFile = [ "config" ];
+      }
+      ''
+        mkdir $out
+        lndir ${pkgs.akkoma-frontends.akkoma-fe} $out
 
-    rm $out/static/config.json
-    jq -s add ${pkgs.akkoma-frontends.akkoma-fe}/static/config.json ${config} \
-      >$out/static/config.json
-  '';
+        rm $out/static/config.json
+        jq -s add ${pkgs.akkoma-frontends.akkoma-fe}/static/config.json ${config} \
+          >$out/static/config.json
+      '';
 }
 ```
 
@@ -212,15 +217,11 @@ of the fediverse and providing a pleasant experience to the users of an instance
 ```nix
 {
   services.akkoma.config.":pleroma" = with (pkgs.formats.elixirConf { }).lib; {
-    ":mrf".policies = map mkRaw [
-      "Pleroma.Web.ActivityPub.MRF.SimplePolicy"
-    ];
+    ":mrf".policies = map mkRaw [ "Pleroma.Web.ActivityPub.MRF.SimplePolicy" ];
 
     ":mrf_simple" = {
       # Tag all media as sensitive
-      media_nsfw = mkMap {
-        "nsfw.weird.kinky" = "Untagged NSFW content";
-      };
+      media_nsfw = mkMap { "nsfw.weird.kinky" = "Untagged NSFW content"; };
 
       # Reject all activities except deletes
       reject = mkMap {
@@ -244,11 +245,12 @@ the file name.
 ```nix
 {
   services.akkoma.config.":pleroma"."Pleroma.Upload".filters =
-    map (pkgs.formats.elixirConf { }).lib.mkRaw [
-      "Pleroma.Upload.Filter.Exiftool"
-      "Pleroma.Upload.Filter.Dedupe"
-      "Pleroma.Upload.Filter.AnonymizeFilename"
-    ];
+    map (pkgs.formats.elixirConf { }).lib.mkRaw
+      [
+        "Pleroma.Upload.Filter.Exiftool"
+        "Pleroma.Upload.Filter.Dedupe"
+        "Pleroma.Upload.Filter.AnonymizeFilename"
+      ];
 }
 ```
 
@@ -322,9 +324,7 @@ details.
 The Akkoma systemd service may be confined to a chroot with
 
 ```nix
-{
-  services.systemd.akkoma.confinement.enable = true;
-}
+{ services.systemd.akkoma.confinement.enable = true; }
 ```
 
 Confinement of services is not generally supported in NixOS and therefore disabled by default.

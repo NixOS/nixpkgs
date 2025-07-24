@@ -12,6 +12,7 @@ buildBatExtrasPkg {
   dependencies = [
     less
     coreutils
-  ] ++ lib.optional withEntr entr;
+  ]
+  ++ lib.optional withEntr entr;
   meta.description = "Watch for changes in one or more files, and print them with bat";
 }

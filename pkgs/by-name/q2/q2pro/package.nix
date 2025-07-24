@@ -45,37 +45,35 @@ stdenv.mkDerivation (finalAttrs: {
   revCount = "3817"; # git rev-list --count ${src.rev}
   SOURCE_DATE_EPOCH = "1746223027"; # git show -s --format=%ct ${src.rev}
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-      makeBinaryWrapper
-      copyDesktopItems
-    ]
-    ++ lib.optional waylandSupport wayland-scanner
-    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    makeBinaryWrapper
+    copyDesktopItems
+  ]
+  ++ lib.optional waylandSupport wayland-scanner
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      zlib
-      libpng
-      libjpeg
-      curl
-      SDL2
-      libGL
-      libogg
-      libvorbis
-      libX11
-      ffmpeg
-      openalSoft
-    ]
-    ++ lib.optionals waylandSupport [
-      wayland
-      wayland-protocols
-      libdecor
-    ]
-    ++ lib.optional x11Support libXi;
+  buildInputs = [
+    zlib
+    libpng
+    libjpeg
+    curl
+    SDL2
+    libGL
+    libogg
+    libvorbis
+    libX11
+    ffmpeg
+    openalSoft
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    wayland-protocols
+    libdecor
+  ]
+  ++ lib.optional x11Support libXi;
 
   mesonBuildType = "release";
 

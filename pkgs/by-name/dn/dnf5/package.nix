@@ -47,21 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WlQfvWDd9Eay9TPq2EfFlQGljEskJqL3xyNIJDdaNps=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      createrepo_c
-      doxygen
-      gettext
-      help2man
-      pkg-config
-      sphinx
-    ]
-    ++ (with python3Packages; [
-      breathe
-      sphinx-autoapi
-      sphinx-rtd-theme
-    ]);
+  nativeBuildInputs = [
+    cmake
+    createrepo_c
+    doxygen
+    gettext
+    help2man
+    pkg-config
+    sphinx
+  ]
+  ++ (with python3Packages; [
+    breathe
+    sphinx-autoapi
+    sphinx-rtd-theme
+  ]);
 
   buildInputs = [
     appstream

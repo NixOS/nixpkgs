@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage {
 
   env = {
     ATTIC_DISTRIBUTOR = "nixpkgs";
-  } // lib.optionalAttrs needNixInclude { NIX_INCLUDE_PATH = "${lib.getDev nix}/include"; };
+  }
+  // lib.optionalAttrs needNixInclude { NIX_INCLUDE_PATH = "${lib.getDev nix}/include"; };
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.

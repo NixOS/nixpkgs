@@ -623,14 +623,15 @@ let
               # TODO: remove `unique` once nix has a list canonicalization primitive
               __sandboxProfile =
                 let
-                  profiles =
-                    [ stdenv.extraSandboxProfile ]
-                    ++ computedSandboxProfile
-                    ++ computedPropagatedSandboxProfile
-                    ++ [
-                      propagatedSandboxProfile
-                      sandboxProfile
-                    ];
+                  profiles = [
+                    stdenv.extraSandboxProfile
+                  ]
+                  ++ computedSandboxProfile
+                  ++ computedPropagatedSandboxProfile
+                  ++ [
+                    propagatedSandboxProfile
+                    sandboxProfile
+                  ];
                   final = concatStringsSep "\n" (filter (x: x != "") (unique profiles));
                 in
                 final;

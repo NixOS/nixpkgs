@@ -64,15 +64,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # requires internet connection
-      "test_load_dataset_string_error"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-      # overly strict float tolerances
-      "TestDendrogram"
-    ];
+  disabledTests = [
+    # requires internet connection
+    "test_load_dataset_string_error"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # overly strict float tolerances
+    "TestDendrogram"
+  ];
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).

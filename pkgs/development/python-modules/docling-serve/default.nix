@@ -54,23 +54,22 @@ buildPythonPackage rec {
     "mlx-vlm" # not yet available on nixpkgs
   ];
 
-  dependencies =
-    [
-      docling
-      (docling-jobkit.override { inherit withTesserocr withRapidocr; })
-      fastapi
-      httpx
-      pydantic-settings
-      python-multipart
-      scalar-fastapi
-      typer
-      uvicorn
-      websockets
-    ]
-    ++ lib.optionals withUI optional-dependencies.ui
-    ++ lib.optionals withTesserocr optional-dependencies.tesserocr
-    ++ lib.optionals withRapidocr optional-dependencies.rapidocr
-    ++ lib.optionals withCPU optional-dependencies.cpu;
+  dependencies = [
+    docling
+    (docling-jobkit.override { inherit withTesserocr withRapidocr; })
+    fastapi
+    httpx
+    pydantic-settings
+    python-multipart
+    scalar-fastapi
+    typer
+    uvicorn
+    websockets
+  ]
+  ++ lib.optionals withUI optional-dependencies.ui
+  ++ lib.optionals withTesserocr optional-dependencies.tesserocr
+  ++ lib.optionals withRapidocr optional-dependencies.rapidocr
+  ++ lib.optionals withCPU optional-dependencies.cpu;
 
   optional-dependencies = {
     ui = [

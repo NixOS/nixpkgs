@@ -39,7 +39,8 @@ let
     gnome-terminal
     gsettings-desktop-schemas
     gtk3
-  ] ++ extraGSettingsOverridePackages;
+  ]
+  ++ extraGSettingsOverridePackages;
 
   gsettingsOverrides = ''
     # Use Fedora's default to make text readable and

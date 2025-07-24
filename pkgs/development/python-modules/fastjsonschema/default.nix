@@ -27,16 +27,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests =
-    [
-      "benchmark"
-      # these tests require network access
-      "remote ref"
-      "definitions"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_compile_to_code_custom_format" # cannot import temporary module created during test
-    ];
+  disabledTests = [
+    "benchmark"
+    # these tests require network access
+    "remote ref"
+    "definitions"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_compile_to_code_custom_format" # cannot import temporary module created during test
+  ];
 
   pytestFlagsArray = [
     # fastjsonschema.exceptions.JsonSchemaDefinitionException: Unknown format uuid/duration

@@ -32,7 +32,6 @@
   # nativeCheckInputs
   scipy,
   matplotlib,
-  pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
   mpiCheckPhaseHook,
@@ -108,7 +107,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     scipy
     matplotlib
-    pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
     mpiCheckPhaseHook
@@ -131,17 +129,16 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    tests =
-      {
-        complex = fenics-dolfinx.override {
-          petsc4py = petsc4py.override { scalarType = "complex"; };
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        mpich = fenics-dolfinx.override {
-          petsc4py = petsc4py.override { mpi = mpich; };
-        };
+    tests = {
+      complex = fenics-dolfinx.override {
+        petsc4py = petsc4py.override { scalarType = "complex"; };
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      mpich = fenics-dolfinx.override {
+        petsc4py = petsc4py.override { mpi = mpich; };
+      };
+    };
   };
 
   meta = {

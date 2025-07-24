@@ -66,39 +66,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-6htM6p09mPUQmS+QVBDO7Y/tuwweHgA+W/E3XTNunB8=";
   useFetchCargoVendor = true;
 
-  buildFeatures =
-    [
-      "embedding"
-      "parquet"
-      "prometheus"
-      "openidconnect"
-      "cloud"
-      "jemalloc"
-      "deno_core"
-      "license"
-      "http_trigger"
-      "zip"
-      "oauth2"
-      "kafka"
-      "otel"
-      "dind"
-      "php"
-      "mysql"
-      "mssql"
-      "bigquery"
-      "websocket"
-      "python"
-      "smtp"
-      "csharp"
-      "static_frontend"
-      # "rust" # compiler environment is incomplete
-    ]
-    ++ (lib.optionals withEnterpriseFeatures [
-      "enterprise"
-      "enterprise_saml"
-      "tantivy"
-      "stripe"
-    ]);
+  buildFeatures = [
+    "embedding"
+    "parquet"
+    "prometheus"
+    "openidconnect"
+    "cloud"
+    "jemalloc"
+    "deno_core"
+    "license"
+    "http_trigger"
+    "zip"
+    "oauth2"
+    "kafka"
+    "otel"
+    "dind"
+    "php"
+    "mysql"
+    "mssql"
+    "bigquery"
+    "websocket"
+    "python"
+    "smtp"
+    "csharp"
+    "static_frontend"
+    # "rust" # compiler environment is incomplete
+  ]
+  ++ (lib.optionals withEnterpriseFeatures [
+    "enterprise"
+    "enterprise_saml"
+    "tantivy"
+    "stripe"
+  ]);
 
   patches = [
     ./download.py.config.proto.patch

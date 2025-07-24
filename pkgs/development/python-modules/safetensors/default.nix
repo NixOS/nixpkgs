@@ -107,16 +107,15 @@ buildPythonPackage rec {
   ];
 
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
-  disabledTestPaths =
-    [
-      "tests/test_flax_comparison.py"
-      "tests/test_paddle_comparison.py"
-      "tests/test_tf_comparison.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # don't require mlx (not in Nixpkgs) to run tests
-      "tests/test_mlx_comparison.py"
-    ];
+  disabledTestPaths = [
+    "tests/test_flax_comparison.py"
+    "tests/test_paddle_comparison.py"
+    "tests/test_tf_comparison.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # don't require mlx (not in Nixpkgs) to run tests
+    "tests/test_mlx_comparison.py"
+  ];
 
   pythonImportsCheck = [ "safetensors" ];
 

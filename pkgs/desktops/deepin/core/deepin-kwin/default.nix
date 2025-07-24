@@ -43,44 +43,43 @@ stdenv.mkDerivation rec {
     libsForQt5.qttools
   ];
 
-  buildInputs =
-    [
-      wayland
-      dwayland
-      libepoxy
-      gsettings-qt
+  buildInputs = [
+    wayland
+    dwayland
+    libepoxy
+    gsettings-qt
 
-      libinput
-      libgbm
-      lcms2
+    libinput
+    libgbm
+    lcms2
 
-      xorg.libxcb
-      xorg.libXdmcp
-      xorg.libXcursor
-      xorg.xcbutilcursor
-      xorg.libXtst
-      xorg.libXScrnSaver
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtx11extras
-      kconfig
-      kconfigwidgets
-      kcoreaddons
-      kcrash
-      kdbusaddons
-      kiconthemes
-      kglobalaccel
-      kidletime
-      knotifications
-      kpackage
-      plasma-framework
-      kcmutils
-      knewstuff
-      kdecoration
-      kscreenlocker
-      breeze-qt5
-    ]);
+    xorg.libxcb
+    xorg.libXdmcp
+    xorg.libXcursor
+    xorg.xcbutilcursor
+    xorg.libXtst
+    xorg.libXScrnSaver
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtx11extras
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kdbusaddons
+    kiconthemes
+    kglobalaccel
+    kidletime
+    knotifications
+    kpackage
+    plasma-framework
+    kcmutils
+    knewstuff
+    kdecoration
+    kscreenlocker
+    breeze-qt5
+  ]);
 
   cmakeFlags = [ "-DKWIN_BUILD_RUNNERS=OFF" ];
 

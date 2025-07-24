@@ -348,34 +348,33 @@ stdenv.mkDerivation {
     boost-build
     copyPkgconfigItems
     sanitiseHeaderPathsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs =
-    [
-      zlib
-      bzip2
-      libiconv
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [
+    zlib
+    bzip2
+    libiconv
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.69") zstd
+  ++ [ xz ]
+  ++ lib.optional enableIcu icu
+  ++ lib.optionals enablePython [
+    libxcrypt
+    python
+  ]
+  ++ lib.optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
-  configureFlags =
-    [
-      "--includedir=$(dev)/include"
-      "--libdir=$(out)/lib"
-      "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
-    ]
-    ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
-    ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
+  configureFlags = [
+    "--includedir=$(dev)/include"
+    "--libdir=$(out)/lib"
+    "--with-bjam=b2" # prevent bootstrapping b2 in configurePhase
+  ]
+  ++ lib.optional (toolset != null) "--with-toolset=${toolset}"
+  ++ [ (if enableIcu then "--with-icu=${icu.dev}" else "--without-icu") ];
 
   buildPhase = ''
     runHook preBuild

@@ -55,7 +55,8 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=github.com/TecharoHQ/anubis.Version=v${finalAttrs.version}"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
 
   postPatch = ''
     patchShebangs ./web/build.sh

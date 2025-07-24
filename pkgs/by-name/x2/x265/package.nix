@@ -53,76 +53,73 @@ stdenv.mkDerivation rec {
     hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
   };
 
-  patches =
-    [
-      ./darwin-__rdtsc.patch
-    ]
-    # TODO: remove after update to version 4.2
-    ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
-      (fetchpatch2 {
-        url = "https://bitbucket.org/multicoreware/x265_git/commits/ddb1933598736394b646cb0f78da4a4201ffc656/raw";
-        hash = "sha256-ZH+jbVtfNJ+CwRUEgsnzyPVzajR/+4nDnUDz5RONO6c=";
-        stripLen = 1;
-      })
-    ];
+  patches = [
+    ./darwin-__rdtsc.patch
+  ]
+  # TODO: remove after update to version 4.2
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
+    (fetchpatch2 {
+      url = "https://bitbucket.org/multicoreware/x265_git/commits/ddb1933598736394b646cb0f78da4a4201ffc656/raw";
+      hash = "sha256-ZH+jbVtfNJ+CwRUEgsnzyPVzajR/+4nDnUDz5RONO6c=";
+      stripLen = 1;
+    })
+  ];
 
   sourceRoot = "x265_${version}/source";
 
-  postPatch =
-    ''
-      substituteInPlace cmake/Version.cmake \
-        --replace-fail "unknown" "${version}" \
-        --replace-fail "0.0" "${version}"
-    ''
-    # There is broken and complicated logic when setting X265_LATEST_TAG for
-    # mingwW64 builds. This bypasses the logic by setting it at the end of the
-    # file
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      echo 'set(X265_LATEST_TAG "${version}")' >> ./cmake/Version.cmake
-    '';
+  postPatch = ''
+    substituteInPlace cmake/Version.cmake \
+      --replace-fail "unknown" "${version}" \
+      --replace-fail "0.0" "${version}"
+  ''
+  # There is broken and complicated logic when setting X265_LATEST_TAG for
+  # mingwW64 builds. This bypasses the logic by setting it at the end of the
+  # file
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    echo 'set(X265_LATEST_TAG "${version}")' >> ./cmake/Version.cmake
+  '';
 
   nativeBuildInputs = [
     cmake
     nasm
-  ] ++ lib.optionals (numaSupport) [ numactl ];
+  ]
+  ++ lib.optionals (numaSupport) [ numactl ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_ALPHA=ON"
-      "-DENABLE_MULTIVIEW=ON"
-      "-DENABLE_SCC_EXT=ON"
-      "-Wno-dev"
-      (mkFlag custatsSupport "DETAILED_CU_STATS")
-      (mkFlag debugSupport "CHECKED_BUILD")
-      (mkFlag ppaSupport "ENABLE_PPA")
-      (mkFlag vtuneSupport "ENABLE_VTUNE")
-      (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-    ]
-    # Clang does not support the endfunc directive so use GCC.
-    ++ lib.optional (
-      stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
-    ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
-    # Neon support
-    ++ lib.optionals (neonSupport && stdenv.hostPlatform.isAarch32) [
-      "-DENABLE_NEON=ON"
-      "-DCPU_HAS_NEON=ON"
-      "-DENABLE_ASSEMBLY=ON"
-    ];
+  cmakeFlags = [
+    "-DENABLE_ALPHA=ON"
+    "-DENABLE_MULTIVIEW=ON"
+    "-DENABLE_SCC_EXT=ON"
+    "-Wno-dev"
+    (mkFlag custatsSupport "DETAILED_CU_STATS")
+    (mkFlag debugSupport "CHECKED_BUILD")
+    (mkFlag ppaSupport "ENABLE_PPA")
+    (mkFlag vtuneSupport "ENABLE_VTUNE")
+    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ]
+  # Clang does not support the endfunc directive so use GCC.
+  ++ lib.optional (
+    stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
+  ) "-DCMAKE_ASM_COMPILER=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc"
+  # Neon support
+  ++ lib.optionals (neonSupport && stdenv.hostPlatform.isAarch32) [
+    "-DENABLE_NEON=ON"
+    "-DCPU_HAS_NEON=ON"
+    "-DENABLE_ASSEMBLY=ON"
+  ];
 
-  cmakeStaticLibFlags =
-    [
-      "-DHIGH_BIT_DEPTH=ON"
-      "-DENABLE_CLI=OFF"
-      "-DENABLE_SHARED=OFF"
-      "-DEXPORT_C_API=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isPower [
-      "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
-    ]
-    ++ lib.optionals isCross [
-      (mkFlag stdenv.hostPlatform.isAarch32 "CROSS_COMPILE_ARM")
-      (mkFlag stdenv.hostPlatform.isAarch64 "CROSS_COMPILE_ARM64")
-    ];
+  cmakeStaticLibFlags = [
+    "-DHIGH_BIT_DEPTH=ON"
+    "-DENABLE_CLI=OFF"
+    "-DENABLE_SHARED=OFF"
+    "-DEXPORT_C_API=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isPower [
+    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
+  ]
+  ++ lib.optionals isCross [
+    (mkFlag stdenv.hostPlatform.isAarch32 "CROSS_COMPILE_ARM")
+    (mkFlag stdenv.hostPlatform.isAarch64 "CROSS_COMPILE_ARM64")
+  ];
 
   preConfigure =
     lib.optionalString multibitdepthSupport ''
@@ -165,14 +162,13 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postInstall =
-    ''
-      rm -f ${placeholder "out"}/lib/*.a
-    ''
-    # For mingw, libs are located in $out/bin not $out/lib
-    + lib.optionalString stdenv.hostPlatform.isMinGW ''
-      ln -s $out/bin/*.dll $out/lib
-    '';
+  postInstall = ''
+    rm -f ${placeholder "out"}/lib/*.a
+  ''
+  # For mingw, libs are located in $out/bin not $out/lib
+  + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    ln -s $out/bin/*.dll $out/lib
+  '';
 
   meta = {
     description = "Library for encoding H.265/HEVC video streams";

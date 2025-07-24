@@ -33,14 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-installation-of-cmake-files.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-    ]
-    ++ lib.optionals withGUI [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ]
+  ++ lib.optionals withGUI [
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = lib.optionals withGUI [
     qt6.qtbase
@@ -53,13 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "ZINT_USE_QT" withGUI)
-    ]
-    ++ lib.optionals withGUI [
-      (lib.cmakeBool "ZINT_QT6" true) # do not use Qt 5
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ZINT_USE_QT" withGUI)
+  ]
+  ++ lib.optionals withGUI [
+    (lib.cmakeBool "ZINT_QT6" true) # do not use Qt 5
+  ];
 
   doInstallCheck = true;
   nativeCheckInputs = [ versionCheckHook ];

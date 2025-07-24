@@ -15,7 +15,8 @@
                 settings = {
                   network_name = "easytier_test";
                   network_secret = "easytier_test_secret";
-                } // settings;
+                }
+                // settings;
               };
             };
 

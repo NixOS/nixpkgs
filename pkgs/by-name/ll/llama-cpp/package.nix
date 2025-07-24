@@ -103,17 +103,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       --replace-fail 'build_commit="unknown"' "build_commit=\"$(cat COMMIT)\""
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      git
-    ]
-    ++ optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    git
+  ]
+  ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
   buildInputs =
     optionals cudaSupport cudaBuildInputs
@@ -123,50 +122,48 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ curl ];
 
-  cmakeFlags =
-    [
-      # -march=native is non-deterministic; override with platform-specific flags if needed
-      (cmakeBool "GGML_NATIVE" false)
-      (cmakeBool "LLAMA_BUILD_SERVER" true)
-      (cmakeBool "LLAMA_CURL" true)
-      (cmakeBool "BUILD_SHARED_LIBS" true)
-      (cmakeBool "GGML_BLAS" blasSupport)
-      (cmakeBool "GGML_CLBLAST" openclSupport)
-      (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIP" rocmSupport)
-      (cmakeBool "GGML_METAL" metalSupport)
-      (cmakeBool "GGML_RPC" rpcSupport)
-      (cmakeBool "GGML_VULKAN" vulkanSupport)
-    ]
-    ++ optionals cudaSupport [
-      (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ optionals rocmSupport ([
-      (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
-      # TODO: this should become `clr.gpuTargets` in the future.
-      (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
-    ])
-    ++ optionals metalSupport [
-      (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-      (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
-    ]
-    ++ optionals rpcSupport [
-      # This is done so we can move rpc-server out of bin because llama.cpp doesn't
-      # install rpc-server in their install target.
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    ];
+  cmakeFlags = [
+    # -march=native is non-deterministic; override with platform-specific flags if needed
+    (cmakeBool "GGML_NATIVE" false)
+    (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_CURL" true)
+    (cmakeBool "BUILD_SHARED_LIBS" true)
+    (cmakeBool "GGML_BLAS" blasSupport)
+    (cmakeBool "GGML_CLBLAST" openclSupport)
+    (cmakeBool "GGML_CUDA" cudaSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
+    (cmakeBool "GGML_METAL" metalSupport)
+    (cmakeBool "GGML_RPC" rpcSupport)
+    (cmakeBool "GGML_VULKAN" vulkanSupport)
+  ]
+  ++ optionals cudaSupport [
+    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ optionals rocmSupport ([
+    (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
+    # TODO: this should become `clr.gpuTargets` in the future.
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
+  ])
+  ++ optionals metalSupport [
+    (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+    (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals rpcSupport [
+    # This is done so we can move rpc-server out of bin because llama.cpp doesn't
+    # install rpc-server in their install target.
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that
-  postInstall =
-    ''
-      # Match previous binary name for this package
-      ln -sf $out/bin/llama-cli $out/bin/llama
+  postInstall = ''
+    # Match previous binary name for this package
+    ln -sf $out/bin/llama-cli $out/bin/llama
 
-      mkdir -p $out/include
-      cp $src/include/llama.h $out/include/
-    ''
-    + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
+    mkdir -p $out/include
+    cp $src/include/llama.h $out/include/
+  ''
+  + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
   passthru.updateScript = nix-update-script {
     attrPath = "llama-cpp";

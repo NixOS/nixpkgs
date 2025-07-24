@@ -48,39 +48,38 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs =
-    [
-      bzip2
-      eigen
-      ffmpeg
-      fox_1_6
-      gdal
-      gl2ps
-      gpp
-      gtest
-      jdk
-      libGL
-      libGLU
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      openscenegraph
-      proj
-      python3Packages.setuptools
-      xercesc
-      zlib
-      python3
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcursor
-      libXext
-      libXfixes
-      libXft
-      libXrandr
-      libXrender
-    ]);
+  buildInputs = [
+    bzip2
+    eigen
+    ffmpeg
+    fox_1_6
+    gdal
+    gl2ps
+    gpp
+    gtest
+    jdk
+    libGL
+    libGLU
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    openscenegraph
+    proj
+    python3Packages.setuptools
+    xercesc
+    zlib
+    python3
+  ]
+  ++ (with xorg; [
+    libX11
+    libXcursor
+    libXext
+    libXfixes
+    libXft
+    libXrandr
+    libXrender
+  ]);
 
   meta = with lib; {
     description = "SUMO traffic simulator";

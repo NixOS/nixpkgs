@@ -63,9 +63,9 @@
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "1.2.1";
+    version = "1.2.6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-D78WwrOKbc8RNAa9Q3wgZRjVOUy/012+KIlTtk5NeTM=";
+    hash = "sha256-kyJ4AkPcpP/10nf4whJiuraC7hn0E6iBkhRIn43E9J0=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ openssl_1_1 ];
@@ -130,9 +130,9 @@
 
   storage-preview = mkAzExtension rec {
     pname = "storage-preview";
-    version = "1.0.0b6";
+    version = "1.0.0b7";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_preview-${version}-py2.py3-none-any.whl";
-    hash = "sha256-467PbUh6rCPndvAXeZ5tMgCH34HL36Kzd9DzYlM63EA=";
+    hash = "sha256-wtf+4TBDzpWO55w5VXnoERAbksP2QaSc29FHL3MNOBo=";
     description = "Provides a preview for upcoming storage features";
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];

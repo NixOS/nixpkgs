@@ -36,17 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.sigtool
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      shared-mime-info
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    shared-mime-info
+  ];
 
   buildInputs = [
     boost

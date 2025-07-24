@@ -41,16 +41,15 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      libffi
-      llvm
-      zlib
-      zstd
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ];
+  buildInputs = [
+    libffi
+    llvm
+    zlib
+    zstd
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ];
 
   preConfigure = ''
     mkdir build

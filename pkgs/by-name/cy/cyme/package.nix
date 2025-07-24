@@ -24,14 +24,13 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-HdlhsOctPxOanbPAIJnlUoY4QeIluVsJlPglFXHBpFY=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools
+  ];
 
   checkFlags = [
     # doctest that requires access outside sandbox

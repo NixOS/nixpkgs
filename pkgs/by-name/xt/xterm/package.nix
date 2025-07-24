@@ -62,17 +62,17 @@ stdenv.mkDerivation rec {
     "--enable-mini-luit"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
-  ] ++ lib.optional enableDecLocator "--enable-dec-locator";
+  ]
+  ++ lib.optional enableDecLocator "--enable-dec-locator";
 
-  env =
-    {
-      # Work around broken "plink.sh".
-      NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isMusl {
-      # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
-      NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
-    };
+  env = {
+    # Work around broken "plink.sh".
+    NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
+    NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  };
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
   # decided by the sysadmin to allow the xterm reporting to /var/run/utmp

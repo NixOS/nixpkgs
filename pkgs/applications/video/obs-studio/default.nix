@@ -100,63 +100,61 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-nix-plugin-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      cmake
-      ninja
-      pkg-config
-      wrapGAppsHook3
-      wrapQtAppsHook
-      extra-cmake-modules
-    ]
-    ++ optional scriptingSupport swig
-    ++ optional cudaSupport autoAddDriverRunpath;
+  nativeBuildInputs = [
+    addDriverRunpath
+    cmake
+    ninja
+    pkg-config
+    wrapGAppsHook3
+    wrapQtAppsHook
+    extra-cmake-modules
+  ]
+  ++ optional scriptingSupport swig
+  ++ optional cudaSupport autoAddDriverRunpath;
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      jansson
-      libjack2
-      libv4l
-      libxkbcommon
-      libpthreadstubs
-      libXdmcp
-      qtbase
-      qtsvg
-      speex
-      wayland
-      x264
-      libvlc
-      mbedtls
-      pciutils
-      librist
-      cjson
-      libva
-      srt
-      qtwayland
-      nlohmann_json
-      websocketpp
-      asio
-      libdatachannel
-      libvpl
-      qrcodegencpp
-      uthash
-      nv-codec-headers-12
-    ]
-    ++ optionals scriptingSupport [
-      luajit
-      python3
-    ]
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optionals pipewireSupport [
-      pipewire
-      libdrm
-    ]
-    ++ optional browserSupport cef
-    ++ optional withFdk fdk_aac;
+  buildInputs = [
+    curl
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthreadstubs
+    libXdmcp
+    qtbase
+    qtsvg
+    speex
+    wayland
+    x264
+    libvlc
+    mbedtls
+    pciutils
+    librist
+    cjson
+    libva
+    srt
+    qtwayland
+    nlohmann_json
+    websocketpp
+    asio
+    libdatachannel
+    libvpl
+    qrcodegencpp
+    uthash
+    nv-codec-headers-12
+  ]
+  ++ optionals scriptingSupport [
+    luajit
+    python3
+  ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optionals pipewireSupport [
+    pipewire
+    libdrm
+  ]
+  ++ optional browserSupport cef
+  ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
@@ -181,7 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
     (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
-  ] ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
+  ]
+  ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -196,7 +195,8 @@ stdenv.mkDerivation (finalAttrs: {
         xorg.libX11
         libvlc
         libGL
-      ] ++ optionals decklinkSupport [ blackmagic-desktop-video ];
+      ]
+      ++ optionals decklinkSupport [ blackmagic-desktop-video ];
     in
     ''
       qtWrapperArgs+=(

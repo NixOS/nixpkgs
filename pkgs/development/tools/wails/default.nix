@@ -44,17 +44,16 @@ buildGoModule rec {
   allowGoReference = true;
 
   # Following packages are required when wails used as a builder.
-  propagatedBuildInputs =
-    [
-      pkg-config
-      go
-      stdenv.cc
-      nodejs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      webkitgtk_4_0
-    ];
+  propagatedBuildInputs = [
+    pkg-config
+    go
+    stdenv.cc
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    webkitgtk_4_0
+  ];
 
   ldflags = [
     "-s"

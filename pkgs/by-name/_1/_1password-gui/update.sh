@@ -37,6 +37,7 @@ read_local_versions() {
 
 read_remote_versions() {
   local channel="$1"
+  local darwin_beta_maybe
 
   if [[ ${channel} == "stable" ]]; then
     remote_versions["stable/linux"]=$(
@@ -56,10 +57,17 @@ read_remote_versions() {
         | "${JQ[@]}" '.[] | select(.repo == "aur" and .srcname == "1password-beta") | .version | sub("_"; "-")'
     )
 
-    remote_versions["beta/darwin"]=$(
+    # Handle macOS Beta app-update feed quirk.
+    # If there is a newer release in the stable channel, queries for beta
+    # channel will return the stable channel version; masking the current beta.
+    darwin_beta_maybe=$(
       "${CURL[@]}" "${APP_UPDATES_URI_BASE}/Y" \
         | "${JQ[@]}" 'select(.available == "1") | .version'
     )
+    # Only consider versions that end with '.BETA'
+    if [[ ${darwin_beta_maybe} =~ \.BETA$ ]]; then
+      remote_versions["beta/darwin"]=${darwin_beta_maybe}
+    fi
   fi
 }
 
@@ -98,9 +106,12 @@ for i in "${!remote_versions[@]}"; do
   fi
 done
 
-if [[ ${#new_version_available[@]} -eq 0 ]]; then
-  # up to date
-  exit
+num_updates=${#new_version_available[@]}
+if (( num_updates == 0 )); then
+  exit # up to date
+elif (( num_updates == 1 )); then
+  os=$(cut -d / -f 2 <<<"${new_version_available[@]}")
+  os_specific_update=" (${os} only)"
 fi
 
 ./update-sources.py "${new_version_available[@]}"
@@ -109,7 +120,7 @@ cat <<EOF
   {
     "attrPath": "${attr_path}",
     "oldVersion": "${old_version}",
-    "newVersion": "${new_version}",
+    "newVersion": "${new_version}${os_specific_update-}",
     "files": [
       "$PWD/sources.json"
     ]

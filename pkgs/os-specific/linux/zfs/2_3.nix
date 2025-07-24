@@ -16,13 +16,12 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.3.3";
 
-  tests =
-    {
-      inherit (nixosTests.zfs) series_2_3;
-    }
-    // lib.optionalAttrs stdenv.isx86_64 {
-      inherit (nixosTests.zfs) installer;
-    };
+  tests = {
+    inherit (nixosTests.zfs) series_2_3;
+  }
+  // lib.optionalAttrs stdenv.isx86_64 {
+    inherit (nixosTests.zfs) installer;
+  };
 
   maintainers = with lib.maintainers; [
     adamcstephens

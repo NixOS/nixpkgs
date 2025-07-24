@@ -160,29 +160,28 @@ let
       "tests/help/test_help.py"
     ];
 
-    disabledTests =
-      [
-        # Tests require network
-        "test_urls"
-        "test_get_commit_message_with_custom_prompt"
-        # FileNotFoundError
-        "test_get_commit_message"
-        # Expected 'launch_gui' to have been called once
-        "test_browser_flag_imports_streamlit"
-        # AttributeError
-        "test_simple_send_with_retries"
-        # Expected 'check_version' to have been called once
-        "test_main_exit_calls_version_check"
-        # AssertionError: assert 2 == 1
-        "test_simple_send_non_retryable_error"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # Tests fails on darwin
-        "test_dark_mode_sets_code_theme"
-        "test_default_env_file_sets_automatic_variable"
-        # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
-        "test_pipe_editor"
-      ];
+    disabledTests = [
+      # Tests require network
+      "test_urls"
+      "test_get_commit_message_with_custom_prompt"
+      # FileNotFoundError
+      "test_get_commit_message"
+      # Expected 'launch_gui' to have been called once
+      "test_browser_flag_imports_streamlit"
+      # AttributeError
+      "test_simple_send_with_retries"
+      # Expected 'check_version' to have been called once
+      "test_main_exit_calls_version_check"
+      # AssertionError: assert 2 == 1
+      "test_simple_send_non_retryable_error"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Tests fails on darwin
+      "test_dark_mode_sets_code_theme"
+      "test_default_env_file_sets_automatic_variable"
+      # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
+      "test_pipe_editor"
+    ];
 
     makeWrapperArgs = [
       "--set"
@@ -254,8 +253,7 @@ let
               ++ lib.optionals withBedrock aider-chat.optional-dependencies.bedrock;
 
             propagatedBuildInputs =
-              propagatedBuildInputs
-              ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
+              propagatedBuildInputs ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
 
             makeWrapperArgs =
               makeWrapperArgs

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "solanum";
-  version = "0-unstable-2025-06-11";
+  version = "0-unstable-2025-07-20";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "70d491d8a4ad9fa02ce5394d9007baf5f23ca61c";
-    hash = "sha256-+AYEfG0MJE7LnoS1saA1zSSKNxAvxMppobYUK+sP4fw=";
+    rev = "7feda92636c9d5b5e7decceee1273dd18b6cc31b";
+    hash = "sha256-cfDwdE2CA69dSg59Sn1TKk3OWxvoTIm/KCiKfgzokVU=";
   };
 
   patches = [
@@ -33,19 +33,18 @@ stdenv.mkDerivation {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
-  configureFlags =
-    [
-      "--enable-epoll"
-      "--enable-ipv6"
-      "--enable-openssl=${openssl.dev}"
-      "--with-program-prefix=solanum-"
-      "--localstatedir=/var/lib"
-      "--with-rundir=/run"
-      "--with-logdir=/var/log"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      "--enable-sctp=${lksctp-tools.out}/lib"
-    ];
+  configureFlags = [
+    "--enable-epoll"
+    "--enable-ipv6"
+    "--enable-openssl=${openssl.dev}"
+    "--with-program-prefix=solanum-"
+    "--localstatedir=/var/lib"
+    "--with-rundir=/run"
+    "--with-logdir=/var/log"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    "--enable-sctp=${lksctp-tools.out}/lib"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

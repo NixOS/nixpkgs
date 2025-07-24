@@ -104,24 +104,24 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     numpy
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     # Checks for very precise color values on what's basically white
     "--deselect=Tests/test_file_avif.py::TestFileAvif::test_background_from_gif"
   ];
 
-  disabledTests =
-    [
-      # Code quality mismathch 9 vs 10
-      "test_pyroma"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Disable darwin tests which require executables: `iconutil` and `screencapture`
-      "test_grab"
-      "test_grabclipboard"
-      "test_save"
-    ];
+  disabledTests = [
+    # Code quality mismathch 9 vs 10
+    "test_pyroma"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disable darwin tests which require executables: `iconutil` and `screencapture`
+    "test_grab"
+    "test_grabclipboard"
+    "test_save"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes the interpreter

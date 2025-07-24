@@ -39,12 +39,13 @@ lib.warnIf (withDocs != null)
       sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
     };
 
-    hardeningDisable =
-      [ "format" ]
-      # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
-      # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
-      # or you can check libc/include/sys/cdefs.h in bionic source code
-      ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
+    hardeningDisable = [
+      "format"
+    ]
+    # bionic libc is super weird and has issues with fortify outside of its own libc, check this comment:
+    # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+    # or you can check libc/include/sys/cdefs.h in bionic source code
+    ++ lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
     outputs = [
       "out"
@@ -56,20 +57,19 @@ lib.warnIf (withDocs != null)
 
     separateDebugInfo = true;
 
-    env.NIX_CFLAGS_COMPILE =
-      ''
-        -DSYS_BASHRC="/etc/bashrc"
-        -DSYS_BASH_LOGOUT="/etc/bash_logout"
-      ''
-      + lib.optionalString (!forFHSEnv) ''
-        -DDEFAULT_PATH_VALUE="/no-such-path"
-        -DSTANDARD_UTILS_PATH="/no-such-path"
-        -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
-      ''
-      + ''
-        -DNON_INTERACTIVE_LOGIN_SHELLS
-        -DSSH_SOURCE_BASHRC
-      '';
+    env.NIX_CFLAGS_COMPILE = ''
+      -DSYS_BASHRC="/etc/bashrc"
+      -DSYS_BASH_LOGOUT="/etc/bash_logout"
+    ''
+    + lib.optionalString (!forFHSEnv) ''
+      -DDEFAULT_PATH_VALUE="/no-such-path"
+      -DSTANDARD_UTILS_PATH="/no-such-path"
+      -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
+    ''
+    + ''
+      -DNON_INTERACTIVE_LOGIN_SHELLS
+      -DSSH_SOURCE_BASHRC
+    '';
 
     patchFlags = [ "-p0" ];
 
@@ -88,43 +88,42 @@ lib.warnIf (withDocs != null)
       ./fix-pop-var-context-error.patch
     ];
 
-    configureFlags =
-      [
-        # At least on Linux bash memory allocator has pathological performance
-        # in scenarios involving use of larger memory:
-        #   https://lists.gnu.org/archive/html/bug-bash/2023-08/msg00052.html
-        # Various distributions default to system allocator. Let's nixpkgs
-        # do the same.
-        "--without-bash-malloc"
-        (if interactive then "--with-installed-readline" else "--disable-readline")
-      ]
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "bash_cv_job_control_missing=nomissing"
-        "bash_cv_sys_named_pipes=nomissing"
-        "bash_cv_getcwd_malloc=yes"
-        # This check cannot be performed when cross compiling. The "yes"
-        # default is fine for static linking on Linux (weak symbols?) but
-        # not with BSDs, when it does clash with the regular `getenv`.
-        "bash_cv_getenv_redef=${
-          if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"
-        }"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isCygwin [
-        "--without-libintl-prefix"
-        "--without-libiconv-prefix"
-        "--with-installed-readline"
-        "bash_cv_dev_stdin=present"
-        "bash_cv_dev_fd=standard"
-        "bash_cv_termcap_lib=libncurses"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
-        "--disable-nls"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-        # /dev/fd is optional on FreeBSD. we need it to work when built on a system
-        # with it and transferred to a system without it! This includes linux cross.
-        "bash_cv_dev_fd=absent"
-      ];
+    configureFlags = [
+      # At least on Linux bash memory allocator has pathological performance
+      # in scenarios involving use of larger memory:
+      #   https://lists.gnu.org/archive/html/bug-bash/2023-08/msg00052.html
+      # Various distributions default to system allocator. Let's nixpkgs
+      # do the same.
+      "--without-bash-malloc"
+      (if interactive then "--with-installed-readline" else "--disable-readline")
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "bash_cv_job_control_missing=nomissing"
+      "bash_cv_sys_named_pipes=nomissing"
+      "bash_cv_getcwd_malloc=yes"
+      # This check cannot be performed when cross compiling. The "yes"
+      # default is fine for static linking on Linux (weak symbols?) but
+      # not with BSDs, when it does clash with the regular `getenv`.
+      "bash_cv_getenv_redef=${
+        if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"
+      }"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isCygwin [
+      "--without-libintl-prefix"
+      "--without-libiconv-prefix"
+      "--with-installed-readline"
+      "bash_cv_dev_stdin=present"
+      "bash_cv_dev_fd=standard"
+      "bash_cv_termcap_lib=libncurses"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
+      "--disable-nls"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      # /dev/fd is optional on FreeBSD. we need it to work when built on a system
+      # with it and transferred to a system without it! This includes linux cross.
+      "bash_cv_dev_fd=absent"
+    ];
 
     strictDeps = true;
     # Note: Bison is needed because the patches above modify parse.y.
@@ -132,7 +131,8 @@ lib.warnIf (withDocs != null)
     nativeBuildInputs = [
       updateAutotoolsGnuConfigScriptsHook
       bison
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
     buildInputs = lib.optional interactive readline;
 

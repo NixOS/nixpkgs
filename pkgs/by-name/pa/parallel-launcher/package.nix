@@ -46,7 +46,8 @@ stdenv.mkDerivation (
         # Save states with the parallel-n64 core will not work without this.
         libretro_info_path = "${finalAttrs.src}/data";
         assets_directory = retroArchAssetsPath;
-      } // extraRetroArchSettings;
+      }
+      // extraRetroArchSettings;
     };
   in
   {

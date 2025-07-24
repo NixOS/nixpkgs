@@ -56,7 +56,8 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   enabledTestPaths = [ "smart_open" ];
 

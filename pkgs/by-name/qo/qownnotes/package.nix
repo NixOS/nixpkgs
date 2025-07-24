@@ -25,16 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9ldUIT3pQlkO2YhQ3cF9H6Soe8IU4AGEGNRWg0LA1MQ=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt6Packages.qttools
-      qt6Packages.wrapQtAppsHook
-      pkg-config
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
+    pkg-config
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     qt6Packages.qtbase
@@ -43,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtwebsockets
     botan3
     libgit2
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
     "-DQON_QT6_BUILD=ON"

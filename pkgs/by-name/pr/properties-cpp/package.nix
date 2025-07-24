@@ -23,16 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
   };
 
-  postPatch =
-    ''
-      # GTest needs C++17
-      # Remove when https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp/-/merge_requests/3 merged & in release
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'std=c++14' 'std=c++17'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
-    '';
+  postPatch = ''
+    # GTest needs C++17
+    # Remove when https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp/-/merge_requests/3 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'std=c++14' 'std=c++17'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
+  '';
 
   strictDeps = true;
 

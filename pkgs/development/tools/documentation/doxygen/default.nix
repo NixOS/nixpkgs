@@ -38,24 +38,24 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
-  buildInputs =
+  buildInputs = [
+    libiconv
+    spdlog
+    sqlite
+  ]
+  ++ lib.optionals (qt5 != null) (
+    with qt5;
     [
-      libiconv
-      spdlog
-      sqlite
+      qtbase
+      wrapQtAppsHook
     ]
-    ++ lib.optionals (qt5 != null) (
-      with qt5;
-      [
-        qtbase
-        wrapQtAppsHook
-      ]
-    );
+  );
 
   cmakeFlags = [
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
-  ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  ]
+  ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
   outputs = [

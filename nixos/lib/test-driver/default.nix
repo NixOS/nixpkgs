@@ -37,18 +37,17 @@ python3Packages.buildPythonApplication {
     ]
     ++ extraPythonPackages python3Packages;
 
-  propagatedBuildInputs =
-    [
-      coreutils
-      netpbm
-      qemu_pkg
-      socat
-      vde2
-    ]
-    ++ lib.optionals enableOCR [
-      imagemagick_light
-      tesseract4
-    ];
+  propagatedBuildInputs = [
+    coreutils
+    netpbm
+    qemu_pkg
+    socat
+    vde2
+  ]
+  ++ lib.optionals enableOCR [
+    imagemagick_light
+    tesseract4
+  ];
 
   passthru.tests = {
     inherit (nixosTests.nixos-test-driver) driver-timeout;

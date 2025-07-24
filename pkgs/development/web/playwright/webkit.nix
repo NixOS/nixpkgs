@@ -105,18 +105,17 @@ let
       postPatch = "";
       postInstall = "";
 
-      cmakeFlags =
-        [
-          "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
-          "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
-          "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DJPEGXL_STATIC=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-          "-DJPEGXL_FORCE_NEON=ON"
-        ];
+      cmakeFlags = [
+        "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
+        "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+        "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "-DJPEGXL_STATIC=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+        "-DJPEGXL_FORCE_NEON=ON"
+      ];
     }
   );
   webkit-linux = stdenv.mkDerivation {

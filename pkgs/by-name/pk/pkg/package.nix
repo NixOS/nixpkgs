@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 

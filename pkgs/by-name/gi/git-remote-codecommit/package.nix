@@ -29,16 +29,15 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [ botocore ];
 
-  nativeCheckInputs =
-    [
-      awscli
-    ]
-    ++ (with python3Packages; [
-      pytestCheckHook
-      mock
-      flake8
-      tox
-    ]);
+  nativeCheckInputs = [
+    awscli
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    mock
+    flake8
+    tox
+  ]);
 
   meta = {
     description = "Git remote prefix to simplify pushing to and pulling from CodeCommit";

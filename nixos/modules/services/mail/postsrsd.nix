@@ -48,21 +48,21 @@ let
   );
 in
 {
-  imports =
-    [
-      (mkRemovedOptionModule [ "services" "postsrsd" "socketPath" ] ''
-        Configure/reference `services.postsrsd.settings.socketmap` instead. Note that its now required to start with the `inet:` or `unix:` prefix.
-      '')
-      (mkRenamedOptionModule
-        [ "services" "postsrsd" "domains" ]
-        [ "services" "postsrsd" "settings" "domains" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "postsrsd" "separator" ]
-        [ "services" "postsrsd" "settings" "separator" ]
-      )
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [ "services" "postsrsd" "socketPath" ] ''
+      Configure/reference `services.postsrsd.settings.socketmap` instead. Note that its now required to start with the `inet:` or `unix:` prefix.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "postsrsd" "domains" ]
+      [ "services" "postsrsd" "settings" "domains" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "postsrsd" "separator" ]
+      [ "services" "postsrsd" "settings" "separator" ]
+    )
+  ]
+  ++
+    map
       (
         name:
         lib.mkRemovedOptionModule [ "services" "postsrsd" name ] ''

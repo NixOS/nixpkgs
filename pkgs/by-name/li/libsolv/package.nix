@@ -28,23 +28,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-jOYz0p5oWMnPtQbpkCIUgw6e0W5PfR6teA9IdjYSghk=";
   };
 
-  cmakeFlags =
-    [
-      "-DENABLE_COMPLEX_DEPS=true"
-      (lib.cmakeBool "ENABLE_CONDA" withConda)
-      "-DENABLE_LZMA_COMPRESSION=true"
-      "-DENABLE_BZIP2_COMPRESSION=true"
-      "-DENABLE_ZSTD_COMPRESSION=true"
-      "-DENABLE_ZCHUNK_COMPRESSION=true"
-      "-DWITH_SYSTEM_ZCHUNK=true"
-    ]
-    ++ lib.optionals withRpm [
-      "-DENABLE_COMPS=true"
-      "-DENABLE_PUBKEY=true"
-      "-DENABLE_RPMDB=true"
-      "-DENABLE_RPMDB_BYRPMHEADER=true"
-      "-DENABLE_RPMMD=true"
-    ];
+  cmakeFlags = [
+    "-DENABLE_COMPLEX_DEPS=true"
+    (lib.cmakeBool "ENABLE_CONDA" withConda)
+    "-DENABLE_LZMA_COMPRESSION=true"
+    "-DENABLE_BZIP2_COMPRESSION=true"
+    "-DENABLE_ZSTD_COMPRESSION=true"
+    "-DENABLE_ZCHUNK_COMPRESSION=true"
+    "-DWITH_SYSTEM_ZCHUNK=true"
+  ]
+  ++ lib.optionals withRpm [
+    "-DENABLE_COMPS=true"
+    "-DENABLE_PUBKEY=true"
+    "-DENABLE_RPMDB=true"
+    "-DENABLE_RPMDB_BYRPMHEADER=true"
+    "-DENABLE_RPMMD=true"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -59,7 +58,8 @@ stdenv.mkDerivation rec {
     zstd
     expat
     db
-  ] ++ lib.optional withRpm rpm;
+  ]
+  ++ lib.optional withRpm rpm;
 
   meta = with lib; {
     description = "Free package dependency solver";

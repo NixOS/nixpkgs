@@ -585,8 +585,11 @@ lib.recursiveUpdate orig rec {
     extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
     # add license of tlmgr and TeXLive::* perl packages and of bin.core
-    license =
-      [ "gpl2Plus" ] ++ lib.toList bin.core.meta.license.shortName ++ orig."texlive.infra".license or [ ];
+    license = [
+      "gpl2Plus"
+    ]
+    ++ lib.toList bin.core.meta.license.shortName
+    ++ orig."texlive.infra".license or [ ];
 
     scriptsFolder = "texlive";
     extraBuildInputs = [

@@ -44,16 +44,15 @@ buildGoModule rec {
     "github.com/google/go-tpm-tools/.*"
   ];
 
-  postInstall =
-    ''
-      installManPage docs/sbctl.conf.5 docs/sbctl.8
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd sbctl \
-        --bash <($out/bin/sbctl completion bash) \
-        --fish <($out/bin/sbctl completion fish) \
-        --zsh <($out/bin/sbctl completion zsh)
-    '';
+  postInstall = ''
+    installManPage docs/sbctl.conf.5 docs/sbctl.8
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd sbctl \
+      --bash <($out/bin/sbctl completion bash) \
+      --fish <($out/bin/sbctl completion fish) \
+      --zsh <($out/bin/sbctl completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

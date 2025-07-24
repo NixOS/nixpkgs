@@ -42,13 +42,12 @@ let
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
         };
-        passthru =
-          {
-            inherit provider;
-          }
-          // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
-            binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
-          };
+        passthru = {
+          inherit provider;
+        }
+        // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+          binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+        };
         preferLocalBuild = true;
       }
       ''

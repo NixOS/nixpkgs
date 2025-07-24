@@ -40,21 +40,19 @@ let
         {
           inherit name;
 
-          postFixup =
-            previousAttrs.postFixup
-            + ''
-              declare -p wrapperName
-              echo "env.wrapperName = $wrapperName"
-              [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
-              declare -p suffixSalt
-              echo "env.suffixSalt = $suffixSalt"
-              [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
+          postFixup = previousAttrs.postFixup + ''
+            declare -p wrapperName
+            echo "env.wrapperName = $wrapperName"
+            [[ $wrapperName == "CC_WRAPPER" ]] || (echo "'\$wrapperName' was not 'CC_WRAPPER'" && false)
+            declare -p suffixSalt
+            echo "env.suffixSalt = $suffixSalt"
+            [[ $suffixSalt == "${stdenv'.cc.suffixSalt}" ]] || (echo "'\$suffxSalt' was not '${stdenv'.cc.suffixSalt}'" && false)
 
-              grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
-              grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
+            grep -q "@out@" $out/bin/cc || echo "@out@ in $out/bin/cc was substituted"
+            grep -q "@suffixSalt@" $out/bin/cc && (echo "$out/bin/cc contains unsubstituted variables" && false)
 
-              touch $out
-            '';
+            touch $out
+          '';
         }
         // extraAttrs
       )

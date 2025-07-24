@@ -24,14 +24,13 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-ShwFHLfDPc3P8J5gV5CFz/2vrQ5xR01C3sYIejyt860=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
+    pkg-config
+  ];
 
   # only depends on openssl on aarch/arm linux
   buildInputs = lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [

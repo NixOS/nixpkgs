@@ -117,76 +117,73 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./testing/run_{tests,summarize}.py
   '';
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-      cmake
-      ninja
-      gfortran
-    ]
-    ++ lists.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cmake
+    ninja
+    gfortran
+  ]
+  ++ lists.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
+  buildInputs = [
+    libpthreadstubs
+    lapack
+    blas
+    python3
+    (getLib gfortran.cc) # libgfortran.so
+  ]
+  ++ lists.optionals cudaSupport (
+    with cudaPackages;
     [
-      libpthreadstubs
-      lapack
-      blas
-      python3
-      (getLib gfortran.cc) # libgfortran.so
+      cuda_cccl # <nv/target> and <cuda/std/type_traits>
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusparse # cusparse.h
     ]
-    ++ lists.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl # <nv/target> and <cuda/std/type_traits>
-        cuda_cudart # cuda_runtime.h
-        libcublas # cublas_v2.h
-        libcusparse # cusparse.h
-      ]
-      ++ lists.optionals (cudaOlder "11.8") [
-        cuda_nvprof # <cuda_profiler_api.h>
-      ]
-      ++ lists.optionals (cudaAtLeast "11.8") [
-        cuda_profiler_api # <cuda_profiler_api.h>
-      ]
-    )
-    ++ lists.optionals rocmSupport (
-      with rocmPackages;
-      [
-        clr
-        hipblas
-        hipsparse
-        llvm.openmp
-      ]
-    );
+    ++ lists.optionals (cudaOlder "11.8") [
+      cuda_nvprof # <cuda_profiler_api.h>
+    ]
+    ++ lists.optionals (cudaAtLeast "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
+    ]
+  )
+  ++ lists.optionals rocmSupport (
+    with rocmPackages;
+    [
+      clr
+      hipblas
+      hipsparse
+      llvm.openmp
+    ]
+  );
 
-  cmakeFlags =
-    [
-      (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
-      (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
-      (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
-      (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
-      # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
-      # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
-      # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
-      (strings.cmakeBool "USE_FORTRAN" true)
-      (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
-      (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
-      (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
-    ]
-    ++ lists.optionals cudaSupport [
-      (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-      (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
-    ]
-    ++ lists.optionals rocmSupport [
-      # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
-      # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
-      # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
-      (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
-      (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-    ];
+  cmakeFlags = [
+    (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
+    (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+    (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
+    (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
+    # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
+    # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
+    # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
+    (strings.cmakeBool "USE_FORTRAN" true)
+    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
+    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
+    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
+  ]
+  ++ lists.optionals cudaSupport [
+    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
+  ]
+  ++ lists.optionals rocmSupport [
+    # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
+    # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
+    # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
+    (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+  ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
   doCheck = false;

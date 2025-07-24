@@ -49,16 +49,15 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "use_zlib"
-      "use_zstd_thin"
-      # "bzip3" will be optional in the next version
-      "zstd/pkg-config"
-    ]
-    ++ lib.optionals enableUnfree [
-      "unrar"
-    ];
+  buildFeatures = [
+    "use_zlib"
+    "use_zstd_thin"
+    # "bzip3" will be optional in the next version
+    "zstd/pkg-config"
+  ]
+  ++ lib.optionals enableUnfree [
+    "unrar"
+  ];
 
   postInstall = ''
     installManPage artifacts/*.1

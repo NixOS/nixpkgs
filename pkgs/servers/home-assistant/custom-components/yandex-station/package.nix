@@ -30,7 +30,8 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     home-assistant
     pytestCheckHook
-  ] ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ]
+  ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
 
   meta = {
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";

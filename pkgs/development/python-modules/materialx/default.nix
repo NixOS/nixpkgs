@@ -35,19 +35,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs =
-    [
-      openimageio_2
-      imath
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXt
-      libGL
-    ];
+  buildInputs = [
+    openimageio_2
+    imath
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXt
+    libGL
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)

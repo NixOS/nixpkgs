@@ -42,30 +42,30 @@ rec {
     };
 
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
-    buildInputs =
-      [ bash ]
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib;
+    buildInputs = [
+      bash
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib;
 
     postPatch = ''
       patchShebangs .
     '';
 
-    installPhase =
-      ''
-        ./install.sh --prefix=$out \
-          --components=${installComponents}
+    installPhase = ''
+      ./install.sh --prefix=$out \
+        --components=${installComponents}
 
-        # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
-        # (or similar) here. It causes strange effects where rustc loads
-        # the wrong libraries in a bootstrap-build causing failures that
-        # are very hard to track down. For details, see
-        # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -change "/usr/lib/libcurl.4.dylib" \
-        "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
-      '';
+      # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
+      # (or similar) here. It causes strange effects where rustc loads
+      # the wrong libraries in a bootstrap-build causing failures that
+      # are very hard to track down. For details, see
+      # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -change "/usr/lib/libcurl.4.dylib" \
+      "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
+    '';
 
     # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
     # binaries. The lib.rmeta object inside the ar archive should contain an
@@ -149,28 +149,29 @@ rec {
 
     nativeBuildInputs = [
       makeWrapper
-    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     buildInputs = [
       bash
-    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
 
     postPatch = ''
       patchShebangs .
     '';
 
-    installPhase =
-      ''
-        patchShebangs ./install.sh
-        ./install.sh --prefix=$out \
-          --components=cargo
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        install_name_tool -change "/usr/lib/libcurl.4.dylib" \
-          "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
-      ''
-      + ''
-        wrapProgram "$out/bin/cargo" \
-          --suffix PATH : "${rustc}/bin"
-      '';
+    installPhase = ''
+      patchShebangs ./install.sh
+      ./install.sh --prefix=$out \
+        --components=cargo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -change "/usr/lib/libcurl.4.dylib" \
+        "${lib.getLib curl}/lib/libcurl.4.dylib" "$out/bin/cargo"
+    ''
+    + ''
+      wrapProgram "$out/bin/cargo" \
+        --suffix PATH : "${rustc}/bin"
+    '';
   };
 }

@@ -50,29 +50,28 @@ ocamlPackages.buildDunePackage {
   inherit (fetched) version;
   src = "${fetched.src}/language-server";
   nativeBuildInputs = [ coq ];
-  buildInputs =
-    [
-      coq
-      glib
-      adwaita-icon-theme
-      wrapGAppsHook3
-    ]
-    ++ (with ocamlPackages; [
-      findlib
-      lablgtk3-sourceview3
-      yojson
-      zarith
-      ppx_inline_test
-      ppx_assert
-      ppx_sexp_conv
-      ppx_deriving
-      ppx_import
-      sexplib
-      ppx_yojson_conv
-      lsp
-      sel
-      ppx_optcomp
-    ]);
+  buildInputs = [
+    coq
+    glib
+    adwaita-icon-theme
+    wrapGAppsHook3
+  ]
+  ++ (with ocamlPackages; [
+    findlib
+    lablgtk3-sourceview3
+    yojson
+    zarith
+    ppx_inline_test
+    ppx_assert
+    ppx_sexp_conv
+    ppx_deriving
+    ppx_import
+    sexplib
+    ppx_yojson_conv
+    lsp
+    sel
+    ppx_optcomp
+  ]);
 
   meta =
     with lib;

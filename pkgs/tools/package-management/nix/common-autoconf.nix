@@ -100,95 +100,92 @@ let
 
     inherit src patches;
 
-    outputs =
-      [
-        "out"
-        "dev"
-      ]
-      ++ lib.optionals enableDocumentation [
-        "man"
-        "doc"
-      ];
+    outputs = [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals enableDocumentation [
+      "man"
+      "doc"
+    ];
 
     hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
     hardeningDisable = [
       "shadowstack"
-    ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+    ]
+    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
     nativeInstallCheckInputs = lib.optionals atLeast224 [
       git
       man
     ];
 
-    nativeBuildInputs =
-      [
-        pkg-config
-        autoconf-archive
-        autoreconfHook
-        bison
-        flex
-        jq
-      ]
-      ++ lib.optionals enableDocumentation (
-        if atLeast224 then
-          [
-            (lib.getBin lowdown-unsandboxed)
-            mdbook
-            mdbook-linkcheck
-          ]
-        else
-          [
-            libxslt
-            libxml2
-            docbook_xsl_ns
-            docbook5
-          ]
-      )
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        util-linuxMinimal
-      ];
+    nativeBuildInputs = [
+      pkg-config
+      autoconf-archive
+      autoreconfHook
+      bison
+      flex
+      jq
+    ]
+    ++ lib.optionals enableDocumentation (
+      if atLeast224 then
+        [
+          (lib.getBin lowdown-unsandboxed)
+          mdbook
+          mdbook-linkcheck
+        ]
+      else
+        [
+          libxslt
+          libxml2
+          docbook_xsl_ns
+          docbook5
+        ]
+    )
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linuxMinimal
+    ];
 
-    buildInputs =
-      [
-        boost
-        brotli
-        bzip2
-        curl
-        editline
-        libsodium
-        openssl
-        sqlite
-        xz
-        gtest
-        libarchive
-        lowdown
-      ]
-      ++ lib.optionals atLeast224 [
-        libgit2
-        toml11
-        rapidcheck
-      ]
-      ++ lib.optionals (atLeast225 && enableDocumentation) [
-        python3
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
-        libcpuid
-      ]
-      ++ lib.optionals withLibseccomp [
-        libseccomp
-      ]
-      ++ lib.optionals withAWS [
-        aws-sdk-cpp
-      ];
+    buildInputs = [
+      boost
+      brotli
+      bzip2
+      curl
+      editline
+      libsodium
+      openssl
+      sqlite
+      xz
+      gtest
+      libarchive
+      lowdown
+    ]
+    ++ lib.optionals atLeast224 [
+      libgit2
+      toml11
+      rapidcheck
+    ]
+    ++ lib.optionals (atLeast225 && enableDocumentation) [
+      python3
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
+      libcpuid
+    ]
+    ++ lib.optionals withLibseccomp [
+      libseccomp
+    ]
+    ++ lib.optionals withAWS [
+      aws-sdk-cpp
+    ];
 
-    propagatedBuildInputs =
-      [
-        boehmgc
-      ]
-      ++ lib.optionals atLeast224 [
-        nlohmann_json
-      ];
+    propagatedBuildInputs = [
+      boehmgc
+    ]
+    ++ lib.optionals atLeast224 [
+      nlohmann_json
+    ];
 
     postPatch = ''
       patchShebangs --build tests
@@ -224,50 +221,48 @@ let
           mv tmp/config.nix.in corepkgs/config.nix.in
         '';
 
-    configureFlags =
-      [
-        "--with-store-dir=${storeDir}"
-        "--localstatedir=${stateDir}"
-        "--sysconfdir=${confDir}"
-        "--enable-gc"
-      ]
-      ++ lib.optionals (!enableDocumentation) [
-        "--disable-doc-gen"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
-      ]
-      ++ lib.optionals (atLeast224 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
-        "--enable-embedded-sandbox-shell"
-      ]
-      ++
-        lib.optionals
-          (
-            stdenv.hostPlatform != stdenv.buildPlatform
-            && stdenv.hostPlatform ? nix
-            && stdenv.hostPlatform.nix ? system
-          )
-          [
-            "--with-system=${stdenv.hostPlatform.nix.system}"
-          ]
-      ++ lib.optionals (!withLibseccomp) [
-        # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-        "--disable-seccomp-sandboxing"
-      ]
-      ++ lib.optionals (atLeast224 && stdenv.cc.isGNU && !enableStatic) [
-        "--enable-lto"
-      ];
+    configureFlags = [
+      "--with-store-dir=${storeDir}"
+      "--localstatedir=${stateDir}"
+      "--sysconfdir=${confDir}"
+      "--enable-gc"
+    ]
+    ++ lib.optionals (!enableDocumentation) [
+      "--disable-doc-gen"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+    ]
+    ++ lib.optionals (atLeast224 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+      "--enable-embedded-sandbox-shell"
+    ]
+    ++
+      lib.optionals
+        (
+          stdenv.hostPlatform != stdenv.buildPlatform
+          && stdenv.hostPlatform ? nix
+          && stdenv.hostPlatform.nix ? system
+        )
+        [
+          "--with-system=${stdenv.hostPlatform.nix.system}"
+        ]
+    ++ lib.optionals (!withLibseccomp) [
+      # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+      "--disable-seccomp-sandboxing"
+    ]
+    ++ lib.optionals (atLeast224 && stdenv.cc.isGNU && !enableStatic) [
+      "--enable-lto"
+    ];
 
-    makeFlags =
-      [
-        # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
-        # of make jobserver. until gcc adds support for this we have to instruct make to use this
-        # old style or LTO builds will run their linking on only one thread, which takes forever.
-        "--jobserver-style=pipe"
-        "profiledir=$(out)/etc/profile.d"
-      ]
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
+    makeFlags = [
+      # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+      # of make jobserver. until gcc adds support for this we have to instruct make to use this
+      # old style or LTO builds will run their linking on only one thread, which takes forever.
+      "--jobserver-style=pipe"
+      "profiledir=$(out)/etc/profile.d"
+    ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
