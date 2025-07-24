@@ -102,7 +102,7 @@ in
       (oldAttrs.preInstall or "")
       + lib.optionalString hostPlatform.isLinux ''
         mkdir -p bin
-        ln -s ../cursor bin/cursor
+        ln -sf ../cursor bin/cursor
       '';
 
     passthru = (oldAttrs.passthru or { }) // {
