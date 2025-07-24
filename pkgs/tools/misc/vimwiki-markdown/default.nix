@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  markdown,
-  pygments,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "0.4.1";
   format = "setuptools";
   pname = "vimwiki-markdown";
@@ -16,7 +14,7 @@ buildPythonApplication rec {
     hash = "sha256-hJl0OTE6kHucVGOxgOZBG0noYRfxma3yZSrUWEssLN4=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     markdown
     pygments
   ];
