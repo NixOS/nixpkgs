@@ -1270,7 +1270,7 @@ optionalAttrs allowAliases aliases
               passAsFile = [ "value" ];
             }
             ''
-              jsonkdl --kdl-v${builtins.toString version} "$valuePath" "$out"
+              jsonkdl --kdl-v${builtins.toString version} -- "$valuePath" "$out"
             ''
         ) { };
     };
