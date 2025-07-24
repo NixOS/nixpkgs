@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyosohotwaterapi";
-  version = "1.1.5";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
     tag = version;
-    hash = "sha256-jE8cwC18/M58WOVpMsUjIDVmFXLBvPwaAXOSZatpjX0=";
+    hash = "sha256-GFjA1RtJC2bxSoH2TIZwEdSAvpteYBTbsS81hhp4Y3E=";
   };
 
   # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
