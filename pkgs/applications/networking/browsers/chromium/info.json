@@ -802,7 +802,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "138.0.7204.157",
+    "version": "138.0.7204.168",
     "deps": {
       "depot_tools": {
         "rev": "a8900cc0f023d6a662eb66b317e8ddceeb113490",
@@ -813,16 +813,16 @@
         "hash": "sha256-UB9a7Fr1W0yYld6WbXyRR8dFqWsj/zx4KumDZ5JQKSM="
       },
       "ungoogled-patches": {
-        "rev": "138.0.7204.157-1",
-        "hash": "sha256-KzxbyIdESyom6biHUYRJfQJuhA84YQ1KpUHEYncb8IU="
+        "rev": "138.0.7204.168-1",
+        "hash": "sha256-QmHw0sLnVvMwVu/r4L2XS0S31vl+6NJb0zV63iihhkk="
       },
       "npmHash": "sha256-8d5VTHutv51libabhxv7SqPRcHfhVmGDSOvTSv013rE="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "e533e98b1267baa1f1c46d666b120e64e5146aa9",
-        "hash": "sha256-LbZ8/6Lvz1p3ydRL4fXtd7RL426PU3jU01Hx+DP5QYQ=",
+        "rev": "3e8d82e86e9f508e88ed406c2a24657a6c691d30",
+        "hash": "sha256-6s9mkfckhibpb+L74oPZsgvOZZT58BeSo362t/s92UI=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1047,8 +1047,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "4cca0aa00c4915947f1081014d5cfa2e83d357fa",
-        "hash": "sha256-pVNr8NB5U/Uf688oOvPLpu81isCn/WmjJky01A000a4="
+        "rev": "a718e86b3dc6f1ba3c8cc8092cd79b401d428cfc",
+        "hash": "sha256-50KQk54JwwRS3ENUjB0QedQYFuwmkv9oxytfuNDTVPo="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1597,8 +1597,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "de9d0f8b56ae61896e4d2ac577fc589efb14f87d",
-        "hash": "sha256-/T5fisjmN80bs3PtQrCRfH3Bo9dRSd3f+xpPLDh1RTY="
+        "rev": "f5036f509b5e147cccb298a069c40827f3d5edd6",
+        "hash": "sha256-n4/Lf5ZawqUY0QHF2jYl3JPPx9Br/wzVmtqnMvq3Vzk="
       }
     }
   }
