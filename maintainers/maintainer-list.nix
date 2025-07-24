@@ -12945,6 +12945,12 @@
     githubId = 6544084;
     name = "Kai Harries";
   };
+  kajoox = {
+    name = "Kayque Pereira";
+    email = "kayquesousa02004@gmail.com";
+    github = "kajoox";
+    githubId = 114672278;
+  };
   kalbasit = {
     email = "wael.nasreddine@gmail.com";
     matrix = "@kalbasit:matrix.org";
