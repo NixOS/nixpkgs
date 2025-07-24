@@ -19,6 +19,7 @@
   libXrender,
   libX11,
   libXext,
+  libxkbcommon,
   libxcb,
   nss,
   nspr,
@@ -140,6 +141,7 @@ jdk.overrideAttrs (oldAttrs: rec {
         libXrender
         libX11
         libXext
+        libxkbcommon
         libxcb
         nss
         nspr
