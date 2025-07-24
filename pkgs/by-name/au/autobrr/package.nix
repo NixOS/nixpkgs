@@ -40,6 +40,7 @@ let
         src
         sourceRoot
         ;
+      fetcherVersion = 1;
       hash = "sha256-XFGxutHWk1RHnrN//WVTr4RyARIkygdG2C1Af5W0dBc=";
     };
 

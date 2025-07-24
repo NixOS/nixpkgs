@@ -422,8 +422,6 @@ in
     } ./setuptools-build-hook.sh
   ) { };
 
-  setuptoolsCheckHook = throw "The setuptoolsCheckHook has been removed, since the test command has been removed in setuptools 72.0";
-
   setuptoolsRustBuildHook = callPackage (
     { makePythonHook, setuptools-rust }:
     makePythonHook {

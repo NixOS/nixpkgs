@@ -1158,6 +1158,8 @@ mapAliases {
   ma1sd = throw "ma1sd was dropped as it is unmaintained"; # Added 2024-07-10
   mac = monkeysAudio; # Added 2024-11-30
   MACS2 = macs2; # Added 2023-06-12
+  magma_2_6_2 = throw "'magma_2_6_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
+  magma_2_7_2 = throw "'magma_2_7_2' has been removed, use the latest 'magma' package instead."; # Added 2025-07-20
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailctl = throw "mailctl has been renamed to oama"; # Added 2024-08-19
   mailman-rss = throw "The mailman-rss package was dropped since it was unmaintained."; # Added 2024-06-21
@@ -2037,6 +2039,7 @@ mapAliases {
   wrapLisp_old = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   wmii_hg = wmii;
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
+  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead."; # Added 2024-11-22
   write_stylus = styluslabs-write-bin; # Added 2024-10-09
   wtf = lib.warnOnInstantiate "'wtf' has been renamed to 'wtfutil'." wtfutil; # Added 2025-03-01
 

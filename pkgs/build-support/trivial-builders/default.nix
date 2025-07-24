@@ -780,9 +780,6 @@ rec {
         ''
       );
 
-  # Remove after 25.05 branch-off
-  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
-
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
   writeClosure =

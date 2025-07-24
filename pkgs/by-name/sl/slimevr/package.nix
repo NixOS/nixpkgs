@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
+    fetcherVersion = 1;
     hash = "sha256-xCID9JOFEswsTbE5Dh6ZAkhhyy4eMuqkme54IdWfcks=";
   };
 
