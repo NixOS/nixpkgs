@@ -3228,7 +3228,7 @@ with pkgs;
 
   host = bind.host;
 
-  hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
+  hotdoc = callPackage ../development/tools/hotdoc { };
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
