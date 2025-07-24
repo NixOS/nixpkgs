@@ -12025,6 +12025,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  opencode-nvim = buildVimPlugin {
+    pname = "opencode.nvim";
+    version = "2025-07-24";
+    src = fetchFromGitHub {
+      owner = "NickvanDyke";
+      repo = "opencode.nvim";
+      rev = "db3aa9ca3b738600c81e29646a3356477dabaa87";
+      sha256 = "1yhspgja3zdnsf8r3ahci14cndk3bzxvq0w9jqggd7ya103nq6kz";
+    };
+    meta.homepage = "https://github.com/NickvanDyke/opencode.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   openingh-nvim = buildVimPlugin {
     pname = "openingh.nvim";
     version = "2025-05-01";
