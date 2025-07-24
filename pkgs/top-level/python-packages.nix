@@ -14854,11 +14854,6 @@ self: super: with self; {
 
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
-  pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nixVersions.nix_2_3;
-    meson = pkgs.meson.override { python3 = self.python; };
-  };
-
   pythonnet = callPackage ../development/python-modules/pythonnet { };
 
   pythonocc-core = toPythonModule (
