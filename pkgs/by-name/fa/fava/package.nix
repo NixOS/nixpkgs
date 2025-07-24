@@ -1,19 +1,45 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  buildNpmPackage,
+  fetchFromGitHub,
   stdenv,
 }:
+let
+  src = buildNpmPackage (finalAttrs: {
+    pname = "fava-frontend";
+    version = "1.30.5";
 
-python3Packages.buildPythonApplication rec {
+    src = fetchFromGitHub {
+      owner = "beancount";
+      repo = "fava";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-46ze+1sdgXq9Unhu1ec4buXbH3s/PCcfCx+rmYc+fZw=";
+    };
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+
+    npmDepsHash = "sha256-ImBNqccAd61c9ASzklcooQyh7BYdgJW9DTcQRmFHqho=";
+    makeCacheWritable = true;
+
+    preBuild = ''
+      chmod -R u+w ..
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R .. $out
+      runHook postInstall
+    '';
+  });
+in
+python3Packages.buildPythonApplication {
   pname = "fava";
   version = "1.30.5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pfnRNhAcyuYFHqPBF0qCrK7w1PJiMOdYXCGj+xXi6uQ=";
-  };
+  inherit src;
+
+  patches = [ ./dont-compile-frontend.patch ];
 
   postPatch = ''
     substituteInPlace tests/test_cli.py \
