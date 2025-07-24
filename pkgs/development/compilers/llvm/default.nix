@@ -2,6 +2,7 @@
   lib,
   callPackage,
   stdenvAdapters,
+  pkgsBuildBuild,
   buildPackages,
   targetPackages,
   stdenv,
