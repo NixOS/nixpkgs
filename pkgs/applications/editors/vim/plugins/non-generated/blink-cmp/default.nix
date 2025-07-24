@@ -58,6 +58,7 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       balssh
       redxtech
+      llakala
     ];
   };
 
