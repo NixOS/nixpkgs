@@ -24,10 +24,9 @@
   perlPackages,
   pkg-config,
   swig,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   python3,
-  replaceVars,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     swig
-    webkitgtk_4_0
+    webkitgtk_4_1
     python3
   ]
   ++ (with perlPackages; [
