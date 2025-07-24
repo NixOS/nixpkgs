@@ -1,8 +1,8 @@
 diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index b9381c3d7d..5e944640b5 100644
+index e95da44ea4..660fb647f2 100644
 --- a/Modules/Platform/UnixPaths.cmake
 +++ b/Modules/Platform/UnixPaths.cmake
-@@ -26,9 +26,6 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
+@@ -29,9 +29,6 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
  # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
  # synchronized
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
@@ -12,7 +12,7 @@ index b9381c3d7d..5e944640b5 100644
    # CMake install location
    "${_CMAKE_INSTALL_DIR}"
    )
-@@ -47,48 +44,49 @@ endif()
+@@ -51,48 +48,49 @@ _cmake_record_install_prefix()
  
  # Non "standard" but common install prefixes
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
@@ -81,10 +81,10 @@ index b9381c3d7d..5e944640b5 100644
  # Reminder when adding new locations computed from environment variables
  # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
 diff --git a/Modules/Platform/WindowsPaths.cmake b/Modules/Platform/WindowsPaths.cmake
-index b9e2f17979..ab517cd4a7 100644
+index c56dfaf9ac..403133273c 100644
 --- a/Modules/Platform/WindowsPaths.cmake
 +++ b/Modules/Platform/WindowsPaths.cmake
-@@ -70,7 +70,7 @@ endif()
+@@ -71,7 +71,7 @@ _cmake_record_install_prefix()
  
  if(CMAKE_CROSSCOMPILING AND NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
    # MinGW (useful when cross compiling from linux with CMAKE_FIND_ROOT_PATH set)
