@@ -3,7 +3,7 @@
  "!version": 1,
  "https://jitpack.io/com": {
   "github/ATLauncher/gradle-macappbundle#build/d22f8cdb94": {
-   "jar": "sha256-XGbB0YmVOlFzeMMuiQBUfrVV0jGTBH85Wm21cf8dyYY=",
+   "jar": "sha256-jH3SXauqKfj/wonbe/jaMPsISthckyuc1ygUSdbsQpE=",
    "module": "sha256-tZYrHWLuYmqeMw919dnXnIWR+ocLAmH/ZW0dgRAtnt8=",
    "pom": "sha256-ySbX7ZLlXt7l+JcGEqV/peu6T+h7oJp6s/d95XQdIVo="
   },
