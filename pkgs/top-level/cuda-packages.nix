@@ -70,7 +70,6 @@ let
     else
       pkgs.extend (
         final: _: {
-          __attrsFailEvaluation = true;
           recurseForDerivations = false;
           # The CUDA package set will be available as cudaPackages_x_y, so we need only update the aliases for the
           # minor-versioned and unversioned package sets.

@@ -29,7 +29,6 @@ let
     {
       inherit coq lib;
       coqPackages = self // {
-        __attrsFailEvaluation = true;
         recurseForDerivations = false;
       };
 

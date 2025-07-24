@@ -98,7 +98,7 @@ let
         set +e
         command time -o "$outputDir/timestats/$myChunk" \
           -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
-          nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          nix-env -f "${nixpkgs}/pkgs/top-level/release-outpaths-parallel.nix" \
           --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
