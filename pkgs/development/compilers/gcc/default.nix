@@ -55,6 +55,7 @@
   apple-sdk,
   cctools,
   darwin,
+  fixDarwinDylibDuplicateLcRpaths,
 }:
 
 let
@@ -151,6 +152,7 @@ let
       fetchpatch
       fetchurl
       flex
+      fixDarwinDylibDuplicateLcRpaths
       gettext
       gmp
       gnat-bootstrap
