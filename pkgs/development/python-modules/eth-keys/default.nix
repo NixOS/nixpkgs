@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "eth-keys";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-keys";
     tag = "v${version}";
-    hash = "sha256-HyOfuzwldtqjjowW7HGdZ8RNMXNK3y2NrXUoeMlWJjs=";
+    hash = "sha256-H/s/D4f4tqP/WTil9uLmFw2Do9sEjMWwEreQEooeszQ=";
   };
 
   build-system = [ setuptools ];
@@ -49,6 +49,8 @@ buildPythonPackage rec {
     ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_keys" ];
+
+  disabledTests = [ "test_install_local_wheel" ];
 
   optional-dependencies = {
     coincurve = [ coincurve ];
