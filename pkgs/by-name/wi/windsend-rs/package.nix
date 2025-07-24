@@ -14,14 +14,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "windsend-rs";
   version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A0cmjllyhKkYsMyjeuuMCax0uVnaDp9OwJPY7peDjPM=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9zuD3korJGIcarBV0bSSV/g/Q0niWAMqgRfwpPXCuBU=";
 
-  sourceRoot = "${src.name}/windSend-rs";
+  sourceRoot = "${finalAttrs.src.name}/windSend-rs";
 
   nativeBuildInputs = [
     pkg-config
@@ -71,4 +71,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
