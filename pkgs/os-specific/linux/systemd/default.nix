@@ -250,15 +250,10 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/pull/33400
       ./0018-bootctl-do-not-fail-when-the-same-file-is-updated-mu.patch
 
-      # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
-      # if the install prefix is not /usr, but that does not work for us
-      # because we include the config snippet manually
-      ./0019-meson-Don-t-link-ssh-dropins.patch
-
-      ./0020-install-unit_file_exists_full-follow-symlinks.patch
+      ./0019-install-unit_file_exists_full-follow-symlinks.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-      ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+      ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
@@ -509,7 +504,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
 
       # SSH
-      (lib.mesonOption "sshconfdir" "")
+      (lib.mesonOption "sshconfdir" "no")
       (lib.mesonOption "sshdconfdir" "no")
 
       # Features
