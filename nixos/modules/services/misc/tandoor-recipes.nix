@@ -7,31 +7,35 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  useNewMediaRoot = lib.versionAtLeast config.system.stateVersion "25.11";
 
   # SECRET_KEY through an env file
-  env =
-    {
-      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-      DEBUG = "0";
-      DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
-    }
-    // lib.optionalAttrs (config.time.timeZone != null) {
-      TZ = config.time.timeZone;
-    }
-    // (lib.mapAttrs (_: toString) cfg.extraConfig);
+  env = {
+    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+    DEBUG = "0";
+    DEBUG_TOOLBAR = "0";
+    MEDIA_ROOT = "${stateDir}${lib.optionalString useNewMediaRoot "/media"}";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    TZ = config.time.timeZone;
+  }
+  // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $MainPID -m -S $UID -G $GID --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    doc = ./tandoor-recipes.md;
+  };
 
   options.services.tandoor-recipes = {
     enable = lib.mkOption {
@@ -101,6 +105,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (!useNewMediaRoot && !(cfg.extraConfig ? MEDIA_ROOT)) [
+      "`services.tandoor-recipes.extraConfig.MEDIA_ROOT` is unset. This is considered insecure for `system.stateVersion` < 25.11. See https://nixos.org/manual/nixos/stable/#module-services-tandoor-recipes-migrating-media for migration instructions."
+    ];
+
     users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
       tandoor_recipes = {
         inherit (cfg) group;
@@ -126,8 +134,11 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+        ]
+        ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
