@@ -4,6 +4,7 @@
   lib,
   electron,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 buildNpmPackage rec {
@@ -13,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "shy1132";
     repo = "VacuumTube";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-xyfm8c/27WzO5FA9fCvSsDS0sRP/KPEPnN95QYDMVcM=";
   };
 
@@ -25,12 +26,11 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   buildPhase = ''
     runHook preBuild
-
-    export HOME=$(mktemp -d)
 
     npx electron-builder -l --dir \
       -c.electronDist="${electron.dist}" \
