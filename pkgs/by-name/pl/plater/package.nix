@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plater";
-  version = "2020-07-30";
+  version = "2025-03-24";
 
   src = fetchFromGitHub {
     owner = "Rhoban";
     repo = "Plater";
-    rev = "f8de6d038f95a9edebfcfe142c8e9783697d5b47";
-    hash = "sha256-JFs/p7psUEpy3LC7R03OCVxt/vENy6aiCvub0P6qQGQ=";
+    rev = "6c4f924504979095b1b45cf8fd81b1e38f0f8642";
+    hash = "sha256-+iL5Gl7k4lPikRwkyhaXSEcFYmhXV4ubAvP3iTBXDO8=";
   };
 
   nativeBuildInputs = [
