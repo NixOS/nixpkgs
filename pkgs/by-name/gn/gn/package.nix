@@ -8,9 +8,9 @@
 
   # Note: Please use the recommended version for Chromium stable, i.e. from
   # <nixpkgs>/pkgs/applications/networking/browsers/chromium/info.json
-  version ? "0-unstable-2025-04-28",
-  rev ? "85cc21e94af590a267c1c7a47020d9b420f8a033",
-  hash ? "sha256-nc0ls1xKYq80mwPeOQpUI62x7ClBhaXaDGazoXdKFbg=",
+  version ? "0-unstable-2025-05-21",
+  rev ? "ebc8f16ca7b0d36a3e532ee90896f9eb48e5423b",
+  hash ? "sha256-9SxC/nXBjr2EYVM3fchgGUxgaf6W3MJziLUO1HvlmSk=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
