@@ -15827,6 +15827,8 @@ self: super: with self; {
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
+  rich-tables = callPackage ../development/python-modules/rich-tables { };
+
   rich-theme-manager = callPackage ../development/python-modules/rich-theme-manager { };
 
   rich-toolkit = callPackage ../development/python-modules/rich-toolkit { };
