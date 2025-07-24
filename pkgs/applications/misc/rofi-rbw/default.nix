@@ -1,9 +1,7 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  configargparse,
-  hatchling,
   rbw,
 
   waylandSupport ? false,
@@ -15,7 +13,7 @@
   xdotool,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rofi-rbw";
   version = "1.5.1";
   format = "pyproject";
@@ -27,7 +25,7 @@ buildPythonApplication rec {
     hash = "sha256-Qdbz3UjWMCuJUzR6UMt/apt+OjMAr2U7uMtv9wxEZKE=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     hatchling
   ];
 
@@ -43,7 +41,7 @@ buildPythonApplication rec {
     xdotool
   ];
 
-  propagatedBuildInputs = [ configargparse ];
+  propagatedBuildInputs = with python3Packages; [ configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 

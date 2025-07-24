@@ -1,19 +1,13 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
+  python3Packages,
+  fetchPypi,
   iverilog,
   verilator,
   gnumake,
-  edalize,
-  fastjsonschema,
-  pyparsing,
-  pyyaml,
-  simplesat,
-  ipyxact,
-  setuptools-scm,
 }:
-buildPythonPackage rec {
+
+python3Packages.buildPythonPackage rec {
   pname = "fusesoc";
   version = "2.2.1";
   format = "setuptools";
@@ -23,9 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-M36bXBgY8hR33AVDlHoH8PZJG2Bi0KOEI07IMns7R4w=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     edalize
     fastjsonschema
     pyparsing

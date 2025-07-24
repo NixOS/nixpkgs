@@ -1,11 +1,11 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
   installShellFiles,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "grc";
   version = "1.13";
   format = "other";

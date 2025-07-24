@@ -1,21 +1,11 @@
 {
-  stdenv,
   lib,
-  buildPythonApplication,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
-  lxml,
-  matplotlib,
-  numpy,
-  opencv-python,
-  pymavlink,
-  pyserial,
-  setuptools,
-  wxpython,
-  billiard,
-  gnureadline,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "MAVProxy";
   version = "1.8.71";
   format = "setuptools";
@@ -27,20 +17,22 @@ buildPythonApplication rec {
     hash = "sha256-A7tqV1kBCSuWHJUTdUZGcPY/r7X1edGZs6xDctpMbMI=";
   };
 
-  propagatedBuildInputs = [
-    lxml
-    matplotlib
-    numpy
-    opencv-python
-    pymavlink
-    pyserial
-    setuptools
-    wxpython
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    billiard
-    gnureadline
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      lxml
+      matplotlib
+      numpy
+      opencv-python
+      pymavlink
+      pyserial
+      setuptools
+      wxpython
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      billiard
+      gnureadline
+    ];
 
   # No tests
   doCheck = false;

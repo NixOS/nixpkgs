@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  i3ipc,
-  importlib-metadata,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "autotiling";
   version = "1.9.3";
   format = "setuptools";
@@ -18,10 +16,11 @@ buildPythonApplication rec {
     hash = "sha256-k+UiAGMB/fJiE+C737yGdyTpER1ciZrMkZezkcn/4yk=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     i3ipc
     importlib-metadata
   ];
+
   doCheck = false;
 
   meta = with lib; {

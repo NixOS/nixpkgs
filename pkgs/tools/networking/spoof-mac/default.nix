@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  docopt,
 }:
 
-buildPythonPackage {
+python3Packages.buildPythonPackage {
   pname = "spoof-mac";
   version = "unstable-2018-01-27";
   format = "setuptools";
@@ -17,7 +16,7 @@ buildPythonPackage {
     sha256 = "sha256-Qiu0URjUyx8QDVQQUFGxPax0J80e2m4+bPJeqFoKxX8=";
   };
 
-  propagatedBuildInputs = [ docopt ];
+  propagatedBuildInputs = with python3Packages; [ docopt ];
 
   # No tests
   doCheck = false;

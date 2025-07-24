@@ -1,11 +1,10 @@
 {
-  buildPythonApplication,
-  fetchPypi,
   lib,
-  pycryptodome,
+  python3Packages,
+  fetchPypi,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dcnnt";
   version = "0.10.0";
   format = "setuptools";
@@ -15,7 +14,7 @@ buildPythonApplication rec {
     hash = "sha256-73ZLgb5YcXlAOjbKLVv8oqgS6pstBdJxa7LFUgIHpUE=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pycryptodome
   ];
 

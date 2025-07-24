@@ -1,11 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
   installShellFiles,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-imerge";
   version = "1.2.0";
   format = "setuptools";

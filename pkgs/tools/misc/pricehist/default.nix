@@ -1,18 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitLab,
-  requests,
-  lxml,
-  cssselect,
-  curlify,
-  poetry-core,
-  pytest-mock,
-  responses,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pricehist";
   version = "1.4.7";
   format = "pyproject";
@@ -24,7 +16,7 @@ buildPythonApplication rec {
     hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     requests
     lxml
     cssselect
@@ -35,7 +27,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     responses
     pytest-mock
     pytestCheckHook

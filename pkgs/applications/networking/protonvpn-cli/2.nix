@@ -1,24 +1,18 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pythonOlder,
-  requests,
-  docopt,
-  pythondialog,
-  jinja2,
-  distro,
   dialog,
-  iptables,
   openvpn,
+  iptables,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "protonvpn-cli_2";
   version = "2.2.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = python3Packages.pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Rafficer";
@@ -28,16 +22,19 @@ buildPythonApplication rec {
     sha256 = "sha256-vNbqjdkIRK+MkYRKUUe7W5Ytc1PU1t5ZLr9fPDOZXUs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    docopt
-    pythondialog
-    jinja2
-    distro
-    dialog
-    openvpn
-    iptables
-  ];
+  propagatedBuildInputs =
+    (with python3Packages; [
+      requests
+      docopt
+      pythondialog
+      jinja2
+      distro
+    ])
+    ++ [
+      dialog
+      openvpn
+      iptables
+    ];
 
   # No tests
   doCheck = false;

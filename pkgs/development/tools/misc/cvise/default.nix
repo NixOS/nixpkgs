@@ -1,21 +1,17 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   clang-tools,
-  cmake,
   colordiff,
   flex,
+  # cvise keeps up with fresh llvm releases and supports wide version range
   libclang,
   llvm,
   unifdef,
-  chardet,
-  pebble,
-  psutil,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cvise";
   version = "2.11.0";
   format = "other";
@@ -44,7 +40,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    cmake
+    python3Packages.cmake # TODO: swap this out for the non-python cmake
     flex
     llvm.dev
   ];
@@ -56,14 +52,14 @@ buildPythonApplication rec {
     unifdef
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     chardet
     pebble
     psutil
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    python3Packages.pytestCheckHook
     unifdef
   ];
 

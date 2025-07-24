@@ -1,15 +1,14 @@
 {
   lib,
+  python3Packages,
   fetchurl,
-  buildPythonApplication,
   libjack2,
-  pyqt5,
   qt5,
   which,
   bash,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "patchance";
   version = "1.1.0";
 
@@ -21,7 +20,7 @@ buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    pyqt5 # pyuic5 and pyrcc5 to build resources.
+    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
     qt5.qttools # lrelease to build translations.
     which # which to find lrelease.
     qt5.wrapQtAppsHook
@@ -30,7 +29,7 @@ buildPythonApplication rec {
     libjack2
     bash
   ];
-  propagatedBuildInputs = [ pyqt5 ];
+  propagatedBuildInputs = with python3Packages; [ pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.
 

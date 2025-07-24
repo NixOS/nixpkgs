@@ -1,19 +1,12 @@
 {
   lib,
+  python3Packages,
   fetchPypi,
-  buildPythonApplication,
-  poetry-core,
-  colorama,
-  packaging,
-  pydantic,
-  requests,
-  pygobject3,
-  tqdm,
   gobject-introspection,
   wrapGAppsNoGuiHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gnome-extensions-cli";
   version = "0.10.6";
   format = "pyproject";
@@ -26,7 +19,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    poetry-core
+    python3Packages.poetry-core
     wrapGAppsNoGuiHook
   ];
 
@@ -35,7 +28,7 @@ buildPythonApplication rec {
     "packaging"
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     colorama
     packaging
     pydantic

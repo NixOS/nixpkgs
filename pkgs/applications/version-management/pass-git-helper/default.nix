@@ -1,15 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  pyxdg,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pass-git-helper";
   version = "3.3.0";
   pyproject = true;
@@ -21,15 +16,15 @@ buildPythonApplication rec {
     sha256 = "sha256-Y+Y/WcVY5XrxhLoixWwsi9TMkWsJ+jXbs1rZuzo3MFo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [ pyxdg ];
+  dependencies = with python3Packages; [ pyxdg ];
 
   env.HOME = "$TMPDIR";
 
   pythonImportsCheck = [ "passgithelper" ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
     pytest-mock

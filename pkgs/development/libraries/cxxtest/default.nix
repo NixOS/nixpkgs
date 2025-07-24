@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  ply,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cxxtest";
   version = "4.4";
   format = "setuptools";
@@ -19,7 +18,7 @@ buildPythonApplication rec {
 
   sourceRoot = "${src.name}/python";
 
-  nativeCheckInputs = [ ply ];
+  nativeCheckInputs = [ python3Packages.ply ];
 
   preCheck = ''
     cd ../

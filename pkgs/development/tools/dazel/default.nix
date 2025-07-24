@@ -1,9 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
 }:
-buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   version = "0.0.42";
   format = "setuptools";
   pname = "dazel";

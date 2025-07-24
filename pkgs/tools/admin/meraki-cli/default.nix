@@ -1,17 +1,10 @@
 {
   lib,
-  argcomplete,
-  jinja2,
-  meraki,
-  rich,
+  python3Packages,
   fetchPypi,
-  buildPythonApplication,
-  pytestCheckHook,
-  requests-mock,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "meraki-cli";
   version = "1.5.1";
   pyproject = true;
@@ -30,18 +23,18 @@ buildPythonApplication rec {
     "TestUpgrade"
   ];
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     argcomplete
     jinja2
     meraki
     rich
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     requests-mock
   ];

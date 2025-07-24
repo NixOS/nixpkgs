@@ -1,22 +1,11 @@
 {
   lib,
-  buildPythonApplication,
-  fetchPypi,
   stdenv,
-  click,
-  coloredlogs,
-  mido,
-  psutil,
-  pycyphal,
-  pysdl2,
-  python-rtmidi,
-  ruamel-yaml,
-  requests,
-  scipy,
-  simplejson,
+  python3Packages,
+  fetchPypi,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "yakut";
   version = "0.14.1";
   format = "setuptools";
@@ -29,7 +18,8 @@ buildPythonApplication rec {
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
   ];
-  dependencies = [
+
+  dependencies = with python3Packages; [
     click
     coloredlogs
     psutil
@@ -39,7 +29,8 @@ buildPythonApplication rec {
     scipy
     simplejson
   ];
-  optional-dependencies.joystick = [
+
+  optional-dependencies.joystick = with python3Packages; [
     pysdl2
     mido
     python-rtmidi

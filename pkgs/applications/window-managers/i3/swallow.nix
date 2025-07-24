@@ -1,14 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  poetry-core,
-  i3ipc,
-  xlib,
-  six,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 
@@ -21,11 +17,11 @@ buildPythonApplication {
     sha256 = "1l3x8mixwq4n0lnyp0wz5vijgnypamq6lqjazcd2ywl2jv8d6fif";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     i3ipc
     xlib
     six

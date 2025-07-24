@@ -1,21 +1,12 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  click,
-  semantic-version,
-  requests,
-  colorama,
-  pyserial,
-  wheel,
   scons,
-  setuptools,
   tinyprog,
-  flit-core,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "apio";
   version = "0.9.5";
 
@@ -50,11 +41,11 @@ buildPythonApplication rec {
         'version = semantic_version.Version(pkg_version.replace(".dev", "-dev"))'
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     semantic-version
     requests
@@ -67,7 +58,7 @@ buildPythonApplication rec {
     tinyprog # needed for upload to TinyFPGA
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

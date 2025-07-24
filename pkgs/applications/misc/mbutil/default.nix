@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mbutil";
   version = "0.3.0";
   pyproject = true;
@@ -20,9 +18,10 @@ buildPythonApplication rec {
 
   patches = [ ./migrate_to_pytest.patch ];
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
   enabledTestPaths = [ "test/test.py" ];
 
   meta = {

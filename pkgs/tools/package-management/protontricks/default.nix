@@ -1,23 +1,18 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   replaceVars,
   writeShellScript,
   steam-run,
   fetchpatch2,
-  setuptools-scm,
-  setuptools,
-  vdf,
-  pillow,
   winetricks,
   yad,
-  pytestCheckHook,
   nix-update-script,
   extraCompatPaths ? "",
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "protontricks";
   version = "1.12.1";
   format = "setuptools";
@@ -46,9 +41,9 @@ buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     setuptools # implicit dependency, used to find data/icon_placeholder.png
     vdf
     pillow
@@ -66,7 +61,7 @@ buildPythonApplication rec {
   ]
   ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
   # In most cases the script is unnecessary and should be removed as part of the packaging process.

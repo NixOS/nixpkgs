@@ -1,11 +1,10 @@
 {
-  buildPythonApplication,
-  fetchFromGitHub,
-  dnslib,
   lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "dnschef";
   version = "0.4";
 
@@ -21,7 +20,7 @@ buildPythonApplication {
     install -D ./dnschef.py $out/bin/dnschef
   '';
 
-  propagatedBuildInputs = [ dnslib ];
+  propagatedBuildInputs = with python3Packages; [ dnslib ];
 
   meta = with lib; {
     homepage = "https://github.com/iphelix/dnschef";

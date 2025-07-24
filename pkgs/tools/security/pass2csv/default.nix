@@ -1,12 +1,10 @@
 {
-  buildPythonApplication,
-  fetchPypi,
   lib,
-  python-gnupg,
-  setuptools,
+  python3Packages,
+  fetchPypi,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pass2csv";
   version = "1.2.0";
   pyproject = true;
@@ -16,11 +14,11 @@ buildPythonApplication rec {
     hash = "sha256-IdcSwQ9O2HmCvT8p4tC7e2GQuhkE3kvMINszZH970og=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     python-gnupg
   ];
 

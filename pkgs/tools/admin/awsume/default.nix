@@ -1,18 +1,11 @@
 {
   lib,
-  python,
+  python3Packages,
   installShellFiles,
-  buildPythonApplication,
   fetchFromGitHub,
-  boto3,
-  colorama,
-  psutil,
-  pluggy,
-  pyyaml,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "awsume";
   version = "4.5.5";
   format = "setuptools";
@@ -28,7 +21,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     colorama
     boto3
     psutil
@@ -45,9 +38,9 @@ buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --cmd awsume \
-      --bash <(PYTHONPATH=./awsume/configure ${python}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
-      --zsh <(PYTHONPATH=./awsume/configure ${python}/bin/python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
-      --fish <(PYTHONPATH=./awsume/configure ${python}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
+      --bash <(PYTHONPATH=./awsume/configure ${python3Packages.python}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
+      --zsh <(PYTHONPATH=./awsume/configure ${python3Packages.python}/bin/python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
+      --fish <(PYTHONPATH=./awsume/configure ${python3Packages.python}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
 
     rm -f $out/bin/awsume.bat
   '';

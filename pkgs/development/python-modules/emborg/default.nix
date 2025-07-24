@@ -1,29 +1,16 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
   borgbackup,
-  appdirs,
-  arrow,
-  docopt,
-  inform,
-  nestedtext,
-  parametrize-from-file,
-  quantiphy,
-  requests,
-  shlib,
-  voluptuous,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "emborg";
   version = "1.42";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
@@ -32,9 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-/xinm/Jz4JVmm0jioLAhkbBueZCM0ehgt4gsgE7hX6I=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = with python3Packages; [ flit-core ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     appdirs
     arrow
     docopt
@@ -43,14 +30,17 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    nestedtext
-    parametrize-from-file
-    pytestCheckHook
-    shlib
-    voluptuous
-    borgbackup
-  ];
+  nativeCheckInputs =
+    (with python3Packages; [
+      nestedtext
+      parametrize-from-file
+      pytestCheckHook
+      shlib
+      voluptuous
+    ])
+    ++ [
+      borgbackup
+    ];
 
   # this disables testing fuse mounts
   MISSING_DEPENDENCIES = "fuse";
