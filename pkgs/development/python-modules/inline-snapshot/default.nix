@@ -41,19 +41,18 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      asttokens
-      black
-      click
-      executing
-      rich
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      types-toml
-      toml
-    ];
+  dependencies = [
+    asttokens
+    black
+    click
+    executing
+    rich
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    types-toml
+    toml
+  ];
 
   nativeCheckInputs = [
     dirty-equals

@@ -90,7 +90,8 @@ stdenv.mkDerivation (
       platforms = graalvmDrv.meta.platforms;
       # default to executable name
       mainProgram = executable;
-    } // meta;
+    }
+    // meta;
   }
   // extraArgs
 )

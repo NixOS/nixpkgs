@@ -49,7 +49,8 @@ buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];

@@ -31,19 +31,18 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
     libsForQt5.qttools
   ];
-  buildInputs =
-    [
-      libsForQt5.qtbase
-      libsForQt5.qtmultimedia
-      libpng
-      gsl
-      libsndfile
-      lzo
-    ]
-    ++ lib.optionals withOpenCL [
-      opencl-clhpp
-      ocl-icd
-    ];
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libpng
+    gsl
+    libsndfile
+    lzo
+  ]
+  ++ lib.optionals withOpenCL [
+    opencl-clhpp
+    ocl-icd
+  ];
 
   sourceRoot = "${src.name}/mandelbulber2";
 

@@ -100,7 +100,8 @@ in
       path = [
         config.systemd.package
         pkgs.git
-      ] ++ cfg.runtimePackages;
+      ]
+      ++ cfg.runtimePackages;
 
       serviceConfig = {
         User = "renovate";

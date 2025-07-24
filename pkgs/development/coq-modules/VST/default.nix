@@ -11,17 +11,16 @@
 #  but that may be useful to some users.
 # They depend on ITree.
 let
-  extra_floyd_files =
-    [
-      "ASTsize.v"
-      "io_events.v"
-      "powerlater.v"
-    ]
-    # floyd/printf.v is broken in VST 2.9
-    ++ lib.optional (!lib.versions.isGe "8.13" coq.coq-version) "printf.v"
-    ++ [
-      "quickprogram.v"
-    ];
+  extra_floyd_files = [
+    "ASTsize.v"
+    "io_events.v"
+    "powerlater.v"
+  ]
+  # floyd/printf.v is broken in VST 2.9
+  ++ lib.optional (!lib.versions.isGe "8.13" coq.coq-version) "printf.v"
+  ++ [
+    "quickprogram.v"
+  ];
 in
 
 mkCoqDerivation {

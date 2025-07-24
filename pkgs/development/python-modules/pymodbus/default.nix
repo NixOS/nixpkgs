@@ -47,7 +47,8 @@ buildPythonPackage rec {
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     pushd test
@@ -59,16 +60,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests =
-    [
-      # Tests often hang
-      "test_connected"
-    ]
-    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-      "test_split_serial_packet"
-      "test_serial_poll"
-      "test_simulator"
-    ];
+  disabledTests = [
+    # Tests often hang
+    "test_connected"
+  ]
+  ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+    "test_split_serial_packet"
+    "test_serial_poll"
+    "test_simulator"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";

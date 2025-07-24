@@ -73,21 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      gtk3
-      girara
-      libintl
-      sqlite
-      glib
-      file
-      librsvg
-      check
-      json-glib
-      texlive.bin.core
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  buildInputs = [
+    gtk3
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
+    texlive.bin.core
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {

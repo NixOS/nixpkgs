@@ -164,7 +164,8 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
-  ] ++ optional-dependencies.http2;
+  ]
+  ++ optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
 

@@ -39,15 +39,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-XEjRklbvYV7UoVX12iW6s1mS8pzIljla488CQNuFfto=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withPython [
-      swig
-      python3.pkgs.setuptools
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withPython [
+    swig
+    python3.pkgs.setuptools
+  ];
 
   buildInputs = [
     cairo
@@ -67,7 +66,8 @@ stdenv.mkDerivation rec {
     proj
     protobufc
     zlib
-  ] ++ lib.optional withPython python3;
+  ]
+  ++ lib.optional withPython python3;
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_KML" true)

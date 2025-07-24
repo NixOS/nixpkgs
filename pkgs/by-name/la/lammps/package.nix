@@ -74,23 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
   };
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    ]
-    ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
-    ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ]
+  ++ (lib.mapAttrsToList (n: v: lib.cmakeBool "PKG_${n}" v) packages)
+  ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
 
-  buildInputs =
-    [
-      fftw
-      libpng
-      blas
-      lapack
-      gzip
-    ]
-    ++ lib.optionals packages.PYTHON [ python3 ]
-    ++ extraBuildInputs;
+  buildInputs = [
+    fftw
+    libpng
+    blas
+    lapack
+    gzip
+  ]
+  ++ lib.optionals packages.PYTHON [ python3 ]
+  ++ extraBuildInputs;
 
   postInstall = ''
     # For backwards compatibility

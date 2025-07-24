@@ -73,51 +73,49 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # to build bundled libdispatch
-      clang
-      gobject-introspection
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # to build bundled libdispatch
+    clang
+    gobject-introspection
+  ];
 
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtsvg
-      lz4
-      xxHash
-      ffmpeg_6
-      openalSoft
-      minizip
-      libopus
-      range-v3
-      tl-expected
-      rnnoise
-      tg_owt
-      microsoft-gsl
-      boost
-      ada
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      protobuf
-      qtwayland
-      kcoreaddons
-      alsa-lib
-      libpulseaudio
-      hunspell
-      jemalloc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      libicns
-    ];
+  buildInputs = [
+    qtbase
+    qtimageformats
+    qtsvg
+    lz4
+    xxHash
+    ffmpeg_6
+    openalSoft
+    minizip
+    libopus
+    range-v3
+    tl-expected
+    rnnoise
+    tg_owt
+    microsoft-gsl
+    boost
+    ada
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
+    qtwayland
+    kcoreaddons
+    alsa-lib
+    libpulseaudio
+    hunspell
+    jemalloc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    libicns
+  ];
 
   dontWrapQtApps = true;
 

@@ -39,30 +39,29 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      defusedxml
-      lxml
-      relatorio
-      genshi
-      python-dateutil
-      polib
-      python-sql
-      werkzeug
-      passlib
+  dependencies = [
+    defusedxml
+    lxml
+    relatorio
+    genshi
+    python-dateutil
+    polib
+    python-sql
+    werkzeug
+    passlib
 
-      # extra dependencies
-      pydot
-      levenshtein
-      html2text
-      weasyprint
-      gevent
-      pillow
-    ]
-    ++ relatorio.optional-dependencies.fodt
-    ++ passlib.optional-dependencies.bcrypt
-    ++ passlib.optional-dependencies.argon2
-    ++ lib.optional withPostgresql psycopg2;
+    # extra dependencies
+    pydot
+    levenshtein
+    html2text
+    weasyprint
+    gevent
+    pillow
+  ]
+  ++ relatorio.optional-dependencies.fodt
+  ++ passlib.optional-dependencies.bcrypt
+  ++ passlib.optional-dependencies.argon2
+  ++ lib.optional withPostgresql psycopg2;
 
   nativeCheckInputs = [ unittestCheckHook ];
 

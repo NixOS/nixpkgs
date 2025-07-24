@@ -30,23 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      libqalculate
-      libarchive
-      muparser
-      qt6.qtbase
-      qt6.qtscxml
-      qt6.qtsvg
-      qt6.qtdeclarative
-      qt6.qtwayland
-      qt6.qt5compat
-      qt6.qttools
-    ]
-    ++ (with python3Packages; [
-      python
-      pybind11
-    ]);
+  buildInputs = [
+    libqalculate
+    libarchive
+    muparser
+    qt6.qtbase
+    qt6.qtscxml
+    qt6.qtsvg
+    qt6.qtdeclarative
+    qt6.qtwayland
+    qt6.qt5compat
+    qt6.qttools
+  ]
+  ++ (with python3Packages; [
+    python
+    pybind11
+  ]);
 
   postPatch = ''
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;

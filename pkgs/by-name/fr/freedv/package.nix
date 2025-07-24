@@ -40,15 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/codesign/d;/hdiutil/d" src/CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      macdylibbundler
-      makeWrapper
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    macdylibbundler
+    makeWrapper
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = [
     codec2
@@ -59,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     hamlib_4
     wxGTK32
     sioclient
-  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
+  ]
+  ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
 
   cmakeFlags = [
     (lib.cmakeBool "USE_INTERNAL_CODEC2" false)

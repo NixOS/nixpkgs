@@ -190,7 +190,8 @@ makeScopeWithSplicing' {
             configuration = {
               imports = [
                 ../../nixos/modules/profiles/nix-builder-vm.nix
-              ] ++ modules;
+              ]
+              ++ modules;
 
               # If you need to override this, consider starting with the right Nixpkgs
               # in the first place, ie change `pkgs` in `pkgs.darwin.linux-builder`.

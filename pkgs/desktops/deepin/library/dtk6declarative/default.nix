@@ -33,14 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs =
-    [ dtk6gui ]
-    ++ (with qt6Packages; [
-      qtbase
-      qtdeclarative
-      qtshadertools
-      qt5compat
-    ]);
+  propagatedBuildInputs = [
+    dtk6gui
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    qtdeclarative
+    qtshadertools
+    qt5compat
+  ]);
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"

@@ -39,7 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     alembic
     pytestCheckHook
-  ] ++ optional-dependencies.shapely;
+  ]
+  ++ optional-dependencies.shapely;
 
   disabledTestPaths = [
     # tests require live databases

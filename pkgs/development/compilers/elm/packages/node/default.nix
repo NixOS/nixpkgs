@@ -59,14 +59,12 @@ with elmLib;
     in
     patched.override (old: {
       inherit ESBUILD_BINARY_PATH;
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate, same as for elm-coverage below
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
+      preRebuild = (old.preRebuild or "") + ''
+        # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+        # in case of just this package
+        # TODO: investigate, same as for elm-coverage below
+        sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+      '';
     });
 
   elm-coverage =
@@ -75,23 +73,19 @@ with elmLib;
     in
     patched.override (old: {
       # Symlink Elm instrument binary
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # Noop custom installation script
-          sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
+      preRebuild = (old.preRebuild or "") + ''
+        # Noop custom installation script
+        sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
 
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
-      postInstall =
-        (old.postInstall or "")
-        + ''
-          mkdir -p unpacked_bin
-          ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
-        '';
+        # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+        # in case of just this package
+        # TODO: investigate
+        sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+      '';
+      postInstall = (old.postInstall or "") + ''
+        mkdir -p unpacked_bin
+        ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
+      '';
       meta =
         with lib;
         nodePkgs.elm-coverage.meta

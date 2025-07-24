@@ -71,52 +71,51 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      airspy
-      airspyhf
-      aptdec
-      boost
-      cm256cc
-      codec2
-      dab_lib
-      dsdcc
-      faad2
-      ffmpeg
-      fftwFloat
-      flac
-      glew
-      hackrf
-      hidapi
-      libbladeRF
-      libiio
-      libopus
-      libpulseaudio
-      libusb1
-      limesuite
-      mbelib
-      opencv4
-      qt5compat
-      qtcharts
-      qtdeclarative
-      qtlocation
-      qtmultimedia
-      qtscxml
-      qtserialport
-      qtspeech
-      qttools
-      qtwebsockets
-      qtwebengine
-      rtl-sdr
-      serialdv
-      sgp4
-      soapysdr-with-plugins
-      uhd
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals withSDRplay [ sdrplay ];
+  buildInputs = [
+    airspy
+    airspyhf
+    aptdec
+    boost
+    cm256cc
+    codec2
+    dab_lib
+    dsdcc
+    faad2
+    ffmpeg
+    fftwFloat
+    flac
+    glew
+    hackrf
+    hidapi
+    libbladeRF
+    libiio
+    libopus
+    libpulseaudio
+    libusb1
+    limesuite
+    mbelib
+    opencv4
+    qt5compat
+    qtcharts
+    qtdeclarative
+    qtlocation
+    qtmultimedia
+    qtscxml
+    qtserialport
+    qtspeech
+    qttools
+    qtwebsockets
+    qtwebengine
+    rtl-sdr
+    serialdv
+    sgp4
+    soapysdr-with-plugins
+    uhd
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals withSDRplay [ sdrplay ];
 
   patches = [
     # https://github.com/f4exb/sdrangel/pull/2439

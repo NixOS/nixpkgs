@@ -25,13 +25,12 @@ buildNpmPackage rec {
     ln -s npm-shrinkwrap.json package-lock.json
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
   env.PUPPETEER_SKIP_DOWNLOAD = true;
 

@@ -42,7 +42,8 @@ runCommand "julia-depot"
       git
       julia
       (python3.withPackages (ps: with ps; [ pyyaml ]))
-    ] ++ extraLibs;
+    ]
+    ++ extraLibs;
     inherit precompile registry;
   }
   (

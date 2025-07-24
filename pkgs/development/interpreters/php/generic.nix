@@ -236,7 +236,8 @@ let
             libtool
             pkg-config
             re2c
-          ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+          ]
+          ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension

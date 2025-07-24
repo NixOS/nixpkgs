@@ -78,18 +78,17 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  configureFlags =
-    [
-      "--bindir=\${bin}/bin"
-      "--sbindir=\${bin}/bin"
-      "--datadir=\${doc}/share"
-      "--mandir=\${man}/share/man"
-    ]
-    ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
-    # jq is linked to libjq:
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}"
-    # https://github.com/jqlang/jq/issues/3252
-    ++ lib.optional stdenv.hostPlatform.isOpenBSD "CFLAGS=-D_BSD_SOURCE=1";
+  configureFlags = [
+    "--bindir=\${bin}/bin"
+    "--sbindir=\${bin}/bin"
+    "--datadir=\${doc}/share"
+    "--mandir=\${man}/share/man"
+  ]
+  ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
+  # jq is linked to libjq:
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}"
+  # https://github.com/jqlang/jq/issues/3252
+  ++ lib.optional stdenv.hostPlatform.isOpenBSD "CFLAGS=-D_BSD_SOURCE=1";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100

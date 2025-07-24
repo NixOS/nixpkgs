@@ -34,24 +34,23 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      flac
-      freetype
-      glew
-      libjpeg
-      libvorbis
-      openal
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXi
-      libXcursor
-      libXrandr
-      libXrender
-      xcbutilimage
-    ];
+  buildInputs = [
+    flac
+    freetype
+    glew
+    libjpeg
+    libvorbis
+    openal
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libX11
+    libXi
+    libXcursor
+    libXrandr
+    libXrender
+    xcbutilimage
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "SFML_INSTALL_PKGCONFIG_FILES" true)

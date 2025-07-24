@@ -73,7 +73,8 @@ buildPythonPackage rec {
 
     # fastapi
     httpx
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # AssertionError: assert 'c7a05e2b-8a21-4255-a3ed-92cea1e74a62' is None

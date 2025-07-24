@@ -69,7 +69,8 @@ stdenv.mkDerivation (
         }
         .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name
       }"
-    ] ++ (args.makeFlags or [ ]);
+    ]
+    ++ (args.makeFlags or [ ]);
 
     installPhase = ''
       runHook preInstall
@@ -88,14 +89,16 @@ stdenv.mkDerivation (
       # libretro repos sometimes has a fake tag like "Current", ignore
       # it by setting hardcodeZeroVersion
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-    } // (args.passthru or { });
+    }
+    // (args.passthru or { });
 
     meta = {
       inherit mainProgram;
       inherit (retroarch-bare.meta) platforms;
       homepage = "https://www.libretro.com/";
       teams = [ lib.teams.libretro ];
-    } // (args.meta or { });
+    }
+    // (args.meta or { });
   }
   // extraArgs
 )

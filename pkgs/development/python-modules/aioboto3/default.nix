@@ -41,22 +41,22 @@ buildPythonPackage rec {
   dependencies = [
     aiobotocore
     aiofiles
-  ] ++ aiobotocore.optional-dependencies.boto3;
+  ]
+  ++ aiobotocore.optional-dependencies.boto3;
 
   optional-dependencies = {
     chalice = [ chalice ];
     s3cse = [ cryptography ];
   };
 
-  nativeCheckInputs =
-    [
-      dill
-      moto
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ moto.optional-dependencies.server
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    dill
+    moto
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioboto3" ];
 

@@ -208,28 +208,27 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      click
-      docker-pycreds
-      gitpython
-      platformdirs
-      protobuf
-      psutil
-      pydantic
-      pyyaml
-      requests
-      sentry-sdk
-      setproctitle
-      # setuptools is necessary since pkg_resources is required at runtime.
-      setuptools
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      eval-type-backport
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [
-      typing-extensions
-    ];
+  dependencies = [
+    click
+    docker-pycreds
+    gitpython
+    platformdirs
+    protobuf
+    psutil
+    pydantic
+    pyyaml
+    requests
+    sentry-sdk
+    setproctitle
+    # setuptools is necessary since pkg_resources is required at runtime.
+    setuptools
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    eval-type-backport
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    typing-extensions
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -287,98 +286,97 @@ buildPythonPackage rec {
     "tests/unit_tests/test_analytics/test_sentry.py"
   ];
 
-  disabledTests =
-    [
-      # Probably failing because of lack of internet access
-      # AttributeError: module 'wandb.sdk.launch.registry' has no attribute 'azure_container_registry'. Did you mean: 'elastic_container_registry'?
-      "test_registry_from_uri"
+  disabledTests = [
+    # Probably failing because of lack of internet access
+    # AttributeError: module 'wandb.sdk.launch.registry' has no attribute 'azure_container_registry'. Did you mean: 'elastic_container_registry'?
+    "test_registry_from_uri"
 
-      # Require docker
-      "test_get_requirements_section_pyproject"
-      "test_local_custom_env"
-      "test_local_custom_port"
-      "test_local_default"
+    # Require docker
+    "test_get_requirements_section_pyproject"
+    "test_local_custom_env"
+    "test_local_custom_port"
+    "test_local_default"
 
-      # Expects python binary to be named `python3` but nix provides `python3.12`
-      # AssertionError: assert ['python3.12', 'main.py'] == ['python3', 'main.py']
-      "test_get_entrypoint"
+    # Expects python binary to be named `python3` but nix provides `python3.12`
+    # AssertionError: assert ['python3.12', 'main.py'] == ['python3', 'main.py']
+    "test_get_entrypoint"
 
-      # Require internet access
-      "test_audio_refs"
-      "test_bind_image"
-      "test_check_cors_configuration"
-      "test_check_wandb_version"
-      "test_from_path_project_type"
-      "test_image_accepts_bounding_boxes"
-      "test_image_accepts_bounding_boxes_optional_args"
-      "test_image_accepts_masks"
-      "test_image_accepts_masks_without_class_labels"
-      "test_image_seq_to_json"
-      "test_max_images"
-      "test_media_keys_escaped_as_glob_for_publish"
-      "test_parse_path"
-      "test_parse_project_path"
-      "test_translates_azure_err_to_normal_err"
+    # Require internet access
+    "test_audio_refs"
+    "test_bind_image"
+    "test_check_cors_configuration"
+    "test_check_wandb_version"
+    "test_from_path_project_type"
+    "test_image_accepts_bounding_boxes"
+    "test_image_accepts_bounding_boxes_optional_args"
+    "test_image_accepts_masks"
+    "test_image_accepts_masks_without_class_labels"
+    "test_image_seq_to_json"
+    "test_max_images"
+    "test_media_keys_escaped_as_glob_for_publish"
+    "test_parse_path"
+    "test_parse_project_path"
+    "test_translates_azure_err_to_normal_err"
 
-      # tests assertion if filesystem is compressed
-      "test_artifact_file_cache_cleanup"
+    # tests assertion if filesystem is compressed
+    "test_artifact_file_cache_cleanup"
 
-      # Tries to access a storage disk but there are none in the sandbox
-      # psutil.test_disk_out() returns None
-      "test_disk_in"
-      "test_disk_out"
+    # Tries to access a storage disk but there are none in the sandbox
+    # psutil.test_disk_out() returns None
+    "test_disk_in"
+    "test_disk_out"
 
-      # AssertionError: assert is_available('http://localhost:9400/metrics')
-      "test_dcgm"
+    # AssertionError: assert is_available('http://localhost:9400/metrics')
+    "test_dcgm"
 
-      # Error in the moviepy package:
-      # TypeError: must be real number, not NoneType
-      "test_video_numpy_mp4"
+    # Error in the moviepy package:
+    # TypeError: must be real number, not NoneType
+    "test_video_numpy_mp4"
 
-      # AssertionError: assert not _IS_INTERNAL_PROCESS
-      "test_disabled_can_pickle"
-      "test_disabled_context_manager"
-      "test_mode_disabled"
+    # AssertionError: assert not _IS_INTERNAL_PROCESS
+    "test_disabled_can_pickle"
+    "test_disabled_context_manager"
+    "test_mode_disabled"
 
-      # AssertionError: "one of name or plugin needs to be specified"
-      "test_opener_works_across_filesystem_boundaries"
-      "test_md5_file_hashes_on_mounted_filesystem"
+    # AssertionError: "one of name or plugin needs to be specified"
+    "test_opener_works_across_filesystem_boundaries"
+    "test_md5_file_hashes_on_mounted_filesystem"
 
-      # AttributeError: 'bytes' object has no attribute 'read'
-      "test_rewinds_on_failure"
-      "test_smoke"
-      "test_handles_multiple_calls"
+    # AttributeError: 'bytes' object has no attribute 'read'
+    "test_rewinds_on_failure"
+    "test_smoke"
+    "test_handles_multiple_calls"
 
-      # wandb.sdk.launch.errors.LaunchError: Found invalid name for agent MagicMock
-      "test_monitor_preempted"
-      "test_monitor_failed"
-      "test_monitor_running"
-      "test_monitor_job_deleted"
+    # wandb.sdk.launch.errors.LaunchError: Found invalid name for agent MagicMock
+    "test_monitor_preempted"
+    "test_monitor_failed"
+    "test_monitor_running"
+    "test_monitor_job_deleted"
 
-      # Timeout >1024.0s
-      "test_log_media_prefixed_with_multiple_slashes"
-      "test_log_media_saves_to_run_directory"
-      "test_log_media_with_path_traversal"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AssertionError: assert not copy2_mock.called
-      "test_copy_or_overwrite_changed_no_copy"
+    # Timeout >1024.0s
+    "test_log_media_prefixed_with_multiple_slashes"
+    "test_log_media_saves_to_run_directory"
+    "test_log_media_with_path_traversal"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert not copy2_mock.called
+    "test_copy_or_overwrite_changed_no_copy"
 
-      # Fatal Python error: Aborted
-      "test_convert_plots"
-      "test_gpu_apple"
-      "test_image_from_matplotlib_with_image"
-      "test_make_plot_media_from_matplotlib_with_image"
-      "test_make_plot_media_from_matplotlib_without_image"
-      "test_matplotlib_contains_images"
-      "test_matplotlib_image"
-      "test_matplotlib_plotly_with_multiple_axes"
-      "test_matplotlib_to_plotly"
-      "test_plotly_from_matplotlib_with_image"
+    # Fatal Python error: Aborted
+    "test_convert_plots"
+    "test_gpu_apple"
+    "test_image_from_matplotlib_with_image"
+    "test_make_plot_media_from_matplotlib_with_image"
+    "test_make_plot_media_from_matplotlib_without_image"
+    "test_matplotlib_contains_images"
+    "test_matplotlib_image"
+    "test_matplotlib_plotly_with_multiple_axes"
+    "test_matplotlib_to_plotly"
+    "test_plotly_from_matplotlib_with_image"
 
-      # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
-      "test_wandb_image_with_matplotlib_figure"
-    ];
+    # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+    "test_wandb_image_with_matplotlib_figure"
+  ];
 
   pythonImportsCheck = [ "wandb" ];
 

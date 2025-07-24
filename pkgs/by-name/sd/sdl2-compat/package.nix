@@ -71,22 +71,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests =
-      {
-        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-        inherit
-          SDL2_ttf
-          SDL2_net
-          SDL2_gfx
-          SDL2_sound
-          SDL2_mixer
-          SDL2_image
-          ;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit monado;
-      };
+      inherit
+        SDL2_ttf
+        SDL2_net
+        SDL2_gfx
+        SDL2_sound
+        SDL2_mixer
+        SDL2_image
+        ;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit monado;
+    };
 
     updateScript = nix-update-script {
       extraArgs = [

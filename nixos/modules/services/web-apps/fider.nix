@@ -87,7 +87,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-      ] ++ lib.optionals (cfg.database.url == "local") [ "postgresql.service" ];
+      ]
+      ++ lib.optionals (cfg.database.url == "local") [ "postgresql.service" ];
       requires = lib.optionals (cfg.database.url == "local") [ "postgresql.service" ];
       environment =
         let

@@ -149,7 +149,8 @@ in
           "pm.min_spare_servers" = lib.mkDefault 2;
           "pm.max_spare_servers" = lib.mkDefault 4;
           "pm.max_requests" = lib.mkDefault 500;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
 
       postgresql = mkIf cfg.enablePostgresql {

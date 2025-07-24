@@ -51,27 +51,26 @@ let
         description =
           "Extensible, customizable GNU text editor"
           + lib.optionalString (variant == "macport") " - macport variant";
-        longDescription =
-          ''
-            GNU Emacs is an extensible, customizable text editor—and more. At its core
-            is an interpreter for Emacs Lisp, a dialect of the Lisp programming
-            language with extensions to support text editing.
+        longDescription = ''
+          GNU Emacs is an extensible, customizable text editor—and more. At its core
+          is an interpreter for Emacs Lisp, a dialect of the Lisp programming
+          language with extensions to support text editing.
 
-            The features of GNU Emacs include: content-sensitive editing modes,
-            including syntax coloring, for a wide variety of file types including
-            plain text, source code, and HTML; complete built-in documentation,
-            including a tutorial for new users; full Unicode support for nearly all
-            human languages and their scripts; highly customizable, using Emacs Lisp
-            code or a graphical interface; a large number of extensions that add other
-            functionality, including a project planner, mail and news reader, debugger
-            interface, calendar, and more. Many of these extensions are distributed
-            with GNU Emacs; others are available separately.
-          ''
-          + lib.optionalString (variant == "macport") ''
+          The features of GNU Emacs include: content-sensitive editing modes,
+          including syntax coloring, for a wide variety of file types including
+          plain text, source code, and HTML; complete built-in documentation,
+          including a tutorial for new users; full Unicode support for nearly all
+          human languages and their scripts; highly customizable, using Emacs Lisp
+          code or a graphical interface; a large number of extensions that add other
+          functionality, including a project planner, mail and news reader, debugger
+          interface, calendar, and more. Many of these extensions are distributed
+          with GNU Emacs; others are available separately.
+        ''
+        + lib.optionalString (variant == "macport") ''
 
-            This release is built from Mitsuharu Yamamoto's patched source code
-            tailored for macOS.
-          '';
+          This release is built from Mitsuharu Yamamoto's patched source code
+          tailored for macOS.
+        '';
         changelog =
           {
             "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
@@ -99,7 +98,8 @@ let
           }
           .${variant};
         mainProgram = "emacs";
-      } // meta;
+      }
+      // meta;
     };
 in
 {

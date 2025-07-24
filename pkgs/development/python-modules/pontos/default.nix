@@ -43,7 +43,8 @@ buildPythonPackage rec {
     shtab
     rich
     tomlkit
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     git

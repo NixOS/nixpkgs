@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     boost

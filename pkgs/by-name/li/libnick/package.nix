@@ -28,26 +28,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5GO39rtSvg96y6VE0Ej4x7j1zDatP6JSktIcyhSrb98=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isUnix [
-      pkg-config
-      validatePkgConfig
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isUnix [
+    pkg-config
+    validatePkgConfig
+  ];
 
-  buildInputs =
-    [
-      boost
-      libmaddy-markdown
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isUnix [
-      glib
-      openssl
-    ]
-    ++ lib.optional stdenv.hostPlatform.isWindows sqlcipher;
+  buildInputs = [
+    boost
+    libmaddy-markdown
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isUnix [
+    glib
+    openssl
+  ]
+  ++ lib.optional stdenv.hostPlatform.isWindows sqlcipher;
 
   propagatedBuildInputs = [
     curl

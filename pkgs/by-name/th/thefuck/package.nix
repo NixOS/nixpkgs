@@ -25,13 +25,14 @@ python311Packages.buildPythonApplication rec {
     six
   ];
 
-  nativeCheckInputs =
-    [ go ]
-    ++ (with python311Packages; [
-      mock
-      pytest7CheckHook
-      pytest-mock
-    ]);
+  nativeCheckInputs = [
+    go
+  ]
+  ++ (with python311Packages; [
+    mock
+    pytest7CheckHook
+    pytest-mock
+  ]);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_settings_defaults"

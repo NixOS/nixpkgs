@@ -25,7 +25,8 @@ buildGoModule rec {
     xorg.libX11
     xorg.libXtst
     xorg.libXi
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_14;
 
   meta = {
     description = "Encrypted Screen Sharing";

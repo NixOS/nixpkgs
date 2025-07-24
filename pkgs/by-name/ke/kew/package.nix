@@ -48,13 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     fftwFloat.dev

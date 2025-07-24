@@ -47,7 +47,8 @@ buildPythonPackage rec {
     click
     future
     six
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   optional-dependencies = {
     arxml = [ lxml ];
@@ -65,7 +66,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     # long_envvar_name_imports requires stable key value pair ordering

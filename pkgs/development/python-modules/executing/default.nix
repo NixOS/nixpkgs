@@ -39,7 +39,8 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency

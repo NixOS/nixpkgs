@@ -31,21 +31,20 @@ stdenv.mkDerivation (finalAttrs: {
     "stackprotector"
   ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_Fortran_FLAGS=-fPIC"
-      "-DLAPACKE=ON"
-      "-DCBLAS=ON"
-      "-DBUILD_TESTING=ON"
-    ]
-    ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON"
-    ++ lib.optional blas64 "-DBUILD_INDEX64=ON"
-    # Tries to run host platform binaries during the build
-    # Will likely be disabled by default in 3.12, see:
-    # https://github.com/Reference-LAPACK/lapack/issues/757
-    ++ lib.optional (
-      !stdenv.buildPlatform.canExecute stdenv.hostPlatform
-    ) "-DTEST_FORTRAN_COMPILER=OFF";
+  cmakeFlags = [
+    "-DCMAKE_Fortran_FLAGS=-fPIC"
+    "-DLAPACKE=ON"
+    "-DCBLAS=ON"
+    "-DBUILD_TESTING=ON"
+  ]
+  ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON"
+  ++ lib.optional blas64 "-DBUILD_INDEX64=ON"
+  # Tries to run host platform binaries during the build
+  # Will likely be disabled by default in 3.12, see:
+  # https://github.com/Reference-LAPACK/lapack/issues/757
+  ++ lib.optional (
+    !stdenv.buildPlatform.canExecute stdenv.hostPlatform
+  ) "-DTEST_FORTRAN_COMPILER=OFF";
 
   passthru = { inherit blas64; };
 

@@ -77,28 +77,27 @@ mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      python3
-      perl
-      llvmPackages.lld
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      nasm
-      yasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.bintools
-      findutils
-      darwin.bootstrap_cmds
-    ]
-    ++ lib.optionals rustSupport [
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+    perl
+    llvmPackages.lld
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    nasm
+    yasm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.bintools
+    findutils
+    darwin.bootstrap_cmds
+  ]
+  ++ lib.optionals rustSupport [
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -157,52 +156,50 @@ mkDerivation rec {
     popd
   '';
 
-  postPatch =
-    ''
-      patchShebangs src/
+  postPatch = ''
+    patchShebangs src/
 
-      substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
-        --replace 'git rev-parse --show-toplevel' '$src'
-      substituteInPlace utils/check-style/check-duplicate-includes.sh \
-        --replace 'git rev-parse --show-toplevel' '$src'
-      substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-        --replace 'git rev-parse --show-toplevel' '$src'
-      substituteInPlace utils/list-licenses/list-licenses.sh \
-        --replace 'git rev-parse --show-toplevel' '$src'
-      substituteInPlace utils/check-style/check-style \
-        --replace 'git rev-parse --show-toplevel' '$src'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i 's|gfind|find|' cmake/tools.cmake
-      sed -i 's|ggrep|grep|' cmake/tools.cmake
-    ''
-    + lib.optionalString rustSupport ''
+    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-duplicate-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/list-licenses/list-licenses.sh \
+      --replace 'git rev-parse --show-toplevel' '$src'
+    substituteInPlace utils/check-style/check-style \
+      --replace 'git rev-parse --show-toplevel' '$src'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i 's|gfind|find|' cmake/tools.cmake
+    sed -i 's|ggrep|grep|' cmake/tools.cmake
+  ''
+  + lib.optionalString rustSupport ''
 
-      pushd contrib/corrosion/generator
-      cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
-      popd
+    pushd contrib/corrosion/generator
+    cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
+    popd
 
-      pushd rust
-      cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
-      popd
+    pushd rust
+    cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
+    popd
 
-      cargoSetupPostPatchHook() { true; }
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Make sure Darwin invokes lld.ld64 not lld.
-      substituteInPlace cmake/tools.cmake \
-        --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
-    '';
+    cargoSetupPostPatchHook() { true; }
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Make sure Darwin invokes lld.ld64 not lld.
+    substituteInPlace cmake/tools.cmake \
+      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
+  '';
 
-  cmakeFlags =
-    [
-      "-DENABLE_TESTS=OFF"
-      "-DCOMPILER_CACHE=disabled"
-      "-DENABLE_EMBEDDED_COMPILER=ON"
-    ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
-    ) "-DNO_ARMV81_OR_HIGHER=1";
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DCOMPILER_CACHE=disabled"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+  ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+  ) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     NIX_CFLAGS_COMPILE =

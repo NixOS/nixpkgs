@@ -31,27 +31,26 @@ let
       tag = "v${version}";
       hash = "sha256-1lBUkodBDFpJD7pyHAFb8HRLrbK8wyAboX0A2oBQnTM=";
     };
-    patches =
-      [
-        ./nuget-config.patch
-      ]
-      ++ lib.optionals (lib.versionOlder version "5.0") [
-        # See https://github.com/Sonarr/Sonarr/issues/7442 and
-        # https://github.com/Sonarr/Sonarr/pull/7443.
-        # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
-        # and it may take some time for that to become stable.
-        # However, the patches cleanly apply to v4 as well.
-        (fetchpatch {
-          name = "dotnet8-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
-          hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
-        })
-        (fetchpatch {
-          name = "dotnet8-darwin-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
-          hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
-        })
-      ];
+    patches = [
+      ./nuget-config.patch
+    ]
+    ++ lib.optionals (lib.versionOlder version "5.0") [
+      # See https://github.com/Sonarr/Sonarr/issues/7442 and
+      # https://github.com/Sonarr/Sonarr/pull/7443.
+      # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
+      # and it may take some time for that to become stable.
+      # However, the patches cleanly apply to v4 as well.
+      (fetchpatch {
+        name = "dotnet8-compatibility";
+        url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
+        hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
+      })
+      (fetchpatch {
+        name = "dotnet8-darwin-compatibility";
+        url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
+        hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
+      })
+    ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in

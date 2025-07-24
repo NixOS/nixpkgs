@@ -41,7 +41,8 @@ buildPythonPackage rec {
     requests
     tomlkit
     librouteros
-  ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 

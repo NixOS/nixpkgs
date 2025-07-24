@@ -37,7 +37,8 @@ buildPythonPackage rec {
     microsoft-kiota-abstractions
     opentelemetry-api
     opentelemetry-sdk
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     pytest-asyncio

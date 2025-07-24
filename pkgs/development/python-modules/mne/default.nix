@@ -75,7 +75,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-timeout
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)

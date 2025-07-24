@@ -50,22 +50,21 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  buildInputs =
-    [
-      glib
-      pcre
-      pcre2
-      util-linux
-      libmysqlclient
-      libressl
-      libsysprof-capture
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libselinux
-      libsepol
-    ];
+  buildInputs = [
+    glib
+    pcre
+    pcre2
+    util-linux
+    libmysqlclient
+    libressl
+    libsysprof-capture
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libselinux
+    libsepol
+  ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

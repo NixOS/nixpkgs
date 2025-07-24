@@ -46,22 +46,21 @@ buildDotnetModule (finalAttrs: rec {
 
   dontDotnetFixup = true;
 
-  postFixup =
-    ''
-      wrapDotnetProgram $out/lib/${finalAttrs.pname}/StructuredLogViewer.Avalonia $out/bin/${meta.mainProgram}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/${finalAttrs.pname}.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
-        --replace-fail "0.0.1" "${finalAttrs.version}"
+  postFixup = ''
+    wrapDotnetProgram $out/lib/${finalAttrs.pname}/StructuredLogViewer.Avalonia $out/bin/${meta.mainProgram}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/${finalAttrs.pname}.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
+      --replace-fail "0.0.1" "${finalAttrs.version}"
 
-      install -Dm444 src/StructuredLogViewer.Avalonia/Info.plist $out/Applications/StructuredLogViewer.app/Contents/Info.plist
-      install -Dm444 src/StructuredLogViewer.Avalonia/StructuredLogViewer.icns $out/Applications/StructuredLogViewer.app/Contents/Resources/StructuredLogViewer.icns
-      mkdir -p $out/Applications/StructuredLogViewer.app/Contents/MacOS
-      ln -s $out/bin/${meta.mainProgram} $out/Applications/StructuredLogViewer.app/Contents/MacOS/StructuredLogViewer.Avalonia
-    '';
+    install -Dm444 src/StructuredLogViewer.Avalonia/Info.plist $out/Applications/StructuredLogViewer.app/Contents/Info.plist
+    install -Dm444 src/StructuredLogViewer.Avalonia/StructuredLogViewer.icns $out/Applications/StructuredLogViewer.app/Contents/Resources/StructuredLogViewer.icns
+    mkdir -p $out/Applications/StructuredLogViewer.app/Contents/MacOS
+    ln -s $out/bin/${meta.mainProgram} $out/Applications/StructuredLogViewer.app/Contents/MacOS/StructuredLogViewer.Avalonia
+  '';
 
   desktopItems = makeDesktopItem {
     name = finalAttrs.pname;

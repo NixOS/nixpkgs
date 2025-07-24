@@ -55,7 +55,8 @@ buildPythonPackage rec {
     requests-toolbelt
     setuptools
     rich
-  ] ++ requests.optional-dependencies.socks;
+  ]
+  ++ requests.optional-dependencies.socks;
 
   __darwinAllowLocalNetworking = true;
 
@@ -92,22 +93,21 @@ buildPythonPackage rec {
     "tests/test_plugins_cli.py"
   ];
 
-  disabledTests =
-    [
-      # argparse output changed
-      "test_naked_invocation"
-      # Test is flaky
-      "test_stdin_read_warning"
-      # httpbin compatibility issues
-      "test_compress_form"
-      "test_binary_suppresses_when_terminal"
-      "test_binary_suppresses_when_not_terminal_but_pretty"
-      "test_binary_included_and_correct_when_suitable"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Test is flaky
-      "test_daemon_runner"
-    ];
+  disabledTests = [
+    # argparse output changed
+    "test_naked_invocation"
+    # Test is flaky
+    "test_stdin_read_warning"
+    # httpbin compatibility issues
+    "test_compress_form"
+    "test_binary_suppresses_when_terminal"
+    "test_binary_suppresses_when_not_terminal_but_pretty"
+    "test_binary_included_and_correct_when_suitable"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test is flaky
+    "test_daemon_runner"
+  ];
 
   meta = with lib; {
     description = "Command line HTTP client whose goal is to make CLI human-friendly";

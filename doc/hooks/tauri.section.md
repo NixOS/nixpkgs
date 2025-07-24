@@ -45,7 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Make sure we can find our libraries
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking # Most Tauri apps need networking

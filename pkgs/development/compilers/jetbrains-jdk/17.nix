@@ -156,7 +156,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     autoconf
     unzip
     rsync
-  ] ++ oldAttrs.nativeBuildInputs;
+  ]
+  ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";

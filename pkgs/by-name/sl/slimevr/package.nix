@@ -52,19 +52,18 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      openssl
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libayatana-appindicator
+    webkitgtk_4_1
+  ];
 
   patches = [
     # Upstream code uses Git to find the program version.
@@ -75,30 +74,29 @@ rustPlatform.buildRustPackage rec {
     ./no-java-tool-options-warning.patch
   ];
 
-  postPatch =
-    ''
-      # Tauri bundler expects slimevr.jar to exist.
-      mkdir -p server/desktop/build/libs
-      touch server/desktop/build/libs/slimevr.jar
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-      substituteInPlace gui/src-tauri/src/tray.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  postPatch = ''
+    # Tauri bundler expects slimevr.jar to exist.
+    mkdir -p server/desktop/build/libs
+    touch server/desktop/build/libs/slimevr.jar
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    substituteInPlace gui/src-tauri/src/tray.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
-      # tao < version 0.31 has a GTK crash. Manually apply the fix.
-      pushd $cargoDepsCopy/tao-0.30.*
-      patch -p1 < ${
-        fetchpatch {
-          name = "fix-gtk-crash.patch";
-          url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
-          hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
-        }
+    # tao < version 0.31 has a GTK crash. Manually apply the fix.
+    pushd $cargoDepsCopy/tao-0.30.*
+    patch -p1 < ${
+      fetchpatch {
+        name = "fix-gtk-crash.patch";
+        url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
+        hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
       }
-      popd
-    '';
+    }
+    popd
+  '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
   # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.

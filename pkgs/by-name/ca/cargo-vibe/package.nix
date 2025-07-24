@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     dbus
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isLinux udev;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev;
 
   meta = with lib; {
     description = "Cargo x Buttplug.io";

@@ -35,22 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     bison
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      libressl
-      libbsd
-      libevent
-      libuuid
-      libmd
-      zlib
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libossp_uuid
-      apple-sdk_15
-    ];
+  buildInputs = [
+    libressl
+    libbsd
+    libevent
+    libuuid
+    libmd
+    zlib
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libossp_uuid
+    apple-sdk_15
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via

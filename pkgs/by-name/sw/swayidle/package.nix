@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland
     wayland-protocols
-  ] ++ lib.optionals systemdSupport [ systemd ];
+  ]
+  ++ lib.optionals systemdSupport [ systemd ];
 
   mesonFlags = [
     "-Dman-pages=enabled"

@@ -32,14 +32,13 @@ let
 
     sha256 = "sha256-YOh7tuCja9F2VvzX+QqsKHJfebXWbhLqvcraq6PBOGo=";
 
-    nativeBuildInputs =
-      [
-        docbook_xsl
-        libxslt
-      ]
-      ++ lib.optionals withIntrospection [
-        gobject-introspection
-      ];
+    nativeBuildInputs = [
+      docbook_xsl
+      libxslt
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+    ];
 
     buildInputs = [
       exo

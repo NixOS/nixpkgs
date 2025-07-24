@@ -46,7 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     zlib
-  ] ++ lib.optionals (!withApplePCSC) [ pcsclite ];
+  ]
+  ++ lib.optionals (!withApplePCSC) [ pcsclite ];
 
   cmakeFlags = [
     (lib.cmakeBool "GENERATE_MAN_PAGES" true)

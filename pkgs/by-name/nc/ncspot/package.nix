@@ -46,16 +46,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional (withALSA || withRodio) alsa-lib
-    ++ lib.optional withClipboard libxcb
-    ++ lib.optional withCover ueberzug
-    ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional withNcurses ncurses
-    ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux openssl
+  ++ lib.optional (withALSA || withRodio) alsa-lib
+  ++ lib.optional withClipboard libxcb
+  ++ lib.optional withCover ueberzug
+  ++ lib.optional (withMPRIS || withNotify) dbus
+  ++ lib.optional withNcurses ncurses
+  ++ lib.optional withPortAudio portaudio
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 

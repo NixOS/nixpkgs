@@ -38,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     pkg-config
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -50,31 +51,30 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
   '';
 
-  buildInputs =
-    [
-      (curl.override { inherit openssl; })
-      icu
-      libedit
-      libevent
-      lz4
-      ncurses
-      openssl
-      protobuf_21
-      re2
-      readline
-      zlib
-      zstd
-      libfido2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.developer_cmds
-      darwin.DarwinTools
-    ];
+  buildInputs = [
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf_21
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.developer_cmds
+    darwin.DarwinTools
+  ];
 
   outputs = [
     "out"

@@ -32,7 +32,8 @@ mkDerivation {
     "etc/group"
     "etc/master.passwd"
     "etc/shells"
-  ] ++ extraSrc;
+  ]
+  ++ extraSrc;
 
   outputs = [
     "out"

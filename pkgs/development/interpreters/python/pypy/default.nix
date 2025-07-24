@@ -81,41 +81,40 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      bzip2
-      openssl
-      pythonForPypy
-      libffi
-      ncurses
-      expat
-      sqlite
-      tk
-      tcl
-      libX11
-      gdbm
-      db
-    ]
-    ++ lib.optionals isPy3k [
-      xz
-    ]
-    ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
-      stdenv.cc.libc
-    ]
-    ++ lib.optionals zlibSupport [
-      zlib
-    ]
-    ++
-      lib.optionals
-        (lib.any (l: l == optimizationLevel) [
-          "0"
-          "1"
-          "2"
-          "3"
-        ])
-        [
-          boehmgc
-        ];
+  buildInputs = [
+    bzip2
+    openssl
+    pythonForPypy
+    libffi
+    ncurses
+    expat
+    sqlite
+    tk
+    tcl
+    libX11
+    gdbm
+    db
+  ]
+  ++ lib.optionals isPy3k [
+    xz
+  ]
+  ++ lib.optionals (stdenv ? cc && stdenv.cc.libc != null) [
+    stdenv.cc.libc
+  ]
+  ++ lib.optionals zlibSupport [
+    zlib
+  ]
+  ++
+    lib.optionals
+      (lib.any (l: l == optimizationLevel) [
+        "0"
+        "1"
+        "2"
+        "3"
+      ])
+      [
+        boehmgc
+      ];
 
   # Remove bootstrap python from closure
   dontPatchShebangs = true;
@@ -201,32 +200,31 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkPhase =
     let
-      disabledTests =
-        [
-          # disable shutils because it assumes gid 0 exists
-          "test_shutil"
-          # disable socket because it has two actual network tests that fail
-          "test_socket"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-          "test_urllib2net"
-          "test_urllibnet"
-          "test_urllib2_localnet"
-        ]
-        ++ lib.optionals isPy3k [
-          # disable asyncio due to https://github.com/NixOS/nix/issues/1238
-          "test_asyncio"
-          # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
-          "test_os"
-          # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
-          "test_pathlib"
-          # disable tarfile because it assumes gid 0 exists
-          "test_tarfile"
-          # disable __all__ because of spurious imp/importlib warning and
-          # warning-to-error test policy
-          "test___all__"
-        ];
+      disabledTests = [
+        # disable shutils because it assumes gid 0 exists
+        "test_shutil"
+        # disable socket because it has two actual network tests that fail
+        "test_socket"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
+        "test_urllib2net"
+        "test_urllibnet"
+        "test_urllib2_localnet"
+      ]
+      ++ lib.optionals isPy3k [
+        # disable asyncio due to https://github.com/NixOS/nix/issues/1238
+        "test_asyncio"
+        # disable os due to https://github.com/NixOS/nixpkgs/issues/10496
+        "test_os"
+        # disable pathlib due to https://bitbucket.org/pypy/pypy/pull-requests/594
+        "test_pathlib"
+        # disable tarfile because it assumes gid 0 exists
+        "test_tarfile"
+        # disable __all__ because of spurious imp/importlib warning and
+        # warning-to-error test policy
+        "test___all__"
+      ];
     in
     ''
       export TERMINFO="${ncurses.out}/share/terminfo/";
@@ -240,18 +238,17 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase =
     let
-      modules =
-        [
-          "curses"
-          "sqlite3"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          "Tkinter"
-        ]
-        ++ lib.optionals isPy3k [
-          "tkinter"
-          "lzma"
-        ];
+      modules = [
+        "curses"
+        "sqlite3"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        "Tkinter"
+      ]
+      ++ lib.optionals isPy3k [
+        "tkinter"
+        "lzma"
+      ];
       imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
     in
     ''

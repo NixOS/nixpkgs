@@ -42,57 +42,54 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NVyw7xoPutXeUS87jjVv1YxJnwNGZAT4QfkBLzvQbwg=";
   };
 
-  postPatch =
-    ''
-      patchShebangs cmake/install/post/generate-adios2-config.sh.in
-    ''
-    # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
-        --replace-fail "dynamic_cast" "reinterpret_cast"
-    '';
+  postPatch = ''
+    patchShebangs cmake/install/post/generate-adios2-config.sh.in
+  ''
+  # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
+      --replace-fail "dynamic_cast" "reinterpret_cast"
+  '';
 
-  nativeBuildInputs =
-    [
-      perl
-      cmake
-      ninja
-      gfortran
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3
-      python3Packages.pybind11
-    ];
+  nativeBuildInputs = [
+    perl
+    cmake
+    ninja
+    gfortran
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3
+    python3Packages.pybind11
+  ];
 
-  buildInputs =
-    [
-      mpi
-      bzip2
-      lz4
-      c-blosc2
-      (hdf5-mpi.override { inherit mpi; })
-      libfabric
-      libpng
-      libsodium
-      pugixml
-      sqlite
-      zeromq
-      zfp
-      zlib
-      zlib-ng # required by c-blocs2
-      zstd # required by c-blocs2
-      yaml-cpp
-      nlohmann_json
+  buildInputs = [
+    mpi
+    bzip2
+    lz4
+    c-blosc2
+    (hdf5-mpi.override { inherit mpi; })
+    libfabric
+    libpng
+    libsodium
+    pugixml
+    sqlite
+    zeromq
+    zfp
+    zlib
+    zlib-ng # required by c-blocs2
+    zstd # required by c-blocs2
+    yaml-cpp
+    nlohmann_json
 
-      # Todo: add these optional dependcies in nixpkgs.
-      # sz
-      # mgard
-      # catalyst
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
-    # openmp required by zfp
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+    # Todo: add these optional dependcies in nixpkgs.
+    # sz
+    # mgard
+    # catalyst
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
+  # openmp required by zfp
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     (python3Packages.mpi4py.override { inherit mpi; })
@@ -117,13 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Ctest takes too much time, so we only perform some smoke Python tests.
   doInstallCheck = pythonSupport;
 
-  preCheck =
-    ''
-      export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
-      rm ../testing/adios2/python/TestBPWriteTypesHighLevelAPI.py
-    '';
+  preCheck = ''
+    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+    rm ../testing/adios2/python/TestBPWriteTypesHighLevelAPI.py
+  '';
 
   pytestFlagsArray = [
     "../testing/adios2/python/Test*.py"

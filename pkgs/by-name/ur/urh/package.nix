@@ -34,17 +34,16 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
     copyDesktopItems
   ];
-  buildInputs =
-    [
-      hackrf
-      rtl-sdr
-      airspy
-      limesuite
-      libiio
-      libbladeRF
-    ]
-    ++ lib.optional USRPSupport uhd
-    ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
+  buildInputs = [
+    hackrf
+    rtl-sdr
+    airspy
+    limesuite
+    libiio
+    libbladeRF
+  ]
+  ++ lib.optional USRPSupport uhd
+  ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5

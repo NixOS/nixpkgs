@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     libselinux
     pam
     util-linux
-  ] ++ (if enableSystemd then [ udev ] else [ eudev ]);
+  ]
+  ++ (if enableSystemd then [ udev ] else [ eudev ]);
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "install_emptydir(elogindstatedir)" ""

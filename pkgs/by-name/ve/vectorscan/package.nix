@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     pkg-config
     ragel
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
     boost
@@ -56,36 +57,37 @@ stdenv.mkDerivation rec {
   #
   # For generic builds (e.g. x86_64) this can mean using an implementation not optimized for the
   # potentially available more modern hardware extensions (e.g. x86_64 with AVX512).
-  cmakeFlags =
-    [ (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON") ]
-    ++ (
-      if
-        lib.elem stdenv.hostPlatform.system [
-          "x86_64-linux"
-          "i686-linux"
-        ]
-      then
-        [
-          "-DBUILD_AVX2=ON"
-          "-DBUILD_AVX512=ON"
-          "-DBUILD_AVX512VBMI=ON"
-          "-DFAT_RUNTIME=ON"
-        ]
-      else
-        (
-          if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
-            [
-              "-DBUILD_SVE=ON"
-              "-DBUILD_SVE2=ON"
-              "-DBUILD_SVE2_BITPERM=ON"
-              "-DFAT_RUNTIME=ON"
-            ]
-          else
-            [ "-DFAT_RUNTIME=OFF" ]
-            ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
-            ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
-        )
-    );
+  cmakeFlags = [
+    (if enableShared then "-DBUILD_SHARED_LIBS=ON" else "BUILD_STATIC_LIBS=ON")
+  ]
+  ++ (
+    if
+      lib.elem stdenv.hostPlatform.system [
+        "x86_64-linux"
+        "i686-linux"
+      ]
+    then
+      [
+        "-DBUILD_AVX2=ON"
+        "-DBUILD_AVX512=ON"
+        "-DBUILD_AVX512VBMI=ON"
+        "-DFAT_RUNTIME=ON"
+      ]
+    else
+      (
+        if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
+          [
+            "-DBUILD_SVE=ON"
+            "-DBUILD_SVE2=ON"
+            "-DBUILD_SVE2_BITPERM=ON"
+            "-DFAT_RUNTIME=ON"
+          ]
+        else
+          [ "-DFAT_RUNTIME=OFF" ]
+          ++ lib.optional stdenv.hostPlatform.avx2Support "-DBUILD_AVX2=ON"
+          ++ lib.optional stdenv.hostPlatform.avx512Support "-DBUILD_AVX512=ON"
+      )
+  );
 
   doCheck = true;
   checkPhase = ''

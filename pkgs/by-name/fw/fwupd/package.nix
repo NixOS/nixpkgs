@@ -172,18 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./efi-app-path.patch
   ];
 
-  postPatch =
-    ''
-      patchShebangs \
-        contrib/generate-version-script.py \
-        contrib/generate-man.py \
-        po/test-deps
-    ''
-    # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
-    + ''
-      substituteInPlace plugins/redfish/meson.build \
-        --replace-fail "get_option('tests')" "false"
-    '';
+  postPatch = ''
+    patchShebangs \
+      contrib/generate-version-script.py \
+      contrib/generate-man.py \
+      po/test-deps
+  ''
+  # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+  + ''
+    substituteInPlace plugins/redfish/meson.build \
+      --replace-fail "get_option('tests')" "false"
+  '';
 
   strictDeps = true;
 
@@ -196,84 +195,81 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
   ];
 
-  nativeBuildInputs =
-    [
-      ensureNewerSourcesForZipFilesHook # required for firmware zipping
-      gettext
-      gi-docgen
-      gobject-introspection
-      meson
-      ninja
-      pkg-config
-      protobufc # for protoc
-      shared-mime-info
-      vala
-      wrapGAppsNoGuiHook
+  nativeBuildInputs = [
+    ensureNewerSourcesForZipFilesHook # required for firmware zipping
+    gettext
+    gi-docgen
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    protobufc # for protoc
+    shared-mime-info
+    vala
+    wrapGAppsNoGuiHook
 
-      # jcat-tool at buildtime requires a home directory
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+    # jcat-tool at buildtime requires a home directory
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-      curl
-      elfutils
-      fwupd-efi
-      gnutls
-      gusb
-      libarchive
-      libcbor
-      libdrm
-      libgudev
-      libjcat
-      libmbim
-      libqmi
-      libuuid
-      libxmlb
-      modemmanager
-      pango
-      polkit
-      protobufc
-      readline
-      sqlite
-      tpm2-tss
-      valgrind
-      xz # for liblzma
-    ]
-    ++ lib.optionals haveFlashrom [
-      flashrom
-    ];
+  buildInputs = [
+    bash-completion
+    curl
+    elfutils
+    fwupd-efi
+    gnutls
+    gusb
+    libarchive
+    libcbor
+    libdrm
+    libgudev
+    libjcat
+    libmbim
+    libqmi
+    libuuid
+    libxmlb
+    modemmanager
+    pango
+    polkit
+    protobufc
+    readline
+    sqlite
+    tpm2-tss
+    valgrind
+    xz # for liblzma
+  ]
+  ++ lib.optionals haveFlashrom [
+    flashrom
+  ];
 
-  mesonFlags =
-    [
-      (lib.mesonEnable "docs" true)
-      # We are building the official releases.
-      (lib.mesonEnable "supported_build" true)
-      (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
-      (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
-      (lib.mesonOption "efi_os_dir" "nixos")
-      (lib.mesonEnable "plugin_modem_manager" true)
-      (lib.mesonBool "vendor_metadata" true)
-      (lib.mesonBool "plugin_uefi_capsule_splash" false)
-      # TODO: what should this be?
-      (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
-      (lib.mesonEnable "umockdev_tests" false)
-      # We do not want to place the daemon into lib (cyclic reference)
-      "--libexecdir=${placeholder "out"}/libexec"
-    ]
-    ++ lib.optionals (!enablePassim) [
-      (lib.mesonEnable "passim" false)
-    ]
-    ++ lib.optionals (!haveFlashrom) [
-      (lib.mesonEnable "plugin_flashrom" false)
-    ];
+  mesonFlags = [
+    (lib.mesonEnable "docs" true)
+    # We are building the official releases.
+    (lib.mesonEnable "supported_build" true)
+    (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+    (lib.mesonOption "efi_os_dir" "nixos")
+    (lib.mesonEnable "plugin_modem_manager" true)
+    (lib.mesonBool "vendor_metadata" true)
+    (lib.mesonBool "plugin_uefi_capsule_splash" false)
+    # TODO: what should this be?
+    (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
+    (lib.mesonEnable "umockdev_tests" false)
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+  ]
+  ++ lib.optionals (!enablePassim) [
+    (lib.mesonEnable "passim" false)
+  ]
+  ++ lib.optionals (!haveFlashrom) [
+    (lib.mesonEnable "plugin_flashrom" false)
+  ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;

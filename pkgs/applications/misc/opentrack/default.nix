@@ -66,7 +66,8 @@ mkDerivation {
     libXdmcp
     libevdev
     aruco
-  ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
+  ]
+  ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ wineWowPackages.stable ];
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Wpedantic -ffast-math -O3";
   dontWrapQtApps = true;
@@ -76,7 +77,8 @@ mkDerivation {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
     "-DSDK_XPLANE=${xplaneSdk}"
-  ] ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ "-DSDK_WINE=ON" ];
+  ]
+  ++ lib.optionals pkgs.stdenv.targetPlatform.isx86_64 [ "-DSDK_WINE=ON" ];
 
   postInstall = ''
     wrapQtApp $out/bin/opentrack

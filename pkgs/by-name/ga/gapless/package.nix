@@ -36,17 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    gtk4
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

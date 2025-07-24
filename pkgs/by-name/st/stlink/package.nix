@@ -40,21 +40,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs =
-    [
-      libusb1'
-    ]
-    ++ lib.optionals withGUI [
-      gtk3
-    ];
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withGUI [
-      pkg-config
-      wrapGAppsHook3
-    ];
+  buildInputs = [
+    libusb1'
+  ]
+  ++ lib.optionals withGUI [
+    gtk3
+  ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withGUI [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   cmakeFlags = [
     "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"

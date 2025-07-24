@@ -33,18 +33,17 @@ buildGraalvmNativeImage rec {
   ];
 
   doCheck = true;
-  checkPhase =
-    ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      export HOME="$(mktemp -d)"
-      ./clojure-lsp --version | fgrep -q '${version}'
-    ''
-    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-    #${babashka}/bin/bb integration-test ./clojure-lsp
-    + ''
-      runHook postCheck
-    '';
+    export HOME="$(mktemp -d)"
+    ./clojure-lsp --version | fgrep -q '${version}'
+  ''
+  # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+  #${babashka}/bin/bb integration-test ./clojure-lsp
+  + ''
+    runHook postCheck
+  '';
 
   passthru.tests.version = testers.testVersion {
     inherit version;

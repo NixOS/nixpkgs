@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gettext
-  ] ++ (lib.optional (ui == "curses") ncurses);
+  ]
+  ++ (lib.optional (ui == "curses") ncurses);
 
   dontConfigure = true;
 

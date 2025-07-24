@@ -43,7 +43,8 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     libsecret
-  ] ++ pluginsDeps;
+  ]
+  ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext

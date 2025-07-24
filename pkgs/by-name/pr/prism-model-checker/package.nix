@@ -29,7 +29,8 @@ stdenv'.mkDerivation (finalAttrs: {
     openjdk
     copyDesktopItems
     makeWrapper
-  ] ++ lib.optionals stdenv'.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv'.hostPlatform.isDarwin [ cctools ];
 
   desktopItems = [
     (makeDesktopItem {

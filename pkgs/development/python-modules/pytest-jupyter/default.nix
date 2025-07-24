@@ -59,7 +59,8 @@ let
     nativeCheckInputs = [
       pytest-timeout
       pytestCheckHook
-    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {

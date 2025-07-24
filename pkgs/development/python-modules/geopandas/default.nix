@@ -73,7 +73,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

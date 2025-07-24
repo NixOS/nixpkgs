@@ -77,7 +77,8 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"

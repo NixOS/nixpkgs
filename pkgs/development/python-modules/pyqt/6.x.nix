@@ -133,19 +133,18 @@ buildPythonPackage rec {
 
   # Checked using pythonImportsCheck, has no tests
 
-  pythonImportsCheck =
-    [
-      "PyQt6"
-      "PyQt6.QtCore"
-      "PyQt6.QtQml"
-      "PyQt6.QtWidgets"
-      "PyQt6.QtGui"
-      "PyQt6.QtQuick"
-    ]
-    ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-    ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-    # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-    ++ lib.optional withLocation "PyQt6.QtPositioning";
+  pythonImportsCheck = [
+    "PyQt6"
+    "PyQt6.QtCore"
+    "PyQt6.QtQml"
+    "PyQt6.QtWidgets"
+    "PyQt6.QtGui"
+    "PyQt6.QtQuick"
+  ]
+  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+  ++ lib.optional withLocation "PyQt6.QtPositioning";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 

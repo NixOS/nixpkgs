@@ -53,21 +53,20 @@ python3Packages.buildPythonApplication rec {
   # to get $program_PYTHONPATH
   dontWrapPythonPrograms = true;
 
-  postFixup =
-    ''
-      makeWrapperArgs+=(''${gappsWrapperArgs[@]})
-      wrapPythonPrograms
-    ''
-    # Dialogs are not imported, but executed. The same does
-    # nautilus-python plugins. So we need to patch them as well.
-    + ''
-      for dialog_scripts in $out/lib/python*/site-packages/turtlevcs/dialogs/*.py; do
-        patchPythonScript $dialog_scripts
-      done
-      for nautilus_extensions in $out/share/nautilus-python/extensions/*.py; do
-        patchPythonScript $nautilus_extensions
-      done
-    '';
+  postFixup = ''
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]})
+    wrapPythonPrograms
+  ''
+  # Dialogs are not imported, but executed. The same does
+  # nautilus-python plugins. So we need to patch them as well.
+  + ''
+    for dialog_scripts in $out/lib/python*/site-packages/turtlevcs/dialogs/*.py; do
+      patchPythonScript $dialog_scripts
+    done
+    for nautilus_extensions in $out/share/nautilus-python/extensions/*.py; do
+      patchPythonScript $nautilus_extensions
+    done
+  '';
 
   meta = {
     description = "Graphical interface for version control intended to run on gnome and nautilus";

@@ -42,16 +42,15 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      "TestNetworkMonitor"
-      "TestNoResponseFailure"
-      "TestProcessMonitor"
-      "TestSocketConnection"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_time_repeater"
-    ];
+  disabledTests = [
+    "TestNetworkMonitor"
+    "TestNoResponseFailure"
+    "TestProcessMonitor"
+    "TestSocketConnection"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_time_repeater"
+  ];
 
   pythonImportsCheck = [
     "boofuzz"

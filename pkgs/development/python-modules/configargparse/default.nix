@@ -35,7 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # regex mismatch

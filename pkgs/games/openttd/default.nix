@@ -77,35 +77,34 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      SDL2
-      libpng
-      xz
-      zlib
-      freetype
-      fontconfig
-      nlohmann_json
-      curl
-      icu
-      harfbuzz
-      expat
-      glib
-      pcre2
-    ]
-    ++ lib.optionals withFluidSynth [
-      fluidsynth
-      soundfont-fluid
-      libsndfile
-      flac
-      libogg
-      libvorbis
-      libopus
-      libmpg123
-      pulseaudio
-      alsa-lib
-      libjack2
-    ];
+  buildInputs = [
+    SDL2
+    libpng
+    xz
+    zlib
+    freetype
+    fontconfig
+    nlohmann_json
+    curl
+    icu
+    harfbuzz
+    expat
+    glib
+    pcre2
+  ]
+  ++ lib.optionals withFluidSynth [
+    fluidsynth
+    soundfont-fluid
+    libsndfile
+    flac
+    libogg
+    libvorbis
+    libopus
+    libmpg123
+    pulseaudio
+    alsa-lib
+    libjack2
+  ];
 
   prefixKey = "--prefix-dir=";
 

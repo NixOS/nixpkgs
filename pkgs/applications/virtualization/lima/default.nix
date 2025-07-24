@@ -28,7 +28,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -52,23 +53,22 @@ buildGoModule rec {
     export LIMA_HOME="$(mktemp -d)"
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r _output/* $out
-      wrapProgram $out/bin/limactl \
-        --prefix PATH : ${lib.makeBinPath [ qemu ]}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd limactl \
-        --bash <($out/bin/limactl completion bash) \
-        --fish <($out/bin/limactl completion fish) \
-        --zsh <($out/bin/limactl completion zsh)
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r _output/* $out
+    wrapProgram $out/bin/limactl \
+      --prefix PATH : ${lib.makeBinPath [ qemu ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd limactl \
+      --bash <($out/bin/limactl completion bash) \
+      --fish <($out/bin/limactl completion fish) \
+      --zsh <($out/bin/limactl completion zsh)
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   doInstallCheck = true;
   # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53

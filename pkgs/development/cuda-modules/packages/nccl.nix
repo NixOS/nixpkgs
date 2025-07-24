@@ -50,14 +50,13 @@ backendStdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      which
-      autoAddDriverRunpath
-      python3
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
+  nativeBuildInputs = [
+    which
+    autoAddDriverRunpath
+    python3
+  ]
+  ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
+  ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
 
   buildInputs =
     lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
@@ -73,32 +72,30 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
-  postPatch =
-    ''
-      patchShebangs ./src/device/generate.py
-    ''
-    # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
-    # in order to work with new constexpr handling
-    + lib.optionalString (cudaAtLeast "12.8") ''
-      substituteInPlace ./makefiles/common.mk \
-        --replace-fail "-std=c++11" "-std=c++14"
-    '';
+  postPatch = ''
+    patchShebangs ./src/device/generate.py
+  ''
+  # CUDA 12.8 uses GCC 14 and we need to bump C++ standard to C++14
+  # in order to work with new constexpr handling
+  + lib.optionalString (cudaAtLeast "12.8") ''
+    substituteInPlace ./makefiles/common.mk \
+      --replace-fail "-std=c++11" "-std=c++14"
+  '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "NVCC_GENCODE=${flags.gencodeString}"
-    ]
-    ++ lib.optionals (cudaOlder "11.4") [
-      "CUDA_HOME=${cudatoolkit}"
-      "CUDA_LIB=${lib.getLib cudatoolkit}/lib"
-      "CUDA_INC=${lib.getDev cudatoolkit}/include"
-    ]
-    ++ lib.optionals (cudaAtLeast "11.4") [
-      "CUDA_HOME=${cuda_nvcc}"
-      "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-      "CUDA_INC=${lib.getDev cuda_cudart}/include"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NVCC_GENCODE=${flags.gencodeString}"
+  ]
+  ++ lib.optionals (cudaOlder "11.4") [
+    "CUDA_HOME=${cudatoolkit}"
+    "CUDA_LIB=${lib.getLib cudatoolkit}/lib"
+    "CUDA_INC=${lib.getDev cudatoolkit}/include"
+  ]
+  ++ lib.optionals (cudaAtLeast "11.4") [
+    "CUDA_HOME=${cuda_nvcc}"
+    "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
+    "CUDA_INC=${lib.getDev cuda_cudart}/include"
+  ];
 
   enableParallelBuilding = true;
 

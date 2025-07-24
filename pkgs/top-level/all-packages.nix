@@ -3898,8 +3898,7 @@ with pkgs;
     toPythonApplication (
       nvchecker.overridePythonAttrs (oldAttrs: {
         propagatedBuildInputs =
-          oldAttrs.propagatedBuildInputs
-          ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
+          oldAttrs.propagatedBuildInputs ++ lib.flatten (builtins.attrValues oldAttrs.optional-dependencies);
       })
     );
 
@@ -6231,7 +6230,8 @@ with pkgs;
             nixSupport
             zlib
             ;
-        } // extraArgs;
+        }
+        // extraArgs;
       in
       self
     );
@@ -6258,7 +6258,8 @@ with pkgs;
           noLibc = (self.libc == null);
 
           inherit bintools libc;
-        } // extraArgs;
+        }
+        // extraArgs;
       in
       self
     );
@@ -16463,7 +16464,8 @@ with pkgs;
               config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
             }
           )
-        ] ++ (if builtins.isList configuration then configuration else [ configuration ]);
+        ]
+        ++ (if builtins.isList configuration then configuration else [ configuration ]);
 
         # The system is inherited from the current pkgs above.
         # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.

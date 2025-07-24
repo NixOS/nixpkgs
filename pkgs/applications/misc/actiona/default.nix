@@ -47,15 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  patches =
-    [
-      # Sets the proper search location for the `.so` files and the translations
-      ./fix-paths.patch
-    ]
-    ++ lib.optionals (!textToSpeechSupport) [
-      # Removes TTS support
-      ./disable-tts.patch
-    ];
+  patches = [
+    # Sets the proper search location for the `.so` files and the translations
+    ./fix-paths.patch
+  ]
+  ++ lib.optionals (!textToSpeechSupport) [
+    # Removes TTS support
+    ./disable-tts.patch
+  ];
 
   postPatch = ''
     substituteInPlace gui/src/mainwindow.cpp executer/src/executer.cpp tools/src/languages.cpp \
@@ -80,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     qtx11extras
     qtxmlpatterns
-  ] ++ lib.optionals textToSpeechSupport [ qtspeech ];
+  ]
+  ++ lib.optionals textToSpeechSupport [ qtspeech ];
 
   # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
   cmakeFlags = [ (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) ];

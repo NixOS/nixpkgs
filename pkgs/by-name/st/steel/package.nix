@@ -52,21 +52,20 @@ rustPlatform.buildRustPackage {
     rm .cargo/config.toml
   '';
 
-  cargoBuildFlags =
-    [
-      "--package"
-      "steel-interpreter"
-      "--package"
-      "cargo-steel-lib"
-    ]
-    ++ lib.optionals includeLSP [
-      "--package"
-      "steel-language-server"
-    ]
-    ++ lib.optionals includeForge [
-      "--package"
-      "forge"
-    ];
+  cargoBuildFlags = [
+    "--package"
+    "steel-interpreter"
+    "--package"
+    "cargo-steel-lib"
+  ]
+  ++ lib.optionals includeLSP [
+    "--package"
+    "steel-language-server"
+  ]
+  ++ lib.optionals includeForge [
+    "--package"
+    "forge"
+  ];
 
   # Tests are disabled since they always fail when building with Nix
   doCheck = false;

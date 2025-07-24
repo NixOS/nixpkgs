@@ -103,24 +103,23 @@ buildGoModule rec {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
-  postInstall =
-    ''
-      mkdir -p $tools/bin
-      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
+  postInstall = ''
+    mkdir -p $tools/bin
+    mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
 
-      for bin in nvidia-container-runtime-hook nvidia-container-runtime; do
-        wrapProgram $tools/bin/$bin \
-          --prefix PATH : ${libnvidia-container}/bin:$out/bin
-      done
-    ''
-    + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
-      mkdir -p $out/etc/nvidia-container-runtime
+    for bin in nvidia-container-runtime-hook nvidia-container-runtime; do
+      wrapProgram $tools/bin/$bin \
+        --prefix PATH : ${libnvidia-container}/bin:$out/bin
+    done
+  ''
+  + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
+    mkdir -p $out/etc/nvidia-container-runtime
 
-      cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
+    cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
-      substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
-        --subst-var-by glibcbin ${lib.getBin glibc}
-    '';
+    substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
+      --subst-var-by glibcbin ${lib.getBin glibc}
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";

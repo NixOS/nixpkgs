@@ -65,45 +65,44 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      boost
-      catch2_3
-      cryptopp
-      cpp-jwt
-      enet
-      fmt
-      ffmpeg_6-headless
-      glslang
-      httplib
-      inih
-      libGL
-      libjack2
-      libpulseaudio
-      libunwind
-      libusb1
-      nlohmann_json
-      openal
-      openssl
-      pipewire
-      portaudio
-      qt6.qtbase
-      qt6.qtmultimedia
-      qt6.qttools
-      qt6.qtwayland
-      soundtouch
-      SDL2
-      sndio
-      spirv-tools
-      vulkan-headers
-      xorg.libX11
-      xorg.libXext
-      zstd
-    ]
-    ++ optionals enableQtTranslations [ qt6.qttools ]
-    ++ optionals enableCubeb [ cubeb ]
-    ++ optionals useDiscordRichPresence [ rapidjson ];
+  buildInputs = [
+    alsa-lib
+    boost
+    catch2_3
+    cryptopp
+    cpp-jwt
+    enet
+    fmt
+    ffmpeg_6-headless
+    glslang
+    httplib
+    inih
+    libGL
+    libjack2
+    libpulseaudio
+    libunwind
+    libusb1
+    nlohmann_json
+    openal
+    openssl
+    pipewire
+    portaudio
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qttools
+    qt6.qtwayland
+    soundtouch
+    SDL2
+    sndio
+    spirv-tools
+    vulkan-headers
+    xorg.libX11
+    xorg.libXext
+    zstd
+  ]
+  ++ optionals enableQtTranslations [ qt6.qttools ]
+  ++ optionals enableCubeb [ cubeb ]
+  ++ optionals useDiscordRichPresence [ rapidjson ];
 
   patches = [
     # Fix boost errors
