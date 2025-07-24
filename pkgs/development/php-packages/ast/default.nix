@@ -2,6 +2,7 @@
   buildPecl,
   lib,
   fetchFromGitHub,
+  php,
 }:
 
 let
@@ -24,5 +25,6 @@ buildPecl {
     license = licenses.bsd3;
     homepage = "https://pecl.php.net/package/ast";
     teams = [ teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }
