@@ -20,27 +20,29 @@
   makeWrapper,
   nix-update-script,
   stdenv,
+  cacert,
+  lld,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2025.1.2";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gD6gp7Qtf162zpRY0b3+g98GSH2aY07s2Auv4+lmbXQ=";
+    hash = "sha256-XSIgxCpN/6C3P8RbXOfRIjGpjvp937jtmif3AFDEJcQ=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4D7ETUOLixpFB4luqQlwkGR/C6Ke6+ZmPg3dKKkrw7c=";
+    hash = "sha256-S1YEJUgIdcfqqObKOeQyalEnHXtycVoSO5zFjhwikcM=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-YxOSfSyn+gUsw0HeKrkXZg568X9CAY1UWKnGHHWCC78=";
+  cargoHash = "sha256-J1TSbTorHga7kyNTuFsu77LlGdrwa81TtYr3c58BpSE=";
 
   cargoRoot = "src-tauri";
 
@@ -53,6 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     perl
     makeWrapper
+    cacert
+    lld
   ];
 
   buildInputs = [
@@ -72,7 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
-      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"' \
+      --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
@@ -103,7 +108,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preInstall = "pushd src-tauri";
 
-  postInstall = "popd";
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/bin
+      makeWrapper $out/Applications/Yaak.app/Contents/MacOS/yaak-app $out/bin/yaak-app
+    ''
+    + ''
+      popd
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
@@ -118,8 +130,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://yaak.app/";
     changelog = "https://github.com/mountain-loop/yaak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ redyf ];
-    mainProgram = "yaak";
+    maintainers = with lib.maintainers; [
+      redyf
+      dibenzepin
+    ];
+    mainProgram = "yaak-app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
