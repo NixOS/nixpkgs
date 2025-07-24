@@ -16758,6 +16758,8 @@ self: super: with self; {
 
   steamship = callPackage ../development/python-modules/steamship { };
 
+  steamworkspy = callPackage ../development/python-modules/steamworkspy { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   stemming = callPackage ../development/python-modules/stemming { };
