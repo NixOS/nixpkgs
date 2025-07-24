@@ -57,7 +57,7 @@ jobs:
 
       - run: |
           pinned=$(jq -r '.pins.nixpkgs.revision' ci/pinned.json)
-          git fetch --depth 1 origin "$pinned"
+          git -c protocol.version=2 fetch --no-tags --no-recurse-submodules --depth=1 origin "$pinned"
           git worktree add pinned "$pinned"
           git -C pinned sparse-checkout disable
 
