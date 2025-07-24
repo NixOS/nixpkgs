@@ -723,25 +723,24 @@ in
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 
-  vanillaPackages =
-    {
-      # recurse to build modules for the kernels
-      linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
-      linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-      linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-      linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
-      linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-      linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-      linux_6_15 = recurseIntoAttrs (packagesFor kernels.linux_6_15);
-    }
-    // lib.optionalAttrs config.allowAliases {
-      linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
-      linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
-      linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
-      linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
-      linux_6_13 = throw "linux 6.13 was removed because it reached its end of life upstream"; # Added 2025-06-22
-      linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
-    };
+  vanillaPackages = {
+    # recurse to build modules for the kernels
+    linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
+    linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
+    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
+    linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
+    linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
+    linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
+    linux_6_15 = recurseIntoAttrs (packagesFor kernels.linux_6_15);
+  }
+  // lib.optionalAttrs config.allowAliases {
+    linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
+    linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
+    linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
+    linux_6_13 = throw "linux 6.13 was removed because it reached its end of life upstream"; # Added 2025-06-22
+    linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
+  };
 
   rtPackages = {
     # realtime kernel packages
@@ -799,17 +798,16 @@ in
     }
   );
 
-  packageAliases =
-    {
-      linux_default = packages.linux_6_12;
-      # Update this when adding the newest kernel major version!
-      linux_latest = packages.linux_6_15;
-      linux_rt_default = packages.linux_rt_5_15;
-      linux_rt_latest = packages.linux_rt_6_6;
-    }
-    // lib.optionalAttrs config.allowAliases {
-      linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
-    };
+  packageAliases = {
+    linux_default = packages.linux_6_12;
+    # Update this when adding the newest kernel major version!
+    linux_latest = packages.linux_6_15;
+    linux_rt_default = packages.linux_rt_5_15;
+    linux_rt_latest = packages.linux_rt_6_6;
+  }
+  // lib.optionalAttrs config.allowAliases {
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
+  };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix { };
 
@@ -844,12 +842,13 @@ in
     }:
     stdenvNoCC.mkDerivation {
       inherit name src;
-      depsBuildBuild =
-        [ buildPackages.stdenv.cc ]
-        ++ lib.optionals (lib.versionAtLeast version "4.16") [
-          buildPackages.bison
-          buildPackages.flex
-        ];
+      depsBuildBuild = [
+        buildPackages.stdenv.cc
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "4.16") [
+        buildPackages.bison
+        buildPackages.flex
+      ];
       patches = map (p: p.patch) kernelPatches; # Patches may include new configs.
       postPatch = ''
         patchShebangs scripts/

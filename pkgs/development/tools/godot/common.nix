@@ -318,7 +318,8 @@ let
 
         outputs = [
           "out"
-        ] ++ lib.optional (editor) "man";
+        ]
+        ++ lib.optional (editor) "man";
         separateDebugInfo = true;
 
         # Set the build name which is part of the version. In official downloads, this
@@ -446,18 +447,17 @@ let
           ]
           ++ lib.optional withUdev udev;
 
-        nativeBuildInputs =
-          [
-            installShellFiles
-            perl
-            pkg-config
-            scons
-          ]
-          ++ lib.optionals withWayland [ wayland-scanner ]
-          ++ lib.optional (editor && withMono) [
-            makeWrapper
-            dotnet-sdk
-          ];
+        nativeBuildInputs = [
+          installShellFiles
+          perl
+          pkg-config
+          scons
+        ]
+        ++ lib.optionals withWayland [ wayland-scanner ]
+        ++ lib.optional (editor && withMono) [
+          makeWrapper
+          dotnet-sdk
+        ];
 
         postBuild = lib.optionalString (editor && withMono) ''
           echo "Generating Glue"
@@ -466,88 +466,86 @@ let
           python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
         '';
 
-        installPhase =
-          ''
-            runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-            mkdir -p "$out"/{bin,libexec}
-            cp -r bin/* "$out"/libexec
+          mkdir -p "$out"/{bin,libexec}
+          cp -r bin/* "$out"/libexec
 
-            cd "$out"/bin
-            ln -s ../libexec/${binary} godot${lib.versions.majorMinor version}${suffix}
-            ln -s godot${lib.versions.majorMinor version}${suffix} godot${lib.versions.major version}${suffix}
-            ln -s godot${lib.versions.major version}${suffix} godot${suffix}
-            cd -
-          ''
-          + (
-            if editor then
-              ''
-                installManPage misc/dist/linux/godot.6
+          cd "$out"/bin
+          ln -s ../libexec/${binary} godot${lib.versions.majorMinor version}${suffix}
+          ln -s godot${lib.versions.majorMinor version}${suffix} godot${lib.versions.major version}${suffix}
+          ln -s godot${lib.versions.major version}${suffix} godot${suffix}
+          cd -
+        ''
+        + (
+          if editor then
+            ''
+              installManPage misc/dist/linux/godot.6
 
-                mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-                cp misc/dist/linux/org.godotengine.Godot.desktop \
-                  "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
+              mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
+              cp misc/dist/linux/org.godotengine.Godot.desktop \
+                "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
 
-                substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
-                  --replace-fail "Exec=godot" "Exec=$out/bin/godot${suffix}" \
-                  --replace-fail "Godot Engine" "Godot Engine ${
-                    lib.versions.majorMinor version + lib.optionalString withMono " (Mono)"
-                  }"
-                cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
-                cp icon.png "$out/share/icons/godot.png"
-              ''
-              + lib.optionalString withMono ''
-                mkdir -p "$out"/share/nuget
-                mv "$out"/libexec/GodotSharp/Tools/nupkgs "$out"/share/nuget/source
+              substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
+                --replace-fail "Exec=godot" "Exec=$out/bin/godot${suffix}" \
+                --replace-fail "Godot Engine" "Godot Engine ${
+                  lib.versions.majorMinor version + lib.optionalString withMono " (Mono)"
+                }"
+              cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
+              cp icon.png "$out/share/icons/godot.png"
+            ''
+            + lib.optionalString withMono ''
+              mkdir -p "$out"/share/nuget
+              mv "$out"/libexec/GodotSharp/Tools/nupkgs "$out"/share/nuget/source
 
-                wrapProgram "$out"/libexec/${binary} \
-                  --prefix NUGET_FALLBACK_PACKAGES ';' "$out"/share/nuget/packages/
-              ''
-            else
-              let
-                template =
-                  (lib.replaceStrings
-                    [ "template" ]
-                    [
-                      {
-                        linuxbsd = "linux";
-                      }
-                      .${withPlatform}
-                    ]
-                    target
-                  )
-                  + "."
-                  + arch;
-              in
-              ''
-                templates="$out"/share/godot/export_templates/${dottedVersion}
-                mkdir -p "$templates"
-                ln -s "$out"/libexec/${binary} "$templates"/${template}
-              ''
-          )
-          + ''
-            runHook postInstall
-          '';
+              wrapProgram "$out"/libexec/${binary} \
+                --prefix NUGET_FALLBACK_PACKAGES ';' "$out"/share/nuget/packages/
+            ''
+          else
+            let
+              template =
+                (lib.replaceStrings
+                  [ "template" ]
+                  [
+                    {
+                      linuxbsd = "linux";
+                    }
+                    .${withPlatform}
+                  ]
+                  target
+                )
+                + "."
+                + arch;
+            in
+            ''
+              templates="$out"/share/godot/export_templates/${dottedVersion}
+              mkdir -p "$templates"
+              ln -s "$out"/libexec/${binary} "$templates"/${template}
+            ''
+        )
+        + ''
+          runHook postInstall
+        '';
 
-        passthru =
-          {
-            inherit updateScript;
-            tests =
-              mkTests finalAttrs.finalPackage dotnet-sdk
-              // lib.optionalAttrs (editor && withMono) {
-                sdk-override = mkTests finalAttrs.finalPackage dotnet-sdk_alt;
-              };
-          }
-          // lib.optionalAttrs editor {
-            export-template = mkTarget "template_release";
-            export-templates-bin = (
-              callPackage ./export-templates-bin.nix {
-                inherit version withMono;
-                godot = finalAttrs.finalPackage;
-                hash = exportTemplatesHash;
-              }
-            );
-          };
+        passthru = {
+          inherit updateScript;
+          tests =
+            mkTests finalAttrs.finalPackage dotnet-sdk
+            // lib.optionalAttrs (editor && withMono) {
+              sdk-override = mkTests finalAttrs.finalPackage dotnet-sdk_alt;
+            };
+        }
+        // lib.optionalAttrs editor {
+          export-template = mkTarget "template_release";
+          export-templates-bin = (
+            callPackage ./export-templates-bin.nix {
+              inherit version withMono;
+              godot = finalAttrs.finalPackage;
+              hash = exportTemplatesHash;
+            }
+          );
+        };
 
         requiredSystemFeatures = [
           # fixes: No space left on device
@@ -562,7 +560,8 @@ let
           platforms = [
             "x86_64-linux"
             "aarch64-linux"
-          ] ++ lib.optional (!withMono) "i686-linux";
+          ]
+          ++ lib.optional (!withMono) "i686-linux";
           maintainers = with lib.maintainers; [
             shiryel
             corngood

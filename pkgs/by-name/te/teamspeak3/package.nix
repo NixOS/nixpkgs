@@ -37,19 +37,18 @@ stdenv.mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      libsForQt5.quazip
-      glib
-      libcxx
-    ]
-    ++ (with qt5; [
-      qtbase
-      qtwebengine
-      qtwebchannel
-      qtwebsockets
-      qtsvg
-    ]);
+  buildInputs = [
+    libsForQt5.quazip
+    glib
+    libcxx
+  ]
+  ++ (with qt5; [
+    qtbase
+    qtwebengine
+    qtwebchannel
+    qtwebsockets
+    qtsvg
+  ]);
 
   # This runs the installer script. If it gets stuck, run it with -x.
   # If it then gets stuck at something like:

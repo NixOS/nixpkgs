@@ -51,7 +51,8 @@ buildPythonPackage rec {
     tornado
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf

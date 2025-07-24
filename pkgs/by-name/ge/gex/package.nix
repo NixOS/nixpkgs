@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;

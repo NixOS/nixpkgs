@@ -28,23 +28,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      gnutls
-      libedit
-      texinfo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libseccomp
-      pps-tools
-    ];
+  buildInputs = [
+    gnutls
+    libedit
+    texinfo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libseccomp
+    pps-tools
+  ];
 
   configureFlags = [
     "--enable-ntp-signd"
     "--sbindir=$(out)/bin"
     "--chronyrundir=/run/chrony"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--enable-scfilter";
 
   patches = [
     # Cleanup the installation script

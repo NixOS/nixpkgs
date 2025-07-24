@@ -48,7 +48,8 @@ buildPythonPackage rec {
     chardet
     psycopg2
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkPhase = ''
     runHook preCheck

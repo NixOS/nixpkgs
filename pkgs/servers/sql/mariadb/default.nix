@@ -84,36 +84,34 @@ let
           "man"
         ];
 
-        nativeBuildInputs =
-          [
-            cmake
-            pkg-config
-          ]
-          ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-          ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
+        nativeBuildInputs = [
+          cmake
+          pkg-config
+        ]
+        ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+        ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
-        buildInputs =
+        buildInputs = [
+          libiconv
+          ncurses
+          zlib
+          pcre2
+          openssl
+          curl
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux (
           [
-            libiconv
-            ncurses
-            zlib
-            pcre2
-            openssl
-            curl
+            libkrb5
+            systemd
           ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux (
-            [
-              libkrb5
-              systemd
-            ]
-            ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ])
-          )
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            cctools
-            perl
-            libedit
-          ]
-          ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
+          ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ])
+        )
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          cctools
+          perl
+          libedit
+        ]
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -123,66 +121,64 @@ let
           NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
         };
 
-        patches =
-          [
-            ./patch/cmake-includedir.patch
-            # patch for musl compatibility
-            ./patch/include-cstdint-full.patch
-          ]
-          # Fixes a build issue as documented on
-          # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
-          ++ lib.optional (
-            !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
-          ) ./patch/macos-MDEV-26769-regression-fix.patch;
+        patches = [
+          ./patch/cmake-includedir.patch
+          # patch for musl compatibility
+          ./patch/include-cstdint-full.patch
+        ]
+        # Fixes a build issue as documented on
+        # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
+        ++ lib.optional (
+          !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
+        ) ./patch/macos-MDEV-26769-regression-fix.patch;
 
-        cmakeFlags =
-          [
-            "-DBUILD_CONFIG=mysql_release"
-            "-DMANUFACTURER=nixos.org"
-            "-DDEFAULT_CHARSET=utf8mb4"
-            "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
-            "-DSECURITY_HARDENED=ON"
+        cmakeFlags = [
+          "-DBUILD_CONFIG=mysql_release"
+          "-DMANUFACTURER=nixos.org"
+          "-DDEFAULT_CHARSET=utf8mb4"
+          "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
+          "-DSECURITY_HARDENED=ON"
 
-            "-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock"
-            "-DINSTALL_BINDIR=bin"
-            "-DINSTALL_DOCDIR=share/doc/mysql"
-            "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
-            "-DINSTALL_INCLUDEDIR=include/mysql"
-            "-DINSTALL_LIBDIR=lib"
-            "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
-            "-DINSTALL_INFODIR=share/mysql/docs"
-            "-DINSTALL_MANDIR=share/man"
-            "-DINSTALL_MYSQLSHAREDIR=share/mysql"
-            "-DINSTALL_SCRIPTDIR=bin"
-            "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
-            "-DINSTALL_MYSQLTESTDIR=OFF"
-            "-DINSTALL_SQLBENCHDIR=OFF"
-            "-DINSTALL_PAMDIR=share/pam/lib/security"
-            "-DINSTALL_PAMDATADIR=share/pam/etc/security"
+          "-DINSTALL_UNIX_ADDRDIR=/run/mysqld/mysqld.sock"
+          "-DINSTALL_BINDIR=bin"
+          "-DINSTALL_DOCDIR=share/doc/mysql"
+          "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
+          "-DINSTALL_INCLUDEDIR=include/mysql"
+          "-DINSTALL_LIBDIR=lib"
+          "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
+          "-DINSTALL_INFODIR=share/mysql/docs"
+          "-DINSTALL_MANDIR=share/man"
+          "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+          "-DINSTALL_SCRIPTDIR=bin"
+          "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
+          "-DINSTALL_MYSQLTESTDIR=OFF"
+          "-DINSTALL_SQLBENCHDIR=OFF"
+          "-DINSTALL_PAMDIR=share/pam/lib/security"
+          "-DINSTALL_PAMDATADIR=share/pam/etc/security"
 
-            "-DWITH_ZLIB=system"
-            "-DWITH_SSL=system"
-            "-DWITH_PCRE=system"
-            "-DWITH_SAFEMALLOC=OFF"
-            "-DWITH_UNIT_TESTS=OFF"
-            "-DEMBEDDED_LIBRARY=OFF"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
-            # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
-            # to pass in java explicitly.
-            "-DCONNECT_WITH_JDBC=OFF"
-            "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
-          ]
-          ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
-            # workaround for https://jira.mariadb.org/browse/MDEV-29925
-            "-Dhave_C__Wl___as_needed="
-          ]
-          ++ lib.optionals isCross [
-            # revisit this if nixpkgs supports any architecture whose stack grows upwards
-            "-DSTACK_DIRECTION=-1"
-            "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
-          ];
+          "-DWITH_ZLIB=system"
+          "-DWITH_SSL=system"
+          "-DWITH_PCRE=system"
+          "-DWITH_SAFEMALLOC=OFF"
+          "-DWITH_UNIT_TESTS=OFF"
+          "-DEMBEDDED_LIBRARY=OFF"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
+          # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
+          # to pass in java explicitly.
+          "-DCONNECT_WITH_JDBC=OFF"
+          "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "10.6") [
+          # workaround for https://jira.mariadb.org/browse/MDEV-29925
+          "-Dhave_C__Wl___as_needed="
+        ]
+        ++ lib.optionals isCross [
+          # revisit this if nixpkgs supports any architecture whose stack grows upwards
+          "-DSTACK_DIRECTION=-1"
+          "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
+        ];
 
         postInstall = lib.optionalString (!withEmbedded) ''
           # Remove Development components. Need to use libmysqlclient.
@@ -235,8 +231,7 @@ let
           ];
 
           buildInputs =
-            common.buildInputs
-            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -245,15 +240,13 @@ let
             "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
           ];
 
-          postInstall =
-            common.postInstall
-            + ''
-              rm "$out"/bin/{mariadb-test,mysqltest}
-              libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
-              rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
-              mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
-              ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
-            '';
+          postInstall = common.postInstall + ''
+            rm "$out"/bin/{mariadb-test,mysqltest}
+            libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
+            rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
+            mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
+            ln -sv libmysqlclient${libExt} "$out"/lib/libmysqlclient_r${libExt}
+          '';
         }
       );
     in

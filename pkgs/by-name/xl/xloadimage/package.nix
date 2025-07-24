@@ -47,20 +47,19 @@ stdenv.mkDerivation rec {
     quilt
   ];
 
-  buildInputs =
-    [
-      libX11
-      libXt
-    ]
-    ++ lib.optionals withJpegSupport [
-      libjpeg
-    ]
-    ++ lib.optionals withPngSupport [
-      libpng
-    ]
-    ++ lib.optionals withTiffSupport [
-      libtiff
-    ];
+  buildInputs = [
+    libX11
+    libXt
+  ]
+  ++ lib.optionals withJpegSupport [
+    libjpeg
+  ]
+  ++ lib.optionals withPngSupport [
+    libpng
+  ]
+  ++ lib.optionals withTiffSupport [
+    libtiff
+  ];
 
   # NOTE: we patch the build-info script so that it never detects the utilities
   # it's trying to find; one of the Debian patches adds support for

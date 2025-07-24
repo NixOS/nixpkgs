@@ -20,14 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
-  postPatch =
-    ''
-      substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLoongArch64 ''
-      touch ./aclocal.m4 ./lib/config.hin ./configure ./doc/stamp-vti || die
-      find . -name Makefile.in -exec touch {} + || die
-    '';
+  postPatch = ''
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLoongArch64 ''
+    touch ./aclocal.m4 ./lib/config.hin ./configure ./doc/stamp-vti || die
+    find . -name Makefile.in -exec touch {} + || die
+  '';
 
   strictDeps = true;
 
@@ -42,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-syscmd-shell=${stdenv.shell}"
-  ] ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
   meta = {
     description = "GNU M4, a macro processor";

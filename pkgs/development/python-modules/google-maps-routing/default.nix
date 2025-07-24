@@ -35,7 +35,8 @@ buildPythonPackage rec {
     proto-plus
     protobuf
     google-geo-type
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   pythonImportsCheck = [ "google.maps.routing_v2" ];
 

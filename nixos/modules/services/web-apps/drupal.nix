@@ -293,7 +293,8 @@ in
           settings = {
             "listen.owner" = webserver.user;
             "listen.group" = webserver.group;
-          } // cfg.poolConfig;
+          }
+          // cfg.poolConfig;
         })
       ) eachSite;
     }

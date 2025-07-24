@@ -83,24 +83,23 @@ let
           patchShebangs scripts
         '';
 
-        nativeBuildInputs =
-          [
-            ncurses # tools/kwboot
-            bc
-            bison
-            flex
-            installShellFiles
-            (buildPackages.python3.withPackages (p: [
-              p.libfdt
-              p.setuptools # for pkg_resources
-              p.pyelftools
-            ]))
-            swig
-            which # for scripts/dtc-version.sh
-            perl # for oid build (secureboot)
-          ]
-          ++ lib.optionals (!crossTools) toolsDeps
-          ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
+        nativeBuildInputs = [
+          ncurses # tools/kwboot
+          bc
+          bison
+          flex
+          installShellFiles
+          (buildPackages.python3.withPackages (p: [
+            p.libfdt
+            p.setuptools # for pkg_resources
+            p.pyelftools
+          ]))
+          swig
+          which # for scripts/dtc-version.sh
+          perl # for oid build (secureboot)
+        ]
+        ++ lib.optionals (!crossTools) toolsDeps
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]; # sw_vers command is needed on darwin
         depsBuildBuild = [ buildPackages.gccStdenv.cc ]; # gccStdenv is needed for Darwin buildPlatform
         buildInputs = lib.optionals crossTools toolsDeps;
 
@@ -112,7 +111,8 @@ let
           "DTC=${lib.getExe buildPackages.dtc}"
           "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
           "HOSTCFLAGS=-fcommon"
-        ] ++ extraMakeFlags;
+        ]
+        ++ extraMakeFlags;
 
         passAsFile = [ "extraConfig" ];
 

@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     openssl
     cmocka
-  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [ libpcap ];
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [ libpcap ];
 
   cmakeFlags = [
     "-DBNGBLASTER_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"

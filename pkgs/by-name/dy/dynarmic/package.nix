@@ -82,30 +82,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools # sw_ver
-      darwin.bootstrap_cmds # mig
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.DarwinTools # sw_ver
+    darwin.bootstrap_cmds # mig
+  ];
 
-  buildInputs =
-    [
-      boost
-      robin-map
-      mcl
-      fmt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      oaknut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      xbyak
-      zydis
-    ];
+  buildInputs = [
+    boost
+    robin-map
+    mcl
+    fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    oaknut
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    xbyak
+    zydis
+  ];
 
   checkInputs = [
     catch2_3

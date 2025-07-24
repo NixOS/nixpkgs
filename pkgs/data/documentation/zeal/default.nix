@@ -48,7 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtimageformats
     qtwebengine
     xcbutilkeysyms
-  ] ++ lib.optionals isQt5 [ qtx11extras ];
+  ]
+  ++ lib.optionals isQt5 [ qtx11extras ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)

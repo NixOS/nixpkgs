@@ -57,7 +57,8 @@ stdenv.mkDerivation {
     gsl
     yaml-cpp
     zlib
-  ] ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"

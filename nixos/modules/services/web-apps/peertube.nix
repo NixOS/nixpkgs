@@ -502,18 +502,20 @@ in
         MemoryDenyWriteExecute = true;
         # System Call Filtering
         SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
-      } // cfgService;
+      }
+      // cfgService;
     };
 
     systemd.services.peertube = {
       description = "PeerTube daemon";
-      after =
-        [ "network.target" ]
-        ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
-        ++ lib.optionals cfg.database.createLocally [
-          "postgresql.target"
-          "peertube-init-db.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
+      ++ lib.optionals cfg.database.createLocally [
+        "postgresql.target"
+        "peertube-init-db.service"
+      ];
       requires =
         lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
@@ -592,7 +594,8 @@ in
           "pipe"
           "pipe2"
         ];
-      } // cfgService;
+      }
+      // cfgService;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {
@@ -613,24 +616,22 @@ in
           tryFiles = "/dev/null @api";
           priority = 1120;
 
-          extraConfig =
-            ''
-              client_max_body_size 0;
-              proxy_request_buffering off;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/users/[^/]+/imports/import-resumable$" = {
           tryFiles = "/dev/null @api";
           priority = 1130;
 
-          extraConfig =
-            ''
-              client_max_body_size 0;
-              proxy_request_buffering off;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
@@ -638,14 +639,13 @@ in
           root = cfg.settings.storage.tmp;
           priority = 1140;
 
-          extraConfig =
-            ''
-              limit_except POST HEAD { deny all; }
+          extraConfig = ''
+            limit_except POST HEAD { deny all; }
 
-              client_max_body_size 12G;
-              add_header X-File-Maximum-Size 8G always;
-            ''
-            + nginxCommonHeaders;
+            client_max_body_size 12G;
+            add_header X-File-Maximum-Size 8G always;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/runners/jobs/[^/]+/(update|success)$" = {
@@ -653,45 +653,42 @@ in
           root = cfg.settings.storage.tmp;
           priority = 1150;
 
-          extraConfig =
-            ''
-              client_max_body_size 12G;
-              add_header X-File-Maximum-Size 8G always;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 12G;
+            add_header X-File-Maximum-Size 8G always;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
           tryFiles = "/dev/null @api";
           priority = 1160;
 
-          extraConfig =
-            ''
-              client_max_body_size 6M;
-              add_header X-File-Maximum-Size 4M always;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 6M;
+            add_header X-File-Maximum-Size 4M always;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."@api" = {
           proxyPass = "http://peertube";
           priority = 1170;
 
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_connect_timeout 10m;
+            proxy_connect_timeout 10m;
 
-              proxy_send_timeout 10m;
-              proxy_read_timeout 10m;
+            proxy_send_timeout 10m;
+            proxy_read_timeout 10m;
 
-              client_max_body_size 100k;
-              send_timeout 10m;
-            ''
-            + nginxCommonHeaders;
+            client_max_body_size 100k;
+            send_timeout 10m;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Websocket
@@ -718,17 +715,16 @@ in
           proxyPass = "http://peertube";
           priority = 1240;
 
-          extraConfig =
-            ''
-              proxy_http_version 1.1;
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection 'upgrade';
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            ''
-            + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Bypass PeerTube for performance reasons.
@@ -743,67 +739,62 @@ in
         locations."~ ^/client/(.*\\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
           alias = "${cfg.package}/client/dist/$1";
           priority = 1320;
-          extraConfig =
-            ''
-              add_header Cache-Control 'public, max-age=604800, immutable';
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            add_header Cache-Control 'public, max-age=604800, immutable';
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /download/" = {
           proxyPass = "http://peertube";
           priority = 1410;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/streaming-playlists/hls/private/" = {
           proxyPass = "http://peertube";
           priority = 1420;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/web-videos/private/" = {
           proxyPass = "http://peertube";
           priority = 1430;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/webseed/private/" = {
           proxyPass = "http://peertube";
           priority = 1440;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/redundancy/" = {

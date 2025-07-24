@@ -64,19 +64,18 @@ rustPlatform.buildRustPackage rec {
     cp ${parallel-disk-usage}/bin/pdu src-tauri/bin/pdu-${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
-      npmHooks.npmConfigHook
-      nodejs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeBinaryWrapper
-    ];
+  nativeBuildInputs = [
+    cargo-tauri_1.hook
+    npmHooks.npmConfigHook
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dbus

@@ -28,21 +28,20 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      expat
-      fontconfig
-      libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libxcb
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    expat
+    fontconfig
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
+  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cargo-ui \

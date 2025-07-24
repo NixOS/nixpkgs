@@ -37,20 +37,19 @@ stdenv.mkDerivation rec {
     libxslt
     iconv
   ];
-  buildInputs =
-    [
-      groff
-      libxml2
-      opensp
-      libiconv
-      bash
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLSAX
-      XMLParser
-      XMLNamespaceSupport
-    ]);
+  buildInputs = [
+    groff
+    libxml2
+    opensp
+    libiconv
+    bash
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLSAX
+    XMLParser
+    XMLNamespaceSupport
+  ]);
 
   # configure tries to find osx in PATH and hardcodes the resulting path
   # (if any) on the Perl code. this fails under strictDeps, so override

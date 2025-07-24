@@ -53,12 +53,13 @@
 }:
 
 let
-  nvidia_x11s =
-    [ nvidia_x11 ]
-    ++ lib.optional nvidia_x11.useGLVND libglvnd
-    ++ lib.optionals (nvidia_x11_i686 != null) (
-      [ nvidia_x11_i686 ] ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686
-    );
+  nvidia_x11s = [
+    nvidia_x11
+  ]
+  ++ lib.optional nvidia_x11.useGLVND libglvnd
+  ++ lib.optionals (nvidia_x11_i686 != null) (
+    [ nvidia_x11_i686 ] ++ lib.optional nvidia_x11_i686.useGLVND libglvnd_i686
+  );
 
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
@@ -153,18 +154,17 @@ stdenv.mkDerivation rec {
   # includes the acceleration driver. As this is used for the X11
   # server, which runs under the host architecture, this does not
   # include the sub architecture components.
-  configureFlags =
-    [
-      "--with-udev-rules=$out/lib/udev/rules.d"
-      # Don't use a special group, just reuse wheel.
-      "CONF_GID=wheel"
-      # see #10282
-      #"CONF_PRIMUS_LD_PATH=${primusLibs}"
-    ]
-    ++ lib.optionals useNvidia [
-      "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
-      "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
-    ];
+  configureFlags = [
+    "--with-udev-rules=$out/lib/udev/rules.d"
+    # Don't use a special group, just reuse wheel.
+    "CONF_GID=wheel"
+    # see #10282
+    #"CONF_PRIMUS_LD_PATH=${primusLibs}"
+  ]
+  ++ lib.optionals useNvidia [
+    "CONF_LDPATH_NVIDIA=${nvidiaLibs}"
+    "CONF_MODPATH_NVIDIA=${nvidia_x11.bin}/lib/xorg/modules"
+  ];
 
   CFLAGS = [
     "-DX_MODULE_APPENDS=\\\"${xmodules}\\\""

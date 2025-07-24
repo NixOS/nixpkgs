@@ -610,9 +610,7 @@ In the following cases, a `.patch` file _should_ be added to Nixpkgs repository,
 The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
-{
-  patches = [ ./0001-add-missing-include.patch ];
-}
+{ patches = [ ./0001-add-missing-include.patch ]; }
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -719,13 +717,14 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ /* ... , */ yq-go }:
+# ... ,
+{ yq-go }:
 
 buildGoModule rec {
   # …
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
@@ -749,16 +748,26 @@ stdenv.mkDerivation (finalAttrs: {
 
 ```nix
 # my-package/example.nix
-{ runCommand, lib, my-package, ... }:
-runCommand "my-package-test" {
-  nativeBuildInputs = [ my-package ];
-  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
-} ''
-  my-package --help
-  my-package <example.in >example.actual
-  diff -U3 --color=auto example.expected example.actual
-  mkdir $out
-''
+{
+  runCommand,
+  lib,
+  my-package,
+  ...
+}:
+runCommand "my-package-test"
+  {
+    nativeBuildInputs = [ my-package ];
+    src = lib.sources.sourcesByRegex ./. [
+      ".*.in"
+      ".*.expected"
+    ];
+  }
+  ''
+    my-package --help
+    my-package <example.in >example.actual
+    diff -U3 --color=auto example.expected example.actual
+    mkdir $out
+  ''
 ```
 
 ### Writing larger package tests
@@ -769,7 +778,12 @@ This is an example using the `phoronix-test-suite` package with the current best
 Add the tests in `passthru.tests` to the package definition like this:
 
 ```nix
-{ stdenv, lib, fetchurl, callPackage }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  callPackage,
+}:
 
 stdenv.mkDerivation {
   # …
@@ -778,7 +792,9 @@ stdenv.mkDerivation {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { /* … */ };
+  meta = {
+    # …
+  };
 }
 ```
 
@@ -789,22 +805,21 @@ Create `tests.nix` in the package directory:
 
 let
   inherit (phoronix-test-suite) pname version;
-in
 
-runCommand "${pname}-tests" { meta.timeout = 60; }
-  ''
-    # automatic initial setup to prevent interactive questions
-    ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
-    # get version of installed program and compare with package version
-    if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
-      echo "Error: program version does not match package version"
-      exit 1
-    fi
-    # run dummy command
-    ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
-    # needed for Nix to register the command as successful
-    touch $out
-  ''
+in
+runCommand "${pname}-tests" { meta.timeout = 60; } ''
+  # automatic initial setup to prevent interactive questions
+  ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+  # get version of installed program and compare with package version
+  if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+    echo "Error: program version does not match package version"
+    exit 1
+  fi
+  # run dummy command
+  ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+  # needed for Nix to register the command as successful
+  touch $out
+''
 ```
 
 ### Running package tests
@@ -833,7 +848,11 @@ Like [package tests][larger-package-tests] as shown above, [NixOS module tests](
 For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
 
 ```nix
-{ stdenv, lib, nixosTests }:
+{
+  stdenv,
+  lib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   # ...
@@ -902,7 +921,11 @@ The `passthru.updateScript` attribute can contain one of the following:
   { stdenv }:
   stdenv.mkDerivation {
     # ...
-    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+    passthru.updateScript = [
+      ../../update.sh
+      pname
+      "--requested-release=unstable"
+    ];
   }
   ```
 
@@ -927,9 +950,14 @@ The `passthru.updateScript` attribute can contain one of the following:
       pname = "my-package";
       # ...
       passthru.updateScript = {
-        command = [ ../../update.sh pname ];
+        command = [
+          ../../update.sh
+          pname
+        ];
         attrPath = pname;
-        supportedFeatures = [ /* ... */ ];
+        supportedFeatures = [
+          # ...
+        ];
       };
     }
     ```

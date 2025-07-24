@@ -66,16 +66,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-aeET2ALRZwxNWsG5kECx8tXHwF2uxQA4E8BJtRhIIO0=";
   };
 
-  outputs =
-    [
-      "bin"
-      "dev"
-      "out"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      "man"
-      "devdoc"
-    ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    "man"
+    "devdoc"
+  ];
 
   # Not normally useful docs.
   outputInfo = "devdoc";
@@ -92,19 +91,18 @@ stdenv.mkDerivation rec {
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
   #  - ktls: requires tls module loaded into kernel
   # Change p11-kit test to use pkg-config to find p11-kit
-  postPatch =
-    ''
-      sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
-      sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
-      sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      # See https://gitlab.com/gnutls/gnutls/-/issues/945
-      sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed '2iexit 77' -i tests/{ktls,ktls_keyupdate}.sh
-    '';
+  postPatch = ''
+    sed '2iexit 77' -i tests/{pkgconfig,fastopen}.sh
+    sed '/^void doit(void)/,/^{/ s/{/{ exit(77);/' -i tests/{trust-store,psk-file}.c
+    sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # See https://gitlab.com/gnutls/gnutls/-/issues/945
+    sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed '2iexit 77' -i tests/{ktls,ktls_keyupdate}.sh
+  '';
 
   preConfigure = "patchShebangs .";
   configureFlags =
@@ -137,35 +135,33 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  buildInputs =
-    [
-      libtasn1
-      libidn2
-      zlib
-      gmp
-      libunistring
-      unbound
-      gettext
-      libiconv
-    ]
-    ++ lib.optional withP11-kit p11-kit
-    ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
+  buildInputs = [
+    libtasn1
+    libidn2
+    zlib
+    gmp
+    libunistring
+    unbound
+    gettext
+    libiconv
+  ]
+  ++ lib.optional withP11-kit p11-kit
+  ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
 
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-      texinfo
-    ]
-    ++ [
-      autoconf
-      automake
-    ]
-    ++ lib.optionals doCheck [
-      which
-      net-tools
-      util-linux
-    ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    texinfo
+  ]
+  ++ [
+    autoconf
+    automake
+  ]
+  ++ lib.optionals doCheck [
+    which
+    net-tools
+    util-linux
+  ];
 
   propagatedBuildInputs = [ nettle ];
 

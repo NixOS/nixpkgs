@@ -717,7 +717,8 @@ in
         ReadWritePaths = [
           cfg.dataDir
           "/tmp" # mosquitto_passwd creates files in /tmp before moving them
-        ] ++ lib.filter path.check cfg.logDest;
+        ]
+        ++ lib.filter path.check cfg.logDest;
         ReadOnlyPaths = map (p: "${p}") (
           cfg.includeDirs
           ++ lib.filter (v: v != null) (

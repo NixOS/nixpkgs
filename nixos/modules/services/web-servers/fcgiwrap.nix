@@ -148,32 +148,31 @@ in
       after = [ "nss-user-lookup.target" ];
       wantedBy = optional (cfg.socket.type != "unix") "multi-user.target";
 
-      serviceConfig =
-        {
-          ExecStart = ''
-            ${pkgs.fcgiwrap}/sbin/fcgiwrap ${
-              cli.toGNUCommandLineShell { } (
-                {
-                  c = cfg.process.prefork;
-                }
-                // (optionalAttrs (cfg.socket.type != "unix") {
-                  s = "${cfg.socket.type}:${cfg.socket.address}";
-                })
-              )
-            }
-          '';
-        }
-        // (
-          if cfg.process.user != null then
-            {
-              User = cfg.process.user;
-              Group = cfg.process.group;
-            }
-          else
-            {
-              DynamicUser = true;
-            }
-        );
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.fcgiwrap}/sbin/fcgiwrap ${
+            cli.toGNUCommandLineShell { } (
+              {
+                c = cfg.process.prefork;
+              }
+              // (optionalAttrs (cfg.socket.type != "unix") {
+                s = "${cfg.socket.type}:${cfg.socket.address}";
+              })
+            )
+          }
+        '';
+      }
+      // (
+        if cfg.process.user != null then
+          {
+            User = cfg.process.user;
+            Group = cfg.process.group;
+          }
+        else
+          {
+            DynamicUser = true;
+          }
+      );
     });
 
     systemd.sockets = forEachInstance (

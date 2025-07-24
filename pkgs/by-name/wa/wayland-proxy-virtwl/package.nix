@@ -24,17 +24,18 @@ ocamlPackages.buildDunePackage {
     pkg-config
   ];
 
-  buildInputs =
-    [ libdrm ]
-    ++ (with ocamlPackages; [
-      dune-configurator
-      eio_main
-      ppx_cstruct
-      wayland
-      cmdliner
-      logs
-      ppx_cstruct
-    ]);
+  buildInputs = [
+    libdrm
+  ]
+  ++ (with ocamlPackages; [
+    dune-configurator
+    eio_main
+    ppx_cstruct
+    wayland
+    cmdliner
+    logs
+    ppx_cstruct
+  ]);
 
   doCheck = true;
 

@@ -27,16 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # error: cannot initialize a variable of type 'xmlErrorPtr' (aka '_xmlError *')
   #        with an rvalue of type 'const xmlError *' (aka 'const _xmlError *')
-  postPatch =
-    ''
-      substituteInPlace src/wraplibxml.cpp \
-        --replace-fail "xmlErrorPtr err" "const xmlError *err"
-    ''
-    # error: invalid type argument of unary '*' (have 'long int')
-    + ''
-      substituteInPlace src/wraplibxml.cpp \
-        --replace-fail "initGenericErrorDefaultFunc ( NULL )" "xmlSetGenericErrorFunc( nullptr , nullptr )"
-    '';
+  postPatch = ''
+    substituteInPlace src/wraplibxml.cpp \
+      --replace-fail "xmlErrorPtr err" "const xmlError *err"
+  ''
+  # error: invalid type argument of unary '*' (have 'long int')
+  + ''
+    substituteInPlace src/wraplibxml.cpp \
+      --replace-fail "initGenericErrorDefaultFunc ( NULL )" "xmlSetGenericErrorFunc( nullptr , nullptr )"
+  '';
 
   nativeBuildInputs = [
     intltool

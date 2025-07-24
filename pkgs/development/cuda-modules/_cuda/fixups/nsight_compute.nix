@@ -32,26 +32,20 @@ in
     rdma-core
   ];
   dontWrapQtApps = true;
-  preInstall =
-    prevAttrs.preInstall or ""
-    + ''
-      rm -rf host/${archDir}/Mesa/
-    '';
-  postInstall =
-    prevAttrs.postInstall or ""
-    + ''
-      moveToOutput 'ncu' "''${!outputBin}/bin"
-      moveToOutput 'ncu-ui' "''${!outputBin}/bin"
-      moveToOutput 'host/${archDir}' "''${!outputBin}/bin"
-      moveToOutput 'target/${archDir}' "''${!outputBin}/bin"
-      wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
-    '';
-  preFixup =
-    prevAttrs.preFixup or ""
-    + ''
-      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
-    '';
+  preInstall = prevAttrs.preInstall or "" + ''
+    rm -rf host/${archDir}/Mesa/
+  '';
+  postInstall = prevAttrs.postInstall or "" + ''
+    moveToOutput 'ncu' "''${!outputBin}/bin"
+    moveToOutput 'ncu-ui' "''${!outputBin}/bin"
+    moveToOutput 'host/${archDir}' "''${!outputBin}/bin"
+    moveToOutput 'target/${archDir}' "''${!outputBin}/bin"
+    wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
+  '';
+  preFixup = prevAttrs.preFixup or "" + ''
+    # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+    patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/bin/host/${archDir}/Plugins/imageformats/libqtiff.so"
+  '';
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"
   ];

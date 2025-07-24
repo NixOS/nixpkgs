@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     linux-pam
-  ] ++ (lib.optionals x11Support [ libxcb ]);
+  ]
+  ++ (lib.optionals x11Support [ libxcb ]);
 
   postPatch = ''
     ln -s ${

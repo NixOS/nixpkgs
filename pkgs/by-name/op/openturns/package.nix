@@ -36,31 +36,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals enablePython [ python3Packages.sphinx ];
+  ]
+  ++ lib.optionals enablePython [ python3Packages.sphinx ];
 
-  buildInputs =
-    [
-      (lib.getLib primesieve)
-      boost
-      ceres-solver
-      cminpack
-      dlib
-      hdf5
-      hmat-oss
-      ipopt
-      libxml2
-      nlopt
-      pagmo2
-      spectra
-      swig
-      tbb
-    ]
-    ++ lib.optionals enablePython [
-      python3Packages.dill
-      python3Packages.matplotlib
-      python3Packages.psutil
-      python3Packages.python
-    ];
+  buildInputs = [
+    (lib.getLib primesieve)
+    boost
+    ceres-solver
+    cminpack
+    dlib
+    hdf5
+    hmat-oss
+    ipopt
+    libxml2
+    nlopt
+    pagmo2
+    spectra
+    swig
+    tbb
+  ]
+  ++ lib.optionals enablePython [
+    python3Packages.dill
+    python3Packages.matplotlib
+    python3Packages.psutil
+    python3Packages.python
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON" enablePython)

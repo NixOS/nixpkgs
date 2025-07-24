@@ -57,14 +57,12 @@ in
         "nsight-systems/${versionString}/${hostDir}/Mesa"
       ];
   };
-  postPatch =
-    prevAttrs.postPatch or ""
-    + ''
-      for path in $rmPatterns; do
-        rm -r "$path"
-      done
-      patchShebangs nsight-systems
-    '';
+  postPatch = prevAttrs.postPatch or "" + ''
+    for path in $rmPatterns; do
+      rm -r "$path"
+    done
+    patchShebangs nsight-systems
+  '';
   nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [ qt.wrapQtAppsHook ];
   dontWrapQtApps = true;
   buildInputs = prevAttrs.buildInputs or [ ] ++ [
@@ -108,12 +106,10 @@ in
       wrapQtApp "$bin/nsight-systems/${versionString}/${hostDir}/nsys-ui.bin"
     '';
 
-  preFixup =
-    prevAttrs.preFixup or ""
-    + ''
-      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so $bin/nsight-systems/${versionString}/${hostDir}/Plugins/imageformats/libqtiff.so
-    '';
+  preFixup = prevAttrs.preFixup or "" + ''
+    # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+    patchelf --replace-needed libtiff.so.5 libtiff.so $bin/nsight-systems/${versionString}/${hostDir}/Plugins/imageformats/libqtiff.so
+  '';
 
   autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps or [ ] ++ [
     "libnvidia-ml.so.1"

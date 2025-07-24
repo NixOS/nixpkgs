@@ -36,26 +36,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs =
-    [
-      curl
-      librsync
-      libthreadar
-      gpgme
-      libargon2
-      libgcrypt
-      openssl
-      bzip2
-      lz4
-      lzo
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr
-      e2fsprogs
-    ];
+  buildInputs = [
+    curl
+    librsync
+    libthreadar
+    gpgme
+    libargon2
+    libgcrypt
+    openssl
+    bzip2
+    lz4
+    lzo
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    e2fsprogs
+  ];
 
   configureFlags = [
     "--disable-birthtime"

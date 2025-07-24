@@ -38,45 +38,43 @@ stdenv.mkDerivation (finalAttrs: {
       ) "-D__LAPACK_int=int";
   };
 
-  buildInputs =
-    [
-      curl
-      gdal
-      netcdf
-      pcre
-      dcw-gmt
-      gshhg-gmt
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      fftwSinglePrec
-      blas
-      lapack
-    ];
+  buildInputs = [
+    curl
+    gdal
+    netcdf
+    pcre
+    dcw-gmt
+    gshhg-gmt
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    fftwSinglePrec
+    blas
+    lapack
+  ];
 
   propagatedBuildInputs = [ ghostscript ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "GMT_DOCDIR" "share/doc/gmt")
-      (lib.cmakeFeature "GMT_MANDIR" "share/man")
-      (lib.cmakeFeature "GMT_LIBDIR" "lib")
-      (lib.cmakeBool "COPY_GSHHG" false)
-      (lib.cmakeFeature "GSHHG_ROOT" "${gshhg-gmt.out}/share/gshhg-gmt")
-      (lib.cmakeBool "COPY_DCW" false)
-      (lib.cmakeFeature "DCW_ROOT" "${dcw-gmt.out}/share/dcw-gmt")
-      (lib.cmakeFeature "GDAL_ROOT" "${gdal.out}")
-      (lib.cmakeFeature "NETCDF_ROOT" "${netcdf.out}")
-      (lib.cmakeFeature "PCRE_ROOT" "${pcre.out}")
-      (lib.cmakeBool "GMT_INSTALL_TRADITIONAL_FOLDERNAMES" false)
-      (lib.cmakeBool "GMT_ENABLE_OPENMP" true)
-      (lib.cmakeBool "GMT_INSTALL_MODULE_LINKS" false)
-      (lib.cmakeFeature "LICENSE_RESTRICTED" "LGPL")
-    ]
-    ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      (lib.cmakeFeature "FFTW3_ROOT" "${fftwSinglePrec.dev}")
-      (lib.cmakeFeature "LAPACK_LIBRARY" "${lib.getLib lapack}/lib/liblapack.so")
-      (lib.cmakeFeature "BLAS_LIBRARY" "${lib.getLib blas}/lib/libblas.so")
-    ]);
+  cmakeFlags = [
+    (lib.cmakeFeature "GMT_DOCDIR" "share/doc/gmt")
+    (lib.cmakeFeature "GMT_MANDIR" "share/man")
+    (lib.cmakeFeature "GMT_LIBDIR" "lib")
+    (lib.cmakeBool "COPY_GSHHG" false)
+    (lib.cmakeFeature "GSHHG_ROOT" "${gshhg-gmt.out}/share/gshhg-gmt")
+    (lib.cmakeBool "COPY_DCW" false)
+    (lib.cmakeFeature "DCW_ROOT" "${dcw-gmt.out}/share/dcw-gmt")
+    (lib.cmakeFeature "GDAL_ROOT" "${gdal.out}")
+    (lib.cmakeFeature "NETCDF_ROOT" "${netcdf.out}")
+    (lib.cmakeFeature "PCRE_ROOT" "${pcre.out}")
+    (lib.cmakeBool "GMT_INSTALL_TRADITIONAL_FOLDERNAMES" false)
+    (lib.cmakeBool "GMT_ENABLE_OPENMP" true)
+    (lib.cmakeBool "GMT_INSTALL_MODULE_LINKS" false)
+    (lib.cmakeFeature "LICENSE_RESTRICTED" "LGPL")
+  ]
+  ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (lib.cmakeFeature "FFTW3_ROOT" "${fftwSinglePrec.dev}")
+    (lib.cmakeFeature "LAPACK_LIBRARY" "${lib.getLib lapack}/lib/liblapack.so")
+    (lib.cmakeFeature "BLAS_LIBRARY" "${lib.getLib blas}/lib/libblas.so")
+  ]);
 
   meta = {
     homepage = "https://www.generic-mapping-tools.org";

@@ -39,9 +39,7 @@ Should grub be used as bootloader, and `/boot` is located on an
 encrypted partition, it is necessary to add the following grub option:
 
 ```nix
-{
-  boot.loader.grub.enableCryptodisk = true;
-}
+{ boot.loader.grub.enableCryptodisk = true; }
 ```
 
 ## FIDO2 {#sec-luks-file-systems-fido2}
@@ -74,7 +72,8 @@ key, add the following to `configuration.nix`:
 ```nix
 {
   boot.initrd.luks.fido2Support = true;
-  boot.initrd.luks.devices."/dev/sda2".fido2.credential = "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
+  boot.initrd.luks.devices."/dev/sda2".fido2.credential =
+    "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
 }
 ```
 
@@ -83,9 +82,7 @@ you might want to enable it only when your device is PIN protected, such
 as [Trezor](https://trezor.io/).
 
 ```nix
-{
-  boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess = true;
-}
+{ boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess = true; }
 ```
 
 ### systemd Stage 1 {#sec-luks-file-systems-fido2-systemd}

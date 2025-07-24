@@ -37,22 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     zip
   ];
 
-  buildInputs =
-    [
-      the-foundation
-      fribidi
-      harfbuzz
-      libogg
-      libwebp
-      libX11
-      mpg123
-      opusfile
-      SDL2
-    ]
-    ++ lib.optionals enableTUI [
-      ncurses
-      sealcurses
-    ];
+  buildInputs = [
+    the-foundation
+    fribidi
+    harfbuzz
+    libogg
+    libwebp
+    libX11
+    mpg123
+    opusfile
+    SDL2
+  ]
+  ++ lib.optionals enableTUI [
+    ncurses
+    sealcurses
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TUI" enableTUI)

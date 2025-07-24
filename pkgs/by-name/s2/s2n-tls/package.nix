@@ -27,15 +27,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMips64 [
-      # See https://github.com/aws/s2n-tls/issues/1592 and https://github.com/aws/s2n-tls/pull/1609
-      "-DS2N_NO_PQ=ON"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMips64 [
+    # See https://github.com/aws/s2n-tls/issues/1592 and https://github.com/aws/s2n-tls/pull/1609
+    "-DS2N_NO_PQ=ON"
+  ];
 
   propagatedBuildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 

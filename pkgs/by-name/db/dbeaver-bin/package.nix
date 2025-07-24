@@ -44,44 +44,43 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-      undmg
-      autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    undmg
+    autoSignDarwinBinariesHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
 
-  prePatch =
-    ''
-      substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
-        --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
-    ''
-    # remove the bundled JRE configuration on Darwin
-    # dont use substituteInPlace here because it would match "-vmargs"
-    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
-    '';
+  prePatch = ''
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  ''
+  # remove the bundled JRE configuration on Darwin
+  # dont use substituteInPlace here because it would match "-vmargs"
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
+  '';
 
-  preInstall =
-    ''
-      # most directories are for different architectures, only keep what we need
-      shopt -s extglob
-      pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
-      rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
-      popd
-    ''
-    # remove the bundled JRE on Darwin
-    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      rm -r Contents/Eclipse/jre/
-    '';
+  preInstall = ''
+    # most directories are for different architectures, only keep what we need
+    shopt -s extglob
+    pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
+    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+    popd
+  ''
+  # remove the bundled JRE on Darwin
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    rm -r Contents/Eclipse/jre/
+  '';
 
   installPhase =
     if !stdenvNoCC.hostPlatform.isDarwin then

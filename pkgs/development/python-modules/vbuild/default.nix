@@ -39,15 +39,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vbuild" ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_min"
-      "test_pycomp_onlineClosurable"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      "test_ok"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_min"
+    "test_pycomp_onlineClosurable"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    "test_ok"
+  ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/manatlan/vbuild/issues/13

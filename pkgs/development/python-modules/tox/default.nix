@@ -57,7 +57,8 @@ buildPythonPackage rec {
     six
     toml
     virtualenv
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   doCheck = false; # infinite recursion via devpi-client
 

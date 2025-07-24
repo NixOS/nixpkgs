@@ -21,17 +21,16 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-9RP3LmZF7P2c0+Jt/kMSVPb4cBtyH6P3FZ5UrQpBP0I=";
   };
 
-  propagatedBuildInputs =
-    [
-      aircrack-ng
-      iproute2
-      networkmanager
-      tshark
-      wirelesstools
-    ]
-    ++ (with python3.pkgs; [
-      matplotlib
-    ]);
+  propagatedBuildInputs = [
+    aircrack-ng
+    iproute2
+    networkmanager
+    tshark
+    wirelesstools
+  ]
+  ++ (with python3.pkgs; [
+    matplotlib
+  ]);
 
   dontBuild = true;
 

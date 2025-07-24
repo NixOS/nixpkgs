@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     python3
-  ] ++ lib.optionals enableManpages [ buildPackages.pandoc ];
+  ]
+  ++ lib.optionals enableManpages [ buildPackages.pandoc ];
 
   buildInputs = [
     libsoup_3

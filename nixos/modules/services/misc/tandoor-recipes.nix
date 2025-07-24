@@ -9,17 +9,16 @@ let
   pkg = cfg.package;
 
   # SECRET_KEY through an env file
-  env =
-    {
-      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-      DEBUG = "0";
-      DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
-    }
-    // lib.optionalAttrs (config.time.timeZone != null) {
-      TZ = config.time.timeZone;
-    }
-    // (lib.mapAttrs (_: toString) cfg.extraConfig);
+  env = {
+    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+    DEBUG = "0";
+    DEBUG_TOOLBAR = "0";
+    MEDIA_ROOT = "/var/lib/tandoor-recipes";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    TZ = config.time.timeZone;
+  }
+  // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars

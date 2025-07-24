@@ -23,31 +23,29 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace kcollectd/rrd_interface.cc --replace-fail 'char *arg[] =' 'const char *arg[] ='
   '';
 
-  nativeBuildInputs =
-    [
-      shared-mime-info
-      cmake
-    ]
-    ++ (with kdePackages; [
-      wrapQtAppsHook
-      extra-cmake-modules
-    ]);
+  nativeBuildInputs = [
+    shared-mime-info
+    cmake
+  ]
+  ++ (with kdePackages; [
+    wrapQtAppsHook
+    extra-cmake-modules
+  ]);
 
-  buildInputs =
-    [
-      boost
-      rrdtool
-    ]
-    ++ (with kdePackages; [
-      qtbase
-      kconfig
-      kio
-      kxmlgui
-      kiconthemes
-      ki18n
-      kguiaddons
-      breeze-icons
-    ]);
+  buildInputs = [
+    boost
+    rrdtool
+  ]
+  ++ (with kdePackages; [
+    qtbase
+    kconfig
+    kio
+    kxmlgui
+    kiconthemes
+    ki18n
+    kguiaddons
+    breeze-icons
+  ]);
 
   meta = with lib; {
     description = "Graphical frontend to collectd";

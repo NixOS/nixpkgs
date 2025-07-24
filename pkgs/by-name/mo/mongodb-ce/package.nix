@@ -85,24 +85,23 @@ stdenv.mkDerivation (finalAttrs: {
             pup
           ];
 
-          text =
-            ''
-              # Get latest version string from Github
-              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
+          text = ''
+            # Get latest version string from Github
+            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
 
-              # Check if the new version is available for download, if not, exit
-              curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
+            # Check if the new version is available for download, if not, exit
+            curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
 
-              if [[ "${version}" = "$NEW_VERSION" ]]; then
-                  echo "The new version same as the old version."
-                  exit 0
-              fi
-            ''
-            + lib.concatStrings (
-              map (system: ''
-                nix-update --system ${system} --version "$NEW_VERSION" ${finalAttrs.pname}
-              '') finalAttrs.meta.platforms
-            );
+            if [[ "${version}" = "$NEW_VERSION" ]]; then
+                echo "The new version same as the old version."
+                exit 0
+            fi
+          ''
+          + lib.concatStrings (
+            map (system: ''
+              nix-update --system ${system} --version "$NEW_VERSION" ${finalAttrs.pname}
+            '') finalAttrs.meta.platforms
+          );
         };
       in
       {

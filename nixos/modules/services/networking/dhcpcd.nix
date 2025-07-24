@@ -295,16 +295,15 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path =
-          [
-            dhcpcd
-            config.networking.resolvconf.package
-          ]
-          ++ lib.optional cfg.setHostname (
-            pkgs.writeShellScriptBin "hostname" ''
-              ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
-            ''
-          );
+        path = [
+          dhcpcd
+          config.networking.resolvconf.package
+        ]
+        ++ lib.optional cfg.setHostname (
+          pkgs.writeShellScriptBin "hostname" ''
+            ${lib.getExe' pkgs.systemd "hostnamectl"} set-hostname --transient $1
+          ''
+        );
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -341,12 +340,13 @@ in
             "CAP_NET_RAW"
             "CAP_NET_BIND_SERVICE"
           ];
-          ReadWritePaths =
-            [ "/proc/sys/net/ipv4" ]
-            ++ lib.optional cfgN.enableIPv6 "/proc/sys/net/ipv6"
-            ++ lib.optionals useResolvConf (
-              [ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles
-            );
+          ReadWritePaths = [
+            "/proc/sys/net/ipv4"
+          ]
+          ++ lib.optional cfgN.enableIPv6 "/proc/sys/net/ipv6"
+          ++ lib.optionals useResolvConf (
+            [ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles
+          );
           DeviceAllow = "";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -375,18 +375,17 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter =
-            [
-              "@system-service"
-              "~@aio"
-              "~@keyring"
-              "~@memlock"
-              "~@mount"
-            ]
-            ++ lib.optionals (!cfg.allowSetuid) [
-              "~@privileged"
-              "~@resources"
-            ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@aio"
+            "~@keyring"
+            "~@memlock"
+            "~@mount"
+          ]
+          ++ lib.optionals (!cfg.allowSetuid) [
+            "~@privileged"
+            "~@resources"
+          ];
           SystemCallArchitectures = "native";
           UMask = "0027";
         };

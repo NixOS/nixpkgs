@@ -71,15 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
             buildInputs = lib.lists.unique (
               (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
             );
-            postInstall =
-              (previousAttrs.postInstall or "")
-              + ''
-                for extension in ${builtins.toString selectedExtensions} ; do
-                  cp -r $extension/* $out
-                  # Some files are the same for all/several extensions. We allow overwriting them again.
-                  chmod -R +w $out
-                done
-              '';
+            postInstall = (previousAttrs.postInstall or "") + ''
+              for extension in ${builtins.toString selectedExtensions} ; do
+                cp -r $extension/* $out
+                # Some files are the same for all/several extensions. We allow overwriting them again.
+                chmod -R +w $out
+              done
+            '';
           }
         );
       tests.geoserver = nixosTests.geoserver;

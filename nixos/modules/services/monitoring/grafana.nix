@@ -2018,10 +2018,11 @@ in
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.target"
-        ++ lib.optional useMysql "mysql.service";
+      after = [
+        "networking.target"
+      ]
+      ++ lib.optional usePostgresql "postgresql.target"
+      ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -2067,7 +2068,8 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ]
+        ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''

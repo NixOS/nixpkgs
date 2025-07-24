@@ -100,68 +100,68 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "networking.target"
-      ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.target");
+      ]
+      ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.target");
       path = with pkgs; [ replace-secret ];
       restartTriggers = restartTriggers;
-      serviceConfig =
-        {
-          ExecStart = "${cfg.package}/bin/dex serve /run/dex/config.yaml";
-          ExecStartPre = [
-            "${pkgs.coreutils}/bin/install -m 600 ${configFile} /run/dex/config.yaml"
-            "+${startPreScript}"
-          ];
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/dex serve /run/dex/config.yaml";
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/install -m 600 ${configFile} /run/dex/config.yaml"
+          "+${startPreScript}"
+        ];
 
-          RuntimeDirectory = "dex";
-          BindReadOnlyPaths = [
-            "/nix/store"
-            "-/etc/dex"
-            "-/etc/hosts"
-            "-/etc/localtime"
-            "-/etc/nsswitch.conf"
-            "-/etc/resolv.conf"
-            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
-          ];
-          BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
-          # ProtectClock= adds DeviceAllow=char-rtc r
-          DeviceAllow = "";
-          DynamicUser = true;
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateMounts = true;
-          # Port needs to be exposed to the host network
-          #PrivateNetwork = true;
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectSystem = "strict";
-          ProtectControlGroups = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @setuid @keyring"
-          ];
-          UMask = "0066";
-        }
-        // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = cfg.environmentFile;
-        };
+        RuntimeDirectory = "dex";
+        BindReadOnlyPaths = [
+          "/nix/store"
+          "-/etc/dex"
+          "-/etc/hosts"
+          "-/etc/localtime"
+          "-/etc/nsswitch.conf"
+          "-/etc/resolv.conf"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+        ];
+        BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+        DynamicUser = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        # Port needs to be exposed to the host network
+        #PrivateNetwork = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectSystem = "strict";
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @setuid @keyring"
+        ];
+        UMask = "0066";
+      }
+      // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = cfg.environmentFile;
+      };
     };
   };
 

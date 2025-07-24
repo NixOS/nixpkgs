@@ -49,7 +49,8 @@ let
         # inherit testName; TODO (roberth): need this?
         nativeBuildInputs = [
           hostPkgs.makeWrapper
-        ] ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
+        ]
+        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
         buildInputs = [ testDriver ];
         testScript = config.testScriptString;
         preferLocalBuild = true;

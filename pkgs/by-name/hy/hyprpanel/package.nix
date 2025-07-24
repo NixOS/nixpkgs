@@ -93,7 +93,8 @@ ags.bundle {
       ]
       ++ lib.optional enableCuda gpustat
     ))
-  ] ++ (lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [ gpu-screen-recorder ]);
+  ]
+  ++ (lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [ gpu-screen-recorder ]);
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

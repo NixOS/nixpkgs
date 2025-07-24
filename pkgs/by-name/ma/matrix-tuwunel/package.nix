@@ -102,13 +102,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      zstd
-    ]
-    ++ lib.optional enableJemalloc rust-jemalloc-sys'
-    ++ lib.optional enableLiburing liburing;
+  buildInputs = [
+    bzip2
+    zstd
+  ]
+  ++ lib.optional enableJemalloc rust-jemalloc-sys'
+  ++ lib.optional enableLiburing liburing;
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -121,38 +120,36 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # for available features.
   # We enable all default features except jemalloc, blurhashing, and io_uring, which
   # we guard behind our own (default-enabled) flags.
-  buildFeatures =
-    [
-      "brotli_compression"
-      "direct_tls"
-      "element_hacks"
-      "gzip_compression"
-      "media_thumbnail"
-      "release_max_log_level"
-      "systemd"
-      "url_preview"
-      "zstd_compression"
-    ]
-    ++ lib.optional enableBlurhashing "blurhashing"
-    ++ lib.optional enableJemalloc [
-      "jemalloc"
-      "jemalloc_conf"
-    ]
-    ++ lib.optional enableLiburing "io_uring";
+  buildFeatures = [
+    "brotli_compression"
+    "direct_tls"
+    "element_hacks"
+    "gzip_compression"
+    "media_thumbnail"
+    "release_max_log_level"
+    "systemd"
+    "url_preview"
+    "zstd_compression"
+  ]
+  ++ lib.optional enableBlurhashing "blurhashing"
+  ++ lib.optional enableJemalloc [
+    "jemalloc"
+    "jemalloc_conf"
+  ]
+  ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
-    tests =
-      {
-        version = testers.testVersion {
-          inherit (finalAttrs) version;
-          package = matrix-tuwunel;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) matrix-tuwunel;
+    tests = {
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = matrix-tuwunel;
       };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) matrix-tuwunel;
+    };
   };
 
   meta = {

@@ -34,14 +34,13 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-LJEKjhyAsK6b7mKObX8tNJdKt53iagMD/YLzoY5GVPw=";
 
-  nativeBuildInputs =
-    [
-      which
-      python3
-      nodejs
-      pkg-config
-    ]
-    ++
+  nativeBuildInputs = [
+    which
+    python3
+    nodejs
+    pkg-config
+  ]
+  ++
     # for flock
     lib.optional stdenv.hostPlatform.isLinux util-linux;
 

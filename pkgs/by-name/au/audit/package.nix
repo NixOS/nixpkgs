@@ -68,14 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-    ]
-    ++ lib.optionals enablePython [
-      python3
-      swig
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    swig
+  ];
 
   buildInputs = [
     bash

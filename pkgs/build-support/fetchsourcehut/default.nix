@@ -36,19 +36,18 @@ makeOverridable (
   let
     urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";
     baseUrl = urlFor vc;
-    baseArgs =
-      {
-        inherit name;
-      }
-      // removeAttrs args [
-        "owner"
-        "repo"
-        "rev"
-        "domain"
-        "vc"
-        "name"
-        "fetchSubmodules"
-      ];
+    baseArgs = {
+      inherit name;
+    }
+    // removeAttrs args [
+      "owner"
+      "repo"
+      "rev"
+      "domain"
+      "vc"
+      "name"
+      "fetchSubmodules"
+    ];
     vcArgs = baseArgs // {
       inherit rev;
       url = baseUrl;

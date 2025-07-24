@@ -67,16 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      makeWrapper
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies
   cmakeFlags = [

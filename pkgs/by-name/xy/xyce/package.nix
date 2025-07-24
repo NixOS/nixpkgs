@@ -62,44 +62,42 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
-  configureFlags =
-    [
-      "CXXFLAGS=-O3"
-      "--enable-xyce-shareable"
-      "--enable-shared"
-      "--enable-stokhos"
-      "--enable-amesos2"
-    ]
-    ++ lib.optionals withMPI [
-      "--enable-mpi"
-      "CXX=mpicxx"
-      "CC=mpicc"
-      "F77=mpif77"
-    ];
+  configureFlags = [
+    "CXXFLAGS=-O3"
+    "--enable-xyce-shareable"
+    "--enable-shared"
+    "--enable-stokhos"
+    "--enable-amesos2"
+  ]
+  ++ lib.optionals withMPI [
+    "--enable-mpi"
+    "CXX=mpicxx"
+    "CC=mpicc"
+    "F77=mpif77"
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      gfortran
-      libtool_2
-    ]
-    ++ lib.optionals enableDocs [
-      (texliveMedium.withPackages (
-        ps: with ps; [
-          enumitem
-          koma-script
-          optional
-          framed
-          enumitem
-          multirow
-          newtx
-          preprint
-        ]
-      ))
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gfortran
+    libtool_2
+  ]
+  ++ lib.optionals enableDocs [
+    (texliveMedium.withPackages (
+      ps: with ps; [
+        enumitem
+        koma-script
+        optional
+        framed
+        enumitem
+        multirow
+        newtx
+        preprint
+      ]
+    ))
+  ];
 
   buildInputs = [
     bison
@@ -109,7 +107,8 @@ stdenv.mkDerivation rec {
     lapack
     suitesparse
     trilinos
-  ] ++ lib.optionals withMPI [ mpi ];
+  ]
+  ++ lib.optionals withMPI [ mpi ];
 
   doCheck = enableTests;
 
@@ -128,21 +127,20 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeCheckInputs =
-    [
-      bc
-      perl
-      (python3.withPackages (
-        ps: with ps; [
-          numpy
-          scipy
-        ]
-      ))
-    ]
-    ++ lib.optionals withMPI [
-      mpi
-      openssh
-    ];
+  nativeCheckInputs = [
+    bc
+    perl
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        scipy
+      ]
+    ))
+  ]
+  ++ lib.optionals withMPI [
+    mpi
+    openssh
+  ];
 
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"

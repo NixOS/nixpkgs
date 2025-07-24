@@ -74,25 +74,24 @@ buildPythonPackage rec {
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
-  nativeCheckInputs =
-    [
-      # test suite fails with pytest>=8.0.1
-      # https://github.com/fonttools/fonttools/issues/3458
-      pytest7CheckHook
-    ]
-    ++ lib.concatLists (
-      lib.attrVals (
-        [
-          "woff"
-          # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
-          "ufo"
-        ]
-        ++ lib.optionals (!skia-pathops.meta.broken) [
-          "pathops" # broken
-        ]
-        ++ [ "repacker" ]
-      ) optional-dependencies
-    );
+  nativeCheckInputs = [
+    # test suite fails with pytest>=8.0.1
+    # https://github.com/fonttools/fonttools/issues/3458
+    pytest7CheckHook
+  ]
+  ++ lib.concatLists (
+    lib.attrVals (
+      [
+        "woff"
+        # "interpolatable" is not included because it only contains 2 tests at the time of writing but adds 270 extra dependencies
+        "ufo"
+      ]
+      ++ lib.optionals (!skia-pathops.meta.broken) [
+        "pathops" # broken
+      ]
+      ++ [ "repacker" ]
+    ) optional-dependencies
+  );
 
   pythonImportsCheck = [ "fontTools" ];
 

@@ -85,24 +85,23 @@ buildPythonPackage rec {
     "posthog"
   ];
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-      pytest-order
-      pytest-random-order
-      click
-      flaky
-      freezegun
-      invoke
-      moto
-      psycopg2
-      requirements-parser
-      responses
-      sqlalchemy
-    ]
-    ++ moto.optional-dependencies.s3
-    ++ moto.optional-dependencies.sns;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+    pytest-order
+    pytest-random-order
+    click
+    flaky
+    freezegun
+    invoke
+    moto
+    psycopg2
+    requirements-parser
+    responses
+    sqlalchemy
+  ]
+  ++ moto.optional-dependencies.s3
+  ++ moto.optional-dependencies.sns;
 
   disabledTestPaths = [
     # try to access external URLs:

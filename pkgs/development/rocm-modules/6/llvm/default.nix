@@ -381,22 +381,18 @@ rec {
               # FIXME: Config file in rocmcxx instead of GCC_INSTALL_PREFIX?
               "-DGCC_INSTALL_PREFIX=${gcc-prefix}"
             ];
-          postFixup =
-            (old.postFixup or "")
-            + ''
-              find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
-              find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
-              find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
-              find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
-            '';
-          preConfigure =
-            (old.preConfigure or "")
-            + ''
-              cmakeFlagsArray+=(
-                '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
-                '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
-              )
-            '';
+          postFixup = (old.postFixup or "") + ''
+            find $lib -type f -exec remove-references-to -t ${stdenvToBuildRocmLlvm.cc} {} +
+            find $lib -type f -exec remove-references-to -t ${stdenv.cc} {} +
+            find $lib -type f -exec remove-references-to -t ${stdenv.cc.cc} {} +
+            find $lib -type f -exec remove-references-to -t ${stdenv.cc.bintools} {} +
+          '';
+          preConfigure = (old.preConfigure or "") + ''
+            cmakeFlagsArray+=(
+              '-DCMAKE_C_FLAGS_RELEASE=${llvmExtraCflags}'
+              '-DCMAKE_CXX_FLAGS_RELEASE=${llvmExtraCflags}'
+            )
+          '';
         }
       )
     )
@@ -456,24 +452,23 @@ rec {
   # Emulate a monolithic ROCm LLVM build to support building ROCm's in-tree LLVM projects
   rocm-merged-llvm = symlinkJoin {
     name = "rocm-llvm-merge";
-    paths =
-      [
-        llvm
-        llvm.dev
-        lld
-        lld.lib
-        lld.dev
-        libunwind
-        libunwind.dev
-        compiler-rt
-        compiler-rt.dev
-        rocmcxx
-      ]
-      ++ lib.optionals useLibcxx [
-        libcxx
-        libcxx.out
-        libcxx.dev
-      ];
+    paths = [
+      llvm
+      llvm.dev
+      lld
+      lld.lib
+      lld.dev
+      libunwind
+      libunwind.dev
+      compiler-rt
+      compiler-rt.dev
+      rocmcxx
+    ]
+    ++ lib.optionals useLibcxx [
+      libcxx
+      libcxx.out
+      libcxx.dev
+    ];
     postBuild = builtins.unsafeDiscardStringContext ''
       found_files=$(find $out -name '*.cmake')
       if [ -z "$found_files" ]; then

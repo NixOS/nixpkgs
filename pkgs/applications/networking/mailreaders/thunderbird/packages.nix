@@ -44,19 +44,18 @@ let
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
       };
-      extraPatches =
-        [
-          # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-          (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
-        ]
-        ++ lib.optionals (lib.versionOlder version "139") [
-          # clang-19 fixes for char_traits build issue
-          # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
-          # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
-          # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
-          ./0001-Removed-lookup-against-basic_string-uint8_t.patch
-          ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
-        ];
+      extraPatches = [
+        # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
+        (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
+      ]
+      ++ lib.optionals (lib.versionOlder version "139") [
+        # clang-19 fixes for char_traits build issue
+        # https://github.com/rnpgp/rnp/pull/2242/commits/e0790a2c4ff8e09d52522785cec1c9db23d304ac
+        # https://github.com/rnpgp/sexpp/pull/54/commits/46744a14ffc235330bb99cebfaf294829c31bba4
+        # Remove when upstream bumps bundled rnp version: https://bugzilla.mozilla.org/show_bug.cgi?id=1893950
+        ./0001-Removed-lookup-against-basic_string-uint8_t.patch
+        ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
+      ];
 
       extraPassthru = {
         icu73 = icu73';

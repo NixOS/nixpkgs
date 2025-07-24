@@ -26,22 +26,21 @@
   withGraphics ? false,
 }:
 let
-  rpathLibs =
-    [
-      expat
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXxf86vm
-      xorg.libxcb
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    expat
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXxf86vm
+    xorg.libxcb
+    libxkbcommon
+    wayland
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";

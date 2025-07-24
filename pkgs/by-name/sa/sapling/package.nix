@@ -114,17 +114,16 @@ python311Packages.buildPythonApplication {
       "serde_bser-0.4.0" = "sha256-Su1IP3NzQu/87p/+uQaG8JcICL9hit3OV1O9oFiACsQ=";
     };
   };
-  postPatch =
-    ''
-      cp ${./Cargo.lock} Cargo.lock
-    ''
-    + lib.optionalString (!enableMinimal) ''
-      # If asked, we optionally patch in a hardcoded path to the
-      # 'nodejs' package, so that 'sl web' always works. Without the
-      # patch, 'sl web' will still work if 'nodejs' is in $PATH.
-      substituteInPlace lib/config/loader/src/builtin_static/core.rs \
-        --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
-    '';
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  ''
+  + lib.optionalString (!enableMinimal) ''
+    # If asked, we optionally patch in a hardcoded path to the
+    # 'nodejs' package, so that 'sl web' always works. Without the
+    # patch, 'sl web' will still work if 'nodejs' is in $PATH.
+    substituteInPlace lib/config/loader/src/builtin_static/core.rs \
+      --replace '"#);' $'[web]\nnode-path=${nodejs}/bin/node\n"#);'
+  '';
 
   # Since the derivation builder doesn't have network access to remain pure,
   # fetch the artifacts manually and link them. Then replace the hardcoded URLs
@@ -154,14 +153,13 @@ python311Packages.buildPythonApplication {
     rustc
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+    libiconv
+  ];
 
   HGNAME = "sl";
   SAPLING_OSS_BUILD = "true";

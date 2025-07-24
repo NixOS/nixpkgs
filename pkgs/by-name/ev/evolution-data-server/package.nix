@@ -87,40 +87,39 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs =
-    [
-      glib
-      libsecret
-      libsoup_3
-      gnome-online-accounts
-      p11-kit
-      libgweather
-      icu
-      sqlite
-      libkrb5
-      openldap
-      glib-networking
-      libcanberra-gtk3
-      libphonenumber
-      libuuid
-      boost
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ lib.optionals withGtk3 [
-      gtk3
-    ]
-    ++ lib.optionals (withGtk3 && enableOAuth2) [
-      webkitgtk_4_1
-    ]
-    ++ lib.optionals withGtk4 [
-      gtk4
-    ]
-    ++ lib.optionals (withGtk4 && enableOAuth2) [
-      webkitgtk_6_0
-    ];
+  buildInputs = [
+    glib
+    libsecret
+    libsoup_3
+    gnome-online-accounts
+    p11-kit
+    libgweather
+    icu
+    sqlite
+    libkrb5
+    openldap
+    glib-networking
+    libcanberra-gtk3
+    libphonenumber
+    libuuid
+    boost
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ lib.optionals withGtk3 [
+    gtk3
+  ]
+  ++ lib.optionals (withGtk3 && enableOAuth2) [
+    webkitgtk_4_1
+  ]
+  ++ lib.optionals withGtk4 [
+    gtk4
+  ]
+  ++ lib.optionals (withGtk4 && enableOAuth2) [
+    webkitgtk_6_0
+  ];
 
   propagatedBuildInputs = [
     db
@@ -132,22 +131,21 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_VALA_BINDINGS=ON"
-      "-DENABLE_INTROSPECTION=ON"
-      "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
-      "-DWITH_PHONENUMBER=ON"
-      "-DENABLE_GTK=${lib.boolToString withGtk3}"
-      "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
-      "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
-      "-DENABLE_GTK4=${lib.boolToString withGtk4}"
-      "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
-      "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-    ];
+  cmakeFlags = [
+    "-DENABLE_VALA_BINDINGS=ON"
+    "-DENABLE_INTROSPECTION=ON"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+    "-DWITH_PHONENUMBER=ON"
+    "-DENABLE_GTK=${lib.boolToString withGtk3}"
+    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
+    "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
+    "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+  ];
 
   strictDeps = true;
 

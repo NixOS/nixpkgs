@@ -196,11 +196,12 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (stdenv.hostPlatform) system;
   inherit i686bundled;
 
-  outputs =
-    [ "out" ]
-    ++ lib.optional i686bundled "lib32"
-    ++ lib.optional (!libsOnly) "bin"
-    ++ lib.optional (!libsOnly && firmware) "firmware";
+  outputs = [
+    "out"
+  ]
+  ++ lib.optional i686bundled "lib32"
+  ++ lib.optional (!libsOnly) "bin"
+  ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
 
   kernel = if libsOnly then null else kernel.dev;
@@ -233,7 +234,8 @@ stdenv.mkDerivation (finalAttrs: {
     which
     libarchive
     jq
-  ] ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
+  ]
+  ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
 
   disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
 
@@ -328,10 +330,11 @@ stdenv.mkDerivation (finalAttrs: {
       if useFabricmanager then "Data Center" else "X.org"
     } driver and kernel module for NVIDIA cards";
     license = licenses.unfreeRedistributable;
-    platforms =
-      [ "x86_64-linux" ]
-      ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
-      ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
+    ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
     maintainers = with maintainers; [
       kiskae
       edwtjo

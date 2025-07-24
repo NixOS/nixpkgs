@@ -101,24 +101,23 @@ buildNpmPackage' rec {
   # make electron-builder not attempt to codesign the app on darwin
   env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
 
-  nativeBuildInputs =
-    [
-      cargo
-      jq
-      makeWrapper
-      napi-rs-cli
-      pkg-config
-      rustc
-      rustPlatform.cargoCheckHook
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    cargo
+    jq
+    makeWrapper
+    napi-rs-cli
+    pkg-config
+    rustc
+    rustPlatform.cargoCheckHook
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_14
@@ -157,13 +156,12 @@ buildNpmPackage' rec {
     (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
-  checkFlags =
-    [
-      "--skip=password::password::tests::test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--skip=clipboard::tests::test_write_read"
-    ];
+  checkFlags = [
+    "--skip=password::password::tests::test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=clipboard::tests::test_write_read"
+  ];
 
   preCheck = ''
     pushd ${cargoRoot}
@@ -175,43 +173,42 @@ buildNpmPackage' rec {
     popd
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r apps/desktop/dist/mac*/Bitwarden.app $out/Applications
-      makeWrapper $out/Applications/Bitwarden.app/Contents/MacOS/Bitwarden $out/bin/bitwarden
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/opt/Bitwarden
-      cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r apps/desktop/dist/mac*/Bitwarden.app $out/Applications
+    makeWrapper $out/Applications/Bitwarden.app/Contents/MacOS/Bitwarden $out/bin/bitwarden
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/Bitwarden
+    cp -r apps/desktop/dist/linux-*unpacked/{locales,resources{,.pak}} $out/opt/Bitwarden
 
-      makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
-        --add-flags $out/opt/Bitwarden/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --set-default ELECTRON_IS_DEV 0 \
-        --inherit-argv0
+    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
+      --add-flags $out/opt/Bitwarden/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
 
-      # Extract the polkit policy file from the multiline string in the source code.
-      # This may break in the future but its better than copy-pasting it manually.
-      mkdir -p $out/share/polkit-1/actions/
-      pushd apps/desktop/src/key-management/biometrics
-      awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
-      popd
+    # Extract the polkit policy file from the multiline string in the source code.
+    # This may break in the future but its better than copy-pasting it manually.
+    mkdir -p $out/share/polkit-1/actions/
+    pushd apps/desktop/src/key-management/biometrics
+    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+    popd
 
-      pushd apps/desktop/resources/icons
-      for icon in *.png; do
-        dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
-        mkdir -p "$dir"
-        cp "$icon" "$dir"/${icon}.png
-      done
-      popd
-    ''
-    + ''
-      runHook postInstall
-    '';
+    pushd apps/desktop/resources/icons
+    for icon in *.png; do
+      dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
+      mkdir -p "$dir"
+      cp "$icon" "$dir"/${icon}.png
+    done
+    popd
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

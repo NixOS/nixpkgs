@@ -32,17 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LierbGPkVIy5/2vtBl94TQcSpmNX9OUDMntDdo5BeiU=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_10.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpm_10.configHook
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs

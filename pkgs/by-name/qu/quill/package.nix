@@ -51,14 +51,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
   ];
-  buildInputs =
-    [
-      openssl
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+    udev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = {
     homepage = "https://github.com/dfinity/quill";

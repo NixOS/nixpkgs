@@ -170,14 +170,14 @@ let
             # Crude method to drop polly patches if present, they're not needed for tblgen.
             (p: (!lib.hasInfix "-polly" p))
             tools.libllvm.patches;
-        clangPatches =
-          [
-            # Would take tools.libclang.patches, but this introduces a cycle due
-            # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
-            # So take the only patch known to be necessary.
-            (metadata.getVersionFile "clang/gnu-install-dirs.patch")
-          ]
-          ++ lib.optional (stdenv.isAarch64 && lib.versions.major metadata.release_version == "17")
+        clangPatches = [
+          # Would take tools.libclang.patches, but this introduces a cycle due
+          # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
+          # So take the only patch known to be necessary.
+          (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+        ]
+        ++
+          lib.optional (stdenv.isAarch64 && lib.versions.major metadata.release_version == "17")
             # Fixes llvm17 tblgen builds on aarch64.
             # https://github.com/llvm/llvm-project/issues/106521#issuecomment-2337175680
             (metadata.getVersionFile "clang/aarch64-tblgen.patch");
@@ -278,11 +278,12 @@ let
           cc = tools.clang-unwrapped;
           libcxx = targetLlvmLibraries.libcxx;
           bintools = bintools';
-          extraPackages =
-            [ targetLlvmLibraries.compiler-rt ]
-            ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-              targetLlvmLibraries.libunwind
-            ];
+          extraPackages = [
+            targetLlvmLibraries.compiler-rt
+          ]
+          ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
+            targetLlvmLibraries.libunwind
+          ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
@@ -303,21 +304,20 @@ let
             + mkExtraBuildCommands cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-Wno-unused-command-line-argument"
-              "-B${targetLlvmLibraries.compiler-rt}/lib"
-            ]
-            ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-            ) "--unwindlib=libunwind"
-            ++ lib.optional (
-              !stdenv.targetPlatform.isWasm
-              && !stdenv.targetPlatform.isFreeBSD
-              && stdenv.targetPlatform.useLLVM or false
-            ) "-lunwind"
-            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+          nixSupport.cc-cflags = [
+            "-rtlib=compiler-rt"
+            "-Wno-unused-command-line-argument"
+            "-B${targetLlvmLibraries.compiler-rt}/lib"
+          ]
+          ++ lib.optional (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) "--unwindlib=libunwind"
+          ++ lib.optional (
+            !stdenv.targetPlatform.isWasm
+            && !stdenv.targetPlatform.isFreeBSD
+            && stdenv.targetPlatform.useLLVM or false
+          ) "-lunwind"
+          ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
             !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
@@ -329,9 +329,11 @@ let
           cc = tools.clang-unwrapped;
           libcxx = targetLlvmLibraries.libcxx;
           bintools = bintools';
-          extraPackages =
-            [ targetLlvmLibraries.compiler-rt-no-libc ]
-            ++ lib.optionals
+          extraPackages = [
+            targetLlvmLibraries.compiler-rt-no-libc
+          ]
+          ++
+            lib.optionals
               (
                 !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
               )
@@ -358,21 +360,20 @@ let
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-Wno-unused-command-line-argument"
-              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-            ]
-            ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-            ) "--unwindlib=libunwind"
-            ++ lib.optional (
-              !stdenv.targetPlatform.isWasm
-              && !stdenv.targetPlatform.isFreeBSD
-              && stdenv.targetPlatform.useLLVM or false
-            ) "-lunwind"
-            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+          nixSupport.cc-cflags = [
+            "-rtlib=compiler-rt"
+            "-Wno-unused-command-line-argument"
+            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          ]
+          ++ lib.optional (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+          ) "--unwindlib=libunwind"
+          ++ lib.optional (
+            !stdenv.targetPlatform.isWasm
+            && !stdenv.targetPlatform.isFreeBSD
+            && stdenv.targetPlatform.useLLVM or false
+          ) "-lunwind"
+          ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
             !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
@@ -394,15 +395,14 @@ let
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-              "-nostdlib++"
-            ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          nixSupport.cc-cflags = [
+            "-rtlib=compiler-rt"
+            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+            "-nostdlib++"
+          ]
+          ++ lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
         }
       );
 
@@ -420,14 +420,13 @@ let
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-            ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          nixSupport.cc-cflags = [
+            "-rtlib=compiler-rt"
+            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          ]
+          ++ lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
         }
       );
 

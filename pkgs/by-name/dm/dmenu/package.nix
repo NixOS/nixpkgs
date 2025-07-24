@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXinerama
     libXft
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   inherit patches;
 

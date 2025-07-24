@@ -76,7 +76,8 @@ buildPythonPackage rec {
     torch = [
       torch
       safetensors
-    ] ++ safetensors.optional-dependencies.torch;
+    ]
+    ++ safetensors.optional-dependencies.torch;
     hf_transfer = [
       hf-transfer
     ];

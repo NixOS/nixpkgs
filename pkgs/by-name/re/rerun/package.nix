@@ -107,7 +107,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getDev openssl)
     libxkbcommon
     vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

@@ -31,35 +31,33 @@ buildPythonApplication rec {
     hatchling
   ];
 
-  buildInputs =
-    [
-      rbw
-    ]
-    ++ lib.optionals waylandSupport [
-      wl-clipboard
-      wtype
-    ]
-    ++ lib.optionals x11Support [
-      xclip
-      xdotool
-    ];
+  buildInputs = [
+    rbw
+  ]
+  ++ lib.optionals waylandSupport [
+    wl-clipboard
+    wtype
+  ]
+  ++ lib.optionals x11Support [
+    xclip
+    xdotool
+  ];
 
   propagatedBuildInputs = [ configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 
-  wrapper_paths =
-    [
-      rbw
-    ]
-    ++ lib.optionals waylandSupport [
-      wl-clipboard
-      wtype
-    ]
-    ++ lib.optionals x11Support [
-      xclip
-      xdotool
-    ];
+  wrapper_paths = [
+    rbw
+  ]
+  ++ lib.optionals waylandSupport [
+    wl-clipboard
+    wtype
+  ]
+  ++ lib.optionals x11Support [
+    xclip
+    xdotool
+  ];
 
   wrapper_flags =
     lib.optionalString waylandSupport "--typer wtype --clipboarder wl-copy"

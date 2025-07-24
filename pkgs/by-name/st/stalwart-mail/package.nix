@@ -43,22 +43,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     sqlite
     zstd
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "sqlite"
-      "postgres"
-      "mysql"
-      "rocks"
-      "elastic"
-      "s3"
-      "redis"
-    ]
-    ++ lib.optionals withFoundationdb [ "foundationdb" ]
-    ++ lib.optionals stalwartEnterprise [ "enterprise" ];
+  buildFeatures = [
+    "sqlite"
+    "postgres"
+    "mysql"
+    "rocks"
+    "elastic"
+    "s3"
+    "redis"
+  ]
+  ++ lib.optionals withFoundationdb [ "foundationdb" ]
+  ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -171,16 +171,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
-    license =
-      [ lib.licenses.agpl3Only ]
-      ++ lib.optionals stalwartEnterprise [
-        {
-          fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
-          url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
-          free = false;
-          redistributable = false;
-        }
-      ];
+    license = [
+      lib.licenses.agpl3Only
+    ]
+    ++ lib.optionals stalwartEnterprise [
+      {
+        fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
+        url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+        free = false;
+        redistributable = false;
+      }
+    ];
 
     mainProgram = "stalwart";
     maintainers = with lib.maintainers; [

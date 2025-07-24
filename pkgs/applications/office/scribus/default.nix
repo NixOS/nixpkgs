@@ -92,7 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtimageformats
     qt6.qtsvg
     qt6.qttools
-  ] ++ lib.optionals libmspub.meta.available [ libmspub ];
+  ]
+  ++ lib.optionals libmspub.meta.available [ libmspub ];
 
   cmakeFlags = [ (lib.cmakeBool "WANT_GRAPHICSMAGICK" true) ];
 

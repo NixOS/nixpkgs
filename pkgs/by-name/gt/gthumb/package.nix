@@ -83,7 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     libX11
-  ] ++ lib.optional withWebservices webkitgtk_4_0;
+  ]
+  ++ lib.optional withWebservices webkitgtk_4_0;
 
   mesonFlags = [
     "-Dlibchamplain=true"

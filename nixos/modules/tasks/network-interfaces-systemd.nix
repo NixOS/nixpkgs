@@ -237,43 +237,41 @@ in
         vlanNetworks
       ];
       boot.initrd.availableKernelModules =
-        optional (cfg.bridges != { }) "bridge"
-        ++ optional (cfg.vlans != { }) "8021q";
+        optional (cfg.bridges != { }) "bridge" ++ optional (cfg.vlans != { }) "8021q";
     })
 
     (mkIf cfg.useNetworkd {
 
-      assertions =
-        [
-          {
-            assertion = cfg.defaultGatewayWindowSize == null;
-            message = "networking.defaultGatewayWindowSize is not supported by networkd.";
-          }
-          {
-            assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
-            message = "networking.defaultGateway.interface is not optional when using networkd.";
-          }
-          {
-            assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
-            message = "networking.defaultGateway6.interface is not optional when using networkd.";
-          }
-        ]
-        ++ flip mapAttrsToList cfg.bridges (
-          n:
-          { rstp, ... }:
-          {
-            assertion = !rstp;
-            message = "networking.bridges.${n}.rstp is not supported by networkd.";
-          }
-        )
-        ++ flip mapAttrsToList cfg.fooOverUDP (
-          n:
-          { local, ... }:
-          {
-            assertion = local == null;
-            message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
-          }
-        );
+      assertions = [
+        {
+          assertion = cfg.defaultGatewayWindowSize == null;
+          message = "networking.defaultGatewayWindowSize is not supported by networkd.";
+        }
+        {
+          assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
+          message = "networking.defaultGateway.interface is not optional when using networkd.";
+        }
+        {
+          assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
+          message = "networking.defaultGateway6.interface is not optional when using networkd.";
+        }
+      ]
+      ++ flip mapAttrsToList cfg.bridges (
+        n:
+        { rstp, ... }:
+        {
+          assertion = !rstp;
+          message = "networking.bridges.${n}.rstp is not supported by networkd.";
+        }
+      )
+      ++ flip mapAttrsToList cfg.fooOverUDP (
+        n:
+        { local, ... }:
+        {
+          assertion = local == null;
+          message = "networking.fooOverUDP.${n}.local is not supported by networkd.";
+        }
+      );
 
       networking.dhcpcd.enable = mkDefault false;
 
@@ -409,14 +407,13 @@ in
                 # unfortunately networkd cannot encode dependencies of netdevs on addresses/routes,
                 # so we cannot specify Local=, Peer=, PeerPort=. this looks like a missing feature
                 # in networkd.
-                fooOverUDPConfig =
-                  {
-                    Port = fou.port;
-                    Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
-                  }
-                  // (optionalAttrs (fou.protocol != null) {
-                    Protocol = fou.protocol;
-                  });
+                fooOverUDPConfig = {
+                  Port = fou.port;
+                  Encapsulation = if fou.protocol != null then "FooOverUDP" else "GenericUDPEncapsulation";
+                }
+                // (optionalAttrs (fou.protocol != null) {
+                  Protocol = fou.protocol;
+                });
               };
             }
           )
@@ -554,7 +551,8 @@ in
                 after = [
                   "network-pre.target"
                   "ovs-vswitchd.service"
-                ] ++ deps;
+                ]
+                ++ deps;
                 wants = deps; # if one or more interface fails, the switch should continue to run
                 serviceConfig.Type = "oneshot";
                 serviceConfig.RemainAfterExit = true;

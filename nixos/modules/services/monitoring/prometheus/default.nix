@@ -201,7 +201,8 @@ let
         tls_config = mkOpt promTypes.tls_config ''
           TLS configuration.
         '';
-      } // extraOptions;
+      }
+      // extraOptions;
     };
 
   #

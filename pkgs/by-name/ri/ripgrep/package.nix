@@ -32,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     writableTmpDirAsHomeHook # required for wine when cross-compiling to Windows
-  ] ++ lib.optional withPCRE2 pkg-config;
+  ]
+  ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
@@ -48,16 +49,15 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase =
-    ''
-      file="$(mktemp)"
-      echo "abc\nbcd\ncde" > "$file"
-      ${rg} -N 'bcd' "$file"
-      ${rg} -N 'cd' "$file"
-    ''
-    + lib.optionalString withPCRE2 ''
-      echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
-    '';
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    ${rg} -N 'bcd' "$file"
+    ${rg} -N 'cd' "$file"
+  ''
+  + lib.optionalString withPCRE2 ''
+    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
+  '';
 
   meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
