@@ -1541,14 +1541,6 @@ with pkgs;
     emojiSupport = true;
   };
 
-  st = callPackage ../applications/terminal-emulators/st {
-    conf = config.st.conf or null;
-    patches = config.st.patches or [ ];
-    extraLibs = config.st.extraLibs or [ ];
-  };
-  xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
-  mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
-
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -12013,9 +12005,6 @@ with pkgs;
 
   djview4 = djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
-  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
-
   dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
@@ -12057,14 +12046,6 @@ with pkgs;
   dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_18;
   };
-
-  dwm = callPackage ../applications/window-managers/dwm {
-    # dwm is configured entirely through source modification. Allow users to
-    # specify patches through nixpkgs.config.dwm.patches
-    patches = config.dwm.patches or [ ];
-  };
-
-  dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];

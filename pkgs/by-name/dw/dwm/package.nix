@@ -1,25 +1,28 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   libX11,
   libXinerama,
   libXft,
   writeText,
   pkg-config,
-  patches ? [ ],
-  conf ? null,
+  # customization
+  config,
+  conf ? config.dwm.conf or null,
+  patches ? config.dwm.patches or [ ],
+  extraLibs ? config.dwm.extraLibs or [ ],
   # update script dependencies
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dwm";
   version = "6.5";
 
-  src = fetchurl {
-    url = "https://dl.suckless.org/dwm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Ideev6ny+5MUGDbCZmy4H0eExp1k5/GyNS+blwuglyk=";
+  src = fetchzip {
+    url = "https://dl.suckless.org/dwm/dwm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Cc4B8evvuRxOjbeOhg3oAs3Nxi/msxWg950/eiq536w=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isStatic pkg-config;
@@ -28,14 +31,16 @@ stdenv.mkDerivation rec {
     libX11
     libXinerama
     libXft
-  ];
+  ] ++ extraLibs;
 
-  prePatch = ''
-    sed -i "s@/usr/local@$out@" config.mk
-  '';
-
-  preBuild = lib.optional stdenv.hostPlatform.isStatic ''
-    makeFlagsArray+=(LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)")
+  preBuild = ''
+    makeFlagsArray+=(
+      "PREFIX=$out"
+      "CC=$CC"
+      ${lib.optionalString stdenv.hostPlatform.isStatic ''
+        LDFLAGS="$(${stdenv.cc.targetPrefix}pkg-config --static --libs x11 xinerama xft)"
+      ''}
+    )
   '';
 
   # Allow users set their own list of patches
@@ -49,13 +54,11 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
-
   passthru.updateScript = gitUpdater {
     url = "git://git.suckless.org/dwm";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dwm.suckless.org/";
     description = "Extremely fast, small, and dynamic window manager for X";
     longDescription = ''
@@ -67,9 +70,9 @@ stdenv.mkDerivation rec {
       multiple tags. Selecting certain tags displays all windows with these
       tags.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ neonfuz ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ neonfuz ];
+    platforms = lib.platforms.all;
     mainProgram = "dwm";
   };
-}
+})
