@@ -808,7 +808,7 @@ let
           hash = "sha256-vVbaHSaBX6QzpnYMQlpPsJU1TQYJEBe8jq95muzwN0o=";
         };
         meta = {
-          description = " A solarized-palenight theme for vscode";
+          description = "Solarized-palenight theme for vscode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=BrandonKirbyson.solarized-palenight";
           homepage = "https://github.com/BrandonKirbyson/Solarized-Palenight";
           license = lib.licenses.mit;

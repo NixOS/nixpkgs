@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
+  gtk-doc,
   pkg-config,
   atk,
   cairo,
@@ -48,10 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Fix build with gcc 14
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ autoreconfHook ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      intltool
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      autoreconfHook
+      gtk-doc
+    ];
+
   buildInputs =
     [
       atk
@@ -67,10 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       gnome-common
       gtk-mac-integration-gtk2
     ];
-
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    intltoolize --force
-  '';
 
   doCheck = false; # requires X11 daemon
 

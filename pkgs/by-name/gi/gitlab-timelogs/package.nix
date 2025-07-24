@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-qSIRcf0HpRg1Eu12L6UcJajHBgjJgfhsHmF1oV1h8HM=";
 
   meta = {
-    description = " CLI utility to support you with your time logs in GitLab";
+    description = "CLI utility to support you with your time logs in GitLab";
     mainProgram = "gitlab-timelogs";
     longDescription = ''
       CLI utility to support you with your time logs in GitLab.

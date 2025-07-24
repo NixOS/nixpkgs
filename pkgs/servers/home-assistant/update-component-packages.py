@@ -97,7 +97,7 @@ def parse_components(version: str = "master"):
         with urlopen(
             f"https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz"
         ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
+            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp, filter="data")
         # Use part of a script from the Home Assistant codebase
         core_path = os.path.join(tmp, f"core-{version}")
 

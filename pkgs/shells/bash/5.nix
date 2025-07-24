@@ -74,6 +74,11 @@ lib.warnIf (withDocs != null)
     patchFlags = [ "-p0" ];
 
     patches = upstreamPatches ++ [
+      # Enable PGRP_PIPE independently of the kernel of the build machine.
+      # This doesn't seem to be upstreamed despite such a mention of in https://github.com/NixOS/nixpkgs/pull/77196,
+      # which originally introduced the patch
+      # Some related discussion can be found in
+      # https://lists.gnu.org/archive/html/bug-bash/2015-05/msg00071.html
       ./pgrp-pipe-5.patch
       # Apply parallel build fix pending upstream inclusion:
       #   https://savannah.gnu.org/patch/index.php?10373

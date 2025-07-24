@@ -7,49 +7,49 @@
   cmake,
   gpp,
   mpfr,
-  qtbase,
-  qtimageformats,
-  qtsvg,
-  wrapQtAppsHook,
+  qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valeronoi";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ccoors";
-    repo = pname;
-    tag = "v${version}";
-    sha256 = "sha256-5KXVSIqWDkXnpO+qgBzFtbJb444RW8dIVXp8Y/aAOrk=";
+    repo = "valeronoi";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5KXVSIqWDkXnpO+qgBzFtbJb444RW8dIVXp8Y/aAOrk=";
   };
 
-  buildInputs = [
-    boost
-    cgal
-    gpp
-    mpfr
-    qtbase
-    qtimageformats
-    qtsvg
-  ];
+  buildInputs =
+    [
+      boost
+      cgal
+      gpp
+      mpfr
+    ]
+    ++ (with qt6Packages; [
+      qtbase
+      qtimageformats
+      qtsvg
+    ]);
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ccoors/Valeronoi/";
     description = "WiFi mapping companion app for Valetudo";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nova-madeline
       maeve
     ];
     mainProgram = "valeronoi";
   };
-}
+})

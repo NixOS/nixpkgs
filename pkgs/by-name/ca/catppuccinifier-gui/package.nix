@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchzip {
-    url = "https://github.com/lighttigerXIV/catppuccinifier/releases/download/${version}/Catppuccinifer-Linux-${version}.tar.xz";
-    hash = "sha256-FtsO+3C5Ll1aYYCuohrPI2IQZsLyvBseXPzfK1sQgNc=";
+    url = "https://github.com/lighttigerXIV/catppuccinifier/releases/download/${version}/Catppuccinifier-Linux-${version}.tar.xz";
+    hash = "sha256-wGj0mWxmGqG/z/jmQ5pw1LdxYKzHaf+eOUXhpMT3kgs=";
   };
 
   nativeBuildInputs = [

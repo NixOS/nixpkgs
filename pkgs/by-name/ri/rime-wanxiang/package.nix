@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "8.7.7";
+  version = "9.1.3";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
     repo = "rime_wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-X64kxr93V0ilAefmQcJgMCegdzpoNoI0TuMdkYRG66I=";
+    hash = "sha256-jcYvDktk1zj32i92LQKYu35Br2uPRcoNtoyPKo3hP/Y=";
   };
 
   nativeBuildInputs = [

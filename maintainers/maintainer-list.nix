@@ -679,6 +679,12 @@
     githubId = 25004152;
     name = "Adrian Gunnar Lauterer";
   };
+  AdrienLemaire = {
+    email = "lemaire.adrien@gmail.com";
+    github = "AdrienLemaire";
+    githubId = 260983;
+    name = "Adrien Lemaire";
+  };
   AdsonCicilioti = {
     name = "Adson Cicilioti";
     email = "adson.cicilioti@live.com";
@@ -17024,6 +17030,14 @@
     name = "Marc Jakobi";
     github = "mrcjkb";
     githubId = 12857160;
+  };
+  mrdev023 = {
+    name = "Florian RICHER";
+    email = "florian.richer@protonmail.com";
+    matrix = "@mrdev023:matrix.org";
+    github = "mrdev023";
+    githubId = 11292703;
+    keys = [ { fingerprint = "B19E 3F4A 2D80 6AB4 793F  DF2F C73D 37CB ED7B FC77"; } ];
   };
   mredaelli = {
     email = "massimo@typish.io";

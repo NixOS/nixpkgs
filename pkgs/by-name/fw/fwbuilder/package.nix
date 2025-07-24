@@ -4,20 +4,19 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  wrapQtAppsHook,
   wayland,
   wayland-protocols,
-  qtwayland,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwbuilder";
   version = "6.0.0-rc1";
 
   src = fetchFromGitHub {
     owner = "fwbuilder";
     repo = "fwbuilder";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j5HjGcIqq93Ca9OBqEgSotoSXyw+q6Fqxa3hKk1ctwQ=";
   };
 
@@ -31,16 +30,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     wayland
     wayland-protocols
-    qtwayland
+    libsForQt5.qtwayland
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI Firewall Management Application";
     longDescription = ''
       Firewall Builder is a GUI firewall management application for iptables,
@@ -49,8 +48,8 @@ stdenv.mkDerivation rec {
       managed from a single UI.
     '';
     homepage = "https://github.com/fwbuilder/fwbuilder";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.elatov ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ elatov ];
   };
-}
+})

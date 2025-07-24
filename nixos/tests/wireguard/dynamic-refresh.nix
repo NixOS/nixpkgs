@@ -1,27 +1,25 @@
-import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    kernelPackages ? null,
-    useNetworkd ? false,
-    ...
-  }:
-  let
-    wg-snakeoil-keys = import ./snakeoil-keys.nix;
-  in
-  {
-    name = "wireguard-dynamic-refresh";
-    meta = with lib.maintainers; {
-      maintainers = [ majiir ];
-    };
+{
+  lib,
+  kernelPackages ? null,
+  useNetworkd ? false,
+  ...
+}:
+let
+  wg-snakeoil-keys = import ./snakeoil-keys.nix;
+in
+{
+  name = "wireguard-dynamic-refresh";
+  meta.maintainers = with lib.maintainers; [ majiir ];
 
-    nodes = {
-      server = {
+  nodes = {
+    server =
+      { lib, pkgs, ... }:
+      {
         virtualisation.vlans = [
           1
           2
         ];
-        boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
         networking.firewall.allowedUDPPorts = [ 23542 ];
         networking.useDHCP = false;
         networking.wireguard.useNetworkd = useNetworkd;
@@ -40,66 +38,70 @@ import ../make-test-python.nix (
         };
       };
 
-      client =
-        { nodes, ... }:
-        {
-          virtualisation.vlans = [
-            1
-            2
-          ];
-          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-          networking.useDHCP = false;
-          networking.wireguard.useNetworkd = useNetworkd;
-          networking.wireguard.interfaces.wg0 = {
-            ips = [ "10.23.42.2/32" ];
+    client =
+      {
+        nodes,
+        lib,
+        pkgs,
+        ...
+      }:
+      {
+        virtualisation.vlans = [
+          1
+          2
+        ];
+        boot.kernelPackages = lib.mkIf (kernelPackages != null) (kernelPackages pkgs);
+        networking.useDHCP = false;
+        networking.wireguard.useNetworkd = useNetworkd;
+        networking.wireguard.interfaces.wg0 = {
+          ips = [ "10.23.42.2/32" ];
 
-            # !!! Don't do this with real keys. The /nix store is world-readable!
-            privateKeyFile = toString (pkgs.writeText "privateKey" wg-snakeoil-keys.peer1.privateKey);
+          # !!! Don't do this with real keys. The /nix store is world-readable!
+          privateKeyFile = toString (pkgs.writeText "privateKey" wg-snakeoil-keys.peer1.privateKey);
 
-            dynamicEndpointRefreshSeconds = 2;
+          dynamicEndpointRefreshSeconds = 2;
 
-            peers = lib.singleton {
-              allowedIPs = [
-                "0.0.0.0/0"
-                "::/0"
-              ];
-              endpoint = "server:23542";
+          peers = lib.singleton {
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "server:23542";
 
-              inherit (wg-snakeoil-keys.peer0) publicKey;
-            };
-          };
-
-          specialisation.update-hosts.configuration = {
-            networking.extraHosts =
-              let
-                testCfg = nodes.server.virtualisation.test;
-              in
-              lib.mkForce "192.168.2.${toString testCfg.nodeNumber} ${testCfg.nodeName}";
+            inherit (wg-snakeoil-keys.peer0) publicKey;
           };
         };
-    };
 
-    testScript =
-      { nodes, ... }:
-      ''
-        start_all()
+        specialisation.update-hosts.configuration = {
+          networking.extraHosts =
+            let
+              testCfg = nodes.server.virtualisation.test;
+            in
+            lib.mkForce "192.168.2.${toString testCfg.nodeNumber} ${testCfg.nodeName}";
+        };
+      };
+  };
 
-        server.systemctl("start network-online.target")
-        server.wait_for_unit("network-online.target")
+  testScript =
+    { nodes, ... }:
+    ''
+      start_all()
 
-        client.systemctl("start network-online.target")
-        client.wait_for_unit("network-online.target")
+      server.systemctl("start network-online.target")
+      server.wait_for_unit("network-online.target")
 
-        client.succeed("ping -n -w 1 -c 1 10.23.42.1")
+      client.systemctl("start network-online.target")
+      client.wait_for_unit("network-online.target")
 
-        client.succeed("ip link set down eth1")
+      client.succeed("ping -n -w 1 -c 1 10.23.42.1")
 
-        client.fail("ping -n -w 1 -c 1 10.23.42.1")
+      client.succeed("ip link set down eth1")
 
-        with client.nested("update hosts file"):
-          client.succeed("${nodes.client.system.build.toplevel}/specialisation/update-hosts/bin/switch-to-configuration test")
+      client.fail("ping -n -w 1 -c 1 10.23.42.1")
 
-        client.succeed("sleep 5 && ping -n -w 1 -c 1 10.23.42.1")
-      '';
-  }
-)
+      with client.nested("update hosts file"):
+        client.succeed("${nodes.client.system.build.toplevel}/specialisation/update-hosts/bin/switch-to-configuration test")
+
+      client.succeed("sleep 5 && ping -n -w 1 -c 1 10.23.42.1")
+    '';
+}

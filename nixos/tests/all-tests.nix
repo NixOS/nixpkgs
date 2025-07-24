@@ -1553,7 +1553,10 @@ in
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
   wine = handleTest ./wine.nix { };
-  wireguard = handleTest ./wireguard { };
+  wireguard = import ./wireguard {
+    inherit pkgs runTest;
+    inherit (pkgs) lib;
+  };
   wg-access-server = runTest ./wg-access-server.nix;
   without-nix = runTest ./without-nix.nix;
   wmderland = runTest ./wmderland.nix;

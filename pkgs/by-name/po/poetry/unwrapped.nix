@@ -128,24 +128,30 @@ buildPythonPackage rec {
     unset no_proxy
   '';
 
-  disabledTests = [
-    "test_builder_should_execute_build_scripts"
-    "test_env_system_packages_are_relative_to_lib"
-    "test_install_warning_corrupt_root"
-    "test_no_additional_output_in_verbose_mode"
-    "test_project_plugins_are_installed_in_project_folder"
-    "test_application_command_not_found_messages"
-    # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
-    "test_list_poetry_managed"
-    "test_list_poetry_managed"
-    "test_find_all_with_poetry_managed"
-    "test_find_poetry_managed_pythons"
-    # Flaky
-    "test_threading_property_types"
-    "test_threading_single_thread_safe"
-    "test_threading_property_caching"
-    "test_threading_atomic_cached_property_different_instances"
-  ];
+  disabledTests =
+    [
+      "test_builder_should_execute_build_scripts"
+      "test_env_system_packages_are_relative_to_lib"
+      "test_install_warning_corrupt_root"
+      "test_no_additional_output_in_verbose_mode"
+      "test_project_plugins_are_installed_in_project_folder"
+      "test_application_command_not_found_messages"
+      # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
+      "test_list_poetry_managed"
+      "test_list_poetry_managed"
+      "test_find_all_with_poetry_managed"
+      "test_find_poetry_managed_pythons"
+      # Flaky
+      "test_threading_property_types"
+      "test_threading_single_thread_safe"
+      "test_threading_property_caching"
+      "test_threading_atomic_cached_property_different_instances"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Sandbox violation:
+      # PermissionError: [Errno 1] Operation not permitted: '/Library/Frameworks/Python.framework/Versions'
+      "test_find_all"
+    ];
 
   pytestFlagsArray = [
     "-m 'not network'"

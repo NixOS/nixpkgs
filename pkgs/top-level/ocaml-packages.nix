@@ -165,6 +165,8 @@ let
 
         callipyge = callPackage ../development/ocaml-modules/callipyge { };
 
+        camlgpc = callPackage ../development/ocaml-modules/camlgpc { };
+
         camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
         camlimages = callPackage ../development/ocaml-modules/camlimages { };
