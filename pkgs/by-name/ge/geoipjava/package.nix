@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "GeoIPJava";
+  pname = "geoipjava";
   version = "1.2.5";
 
   src = fetchurl {

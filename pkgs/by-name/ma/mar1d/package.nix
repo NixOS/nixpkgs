@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "MAR1D";
+  pname = "mar1d";
   version = "unstable-2023-02-02";
 
   src = fetchFromGitHub {

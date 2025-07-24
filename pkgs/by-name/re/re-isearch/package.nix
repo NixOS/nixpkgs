@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "re-Isearch";
+  pname = "re-isearch";
   version = "2.20220925.4.0a-unstable-2025-05-15";
 
   src = fetchFromGitHub {

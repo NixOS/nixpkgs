@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "EZminc";
+  pname = "ezminc";
   version = "2.2.00-unstable-2023-10-06";
 
   src = fetchFromGitHub {

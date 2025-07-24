@@ -6,7 +6,7 @@
   faust2lv2,
 }:
 stdenv.mkDerivation rec {
-  pname = "Tambura";
+  pname = "tambura";
   version = "1.0";
 
   src = fetchFromGitHub {

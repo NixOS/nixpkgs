@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "NuSMV";
+  pname = "nusmv";
   version = "2.7.0";
 
   src =

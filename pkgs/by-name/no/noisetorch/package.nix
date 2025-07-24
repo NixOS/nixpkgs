@@ -5,7 +5,7 @@
 }:
 
 buildGoModule rec {
-  pname = "NoiseTorch";
+  pname = "noisetorch";
   version = "0.12.2";
 
   src = fetchFromGitHub {

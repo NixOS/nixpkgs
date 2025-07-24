@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "vibrantLinux";
+  pname = "vibrantlinux";
   version = "2.2.0";
 
   src = fetchFromGitHub {

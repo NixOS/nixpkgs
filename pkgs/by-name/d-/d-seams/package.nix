@@ -19,7 +19,7 @@
 
 clangStdenv.mkDerivation rec {
   version = "1.0.1";
-  pname = "d-SEAMS";
+  pname = "d-seams";
 
   src = fetchFromGitHub {
     owner = "d-SEAMS";

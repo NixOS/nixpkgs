@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "FEBio";
+  pname = "febio";
   version = "4.8";
 
   src = fetchFromGitHub {

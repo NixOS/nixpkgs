@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "Real-ESRGAN-ncnn-vulkan";
+  pname = "real-esrgan-ncnn-vulkan";
   version = "0.2.0";
 
   src = fetchFromGitHub {

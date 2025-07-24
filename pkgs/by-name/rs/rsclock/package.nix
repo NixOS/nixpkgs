@@ -5,7 +5,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "rsClock";
+  pname = "rsclock";
   version = "0.1.12";
 
   src = fetchFromGitHub {

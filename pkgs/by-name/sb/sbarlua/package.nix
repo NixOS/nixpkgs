@@ -6,7 +6,7 @@
   readline,
 }:
 lua54Packages.buildLuaPackage {
-  pname = "sbarLua";
+  pname = "sbarlua";
   version = "0-unstable-2024-08-12";
 
   src = fetchFromGitHub {

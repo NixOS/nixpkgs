@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "PotreeConverter";
+  pname = "potreeconverter";
   version = "unstable-2023-02-27";
 
   src = fetchFromGitHub {

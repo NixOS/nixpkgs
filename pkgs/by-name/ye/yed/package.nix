@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "yEd";
+  pname = "yed";
   version = "3.25";
 
   src = fetchzip {

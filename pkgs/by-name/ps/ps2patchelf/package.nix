@@ -7,7 +7,7 @@
 
 buildDotnetModule rec {
   version = "1.0.0";
-  pname = "PS2PatchElf";
+  pname = "ps2patchelf";
 
   src = fetchFromGitHub {
     owner = "CaptainSwag101";

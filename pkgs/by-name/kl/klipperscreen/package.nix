@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 python3.pkgs.buildPythonApplication rec {
-  pname = "KlipperScreen";
+  pname = "klipperscreen";
   version = "0.4.5";
   format = "other";
 

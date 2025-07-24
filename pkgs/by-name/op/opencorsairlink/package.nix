@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "OpenCorsairLink";
+  pname = "opencorsairlink";
   version = "0-unstable-2019-12-23";
 
   buildInputs = [ libusb1 ];

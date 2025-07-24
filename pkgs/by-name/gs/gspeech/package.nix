@@ -20,7 +20,7 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "gSpeech";
+  pname = "gspeech";
   version = "0.11.0";
   format = "setuptools";
 

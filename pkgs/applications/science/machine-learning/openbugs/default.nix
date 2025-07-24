@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "OpenBUGS";
+  pname = "openbugs";
   version = "3.2.3";
 
   outputs = [ "out" ];

@@ -38,7 +38,7 @@ let
 
 in
 stdenv.mkDerivation {
-  pname = "MultiVNC";
+  pname = "multivnc";
   version = "2.8.1";
 
   src = fetchFromGitHub {

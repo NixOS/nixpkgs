@@ -9,7 +9,7 @@
 }:
 
 mkDerivation rec {
-  pname = "KSmoothDock";
+  pname = "ksmoothdock";
   version = "6.3";
 
   src = fetchFromGitHub {

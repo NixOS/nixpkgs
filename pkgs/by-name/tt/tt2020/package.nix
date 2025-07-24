@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "TT2020";
+  pname = "tt2020";
   version = "0.2.1";
 
   src = fetchFromGitHub {

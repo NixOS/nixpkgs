@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
-  pname = "BeatPrints";
+  pname = "beatprints";
   version = "1.1.4";
   pyproject = true;
 

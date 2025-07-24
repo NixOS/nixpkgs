@@ -6,7 +6,7 @@
 }:
 
 buildGoModule rec {
-  pname = "Subtitlr";
+  pname = "subtitlr";
   version = "0.2.0";
 
   src = fetchFromGitHub {

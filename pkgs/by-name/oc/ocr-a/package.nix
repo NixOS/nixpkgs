@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "OCR-A";
+  pname = "ocr-a";
   version = "1.0";
 
   src = fetchurl {

@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "PicoLisp";
+  pname = "picolisp";
   version = "24.3.30";
   src = fetchurl {
     url = "https://www.software-lab.de/picoLisp-24.3.tgz";

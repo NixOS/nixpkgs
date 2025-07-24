@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "NGT";
+  pname = "ngt";
   version = "1.12.3-alpha";
 
   src = fetchFromGitHub {
