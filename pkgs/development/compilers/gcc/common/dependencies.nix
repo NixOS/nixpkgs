@@ -8,6 +8,7 @@
   which,
   gettext,
   gnused,
+  autoconf269,
   patchelf,
   gmp,
   mpfr,
@@ -54,7 +55,8 @@ in
     ++ optionals langRust [ cargo ]
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ optionals buildPlatform.isDarwin [ gnused ];
+    ++ optionals buildPlatform.isDarwin [ gnused ]
+    ++ optionals withoutTargetLibc [ autoconf269 ];
 
   # For building runtime libs
   # same for all gcc's
