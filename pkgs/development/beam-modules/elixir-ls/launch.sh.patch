@@ -1,6 +1,6 @@
-diff --git i/scripts/launch.sh w/scripts/launch.sh
-index 21afbb1e..975cbdf0 100755
---- i/scripts/launch.sh
+diff --git c/scripts/launch.sh w/scripts/launch.sh
+index 21afbb1e..6b61f0b4 100755
+--- c/scripts/launch.sh
 +++ w/scripts/launch.sh
 @@ -1,125 +1,4 @@
 -#!/bin/sh
@@ -140,7 +140,7 @@ index 21afbb1e..975cbdf0 100755
 -  SCRIPTPATH=${ELS_INSTALL_PREFIX}
 -fi
 +SCRIPT=$(readlink -f "$0")
-+SCRIPTPATH=$(dirname "$SCRIPT")/../libexec
++SCRIPTPATH=$(dirname "$SCRIPT")/../scripts
  
  export MIX_ENV=prod
  # Mix.install prints to stdout and reads from stdin
