@@ -4094,9 +4094,6 @@ with pkgs;
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
-  piper-train = callPackage ../tools/audio/piper/train.nix { };
-  piper-tts = callPackage ../tools/audio/piper { };
-
   phosh = callPackage ../applications/window-managers/phosh { };
 
   phosh-mobile-settings =
