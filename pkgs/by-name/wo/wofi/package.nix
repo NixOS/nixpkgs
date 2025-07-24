@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.4.1";
+  version = "1.5";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = "wofi";
     owner = "~scoopta";
     rev = "v${version}";
-    sha256 = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";
+    sha256 = "sha256-7C4rO1Uf7qmzYAr60auILzYyKrJ//TJzTwU1PrBWdVA=";
     vc = "hg";
   };
 
