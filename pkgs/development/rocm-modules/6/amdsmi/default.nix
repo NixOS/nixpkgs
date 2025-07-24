@@ -21,12 +21,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "6.3.3";
+  version = "6.4.1";
   src = fetchFromGitHub {
     owner = "rocm";
     repo = "amdsmi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-hrPqd4ZWqzTG7JRfVwc1SZx6TNS0Q/LFg8yDxrM3mPo=";
+    hash = "sha256-K6FVvieJnOCfbyNNwOWs3t836ihtvELJvcCjXQoHuRY=";
   };
 
   postPatch = ''
