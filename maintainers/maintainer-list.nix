@@ -18059,6 +18059,12 @@
     githubId = 265800;
     name = "Niklaus Giger";
   };
+  ngp = {
+    email = "noah@packetlost.dev";
+    github = "chiefnoah";
+    githubId = 3588683;
+    name = "Noah Pederson";
+  };
   nh2 = {
     email = "mail@nh2.me";
     matrix = "@nh2:matrix.org";
