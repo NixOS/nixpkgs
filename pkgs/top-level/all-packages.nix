@@ -2842,9 +2842,7 @@ with pkgs;
     dub-to-nix
     ;
 
-  duff = callPackage ../tools/filesystems/duff {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  duff = callPackage ../tools/filesystems/duff { };
 
   dvtm = callPackage ../tools/misc/dvtm {
     # if you prefer a custom config, write the config.h in dvtm.config.h
@@ -2854,9 +2852,7 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
-  eid-mw = callPackage ../tools/security/eid-mw {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  eid-mw = callPackage ../tools/security/eid-mw { };
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
@@ -3212,9 +3208,7 @@ with pkgs;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
-  gsmlib = callPackage ../development/libraries/gsmlib {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  gsmlib = callPackage ../development/libraries/gsmlib { };
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
@@ -7289,9 +7283,7 @@ with pkgs;
 
   flow = callPackage ../development/tools/analysis/flow { };
 
-  fswatch = callPackage ../development/tools/misc/fswatch {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  fswatch = callPackage ../development/tools/misc/fswatch { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
@@ -8402,9 +8394,7 @@ with pkgs;
   hamlib_3 = callPackage ../development/libraries/hamlib { };
   hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
 
   harfbuzzFull = harfbuzz.override {
     withGraphite2 = true;
@@ -12158,8 +12148,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  fmit = libsForQt5.callPackage ../applications/audio/fmit { };
-
   focuswriter = qt6Packages.callPackage ../applications/editors/focuswriter { };
 
   fossil = callPackage ../applications/version-management/fossil {
@@ -12179,8 +12167,6 @@ with pkgs;
   gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };
 
   gauche = callPackage ../development/interpreters/gauche { };
-
-  gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
@@ -12551,8 +12537,6 @@ with pkgs;
     )
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
-
-  hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
@@ -14781,8 +14765,6 @@ with pkgs;
   qtads = qt5.callPackage ../games/qtads { };
 
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
-
-  instaloader = python3Packages.callPackage ../tools/misc/instaloader { };
 
   iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
