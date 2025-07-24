@@ -1089,6 +1089,11 @@ optionalAttrs allowAliases aliases
             descriptionClass = "noun";
 
             inherit (coercedTo kdlUntypedValue (value: { inherit value; }) kdlTypedValue) check merge;
+
+            nestedTypes = {
+              type = nullOr str;
+              scalar = kdlUntypedValue;
+            };
           };
 
           # https://kdl.dev/spec/#name-node
@@ -1137,6 +1142,14 @@ optionalAttrs allowAliases aliases
                   };
                 };
               }).merge;
+
+            nestedTypes = {
+              name = str;
+              type = nullOr str;
+              arguments = uniqFlatListOf kdlValue;
+              properties = uniqFlatAttrsOf kdlValue;
+              children = kdlDocument;
+            };
           };
 
           kdlDocument = lib.mkOptionType {
@@ -1182,6 +1195,8 @@ optionalAttrs allowAliases aliases
               in
               mergeDocument
             );
+
+            nestedTypes.node = kdlNode;
           };
         in
         kdlDocument
