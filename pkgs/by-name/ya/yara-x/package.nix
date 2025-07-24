@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yara-x";
-  version = "0.15.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fbuh/SMfOygnuvG9zTZqem4oLaS+5uXScXPhU3aVDjM=";
+    hash = "sha256-E1JDTfI3DbVEhXvPF6nRm1YqJuNJqFv+eOQ/AUtSVNM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-+dPIujaxDJ7JrtNvX4VjGHFmgtCb1BJpFQL4c3E1/GY=";
+  cargoHash = "sha256-kDMZw9dYftXffpG7hczJcmBLQJoZv53KMLRNZKiWsBs=";
 
   nativeBuildInputs = [
     installShellFiles
