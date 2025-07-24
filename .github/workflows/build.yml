@@ -55,11 +55,15 @@ jobs:
           mergedSha: ${{ inputs.mergedSha }}
           merged-as-untrusted: true
 
-      - run: |
+      - id: pinned
+        run: |
           pinned=$(jq -r '.pins.nixpkgs.revision' ci/pinned.json)
-          git -c protocol.version=2 fetch --no-tags --no-recurse-submodules --depth=1 origin "$pinned"
-          git worktree add pinned "$pinned"
-          git -C pinned sparse-checkout disable
+          echo "pinnedSha=$pinned" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.targetSha || steps.pinned.outputs.pinnedSha }}
+          path: pinned
 
       - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
         with:
