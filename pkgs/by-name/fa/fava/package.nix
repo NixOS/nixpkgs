@@ -2,16 +2,17 @@
   lib,
   python3Packages,
   fetchPypi,
+  stdenv,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "fava";
-  version = "1.30.1";
+  version = "1.30.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-69Wx9/H7nLDPZP9LOUnDJngY9YTCcr+oQ0E6+xeIWPE=";
+    hash = "sha256-pfnRNhAcyuYFHqPBF0qCrK7w1PJiMOdYXCGj+xXi6uQ=";
   };
 
   postPatch = ''
@@ -39,6 +40,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+
+  # tests/test_cli.py
+  __darwinAllowLocalNetworking = true;
+
+  # flaky, fails only on ci
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_core_watcher.py" ];
 
   env = {
     # Disable some tests when building with beancount2
