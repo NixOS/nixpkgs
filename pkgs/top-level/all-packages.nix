@@ -1541,14 +1541,6 @@ with pkgs;
     emojiSupport = true;
   };
 
-  st = callPackage ../applications/terminal-emulators/st {
-    conf = config.st.conf or null;
-    patches = config.st.patches or [ ];
-    extraLibs = config.st.extraLibs or [ ];
-  };
-  xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
-  mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
-
   termite = callPackage ../applications/terminal-emulators/termite/wrapper.nix {
     termite = termite-unwrapped;
   };
@@ -2128,8 +2120,6 @@ with pkgs;
   f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
 
   fast-cli = nodePackages.fast-cli;
-
-  fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
 
   ### TOOLS/TYPESETTING/TEX
 
@@ -12011,9 +12001,6 @@ with pkgs;
 
   djview4 = djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
-  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
-
   dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
@@ -12055,14 +12042,6 @@ with pkgs;
   dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_18;
   };
-
-  dwm = callPackage ../applications/window-managers/dwm {
-    # dwm is configured entirely through source modification. Allow users to
-    # specify patches through nixpkgs.config.dwm.patches
-    patches = config.dwm.patches or [ ];
-  };
-
-  dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [ ];
@@ -15374,17 +15353,9 @@ with pkgs;
     nodejs = nodejs_20;
   };
 
-  p4est-sc = callPackage ../development/libraries/science/math/p4est-sc {
-    p4est-sc-debugEnable = false;
-  };
+  p4est-sc-dbg = p4est-sc.override { debug = true; };
 
-  p4est-sc-dbg = callPackage ../development/libraries/science/math/p4est-sc { };
-
-  p4est = callPackage ../development/libraries/science/math/p4est { };
-
-  p4est-dbg = callPackage ../development/libraries/science/math/p4est {
-    p4est-sc = p4est-sc-dbg;
-  };
+  p4est-dbg = p4est.override { debug = true; };
 
   sageWithDoc = sage.override { withDoc = true; };
 

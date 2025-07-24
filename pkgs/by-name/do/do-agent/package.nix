@@ -37,7 +37,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/digitalocean/do-agent";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yvt ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
