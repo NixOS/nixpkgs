@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   callPackage,
@@ -27,7 +28,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X main.versionString=${finalAttrs.version}"
+    "-X \"main.buildString=v${finalAttrs.version} (${stdenv.hostPlatform.system})\""
   ];
 
   postInstall = ''
