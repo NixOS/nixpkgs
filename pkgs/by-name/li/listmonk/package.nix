@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "listmonk";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -43,7 +43,7 @@ buildGoModule rec {
         "queries.sql"
         "static/public:/public"
         "static/email-templates"
-        "${passthru.frontend}:/admin"
+        "${finalAttrs.passthru.frontend}:/admin"
         "i18n:/i18n"
       ];
     in
@@ -53,7 +53,7 @@ buildGoModule rec {
     '';
 
   passthru = {
-    frontend = callPackage ./frontend.nix { inherit meta version src; };
+    frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
   };
 
@@ -61,8 +61,8 @@ buildGoModule rec {
     description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard";
     mainProgram = "listmonk";
     homepage = "https://github.com/knadh/listmonk";
-    changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";
+    changelog = "https://github.com/knadh/listmonk/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ raitobezarius ];
     license = lib.licenses.agpl3Only;
   };
-}
+})
