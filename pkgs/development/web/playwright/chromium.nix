@@ -109,8 +109,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-KOoCbygsZZzGNKD8ICcGg0iM2h0HVgXq0I4JMPaUJR8=";
-        aarch64-darwin = "sha256-2naFzKWmo6el+AqljzILO+hUq/E2g81Dt1fwq79EYO8=";
+        x86_64-darwin = "sha256-0u1AStbUTX+qgUmg2DvL59B4b265WywDaBV+MdSuaNE=";
+        aarch64-darwin = "sha256-4pg4wmNTF8mw+APmdpvYlFxb9zc6OUh11oW5gCRKETY=";
       }
       .${system} or throwSystem;
   };
