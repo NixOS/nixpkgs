@@ -25973,6 +25973,11 @@
     name = "Chinmay D. Pai";
     keys = [ { fingerprint = "7F3E EEAA EE66 93CC 8782  042A 7550 7BE2 56F4 0CED"; } ];
   };
+  thunze = {
+    name = "Tom Hunze";
+    github = "thunze";
+    githubId = 22795263;
+  };
   tiagolobocastro = {
     email = "tiagolobocastro@gmail.com";
     github = "tiagolobocastro";
