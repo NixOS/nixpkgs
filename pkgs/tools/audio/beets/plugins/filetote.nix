@@ -70,7 +70,8 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.test;
+  ]
+  ++ optional-dependencies.test;
 
   meta = with lib; {
     description = "Beets plugin to move non-music files during the import process";

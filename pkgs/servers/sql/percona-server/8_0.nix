@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     coreutils
     gnugrep
     procps
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     # adapted from mysql80's llvm 19 fixes
@@ -86,35 +87,34 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
   '';
 
-  buildInputs =
-    [
-      boost
-      (curl.override { inherit openssl; })
-      icu
-      libedit
-      libevent
-      lz4
-      ncurses
-      openssl
-      protobuf
-      re2
-      readline
-      zlib
-      zstd
-      libfido2
-      openldap
-      perl
-      cyrus_sasl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      numactl
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      developer_cmds
-      DarwinTools
-    ];
+  buildInputs = [
+    boost
+    (curl.override { inherit openssl; })
+    icu
+    libedit
+    libevent
+    lz4
+    ncurses
+    openssl
+    protobuf
+    re2
+    readline
+    zlib
+    zstd
+    libfido2
+    openldap
+    perl
+    cyrus_sasl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+    libtirpc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    developer_cmds
+    DarwinTools
+  ];
 
   outputs = [
     "out"

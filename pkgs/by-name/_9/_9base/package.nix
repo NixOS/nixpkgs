@@ -29,7 +29,8 @@ stdenv.mkDerivation {
     # https://github.com/9fans/plan9port/commit/540caa5873bcc3bc2a0e1896119f5b53a0e8e630
     # https://github.com/9fans/plan9port/commit/323e1a8fac276f008e6d5146a83cbc88edeabc87
     ./getcallerpc-use-macro-or-stub.patch
-  ] ++ patches;
+  ]
+  ++ patches;
 
   # the 9yacc script needs to be executed to build other items
   preBuild = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

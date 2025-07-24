@@ -107,31 +107,30 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    server =
-      [
-        aiofiles
-        aiosqlite
-        alembic
-        brotli-asgi
-        elasticsearch8
-        fastapi
-        greenlet
-        luqum
-        opensearch-py
-        passlib
-        psutil
-        python-jose
-        python-multipart
-        pyyaml
-        scikit-learn
-        smart-open
-        sqlalchemy
-        uvicorn
-      ]
-      ++ elasticsearch8.optional-dependencies.async
-      ++ uvicorn.optional-dependencies.standard
-      ++ python-jose.optional-dependencies.cryptography
-      ++ passlib.optional-dependencies.bcrypt;
+    server = [
+      aiofiles
+      aiosqlite
+      alembic
+      brotli-asgi
+      elasticsearch8
+      fastapi
+      greenlet
+      luqum
+      opensearch-py
+      passlib
+      psutil
+      python-jose
+      python-multipart
+      pyyaml
+      scikit-learn
+      smart-open
+      sqlalchemy
+      uvicorn
+    ]
+    ++ elasticsearch8.optional-dependencies.async
+    ++ uvicorn.optional-dependencies.standard
+    ++ python-jose.optional-dependencies.cryptography
+    ++ passlib.optional-dependencies.bcrypt;
     postgresql = [
       asyncpg
       psycopg2
@@ -163,7 +162,8 @@ buildPythonPackage rec {
       # span_marker
       # trl
       # spacy-huggingface-hub
-    ] ++ transformers.optional-dependencies.torch;
+    ]
+    ++ transformers.optional-dependencies.torch;
   };
 
   # Still quite a bit of optional dependencies missing
@@ -178,7 +178,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 

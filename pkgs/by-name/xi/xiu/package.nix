@@ -28,13 +28,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libopus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ];
+  buildInputs = [
+    libopus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 

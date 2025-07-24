@@ -82,14 +82,13 @@ in
       }
     ];
 
-    environment.etc =
-      {
-        "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
-      }
-      // lib.optionalAttrs enableRDW {
-        "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
-          "${cfg.package}/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
-      };
+    environment.etc = {
+      "tlp.conf".text = (mkTlpConfig cfg.settings) + cfg.extraConfig;
+    }
+    // lib.optionalAttrs enableRDW {
+      "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
+        "${cfg.package}/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
+    };
 
     environment.systemPackages = [ cfg.package ];
 

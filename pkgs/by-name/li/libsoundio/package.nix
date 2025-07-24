@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [ libjack2 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      alsa-lib
-    ];
+  buildInputs = [
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    alsa-lib
+  ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBUILD_TESTS=OFF"

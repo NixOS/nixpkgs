@@ -1577,9 +1577,7 @@ This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting po
 dockerTools.streamNixShellImage {
   tag = "latest";
   drv = hello.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
-      cowsay
-    ];
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ cowsay ];
   });
 }
 ```

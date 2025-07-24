@@ -29,18 +29,17 @@ clangStdenv.mkDerivation (finalAttrs: {
     postgresql.pg_config
   ];
 
-  buildInputs =
-    [
-      libkrb5
-      openssl
-      postgresql
-      readline
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      pam
-    ];
+  buildInputs = [
+    libkrb5
+    openssl
+    postgresql
+    readline
+    sqlite
+    zlib
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    pam
+  ];
 
   hardeningDisable = [ "format" ];
 

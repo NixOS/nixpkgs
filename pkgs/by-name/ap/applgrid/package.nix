@@ -32,15 +32,14 @@ stdenv.mkDerivation rec {
     ./bad_code.patch
   ];
 
-  preConfigure =
-    ''
-      substituteInPlace src/Makefile.in \
-        --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
-    ''
-    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace src/Makefile.in \
-        --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
-    '');
+  preConfigure = ''
+    substituteInPlace src/Makefile.in \
+      --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/Makefile.in \
+      --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
+  '');
 
   enableParallelBuilding = false; # broken
 

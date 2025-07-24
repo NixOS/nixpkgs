@@ -21,12 +21,13 @@ buildNpmPackage rec {
     hash = "sha256-tg2ICxliTmahO3twKgC4LSVyiX9K2jfA7lCcSCkzcbQ=";
   };
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      imagemagick # for icon resizing
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    imagemagick # for icon resizing
+    copyDesktopItems
+  ];
 
   npmDepsHash = "sha256-a5OjCVHPeaBEYTFIUOnc9We677oCGwAvwMv8f1QRk9Q=";
 

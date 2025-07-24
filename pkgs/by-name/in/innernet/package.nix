@@ -29,25 +29,23 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  postInstall =
-    ''
-      installManPage doc/innernet-server.8.gz
-      installManPage doc/innernet.8.gz
-      installShellCompletion doc/innernet.completions.{bash,fish,zsh}
-      installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
-    ''
-    + (lib.optionalString stdenv.hostPlatform.isLinux ''
-      find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
-      find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
-    '');
+  postInstall = ''
+    installManPage doc/innernet-server.8.gz
+    installManPage doc/innernet.8.gz
+    installShellCompletion doc/innernet.completions.{bash,fish,zsh}
+    installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isLinux ''
+    find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
+    find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
+  '');
 
   passthru.tests = {
     serverVersion = testers.testVersion {

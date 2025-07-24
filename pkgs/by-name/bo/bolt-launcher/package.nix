@@ -66,15 +66,14 @@ let
       jdk17
     ];
 
-    cmakeFlags =
-      [
-        "-D CMAKE_BUILD_TYPE=Release"
-        "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-        "-G Ninja"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
-        (lib.cmakeFeature "PROJECT_ARCH" "arm64")
-      ];
+    cmakeFlags = [
+      "-D CMAKE_BUILD_TYPE=Release"
+      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
+      "-G Ninja"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+      (lib.cmakeFeature "PROJECT_ARCH" "arm64")
+    ];
 
     preConfigure = ''
       mkdir -p cef

@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     ffmpeg
     cubeb
-  ] ++ cubeb.passthru.backendLibs;
+  ]
+  ++ cubeb.passthru.backendLibs;
 
   # Correct qml import path
   postInstall = ''

@@ -57,35 +57,33 @@ let
 
       # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
       # on version changes for checking if changes are required here
-      buildFeatures =
-        [
-          "kubernetes-discovery"
-          "bundled-libs"
-        ]
-        ++ lib.optional (lib.versionOlder version "1.0") "sled"
-        ++ [
-          "metrics"
-          "k2v"
-          "telemetry-otlp"
-          "lmdb"
-          "sqlite"
-          "consul-discovery"
-        ];
+      buildFeatures = [
+        "kubernetes-discovery"
+        "bundled-libs"
+      ]
+      ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ [
+        "metrics"
+        "k2v"
+        "telemetry-otlp"
+        "lmdb"
+        "sqlite"
+        "consul-discovery"
+      ];
 
       # To make integration tests pass, we include the optional k2v feature here,
       # but in buildFeatures only for version 0.8+, where it's enabled by default.
       # See: https://garagehq.deuxfleurs.fr/documentation/reference-manual/k2v/
-      checkFeatures =
-        [
-          "k2v"
-          "kubernetes-discovery"
-          "bundled-libs"
-        ]
-        ++ lib.optional (lib.versionOlder version "1.0") "sled"
-        ++ [
-          "lmdb"
-          "sqlite"
-        ];
+      checkFeatures = [
+        "k2v"
+        "kubernetes-discovery"
+        "bundled-libs"
+      ]
+      ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ [
+        "lmdb"
+        "sqlite"
+      ];
 
       disabledTests = [
         # Upstream told us this test is flakey.

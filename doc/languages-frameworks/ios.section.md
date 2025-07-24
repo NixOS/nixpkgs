@@ -31,9 +31,7 @@ Xcode.
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv {
-    inherit (pkgs) stdenv;
-  };
+  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
 in
 xcodeenv.composeXcodeWrapper {
   version = "9.2";
@@ -65,9 +63,7 @@ executing the `xcodeenv.buildApp {}` function:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv {
-    inherit (pkgs) stdenv;
-  };
+  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
 in
 xcodeenv.buildApp {
   name = "MyApp";
@@ -161,9 +157,7 @@ instances:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv {
-    inherit (pkgs) stdenv;
-  };
+  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
 in
 xcode.simulateApp {
   name = "simulate";
@@ -195,9 +189,7 @@ app in the requested simulator instance:
 let
   pkgs = import <nixpkgs> { };
 
-  xcodeenv = import ./xcodeenv {
-    inherit (pkgs) stdenv;
-  };
+  xcodeenv = import ./xcodeenv { inherit (pkgs) stdenv; };
 in
 xcode.simulateApp {
   name = "simulate";

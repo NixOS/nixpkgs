@@ -60,7 +60,8 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"

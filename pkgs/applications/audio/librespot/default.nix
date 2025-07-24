@@ -34,21 +34,21 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-SqvJSHkyd1IicT6c4pE96dBJNNodULhpyG14HRGVWCk=";
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional withALSA alsa-lib
-    ++ lib.optional withDNS-SD avahi-compat
-    ++ lib.optional withPortAudio portaudio
-    ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional withALSA alsa-lib
+  ++ lib.optional withDNS-SD avahi-compat
+  ++ lib.optional withPortAudio portaudio
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   buildNoDefaultFeatures = true;
   buildFeatures =

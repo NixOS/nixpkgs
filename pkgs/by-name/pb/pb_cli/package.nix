@@ -30,14 +30,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  liveDeps =
-    [
-      jq
-      curl
-    ]
-    ++ lib.optional screenshots maim
-    ++ lib.optional video capture
-    ++ lib.optional clipboard xclip;
+  liveDeps = [
+    jq
+    curl
+  ]
+  ++ lib.optional screenshots maim
+  ++ lib.optional video capture
+  ++ lib.optional clipboard xclip;
 
   installPhase = ''
     install -Dm755 src/pb.sh $out/bin/pb

@@ -73,37 +73,36 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fuse3
-      glib
-      icu
-      libdnet
-      libdrm
-      libmspack
-      libtirpc
-      libxcrypt
-      libxml2
-      openssl
-      pam
-      procps
-      rpcsvc-proto
-      udev
-      xercesc
-      xmlsec
-    ]
-    ++ optionals withX [
-      gdk-pixbuf-xlib
-      gtk3
-      gtkmm3
-      libX11
-      libXext
-      libXinerama
-      libXi
-      libXrender
-      libXrandr
-      libXtst
-    ];
+  buildInputs = [
+    fuse3
+    glib
+    icu
+    libdnet
+    libdrm
+    libmspack
+    libtirpc
+    libxcrypt
+    libxml2
+    openssl
+    pam
+    procps
+    rpcsvc-proto
+    udev
+    xercesc
+    xmlsec
+  ]
+  ++ optionals withX [
+    gdk-pixbuf-xlib
+    gtk3
+    gtkmm3
+    libX11
+    libXext
+    libXinerama
+    libXi
+    libXrender
+    libXrandr
+    libXtst
+  ];
 
   postPatch = ''
     sed -i Makefile.am \
@@ -136,7 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-kernel-modules"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     "--with-fuse=fuse3"
-  ] ++ optional (!withX) "--without-x";
+  ]
+  ++ optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
 

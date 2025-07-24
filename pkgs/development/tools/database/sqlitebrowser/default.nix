@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qtbase
     sqlcipher
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
 
   nativeBuildInputs = [
     cmake

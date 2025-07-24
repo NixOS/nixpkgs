@@ -58,6 +58,7 @@
     {
       propagatedBuildInputs = [
         equations
-      ] ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
+      ]
+      ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
     }
   )

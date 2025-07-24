@@ -174,57 +174,56 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      # install dependencies
-      yarn --offline --ignore-scripts
+    # install dependencies
+    yarn --offline --ignore-scripts
 
-      # run yarn install everywhere, skipping postinstall so we can patch esbuild
-      find . -path "*node_modules" -prune -o \
-        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} yarn --cwd {} \
-            --frozen-lockfile --offline --ignore-scripts --ignore-engines
+    # run yarn install everywhere, skipping postinstall so we can patch esbuild
+    find . -path "*node_modules" -prune -o \
+      -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
+        xargs -I {} yarn --cwd {} \
+          --frozen-lockfile --offline --ignore-scripts --ignore-engines
 
-      ${patchEsbuild "./build" "0.12.6"}
-      ${patchEsbuild "./extensions" "0.11.23"}
+    ${patchEsbuild "./build" "0.12.6"}
+    ${patchEsbuild "./extensions" "0.11.23"}
 
-      # patch shebangs of node_modules to allow binary packages to build
-      patchShebangs ./remote/node_modules
+    # patch shebangs of node_modules to allow binary packages to build
+    patchShebangs ./remote/node_modules
 
-      # put ripgrep binary into bin so postinstall does not try to download it
-      find -path "*@vscode/ripgrep" -type d \
-        -execdir mkdir -p {}/bin \; \
-        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-      # (see issue #101229)
-      pushd ./remote/node_modules/@parcel/watcher
-      mkdir -p ./build/Release
-      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-      popd
-    ''
-    + ''
-      export NODE_OPTIONS=--openssl-legacy-provider
+    # put ripgrep binary into bin so postinstall does not try to download it
+    find -path "*@vscode/ripgrep" -type d \
+      -execdir mkdir -p {}/bin \; \
+      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+    # (see issue #101229)
+    pushd ./remote/node_modules/@parcel/watcher
+    mkdir -p ./build/Release
+    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+    popd
+  ''
+  + ''
+    export NODE_OPTIONS=--openssl-legacy-provider
 
-      # rebuild binaries, we use npm here, as yarn does not provide an alternative
-      # that would not attempt to try to reinstall everything and break our
-      # patching attempts
-      npm --prefix ./remote rebuild --build-from-source
+    # rebuild binaries, we use npm here, as yarn does not provide an alternative
+    # that would not attempt to try to reinstall everything and break our
+    # patching attempts
+    npm --prefix ./remote rebuild --build-from-source
 
-      # run postinstall scripts after patching
-      find . -path "*node_modules" -prune -o \
-        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+    # run postinstall scripts after patching
+    find . -path "*node_modules" -prune -o \
+      -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
+        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
-      # build and minify
-      yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
+    # build and minify
+    yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

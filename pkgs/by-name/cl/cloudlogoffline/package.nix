@@ -18,14 +18,13 @@ stdenv.mkDerivation (self: {
     repo = "cloudLogOffline";
   };
 
-  nativeBuildInputs =
-    [
-      qt6.qmake
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    qt6.qmake
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    copyDesktopItems
+  ];
 
   buildInputs = [
     qt6.qtbase

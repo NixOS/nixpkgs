@@ -43,14 +43,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
 
   dontConfigure = true;
   dontBuild = true;

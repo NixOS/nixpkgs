@@ -30,22 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-      ispc
-    ]
-    ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    ispc
+  ]
+  ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
-  buildInputs =
-    [ tbb ]
+  buildInputs = [
+    tbb
+  ]
 
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ];
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)

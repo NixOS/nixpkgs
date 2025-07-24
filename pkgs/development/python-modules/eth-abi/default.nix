@@ -38,7 +38,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   disabledTests = [
     # boolean list representation changed

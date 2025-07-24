@@ -52,31 +52,29 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     removeReferencesTo
   ];
-  buildInputs =
-    [
-      libidn2
-      libtool
-      libxml2
-      openssl
-      liburcu
-      libuv
-      nghttp2
-      jemalloc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libcap
-    ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+  buildInputs = [
+    libidn2
+    libtool
+    libxml2
+    openssl
+    liburcu
+    libuv
+    nghttp2
+    jemalloc
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libcap
+  ++ lib.optional enableGSSAPI libkrb5
+  ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-      "--without-lmdb"
-      "--with-libidn2"
-    ]
-    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--without-lmdb"
+    "--with-libidn2"
+  ]
+  ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -114,13 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
       && !is32bit;
   */
   checkTarget = "unit";
-  checkInputs =
-    [
-      cmocka
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-      tzdata
-    ];
+  checkInputs = [
+    cmocka
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    tzdata
+  ];
   preCheck =
     lib.optionalString stdenv.hostPlatform.isMusl ''
       # musl doesn't respect TZDIR, skip timezone-related tests
@@ -136,16 +133,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests =
-      {
-        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-        inherit (nixosTests) bind;
-        prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      }
-      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
-        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-      };
+    tests = {
+      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+      inherit (nixosTests) bind;
+      prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+    };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.

@@ -74,7 +74,8 @@ let
 
         meta = {
           platforms = tcl.meta.platforms;
-        } // meta;
+        }
+        // meta;
 
       }
       // optionalAttrs (attrs ? checkPhase) {

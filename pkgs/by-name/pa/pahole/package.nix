@@ -24,16 +24,15 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      elfutils
-      zlib
-      libbpf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      argp-standalone
-      musl-obstack
-    ];
+  buildInputs = [
+    elfutils
+    zlib
+    libbpf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    argp-standalone
+    musl-obstack
+  ];
 
   patches = [
     # https://github.com/acmel/dwarves/pull/51 / https://lkml.kernel.org/r/20240626032253.3406460-1-asmadeus@codewreck.org

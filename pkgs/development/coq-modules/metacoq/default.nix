@@ -148,7 +148,8 @@ let
             propagatedBuildInputs = [
               equations
               coq.ocamlPackages.zarith
-            ] ++ metacoq-deps;
+            ]
+            ++ metacoq-deps;
 
             patchPhase =
               if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then
@@ -218,8 +219,7 @@ let
             in
             {
               propagatedBuildInputs =
-                o.propagatedBuildInputs
-                ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
+                o.propagatedBuildInputs ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
             }
           );
       # utils, common, template-pcuic, quotation, safechecker-plugin, and erasure-plugin

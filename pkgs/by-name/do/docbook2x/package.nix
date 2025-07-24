@@ -37,20 +37,19 @@ stdenv.mkDerivation rec {
     libxslt
     iconv
   ];
-  buildInputs =
-    [
-      groff
-      libxml2
-      opensp
-      libiconv
-      bash
-    ]
-    ++ (with perlPackages; [
-      perl
-      XMLSAX
-      XMLParser
-      XMLNamespaceSupport
-    ]);
+  buildInputs = [
+    groff
+    libxml2
+    opensp
+    libiconv
+    bash
+  ]
+  ++ (with perlPackages; [
+    perl
+    XMLSAX
+    XMLParser
+    XMLNamespaceSupport
+  ]);
 
   postConfigure = ''
     # Broken substitution is used for `perl/config.pl', which leaves literal

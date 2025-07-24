@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     openssl_legacy
     zlib
     uthash
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
 

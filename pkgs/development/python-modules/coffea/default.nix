@@ -86,7 +86,8 @@ buildPythonPackage rec {
     tqdm
     uproot
     vector
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed

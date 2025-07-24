@@ -44,20 +44,20 @@ stdenv.mkDerivation rec {
     lm_sensors
     hddtemp
     netcat-gnu
-  ] ++ lib.optionals nvidiaSupport [ libXNVCtrl ];
+  ]
+  ++ lib.optionals nvidiaSupport [ libXNVCtrl ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--with-pathhddtemp=${hddtemp}/bin/hddtemp"
-      "--with-pathnetcat=${netcat-gnu}/bin/netcat"
-    ]
-    ++ lib.optionals nvidiaSupport [
-      # Have to be explicitly enabled since this tries to figure out the default
-      # based on the existence of a hardcoded `/usr/include/NVCtrl` path.
-      "--enable-xnvctrl"
-    ];
+  configureFlags = [
+    "--with-pathhddtemp=${hddtemp}/bin/hddtemp"
+    "--with-pathnetcat=${netcat-gnu}/bin/netcat"
+  ]
+  ++ lib.optionals nvidiaSupport [
+    # Have to be explicitly enabled since this tries to figure out the default
+    # based on the existence of a hardcoded `/usr/include/NVCtrl` path.
+    "--enable-xnvctrl"
+  ];
 
   passthru.updateScript = gitUpdater {
     url = "https://gitlab.xfce.org/panel-plugins/${pname}";

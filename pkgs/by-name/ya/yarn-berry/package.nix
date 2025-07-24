@@ -60,7 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
       };
     };
-  } // (callPackage ./fetcher { yarn-berry = finalAttrs; });
+  }
+  // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";

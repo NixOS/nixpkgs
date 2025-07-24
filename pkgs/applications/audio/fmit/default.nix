@@ -36,33 +36,31 @@ mkDerivation rec {
     itstool
     wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      fftw
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals portaudioSupport [ portaudio ];
+  buildInputs = [
+    fftw
+    qtbase
+    qtmultimedia
+  ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
   '';
 
-  qmakeFlags =
-    [
-      "PREFIXSHORTCUT=${placeholder "out"}"
-    ]
-    ++ lib.optionals alsaSupport [
-      "CONFIG+=acs_alsa"
-    ]
-    ++ lib.optionals jackSupport [
-      "CONFIG+=acs_jack"
-    ]
-    ++ lib.optionals portaudioSupport [
-      "CONFIG+=acs_portaudio"
-    ];
+  qmakeFlags = [
+    "PREFIXSHORTCUT=${placeholder "out"}"
+  ]
+  ++ lib.optionals alsaSupport [
+    "CONFIG+=acs_alsa"
+  ]
+  ++ lib.optionals jackSupport [
+    "CONFIG+=acs_jack"
+  ]
+  ++ lib.optionals portaudioSupport [
+    "CONFIG+=acs_portaudio"
+  ];
 
   meta = with lib; {
     description = "Free Musical Instrument Tuner";

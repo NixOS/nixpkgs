@@ -214,24 +214,20 @@ let
 
   latex_with_foiltex = texliveSmall.withPackages (_: [ foiltex ]);
 in
-runCommand "test.pdf"
-  {
-    nativeBuildInputs = [ latex_with_foiltex ];
-  }
-  ''
-    cat >test.tex <<EOF
-    \documentclass{foils}
+runCommand "test.pdf" { nativeBuildInputs = [ latex_with_foiltex ]; } ''
+  cat >test.tex <<EOF
+  \documentclass{foils}
 
-    \title{Presentation title}
-    \date{}
+  \title{Presentation title}
+  \date{}
 
-    \begin{document}
-    \maketitle
-    \end{document}
-    EOF
-      pdflatex test.tex
-      cp test.pdf $out
-  ''
+  \begin{document}
+  \maketitle
+  \end{document}
+  EOF
+    pdflatex test.tex
+    cp test.pdf $out
+''
 ```
 
 ## LuaLaTeX font cache {#sec-language-texlive-lualatex-font-cache}
@@ -239,15 +235,11 @@ runCommand "test.pdf"
 The font cache for LuaLaTeX is written to `$HOME`.
 Therefore, it is necessary to set `$HOME` to a writable path, e.g. [before using LuaLaTeX in nix derivations](https://github.com/NixOS/nixpkgs/issues/180639):
 ```nix
-runCommandNoCC "lualatex-hello-world"
-  {
-    buildInputs = [ texliveFull ];
-  }
-  ''
-    mkdir $out
-    echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
-    env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex
-  ''
+runCommandNoCC "lualatex-hello-world" { buildInputs = [ texliveFull ]; } ''
+  mkdir $out
+  echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
+  env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex
+''
 ```
 
 Additionally, [the cache of a user can diverge from the nix store](https://github.com/NixOS/nixpkgs/issues/278718).

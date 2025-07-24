@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "info"
-  ] ++ lib.optionals withFuse [ "fuse2fs" ];
+  ]
+  ++ lib.optionals withFuse [ "fuse2fs" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libuuid
     gettext
-  ] ++ lib.optionals withFuse [ fuse3 ];
+  ]
+  ++ lib.optionals withFuse [ fuse3 ];
 
   configureFlags =
     if stdenv.hostPlatform.isLinux then
@@ -65,17 +67,16 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ buildPackages.perl ];
   doCheck = true;
 
-  postInstall =
-    ''
-      # avoid cycle between outputs
-      if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
-        mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
-      fi
-    ''
-    + lib.optionalString withFuse ''
-      mkdir -p $fuse2fs/bin
-      mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
-    '';
+  postInstall = ''
+    # avoid cycle between outputs
+    if [ -f $out/lib/${pname}/e2scrub_all_cron ]; then
+      mv $out/lib/${pname}/e2scrub_all_cron $bin/bin/
+    fi
+  ''
+  + lib.optionalString withFuse ''
+    mkdir -p $fuse2fs/bin
+    mv $bin/bin/fuse2fs $fuse2fs/bin/fuse2fs
+  '';
 
   enableParallelBuilding = true;
 

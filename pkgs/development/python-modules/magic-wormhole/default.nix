@@ -65,25 +65,24 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  dependencies =
-    [
-      attrs
-      autobahn
-      automat
-      click
-      cryptography
-      humanize
-      iterable-io
-      pynacl
-      qrcode
-      spake2
-      tqdm
-      twisted
-      txtorcon
-      zipstream-ng
-    ]
-    ++ autobahn.optional-dependencies.twisted
-    ++ twisted.optional-dependencies.tls;
+  dependencies = [
+    attrs
+    autobahn
+    automat
+    click
+    cryptography
+    humanize
+    iterable-io
+    pynacl
+    qrcode
+    spake2
+    tqdm
+    twisted
+    txtorcon
+    zipstream-ng
+  ]
+  ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];
@@ -93,14 +92,13 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  nativeCheckInputs =
-    [
-      magic-wormhole-mailbox-server
-      magic-wormhole-transit-relay
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.dilation
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
+  nativeCheckInputs = [
+    magic-wormhole-mailbox-server
+    magic-wormhole-transit-relay
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.dilation
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
 

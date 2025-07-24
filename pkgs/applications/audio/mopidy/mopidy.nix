@@ -49,20 +49,21 @@ pythonPackages.buildPythonApplication rec {
     pipewire
   ];
 
-  propagatedBuildInputs =
-    [ gobject-introspection ]
-    ++ (
-      with pythonPackages;
-      [
-        gst-python
-        pygobject3
-        pykka
-        requests
-        setuptools
-        tornado
-      ]
-      ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
-    );
+  propagatedBuildInputs = [
+    gobject-introspection
+  ]
+  ++ (
+    with pythonPackages;
+    [
+      gst-python
+      pygobject3
+      pykka
+      requests
+      setuptools
+      tornado
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
+  );
 
   propagatedNativeBuildInputs = [ gobject-introspection ];
 

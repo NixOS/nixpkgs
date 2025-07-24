@@ -126,7 +126,8 @@ let
       ninja
       qt6.wrapQtAppsHook
       moveDevHook
-    ] ++ extraNativeBuildInputs;
+    ]
+    ++ extraNativeBuildInputs;
     buildInputs = [ qt6.qtbase ] ++ extraBuildInputs;
 
     # FIXME: figure out what to propagate here
@@ -157,7 +158,8 @@ let
     teams = [ lib.teams.qt-kde ];
     # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-  } // (args.meta or { });
+  }
+  // (args.meta or { });
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 in

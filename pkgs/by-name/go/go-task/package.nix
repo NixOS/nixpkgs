@@ -33,16 +33,15 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  postInstall =
-    ''
-      ln -s $out/bin/task $out/bin/go-task
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd task \
-        --bash <($out/bin/task --completion bash) \
-        --fish <($out/bin/task --completion fish) \
-        --zsh <($out/bin/task --completion zsh)
-    '';
+  postInstall = ''
+    ln -s $out/bin/task $out/bin/go-task
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd task \
+      --bash <($out/bin/task --completion bash) \
+      --fish <($out/bin/task --completion fish) \
+      --zsh <($out/bin/task --completion zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

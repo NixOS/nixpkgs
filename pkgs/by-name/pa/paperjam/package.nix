@@ -21,7 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     qpdf
     libpaper
     asciidoc
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   makeFlags = [
     "PREFIX=$(out)"

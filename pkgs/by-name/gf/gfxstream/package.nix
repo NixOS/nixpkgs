@@ -52,7 +52,8 @@ stdenv.mkDerivation {
     vulkan-headers
     vulkan-loader
     xorg.libX11
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [

@@ -38,7 +38,8 @@ buildPythonPackage rec {
     numpy
     fasteners
     numcodecs
-  ] ++ numcodecs.optional-dependencies.msgpack;
+  ]
+  ++ numcodecs.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook

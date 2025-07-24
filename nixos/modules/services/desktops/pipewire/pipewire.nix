@@ -445,7 +445,8 @@ in
         extraGroups = [
           "audio"
           "video"
-        ] ++ optional config.security.rtkit.enable "rtkit";
+        ]
+        ++ optional config.security.rtkit.enable "rtkit";
         description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";

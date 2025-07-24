@@ -64,7 +64,8 @@ stdenv.mkDerivation {
     qttools
     wrapQtAppsHook
     icoutils
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     qtbase

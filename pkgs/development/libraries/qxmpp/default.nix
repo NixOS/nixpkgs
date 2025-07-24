@@ -24,14 +24,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-M3F4tNIO3RvDxk/lce8/J6kmQtnsGLILQ15uEzgyfds=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      wrapQtAppsNoGuiHook
-    ]
-    ++ lib.optionals (withGstreamer || withOmemo) [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsNoGuiHook
+  ]
+  ++ lib.optionals (withGstreamer || withOmemo) [
+    pkg-config
+  ];
   buildInputs =
     lib.optionals withGstreamer (
       with gst_all_1;
@@ -47,17 +46,16 @@ stdenv.mkDerivation rec {
       qca
       libomemo-c
     ];
-  cmakeFlags =
-    [
-      "-DBUILD_EXAMPLES=false"
-      "-DBUILD_TESTS=false"
-    ]
-    ++ lib.optionals withGstreamer [
-      "-DWITH_GSTREAMER=ON"
-    ]
-    ++ lib.optionals withOmemo [
-      "-DBUILD_OMEMO=ON"
-    ];
+  cmakeFlags = [
+    "-DBUILD_EXAMPLES=false"
+    "-DBUILD_TESTS=false"
+  ]
+  ++ lib.optionals withGstreamer [
+    "-DWITH_GSTREAMER=ON"
+  ]
+  ++ lib.optionals withOmemo [
+    "-DBUILD_OMEMO=ON"
+  ];
 
   meta = with lib; {
     description = "Cross-platform C++ XMPP client and server library";

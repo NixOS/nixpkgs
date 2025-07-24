@@ -38,7 +38,8 @@ let
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
         # libressl will append this to the regular prefix for libdir
         "-DCMAKE_INSTALL_LIBDIR=lib"
-      ] ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
+      ]
+      ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
       # The autoconf build is broken as of 2.9.1, resulting in the following error:
       # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.

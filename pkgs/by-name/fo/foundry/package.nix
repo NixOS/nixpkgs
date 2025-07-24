@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 

@@ -65,7 +65,8 @@
       openssl
       libiconv
       zlib
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
 
     cmakeFlags = [
       "-DWITH_EXTERNAL_ZLIB=ON"

@@ -36,20 +36,19 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
-      gtk4
-      libgee
-      pango
-    ]
-    ++ (with pantheon; [
-      elementary-files # io.elementary.files.preferences
-      elementary-terminal # io.elementary.terminal.settings
-      granite7
-      switchboard
-      wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
-    ]);
+  buildInputs = [
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
+    gtk4
+    libgee
+    pango
+  ]
+  ++ (with pantheon; [
+    elementary-files # io.elementary.files.preferences
+    elementary-terminal # io.elementary.terminal.settings
+    granite7
+    switchboard
+    wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
+  ]);
 
   mesonFlags = [
     "-Dsystheme_rootdir=/run/current-system/sw/share"

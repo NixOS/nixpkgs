@@ -42,7 +42,8 @@ buildPythonPackage rec {
     cffi
     six
     packaging
-  ] ++ (with rPackages; [ reticulate ]);
+  ]
+  ++ (with rPackages; [ reticulate ]);
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -54,7 +54,8 @@ buildPythonPackage {
     postgresql
     postgresqlTestHook
     psycopg2
-  ] ++ dramatiq.optional-dependencies.rabbitmq;
+  ]
+  ++ dramatiq.optional-dependencies.rabbitmq;
 
   postgresqlTestSetupPost = ''
     substituteInPlace config.py \

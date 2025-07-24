@@ -51,41 +51,39 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "modulo"
-    ]
-    ++ lib.optionals waylandSupport [
-      "wayland"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "vendored-tls"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "native-tls"
-    ];
+  buildFeatures = [
+    "modulo"
+  ]
+  ++ lib.optionals waylandSupport [
+    "wayland"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "vendored-tls"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "native-tls"
+  ];
 
-  buildInputs =
-    [
-      libpng
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      dbus
-      libnotify
-      libxkbcommon
-    ]
-    ++ lib.optionals waylandSupport [
-      wl-clipboard
-    ]
-    ++ lib.optionals x11Support [
-      libXi
-      libXtst
-      libX11
-      xclip
-      xdotool
-    ];
+  buildInputs = [
+    libpng
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    dbus
+    libnotify
+    libxkbcommon
+  ]
+  ++ lib.optionals waylandSupport [
+    wl-clipboard
+  ]
+  ++ lib.optionals x11Support [
+    libXi
+    libXtst
+    libX11
+    xclip
+    xdotool
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \

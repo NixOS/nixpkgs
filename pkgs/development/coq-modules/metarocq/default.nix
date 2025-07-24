@@ -88,7 +88,8 @@ let
             equations
             coq.ocamlPackages.zarith
             coq.ocamlPackages.stdlib-shims
-          ] ++ metarocq-deps;
+          ]
+          ++ metarocq-deps;
 
           patchPhase = ''
             patchShebangs ./configure.sh

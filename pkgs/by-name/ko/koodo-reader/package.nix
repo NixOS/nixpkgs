@@ -29,17 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      yarnConfigHook
-      yarnBuildHook
-      nodejs
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      copyDesktopItems
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
 
   dontWrapGApps = true;
 

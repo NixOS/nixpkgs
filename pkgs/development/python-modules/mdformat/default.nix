@@ -26,10 +26,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [ markdown-it-py ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    markdown-it-py
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

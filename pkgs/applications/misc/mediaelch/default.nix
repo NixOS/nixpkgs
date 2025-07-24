@@ -40,22 +40,21 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      libmediainfo
-      libzen
-      qtbase
-      qtdeclarative
-      qtmultimedia
-      qtsvg
-      qtwayland
-      quazip
-    ]
-    ++ lib.optionals (qtVersion == "6") [
-      qt5compat
-    ];
+  buildInputs = [
+    curl
+    ffmpeg
+    libmediainfo
+    libzen
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qtsvg
+    qtwayland
+    quazip
+  ]
+  ++ lib.optionals (qtVersion == "6") [
+    qt5compat
+  ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"

@@ -57,7 +57,8 @@ buildPythonPackage rec {
     dask
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 

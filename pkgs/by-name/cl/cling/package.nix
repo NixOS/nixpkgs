@@ -82,32 +82,31 @@ let
 
     strictDeps = true;
 
-    cmakeFlags =
-      [
-        "-DLLVM_BINARY_DIR=${llvm.out}"
-        "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
-        "-DLLVM_LIBRARY_DIR=${llvm.lib}/lib"
-        "-DLLVM_MAIN_INCLUDE_DIR=${llvm.dev}/include"
-        "-DLLVM_TABLEGEN_EXE=${llvm.out}/bin/llvm-tblgen"
-        "-DLLVM_TOOLS_BINARY_DIR=${llvm.out}/bin"
-        "-DLLVM_BUILD_TOOLS=Off"
-        "-DLLVM_TOOL_CLING_BUILD=ON"
+    cmakeFlags = [
+      "-DLLVM_BINARY_DIR=${llvm.out}"
+      "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+      "-DLLVM_LIBRARY_DIR=${llvm.lib}/lib"
+      "-DLLVM_MAIN_INCLUDE_DIR=${llvm.dev}/include"
+      "-DLLVM_TABLEGEN_EXE=${llvm.out}/bin/llvm-tblgen"
+      "-DLLVM_TOOLS_BINARY_DIR=${llvm.out}/bin"
+      "-DLLVM_BUILD_TOOLS=Off"
+      "-DLLVM_TOOL_CLING_BUILD=ON"
 
-        "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
-        "-DLLVM_ENABLE_RTTI=ON"
+      "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
+      "-DLLVM_ENABLE_RTTI=ON"
 
-        # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
-        # see cling/tools/CMakeLists.txt
-        "-DCLING_INCLUDE_TESTS=ON"
-        "-DCLANG-TOOLS=OFF"
-      ]
-      ++ lib.optionals debug [
-        "-DCMAKE_BUILD_TYPE=Debug"
-      ]
-      ++ lib.optionals useLLVMLibcxx [
-        "-DLLVM_ENABLE_LIBCXX=ON"
-        "-DLLVM_ENABLE_LIBCXXABI=ON"
-      ];
+      # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
+      # see cling/tools/CMakeLists.txt
+      "-DCLING_INCLUDE_TESTS=ON"
+      "-DCLANG-TOOLS=OFF"
+    ]
+    ++ lib.optionals debug [
+      "-DCMAKE_BUILD_TYPE=Debug"
+    ]
+    ++ lib.optionals useLLVMLibcxx [
+      "-DLLVM_ENABLE_LIBCXX=ON"
+      "-DLLVM_ENABLE_LIBCXXABI=ON"
+    ];
 
     CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [ ];
 
@@ -161,27 +160,26 @@ let
   # Thus, if you're packaging a Jupyter kernel, you either need to pass these flags as extra
   # args to xcpp (for xeus-cling) or put them in the environment variable CLING_OPTS
   # (for jupyter-cling-kernel).
-  flags =
-    [
-      "-nostdinc"
-      "-nostdinc++"
+  flags = [
+    "-nostdinc"
+    "-nostdinc++"
 
-      "-resource-dir"
-      "${llvm.lib}/lib"
+    "-resource-dir"
+    "${llvm.lib}/lib"
 
-      "-isystem"
-      "${lib.getLib unwrapped}/lib/clang/${llvmPackages_13.clang.version}/include"
-    ]
-    ++ cxxFlags
-    ++ [
-      # System libc
-      "-isystem"
-      "${lib.getDev stdenv.cc.libc}/include"
+    "-isystem"
+    "${lib.getLib unwrapped}/lib/clang/${llvmPackages_13.clang.version}/include"
+  ]
+  ++ cxxFlags
+  ++ [
+    # System libc
+    "-isystem"
+    "${lib.getDev stdenv.cc.libc}/include"
 
-      # cling includes
-      "-isystem"
-      "${lib.getDev unwrapped}/include"
-    ];
+    # cling includes
+    "-isystem"
+    "${lib.getDev unwrapped}/include"
+  ];
 
 in
 

@@ -846,7 +846,8 @@ in
 
               # Removed option. See `checkAssertion` below for the accompanying error message.
               pkgs = mkOption { visible = false; };
-            } // networkOptions;
+            }
+            // networkOptions;
 
             config =
               let

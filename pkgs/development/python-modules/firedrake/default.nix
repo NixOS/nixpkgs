@@ -74,26 +74,25 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch =
-    ''
-      # relax build-dependency petsc4py
-      substituteInPlace pyproject.toml --replace-fail \
-        "petsc4py==3.23.0" "petsc4py"
+  postPatch = ''
+    # relax build-dependency petsc4py
+    substituteInPlace pyproject.toml --replace-fail \
+      "petsc4py==3.23.0" "petsc4py"
 
-      # These scripts are used by official source distribution only,
-      # and do not make sense in our binary distribution.
-      sed -i '/firedrake-\(check\|status\|run-split-tests\)/d' pyproject.toml
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["ldd"]' \
-        'program = ["${lib.getExe' pax-utils "lddtree"}"]'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace firedrake/petsc.py --replace-fail \
-        'program = ["otool"' \
-        'program = ["${lib.getExe' stdenv.cc.bintools.bintools "otool"}"'
-    '';
+    # These scripts are used by official source distribution only,
+    # and do not make sense in our binary distribution.
+    sed -i '/firedrake-\(check\|status\|run-split-tests\)/d' pyproject.toml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace firedrake/petsc.py --replace-fail \
+      'program = ["ldd"]' \
+      'program = ["${lib.getExe' pax-utils "lddtree"}"]'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace firedrake/petsc.py --replace-fail \
+      'program = ["otool"' \
+      'program = ["${lib.getExe' stdenv.cc.bintools.bintools "otool"}"'
+  '';
 
   pythonRelaxDeps = [
     "decorator"
@@ -115,33 +114,32 @@ buildPythonPackage rec {
     firedrakePackages.mpi
   ];
 
-  dependencies =
-    [
-      decorator
-      cachetools
-      firedrakePackages.mpi4py
-      fenics-ufl
-      firedrake-fiat
-      firedrakePackages.h5py
-      libsupermesh
-      loopy
-      petsc4py
-      numpy
-      packaging
-      pkgconfig
-      progress
-      pyadjoint-ad
-      pycparser
-      pytools
-      requests
-      rtree
-      scipy
-      sympy
-      # required by script spydump
-      matplotlib
-    ]
-    ++ pytools.optional-dependencies.siphash
-    ++ lib.optional stdenv.hostPlatform.isDarwin islpy;
+  dependencies = [
+    decorator
+    cachetools
+    firedrakePackages.mpi4py
+    fenics-ufl
+    firedrake-fiat
+    firedrakePackages.h5py
+    libsupermesh
+    loopy
+    petsc4py
+    numpy
+    packaging
+    pkgconfig
+    progress
+    pyadjoint-ad
+    pycparser
+    pytools
+    requests
+    rtree
+    scipy
+    sympy
+    # required by script spydump
+    matplotlib
+  ]
+  ++ pytools.optional-dependencies.siphash
+  ++ lib.optional stdenv.hostPlatform.isDarwin islpy;
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \

@@ -86,7 +86,8 @@ buildPythonPackage rec {
     multidict
     propcache
     yarl
-  ] ++ optional-dependencies.speedups;
+  ]
+  ++ optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
@@ -107,40 +108,38 @@ buildPythonPackage rec {
     trustme
   ];
 
-  disabledTests =
-    [
-      # Disable tests that require network access
-      "test_client_session_timeout_zero"
-      "test_mark_formdata_as_processed"
-      "test_requote_redirect_url_default"
-      # don't run benchmarks
-      "test_import_time"
-    ]
-    # these tests fail with python310 but succeeds with 11+
-    ++ lib.optionals isPy310 [
-      "test_https_proxy_unsupported_tls_in_tls"
-      "test_tcp_connector_raise_connector_ssl_error"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
-      "test_close"
-    ];
+  disabledTests = [
+    # Disable tests that require network access
+    "test_client_session_timeout_zero"
+    "test_mark_formdata_as_processed"
+    "test_requote_redirect_url_default"
+    # don't run benchmarks
+    "test_import_time"
+  ]
+  # these tests fail with python310 but succeeds with 11+
+  ++ lib.optionals isPy310 [
+    "test_https_proxy_unsupported_tls_in_tls"
+    "test_tcp_connector_raise_connector_ssl_error"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+    "test_close"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck =
-    ''
-      # aiohttp in current folder shadows installed version
-      rm -r aiohttp
-      touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+  preCheck = ''
+    # aiohttp in current folder shadows installed version
+    rm -r aiohttp
+    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
 
-      export HOME=$(mktemp -d)
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Work around "OSError: AF_UNIX path too long"
-      export TMPDIR="/tmp"
-    '';
+    export HOME=$(mktemp -d)
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";

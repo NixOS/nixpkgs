@@ -55,7 +55,8 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.mqtt;
+  ]
+  ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

@@ -32,16 +32,15 @@ stdenv.mkDerivation {
     hash = "sha256-L7I80kSG4/ES2tGvHHgvOxJZzF76yeqy2WquKCPhnFk=";
   };
 
-  buildInputs =
-    [
-      acl
-      curl
-      xz
-      zstd
-    ]
-    ++ lib.optionals fuseSupport [ fuse ]
-    ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals udevSupport [ udev ];
+  buildInputs = [
+    acl
+    curl
+    xz
+    zstd
+  ]
+  ++ lib.optionals fuseSupport [ fuse ]
+  ++ lib.optionals selinuxSupport [ libselinux ]
+  ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
     meson
     ninja

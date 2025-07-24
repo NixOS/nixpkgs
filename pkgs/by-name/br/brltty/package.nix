@@ -33,13 +33,12 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     tcl
   ];
-  buildInputs =
-    [
-      bluez
-      ncurses.dev
-    ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional systemdSupport systemd;
+  buildInputs = [
+    bluez
+    ncurses.dev
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional systemdSupport systemd;
 
   meta = {
     description = "Access software for a blind person using a braille display";

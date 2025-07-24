@@ -43,7 +43,8 @@ python3Packages.buildPythonApplication rec {
     hicolor-icon-theme
     libnotify
     librsvg
-  ] ++ lib.optional appindicatorSupport libayatana-appindicator;
+  ]
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
 
   dependencies =
     with python3Packages;

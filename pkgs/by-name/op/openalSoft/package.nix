@@ -41,19 +41,18 @@ stdenv.mkDerivation rec {
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio;
 
-  cmakeFlags =
-    [
-      # Automatically links dependencies without having to rely on dlopen, thus
-      # removes the need for NIX_LDFLAGS.
-      "-DALSOFT_DLOPEN=OFF"
+  cmakeFlags = [
+    # Automatically links dependencies without having to rely on dlopen, thus
+    # removes the need for NIX_LDFLAGS.
+    "-DALSOFT_DLOPEN=OFF"
 
-      # allow oal-soft to find its own data files (e.g. HRTF profiles)
-      "-DALSOFT_SEARCH_INSTALL_DATADIR=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # https://github.com/NixOS/nixpkgs/issues/183774
-      "-DALSOFT_BACKEND_OSS=OFF"
-    ];
+    # allow oal-soft to find its own data files (e.g. HRTF profiles)
+    "-DALSOFT_SEARCH_INSTALL_DATADIR=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # https://github.com/NixOS/nixpkgs/issues/183774
+    "-DALSOFT_BACKEND_OSS=OFF"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

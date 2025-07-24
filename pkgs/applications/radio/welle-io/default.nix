@@ -50,12 +50,14 @@ stdenv.mkDerivation rec {
     qt5compat
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional withFlac flac;
+  ]
+  ++ lib.optional withFlac flac;
 
   cmakeFlags = [
     "-DRTLSDR=true"
     "-DSOAPYSDR=true"
-  ] ++ lib.optional withFlac "-DFLAC=true";
+  ]
+  ++ lib.optional withFlac "-DFLAC=true";
 
   meta = {
     description = "DAB/DAB+ Software Radio";
@@ -68,6 +70,7 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-    ] ++ lib.platforms.darwin;
+    ]
+    ++ lib.platforms.darwin;
   };
 }

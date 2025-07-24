@@ -1246,7 +1246,8 @@ in
             serviceConfig.User = "nextcloud";
             serviceConfig.LoadCredential = [
               "adminpass:${cfg.config.adminpassFile}"
-            ] ++ runtimeSystemdCredentials;
+            ]
+            ++ runtimeSystemdCredentials;
             # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
             # an automatic creation of the database user.
             environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
@@ -1306,34 +1307,33 @@ in
           };
         };
 
-        phpfpm-nextcloud =
-          {
-            # When upgrading the Nextcloud package, Nextcloud can report errors such as
-            # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
-            # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
-            restartTriggers = [
-              webroot
-              overrideConfig
-            ];
-          }
-          // lib.optionalAttrs requiresRuntimeSystemdCredentials {
-            serviceConfig.LoadCredential = runtimeSystemdCredentials;
+        phpfpm-nextcloud = {
+          # When upgrading the Nextcloud package, Nextcloud can report errors such as
+          # "The files of the app [all apps in /var/lib/nextcloud/apps] were not replaced correctly"
+          # Restarting phpfpm on Nextcloud package update fixes these issues (but this is a workaround).
+          restartTriggers = [
+            webroot
+            overrideConfig
+          ];
+        }
+        // lib.optionalAttrs requiresRuntimeSystemdCredentials {
+          serviceConfig.LoadCredential = runtimeSystemdCredentials;
 
-            # FIXME: We use a hack to make the credential files readable by the nextcloud
-            #        user by copying them somewhere else and overriding CREDENTIALS_DIRECTORY
-            #        for php. This is currently necessary as the unit runs as root.
-            serviceConfig.RuntimeDirectory = lib.mkForce "phpfpm phpfpm-nextcloud";
-            preStart = ''
-              umask 0077
+          # FIXME: We use a hack to make the credential files readable by the nextcloud
+          #        user by copying them somewhere else and overriding CREDENTIALS_DIRECTORY
+          #        for php. This is currently necessary as the unit runs as root.
+          serviceConfig.RuntimeDirectory = lib.mkForce "phpfpm phpfpm-nextcloud";
+          preStart = ''
+            umask 0077
 
-              # NOTE: Runtime directories for this service are currently preserved
-              #       between restarts.
-              rm -rf /run/phpfpm-nextcloud/credentials/
-              mkdir -p /run/phpfpm-nextcloud/credentials/
-              cp "$CREDENTIALS_DIRECTORY"/* /run/phpfpm-nextcloud/credentials/
-              chown -R nextcloud:nextcloud /run/phpfpm-nextcloud/credentials/
-            '';
-          };
+            # NOTE: Runtime directories for this service are currently preserved
+            #       between restarts.
+            rm -rf /run/phpfpm-nextcloud/credentials/
+            mkdir -p /run/phpfpm-nextcloud/credentials/
+            cp "$CREDENTIALS_DIRECTORY"/* /run/phpfpm-nextcloud/credentials/
+            chown -R nextcloud:nextcloud /run/phpfpm-nextcloud/credentials/
+          '';
+        };
       };
 
       services.phpfpm = {

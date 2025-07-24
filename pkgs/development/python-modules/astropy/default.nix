@@ -95,30 +95,30 @@ buildPythonPackage rec {
       ipykernel
       # ipydatagrid
       pandas
-    ] ++ self.ipython;
-    all =
-      [
-        certifi
-        dask
-        h5py
-        pyarrow
-        beautifulsoup4
-        html5lib
-        sortedcontainers
-        pytz
-        jplephem
-        mpmath
-        asdf
-        asdf-astropy
-        bottleneck
-        fsspec
-        s3fs
-      ]
-      ++ self.recommended
-      ++ self.ipython
-      ++ self.jupyter
-      ++ dask.optional-dependencies.array
-      ++ fsspec.optional-dependencies.http;
+    ]
+    ++ self.ipython;
+    all = [
+      certifi
+      dask
+      h5py
+      pyarrow
+      beautifulsoup4
+      html5lib
+      sortedcontainers
+      pytz
+      jplephem
+      mpmath
+      asdf
+      asdf-astropy
+      bottleneck
+      fsspec
+      s3fs
+    ]
+    ++ self.recommended
+    ++ self.ipython
+    ++ self.jupyter
+    ++ dask.optional-dependencies.array
+    ++ fsspec.optional-dependencies.http;
   });
 
   nativeCheckInputs = [
@@ -127,7 +127,8 @@ buildPythonPackage rec {
     pytest-astropy-header
     pytest-astropy
     threadpoolctl
-  ] ++ optional-dependencies.recommended;
+  ]
+  ++ optional-dependencies.recommended;
 
   pythonImportsCheck = [ "astropy" ];
 

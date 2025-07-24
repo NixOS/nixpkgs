@@ -41,20 +41,20 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      markdown-it-py
-      platformdirs
-      rich
-      typing-extensions
-    ]
-    ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies = [
+    markdown-it-py
+    platformdirs
+    rich
+    typing-extensions
+  ]
+  ++ markdown-it-py.optional-dependencies.plugins
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+    ]
+    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [

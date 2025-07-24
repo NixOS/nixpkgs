@@ -87,7 +87,8 @@ buildGoModule rec {
     faketty
     yarn-berry_4
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   # We have to remove this setupHook, otherwise it also runs in the `goModules`
   # derivation and fails because `offlineCache` is missing there.

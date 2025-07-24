@@ -72,14 +72,13 @@ buildPythonPackage rec {
   doCheck = false; # does not affect pythonImportsCheck
 
   # OpenGL looks for libraries during import, making this a somewhat decent test of the flaky patching above.
-  pythonImportsCheck =
-    [
-      "OpenGL"
-      "OpenGL.GL"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      "OpenGL.GLX"
-    ];
+  pythonImportsCheck = [
+    "OpenGL"
+    "OpenGL.GL"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "OpenGL.GLX"
+  ];
 
   meta = with lib; {
     homepage = "https://mcfletch.github.io/pyopengl/";

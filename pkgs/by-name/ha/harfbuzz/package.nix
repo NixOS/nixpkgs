@@ -41,15 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Yg40aPrsLqhoXTLEalhGm4UO9jBAs1Zc3gWVmCW0gic=";
   };
 
-  postPatch =
-    ''
-      patchShebangs src/*.py test
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # ApplicationServices.framework headers have cast-align warnings.
-      substituteInPlace src/hb.hh \
-        --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
-    '';
+  postPatch = ''
+    patchShebangs src/*.py test
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+  '';
 
   outputs = [
     "out"
@@ -87,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional withIntrospection gobject-introspection;
+  ]
+  ++ lib.optional withIntrospection gobject-introspection;
 
   buildInputs = [
     glib

@@ -40,19 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "w58HVCvKuWpGJwllupbj7ndeq4iE9LPs/IjFSUN0DOU=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      bison
-      flex
-      pkg-config
-    ]
-    ++ lib.optionals docSupport [
-      unixtools.more
-      texliveMedium
-      texinfo
-      texi2html
-    ];
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+    pkg-config
+  ]
+  ++ lib.optionals docSupport [
+    unixtools.more
+    texliveMedium
+    texinfo
+    texi2html
+  ];
 
   buildInputs = [
     (if useElfutils then elfutils else finalAttrs.finalPackage.passthru.libelf)

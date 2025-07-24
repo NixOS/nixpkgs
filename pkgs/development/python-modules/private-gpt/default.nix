@@ -63,7 +63,8 @@ buildPythonPackage rec {
     pyyaml
     transformers
     watchdog
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # This is needed for running the tests and the service in offline mode,
   # See related issue at https://github.com/zylon-ai/private-gpt/issues/1870

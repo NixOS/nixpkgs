@@ -31,7 +31,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 

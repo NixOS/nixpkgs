@@ -236,17 +236,16 @@ in
 
     systemd.services.searx-init = {
       description = "Initialise Searx settings";
-      serviceConfig =
-        {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = "searx";
-          RuntimeDirectory = "searx";
-          RuntimeDirectoryMode = "750";
-        }
-        // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = builtins.toPath cfg.environmentFile;
-        };
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "searx";
+        RuntimeDirectory = "searx";
+        RuntimeDirectoryMode = "750";
+      }
+      // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = builtins.toPath cfg.environmentFile;
+      };
       script = generateConfig;
     };
 
@@ -258,15 +257,14 @@ in
         "searx-init.service"
         "network.target"
       ];
-      serviceConfig =
-        {
-          User = "searx";
-          Group = "searx";
-          ExecStart = lib.getExe cfg.package;
-        }
-        // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = builtins.toPath cfg.environmentFile;
-        };
+      serviceConfig = {
+        User = "searx";
+        Group = "searx";
+        ExecStart = lib.getExe cfg.package;
+      }
+      // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = builtins.toPath cfg.environmentFile;
+      };
       environment = {
         SEARX_SETTINGS_PATH = cfg.settingsFile;
         SEARXNG_SETTINGS_PATH = cfg.settingsFile;
@@ -305,7 +303,8 @@ in
         ];
         buffer-size = 32768;
         pythonPackages = self: [ cfg.package ];
-      } // cfg.uwsgiConfig;
+      }
+      // cfg.uwsgiConfig;
     };
 
     services.redis.servers.searx = lib.mkIf cfg.redisCreateLocally {

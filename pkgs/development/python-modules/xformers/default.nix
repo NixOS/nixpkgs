@@ -82,7 +82,8 @@ buildPythonPackage {
   nativeBuildInputs = [
     ninja
     which
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
+  ]
+  ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
 
   dependencies = [
     numpy

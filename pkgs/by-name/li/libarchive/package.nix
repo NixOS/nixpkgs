@@ -65,23 +65,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     let
-      skipTestPaths =
-        [
-          # test won't work in nix sandbox
-          "libarchive/test/test_write_disk_perms.c"
-          # the filesystem does not necessarily have sparse capabilities
-          "libarchive/test/test_sparse_basic.c"
-          # the filesystem does not necessarily have hardlink capabilities
-          "libarchive/test/test_write_disk_hardlink.c"
-          # access-time-related tests flakey on some systems
-          "cpio/test/test_option_a.c"
-          "cpio/test/test_option_t.c"
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-          # only on some aarch64-linux systems?
-          "cpio/test/test_basic.c"
-          "cpio/test/test_format_newc.c"
-        ];
+      skipTestPaths = [
+        # test won't work in nix sandbox
+        "libarchive/test/test_write_disk_perms.c"
+        # the filesystem does not necessarily have sparse capabilities
+        "libarchive/test/test_sparse_basic.c"
+        # the filesystem does not necessarily have hardlink capabilities
+        "libarchive/test/test_write_disk_hardlink.c"
+        # access-time-related tests flakey on some systems
+        "cpio/test/test_option_a.c"
+        "cpio/test/test_option_t.c"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+        # only on some aarch64-linux systems?
+        "cpio/test/test_basic.c"
+        "cpio/test/test_format_newc.c"
+      ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
         rm "${testPath}"
@@ -99,21 +98,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      lzo
-      openssl
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-      e2fsprogs
-    ]
-    ++ lib.optional xarSupport libxml2;
+  buildInputs = [
+    bzip2
+    lzo
+    openssl
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+    e2fsprogs
+  ]
+  ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

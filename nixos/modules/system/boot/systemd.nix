@@ -26,185 +26,184 @@ let
     sliceToUnit
     ;
 
-  upstreamSystemUnits =
-    [
-      # Targets.
-      "basic.target"
-      "sysinit.target"
-      "sockets.target"
-      "exit.target"
-      "graphical.target"
-      "multi-user.target"
-      "network.target"
-      "network-pre.target"
-      "network-online.target"
-      "nss-lookup.target"
-      "nss-user-lookup.target"
-      "time-sync.target"
-      "first-boot-complete.target"
-    ]
-    ++ optionals cfg.package.withCryptsetup [
-      "cryptsetup.target"
-      "cryptsetup-pre.target"
-      "remote-cryptsetup.target"
-    ]
-    ++ [
-      "sigpwr.target"
-      "timers.target"
-      "paths.target"
-      "rpcbind.target"
+  upstreamSystemUnits = [
+    # Targets.
+    "basic.target"
+    "sysinit.target"
+    "sockets.target"
+    "exit.target"
+    "graphical.target"
+    "multi-user.target"
+    "network.target"
+    "network-pre.target"
+    "network-online.target"
+    "nss-lookup.target"
+    "nss-user-lookup.target"
+    "time-sync.target"
+    "first-boot-complete.target"
+  ]
+  ++ optionals cfg.package.withCryptsetup [
+    "cryptsetup.target"
+    "cryptsetup-pre.target"
+    "remote-cryptsetup.target"
+  ]
+  ++ [
+    "sigpwr.target"
+    "timers.target"
+    "paths.target"
+    "rpcbind.target"
 
-      # Rescue mode.
-      "rescue.target"
-      "rescue.service"
+    # Rescue mode.
+    "rescue.target"
+    "rescue.service"
 
-      # systemd-debug-generator
-      "debug-shell.service"
+    # systemd-debug-generator
+    "debug-shell.service"
 
-      # Udev.
-      "systemd-udevd-control.socket"
-      "systemd-udevd-kernel.socket"
-      "systemd-udevd.service"
-      "systemd-udev-settle.service"
-    ]
-    ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
-    ++ [
-      # hwdb.bin is managed by NixOS
-      # "systemd-hwdb-update.service"
+    # Udev.
+    "systemd-udevd-control.socket"
+    "systemd-udevd-kernel.socket"
+    "systemd-udevd.service"
+    "systemd-udev-settle.service"
+  ]
+  ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
+  ++ [
+    # hwdb.bin is managed by NixOS
+    # "systemd-hwdb-update.service"
 
-      # Hardware (started by udev when a relevant device is plugged in).
-      "sound.target"
-      "bluetooth.target"
-      "printer.target"
-      "smartcard.target"
+    # Hardware (started by udev when a relevant device is plugged in).
+    "sound.target"
+    "bluetooth.target"
+    "printer.target"
+    "smartcard.target"
 
-      # Kernel module loading.
-      "systemd-modules-load.service"
-      "kmod-static-nodes.service"
-      "modprobe@.service"
+    # Kernel module loading.
+    "systemd-modules-load.service"
+    "kmod-static-nodes.service"
+    "modprobe@.service"
 
-      # Filesystems.
-      "systemd-fsck@.service"
-      "systemd-fsck-root.service"
-      "systemd-growfs@.service"
-      "systemd-growfs-root.service"
-      "systemd-remount-fs.service"
-      "systemd-pstore.service"
-      "local-fs.target"
-      "local-fs-pre.target"
-      "remote-fs.target"
-      "remote-fs-pre.target"
-      "swap.target"
-      "dev-hugepages.mount"
-      "dev-mqueue.mount"
-      "sys-fs-fuse-connections.mount"
-    ]
-    ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
-    ++ [
-      "sys-kernel-debug.mount"
-      "sys-kernel-tracing.mount"
+    # Filesystems.
+    "systemd-fsck@.service"
+    "systemd-fsck-root.service"
+    "systemd-growfs@.service"
+    "systemd-growfs-root.service"
+    "systemd-remount-fs.service"
+    "systemd-pstore.service"
+    "local-fs.target"
+    "local-fs-pre.target"
+    "remote-fs.target"
+    "remote-fs-pre.target"
+    "swap.target"
+    "dev-hugepages.mount"
+    "dev-mqueue.mount"
+    "sys-fs-fuse-connections.mount"
+  ]
+  ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
+  ++ [
+    "sys-kernel-debug.mount"
+    "sys-kernel-tracing.mount"
 
-      # Maintaining state across reboots.
-      "systemd-random-seed.service"
-    ]
-    ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
-    ++ [
-      "systemd-backlight@.service"
-      "systemd-rfkill.service"
-      "systemd-rfkill.socket"
+    # Maintaining state across reboots.
+    "systemd-random-seed.service"
+  ]
+  ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
+  ++ [
+    "systemd-backlight@.service"
+    "systemd-rfkill.service"
+    "systemd-rfkill.socket"
 
-      # Hibernate / suspend.
-      "hibernate.target"
-      "suspend.target"
-      "suspend-then-hibernate.target"
-      "sleep.target"
-      "hybrid-sleep.target"
-      "systemd-hibernate.service"
-    ]
-    ++ (lib.optional cfg.package.withEfi "systemd-hibernate-clear.service")
-    ++ [
-      "systemd-hybrid-sleep.service"
-      "systemd-suspend.service"
-      "systemd-suspend-then-hibernate.service"
+    # Hibernate / suspend.
+    "hibernate.target"
+    "suspend.target"
+    "suspend-then-hibernate.target"
+    "sleep.target"
+    "hybrid-sleep.target"
+    "systemd-hibernate.service"
+  ]
+  ++ (lib.optional cfg.package.withEfi "systemd-hibernate-clear.service")
+  ++ [
+    "systemd-hybrid-sleep.service"
+    "systemd-suspend.service"
+    "systemd-suspend-then-hibernate.service"
 
-      # Reboot stuff.
-      "reboot.target"
-      "systemd-reboot.service"
-      "poweroff.target"
-      "systemd-poweroff.service"
-      "halt.target"
-      "systemd-halt.service"
-      "shutdown.target"
-      "umount.target"
-      "final.target"
-      "kexec.target"
-      "systemd-kexec.service"
-    ]
-    ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
-    ++ [
+    # Reboot stuff.
+    "reboot.target"
+    "systemd-reboot.service"
+    "poweroff.target"
+    "systemd-poweroff.service"
+    "halt.target"
+    "systemd-halt.service"
+    "shutdown.target"
+    "umount.target"
+    "final.target"
+    "kexec.target"
+    "systemd-kexec.service"
+  ]
+  ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
+  ++ [
 
-      # Password entry.
-      "systemd-ask-password-console.path"
-      "systemd-ask-password-console.service"
-      "systemd-ask-password-wall.path"
-      "systemd-ask-password-wall.service"
+    # Password entry.
+    "systemd-ask-password-console.path"
+    "systemd-ask-password-console.service"
+    "systemd-ask-password-wall.path"
+    "systemd-ask-password-wall.service"
 
-      # Varlink APIs
-    ]
-    ++ lib.optionals cfg.package.withBootloader [
-      "systemd-bootctl@.service"
-      "systemd-bootctl.socket"
-    ]
-    ++ [
-      "systemd-creds@.service"
-      "systemd-creds.socket"
-    ]
-    ++ lib.optional cfg.package.withTpm2Units [
-      "systemd-pcrlock@.service"
-      "systemd-pcrlock.socket"
-    ]
-    ++ [
+    # Varlink APIs
+  ]
+  ++ lib.optionals cfg.package.withBootloader [
+    "systemd-bootctl@.service"
+    "systemd-bootctl.socket"
+  ]
+  ++ [
+    "systemd-creds@.service"
+    "systemd-creds.socket"
+  ]
+  ++ lib.optional cfg.package.withTpm2Units [
+    "systemd-pcrlock@.service"
+    "systemd-pcrlock.socket"
+  ]
+  ++ [
 
-      # Slices / containers.
-      "slices.target"
-    ]
-    ++ optionals cfg.package.withImportd [
-      "systemd-importd.service"
-    ]
-    ++ optionals cfg.package.withMachined [
-      "machine.slice"
-      "machines.target"
-      "systemd-machined.service"
-    ]
-    ++ [
-      "systemd-nspawn@.service"
+    # Slices / containers.
+    "slices.target"
+  ]
+  ++ optionals cfg.package.withImportd [
+    "systemd-importd.service"
+  ]
+  ++ optionals cfg.package.withMachined [
+    "machine.slice"
+    "machines.target"
+    "systemd-machined.service"
+  ]
+  ++ [
+    "systemd-nspawn@.service"
 
-      # Misc.
-      "systemd-sysctl.service"
-      "systemd-machine-id-commit.service"
-    ]
-    ++ optionals cfg.package.withTimedated [
-      "dbus-org.freedesktop.timedate1.service"
-      "systemd-timedated.service"
-    ]
-    ++ optionals cfg.package.withLocaled [
-      "dbus-org.freedesktop.locale1.service"
-      "systemd-localed.service"
-    ]
-    ++ optionals cfg.package.withHostnamed [
-      "dbus-org.freedesktop.hostname1.service"
-      "systemd-hostnamed.service"
-      "systemd-hostnamed.socket"
-    ]
-    ++ optionals cfg.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-      "systemd-portabled.service"
-    ]
-    ++ [
-      "systemd-exit.service"
-      "systemd-update-done.service"
-    ]
-    ++ cfg.additionalUpstreamSystemUnits;
+    # Misc.
+    "systemd-sysctl.service"
+    "systemd-machine-id-commit.service"
+  ]
+  ++ optionals cfg.package.withTimedated [
+    "dbus-org.freedesktop.timedate1.service"
+    "systemd-timedated.service"
+  ]
+  ++ optionals cfg.package.withLocaled [
+    "dbus-org.freedesktop.locale1.service"
+    "systemd-localed.service"
+  ]
+  ++ optionals cfg.package.withHostnamed [
+    "dbus-org.freedesktop.hostname1.service"
+    "systemd-hostnamed.service"
+    "systemd-hostnamed.socket"
+  ]
+  ++ optionals cfg.package.withPortabled [
+    "dbus-org.freedesktop.portable1.service"
+    "systemd-portabled.service"
+  ]
+  ++ [
+    "systemd-exit.service"
+    "systemd-update-done.service"
+  ]
+  ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants = [
     "sysinit.target.wants"

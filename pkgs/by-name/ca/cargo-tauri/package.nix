@@ -27,12 +27,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk4
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk4
+    webkitgtk_4_1
+  ];
 
   cargoBuildFlags = [ "--package tauri-cli" ];
   cargoTestFlags = cargoBuildFlags;
