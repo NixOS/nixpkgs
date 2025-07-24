@@ -36,8 +36,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "6448ff90bbf2fddb4498dcfdae0e6d3ec8c23479";
-    hash = "sha256-ZXAZekllZHYjfU1q1QrbEdRlRAUAB6VOXLeAfn1GqW0=";
+    rev = "921c8143a5cd75a40ca1eefb0b4b0ae871094513";
+    hash = "sha256-ER2ZTrev0guAE01hva1GS4AReY2bmybFV2NF5nklLuU=";
   };
 
   inherit (qt6)
@@ -50,13 +50,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.3.424";
+  version = "2.5.66";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EdFkSsat6O/1tXtJVHOPviseSaixd5LB1TNtfqhqR1E=";
+    hash = "sha256-2vbe8iLa1QqRclbd0tGebsIm9M6kryGHSfVCdFubDro=";
   };
 
   patches = [
