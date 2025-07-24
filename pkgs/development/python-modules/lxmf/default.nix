@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
-    changelog = "https://github.com/markqvist/LXMF/releases/tag/${version}";
+    changelog = "https://github.com/markqvist/LXMF/releases/tag/${src.tag}";
     # Reticulum License
     # https://github.com/markqvist/LXMF/blob/master/LICENSE
     license = licenses.unfree;
