@@ -26253,6 +26253,12 @@
     githubId = 74688871;
     name = "Tochukwu Ahanonu";
   };
+  tom94 = {
+    email = "nix@94.me";
+    github = "Tom94";
+    githubId = 4923655;
+    name = "Thomas Müller";
+  };
   tomahna = {
     email = "kevin.rauscher@tomahna.fr";
     github = "Tomahna";
