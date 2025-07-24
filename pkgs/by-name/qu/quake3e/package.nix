@@ -20,7 +20,7 @@ let
   arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation {
-  pname = "Quake3e";
+  pname = "quake3e";
   version = "2024-09-02-dev";
 
   src = fetchFromGitHub {

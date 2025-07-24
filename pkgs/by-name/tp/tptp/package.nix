@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "TPTP";
+  pname = "tptp";
   version = "7.2.0";
 
   src = fetchurl {

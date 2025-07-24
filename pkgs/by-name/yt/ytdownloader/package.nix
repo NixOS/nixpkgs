@@ -11,7 +11,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "ytDownloader";
+  pname = "ytdownloader";
   version = "3.19.1";
 
   src = fetchFromGitHub {

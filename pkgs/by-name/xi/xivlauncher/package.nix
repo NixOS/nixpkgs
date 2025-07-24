@@ -20,7 +20,7 @@ let
   rev = "1.2.1";
 in
 buildDotnetModule rec {
-  pname = "XIVLauncher";
+  pname = "xivlauncher";
   version = rev;
 
   src = fetchFromGitHub {

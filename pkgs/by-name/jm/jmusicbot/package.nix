@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "JMusicBot";
+  pname = "jmusicbot";
   version = "0.4.3";
 
   src = fetchurl {

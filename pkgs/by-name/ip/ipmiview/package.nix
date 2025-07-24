@@ -15,7 +15,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "IPMIView";
+  pname = "ipmiview";
   version = "2.21.0";
   buildVersion = "221118";
 

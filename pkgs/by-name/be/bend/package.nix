@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "Bend";
+  pname = "bend";
   version = "0.2.37";
 
   src = fetchFromGitHub {

@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "SHADERed";
+  pname = "shadered";
   version = "1.5.6";
 
   src = fetchFromGitHub {
