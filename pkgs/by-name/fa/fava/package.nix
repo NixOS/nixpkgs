@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bhipple
+      prince213
       sigmanificient
     ];
   };
