@@ -12886,8 +12886,6 @@ with pkgs;
 
   kup = libsForQt5.callPackage ../applications/misc/kup { };
 
-  timoni = callPackage ../applications/networking/cluster/timoni { };
-
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
@@ -13617,8 +13615,6 @@ with pkgs;
   };
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
-
-  restique = libsForQt5.callPackage ../applications/backup/restique { };
 
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
 

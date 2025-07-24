@@ -84,7 +84,6 @@ buildNpmPackage (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ercao
       kashw2
     ];
     mainProgram = "figma-linux";

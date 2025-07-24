@@ -6294,6 +6294,8 @@ self: super: with self; {
 
   gstools = callPackage ../development/python-modules/gstools { };
 
+  gstools-cython = callPackage ../development/python-modules/gstools-cython { };
+
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
   gto = callPackage ../development/python-modules/gto { };
