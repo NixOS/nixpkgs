@@ -5,6 +5,7 @@
   alsa-topology-conf,
   alsa-ucm-conf,
   testers,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = directoryListingUpdater {
+      url = "https://www.alsa-project.org/files/pub/lib/";
+    };
+  };
 
   meta = {
     homepage = "http://www.alsa-project.org/";
