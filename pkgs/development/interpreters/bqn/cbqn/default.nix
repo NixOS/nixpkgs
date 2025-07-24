@@ -63,6 +63,7 @@ stdenv.mkDerivation {
 
   dontConfigure = true;
 
+  doCheck = true;
   doInstallCheck = true;
 
   strictDeps = true;
@@ -93,6 +94,12 @@ stdenv.mkDerivation {
       mkdir -p build/replxxLocal/
       cp -r ${sources.replxx.src}/* build/replxxLocal/
     '';
+
+  # Only uses in tree BQN executable, so doesn't make sense in installCheckPhase
+  checkFlags = [
+    "-C"
+    "test/ffi"
+  ];
 
   installPhase =
     ''
