@@ -5757,6 +5757,8 @@ self: super: with self; {
 
   gevent = callPackage ../development/python-modules/gevent { };
 
+  gevent-eventemitter = callPackage ../development/python-modules/gevent-eventemitter { };
+
   gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
 
   gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
@@ -17247,9 +17249,13 @@ self: super: with self; {
 
   stdlibs = callPackage ../development/python-modules/stdlibs { };
 
+  steam = callPackage ../development/python-modules/steam { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steamship = callPackage ../development/python-modules/steamship { };
+
+  steamworkspy = callPackage ../development/python-modules/steamworkspy { };
 
   stem = callPackage ../development/python-modules/stem { };
 
