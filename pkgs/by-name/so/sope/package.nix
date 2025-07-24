@@ -76,5 +76,6 @@ clangStdenv.mkDerivation rec {
     homepage = "https://github.com/inverse-inc/sope";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];
+    knownVulnerabilities = [ "CVE-2025-53603" ];
   };
 }
