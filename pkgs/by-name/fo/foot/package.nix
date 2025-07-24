@@ -24,6 +24,7 @@
   # for clang stdenv check
   foot,
   llvmPackages,
+  utempterPath ? "/run/wrappers/bin/utempter",
 }:
 
 let
@@ -162,6 +163,7 @@ stdenv.mkDerivation {
     "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
     # Especially -Wunused-command-line-argument is a problem with clang
     "-Dwerror=false"
+    "-Dutmp-default-helper-path=${utempterPath}"
   ];
 
   # build and run binary generating PGO profiles,
