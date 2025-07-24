@@ -1,55 +1,78 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   cmake,
+  darwin,
+  fetchFromGitHub,
+  lcms2,
+  libGL,
+  libffi,
+  libxkbcommon,
+  perl,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
   wrapGAppsHook3,
-  libX11,
-  libzip,
-  glfw,
-  libpng,
   xorg,
   zenity,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.29";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ke1T5nOrDoJilpfshAIAFWw/640Gm5OaxZ+ZakCevTs=";
+    hash = "sha256-RRGE/gEWaSwvbytmtR5fLAke8QqIeuYJQzwC++Z1bgc=";
   };
+
+  postPatch =
+    let
+      waylandLibPath = lib.makeLibraryPath [ wayland ];
+    in
+    ''
+      substituteInPlace ./dependencies/nanogui/ext/glfw/src/wl_init.c \
+        --replace-fail "libwayland-client.so" "${waylandLibPath}/libwayland-client.so" \
+        --replace-fail "libwayland-cursor.so" "${waylandLibPath}/libwayland-cursor.so" \
+        --replace-fail "libwayland-egl.so" "${waylandLibPath}/libwayland-egl.so" \
+        --replace-fail "libxkbcommon.so" "${lib.makeLibraryPath [ libxkbcommon ]}/libxkbcommon.so"
+    '';
 
   nativeBuildInputs = [
     cmake
+    perl
+    pkg-config
     wrapGAppsHook3
   ];
+
   buildInputs = [
-    libX11
-    libzip
-    glfw
-    libpng
+    lcms2
   ]
-  ++ (with xorg; [
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXxf86vm
-    libXext
-  ]);
+  ++ lib.optionals stdenv.isLinux [
+    libffi
+    libxkbcommon
+    wayland
+    wayland-protocols
+    wayland-scanner
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+  ];
 
   dontWrapGApps = true; # We also need zenity (see below)
 
   cmakeFlags = [
-    "-DTEV_DEPLOY=1" # Only relevant not to append "dev" to the version
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DTEV_DEPLOY=1"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/tev \
       "''${gappsWrapperArgs[@]}" \
       --prefix PATH ":" "${zenity}/bin"
@@ -58,24 +81,18 @@ stdenv.mkDerivation rec {
   env.CXXFLAGS = "-include cstdint";
 
   meta = {
-    description = "High dynamic range (HDR) image comparison tool";
+    description = "High dynamic range (HDR) image viewer for people who care about colors";
     mainProgram = "tev";
     longDescription = ''
-      A high dynamic range (HDR) image comparison tool for graphics people. tev
-      allows viewing images through various tonemapping operators and inspecting
-      the values of individual pixels. Often, it is important to find exact
-      differences between pairs of images. For this purpose, tev allows rapidly
-      switching between opened images and visualizing various error metrics (L1,
-      L2, and relative versions thereof). To avoid clutter, opened images and
-      their layers can be filtered by keywords.
-      While the predominantly supported file format is OpenEXR certain other
-      types of images can also be loaded.
+      High dynamic range (HDR) image viewer for people who care about colors. It is
+      - Lightning fast: starts up instantly, loads hundreds of images in seconds.
+      - Accurate: understands color profiles and displays HDR.
+      - Versatile: supports many formats, histograms, pixel peeping, tonemaps, etc.
     '';
-    inherit (src.meta) homepage;
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
-    license = lib.licenses.bsd3;
+    homepage = "https://github.com/Tom94/tev";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ tom94 ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
-    maintainers = with lib.maintainers; [ ];
   };
 }
