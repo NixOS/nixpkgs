@@ -19,6 +19,12 @@ curl=(
 )
 
 if ! [ -f "$SSL_CERT_FILE" ]; then
+    for prefetchHash in $prefetchHashes; do
+        if [ "$outputHash" == "$prefetchHash" ]; then
+            echo "error: Refusing non-SSL-protected prefetch."
+            exit 1
+        fi
+    done
     curl+=(--insecure)
 fi
 
