@@ -1435,7 +1435,7 @@ mapAliases {
   nixFlakes = throw "'nixFlakes' has been renamed to/replaced by 'nixVersions.stable'"; # Converted to throw 2024-10-17
   nixStable = nixVersions.stable; # Added 2022-01-24
   nixUnstable = throw "nixUnstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest."; # Converted to throw 2024-04-22
-  nix_2_3 = nixVersions.nix_2_3;
+  nix_2_3 = throw "'nix_2_3' has been removed, because it was unmaintained and insecure."; # Converted to throw 2025-07-24
   nixfmt-rfc-style =
     if lib.oldestSupportedReleaseIsAtLeast 2511 then
       lib.warnOnInstantiate
