@@ -13340,8 +13340,6 @@ with pkgs;
 
   pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
 
-  plater = libsForQt5.callPackage ../applications/misc/plater { };
-
   plexamp = callPackage ../applications/audio/plexamp { };
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
