@@ -71,6 +71,62 @@ let
     };
   };
 
+  tunI2cpOpts = name: {
+    leaseSetType = mkOption {
+      type = types.enum [
+        1
+        3
+        5
+      ];
+      description = "Type of LeaseSet to be sent for ${name}.";
+      default = 3;
+    };
+    leaseSetEncType = mkOption {
+      type = types.listOf (
+        types.enum [
+          0
+          1
+          2
+          3
+          4
+        ]
+      );
+      description = "Comma separated encryption types to be used in LeaseSet for ${name}.";
+      default = [
+        0
+        4
+      ];
+    };
+    leaseSetPrivKey = mkOption {
+      type = with types; nullOr str;
+      description = "Decryption key for encrypted LeaseSet in base64. PSK or private DH for ${name}";
+    };
+    leaseSetAuthType = mkOption {
+      type = types.enum [
+        0
+        1
+        2
+      ];
+      description = "Authentication type for encrypted LeaseSet for ${name}.";
+      default = 0;
+    };
+    leaseSetClient.dh.nnn = mkOption {
+      type = with types; nullOr (either str int);
+      description = "Client name: client's public DH in base64 for ${name}.";
+      default = null;
+    };
+    leaseSetClient.psk.nnn = mkOption {
+      type = with types; nullOr (either str int);
+      description = "Client name: client's PSK in base64 for ${name}.";
+      default = null;
+    };
+    dontPublishLeaseSet = mkOption {
+      type = types.bool;
+      description = "Don't publish LeaseSet if set to true for ${name}.";
+      default = false;
+    };
+  };
+
   mkKeyedEndpointOpt =
     name: addr: port: keyloc:
     (mkEndpointOpt name addr port)
@@ -101,6 +157,7 @@ let
     {
       outbound = i2cpOpts name;
       inbound = i2cpOpts name;
+      i2cp = tunI2cpOpts name;
       crypto.tagsToSend = mkOption {
         type = types.int;
         description = "Number of ElGamal/AES tags to send.";
@@ -238,8 +295,37 @@ let
             ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
             ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
             ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
-            ++ (optionals (tun ? crypto.tagsToSend) (
-              optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend
+            ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend))
+            ++ (optionals (tun ? i2cp.leaseSetType) (optionalNullInt "i2cp.leaseSetType" tun.i2cp.leaseSetType))
+            ++ (optionals (tun ? i2cp.leaseSetEncType) (
+              optionalNullString "i2cp.leaseSetEncType" (
+                lib.concatStringsSep "," (map toString tun.i2cp.leaseSetEncType)
+              )
+            ))
+            ++ (optionals (tun ? i2cp.leaseSetPrivKey) (
+              optionalNullString "i2cp.leaseSetPrivKey" tun.i2cp.leaseSetPrivKey
+            ))
+            ++ (optionals (tun ? i2cp.leaseSetAuthType) (
+              optionalNullInt "i2cp.leaseSetAuthType" tun.i2cp.leaseSetAuthType
+            ))
+            ++ (optionals (tun ? i2cp.leaseSetClient.dh.nnn) (
+              if builtins.typeOf tun.i2cp.leaseSetClient.dh.nnn == "string" then
+                optionalNullString "i2cp.leaseSetClient.dh.nnn" tun.i2cp.leaseSetClient.dh.nnn
+              else if builtins.typeOf tun.i2cp.leaseSetClient.dh.nnn == "int" then
+                optionalNullInt "i2cp.leaseSetClient.dh.nnn" tun.i2cp.leaseSetClient.dh.nnn
+              else
+                [ ]
+            ))
+            ++ (optionals (tun ? i2cp.leaseSetClient.psk.nnn) (
+              if builtins.typeOf tun.i2cp.leaseSetClient.psk.nnn == "string" then
+                optionalNullString "i2cp.leaseSetClient.psk.nnn" tun.i2cp.leaseSetClient.psk.nnn
+              else if builtins.typeOf tun.i2cp.leaseSetClient.psk.nnn == "int" then
+                optionalNullInt "i2cp.leaseSetClient.psk.nnn" tun.i2cp.leaseSetClient.psk.nnn
+              else
+                [ ]
+            ))
+            ++ (optionals (tun ? i2cp.dontPublishLeaseSet) (
+              optionalNullBool "i2cp.dontPublishLeaseSet" tun.i2cp.dontPublishLeaseSet
             ));
         in
         lib.concatStringsSep "\n" outTunOpts;
