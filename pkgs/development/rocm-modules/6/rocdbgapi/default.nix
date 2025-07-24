@@ -12,7 +12,7 @@
   texliveSmall,
   doxygen,
   graphviz,
-  buildDocs ? true,
+  buildDocs ? false, # TODO: revert to true, docs build fixed in PR pending merge
 }:
 
 let

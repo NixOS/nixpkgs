@@ -7,6 +7,7 @@
   cmake,
   clang,
   clr,
+  aqlprofile,
   rocm-core,
   rocm-runtime,
   rocm-device-libs,
@@ -57,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # These just simply won't build
     ./0000-dont-install-tests-hsaco.patch
-    ./optional-aql-in-cmake.patch
   ];
 
   nativeBuildInputs = [
@@ -80,12 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     mpi
     systemd
     gtest
+    aqlprofile
   ];
 
   propagatedBuildInputs = [ rocmtoolkit-merged ];
 
-  # HACK: allow building without aqlprofile, probably explodes at runtime if use profiling
-  env.LDFLAGS = "-z nodefs -Wl,-undefined,dynamic_lookup,--unresolved-symbols=ignore-all";
   #HACK: rocprofiler's cmake doesn't add these deps properly
   env.CXXFLAGS = "-I${libpciaccess}/include -I${numactl.dev}/include -I${rocmtoolkit-merged}/include -I${elfutils.dev}/include -w";
 

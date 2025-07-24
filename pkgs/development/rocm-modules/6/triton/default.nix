@@ -17,7 +17,7 @@
       owner = "triton-lang";
       repo = "triton";
       rev = "v3.3.1";
-      hash = "sha256-11lpARwOLn28ZHfjiWR/JJWGw3MB34c+gz6Tq1GOVfo=";
+      hash = "sha256-XLw7s5K0j4mfIvNMumlHkUpklSzVSTRyfGazZ4lLpn0=";
     };
     buildInputs = old.buildInputs ++ [
       rocmPackages.clr

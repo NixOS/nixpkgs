@@ -66,7 +66,6 @@ let
 
       rocminfo = self.callPackage ./rocminfo { };
 
-      # Unfree
       aqlprofile = self.callPackage ./aqlprofile { };
 
       rdc = self.callPackage ./rdc { };
