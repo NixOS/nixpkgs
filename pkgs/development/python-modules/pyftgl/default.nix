@@ -4,7 +4,7 @@
   fetchFromGitHub,
   stdenv,
   setuptools,
-  boost,
+  boost-python,
   freetype,
   ftgl,
   libGLU,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     '';
 
   buildInputs = [
-    boost
+    boost-python
     freetype
     ftgl
     libGLU

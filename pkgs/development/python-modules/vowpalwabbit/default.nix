@@ -5,8 +5,10 @@
   buildPythonPackage,
   cmake,
   python,
+  boost-python,
   zlib,
   ncurses,
+  distutils,
   docutils,
   pygments,
   numpy,
@@ -27,22 +29,35 @@ buildPythonPackage rec {
     hash = "sha256-Yyqm3MlW6UL+bCufFfzWg9mBBQNhLxR+g++ZrQ6qM/E=";
   };
 
+  patches = [ ./fix-supplied-rapidjson.patch ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    boost-python
+    distutils
     docutils
     ncurses
     pygments
-    python.pkgs.boost
     zlib.dev
     spdlog
     fmt
     rapidjson
   ];
 
-  # As we disable configure via cmake, pass explicit global options to enable
-  # spdlog and fmt packages
-  setupPyGlobalFlags = [ "--cmake-options=-DSPDLOG_SYS_DEP=ON;-DFMT_SYS_DEP=ON" ];
+  # cmakeFlags are passed through setup.py, as that is the one invoking CMake
+  # instead of the derivation's builder.
+  setupPyGlobalFlags =
+    let
+      cmake-options = lib.concatStringsSep ";" [
+        "-DFMT_SYS_DEP:BOOL=ON"
+        "-DRAPIDJSON_SYS_DEP:BOOL=ON"
+        "-DSPDLOG_SYS_DEP:BOOL=ON"
+        "-DVW_BOOST_MATH_SYS_DEP:BOOL=ON"
+        "-DVW_ZLIB_SYS_DEP:BOOL=ON"
+      ];
+    in
+    [ "--cmake-options=\"${cmake-options}\"" ];
 
   propagatedBuildInputs = [
     numpy
@@ -56,7 +71,7 @@ buildPythonPackage rec {
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
+    export DYLD_LIBRARY_PATH="${lib.getLib boost-python}/lib"
   '';
 
   checkPhase = ''
@@ -67,7 +82,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
-    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    homepage = "https://vowpalwabbit.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     # Test again when new version is released

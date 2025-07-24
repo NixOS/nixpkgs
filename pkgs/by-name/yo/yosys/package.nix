@@ -9,6 +9,7 @@
   pkg-config,
 
   # propagatedBuildInputs
+  boost,
   libffi,
   python3,
   readline,
@@ -126,9 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
           click
         ]
       ))
-    ]
-    ++ lib.optionals enablePython [
-      python3.pkgs.boost
+    ] ++ lib.optionals enablePython  [
+      boost
+      (boost.pythonLib python3)
     ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

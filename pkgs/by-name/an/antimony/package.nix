@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libpng
     python3
-    python3.pkgs.boost
+    python3.pkgs.boost-python
     libGLU
     libGL
     libsForQt5.qtbase

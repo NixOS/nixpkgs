@@ -37,11 +37,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    (boost.override {
-      enablePython = true;
-      python = python3;
-    })
     (python3.withPackages (p: with p; [ pycodestyle ]))
+    (boost.withPython python3)
     SDL2
     freetype
     glew

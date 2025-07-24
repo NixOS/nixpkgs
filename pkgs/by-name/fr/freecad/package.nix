@@ -35,7 +35,7 @@
 }:
 let
   pythonDeps = with python3Packages; [
-    boost
+    boost-python
     gitpython # for addon manager
     ifcopenshell
     matplotlib
