@@ -505,19 +505,24 @@ builtins.intersectAttrs super {
   # LLVM input that llvm-ffi declares.
   llvm-ffi =
     let
-      matchingLlvmVersion = lib.strings.toInt (lib.versions.major super.llvm-ffi.version);
-      nextLlvmVersion = matchingLlvmVersion + 1;
+      chosenLlvmVersion = 20;
+      nextLlvmAttr = "llvmPackages_${toString (chosenLlvmVersion + 1)}";
+      shouldUpgrade =
+        pkgs ? ${nextLlvmAttr} && (lib.strings.match ".+rc.+" pkgs.${nextLlvmAttr}.llvm.version) == null;
     in
-    lib.warnIf (pkgs ? "llvmPackages_${toString nextLlvmVersion}")
-      # This package can be updated by changing the version constraint in
-      # configuration-hackage2nix/main.yaml and regenerating the haskellPackages set.
-      "haskellPackages.llvm-ffi: LLVM ${toString nextLlvmVersion} is available in Nixpkgs, consider updating."
-      addBuildDepends
+    lib.warnIf shouldUpgrade
+      "haskellPackages.llvm-ffi: ${nextLlvmAttr} is available in Nixpkgs, consider updating."
+      lib.pipe
+      super.llvm-ffi
       [
-        pkgs."llvmPackages_${toString matchingLlvmVersion}".llvm.lib
-        pkgs."llvmPackages_${toString matchingLlvmVersion}".llvm.dev
-      ]
-      super.llvm-ffi;
+        # ATTN: There is no matching flag for the latest supported LLVM version,
+        # so you may need to remove this when updating chosenLlvmVersion
+        (enableCabalFlag "LLVM${toString chosenLlvmVersion}00")
+        (addBuildDepends [
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.lib
+          pkgs."llvmPackages_${toString chosenLlvmVersion}".llvm.dev
+        ])
+      ];
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
