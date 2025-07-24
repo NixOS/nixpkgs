@@ -1107,7 +1107,7 @@ with pkgs;
     };
   };
 
-  mkosi = callPackage ../tools/virtualization/mkosi { };
+  mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
   mkosi-full = mkosi.override { withQemu = true; };
 
