@@ -1,6 +1,7 @@
 {
   system,
   pkgs,
+  lib ? pkgs.lib,
 
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
@@ -142,6 +143,8 @@ let
       _class = "nixosTest";
       node.pkgs = pkgs.pkgsLinux;
     };
+
+  inherit (pkgs) emptyFile;
 
 in
 {
@@ -878,6 +881,9 @@ in
   meilisearch = runTest ./meilisearch.nix;
   memcached = runTest ./memcached.nix;
   merecat = runTest ./merecat.nix;
+  meta =
+    (import ../modules/misc/meta/tests.nix { inherit lib evalMinimalConfig; }).evalTests
+      emptyFile;
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
   mindustry = runTest ./mindustry.nix;
