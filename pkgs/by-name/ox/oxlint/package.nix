@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${version}";
-    hash = "sha256-+K8hc6uU/p/hT3bkaGPZpVcK9itSGJM9Mdhfw3DSZJw=";
+    hash = "sha256-tSbphp04uh/KjnieyJ6JNIj4VUDl6jiHo0m90P1/XwA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-D0YEodCzBpf7g3VnKyydEDtjzGUu+XsGc2BpXU4CR6Q=";
+  cargoHash = "sha256-Jxj+uQgFbZdzJM1sAu3GU3uXcKOd7RyRxc46eL12qoc=";
 
   buildInputs = [
     rust-jemalloc-sys
