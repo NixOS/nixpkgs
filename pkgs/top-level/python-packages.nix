@@ -2801,6 +2801,8 @@ self: super: with self; {
 
   color-parser-py = callPackage ../development/python-modules/color-parser-py { };
 
+  coloraide = callPackage ../development/python-modules/coloraide { };
+
   colorama = callPackage ../development/python-modules/colorama { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
