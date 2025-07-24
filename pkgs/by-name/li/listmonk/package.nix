@@ -51,6 +51,7 @@ buildGoModule (finalAttrs: {
         "config.toml.sample"
         "schema.sql"
         "queries.sql"
+        "permissions.json"
         "static/public:/public"
         "static/email-templates"
         "${finalAttrs.passthru.frontend}:/admin"
