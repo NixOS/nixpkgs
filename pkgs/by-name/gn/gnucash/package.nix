@@ -10,6 +10,7 @@
   gettext,
   glib,
   glibcLocales,
+  gobject-introspection,
   gtest,
   guile,
   gwenhywfar,
@@ -28,7 +29,13 @@
   wrapGAppsHook3,
   python3,
 }:
-
+let
+  py = python3.withPackages (
+    ps: with ps; [
+      pygobject3.out
+    ]
+  );
+in
 stdenv.mkDerivation rec {
   pname = "gnucash";
   version = "5.11";
@@ -42,6 +49,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gettext
+    gobject-introspection
     makeWrapper
     wrapGAppsHook3
     pkg-config
@@ -69,7 +77,7 @@ stdenv.mkDerivation rec {
     libxslt
     swig
     webkitgtk_4_1
-    python3
+    py
   ]
   ++ (with perlPackages; [
     JSONParse
@@ -150,11 +158,16 @@ stdenv.mkDerivation rec {
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
+  # We could not find the python entrypoint and somehow it is used from PATH,
+  # so force to use the one with all dependencies
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
-    wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"
-    wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
+    wrapProgram $out/bin/gnucash-cli \
+      --prefix PATH : ${lib.makeBinPath [ py ]} \
+      "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
       --prefix PERL5LIB : "${
@@ -164,6 +177,9 @@ stdenv.mkDerivation rec {
           FinanceQuote
         ]
       }"
+
+    chmod +x $out/share/gnucash/python/pycons/*.py
+    patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
   passthru.updateScript = ./update.sh;
