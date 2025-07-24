@@ -7047,11 +7047,10 @@
     name = "Dzmitry Lahoda";
   };
   e-v-o-l-v-e = {
-    name = "Ivanoe Megnin-Preiss";
-    email = "megninpreiss.ivanoe@gmail.com";
+    email = "oss@imp-network.com";
     github = "e-v-o-l-v-e";
     githubId = 84813895;
-    matrix = "@evolve:matrix.imp-network.com";
+    name = "Ivanoe Megnin-Preiss";
   };
   e1mo = {
     email = "nixpkgs@e1mo.de";
