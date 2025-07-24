@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '"fzy"' '"${lib.getExe fzy}"'
   '';
 
+  patches = [
+    ./rustverfix.patch
+  ];
+
   postInstall = ''
     ln -s $out/bin/comma $out/bin/,
 

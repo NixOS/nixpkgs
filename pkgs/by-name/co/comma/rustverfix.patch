@@ -1,0 +1,14 @@
+diff --git a/src/main.rs b/src/main.rs
+index cdd04a0..413139a 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -214,7 +214,7 @@ fn run_command_from_cache(
+ 
+ fn confirmer(run_cmd: &Command) -> bool {
+     loop {
+-        print!("Run '{}'? [Y/n]: ", run_cmd.get_program().display());
++        print!("Run '{}'? [Y/n]: ", run_cmd.get_program().to_string_lossy());
+         io::stdout().flush().unwrap();
+ 
+         let mut input = String::new();
+
