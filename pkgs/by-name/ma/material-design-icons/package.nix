@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Templarian";
     repo = "MaterialDesign-Webfont";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-7t3i3nPJZ/tRslLBfY+9kXH8TR145GC2hPFYJeMHRL8=";
     sparseCheckout = [ "fonts" ];
   };

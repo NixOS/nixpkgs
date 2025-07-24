@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    rev = "Sans${version}";
+    tag = "Sans${version}";
     hash = "sha256-i3ZKoSy2SVs46IViha+Sg8atH4n3ywgrunHPLtVT4Pk=";
     sparseCheckout = [
       "Sans/OTC"

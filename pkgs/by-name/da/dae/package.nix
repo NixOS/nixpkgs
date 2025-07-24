@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-RpbWZEoGrCq3Py0hu6YDie6ErDTLS3oabqScPzhCtm0=";
     fetchSubmodules = true;
   };

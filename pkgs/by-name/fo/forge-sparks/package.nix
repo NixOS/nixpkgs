@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "forge-sparks";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-H607u/VBuzzoYrYZc8fLqCQMZ+jRJOVZ34U8yKHfmYk=";
     fetchSubmodules = true;
   };
