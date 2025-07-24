@@ -17571,6 +17571,8 @@ self: super: with self; {
 
   taskw-ng = callPackage ../development/python-modules/taskw-ng { };
 
+  tasmota-metrics = callPackage ../development/python-modules/tasmota-metrics { };
+
   tatsu = callPackage ../development/python-modules/tatsu { };
 
   tatsu-lts = callPackage ../development/python-modules/tatsu-lts { };

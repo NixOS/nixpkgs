@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "framework-arduino-ITEAD",
+  "version": "3.1.0+sha.35321e8b",
+  "spec": {
+    "owner": "tasmota",
+    "id": null,
+    "name": "framework-arduino-ITEAD",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/arduino-esp32/releases/download/3.1.0.241206/framework-arduinoespressif32-ITEAD.zip"
+  }
+}
