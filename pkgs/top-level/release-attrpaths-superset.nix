@@ -24,7 +24,6 @@
 {
   lib ? import (path + "/lib"),
   trace ? false,
-  enableWarnings ? true,
   checkMeta ? true,
   path ? ./../..,
 }:
@@ -125,8 +124,10 @@ let
   justAttrNames =
     path: value:
     let
-      attempt =
-        if
+      result =
+        if path == [ "AAAAAASomeThingsFailToEvaluate" ] then
+          [ ]
+        else if
           lib.isDerivation value
           &&
             # in some places we have *derivations* with jobsets as subattributes, ugh
@@ -162,17 +163,6 @@ let
             builtins.attrValues
             builtins.concatLists
           ];
-
-      seq = builtins.deepSeq attempt attempt;
-      tried = builtins.tryEval seq;
-
-      result =
-        if tried.success then
-          tried.value
-        else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ] then
-          lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" [ ]
-        else
-          [ ];
     in
     if !trace then result else lib.trace "** ${lib.concatStringsSep "." path}" result;
 

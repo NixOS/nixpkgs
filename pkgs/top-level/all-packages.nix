@@ -113,12 +113,10 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
-  ### Evaluating the entire Nixpkgs naively will fail, make failure fast
+  ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
-    Please be informed that this pseudo-package is not the only part
-    of Nixpkgs that fails to evaluate. You should not evaluate
-    entire Nixpkgs without some special measures to handle failing
-    packages, like using pkgs/top-level/release-attrpaths-superset.nix.
+    This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
+    You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
   tests = callPackages ../test { };
