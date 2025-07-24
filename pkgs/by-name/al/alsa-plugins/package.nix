@@ -9,6 +9,7 @@
   libogg,
   libpulseaudio,
   speexdsp,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     speexdsp
   ];
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://alsa-project.org/files/pub/plugins/";
+  };
 
   meta = {
     description = "Various plugins for ALSA";
