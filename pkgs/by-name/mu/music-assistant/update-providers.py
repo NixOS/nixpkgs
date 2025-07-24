@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p pyright ruff isort
+#!nix-shell -I nixpkgs=./. -i python3 -p "music-assistant.python.withPackages (ps: music-assistant.dependencies ++ (with ps; [ jinja2 packaging ]))" -p nixfmt pyright ruff isort
 import asyncio
 import json
 import os.path
