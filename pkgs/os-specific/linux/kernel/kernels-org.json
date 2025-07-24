@@ -27,14 +27,6 @@
         "version": "6.12.40",
         "hash": "sha256:0cr9hi0m7p9jf0rdblign1ya40rckab9axiwxb62r3gr2w9sy4a8"
     },
-    "6.13": {
-        "version": "6.13.12",
-        "hash": "sha256:0hhj49k3ksjcp0dg5yiahqzryjfdpr9c1a9ph6j9slzmkikbn7v1"
-    },
-    "6.14": {
-        "version": "6.14.11",
-        "hash": "sha256:06rvydmc2yfspidnsay5hin3i8p4fxy3bvzwnry7gjf9dl5cs71z"
-    },
     "6.15": {
         "version": "6.15.8",
         "hash": "sha256:19i87zpq3zhpg09sdirnzys2s2yrv9xn8mpibl1a6qmr2sy94znk"
