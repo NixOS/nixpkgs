@@ -9,8 +9,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gn";
-  version = "0-unstable-2025-04-28";
-  revNum = 2233;
+  version = "0-unstable-2025-05-21";
+  revNum = 2237;
   revShort = builtins.substring 0 7 finalAttrs.src.rev;
 
   src = fetchgit {
@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://gn.googlesource.com/gn";
     # Note: Please use the recommended version for Chromium stable, i.e. from
     # <nixpkgs>/pkgs/applications/networking/browsers/chromium/info.json
-    rev = "85cc21e94af590a267c1c7a47020d9b420f8a033";
-    hash = "sha256-+nKP2hBUKIqdNfDz1vGggXSdCuttOt0GwyGUQ3Z1ZHI=";
+    rev = "ebc8f16ca7b0d36a3e532ee90896f9eb48e5423b";
+    hash = "sha256-UB9a7Fr1W0yYld6WbXyRR8dFqWsj/zx4KumDZ5JQKSM=";
   };
 
   nativeBuildInputs = [
