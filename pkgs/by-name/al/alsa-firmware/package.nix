@@ -5,6 +5,7 @@
   autoreconfHook,
   fetchurl,
   fetchpatch,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     # remove empty dir
     rm -rf $out/bin
   '';
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://alsa-project.org/files/pub/firmware/";
+  };
 
   meta = {
     homepage = "http://www.alsa-project.org/";
