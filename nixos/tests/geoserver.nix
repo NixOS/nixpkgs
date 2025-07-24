@@ -19,7 +19,7 @@ in
 
   name = "geoserver";
   meta = {
-    maintainers = with lib; [ teams.geospatial.members ];
+    maintainers = lib.teams.geospatial.members;
   };
 
   nodes = {
