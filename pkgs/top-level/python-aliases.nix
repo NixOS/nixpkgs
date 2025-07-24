@@ -589,6 +589,7 @@ mapAliases ({
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   python-picnic-api = throw "python-picnic-api was removed because Home Assistant switched to python-picnic-api2"; # added 2025-03-05
   python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
+  pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pytrends = throw "pytrends has been removed, as it no longer works and is abandoned upstream"; # added 2025-02-02
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
