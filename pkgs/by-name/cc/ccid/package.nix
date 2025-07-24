@@ -69,17 +69,21 @@ stdenv.mkDerivation rec {
     url = "https://salsa.debian.org/rousseau/CCID.git";
   };
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  installCheckPhase =
+    let
+      platform = if stdenv.hostPlatform.isLinux then "Linux" else "MacOS";
+    in
+    lib.optionalString (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) ''
+      runHook preInstallCheck
 
-    [ -f $out/etc/reader.conf.d/libccidtwin ]
-    [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
-    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
-    [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Linux/libccid.so ]
-    [ -f $out/pcsc/drivers/serial/libccidtwin.so ]
+      [ -f $out/etc/reader.conf.d/libccidtwin ]
+      [ -f $out/lib/udev/rules.d/92_pcscd_ccid.rules ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist ]
+      [ -f $out/pcsc/drivers/ifd-ccid.bundle/Contents/${platform}/libccid${stdenv.hostPlatform.extensions.sharedLibrary} ]
+      [ -f $out/pcsc/drivers/serial/libccidtwin${stdenv.hostPlatform.extensions.sharedLibrary} ]
 
-    runHook preInstallCheck
-  '';
+      runHook postInstallCheck
+    '';
 
   meta = with lib; {
     description = "PC/SC driver for USB CCID smart card readers";
