@@ -14784,6 +14784,8 @@ self: super: with self; {
 
   python-trovo = callPackage ../development/python-modules/python-trovo { };
 
+  python-tsp = callPackage ../development/python-modules/python-tsp { };
+
   python-twitch-client = callPackage ../development/python-modules/python-twitch-client { };
 
   python-twitter = callPackage ../development/python-modules/python-twitter { };
