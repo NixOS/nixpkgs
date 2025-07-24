@@ -67,7 +67,8 @@ buildPythonPackage rec {
     mako
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ] ++ pytools.optional-dependencies.siphash;
+  ]
+  ++ pytools.optional-dependencies.siphash;
 
   env = {
     CL_INC_DIR = "${opencl-headers}/include";

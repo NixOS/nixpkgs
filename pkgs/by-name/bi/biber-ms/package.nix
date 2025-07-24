@@ -84,13 +84,12 @@ perlPackages.buildPerlModule {
     cp '${multiscriptBltxml}' t/tdata/multiscript.bltxml
   '';
 
-  postInstall =
-    ''
-      mv "$out"/bin/biber{,-ms}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      shortenPerlShebang "$out"/bin/biber-ms
-    '';
+  postInstall = ''
+    mv "$out"/bin/biber{,-ms}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang "$out"/bin/biber-ms
+  '';
 
   meta = with lib; {
     description = "Backend for BibLaTeX (multiscript version)";

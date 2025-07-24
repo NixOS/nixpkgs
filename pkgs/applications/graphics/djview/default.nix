@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     "--with-x"
     "--with-tiff"
     "--disable-nsdejavu" # 2023-11-14: modern browsers have dropped support for NPAPI
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-mac";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-mac";
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

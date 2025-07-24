@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
     libsodium
     curl
-  ] ++ lib.optional enableProtoBuf protobuf;
+  ]
+  ++ lib.optional enableProtoBuf protobuf;
 
   configureFlags = [
     "--enable-reproducible"

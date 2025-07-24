@@ -65,15 +65,14 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "vectorcode" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python3Packages; [
-      mcp
-      pygls
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python3Packages; [
+    mcp
+    pygls
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "version";
 
   disabledTests = [

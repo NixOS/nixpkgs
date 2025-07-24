@@ -49,10 +49,11 @@ in
       hostPkgs.stdenv.mkDerivation {
         name = "vm-test-run-${config.name}";
 
-        requiredSystemFeatures =
-          [ "nixos-test" ]
-          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
-          ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
+        requiredSystemFeatures = [
+          "nixos-test"
+        ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
+        ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
         buildCommand = ''
           mkdir -p $out

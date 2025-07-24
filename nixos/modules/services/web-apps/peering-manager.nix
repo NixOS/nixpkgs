@@ -22,16 +22,15 @@ let
 
   pkg =
     (pkgs.peering-manager.overrideAttrs (old: {
-      postInstall =
-        ''
-          ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
-        ''
-        + lib.optionalString cfg.enableLdap ''
-          ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
-        ''
-        + lib.optionalString cfg.enableOidc ''
-          ln -s ${cfg.oidcConfigPath} $out/opt/peering-manager/peering_manager/oidc_config.py
-        '';
+      postInstall = ''
+        ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
+      ''
+      + lib.optionalString cfg.enableLdap ''
+        ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
+      ''
+      + lib.optionalString cfg.enableOidc ''
+        ln -s ${cfg.oidcConfigPath} $out/opt/peering-manager/peering_manager/oidc_config.py
+      '';
     })).override
       {
         inherit (cfg) plugins;
@@ -200,15 +199,14 @@ in
         };
       };
 
-      extraConfig =
-        ''
-          with open("${cfg.secretKeyFile}", "r") as file:
-            SECRET_KEY = file.readline()
-        ''
-        + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
-          with open("${cfg.peeringdbApiKeyFile}", "r") as file:
-            PEERINGDB_API_KEY = file.readline()
-        '';
+      extraConfig = ''
+        with open("${cfg.secretKeyFile}", "r") as file:
+          SECRET_KEY = file.readline()
+      ''
+      + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
+        with open("${cfg.peeringdbApiKeyFile}", "r") as file:
+          PEERINGDB_API_KEY = file.readline()
+      '';
 
       plugins = (
         ps:

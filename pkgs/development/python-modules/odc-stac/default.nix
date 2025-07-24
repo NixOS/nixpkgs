@@ -66,7 +66,8 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ] ++ optional-dependencies.botocore;
+  ]
+  ++ optional-dependencies.botocore;
 
   pytestFlagsArray = [ "-m 'not network'" ];
 

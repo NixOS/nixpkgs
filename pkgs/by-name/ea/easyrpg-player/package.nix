@@ -65,37 +65,36 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fmt
-      freetype
-      glib
-      harfbuzz
-      liblcf
-      libpng
-      libsndfile
-      libvorbis
-      libxmp
-      mpg123
-      opusfile
-      pcre
-      pixman
-      SDL2
-      speexdsp
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libXcursor
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXScrnSaver
-      libXxf86vm
-      libdecor
-      wildmidi # until packaged on Darwin
-    ];
+  buildInputs = [
+    fmt
+    freetype
+    glib
+    harfbuzz
+    liblcf
+    libpng
+    libsndfile
+    libvorbis
+    libxmp
+    mpg123
+    opusfile
+    pcre
+    pixman
+    SDL2
+    speexdsp
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+    libXScrnSaver
+    libXxf86vm
+    libdecor
+    wildmidi # until packaged on Darwin
+  ];
 
   cmakeFlags = [
     "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}"

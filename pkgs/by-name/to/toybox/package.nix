@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
-  buildInputs =
-    [
-      libxcrypt
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ]
-    ++ optionals (enableStatic && stdenv.cc.libc ? static) [
-      stdenv.cc.libc
-      stdenv.cc.libc.static
-    ];
+  buildInputs = [
+    libxcrypt
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ]
+  ++ optionals (enableStatic && stdenv.cc.libc ? static) [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   postPatch = "patchShebangs .";
 

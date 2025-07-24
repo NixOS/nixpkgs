@@ -24,7 +24,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cheroot
-  ] ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
+  ]
+  ++ lib.optional (pythonAtLeast "3.13") legacy-cgi;
 
   # requires multiple running databases
   doCheck = false;

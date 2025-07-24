@@ -39,16 +39,15 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      bzip2
-      nettle
-      openssl
-      pcsclite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    bzip2
+    nettle
+    openssl
+    pcsclite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   pythonImportsCheck = [ "pysequoia" ];
 

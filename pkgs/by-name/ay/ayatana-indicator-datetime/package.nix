@@ -62,30 +62,29 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      ayatana-indicator-messages
-      evolution-data-server
-      glib
-      libaccounts-glib
-      libayatana-common
-      libical
-      libnotify
-      libuuid
-      properties-cpp
-      systemd
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-    ])
-    ++ (with lomiri; [
-      cmake-extras
-      lomiri-schemas
-      lomiri-sounds
-      lomiri-url-dispatcher
-    ]);
+  buildInputs = [
+    ayatana-indicator-messages
+    evolution-data-server
+    glib
+    libaccounts-glib
+    libayatana-common
+    libical
+    libnotify
+    libuuid
+    properties-cpp
+    systemd
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ])
+  ++ (with lomiri; [
+    cmake-extras
+    lomiri-schemas
+    lomiri-sounds
+    lomiri-url-dispatcher
+  ]);
 
   nativeCheckInputs = [
     dbus

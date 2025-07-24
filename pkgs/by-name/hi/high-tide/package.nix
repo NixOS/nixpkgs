@@ -34,16 +34,17 @@ python3Packages.buildPythonApplication {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [ libadwaita ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-plugins-bad
-      libsecret
-    ]);
+  buildInputs = [
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    libsecret
+  ]);
 
   dependencies = with python3Packages; [
     pygobject3

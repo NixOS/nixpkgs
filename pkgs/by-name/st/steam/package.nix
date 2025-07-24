@@ -132,7 +132,8 @@ let
       extraBwrapArgs = [
         # Steam will dump crash reports here, make those more accessible
         "--bind-try /tmp/dumps /tmp/dumps"
-      ] ++ extraBwrapArgs;
+      ]
+      ++ extraBwrapArgs;
     };
 in
 steamEnv {

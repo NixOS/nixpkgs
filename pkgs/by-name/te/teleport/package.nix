@@ -135,7 +135,8 @@ buildGo123Module (finalAttrs: {
   tags = [
     "libfido2"
     "webassets_embed"
-  ] ++ lib.optional withRdpClient "desktop_access_rdp";
+  ]
+  ++ lib.optional withRdpClient "desktop_access_rdp";
 
   buildInputs = [
     openssl
@@ -158,14 +159,13 @@ buildGo123Module (finalAttrs: {
     "client"
   ];
 
-  preBuild =
-    ''
-      cp -r ${webassets} webassets
-    ''
-    + lib.optionalString withRdpClient ''
-      ln -s ${rdpClient}/lib/* lib/
-      ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
-    '';
+  preBuild = ''
+    cp -r ${webassets} webassets
+  ''
+  + lib.optionalString withRdpClient ''
+    ln -s ${rdpClient}/lib/* lib/
+    ln -s ${rdpClient}/include/* lib/srv/desktop/rdp/rdpclient/
+  '';
 
   # Multiple tests fail in the build sandbox
   # due to trying to spawn nixbld's shell (/noshell), etc.

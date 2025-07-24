@@ -113,7 +113,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ] ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+    ]
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     updateScript = writeShellScript "update-wine-stable" (''
       ${updateScriptPreamble}
@@ -202,7 +203,8 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ] ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+    ]
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {

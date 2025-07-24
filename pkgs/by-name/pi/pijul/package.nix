@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage rec {
     openssl
     libsodium
     xxHash
-  ] ++ (lib.optionals gitImportSupport [ libgit2 ]);
+  ]
+  ++ (lib.optionals gitImportSupport [ libgit2 ]);
 
   buildFeatures = lib.optional gitImportSupport "git";
 

@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=/"
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_UTILS=ON"
-  ] ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
+  ]
+  ++ lib.optionals withZlibCompat [ "-DZLIB_COMPAT=ON" ];
 
   meta = with lib; {
     description = "zlib data compression library for the next generation systems";

@@ -28,13 +28,12 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtsvg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -89,16 +88,15 @@ python3Packages.buildPythonApplication rec {
       export QT_QPA_PLATFORM=offscreen
     '';
 
-  disabledTestPaths =
-    [
-      # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
-      "tests/integration"
-      "tests/unit"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Darwin-only test
-      "tests/network_manager/test_darwin.py"
-    ];
+  disabledTestPaths = [
+    # QObject::connect: No such signal QPlatformNativeInterface::systemTrayWindowChanged(QScreen*)    "tests/test_excludes.py"
+    "tests/integration"
+    "tests/unit"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Darwin-only test
+    "tests/network_manager/test_darwin.py"
+  ];
 
   meta = {
     changelog = "https://github.com/borgbase/vorta/releases/tag/v${version}";

@@ -53,23 +53,22 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs =
-    [
-      caja
-      gtk3
-      glib
-      libarchive
-      libsecret
-      libxml2
-      poppler
-      mate-desktop
-      hicolor-icon-theme
-      texlive.bin.core # for synctex, used by the pdf back-end
-    ]
-    ++ lib.optionals enableDjvu [ djvulibre ]
-    ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
-    ++ lib.optionals enablePostScript [ libspectre ]
-    ++ lib.optionals enableXps [ libgxps ];
+  buildInputs = [
+    caja
+    gtk3
+    glib
+    libarchive
+    libsecret
+    libxml2
+    poppler
+    mate-desktop
+    hicolor-icon-theme
+    texlive.bin.core # for synctex, used by the pdf back-end
+  ]
+  ++ lib.optionals enableDjvu [ djvulibre ]
+  ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
+  ++ lib.optionals enablePostScript [ libspectre ]
+  ++ lib.optionals enableXps [ libgxps ];
 
   configureFlags =
     [ ]

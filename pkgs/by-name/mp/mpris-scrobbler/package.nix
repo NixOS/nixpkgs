@@ -26,16 +26,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qjd/8Ro4wERvp8RDxyZiqWqVKwA0CX1LaoZAquw9asA=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/signon.c \
-        --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace meson.build \
-        --replace "-Werror=format-truncation=0" "" \
-        --replace "-Wno-stringop-overflow" ""
-    '';
+  postPatch = ''
+    substituteInPlace src/signon.c \
+      --replace "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace meson.build \
+      --replace "-Werror=format-truncation=0" "" \
+      --replace "-Wno-stringop-overflow" ""
+  '';
 
   nativeBuildInputs = [
     m4

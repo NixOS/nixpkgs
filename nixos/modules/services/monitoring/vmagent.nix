@@ -9,21 +9,20 @@ let
   cfg = config.services.vmagent;
   settingsFormat = pkgs.formats.yaml { };
 
-  startCLIList =
-    [
-      "${cfg.package}/bin/vmagent"
-    ]
-    ++ lib.optionals (cfg.remoteWrite.url != null) [
-      "-remoteWrite.url=${cfg.remoteWrite.url}"
-      "-remoteWrite.tmpDataPath=%C/vmagent/remote_write_tmp"
-    ]
-    ++ lib.optional (
-      cfg.remoteWrite.basicAuthUsername != null
-    ) "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
-    ++ lib.optional (
-      cfg.remoteWrite.basicAuthPasswordFile != null
-    ) "-remoteWrite.basicAuth.passwordFile=\${CREDENTIALS_DIRECTORY}/remote_write_basic_auth_password"
-    ++ cfg.extraArgs;
+  startCLIList = [
+    "${cfg.package}/bin/vmagent"
+  ]
+  ++ lib.optionals (cfg.remoteWrite.url != null) [
+    "-remoteWrite.url=${cfg.remoteWrite.url}"
+    "-remoteWrite.tmpDataPath=%C/vmagent/remote_write_tmp"
+  ]
+  ++ lib.optional (
+    cfg.remoteWrite.basicAuthUsername != null
+  ) "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
+  ++ lib.optional (
+    cfg.remoteWrite.basicAuthPasswordFile != null
+  ) "-remoteWrite.basicAuth.passwordFile=\${CREDENTIALS_DIRECTORY}/remote_write_basic_auth_password"
+  ++ cfg.extraArgs;
   prometheusConfigYml = checkedConfig (
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );

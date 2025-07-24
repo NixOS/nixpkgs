@@ -31,12 +31,14 @@ let
       rich-toolkit
       typer
       uvicorn
-    ] ++ uvicorn.optional-dependencies.standard;
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
     optional-dependencies = {
       standard = [
         uvicorn
-      ] ++ uvicorn.optional-dependencies.standard;
+      ]
+      ++ uvicorn.optional-dependencies.standard;
     };
 
     doCheck = false;
@@ -46,7 +48,8 @@ let
     nativeCheckInputs = [
       pytestCheckHook
       rich
-    ] ++ optional-dependencies.standard;
+    ]
+    ++ optional-dependencies.standard;
 
     # coverage
     disabledTests = [ "test_script" ];

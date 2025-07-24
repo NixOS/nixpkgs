@@ -23,21 +23,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      fftw
-      gsl
-      motif
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ (with xorg; [
-      libXext
-      libXft
-      libXpm
-      libXt
-    ]);
+  buildInputs = [
+    fftw
+    gsl
+    motif
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ (with xorg; [
+    libXext
+    libXft
+    libXpm
+    libXt
+  ]);
 
   configureFlags = [
     "--with-motif"

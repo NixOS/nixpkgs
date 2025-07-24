@@ -76,19 +76,19 @@ buildPythonPackage rec {
 
   optional-dependencies = lib.fix (self: {
     array = [ numpy ];
-    complete =
-      [
-        pyarrow
-        lz4
-      ]
-      ++ self.array
-      ++ self.dataframe
-      ++ self.distributed
-      ++ self.diagnostics;
+    complete = [
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       pandas
       pyarrow
-    ] ++ self.array;
+    ]
+    ++ self.array;
     distributed = [ distributed ];
     diagnostics = [
       bokeh
@@ -96,20 +96,19 @@ buildPythonPackage rec {
     ];
   });
 
-  nativeCheckInputs =
-    [
-      hypothesis
-      pyarrow
-      pytest-asyncio
-      pytest-cov-stub
-      pytest-mock
-      pytest-rerunfailures
-      pytest-xdist
-      pytestCheckHook
-      versionCheckHook
-    ]
-    ++ optional-dependencies.array
-    ++ optional-dependencies.dataframe;
+  nativeCheckInputs = [
+    hypothesis
+    pyarrow
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
+    pytest-rerunfailures
+    pytest-xdist
+    pytestCheckHook
+    versionCheckHook
+  ]
+  ++ optional-dependencies.array
+  ++ optional-dependencies.dataframe;
   versionCheckProgramArg = "--version";
 
   pytestFlagsArray = [

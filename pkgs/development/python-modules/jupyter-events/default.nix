@@ -58,7 +58,8 @@ buildPythonPackage rec {
     rfc3339-validator
     rfc3986-validator
     traitlets
-  ] ++ jsonschema.optional-dependencies.format-nongpl;
+  ]
+  ++ jsonschema.optional-dependencies.format-nongpl;
 
   optional-dependencies = {
     cli = [
@@ -71,7 +72,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-console-scripts
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

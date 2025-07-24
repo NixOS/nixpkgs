@@ -23,36 +23,35 @@ stdenv.mkDerivation rec {
     sha256 = "1zdn1y0ij6amj7smmcslkqgbqv9yy5cwmbyzqc9v6drzdzllgbpj";
   };
 
-  preConfigure =
-    ''
-      mkdir -p $out/lib
-      mkdir -p $out/include
+  preConfigure = ''
+    mkdir -p $out/lib
+    mkdir -p $out/include
 
-      sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
-          -e 's/METIS .*$/METIS =/' \
-          -e 's/METIS_PATH .*$/METIS_PATH =/' \
-          -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
-          -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
-          -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
-    ''
-    + lib.optionalString enableCuda ''
-      sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
-          -e 's|^[[:space:]]*\(CUDA_ROOT     =\)|CUDA_ROOT = ${cudatoolkit}|' \
-          -e 's|^[[:space:]]*\(GPU_BLAS_PATH =\)|GPU_BLAS_PATH = $(CUDA_ROOT)|' \
-          -e 's|^[[:space:]]*\(GPU_CONFIG    =\)|GPU_CONFIG = -I$(CUDA_ROOT)/include -DGPU_BLAS -DCHOLMOD_OMP_NUM_THREADS=$(NIX_BUILD_CORES) |' \
-          -e 's|^[[:space:]]*\(CUDA_PATH     =\)|CUDA_PATH = $(CUDA_ROOT)|' \
-          -e 's|^[[:space:]]*\(CUDART_LIB    =\)|CUDART_LIB = $(CUDA_ROOT)/lib64/libcudart.so|' \
-          -e 's|^[[:space:]]*\(CUBLAS_LIB    =\)|CUBLAS_LIB = $(CUDA_ROOT)/lib64/libcublas.so|' \
-          -e 's|^[[:space:]]*\(CUDA_INC_PATH =\)|CUDA_INC_PATH = $(CUDA_ROOT)/include/|' \
-          -e 's|^[[:space:]]*\(NV20          =\)|NV20 = -arch=sm_20 -Xcompiler -fPIC|' \
-          -e 's|^[[:space:]]*\(NV30          =\)|NV30 = -arch=sm_30 -Xcompiler -fPIC|' \
-          -e 's|^[[:space:]]*\(NV35          =\)|NV35 = -arch=sm_35 -Xcompiler -fPIC|' \
-          -e 's|^[[:space:]]*\(NVCC          =\) echo|NVCC = $(CUDA_ROOT)/bin/nvcc|' \
-          -e 's|^[[:space:]]*\(NVCCFLAGS     =\)|NVCCFLAGS = $(NV20) -O3 -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_60,code=sm_60|'
-    '';
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's/METIS .*$/METIS =/' \
+        -e 's/METIS_PATH .*$/METIS_PATH =/' \
+        -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
+        -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
+  ''
+  + lib.optionalString enableCuda ''
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's|^[[:space:]]*\(CUDA_ROOT     =\)|CUDA_ROOT = ${cudatoolkit}|' \
+        -e 's|^[[:space:]]*\(GPU_BLAS_PATH =\)|GPU_BLAS_PATH = $(CUDA_ROOT)|' \
+        -e 's|^[[:space:]]*\(GPU_CONFIG    =\)|GPU_CONFIG = -I$(CUDA_ROOT)/include -DGPU_BLAS -DCHOLMOD_OMP_NUM_THREADS=$(NIX_BUILD_CORES) |' \
+        -e 's|^[[:space:]]*\(CUDA_PATH     =\)|CUDA_PATH = $(CUDA_ROOT)|' \
+        -e 's|^[[:space:]]*\(CUDART_LIB    =\)|CUDART_LIB = $(CUDA_ROOT)/lib64/libcudart.so|' \
+        -e 's|^[[:space:]]*\(CUBLAS_LIB    =\)|CUBLAS_LIB = $(CUDA_ROOT)/lib64/libcublas.so|' \
+        -e 's|^[[:space:]]*\(CUDA_INC_PATH =\)|CUDA_INC_PATH = $(CUDA_ROOT)/include/|' \
+        -e 's|^[[:space:]]*\(NV20          =\)|NV20 = -arch=sm_20 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NV30          =\)|NV30 = -arch=sm_30 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NV35          =\)|NV35 = -arch=sm_35 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NVCC          =\) echo|NVCC = $(CUDA_ROOT)/bin/nvcc|' \
+        -e 's|^[[:space:]]*\(NVCCFLAGS     =\)|NVCCFLAGS = $(NV20) -O3 -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_60,code=sm_60|'
+  '';
 
   makeFlags = [
     "PREFIX=\"$(out)\""

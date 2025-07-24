@@ -141,33 +141,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.setuptools
   ];
-  buildInputs =
-    [
-      # Xen
-      acpica-tools
-      bzip2
-      dev86
-      e2fsprogs.dev
-      libnl
-      libuuid
-      lzo
-      ncurses
-      perl
-      python3Packages.python
-      xz
-      yajl
-      zlib
-      zstd
+  buildInputs = [
+    # Xen
+    acpica-tools
+    bzip2
+    dev86
+    e2fsprogs.dev
+    libnl
+    libuuid
+    lzo
+    ncurses
+    perl
+    python3Packages.python
+    xz
+    yajl
+    zlib
+    zstd
 
-      # oxenstored
-      ocamlPackages.findlib
-      ocamlPackages.ocaml
+    # oxenstored
+    ocamlPackages.findlib
+    ocamlPackages.ocaml
 
-      # Python Fixes
-      python3Packages.wrapPython
-    ]
-    ++ optional withFlask checkpolicy
-    ++ optional (versionOlder version "4.19") systemdMinimal;
+    # Python Fixes
+    python3Packages.wrapPython
+  ]
+  ++ optional withFlask checkpolicy
+  ++ optional (versionOlder version "4.19") systemdMinimal;
 
   configureFlags = [
     "--enable-systemd"
@@ -179,29 +178,28 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withFlask "xsmpolicy")
   ];
 
-  makeFlags =
-    [
-      "SUBSYSTEMS=${toString finalAttrs.buildFlags}"
+  makeFlags = [
+    "SUBSYSTEMS=${toString finalAttrs.buildFlags}"
 
-      "PREFIX=$(out)"
-      "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
+    "PREFIX=$(out)"
+    "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
 
-      "XEN_WHOAMI=${pname}"
-      "XEN_DOMAIN=${vendor}"
+    "XEN_WHOAMI=${pname}"
+    "XEN_DOMAIN=${vendor}"
 
-      "GIT=${coreutils}/bin/false"
-      "WGET=${coreutils}/bin/false"
-      "EFI_VENDOR=${vendor}"
-      "INSTALL_EFI_STRIP=1"
-      "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
-    ]
-    # These flags set the CONFIG_* options in /boot/xen.config
-    # and define if the default policy file is built. However,
-    # the Flask binaries always get compiled by default.
-    ++ optionals withFlask [
-      "XSM_ENABLE=y"
-      "FLASK_ENABLE=y"
-    ];
+    "GIT=${coreutils}/bin/false"
+    "WGET=${coreutils}/bin/false"
+    "EFI_VENDOR=${vendor}"
+    "INSTALL_EFI_STRIP=1"
+    "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
+  ]
+  # These flags set the CONFIG_* options in /boot/xen.config
+  # and define if the default policy file is built. However,
+  # the Flask binaries always get compiled by default.
+  ++ optionals withFlask [
+    "XSM_ENABLE=y"
+    "FLASK_ENABLE=y"
+  ];
 
   buildFlags = [
     "xen"
@@ -282,17 +280,16 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '';
 
-  postFixup =
-    ''
-      addAutoPatchelfSearchPath $out/lib
-      autoPatchelf $out/libexec/xen/bin
-    ''
-    # Flask is particularly hard to disable. Even after
-    # setting the make flags to `n`, it still gets compiled.
-    # If withFlask is disabled, delete the extra binaries.
-    + optionalString (!withFlask) ''
-      rm -f $out/bin/flask-*
-    '';
+  postFixup = ''
+    addAutoPatchelfSearchPath $out/lib
+    autoPatchelf $out/libexec/xen/bin
+  ''
+  # Flask is particularly hard to disable. Even after
+  # setting the make flags to `n`, it still gets compiled.
+  # If withFlask is disabled, delete the extra binaries.
+  + optionalString (!withFlask) ''
+    rm -f $out/bin/flask-*
+  '';
 
   passthru = {
     efi = "boot/xen-${upstreamVersion}.efi";
@@ -331,22 +328,21 @@ stdenv.mkDerivation (finalAttrs: {
     inherit branch;
 
     description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
-    longDescription =
-      ''
-        The Xen Project Hypervisor is a virtualisation technology defined as a *type-1
-        hypervisor*, which allows multiple virtual machines, known as domains, to run
-        concurrently with the host on the physical machine. On a typical *type-2
-        hypervisor*, the virtual machines run as applications on top of the
-        host. NixOS runs as the privileged **Domain 0**, and can paravirtualise or fully
-        virtualise **Unprivileged Domains**.
+    longDescription = ''
+      The Xen Project Hypervisor is a virtualisation technology defined as a *type-1
+      hypervisor*, which allows multiple virtual machines, known as domains, to run
+      concurrently with the host on the physical machine. On a typical *type-2
+      hypervisor*, the virtual machines run as applications on top of the
+      host. NixOS runs as the privileged **Domain 0**, and can paravirtualise or fully
+      virtualise **Unprivileged Domains**.
 
-        Use with the `qemu_xen` package.
-      ''
-      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${upstreamVersion}` file is available on the `boot` output of this package."
-      + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
-      + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
-      + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
+      Use with the `qemu_xen` package.
+    ''
+    + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+    + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${upstreamVersion}` file is available on the `boot` output of this package."
+    + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
+    + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
+    + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";
 
     homepage = "https://xenproject.org/";
     downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
@@ -370,5 +366,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = [ isLinux ];
     badPlatforms = [ isAarch64 ];
-  } // meta;
+  }
+  // meta;
 })

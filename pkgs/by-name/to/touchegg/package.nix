@@ -49,24 +49,23 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs =
-    [
-      systemd
-      libinput
-      pugixml
-      cairo
-      gtk3-x11
-      pcre
-    ]
-    ++ (with xorg; [
-      libX11
-      libXtst
-      libXrandr
-      libXi
-      libXdmcp
-      libpthreadstubs
-      libxcb
-    ]);
+  buildInputs = [
+    systemd
+    libinput
+    pugixml
+    cairo
+    gtk3-x11
+    pcre
+  ]
+  ++ (with xorg; [
+    libX11
+    libXtst
+    libXrandr
+    libXi
+    libXdmcp
+    libpthreadstubs
+    libxcb
+  ]);
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 

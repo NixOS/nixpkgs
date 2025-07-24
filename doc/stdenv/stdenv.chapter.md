@@ -501,11 +501,7 @@ let
     # An example of an attribute containing a function
     passthru.appendPackages =
       packages':
-      finalAttrs.finalPackage.overrideAttrs (
-        newSelf: super: {
-          packages = super.packages ++ packages';
-        }
-      );
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: { packages = super.packages ++ packages'; });
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
@@ -745,9 +741,7 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-{
-  makeFlags = [ "PREFIX=$(out)" ];
-}
+{ makeFlags = [ "PREFIX=$(out)" ]; }
 ```
 
 ::: {.note}
@@ -797,9 +791,7 @@ It is highly recommended, for packages' sources that are not distributed with an
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -852,9 +844,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-{
-  installTargets = "install-bin install-doc";
-}
+{ installTargets = "install-bin install-doc"; }
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
@@ -1043,9 +1033,7 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-{
-  doInstallCheck = true;
-}
+{ doInstallCheck = true; }
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.

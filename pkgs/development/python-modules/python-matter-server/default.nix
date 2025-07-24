@@ -108,7 +108,8 @@ buildPythonPackage rec {
     aioresponses
     pytest-aiohttp
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck =
     let

@@ -67,7 +67,8 @@ buildPythonPackage rec {
     time-machine
     werkzeug
     pytestCheckHook
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ moto.optional-dependencies.server;
 
   pythonImportsCheck = [ "aiobotocore" ];
 

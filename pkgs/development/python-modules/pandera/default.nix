@@ -106,7 +106,8 @@ buildPythonPackage rec {
     pytest-asyncio
     joblib
     pyarrow
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # KeyError: 'dask'

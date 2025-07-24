@@ -14,14 +14,12 @@ let
       noDev = true; # Disable development dependencies
     }).overrideAttrs
       (attrs: {
-        installPhase =
-          attrs.installPhase
-          + ''
-            rm -R $out/storage $out/public/uploads
-            ln -s ${dataDir}/.env $out/.env
-            ln -s ${dataDir}/storage $out/storage
-            ln -s ${dataDir}/public/uploads $out/public/uploads
-          '';
+        installPhase = attrs.installPhase + ''
+          rm -R $out/storage $out/public/uploads
+          ln -s ${dataDir}/.env $out/.env
+          ln -s ${dataDir}/storage $out/storage
+          ln -s ${dataDir}/public/uploads $out/public/uploads
+        '';
       });
 
 in

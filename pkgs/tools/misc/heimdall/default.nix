@@ -24,7 +24,8 @@ mkDerivation rec {
   buildInputs = [
     zlib
     libusb1
-  ] ++ lib.optional enableGUI qtbase;
+  ]
+  ++ lib.optional enableGUI qtbase;
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
@@ -32,14 +33,13 @@ mkDerivation rec {
     "-DLIBUSB_LIBRARY=${libusb1}"
   ];
 
-  preConfigure =
-    ''
-      # Give ownership of the Galaxy S USB device to the logged in user.
-      substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
-    '';
+  preConfigure = ''
+    # Give ownership of the Galaxy S USB device to the logged in user.
+    substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
+  '';
 
   installPhase =
     lib.optionalString (stdenv.hostPlatform.isDarwin && enableGUI) ''

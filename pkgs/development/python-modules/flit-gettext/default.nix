@@ -54,7 +54,8 @@ buildPythonPackage rec {
     build
     pytestCheckHook
     wheel
-  ] ++ optional-dependencies.scm;
+  ]
+  ++ optional-dependencies.scm;
 
   disabledTests = [
     # tests for missing msgfmt, but we always provide it

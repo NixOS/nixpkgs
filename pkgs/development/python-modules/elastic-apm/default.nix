@@ -88,15 +88,14 @@ buildPythonPackage rec {
 
   disabledTests = [ "elasticapm_client" ];
 
-  disabledTestPaths =
-    [
-      # Exclude tornado tests
-      "tests/contrib/asyncio/tornado/tornado_tests.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky tests on Darwin
-      "tests/utils/threading_tests.py"
-    ];
+  disabledTestPaths = [
+    # Exclude tornado tests
+    "tests/contrib/asyncio/tornado/tornado_tests.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
+  ];
 
   pythonImportsCheck = [ "elasticapm" ];
 

@@ -24,11 +24,12 @@ rustPlatform.buildRustPackage rec {
 
   env.TOOL_VERSION = "v${version}";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libgit2
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libgit2
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

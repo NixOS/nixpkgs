@@ -47,16 +47,17 @@ in
 runCommand name
   {
     inherit meta;
-    nativeBuildInputs =
-      [ cacert ]
-      ++ (
-        if (backend == "transmission") then
-          [ transmission_3_noSystemd ]
-        else if (backend == "rqbit") then
-          [ rqbit ]
-        else
-          throw "rqbit or transmission are the only available backends for fetchtorrent"
-      );
+    nativeBuildInputs = [
+      cacert
+    ]
+    ++ (
+      if (backend == "transmission") then
+        [ transmission_3_noSystemd ]
+      else if (backend == "rqbit") then
+        [ rqbit ]
+      else
+        throw "rqbit or transmission are the only available backends for fetchtorrent"
+    );
     outputHashAlgo = if hash != "" then null else "sha256";
     outputHash = hash;
     outputHashMode = if recursiveHash then "recursive" else "flat";

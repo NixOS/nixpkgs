@@ -112,26 +112,25 @@ let
       cpio
     ];
 
-    installPhase =
-      ''
-        runHook preInstall
-      ''
-      + (
-        if stdenv.hostPlatform.isDarwin then
-          ''
-            mkdir -p $out/Applications
-            cp -R zoom.us.app $out/Applications/
-          ''
-        else
-          ''
-            mkdir $out
-            tar -C $out -xf $src
-            mv $out/usr/* $out/
-          ''
-      )
-      + ''
-        runHook postInstall
-      '';
+    installPhase = ''
+      runHook preInstall
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          cp -R zoom.us.app $out/Applications/
+        ''
+      else
+        ''
+          mkdir $out
+          tar -C $out -xf $src
+          mv $out/usr/* $out/
+        ''
+    )
+    + ''
+      runHook postInstall
+    '';
 
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom

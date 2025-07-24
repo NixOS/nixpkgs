@@ -21,16 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1msV/gW6BH90rHm6t7xm0hYqbG/yGBt65GVTbKuwdtg=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals enablePython (
-      with python3Packages;
-      [
-        nanobind
-        python
-        pythonImportsCheckHook
-      ]
-    );
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enablePython (
+    with python3Packages;
+    [
+      nanobind
+      python
+      pythonImportsCheckHook
+    ]
+  );
 
   buildInputs = [ zlib ];
 

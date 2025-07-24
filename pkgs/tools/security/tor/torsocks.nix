@@ -36,18 +36,17 @@ stdenv.mkDerivation rec {
     ./torsocks-gethostbyaddr-darwin.patch
   ];
 
-  postPatch =
-    ''
-      # Patch torify_app()
-      sed -i \
-        -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
-        src/bin/torsocks.in
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i \
-        -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
-        src/bin/torsocks.in
-    '';
+  postPatch = ''
+    # Patch torify_app()
+    sed -i \
+      -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
+      src/bin/torsocks.in
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    sed -i \
+      -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
+      src/bin/torsocks.in
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
 

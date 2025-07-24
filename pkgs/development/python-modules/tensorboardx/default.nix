@@ -55,18 +55,17 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  disabledTests =
-    [
-      # ImportError: Visdom visualization requires installation of Visdom
-      "test_TorchVis"
-      # Requires network access (FileNotFoundError: [Errno 2] No such file or directory: 'wget')
-      "test_onnx_graph"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fails with a mysterious error in pytorch:
-      # RuntimeError: required keyword attribute 'name' has the wrong type
-      "test_pytorch_graph"
-    ];
+  disabledTests = [
+    # ImportError: Visdom visualization requires installation of Visdom
+    "test_TorchVis"
+    # Requires network access (FileNotFoundError: [Errno 2] No such file or directory: 'wget')
+    "test_onnx_graph"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails with a mysterious error in pytorch:
+    # RuntimeError: required keyword attribute 'name' has the wrong type
+    "test_pytorch_graph"
+  ];
 
   disabledTestPaths = [
     # we are not interested in linting errors

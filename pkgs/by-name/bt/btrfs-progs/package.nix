@@ -27,18 +27,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-31q4BPyzbikcQq2DYfgBrR4QJBtDvTBP5Qzj355+PaE=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ [
-      (buildPackages.python3.withPackages (
-        ps: with ps; [
-          sphinx
-          sphinx-rtd-theme
-        ]
-      ))
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ [
+    (buildPackages.python3.withPackages (
+      ps: with ps; [
+        sphinx
+        sphinx-rtd-theme
+      ]
+    ))
+  ];
 
   buildInputs = [
     acl
@@ -59,17 +58,16 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags =
-    [
-      # Built separately, see python3Packages.btrfsutil
-      "--disable-python"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "--disable-backtrace"
-    ]
-    ++ lib.optionals (!udevSupport) [
-      "--disable-libudev"
-    ];
+  configureFlags = [
+    # Built separately, see python3Packages.btrfsutil
+    "--disable-python"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ]
+  ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 

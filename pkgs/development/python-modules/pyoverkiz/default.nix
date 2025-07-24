@@ -38,7 +38,8 @@ buildPythonPackage rec {
     boto3
     pyhumps
     warrant-lite
-  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [
     pytest-asyncio

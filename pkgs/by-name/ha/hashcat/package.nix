@@ -34,37 +34,34 @@ stdenv.mkDerivation rec {
       --replace '-i ""' '-i'
   '';
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [
-      addDriverRunpath
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [
+    addDriverRunpath
+  ];
 
-  buildInputs =
-    [
-      minizip
-      opencl-headers
-      xxHash
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    minizip
+    opencl-headers
+    xxHash
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  makeFlags =
-    [
-      "PREFIX=${placeholder "out"}"
-      "COMPTIME=1337"
-      "VERSION_TAG=${version}"
-      "USE_SYSTEM_OPENCL=1"
-      "USE_SYSTEM_XXHASH=1"
-      "USE_SYSTEM_ZLIB=1"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
-      "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
-    ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "COMPTIME=1337"
+    "VERSION_TAG=${version}"
+    "USE_SYSTEM_OPENCL=1"
+    "USE_SYSTEM_XXHASH=1"
+    "USE_SYSTEM_ZLIB=1"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
+    "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
+  ];
 
   enableParallelBuilding = true;
 

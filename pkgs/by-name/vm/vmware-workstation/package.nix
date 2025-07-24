@@ -99,19 +99,18 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  nativeBuildInputs =
-    [
-      python3
-      vmware-unpack-env
-      autoPatchelfHook
-      makeWrapper
-    ]
-    ++ lib.optionals enableInstaller [
-      bzip2
-      sqlite
-      readline70_compat63
-    ]
-    ++ lib.optionals enableMacOSGuests [ unzip ];
+  nativeBuildInputs = [
+    python3
+    vmware-unpack-env
+    autoPatchelfHook
+    makeWrapper
+  ]
+  ++ lib.optionals enableInstaller [
+    bzip2
+    sqlite
+    readline70_compat63
+  ]
+  ++ lib.optionals enableMacOSGuests [ unzip ];
 
   src = requireFile {
     name = "VMware-Workstation-Full-${version}-${build}.x86_64.bundle";

@@ -47,7 +47,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pillow
     wand
-  ] ++ optional-dependencies.heif;
+  ]
+  ++ optional-dependencies.heif;
 
   disabledTests = [
     # ValueError: Invalid quality setting

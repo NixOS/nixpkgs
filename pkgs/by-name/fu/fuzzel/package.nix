@@ -49,18 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      wayland
-      pixman
-      wayland-protocols
-      libxkbcommon
-      tllist
-      fcft
-    ]
-    ++ lib.optional enableCairo cairo
-    ++ lib.optional pngSupport libpng
-    ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
+  buildInputs = [
+    wayland
+    pixman
+    wayland-protocols
+    libxkbcommon
+    tllist
+    fcft
+  ]
+  ++ lib.optional enableCairo cairo
+  ++ lib.optional pngSupport libpng
+  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
 
   mesonBuildType = "release";
 

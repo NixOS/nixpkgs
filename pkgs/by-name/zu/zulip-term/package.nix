@@ -61,15 +61,14 @@ buildPythonApplication rec {
     zulip
   ];
 
-  nativeCheckInputs =
-    [
-      glibcLocales
-    ]
-    ++ (with python3.pkgs; [
-      pytestCheckHook
-      pytest-cov
-      pytest-mock
-    ]);
+  nativeCheckInputs = [
+    glibcLocales
+  ]
+  ++ (with python3.pkgs; [
+    pytestCheckHook
+    pytest-cov
+    pytest-mock
+  ]);
 
   makeWrapperArgs = [
     "--prefix"

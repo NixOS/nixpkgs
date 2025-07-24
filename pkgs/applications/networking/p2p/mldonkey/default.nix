@@ -49,14 +49,13 @@ stdenv.mkDerivation rec {
     cd ..
   '';
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    }
-    # https://github.com/ygrek/mldonkey/issues/117
-    // lib.optionalAttrs stdenv.cc.isClang {
-      CXXFLAGS = "-std=c++98";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  }
+  # https://github.com/ygrek/mldonkey/issues/117
+  // lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++98";
+  };
 
   meta = {
     description = "Client for many p2p networks, with multiple frontends";

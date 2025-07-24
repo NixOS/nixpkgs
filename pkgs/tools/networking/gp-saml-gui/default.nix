@@ -34,7 +34,8 @@ buildPythonPackage rec {
     requests
     pygobject3
     openconnect
-  ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
   preFixup = ''
     gappsWrapperArgs+=(

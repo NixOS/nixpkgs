@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
       autoSignDarwinBinariesHook
     ];
 
-  env =
-    {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-    }
-    // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      NIX_LDFLAGS = "-headerpad_max_install_names";
-    };
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   dontConfigure = true;
 

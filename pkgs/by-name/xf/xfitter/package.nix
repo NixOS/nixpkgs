@@ -43,25 +43,24 @@ stdenv.mkDerivation {
     gfortran
     pkg-config
   ];
-  buildInputs =
-    [
-      apfel
-      blas
-      ceres-solver
-      lhapdf
-      lapack
-      libyaml
-      root
-      qcdnum
-      gsl
-      yaml-cpp
-      zlib
-    ]
-    ++ lib.optionals ("5" == lib.versions.major root.version) [
-      apfelgrid
-      applgrid
-    ]
-    ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
+  buildInputs = [
+    apfel
+    blas
+    ceres-solver
+    lhapdf
+    lapack
+    libyaml
+    root
+    qcdnum
+    gsl
+    yaml-cpp
+    zlib
+  ]
+  ++ lib.optionals ("5" == lib.versions.major root.version) [
+    apfelgrid
+    applgrid
+  ]
+  ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"

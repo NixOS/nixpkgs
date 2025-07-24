@@ -56,13 +56,15 @@ buildPythonPackage rec {
 
   optional-dependencies.with_social = [
     django-allauth
-  ] ++ django-allauth.optional-dependencies.socialaccount;
+  ]
+  ++ django-allauth.optional-dependencies.socialaccount;
 
   nativeCheckInputs = [
     djangorestframework-simplejwt
     responses
     unittest-xml-reporting
-  ] ++ optional-dependencies.with_social;
+  ]
+  ++ optional-dependencies.with_social;
 
   checkInputs = [
     pytestCheckHook

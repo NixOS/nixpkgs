@@ -54,16 +54,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wUirMA/kao6969KkiDKCM8Jh2Bds+ob5bErep4SMtIg=";
   };
 
-  buildInputs =
-    [
-      iptables-legacy
-      libuuid
-      openssl
-    ]
-    ++ lib.optionals (firewall == "nftables") [
-      libmnl
-      libnftnl
-    ];
+  buildInputs = [
+    iptables-legacy
+    libuuid
+    openssl
+  ]
+  ++ lib.optionals (firewall == "nftables") [
+    libmnl
+    libnftnl
+  ];
   nativeBuildInputs = [
     pkg-config
     makeWrapper

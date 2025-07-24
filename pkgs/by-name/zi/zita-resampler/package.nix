@@ -18,16 +18,15 @@ stdenv.mkDerivation rec {
     "SUFFIX="
   ];
 
-  postPatch =
-    ''
-      cd source
-      substituteInPlace Makefile \
-        --replace 'ldconfig' ""
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace Makefile \
-        --replace '-DENABLE_SSE2' ""
-    '';
+  postPatch = ''
+    cd source
+    substituteInPlace Makefile \
+      --replace 'ldconfig' ""
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace Makefile \
+      --replace '-DENABLE_SSE2' ""
+  '';
 
   fixupPhase = ''
     ln -s $out/lib/libzita-resampler.so.$version $out/lib/libzita-resampler.so.1

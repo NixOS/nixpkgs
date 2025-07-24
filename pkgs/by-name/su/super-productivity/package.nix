@@ -36,11 +36,12 @@ buildNpmPackage rec {
     CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
-  nativeBuildInputs =
-    [ copyDesktopItems ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      (python3.withPackages (ps: [ ps.setuptools ]))
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    (python3.withPackages (ps: [ ps.setuptools ]))
+  ];
 
   # package.json does not include `core-js` and the comment suggests
   # it is only needed on some mobile platforms

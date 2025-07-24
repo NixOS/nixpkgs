@@ -44,12 +44,13 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [ gpgme ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lvm2
-      btrfs-progs
-    ];
+  buildInputs = [
+    gpgme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lvm2
+    btrfs-progs
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -58,19 +59,18 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      PREFIX=${placeholder "out"} make install-binary install-completions install-docs
-      install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/skopeo \
-        --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    PREFIX=${placeholder "out"} make install-binary install-completions install-docs
+    install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   passthru = {
     policy = runCommand "policy" { } ''

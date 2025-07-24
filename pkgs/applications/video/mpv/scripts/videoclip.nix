@@ -19,15 +19,14 @@ buildLua {
     hash = "sha256-oanc9MggMjVDrSW42XrQwwWw2YTrifiCVrg/r42oGx8=";
   };
 
-  patchPhase =
-    ''
-      substituteInPlace platform.lua \
-      --replace \'curl\' \'${lib.getExe curl}\' \
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      --replace xclip ${lib.getExe xclip} \
-      --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
-    '';
+  patchPhase = ''
+    substituteInPlace platform.lua \
+    --replace \'curl\' \'${lib.getExe curl}\' \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    --replace xclip ${lib.getExe xclip} \
+    --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+  '';
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";

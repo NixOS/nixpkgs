@@ -80,7 +80,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+  ]
+  ++ cubeb.passthru.backendLibs;
 
   strictDeps = true;
 

@@ -62,14 +62,16 @@ let
   nativeBuildInputs' = [
     octave
     writeRequiredOctavePackagesHook
-  ] ++ nativeBuildInputs;
+  ]
+  ++ nativeBuildInputs;
 
   passthru' = {
     updateScript = [
       ../../../../maintainers/scripts/update-octave-packages
       (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
     ];
-  } // passthru;
+  }
+  // passthru;
 
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };

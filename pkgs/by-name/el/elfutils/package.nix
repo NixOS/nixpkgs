@@ -36,45 +36,43 @@ stdenv.mkDerivation rec {
     hash = "sha256-YWCZvq4kq6Efm2PYbKbMjVZtlouAI5EzTJHfVOq0FrQ=";
   };
 
-  patches =
-    [
-      ./debug-info-from-env.patch
-      (fetchpatch {
-        name = "fix-aarch64_fregs.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "zvncoRkQx3AwPx52ehjA2vcFroF+yDC2MQR5uS6DATs=";
-      })
-      (fetchpatch {
-        name = "musl-asm-ptrace-h.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-asm-ptrace-h.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "8D1wPcdgAkE/TNBOgsHaeTZYhd9l+9TrZg8d5C7kG6k=";
-      })
-      (fetchpatch {
-        name = "musl-macros.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-macros.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "tp6O1TRsTAMsFe8vw3LMENT/vAu6OmyA8+pzgThHeA8=";
-      })
-      (fetchpatch {
-        name = "musl-strndupa.patch";
-        url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
-        sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
-    # Prevent headers and binaries from colliding which results in an error.
-    # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch;
+  patches = [
+    ./debug-info-from-env.patch
+    (fetchpatch {
+      name = "fix-aarch64_fregs.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/fix-aarch64_fregs.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "zvncoRkQx3AwPx52ehjA2vcFroF+yDC2MQR5uS6DATs=";
+    })
+    (fetchpatch {
+      name = "musl-asm-ptrace-h.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-asm-ptrace-h.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "8D1wPcdgAkE/TNBOgsHaeTZYhd9l+9TrZg8d5C7kG6k=";
+    })
+    (fetchpatch {
+      name = "musl-macros.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-macros.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "tp6O1TRsTAMsFe8vw3LMENT/vAu6OmyA8+pzgThHeA8=";
+    })
+    (fetchpatch {
+      name = "musl-strndupa.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
+      sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ]
+  # Prevent headers and binaries from colliding which results in an error.
+  # https://sourceware.org/pipermail/elfutils-devel/2024q3/007281.html
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) ./cxx-header-collision.patch;
 
-  postPatch =
-    ''
-      patchShebangs tests/*.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isRiscV ''
-      # disable failing test:
-      #
-      # > dwfl_thread_getframes: No DWARF information found
-      sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
-    '';
+  postPatch = ''
+    patchShebangs tests/*.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV ''
+    # disable failing test:
+    #
+    # > dwfl_thread_getframes: No DWARF information found
+    sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
+  '';
 
   outputs = [
     "bin"
@@ -85,54 +83,51 @@ stdenv.mkDerivation rec {
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
-  nativeBuildInputs =
-    [
-      m4
-      bison
-      flex
-      gettext
-      bzip2
-    ]
-    ++ lib.optional enableDebuginfod pkg-config
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;
-  buildInputs =
-    [
-      zlib
-      zstd
-      bzip2
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      argp-standalone
-      musl-fts
-      musl-obstack
-    ]
-    ++ lib.optionals enableDebuginfod [
-      sqlite
-      curl
-      json_c
-      libmicrohttpd
-      libarchive
-    ];
+  nativeBuildInputs = [
+    m4
+    bison
+    flex
+    gettext
+    bzip2
+  ]
+  ++ lib.optional enableDebuginfod pkg-config
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) autoreconfHook;
+  buildInputs = [
+    zlib
+    zstd
+    bzip2
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    argp-standalone
+    musl-fts
+    musl-obstack
+  ]
+  ++ lib.optionals enableDebuginfod [
+    sqlite
+    curl
+    json_c
+    libmicrohttpd
+    libarchive
+  ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
-  configureFlags =
-    [
-      "--program-prefix=eu-" # prevent collisions with binutils
-      "--enable-deterministic-archives"
-      (lib.enableFeature enableDebuginfod "libdebuginfod")
-      (lib.enableFeature enableDebuginfod "debuginfod")
+  configureFlags = [
+    "--program-prefix=eu-" # prevent collisions with binutils
+    "--enable-deterministic-archives"
+    (lib.enableFeature enableDebuginfod "libdebuginfod")
+    (lib.enableFeature enableDebuginfod "debuginfod")
 
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
-      # Versioned symbols are nice to have, but we can do without.
-      (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
-    ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
-    ++ lib.optionals stdenv.cc.isClang [
-      "CFLAGS=-Wno-unused-private-field"
-      "CXXFLAGS=-Wno-unused-private-field"
-    ];
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+    # Versioned symbols are nice to have, but we can do without.
+    (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
+  ++ lib.optionals stdenv.cc.isClang [
+    "CFLAGS=-Wno-unused-private-field"
+    "CXXFLAGS=-Wno-unused-private-field"
+  ];
 
   enableParallelBuilding = true;
 

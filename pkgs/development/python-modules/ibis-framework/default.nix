@@ -141,7 +141,8 @@ buildPythonPackage rec {
     # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
     writableTmpDirAsHomeHook
-  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ]
+  ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
   pytestFlagsArray = [
     "-m"

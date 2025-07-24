@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libgit2
     libssh2
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeCheckInputs = [
     git

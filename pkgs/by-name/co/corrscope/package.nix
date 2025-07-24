@@ -34,19 +34,18 @@ python3Packages.buildPythonApplication rec {
       poetry-core
     ]);
 
-  buildInputs =
+  buildInputs = [
+    ffmpeg
+  ]
+  ++ (
+    with libsForQt5;
     [
-      ffmpeg
+      qtbase
     ]
-    ++ (
-      with libsForQt5;
-      [
-        qtbase
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        qtwayland
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+  );
 
   propagatedBuildInputs = with python3Packages; [
     appdirs

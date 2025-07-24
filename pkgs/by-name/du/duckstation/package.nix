@@ -70,7 +70,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     sources.soundtouch-patched
     sources.spirv-cross-patched
     wayland
-  ] ++ cubeb.passthru.backendLibs;
+  ]
+  ++ cubeb.passthru.backendLibs;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)

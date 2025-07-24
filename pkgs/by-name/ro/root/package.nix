@@ -79,97 +79,94 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     nlohmann_json # link interface of target "ROOT::ROOTEve"
   ];
-  buildInputs =
-    [
-      davix
-      fftw
-      ftgl
-      giflib
-      gl2ps
-      glew
-      gsl
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      libxml2
-      llvm_18
-      lz4
-      openssl
-      patchRcPathCsh
-      patchRcPathFish
-      patchRcPathPosix
-      pcre2
-      python3.pkgs.numpy
-      tbb
-      xrootd
-      xxHash
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGLU
-      libGL
-      xorg.libX11
-      xorg.libXpm
-      xorg.libXft
-      xorg.libXext
-    ];
+  buildInputs = [
+    davix
+    fftw
+    ftgl
+    giflib
+    gl2ps
+    glew
+    gsl
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    libxml2
+    llvm_18
+    lz4
+    openssl
+    patchRcPathCsh
+    patchRcPathFish
+    patchRcPathPosix
+    pcre2
+    python3.pkgs.numpy
+    tbb
+    xrootd
+    xxHash
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    xorg.libX11
+    xorg.libXpm
+    xorg.libXft
+    xorg.libXext
+  ];
 
-  preConfigure =
-    ''
-      for path in builtins/*; do
-        if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
-          rm -rf "$path"
-        fi
-      done
-      substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-        --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
+  preConfigure = ''
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
+    substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-        --replace-fail 'add_clang_symlink(''${link} clang)' ""
+    substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
+      --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
-      patchShebangs cmake/unix/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Eliminate impure reference to /System/Library/PrivateFrameworks
-      substituteInPlace core/macosx/CMakeLists.txt \
-        --replace-fail "-F/System/Library/PrivateFrameworks " ""
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
-        ''
-          MACOSX_DEPLOYMENT_TARGET=10.16
-        '';
+    patchShebangs cmake/unix/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Eliminate impure reference to /System/Library/PrivateFrameworks
+    substituteInPlace core/macosx/CMakeLists.txt \
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      '';
 
-  cmakeFlags =
-    [
-      "-DCLAD_SOURCE_DIR=${clad_src}"
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-Dbuiltin_llvm=OFF"
-      "-Dfail-on-missing=ON"
-      "-Dfftw3=ON"
-      "-Dfitsio=OFF"
-      "-Dgnuinstall=ON"
-      "-Dmathmore=ON"
-      "-Dmysql=OFF"
-      "-Dpgsql=OFF"
-      "-Dsqlite=OFF"
-      "-Dvdt=OFF"
-    ]
-    ++ lib.optional (
-      (!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)
-    ) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
-      # fatal error: could not build module '_Builtin_intrinsics'
-      "-Druntime_cxxmodules=OFF"
-    ];
+  cmakeFlags = [
+    "-DCLAD_SOURCE_DIR=${clad_src}"
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-Dbuiltin_llvm=OFF"
+    "-Dfail-on-missing=ON"
+    "-Dfftw3=ON"
+    "-Dfitsio=OFF"
+    "-Dgnuinstall=ON"
+    "-Dmathmore=ON"
+    "-Dmysql=OFF"
+    "-Dpgsql=OFF"
+    "-Dsqlite=OFF"
+    "-Dvdt=OFF"
+  ]
+  ++ lib.optional (
+    (!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)
+  ) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+    # fatal error: could not build module '_Builtin_intrinsics'
+    "-Druntime_cxxmodules=OFF"
+  ];
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do

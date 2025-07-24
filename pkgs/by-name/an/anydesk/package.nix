@@ -44,43 +44,42 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AEj4/S4k6mnCb/CagEDhpCtExB8pIqv7V2b/br4nC/8=";
   };
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      dbus
-      harfbuzz
-      libz
-      stdenv.cc.cc
-      pango
-      libGLU
-      libGL
-      minizip
-      freetype
-      fontconfig
-      polkit
-      polkit_gnome
-      pulseaudio
-    ]
-    ++ (with xorg; [
-      libxcb
-      libxkbfile
-      libX11
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXmu
-      libXrandr
-      libXtst
-      libXt
-      libICE
-      libSM
-      libXrender
-    ]);
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    dbus
+    harfbuzz
+    libz
+    stdenv.cc.cc
+    pango
+    libGLU
+    libGL
+    minizip
+    freetype
+    fontconfig
+    polkit
+    polkit_gnome
+    pulseaudio
+  ]
+  ++ (with xorg; [
+    libxcb
+    libxkbfile
+    libX11
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXmu
+    libXrandr
+    libXtst
+    libXt
+    libICE
+    libSM
+    libXrender
+  ]);
 
   nativeBuildInputs = [
     copyDesktopItems

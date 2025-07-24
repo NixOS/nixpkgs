@@ -30,14 +30,13 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs =
-    [
-      mako
-      numpy
-      funcsigs
-    ]
-    ++ lib.optional withCuda pycuda
-    ++ lib.optional withOpenCL pyopencl;
+  propagatedBuildInputs = [
+    mako
+    numpy
+    funcsigs
+  ]
+  ++ lib.optional withCuda pycuda
+  ++ lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test

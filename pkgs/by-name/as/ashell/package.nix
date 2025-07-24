@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     pipewire
     udev
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   meta = {
     description = "Ready to go Wayland status bar for Hyprland";

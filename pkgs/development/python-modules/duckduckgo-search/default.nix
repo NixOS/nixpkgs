@@ -30,7 +30,8 @@ buildPythonPackage rec {
   dependencies = [
     click
     primp
-  ] ++ optional-dependencies.lxml;
+  ]
+  ++ optional-dependencies.lxml;
 
   optional-dependencies = {
     lxml = [ lxml ];

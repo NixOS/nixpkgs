@@ -317,7 +317,8 @@ in
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -393,8 +394,7 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.service";
+      optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

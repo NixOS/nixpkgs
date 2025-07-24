@@ -55,45 +55,44 @@ let
 
   apple_sdk = apple_sdk_11_0;
 
-  stubs =
-    {
-      inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
-    }
-    // lib.genAttrs [
-      "CF"
-      "CarbonHeaders"
-      "CommonCrypto"
-      "CoreSymbolication"
-      "IOKit"
-      "Libc"
-      "Libinfo"
-      "Libm"
-      "Libnotify"
-      "Librpcsvc"
-      "Libsystem"
-      "LibsystemCross"
-      "Security"
-      "architecture"
-      "cf-private"
-      "configd"
-      "configdHeaders"
-      "darwin-stubs"
-      "dtrace"
-      "eap8021x"
-      "hfs"
-      "hfsHeaders"
-      "launchd"
-      "libclosure"
-      "libdispatch"
-      "libmalloc"
-      "libobjc"
-      "libplatform"
-      "libpthread"
-      "mDNSResponder"
-      "objc4"
-      "ppp"
-      "xnu"
-    ] (mkStub "darwin" "11.0");
+  stubs = {
+    inherit apple_sdk apple_sdk_11_0 apple_sdk_12_3;
+  }
+  // lib.genAttrs [
+    "CF"
+    "CarbonHeaders"
+    "CommonCrypto"
+    "CoreSymbolication"
+    "IOKit"
+    "Libc"
+    "Libinfo"
+    "Libm"
+    "Libnotify"
+    "Librpcsvc"
+    "Libsystem"
+    "LibsystemCross"
+    "Security"
+    "architecture"
+    "cf-private"
+    "configd"
+    "configdHeaders"
+    "darwin-stubs"
+    "dtrace"
+    "eap8021x"
+    "hfs"
+    "hfsHeaders"
+    "launchd"
+    "libclosure"
+    "libdispatch"
+    "libmalloc"
+    "libobjc"
+    "libplatform"
+    "libpthread"
+    "mDNSResponder"
+    "objc4"
+    "ppp"
+    "xnu"
+  ] (mkStub "darwin" "11.0");
 in
 
 stubs

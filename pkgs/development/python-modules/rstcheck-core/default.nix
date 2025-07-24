@@ -38,15 +38,14 @@ buildPythonPackage rec {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
   };
 
-  dependencies =
-    [
-      docutils
-      pydantic
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    docutils
+    pydantic
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     mock

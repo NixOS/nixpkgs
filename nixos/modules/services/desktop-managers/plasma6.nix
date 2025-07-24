@@ -154,34 +154,33 @@ in
           systemsettings
           kcmutils
         ];
-        optionalPackages =
-          [
-            plasma-browser-integration
-            konsole
-            (lib.getBin qttools) # Expose qdbus in PATH
-            ark
-            elisa
-            gwenview
-            okular
-            kate
-            khelpcenter
-            dolphin
-            baloo-widgets # baloo information in Dolphin
-            dolphin-plugins
-            spectacle
-            ffmpegthumbs
-            krdp
-            xwaylandvideobridge # exposes Wayland windows to X11 screen capture
-          ]
-          ++ lib.optionals config.hardware.sensor.iio.enable [
-            # This is required for autorotation in Plasma 6
-            qtsensors
-          ]
-          ++ lib.optionals config.services.flatpak.enable [
-            # Since PackageKit Nix support is not there yet,
-            # only install discover if flatpak is enabled.
-            discover
-          ];
+        optionalPackages = [
+          plasma-browser-integration
+          konsole
+          (lib.getBin qttools) # Expose qdbus in PATH
+          ark
+          elisa
+          gwenview
+          okular
+          kate
+          khelpcenter
+          dolphin
+          baloo-widgets # baloo information in Dolphin
+          dolphin-plugins
+          spectacle
+          ffmpegthumbs
+          krdp
+          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
+        ]
+        ++ lib.optionals config.hardware.sensor.iio.enable [
+          # This is required for autorotation in Plasma 6
+          qtsensors
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # Since PackageKit Nix support is not there yet,
+          # only install discover if flatpak is enabled.
+          discover
+        ];
       in
       requiredPackages
       ++ utils.removePackagesByName optionalPackages config.environment.plasma6.excludePackages

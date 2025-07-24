@@ -535,36 +535,35 @@ let
         RequiresMountsFor = "/run/user/${toString uid}/containers";
       };
 
-      serviceConfig =
-        {
-          ### There is no generalized way of supporting `reload` for docker
-          ### containers. Some containers may respond well to SIGHUP sent to their
-          ### init process, but it is not guaranteed; some apps have other reload
-          ### mechanisms, some don't have a reload signal at all, and some docker
-          ### images just have broken signal handling.  The best compromise in this
-          ### case is probably to leave ExecReload undefined, so `systemctl reload`
-          ### will at least result in an error instead of potentially undefined
-          ### behaviour.
-          ###
-          ### Advanced users can still override this part of the unit to implement
-          ### a custom reload handler, since the result of all this is a normal
-          ### systemd service from the perspective of the NixOS module system.
-          ###
-          # ExecReload = ...;
-          ###
-          ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
-          TimeoutStartSec = 0;
-          TimeoutStopSec = 120;
-          Restart = "always";
-        }
-        // optionalAttrs (cfg.backend == "podman") {
-          Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
-          Type = "notify";
-          NotifyAccess = "all";
-          Delegate = mkIf (container.podman.sdnotify == "healthy") true;
-          User = effectiveUser;
-          RuntimeDirectory = escapedName;
-        };
+      serviceConfig = {
+        ### There is no generalized way of supporting `reload` for docker
+        ### containers. Some containers may respond well to SIGHUP sent to their
+        ### init process, but it is not guaranteed; some apps have other reload
+        ### mechanisms, some don't have a reload signal at all, and some docker
+        ### images just have broken signal handling.  The best compromise in this
+        ### case is probably to leave ExecReload undefined, so `systemctl reload`
+        ### will at least result in an error instead of potentially undefined
+        ### behaviour.
+        ###
+        ### Advanced users can still override this part of the unit to implement
+        ### a custom reload handler, since the result of all this is a normal
+        ### systemd service from the perspective of the NixOS module system.
+        ###
+        # ExecReload = ...;
+        ###
+        ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
+        TimeoutStartSec = 0;
+        TimeoutStopSec = 120;
+        Restart = "always";
+      }
+      // optionalAttrs (cfg.backend == "podman") {
+        Environment = "PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+        Type = "notify";
+        NotifyAccess = "all";
+        Delegate = mkIf (container.podman.sdnotify == "healthy") true;
+        User = effectiveUser;
+        RuntimeDirectory = escapedName;
+      };
     };
 
 in

@@ -88,7 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ] ++ lib.optional waylandSupport wayland-scanner;
+  ]
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
     finalAttrs.dlopenBuildInputs
@@ -203,14 +204,13 @@ stdenv.mkDerivation (finalAttrs: {
       };
     });
 
-    tests =
-      {
-        pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-        inherit (finalAttrs.passthru) debug-text-example;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        nixosTest = nixosTests.sdl3;
-      };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      inherit (finalAttrs.passthru) debug-text-example;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixosTest = nixosTests.sdl3;
+    };
 
     updateScript = nix-update-script {
       extraArgs = [

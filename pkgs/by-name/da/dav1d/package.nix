@@ -48,14 +48,15 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs =
-    [ xxHash ]
-    ++ lib.optional withExamples SDL2
-    ++ lib.optionals useVulkan [
-      libplacebo
-      vulkan-loader
-      vulkan-headers
-    ];
+  buildInputs = [
+    xxHash
+  ]
+  ++ lib.optional withExamples SDL2
+  ++ lib.optionals useVulkan [
+    libplacebo
+    vulkan-loader
+    vulkan-headers
+  ];
 
   mesonFlags = [
     "-Denable_tools=${lib.boolToString withTools}"

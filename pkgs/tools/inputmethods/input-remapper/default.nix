@@ -46,17 +46,16 @@ in
     hash = "sha256-GMKcs2UK1yegGT/TBsLGgTBJROQ38M6WwnLbJIuAZwg=";
   };
 
-  postPatch =
-    ''
-      # fix FHS paths
-      substituteInPlace inputremapper/configs/data.py \
-        --replace-fail "/usr/share"  "$out/usr/share"
-    ''
-    + lib.optionalString withDebugLogLevel ''
-      # if debugging
-      substituteInPlace inputremapper/logger.py \
-        --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
-    '';
+  postPatch = ''
+    # fix FHS paths
+    substituteInPlace inputremapper/configs/data.py \
+      --replace-fail "/usr/share"  "$out/usr/share"
+  ''
+  + lib.optionalString withDebugLogLevel ''
+    # if debugging
+    substituteInPlace inputremapper/logger.py \
+      --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -65,7 +64,8 @@ in
     glib
     gobject-introspection
     pygobject3
-  ] ++ maybeXmodmap;
+  ]
+  ++ maybeXmodmap;
 
   dependencies = [
     setuptools # needs pkg_resources
@@ -174,11 +174,9 @@ in
       # this ensures the rev matches the input src's rev after overriding
       # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
       # discussion
-      postPatch =
-        prev.postPatch or ""
-        + ''
-          # set revision for --version output
-          echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
-        '';
+      postPatch = prev.postPatch or "" + ''
+        # set revision for --version output
+        echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
+      '';
     }
   )

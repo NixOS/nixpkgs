@@ -46,16 +46,15 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-l+1JntqIPttuYXKsVEdJOB1qQfsoheZk+7Z7OJ67z5E=";
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # File "/build/source/node_modules/node-gyp/gyp/gyp_main.py", line 42, in <module>
-      # npm error ModuleNotFoundError: No module named 'distutils'
-      python311
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # File "/build/source/node_modules/node-gyp/gyp/gyp_main.py", line 42, in <module>
+    # npm error ModuleNotFoundError: No module named 'distutils'
+    python311
+  ];
 
   installPhase = ''
     runHook preInstall

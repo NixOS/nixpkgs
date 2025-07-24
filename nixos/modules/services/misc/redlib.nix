@@ -93,26 +93,25 @@ in
     systemd.services.redlib = {
       wantedBy = [ "default.target" ];
       environment = mapAttrs (_: v: if isBool v then boolToString' v else toString v) cfg.settings;
-      serviceConfig =
-        {
-          ExecStart = [
-            ""
-            "${lib.getExe cfg.package} ${args}"
-          ];
-        }
-        // (
-          if (cfg.port < 1024) then
-            {
-              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-              CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-            }
-          else
-            {
-              # A private user cannot have process capabilities on the host's user
-              # namespace and thus CAP_NET_BIND_SERVICE has no effect.
-              PrivateUsers = true;
-            }
-        );
+      serviceConfig = {
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} ${args}"
+        ];
+      }
+      // (
+        if (cfg.port < 1024) then
+          {
+            AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+            CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          }
+        else
+          {
+            # A private user cannot have process capabilities on the host's user
+            # namespace and thus CAP_NET_BIND_SERVICE has no effect.
+            PrivateUsers = true;
+          }
+      );
     };
 
     networking.firewall = mkIf cfg.openFirewall {

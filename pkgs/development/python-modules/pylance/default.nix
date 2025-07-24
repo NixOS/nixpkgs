@@ -90,22 +90,22 @@ buildPythonPackage rec {
     polars
     pytestCheckHook
     tqdm
-  ] ++ optional-dependencies.torch;
+  ]
+  ++ optional-dependencies.torch;
 
   preCheck = ''
     cd python/tests
   '';
 
-  disabledTests =
-    [
-      # Writes to read-only build directory
-      "test_add_data_storage_version"
-      "test_fix_data_storage_version"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
-      "test_merge_insert_large"
-    ];
+  disabledTests = [
+    # Writes to read-only build directory
+    "test_add_data_storage_version"
+    "test_fix_data_storage_version"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
+    "test_merge_insert_large"
+  ];
 
   meta = {
     description = "Python wrapper for Lance columnar format";

@@ -175,7 +175,8 @@ let
         buildInputs = [
           php
           composer
-        ] ++ buildInputs;
+        ]
+        ++ buildInputs;
 
         inherit unpackPhase buildPhase;
 

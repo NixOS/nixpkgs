@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
     lxqt-menu-data
     menu-cache
     pcre
-  ] ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [ qtx11extras ]);
+  ]
+  ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [ qtx11extras ]);
 
   passthru.updateScript = gitUpdater { };
 

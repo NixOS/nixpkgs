@@ -47,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     python311
     npmHooks.npmInstallHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = [ sqlite ];
 
   configurePhase = ''

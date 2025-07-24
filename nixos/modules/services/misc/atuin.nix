@@ -139,18 +139,17 @@ in
         UMask = "0077";
       };
 
-      environment =
-        {
-          ATUIN_HOST = cfg.host;
-          ATUIN_PORT = toString cfg.port;
-          ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
-          ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
-          ATUIN_PATH = cfg.path;
-          ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
-        }
-        // lib.optionalAttrs (cfg.database.uri != null) {
-          ATUIN_DB_URI = cfg.database.uri;
-        };
+      environment = {
+        ATUIN_HOST = cfg.host;
+        ATUIN_PORT = toString cfg.port;
+        ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
+        ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
+        ATUIN_PATH = cfg.path;
+        ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
+      }
+      // lib.optionalAttrs (cfg.database.uri != null) {
+        ATUIN_DB_URI = cfg.database.uri;
+      };
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];

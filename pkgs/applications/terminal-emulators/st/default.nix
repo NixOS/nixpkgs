@@ -56,7 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libX11
     libXft
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   preInstall = ''
     export TERMINFO=$terminfo/share/terminfo

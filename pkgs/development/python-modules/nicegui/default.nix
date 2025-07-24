@@ -108,7 +108,8 @@ buildPythonPackage rec {
     pytestCheckHook
     webdriver-manager
     writableTmpDirAsHomeHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 

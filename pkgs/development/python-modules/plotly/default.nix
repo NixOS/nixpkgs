@@ -104,17 +104,16 @@ buildPythonPackage rec {
     # https://github.com/plotly/plotly.py/pull/4622#issuecomment-2452886352
     "test_masked_constants_example"
   ];
-  disabledTestPaths =
-    [
-      # unable to locate orca binary, adding the package does not fix it
-      "plotly/tests/test_orca/"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # requires local networking
-      "plotly/tests/test_io/test_renderers.py"
-      # fails to launch kaleido subprocess
-      "plotly/tests/test_optional/test_kaleido"
-    ];
+  disabledTestPaths = [
+    # unable to locate orca binary, adding the package does not fix it
+    "plotly/tests/test_orca/"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires local networking
+    "plotly/tests/test_io/test_renderers.py"
+    # fails to launch kaleido subprocess
+    "plotly/tests/test_optional/test_kaleido"
+  ];
 
   pythonImportsCheck = [ "plotly" ];
 

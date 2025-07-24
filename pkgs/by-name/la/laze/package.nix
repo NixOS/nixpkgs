@@ -33,17 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      wrapProgram "$out/bin/laze" \
-        --suffix PATH : ${lib.makeBinPath [ ninja ]}
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd laze \
-        --bash <($out/bin/laze completion --generate bash) \
-        --fish <($out/bin/laze completion --generate fish) \
-        --zsh <($out/bin/laze completion --generate zsh)
-    '';
+  postInstall = ''
+    wrapProgram "$out/bin/laze" \
+      --suffix PATH : ${lib.makeBinPath [ ninja ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd laze \
+      --bash <($out/bin/laze completion --generate bash) \
+      --fish <($out/bin/laze completion --generate fish) \
+      --zsh <($out/bin/laze completion --generate zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
