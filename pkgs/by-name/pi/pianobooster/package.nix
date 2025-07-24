@@ -4,27 +4,25 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
   alsa-lib,
   ftgl,
   libGLU,
-  qtbase,
   rtmidi,
   libjack2,
   fluidsynth,
   soundfont-fluid,
   unzip,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pianobooster";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "pianobooster";
     repo = "PianoBooster";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1WOlAm/HXSL6QK0Kd1mnFEZxxpMseTG+6WzgMNWt+RA=";
   };
 
@@ -37,15 +35,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ (with libsForQt5; [
     qttools
     wrapQtAppsHook
-  ];
+  ]);
 
   buildInputs = [
     alsa-lib
     ftgl
     libGLU
-    qtbase
+    libsForQt5.qtbase
     rtmidi
     libjack2
     fluidsynth
@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MIDI file player that teaches you how to play the piano";
     mainProgram = "pianobooster";
     homepage = "https://github.com/pianobooster/PianoBooster";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
-}
+})
