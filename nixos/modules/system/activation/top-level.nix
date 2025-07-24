@@ -77,7 +77,48 @@ let
   );
 
   # Handle assertions and warnings
-  baseSystemAssertWarn = lib.asserts.checkAssertWarn config.assertions config.warnings baseSystem;
+  collectUntil =
+    let
+      collectUntil' =
+        path: pred: dontProceedPred: value:
+        if pred value then
+          [ { inherit path value; } ]
+        else if dontProceedPred value then
+          [ ]
+        else if isAttrs value then
+          concatMap ({ name, value }: collectUntil' (path ++ [ name ]) pred dontProceedPred value) (
+            attrsToList value
+          )
+        else
+          [ ];
+    in
+    collectUntil' [ ];
+
+  formatAttrPath =
+    let
+      escape = s: "\"" + (builtins.replaceStrings [ "\"" ] [ "\\\"" ] s) + "\"";
+    in
+    lib.concatMapStringsSep "." (
+      p: if builtins.match "[a-zA-Z_-][a-zA-Z0-9_-]*" p == null then escape p else p
+    );
+
+  failedAssertions =
+    let
+      assertions = collectUntil (
+        x: builtins.isAttrs x && !(x.assertion or true) && (x.enable or false) && x ? message
+      ) (x: builtins.isAttrs x && (x.lazy or false)) config.assertions;
+    in
+    map (x: "assertions." + (formatAttrPath x.path) + ":\n" + x.value.message) assertions;
+
+  failedWarnings =
+    let
+      warnings = lib.collect' (
+        x: builtins.isAttrs x && (x.condition or false) && (x.enable or false) && x ? message
+      ) config.warnings;
+    in
+    map (x: "warnings." (formatAttrPath x.path) + ":\n" + x.value.message) warnings;
+
+  baseSystemAssertWarn = lib.asserts.checkAssertWarn failedAssertions failedWarnings baseSystem;
 
   # Replace runtime dependencies
   system =
