@@ -2515,6 +2515,8 @@ let
         };
       };
 
+      jasew.anki = callPackage ./jasew.anki { };
+
       jbockle.jbockle-format-files = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "jbockle-format-files";
