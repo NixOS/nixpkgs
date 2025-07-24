@@ -172,15 +172,14 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "vectorcode" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python.pkgs; [
-      mcp
-      pygls
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python.pkgs; [
+    mcp
+    pygls
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "version";
 
   disabledTests = [

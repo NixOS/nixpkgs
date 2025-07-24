@@ -34,16 +34,15 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      sqlalchemy
-      pycrypto
-      cryptography
-    ]
-    ++ lib.optionals (isPy27) [
-      funcsigs
-      pycryptopp
-    ];
+  dependencies = [
+    sqlalchemy
+    pycrypto
+    cryptography
+  ]
+  ++ lib.optionals (isPy27) [
+    funcsigs
+    pycryptopp
+  ];
 
   nativeCheckInputs = [
     glibcLocales

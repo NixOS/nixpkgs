@@ -59,37 +59,36 @@ stdenv.mkDerivation (finalAttrs: {
     ./0003-Match-designator-order-with-declaration-order.patch
   ];
 
-  postPatch =
-    ''
-      # Enable building on non-Darwin platforms
-      substituteInPlace tapi/CMakeLists.txt \
-        --replace-fail 'message(FATAL_ERROR "Unsupported configuration.")' ""
+  postPatch = ''
+    # Enable building on non-Darwin platforms
+    substituteInPlace tapi/CMakeLists.txt \
+      --replace-fail 'message(FATAL_ERROR "Unsupported configuration.")' ""
 
-      # Remove the client limitation on linking to libtapi.dylib.
-      substituteInPlace tapi/tools/libtapi/CMakeLists.txt \
-        --replace-fail '-allowable_client ld' ""
-      # Replace hard-coded installation paths with standard ones.
-      declare -A installdirs=(
-        [bin]=BINDIR
-        [include]=INCLUDEDIR
-        [lib]=LIBDIR
-        [local/bin]=BINDIR
-        [local/share/man]=MANDIR
-        [share/man]=MANDIR
-      )
-      for dir in "''${!installdirs[@]}"; do
-        cmakevar=CMAKE_INSTALL_''${installdirs[$dir]}
-        for cmakelist in $(grep -rl "DESTINATION $dir" tapi); do
-          substituteInPlace "$cmakelist" \
-            --replace-fail "DESTINATION $dir" "DESTINATION \''${$cmakevar}"
-        done
+    # Remove the client limitation on linking to libtapi.dylib.
+    substituteInPlace tapi/tools/libtapi/CMakeLists.txt \
+      --replace-fail '-allowable_client ld' ""
+    # Replace hard-coded installation paths with standard ones.
+    declare -A installdirs=(
+      [bin]=BINDIR
+      [include]=INCLUDEDIR
+      [lib]=LIBDIR
+      [local/bin]=BINDIR
+      [local/share/man]=MANDIR
+      [share/man]=MANDIR
+    )
+    for dir in "''${!installdirs[@]}"; do
+      cmakevar=CMAKE_INSTALL_''${installdirs[$dir]}
+      for cmakelist in $(grep -rl "DESTINATION $dir" tapi); do
+        substituteInPlace "$cmakelist" \
+          --replace-fail "DESTINATION $dir" "DESTINATION \''${$cmakevar}"
       done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Remove Darwin-specific versioning flags.
-      substituteInPlace tapi/tools/libtapi/CMakeLists.txt \
-          --replace-fail '-current_version ''${DYLIB_VERSION} -compatibility_version 1' ""
-    '';
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Remove Darwin-specific versioning flags.
+    substituteInPlace tapi/tools/libtapi/CMakeLists.txt \
+        --replace-fail '-current_version ''${DYLIB_VERSION} -compatibility_version 1' ""
+  '';
 
   preUnpack = ''
     mkdir source

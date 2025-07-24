@@ -53,24 +53,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TZNN5pQhH/10DfntCfGHL1kuAceLMYbxwa4RFq7OmrQ=";
   };
 
-  patches =
-    [
-      ./load-configuration-from-etc.patch
+  patches = [
+    ./load-configuration-from-etc.patch
 
-      (replaceVars ./fix-paths.patch {
-        inherit swaybg;
-      })
-    ]
-    ++ lib.optionals (!finalAttrs.isNixOS) [
-      # References to /nix/store/... will get GC'ed which causes problems when
-      # copying the default configuration:
-      ./sway-config-no-nix-store-references.patch
-    ]
-    ++ lib.optionals finalAttrs.isNixOS [
-      # Use /run/current-system/sw/share and /etc instead of /nix/store
-      # references:
-      ./sway-config-nixos-paths.patch
-    ];
+    (replaceVars ./fix-paths.patch {
+      inherit swaybg;
+    })
+  ]
+  ++ lib.optionals (!finalAttrs.isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ]
+  ++ lib.optionals finalAttrs.isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
+  ];
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
@@ -99,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
-  ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
+  ]
+  ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
   mesonFlags =
     let

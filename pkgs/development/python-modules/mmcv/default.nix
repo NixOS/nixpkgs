@@ -65,21 +65,20 @@ buildPythonPackage rec {
     which
   ];
 
-  buildInputs =
+  buildInputs = [
+    pybind11
+    torch
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      pybind11
-      torch
+      cuda_cudart # cuda_runtime.h
+      cuda_cccl # <thrust/*>
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcusparse # cusparse.h
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime.h
-        cuda_cccl # <thrust/*>
-        libcublas # cublas_v2.h
-        libcusolver # cusolverDn.h
-        libcusparse # cusparse.h
-      ]
-    );
+  );
 
   dependencies = [
     addict
@@ -96,16 +95,15 @@ buildPythonPackage rec {
 
   env.CUDA_HOME = lib.optionalString cudaSupport (lib.getDev cudaPackages.cuda_nvcc);
 
-  preConfigure =
-    ''
-      export MMCV_WITH_OPS=1
-    ''
-    + lib.optionalString cudaSupport ''
-      export CC=${lib.getExe' backendStdenv.cc "cc"}
-      export CXX=${lib.getExe' backendStdenv.cc "c++"}
-      export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
-      export FORCE_CUDA=1
-    '';
+  preConfigure = ''
+    export MMCV_WITH_OPS=1
+  ''
+  + lib.optionalString cudaSupport ''
+    export CC=${lib.getExe' backendStdenv.cc "cc"}
+    export CXX=${lib.getExe' backendStdenv.cc "c++"}
+    export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
+    export FORCE_CUDA=1
+  '';
 
   pythonImportsCheck = [ "mmcv" ];
 
@@ -128,23 +126,22 @@ buildPythonPackage rec {
   # test_cnn test_ops really requires gpus to be useful.
   # some of the tests take exceedingly long time.
   # the rest of the tests are disabled due to sandbox env.
-  disabledTests =
-    [
-      "test_cnn"
-      "test_ops"
-      "test_fileclient"
-      "test_load_model_zoo"
-      "test_processing"
-      "test_checkpoint"
-      "test_hub"
-      "test_reader"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # flaky numerical tests (AssertionError)
-      "test_ycbcr2rgb"
-      "test_ycbcr2bgr"
-      "test_tensor2imgs"
-    ];
+  disabledTests = [
+    "test_cnn"
+    "test_ops"
+    "test_fileclient"
+    "test_load_model_zoo"
+    "test_processing"
+    "test_checkpoint"
+    "test_hub"
+    "test_reader"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky numerical tests (AssertionError)
+    "test_ycbcr2rgb"
+    "test_ycbcr2bgr"
+    "test_tensor2imgs"
+  ];
 
   meta = {
     description = "Foundational Library for Computer Vision Research";

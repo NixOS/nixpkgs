@@ -49,19 +49,18 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  propagatedBuildInputs =
-    [
-      pulseaudio
-      sound-theme-freedesktop
-    ]
-    ++ (with python3.pkgs; [
-      psutil
-      pyqt5
-      requests
-      setproctitle
-      setuptools
-      yt-dlp
-    ]);
+  propagatedBuildInputs = [
+    pulseaudio
+    sound-theme-freedesktop
+  ]
+  ++ (with python3.pkgs; [
+    psutil
+    pyqt5
+    requests
+    setproctitle
+    setuptools
+    yt-dlp
+  ]);
 
   meta = with lib; {
     description = "Download manager GUI written in Python";

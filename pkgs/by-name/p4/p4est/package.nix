@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ lib.optional mpiSupport mpi;
+  ]
+  ++ lib.optional mpiSupport mpi;
 
   buildInputs = [
     metis
@@ -49,18 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ p4est-sc' ];
 
-  configureFlags =
-    [
-      "--with-sc=${p4est-sc'}"
-      "--with-metis"
-      "--enable-p6est"
-      "LDFLAGS=-lm"
-    ]
-    ++ lib.optionals mpiSupport [
-      "--enable-mpi"
-      "CC=mpicc"
-    ]
-    ++ lib.optional debug "--enable-debug";
+  configureFlags = [
+    "--with-sc=${p4est-sc'}"
+    "--with-metis"
+    "--enable-p6est"
+    "LDFLAGS=-lm"
+  ]
+  ++ lib.optionals mpiSupport [
+    "--enable-mpi"
+    "CC=mpicc"
+  ]
+  ++ lib.optional debug "--enable-debug";
 
   doCheck = true;
 

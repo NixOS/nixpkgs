@@ -65,14 +65,13 @@ stdenv.mkDerivation rec {
     libbsd
     libuuid
   ];
-  propagatedBuildInputs =
-    [
-      protobufc
-    ]
-    ++ (with python3.pkgs; [
-      python
-      python3.pkgs.protobuf
-    ]);
+  propagatedBuildInputs = [
+    protobufc
+  ]
+  ++ (with python3.pkgs; [
+    python
+    python3.pkgs.protobuf
+  ]);
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \

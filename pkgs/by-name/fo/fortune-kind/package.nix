@@ -49,14 +49,13 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/fortunes $out/fortunes;
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fortune-kind \
-        --set-default FORTUNE_DIR "$out/fortunes"
-    ''
-    + lib.optionalString fortuneAlias ''
-      ln -s fortune-kind $out/bin/fortune
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/fortune-kind \
+      --set-default FORTUNE_DIR "$out/fortunes"
+  ''
+  + lib.optionalString fortuneAlias ''
+    ln -s fortune-kind $out/bin/fortune
+  '';
 
   meta = {
     description = "Kinder, curated fortune, written in rust";

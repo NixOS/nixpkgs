@@ -97,7 +97,8 @@ buildPythonPackage rec {
     "test_warp"
     "test_warpedvrt"
     "test_rio_warp"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
 

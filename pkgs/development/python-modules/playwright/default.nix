@@ -67,7 +67,8 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [
     "greenlet"
@@ -90,14 +91,13 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests =
-      {
-        driver = playwright-driver;
-        browsers = playwright-driver.browsers;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit (nixosTests) playwright-python;
-      };
+    tests = {
+      driver = playwright-driver;
+      browsers = playwright-driver.browsers;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) playwright-python;
+    };
     # Package and playwright driver versions are tightly coupled.
     # Use the update script to ensure synchronized updates.
     skipBulkUpdate = true;

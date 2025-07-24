@@ -126,15 +126,14 @@ py.pkgs.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  postInstall =
-    ''
-      installShellCompletion --cmd aws \
-        --bash <(echo "complete -C $out/bin/aws_completer aws") \
-        --zsh $out/bin/aws_zsh_completer.sh
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      rm $out/bin/aws.cmd
-    '';
+  postInstall = ''
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/aws.cmd
+  '';
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.

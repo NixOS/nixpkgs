@@ -66,16 +66,15 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
-  disabledTests =
-    [
-      # Assertion error
-      "test_help_output"
-      "test_exits_on_unsupported_target"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # FsOperationFailed
-      "test_get_file_mode"
-    ];
+  disabledTests = [
+    # Assertion error
+    "test_help_output"
+    "test_exits_on_unsupported_target"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
+  ];
 
   passthru = {
     updateScript = nix-update-script {

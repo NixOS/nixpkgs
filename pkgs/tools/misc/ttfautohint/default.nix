@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     freetype
     harfbuzz
     libiconv
-  ] ++ lib.optional enableGUI qtbase;
+  ]
+  ++ lib.optional enableGUI qtbase;
 
   configureFlags = [ ''--with-qt=${if enableGUI then "${qtbase}/lib" else "no"}'' ];
 

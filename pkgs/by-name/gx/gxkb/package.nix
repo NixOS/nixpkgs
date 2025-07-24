@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     gtk3
     libwnck
     libxklavier
-  ] ++ lib.optional appindicatorSupport libayatana-appindicator;
+  ]
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
 
   configureFlags = lib.optional appindicatorSupport "--enable-appindicator=yes";
   outputs = [

@@ -39,7 +39,8 @@ buildPythonPackage rec {
     dask
     sparse
     array-api-strict
-  ] ++ lib.optionals cudaSupport [ cupy ];
+  ]
+  ++ lib.optionals cudaSupport [ cupy ];
 
   pythonImportsCheck = [ "array_api_compat" ];
 

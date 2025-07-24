@@ -148,7 +148,8 @@ buildGoModule (finalAttrs: {
         };
       }
       // moduleTests;
-  } // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
+  }
+  // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
   meta = {
     homepage = "https://github.com/rancher/rke2";

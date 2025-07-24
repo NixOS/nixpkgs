@@ -23,14 +23,13 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs =
-    [
-      git
-    ]
-    ++ (with python3.pkgs; [
-      pytest-mock
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    pytest-mock
+    pytestCheckHook
+  ]);
 
   disabledTests = [
     # Requires fully functioning shells including zsh modules and bash

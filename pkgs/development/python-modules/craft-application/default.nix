@@ -110,44 +110,42 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit" ];
 
-  disabledTests =
-    [
-      "test_to_yaml_file"
-      # Tests expecting pytest-time
-      "test_monitor_builds_success"
-      # Temporary fix until new release to support Python 3.13
-      "test_grammar_aware_part_error"
-      "test_grammar_aware_part_error[part2]"
-      "test_grammar_aware_project_error[project0]"
-      # Temp fix - asserts fail against error messages which have changed
-      # slightly in a later revision of craft-platforms. No functional error.
-      "test_platform_invalid_arch"
-      "test_platform_invalid_build_arch"
-      # Asserts against string output which fails when not on Ubuntu.
-      "test_run_error_with_docs_url"
-      # Asserts a fallback path for SSL certs that we override in a patch.
-      "test_import_fallback_wrong_metadata"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # These tests have hardcoded "amd64" strings which fail on aarch64
-      "test_process_grammar_build_for"
-      "test_process_grammar_platform"
-      "test_process_grammar_default"
-      "test_create_craft_manifest"
-      "test_create_project_manifest"
-      "test_from_packed_artifact"
-      "test_teardown_session_create_manifest"
-    ];
+  disabledTests = [
+    "test_to_yaml_file"
+    # Tests expecting pytest-time
+    "test_monitor_builds_success"
+    # Temporary fix until new release to support Python 3.13
+    "test_grammar_aware_part_error"
+    "test_grammar_aware_part_error[part2]"
+    "test_grammar_aware_project_error[project0]"
+    # Temp fix - asserts fail against error messages which have changed
+    # slightly in a later revision of craft-platforms. No functional error.
+    "test_platform_invalid_arch"
+    "test_platform_invalid_build_arch"
+    # Asserts against string output which fails when not on Ubuntu.
+    "test_run_error_with_docs_url"
+    # Asserts a fallback path for SSL certs that we override in a patch.
+    "test_import_fallback_wrong_metadata"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # These tests have hardcoded "amd64" strings which fail on aarch64
+    "test_process_grammar_build_for"
+    "test_process_grammar_platform"
+    "test_process_grammar_default"
+    "test_create_craft_manifest"
+    "test_create_project_manifest"
+    "test_from_packed_artifact"
+    "test_teardown_session_create_manifest"
+  ];
 
-  disabledTestPaths =
-    [
-      # These tests assert outputs of commands that assume Ubuntu-related output.
-      "tests/unit/services/test_lifecycle.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # Hard-coded assumptions around use of "amd64" arch strings.
-      "tests/unit/services/test_project.py"
-    ];
+  disabledTestPaths = [
+    # These tests assert outputs of commands that assume Ubuntu-related output.
+    "tests/unit/services/test_lifecycle.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Hard-coded assumptions around use of "amd64" arch strings.
+    "tests/unit/services/test_project.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

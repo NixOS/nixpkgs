@@ -44,12 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     export AS=${if stdenv.hostPlatform.isx86 then "nasm" else ""}
   '';
 
-  configureFlags =
-    [ "--cross-prefix=${stdenv.cc.targetPrefix}" ]
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      (lib.enableFeature true "shared")
-      "--system-libxavs2"
-    ];
+  configureFlags = [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    (lib.enableFeature true "shared")
+    "--system-libxavs2"
+  ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     rm $lib/lib/*.a

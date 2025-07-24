@@ -22,14 +22,13 @@ buildPythonPackage rec {
 
   buildInputs = [ hatch-vcs ];
 
-  propagatedBuildInputs =
-    [
-      hatchling
-      manifestoo-core
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
+  propagatedBuildInputs = [
+    hatchling
+    manifestoo-core
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
 
   meta = with lib; {
     description = "A hatch plugin to develop and package Odoo projects";

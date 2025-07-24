@@ -38,7 +38,8 @@ rustPlatform.buildRustPackage rec {
     curl
     zlib
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   buildFeatures = [ "no-self-update" ];
 

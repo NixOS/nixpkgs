@@ -23,13 +23,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-F+JIAHk28qpJy97aQQup1Ss5G1p4LQzkj1ptjBhp1CY=";
 
-  buildInputs =
-    [
-      openssl # required for openssl-sys
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl # required for openssl-sys
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeBuildInputs = [
     installShellFiles

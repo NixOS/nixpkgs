@@ -68,49 +68,48 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      boost
-      catch2_3
-      cryptopp
-      cpp-jwt
-      dynarmic
-      enet
-      fmt
-      ffmpeg_6-headless
-      glslang
-      httplib
-      inih
-      libGL
-      libunwind
-      libusb1
-      nlohmann_json
-      openal
-      openssl
-      portaudio
-      robin-map
-      qt6.qtbase
-      qt6.qtmultimedia
-      qt6.qttools
-      soundtouch
-      SDL2
-      spirv-tools
-      vulkan-headers
-      xbyak
-      zstd
-    ]
-    ++ optionals enableQtTranslations [ qt6.qttools ]
-    ++ optionals enableCubeb [ cubeb ]
-    ++ optionals useDiscordRichPresence [ rapidjson ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      pipewire
-      qt6.qtwayland
-      xorg.libX11
-      xorg.libXext
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    boost
+    catch2_3
+    cryptopp
+    cpp-jwt
+    dynarmic
+    enet
+    fmt
+    ffmpeg_6-headless
+    glslang
+    httplib
+    inih
+    libGL
+    libunwind
+    libusb1
+    nlohmann_json
+    openal
+    openssl
+    portaudio
+    robin-map
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qttools
+    soundtouch
+    SDL2
+    spirv-tools
+    vulkan-headers
+    xbyak
+    zstd
+  ]
+  ++ optionals enableQtTranslations [ qt6.qttools ]
+  ++ optionals enableCubeb [ cubeb ]
+  ++ optionals useDiscordRichPresence [ rapidjson ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    pipewire
+    qt6.qtwayland
+    xorg.libX11
+    xorg.libXext
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
   patches = [
     # Fix boost errors
@@ -129,17 +128,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./update-cmake-lists.patch
   ];
 
-  postPatch =
-    ''
-      # We already know the submodules are present
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "check_submodules_present()" ""
-    ''
-    # Add gamemode
-    + optionalString enableGamemode ''
-      substituteInPlace externals/gamemode/include/gamemode_client.h \
-        --replace-fail "libgamemode.so.0" "${getLib gamemode}/lib/libgamemode.so.0"
-    '';
+  postPatch = ''
+    # We already know the submodules are present
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "check_submodules_present()" ""
+  ''
+  # Add gamemode
+  + optionalString enableGamemode ''
+    substituteInPlace externals/gamemode/include/gamemode_client.h \
+      --replace-fail "libgamemode.so.0" "${getLib gamemode}/lib/libgamemode.so.0"
+  '';
 
   cmakeFlags = [
     (cmakeBool "USE_SYSTEM_LIBS" true)

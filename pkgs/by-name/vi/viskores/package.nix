@@ -35,12 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  propagatedBuildInputs =
-    [
-      tbb
-    ]
-    ++ lib.optional mpiSupport mpi
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  propagatedBuildInputs = [
+    tbb
+  ]
+  ++ lib.optional mpiSupport mpi
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
     (lib.cmakeBool "Viskores_ENABLE_OPENMP" true)

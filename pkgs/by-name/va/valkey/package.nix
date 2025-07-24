@@ -40,15 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/valkey-io/valkey/commit/02d7ee08489fe34f853ffccce9057dea6f03d957.diff";
       hash = "sha256-/5U6HqgK4m1XQGTZchSmzl7hOBxCwL4XZVjE5QIZVjc=";
     })
-  ] ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
+  ]
+  ++ lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional tlsSupport openssl;
+  buildInputs = [
+    lua
+  ]
+  ++ lib.optional useSystemJemalloc jemalloc
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
 
@@ -57,14 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -78,7 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 

@@ -48,25 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./musl.patch
   ];
 
-  outputs =
-    [ "out" ]
-    ++ lib.optional withUtils "lib"
-    ++ [
-      "doc"
-      "dev"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optional withUtils "lib"
+  ++ [
+    "doc"
+    "dev"
+  ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "v4l-utils" withUtils)
-      (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
-      (lib.mesonEnable "qv4l2" withQt)
-      (lib.mesonEnable "qvidcap" withQt)
-      (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isGnu [
-      (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
-    ];
+  mesonFlags = [
+    (lib.mesonBool "v4l-utils" withUtils)
+    (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
+    (lib.mesonEnable "qv4l2" withQt)
+    (lib.mesonEnable "qvidcap" withQt)
+    (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isGnu [
+    (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
+  ];
 
   postFixup = ''
     # Create symlink for V4l1 compatibility
@@ -81,22 +81,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     udevCheckHook
-  ] ++ lib.optional withQt wrapQtAppsHook;
+  ]
+  ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs =
-    [
-      json_c
-      libbpf
-      libelf
-      udev
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
-    ++ lib.optionals withQt [
-      alsa-lib
-      qt5compat
-      qtbase
-      libGLU
-    ];
+  buildInputs = [
+    json_c
+    libbpf
+    libelf
+    udev
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+  ++ lib.optionals withQt [
+    alsa-lib
+    qt5compat
+    qtbase
+    libGLU
+  ];
 
   hardeningDisable = [ "zerocallusedregs" ];
 

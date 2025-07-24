@@ -52,18 +52,17 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  dependencies =
-    [
-      aiodns
-      aiohttp
-      brotli
-      orjson
-      pynacl
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      audioop-lts
-    ];
+  dependencies = [
+    aiodns
+    aiohttp
+    brotli
+    orjson
+    pynacl
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    audioop-lts
+  ];
 
   # upstream has no tests
   doCheck = false;

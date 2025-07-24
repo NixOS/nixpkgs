@@ -63,32 +63,31 @@ buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs =
-    [
-      aiofiles
-      ajsonrpc
-      bottle
-      click
-      click-completion
-      colorama
-      git
-      lockfile
-      marshmallow
-      pyelftools
-      pyserial
-      requests
-      semantic-version
-      setuptools
-      spdx-license-list-data.json
-      starlette
-      tabulate
-      uvicorn
-      wsproto
-      zeroconf
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      chardet
-    ];
+  propagatedBuildInputs = [
+    aiofiles
+    ajsonrpc
+    bottle
+    click
+    click-completion
+    colorama
+    git
+    lockfile
+    marshmallow
+    pyelftools
+    pyserial
+    requests
+    semantic-version
+    setuptools
+    spdx-license-list-data.json
+    starlette
+    tabulate
+    uvicorn
+    wsproto
+    zeroconf
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    chardet
+  ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin

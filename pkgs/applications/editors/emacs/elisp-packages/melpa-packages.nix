@@ -129,12 +129,10 @@ let
           ac-rtags = ignoreCompilationError (fix-rtags super.ac-rtags); # elisp error
 
           age = super.age.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace age.el \
-                  --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace age.el \
+                --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
+            '';
           });
 
           airline-themes = super.airline-themes.override {
@@ -405,21 +403,17 @@ let
           forge = buildWithGit super.forge;
 
           gnuplot = super.gnuplot.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace gnuplot.el \
-                  --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace gnuplot.el \
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+            '';
           });
 
           gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace gnuplot-mode.el \
-                  --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace gnuplot-mode.el \
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+            '';
           });
 
           magit = buildWithGit super.magit;
@@ -492,23 +486,19 @@ let
           orgit-forge = buildWithGit super.orgit-forge;
 
           ormolu = super.ormolu.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace ormolu.el \
-                  --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace ormolu.el \
+                --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+            '';
           });
 
           ox-rss = buildWithGit super.ox-rss;
 
           python-isort = super.python-isort.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace python-isort.el \
-                  --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace python-isort.el \
+                --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+            '';
           });
 
           # upstream issue: missing file header
@@ -524,12 +514,10 @@ let
           notmuch = dontConfigure super.notmuch;
 
           pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace pikchr-mode.el \
-                  --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace pikchr-mode.el \
+                --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+            '';
           });
 
           rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
@@ -538,16 +526,12 @@ let
 
           rime = super.rime.overrideAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-            preBuild =
-              (old.preBuild or "")
-              + ''
-                make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
-              '';
-            postInstall =
-              (old.postInstall or "")
-              + ''
-                install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
-              '';
+            preBuild = (old.preBuild or "") + ''
+              make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
+            '';
+            postInstall = (old.postInstall or "") + ''
+              install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
+            '';
           });
 
           # https://github.com/projectional-haskell/structured-haskell-mode/issues/165
@@ -595,21 +579,17 @@ let
           });
 
           tokei = super.tokei.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace tokei.el \
-                  --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace tokei.el \
+                --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+            '';
           });
 
           treemacs = super.treemacs.overrideAttrs (attrs: {
-            postPatch =
-              (attrs.postPatch or "")
-              + ''
-                substituteInPlace src/elisp/treemacs-customization.el \
-                  --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
-              '';
+            postPatch = (attrs.postPatch or "") + ''
+              substituteInPlace src/elisp/treemacs-customization.el \
+                --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+            '';
           });
 
           treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
@@ -618,21 +598,17 @@ let
           });
 
           typst-mode = super.typst-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace typst-mode.el \
-                  --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace typst-mode.el \
+                --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+            '';
           });
 
           units-mode = super.units-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace units-mode.el \
-                  --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace units-mode.el \
+                --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
+            '';
           });
 
           vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
@@ -640,12 +616,10 @@ let
           });
 
           zig-mode = super.zig-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace zig-mode.el \
-                  --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace zig-mode.el \
+                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
+            '';
           });
 
           zmq = super.zmq.overrideAttrs (old: {
@@ -735,12 +709,10 @@ let
           php-auto-yasnippets = mkHome super.php-auto-yasnippets;
 
           racer = super.racer.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace racer.el \
-                  --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace racer.el \
+                --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
+            '';
           });
 
           spaceline = super.spaceline.override {
@@ -789,32 +761,26 @@ let
           });
 
           wordnut = super.wordnut.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace wordnut.el \
-                  --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace wordnut.el \
+                --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+            '';
           });
 
           mozc = super.mozc.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace src/unix/emacs/mozc.el \
-                  --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace src/unix/emacs/mozc.el \
+                --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+            '';
           });
 
           # Build a helper executable that interacts with the macOS Dictionary.app
           osx-dictionary =
             if pkgs.stdenv.hostPlatform.isDarwin then
               super.osx-dictionary.overrideAttrs (old: {
-                postBuild =
-                  (old.postBuild or "")
-                  + ''
-                    $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
-                  '';
+                postBuild = (old.postBuild or "") + ''
+                  $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+                '';
                 postInstall =
                   (old.postInstall or "")
                   + "\n"
@@ -841,11 +807,10 @@ let
 
           ac-php-core = super.ac-php-core.overrideAttrs (old: {
             # empty file causing native-compiler-error-empty-byte
-            preBuild =
-              ''
-                rm --verbose ac-php-comm-tags-data.el
-              ''
-              + old.preBuild or "";
+            preBuild = ''
+              rm --verbose ac-php-comm-tags-data.el
+            ''
+            + old.preBuild or "";
           });
 
           # Optimizer error: too much on the stack
@@ -1150,12 +1115,10 @@ let
           el-secretario-mu4e = addPackageRequires super.el-secretario-mu4e [ self.mu4e ];
 
           elfeed = super.elfeed.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace elfeed-curl.el \
-                  --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace elfeed-curl.el \
+                --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
+            '';
           });
 
           elisp-sandbox = ignoreCompilationError super.elisp-sandbox; # elisp error
@@ -1403,14 +1366,12 @@ let
           jekyll-modes = addPackageRequires super.jekyll-modes [ self.poly-markdown ];
 
           jq-mode = super.jq-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace jq-mode.el \
-                  --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
-                substituteInPlace ob-jq.el \
-                  --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace jq-mode.el \
+                --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
+              substituteInPlace ob-jq.el \
+                --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
+            '';
           });
 
           jss = ignoreCompilationError super.jss; # elisp error

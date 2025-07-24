@@ -18,25 +18,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontBuild = true;
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      substituteInPlace ucm2/lib/card-init.conf \
-        --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
-        --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
-    ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-      substituteInPlace ucm2/common/ctl/led.conf \
-        --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
-    ''
-    + ''
+    substituteInPlace ucm2/lib/card-init.conf \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
+      --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+    substituteInPlace ucm2/common/ctl/led.conf \
+      --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
+  ''
+  + ''
 
-      mkdir -p $out/share/alsa
-      cp -r ucm ucm2 $out/share/alsa
+    mkdir -p $out/share/alsa
+    cp -r ucm ucm2 $out/share/alsa
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/lib/";

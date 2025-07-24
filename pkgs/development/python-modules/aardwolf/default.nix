@@ -63,7 +63,8 @@ buildPythonPackage rec {
     pyperclip
     tqdm
     unicrypto
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;

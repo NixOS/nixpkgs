@@ -37,16 +37,15 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  postInstall =
-    ''
-      mv $out/bin/mcp $out/bin/flux-operator-mcp
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        installShellCompletion --cmd flux-operator-mcp \
-          --$shell <($out/bin/flux-operator-mcp completion $shell)
-      done
-    '';
+  postInstall = ''
+    mv $out/bin/mcp $out/bin/flux-operator-mcp
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd flux-operator-mcp \
+        --$shell <($out/bin/flux-operator-mcp completion $shell)
+    done
+  '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -30,18 +30,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # https://github.com/emcconville/wand/issues/558
-      "test_forward_fourier_transform"
-      "test_inverse_fourier_transform"
-      # our imagemagick doesn't set MagickReleaseDate
-      "test_configure_options"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AssertionError: assert wand.color.Color('srgb(255,0,1.41553e-14)') == wand.color.Color('srgb(255,0,0)')
-      "test_sparse_color"
-    ];
+  disabledTests = [
+    # https://github.com/emcconville/wand/issues/558
+    "test_forward_fourier_transform"
+    "test_inverse_fourier_transform"
+    # our imagemagick doesn't set MagickReleaseDate
+    "test_configure_options"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert wand.color.Color('srgb(255,0,1.41553e-14)') == wand.color.Color('srgb(255,0,0)')
+    "test_sparse_color"
+  ];
 
   passthru.imagemagick = imagemagickBig;
 

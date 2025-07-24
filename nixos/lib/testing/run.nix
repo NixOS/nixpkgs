@@ -93,8 +93,11 @@ in
       {
         name = "vm-test-run-${config.name}";
 
-        requiredSystemFeatures =
-          [ "nixos-test" ] ++ lib.optional isLinux "kvm" ++ lib.optional isDarwin "apple-virt";
+        requiredSystemFeatures = [
+          "nixos-test"
+        ]
+        ++ lib.optional isLinux "kvm"
+        ++ lib.optional isDarwin "apple-virt";
 
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh

@@ -17,25 +17,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtmultimedia
-      qtsvg
-      qttools
-    ]);
+  buildInputs = [
+    zlib
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+  ]);
 
   patches =
     # needed to backport patches to successfully build, due to broken release

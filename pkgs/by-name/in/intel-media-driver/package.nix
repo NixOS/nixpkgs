@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     libpciaccess
     intel-gmmlib
     libdrm
-  ] ++ lib.optional enableX11 libX11;
+  ]
+  ++ lib.optional enableX11 libX11;
 
   postFixup = lib.optionalString enableX11 ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11 ]}" \

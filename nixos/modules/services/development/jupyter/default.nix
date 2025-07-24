@@ -202,7 +202,8 @@ in
 
         environment = {
           JUPYTER_PATH = toString kernels;
-        } // cfg.extraEnvironmentVariables;
+        }
+        // cfg.extraEnvironmentVariables;
 
         serviceConfig = {
           Restart = "always";

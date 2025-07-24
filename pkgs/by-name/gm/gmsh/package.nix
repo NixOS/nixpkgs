@@ -32,31 +32,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
-  buildInputs =
-    [
-      blas
-      lapack
-      gmm
-      fltk
-      libjpeg
-      zlib
-      opencascade-occt
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      xorg.libXrender
-      xorg.libXcursor
-      xorg.libXfixes
-      xorg.libXext
-      xorg.libXft
-      xorg.libXinerama
-      xorg.libX11
-      xorg.libSM
-      xorg.libICE
-    ]
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optional enablePython python;
+  buildInputs = [
+    blas
+    lapack
+    gmm
+    fltk
+    libjpeg
+    zlib
+    opencascade-occt
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    xorg.libXrender
+    xorg.libXcursor
+    xorg.libXfixes
+    xorg.libXext
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libX11
+    xorg.libSM
+    xorg.libICE
+  ]
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+  ++ lib.optional enablePython python;
 
   enableParallelBuilding = true;
 

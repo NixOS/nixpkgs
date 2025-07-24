@@ -25,7 +25,8 @@ buildPythonPackage rec {
     six
     enum-compat
     ifaddr
-  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  ]
+  ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   meta = with lib; {
     description = "Pure python implementation of multicast DNS service discovery";

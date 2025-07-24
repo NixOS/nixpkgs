@@ -45,33 +45,31 @@ rustPlatform.buildRustPackage rec {
     "lang-cjk"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      ffmpeg_6
-      fontconfig
-      libGL
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ];
+  buildInputs = [
+    SDL2
+    ffmpeg_6
+    fontconfig
+    libGL
+    libxkbcommon
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libX11
+    libXcursor
+    libXi
+    libXrandr
+  ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;

@@ -42,16 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   # and it matches the version torch 2.6 wants
   version = "6.4.0-unstable-20241220";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildExamples [
-      "example"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildExamples [
+    "example"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -83,40 +82,39 @@ stdenv.mkDerivation (finalAttrs: {
   env.ROCM_PATH = clr;
   env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
 
-  cmakeFlags =
-    [
-      "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
-      # "-DDL_KERNELS=ON" # Not needed, slow to build
-      # CK_USE_CODEGEN Required for migraphx which uses device_gemm_multiple_d.hpp
-      # but migraphx requires an incompatible fork of CK and fails anyway
-      # "-DCK_USE_CODEGEN=ON"
-      # It might be worth skipping fp64 in future with this:
-      # "-DDTYPES=fp32;fp16;fp8;bf16;int8"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DBUILD_DEV=OFF"
-      "-DROCM_PATH=${clr}"
-      "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
+  cmakeFlags = [
+    "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
+    # "-DDL_KERNELS=ON" # Not needed, slow to build
+    # CK_USE_CODEGEN Required for migraphx which uses device_gemm_multiple_d.hpp
+    # but migraphx requires an incompatible fork of CK and fails anyway
+    # "-DCK_USE_CODEGEN=ON"
+    # It might be worth skipping fp64 in future with this:
+    # "-DDTYPES=fp32;fp16;fp8;bf16;int8"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DBUILD_DEV=OFF"
+    "-DROCM_PATH=${clr}"
+    "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
 
-      # FP8 can build for 908/90a but very slow build
-      # and produces unusably slow kernels that are huge
-      "-DCK_USE_FP8_ON_UNSUPPORTED_ARCH=OFF"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      # We intentionally set GPU_ARCHS and not AMD/GPU_TARGETS
-      # per readme this is required if archs are dissimilar
-      # In rocm-6.3.x not setting any arch flag worked
-      # but setting dissimilar arches always failed
-      "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildTests [
-      "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
-    ];
+    # FP8 can build for 908/90a but very slow build
+    # and produces unusably slow kernels that are huge
+    "-DCK_USE_FP8_ON_UNSUPPORTED_ARCH=OFF"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    # We intentionally set GPU_ARCHS and not AMD/GPU_TARGETS
+    # per readme this is required if archs are dissimilar
+    # In rocm-6.3.x not setting any arch flag worked
+    # but setting dissimilar arches always failed
+    "-DGPU_ARCHS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildTests [
+    "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
+  ];
 
   # No flags to build selectively it seems...
   postPatch =

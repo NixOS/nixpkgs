@@ -48,15 +48,14 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pname = "libxml2";
 
-  outputs =
-    [
-      "bin"
-      "dev"
-      "out"
-      "devdoc"
-    ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "devdoc"
+  ]
+  ++ lib.optional pythonSupport "py"
+  ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
   patches = [
@@ -66,7 +65,8 @@ stdenv'.mkDerivation (finalAttrs: {
     # See also https://gitlab.gnome.org/GNOME/libxml2/-/issues/906
     # Source: https://github.com/chromium/chromium/blob/4fb4ae8ce3daa399c3d8ca67f2dfb9deffcc7007/third_party/libxml/chromium/xml-attr-extra.patch
     ./xml-attr-extra.patch
-  ] ++ extraPatches;
+  ]
+  ++ extraPatches;
 
   strictDeps = true;
 
@@ -84,29 +84,27 @@ stdenv'.mkDerivation (finalAttrs: {
       zlib
     ];
 
-  propagatedBuildInputs =
-    [
-      findXMLCatalogs
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
-      libiconv
-    ]
-    ++ lib.optionals icuSupport [
-      icu
-    ];
+  propagatedBuildInputs = [
+    findXMLCatalogs
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
+    libiconv
+  ]
+  ++ lib.optionals icuSupport [
+    icu
+  ];
 
-  configureFlags =
-    [
-      "--exec-prefix=${placeholder "dev"}"
-      (lib.enableFeature enableStatic "static")
-      (lib.enableFeature enableShared "shared")
-      (lib.withFeature icuSupport "icu")
-      (lib.withFeature pythonSupport "python")
-      (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
-    ]
-    # avoid rebuilds, can be merged into list in version bumps
-    ++ lib.optional enableHttp "--with-http"
-    ++ lib.optional zlibSupport "--with-zlib";
+  configureFlags = [
+    "--exec-prefix=${placeholder "dev"}"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+    (lib.withFeature icuSupport "icu")
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python3.pythonOnBuildForHost.interpreter}")
+  ]
+  # avoid rebuilds, can be merged into list in version bumps
+  ++ lib.optional enableHttp "--with-http"
+  ++ lib.optional zlibSupport "--with-zlib";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python3.sitePackages}\""
@@ -128,14 +126,13 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python3.sitePackages}" "$py/${python3.sitePackages}"
   '';
 
-  postFixup =
-    ''
-      moveToOutput bin/xml2-config "$dev"
-      moveToOutput lib/xml2Conf.sh "$dev"
-    ''
-    + lib.optionalString (enableStatic && enableShared) ''
-      moveToOutput lib/libxml2.a "$static"
-    '';
+  postFixup = ''
+    moveToOutput bin/xml2-config "$dev"
+    moveToOutput lib/xml2Conf.sh "$dev"
+  ''
+  + lib.optionalString (enableStatic && enableShared) ''
+    moveToOutput lib/libxml2.a "$static"
+  '';
 
   passthru = {
     inherit pythonSupport;
@@ -162,5 +159,6 @@ stdenv'.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libxml-2.0" ];
-  } // extraMeta;
+  }
+  // extraMeta;
 })

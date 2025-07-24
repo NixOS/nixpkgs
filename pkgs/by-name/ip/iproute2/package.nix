@@ -53,21 +53,20 @@ stdenv.mkDerivation rec {
     "auto"
   ];
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "SBINDIR=$(out)/sbin"
-      "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
-      "HDRDIR=$(dev)/include/iproute2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "SHARED_LIBS=n"
-      # all build .so plugins:
-      "TC_CONFIG_NO_XT=y"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "HOSTCC=$(CC_FOR_BUILD)"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
+  ];
 
   buildFlags = [
     "CONFDIR=/etc/iproute2"
@@ -83,18 +82,17 @@ stdenv.mkDerivation rec {
     flex
     pkg-config
   ];
-  buildInputs =
-    [
-      db
-      iptables
-      libmnl
-      python3
-    ]
-    # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      elfutils
-      libbpf
-    ];
+  buildInputs = [
+    db
+    iptables
+    libmnl
+    python3
+  ]
+  # needed to uploaded bpf programs
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    elfutils
+    libbpf
+  ];
 
   enableParallelBuilding = true;
 

@@ -44,53 +44,54 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      doxygen
-      cmake
-      graphviz
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
-  buildInputs =
-    [ fmt ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
-  propagatedBuildInputs =
-    [ suitesparse ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.crocoddyl
-      python3Packages.matplotlib
-      python3Packages.pinocchio
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      crocoddyl
-      pinocchio
-    ];
-  checkInputs =
-    [ gbenchmark ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.matplotlib
-      python3Packages.pytest
-    ];
+  nativeBuildInputs = [
+    doxygen
+    cmake
+    graphviz
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
+  buildInputs = [
+    fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
+  propagatedBuildInputs = [
+    suitesparse
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.crocoddyl
+    python3Packages.matplotlib
+    python3Packages.pinocchio
+  ]
+  ++ lib.optionals (!pythonSupport) [
+    crocoddyl
+    pinocchio
+  ];
+  checkInputs = [
+    gbenchmark
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.matplotlib
+    python3Packages.pytest
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
-      (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
-      (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
-      (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
-      (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
-      # ignore one failing test for now
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
+    (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
+    (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
+    (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
+    (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
+    # ignore one failing test for now
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
+  ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     libxml2
     openssl
     bash
-  ] ++ lib.optional compressionSupport zlib;
+  ]
+  ++ lib.optional compressionSupport zlib;
 
   strictDeps = true;
 

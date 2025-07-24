@@ -47,30 +47,28 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  configureFlags =
-    [
-      "--enable-perfdhcp"
-      "--enable-shell"
-      "--localstatedir=/var"
-      "--with-openssl=${lib.getDev openssl}"
-    ]
-    ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
-    ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
+  configureFlags = [
+    "--enable-perfdhcp"
+    "--enable-shell"
+    "--localstatedir=/var"
+    "--with-openssl=${lib.getDev openssl}"
+  ]
+  ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
+  ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
     sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
   '';
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-    ]
-    ++ (with python3Packages; [
-      sphinxHook
-      sphinx-rtd-theme
-    ]);
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ]
+  ++ (with python3Packages; [
+    sphinxHook
+    sphinx-rtd-theme
+  ]);
 
   sphinxBuilders = [
     "html"

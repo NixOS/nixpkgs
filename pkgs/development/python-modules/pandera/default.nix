@@ -118,7 +118,8 @@ buildPythonPackage rec {
     joblib
     pyarrow
     pyarrow-hotfix
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network

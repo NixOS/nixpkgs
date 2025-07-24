@@ -103,15 +103,14 @@ buildPythonApplication rec {
     "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
   ];
 
-  disabledTests =
-    [
-      # Test does not correctly handle path normalization for test comparison
-      "test_cli_overrides"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
-      "test_index"
-    ];
+  disabledTests = [
+    # Test does not correctly handle path normalization for test comparison
+    "test_cli_overrides"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+    "test_index"
+  ];
 
   # Hardcode libclang paths
   postPatch = ''

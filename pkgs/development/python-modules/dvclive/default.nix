@@ -75,7 +75,8 @@ buildPythonPackage rec {
       torch
       transformers
       xgboost
-    ] ++ jsonargparse.optional-dependencies.signatures;
+    ]
+    ++ jsonargparse.optional-dependencies.signatures;
     image = [
       numpy
       pillow
@@ -103,7 +104,8 @@ buildPythonPackage rec {
       lightning
       torch
       jsonargparse
-    ] ++ jsonargparse.optional-dependencies.signatures;
+    ]
+    ++ jsonargparse.optional-dependencies.signatures;
     optuna = [ optuna ];
   };
 

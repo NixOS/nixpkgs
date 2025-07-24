@@ -59,7 +59,8 @@ stdenv.mkDerivation {
   buildInputs = [
     pcre2
     libiconv
-  ] ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance

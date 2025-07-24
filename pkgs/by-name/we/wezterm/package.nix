@@ -39,21 +39,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-danJcaG4ZyMbqR+4xaVOVM7a+4Sehq5cum40iRt/HQ8=";
   };
 
-  postPatch =
-    ''
-      echo ${version} > .tag
+  postPatch = ''
+    echo ${version} > .tag
 
-      # hash does not work well with NixOS
-      substituteInPlace assets/shell-integration/wezterm.sh \
-        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # many tests fail with: No such file or directory
-      rm -r wezterm-ssh/tests
-    '';
+    # hash does not work well with NixOS
+    substituteInPlace assets/shell-integration/wezterm.sh \
+      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # many tests fail with: No such file or directory
+    rm -r wezterm-ssh/tests
+  '';
 
   # dep: syntax causes build failures in rare cases
   # https://github.com/rust-secure-code/cargo-auditable/issues/124
@@ -68,24 +67,24 @@ rustPlatform.buildRustPackage rec {
     ncurses # tic for terminfo
     pkg-config
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin perl;
 
-  buildInputs =
-    [
-      fontconfig
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libxcb
-      libxkbcommon
-      wayland
-      xcbutil
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilwm # contains xcb-ewmh among others
-    ];
+  buildInputs = [
+    fontconfig
+    openssl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libxcb
+    libxkbcommon
+    wayland
+    xcbutil
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilwm # contains xcb-ewmh among others
+  ];
 
   buildFeatures = [ "distro-defaults" ];
 

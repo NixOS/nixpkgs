@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optional odbcSupport unixODBC;
+  ]
+  ++ lib.optional odbcSupport unixODBC;
 
   nativeBuildInputs = [
     autoreconfHook

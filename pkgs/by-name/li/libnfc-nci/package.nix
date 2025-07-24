@@ -24,13 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  configureFlags =
-    [
-      "--enable-i2c"
-    ]
-    ++ lib.optionals debug [
-      "--enable-debug"
-    ];
+  configureFlags = [
+    "--enable-i2c"
+  ]
+  ++ lib.optionals debug [
+    "--enable-debug"
+  ];
   dontStrip = debug;
 
   postInstall = ''

@@ -31,32 +31,31 @@ stdenvNoCC.mkDerivation (
       productName = if buildType == "stable" then "AFFiNE" else "AFFiNE-" + buildType;
       binName = lib.toLower finalAttrs.productName;
       pname = "${finalAttrs.binName}-bin";
-      meta =
-        {
-          description = "Workspace with fully merged docs, whiteboards and databases";
-          longDescription = ''
-            AFFiNE is an open-source, all-in-one workspace and an operating
-            system for all the building blocks that assemble your knowledge
-            base and much more -- wiki, knowledge management, presentation
-            and digital assets
-          '';
-          homepage = "https://affine.pro/";
-          license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [
-            richar
-            redyf
-            xiaoxiangmoe
-          ];
-          platforms = [
-            "aarch64-darwin"
-            "x86_64-darwin"
-            "x86_64-linux"
-          ];
-          sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-        }
-        // lib.optionalAttrs hostPlatform.isLinux {
-          mainProgram = finalAttrs.binName;
-        };
+      meta = {
+        description = "Workspace with fully merged docs, whiteboards and databases";
+        longDescription = ''
+          AFFiNE is an open-source, all-in-one workspace and an operating
+          system for all the building blocks that assemble your knowledge
+          base and much more -- wiki, knowledge management, presentation
+          and digital assets
+        '';
+        homepage = "https://affine.pro/";
+        license = lib.licenses.mit;
+        maintainers = with lib.maintainers; [
+          richar
+          redyf
+          xiaoxiangmoe
+        ];
+        platforms = [
+          "aarch64-darwin"
+          "x86_64-darwin"
+          "x86_64-linux"
+        ];
+        sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+      }
+      // lib.optionalAttrs hostPlatform.isLinux {
+        mainProgram = finalAttrs.binName;
+      };
 
       src = (
         let
@@ -75,14 +74,13 @@ stdenvNoCC.mkDerivation (
         }
       );
 
-      nativeBuildInputs =
-        [
-          unzip
-        ]
-        ++ lib.optionals hostPlatform.isLinux [
-          copyDesktopItems
-          makeWrapper
-        ];
+      nativeBuildInputs = [
+        unzip
+      ]
+      ++ lib.optionals hostPlatform.isLinux [
+        copyDesktopItems
+        makeWrapper
+      ];
 
       installPhase =
         let

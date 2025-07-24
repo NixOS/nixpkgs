@@ -443,7 +443,8 @@ rec {
 
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
       shortVersion = [

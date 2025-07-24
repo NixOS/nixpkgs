@@ -16,13 +16,14 @@ let
 
       src = libSrc name;
 
-      nativeBuildInputs =
-        [ cmake ]
-        ++ lib.optionals (name == "packages3d") [
-          stepreduce
-          parallel
-          zip
-        ];
+      nativeBuildInputs = [
+        cmake
+      ]
+      ++ lib.optionals (name == "packages3d") [
+        stepreduce
+        parallel
+        zip
+      ];
 
       postInstall =
         lib.optionalString (name == "packages3d") ''

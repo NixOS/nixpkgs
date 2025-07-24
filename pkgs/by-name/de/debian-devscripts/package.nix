@@ -61,34 +61,33 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      xz
-      dpkg
-      libxslt
-      python
-      setuptools
-      curl
-      gnupg
-      diffutils
-      bash-completion
-      help2man
-    ]
-    ++ (with perlPackages; [
-      perl
-      CryptSSLeay
-      LWP
-      TimeDate
-      DBFile
-      FileDesktopEntry
-      ParseDebControl
-      LWPProtocolHttps
-      Moo
-      FileHomeDir
-      IPCRun
-      FileDirList
-      FileTouch
-    ]);
+  buildInputs = [
+    xz
+    dpkg
+    libxslt
+    python
+    setuptools
+    curl
+    gnupg
+    diffutils
+    bash-completion
+    help2man
+  ]
+  ++ (with perlPackages; [
+    perl
+    CryptSSLeay
+    LWP
+    TimeDate
+    DBFile
+    FileDesktopEntry
+    ParseDebControl
+    LWPProtocolHttps
+    Moo
+    FileHomeDir
+    IPCRun
+    FileDirList
+    FileTouch
+  ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";

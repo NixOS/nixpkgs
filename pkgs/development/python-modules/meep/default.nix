@@ -73,20 +73,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mpi ];
 
-  dependencies =
-    [
-      numpy
-      scipy
-      matplotlib
-      h5py-mpi
-      cython
-      autograd
-      mpi4py
-    ]
-    ++ lib.optionals (!pythonOlder "3.12") [
-      setuptools # used in python/visualization.py
-      distutils
-    ];
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+    h5py-mpi
+    cython
+    autograd
+    mpi4py
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [
+    setuptools # used in python/visualization.py
+    distutils
+  ];
 
   propagatedUserEnvPkgs = [ mpi ];
 

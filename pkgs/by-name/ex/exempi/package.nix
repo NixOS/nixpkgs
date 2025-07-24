@@ -17,23 +17,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dRO35Cw72QpY132TjGDS6Hxo+BZG58uLEtcf4zQ5HG8=";
   };
 
-  configureFlags =
-    [
-      "--with-boost=${boost.dev}"
-    ]
-    ++ lib.optionals (!doCheck) [
-      "--enable-unittest=no"
-    ];
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+  ]
+  ++ lib.optionals (!doCheck) [
+    "--enable-unittest=no"
+  ];
 
-  buildInputs =
-    [
-      expat
-      zlib
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    expat
+    zlib
+    boost
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit;
   dontDisableStatic = doCheck;

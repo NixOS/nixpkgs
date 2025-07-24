@@ -38,30 +38,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      glib # for gdbus-codegen
-      pkg-config
-    ]
-    ++ lib.optionals withGnome [
-      gtk4 # for gtk4-builder-tool
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    glib # for gdbus-codegen
+    pkg-config
+  ]
+  ++ lib.optionals withGnome [
+    gtk4 # for gtk4-builder-tool
+  ];
 
-  buildInputs =
-    [
-      networkmanager
-      ppp
-      openssl
-      nss
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    networkmanager
+    ppp
+    openssl
+    nss
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"

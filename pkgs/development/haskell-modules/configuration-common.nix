@@ -71,11 +71,9 @@ with haskellLib;
       (drv: {
         # Revert increased lower bound on unix since we have backported
         # the required patch to all GHC bundled versions of unix.
-        postPatch =
-          drv.postPatch or ""
-          + ''
-            substituteInPlace Cabal.cabal --replace-fail "unix  >= 2.8.6.0" "unix >= 2.6.0.0"
-          '';
+        postPatch = drv.postPatch or "" + ''
+          substituteInPlace Cabal.cabal --replace-fail "unix  >= 2.8.6.0" "unix >= 2.6.0.0"
+        '';
       })
       (
         doDistribute (
@@ -118,35 +116,34 @@ with haskellLib;
             old:
             {
               # Prevent DOS line endings from Hackage from breaking a patch
-              prePatch =
-                old.prePatch or ""
-                + ''
-                  ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-                '';
+              prePatch = old.prePatch or "" + ''
+                ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+              '';
               # Ignore unix bound intended to prevent an unix bug on 32bit systems.
               # We apply a patch for this issue to the GHC core packages directly.
               # See unix-fix-ctimeval-size-32-bit.patch in ../compilers/ghc/common-*.nix
               patches =
                 old.patches or [ ]
-                ++ lib.optionals
-                  (
-                    scope.unix == null
-                    && lib.elem self.ghc.version [
-                      "9.6.1"
-                      "9.6.2"
-                      "9.6.3"
-                      "9.6.4"
-                      "9.6.5"
-                      "9.6.6"
-                      "9.8.1"
-                      "9.8.2"
-                      "9.8.3"
-                      "9.10.1"
-                    ]
-                  )
-                  [
-                    ./patches/cabal-install-3.14.1.1-lift-unix-bound.patch
-                  ];
+                ++
+                  lib.optionals
+                    (
+                      scope.unix == null
+                      && lib.elem self.ghc.version [
+                        "9.6.1"
+                        "9.6.2"
+                        "9.6.3"
+                        "9.6.4"
+                        "9.6.5"
+                        "9.6.6"
+                        "9.8.1"
+                        "9.8.2"
+                        "9.8.3"
+                        "9.10.1"
+                      ]
+                    )
+                    [
+                      ./patches/cabal-install-3.14.1.1-lift-unix-bound.patch
+                    ];
             }
             // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
               postInstall = ''
@@ -714,11 +711,9 @@ with haskellLib;
   ABList = dontCheck super.ABList;
 
   inline-c-cpp = overrideCabal (drv: {
-    postPatch =
-      (drv.postPatch or "")
-      + ''
-        substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
-      '';
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
+    '';
   }) super.inline-c-cpp;
 
   inline-java = addBuildDepend pkgs.jdk super.inline-java;
@@ -1240,11 +1235,9 @@ with haskellLib;
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal (drv: {
-    postPatch =
-      (drv.postPatch or "")
-      + ''
-        substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
-      '';
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
+    '';
   }) super.stunclient;
 
   d-bus =
@@ -1323,13 +1316,11 @@ with haskellLib;
   # in LTS-13.x.
   cryptol = overrideCabal (drv: {
     buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
-    postInstall =
-      drv.postInstall or ""
-      + ''
-        for b in $out/bin/cryptol $out/bin/cryptol-html; do
-          wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
-        done
-      '';
+    postInstall = drv.postInstall or "" + ''
+      for b in $out/bin/cryptol $out/bin/cryptol-html; do
+        wrapProgram $b --prefix 'PATH' ':' "${lib.getBin pkgs.z3}/bin"
+      done
+    '';
   }) super.cryptol;
 
   # Z3 removed aliases for boolean types in 4.12
@@ -1362,11 +1353,10 @@ with haskellLib;
     # Flaky tests: https://github.com/jfischoff/tmp-postgres/issues/274
     doCheck = false;
 
-    preCheck =
-      ''
-        export HOME="$TMPDIR"
-      ''
-      + (drv.preCheck or "");
+    preCheck = ''
+      export HOME="$TMPDIR"
+    ''
+    + (drv.preCheck or "");
     libraryToolDepends = drv.libraryToolDepends or [ ] ++ [ pkgs.buildPackages.postgresql ];
     testToolDepends = drv.testToolDepends or [ ] ++ [ pkgs.procps ];
   }) super.tmp-postgres;
@@ -1430,11 +1420,9 @@ with haskellLib;
   # Workaround for https://github.com/sol/hpack/issues/528
   # The hpack test suite can't deal with the CRLF line endings hackage revisions insert
   hpack = overrideCabal (drv: {
-    postPatch =
-      drv.postPatch or ""
-      + ''
-        "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
+    postPatch = drv.postPatch or "" + ''
+      "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+    '';
   }) super.hpack;
 
   # hslua has tests that break when using musl.
@@ -1511,12 +1499,10 @@ with haskellLib;
   # https://github.com/NixOS/nixpkgs/issues/6860
   PortMidi = overrideCabal (drv: {
     patches = (drv.patches or [ ]) ++ [ ./patches/portmidi-alsa-plugins.patch ];
-    postPatch =
-      (drv.postPatch or "")
-      + ''
-        substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
-          --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
-      '';
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace portmidi/pm_linux/pmlinuxalsa.c \
+        --replace @alsa_plugin_dir@ "${pkgs.alsa-plugins}/lib/alsa-lib"
+    '';
   }) super.PortMidi;
 
   scat = overrideCabal (drv: {
@@ -1540,20 +1526,16 @@ with haskellLib;
   esqueleto =
     overrideCabal
       (drv: {
-        postPatch =
-          drv.postPatch or ""
-          + ''
-            # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
-            sed -i test/PostgreSQL/Test.hs \
-              -e s^host=localhost^^
-          '';
+        postPatch = drv.postPatch or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          sed -i test/PostgreSQL/Test.hs \
+            -e s^host=localhost^^
+        '';
         # Match the test suite defaults (or hardcoded values?)
-        preCheck =
-          drv.preCheck or ""
-          + ''
-            PGUSER=esqutest
-            PGDATABASE=esqutest
-          '';
+        preCheck = drv.preCheck or "" + ''
+          PGUSER=esqutest
+          PGDATABASE=esqutest
+        '';
         testFlags = drv.testFlags or [ ] ++ [
           # We don't have a MySQL test hook yet
           "--skip=/Esqueleto/MySQL"
@@ -1621,34 +1603,28 @@ with haskellLib;
       ]
       (
         overrideCabal (drv: {
-          postPatch =
-            super.postPatch or ""
-            + ''
-              # Restore the symlink (to the file we patch) which becomes a regular file
-              # in the hackage tarball
-              ln -sf README.md README.lhs
-            '';
+          postPatch = super.postPatch or "" + ''
+            # Restore the symlink (to the file we patch) which becomes a regular file
+            # in the hackage tarball
+            ln -sf README.md README.lhs
+          '';
         }) super.servant-client
       );
 
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
-    postPatch =
-      (drv.postPatch or "")
-      + ''
-        substituteInPlace hledger-flow.cabal --replace "-static" ""
-      '';
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace hledger-flow.cabal --replace "-static" ""
+    '';
   }) super.hledger-flow;
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
     # 2025-02-13: Too strict bounds on lens < 5.3 and vector < 0.13
     jailbreak = true;
-    preCheck =
-      old.preCheck or ""
-      + ''
-        tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
-      '';
+    preCheck = old.preCheck or "" + ''
+      tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
+    '';
   }) (addExtraLibrary self.QuickCheck super.Chart-tests);
 
   # This breaks because of version bounds, but compiles and runs fine.
@@ -1667,20 +1643,16 @@ with haskellLib;
     # TODO: move this override to configuration-nix.nix
     overrideCabal
       (drv: {
-        postPatch =
-          drv.postPath or ""
-          + ''
-            # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
-            # NOTE: upstream host variable takes only two values...
-            sed -i test/PgInit.hs \
-              -e s^'host=" <> host <> "'^^
-          '';
-        preCheck =
-          drv.preCheck or ""
-          + ''
-            PGDATABASE=test
-            PGUSER=test
-          '';
+        postPatch = drv.postPath or "" + ''
+          # patch out TCP usage: https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook-tcp
+          # NOTE: upstream host variable takes only two values...
+          sed -i test/PgInit.hs \
+            -e s^'host=" <> host <> "'^^
+        '';
+        preCheck = drv.preCheck or "" + ''
+          PGDATABASE=test
+          PGUSER=test
+        '';
         testToolDepends = drv.testToolDepends or [ ] ++ [
           pkgs.postgresql
           pkgs.postgresqlTestHook
@@ -1737,12 +1709,10 @@ with haskellLib;
   jsaddle-webkit2gtk =
     overrideCabal
       (drv: {
-        postPatch =
-          drv.postPatch or ""
-          + ''
-            substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-gtk gi-gtk3
-            substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-javascriptcore gi-javascriptcore4
-          '';
+        postPatch = drv.postPatch or "" + ''
+          substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-gtk gi-gtk3
+          substituteInPlace jsaddle-webkit2gtk.cabal --replace-fail gi-javascriptcore gi-javascriptcore4
+        '';
       })
       (
         super.jsaddle-webkit2gtk.override {
@@ -1870,11 +1840,9 @@ with haskellLib;
       (self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ])
       (overrideCabal (drv: {
         buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
-        postInstall =
-          drv.postInstall or ""
-          + ''
-            wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
-          '';
+        postInstall = drv.postInstall or "" + ''
+          wrapProgram "$out/bin/update-nix-fetchgit" --prefix 'PATH' ':' "${lib.makeBinPath deps}"
+        '';
       }))
       (addTestToolDepends deps)
       # Patch for hnix compat.
@@ -2019,17 +1987,15 @@ with haskellLib;
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
-    preCheck =
-      ''
-        export SPACECOOKIE_TEST_BIN=./dist/build/spacecookie/spacecookie
-      ''
-      + (old.preCheck or "");
+    preCheck = ''
+      export SPACECOOKIE_TEST_BIN=./dist/build/spacecookie/spacecookie
+    ''
+    + (old.preCheck or "");
     # install man pages shipped in the sdist
-    postInstall =
-      ''
-        installManPage docs/man/*
-      ''
-      + (old.postInstall or "");
+    postInstall = ''
+      installManPage docs/man/*
+    ''
+    + (old.postInstall or "");
   }) super.spacecookie;
 
   # Patch and jailbreak can be removed at next release, chatter > 0.9.1.0
@@ -2321,7 +2287,8 @@ with haskellLib;
         "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/unique: simple test/"
         "--skip"
         "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
-      ] ++ drv.testFlags or [ ];
+      ]
+      ++ drv.testFlags or [ ];
     }) super.Unique
   );
 
@@ -2331,7 +2298,8 @@ with haskellLib;
       testFlags = [
         "-p"
         "! /encode train/"
-      ] ++ drv.testFlags or [ ];
+      ]
+      ++ drv.testFlags or [ ];
     }) super.aeson-casing
   );
 
@@ -2342,14 +2310,16 @@ with haskellLib;
     testFlags = [
       "--skip"
       "/Geo/Hexable/Encodes a linestring/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) super.haskell-postgis;
   # https://github.com/ChrisPenner/json-to-haskell/issues/5
   json-to-haskell = overrideCabal (drv: {
     testFlags = [
       "--match"
       "/should sanitize weird field and record names/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) super.json-to-haskell;
   # https://github.com/fieldstrength/aeson-deriving/issues/5
   aeson-deriving = dontCheck super.aeson-deriving;
@@ -2368,14 +2338,16 @@ with haskellLib;
     testFlags = [
       "--skip"
       "/Dropbox/Dropbox aeson aeson/encodes list folder correctly/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) super.dropbox;
   # https://github.com/alonsodomin/haskell-schema/issues/11
   hschema-aeson = overrideCabal (drv: {
     testFlags = [
       "--skip"
       "/toJsonSerializer/should generate valid JSON/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) super.hschema-aeson;
   # https://github.com/minio/minio-hs/issues/165
   # https://github.com/minio/minio-hs/pull/191 Use crypton-connection instead of unmaintained connection
@@ -2383,7 +2355,8 @@ with haskellLib;
     testFlags = [
       "-p"
       "!/Test mkSelectRequest/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
     patches = drv.patches or [ ] ++ [
       (pkgs.fetchpatch {
         name = "use-crypton-connection.patch";
@@ -2609,22 +2582,18 @@ with haskellLib;
         ];
       })
     ];
-    postPatch =
-      drv.postPatch or ""
-      + ''
-        ln -fs ${pkgs.simdjson.src} simdjson
-      '';
+    postPatch = drv.postPatch or "" + ''
+      ln -fs ${pkgs.simdjson.src} simdjson
+    '';
   }) super.hermes-json;
 
   # hexstring is not compatible with newer versions of base16-bytestring
   # See https://github.com/solatis/haskell-hexstring/issues/3
   hexstring = overrideCabal (old: {
     # Prevent DOS line endings from Hackage from breaking a patch
-    prePatch =
-      old.prePatch or ""
-      + ''
-        ${pkgs.buildPackages.dos2unix}/bin/dos2unix src/Data/HexString.hs
-      '';
+    prePatch = old.prePatch or "" + ''
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix src/Data/HexString.hs
+    '';
     patches = old.patches or [ ] ++ [
       (pkgs.fetchpatch {
         name = "fix-base16-bytestring-compat";
@@ -3012,18 +2981,17 @@ with haskellLib;
   zinza = dontCheck super.zinza;
 
   pdftotext = overrideCabal (drv: {
-    postPatch =
-      ''
-        # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
-        substituteInPlace pdftotext.cabal --replace-quiet c-sources cxx-sources
+    postPatch = ''
+      # Fixes https://todo.sr.ht/~geyaeb/haskell-pdftotext/6
+      substituteInPlace pdftotext.cabal --replace-quiet c-sources cxx-sources
 
-        # Fix cabal ignoring cxx because the cabal format version is too old
-        substituteInPlace pdftotext.cabal --replace-quiet ">=1.10" 2.2
+      # Fix cabal ignoring cxx because the cabal format version is too old
+      substituteInPlace pdftotext.cabal --replace-quiet ">=1.10" 2.2
 
-        # Fix wrong license name that breaks recent cabal version
-        substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
-      ''
-      + (drv.postPatch or "");
+      # Fix wrong license name that breaks recent cabal version
+      substituteInPlace pdftotext.cabal --replace-quiet BSD3 BSD-3-Clause
+    ''
+    + (drv.postPatch or "");
   }) (doJailbreak (addExtraLibrary pkgs.pkg-config (addExtraLibrary pkgs.poppler super.pdftotext)));
 
   proto3-wire = appendPatch (fetchpatch {

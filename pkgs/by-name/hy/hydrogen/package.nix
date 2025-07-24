@@ -32,23 +32,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt5.wrapQtAppsHook
   ];
-  buildInputs =
-    [
-      alsa-lib
-      ladspa-sdk
-      lash
-      libarchive
-      libjack2
-      liblo
-      libpulseaudio
-      libsndfile
-      lrdf
-    ]
-    ++ (with qt5; [
-      qtbase
-      qttools
-      qtxmlpatterns
-    ]);
+  buildInputs = [
+    alsa-lib
+    ladspa-sdk
+    lash
+    libarchive
+    libjack2
+    liblo
+    libpulseaudio
+    libsndfile
+    lrdf
+  ]
+  ++ (with qt5; [
+    qtbase
+    qttools
+    qtxmlpatterns
+  ]);
 
   cmakeFlags = [
     "-DWANT_DEBUG=OFF"
