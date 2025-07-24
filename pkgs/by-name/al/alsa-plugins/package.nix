@@ -11,12 +11,12 @@
   speexdsp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-plugins";
   version = "1.2.12";
 
   src = fetchurl {
-    url = "mirror://alsa/plugins/alsa-plugins-${version}.tar.bz2";
+    url = "mirror://alsa/plugins/alsa-plugins-${finalAttrs.version}.tar.bz2";
     hash = "sha256-e9ioPTBOji2GoliV2Nyw7wJFqN8y4nGVnNvcavObZvI=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;
   };
-}
+})
