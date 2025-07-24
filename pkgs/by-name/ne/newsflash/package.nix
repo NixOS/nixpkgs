@@ -65,29 +65,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   ];
 
-  buildInputs =
-    [
-      clapper-unwrapped
-      gtk4
-      libadwaita
-      libxml2
-      openssl
-      sqlite
-      webkitgtk_6_0
+  buildInputs = [
+    clapper-unwrapped
+    gtk4
+    libadwaita
+    libxml2
+    openssl
+    sqlite
+    webkitgtk_6_0
 
-      # TLS support for loading external content in webkitgtk WebView
-      glib-networking
+    # TLS support for loading external content in webkitgtk WebView
+    glib-networking
 
-      # SVG support for gdk-pixbuf
-      librsvg
-    ]
-    ++ (with gst_all_1; [
-      # Audio & video support for webkitgtk WebView
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # SVG support for gdk-pixbuf
+    librsvg
+  ]
+  ++ (with gst_all_1; [
+    # Audio & video support for webkitgtk WebView
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v.";

@@ -31,15 +31,14 @@ buildGoModule rec {
     "-X=github.com/influxdata/telegraf/internal.Version=${version}"
   ];
 
-  passthru.tests =
-    {
-      version = testers.testVersion {
-        package = telegraf;
-      };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) telegraf;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = telegraf;
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    inherit (nixosTests) telegraf;
+  };
 
   meta = with lib; {
     description = "Plugin-driven server agent for collecting & reporting metrics";

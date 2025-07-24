@@ -47,7 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpm.configHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 

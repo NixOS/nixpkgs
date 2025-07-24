@@ -63,16 +63,15 @@ in
           cfg.settings.playlists-path
           cfg.settings.podcast-path
         ];
-        BindReadOnlyPaths =
-          [
-            # gonic can access scrobbling services
-            "-/etc/resolv.conf"
-            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
-            builtins.storeDir
-          ]
-          ++ cfg.settings.music-path
-          ++ lib.optional (cfg.settings.tls-cert != null) cfg.settings.tls-cert
-          ++ lib.optional (cfg.settings.tls-key != null) cfg.settings.tls-key;
+        BindReadOnlyPaths = [
+          # gonic can access scrobbling services
+          "-/etc/resolv.conf"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+          builtins.storeDir
+        ]
+        ++ cfg.settings.music-path
+        ++ lib.optional (cfg.settings.tls-cert != null) cfg.settings.tls-cert
+        ++ lib.optional (cfg.settings.tls-key != null) cfg.settings.tls-key;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [
           "AF_UNIX"

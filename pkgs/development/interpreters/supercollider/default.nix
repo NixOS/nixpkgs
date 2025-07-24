@@ -53,7 +53,8 @@ mkDerivation rec {
     pkg-config
     qttools
     libsForQt5.wrapQtAppsHook
-  ] ++ lib.optionals useSCEL [ emacs ];
+  ]
+  ++ lib.optionals useSCEL [ emacs ];
 
   buildInputs = [
     gcc
@@ -66,7 +67,8 @@ mkDerivation rec {
     qtwebengine
     qtwebsockets
     readline
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
 

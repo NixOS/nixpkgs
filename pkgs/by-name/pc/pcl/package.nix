@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libsForQt5.wrapQtAppsHook
     pkg-config
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
@@ -61,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsForQt5.qtbase
     libusb1
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   propagatedBuildInputs = [
     boost

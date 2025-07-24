@@ -83,21 +83,19 @@ let
 
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
-      postPatch =
-        (super.postPatch or "")
-        + ''
-          substituteInPlace src/CMakeLists.txt \
-            --replace "scintilla" "" \
-            --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
+      postPatch = (super.postPatch or "") + ''
+        substituteInPlace src/CMakeLists.txt \
+          --replace "scintilla" "" \
+          --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
 
-          substituteInPlace src/libslic3r/CMakeLists.txt \
-            --replace "libexpat" "EXPAT::EXPAT"
+        substituteInPlace src/libslic3r/CMakeLists.txt \
+          --replace "libexpat" "EXPAT::EXPAT"
 
-          # fixes GCC 14 error
-          substituteInPlace src/libslic3r/MeshBoolean.cpp \
-            --replace-fail 'auto &face' 'auto face' \
-            --replace-fail 'auto &vi' 'auto vi'
-        '';
+        # fixes GCC 14 error
+        substituteInPlace src/libslic3r/MeshBoolean.cpp \
+          --replace-fail 'auto &face' 'auto face' \
+          --replace-fail 'auto &vi' 'auto vi'
+      '';
 
       # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary
       # but we do still need to move OCCTWrapper.so to the lib directory

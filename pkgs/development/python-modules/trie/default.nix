@@ -41,7 +41,8 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     pytest-xdist
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   disabledTests = [
     # some core tests require fixture submodule and execution spec

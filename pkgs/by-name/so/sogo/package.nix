@@ -52,7 +52,8 @@ clangStdenv.mkDerivation rec {
     openldap
     oath-toolkit
     libxcrypt
-  ] ++ lib.optional enableActiveSync libwbxml;
+  ]
+  ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 

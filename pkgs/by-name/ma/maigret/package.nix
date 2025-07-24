@@ -85,21 +85,20 @@ python312.pkgs.buildPythonApplication rec {
     "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_extract_ids_from_page"
-      "test_import_aiohttp_cookies"
-      "test_maigret_results"
-      "test_pdf_report"
-      "test_self_check_db_negative_enabled"
-      "test_self_check_db_positive_enable"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AsyncioProgressbarExecutor is slower on darwin than it should be,
-      # Upstream issue: https://github.com/soxoj/maigret/issues/679
-      "test_asyncio_progressbar_executor"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_extract_ids_from_page"
+    "test_import_aiohttp_cookies"
+    "test_maigret_results"
+    "test_pdf_report"
+    "test_self_check_db_negative_enabled"
+    "test_self_check_db_positive_enable"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AsyncioProgressbarExecutor is slower on darwin than it should be,
+    # Upstream issue: https://github.com/soxoj/maigret/issues/679
+    "test_asyncio_progressbar_executor"
+  ];
 
   pythonImportsCheck = [ "maigret" ];
 

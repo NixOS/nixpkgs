@@ -31,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXinerama
     libXft
-  ] ++ extraLibs;
+  ]
+  ++ extraLibs;
 
   preBuild = ''
     makeFlagsArray+=(

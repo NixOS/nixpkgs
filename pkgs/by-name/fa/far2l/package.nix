@@ -95,20 +95,19 @@ stdenv.mkDerivation rec {
     patchShebangs far2l/bootstrap/view.sh
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "TTYX" withTTYX)
-      (lib.cmakeBool "USEWX" withGUI)
-      (lib.cmakeBool "USEUCD" withUCD)
-      (lib.cmakeBool "COLORER" withColorer)
-      (lib.cmakeBool "MULTIARC" withMultiArc)
-      (lib.cmakeBool "NETROCKS" withNetRocks)
-      (lib.cmakeBool "PYTHON" withPython)
-    ]
-    ++ lib.optionals withPython [
-      (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
-      (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "TTYX" withTTYX)
+    (lib.cmakeBool "USEWX" withGUI)
+    (lib.cmakeBool "USEUCD" withUCD)
+    (lib.cmakeBool "COLORER" withColorer)
+    (lib.cmakeBool "MULTIARC" withMultiArc)
+    (lib.cmakeBool "NETROCKS" withNetRocks)
+    (lib.cmakeBool "PYTHON" withPython)
+  ]
+  ++ lib.optionals withPython [
+    (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
+    (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
+  ];
 
   runtimeDeps = [
     unzip

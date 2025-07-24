@@ -31,17 +31,16 @@ stdenv.mkDerivation {
     installShellFiles
   ];
 
-  postPatch =
-    ''
-      sed -i i3lock-fancy \
-        -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
-        -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
-      rm Makefile
-    ''
-    + lib.optionalString (screenshotCommand != "") ''
-      sed -i i3lock-fancy \
-        -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
-    '';
+  postPatch = ''
+    sed -i i3lock-fancy \
+      -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
+      -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
+    rm Makefile
+  ''
+  + lib.optionalString (screenshotCommand != "") ''
+    sed -i i3lock-fancy \
+      -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
+  '';
 
   installPhase = ''
     runHook preInstall

@@ -45,14 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs =
-    [ speexdsp ]
-    # In the default configuration these inputs are lazy-loaded. If your package builds a vendored cubeb please make
-    # sure to include these in the runtime LD path.
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional jackSupport jack2
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional sndioSupport sndio;
+  buildInputs = [
+    speexdsp
+  ]
+  # In the default configuration these inputs are lazy-loaded. If your package builds a vendored cubeb please make
+  # sure to include these in the runtime LD path.
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional jackSupport jack2
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional sndioSupport sndio;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)

@@ -72,7 +72,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-  ] ++ lib.optionals runTorchTests [ torch ];
+  ]
+  ++ lib.optionals runTorchTests [ torch ];
 
   passthru.c-blosc2 = c-blosc2;
 

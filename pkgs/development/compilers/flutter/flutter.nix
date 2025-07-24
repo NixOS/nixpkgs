@@ -69,7 +69,8 @@ let
       makeWrapper
       jq
       gitMinimal
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     strictDeps = true;
 
     preConfigure = ''
@@ -153,7 +154,8 @@ let
     doInstallCheck = true;
     nativeInstallCheckInputs = [
       which
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
     installCheckPhase = ''
       runHook preInstallCheck
 
@@ -165,24 +167,23 @@ let
       runHook postInstallCheck
     '';
 
-    passthru =
-      {
-        # TODO: rely on engine.version instead of engineVersion
-        inherit
-          dart
-          engineVersion
-          artifactHashes
-          channel
-          ;
-        tools = flutterTools;
-        # The derivation containing the original Flutter SDK files.
-        # When other derivations wrap this one, any unmodified files
-        # found here should be included as-is, for tooling compatibility.
-        sdk = unwrapped;
-      }
-      // lib.optionalAttrs (engine != null) {
-        inherit engine;
-      };
+    passthru = {
+      # TODO: rely on engine.version instead of engineVersion
+      inherit
+        dart
+        engineVersion
+        artifactHashes
+        channel
+        ;
+      tools = flutterTools;
+      # The derivation containing the original Flutter SDK files.
+      # When other derivations wrap this one, any unmodified files
+      # found here should be included as-is, for tooling compatibility.
+      sdk = unwrapped;
+    }
+    // lib.optionalAttrs (engine != null) {
+      inherit engine;
+    };
 
     meta = with lib; {
       description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";

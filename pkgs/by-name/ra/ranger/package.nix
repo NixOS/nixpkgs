@@ -34,40 +34,38 @@ python3Packages.buildPythonApplication {
     astroid
     pylint
   ];
-  propagatedBuildInputs =
-    [
-      less
-      file
-    ]
-    ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
-    ++ lib.optionals sixelPreviewSupport [ imagemagick ]
-    ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
-    ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+  propagatedBuildInputs = [
+    less
+    file
+  ]
+  ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+  ++ lib.optionals sixelPreviewSupport [ imagemagick ]
+  ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
+  ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
+  ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
 
-  preConfigure =
-    ''
-      ${lib.optionalString (highlight != null) ''
-        sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
-          ranger/data/scope.sh
-      ''}
+  preConfigure = ''
+    ${lib.optionalString (highlight != null) ''
+      sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
+        ranger/data/scope.sh
+    ''}
 
-      substituteInPlace ranger/__init__.py \
-        --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
+    substituteInPlace ranger/__init__.py \
+      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
-      # give file previews out of the box
-      substituteInPlace ranger/config/rc.conf \
-        --replace /usr/share $out/share \
-        --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
-    ''
-    + lib.optionalString imagePreviewSupport ''
-      substituteInPlace ranger/ext/img_display.py \
-        --replace /usr/lib/w3m ${w3m}/libexec/w3m
+    # give file previews out of the box
+    substituteInPlace ranger/config/rc.conf \
+      --replace /usr/share $out/share \
+      --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+  ''
+  + lib.optionalString imagePreviewSupport ''
+    substituteInPlace ranger/ext/img_display.py \
+      --replace /usr/lib/w3m ${w3m}/libexec/w3m
 
-      # give image previews out of the box when building with w3m
-      substituteInPlace ranger/config/rc.conf \
-        --replace "set preview_images false" "set preview_images true"
-    '';
+    # give image previews out of the box when building with w3m
+    substituteInPlace ranger/config/rc.conf \
+      --replace "set preview_images false" "set preview_images true"
+  '';
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 

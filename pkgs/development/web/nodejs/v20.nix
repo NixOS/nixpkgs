@@ -27,5 +27,6 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
-  ] ++ gypPatches;
+  ]
+  ++ gypPatches;
 }

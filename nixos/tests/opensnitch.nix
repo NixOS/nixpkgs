@@ -14,72 +14,70 @@ in
     maintainers = [ onny ];
   };
 
-  nodes =
-    {
-      server = {
-        networking.firewall.allowedTCPPorts = [ 80 ];
-        services.caddy = {
-          enable = true;
-          virtualHosts."localhost".extraConfig = ''
-            respond "Hello, world!"
-          '';
-        };
+  nodes = {
+    server = {
+      networking.firewall.allowedTCPPorts = [ 80 ];
+      services.caddy = {
+        enable = true;
+        virtualHosts."localhost".extraConfig = ''
+          respond "Hello, world!"
+        '';
       };
-    }
-    // (lib.listToAttrs (
-      map (
-        m:
-        lib.nameValuePair "client_blocked_${m}" {
-          services.opensnitch = {
-            enable = true;
-            settings.DefaultAction = "deny";
-            settings.ProcMonitorMethod = m;
-            settings.LogLevel = 0;
-          };
-        }
-      ) monitorMethods
-    ))
-    // (lib.listToAttrs (
-      map (
-        m:
-        lib.nameValuePair "client_allowed_${m}" {
-          services.opensnitch = {
-            enable = true;
-            settings.DefaultAction = "deny";
-            settings.ProcMonitorMethod = m;
-            settings.LogLevel = 0;
-            rules = {
-              curl = {
-                name = "curl";
-                enabled = true;
-                action = "allow";
-                duration = "always";
-                operator = {
-                  type = "simple";
-                  sensitive = false;
-                  operand = "process.path";
-                  data = "${pkgs.curl}/bin/curl";
-                };
+    };
+  }
+  // (lib.listToAttrs (
+    map (
+      m:
+      lib.nameValuePair "client_blocked_${m}" {
+        services.opensnitch = {
+          enable = true;
+          settings.DefaultAction = "deny";
+          settings.ProcMonitorMethod = m;
+          settings.LogLevel = 0;
+        };
+      }
+    ) monitorMethods
+  ))
+  // (lib.listToAttrs (
+    map (
+      m:
+      lib.nameValuePair "client_allowed_${m}" {
+        services.opensnitch = {
+          enable = true;
+          settings.DefaultAction = "deny";
+          settings.ProcMonitorMethod = m;
+          settings.LogLevel = 0;
+          rules = {
+            curl = {
+              name = "curl";
+              enabled = true;
+              action = "allow";
+              duration = "always";
+              operator = {
+                type = "simple";
+                sensitive = false;
+                operand = "process.path";
+                data = "${pkgs.curl}/bin/curl";
               };
             };
           };
-        }
-      ) monitorMethods
-    ));
+        };
+      }
+    ) monitorMethods
+  ));
 
-  testScript =
-    ''
-      start_all()
-      server.wait_for_unit("caddy.service")
-      server.wait_for_open_port(80)
-    ''
-    + lib.concatLines (
-      map (m: ''
-        client_blocked_${m}.wait_for_unit("opensnitchd.service")
-        client_blocked_${m}.fail("curl http://server")
+  testScript = ''
+    start_all()
+    server.wait_for_unit("caddy.service")
+    server.wait_for_open_port(80)
+  ''
+  + lib.concatLines (
+    map (m: ''
+      client_blocked_${m}.wait_for_unit("opensnitchd.service")
+      client_blocked_${m}.fail("curl http://server")
 
-        client_allowed_${m}.wait_for_unit("opensnitchd.service")
-        client_allowed_${m}.succeed("curl http://server")
-      '') monitorMethods
-    );
+      client_allowed_${m}.wait_for_unit("opensnitchd.service")
+      client_allowed_${m}.succeed("curl http://server")
+    '') monitorMethods
+  );
 }

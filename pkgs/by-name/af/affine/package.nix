@@ -105,26 +105,25 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_15
   ];
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry
-      cargo
-      rustc
-      findutils
-      zip
-      jq
-      rsync
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      copyDesktopItems
-      makeWrapper
-    ]
-    ++ lib.optionals hostPlatform.isDarwin [
-      # bindgenHook is needed to build `coreaudio-sys` on darwin
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    cargo
+    rustc
+    findutils
+    zip
+    jq
+    rsync
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    copyDesktopItems
+    makeWrapper
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # bindgenHook is needed to build `coreaudio-sys` on darwin
+    rustPlatform.bindgenHook
+  ];
 
   env = {
     # force yarn install run in CI mode

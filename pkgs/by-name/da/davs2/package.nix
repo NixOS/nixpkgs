@@ -35,12 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     export AS=${if stdenv.hostPlatform.isx86 then "nasm" else ""}
   '';
 
-  configureFlags =
-    [ "--cross-prefix=${stdenv.cc.targetPrefix}" ]
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      (lib.enableFeature true "shared")
-      "--system-libdavs2"
-    ];
+  configureFlags = [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    (lib.enableFeature true "shared")
+    "--system-libdavs2"
+  ];
 
   nativeBuildInputs = [
     nasm

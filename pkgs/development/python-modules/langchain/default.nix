@@ -79,7 +79,8 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optional (pythonOlder "3.11") async-timeout;
+  ]
+  ++ lib.optional (pythonOlder "3.11") async-timeout;
 
   optional-dependencies = {
     numpy = [ numpy ];

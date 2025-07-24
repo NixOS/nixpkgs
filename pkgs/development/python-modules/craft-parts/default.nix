@@ -92,26 +92,25 @@ buildPythonPackage rec {
     "test_java_plugin_jre_not_17"
   ];
 
-  disabledTestPaths =
-    [
-      # Relies upon filesystem extended attributes, and suid/guid bits
-      "tests/unit/sources/test_base.py"
-      "tests/unit/packages/test_base.py"
-      "tests/unit/state_manager"
-      "tests/unit/test_xattrs.py"
-      "tests/unit/packages/test_normalize.py"
-      # Relies upon presence of apt/dpkg.
-      "tests/unit/packages/test_apt_cache.py"
-      "tests/unit/packages/test_deb.py"
-      "tests/unit/packages/test_chisel.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # These tests have hardcoded "amd64" strings which fail on aarch64
-      "tests/unit/executor/test_environment.py"
-      "tests/unit/features/overlay/test_executor_environment.py"
-      # Hard-coded assumptions about arguments relating to 'x86_64'
-      "tests/unit/plugins/test_dotnet_v2_plugin.py"
-    ];
+  disabledTestPaths = [
+    # Relies upon filesystem extended attributes, and suid/guid bits
+    "tests/unit/sources/test_base.py"
+    "tests/unit/packages/test_base.py"
+    "tests/unit/state_manager"
+    "tests/unit/test_xattrs.py"
+    "tests/unit/packages/test_normalize.py"
+    # Relies upon presence of apt/dpkg.
+    "tests/unit/packages/test_apt_cache.py"
+    "tests/unit/packages/test_deb.py"
+    "tests/unit/packages/test_chisel.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # These tests have hardcoded "amd64" strings which fail on aarch64
+    "tests/unit/executor/test_environment.py"
+    "tests/unit/features/overlay/test_executor_environment.py"
+    # Hard-coded assumptions about arguments relating to 'x86_64'
+    "tests/unit/plugins/test_dotnet_v2_plugin.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

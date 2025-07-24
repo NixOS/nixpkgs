@@ -213,69 +213,68 @@ stdenv.mkDerivation (finalAttrs: {
     gcc-unwrapped
   ];
 
-  passthru =
-    {
-      # All known and valid general GPU targets
-      # We cannot use this for each ROCm library, as each defines their own supported targets
-      # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
-      # Generic targets are not yet available in rocm-6.3.1 llvm
-      gpuTargets = lib.forEach [
-        # "9-generic"
-        "900" # MI25, Vega 56/64
-        "906" # MI50/60, Radeon VII
-        "908" # MI100
-        "90a" # MI210 / MI250
-        # "9-4-generic"
-        # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
-        "942" # MI300
-        # "10-1-generic"
-        "1010"
-        "1012"
-        # "10-3-generic"
-        "1030" # W6800, various Radeon cards
-        # "11-generic"
-        "1100"
-        "1101"
-        "1102"
-        "1200" # RX 9070
-        "1201" # RX 9070 XT
-      ] (target: "gfx${target}");
+  passthru = {
+    # All known and valid general GPU targets
+    # We cannot use this for each ROCm library, as each defines their own supported targets
+    # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
+    # Generic targets are not yet available in rocm-6.3.1 llvm
+    gpuTargets = lib.forEach [
+      # "9-generic"
+      "900" # MI25, Vega 56/64
+      "906" # MI50/60, Radeon VII
+      "908" # MI100
+      "90a" # MI210 / MI250
+      # "9-4-generic"
+      # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
+      "942" # MI300
+      # "10-1-generic"
+      "1010"
+      "1012"
+      # "10-3-generic"
+      "1030" # W6800, various Radeon cards
+      # "11-generic"
+      "1100"
+      "1101"
+      "1102"
+      "1200" # RX 9070
+      "1201" # RX 9070 XT
+    ] (target: "gfx${target}");
 
-      inherit hipClangPath;
+    inherit hipClangPath;
 
-      updateScript = rocmUpdateScript {
-        name = finalAttrs.pname;
-        inherit (finalAttrs.src) owner;
-        inherit (finalAttrs.src) repo;
-        page = "tags?per_page=4";
-      };
-
-      impureTests = {
-        rocm-smi = callPackage ./test-rocm-smi.nix {
-          inherit rocm-smi;
-          clr = finalAttrs.finalPackage;
-        };
-        opencl-example = callPackage ./test-opencl-example.nix {
-          clr = finalAttrs.finalPackage;
-        };
-      };
-
-      selectGpuTargets =
-        {
-          supported ? [ ],
-        }:
-        supported;
-      gpuArchSuffix = "";
-    }
-    // lib.optionalAttrs (localGpuTargets != null) {
-      inherit localGpuTargets;
-      gpuArchSuffix = "-" + (builtins.concatStringsSep "-" localGpuTargets);
-      selectGpuTargets =
-        {
-          supported ? [ ],
-        }:
-        if supported == [ ] then localGpuTargets else lib.lists.intersectLists localGpuTargets supported;
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
+      page = "tags?per_page=4";
     };
+
+    impureTests = {
+      rocm-smi = callPackage ./test-rocm-smi.nix {
+        inherit rocm-smi;
+        clr = finalAttrs.finalPackage;
+      };
+      opencl-example = callPackage ./test-opencl-example.nix {
+        clr = finalAttrs.finalPackage;
+      };
+    };
+
+    selectGpuTargets =
+      {
+        supported ? [ ],
+      }:
+      supported;
+    gpuArchSuffix = "";
+  }
+  // lib.optionalAttrs (localGpuTargets != null) {
+    inherit localGpuTargets;
+    gpuArchSuffix = "-" + (builtins.concatStringsSep "-" localGpuTargets);
+    selectGpuTargets =
+      {
+        supported ? [ ],
+      }:
+      if supported == [ ] then localGpuTargets else lib.lists.intersectLists localGpuTargets supported;
+  };
 
   meta = with lib; {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";

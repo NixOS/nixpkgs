@@ -282,11 +282,9 @@ in
   xeft = super.xeft.overrideAttrs (old: {
     dontUnpack = false;
     buildInputs = old.buildInputs or [ ] ++ [ pkgs.xapian ];
-    buildPhase =
-      old.buildPhase or ""
-      + ''
-        $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
-      '';
+    buildPhase = old.buildPhase or "" + ''
+      $CXX -shared -o xapian-lite${libExt} xapian-lite.cc -lxapian
+    '';
     postInstall =
       old.postInstall or ""
       + "\n"

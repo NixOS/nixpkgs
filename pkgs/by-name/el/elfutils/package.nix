@@ -57,18 +57,18 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
-  postPatch =
-    ''
-      patchShebangs tests/*.sh
-    ''
-    + lib.optionalString stdenv.hostPlatform.isRiscV ''
-      # disable failing test:
-      #
-      # > dwfl_thread_getframes: No DWARF information found
-      sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
-    '';
+  postPatch = ''
+    patchShebangs tests/*.sh
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV ''
+    # disable failing test:
+    #
+    # > dwfl_thread_getframes: No DWARF information found
+    sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
+  '';
 
   outputs = [
     "bin"
@@ -85,26 +85,26 @@ stdenv.mkDerivation rec {
     flex
     gettext
     bzip2
-  ] ++ lib.optional enableDebuginfod pkg-config;
-  buildInputs =
-    [
-      zlib
-      zstd
-      bzip2
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      argp-standalone
-      musl-fts
-      musl-obstack
-    ]
-    ++ lib.optionals enableDebuginfod [
-      sqlite
-      curl
-      json_c
-      libmicrohttpd
-      libarchive
-    ];
+  ]
+  ++ lib.optional enableDebuginfod pkg-config;
+  buildInputs = [
+    zlib
+    zstd
+    bzip2
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    argp-standalone
+    musl-fts
+    musl-obstack
+  ]
+  ++ lib.optionals enableDebuginfod [
+    sqlite
+    curl
+    json_c
+    libmicrohttpd
+    libarchive
+  ];
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -131,7 +131,8 @@ stdenv.mkDerivation rec {
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
     # Versioned symbols are nice to have, but we can do without.
     (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
-  ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler";
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler";
 
   enableParallelBuilding = true;
 

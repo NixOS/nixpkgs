@@ -31,27 +31,25 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iM16DlTf+1yXBZVH7QqzhKuSkn1n/ZDosnZj3t+io0E=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      zig_0_13
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    zig_0_13
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      libffi
-      libxml2
-      llvmPackages.clang
-      llvmPackages.llvm.dev
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      glibc
-      stdenv.cc.cc.lib
-    ];
+  buildInputs = [
+    libffi
+    libxml2
+    llvmPackages.clang
+    llvmPackages.llvm.dev
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    glibc
+    stdenv.cc.cc.lib
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-9cOJ79GrnrMEIhFikvCfXa2SI4O0fy50cr4Fb6p4Vho=";

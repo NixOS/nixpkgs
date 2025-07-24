@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=daa29443819d3045338792b5ba950ed90e79d7a5";
       hash = "sha256-Nq5HIcLY6KSvvrs2sbfE/vovMbleJYElHW9AVRU5rSA=";
     })
-  ] ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
+  ]
+  ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
 
   hardeningDisable = [
     "format"

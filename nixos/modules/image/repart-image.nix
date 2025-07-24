@@ -148,16 +148,15 @@ stdenvNoCC.mkDerivation (
     # to the closure that was used to build it
     unsafeDiscardReferences.out = true;
 
-    nativeBuildInputs =
-      [
-        systemd
-        util-linux
-        fakeroot
-      ]
-      ++ lib.optionals (compression.enable) [
-        compressionPkg
-      ]
-      ++ fileSystemTools;
+    nativeBuildInputs = [
+      systemd
+      util-linux
+      fakeroot
+    ]
+    ++ lib.optionals (compression.enable) [
+      compressionPkg
+    ]
+    ++ fileSystemTools;
 
     env = mkfsEnv;
 
@@ -168,24 +167,23 @@ stdenvNoCC.mkDerivation (
     # relative path to the repart definitions that are read by systemd-repart
     finalRepartDefinitions = "repart.d";
 
-    systemdRepartFlags =
-      [
-        "--architecture=${systemdArch}"
-        "--dry-run=no"
-        "--size=auto"
-        "--definitions=${finalAttrs.finalRepartDefinitions}"
-        "--split=${lib.boolToString split}"
-        "--json=pretty"
-      ]
-      ++ lib.optionals (seed != null) [
-        "--seed=${seed}"
-      ]
-      ++ lib.optionals createEmpty [
-        "--empty=create"
-      ]
-      ++ lib.optionals (sectorSize != null) [
-        "--sector-size=${toString sectorSize}"
-      ];
+    systemdRepartFlags = [
+      "--architecture=${systemdArch}"
+      "--dry-run=no"
+      "--size=auto"
+      "--definitions=${finalAttrs.finalRepartDefinitions}"
+      "--split=${lib.boolToString split}"
+      "--json=pretty"
+    ]
+    ++ lib.optionals (seed != null) [
+      "--seed=${seed}"
+    ]
+    ++ lib.optionals createEmpty [
+      "--empty=create"
+    ]
+    ++ lib.optionals (sectorSize != null) [
+      "--sector-size=${toString sectorSize}"
+    ];
 
     dontUnpack = true;
     dontConfigure = true;
@@ -213,27 +211,26 @@ stdenvNoCC.mkDerivation (
       runHook postBuild
     '';
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        mkdir -p $out
-      ''
-      # Compression is implemented in the same derivation as opposed to in a
-      # separate derivation to allow users to save disk space. Disk images are
-      # already very space intensive so we want to allow users to mitigate this.
-      + lib.optionalString compression.enable ''
-        for f in ${imageFileBasename}*; do
-          echo "Compressing $f with ${compression.algorithm}..."
-          # Keep the original file when compressing and only delete it afterwards
-          ${compressionCommand} $f && rm $f
-        done
-      ''
-      + ''
-        mv -v repart-output.json ${imageFileBasename}* $out
+      mkdir -p $out
+    ''
+    # Compression is implemented in the same derivation as opposed to in a
+    # separate derivation to allow users to save disk space. Disk images are
+    # already very space intensive so we want to allow users to mitigate this.
+    + lib.optionalString compression.enable ''
+      for f in ${imageFileBasename}*; do
+        echo "Compressing $f with ${compression.algorithm}..."
+        # Keep the original file when compressing and only delete it afterwards
+        ${compressionCommand} $f && rm $f
+      done
+    ''
+    + ''
+      mv -v repart-output.json ${imageFileBasename}* $out
 
-        runHook postInstall
-      '';
+      runHook postInstall
+    '';
 
     passthru = {
       inherit amendRepartDefinitions;

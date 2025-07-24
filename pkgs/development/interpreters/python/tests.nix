@@ -254,12 +254,13 @@ let
             url = "https://repo.anaconda.com/pkgs/main/noarch/requests-2.24.0-py_0.tar.bz2";
             sha256 = "02qzaf6gwsqbcs69pix1fnjxzgnngwzvrsy65h1d521g750mjvvp";
           };
-          nativeBuildInputs =
-            [ autoPatchelfHook ]
-            ++ (with python.pkgs; [
-              condaUnpackHook
-              condaInstallHook
-            ]);
+          nativeBuildInputs = [
+            autoPatchelfHook
+          ]
+          ++ (with python.pkgs; [
+            condaUnpackHook
+            condaInstallHook
+          ]);
           buildInputs = [
             pythonCondaPackages.condaPatchelfLibs
           ];

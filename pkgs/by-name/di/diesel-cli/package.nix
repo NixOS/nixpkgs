@@ -43,14 +43,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport libpq
-    ++ lib.optionals mysqlSupport [
-      libmysqlclient
-      zlib
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optional sqliteSupport sqlite
+  ++ lib.optional postgresqlSupport libpq
+  ++ lib.optionals mysqlSupport [
+    libmysqlclient
+    zlib
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures =

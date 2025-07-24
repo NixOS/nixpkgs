@@ -472,30 +472,29 @@ let
           fou3-fou-encap.after = lib.optional (!networkd) "network-addresses-enp1s0.service";
         };
       };
-      testScript =
-        ''
-          import json
+      testScript = ''
+        import json
 
-          machine.wait_for_unit("network.target")
-          fous = json.loads(machine.succeed("ip -json fou show"))
-          assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
-          assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
-        ''
-        + lib.optionalString (!networkd) ''
-          assert {
-              "port": 9003,
-              "gue": None,
-              "family": "inet",
-              "local": "192.168.1.1",
-          } in fous, "fou3 exists"
-          assert {
-              "port": 9004,
-              "gue": None,
-              "family": "inet",
-              "local": "192.168.1.1",
-              "dev": "enp1s0",
-          } in fous, "fou4 exists"
-        '';
+        machine.wait_for_unit("network.target")
+        fous = json.loads(machine.succeed("ip -json fou show"))
+        assert {"port": 9001, "gue": None, "family": "inet"} in fous, "fou1 exists"
+        assert {"port": 9002, "ipproto": 41, "family": "inet"} in fous, "fou2 exists"
+      ''
+      + lib.optionalString (!networkd) ''
+        assert {
+            "port": 9003,
+            "gue": None,
+            "family": "inet",
+            "local": "192.168.1.1",
+        } in fous, "fou3 exists"
+        assert {
+            "port": 9004,
+            "gue": None,
+            "family": "inet",
+            "local": "192.168.1.1",
+            "dev": "enp1s0",
+        } in fous, "fou4 exists"
+      '';
     };
     sit-6in4 =
       let
@@ -1075,58 +1074,57 @@ let
         };
       };
 
-      testScript =
-        ''
-          targetList = """
-          tap0: tap persist user 0
-          tun0: tun persist user 0
-          """.strip()
+      testScript = ''
+        targetList = """
+        tap0: tap persist user 0
+        tun0: tun persist user 0
+        """.strip()
 
-          with subtest("Wait for networking to come up"):
-              machine.start()
-              machine.wait_for_unit("network.target")
+        with subtest("Wait for networking to come up"):
+            machine.start()
+            machine.wait_for_unit("network.target")
 
-          with subtest("Test interfaces set up"):
-              list = machine.succeed("ip tuntap list | sort").strip()
-              assert (
-                  list == targetList
-              ), """
-              The list of virtual interfaces does not match the expected one:
-              Result:
-                {}
-              Expected:
-                {}
-              """.format(
-                  list, targetList
-              )
-          with subtest("Test MTU and MAC Address are configured"):
-              machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
-              machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
-              assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
-        '' # network-addresses-* only exist in scripted networking
-        + lib.optionalString (!networkd) ''
-          with subtest("Test interfaces' addresses clean up"):
-              machine.succeed("systemctl stop network-addresses-tap0")
-              machine.sleep(10)
-              machine.succeed("systemctl stop network-addresses-tun0")
-              machine.sleep(10)
-              residue = machine.succeed("ip tuntap list | sort").strip()
-              assert (
-                  residue == targetList
-              ), "Some virtual interface has been removed:\n{}".format(residue)
-              assert "192.168.1.1" not in machine.succeed("ip address show dev tap0"), "tap0 interface address has not been removed"
-              assert "192.168.1.2" not in machine.succeed("ip address show dev tun0"), "tun0 interface address has not been removed"
+        with subtest("Test interfaces set up"):
+            list = machine.succeed("ip tuntap list | sort").strip()
+            assert (
+                list == targetList
+            ), """
+            The list of virtual interfaces does not match the expected one:
+            Result:
+              {}
+            Expected:
+              {}
+            """.format(
+                list, targetList
+            )
+        with subtest("Test MTU and MAC Address are configured"):
+            machine.wait_until_succeeds("ip link show dev tap0 | grep 'mtu 1342'")
+            machine.wait_until_succeeds("ip link show dev tun0 | grep 'mtu 1343'")
+            assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
+      '' # network-addresses-* only exist in scripted networking
+      + lib.optionalString (!networkd) ''
+        with subtest("Test interfaces' addresses clean up"):
+            machine.succeed("systemctl stop network-addresses-tap0")
+            machine.sleep(10)
+            machine.succeed("systemctl stop network-addresses-tun0")
+            machine.sleep(10)
+            residue = machine.succeed("ip tuntap list | sort").strip()
+            assert (
+                residue == targetList
+            ), "Some virtual interface has been removed:\n{}".format(residue)
+            assert "192.168.1.1" not in machine.succeed("ip address show dev tap0"), "tap0 interface address has not been removed"
+            assert "192.168.1.2" not in machine.succeed("ip address show dev tun0"), "tun0 interface address has not been removed"
 
-          with subtest("Test interfaces clean up"):
-              machine.succeed("systemctl stop tap0-netdev")
-              machine.sleep(10)
-              machine.succeed("systemctl stop tun0-netdev")
-              machine.sleep(10)
-              residue = machine.succeed("ip tuntap list")
-              assert (
-                  residue == ""
-              ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
-        '';
+        with subtest("Test interfaces clean up"):
+            machine.succeed("systemctl stop tap0-netdev")
+            machine.sleep(10)
+            machine.succeed("systemctl stop tun0-netdev")
+            machine.sleep(10)
+            residue = machine.succeed("ip tuntap list")
+            assert (
+                residue == ""
+            ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
+      '';
     };
     privacy = {
       name = "Privacy";
@@ -1263,62 +1261,61 @@ let
         virtualisation.vlans = [ ];
       };
 
-      testScript =
-        ''
-          targetIPv4Table = [
-              "10.0.0.0/16 proto static scope link mtu 1500",
-              "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
-              "192.168.2.0/24 via 192.168.1.1 proto static",
-          ]
+      testScript = ''
+        targetIPv4Table = [
+            "10.0.0.0/16 proto static scope link mtu 1500",
+            "192.168.1.0/24 proto kernel scope link src 192.168.1.2",
+            "192.168.2.0/24 via 192.168.1.1 proto static",
+        ]
 
-          targetIPv6Table = [
-              "2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium",
-              "2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium",
-              "fdfd:b3f0::/48 proto static metric 1024 pref medium",
-          ]
+        targetIPv6Table = [
+            "2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium",
+            "2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium",
+            "fdfd:b3f0::/48 proto static metric 1024 pref medium",
+        ]
 
-          machine.start()
-          machine.wait_for_unit("network.target")
+        machine.start()
+        machine.wait_for_unit("network.target")
 
-          with subtest("test routing tables"):
-              ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
-              ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
-              assert [
-                  l.strip() for l in ipv4Table.splitlines()
-              ] == targetIPv4Table, """
-                The IPv4 routing table does not match the expected one:
-                  Result:
-                    {}
-                  Expected:
-                    {}
-                """.format(
-                  ipv4Table, targetIPv4Table
-              )
-              assert [
-                  l.strip() for l in ipv6Table.splitlines()
-              ] == targetIPv6Table, """
-                The IPv6 routing table does not match the expected one:
-                  Result:
-                    {}
-                  Expected:
-                    {}
-                """.format(
-                  ipv6Table, targetIPv6Table
-              )
+        with subtest("test routing tables"):
+            ipv4Table = machine.succeed("ip -4 route list dev eth0 | head -n3").strip()
+            ipv6Table = machine.succeed("ip -6 route list dev eth0 | head -n3").strip()
+            assert [
+                l.strip() for l in ipv4Table.splitlines()
+            ] == targetIPv4Table, """
+              The IPv4 routing table does not match the expected one:
+                Result:
+                  {}
+                Expected:
+                  {}
+              """.format(
+                ipv4Table, targetIPv4Table
+            )
+            assert [
+                l.strip() for l in ipv6Table.splitlines()
+            ] == targetIPv6Table, """
+              The IPv6 routing table does not match the expected one:
+                Result:
+                  {}
+                Expected:
+                  {}
+              """.format(
+                ipv6Table, targetIPv6Table
+            )
 
-        ''
-        + lib.optionalString (!networkd) ''
-          with subtest("test clean-up of the tables"):
-              machine.succeed("systemctl stop network-addresses-eth0")
-              ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
-              ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
-              assert (
-                  ipv4Residue == ""
-              ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
-              assert (
-                  ipv6Residue == ""
-              ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
-        '';
+      ''
+      + lib.optionalString (!networkd) ''
+        with subtest("test clean-up of the tables"):
+            machine.succeed("systemctl stop network-addresses-eth0")
+            ipv4Residue = machine.succeed("ip -4 route list dev eth0 | head -n-3").strip()
+            ipv6Residue = machine.succeed("ip -6 route list dev eth0 | head -n-3").strip()
+            assert (
+                ipv4Residue == ""
+            ), "The IPv4 routing table has not been properly cleaned:\n{}".format(ipv4Residue)
+            assert (
+                ipv6Residue == ""
+            ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
+      '';
     };
     rename =
       if networkd then

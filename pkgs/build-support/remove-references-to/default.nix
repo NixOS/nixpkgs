@@ -37,7 +37,8 @@ stdenv.mkDerivation {
   env = {
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
-  } // lib.optionalAttrs darwinCodeSign { inherit signingUtils; };
+  }
+  // lib.optionalAttrs darwinCodeSign { inherit signingUtils; };
 
   meta.mainProgram = "remove-references-to";
 }

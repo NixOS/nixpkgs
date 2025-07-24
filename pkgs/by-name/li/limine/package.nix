@@ -54,16 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs =
-    [
-      llvmPackages.clang-unwrapped
-      llvmPackages.libllvm
-      llvmPackages.lld
-    ]
-    ++ lib.optionals (enableAll || buildCDs) [
-      mtools
-    ]
-    ++ lib.optionals hasX86 [ nasm ];
+  nativeBuildInputs = [
+    llvmPackages.clang-unwrapped
+    llvmPackages.libllvm
+    llvmPackages.lld
+  ]
+  ++ lib.optionals (enableAll || buildCDs) [
+    mtools
+  ]
+  ++ lib.optionals hasX86 [ nasm ];
 
   outputs = [
     "out"

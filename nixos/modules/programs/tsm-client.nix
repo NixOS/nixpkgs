@@ -229,44 +229,43 @@ let
   cfg = config.programs.tsmClient;
   servernames = map (s: s.servername) (attrValues cfg.servers);
 
-  assertions =
-    [
-      {
-        assertion = allUnique (map toLower servernames);
-        message = ''
-          TSM server names
-          (option `programs.tsmClient.servers`)
-          contain duplicate name
-          (note that server names are case insensitive).
-        '';
-      }
-      {
-        assertion = (cfg.defaultServername != null) -> (elem cfg.defaultServername servernames);
-        message = ''
-          TSM default server name
-          `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
-          not found in server names in
-          `programs.tsmClient.servers`.
-        '';
-      }
-    ]
-    ++ (mapAttrsToList (name: serverCfg: {
-      assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
+  assertions = [
+    {
+      assertion = allUnique (map toLower servernames);
       message = ''
-        TSM server setting names in
-        `programs.tsmClient.servers.${name}.*`
-        contain spaces, but that's not allowed.
+        TSM server names
+        (option `programs.tsmClient.servers`)
+        contain duplicate name
+        (note that server names are case insensitive).
       '';
-    }) cfg.servers)
-    ++ (mapAttrsToList (name: serverCfg: {
-      assertion = allUnique (map toLower (attrNames serverCfg));
+    }
+    {
+      assertion = (cfg.defaultServername != null) -> (elem cfg.defaultServername servernames);
       message = ''
-        TSM server setting names in
-        `programs.tsmClient.servers.${name}.*`
-        contain duplicate names
-        (note that setting names are case insensitive).
+        TSM default server name
+        `programs.tsmClient.defaultServername="${cfg.defaultServername}"`
+        not found in server names in
+        `programs.tsmClient.servers`.
       '';
-    }) cfg.servers);
+    }
+  ]
+  ++ (mapAttrsToList (name: serverCfg: {
+    assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
+    message = ''
+      TSM server setting names in
+      `programs.tsmClient.servers.${name}.*`
+      contain spaces, but that's not allowed.
+    '';
+  }) cfg.servers)
+  ++ (mapAttrsToList (name: serverCfg: {
+    assertion = allUnique (map toLower (attrNames serverCfg));
+    message = ''
+      TSM server setting names in
+      `programs.tsmClient.servers.${name}.*`
+      contain duplicate names
+      (note that setting names are case insensitive).
+    '';
+  }) cfg.servers);
 
   makeDsmSysLines =
     key: value:

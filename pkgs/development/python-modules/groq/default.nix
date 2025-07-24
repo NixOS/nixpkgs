@@ -66,7 +66,8 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "groq" ];
 

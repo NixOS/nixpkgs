@@ -223,38 +223,37 @@ let
 
   makeFstabEntries =
     let
-      fsToSkipCheck =
-        [
-          "none"
-          "auto"
-          "overlay"
-          "iso9660"
-          "bindfs"
-          "udf"
-          "btrfs"
-          "zfs"
-          "tmpfs"
-          "bcachefs"
-          "nfs"
-          "nfs4"
-          "nilfs2"
-          "vboxsf"
-          "squashfs"
-          "glusterfs"
-          "apfs"
-          "9p"
-          "cifs"
-          "prl_fs"
-          "vmhgfs"
-        ]
-        ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
-          "ext3"
-          "ext4"
-          "reiserfs"
-          "xfs"
-          "jfs"
-          "f2fs"
-        ];
+      fsToSkipCheck = [
+        "none"
+        "auto"
+        "overlay"
+        "iso9660"
+        "bindfs"
+        "udf"
+        "btrfs"
+        "zfs"
+        "tmpfs"
+        "bcachefs"
+        "nfs"
+        "nfs4"
+        "nilfs2"
+        "vboxsf"
+        "squashfs"
+        "glusterfs"
+        "apfs"
+        "9p"
+        "cifs"
+        "prl_fs"
+        "vmhgfs"
+      ]
+      ++ lib.optionals (!config.boot.initrd.checkJournalingFS) [
+        "ext3"
+        "ext4"
+        "reiserfs"
+        "xfs"
+        "jfs"
+        "f2fs"
+      ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck =
         fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
@@ -555,79 +554,78 @@ in
     ];
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
-    boot.specialFileSystems =
-      {
-        "/proc" = {
-          fsType = "proc";
-          options = [
-            "nosuid"
-            "noexec"
-            "nodev"
-          ];
-        };
-        "/run" = {
-          fsType = "tmpfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "strictatime"
-            "mode=755"
-            "size=${config.boot.runSize}"
-          ];
-        };
-        "/dev" = {
-          fsType = "devtmpfs";
-          options = [
-            "nosuid"
-            "strictatime"
-            "mode=755"
-            "size=${config.boot.devSize}"
-          ];
-        };
-        "/dev/shm" = {
-          fsType = "tmpfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "strictatime"
-            "mode=1777"
-            "size=${config.boot.devShmSize}"
-          ];
-        };
-        "/dev/pts" = {
-          fsType = "devpts";
-          options = [
-            "nosuid"
-            "noexec"
-            "mode=620"
-            "ptmxmode=0666"
-            "gid=${toString config.ids.gids.tty}"
-          ];
-        };
-
-        # To hold secrets that shouldn't be written to disk
-        "/run/keys" = {
-          fsType = "ramfs";
-          options = [
-            "nosuid"
-            "nodev"
-            "mode=750"
-          ];
-        };
-      }
-      // optionalAttrs (!config.boot.isContainer) {
-        # systemd-nspawn populates /sys by itself, and remounting it causes all
-        # kinds of weird issues (most noticeably, waiting for host disk device
-        # nodes).
-        "/sys" = {
-          fsType = "sysfs";
-          options = [
-            "nosuid"
-            "noexec"
-            "nodev"
-          ];
-        };
+    boot.specialFileSystems = {
+      "/proc" = {
+        fsType = "proc";
+        options = [
+          "nosuid"
+          "noexec"
+          "nodev"
+        ];
       };
+      "/run" = {
+        fsType = "tmpfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "strictatime"
+          "mode=755"
+          "size=${config.boot.runSize}"
+        ];
+      };
+      "/dev" = {
+        fsType = "devtmpfs";
+        options = [
+          "nosuid"
+          "strictatime"
+          "mode=755"
+          "size=${config.boot.devSize}"
+        ];
+      };
+      "/dev/shm" = {
+        fsType = "tmpfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "strictatime"
+          "mode=1777"
+          "size=${config.boot.devShmSize}"
+        ];
+      };
+      "/dev/pts" = {
+        fsType = "devpts";
+        options = [
+          "nosuid"
+          "noexec"
+          "mode=620"
+          "ptmxmode=0666"
+          "gid=${toString config.ids.gids.tty}"
+        ];
+      };
+
+      # To hold secrets that shouldn't be written to disk
+      "/run/keys" = {
+        fsType = "ramfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "mode=750"
+        ];
+      };
+    }
+    // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = {
+        fsType = "sysfs";
+        options = [
+          "nosuid"
+          "noexec"
+          "nodev"
+        ];
+      };
+    };
 
   };
 

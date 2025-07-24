@@ -55,7 +55,8 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 

@@ -37,20 +37,19 @@ buildPythonPackage {
     zlib
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
-      (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
-      (lib.cmakeBool "USE_SYSTEM_PYBIND" true)
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_ABSEIL" true)
+    (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
+    (lib.cmakeBool "USE_SYSTEM_PYBIND" true)
 
-      # The find_package calls are local to the dependencies subdirectory
-      (lib.cmakeBool "CMAKE_FIND_PACKAGE_TARGETS_GLOBAL" true)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Without it, Cmake prefers using Find-module which is mysteriously broken
-      # But the generated Config works
-      (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
-    ];
+    # The find_package calls are local to the dependencies subdirectory
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_TARGETS_GLOBAL" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Without it, Cmake prefers using Find-module which is mysteriously broken
+    # But the generated Config works
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+  ];
 
   meta = {
     description = "Pybind11 bindings for Google's Protocol Buffers";

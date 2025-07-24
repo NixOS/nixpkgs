@@ -51,18 +51,17 @@ buildPythonPackage rec {
     twisted
   ];
 
-  disabledTests =
-    [
-      "test_broken_pool"
-      # gevent tests have issue on newer Python releases
-      "test_add_live_job"
-      "test_add_pending_job"
-      "test_shutdown"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_submit_job"
-      "test_max_instances"
-    ];
+  disabledTests = [
+    "test_broken_pool"
+    # gevent tests have issue on newer Python releases
+    "test_add_live_job"
+    "test_add_pending_job"
+    "test_shutdown"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_submit_job"
+    "test_max_instances"
+  ];
 
   pythonImportsCheck = [ "apscheduler" ];
 

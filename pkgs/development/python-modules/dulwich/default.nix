@@ -57,7 +57,8 @@ buildPythonPackage rec {
     git
     glibcLocales
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   enabledTestPaths = [ "tests" ];
 

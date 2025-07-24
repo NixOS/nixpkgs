@@ -75,7 +75,8 @@ let
           license = lib.licenses.bsd2;
           platforms = lib.platforms.all;
           description = throw "please write meta.description";
-        } // attrs.meta;
+        }
+        // attrs.meta;
       }
     );
 in

@@ -270,32 +270,31 @@ python.pkgs.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  disabledTests =
-    [
-      "test_sbin_added_to_path"
-      "test_diff_meta"
-      "test_diff_meta2"
+  disabledTests = [
+    "test_sbin_added_to_path"
+    "test_diff_meta"
+    "test_diff_meta2"
 
-      # Fails because it fails to determine llvm version
-      "test_item3_deflate_llvm_bitcode"
+    # Fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
 
-      # Flaky test on Linux and Darwin
-      "test_non_unicode_filename"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Disable flaky tests on Darwin
-      "test_listing"
-      "test_symlink_root"
+    # Flaky test on Linux and Darwin
+    "test_non_unicode_filename"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disable flaky tests on Darwin
+    "test_listing"
+    "test_symlink_root"
 
-      # Appears to be a sandbox related issue
-      "test_trim_stderr_in_command"
-      # Seems to be a bug caused by having different versions of rdata than
-      # expected. Will file upstream.
-      "test_item_rdb"
-      # Caused by getting an otool command instead of llvm-objdump. Could be Nix
-      # setup, could be upstream bug. Will file upstream.
-      "test_libmix_differences"
-    ];
+    # Appears to be a sandbox related issue
+    "test_trim_stderr_in_command"
+    # Seems to be a bug caused by having different versions of rdata than
+    # expected. Will file upstream.
+    "test_item_rdb"
+    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+    # setup, could be upstream bug. Will file upstream.
+    "test_libmix_differences"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"

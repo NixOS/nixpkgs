@@ -20,14 +20,13 @@
 rustPlatform.buildRustPackage rec {
   pname = "just";
   version = "1.42.3";
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals installManPages [
-      "man"
-    ]
-    ++ lib.optionals withDocumentation [ "doc" ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals installManPages [
+    "man"
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
@@ -72,7 +71,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=just"
-  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ]
+  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell

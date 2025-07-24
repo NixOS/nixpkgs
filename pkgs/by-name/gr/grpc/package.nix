@@ -43,29 +43,29 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches =
-    [
-      (fetchpatch {
-        # armv6l support, https://github.com/grpc/grpc/pull/21341
-        name = "grpc-link-libatomic.patch";
-        url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
-        hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
-      ./dynamic-lookup-darwin.patch
-      # https://github.com/grpc/grpc/issues/39170
-      (fetchurl {
-        url = "https://raw.githubusercontent.com/rdhafidh/vcpkg/0ae97b7b81562bd66ab99d022551db1449c079f9/ports/grpc/00017-add-src-upb.patch";
-        hash = "sha256-0zaJqeCM90DTtUR6xCUorahUpiJF3D/KODYkUXQh2ok=";
-      })
-    ];
+  patches = [
+    (fetchpatch {
+      # armv6l support, https://github.com/grpc/grpc/pull/21341
+      name = "grpc-link-libatomic.patch";
+      url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
+      hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
+    ./dynamic-lookup-darwin.patch
+    # https://github.com/grpc/grpc/issues/39170
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/rdhafidh/vcpkg/0ae97b7b81562bd66ab99d022551db1449c079f9/ports/grpc/00017-add-src-upb.patch";
+      hash = "sha256-0zaJqeCM90DTtUR6xCUorahUpiJF3D/KODYkUXQh2ok=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [
     c-ares
     re2
@@ -75,37 +75,37 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
-  cmakeFlags =
-    [
-      "-DgRPC_ZLIB_PROVIDER=package"
-      "-DgRPC_CARES_PROVIDER=package"
-      "-DgRPC_RE2_PROVIDER=package"
-      "-DgRPC_SSL_PROVIDER=package"
-      "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_ABSL_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
+  cmakeFlags = [
+    "-DgRPC_ZLIB_PROVIDER=package"
+    "-DgRPC_CARES_PROVIDER=package"
+    "-DgRPC_RE2_PROVIDER=package"
+    "-DgRPC_SSL_PROVIDER=package"
+    "-DgRPC_PROTOBUF_PROVIDER=package"
+    "-DgRPC_ABSL_PROVIDER=package"
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
+  ]
+  # The build scaffold defaults to c++14 on darwin, even when the compiler uses
+  # a more recent c++ version by default [1]. However, downgrades are
+  # problematic, because the compatibility types in abseil will have different
+  # interface definitions than the ones used for building abseil itself.
+  # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
+  ++ (
+    let
+      defaultCxxIsOlderThan17 =
+        (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
+        || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
+    in
+    lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
+      "-DCMAKE_CXX_STANDARD=17"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-      "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
-    ]
-    # The build scaffold defaults to c++14 on darwin, even when the compiler uses
-    # a more recent c++ version by default [1]. However, downgrades are
-    # problematic, because the compatibility types in abseil will have different
-    # interface definitions than the ones used for building abseil itself.
-    # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
-    ++ (
-      let
-        defaultCxxIsOlderThan17 =
-          (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
-          || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
-      in
-      lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
-        "-DCMAKE_CXX_STANDARD=17"
-      ]
-    );
+  );
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.

@@ -146,9 +146,7 @@ These settings ensure that the CUDA setup hooks function as intended.
 When using `callPackage`, you can choose to pass in a different variant, e.g. when a package requires a specific version of CUDA:
 
 ```nix
-{
-  mypkg = callPackage { cudaPackages = cudaPackages_12_2; };
-}
+{ mypkg = callPackage { cudaPackages = cudaPackages_12_2; }; }
 ```
 
 ::: {.caution}
@@ -208,9 +206,7 @@ It is possible to run Docker or Podman containers with CUDA support. The recomme
 The NVIDIA Container Toolkit can be enabled in NixOS like follows:
 
 ```nix
-{
-  hardware.nvidia-container-toolkit.enable = true;
-}
+{ hardware.nvidia-container-toolkit.enable = true; }
 ```
 
 This will automatically enable a service that generates a CDI specification (located at `/var/run/cdi/nvidia-container-toolkit.json`) based on the auto-detected hardware of your machine. You can check this service by running:

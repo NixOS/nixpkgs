@@ -69,13 +69,12 @@ python3.pkgs.buildPythonApplication rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -150,15 +149,14 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs =
-    [
-      openssl
-    ]
-    ++ (with python3.pkgs; [
-      mock
-      parameterized
-    ])
-    ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+  nativeCheckInputs = [
+    openssl
+  ]
+  ++ (with python3.pkgs; [
+    mock
+    parameterized
+  ])
+  ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

@@ -128,7 +128,8 @@ let
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
-  ] ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
+  ]
+  ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -198,24 +199,26 @@ let
       '';
     };
 
-    nativeBuildInputs =
-      [ pkg-config ]
-      ++ ocamlNativeBuildInputs
-      ++ lib.optional buildIde copyDesktopItems
-      ++ lib.optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
-      ++ lib.optional (!coqAtLeast "8.6") gnumake42;
-    buildInputs =
-      [ ncurses ]
-      ++ lib.optionals buildIde (
-        if coqAtLeast "8.10" then
-          [
-            ocamlPackages.lablgtk3-sourceview3
-            glib
-            adwaita-icon-theme
-          ]
-        else
-          [ ocamlPackages.lablgtk ]
-      );
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ ocamlNativeBuildInputs
+    ++ lib.optional buildIde copyDesktopItems
+    ++ lib.optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
+    ++ lib.optional (!coqAtLeast "8.6") gnumake42;
+    buildInputs = [
+      ncurses
+    ]
+    ++ lib.optionals buildIde (
+      if coqAtLeast "8.10" then
+        [
+          ocamlPackages.lablgtk3-sourceview3
+          glib
+          adwaita-icon-theme
+        ]
+      else
+        [ ocamlPackages.lablgtk ]
+    );
 
     propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
@@ -253,13 +256,12 @@ let
 
     prefixKey = "-prefix ";
 
-    buildFlags =
-      [
-        "revision"
-        "coq"
-      ]
-      ++ lib.optional buildIde "coqide"
-      ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
+    buildFlags = [
+      "revision"
+      "coq"
+    ]
+    ++ lib.optional buildIde "coqide"
+    ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
     enableParallelBuilding = true;
 
     createFindlibDestdir = true;

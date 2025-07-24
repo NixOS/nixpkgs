@@ -20,7 +20,8 @@ For this purpose, Bootspec offers a generic extension facility [`boot.bootspec.e
 An example for SecureBoot is to get the Nix store path to `/etc/os-release` in order to bake it into a unified kernel image:
 
 ```nix
-{ config, lib, ... }: {
+{ config, lib, ... }:
+{
   boot.bootspec.extensions = {
     "org.secureboot.osRelease" = config.environment.etc."os-release".source;
   };

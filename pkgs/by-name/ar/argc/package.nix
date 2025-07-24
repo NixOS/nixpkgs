@@ -39,13 +39,12 @@ rustPlatform.buildRustPackage rec {
 
   disallowedReferences = lib.optional (!canExecuteHost) buildPackages.argc;
 
-  env =
-    {
-      LANG = "C.UTF-8";
-    }
-    // lib.optionalAttrs (glibcLocales != null) {
-      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
-    };
+  env = {
+    LANG = "C.UTF-8";
+  }
+  // lib.optionalAttrs (glibcLocales != null) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   passthru = {
     tests = {

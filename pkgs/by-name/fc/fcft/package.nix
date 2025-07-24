@@ -50,26 +50,24 @@ stdenv.mkDerivation rec {
     ninja
     scdoc
   ];
-  buildInputs =
-    [
-      freetype
-      fontconfig
-      nanosvg
-      pixman
-      tllist
-    ]
-    ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
-    ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
+  buildInputs = [
+    freetype
+    fontconfig
+    nanosvg
+    pixman
+    tllist
+  ]
+  ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
+  ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
   nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags =
-    [
-      (lib.mesonEnable "system-nanosvg" true)
-    ]
-    ++ builtins.map (
-      t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-    ) availableShapingTypes;
+  mesonFlags = [
+    (lib.mesonEnable "system-nanosvg" true)
+  ]
+  ++ builtins.map (
+    t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
+  ) availableShapingTypes;
 
   doCheck = true;
 

@@ -276,19 +276,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "txtai" ];
 
-  nativeCheckInputs =
-    [
-      httpx
-      msgpack
-      pytestCheckHook
-      python-multipart
-      timm
-      sqlalchemy
-    ]
-    ++ optional-dependencies.agent
-    ++ optional-dependencies.ann
-    ++ optional-dependencies.api
-    ++ optional-dependencies.similarity;
+  nativeCheckInputs = [
+    httpx
+    msgpack
+    pytestCheckHook
+    python-multipart
+    timm
+    sqlalchemy
+  ]
+  ++ optional-dependencies.agent
+  ++ optional-dependencies.ann
+  ++ optional-dependencies.api
+  ++ optional-dependencies.similarity;
 
   enabledTestPaths = [
     "test/python/test*.py"

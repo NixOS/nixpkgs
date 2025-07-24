@@ -21,26 +21,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals enableManpages [
-      buildPackages.pandoc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals enableManpages [
+    buildPackages.pandoc
+  ];
 
   buildInputs = [ catch2_3 ];
 
   propagatedBuildInputs = [ icu ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_TESTING=YES"
-    ]
-    ++ lib.optionals (!enableManpages) [
-      "-DBUILD_DOCS=OFF"
-    ];
+  cmakeFlags = [
+    "-DBUILD_TESTING=YES"
+  ]
+  ++ lib.optionals (!enableManpages) [
+    "-DBUILD_DOCS=OFF"
+  ];
 
   doCheck = true;
 

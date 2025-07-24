@@ -29,19 +29,19 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs =
-    [
-      eth-hash
-      eth-typing
-    ]
-    ++ lib.optional (!isPyPy) cytoolz
-    ++ lib.optional isPyPy toolz;
+  propagatedBuildInputs = [
+    eth-hash
+    eth-typing
+  ]
+  ++ lib.optional (!isPyPy) cytoolz
+  ++ lib.optional isPyPy toolz;
 
   nativeCheckInputs = [
     hypothesis
     mypy
     pytestCheckHook
-  ] ++ eth-hash.optional-dependencies.pycryptodome;
+  ]
+  ++ eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_utils" ];
 

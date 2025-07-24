@@ -120,13 +120,12 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-      "doc"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    "doc"
+  ];
 
   sphinxRoot = "../docs";
 
@@ -143,18 +142,17 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
-  nativeBuildInputs =
-    [
-      furo
-      setuptools
-      shapely
-    ]
-    # building the docs fails with the following error when cross compiling
-    #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-      sphinx-autodoc-typehints
-      sphinxHook
-    ];
+  nativeBuildInputs = [
+    furo
+    setuptools
+    shapely
+  ]
+  # building the docs fails with the following error when cross compiling
+  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    sphinx-autodoc-typehints
+    sphinxHook
+  ];
 
   propagatedBuildInputs = [
     psycopg-c
@@ -172,17 +170,16 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs =
-    [
-      anyio
-      pproxy
-      pytest-randomly
-      pytestCheckHook
-      postgresql
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
-    ++ optional-dependencies.c
-    ++ optional-dependencies.pool;
+  nativeCheckInputs = [
+    anyio
+    pproxy
+    pytest-randomly
+    pytestCheckHook
+    postgresql
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux postgresqlTestHook
+  ++ optional-dependencies.c
+  ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -190,13 +187,12 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck =
-    ''
-      cd ..
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-    '';
+  preCheck = ''
+    cd ..
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+  '';
 
   disabledTests = [
     # don't depend on mypy for tests

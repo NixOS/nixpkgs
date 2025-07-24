@@ -105,34 +105,33 @@ buildPythonPackage rec {
     firedrakePackages.mpi
   ];
 
-  dependencies =
-    [
-      decorator
-      cachetools
-      firedrakePackages.mpi4py
-      fenics-ufl
-      firedrake-fiat
-      firedrakePackages.h5py
-      libsupermesh
-      loopy
-      petsc4py
-      numpy
-      packaging
-      pkgconfig
-      progress
-      pyadjoint-ad
-      pycparser
-      pytools
-      requests
-      rtree
-      scipy
-      sympy
-      # required by script spydump
-      matplotlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      islpy
-    ];
+  dependencies = [
+    decorator
+    cachetools
+    firedrakePackages.mpi4py
+    fenics-ufl
+    firedrake-fiat
+    firedrakePackages.h5py
+    libsupermesh
+    loopy
+    petsc4py
+    numpy
+    packaging
+    pkgconfig
+    progress
+    pyadjoint-ad
+    pycparser
+    pytools
+    requests
+    rtree
+    scipy
+    sympy
+    # required by script spydump
+    matplotlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    islpy
+  ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \

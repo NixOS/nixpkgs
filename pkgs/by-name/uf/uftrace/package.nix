@@ -29,15 +29,14 @@ stdenv.mkDerivation rec {
     pkg-config
     pandoc
   ];
-  buildInputs =
-    [
-      capstone
-      elfutils
-      libtraceevent
-      ncurses
-    ]
-    ++ lib.optional withLuaJIT luajit
-    ++ lib.optional withPython python3;
+  buildInputs = [
+    capstone
+    elfutils
+    libtraceevent
+    ncurses
+  ]
+  ++ lib.optional withLuaJIT luajit
+  ++ lib.optional withPython python3;
 
   # libmcount.so dlopens python and luajit, make sure they're in the RUNPATH
   preBuild =

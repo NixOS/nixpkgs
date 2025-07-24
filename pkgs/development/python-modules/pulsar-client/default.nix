@@ -72,7 +72,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   unittestFlagsArray = [
     "-s"

@@ -50,18 +50,17 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unittests/"
   ];
 
-  disabledTestPaths =
-    [
-      # Fails on sandbox
-      "tests/unittests/test_client.py"
-      "tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
-      "tests/unittests/test_render_functions.py::test_render_time"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky tests
-      "tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
-      "tests/unittests/test_utils.py::test_timer"
-    ];
+  disabledTestPaths = [
+    # Fails on sandbox
+    "tests/unittests/test_client.py"
+    "tests/unittests/test_render_functions.py::test_render_unixtime_config_raw"
+    "tests/unittests/test_render_functions.py::test_render_time"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky tests
+    "tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
+    "tests/unittests/test_utils.py::test_timer"
+  ];
 
   pythonImportsCheck = [ "iredis" ];
 

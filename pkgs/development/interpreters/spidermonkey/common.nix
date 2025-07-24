@@ -67,38 +67,36 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
 
-  nativeBuildInputs =
-    [
-      cargo
-      m4
-      perl
-      pkg-config
-      # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
-      # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
-      (if lib.versionOlder version "115" then python311 else python3)
-      rustc
-      rustc.llvmPackages.llvm # for llvm-objdump
-      which
-      zip
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "128") [
-      rust-cbindgen
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    cargo
+    m4
+    perl
+    pkg-config
+    # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
+    # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
+    (if lib.versionOlder version "115" then python311 else python3)
+    rustc
+    rustc.llvmPackages.llvm # for llvm-objdump
+    which
+    zip
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "128") [
+    rust-cbindgen
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  buildInputs =
-    [
-      icu75
-      nspr
-      readline
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    icu75
+    nspr
+    readline
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -106,32 +104,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   setOutputFlags = false; # Configure script only understands --includedir
 
-  configureFlags =
-    [
-      "--with-intl-api"
-      "--with-system-icu"
-      "--with-system-nspr"
-      "--with-system-zlib"
-      # Fedora and Arch disable optimize, but it doesn't seme to be necessary
-      # It turns on -O3 which some gcc version had a problem with:
-      # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
-      "--enable-optimize"
-      "--enable-readline"
-      "--enable-release"
-      "--enable-shared-js"
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "91") [
-      "--disable-debug"
-    ]
-    ++ [
-      "--disable-jemalloc"
-      "--disable-strip"
-      "--disable-tests"
-      # Spidermonkey seems to use different host/build terminology for cross
-      # compilation here.
-      "--host=${stdenv.buildPlatform.config}"
-      "--target=${stdenv.hostPlatform.config}"
-    ];
+  configureFlags = [
+    "--with-intl-api"
+    "--with-system-icu"
+    "--with-system-nspr"
+    "--with-system-zlib"
+    # Fedora and Arch disable optimize, but it doesn't seme to be necessary
+    # It turns on -O3 which some gcc version had a problem with:
+    # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
+    "--enable-optimize"
+    "--enable-readline"
+    "--enable-release"
+    "--enable-shared-js"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "91") [
+    "--disable-debug"
+  ]
+  ++ [
+    "--disable-jemalloc"
+    "--disable-strip"
+    "--disable-tests"
+    # Spidermonkey seems to use different host/build terminology for cross
+    # compilation here.
+    "--host=${stdenv.buildPlatform.config}"
+    "--target=${stdenv.hostPlatform.config}"
+  ];
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
   # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list

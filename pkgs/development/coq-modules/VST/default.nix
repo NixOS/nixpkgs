@@ -11,17 +11,16 @@
 #  but that may be useful to some users.
 # They depend on ITree.
 let
-  extra_floyd_files =
-    [
-      "ASTsize.v"
-      "io_events.v"
-      "powerlater.v"
-    ]
-    # floyd/printf.v is broken in VST 2.9
-    ++ lib.optional (!lib.versions.isGe "8.13" coq.coq-version) "printf.v"
-    ++ [
-      "quickprogram.v"
-    ];
+  extra_floyd_files = [
+    "ASTsize.v"
+    "io_events.v"
+    "powerlater.v"
+  ]
+  # floyd/printf.v is broken in VST 2.9
+  ++ lib.optional (!lib.versions.isGe "8.13" coq.coq-version) "printf.v"
+  ++ [
+    "quickprogram.v"
+  ];
 in
 
 mkCoqDerivation {
@@ -58,28 +57,26 @@ mkCoqDerivation {
   buildInputs = [ ITree ];
   propagatedBuildInputs = [ compcert ];
 
-  preConfigure =
-    ''
-      patchShebangs util
-    ''
-    +
-      lib.optionalString
-        (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "8.20" coq.coq-version)
-        ''
-          substituteInPlace Makefile \
-            --replace-fail 'COQVERSION= ' 'COQVERSION= 8.20.1 or-else 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
-            --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
-        '';
+  preConfigure = ''
+    patchShebangs util
+  ''
+  +
+    lib.optionalString
+      (coq.coq-version != null && coq.coq-version != "dev" && lib.versions.isLe "8.20" coq.coq-version)
+      ''
+        substituteInPlace Makefile \
+          --replace-fail 'COQVERSION= ' 'COQVERSION= 8.20.1 or-else 8.19.2 or-else 8.17.1 or-else 8.16.1 or-else 8.16.0 or-else 8.15.2 or-else 8.15.1 or-else '\
+          --replace-fail 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
+      '';
 
-  makeFlags =
-    [
-      "BITSIZE=64"
-      "COMPCERT=inst_dir"
-      "COMPCERT_INST_DIR=${compcert.lib}/lib/coq/${coq.coq-version}/user-contrib/compcert"
-      "INSTALLDIR=$(out)/lib/coq/${coq.coq-version}/user-contrib/VST"
-    ]
-    ++ lib.optional (coq.coq-version == "dev") "IGNORECOQVERSION=true"
-    ++ lib.optional (coq.coq-version == "dev") "IGNORECOMPCERTVERSION=true";
+  makeFlags = [
+    "BITSIZE=64"
+    "COMPCERT=inst_dir"
+    "COMPCERT_INST_DIR=${compcert.lib}/lib/coq/${coq.coq-version}/user-contrib/compcert"
+    "INSTALLDIR=$(out)/lib/coq/${coq.coq-version}/user-contrib/VST"
+  ]
+  ++ lib.optional (coq.coq-version == "dev") "IGNORECOQVERSION=true"
+  ++ lib.optional (coq.coq-version == "dev") "IGNORECOMPCERTVERSION=true";
 
   postInstall = ''
     for d in msl veric floyd sepcomp progs64

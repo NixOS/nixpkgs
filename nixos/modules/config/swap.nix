@@ -286,7 +286,8 @@ in
             path = [
               pkgs.util-linux
               pkgs.e2fsprogs
-            ] ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
+            ]
+            ++ lib.optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             environment.DEVICE = sw.device;
 

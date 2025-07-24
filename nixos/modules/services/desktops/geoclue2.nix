@@ -344,16 +344,15 @@ in
         modem-gps = {
           enable = cfg.enableModemGPS;
         };
-        wifi =
-          {
-            enable = cfg.enableWifi;
-          }
-          // lib.optionalAttrs cfg.enableWifi {
-            url = cfg.geoProviderUrl;
-            submit-data = lib.boolToString cfg.submitData;
-            submission-url = cfg.submissionUrl;
-            submission-nick = cfg.submissionNick;
-          };
+        wifi = {
+          enable = cfg.enableWifi;
+        }
+        // lib.optionalAttrs cfg.enableWifi {
+          url = cfg.geoProviderUrl;
+          submit-data = lib.boolToString cfg.submitData;
+          submission-url = cfg.submissionUrl;
+          submission-nick = cfg.submissionNick;
+        };
         static-source = {
           enable = cfg.enableStatic;
         };

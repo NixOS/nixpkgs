@@ -52,33 +52,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      zlib
-      curl.dev
-      re2c
-    ]
-    ++ lib.optionals prqlSupport [
-      cargo
-      rustPlatform.cargoSetupHook
-      rustc
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    zlib
+    curl.dev
+    re2c
+  ]
+  ++ lib.optionals prqlSupport [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      pcre2
-      readline
-      sqlite
-      curl
-      libarchive
-      libunistring
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gpm
-    ];
+  buildInputs = [
+    bzip2
+    pcre2
+    readline
+    sqlite
+    curl
+    libarchive
+    libunistring
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gpm
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${finalAttrs.src}/src/third-party/prqlc-c";

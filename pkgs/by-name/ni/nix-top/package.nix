@@ -36,20 +36,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ruby ];
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out/libexec/nix-top
-      install -D -m755 ./nix-top $out/bin/nix-top
-      wrapProgram $out/bin/nix-top \
-        --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      ln -s /bin/stty $out/libexec/nix-top
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/libexec/nix-top
+    install -D -m755 ./nix-top $out/bin/nix-top
+    wrapProgram $out/bin/nix-top \
+      --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ln -s /bin/stty $out/libexec/nix-top
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = {
     description = "Tracks what nix is building";

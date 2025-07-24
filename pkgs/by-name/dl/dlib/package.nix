@@ -33,55 +33,52 @@
     rm -rf dlib/external
   '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
-      (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
-      (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
-      (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
-        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDots cudaCapabilities)
-      ))
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
+    (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
+    (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
+    (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
+  ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
+      builtins.concatStringsSep "," (with cudaPackages.flags; map dropDots cudaCapabilities)
+    ))
+  ];
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      cmake
-      pkg-config
+      cuda_nvcc
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_nvcc
-      ]
-    );
+  );
 
-  buildInputs =
+  buildInputs = [
+    libpng
+    libjpeg
+    libwebp
+    blas
+    lapack
+  ]
+  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      libpng
-      libjpeg
-      libwebp
-      blas
-      lapack
+      cuda_cudart
+      cuda_nvcc
+      libcublas
+      libcurand
+      libcusolver
+      cudnn
+      cuda_cccl
     ]
-    ++ lib.optionals guiSupport [ libX11 ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cudart
-        cuda_nvcc
-        libcublas
-        libcurand
-        libcusolver
-        cudnn
-        cuda_cccl
-      ]
-    );
+  );
 
   passthru = {
     inherit

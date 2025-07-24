@@ -24,20 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ANZYsOuTUEp5agbCdBX2uqTh8XKx53bMJn5UPpmKixY=";
   };
 
-  buildInputs =
-    [
-      gumbo
-      harfbuzz
-      jbig2dec
-      mujs
-      mupdf
-      openjpeg
-      qt6.qt3d
-      qt6.qtbase
-      qt6.qtspeech
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs = [
+    gumbo
+    harfbuzz
+    jbig2dec
+    mujs
+    mupdf
+    openjpeg
+    qt6.qt3d
+    qt6.qtbase
+    qt6.qtspeech
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles

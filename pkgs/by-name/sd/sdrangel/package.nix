@@ -60,52 +60,51 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      airspy
-      airspyhf
-      aptdec
-      boost
-      cm256cc
-      codec2
-      dab_lib
-      dsdcc
-      faad2
-      ffmpeg
-      fftwFloat
-      flac
-      glew
-      hackrf
-      hidapi
-      libbladeRF
-      libiio
-      libopus
-      libpulseaudio
-      libusb1
-      limesuite
-      mbelib
-      opencv4
-      qt6Packages.qt5compat
-      qt6Packages.qtcharts
-      qt6Packages.qtdeclarative
-      qt6Packages.qtlocation
-      qt6Packages.qtmultimedia
-      qt6Packages.qtscxml
-      qt6Packages.qtserialport
-      qt6Packages.qtspeech
-      qt6Packages.qttools
-      qt6Packages.qtwebsockets
-      qt6Packages.qtwebengine
-      rtl-sdr
-      serialdv
-      sgp4
-      soapysdr-with-plugins
-      uhd
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals withSDRplay [ sdrplay ];
+  buildInputs = [
+    airspy
+    airspyhf
+    aptdec
+    boost
+    cm256cc
+    codec2
+    dab_lib
+    dsdcc
+    faad2
+    ffmpeg
+    fftwFloat
+    flac
+    glew
+    hackrf
+    hidapi
+    libbladeRF
+    libiio
+    libopus
+    libpulseaudio
+    libusb1
+    limesuite
+    mbelib
+    opencv4
+    qt6Packages.qt5compat
+    qt6Packages.qtcharts
+    qt6Packages.qtdeclarative
+    qt6Packages.qtlocation
+    qt6Packages.qtmultimedia
+    qt6Packages.qtscxml
+    qt6Packages.qtserialport
+    qt6Packages.qtspeech
+    qt6Packages.qttools
+    qt6Packages.qtwebsockets
+    qt6Packages.qtwebengine
+    rtl-sdr
+    serialdv
+    sgp4
+    soapysdr-with-plugins
+    uhd
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals withSDRplay [ sdrplay ];
 
   patches = [
     # https://github.com/f4exb/sdrangel/pull/2439

@@ -37,28 +37,28 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      pkg-config
-      glib
-      bison
-      flex
-      asciidoc
-      xmlto
-      docbook_xml_dtd_45
-      docbook_xsl
-    ]
-    ++ lib.optionals enablePython [
-      swig
-      pythonPackages.setuptools
-      ensureNewerSourcesForZipFilesHook
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    glib
+    bison
+    flex
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+  ]
+  ++ lib.optionals enablePython [
+    swig
+    pythonPackages.setuptools
+    ensureNewerSourcesForZipFilesHook
+  ];
 
   buildInputs = [
     glib
     elfutils
-  ] ++ lib.optional enablePython python;
+  ]
+  ++ lib.optional enablePython python;
 
   configureFlags = [
     (lib.enableFeature enablePython "python-bindings")

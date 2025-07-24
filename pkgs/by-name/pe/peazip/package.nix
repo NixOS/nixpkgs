@@ -37,14 +37,13 @@ stdenv.mkDerivation rec {
     fpc
   ];
 
-  buildInputs =
-    [
-      xorg.libX11
-    ]
-    ++ (with qt6Packages; [
-      qtbase
-      libqtpas
-    ]);
+  buildInputs = [
+    xorg.libX11
+  ]
+  ++ (with qt6Packages; [
+    qtbase
+    libqtpas
+  ]);
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 

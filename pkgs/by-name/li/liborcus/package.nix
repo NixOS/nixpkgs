@@ -40,20 +40,19 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
-  preCheck =
-    ''
-      patchShebangs test/python
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}${
-        lib.concatMapStringsSep ":" (d: "$(pwd)/src/${d}/.libs") [
-          "liborcus"
-          "parser"
-          "python"
-          "spreadsheet"
-        ]
-      }
-    '';
+  preCheck = ''
+    patchShebangs test/python
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}${
+      lib.concatMapStringsSep ":" (d: "$(pwd)/src/${d}/.libs") [
+        "liborcus"
+        "parser"
+        "python"
+        "spreadsheet"
+      ]
+    }
+  '';
 
   strictDeps = true;
   doCheck = true;

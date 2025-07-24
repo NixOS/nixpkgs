@@ -49,26 +49,25 @@ stdenv.mkDerivation (finalAttrs: {
     export AR="$AR rc"
   '';
 
-  postPatch =
-    ''
-      substituteInPlace jam.h --replace-fail 'ifdef linux' 'ifdef __linux__'
-    ''
-    +
-      # When cross-compiling, we need to set the preprocessor macros
-      # OSMAJOR/OSMINOR/OSPLAT to the values from the target platform, not the host
-      # platform. This looks a little ridiculous because the vast majority of build
-      # tools don't embed target-specific information into their binary, but in this
-      # case we behave more like a compiler than a make(1)-alike.
-      lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
-         cat >>jam.h <<EOF
-         #undef OSMAJOR
-         #undef OSMINOR
-         #undef OSPLAT
-         $(
-           ${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc -E -dM jam.h | grep -E '^#define (OSMAJOR|OSMINOR|OSPLAT) '
-          )
-        EOF
-      '';
+  postPatch = ''
+    substituteInPlace jam.h --replace-fail 'ifdef linux' 'ifdef __linux__'
+  ''
+  +
+    # When cross-compiling, we need to set the preprocessor macros
+    # OSMAJOR/OSMINOR/OSPLAT to the values from the target platform, not the host
+    # platform. This looks a little ridiculous because the vast majority of build
+    # tools don't embed target-specific information into their binary, but in this
+    # case we behave more like a compiler than a make(1)-alike.
+    lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+       cat >>jam.h <<EOF
+       #undef OSMAJOR
+       #undef OSMINOR
+       #undef OSPLAT
+       $(
+         ${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc -E -dM jam.h | grep -E '^#define (OSMAJOR|OSMINOR|OSPLAT) '
+        )
+      EOF
+    '';
 
   buildPhase = ''
     runHook preBuild

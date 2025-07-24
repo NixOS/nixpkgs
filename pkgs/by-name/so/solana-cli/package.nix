@@ -12,29 +12,28 @@
   nix-update-script,
   versionCheckHook,
   # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
-  solanaPkgs ?
-    [
-      "cargo-build-bpf"
-      "cargo-test-bpf"
-      "cargo-build-sbf"
-      "cargo-test-sbf"
-      "solana"
-      "solana-bench-tps"
-      "solana-faucet"
-      "solana-gossip"
-      "solana-install"
-      "solana-keygen"
-      "solana-ledger-tool"
-      "solana-log-analyzer"
-      "solana-net-shaper"
-      "solana-validator"
-      "solana-test-validator"
-    ]
-    ++ [
-      # XXX: Ensure `solana-genesis` is built LAST!
-      # See https://github.com/solana-labs/solana/issues/5826
-      "solana-genesis"
-    ],
+  solanaPkgs ? [
+    "cargo-build-bpf"
+    "cargo-test-bpf"
+    "cargo-build-sbf"
+    "cargo-test-sbf"
+    "solana"
+    "solana-bench-tps"
+    "solana-faucet"
+    "solana-gossip"
+    "solana-install"
+    "solana-keygen"
+    "solana-ledger-tool"
+    "solana-log-analyzer"
+    "solana-net-shaper"
+    "solana-validator"
+    "solana-test-validator"
+  ]
+  ++ [
+    # XXX: Ensure `solana-genesis` is built LAST!
+    # See https://github.com/solana-labs/solana/issues/5826
+    "solana-genesis"
+  ],
 }:
 let
   version = "1.18.26";
@@ -85,7 +84,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   doInstallCheck = true;
 

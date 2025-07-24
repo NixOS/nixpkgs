@@ -122,30 +122,29 @@ let
         pluginName = if name != null then name else "${pname}-${version}";
         dontConfigure = true;
         dontBuild = true;
-        installPhase =
-          ''
-            runHook preInstall
-            mkdir -p $out
-            cp -r * $out/
-          ''
-          + lib.optionalString (bundlerEnvArgs != { }) (
-            if preserveGemsDir then
-              ''
-                cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
-              ''
-            else
-              ''
-                if [[ -e $out/gems ]]; then
-                  echo "Warning: The repo contains a 'gems' directory which will be removed!"
-                  echo "         If you need to preserve it, set 'preserveGemsDir = true'."
-                  rm -r $out/gems
-                fi
-                ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-              ''
-              + ''
-                runHook postInstall
-              ''
-          );
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r * $out/
+        ''
+        + lib.optionalString (bundlerEnvArgs != { }) (
+          if preserveGemsDir then
+            ''
+              cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+            ''
+          else
+            ''
+              if [[ -e $out/gems ]]; then
+                echo "Warning: The repo contains a 'gems' directory which will be removed!"
+                echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+                rm -r $out/gems
+              fi
+              ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+            ''
+            + ''
+              runHook postInstall
+            ''
+        );
       }
     );
 

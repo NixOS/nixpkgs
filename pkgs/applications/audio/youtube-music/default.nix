@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     nodejs
     pnpm.configHook
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -50,30 +51,29 @@ stdenv.mkDerivation (finalAttrs: {
         -c.electronVersion=${electron.version}
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv pack/mac*/YouTube\ Music.app $out/Applications
-      makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      mkdir -p "$out/share/lib/youtube-music"
-      cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv pack/mac*/YouTube\ Music.app $out/Applications
+    makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -p "$out/share/lib/youtube-music"
+    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
 
-      pushd assets/generated/icons/png
-      for file in *.png; do
-        install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
-      done
-      popd
-    ''
-    + ''
+    pushd assets/generated/icons/png
+    for file in *.png; do
+      install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
+    done
+    popd
+  ''
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \

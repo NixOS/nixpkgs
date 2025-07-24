@@ -87,20 +87,19 @@ buildPythonPackage rec {
     llvmlite
   ];
 
-  patches =
-    [
-      (fetchpatch2 {
-        url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
-        includes = [ "numba/core/bytecode.py" ];
-        hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
-      })
-    ]
-    ++ lib.optionals cudaSupport [
-      (replaceVars ./cuda_path.patch {
-        cuda_toolkit_path = cudatoolkit;
-        cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-      })
-    ];
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/numba/numba/commit/e2c8984ba60295def17e363a926d6f75e7fa9f2d.patch";
+      includes = [ "numba/core/bytecode.py" ];
+      hash = "sha256-HIVbp3GSmnq6W7zrRIirIbhGjJsFN3PNyHSfAE8fdDw=";
+    })
+  ]
+  ++ lib.optionals cudaSupport [
+    (replaceVars ./cuda_path.patch {
+      cuda_toolkit_path = cudatoolkit;
+      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+    })
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

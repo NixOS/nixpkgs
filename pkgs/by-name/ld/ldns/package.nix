@@ -36,18 +36,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  configureFlags =
-    [
-      "--with-ssl=${openssl.dev}"
-      "--with-trust-anchor=${dns-root-data}/root.key"
-      "--with-drill"
-      "--disable-gost"
-      "--with-examples"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ];
+  configureFlags = [
+    "--with-ssl=${openssl.dev}"
+    "--with-trust-anchor=${dns-root-data}/root.key"
+    "--with-drill"
+    "--disable-gost"
+    "--with-examples"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   nativeCheckInputs = [ which ];
   doCheck = false; # fails. missing some files

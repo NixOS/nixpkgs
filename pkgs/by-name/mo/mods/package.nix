@@ -49,20 +49,19 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  postInstall =
-    ''
-      export HOME=$(mktemp -d)
-    ''
-    + lib.optionalString installManPages ''
-      $out/bin/mods man > ./mods.1
-      installManPage ./mods.1
-    ''
-    + lib.optionalString installShellCompletions ''
-      installShellCompletion --cmd mods \
-        --bash <($out/bin/mods completion bash) \
-        --fish <($out/bin/mods completion fish) \
-        --zsh <($out/bin/mods completion zsh)
-    '';
+  postInstall = ''
+    export HOME=$(mktemp -d)
+  ''
+  + lib.optionalString installManPages ''
+    $out/bin/mods man > ./mods.1
+    installManPage ./mods.1
+  ''
+  + lib.optionalString installShellCompletions ''
+    installShellCompletion --cmd mods \
+      --bash <($out/bin/mods completion bash) \
+      --fish <($out/bin/mods completion fish) \
+      --zsh <($out/bin/mods completion zsh)
+  '';
 
   meta = {
     description = "AI on the command line";

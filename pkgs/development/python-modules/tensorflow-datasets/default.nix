@@ -76,31 +76,30 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      absl-py
-      array-record
-      dm-tree
-      etils
-      immutabledict
-      numpy
-      promise
-      protobuf
-      psutil
-      pyarrow
-      requests
-      simple-parsing
-      tensorflow-metadata
-      termcolor
-      toml
-      tqdm
-      wrapt
-    ]
-    ++ etils.optional-dependencies.epath
-    ++ etils.optional-dependencies.etree
-    ++ lib.optionals (pythonOlder "3.9") [
-      importlib-resources
-    ];
+  dependencies = [
+    absl-py
+    array-record
+    dm-tree
+    etils
+    immutabledict
+    numpy
+    promise
+    protobuf
+    psutil
+    pyarrow
+    requests
+    simple-parsing
+    tensorflow-metadata
+    termcolor
+    toml
+    tqdm
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree
+  ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 

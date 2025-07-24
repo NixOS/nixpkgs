@@ -55,7 +55,8 @@ buildPythonPackage rec {
 
   env = {
     CAUSAL_CONV1D_FORCE_BUILD = "TRUE";
-  } // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
+  }
+  // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
 
   meta = with lib; {
     description = "Causal depthwise conv1d in CUDA with a PyTorch interface";

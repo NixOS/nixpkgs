@@ -52,26 +52,25 @@ buildPythonPackage rec {
     rm -r coverage
   '';
 
-  disabledTests =
-    [
-      "test_all_our_source_files"
-      "test_doctest"
-      "test_files_up_one_level"
-      "test_get_encoded_zip_files"
-      "test_metadata"
-      "test_more_metadata"
-      "test_multi"
-      "test_no_duplicate_packages"
-      "test_xdist_sys_path_nuttiness_is_fixed"
-      "test_zipfile"
-    ]
-    ++ lib.optionals (isPy312 && stdenv.hostPlatform.system == "x86_64-darwin") [
-      # substring that may not be in string is part of the pytest output hash, which appears in the string
-      "test_nothing_specified"
-      "test_omit"
-      "test_omit_2"
-      "test_omit_as_string"
-    ];
+  disabledTests = [
+    "test_all_our_source_files"
+    "test_doctest"
+    "test_files_up_one_level"
+    "test_get_encoded_zip_files"
+    "test_metadata"
+    "test_more_metadata"
+    "test_multi"
+    "test_no_duplicate_packages"
+    "test_xdist_sys_path_nuttiness_is_fixed"
+    "test_zipfile"
+  ]
+  ++ lib.optionals (isPy312 && stdenv.hostPlatform.system == "x86_64-darwin") [
+    # substring that may not be in string is part of the pytest output hash, which appears in the string
+    "test_nothing_specified"
+    "test_omit"
+    "test_omit_2"
+    "test_omit_as_string"
+  ];
 
   disabledTestPaths = [
     "tests/test_debug.py"

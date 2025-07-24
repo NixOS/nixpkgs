@@ -51,14 +51,16 @@ buildGoModule rec {
     phpUnwrapped
     brotli
     watcher
-  ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs =
-    [ makeBinaryWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkg-config
-      cctools
-      darwin.autoSignDarwinBinariesHook
-    ];
+  ]
+  ++ phpUnwrapped.buildInputs;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkg-config
+    cctools
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   subPackages = [ "frankenphp" ];
 
@@ -77,20 +79,20 @@ buildGoModule rec {
     "-w"
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${version} PHP ${phpUnwrapped.version} Caddy'"
     # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
-  ] ++ (lib.optional pieBuild [ "-static-pie" ]);
+  ]
+  ++ (lib.optional pieBuild [ "-static-pie" ]);
 
-  preBuild =
-    ''
-      export CGO_CFLAGS="$(${phpConfig} --includes)"
-      export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
-        $(${phpConfig} --ldflags) \
-        $(${phpConfig} --libs)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # replace hard-code homebrew path
-      substituteInPlace ../frankenphp.go \
-        --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
-    '';
+  preBuild = ''
+    export CGO_CFLAGS="$(${phpConfig} --includes)"
+    export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
+      $(${phpConfig} --ldflags) \
+      $(${phpConfig} --libs)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # replace hard-code homebrew path
+    substituteInPlace ../frankenphp.go \
+      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
+  '';
 
   preFixup = ''
     mkdir -p $out/lib

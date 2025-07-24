@@ -65,9 +65,7 @@ let
     overlays = [ ];
   };
 in
-pkgs.mkShell {
-  packages = [ pkgs.beamPackages.rebar3 ];
-}
+pkgs.mkShell { packages = [ pkgs.beamPackages.rebar3 ]; }
 ```
 :::
 
@@ -324,9 +322,7 @@ with pkgs;
 let
   elixir = beam.packages.erlang_27.elixir_1_18;
 in
-mkShell {
-  buildInputs = [ elixir ];
-}
+mkShell { buildInputs = [ elixir ]; }
 ```
 
 ### Using an overlay {#beam-using-overlays}
@@ -348,11 +344,7 @@ let
   pkgs = import <nixpkgs> { overlays = [ elixir_1_18_1_overlay ]; };
 in
 with pkgs;
-mkShell {
-  buildInputs = [
-    elixir_1_18
-  ];
-}
+mkShell { buildInputs = [ elixir_1_18 ]; }
 ```
 
 #### Elixir - Phoenix project {#elixir---phoenix-project}

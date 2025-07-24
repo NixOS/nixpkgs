@@ -39,17 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1AZLxD/VyBt60ZHXVN/OpKNigN9NdEBJ9svOOVI0JCI=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-        --replace-fail '-march=native' '# -march=native' \
-        --replace-fail '-flto' '# -flto'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests/)' ""
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native' \
+      --replace-fail '-flto' '# -flto'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests/)' ""
+  '';
 
   strictDeps = true;
 

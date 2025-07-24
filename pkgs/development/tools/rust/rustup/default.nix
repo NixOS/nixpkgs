@@ -44,16 +44,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      curl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      xz
-    ];
+  buildInputs = [
+    openssl
+    curl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    xz
+  ];
 
   buildFeatures = [ "no-self-update" ];
 

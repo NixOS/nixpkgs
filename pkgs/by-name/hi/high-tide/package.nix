@@ -37,18 +37,17 @@ python313Packages.buildPythonApplication rec {
     desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      glib-networking
-      libadwaita
-      libportal
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      libsecret
-    ]);
+  buildInputs = [
+    glib-networking
+    libadwaita
+    libportal
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    libsecret
+  ]);
 
   dependencies = with python313Packages; [
     pygobject3

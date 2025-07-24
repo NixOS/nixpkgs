@@ -75,27 +75,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      gtksourceview5
-      lcms2
-      libadwaita
-      openssl
-      pipewire
-      libshumate
-      sqlite
-      xdg-desktop-portal
-      libseccomp
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-      gst-plugins-good
-      gst-plugins-rs
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    gtksourceview5
+    lcms2
+    libadwaita
+    openssl
+    pipewire
+    libshumate
+    sqlite
+    xdg-desktop-portal
+    libseccomp
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(
