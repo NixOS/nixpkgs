@@ -7,6 +7,7 @@
   alsa-plugins,
   gettext,
   makeWrapper,
+  pkg-config,
   ncurses,
   libsamplerate,
   pciutils,
@@ -30,16 +31,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchurl {
     url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
+    hash = "sha256-B5THTTP+2UPnxQYJwTCJ5AkxK2xAPWromE/EKcCWB0E=";
   };
 
   nativeBuildInputs = [
     gettext
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     alsa-lib
