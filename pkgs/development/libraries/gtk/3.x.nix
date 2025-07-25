@@ -130,15 +130,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals (x11Support || waylandSupport) [
-      # TODO: Reorder me on `staging`.
-      libxkbcommon
-    ]
-    ++ [
+    [
       (libepoxy.override { inherit x11Support; })
     ]
     ++ lib.optionals (x11Support || waylandSupport) [
       isocodes
+      libxkbcommon
     ]
     ++ lib.optionals trackerSupport [
       tinysparql
@@ -149,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-atk
     atk
     cairo
+    pango
     expat
     fribidi
     gdk-pixbuf
@@ -169,10 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXrender
     ]
   )
-  ++ [
-    # TODO: Reorder me on `staging`.
-    pango
-  ]
   ++ lib.optionals waylandSupport [
     libGL
     wayland
