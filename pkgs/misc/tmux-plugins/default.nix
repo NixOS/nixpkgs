@@ -238,6 +238,26 @@ in
     };
   };
 
+  dotbar = mkTmuxPlugin rec {
+    pluginName = "dotbar";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "vaaleyard";
+      repo = "tmux-dotbar";
+      tag = version;
+      hash = "sha256-n9k18pJnd5mnp9a7VsMBmEHDwo3j06K6/G6p7/DTyIY=";
+    };
+    meta = {
+      homepage = "https://github.com/vaaleyard/tmux-dotbar";
+      downloadPage = "https://github.com/vaaleyard/tmux-dotbar";
+      description = "Simple and minimalist status bar for tmux";
+      changelog = "https://github.com/vaaleyard/tmux-dotbar/releases/tag/${version}";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ FKouhai ];
+    };
+  };
+
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
     version = "0-unstable-2024-08-25";
