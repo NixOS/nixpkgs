@@ -9269,6 +9269,8 @@ self: super: with self; {
 
   mkdocs-awesome-nav = callPackage ../development/python-modules/mkdocs-awesome-nav { };
 
+  mkdocs-backlinks = callPackage ../development/python-modules/mkdocs-backlinks { };
+
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
 
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
@@ -9291,6 +9293,8 @@ self: super: with self; {
 
   mkdocs-glightbox = callPackage ../development/python-modules/mkdocs-glightbox { };
 
+  mkdocs-graphviz = callPackage ../development/python-modules/mkdocs-graphviz { };
+
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
@@ -9308,6 +9312,8 @@ self: super: with self; {
   mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
+
+  mkdocs-puml = callPackage ../development/python-modules/mkdocs-puml { };
 
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
 
