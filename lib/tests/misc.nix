@@ -110,6 +110,7 @@ let
     toHexString
     fromHexString
     toInt
+    toIntBase
     toIntBase10
     toShellVars
     types
@@ -1760,6 +1761,40 @@ runTests {
       value = false;
     };
   };
+
+  testToIntBase = testAllTrue [
+    ( 0 == toIntBase 10 "0")
+    ( 0 == toIntBase 2 "0")
+    ( 0 == toIntBase 2 "00000000000000")
+    ( 123 == toIntBase 10 "123")
+    ( 123 == toIntBase 10 "0000123")
+    ( -123 == toIntBase 10 "-0000123")
+    ( 123 == toIntBase 8 "173")
+    ( 48879 == toIntBase 16 "BEEF")
+    ( -48879 == toIntBase 16 "-Beef")
+    ( 64206 == toIntBase 16 "+face")
+    ( 4613973002748035588 == toIntBase 2 "100000000001000001000000000000000001000000010100000001000000100")
+    ( -4613973002748035588 == toIntBase 2 "-100000000001000001000000000000000001000000010100000001000000100")
+    ( 9223372036854775807 == toIntBase 16 "7FFFFFFFFFFFFFFF")
+    ( -9223372036854775807 == toIntBase 16 "-7FFFFFFFFFFFFFFF")
+  ];
+
+  testToIntBaseFails = testAllTrue [
+    ( builtins.tryEval (toIntBase 10 "" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 " " ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 " 1" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 "1 " ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 "-" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 "+" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 "- " ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 10 "10beef" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 16 "0xbeef" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 2 "0777" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 1 "0" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 0 "0" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase (-1) "0" ) == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase 17 "0" ) == { success = false; value = false; } )
+  ];
 
   testHasAttrByPathTrue = {
     expr = hasAttrByPath [ "a" "b" ] {
