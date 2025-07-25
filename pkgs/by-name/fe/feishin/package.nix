@@ -133,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     mainProgram = "feishin";
     maintainers = with maintainers; [
-      lagerstrom
       onny
       jlbribeiro
     ];
