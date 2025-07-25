@@ -17,7 +17,7 @@ update_arch() {
   local hash
   hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$(nix-prefetch-url --type sha256 "$source_url")")
 
-  update-source-version orbstack "$version" "$hash" --system="$system" --ignore-same-version
+  update-source-version orbstack "$version" "$hash" --version-key="buildVersion" --system="$system" --ignore-same-version
 }
 
 update_arch "arm64" "aarch64-darwin"

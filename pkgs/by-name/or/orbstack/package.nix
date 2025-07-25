@@ -6,21 +6,21 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "1.11.3_19358";
+  buildVersion = "1.11.3_19358";
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${version}_arm64.dmg";
-      hash = "sha256-/zujkmctMdJUm3d7Rjjeic8QrvWSlEAUhjFgouBXeNw=";
+      url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${buildVersion}_arm64.dmg";
+      hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://cdn-updates.orbstack.dev/amd64/OrbStack_v${version}_amd64.dmg";
+      url = "https://cdn-updates.orbstack.dev/amd64/OrbStack_v${buildVersion}_amd64.dmg";
       hash = "sha256-oLOTKekDU880p9DtzcR/muwzPuFA3vu789aEYNFbcx8=";
     };
   };
 in
 stdenvNoCC.mkDerivation {
   pname = "orbstack";
-  inherit version;
+  version = lib.head (lib.splitString "_" buildVersion);
 
   src = srcs.${system} or (throw "unsupported system ${system}");
 
