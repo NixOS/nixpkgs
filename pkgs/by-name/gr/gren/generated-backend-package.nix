@@ -2,7 +2,6 @@
 # Update via ./update.sh
 {
   mkDerivation,
-  ansi-terminal,
   ansi-wl-pprint,
   base,
   base64-bytestring,
@@ -12,7 +11,6 @@
   directory,
   edit-distance,
   fetchgit,
-  filelock,
   filepath,
   ghc-prim,
   haskeline,
@@ -21,28 +19,26 @@
   indexed-traversable,
   lib,
   mtl,
-  prettyprint-avh4,
+  prettyprinter,
   process,
   raw-strings-qq,
   scientific,
   text,
-  time,
   utf8-string,
   vector,
 }:
 mkDerivation {
   pname = "gren";
-  version = "0.5.2";
+  version = "0.6.1";
   src = fetchgit {
     url = "https://github.com/gren-lang/compiler.git";
-    sha256 = "1mksfma6c1dn091ab4x794hs71v44bx294wbn80qfc5kgrrl5lf4";
-    rev = "ee19481f5715b78cad8be09e29e56dcb82d65f4f";
+    sha256 = "0h7mm3y62l3j190sd25db4bifp65xmyc4rc16jhyphp6yzyjcpcl";
+    rev = "b54f0343c8015c777e4fbb74e843181e6f3cb214";
     fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
-  executableHaskellDepends = [
-    ansi-terminal
+  libraryHaskellDepends = [
     ansi-wl-pprint
     base
     base64-bytestring
@@ -51,51 +47,39 @@ mkDerivation {
     containers
     directory
     edit-distance
-    filelock
     filepath
     ghc-prim
-    haskeline
     indexed-traversable
     mtl
-    prettyprint-avh4
-    process
+    prettyprinter
     raw-strings-qq
     scientific
     text
-    time
     utf8-string
     vector
+  ];
+  executableHaskellDepends = [
+    base
+    bytestring
+    containers
+    directory
+    filepath
+    haskeline
+    mtl
+    process
+    utf8-string
   ];
   testHaskellDepends = [
-    ansi-terminal
-    ansi-wl-pprint
     base
-    base64-bytestring
-    binary
     bytestring
-    containers
-    directory
-    edit-distance
-    filelock
-    filepath
-    ghc-prim
-    haskeline
     hspec
-    indexed-traversable
-    mtl
-    prettyprint-avh4
-    process
-    raw-strings-qq
-    scientific
-    text
-    time
     utf8-string
-    vector
   ];
   testToolDepends = [ hspec-discover ];
+  doHaddock = false;
   jailbreak = true;
   homepage = "https://gren-lang.org";
-  description = "`gren` command line interface";
+  description = "The `gren` command line interface";
   license = lib.licenses.bsd3;
   mainProgram = "gren";
 }
