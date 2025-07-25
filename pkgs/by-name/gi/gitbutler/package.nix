@@ -35,14 +35,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.14.19";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${version}";
-    hash = "sha256-NopuZbgF2jdwuf/p/JzubS0IM5xBnlkh9Tj234auBnE=";
+    hash = "sha256-P7l09REnVUjsVYy+OLvwBsB+wLVvvqRTsEtVayTU36o=";
   };
+
+  patches = [
+    # TODO: remove after https://github.com/gitbutlerapp/gitbutler/issues/9144 got resolved
+    ./vendor-gix-testtools-from-github.patch
+
+    # Frontend doesn't build if dependencies like svelte-comment-injector haven't been built yet
+    ./build-dependencies-before-frontend.patch
+  ];
 
   # Let Tauri know what version we're building
   #
@@ -57,15 +65,32 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
       --replace-fail 'checkUpdate = check;' 'checkUpdate = () => null;'
+
+    cp ${./Cargo.lock} Cargo.lock
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wzSRUZeB5f9Z/D+Sa5Nl77jh7GDnnUehcmwanPcaSKM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "gix-0.72.1" = "sha256-1v7/3F8ItBG940tei3YOhFpSK4Fl2BaCriczMGNBVPs=";
+      "tauri-plugin-trafficlights-positioner-1.0.1" =
+        "sha256-4VjU7Vf+zznk7qqyaum+bLuslVNxeGSoxDPz8QQp0pk=";
+    };
+  };
 
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
     fetcherVersion = 1;
-    hash = "sha256-5NtfstUuIYyntt09Mu9GAFAOImfO6VMmJ7g15kvGaLE=";
+    hash =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-XdAC+t1Aax6nSo2tbRSxA8aUR3QbHO09DuNZ5TMriHA="
+      else
+        "sha256-ieCejiVwqtQLDLfjJumj6OF9I+Y6chQE8ATU1PLTzeo=";
   };
 
   nativeBuildInputs = [
