@@ -5498,7 +5498,7 @@ with pkgs;
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  idrisPackages = dontRecurseIntoAttrs (
+  idrisPackages = recurseIntoAttrs (
     callPackage ../development/idris-modules {
       idris-no-deps = haskellPackages.idris;
       pkgs = pkgs.__splicedPackages;
@@ -9615,9 +9615,11 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
-  agdaPackages = callPackage ./agda-packages.nix {
-    inherit (haskellPackages) Agda;
-  };
+  agdaPackages = recurseIntoAttrs (
+    callPackage ./agda-packages.nix {
+      inherit (haskellPackages) Agda;
+    }
+  );
   agda = agdaPackages.agda;
 
   ### DEVELOPMENT / LIBRARIES / BASH
@@ -10758,7 +10760,7 @@ with pkgs;
   # Even though this is a set of packages not single package, use `callPackage`
   # not `callPackages` so the per-package callPackages don't have their
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
-  darwin = recurseIntoAttrs (callPackage ./darwin-packages.nix { });
+  darwin = callPackage ./darwin-packages.nix { };
 
   displaylink = callPackage ../os-specific/linux/displaylink {
     inherit (linuxPackages) evdi;
