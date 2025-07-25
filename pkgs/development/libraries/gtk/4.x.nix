@@ -163,11 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     # Required by pkg-config files.
-    cairo
+    (cairo.override { inherit x11Support; })
     gdk-pixbuf
     glib
     graphene
-    pango
+    (pango.override { inherit x11Support; })
   ]
   ++ lib.optionals waylandSupport [
     wayland
