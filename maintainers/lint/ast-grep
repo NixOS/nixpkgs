@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+repo="$(git rev-parse --show-toplevel)"
+ast_grep=$(nix-build "$repo" --no-out-link -A ast-grep)/bin/ast-grep
+exec $ast_grep --config "$(dirname "${BASH_SOURCE[0]}")/sgconfig.yml" "$@"

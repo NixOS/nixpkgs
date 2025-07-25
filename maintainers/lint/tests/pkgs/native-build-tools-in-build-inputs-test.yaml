@@ -1,0 +1,87 @@
+id: native-build-tools-in-build-inputs
+valid:
+  - |
+    # Correct: build tools in nativeBuildInputs
+    {
+      nativeBuildInputs = [ pkg-config cmake meson ];
+      buildInputs = [ libfoo libbar ];
+    }
+  - |
+    # Correct: empty buildInputs
+    {
+      buildInputs = [ ];
+    }
+  - |
+    # Correct: buildInputs with only runtime dependencies
+    {
+      buildInputs = [ gtk3 qt5 libxml2 ];
+    }
+  - |
+    # Correct: various build tools in nativeBuildInputs
+    {
+      nativeBuildInputs = [
+        autoreconfHook
+        makeWrapper
+        desktop-file-utils
+        cargo
+      ];
+      buildInputs = [ boost python3 ];  # python3 is OK in buildInputs now
+    }
+
+invalid:
+  - |
+    # Wrong: pkg-config in buildInputs
+    {
+      buildInputs = [ pkg-config ];
+    }
+  - |
+    # Wrong: cmake in buildInputs
+    {
+      buildInputs = [ cmake libfoo ];
+    }
+  - |
+    # Wrong: multiple build tools in buildInputs
+    {
+      buildInputs = [
+        meson
+        ninja
+        pkg-config
+        libfoo
+      ];
+    }
+  - |
+    # Wrong: Go compiler in buildInputs
+    {
+      nativeBuildInputs = [ cmake ];
+      buildInputs = [ go libfoo ];
+    }
+  - |
+    # Wrong: makeWrapper in buildInputs
+    {
+      buildInputs = [ makeWrapper gtk3 ];
+    }
+  - |
+    # Wrong: autoreconfHook in buildInputs
+    {
+      buildInputs = [ autoreconfHook automake libtool ];
+    }
+  - |
+    # Wrong: Go compiler in buildInputs
+    {
+      buildInputs = [ go libfoo ];
+    }
+  - |
+    # Wrong: Rust toolchain in buildInputs
+    {
+      buildInputs = [ cargo rustc ];
+    }
+  - |
+    # Wrong: documentation tools in buildInputs
+    {
+      buildInputs = [ doxygen help2man pandoc ];
+    }
+  - |
+    # Wrong: wrappers in buildInputs
+    {
+      buildInputs = [ wrapGAppsHook wrapQtAppsHook libgtk ];
+    }
