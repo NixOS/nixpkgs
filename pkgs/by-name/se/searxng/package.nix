@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-16";
+    version = "0-unstable-2025-07-25";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
-      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
+      rev = "02cbdf468b316d9c9609d35ec2a9d0916c6def4c";
+      hash = "sha256-42mpor/N/gJvOwRF7bwXZflcIZGmNFNLTfg1lb/AEBk=";
     };
 
     postPatch = ''
