@@ -13384,8 +13384,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
-
   pianoteq = callPackage ../applications/audio/pianoteq { };
 
   pidginPackages = recurseIntoAttrs (
