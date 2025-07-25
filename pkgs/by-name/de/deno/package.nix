@@ -43,9 +43,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-ZEWSnath9v04wU1VyFDAx3LANnVhfE5s93jX4QW3XlI=";
 
   patches = [
-    ./tests-replace-hardcoded-paths.patch
-    ./tests-darwin-differences.patch
-    ./tests-no-chown.patch
+    # Patch out the remote upgrade (deno update) check.
+    # Not a blocker in the build sandbox, since implementation and tests are
+    # considerately written for no external networking, but removing brings
+    # in-line with common nixpkgs practice.
+    ./patches/0000-remove-deno-upgrade-check.patch
+    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
+    # deno from nixpkgs.
+    ./patches/0001-remove-deno-upgrade.patch
+    ./patches/0002-tests-replace-hardcoded-paths.patch
+    ./patches/0003-tests-linux-no-chown.patch
+    ./patches/0004-tests-darwin-fixes.patch
   ];
   postPatch =
     ''
