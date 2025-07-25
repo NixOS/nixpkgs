@@ -9273,6 +9273,8 @@ self: super: with self; {
 
   mkdocs-backlinks = callPackage ../development/python-modules/mkdocs-backlinks { };
 
+  mkdocs-build-plantuml = callPackage ../development/python-modules/mkdocs-build-plantuml { };
+
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
 
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
