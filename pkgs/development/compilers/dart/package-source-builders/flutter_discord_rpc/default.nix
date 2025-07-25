@@ -1,8 +1,8 @@
 {
   lib,
-  rustPlatform,
   stdenv,
-  replaceVars,
+  rustPlatform,
+  writeText,
 }:
 
 { version, src, ... }:
@@ -13,8 +13,6 @@ let
     inherit version src;
 
     buildAndTestSubdir = "rust";
-
-    useFetchCargoVendor = true;
 
     cargoHash =
       {
@@ -28,22 +26,23 @@ let
 
     passthru.libraryPath = "lib/libflutter_discord_rpc.so";
   };
+
+  fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+    function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+      set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
+    endfunction()
+  '';
 in
 stdenv.mkDerivation {
   pname = "flutter_discord_rpc";
   inherit version src;
   inherit (src) passthru;
 
-  patches = [
-    (replaceVars ./cargokit.patch {
-      output_lib = "${rustDep}/${rustDep.passthru.libraryPath}";
-    })
-  ];
-
   installPhase = ''
     runHook preInstall
 
-    cp -r . $out
+    cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+    cp -r . "$out"
 
     runHook postInstall
   '';
