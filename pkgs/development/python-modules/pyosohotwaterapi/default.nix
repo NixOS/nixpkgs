@@ -5,7 +5,6 @@
   fetchFromGitHub,
   loguru,
   numpy,
-  pythonOlder,
   setuptools,
   unasync,
   urllib3,
@@ -16,17 +15,12 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
     tag = version;
     hash = "sha256-GFjA1RtJC2bxSoH2TIZwEdSAvpteYBTbsS81hhp4Y3E=";
   };
-
-  # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
-  pythonRemoveDeps = [ "pre-commit" ];
 
   build-system = [
     setuptools
