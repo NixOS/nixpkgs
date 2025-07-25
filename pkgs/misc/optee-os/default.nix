@@ -8,13 +8,13 @@
 }:
 
 let
-  defaultVersion = "4.6.0";
+  defaultVersion = "4.7.0";
 
   defaultSrc = fetchFromGitHub {
     owner = "OP-TEE";
     repo = "optee_os";
     rev = defaultVersion;
-    hash = "sha256-4z706DNfZE+CAPOa362CNSFhAN1KaNyKcI9C7+MRccs=";
+    hash = "sha256-kvp3GDBZtKlephyW+oxHmXnqvCe1jL+PN1i/MCw6SX0=";
   };
 
   buildOptee = lib.makeOverridable (
