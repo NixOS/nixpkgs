@@ -444,6 +444,9 @@ with haskellLib;
   # https://github.com/essandess/adblock2privoxy/pull/43
   adblock2privoxy = doJailbreak super.adblock2privoxy;
 
+  # Relax version constraints (network < 3.2)
+  mason = doJailbreak super.mason;
+
   # Missing test file https://gitlab.com/dpwiz/hs-jpeg-turbo/-/issues/1
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
