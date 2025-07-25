@@ -1,0 +1,39 @@
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libimobiledevice,
+  libusb1,
+  avahi,
+  clang,
+  git,
+}:
+clangStdenv.mkDerivation (finalAttrs: {
+    pname = "libgeneral";
+    version = "84";
+
+    src = fetchFromGitHub {
+      owner = "tihmstar";
+      repo = "libgeneral";
+      tag = finalAttrs.version;
+      hash = "sha256-D6S7Ha7SQvWDGwiJuKh2Y9YOsw2ytxn70ia3llKC034=";
+      # Leave DotGit so that autoconfigure can read version from git tags
+      leaveDotGit = true;
+    };
+
+    nativeBuildInputs = [
+      autoreconfHook
+      git
+      pkg-config
+    ];
+
+    meta = {
+      description = "Helper library used by usbmuxd2";
+      homepage = "https://github.com/tihmstar/libgeneral";
+      license = lib.licenses.lgpl21;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ onny ];
+    };
+})
