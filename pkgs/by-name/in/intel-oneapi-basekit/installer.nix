@@ -265,15 +265,14 @@ let
                   --components "$COMPONENTS" \
                   --log-dir ./log \
                   --ignore-errors \
-                  --install-dir $OUT \
+                  --install-dir $out \
               '';
             in
             ''
               runHook preInstall
 
-              export OUT=$out/opt/intel/oneapi
               export COMPONENTS=${components_string}
-              mkdir -p $OUT
+              mkdir -p $out
               ${fhs}/bin/oneapi-installer-fhs-env -- ${install}
 
               runHook postInstall
