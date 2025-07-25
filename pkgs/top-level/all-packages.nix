@@ -4377,9 +4377,7 @@ with pkgs;
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
-  solanum = callPackage ../servers/irc/solanum {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  solanum = callPackage ../servers/irc/solanum { };
 
   solc-select = with python3Packages; toPythonApplication solc-select;
 
