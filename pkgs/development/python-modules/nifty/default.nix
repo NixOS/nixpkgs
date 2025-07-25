@@ -24,44 +24,51 @@
   pytest-xdist,
   mpiCheckPhaseHook,
   openssh,
-}:
 
+  # CUDA
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  cupy,
+}:
 buildPythonPackage rec {
-  pname = "nifty8";
-  version = "8.5.7";
+  pname = "nifty";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "ift";
     repo = "nifty";
-    tag = "v${version}";
-    hash = "sha256-5KPmM1UaXnS/ZEsnyFyxvDk4Nc4m6AT5FDgmCG6U6YU=";
+    tag = version;
+    hash = "sha256-hr3/kTQSMpMzt5dkMchSyOm2i8+az9bf327pG27ni9s=";
   };
 
-  # nifty8.re is the jax-backed version of nifty8 (the regular one uses numpy).
+  # nifty.re is the jax-backed version of nifty (the regular one uses numpy/cupy).
   # It is not compatible with the latest jax update:
   # https://gitlab.mpcdf.mpg.de/ift/nifty/-/issues/414
   # While the issue is being fixed by upstream, we completely remove this package from the source and the tests.
   postPatch = ''
-    rm -r src/re
+    rm -r nifty/re
     rm -r test/test_re
   '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    astropy
-    ducc0
-    h5py
-    jax
-    jaxlib
-    matplotlib
-    mpi4py
-    mpi
-    numpy
-    scipy
-  ];
+  dependencies =
+    [
+      ducc0
+      h5py
+      matplotlib
+      mpi4py
+      mpi
+      numpy
+      scipy
+    ]
+    ++ lib.optionals cudaSupport [
+      cupy
+      cudaPackages.cudatoolkit
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -93,14 +100,14 @@ buildPythonPackage rec {
         !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
       )
       ''
-        ${lib.getExe' mpi "mpirun"} -n 2 --bind-to none python3 -m pytest test/test_mpi
+        ${lib.getExe' mpi "mpirun"} -n 2 --bind-to none python3 -m pytest test/test_cl/test_mpi
       '';
 
-  pythonImportsCheck = [ "nifty8" ];
+  pythonImportsCheck = [ "nifty" ];
 
   meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/ift/nifty";
-    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/v${version}/ChangeLog.md";
+    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/${version}/ChangeLog.md";
     description = "Bayesian Imaging library for high-dimensional posteriors";
     longDescription = ''
       NIFTy, "Numerical Information Field Theory", is a Bayesian imaging library.
