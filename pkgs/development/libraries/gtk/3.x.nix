@@ -132,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       (libepoxy.override { inherit x11Support; })
+      isocodes
     ]
     ++ lib.optionals (x11Support || waylandSupport) [
-      isocodes
       libxkbcommon
     ]
     ++ lib.optionals trackerSupport [
