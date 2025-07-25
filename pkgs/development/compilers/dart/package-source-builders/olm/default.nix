@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   writeScript,
   olm,
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit (src) passthru;
 
-  setupHook = writeScript "${pname}-setup-hook" ''
+  setupHook = writeScript "olm-setup-hook" ''
     olmFixupHook() {
       runtimeDependencies+=('${lib.getLib olm}')
     }
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"
-    ln -s '${src}'/* "$out"
+    cp -r . "$out"
 
     runHook postInstall
   '';
