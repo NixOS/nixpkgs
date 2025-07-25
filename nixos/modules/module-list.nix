@@ -1648,6 +1648,7 @@
   ./services/web-apps/part-db.nix
   ./services/web-apps/pds.nix
   ./services/web-apps/peering-manager.nix
+  ./services/web-apps/peertube-runner.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/photoprism.nix
