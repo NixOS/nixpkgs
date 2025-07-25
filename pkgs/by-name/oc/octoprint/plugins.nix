@@ -15,8 +15,7 @@ let
       args
       // {
         pname = "octoprint-plugin-${args.pname}";
-        inherit (args) version format;
-        propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
+        dependencies = (args.dependencies or [ ]) ++ [ self.octoprint ];
         # none of the following have tests
         doCheck = false;
       }
@@ -28,7 +27,7 @@ in
   m86motorsoff = buildPlugin rec {
     pname = "m84motorsoff";
     version = "0.1.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "ntoff";
@@ -36,6 +35,8 @@ in
       rev = "v${version}";
       sha256 = "1w6h4hia286lbz2gy33rslq02iypx067yqn413xcipb07ivhvdq7";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Changes the \"Motors off\" button in octoprint's control tab to issue an M84 command to allow compatibility with Repetier firmware Resources";
@@ -48,7 +49,7 @@ in
   abl-expert = buildPlugin rec {
     pname = "abl-expert";
     version = "0.6";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitLab {
       domain = "framagit.org";
@@ -57,6 +58,8 @@ in
       rev = version;
       sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
@@ -69,7 +72,7 @@ in
   bedlevelvisualizer = buildPlugin rec {
     pname = "bedlevelvisualizer";
     version = "1.1.1";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -77,6 +80,8 @@ in
       rev = version;
       sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Displays 3D mesh of bed topography report";
@@ -89,7 +94,7 @@ in
   costestimation = buildPlugin rec {
     pname = "costestimation";
     version = "3.4.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OllisGit";
@@ -97,6 +102,8 @@ in
       rev = version;
       sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Plugin to display the estimated print cost for the loaded model";
@@ -109,7 +116,7 @@ in
   curaenginelegacy = buildPlugin rec {
     pname = "curaenginelegacy";
     version = "1.1.2";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -117,6 +124,8 @@ in
       rev = version;
       sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
@@ -129,7 +138,7 @@ in
   displayprogress = buildPlugin rec {
     pname = "displayprogress";
     version = "0.1.3";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -137,6 +146,8 @@ in
       rev = version;
       sha256 = "080prvfwggl4vkzyi369vxh1n8231hrl8a44f399laqah3dn5qw4";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Displays the job progress on the printer's display";
@@ -149,7 +160,7 @@ in
   displaylayerprogress = buildPlugin rec {
     pname = "displaylayerprogress";
     version = "1.26.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OllisGit";
@@ -157,6 +168,8 @@ in
       rev = version;
       sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
@@ -169,7 +182,7 @@ in
   ender3v2tempfix = buildPlugin {
     pname = "ender3v2tempfix";
     version = "unstable-2021-04-27";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "SimplyPrint";
@@ -177,6 +190,8 @@ in
       rev = "2c4183b6a0242a24ebf646d7ac717cd7a2db2bcf";
       sha256 = "03bc2zbffw4ksk8if90kxhs3179nbhb4xikp4f0adm3lrnvxkd3s";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Fixes the double temperature reporting from the Creality Ender-3 v2 printer";
@@ -189,7 +204,7 @@ in
   firmwareupdater = buildPlugin rec {
     pname = "firmwareupdater";
     version = "1.14.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -198,7 +213,9 @@ in
       sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
     };
 
-    propagatedBuildInputs = with super; [ pyserial ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ pyserial ];
 
     meta = with lib; {
       description = "Printer Firmware Updater";
@@ -211,7 +228,7 @@ in
   fullscreen = buildPlugin rec {
     pname = "fullscreen";
     version = "0.0.6";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "BillyBlaze";
@@ -219,6 +236,8 @@ in
       rev = version;
       sha256 = "sha256-Z8twpj+gqgbiWWxNd9I9qflEAln5Obpb3cn34KwSc5A=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Open webcam in fullscreen mode";
@@ -231,7 +250,7 @@ in
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
     version = "0.2.12";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "ieatacid";
@@ -239,6 +258,8 @@ in
       rev = version;
       sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Edit gcode on OctoPrint";
@@ -251,7 +272,7 @@ in
   marlingcodedocumentation = buildPlugin rec {
     pname = "marlingcodedocumentation";
     version = "0.13.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "costas-basdekis";
@@ -259,6 +280,8 @@ in
       rev = "v${version}";
       sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Displays GCode documentation for Marlin in the Octoprint terminal command line";
@@ -271,7 +294,7 @@ in
   mqtt = buildPlugin rec {
     pname = "mqtt";
     version = "0.8.16";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
@@ -280,7 +303,11 @@ in
       sha256 = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
     };
 
-    propagatedBuildInputs = with super; [ paho-mqtt ];
+    build-system = with self; [ setuptools ];
+
+    pythonRelaxDeps = [ "paho-mqtt" ];
+
+    dependencies = with self; [ paho-mqtt ];
 
     meta = with lib; {
       description = "Publish printer status MQTT";
@@ -293,7 +320,7 @@ in
   mqttchambertemperature = buildPlugin rec {
     pname = "mqttchambertemperature";
     version = "0.0.3";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "synman";
@@ -302,7 +329,9 @@ in
       sha256 = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
     };
 
-    propagatedBuildInputs = with super; [ jsonpath-ng ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ jsonpath-ng ];
 
     meta = with lib; {
       description = "Enables Chamber temperature reporting via subscribing to an MQTT topic";
@@ -315,7 +344,7 @@ in
   navbartemp = buildPlugin rec {
     pname = "navbartemp";
     version = "0.15";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "imrahil";
@@ -323,6 +352,8 @@ in
       rev = version;
       sha256 = "sha256-ZPpTx+AadRffUb53sZbMUbCZa7xYGQW/5si7UB8mnVI=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Displays temperatures on navbar";
@@ -335,7 +366,7 @@ in
   obico = buildPlugin rec {
     pname = "obico";
     version = "2.5.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "TheSpaghettiDetective";
@@ -344,7 +375,9 @@ in
       sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
     };
 
-    propagatedBuildInputs = with super; [
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [
       backoff
       sentry-sdk
       bson
@@ -362,7 +395,7 @@ in
   octopod = buildPlugin rec {
     pname = "octopod";
     version = "0.3.18";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "gdombiak";
@@ -371,7 +404,9 @@ in
       sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
     };
 
-    propagatedBuildInputs = with super; [ pillow ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ pillow ];
 
     meta = with lib; {
       description = "OctoPod extension for OctoPrint";
@@ -384,7 +419,7 @@ in
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
     version = "2.4.0";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "eyal0";
@@ -393,7 +428,9 @@ in
       sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
     };
 
-    propagatedBuildInputs = with super; [
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [
       psutil
       sarge
     ];
@@ -401,7 +438,8 @@ in
     preConfigure = ''
       # PrintTimeGenius ships with marlin-calc binaries for multiple architectures
       rm */analyzers/marlin-calc*
-      sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
+      substituteInPlace */analyzers/analyze_progress.py \
+        --replace-fail '"{}.{}".format(binary_base_name, machine)' '"${marlin-calc}/bin/marlin-calc"'
     '';
 
     meta = with lib; {
@@ -415,7 +453,7 @@ in
   prusaslicerthumbnails = buildPlugin rec {
     pname = "prusaslicerthumbnails";
     version = "1.0.8";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -424,7 +462,9 @@ in
       sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
-    propagatedBuildInputs = with super; [ psutil ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ pillow ];
 
     meta = with lib; {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
@@ -437,7 +477,7 @@ in
   psucontrol = buildPlugin rec {
     pname = "psucontrol";
     version = "1.0.6";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "kantlivelong";
@@ -446,7 +486,9 @@ in
       sha256 = "sha256-S+lPm85+ZEO/3BXYsrxE4FU29EGWzWrSw3y1DLdByrM=";
     };
 
-    propagatedBuildInputs = with super; [
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [
       python-periphery
     ];
 
@@ -466,7 +508,7 @@ in
   resource-monitor = buildPlugin rec {
     pname = "resource-monitor";
     version = "0.3.16";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "Renaud11232";
@@ -475,7 +517,9 @@ in
       sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
     };
 
-    propagatedBuildInputs = with super; [ psutil ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ psutil ];
 
     meta = with lib; {
       description = "Plugin to view the current CPU and RAM usage on your system";
@@ -488,7 +532,7 @@ in
   simpleemergencystop = buildPlugin rec {
     pname = "simpleemergencystop";
     version = "1.0.5";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "Sebclem";
@@ -496,6 +540,8 @@ in
       rev = version;
       sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Simple plugin that add an emergency stop buton on NavBar of OctoPrint";
@@ -508,7 +554,7 @@ in
   stlviewer = buildPlugin rec {
     pname = "stlviewer";
     version = "0.4.2";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -516,6 +562,8 @@ in
       rev = "refs/tags/${version}";
       sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Simple stl viewer tab for OctoPrint";
@@ -528,7 +576,7 @@ in
   telegram = buildPlugin rec {
     pname = "telegram";
     version = "1.6.5";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "fabianonline";
@@ -537,7 +585,9 @@ in
       sha256 = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
     };
 
-    propagatedBuildInputs = with super; [ pillow ];
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [ pillow ];
 
     meta = with lib; {
       description = "Plugin to send status messages and receive commands via Telegram messenger";
@@ -550,7 +600,7 @@ in
   themeify = buildPlugin rec {
     pname = "themeify";
     version = "1.2.2";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "Birkbjo";
@@ -558,6 +608,8 @@ in
       rev = "v${version}";
       sha256 = "sha256-om9IUSmxU8y0x8DrodW1EU/pilAN3+PbtYck6KfROEg=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Beautiful themes for OctoPrint";
@@ -570,7 +622,7 @@ in
   timelapsepurger = buildPlugin rec {
     pname = "firmwareupdater";
     version = "0.1.4";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jneilliii";
@@ -578,6 +630,8 @@ in
       rev = version;
       sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Automatically deletes timelapses that are older than configured timeframe";
@@ -590,7 +644,7 @@ in
   titlestatus = buildPlugin rec {
     pname = "titlestatus";
     version = "0.0.5";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "MoonshineSG";
@@ -598,6 +652,8 @@ in
       rev = version;
       sha256 = "10nxjrixg0i6n6x8ghc1ndshm25c97bvkcis5j9kmlkkzs36i2c6";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Show printers status in window title";
@@ -610,7 +666,7 @@ in
   touchui = buildPlugin rec {
     pname = "touchui";
     version = "0.3.18";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "BillyBlaze";
@@ -618,6 +674,8 @@ in
       rev = version;
       sha256 = "sha256-PNDCjY7FhfnwK7Nd86el9ZQ00G4uMANH2Sk080iMYXw=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Touch friendly interface for a small TFT module or phone for OctoPrint";
@@ -630,7 +688,7 @@ in
   octoklipper = buildPlugin rec {
     pname = "octoklipper";
     version = "0.3.8.3";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "AliceGrey";
@@ -638,6 +696,8 @@ in
       rev = version;
       sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Plugin for a better integration of Klipper into OctoPrint";
@@ -650,7 +710,7 @@ in
   octolapse = buildPlugin rec {
     pname = "octolapse";
     version = "0.4.2";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "FormerLurker";
@@ -671,7 +731,9 @@ in
     # Test fails due to code executed on import, see #136513
     #pythonImportsCheck = [ "octoprint_octolapse" ];
 
-    propagatedBuildInputs = with super; [
+    build-system = with self; [ setuptools ];
+
+    dependencies = with self; [
       awesome-slugify
       setuptools
       pillow
@@ -698,7 +760,7 @@ in
   dashboard = buildPlugin rec {
     pname = "dashboard";
     version = "1.18.3";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
@@ -706,6 +768,8 @@ in
       rev = version;
       sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
     };
+
+    build-system = with self; [ setuptools ];
 
     meta = with lib; {
       description = "Dashboard for Octoprint";
@@ -716,5 +780,5 @@ in
   };
 }
 // lib.optionalAttrs config.allowAliases {
-  octoprint-dashboard = super.dashboard;
+  octoprint-dashboard = self.dashboard;
 }
