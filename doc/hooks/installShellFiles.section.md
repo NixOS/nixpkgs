@@ -43,11 +43,42 @@ The manpages must have a section suffix, and may optionally be compressed (with
   nativeBuildInputs = [ installShellFiles ];
 
   # Sometimes the manpage file has an undersirable name; e.g. it conflicts with
-  # another software with an equal name. It should be renamed before being
-  # installed via installManPage
+  # another software with an equal name. To install it with a different name,
+  # the installed name must be provided before the path to the file.
+  #
+  # Below install a manpage "foobar.1" from the source file "./foobar.1", and
+  # also installs the manpage "fromsea.3" from the source file "./delmar.3".
   postInstall = ''
-    mv fromsea.3 delmar.3
-    installManPage foobar.1 delmar.3
+    installManPage \
+        foobar.1 \
+        --name fromsea.3 delmar.3
+  '';
+}
+```
+
+The manpage may be the result of a piped input (e.g. `<(cmd)`), in which
+case the name must be provided before the pipe with the `--name` flag.
+
+```nix
+{
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage --name foobar.1 <($out/bin/foobar --manpage)
+  '';
+}
+```
+
+If no parsing of arguments is desired, pass `--` to opt-out of all subsequent
+arguments.
+
+```nix
+{
+  nativeBuildInputs = [ installShellFiles ];
+
+  # Installs a manpage from a file called "--name"
+  postInstall = ''
+    installManPage -- --name
   '';
 }
 ```
