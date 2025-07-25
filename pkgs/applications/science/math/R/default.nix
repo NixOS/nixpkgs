@@ -27,7 +27,6 @@
   icu,
   pkg-config,
   bison,
-  imake,
   which,
   jdk,
   blas,
@@ -63,11 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     "tex"
   ];
 
-  dontUseImakeConfigure = true;
-
   nativeBuildInputs = [
     bison
-    imake
     perl
     pkg-config
     tzdata
