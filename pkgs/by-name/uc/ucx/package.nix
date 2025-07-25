@@ -108,6 +108,9 @@ stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://www.openucx.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+    # LoongArch64 is not supported.
+    # See: https://github.com/openucx/ucx/issues/9873
+    badPlatforms = lib.platforms.loongarch64;
     maintainers = with lib.maintainers; [ markuskowa ];
   };
 })
