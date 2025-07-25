@@ -9352,6 +9352,8 @@ self: super: with self; {
 
   mlx = callPackage ../development/python-modules/mlx { };
 
+  mlx-lm = callPackage ../development/python-modules/mlx-lm { };
+
   mlxtend = callPackage ../development/python-modules/mlxtend { };
 
   mmcif-pdbx = callPackage ../development/python-modules/mmcif-pdbx { };
