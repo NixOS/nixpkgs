@@ -4035,9 +4035,7 @@ with pkgs;
 
   parallel-full = callPackage ../tools/misc/parallel/wrapper.nix { };
 
-  parcellite = callPackage ../tools/misc/parcellite {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  parcellite = callPackage ../tools/misc/parcellite { };
 
   patchutils = callPackage ../tools/text/patchutils { };
 
@@ -10790,9 +10788,7 @@ with pkgs;
 
   tomcat = tomcat11;
 
-  torque = callPackage ../servers/computing/torque {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  torque = callPackage ../servers/computing/torque { };
 
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
@@ -12045,9 +12041,7 @@ with pkgs;
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  elinks = callPackage ../applications/networking/browsers/elinks { };
 
   inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
     emacs30

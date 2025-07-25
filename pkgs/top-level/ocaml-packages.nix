@@ -326,10 +326,6 @@ let
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
 
-        ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {
-          inherit (pkgs) nodejs;
-        };
-
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
         curly = callPackage ../development/ocaml-modules/curly {

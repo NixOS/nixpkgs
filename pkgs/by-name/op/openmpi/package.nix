@@ -101,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
     numactl
     pmix
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
     ucx
     ucc
   ]
@@ -153,8 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
         p = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
           "shmem"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           "osh"
         ];
         s = [
@@ -201,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
         part1 = [
           "mpi"
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
