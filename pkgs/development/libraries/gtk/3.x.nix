@@ -20,8 +20,7 @@
   cairo,
   pango,
   gdk-pixbuf,
-  atk,
-  at-spi2-atk,
+  at-spi2-core,
   gobject-introspection,
   buildPackages,
   withIntrospection ?
@@ -143,10 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
   #TODO: colord?
 
   propagatedBuildInputs = [
-    at-spi2-atk
-    atk
-    cairo
-    pango
+    (at-spi2-core.override { inherit x11Support; })
+    (cairo.override { inherit x11Support; })
+    (pango.override { inherit x11Support; })
     expat
     fribidi
     gdk-pixbuf
