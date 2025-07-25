@@ -24507,6 +24507,12 @@
     githubId = 71331875;
     name = "Edwin Mackenzie-Owen";
   };
+  szaffarano = {
+    email = "sebas@zaffarano.com.ar";
+    github = "szaffarano";
+    githubId = 58266;
+    name = "Sebastián Zaffarano";
+  };
   szczyp = {
     email = "qb@szczyp.com";
     github = "Szczyp";
