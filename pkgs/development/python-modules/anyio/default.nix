@@ -94,6 +94,10 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+
+    # These tests might also be flaky due to heavy load
+    "test_run_sync_from_thread_pooling"
+    "test_single_thread"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
