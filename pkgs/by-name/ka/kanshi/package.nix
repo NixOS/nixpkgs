@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       balsoft
       danielbarter
+      aleksana
     ];
     platforms = lib.platforms.linux;
   };
