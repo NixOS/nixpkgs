@@ -37,9 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     typescript
     nodejs
     pnpm.configHook
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.autoSignDarwinBinariesHook ];
-
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.autoSignDarwinBinariesHook ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -55,59 +55,57 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-      pnpm run build
+    pnpm run build
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
-      cp -r ${electron.dist}/Electron.app ./
-      find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
+    # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
+    cp -r ${electron.dist}/Electron.app ./
+    find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
-    ''
-    + ''
-      ./node_modules/.bin/electron-builder \
-      --publish always --linux \
-      --dir \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version} 
+    # Disable code signing during build on macOS.
+    # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    sed -i "/afterSign/d" package.json
+  ''
+  + ''
+    ./node_modules/.bin/electron-builder \
+    --publish always --linux \
+    --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version} 
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      cp -r release/build/**/Feishin.app $out/Applications/
-      makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out/share/feishin
-      cp -r dist/linux-unpacked/locales dist/linux-unpacked/resources dist/linux-unpacked/resources.pak $out/share/feishin
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -r release/build/**/Feishin.app $out/Applications/
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/feishin
+    cp -r dist/linux-unpacked/locales dist/linux-unpacked/resources dist/linux-unpacked/resources.pak $out/share/feishin
 
-      for size in 32 64 128 256 512 1024; do
-        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        ln -s \
-          $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
-          $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
-      done
+    for size in 32 64 128 256 512 1024; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      ln -s \
+        $out/share/feishin/resources/assets/icons/"$size"x"$size".png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/feishin.png
+    done
 
-      # Code relies on checking app.isPackaged, which returns false if the executable is electron.
-      # Set ELECTRON_FORCE_IS_PACKAGED=1.
-      # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
-      makeWrapper ${lib.getExe electron} $out/bin/feishin \
-        --add-flags $out/share/feishin/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --set ELECTRON_FORCE_IS_PACKAGED=1 \
-        --inherit-argv0
+    # Code relies on checking app.isPackaged, which returns false if the executable is electron.
+    # Set ELECTRON_FORCE_IS_PACKAGED=1.
+    # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
+    makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --add-flags $out/share/feishin/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --inherit-argv0
   ''
   + ''
     runHook postInstall
   '';
-
 
   desktopItems = [
     (makeDesktopItem {
