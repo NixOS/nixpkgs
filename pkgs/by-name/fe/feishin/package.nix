@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  electron,
+  electron_36,
   typescript,
   nodejs,
   pnpm,
@@ -22,6 +22,8 @@ let
     rev = "v${version}";
     hash = "sha256-4gcS7Vd7LSpEByO2Hlk6nb8V2adBPh5XwWGCu2lwOA4=";
   };
+
+  electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
