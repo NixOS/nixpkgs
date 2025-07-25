@@ -7,19 +7,19 @@
   vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hayabusa";
-  version = "unstable-2023-11-29";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "notarin";
     repo = "hayabusa";
-    rev = "306167c632173f6633e51c5610fe32af7718ec25";
-    hash = "sha256-e2zoVIhxcE9cUypi8Uzz3YZe2JvIaEVuWOGpqHVtxn8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GSyauhVDWsiTOKdH09pz9y3pkiMzvtDNqd+izXtHQG8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wWJIZRiDK32uGroIG36QvRSvPw18nFGfp7OI7VNhCWE=";
+  cargoHash = "sha256-Ioql3gKKOZB9J/97m5IsCtpxAyqH3eXHH6Cnrb9962g=";
 
   enableParallelBuilding = true;
 
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage {
   ];
 
   postPatch = ''
-    substituteInPlace src/daemon/hayabusa.service \
-      --replace "/usr/local" "$out"
+    substituteInPlace distribution/hayabusa.service \
+      --replace-fail "/usr/local" "$out"
   '';
 
   postInstall = ''
-    install -Dm444 src/daemon/hayabusa.service -t $out/lib/systemd/system/
+    install -Dm444 distribution/hayabusa.service -t $out/lib/systemd/system/
   '';
 
   meta = {
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "hayabusa";
     platforms = lib.platforms.linux;
   };
-}
+})
