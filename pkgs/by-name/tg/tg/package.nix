@@ -1,20 +1,16 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
+  python3Packages,
   stdenv,
   libnotify,
-  mailcap-fix,
-  python-telegram,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tg";
   version = "0.22.0";
   pyproject = true;
-  disabled = pythonOlder "3.9";
+  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "paul-nameless";
@@ -32,9 +28,9 @@ buildPythonApplication rec {
     sed -i 's|^NOTIFY_CMD = .*|NOTIFY_CMD = "${libnotify}/bin/notify-send {title} {message} -i {icon_path}"|' tg/config.py
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ python3Packages.poetry-core ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     mailcap-fix
     python-telegram
   ];
