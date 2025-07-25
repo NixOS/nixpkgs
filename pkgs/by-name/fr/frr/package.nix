@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FRRouting";
     repo = "frr";
     rev = "frr-${finalAttrs.version}";
-    hash = "sha256-62+WTabM+gx8CJDAb7LnTG45B1jcpWTTEouiQW3q468=";
+    hash = "sha256-p+pjWsWk/x1pdyp1zbT0GQUKnW1DprHcJLpg7t746Lc=";
   };
 
   # Without the std explicitly set, we may run into abseil-cpp
