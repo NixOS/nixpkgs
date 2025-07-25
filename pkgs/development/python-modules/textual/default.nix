@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "4.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-rVDr4Snp5qnErxWRM9yoxnzzX8gg8nD3RbBkL1rmgqI=";
+    hash = "sha256-cWVKoZMGpKjiEzbefOMct1nR/GK+2tUe5x39kExdOJI=";
   };
 
   build-system = [ poetry-core ];
@@ -96,6 +96,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gepbird ];
     # https://github.com/Textualize/textual/issues/5868
-    broken = true;
+    # broken = true;
   };
 }
