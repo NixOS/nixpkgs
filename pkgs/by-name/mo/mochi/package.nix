@@ -2,22 +2,23 @@
   _7zz,
   appimageTools,
   fetchurl,
-  fetchzip,
   lib,
   stdenvNoCC,
   xorg,
+  makeWrapper,
 }:
 
 let
   pname = "mochi";
-  version = "1.18.11";
+  version = "1.19.0";
+  appName = "Mochi";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
 
     src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-NQ591KtWQz8hlXPhV83JEwGm+Au26PIop5KVzsyZKp4=";
+      hash = "";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -33,29 +34,46 @@ let
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      appName
+      ;
 
-    src = fetchzip {
+    src = fetchurl {
       url = "https://mochi.cards/releases/Mochi-${version}.dmg";
-      hash = "sha256-5RM4eqHQoYfO5JiUH9ol+3XxOk4VX4ocE3Yia82sovI=";
-      stripRoot = false;
-      nativeBuildInputs = [ _7zz ];
+      hash = "sha256-2y9gwO+l2Hs5+Le87vROYb7Nq2G/gYu0DUHJFfQ+Imw=";
     };
+
+    sourceRoot = "${appName}.app";
+    nativeBuildInputs = [
+      _7zz
+      makeWrapper
+    ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      # 7zz extracts all the entitlements, which trips the signature
+      find . -name '*com.apple.cs*' -exec rm {} \;
+      mkdir -p $out/{Applications/${appName}.app,bin}
+      cp -r . $out/Applications/${appName}.app
+      makeWrapper $out/Applications/${appName}.app/Contents/MacOS/${appName} $out/bin/${pname}
 
       runHook postInstall
     '';
+
+    dontUpdateAutotoolsGnuConfigScripts = true;
+    dontConfigure = true;
+    dontFixup = true;
   };
 
   meta = {
     description = "Simple markdown-powered SRS app";
     homepage = "https://mochi.cards/";
     changelog = "https://mochi.cards/changelog.html";
+    mainProgram = "mochi";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ poopsicles ];
