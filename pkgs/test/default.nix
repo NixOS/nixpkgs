@@ -131,6 +131,7 @@ with pkgs;
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
