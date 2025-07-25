@@ -2,6 +2,7 @@
   dtc,
   fetchFromGitHub,
   lib,
+  nukeReferences,
   pkgsBuildBuild,
   stdenv,
 }:
@@ -61,6 +62,7 @@ let
 
         nativeBuildInputs = [
           dtc
+          nukeReferences
           (pkgsBuildBuild.python3.withPackages (
             p: with p; [
               pyelftools
@@ -89,6 +91,8 @@ let
 
           mkdir -p $out
           cp out/core/{tee.elf,tee-pageable_v2.bin,tee.bin,tee-header_v2.bin,tee-pager_v2.bin,tee-raw.bin} $out
+          nuke-refs $out/*
+
           cp -r out/export-${taTarget} $devkit
 
           runHook postInstall
