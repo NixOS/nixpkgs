@@ -51,19 +51,19 @@ let
       wayland
     ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.20";
+  version = "0.2.23";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-/RQPjT5IIhV6bp3u5BhsCglGIJbQoBKIJ88U2Tp3qVE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hhKlXuhv0PP8/xCIZ0lFGtCYCzOzH0gUeh48GdKpG6A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-T88K2ujB4hskbQW5+urlSdEgN+XSmEEb80eW5gw51Gs=";
+  cargoHash = "sha256-+pfudGeWq4EARQDu+HAZczWlzStuzDPArMm1oCZGfKU=";
 
   nativeBuildInputs = [
     ncurses
@@ -142,7 +142,7 @@ rustPlatform.buildRustPackage rec {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${finalAttrs.version}/docs/docs/releases.md";
     mainProgram = "rio";
   };
-}
+})
