@@ -73,8 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./node_modules/.bin/electron-builder \
     --publish always --linux \
     --dir \
-      -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false
   '';
 
   installPhase = ''
