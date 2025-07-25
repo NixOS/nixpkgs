@@ -39,7 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Various plugins for ALSA";
     homepage = "http://alsa-project.org/";
-    license = lib.licenses.lgpl21;
+
+    license = with lib.licenses; [
+      lgpl21Plus
+      lgpl2Plus # maemo plugin
+      gpl2Plus # attributes.m4 & usb_stream.h
+    ];
+
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };

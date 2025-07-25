@@ -207,11 +207,11 @@
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
   "btp": {
-    "hash": "sha256-FYheCO1Ch/NFiWvdLm0mAuheer9XcL9AhMYZ13Ag8Cs=",
+    "hash": "sha256-vXe8nD8x0p3krddfPzEso7KSkO+nPVC1eUP1CYN8WOk=",
     "homepage": "https://registry.terraform.io/providers/SAP/btp",
     "owner": "SAP",
     "repo": "terraform-provider-btp",
-    "rev": "v1.14.0",
+    "rev": "v1.15.0",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-r4Q7b7ZzK+ZDXhIabTSgP7HY5Q51Hz5ErnW+nV+ZIqA="
   },
@@ -759,13 +759,13 @@
     "vendorHash": "sha256-fP6brpY/wRI1Yjgapzi+FfOci65gxWeOZulXbGdilrE="
   },
   "linode": {
-    "hash": "sha256-3EBaRDf1ChC92iaYowJEpCIn/br/MxeQGqd47/xuEHo=",
+    "hash": "sha256-rpF/R2wYYwMp+p57NUXFuEw9UpjJUoGFqTbnuGi3j7E=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v3.0.0",
+    "rev": "v3.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-o4C58i+/IhMQSziF6Ldb8P+3ojTYyXx9CS65/9ExLpE="
+    "vendorHash": "sha256-n+CNvbY02Z9mYSrnm3qfP6hLXqD+If00mM7m0Aq8608="
   },
   "linuxbox": {
     "hash": "sha256-svQRz1/PdVLpHoxOam1sfRTwHqgqs4ohJQs3IPMMAM4=",
@@ -967,13 +967,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "openstack": {
-    "hash": "sha256-N5PhTfFNA6jU12uDxSQpOriDOK6okOTh1aFZo3isA7E=",
+    "hash": "sha256-vACjj5wo2zqNls0VgKeylEW5rrsNv1jz5iKoEywBAEc=",
     "homepage": "https://registry.terraform.io/providers/terraform-provider-openstack/openstack",
     "owner": "terraform-provider-openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v3.3.1",
+    "rev": "v3.3.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ke7Dd3I/6Mja8SzrDy/f4GGgcB3C9xpCT4KiCr0PNZw="
+    "vendorHash": "sha256-AlB9tC3KejgUAjjT2pY7Q2mTS/AV4QRusSnyPiOheXE="
   },
   "opentelekomcloud": {
     "hash": "sha256-HbtNk5UAr+q09mOICkKzh9wIP0HM9MFVVR6gEIBdnvs=",
