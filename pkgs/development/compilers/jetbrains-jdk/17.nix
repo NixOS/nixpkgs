@@ -43,32 +43,27 @@ let
 in
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
-  javaVersion = "17.0.11";
-  build = "1207.24";
+  javaVersion = "17.0.15";
+  build = "1381";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
-  # git reset --hard [revision]
-  # git log --simplify-by-decoration --decorate=short --pretty=short | grep "jbr-" --color=never | cut -d "(" -f2 | cut -d ")" -f1 | awk '{print $2}' | sort -t "-" -k 2 -g | tail -n 1 | tr -d ","
-  openjdkTag = "jbr-17.0.8+7";
+  # git tag --points-at [revision]
+  # Look for the line that starts with jbr-
+  openjdkTag = "jbr-17.0.15+6";
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-a7cJF2iCW/1GK0/GmVbaY5pYcn3YtZy5ngFkyAGRhu0=";
+    hash = "sha256-Ckv2SNugHK75Af+ZzI91+QodOHIa5TMcjVQYsO45mQo=";
   };
 
   env = {
     BOOT_JDK = openjdk17-bootstrap.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    SOURCE_DATE_EPOCH = 1715809405;
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU (toString [
-      "-Wno-error=format-overflow"
-      "-Wno-error=template-id-cdtor"
-      "-Wno-error=calloc-transposed-args"
-    ]);
+    SOURCE_DATE_EPOCH = 1745907200;
   };
 
   patches = [ ];
