@@ -1,11 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  python-dateutil,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pdd";
   version = "1.7";
   pyproject = false;
@@ -27,7 +26,7 @@ buildPythonApplication rec {
     mkdir -p $out/share/fish/vendor_completions.d
   '';
 
-  dependencies = [ python-dateutil ];
+  dependencies = with python3Packages; [ python-dateutil ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

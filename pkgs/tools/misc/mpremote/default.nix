@@ -1,16 +1,13 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  hatchling,
-  hatch-requirements-txt,
-  hatch-vcs,
-  pyserial,
-  importlib-metadata,
 }:
-buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "mpremote";
   version = "1.25.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "micropython";
@@ -18,15 +15,16 @@ buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-Hk/DHMb9U/mLLVRKe+K3u5snxzW5BW3+bYRPFEAmUBQ=";
   };
-  sourceRoot = "${src.name}/tools/mpremote";
-  format = "pyproject";
 
-  nativeBuildInputs = [
+  sourceRoot = "${src.name}/tools/mpremote";
+
+  nativeBuildInputs = with python3Packages; [
     hatchling
     hatch-requirements-txt
     hatch-vcs
   ];
-  propagatedBuildInputs = [
+
+  propagatedBuildInputs = with python3Packages; [
     pyserial
     importlib-metadata
   ];

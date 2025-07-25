@@ -1,16 +1,14 @@
 {
   lib,
+  python3Packages,
   fetchurl,
-  buildPythonApplication,
   libjack2,
-  pyliblo3,
-  pyqt5,
   which,
   bash,
   qt5,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "raysession";
   version = "0.14.4";
 
@@ -30,16 +28,18 @@ buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    pyqt5 # pyuic5 and pyrcc5 to build resources.
+    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
     qt5.qttools # lrelease to build translations.
     which # which to find lrelease.
     qt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     libjack2
     bash
   ];
-  dependencies = [
+
+  dependencies = with python3Packages; [
     pyliblo3
     pyqt5
   ];

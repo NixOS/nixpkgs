@@ -1,14 +1,10 @@
 {
   lib,
-  buildPythonApplication,
-  click,
+  python3Packages,
   fetchFromGitHub,
-  ipy,
-  pyyaml,
-  requests,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gandi-cli";
   version = "1.6";
   format = "setuptools";
@@ -20,7 +16,7 @@ buildPythonApplication rec {
     sha256 = "sha256-KLeEbbzgqpmBjeTc5RYsFScym8xtMqVjU+H0lyDM0+o=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     ipy
     pyyaml

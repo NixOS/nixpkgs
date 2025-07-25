@@ -1,13 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  iso8601,
-  progressbar2,
-  requests,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "twitch-chat-downloader";
   version = "2.5.4";
   format = "setuptools";
@@ -29,7 +26,7 @@ buildPythonApplication rec {
       --replace-fail jzkbprff40iqj646a697cyrvl0zt2m6 kd1unb4b3q4t58fwlpcbzcbnm76a8fp
   '';
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     iso8601
     progressbar2
     requests

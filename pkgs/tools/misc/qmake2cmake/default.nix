@@ -1,16 +1,10 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchgit,
-  packaging,
-  platformdirs,
-  portalocker,
-  pyparsing,
-  sympy,
-  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "qmake2cmake";
   version = "1.0.6";
   format = "setuptools";
@@ -25,7 +19,7 @@ buildPythonPackage rec {
     ./fix-locations.patch
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     packaging
     platformdirs
     portalocker
@@ -33,7 +27,7 @@ buildPythonPackage rec {
     sympy
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

@@ -1,14 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  python-dotenv,
-  pyyaml,
-  setuptools,
-  pypaBuildHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   version = "1.5.0";
   pname = "podman-compose";
   pyproject = true;
@@ -20,15 +16,16 @@ buildPythonApplication rec {
     hash = "sha256-AEnq0wsDHaCxefaEX4lB+pCAIKzN0oyaBNm7t7tK/yI=";
   };
 
-  build-system = [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     python-dotenv
     pyyaml
   ];
-  propagatedBuildInputs = [ pypaBuildHook ];
+
+  propagatedBuildInputs = with python3Packages; [ pypaBuildHook ];
 
   meta = {
     description = "Implementation of docker-compose with podman backend";

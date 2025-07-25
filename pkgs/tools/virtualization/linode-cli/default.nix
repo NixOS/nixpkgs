@@ -1,18 +1,9 @@
 {
-  buildPythonApplication,
-  colorclass,
+  lib,
+  python3Packages,
   fetchPypi,
   fetchurl,
   installShellFiles,
-  lib,
-  linode-metadata,
-  openapi3,
-  packaging,
-  pyyaml,
-  requests,
-  rich,
-  setuptools,
-  terminaltables,
 }:
 
 let
@@ -24,10 +15,9 @@ let
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
     hash = specHash;
   };
-
 in
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "linode-cli";
   version = "5.56.2";
   pyproject = true;
@@ -54,7 +44,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     colorclass
     linode-metadata
     pyyaml

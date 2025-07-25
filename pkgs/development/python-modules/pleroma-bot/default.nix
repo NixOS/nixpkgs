@@ -1,22 +1,15 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchFromGitHub,
-  pytestCheckHook,
-  requests-mock,
-  oauthlib,
-  requests-oauthlib,
-  requests,
-  pyaml,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "pleroma-bot";
   version = "0.8.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "robertoszek";
@@ -25,14 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-vJxblpf3NMSyYMHeWG7vHP5AeluTtMtVxOsHgvGDHeA=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pyaml
     requests
     requests-oauthlib
     oauthlib
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     requests-mock
   ];

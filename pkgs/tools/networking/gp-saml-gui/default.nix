@@ -1,17 +1,16 @@
 {
   lib,
   stdenv,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonPackage,
   webkitgtk_4_1,
   wrapGAppsHook3,
   glib-networking,
   gobject-introspection,
   openconnect,
-  pygobject3,
-  requests,
 }:
-buildPythonPackage rec {
+
+python3Packages.buildPythonPackage rec {
   pname = "gp-saml-gui";
   version = "0.1+20240731-${lib.strings.substring 0 7 src.rev}";
   format = "setuptools";
@@ -31,12 +30,17 @@ buildPythonPackage rec {
     glib-networking
   ];
 
-  propagatedBuildInputs = [
-    requests
-    pygobject3
-    openconnect
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+  propagatedBuildInputs =
+    (with python3Packages; [
+      requests
+      pygobject3
+    ])
+    ++ [
+      openconnect
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_1
+    ];
 
   preFixup = ''
     gappsWrapperArgs+=(

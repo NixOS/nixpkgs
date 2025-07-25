@@ -1,16 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  autopep8,
-  flake8,
-  jinja2,
-  pylint,
-  pyyaml,
-  six,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cmake-format";
   version = "0.6.13";
   # The source distribution does not build because of missing files.
@@ -23,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     autopep8
     flake8
     jinja2

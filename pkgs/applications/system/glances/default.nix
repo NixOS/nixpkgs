@@ -1,36 +1,19 @@
 {
-  stdenv,
-  buildPythonApplication,
-  fetchFromGitHub,
-  isPyPy,
-  pythonOlder,
   lib,
-  defusedxml,
-  packaging,
-  psutil,
-  setuptools,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
   nixosTests,
-  pytestCheckHook,
   which,
-  podman,
-  selenium,
-  # Optional dependencies:
-  fastapi,
-  jinja2,
-  pysnmp,
   hddtemp,
-  netifaces2, # IP module
-  uvicorn,
-  requests,
-  prometheus-client,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "glances";
   version = "4.3.1";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.9";
+  disabled = python3Packages.isPyPy || python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nicolargo";
@@ -39,7 +22,7 @@ buildPythonApplication rec {
     hash = "sha256-KaH2dV9bOtBZkfbIGIgQS8vL39XwSyatSjclcXpeVGM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -54,26 +37,30 @@ buildPythonApplication rec {
   # some tests fail in darwin sandbox
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  dependencies = [
-    defusedxml
-    netifaces2
-    packaging
-    psutil
-    pysnmp
-    fastapi
-    uvicorn
-    requests
-    jinja2
-    which
-    prometheus-client
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+  dependencies =
+    with python3Packages;
+    [
+      defusedxml
+      netifaces2 # optional (IP module)
+      packaging
+      psutil
+      pysnmp # optional
+      fastapi # optional
+      uvicorn # optional
+      requests # optional
+      jinja2 # optional
+      which
+      prometheus-client # optional
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      hddtemp
+    ];
 
   passthru.tests = {
     service = nixosTests.glances;
   };
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     which
     pytestCheckHook
     selenium

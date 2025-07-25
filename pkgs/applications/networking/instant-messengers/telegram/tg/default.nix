@@ -1,19 +1,18 @@
 {
   lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  pythonOlder,
-  fetchpatch,
   stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
   libnotify,
-  python-telegram,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tg";
   version = "0.19.0";
   format = "setuptools";
-  disabled = pythonOlder "3.8";
+
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "paul-nameless";
@@ -36,7 +35,7 @@ buildPythonApplication rec {
     sed -i 's|^NOTIFY_CMD = .*|NOTIFY_CMD = "${libnotify}/bin/notify-send {title} {message} -i {icon_path}"|' tg/config.py
   '';
 
-  propagatedBuildInputs = [ python-telegram ];
+  propagatedBuildInputs = with python3Packages; [ python-telegram ];
 
   doCheck = false; # No tests
 

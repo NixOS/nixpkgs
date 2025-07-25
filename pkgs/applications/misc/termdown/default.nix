@@ -1,14 +1,10 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
-  click,
-  pyfiglet,
-  python-dateutil,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "termdown";
   version = "1.18.0";
   format = "setuptools";
@@ -20,7 +16,7 @@ buildPythonApplication rec {
     hash = "sha256-Hnk/MOYdbOl14fI0EFbIq7Hmc7TyhcZWGEg2/jmNJ5Y=";
   };
 
-  dependencies = [
+  dependencies = with python3Packages; [
     python-dateutil
     click
     pyfiglet

@@ -1,41 +1,20 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
   gitUpdater,
-  pythonOlder,
-  aiohttp,
-  appdirs,
-  beautifulsoup4,
-  defusedxml,
-  devpi-common,
-  execnet,
-  itsdangerous,
   nginx,
-  packaging,
-  passlib,
-  platformdirs,
-  pluggy,
-  py,
-  httpx,
-  pyramid,
-  pytestCheckHook,
-  repoze-lru,
-  setuptools,
-  strictyaml,
-  waitress,
-  webtest,
   testers,
   devpi-server,
   nixosTests,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
   version = "6.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -51,32 +30,34 @@ buildPythonApplication rec {
       --replace "--flake8" ""
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    appdirs
-    defusedxml
-    devpi-common
-    execnet
-    itsdangerous
-    packaging
-    passlib
-    platformdirs
-    pluggy
-    pyramid
-    repoze-lru
-    setuptools
-    strictyaml
-    waitress
-    py
-    httpx
-  ]
-  ++ passlib.optional-dependencies.argon2;
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      aiohttp
+      appdirs
+      defusedxml
+      devpi-common
+      execnet
+      itsdangerous
+      packaging
+      passlib
+      platformdirs
+      pluggy
+      pyramid
+      repoze-lru
+      setuptools
+      strictyaml
+      waitress
+      py
+      httpx
+    ]
+    ++ passlib.optional-dependencies.argon2;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     beautifulsoup4
     nginx
     py

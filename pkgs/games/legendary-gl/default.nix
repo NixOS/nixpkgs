@@ -1,14 +1,11 @@
 {
   lib,
-  gitUpdater,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
-  pythonOlder,
-  requests,
-  filelock,
+  gitUpdater,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "legendary-gl"; # Name in pypi
   version = "0.20.34";
   format = "setuptools";
@@ -20,12 +17,12 @@ buildPythonApplication {
     sha256 = "sha256-yCHeeEGw+9gtRMGyIhbStxJhmSM/1Fqly7HSRDkZILQ=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     requests
     filelock
   ];
 
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
   # no tests
   doCheck = false;

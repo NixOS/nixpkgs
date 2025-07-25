@@ -1,13 +1,10 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitLab,
-  python-musicpd,
-  requests,
-  sphinxHook,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mpd-sima";
   version = "0.18.2";
 
@@ -24,13 +21,13 @@ buildPythonApplication rec {
     sed -i '/intersphinx/d' doc/source/conf.py
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     sphinxHook
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     requests
     python-musicpd
   ];

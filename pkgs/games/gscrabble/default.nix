@@ -1,17 +1,15 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   gtk3,
   wrapGAppsHook3,
   gst_all_1,
   gobject-introspection,
-  gst-python,
-  pygobject3,
   adwaita-icon-theme,
 }:
 
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "gscrabble";
   version = "unstable-2020-04-21";
   format = "setuptools";
@@ -30,16 +28,19 @@ buildPythonApplication {
     gobject-introspection
   ];
 
-  buildInputs = with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gst-plugins-bad
-    adwaita-icon-theme
-    gtk3
-  ];
+  buildInputs =
+    (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-plugins-bad
+    ])
+    ++ [
+      adwaita-icon-theme
+      gtk3
+    ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     gst-python
     pygobject3
   ];

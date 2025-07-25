@@ -1,8 +1,7 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  buildPythonApplication,
-  python,
   wrapGAppsHook3,
   xflux,
   gtk3,
@@ -10,12 +9,10 @@
   pango,
   gdk-pixbuf,
   atk,
-  pexpect,
-  pygobject3,
-  pyxdg,
   libappindicator-gtk3,
 }:
-buildPythonApplication rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "xflux-gui";
   version = "1.2.0";
   format = "setuptools";
@@ -27,7 +24,7 @@ buildPythonApplication rec {
     sha256 = "09zphcd9821ink63636swql4g85hg6lpsazqg1mawlk9ikc8zbps";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pyxdg
     pexpect
     pygobject3
@@ -55,7 +52,7 @@ buildPythonApplication rec {
   postFixup = ''
     wrapGAppsHook
     wrapPythonPrograms
-    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
+    patchPythonScript $out/${python3Packages.python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

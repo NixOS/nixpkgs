@@ -1,14 +1,11 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchgit,
-  pbr,
-  requests,
-  setuptools,
   gitUpdater,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-review";
   version = "2.5.0";
   format = "setuptools";
@@ -29,11 +26,11 @@ buildPythonApplication rec {
     "man"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     pbr
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     requests
     setuptools # implicit dependency, used to get package version through pkg_resources
   ];

@@ -1,6 +1,6 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
   gdk-pixbuf,
   glib,
@@ -9,12 +9,9 @@
   gtksourceview,
   pango,
   webkitgtk_4_1,
-  pygobject3,
-  pyyaml,
-  setuptools,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rednotebook";
   version = "2.39";
   pyproject = true;
@@ -31,7 +28,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection ];
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = [
     gdk-pixbuf
@@ -40,9 +37,11 @@ buildPythonApplication rec {
     gtksourceview
     pango
     webkitgtk_4_1
+  ]
+  ++ (with python3Packages; [
     pygobject3
     pyyaml
-  ];
+  ]);
 
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"

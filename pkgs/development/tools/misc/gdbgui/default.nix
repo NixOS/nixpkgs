@@ -1,23 +1,19 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
   gdb,
-  eventlet,
-  flask-compress,
-  flask-socketio,
-  pygdbmi,
-  pygments,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gdbgui";
 
   version = "0.15.2.0";
   format = "setuptools";
 
   buildInputs = [ gdb ];
-  propagatedBuildInputs = [
+
+  propagatedBuildInputs = with python3Packages; [
     eventlet
     flask-compress
     flask-socketio

@@ -1,16 +1,13 @@
 {
   lib,
-  wrapPython,
-  python,
   stdenv,
-  dnf4,
-  dnf-plugins-core,
-  plugins ? [ dnf-plugins-core ],
+  python3Packages,
+  plugins ? [ python3Packages.dnf-plugins-core ],
 }:
 let
-  pluginPaths = map (p: "${p}/${python.sitePackages}/dnf-plugins") plugins;
+  pluginPaths = map (p: "${p}/${python3Packages.python.sitePackages}/dnf-plugins") plugins;
 
-  dnf4-unwrapped = dnf4;
+  dnf4-unwrapped = python3Packages.dnf4;
 in
 
 stdenv.mkDerivation {
@@ -25,7 +22,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ wrapPython ];
+  nativeBuildInputs = [ python3Packages.wrapPython ];
 
   propagatedBuildInputs = [ dnf4-unwrapped ] ++ plugins;
 
