@@ -10452,6 +10452,8 @@ self: super: with self; {
 
   notify-py = callPackage ../development/python-modules/notify-py { };
 
+  notify-run = callPackage ../development/python-modules/notify-run { };
+
   notify2 = callPackage ../development/python-modules/notify2 { };
 
   notion-client = callPackage ../development/python-modules/notion-client { };
