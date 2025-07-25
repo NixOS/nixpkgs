@@ -8,6 +8,7 @@
   yq,
   protobuf,
   installShellFiles,
+  makeWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -77,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
+    makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
@@ -204,6 +206,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
+
+    # Turn off update checks
+    wrapProgram $out/bin/deno \
+      --set DENO_NO_UPDATE_CHECK 1
 
     ${lib.optionalString canExecute ''
       installShellCompletion --cmd deno \
