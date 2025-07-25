@@ -70,8 +70,7 @@ in
       # Required for wayland with setLoginUid = false;
       seatd.enable = true;
       xserver = {
-        # To enable user switching, allow lemurs to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow lemurs to allocate displays dynamically.
         display = null;
       };
       displayManager = {

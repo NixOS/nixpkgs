@@ -118,8 +118,7 @@ in
       };
 
       xserver = {
-        # To enable user switching, allow ly to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow ly to allocate displays dynamically.
         display = null;
       };
     };

@@ -190,7 +190,6 @@ in
     users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
-    services.xserver.tty = null;
     services.xserver.display = null;
     services.xserver.verbose = null;
 

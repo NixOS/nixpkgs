@@ -93,7 +93,6 @@ let
   }
   // optionalAttrs xcfg.enable {
     X11 = {
-      MinimumVT = if xcfg.tty != null then xcfg.tty else 7;
       ServerPath = toString xserverWrapper;
       XephyrPath = "${pkgs.xorg.xorgserver.out}/bin/Xephyr";
       SessionCommand = toString dmcfg.sessionData.wrapper;
@@ -419,8 +418,7 @@ in
     services = {
       dbus.packages = [ sddm ];
       xserver = {
-        # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
-        tty = null;
+        # To enable user switching, allow sddm to allocate displays dynamically.
         display = null;
       };
     };
