@@ -126,6 +126,11 @@ init_remote(){
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
     ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
+    local proxy_pairs i
+    read -a proxy_pairs <<< "${FETCHGIT_HTTP_PROXIES:-}"
+    for ((i = 1; i < ${#proxy_pairs[@]}; i += 2)); do
+        clean_git config --global "http.${proxy_pairs[$i - 1]}.proxy" "${proxy_pairs[$i]}"
+    done
 }
 
 # Return the reference of an hash if it exists on the remote repository.
