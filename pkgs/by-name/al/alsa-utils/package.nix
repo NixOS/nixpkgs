@@ -28,12 +28,12 @@ let
     paths = map (path: "${path}/lib/alsa-lib") plugin-packages;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-utils";
   version = "1.2.13";
 
   src = fetchurl {
-    url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
+    url = "mirror://alsa/utils/alsa-utils-${finalAttrs.version}.tar.bz2";
     hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
   };
 
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})
