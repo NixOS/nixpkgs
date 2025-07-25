@@ -112,7 +112,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ siriobalmelli ];
   };
 }
