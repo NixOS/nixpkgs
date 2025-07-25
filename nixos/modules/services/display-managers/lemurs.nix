@@ -113,6 +113,8 @@ in
         TTYPath = "/dev/tty${toString cfg.vt}";
         TTYReset = "yes";
         TTYVHangup = "yes";
+        # Clear the console before starting
+        TTYVTDisallocate = true;
       };
       # Don't kill a user session when using nixos-rebuild
       restartIfChanged = false;
