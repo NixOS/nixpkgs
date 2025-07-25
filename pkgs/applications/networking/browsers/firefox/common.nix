@@ -316,7 +316,9 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    ++ lib.optionals (lib.versionAtLeast version "139") [ ./139-relax-apple-sdk.patch ]
+    ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "142") [
+      ./139-relax-apple-sdk.patch
+    ]
     ++ lib.optionals (lib.versionOlder version "139") [
       # Fix for missing vector header on macOS
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1959377
