@@ -104,11 +104,11 @@ python3Packages.buildPythonApplication rec {
         ln -s $f $bin
       fi
       substituteInPlace "$f" \
-        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
+        --replace-quiet '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
-
-    sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
   '';
+
+  pythonImportsCheck = [ "bcc" ];
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
