@@ -9,7 +9,7 @@ let
   pname = "immersed";
   version = "10.6.0";
 
-  sources = rec {
+  sources = lib.mapAttrs (_: fetchurl) (rec {
     x86_64-linux = {
       url = "https://web.archive.org/web/20241229041449/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
       hash = "sha256-u07QpGXEXbp7ApZgerq36x+4Wxsz08YAruIVnZeS0ck=";
@@ -23,9 +23,9 @@ let
       hash = "sha256-Sgfm0giVR1dDIFIDpNmGmXLXLRgpMXrVxD/oyPc+Lq0=";
     };
     aarch64-darwin = x86_64-darwin;
-  };
+  });
 
-  src = fetchurl (sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"));
+  src = sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = with lib; {
     description = "VR coworking platform";
@@ -40,21 +40,29 @@ let
   };
 
 in
-if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-  }
-else
-  callPackage ./linux.nix {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-  }
+
+(
+  if stdenv.hostPlatform.isDarwin then
+    callPackage ./darwin.nix {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+    }
+  else
+    callPackage ./linux.nix {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+    }
+)
+// {
+  passthru = {
+    inherit sources;
+  };
+}
