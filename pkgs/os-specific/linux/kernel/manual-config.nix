@@ -181,6 +181,8 @@ lib.makeOverridable (
         ];
       })
       // {
+        __structuredAttrs = true;
+
         passthru = rec {
           inherit
             version
@@ -306,17 +308,17 @@ lib.makeOverridable (
 
           # reads the existing .config file and prompts the user for options in
           # the current kernel source that are not found in the file.
-          make $makeFlags "''${makeFlagsArray[@]}" oldconfig
+          make "''${makeFlags[@]}" oldconfig
           runHook postConfigure
 
-          make $makeFlags "''${makeFlagsArray[@]}" prepare
+          make "''${makeFlags[@]}" prepare
           actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
           if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
             echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
             exit 1
           fi
 
-          buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
+          buildFlags+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
 
           cd $buildRoot
         '';
@@ -396,7 +398,7 @@ lib.makeOverridable (
             '';
           in
           ''
-            installFlagsArray+=("-j$NIX_BUILD_CORES")
+            installFlags+=("-j$NIX_BUILD_CORES")
             export HOME=${installkernel}
           '';
 
@@ -433,10 +435,9 @@ lib.makeOverridable (
           mkdir -p $dev
           cp vmlinux $dev/
           if [ -z "''${dontStrip-}" ]; then
-            installFlagsArray+=("INSTALL_MOD_STRIP=1")
+            installFlags+=("INSTALL_MOD_STRIP=1")
           fi
-          make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-            $installFlags "''${installFlagsArray[@]}"
+          make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
           unlink $out/lib/modules/${modDirVersion}/build
           rm -f $out/lib/modules/${modDirVersion}/source
 
@@ -450,7 +451,7 @@ lib.makeOverridable (
           cd $dev/lib/modules/${modDirVersion}/source
 
           cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-          make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
+          make modules_prepare "''${makeFlags[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
           # For reproducibility, removes accidental leftovers from a `cc1` call
           # from a `try-run` call from the Makefile
