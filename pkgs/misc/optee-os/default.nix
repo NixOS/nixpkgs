@@ -94,6 +94,15 @@ let
           runHook postInstall
         '';
 
+        # The conventional build system for OPTEE trusted applications accepts
+        # a TA_DEV_KIT_DIR parameter, which expects all artifacts (headers and
+        # libraries) to exist in that directory. We populate a "devkit" Nix
+        # output for this purpose, but we must also tell the multiple-output
+        # setup hook to not move our artifacts after we populate this
+        # directory.
+        outputDev = "devkit";
+        outputLib = "devkit";
+
         meta =
 
           {
