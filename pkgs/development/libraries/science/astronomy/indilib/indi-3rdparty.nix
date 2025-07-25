@@ -9,6 +9,7 @@
   coreutils,
   cfitsio,
   fetchFromGitHub,
+  fetchpatch,
   gtest,
   libusb1,
   libusb-compat-0_1,
@@ -46,7 +47,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-REmeIP0Cl5FfwUnL40u0dqZaJugBlLGT/Bts5j1bvgw=";
+    hash = "sha256-zd88QHYhqxAQlzozXZMKXCFWKYqvGsPHhNxmkdexOOE=";
   };
 
   buildIndi3rdParty =
@@ -70,25 +71,25 @@ let
 
         sourceRoot = "${src.name}/${pname}";
 
-        cmakeFlags =
-          [
-            "-DCMAKE_INSTALL_LIBDIR=lib"
-            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DINDI_DATA_DIR=share/indi/"
-          ]
-          ++ lib.optional doCheck [
-            "-DINDI_BUILD_UNITTESTS=ON"
-            "-DINDI_BUILD_INTEGTESTS=ON"
-          ]
-          ++ cmakeFlags;
+        cmakeFlags = [
+          "-DCMAKE_INSTALL_LIBDIR=lib"
+          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DINDI_DATA_DIR=share/indi/"
+        ]
+        ++ lib.optional doCheck [
+          "-DINDI_BUILD_UNITTESTS=ON"
+          "-DINDI_BUILD_INTEGTESTS=ON"
+        ]
+        ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
           udevCheckHook
-        ] ++ nativeBuildInputs;
+        ]
+        ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 
@@ -971,6 +972,14 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/indilib/indi-3rdparty/commit/db8106a9a03e0cfb700e02841d46f8b97b5513e0.patch";
+        hash = "sha256-JJatmu/dxFEni6CdR6QUn7+EiPe18EwE7OmrCT8Nk2c=";
+        stripLen = 1;
+      })
+    ];
   };
 
   indi-starbook = buildIndi3rdParty {

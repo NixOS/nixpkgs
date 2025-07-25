@@ -7,8 +7,6 @@
   makeWrapper,
 }:
 
-assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
-
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
   version = "0.14.1";
@@ -45,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    platforms = if nvidiaSupport then platforms.linux else platforms.unix;
   };
 }

@@ -51,24 +51,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      gjs
-      glib
-      glib-networking
-      gsettings-desktop-schemas
-      gtk4
-      libadwaita
-      webkitgtk_6_0
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    gdk-pixbuf
+    gjs
+    glib
+    glib-networking
+    gsettings-desktop-schemas
+    gtk4
+    libadwaita
+    webkitgtk_6_0
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]);
 
   dontPatchShebangs = true;
 

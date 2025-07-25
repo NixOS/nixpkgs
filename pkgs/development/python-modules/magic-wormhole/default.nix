@@ -29,7 +29,7 @@
   noiseprotocol,
 
   # tests
-  nettools,
+  net-tools,
   unixtools,
   magic-wormhole-transit-relay,
   magic-wormhole-mailbox-server,
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     ''
     # fix the location of the ifconfig binary
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
+      sed -i -e "s|'ifconfig'|'${net-tools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
   build-system = [
@@ -68,25 +68,24 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  dependencies =
-    [
-      attrs
-      autobahn
-      automat
-      click
-      cryptography
-      humanize
-      iterable-io
-      pynacl
-      qrcode
-      spake2
-      tqdm
-      twisted
-      txtorcon
-      zipstream-ng
-    ]
-    ++ autobahn.optional-dependencies.twisted
-    ++ twisted.optional-dependencies.tls;
+  dependencies = [
+    attrs
+    autobahn
+    automat
+    click
+    cryptography
+    humanize
+    iterable-io
+    pynacl
+    qrcode
+    spake2
+    tqdm
+    twisted
+    txtorcon
+    zipstream-ng
+  ]
+  ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];
@@ -96,15 +95,14 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  nativeCheckInputs =
-    [
-      magic-wormhole-mailbox-server
-      magic-wormhole-transit-relay
-      pytestCheckHook
-      pytest-twisted
-    ]
-    ++ optional-dependencies.dilation
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
+  nativeCheckInputs = [
+    magic-wormhole-mailbox-server
+    magic-wormhole-transit-relay
+    pytestCheckHook
+    pytest-twisted
+  ]
+  ++ optional-dependencies.dilation
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   pytestFlagsArray = [ "src/wormhole/test" ];
 

@@ -51,11 +51,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    hash = "sha256-w4K72DjCOfjUxOnMMg86vzT3sI5x2eeO0CmpbZY5QM4=";
+    hash = "sha256-wdNQw/Mpb9IbnbB5TiPT8xmykviAv4F4uC71xjkcYMA=";
   };
 
   strictDeps = true;
@@ -88,7 +88,8 @@ stdenv.mkDerivation rec {
     # needed to patch shebangs
     python3
     bash
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
 
   prePatch = ''
     # Replace wget with curl to save a dependency
@@ -103,6 +104,9 @@ stdenv.mkDerivation rec {
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
     "LINUX_VARIANT=nixos"
     "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
+    # Fix invalid XML files with libxml 2.14
+    "XMLTO_FLAGS=--searchpath=$(abs_srcdir)/d.ipsec.conf:$(abs_srcdir)"
+    "XMLTO_FLAGS+=--skip-validation"
   ];
 
   # Hack to make install work
@@ -133,7 +137,6 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     maintainers = with maintainers; [
-      afranchuk
       rnhmjoj
     ];
     mainProgram = "ipsec";

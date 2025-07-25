@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -e <(echo "test_load_ok")
     runHook postCheck
   '';
 

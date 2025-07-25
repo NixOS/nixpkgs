@@ -42,21 +42,20 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-      gtk3
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    openssl
+    fontconfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXi
+    libXrandr
+    gtk3
+    libxkbcommon
+    wayland
+  ];
 
   checkFlags = [
     "--skip=bench"

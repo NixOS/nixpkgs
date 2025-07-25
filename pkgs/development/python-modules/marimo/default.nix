@@ -67,7 +67,8 @@ buildPythonPackage rec {
     tomlkit
     uvicorn
     websockets
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   pythonImportsCheck = [ "marimo" ];
 

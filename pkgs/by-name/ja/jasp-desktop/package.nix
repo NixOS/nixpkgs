@@ -46,7 +46,8 @@ let
       "${R}/lib/R"
       rPackages.RInside
       engine.jaspBase # Should already be propagated from modules, but include it again, just in case
-    ] ++ lib.attrValues modules;
+    ]
+    ++ lib.attrValues modules;
   };
 
   modulesDir = linkFarm "jasp-${version}-modules" (

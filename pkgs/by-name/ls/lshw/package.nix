@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs =
-    [ hwdata ]
-    ++ lib.optionals withGUI [
-      gtk3
-      sqlite
-    ];
+  buildInputs = [
+    hwdata
+  ]
+  ++ lib.optionals withGUI [
+    gtk3
+    sqlite
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

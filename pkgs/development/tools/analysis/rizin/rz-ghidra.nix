@@ -28,29 +28,27 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      openssl
-      pugixml
-      rizin
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      cutter
-      qt5compat
-      qtbase
-      qtsvg
-    ];
+  buildInputs = [
+    openssl
+    pugixml
+    rizin
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    cutter
+    qt5compat
+    qtbase
+    qtsvg
+  ];
 
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DUSE_SYSTEM_PUGIXML=ON"
-    ]
-    ++ lib.optionals enableCutterPlugin [
-      "-DBUILD_CUTTER_PLUGIN=ON"
-      "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
-    ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_PUGIXML=ON"
+  ]
+  ++ lib.optionals enableCutterPlugin [
+    "-DBUILD_CUTTER_PLUGIN=ON"
+    "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
+  ];
 
   meta = with lib; {
     # errors out with undefined symbols from Cutter

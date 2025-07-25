@@ -61,7 +61,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
-  ] ++ optional-dependencies.jupyter;
+  ]
+  ++ optional-dependencies.jupyter;
 
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];

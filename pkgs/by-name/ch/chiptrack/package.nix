@@ -61,7 +61,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     harfbuzz
     icu
     libjpeg
-  ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
 
   # Has git dependencies
   useFetchCargoVendor = true;

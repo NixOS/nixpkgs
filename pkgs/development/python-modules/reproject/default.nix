@@ -51,7 +51,8 @@ buildPythonPackage rec {
     numpy
     scipy
     zarr
-  ] ++ dask.optional-dependencies.array;
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     pytest-astropy

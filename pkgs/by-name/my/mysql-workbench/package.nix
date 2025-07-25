@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.42";
+  version = "8.0.43";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-d4SnNALK76AXWEu0WHX0dZv4co6Q+oCMTYAVV3pd9gU=";
+    hash = "sha256-E9fn72r35WrGzIOoDouIvJFZdpfw9sgDNHwEe/0DdUI=";
   };
 
   patches = [
@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/get_wb_version.sh
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -114,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     libsecret
     libiodbc
+
+    bash # for shebangs
 
     # python dependencies:
     paramiko

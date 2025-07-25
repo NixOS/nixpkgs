@@ -29,14 +29,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./disable-radio.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rustPlatform.bindgenHook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   nativeCheckInputs = [

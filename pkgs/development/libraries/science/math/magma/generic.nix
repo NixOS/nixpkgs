@@ -27,8 +27,10 @@
   # At least one back-end has to be enabled,
   # and we can't default to CUDA since it's unfree
   rocmSupport ? !cudaSupport,
+  runCommand,
   static ? stdenv.hostPlatform.isStatic,
   stdenv,
+  writeShellApplication,
 }:
 
 let
@@ -40,20 +42,7 @@ let
     ;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
-  # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
-  # If we're building a version prior to that, use the latest release of the 11.x series.
-  effectiveCudaPackages =
-    if strings.versionOlder version "2.7.1" then cudaPackages_11 else cudaPackages;
-
-  inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
-
-  effectiveRocmPackages =
-    if strings.versionOlder version "2.8.0" then
-      throw ''
-        the required ROCm 5.7 version for magma ${version} has been removed
-      ''
-    else
-      rocmPackages;
+  inherit (cudaPackages) cudaAtLeast flags cudaOlder;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -63,7 +52,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) effectiveRocmPackages.clr.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -104,7 +93,7 @@ in
 
 assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magma";
   inherit version;
 
@@ -121,90 +110,80 @@ stdenv.mkDerivation {
     "test"
   ];
 
-  postPatch =
-    ''
-      # For rocm version script invoked by cmake
-      patchShebangs tools/
-      # Fixup for the python test runners
-      patchShebangs ./testing/run_{tests,summarize}.py
-    ''
-    + lib.optionalString (strings.versionOlder version "2.9.0") ''
-      substituteInPlace ./testing/run_tests.py \
-        --replace-fail \
-          "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
-          "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
-    '';
+  postPatch = ''
+    # For rocm version script invoked by cmake
+    patchShebangs tools/
+    # Fixup for the python test runners
+    patchShebangs ./testing/run_{tests,summarize}.py
+  '';
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-      cmake
-      ninja
-      gfortran
-    ]
-    ++ lists.optionals cudaSupport [
-      effectiveCudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    cmake
+    ninja
+    gfortran
+  ]
+  ++ lists.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs =
+  buildInputs = [
+    libpthreadstubs
+    lapack
+    blas
+    python3
+    (getLib gfortran.cc) # libgfortran.so
+  ]
+  ++ lists.optionals cudaSupport (
+    with cudaPackages;
     [
-      libpthreadstubs
-      lapack
-      blas
-      python3
-      (getLib gfortran.cc) # libgfortran.so
+      cuda_cccl # <nv/target> and <cuda/std/type_traits>
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusparse # cusparse.h
     ]
-    ++ lists.optionals cudaSupport (
-      with effectiveCudaPackages;
-      [
-        cuda_cccl # <nv/target> and <cuda/std/type_traits>
-        cuda_cudart # cuda_runtime.h
-        libcublas # cublas_v2.h
-        libcusparse # cusparse.h
-      ]
-      ++ lists.optionals (cudaOlder "11.8") [
-        cuda_nvprof # <cuda_profiler_api.h>
-      ]
-      ++ lists.optionals (cudaAtLeast "11.8") [
-        cuda_profiler_api # <cuda_profiler_api.h>
-      ]
-    )
-    ++ lists.optionals rocmSupport (
-      with effectiveRocmPackages;
-      [
-        clr
-        hipblas
-        hipsparse
-        llvm.openmp
-      ]
-    );
+    ++ lists.optionals (cudaOlder "11.8") [
+      cuda_nvprof # <cuda_profiler_api.h>
+    ]
+    ++ lists.optionals (cudaAtLeast "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
+    ]
+  )
+  ++ lists.optionals rocmSupport (
+    with rocmPackages;
+    [
+      clr
+      hipblas
+      hipsparse
+      llvm.openmp
+    ]
+  );
 
-  cmakeFlags =
-    [
-      (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
-      (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
-      (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
-      (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
-      # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
-      # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
-      # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
-      (strings.cmakeBool "USE_FORTRAN" true)
-      (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
-      (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
-      (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
-    ]
-    ++ lists.optionals cudaSupport [
-      (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-      (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
-    ]
-    ++ lists.optionals rocmSupport [
-      # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
-      # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
-      # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
-      (strings.cmakeFeature "ROCM_CORE" "${effectiveRocmPackages.clr}")
-      (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
-      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
-    ];
+  cmakeFlags = [
+    (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
+    (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+    (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
+    (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
+    # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
+    # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
+    # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
+    (strings.cmakeBool "USE_FORTRAN" true)
+    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
+    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
+    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
+  ]
+  ++ lists.optionals cudaSupport [
+    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
+  ]
+  ++ lists.optionals rocmSupport [
+    # Can be removed once https://github.com/icl-utk-edu/magma/pull/27 is merged
+    # Can't easily apply the PR as a patch because we rely on the tarball with pregenerated
+    # hipified files ∴ fetchpatch of the PR will apply cleanly but fail to build
+    (strings.cmakeFeature "ROCM_CORE" "${rocmPackages.clr}")
+    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+  ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
   doCheck = false;
@@ -239,8 +218,149 @@ stdenv.mkDerivation {
     '';
 
   passthru = {
-    inherit cudaSupport rocmSupport gpuTargets;
-    cudaPackages = effectiveCudaPackages;
+    inherit
+      cudaPackages
+      cudaSupport
+      rocmSupport
+      gpuTargets
+      ;
+    testers = {
+      all =
+        let
+          magma = finalAttrs.finalPackage;
+        in
+        writeShellApplication {
+          derivationArgs = {
+            __structuredAttrs = true;
+            strictDeps = true;
+          };
+          name = "magma-testers-all";
+          text = ''
+            logWithDate() {
+              printf "%s: %s\n" "$(date --utc --iso-8601=seconds)" "$*"
+            }
+
+            isIgnoredTest() {
+              case $1 in
+                # Skip the python scripts
+                *.py) return 0 ;;
+
+                # These test require files, so we skip them
+                testing_?io) ;&
+                testing_?madd) ;&
+                testing_?matrix) ;&
+                testing_?matrixcapcup) ;&
+                testing_?matrixinfo) ;&
+                testing_?mcompressor) ;&
+                testing_?mconverter) ;&
+                testing_?preconditioner) ;&
+                testing_?solver) ;&
+                testing_?solver_rhs) ;&
+                testing_?solver_rhs_scaling) ;&
+                testing_?sort) ;&
+                testing_?spmm) ;&
+                testing_?spmv) ;&
+                testing_?spmv_check) ;&
+                testing_?sptrsv) ;&
+                testing_dsspmv_mixed) ;&
+                testing_zcspmv_mixed)
+                  logWithDate "skipping $1 because it requires input"
+                  return 0
+                  ;;
+
+                # These test require outputing to files, so we skip them
+                testing_?print)
+                  logWithDate "skipping $1 because it requires creating output"
+                  return 0
+                  ;;
+
+                # These test succeed but exit with a non-zero code
+                testing_[cdz]gglse) ;&
+                testing_sgemm_fp16)
+                  logWithDate "skipping $1 because has a non-zero exit code"
+                  return 0
+                  ;;
+
+                # These test have memory freeing/allocation errors:
+                testing_?mdotc)
+                  logWithDate "skipping $1 because it fails to allocate or free memory"
+                  return 0
+                  ;;
+
+                # Test is not ignored otherwise.
+                *) return 1 ;;
+              esac
+            }
+
+            runTests() {
+              local -nr outputArray="$1"
+              local -i programExitCode=0
+              local file
+
+              # TODO: Collect and sort filenames prior to iterating so the order isn't dependent on the filesystem.
+              for file in "${magma.test}"/bin/*; do
+                if isIgnoredTest "$(basename "$file")"; then
+                  continue
+                fi
+
+                logWithDate "Starting $file"
+
+                # Since errexit is set, we need to reset programExitCode every iteration and use an OR
+                # to set it only when the test fails (which should not fail, avoiding tripping errexit).
+                programExitCode=0
+
+                # A number of test cases require an input <=128, so we set the range to include [128, 1024].
+                # Batch is kept small to keep tests fast.
+                "$file" --range 128:1024:896 --batch 32 || programExitCode=$?
+
+                logWithDate "Finished $file with exit code $programExitCode"
+
+                if ((programExitCode)); then
+                  outputArray+=("$file")
+                fi
+              done
+            }
+
+            main() {
+              local -a failedPrograms=()
+              runTests failedPrograms
+
+              if ((''${#failedPrograms[@]})); then
+                logWithDate "The following programs had non-zero exit codes:"
+                for file in "''${failedPrograms[@]}"; do
+                  # Using echo to avoid printing the date
+                  echo "- $file"
+                done
+                logWithDate "Exiting with code 1 because at least one test failed."
+                exit 1
+              fi
+
+              logWithDate "All tests passed!"
+              exit 0
+            }
+
+            main
+          '';
+          runtimeInputs = [ magma.test ];
+        };
+    };
+    tests = {
+      all =
+        runCommand "magma-tests-all"
+          {
+            __structuredAttrs = true;
+            strictDeps = true;
+            nativeBuildInputs = [ finalAttrs.passthru.testers.all ];
+            requiredSystemFeatures = lib.optionals cudaSupport [ "cuda" ];
+          }
+          ''
+            if magma-testers-all; then
+              touch "$out"
+            else
+              exit 1
+            fi
+          '';
+    };
   };
 
   meta = with lib; {
@@ -256,8 +376,6 @@ stdenv.mkDerivation {
       # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
       (cudaSupport && !static)
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
-      || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
-      || (rocmSupport && strings.versionOlder version "2.8.0");
+      || (cudaSupport && rocmSupport); # Mutually exclusive
   };
-}
+})

@@ -35,17 +35,17 @@
 
 let
   # Note: The cacert version is synthetic and must match the version in the package's CMake
-  cacert_version = "2023-12-12";
+  cacert_version = "2025-05-20";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-06-18";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "86c8dbbf902d5c84bdc90cd35d19cc167d5848bd";
-    hash = "sha256-CUVKrbpwPDMHPMHQfNSOQLQmRv7Fy4H/xsglZJaPZlI=";
+    rev = "831ba5d6550fd9dfaf90153876ff42396f7165ac";
+    hash = "sha256-7feXPFKExjuOGbitlAkSEEzYNEZb6hGSDUZW1EJGIW8=";
   };
 
   postPatch = ''
@@ -92,49 +92,47 @@ stdenv.mkDerivation (finalAttrs: {
     libtommath
   ];
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      fontconfig
-      libavif
-      libGL
-      libjxl
-      libwebp
-      libxcrypt
-      openssl
-      qt6Packages.qtbase
-      qt6Packages.qtmultimedia
-      simdutf
-      (skia.overrideAttrs (prev: {
-        gnFlags = prev.gnFlags ++ [
-          # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
-          # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
-          # Remove when/if this gets upstreamed in skia.
-          "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
-        ];
-      }))
-      woff2
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      libpulseaudio.dev
-      qt6Packages.qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  buildInputs = [
+    curl
+    ffmpeg
+    fontconfig
+    libavif
+    libGL
+    libjxl
+    libwebp
+    libxcrypt
+    openssl
+    qt6Packages.qtbase
+    qt6Packages.qtmultimedia
+    simdutf
+    (skia.overrideAttrs (prev: {
+      gnFlags = prev.gnFlags ++ [
+        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+        # Remove when/if this gets upstreamed in skia.
+        "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
+      ];
+    }))
+    woff2
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    libpulseaudio.dev
+    qt6Packages.qtwayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ];
 
-  cmakeFlags =
-    [
-      # Takes an enormous amount of resources, even with mold
-      (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
-      # Disable network operations
-      "-DSERENITY_CACHE_DIR=Caches"
-      "-DENABLE_NETWORK_DOWNLOADS=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    ];
+  cmakeFlags = [
+    # Takes an enormous amount of resources, even with mold
+    (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
+    # Disable network operations
+    "-DSERENITY_CACHE_DIR=Caches"
+    "-DENABLE_NETWORK_DOWNLOADS=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+  ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
@@ -143,18 +141,17 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
   env.NIX_LDFLAGS = "-lGL -lfontconfig";
 
-  postInstall =
-    ''
-      for size in 48x48 128x128; do
-        mkdir -p $out/share/icons/hicolor/$size/apps
-        ln -s $out/share/Lagom/icons/$size/app-browser.png \
-          $out/share/icons/hicolor/$size/apps/ladybird.png
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications $out/bin
-      mv $out/bundle/Ladybird.app $out/Applications
-    '';
+  postInstall = ''
+    for size in 48x48 128x128; do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $out/share/Lagom/icons/$size/app-browser.png \
+        $out/share/icons/hicolor/$size/apps/ladybird.png
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications $out/bin
+    mv $out/bundle/Ladybird.app $out/Applications
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -201,5 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

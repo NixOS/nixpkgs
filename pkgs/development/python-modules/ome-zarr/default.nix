@@ -47,7 +47,8 @@ buildPythonPackage rec {
     scikit-image
     toolz
     zarr
-  ] ++ fsspec.optional-dependencies.s3;
+  ]
+  ++ fsspec.optional-dependencies.s3;
 
   nativeCheckInputs = [
     pytestCheckHook

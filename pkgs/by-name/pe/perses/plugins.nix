@@ -57,9 +57,9 @@
     hash = "sha256-61k3G+8bCsUErBCwvFxgnYCPLAqpCIcuF3GEZHacMB0=";
   };
   "Table" = {
-    version = "0.7.0";
-    url = "https://github.com/perses/plugins/releases/download/table/v0.7.0/Table-0.7.0.tar.gz";
-    hash = "sha256-MemCUd/9RhodqMzDuYCNPYDMaSy7LpVPCTP4IUFE3lM=";
+    version = "0.7.1";
+    url = "https://github.com/perses/plugins/releases/download/table/v0.7.1/Table-0.7.1.tar.gz";
+    hash = "sha256-X/W2vSBddGHbEXzBW2MDxMwSMfVweSi5MtztXTURne8=";
   };
   "Tempo" = {
     version = "0.51.0-rc.3";

@@ -29,24 +29,24 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-MpmGLhg00quz4mYkidLofpcZTVwxbgIThg5v2r4HIfs=";
 
-  buildInputs =
-    [
-      expat
-      freetype
-      fira-code
-      fontconfig
-      harfbuzz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    expat
+    freetype
+    fira-code
+    fontconfig
+    harfbuzz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
   preCheck = ''
     export HOME=$TMPDIR

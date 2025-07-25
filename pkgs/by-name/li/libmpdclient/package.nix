@@ -18,14 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KF8IR9YV6b9ro+L9m6nHs1IggakEZddfcBKm/oKCVZY=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   meta = {
     description = "Client library for MPD (music player daemon)";

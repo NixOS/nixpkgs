@@ -131,25 +131,24 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch =
-    ''
-      # Ensure the prebuilt shared objects don't accidentally get shipped
-      rm -r Arc/natives/natives-*/libs/*
-      rm -r Arc/backends/backend-*/libs/*
+  postPatch = ''
+    # Ensure the prebuilt shared objects don't accidentally get shipped
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
 
-      cd Mindustry
+    cd Mindustry
 
-      # Remove unbuildable iOS stuff
-      sed -i '/^project(":ios"){/,/^}/d' build.gradle
-      sed -i '/robo(vm|VM)/d' build.gradle
-      rm ios/build.gradle
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86) ''
-      substituteInPlace ../Arc/arc-core/build.gradle \
-        --replace-fail "-msse" ""
-      substituteInPlace ../Arc/backends/backend-sdl/build.gradle \
-        --replace-fail "-m64" ""
-    '';
+    # Remove unbuildable iOS stuff
+    sed -i '/^project(":ios"){/,/^}/d' build.gradle
+    sed -i '/robo(vm|VM)/d' build.gradle
+    rm ios/build.gradle
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    substituteInPlace ../Arc/arc-core/build.gradle \
+      --replace-fail "-msse" ""
+    substituteInPlace ../Arc/backends/backend-sdl/build.gradle \
+      --replace-fail "-m64" ""
+  '';
 
   mitmCache = gradle.fetchDeps {
     inherit pname;
@@ -163,19 +162,18 @@ stdenv.mkDerivation {
     alsa-lib
     glew
   ];
-  nativeBuildInputs =
-    [
-      pkg-config
-      gradle
-      makeWrapper
-      jdk
-    ]
-    ++ lib.optionals enableClient [
-      ant
-      copyDesktopItems
-      curl
-      wget
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    gradle
+    makeWrapper
+    jdk
+  ]
+  ++ lib.optionals enableClient [
+    ant
+    copyDesktopItems
+    curl
+    wget
+  ];
 
   desktopItems = lib.optional enableClient desktopItem;
 
@@ -184,32 +182,31 @@ stdenv.mkDerivation {
     "-Dorg.gradle.java.home=${jdk}"
   ];
 
-  buildPhase =
-    ''
-      runHook preBuild
-    ''
-    + lib.optionalString enableServer ''
-      gradle server:dist
-    ''
-    + lib.optionalString enableClient ''
-      pushd ../Arc
-      gradle jnigenBuild
-      gradle jnigenJarNativesDesktop
-      glewlib=${lib.getLib glew}/lib/libGLEW.so
-      sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-      patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-        --add-needed $glewlib \
-        --add-needed $sdllib
-      # Put the freshly-built libraries where the pre-built libraries used to be:
-      cp arc-core/libs/*/* natives/natives-desktop/libs/
-      cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
-      popd
+  buildPhase = ''
+    runHook preBuild
+  ''
+  + lib.optionalString enableServer ''
+    gradle server:dist
+  ''
+  + lib.optionalString enableClient ''
+    pushd ../Arc
+    gradle jnigenBuild
+    gradle jnigenJarNativesDesktop
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed $glewlib \
+      --add-needed $sdllib
+    # Put the freshly-built libraries where the pre-built libraries used to be:
+    cp arc-core/libs/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    popd
 
-      gradle desktop:dist
-    ''
-    + ''
-      runHook postBuild
-    '';
+    gradle desktop:dist
+  ''
+  + ''
+    runHook postBuild
+  '';
 
   installPhase =
     let

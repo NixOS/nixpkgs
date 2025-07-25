@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reconplogger" ];
 
-  pytestFlagsArray = [ "reconplogger_tests.py" ];
+  enabledTestPaths = [ "reconplogger_tests.py" ];
 
   meta = with lib; {
     description = "Module to ease the standardization of logging within omni:us";

@@ -56,7 +56,8 @@ buildPythonPackage rec {
     pexpect
     python-daemon
     pyyaml
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     ansible-core # required to place ansible CLI onto the PATH in tests
@@ -94,18 +95,17 @@ buildPythonPackage rec {
     "test_resolved_actions"
   ];
 
-  disabledTestPaths =
-    [
-      # These tests unset PATH and then run executables like `bash` (see https://github.com/ansible/ansible-runner/pull/918)
-      "test/integration/test_runner.py"
-      "test/unit/test_runner.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
-      "test/integration"
-      # These tests write to `/tmp` which is not writable on Darwin
-      "test/unit/config/test__base.py"
-    ];
+  disabledTestPaths = [
+    # These tests unset PATH and then run executables like `bash` (see https://github.com/ansible/ansible-runner/pull/918)
+    "test/integration/test_runner.py"
+    "test/unit/test_runner.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
+    "test/integration"
+    # These tests write to `/tmp` which is not writable on Darwin
+    "test/unit/config/test__base.py"
+  ];
 
   pythonImportsCheck = [ "ansible_runner" ];
 

@@ -59,52 +59,49 @@ stdenv.mkDerivation (finalAttrs: {
 
   # or-tools normally attempts to build Protobuf for the build platform when
   # cross-compiling. Instead, just tell it where to find protoc.
-  postPatch =
-    ''
-      echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
-    ''
-    # Patches from OpenSUSE:
-    # https://build.opensuse.org/projects/science/packages/google-or-tools/files/google-or-tools.spec?expand=1
-    + ''
-      sed -i -e '/CMAKE_DEPENDENT_OPTION(INSTALL_DOC/ s/BUILD_CXX AND BUILD_DOC/BUILD_CXX/' CMakeLists.txt
-      find . -iname \*CMakeLists.txt -exec sed -i -e 's/pybind11_native_proto_caster/pybind11_protobuf::pybind11_native_proto_caster/' '{}' \;
-      sed -i -e 's/TARGET pybind11_native_proto_caster/TARGET pybind11_protobuf::pybind11_native_proto_caster/' cmake/check_deps.cmake
-      sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
-    '';
+  postPatch = ''
+    echo "set(PROTOC_PRG $(type -p protoc))" > cmake/host.cmake
+  ''
+  # Patches from OpenSUSE:
+  # https://build.opensuse.org/projects/science/packages/google-or-tools/files/google-or-tools.spec?expand=1
+  + ''
+    sed -i -e '/CMAKE_DEPENDENT_OPTION(INSTALL_DOC/ s/BUILD_CXX AND BUILD_DOC/BUILD_CXX/' CMakeLists.txt
+    find . -iname \*CMakeLists.txt -exec sed -i -e 's/pybind11_native_proto_caster/pybind11_protobuf::pybind11_native_proto_caster/' '{}' \;
+    sed -i -e 's/TARGET pybind11_native_proto_caster/TARGET pybind11_protobuf::pybind11_native_proto_caster/' cmake/check_deps.cmake
+    sed -i -e "/protobuf/ { s/.*,/'protobuf >= 5.26',/ }" ortools/python/setup.py.in
+  '';
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_DEPS" false)
-      (lib.cmakeBool "BUILD_PYTHON" true)
-      (lib.cmakeBool "BUILD_pybind11" false)
-      (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
-      (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-      (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
-      (lib.cmakeBool "USE_GLPK" true)
-      (lib.cmakeBool "USE_SCIP" false)
-      (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_DEPS" false)
+    (lib.cmakeBool "BUILD_PYTHON" true)
+    (lib.cmakeBool "BUILD_pybind11" false)
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
+    (lib.cmakeBool "USE_GLPK" true)
+    (lib.cmakeBool "USE_SCIP" false)
+    (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      ensureNewerSourcesForZipFilesHook
-      pkg-config
-      python3.pythonOnBuildForHost
-      swig
-      unzip
-    ]
-    ++ (with python3.pythonOnBuildForHost.pkgs; [
-      pip
-      mypy-protobuf
-      mypy
-    ]);
+  nativeBuildInputs = [
+    cmake
+    ensureNewerSourcesForZipFilesHook
+    pkg-config
+    python3.pythonOnBuildForHost
+    swig
+    unzip
+  ]
+  ++ (with python3.pythonOnBuildForHost.pkgs; [
+    pip
+    mypy-protobuf
+    mypy
+  ]);
   buildInputs = [
     abseil-cpp
     bzip2

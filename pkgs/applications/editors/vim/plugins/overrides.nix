@@ -16,6 +16,7 @@
   mkYarnModules,
   python3,
   # Misc dependencies
+  charm-freeze,
   code-minimap,
   dailies,
   dasht,
@@ -23,6 +24,7 @@
   direnv,
   fzf,
   gawk,
+  helm-ls,
   himalaya,
   htop,
   jq,
@@ -118,6 +120,10 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # lazydocker.nvim dependencies
+  lazydocker,
+  # lazyjj.nvim dependencies
+  lazyjj,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
@@ -164,6 +170,9 @@ in
   # Regular overrides
 
   advanced-git-search-nvim = super.advanced-git-search-nvim.overrideAttrs {
+    checkInputs = with self; [
+      snacks-nvim
+    ];
     dependencies = with self; [
       telescope-nvim
       vim-fugitive
@@ -384,17 +393,16 @@ in
     # These usually implicitly set by cc-wrapper around clang (pkgs/build-support/cc-wrapper).
     # The linked ruby code shows generates the required '.clang_complete' for cmake based projects
     # https://gist.github.com/Mic92/135e83803ed29162817fce4098dec144
-    preFixup =
-      ''
-        substituteInPlace "$out"/plugin/clang_complete.vim \
-          --replace-fail "let g:clang_library_path = ''
-      + "''"
-      + ''
-        " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
+    preFixup = ''
+      substituteInPlace "$out"/plugin/clang_complete.vim \
+        --replace-fail "let g:clang_library_path = ''
+    + "''"
+    + ''
+      " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
 
-              substituteInPlace "$out"/plugin/libclang.py \
-                --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
-      '';
+            substituteInPlace "$out"/plugin/libclang.py \
+              --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+    '';
   };
 
   claude-code-nvim = super.claude-code-nvim.overrideAttrs {
@@ -752,14 +760,12 @@ in
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
-      ruby
     ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
         --replace-fail '/bin/bash' 'bash' \
         --replace-fail xcrun ""
       make build
-      rm ruby/command-t/ext/command-t/*.o
     '';
   };
 
@@ -1074,13 +1080,11 @@ in
   };
 
   direnv-vim = super.direnv-vim.overrideAttrs (old: {
-    preFixup =
-      old.preFixup or ""
-      + ''
-        substituteInPlace $out/autoload/direnv.vim \
-          --replace-fail "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
-            "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
-      '';
+    preFixup = old.preFixup or "" + ''
+      substituteInPlace $out/autoload/direnv.vim \
+        --replace-fail "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
+    '';
   });
 
   dotnet-nvim = super.dotnet-nvim.overrideAttrs {
@@ -1170,6 +1174,10 @@ in
     dependencies = [ self.self ];
   };
 
+  freeze-nvim = super.freeze-nvim.overrideAttrs {
+    runtimeDeps = [ charm-freeze ];
+  };
+
   fruzzy =
     let
       # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
@@ -1231,6 +1239,15 @@ in
     nvimSkipModules = [
       # TODO: package fzy-lua-native
       "fuzzy_nvim.fzy_matcher"
+    ];
+  };
+
+  fyler-nvim = super.fyler-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires setup call
+      "fyler.views.explorer.init"
+      "fyler.views.explorer.actions"
+      "fyler.views.explorer.ui"
     ];
   };
 
@@ -1403,6 +1420,12 @@ in
     luaAttr = luaPackages.haskell-tools-nvim;
   };
 
+  helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
+    runtimeDeps = [
+      helm-ls
+    ];
+  };
+
   helpview-nvim = super.helpview-nvim.overrideAttrs {
     nvimSkipModules = [ "definitions.__vimdoc" ];
   };
@@ -1492,6 +1515,10 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  jdd-nvim = super.jdd-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   jedi-vim = super.jedi-vim.overrideAttrs {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -1530,6 +1557,19 @@ in
     nvimSkipModules = [
       # Requires some extra work to get CLI working in nixpkgs
       "cli.kulala_cli"
+    ];
+  };
+
+  lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
+    runtimeDeps = [
+      lazydocker
+    ];
+  };
+
+  lazyjj-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [
+      lazyjj
     ];
   };
 
@@ -1603,6 +1643,7 @@ in
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    checkInputs = [ self.snacks-nvim ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
@@ -1625,6 +1666,7 @@ in
       "leetcode.picker.language.fzf"
       "leetcode.picker.question.fzf"
       "leetcode.picker.question.init"
+      "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
@@ -1672,6 +1714,10 @@ in
   lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
     checkInputs = [ self.nvim-web-devicons ];
+  };
+
+  lightswitch-nvim = super.lightswitch-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
   };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
@@ -2777,6 +2823,13 @@ in
 
   otter-nvim = super.otter-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
+    nvimSkipModules = [
+      # requires config setup
+      "otter.keeper"
+      "otter.lsp.handlers"
+      "otter.lsp.init"
+      "otter.diagnostics"
+    ];
   };
 
   outline-nvim = super.outline-nvim.overrideAttrs {
@@ -2875,6 +2928,10 @@ in
     '';
   };
 
+  plantuml-nvim = super.plantuml-nvim.overrideAttrs {
+    dependencies = [ self.LibDeflate-nvim ];
+  };
+
   playground = super.playground.overrideAttrs {
     dependencies = with self; [
       # we need the 'query' grammar to make
@@ -2897,6 +2954,15 @@ in
         mdt = lib.getExe md-tui;
       })
     ];
+  };
+
+  python-mode = super.python-mode.overrideAttrs {
+    postPatch = ''
+      # NOTE: Fix broken symlink - the pytoolconfig directory was moved to src/
+      # https://github.com/python-mode/python-mode/pull/1189#issuecomment-3109528360
+      rm -f pymode/libs/pytoolconfig
+      ln -sf ../../submodules/pytoolconfig/src/pytoolconfig pymode/libs/pytoolconfig
+    '';
   };
 
   pywal-nvim = super.pywal-nvim.overrideAttrs {
@@ -2927,9 +2993,9 @@ in
       nvim-lspconfig
       otter-nvim
     ];
-  };
-
-  quicker-nvim = super.quicker-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "quarto.runner.init"
+    ];
   };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
@@ -3891,13 +3957,11 @@ in
   };
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
-    postPatch =
-      old.postPatch or ""
-      + ''
-        substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
-          'g:stylish_haskell_command = "stylish-haskell"' \
-          'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
-      '';
+    postPatch = old.postPatch or "" + ''
+      substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
+        'g:stylish_haskell_command = "stylish-haskell"' \
+        'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
+    '';
   });
 
   vim-surround = super.vim-surround.overrideAttrs {
@@ -4003,7 +4067,10 @@ in
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
-    dependencies = [ self.nui-nvim ];
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
   };
 
   xmake-nvim = super.xmake-nvim.overrideAttrs {

@@ -33,12 +33,14 @@ let
   lynxpresence = python3Packages.buildPythonPackage rec {
     pname = "lynxpresence";
     version = "4.4.1";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
       hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
     };
+
+    build-system = with python3Packages; [ setuptools ];
 
     doCheck = false; # tests require internet connection
     pythonImportsCheck = [ "lynxpresence" ];

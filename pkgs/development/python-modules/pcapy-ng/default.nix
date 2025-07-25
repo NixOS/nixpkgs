@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   doCheck = pythonOlder "3.10";
 
-  pytestFlagsArray = [ "pcapytests.py" ];
+  enabledTestPaths = [ "pcapytests.py" ];
 
   meta = with lib; {
     description = "Module to interface with the libpcap packet capture library";

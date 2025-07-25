@@ -75,14 +75,13 @@ buildPythonPackage rec {
     heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs =
-    [
-      fsspec
-      psutil
-      pytestCheckHook
-    ]
-    ++ fsspec.optional-dependencies.github
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    fsspec
+    psutil
+    pytestCheckHook
+  ]
+  ++ fsspec.optional-dependencies.github
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "-m 'not needs_internet'" ];
 

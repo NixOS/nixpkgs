@@ -52,7 +52,8 @@ stdenv.mkDerivation {
   buildInputs = [
     pcre2
     libiconv
-  ] ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
@@ -83,6 +84,10 @@ stdenv.mkDerivation {
     echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/grep/";

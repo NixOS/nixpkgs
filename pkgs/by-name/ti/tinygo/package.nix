@@ -65,7 +65,8 @@ buildGoModule rec {
   buildInputs = [
     llvm
     clang.cc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -129,7 +130,8 @@ buildGoModule rec {
     avrdude
     openocd
     binaryen
-  ] ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
+  ]
+  ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall

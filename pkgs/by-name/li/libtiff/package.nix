@@ -83,13 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
   ];
 
-  buildInputs =
-    [
-      zstd
-    ]
-    ++ lib.optionals withLerc [
-      lerc
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals withLerc [
+    lerc
+  ];
 
   # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "cat command for documents / images / videos and more!";
+    description = "cat command for documents / images / videos and more";
     homepage = "https://github.com/Skardyy/mcat";
     changelog = "https://github.com/Skardyy/mcat/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;

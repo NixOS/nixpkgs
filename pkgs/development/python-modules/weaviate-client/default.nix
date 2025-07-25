@@ -87,7 +87,7 @@ buildPythonPackage rec {
     "test_client_with_extra_options"
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
     "mock_tests"
   ];

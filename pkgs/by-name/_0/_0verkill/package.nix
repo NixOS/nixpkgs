@@ -2,7 +2,7 @@
   lib,
   gccStdenv,
   fetchFromGitHub,
-  autoreconfHook269,
+  autoreconfHook,
   xorgproto,
   libX11,
   libXpm,
@@ -19,7 +19,7 @@ gccStdenv.mkDerivation {
     sha256 = "WO7PN192HhcDl6iHIbVbH7MVMi1Tl2KyQbDa9DWRO6M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook269 ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     libX11
     xorgproto
@@ -27,10 +27,6 @@ gccStdenv.mkDerivation {
   ];
 
   configureFlags = [ "--with-x" ];
-
-  preAutoreconf = ''
-    autoupdate
-  '';
 
   # The code needs an update for gcc-10:
   #   https://github.com/hackndev/0verkill/issues/7

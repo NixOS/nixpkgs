@@ -13,20 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "1.15.8";
+  version = "1.15.9";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rwTa9owtnkyI9OpUKLk6V7WbAkqlYucpGzPnHHvKW/A=";
+    hash = "sha256-7djVcozWklI/0KhDC20df+H3YQbodUZaXBnQT4Ug8oI=";
   };
-
-  patches = [
-    # fix libuv changes. review removal in > 1.15.8
-    # https://github.com/cowsql/cowsql/pull/37
-    ./37.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

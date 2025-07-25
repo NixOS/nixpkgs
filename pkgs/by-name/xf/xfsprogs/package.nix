@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   gettext,
   pkg-config,
@@ -17,26 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.13.0";
+  version = "6.15.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-BFmTP5PZTIK8J4nnvWN0InPZ10IHza5n3DAyA42ggzc=";
+    hash = "sha256-E7kfdL7vitERN/fZ1xBVVz2R6WG8VbsCRZVvabhM1wQ=";
   };
-
-  patches = [
-    (fetchurl {
-      name = "icu76.patch";
-      url = "https://lore.kernel.org/linux-xfs/20250212081649.3502717-1-hi@alyssa.is/raw";
-      hash = "sha256-Z7BW0B+/5eHWXdHre++wRtdbU/P6XZqudYx6EK5msIU=";
-    })
-    # Backport which fixes pkgsCross.armv7l-hf-multiplatform.xfsprogs
-    (fetchpatch {
-      name = "32-bit.patch";
-      url = "https://web.git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/patch/mkfs/proto.c?id=a5466cee9874412cfdd187f07c5276e1d4ef0fea";
-      hash = "sha256-svC7pSbblWfO5Khots2kWWfDMBXUrU35fk5wsdYuPQI=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -113,5 +98,8 @@ stdenv.mkDerivation rec {
       dezgeg
       ajs124
     ];
+    # error: ‘struct statx’ has no member named ‘stx_atomic_write_unit_min’ ‘stx_atomic_write_unit_max’ ‘stx_atomic_write_segments_max’
+    # remove if https://www.openwall.com/lists/musl/2024/10/23/6 gets merged
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)

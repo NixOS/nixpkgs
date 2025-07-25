@@ -29,13 +29,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   nativeCheckInputs = [ git ];
 

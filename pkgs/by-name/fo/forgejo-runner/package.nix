@@ -17,27 +17,42 @@ let
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "6.3.1";
+  version = "7.0.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-eR7WsdnA9guEf/BXymWuJTy+4TTBUq9YxeFVKgvvAD8=";
+    hash = "sha256-vt0uPGJdydy4cM1AEBeXQu4aNRggqaITS3eAmimVPRU=";
   };
 
-  vendorHash = "sha256-ZlXx0B2IdyeqPzQchmUI0peOZShUi0m9BMBQ1Xj2ftQ=";
+  vendorHash = "sha256-hE03QkXSPyl7IVEnXi/wWwQZOVcdyyGdEmGiOwLK6Zg=";
+
+  # See upstream Makefile
+  # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
+  tags = [
+    "netgo"
+    "osusergo"
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=${src.rev}"
+    "-X runner.forgejo.org/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
+
+  postInstall = ''
+    # fix up go-specific executable naming derived from package name, upstream
+    # also calls it `forgejo-runner`
+    mv $out/bin/runner.forgejo.org $out/bin/forgejo-runner
+    # provide old binary name for compatibility
+    ln -s $out/bin/forgejo-runner $out/bin/act_runner
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -61,6 +76,6 @@ buildGoModule rec {
       emilylange
       christoph-heiss
     ];
-    mainProgram = "act_runner";
+    mainProgram = "forgejo-runner";
   };
 }

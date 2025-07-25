@@ -75,19 +75,18 @@ stdenv.mkDerivation (
     env.ROCM_PATH = "${clr}";
     requiredSystemFeatures = [ "big-parallel" ];
 
-    outputs =
-      [
-        "out"
-      ]
-      ++ lib.optionals buildTests [
-        "test"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "benchmark"
-      ]
-      ++ lib.optionals buildSamples [
-        "sample"
-      ];
+    outputs = [
+      "out"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ]
+    ++ lib.optionals buildSamples [
+      "sample"
+    ];
 
     # Need an empty cuda.h for this to compile
     # Better than pulling in unfree cuda headers
@@ -107,31 +106,30 @@ stdenv.mkDerivation (
       ninja
     ];
 
-    buildInputs =
-      [
-        rocblas
-        rocsolver
-        hipblas-common
-        hipblas
-        openmp
-        libffi
-        ncurses
-        xz
-        nlohmann_json
-        rocmlir
+    buildInputs = [
+      rocblas
+      rocsolver
+      hipblas-common
+      hipblas
+      openmp
+      libffi
+      ncurses
+      xz
+      nlohmann_json
+      rocmlir
 
-        msgpack
-        libxml2
-        python3Packages.msgpack
-        zlib
-        zstd
-      ]
-      ++ lib.optionals buildTests [
-        gtest
-      ]
-      ++ lib.optionals (buildTests || buildBenchmarks) [
-        lapack-reference
-      ];
+      msgpack
+      libxml2
+      python3Packages.msgpack
+      zlib
+      zstd
+    ]
+    ++ lib.optionals buildTests [
+      gtest
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      lapack-reference
+    ];
 
     env.TRITON_OFFLINE_BUILD = 1;
     env.LLVM_SYSPATH = "${triton-llvm'}";
@@ -177,31 +175,30 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    cmakeFlags =
-      [
-        "-Wno-dev"
-        "-DAOTRITON_NOIMAGE_MODE=ON" # FIXME: Should be able to build with object code but generate_shim is failing
-        "-DCMAKE_BUILD_TYPE=Release"
-        "-DCMAKE_VERBOSE_MAKEFILE=ON"
-        "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
-        "-DCMAKE_CXX_COMPILER=${compiler}"
-        # Manually define CMAKE_INSTALL_<DIR>
-        # See: https://github.com/NixOS/nixpkgs/pull/197838
-        "-DCMAKE_INSTALL_BINDIR=bin"
-        "-DCMAKE_INSTALL_LIBDIR=lib"
-        "-DCMAKE_INSTALL_INCLUDEDIR=include"
-        "-DAMDGPU_TARGETS=${gpuTargets'}"
-        "-DGPU_TARGETS=${gpuTargets'}"
-      ]
-      ++ lib.optionals buildTests [
-        "-DBUILD_CLIENTS_TESTS=ON"
-      ]
-      ++ lib.optionals buildBenchmarks [
-        "-DBUILD_CLIENTS_BENCHMARKS=ON"
-      ]
-      ++ lib.optionals buildSamples [
-        "-DBUILD_CLIENTS_SAMPLES=ON"
-      ];
+    cmakeFlags = [
+      "-Wno-dev"
+      "-DAOTRITON_NOIMAGE_MODE=ON" # FIXME: Should be able to build with object code but generate_shim is failing
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCMAKE_VERBOSE_MAKEFILE=ON"
+      "-DVIRTUALENV_PYTHON_EXENAME=${lib.getExe py}"
+      "-DCMAKE_CXX_COMPILER=${compiler}"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DAMDGPU_TARGETS=${gpuTargets'}"
+      "-DGPU_TARGETS=${gpuTargets'}"
+    ]
+    ++ lib.optionals buildTests [
+      "-DBUILD_CLIENTS_TESTS=ON"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ]
+    ++ lib.optionals buildSamples [
+      "-DBUILD_CLIENTS_SAMPLES=ON"
+    ];
 
     postInstall =
       lib.optionalString buildTests ''

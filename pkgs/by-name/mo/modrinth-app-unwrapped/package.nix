@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-Q6e942R+3+511qFe4oehxdquw1TgaWMyOGOmP3me54o=";
   };
 
@@ -46,7 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpm.configHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 

@@ -40,7 +40,7 @@ do
     }
     ')
     url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_"$version"_"$i".deb")
-    hash+=("$(nix hash to-sri --type sha256 $sha256sum)")
+    hash+=("$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $sha256sum)")
 done
 
 cat >sources.nix <<EOF

@@ -31,7 +31,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ optional-dependencies.streams;
+  ]
+  ++ optional-dependencies.streams;
 
   meta = {
     description = "Reusable state for writing clean tests and more";

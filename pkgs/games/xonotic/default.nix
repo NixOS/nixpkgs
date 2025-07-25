@@ -64,7 +64,6 @@ let
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      astsmtl
       zalakain
     ];
     platforms = lib.platforms.linux;
@@ -93,24 +92,23 @@ let
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs =
-      [
-        libjpeg
-        zlib
-        libvorbis
-        curl
-        gmp
-        libX11
-      ]
-      ++ lib.optionals withGLX [
-        libGLU
-        libGL
-        libXpm
-        libXext
-        libXxf86vm
-        alsa-lib
-      ]
-      ++ lib.optionals withSDL [ SDL2 ];
+    buildInputs = [
+      libjpeg
+      zlib
+      libvorbis
+      curl
+      gmp
+      libX11
+    ]
+    ++ lib.optionals withGLX [
+      libGLU
+      libGL
+      libXpm
+      libXext
+      libXxf86vm
+      alsa-lib
+    ]
+    ++ lib.optionals withSDL [ SDL2 ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 

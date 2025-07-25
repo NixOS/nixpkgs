@@ -230,7 +230,8 @@ stdenv.mkDerivation rec {
     # disable suspend detection during a build inside Nix as this is
     # not available inside the darwin sandbox
     ./bazel_darwin_sandbox.patch
-  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
+  ]
+  ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
   # Additional tests that check bazel’s functionality. Execute
   #
@@ -609,19 +610,18 @@ stdenv.mkDerivation rec {
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
-  nativeBuildInputs =
-    [
-      installShellFiles
-      makeWrapper
-      python3
-      unzip
-      which
-      zip
-      python3.pkgs.absl-py # Needed to build fish completion
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      cctools
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    python3
+    unzip
+    which
+    zip
+    python3.pkgs.absl-py # Needed to build fish completion
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    cctools
+  ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -742,18 +742,17 @@ stdenv.mkDerivation rec {
 
   # Save paths to hardcoded dependencies so Nix can detect them.
   # This is needed because the templates get tar’d up into a .jar.
-  postFixup =
-    ''
-      mkdir -p $out/nix-support
-      echo "${defaultShellPath}" >> $out/nix-support/depends
-      # The string literal specifying the path to the bazel-rc file is sometimes
-      # stored non-contiguously in the binary due to gcc optimisations, which leads
-      # Nix to miss the hash when scanning for dependencies
-      echo "${bazelRC}" >> $out/nix-support/depends
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      echo "${cctools}" >> $out/nix-support/depends
-    '';
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${defaultShellPath}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
+  '';
 
   dontStrip = true;
   dontPatchELF = true;

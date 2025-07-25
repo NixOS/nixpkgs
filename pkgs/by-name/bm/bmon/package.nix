@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libconfuse
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libnl;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libnl;
 
   preConfigure = ''
     # Must be an absolute path

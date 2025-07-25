@@ -9,6 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
   version = "1.11.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -32,19 +33,18 @@ python3Packages.buildPythonApplication rec {
     pytest-cov-stub
   ];
 
-  propagatedBuildInputs =
-    [
-      nix
-    ]
-    ++ (with python3Packages; [
-      click
-      colorama
-      pyyaml
-      requests
-      setuptools
-      toml
-      zodb
-    ]);
+  propagatedBuildInputs = [
+    nix
+  ]
+  ++ (with python3Packages; [
+    click
+    colorama
+    pyyaml
+    requests
+    setuptools
+    toml
+    zodb
+  ]);
 
   postBuild = "make -C doc";
 

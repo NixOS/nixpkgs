@@ -176,7 +176,7 @@ elsif (defined $expr) {
 
         if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
             $algo = $1;
-            $hash = `nix hash to-base16 $hash` or die;
+            $hash = `nix --extra-experimental-features nix-command hash to-base16 $hash` or die;
             chomp $hash;
         }
 
@@ -184,7 +184,7 @@ elsif (defined $expr) {
 
         # Convert non-SRI base-64 to base-16.
         if ($hash =~ /^[A-Za-z0-9+\/=]+$/) {
-            $hash = `nix hash to-base16 --type '$algo' $hash` or die;
+            $hash = `nix --extra-experimental-features nix-command hash to-base16 --type '$algo' $hash` or die;
             chomp $hash;
         }
 

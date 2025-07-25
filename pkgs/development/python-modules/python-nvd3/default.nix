@@ -29,7 +29,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   meta = {
     homepage = "https://github.com/areski/python-nvd3";

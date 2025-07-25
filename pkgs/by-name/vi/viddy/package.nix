@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
-    description = "Modern watch command, time machine and pager etc.";
+    description = "Modern `watch` command";
     changelog = "https://github.com/sachaos/viddy/releases";
     homepage = "https://github.com/sachaos/viddy";
     license = lib.licenses.mit;

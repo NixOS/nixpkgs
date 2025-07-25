@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.68.0";
+  version = "0.69.1";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x6QDwduAMCD+Trj0awQXW0Tdleb2U6YBi/7mdMB6V/8=";
+    hash = "sha256-+KZrKOxn9M+iKtugH89bPc106NGLwErMgIyiaU2kcGE=";
   };
 
-  vendorHash = "sha256-XRgKfRw6VGg+lkbtPWUVNfAk5a7ZdFwVmhjtM7uSwHs=";
+  vendorHash = "sha256-YmE2eR5UnXy2nXTQP2FdyPQLAQVYPzDTmLrWtbRknAs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,6 +36,11 @@ buildGoModule (finalAttrs: {
     # Fix failed TestLabelsInit test
     export USER="runner"
   '';
+
+  # TestVerifyLinks wants to use docker.sock, which is not available in the Nix build environment.
+  checkFlags = [
+    "-skip=^TestVerifyLinks$"
+  ];
 
   postInstall = ''
     local INSTALL="$out/bin/containerlab"

@@ -55,7 +55,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   passthru.tests = {

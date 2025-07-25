@@ -29,19 +29,19 @@ stdenv.mkDerivation {
   makeFlags = [
     "DESTINATION=$(out)/bin/"
     "CFLAGS=-Wno-incompatible-pointer-types"
-  ] ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
+  ]
+  ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
 
-  buildInputs =
-    [
-      motif
-      xorg.libX11
-      xorg.libXext
-      xorg.libXt
-    ]
-    ++ lib.optionals withAudioTracking [
-      libpulseaudio
-      aubio
-    ];
+  buildInputs = [
+    motif
+    xorg.libX11
+    xorg.libXext
+    xorg.libXt
+  ]
+  ++ lib.optionals withAudioTracking [
+    libpulseaudio
+    aubio
+  ];
 
   meta = with lib; {
     homepage = "http://codefromabove.com/2014/05/catclock/";

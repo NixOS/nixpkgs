@@ -28,7 +28,7 @@ buildFishPlugin rec {
 
   meta = {
     description = "Pretty, minimal and fast Fish prompt, ported from zsh";
-    homepage = "https://github.com/rafaelrinaldi/pure";
+    homepage = "https://github.com/pure-fish/pure";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
   };

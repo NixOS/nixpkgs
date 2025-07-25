@@ -27,7 +27,8 @@ buildPythonPackage rec {
   dependencies = [
     camel-converter
     requests
-  ] ++ camel-converter.optional-dependencies.pydantic;
+  ]
+  ++ camel-converter.optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "meilisearch" ];
 

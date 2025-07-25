@@ -45,24 +45,23 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      aiofiles
-      blinker
-      click
-      flask
-      hypercorn
-      itsdangerous
-      jinja2
-      markupsafe
-      pydata-sphinx-theme
-      python-dotenv
-      werkzeug
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    aiofiles
+    blinker
+    click
+    flask
+    hypercorn
+    itsdangerous
+    jinja2
+    markupsafe
+    pydata-sphinx-theme
+    python-dotenv
+    werkzeug
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+    typing-extensions
+  ];
 
   pythonImportsCheck = [ "quart" ];
 

@@ -62,6 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "NeoHtop";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

@@ -40,32 +40,30 @@ rustPlatform.buildRustPackage rec {
     imagemagick
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      libxkbcommon
-      pango
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    libxkbcommon
+    pango
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
-  runtimeDependencies =
-    [
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  runtimeDependencies = [
+    libxkbcommon
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/bite \

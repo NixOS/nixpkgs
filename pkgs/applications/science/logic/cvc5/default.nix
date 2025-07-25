@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cvc5";
     repo = "cvc5";
     rev = "cvc5-${version}";
-    hash = "sha256-mTWPGYeUH05qmLYUtNpsFXicUm3GMrQC06t7Z4J1YQ0=";
+    hash = "sha256-w8rIGPG9BTEPV9HG2U40A4DYYnC6HaWbzqDKCRhaT00=";
   };
 
   nativeBuildInputs = [

@@ -26,18 +26,17 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  postInstall =
-    ''
-      # Built by ./build.rs using `asciidoctor`
-      installManPage ./target/*/release/build/qrtool*/out/*.?
+  postInstall = ''
+    # Built by ./build.rs using `asciidoctor`
+    installManPage ./target/*/release/build/qrtool*/out/*.?
 
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd qrtool \
-        --bash <($out/bin/qrtool --generate-completion bash) \
-        --fish <($out/bin/qrtool --generate-completion fish) \
-        --zsh <($out/bin/qrtool --generate-completion zsh)
-    '';
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd qrtool \
+      --bash <($out/bin/qrtool --generate-completion bash) \
+      --fish <($out/bin/qrtool --generate-completion fish) \
+      --zsh <($out/bin/qrtool --generate-completion zsh)
+  '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];

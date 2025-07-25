@@ -47,31 +47,30 @@ let
       inherit version;
       pname = "asterisk" + lib.optionalString ldapSupport "-ldap";
 
-      buildInputs =
-        [
-          jansson
-          libedit
-          libxml2
-          libxslt
-          ncurses
-          openssl
-          sqlite
-          dmidecode
-          libuuid
-          newt
-          lua
-          speex
-          srtp
-          wget
-          curl
-          iksemel
-        ]
-        ++ lib.optionals withOpus [
-          libopus
-          opusfile
-          libogg
-        ]
-        ++ lib.optionals ldapSupport [ openldap ];
+      buildInputs = [
+        jansson
+        libedit
+        libxml2
+        libxslt
+        ncurses
+        openssl
+        sqlite
+        dmidecode
+        libuuid
+        newt
+        lua
+        speex
+        srtp
+        wget
+        curl
+        iksemel
+      ]
+      ++ lib.optionals withOpus [
+        libopus
+        opusfile
+        libogg
+      ]
+      ++ lib.optionals ldapSupport [ openldap ];
       nativeBuildInputs = [
         util-linux
         pkg-config
@@ -86,7 +85,8 @@ let
         # This patch changes the runtime behavior to look for state
         # directories in /var rather than ${out}/var.
         ./runtime-vardirs.patch
-      ] ++ lib.optional withOpus "${asterisk-opus}/asterisk.patch";
+      ]
+      ++ lib.optional withOpus "${asterisk-opus}/asterisk.patch";
 
       postPatch = ''
         echo "PJPROJECT_CONFIG_OPTS += --prefix=$out" >> third-party/pjproject/Makefile.rules

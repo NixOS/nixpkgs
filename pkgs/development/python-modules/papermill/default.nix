@@ -62,7 +62,8 @@ buildPythonPackage rec {
     requests
     tenacity
     tqdm
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
   optional-dependencies = {
     azure = [
@@ -76,18 +77,17 @@ buildPythonPackage rec {
     s3 = [ boto3 ];
   };
 
-  nativeCheckInputs =
-    [
-      ipykernel
-      moto
-      pytest-mock
-      pytestCheckHook
-      versionCheckHook
-      writableTmpDirAsHomeHook
-    ]
-    ++ optional-dependencies.azure
-    ++ optional-dependencies.s3
-    ++ optional-dependencies.gcs;
+  nativeCheckInputs = [
+    ipykernel
+    moto
+    pytest-mock
+    pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.azure
+  ++ optional-dependencies.s3
+  ++ optional-dependencies.gcs;
   versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "papermill" ];
@@ -101,15 +101,14 @@ buildPythonPackage rec {
     "--deselect=papermill/tests/test_execute.py::TestOutputFormatting::test_output_formatting"
   ];
 
-  disabledTests =
-    [
-      # pytest 8 compat
-      "test_read_with_valid_file_extension"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # might fail due to the sandbox
-      "test_end2end_autosave_slow_notebook"
-    ];
+  disabledTests = [
+    # pytest 8 compat
+    "test_read_with_valid_file_extension"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # might fail due to the sandbox
+    "test_end2end_autosave_slow_notebook"
+  ];
 
   disabledTestPaths = [
     # ImportError: cannot import name 'mock_s3' from 'moto'

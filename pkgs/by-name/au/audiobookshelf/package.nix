@@ -86,6 +86,7 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
+      tebriel
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";

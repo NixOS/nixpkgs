@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   meta = with lib; {
     description = "YubiKey plugin for age";

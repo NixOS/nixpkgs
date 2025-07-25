@@ -178,7 +178,7 @@ beamPackages.mixRelease rec {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
     changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
-    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
+    description = "Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
     mainProgram = "plausible";
     teams = [ teams.cyberus ];
     platforms = platforms.unix;

@@ -27,7 +27,8 @@ buildPythonPackage rec {
     ddt
     gitdb
     pkgs.gitMinimal
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   postPatch = ''
     substituteInPlace git/cmd.py \

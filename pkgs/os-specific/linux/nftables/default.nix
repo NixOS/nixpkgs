@@ -54,24 +54,22 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
-  buildInputs =
-    [
-      libmnl
-      libnftnl
-      libpcap
-      gmp
-      jansson
-    ]
-    ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables;
+  buildInputs = [
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+  ]
+  ++ lib.optional withCli libedit
+  ++ lib.optional withXtables iptables;
 
-  configureFlags =
-    [
-      "--with-json"
-      (lib.withFeatureAs withCli "cli" "editline")
-    ]
-    ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional withXtables "--with-xtables";
+  configureFlags = [
+    "--with-json"
+    (lib.withFeatureAs withCli "cli" "editline")
+  ]
+  ++ lib.optional (!withDebugSymbols) "--disable-debug"
+  ++ lib.optional withXtables "--with-xtables";
 
   enableParallelBuilding = true;
 

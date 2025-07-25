@@ -38,16 +38,15 @@ buildNpmPackage rec {
 
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      zip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    zip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+    copyDesktopItems
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxkbcommon

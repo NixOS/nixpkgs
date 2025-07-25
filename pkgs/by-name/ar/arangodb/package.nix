@@ -31,7 +31,7 @@ gcc10Stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "arangodb";
     owner = "arangodb";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-64iTxhG8qKTSrTlH/BWDJNnLf8VnaCteCKfQ9D2lGDQ=";
     fetchSubmodules = true;
   };
@@ -69,18 +69,17 @@ gcc10Stdenv.mkDerivation rec {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  cmakeFlags =
-    [
-      "-DUSE_MAINTAINER_MODE=OFF"
-      "-DUSE_GOOGLE_TESTS=OFF"
+  cmakeFlags = [
+    "-DUSE_MAINTAINER_MODE=OFF"
+    "-DUSE_GOOGLE_TESTS=OFF"
 
-      # avoid reading /proc/cpuinfo for feature detection
-      "-DTARGET_ARCHITECTURE=${targetArch}"
-    ]
-    ++ lib.optionals asmOptimizations [
-      "-DASM_OPTIMIZATIONS=ON"
-      "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-    ];
+    # avoid reading /proc/cpuinfo for feature detection
+    "-DTARGET_ARCHITECTURE=${targetArch}"
+  ]
+  ++ lib.optionals asmOptimizations [
+    "-DASM_OPTIMIZATIONS=ON"
+    "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+  ];
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";

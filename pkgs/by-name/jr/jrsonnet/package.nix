@@ -27,19 +27,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::native_ext"
   ];
 
-  postInstall =
-    ''
-      ln -s $out/bin/jrsonnet $out/bin/jsonnet
+  postInstall = ''
+    ln -s $out/bin/jrsonnet $out/bin/jsonnet
 
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash zsh fish; do
-        installShellCompletion --cmd jrsonnet \
-          --$shell <($out/bin/jrsonnet --generate $shell /dev/null)
-        installShellCompletion --cmd jsonnet \
-          --$shell <($out/bin/jrsonnet --generate $shell /dev/null | sed s/jrsonnet/jsonnet/g)
-      done
-    '';
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash zsh fish; do
+      installShellCompletion --cmd jrsonnet \
+        --$shell <($out/bin/jrsonnet --generate $shell /dev/null)
+      installShellCompletion --cmd jsonnet \
+        --$shell <($out/bin/jrsonnet --generate $shell /dev/null | sed s/jrsonnet/jsonnet/g)
+    done
+  '';
 
   meta = with lib; {
     description = "Purely-functional configuration language that helps you define JSON data";

@@ -124,7 +124,7 @@ in
     '';
     meta = with lib; {
       homepage = "https://github.com/catppuccin/tmux";
-      description = "Soothing pastel theme for Tmux!";
+      description = "Soothing pastel theme for Tmux";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ jnsgruk ];
@@ -230,7 +230,7 @@ in
     meta = {
       homepage = "https://draculatheme.com/tmux";
       downloadPage = "https://github.com/dracula/tmux";
-      description = "Feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux";
       changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
@@ -338,7 +338,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/wfxr/tmux-fzf-url";
-      description = "Quickly open urls on your terminal screen!";
+      description = "Quickly open urls on your terminal screen";
       license = licenses.mit;
       platforms = platforms.unix;
     };
@@ -390,7 +390,7 @@ in
     meta = {
       homepage = "https://github.com/Nybkox/tmux-kanagawa";
       downloadPage = "https://github.com/Nybkox/tmux-kanagawa";
-      description = "Feature packed kanagawa theme for tmux!";
+      description = "Feature packed kanagawa theme for tmux";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ FKouhai ];
@@ -775,7 +775,7 @@ in
     };
     meta = with lib; {
       homepage = "https://github.com/janoamaral/tokyo-night-tmux";
-      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
+      description = "Clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ redyf ];
@@ -860,7 +860,7 @@ in
     rtpFilePath = "main.tmux";
     meta = {
       homepage = "https://github.com/erikw/tmux-powerline";
-      description = "Empowering your tmux (status bar) experience!";
+      description = "Empowering your tmux (status bar) experience";
       longDescription = "A tmux plugin giving you a hackable status bar consisting of dynamic & beautiful looking powerline segments, written purely in bash.";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.unix;
@@ -995,12 +995,12 @@ in
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2022-08-21";
+    version = "unstable-2025-04-25";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "afb45a55b452b9238159047ce7c6e161bd4a9907";
-      hash = "sha256-8A+Yt9uhhAP76EiqUopE8vl7/UXkgU2x000EOcF7pl0=";
+      rev = "33afa80db65113561dc53fa732b7f5e53d5ecfd0";
+      hash = "sha256-h3c5ki8N4kiNzbgjxHwLh625un6GqbLZv/4dPVW3vCI=";
     };
   };
 

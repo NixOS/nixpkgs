@@ -294,51 +294,45 @@ in
             '';
           };
           "/vod/" = {
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                aio threads;
-                vod hls;
+            extraConfig = nginxAuthRequest + ''
+              aio threads;
+              vod hls;
 
-                secure_token $args;
-                secure_token_types application/vnd.apple.mpegurl;
+              secure_token $args;
+              secure_token_types application/vnd.apple.mpegurl;
 
-                add_header Cache-Control "no-store";
-                expires off;
+              add_header Cache-Control "no-store";
+              expires off;
 
-                keepalive_disable safari;
-              '';
+              keepalive_disable safari;
+            '';
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                add_header Cache-Control "no-store";
-                expires off;
+            extraConfig = nginxAuthRequest + ''
+              add_header Cache-Control "no-store";
+              expires off;
 
-                types {
-                    application/dash+xml mpd;
-                    application/vnd.apple.mpegurl m3u8;
-                    video/mp2t ts;
-                    image/jpeg jpg;
-                }
-              '';
+              types {
+                  application/dash+xml mpd;
+                  application/vnd.apple.mpegurl m3u8;
+                  video/mp2t ts;
+                  image/jpeg jpg;
+              }
+            '';
           };
           "/clips/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                    image/jpeg jpg;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+                  image/jpeg jpg;
+              }
 
-                expires 7d;
-                add_header Cache-Control "public";
-                autoindex on;
-              '';
+              expires 7d;
+              add_header Cache-Control "public";
+              autoindex on;
+            '';
           };
           "/cache/" = {
             alias = "/var/cache/frigate/";
@@ -348,29 +342,25 @@ in
           };
           "/recordings/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                    video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                  video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/exports/" = {
             root = "/var/lib/frigate";
-            extraConfig =
-              nginxAuthRequest
-              + ''
-                types {
-                  video/mp4 mp4;
-                }
+            extraConfig = nginxAuthRequest + ''
+              types {
+                video/mp4 mp4;
+              }
 
-                autoindex on;
-                autoindex_format json;
-              '';
+              autoindex on;
+              autoindex_format json;
+            '';
           };
           "/ws" = {
             proxyPass = "http://frigate-mqtt-ws/";
@@ -613,18 +603,17 @@ in
       wantedBy = [
         "multi-user.target"
       ];
-      environment =
-        {
-          CONFIG_FILE = "/run/frigate/frigate.yml";
-          HOME = "/var/lib/frigate";
-          PYTHONPATH = cfg.package.pythonPath;
-        }
-        // optionalAttrs (cfg.vaapiDriver != null) {
-          LIBVA_DRIVER_NAME = cfg.vaapiDriver;
-        }
-        // optionalAttrs withCoral {
-          LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
-        };
+      environment = {
+        CONFIG_FILE = "/run/frigate/frigate.yml";
+        HOME = "/var/lib/frigate";
+        PYTHONPATH = cfg.package.pythonPath;
+      }
+      // optionalAttrs (cfg.vaapiDriver != null) {
+        LIBVA_DRIVER_NAME = cfg.vaapiDriver;
+      }
+      // optionalAttrs withCoral {
+        LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
+      };
       path =
         with pkgs;
         [

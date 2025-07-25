@@ -32,14 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
   ];
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pcsclite
-    ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pcsclite
+  ];
 
   cmakeFlags = [
     "-DTESTING=ON"

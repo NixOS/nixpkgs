@@ -9,18 +9,18 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0-rc.4";
+    version = "3.0.0-rc.5";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-w1LV21EqHNC+LYMLpljGQrxmBJ8ztCQ7g3YbJ6ME5j0=";
+      hash = "sha256-CxssC3ftnXgxdvRO7CrVgBSVkh7DPjXRNRet4fB2BKc=";
     };
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-Q6HoKrcwa67lAsl4zgNYilo4LzPxySz2lE85ZdOSPpM=";
+    cargoHash = "sha256-OsynIQeGjXHD1E9iDH4P7Jksr1APtGZkchzZB0DawIw=";
 
     nativeCheckInputs = [ python3 ];
 

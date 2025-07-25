@@ -31,21 +31,20 @@ rustPlatform.buildRustPackage rec {
     python3Packages.cython
   ];
 
-  checkFlags =
-    [
-      # Disable tests that require rust unstable features
-      # https://github.com/eqrion/cbindgen/issues/338
-      "--skip test_expand"
-      "--skip test_bitfield"
-      "--skip lib_default_uses_debug_build"
-      "--skip lib_explicit_debug_build"
-      "--skip lib_explicit_release_build"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # WORKAROUND: test_body fails when using clang
-      # https://github.com/eqrion/cbindgen/issues/628
-      "--skip test_body"
-    ];
+  checkFlags = [
+    # Disable tests that require rust unstable features
+    # https://github.com/eqrion/cbindgen/issues/338
+    "--skip test_expand"
+    "--skip test_bitfield"
+    "--skip lib_default_uses_debug_build"
+    "--skip lib_explicit_debug_build"
+    "--skip lib_explicit_release_build"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # WORKAROUND: test_body fails when using clang
+    # https://github.com/eqrion/cbindgen/issues/628
+    "--skip test_body"
+  ];
 
   passthru.tests = {
     inherit

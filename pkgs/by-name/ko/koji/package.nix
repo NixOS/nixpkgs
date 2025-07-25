@@ -37,7 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   nativeCheckInputs = [
     gitMinimal

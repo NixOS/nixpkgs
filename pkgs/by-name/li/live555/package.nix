@@ -8,6 +8,10 @@
   openssl,
   runCommand,
   stdenv,
+  writeScript,
+
+  # tests
+  vlc,
 }:
 let
   isStatic = stdenv.hostPlatform.isStatic;
@@ -62,27 +66,26 @@ stdenv.mkDerivation (finalAttrs: {
   # required for whitespaces in makeFlags
   __structuredAttrs = true;
 
-  postPatch =
-    ''
-      substituteInPlace config.macosx-catalina \
-        --replace '/usr/lib/libssl.46.dylib' "${lib.getLib openssl}/lib/libssl.dylib" \
-        --replace '/usr/lib/libcrypto.44.dylib' "${lib.getLib openssl}/lib/libcrypto.dylib"
-      sed -i -e 's|/bin/rm|rm|g' genMakefiles
-      sed -i \
-        -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-        config.linux
-    ''
-    # condition from icu/base.nix
-    +
-      lib.optionalString
-        (lib.elem stdenv.hostPlatform.libc [
-          "glibc"
-          "musl"
-        ])
-        ''
-          substituteInPlace liveMedia/include/Locale.hh \
-            --replace '<xlocale.h>' '<locale.h>'
-        '';
+  postPatch = ''
+    substituteInPlace config.macosx-catalina \
+      --replace '/usr/lib/libssl.46.dylib' "${lib.getLib openssl}/lib/libssl.dylib" \
+      --replace '/usr/lib/libcrypto.44.dylib' "${lib.getLib openssl}/lib/libcrypto.dylib"
+    sed -i -e 's|/bin/rm|rm|g' genMakefiles
+    sed -i \
+      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
+      config.linux
+  ''
+  # condition from icu/base.nix
+  +
+    lib.optionalString
+      (lib.elem stdenv.hostPlatform.libc [
+        "glibc"
+        "musl"
+      ])
+      ''
+        substituteInPlace liveMedia/include/Locale.hh \
+          --replace '<xlocale.h>' '<locale.h>'
+      '';
 
   configurePhase =
     let
@@ -128,7 +131,19 @@ stdenv.mkDerivation (finalAttrs: {
           touch $out
         fi
       '';
+
+      inherit vlc;
     };
+
+  passthru.updateScript = writeScript "update-live555" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    # Expect the text in format of '2025.05.24:'
+    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+      head -n1 | tr -d ':')"
+    update-source-version live555 "$new_version"
+  '';
 
   meta = {
     homepage = "http://www.live555.com/liveMedia/";

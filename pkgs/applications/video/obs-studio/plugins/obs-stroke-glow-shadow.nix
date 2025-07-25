@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An OBS plugin to provide efficient Stroke, Glow, and Shadow effects on masked sources.";
+    description = "An OBS plugin to provide efficient Stroke, Glow, and Shadow effects on masked sources";
     homepage = "https://github.com/FiniteSingularity/obs-stroke-glow-shadow";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Only;

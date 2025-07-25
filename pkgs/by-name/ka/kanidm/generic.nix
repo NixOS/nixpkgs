@@ -60,27 +60,26 @@ rustPlatform.buildRustPackage rec {
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
-      profile =
-        {
-          cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
-        }
-        // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
-          client_config_path = "/etc/kanidm/config";
-          resolver_config_path = "/etc/kanidm/unixd";
-          resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-          server_admin_bind_path = socket_path;
-          server_config_path = "/etc/kanidm/server.toml";
-          server_ui_pkg_path = "@htmx_ui_pkg_path@";
-        }
-        // lib.optionalAttrs (lib.versionOlder version "1.5") {
-          admin_bind_path = socket_path;
-          default_config_path = "/etc/kanidm/server.toml";
-          default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-          htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
-        }
-        // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
-          web_ui_pkg_path = "@web_ui_pkg_path@";
-        };
+      profile = {
+        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
+      }
+      // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
+        client_config_path = "/etc/kanidm/config";
+        resolver_config_path = "/etc/kanidm/unixd";
+        resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        server_admin_bind_path = socket_path;
+        server_config_path = "/etc/kanidm/server.toml";
+        server_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versionOlder version "1.5") {
+        admin_bind_path = socket_path;
+        default_config_path = "/etc/kanidm/server.toml";
+        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+        htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
+      }
+      // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
+        web_ui_pkg_path = "@web_ui_pkg_path@";
+      };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
@@ -95,26 +94,24 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      pam
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+    pam
+    rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
   # The UI needs to be in place before the tests are run.
-  postBuild =
-    ''
-      mkdir -p $out/ui
-      cp -r server/core/static $out/ui/hpkg
-    ''
-    + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
-      cp -r server/web_ui/pkg $out/ui/pkg
-    '';
+  postBuild = ''
+    mkdir -p $out/ui
+    cp -r server/core/static $out/ui/hpkg
+  ''
+  + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
+    cp -r server/web_ui/pkg $out/ui/pkg
+  '';
 
   # Upstream runs with the Rust equivalent of -Werror,
   # which breaks when we upgrade to new Rust before them.
@@ -129,17 +126,16 @@ rustPlatform.buildRustPackage rec {
     ''profile.release.lto="off"''
   ];
 
-  preFixup =
-    ''
-      installShellCompletion \
-        --bash $releaseDir/build/completions/*.bash \
-        --zsh $releaseDir/build/completions/_*
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      # PAM and NSS need fix library names
-      mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
-      mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
-    '';
+  preFixup = ''
+    installShellCompletion \
+      --bash $releaseDir/build/completions/*.bash \
+      --zsh $releaseDir/build/completions/_*
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # PAM and NSS need fix library names
+    mv $out/lib/libnss_kanidm.so $out/lib/libnss_kanidm.so.2
+    mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
+  '';
 
   passthru = {
     tests = {

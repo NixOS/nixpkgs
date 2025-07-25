@@ -73,27 +73,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCargoParallelTests = true;
 
   # skip broken tests
-  checkFlags =
-    [
-      "--skip=binwalk::Binwalk"
-      "--skip=binwalk::Binwalk::scan"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--skip=binwalk::Binwalk::analyze"
-      "--skip=binwalk::Binwalk::extract"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--skip=extractors::common::Chroot::append_to_file"
-      "--skip=extractors::common::Chroot::carve_file"
-      "--skip=extractors::common::Chroot::create_block_device"
-      "--skip=extractors::common::Chroot::create_character_device"
-      "--skip=extractors::common::Chroot::create_directory"
-      "--skip=extractors::common::Chroot::create_fifo"
-      "--skip=extractors::common::Chroot::create_file"
-      "--skip=extractors::common::Chroot::create_socket"
-      "--skip=extractors::common::Chroot::create_symlink"
-      "--skip=extractors::common::Chroot::make_executable"
-    ];
+  checkFlags = [
+    "--skip=binwalk::Binwalk"
+    "--skip=binwalk::Binwalk::scan"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--skip=binwalk::Binwalk::analyze"
+    "--skip=binwalk::Binwalk::extract"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=extractors::common::Chroot::append_to_file"
+    "--skip=extractors::common::Chroot::carve_file"
+    "--skip=extractors::common::Chroot::create_block_device"
+    "--skip=extractors::common::Chroot::create_character_device"
+    "--skip=extractors::common::Chroot::create_directory"
+    "--skip=extractors::common::Chroot::create_fifo"
+    "--skip=extractors::common::Chroot::create_file"
+    "--skip=extractors::common::Chroot::create_socket"
+    "--skip=extractors::common::Chroot::create_symlink"
+    "--skip=extractors::common::Chroot::make_executable"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

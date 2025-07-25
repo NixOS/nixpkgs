@@ -24,7 +24,7 @@
   hnswlib,
   pgvector,
   sqlalchemy,
-  sqlite-vec,
+  sqlite-vec-c,
   # api
   aiohttp,
   fastapi,
@@ -103,7 +103,7 @@ let
     hnswlib
     pgvector
     sqlalchemy
-    sqlite-vec
+    sqlite-vec-c
   ];
   api = [
     aiohttp
@@ -276,19 +276,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "txtai" ];
 
-  nativeCheckInputs =
-    [
-      httpx
-      msgpack
-      pytestCheckHook
-      python-multipart
-      timm
-      sqlalchemy
-    ]
-    ++ optional-dependencies.agent
-    ++ optional-dependencies.ann
-    ++ optional-dependencies.api
-    ++ optional-dependencies.similarity;
+  nativeCheckInputs = [
+    httpx
+    msgpack
+    pytestCheckHook
+    python-multipart
+    timm
+    sqlalchemy
+  ]
+  ++ optional-dependencies.agent
+  ++ optional-dependencies.ann
+  ++ optional-dependencies.api
+  ++ optional-dependencies.similarity;
 
   # The deselected paths depend on the huggingface hub and should be run as a passthru test
   # disabledTestPaths won't work as the problem is with the classes containing the tests

@@ -211,28 +211,27 @@ in
       hostname = config.networking.hostName;
       inherit (pkgs.stdenv.hostPlatform) system;
 
-      supportedTypes =
-        [
-          "echo"
-          "fileset"
-          "process"
-          "wrapper"
+      supportedTypes = [
+        "echo"
+        "fileset"
+        "process"
+        "wrapper"
 
-          # These are not base modules, but they are still enabled because they work with technology that are always enabled in NixOS
-          "systemd-unit"
-          "sysvinit-script"
-          "nixos-configuration"
-        ]
-        ++ lib.optional (dysnomiaFlags.enableApacheWebApplication) "apache-webapplication"
-        ++ lib.optional (dysnomiaFlags.enableAxis2WebService) "axis2-webservice"
-        ++ lib.optional (dysnomiaFlags.enableDockerContainer) "docker-container"
-        ++ lib.optional (dysnomiaFlags.enableEjabberdDump) "ejabberd-dump"
-        ++ lib.optional (dysnomiaFlags.enableInfluxDatabase) "influx-database"
-        ++ lib.optional (dysnomiaFlags.enableMySQLDatabase) "mysql-database"
-        ++ lib.optional (dysnomiaFlags.enablePostgreSQLDatabase) "postgresql-database"
-        ++ lib.optional (dysnomiaFlags.enableTomcatWebApplication) "tomcat-webapplication"
-        ++ lib.optional (dysnomiaFlags.enableMongoDatabase) "mongo-database"
-        ++ lib.optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
+        # These are not base modules, but they are still enabled because they work with technology that are always enabled in NixOS
+        "systemd-unit"
+        "sysvinit-script"
+        "nixos-configuration"
+      ]
+      ++ lib.optional (dysnomiaFlags.enableApacheWebApplication) "apache-webapplication"
+      ++ lib.optional (dysnomiaFlags.enableAxis2WebService) "axis2-webservice"
+      ++ lib.optional (dysnomiaFlags.enableDockerContainer) "docker-container"
+      ++ lib.optional (dysnomiaFlags.enableEjabberdDump) "ejabberd-dump"
+      ++ lib.optional (dysnomiaFlags.enableInfluxDatabase) "influx-database"
+      ++ lib.optional (dysnomiaFlags.enableMySQLDatabase) "mysql-database"
+      ++ lib.optional (dysnomiaFlags.enablePostgreSQLDatabase) "postgresql-database"
+      ++ lib.optional (dysnomiaFlags.enableTomcatWebApplication) "tomcat-webapplication"
+      ++ lib.optional (dysnomiaFlags.enableMongoDatabase) "mongo-database"
+      ++ lib.optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
     };
 
     services.dysnomia.containers = lib.recursiveUpdate (
@@ -252,22 +251,20 @@ in
         };
       }
       // lib.optionalAttrs (config.services.mysql.enable) {
-        mysql-database =
-          {
-            mysqlPort = config.services.mysql.settings.mysqld.port;
-            mysqlSocket = "/run/mysqld/mysqld.sock";
-          }
-          // lib.optionalAttrs cfg.enableAuthentication {
-            mysqlUsername = "root";
-          };
+        mysql-database = {
+          mysqlPort = config.services.mysql.settings.mysqld.port;
+          mysqlSocket = "/run/mysqld/mysqld.sock";
+        }
+        // lib.optionalAttrs cfg.enableAuthentication {
+          mysqlUsername = "root";
+        };
       }
       // lib.optionalAttrs (config.services.postgresql.enable) {
-        postgresql-database =
-          {
-          }
-          // lib.optionalAttrs (cfg.enableAuthentication) {
-            postgresqlUsername = "postgres";
-          };
+        postgresql-database = {
+        }
+        // lib.optionalAttrs (cfg.enableAuthentication) {
+          postgresqlUsername = "postgres";
+        };
       }
       // lib.optionalAttrs (config.services.tomcat.enable) {
         tomcat-webapplication = {

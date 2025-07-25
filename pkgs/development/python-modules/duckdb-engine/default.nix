@@ -48,20 +48,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs =
-    [
-      fsspec
-      hypothesis
-      pandas
-      pyarrow
-      pytest-remotedata
-      typing-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.12") [
-      # requires wasmer which is broken for python 3.12
-      # https://github.com/wasmerio/wasmer-python/issues/778
-      snapshottest
-    ];
+  checkInputs = [
+    fsspec
+    hypothesis
+    pandas
+    pyarrow
+    pytest-remotedata
+    typing-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
+  ];
 
   pytestFlagsArray = [
     "-m"
@@ -77,6 +76,12 @@ buildPythonPackage rec {
     # user agent not available in nixpkgs
     "test_user_agent"
     "test_user_agent_with_custom_user_agent"
+
+    # Fail under nixpkgs-review in the sandbox due to "missing tables"
+    "test_get_columns"
+    "test_get_foreign_keys"
+    "test_get_check_constraints"
+    "test_get_unique_constraints"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];

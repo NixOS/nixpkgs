@@ -31,13 +31,12 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      blas
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    blas
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   dontUseCmakeConfigure = true;
 

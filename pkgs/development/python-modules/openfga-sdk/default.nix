@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "openfga-sdk";
-  version = "0.9.1";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-+4Np406HAB6uHZhDUUSn9aDbuC4/G172+TZ560rYjlk=";
+    hash = "sha256-e/Pgyj7A1HtcDPeRy0QK+Nok2ruWBiU9A1Yh7RZvtVI=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     mock
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [ pytest-asyncio ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # These fail due to a race condition in the test mocks
@@ -52,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/openfga/python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/openfga/python-sdk/blob/${src.tag}/CHANGELOG.md";
     description = "Fine-Grained Authorization solution for Python";
     homepage = "https://github.com/openfga/python-sdk";
     license = lib.licenses.asl20;

@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
     python3
     makeWrapper
     writableTmpDirAsHomeHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3

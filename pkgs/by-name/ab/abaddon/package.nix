@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-48lR1rIWMwLaTv+nIdqmQ3mHOayrC1P5OQuUb+URYh0=";
     fetchSubmodules = true;
   };
@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Discord client reimplementation, written in C++";
     mainProgram = "abaddon";
     homepage = "https://github.com/uowuo/abaddon";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
     platforms = lib.platforms.linux;
   };
 }

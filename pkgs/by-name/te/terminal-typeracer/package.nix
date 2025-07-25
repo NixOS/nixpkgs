@@ -26,15 +26,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   OPENSSL_NO_VENDOR = 1;
   LIBGIT2_NO_VENDOR = 1;

@@ -58,17 +58,19 @@ effectiveStdenv.mkDerivation rec {
     hash = "sha256-8mj8uw7bbwhRaL0JZf9L9//a+Re2AwbL0e7Oiw/BqIA=";
   };
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
-    ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
-    ++ lib.optionals rLibrary [ R ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
+  ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
+  ++ lib.optionals rLibrary [ R ];
 
-  buildInputs =
-    [ gtest ]
-    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
-    ++ lib.optional cudaSupport cudaPackages.cuda_cudart
-    ++ lib.optional ncclSupport cudaPackages.nccl;
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  ++ lib.optional cudaSupport cudaPackages.cuda_cudart
+  ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
@@ -169,20 +171,19 @@ effectiveStdenv.mkDerivation rec {
     in
     "-${builtins.concatStringsSep ":" excludedTests}";
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    # the R library option builds a completely different binary xgboost.so instead of
-    # libxgboost.so, which isn't full featured for python and CLI
-    + lib.optionalString rLibrary ''
-      mkdir -p $out/library
-      export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-    ''
-    + ''
-      cmake --install .
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  # the R library option builds a completely different binary xgboost.so instead of
+  # libxgboost.so, which isn't full featured for python and CLI
+  + lib.optionalString rLibrary ''
+    mkdir -p $out/library
+    export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
+  ''
+  + ''
+    cmake --install .
+    runHook postInstall
+  '';
 
   postFixup = lib.optionalString rLibrary ''
     if test -e $out/nix-support/propagated-build-inputs; then

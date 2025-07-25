@@ -82,7 +82,8 @@ buildPythonPackage rec {
     myst-docutils
     pytestCheckHook
     pytest-benchmark
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "--benchmark-disable"

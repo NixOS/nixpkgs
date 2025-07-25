@@ -13,31 +13,29 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20250622-1";
+  version = "20250718";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
     rev = version;
-    hash = "sha256-QLlnIrlWGbPPD2ZgmvzX28UkVSQHcEUoL/XmajgFs6o=";
+    hash = "sha256-weUqp77bK8svM5Pj0z6E1agAw1bTfELcaWTeW+XlfY0=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+  ];
 
   installPhase = ''
     runHook preInstall

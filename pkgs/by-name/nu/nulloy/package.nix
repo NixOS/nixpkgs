@@ -31,19 +31,18 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qt5.qtscript
-      qt5.qtsvg
-      taglib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    qt5.qtscript
+    qt5.qtsvg
+    taglib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   prefixKey = "--prefix ";
 

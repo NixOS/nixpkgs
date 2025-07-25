@@ -54,19 +54,18 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      dbus
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    dbus
+  ];
 
   patches = [
     # Use a fixed build time, hard-code upstream URL instead of trying to read `.git`

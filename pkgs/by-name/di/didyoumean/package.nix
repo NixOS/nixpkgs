@@ -23,13 +23,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-BASM0gBQFuJY2ze9X9HJUkiP4WrOP/inD87bVFraeAY=";
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcb

@@ -91,55 +91,54 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      attrs
-      celery
-      colorama
-      configobj
-      distro
-      dpath
-      dulwich
-      dvc-data
-      dvc-http
-      dvc-render
-      dvc-studio-client
-      dvc-task
-      flatten-dict
-      flufl-lock
-      fsspec
-      funcy
-      grandalf
-      gto
-      hydra-core
-      iterative-telemetry
-      kombu
-      networkx
-      omegaconf
-      packaging
-      pathspec
-      platformdirs
-      psutil
-      pydot
-      pygtrie
-      pyparsing
-      requests
-      rich
-      ruamel-yaml
-      scmrepo
-      shortuuid
-      shtab
-      tabulate
-      tomlkit
-      tqdm
-      typing-extensions
-      voluptuous
-      zc-lockfile
-    ]
-    ++ lib.optionals enableGoogle optional-dependencies.gs
-    ++ lib.optionals enableAWS optional-dependencies.s3
-    ++ lib.optionals enableAzure optional-dependencies.azure
-    ++ lib.optionals enableSSH optional-dependencies.ssh;
+  dependencies = [
+    attrs
+    celery
+    colorama
+    configobj
+    distro
+    dpath
+    dulwich
+    dvc-data
+    dvc-http
+    dvc-render
+    dvc-studio-client
+    dvc-task
+    flatten-dict
+    flufl-lock
+    fsspec
+    funcy
+    grandalf
+    gto
+    hydra-core
+    iterative-telemetry
+    kombu
+    networkx
+    omegaconf
+    packaging
+    pathspec
+    platformdirs
+    psutil
+    pydot
+    pygtrie
+    pyparsing
+    requests
+    rich
+    ruamel-yaml
+    scmrepo
+    shortuuid
+    shtab
+    tabulate
+    tomlkit
+    tqdm
+    typing-extensions
+    voluptuous
+    zc-lockfile
+  ]
+  ++ lib.optionals enableGoogle optional-dependencies.gs
+  ++ lib.optionals enableAWS optional-dependencies.s3
+  ++ lib.optionals enableAzure optional-dependencies.azure
+  ++ lib.optionals enableSSH optional-dependencies.ssh;
 
   optional-dependencies = {
     azure = [ dvc-azure ];

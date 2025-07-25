@@ -57,19 +57,18 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
   ];
 
-  buildInputs =
-    [
-      arpack
-      blas
-      glpk
-      gmp
-      lapack
-      libxml2
-      plfit
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    arpack
+    blas
+    glpk
+    gmp
+    lapack
+    libxml2
+    plfit
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     "-DIGRAPH_USE_INTERNAL_BLAS=OFF"
@@ -93,14 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc "$out/share"
   '';
 
-  postFixup =
-    ''
-      substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
-        --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
-    '';
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+  '';
 
   passthru.tests = {
     python = python3.pkgs.igraph;

@@ -57,38 +57,37 @@ buildPythonPackage rec {
     export WIDS_CACHE=$TMPDIR
   '';
 
-  disabledTests =
-    [
-      # requires network
-      "test_batched"
-      "test_cache_dir"
-      "test_concurrent_download_and_open"
-      "test_dataloader"
-      "test_decode_handlers"
-      "test_decoder"
-      "test_download"
-      "test_handlers"
-      "test_pipe"
-      "test_remote_file"
-      "test_shard_syntax"
-      "test_torchvision"
-      "test_unbatched"
-      "test_yaml3"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # pickling error
-      "test_background_download"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
-      "test_concurrent_access"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      # segfaults on aarch64-linux
-      "test_webloader"
-      "test_webloader2"
-      "test_webloader_repeat"
-      "test_webloader_unbatched"
-    ];
+  disabledTests = [
+    # requires network
+    "test_batched"
+    "test_cache_dir"
+    "test_concurrent_download_and_open"
+    "test_dataloader"
+    "test_decode_handlers"
+    "test_decoder"
+    "test_download"
+    "test_handlers"
+    "test_pipe"
+    "test_remote_file"
+    "test_shard_syntax"
+    "test_torchvision"
+    "test_unbatched"
+    "test_yaml3"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # pickling error
+    "test_background_download"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
+    "test_concurrent_access"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # segfaults on aarch64-linux
+    "test_webloader"
+    "test_webloader2"
+    "test_webloader_repeat"
+    "test_webloader_unbatched"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Issue with creating a temp file in the sandbox

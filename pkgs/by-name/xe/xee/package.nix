@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   meta = {
-    description = "XML Execution Engine written in Rust.";
+    description = "XML Execution Engine written in Rust";
     longDescription = ''
       Load XML documents, issue XPath expressions against them, including in
       a REPL, and pretty-print XML documents. A Swiss Army knife CLI for XML.

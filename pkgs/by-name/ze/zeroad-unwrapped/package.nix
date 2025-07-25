@@ -84,7 +84,8 @@ stdenv.mkDerivation rec {
     freetype
     premake5
     cxxtest
-  ] ++ lib.optional withEditor wxGTK;
+  ]
+  ++ lib.optional withEditor wxGTK;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include"

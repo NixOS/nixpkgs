@@ -25,14 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VKpFeI1tUq+2WcOu8zWq/eDvLImQp3cPjqpk5X8ic0Y=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
   buildInputs = [
     bzip2
     glib
@@ -42,7 +41,8 @@ stdenv.mkDerivation rec {
     tcl
     tk
     xz
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # fix compilation under Darwin
   # remove these patches upon next release

@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_36,
+  electron_37,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,20 +18,20 @@
 }:
 
 let
-  electron = electron_36;
+  electron = electron_37;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.23.2";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tZw9iEhZ5ss+mv/WUFaj+xQ6GP4GAHq+PvBOv6F5tgM=";
+    hash = "sha256-BVc/aQ9q+VfWWOJQgNEBNYpvYLsX6eiIwiKRhVkxmZ8=";
   };
 
-  npmDepsHash = "sha256-dx66k82o+TWrrK9xBHPbnudDn0CG8mM7c1xeoSAM4Fs=";
+  npmDepsHash = "sha256-9BsEEcdFYs9SSgL749Zhau34uieyOQry/g3wo/oW0DA=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -60,53 +60,51 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
-  buildPhase =
-    ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      cp -r ${electron.dist} electron-dist
-      chmod -R u+w electron-dist
-    ''
-    # Electron builder complains about symlink in electron-dist
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      rm electron-dist/libvulkan.so.1
-      cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
-    ''
-    + ''
-      npm run electron:pack
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  ''
+  # Electron builder complains about symlink in electron-dist
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm electron-dist/libvulkan.so.1
+    cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
+  ''
+  + ''
+    npm run electron:pack
 
-      ./node_modules/.bin/electron-builder \
-          --dir \
-          --config .electron-builder.config.mjs \
-          -c.electronDist=electron-dist \
-          -c.electronVersion=${electron.version}
+    ./node_modules/.bin/electron-builder \
+        --dir \
+        --config .electron-builder.config.mjs \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron.version}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p "$out/share/lib/shogihome"
-      cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p "$out/share/lib/shogihome"
+    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/shogihome"
 
-      install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
+    install -Dm444 'docs/icon.svg' "$out/share/icons/hicolor/scalable/apps/shogihome.svg"
 
-      makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
-        --add-flags "$out/share/lib/shogihome/resources/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArgs commandLineArgs} \
-        --inherit-argv0
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      mv dist/mac*/ShogiHome.app "$out/Applications"
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper '${lib.getExe electron}' "$out/bin/shogihome" \
+      --add-flags "$out/share/lib/shogihome/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArgs commandLineArgs} \
+      --inherit-argv0
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv dist/mac*/ShogiHome.app "$out/Applications"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {

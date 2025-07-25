@@ -63,7 +63,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "open_web_calendar/test" ];
+  enabledTestPaths = [ "open_web_calendar/test" ];
 
   pythonImportsCheck = [ "open_web_calendar.app" ];
 

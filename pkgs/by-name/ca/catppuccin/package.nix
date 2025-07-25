@@ -224,111 +224,110 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       done
     '';
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        local capitalizedVariant=$(sed 's/^\(.\)/\U\1/' <<< "${variant}")
-        local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
+      local capitalizedVariant=$(sed 's/^\(.\)/\U\1/' <<< "${variant}")
+      local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
 
-      ''
-      + lib.optionalString (lib.elem "alacritty" themeList) ''
-        mkdir -p "$out/alacritty"
-        cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
+    ''
+    + lib.optionalString (lib.elem "alacritty" themeList) ''
+      mkdir -p "$out/alacritty"
+      cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
 
-      ''
-      + lib.optionalString (lib.elem "bat" themeList) ''
-        mkdir -p "$out/bat"
-        cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
+    ''
+    + lib.optionalString (lib.elem "bat" themeList) ''
+      mkdir -p "$out/bat"
+      cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
 
-      ''
-      + lib.optionalString (lib.elem "btop" themeList) ''
-        mkdir -p "$out/btop"
-        cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop/"
+    ''
+    + lib.optionalString (lib.elem "btop" themeList) ''
+      mkdir -p "$out/btop"
+      cp "${sources.btop}/themes/catppuccin_${variant}.theme" "$out/btop/"
 
-      ''
-      + lib.optionalString (lib.elem "bottom" themeList) ''
-        mkdir -p "$out/bottom"
-        cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+    ''
+    + lib.optionalString (lib.elem "bottom" themeList) ''
+      mkdir -p "$out/bottom"
+      cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
 
-      ''
-      + lib.optionalString (lib.elem "element" themeList) ''
-        mkdir -p "$out/element"
-        cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
+    ''
+    + lib.optionalString (lib.elem "element" themeList) ''
+      mkdir -p "$out/element"
+      cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
 
-      ''
-      + lib.optionalString (lib.elem "grub" themeList) ''
-        mkdir -p "$out/grub"
-        cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme/"* "$out/grub/"
+    ''
+    + lib.optionalString (lib.elem "grub" themeList) ''
+      mkdir -p "$out/grub"
+      cp -r "${sources.grub}/src/catppuccin-${variant}-grub-theme/"* "$out/grub/"
 
-      ''
-      + lib.optionalString (lib.elem "hyprland" themeList) ''
-        mkdir -p "$out/hyprland"
-        cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
+    ''
+    + lib.optionalString (lib.elem "hyprland" themeList) ''
+      mkdir -p "$out/hyprland"
+      cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
 
-      ''
-      + lib.optionalString (lib.elem "k9s" themeList) ''
-        mkdir -p "$out/k9s"
-        cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
-        cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
+    ''
+    + lib.optionalString (lib.elem "k9s" themeList) ''
+      mkdir -p "$out/k9s"
+      cp "${sources.k9s}/dist/catppuccin-${variant}.yaml" "$out/k9s/"
+      cp "${sources.k9s}/dist/catppuccin-${variant}-transparent.yaml" "$out/k9s/"
 
-      ''
-      + lib.optionalString (lib.elem "kvantum" themeList) ''
-        mkdir -p "$out/share/Kvantum"
-        cp -r "${sources.kvantum}/themes/catppuccin-${variant}-${accent}" "$out/share/Kvantum"
+    ''
+    + lib.optionalString (lib.elem "kvantum" themeList) ''
+      mkdir -p "$out/share/Kvantum"
+      cp -r "${sources.kvantum}/themes/catppuccin-${variant}-${accent}" "$out/share/Kvantum"
 
-      ''
-      + lib.optionalString (lib.elem "lazygit" themeList) ''
-        mkdir -p "$out/lazygit/"{themes,themes-mergable}
-        cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
-        cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
+    ''
+    + lib.optionalString (lib.elem "lazygit" themeList) ''
+      mkdir -p "$out/lazygit/"{themes,themes-mergable}
+      cp "${sources.lazygit}/themes/${variant}/${accent}.yml" "$out/lazygit/themes/"
+      cp "${sources.lazygit}/themes-mergable/${variant}/${accent}.yml" "$out/lazygit/themes-mergable/"
 
-      ''
-      + lib.optionalString (lib.elem "lxqt" themeList) ''
-        mkdir -p "$out/share/lxqt/themes/catppuccin-${variant}"
-        cp -r "${sources.lxqt}/src/catppuccin-${variant}/"* "$out/share/lxqt/themes/catppuccin-${variant}"
+    ''
+    + lib.optionalString (lib.elem "lxqt" themeList) ''
+      mkdir -p "$out/share/lxqt/themes/catppuccin-${variant}"
+      cp -r "${sources.lxqt}/src/catppuccin-${variant}/"* "$out/share/lxqt/themes/catppuccin-${variant}"
 
-      ''
-      + lib.optionalString (lib.elem "plymouth" themeList) ''
-        mkdir -p "$out/share/plymouth/themes/catppuccin-${variant}"
-        cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
-        sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+    ''
+    + lib.optionalString (lib.elem "plymouth" themeList) ''
+      mkdir -p "$out/share/plymouth/themes/catppuccin-${variant}"
+      cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
+      sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
 
-      ''
-      + lib.optionalString (lib.elem "qt5ct" themeList) ''
-        mkdir -p "$out/qt5ct"
-        cp "${sources.qt5ct}/themes/catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
+    ''
+    + lib.optionalString (lib.elem "qt5ct" themeList) ''
+      mkdir -p "$out/qt5ct"
+      cp "${sources.qt5ct}/themes/catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
 
-      ''
-      + lib.optionalString (lib.elem "rofi" themeList) ''
-        mkdir -p "$out/rofi"
-        cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
+    ''
+    + lib.optionalString (lib.elem "rofi" themeList) ''
+      mkdir -p "$out/rofi"
+      cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
 
-      ''
-      + lib.optionalString (lib.elem "refind" themeList) ''
-        mkdir -p "$out/refind/assets"
-        cp "${sources.refind}/${variant}.conf" "$out/refind"
-        cp -r "${sources.refind}/assets/${variant}" "$out/refind/assets"
+    ''
+    + lib.optionalString (lib.elem "refind" themeList) ''
+      mkdir -p "$out/refind/assets"
+      cp "${sources.refind}/${variant}.conf" "$out/refind"
+      cp -r "${sources.refind}/assets/${variant}" "$out/refind/assets"
 
-      ''
-      + lib.optionalString (lib.elem "starship" themeList) ''
-        mkdir -p "$out/starship"
-        cp "${sources.starship}/themes/${variant}.toml" "$out/starship"
+    ''
+    + lib.optionalString (lib.elem "starship" themeList) ''
+      mkdir -p "$out/starship"
+      cp "${sources.starship}/themes/${variant}.toml" "$out/starship"
 
-      ''
-      + lib.optionalString (lib.elem "thunderbird" themeList) ''
-        mkdir -p "$out/thunderbird"
-        cp "${sources.thunderbird}/themes/${variant}/${variant}-${accent}.xpi" "$out/thunderbird"
+    ''
+    + lib.optionalString (lib.elem "thunderbird" themeList) ''
+      mkdir -p "$out/thunderbird"
+      cp "${sources.thunderbird}/themes/${variant}/${variant}-${accent}.xpi" "$out/thunderbird"
 
-      ''
-      + lib.optionalString (lib.elem "waybar" themeList) ''
-        mkdir -p "$out/waybar"
-        cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
+    ''
+    + lib.optionalString (lib.elem "waybar" themeList) ''
+      mkdir -p "$out/waybar"
+      cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
 
-      ''
-      + ''
-        runHook postInstall
-      '';
+    ''
+    + ''
+      runHook postInstall
+    '';
 
     meta = {
       description = "Soothing pastel themes";

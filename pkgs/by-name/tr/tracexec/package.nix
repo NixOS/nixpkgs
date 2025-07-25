@@ -52,15 +52,14 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  cargoBuildFlags =
-    [
-      "--no-default-features"
-      "--features=recommended"
-    ]
-    # Remove RiscV64 specialisation when this is fixed:
-    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-    # * https://github.com/rust-vmm/seccompiler/pull/72
-    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ]
+  # Remove RiscV64 specialisation when this is fixed:
+  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
+  # * https://github.com/rust-vmm/seccompiler/pull/72
+  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests

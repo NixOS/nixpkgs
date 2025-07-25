@@ -15,18 +15,19 @@
   requests,
   setuptools,
   six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "5.0.0";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${version}";
-    hash = "sha256-pNnttrp6s9T+tmDFJ9S3DZ/HcMTifYkr6Rs8E/8+G5c=";
+    hash = "sha256-u4qCQYCpMfM/JCyyKOfTTN7vwh3EvlGnxuslUy/d9Bs=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [

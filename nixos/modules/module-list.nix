@@ -67,6 +67,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
+  ./hardware/fw-fanctrl.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/graphics.nix
@@ -103,6 +104,7 @@
   ./hardware/sata.nix
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
+  ./hardware/sheep-net.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tuxedo-drivers.nix
@@ -331,6 +333,7 @@
   ./programs/vim.nix
   ./programs/virt-manager.nix
   ./programs/vivid.nix
+  ./programs/vscode.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/dwl.nix
@@ -579,6 +582,7 @@
   ./services/development/athens.nix
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
+  ./services/development/corteza.nix
   ./services/development/distccd.nix
   ./services/development/gemstash.nix
   ./services/development/hoogle.nix
@@ -594,6 +598,7 @@
   ./services/display-managers/default.nix
   ./services/display-managers/gdm.nix
   ./services/display-managers/greetd.nix
+  ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
@@ -691,6 +696,7 @@
   ./services/home-automation/evcc.nix
   ./services/home-automation/govee2mqtt.nix
   ./services/home-automation/home-assistant.nix
+  ./services/home-automation/homebridge.nix
   ./services/home-automation/matter-server.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix
@@ -773,10 +779,10 @@
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
-  ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse-auto-compressor.nix
   ./services/matrix/synapse.nix
+  ./services/matrix/tuwunel.nix
   ./services/misc/airsonic.nix
   ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
@@ -878,6 +884,7 @@
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
+  ./services/misc/paisa.nix
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
   ./services/misc/persistent-evdev.nix
@@ -915,7 +922,6 @@
   ./services/misc/sickbeard.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
-  ./services/misc/sourcehut
   ./services/misc/spice-autorandr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/spice-webdavd.nix
@@ -930,6 +936,7 @@
   ./services/misc/taskchampion-sync-server.nix
   ./services/misc/taskserver
   ./services/misc/tautulli.nix
+  ./services/misc/tee-supplicant
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix
   ./services/misc/transfer-sh.nix
@@ -1067,6 +1074,7 @@
   ./services/networking/anubis.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
+  ./services/networking/atalkd.nix
   ./services/networking/atftpd.nix
   ./services/networking/atticd.nix
   ./services/networking/autossh.nix
@@ -1116,6 +1124,7 @@
   ./services/networking/dnsproxy.nix
   ./services/networking/doh-proxy-rust.nix
   ./services/networking/doh-server.nix
+  ./services/networking/easytier.nix
   ./services/networking/ejabberd.nix
   ./services/networking/envoy.nix
   ./services/networking/epmd.nix
@@ -1197,6 +1206,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
   ./services/networking/libreswan.nix
+  ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
@@ -1240,6 +1250,7 @@
   ./services/networking/netclient.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/newt.nix
   ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
   ./services/networking/nghttpx/default.nix
@@ -1411,6 +1422,7 @@
   ./services/search/hound.nix
   ./services/search/manticore.nix
   ./services/search/meilisearch.nix
+  ./services/search/nominatim.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
   ./services/search/quickwit.nix
@@ -1490,6 +1502,7 @@
   ./services/torrent/magnetico.nix
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
+  ./services/torrent/qbittorrent.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/torrentstream.nix
   ./services/torrent/transmission.nix
@@ -1524,6 +1537,7 @@
   ./services/web-apps/castopod.nix
   ./services/web-apps/changedetection-io.nix
   ./services/web-apps/chatgpt-retrieval-plugin.nix
+  ./services/web-apps/chhoto-url.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
   ./services/web-apps/coder.nix
@@ -1595,6 +1609,7 @@
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
+  ./services/web-apps/lasuite-meet.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mainsail.nix
@@ -1619,6 +1634,7 @@
   ./services/web-apps/nextjs-ollama-llm-ui.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/nifi.nix
+  ./services/web-apps/nipap.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix
@@ -1657,6 +1673,7 @@
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/sftpgo.nix
+  ./services/web-apps/sharkey.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/silverbullet.nix
   ./services/web-apps/simplesamlphp.nix
@@ -1826,6 +1843,8 @@
   ./system/boot/uvesafb.nix
   ./system/boot/zram-as-tmp.nix
   ./system/etc/etc-activation.nix
+  ./system/service/systemd/system.nix
+  ./system/service/systemd/user.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix

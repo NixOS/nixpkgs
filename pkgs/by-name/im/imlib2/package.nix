@@ -50,25 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+iMV8oN5tDCm5mBbQoSwe+BqPvQi1PXhybskcUxM9t0=";
   };
 
-  buildInputs =
-    [
-      libjpeg
-      libtiff
-      giflib
-      libpng
-      bzip2
-      freetype
-      libid3tag
-    ]
-    ++ optionals x11Support [
-      xorg.libXft
-      xorg.libXext
-    ]
-    ++ optional heifSupport libheif
-    ++ optional svgSupport librsvg
-    ++ optional webpSupport libwebp
-    ++ optional jxlSupport libjxl
-    ++ optional psSupport libspectre;
+  buildInputs = [
+    libjpeg
+    libtiff
+    giflib
+    libpng
+    bzip2
+    freetype
+    libid3tag
+  ]
+  ++ optionals x11Support [
+    xorg.libXft
+    xorg.libXext
+  ]
+  ++ optional heifSupport libheif
+  ++ optional svgSupport librsvg
+  ++ optional webpSupport libwebp
+  ++ optional jxlSupport libjxl
+  ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 

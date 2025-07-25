@@ -28,14 +28,13 @@ rustPlatform.buildRustPackage rec {
   cargoExtraArgs = "-p nix-weather";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      openssl
-      installShellFiles
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   outputs = [
     "out"

@@ -76,11 +76,10 @@ let
           addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
         '';
 
-        postPatch =
-          ''
-            rm -f rebar rebar3
-          ''
-          + postPatch;
+        postPatch = ''
+          rm -f rebar rebar3
+        ''
+        + postPatch;
 
         buildPhase = ''
           runHook preBuild
@@ -101,7 +100,8 @@ let
 
         meta = {
           inherit (erlang.meta) platforms;
-        } // meta;
+        }
+        // meta;
 
         passthru = {
           packageName = name;

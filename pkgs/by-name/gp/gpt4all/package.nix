@@ -44,54 +44,51 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
 
-  nativeBuildInputs =
-    [
-      cmake
-      qt6.wrapQtAppsHook
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ];
 
-  buildInputs =
+  buildInputs = [
+    duckx
+    fmt
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qthttpserver
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwayland
+    qt6.qtwebengine
+    shaderc
+    vulkan-headers
+    wayland
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
     [
-      duckx
-      fmt
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtdeclarative
-      qt6.qthttpserver
-      qt6.qtsvg
-      qt6.qttools
-      qt6.qtwayland
-      qt6.qtwebengine
-      shaderc
-      vulkan-headers
-      wayland
+      cuda_cccl
+      cuda_cudart
+      libcublas
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl
-        cuda_cudart
-        libcublas
-      ]
-    );
+  );
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER" false)
-      (lib.cmakeBool "KOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK" true)
-      (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_FMT" false)
+  cmakeFlags = [
+    (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER" false)
+    (lib.cmakeBool "KOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK" true)
+    (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_FMT" false)
 
-      # https://github.com/NixOS/nixpkgs/issues/298997
-      # https://github.com/nomic-ai/gpt4all/issues/3468
-      (lib.cmakeBool "LLMODEL_KOMPUTE" false)
-    ]
-    ++ lib.optionals (!cudaSupport) [
-      (lib.cmakeBool "LLMODEL_CUDA" false)
-    ];
+    # https://github.com/NixOS/nixpkgs/issues/298997
+    # https://github.com/nomic-ai/gpt4all/issues/3468
+    (lib.cmakeBool "LLMODEL_KOMPUTE" false)
+  ]
+  ++ lib.optionals (!cudaSupport) [
+    (lib.cmakeBool "LLMODEL_CUDA" false)
+  ];
 
   postInstall = ''
     rm -rf $out/include

@@ -36,23 +36,21 @@ stdenv.mkDerivation {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches =
-    [
-      ./x11.patch
-    ]
-    ++ lib.optionals withMinecraftPatch [
-      ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
-    ];
+  patches = [
+    ./x11.patch
+  ]
+  ++ lib.optionals withMinecraftPatch [
+    ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
+  ];
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     wayland

@@ -16,20 +16,20 @@ let
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/linux/x64/Cursor-1.0.0-x86_64.AppImage";
-      hash = "sha256-HJiT3aDB66K2slcGJDC21+WhK/kv4KCKVZgupbfmLG0=";
+      url = "https://downloads.cursor.com/production/faa03b17cce93e8a80b7d62d57f5eda6bb6ab9fa/linux/x64/Cursor-1.2.2-x86_64.AppImage";
+      hash = "sha256-mQr1QMw4wP+kHvE9RWPkCKtHObbr0jpyOxNw3LfTPfc=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/linux/arm64/Cursor-1.0.0-aarch64.AppImage";
-      hash = "sha256-/F+OUD+sjnIt2ishusi7F/W1kK/n7hwL7Bz1cO3u+x4=";
+      url = "https://downloads.cursor.com/production/faa03b17cce93e8a80b7d62d57f5eda6bb6ab9fa/linux/arm64/Cursor-1.2.2-aarch64.AppImage";
+      hash = "sha256-EGvm/VW+NDTmOB1o2j3dpq4ckWbroFWEbF9Pezr8SZQ=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-7JTgauy+vdoaPOtbYjhSCR+ZtVwzRYKHVelpnvS5oKw=";
+      url = "https://downloads.cursor.com/production/faa03b17cce93e8a80b7d62d57f5eda6bb6ab9fa/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-IDJklB8wMfrPpc2SO02iVBBE9d7fLN7JotVpPyCQkyE=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/53b99ce608cba35127ae3a050c1738a959750865/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-kbSN4+ozVGVAGLqEuaDnWBNfzmFHYdAvbOsCb/KTpe8=";
+      url = "https://downloads.cursor.com/production/faa03b17cce93e8a80b7d62d57f5eda6bb6ab9fa/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-GxiNf58Kf5/l01eBhXRWMLMxAnj1txDQwSe5ei6nTgg=";
     };
   };
 
@@ -39,7 +39,7 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = finalCommandLineArgs;
 
-  version = "1.0.0";
+  version = "1.2.2";
   pname = "cursor";
 
   # You can find the current VSCode version in the About dialog:
@@ -89,14 +89,14 @@ in
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
-    ] ++ lib.platforms.darwin;
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
 }).overrideAttrs
   (oldAttrs: {
     nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ])
-      ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
 
     preInstall =
       (oldAttrs.preInstall or "")

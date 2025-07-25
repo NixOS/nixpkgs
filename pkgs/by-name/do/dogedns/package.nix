@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pandoc
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   postInstall = ''

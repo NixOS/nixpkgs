@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acshk";
     repo = "acsccid";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
@@ -35,14 +35,13 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      libusb1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    pcsclite
+    libusb1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   configureFlags = [
     "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"

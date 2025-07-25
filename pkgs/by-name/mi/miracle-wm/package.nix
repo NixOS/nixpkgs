@@ -23,6 +23,7 @@
   nlohmann_json,
   pcre2,
   pkg-config,
+  python3,
   systemd,
   wayland,
   yaml-cpp,
@@ -30,26 +31,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.5.2";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nmDFmj3DawgjRB0+vlcvPX+kj6lzAu14HySFc2NsJss=";
+    hash = "sha256-zUqW21gZC7J/E0cld11N6OyclpgKCh4F7m/soBi3N1E=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-        --replace-fail '-march=native' '# -march=native' \
-        --replace-fail '-flto' '# -flto'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests/)' ""
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native' \
+      --replace-fail '-flto' '# -flto'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests/)' ""
+  '';
 
   strictDeps = true;
 
@@ -76,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     mir
     nlohmann_json
     pcre2
+    (python3.withPackages (
+      ps: with ps; [
+        dbus-next
+        tenacity
+      ]
+    ))
     wayland
     yaml-cpp
   ];
@@ -91,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/miracle-wm-tests
+    ./tests/miracle-wm-tests
 
     runHook postCheck
   '';

@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -26,15 +26,15 @@
   nix-update-script,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9amK5DEpueAD+aobmBmjbV+C16RO7lcDOdf5ucJtNvM=";
+    hash = "sha256-YndFlXC9ZM7uiC75MfnYFk4S9s1Xqq3GTnW0xMBlG7g=";
   };
 
   nativeBuildInputs = [

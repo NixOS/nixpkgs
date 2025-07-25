@@ -29,20 +29,19 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      make install BINDIR=$out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      for shell in bash fish zsh; do
-        installShellCompletion --cmd crictl \
-          --$shell <($out/bin/crictl completion $shell)
-      done
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    make install BINDIR=$out/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd crictl \
+        --$shell <($out/bin/crictl completion $shell)
+    done
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "CLI and validation tools for Kubelet Container Runtime Interface (CRI)";

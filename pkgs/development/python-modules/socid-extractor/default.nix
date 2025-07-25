@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-oiXIxNvedEk+EufYzxhvRr8m+kuQRs0J62Yel5JLenQ=";
   };
 
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -39,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
-    changelog = "https://github.com/soxoj/socid-extractor/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/soxoj/socid-extractor/blob/v${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "socid_extractor";

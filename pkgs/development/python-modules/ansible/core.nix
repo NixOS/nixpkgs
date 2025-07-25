@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.18.6";
+  version = "2.18.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ansible_core";
     inherit version;
-    hash = "sha256-JbsgzhUWobcweDGyY872hAQ7NyBxFGa9nUFk5f1XZVc=";
+    hash = "sha256-GhKb+fzV3KKxfoPOdxR+4vvDxRpJWJcBUol8xbbQquc=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -87,7 +87,8 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optionals windowsSupport [ pywinrm ];
+  ]
+  ++ lib.optionals windowsSupport [ pywinrm ];
 
   pythonRelaxDeps = [ "resolvelib" ];
 
@@ -105,6 +106,9 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

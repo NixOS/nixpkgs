@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     (if stdenv.hostPlatform.isDarwin then fuse else fuse3)
     bzip2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isLinux attr;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux attr;
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DUSE_FUSE3=OFF";
 

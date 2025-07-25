@@ -61,37 +61,54 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
     tag = finalAttrs.version;
-    hash = "sha256-5fwSLUTntVyV5FIVnPishrU/55tyTyx0Fzh6oitaWwo=";
+    hash = "sha256-blXEfDauwtDH+0OdUx0vAR+8lnAGrREssqjsBNmvomk=";
   };
 
   patches = [
-    # Fix greeter & related settings
-    # These patches are seemingly not submitted upstream yet
+    # Fix broken multimedia suspend due to missing media-hub
     (fetchpatch {
-      name = "1000-lomiri-QT_IM_MODULE-maliit.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/ebbe0f3f568bd145bb58a2e47f7112442328a0a5/debian/patches/2003_maliit-not-maliitphablet-as-im-module-namespace.patch";
-      hash = "sha256-5HEMl0x1S9Hb7spxPRgu8OBebmpaLa6zko2uVEYtBmY=";
+      name = "2012-lomiri-dont-suspend-apps.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/1d6e83446f69299d1206927c2adbf78470ba27ec/debian/patches/2012_no-app-suspension-on-Debian+Ubuntu-proper.patch";
+      hash = "sha256-9mvkILrkig18fAw5KyA2+5vXup6Le7X0blgY0PJ2Trc=";
+    })
+
+    # Fix convergence on some tablets
+    (fetchpatch {
+      name = "1013-lomiri-fix-convergence-on-high-resolution-tablets.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/4d4904b728a3e66706c756f911ddc79b01f863a2/debian/patches/1013_fix-convergence-on-high-resolution-tablets.patch";
+      hash = "sha256-pQYIa8U0gEFdwZBuWMp8nL5j2HPSivMrsuKUC9scKg0=";
+    })
+
+    # Make greeter behave nicer & more Wayland-native
+    (fetchpatch {
+      name = "2014-lomiri-greeter-wrapper-on-wayland.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/e655e14c7d420021193e37debd3e7da620b45429/debian/patches/2014_lomiri-greeter-wrapper-on-wayland.patch";
+      hash = "sha256-aEId3UDqH1iUi9gV5IpW/5S5rke93UyZVr0jWlNYnOU=";
     })
     (fetchpatch {
-      name = "1001-lomiri-QT_QPA_PLATFORM-wayland.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/ebbe0f3f568bd145bb58a2e47f7112442328a0a5/debian/patches/2004_qt-qpa-platform-is-wayland.patch";
-      hash = "sha256-4C6X2TW+yjZhqYPIcQ3GJeTKbz785i7p/DpT+vX1DSQ=";
+      name = "2015-lomiri-greeter-use-wayland.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/2f5acfa085c901359bf6f6cccbce36d7e2981555/debian/patches/2015_lomiri-greeter-use-wayland.patch";
+      hash = "sha256-fnTEVQnOBQVd95ucs+iDMcQFOevfQ8dckQg0PrtL/A0=";
     })
+
+    # Reduce desyncing of cursor
     (fetchpatch {
-      name = "1002-lomiri-Fix-Lomiri-greeter.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/5f9d28fe6f0ba9ab7eed149b4da7f6b3f4eae55a/debian/patches/1008_lomiri-greeter-wayland.patch";
-      hash = "sha256-vuNTKWA50krtx/+XB2pMI271q57N+kqWlfq54gtf/HI=";
+      name = "1005-lomiri-cursor-always-follow-cursor-position-from-mir.patch";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/f3ba943006f5469a8a7aa24f232d6383afb3bc74/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
+      hash = "sha256-FYWRHt3//gm3jT9dr35tH4PlZssMMA/zBhjkszgqTYo=";
     })
+
+    # Undo start-here integration & uglier colours for launcher
     (fetchpatch {
-      name = "1004-lomiri-Dont-reset-OSK-setting.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/ebbe0f3f568bd145bb58a2e47f7112442328a0a5/debian/patches/2005_dont-reset-alwaysShowOsk-to-system-defaults-on-login.patch";
-      hash = "sha256-guq/Ykcq4WcuXxNKO1eA4sJFyGSpZo0gtyFTdeK/GeE=";
+      name = "0001-lomiri-LauncherPanel-Use-Lomiri-upstream-home-logo-and-home-background-color.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/defaabfaf4818ee6b618c97b34acf5e0ed2ebb2e.patch";
+      hash = "sha256-9YRWMV+1UT+EQd9Uq1+6enNzz+HDlSt3LTPM1BKJxiE=";
     })
 
     ./9901-lomiri-Disable-Wizard.patch
@@ -100,42 +117,37 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch =
-    ''
-      # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'qt5mir2server' 'qtmirserver'
+  postPatch = ''
+    # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'qt5mir2server' 'qtmirserver'
 
-      # Need to replace prefix
-      substituteInPlace data/systemd-user/CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+    # Need to replace prefix
+    substituteInPlace data/systemd-user/CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
-      # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
-      substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
-        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
+    # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
+    substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
+      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
 
-      # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
-      # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
-      substituteInPlace tests/mocks/CMakeLists.txt \
-        --replace-fail 'add_subdirectory(QtMir/Application)' ""
+    # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
+    # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
+    substituteInPlace tests/mocks/CMakeLists.txt \
+      --replace-fail 'add_subdirectory(QtMir/Application)' ""
 
-      # This needs to launch the *lomiri* indicators, now that datetime is split into lomiri and non-lomiri variants
-      substituteInPlace data/lomiri-greeter-wrapper \
-        --replace-fail 'ayatana-indicators.target' 'lomiri-indicators.target'
+    # Seems like the Debian patch that added this didn't read the lightdm greeter entry properly, so everything gets passed twice
+    substituteInPlace data/lomiri-greeter.desktop.in.in \
+      --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
+    substituteInPlace data/lomiri-greeter-wrapper \
+      --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
 
-      # NixOS-ify
-
-      # Use Nix flake instead of Canonical's Ubuntu logo
-      rm qml/Launcher/graphics/home.svg
-      ln -s ${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg qml/Launcher/graphics/home.svg
-
-      # Look up default wallpaper in current system
-      substituteInPlace plugins/Utils/constants.cpp \
-        --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/whitespace/check_whitespace.py
-    '';
+    # Look up default wallpaper in current system
+    substituteInPlace plugins/Utils/constants.cpp \
+      --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/whitespace/check_whitespace.py
+  '';
 
   nativeBuildInputs = [
     cmake

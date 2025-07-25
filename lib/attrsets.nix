@@ -1163,7 +1163,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (path: x: x.name)
       attrs
     ```
     :::

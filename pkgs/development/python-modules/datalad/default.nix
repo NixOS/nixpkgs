@@ -82,23 +82,22 @@ buildPythonPackage rec {
     optional-dependencies.core ++ optional-dependencies.downloaders ++ optional-dependencies.publish;
 
   optional-dependencies = {
-    core =
-      [
-        platformdirs
-        chardet
-        distro
-        iso8601
-        humanize
-        fasteners
-        packaging
-        patool
-        tqdm
-        annexremote
-        looseversion
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
-      ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-      ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+    core = [
+      platformdirs
+      chardet
+      distro
+      iso8601
+      humanize
+      fasteners
+      packaging
+      patool
+      tqdm
+      annexremote
+      looseversion
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ colorama ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
     downloaders = [
       boto3
       keyrings-alt
@@ -230,10 +229,9 @@ buildPythonPackage rec {
     httpretty
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Deprecated in 3.13. Use exc_type_str instead.
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];

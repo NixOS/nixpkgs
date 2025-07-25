@@ -11,6 +11,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
   version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.tails.boum.org";
@@ -24,10 +25,14 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     intltool
     wrapGAppsHook3
-    python3.pkgs.distutils-extra
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    distutils-extra
+  ];
+
+  dependencies = with python3.pkgs; [
     pygobject3
     stem
   ];

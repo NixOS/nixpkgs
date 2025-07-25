@@ -188,21 +188,20 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
   ];
 
-  buildInputs =
-    [
-      dbus
-      nlohmann_json
-      spdlog
-    ]
-    ++ lib.optional waylandSupport wayland
-    ++ lib.optional x11Support libX11
-    ++ lib.optional nvidiaSupport libXNVCtrl
-    ++ lib.optional (x11Support || waylandSupport) libxkbcommon
-    ++ lib.optionals mangoappSupport [
-      glew
-      glfw
-      libXrandr
-    ];
+  buildInputs = [
+    dbus
+    nlohmann_json
+    spdlog
+  ]
+  ++ lib.optional waylandSupport wayland
+  ++ lib.optional x11Support libX11
+  ++ lib.optional nvidiaSupport libXNVCtrl
+  ++ lib.optional (x11Support || waylandSupport) libxkbcommon
+  ++ lib.optionals mangoappSupport [
+    glew
+    glfw
+    libXrandr
+  ];
 
   doCheck = true;
 

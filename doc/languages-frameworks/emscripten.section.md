@@ -38,78 +38,75 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
 
 
 ```nix
-(pkgs.zlib.override {
-  stdenv = pkgs.emscriptenStdenv;
-}).overrideAttrs
-  (old: {
-    buildInputs = old.buildInputs ++ [ pkg-config ];
-    # we need to reset this setting!
-    env = (old.env or { }) // {
-      NIX_CFLAGS_COMPILE = "";
-    };
+(pkgs.zlib.override { stdenv = pkgs.emscriptenStdenv; }).overrideAttrs (old: {
+  buildInputs = old.buildInputs ++ [ pkg-config ];
+  # we need to reset this setting!
+  env = (old.env or { }) // {
+    NIX_CFLAGS_COMPILE = "";
+  };
 
-    configurePhase = ''
-      # FIXME: Some tests require writing at $HOME
-      HOME=$TMPDIR
-      runHook preConfigure
+  configurePhase = ''
+    # FIXME: Some tests require writing at $HOME
+    HOME=$TMPDIR
+    runHook preConfigure
 
-      #export EMCC_DEBUG=2
-      emconfigure ./configure --prefix=$out --shared
+    #export EMCC_DEBUG=2
+    emconfigure ./configure --prefix=$out --shared
 
-      runHook postConfigure
-    '';
+    runHook postConfigure
+  '';
 
-    dontStrip = true;
-    outputs = [ "out" ];
+  dontStrip = true;
+  outputs = [ "out" ];
 
-    buildPhase = ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      emmake make
+    emmake make
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      emmake make install
+    emmake make install
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    checkPhase = ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      echo "================= testing zlib using node ================="
+    echo "================= testing zlib using node ================="
 
-      echo "Compiling a custom test"
-      set -x
-      emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-      libz.so.${old.version} -I . -o example.js
+    echo "Compiling a custom test"
+    set -x
+    emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
+    libz.so.${old.version} -I . -o example.js
 
-      echo "Using node to execute the test"
-      ${pkgs.nodejs}/bin/node ./example.js
+    echo "Using node to execute the test"
+    ${pkgs.nodejs}/bin/node ./example.js
 
-      set +x
-      if [ $? -ne 0 ]; then
-        echo "test failed for some reason"
-        exit 1;
-      else
-        echo "it seems to work! very good."
-      fi
-      echo "================= /testing zlib using node ================="
+    set +x
+    if [ $? -ne 0 ]; then
+      echo "test failed for some reason"
+      exit 1;
+    else
+      echo "it seems to work! very good."
+    fi
+    echo "================= /testing zlib using node ================="
 
-      runHook postCheck
-    '';
+    runHook postCheck
+  '';
 
-    postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure \
-        --replace-fail '/usr/bin/libtool' 'ar' \
-        --replace-fail 'AR="libtool"' 'AR="ar"' \
-        --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
-    '';
-  })
+  postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure \
+      --replace-fail '/usr/bin/libtool' 'ar' \
+      --replace-fail 'AR="libtool"' 'AR="ar"' \
+      --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
+})
 ```
 
 :::{.example #usage-2-pkgs.buildemscriptenpackage}

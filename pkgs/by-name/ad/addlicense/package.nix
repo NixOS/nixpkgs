@@ -29,11 +29,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Ensures source code files have copyright license headers by scanning directory patterns recursively";
     homepage = "https://github.com/google/addlicense";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "addlicense";
   };
 }

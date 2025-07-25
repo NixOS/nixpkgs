@@ -67,17 +67,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall =
-    ''
-      mandown docs/MANPAGE.md > zellij.1
-      installManPage zellij.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd $pname \
-        --bash <($out/bin/zellij setup --generate-completion bash) \
-        --fish <($out/bin/zellij setup --generate-completion fish) \
-        --zsh <($out/bin/zellij setup --generate-completion zsh)
-    '';
+  postInstall = ''
+    mandown docs/MANPAGE.md > zellij.1
+    installManPage zellij.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd $pname \
+      --bash <($out/bin/zellij setup --generate-completion bash) \
+      --fish <($out/bin/zellij setup --generate-completion fish) \
+      --zsh <($out/bin/zellij setup --generate-completion zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 

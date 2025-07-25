@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     m4
     wirelesstools
     curl
-  ] ++ lib.optional supportAlsa alsa-lib;
+  ]
+  ++ lib.optional supportAlsa alsa-lib;
 
   postPatch = ''
     substituteInPlace src/Makefile.in \

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-bQ+ph7CvPtygvCoCMjTMadYLn/ds2ZOGQL29x3hFuLg=";
+    hash = "sha256-/SKQC+i8tgpYNVJIem8XDp+v7olGbRRgW25UhhLpIu8=";
   };
 
   nativeBuildInputs = [

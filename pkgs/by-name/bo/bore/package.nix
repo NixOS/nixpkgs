@@ -36,7 +36,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
   postInstall = ''
     installManPage $src/bore/doc/bore.1

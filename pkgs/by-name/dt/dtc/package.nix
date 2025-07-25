@@ -42,20 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      flex
-      bison
-      pkg-config
-      which
-    ]
-    ++ lib.optionals pythonSupport [
-      python
-      python.pkgs.setuptools-scm
-      swig
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    flex
+    bison
+    pkg-config
+    which
+  ]
+  ++ lib.optionals pythonSupport [
+    python
+    python.pkgs.setuptools-scm
+    swig
+  ];
 
   buildInputs = [ libyaml ];
 

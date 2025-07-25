@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash = "sha256-aPkXHKG3vDsfYqYx9q9+2wZhuFqmPcXdoBqOfAvW9oA=";
   };
 
@@ -57,7 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     nodejs
     pnpm_10.configHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
     nodePackages.node-gyp-build

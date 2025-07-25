@@ -18,7 +18,7 @@ update-source-version vscode $latestVersion
 
 systems=$(nix eval --json -f . vscode.meta.platforms | jq --raw-output '.[]')
 for system in $systems; do
-  hash=$(nix hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . vscode.src.url --system "$system")))
+  hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . vscode.src.url --system "$system")))
   update-source-version vscode $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
 done
 

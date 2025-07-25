@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     exiv2
     mpv
-    opencv4
+    opencv4.cxxdev
     libsForQt5.qtbase
     libsForQt5.qtimageformats
     libsForQt5.qtsvg

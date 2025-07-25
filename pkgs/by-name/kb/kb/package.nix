@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "kb";
   version = "0.1.7";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "gnebbia";
@@ -20,12 +20,16 @@ python3.pkgs.buildPythonApplication rec {
     # `attr` module is not available. And `attrs` defines another `attr` package
     # that shadows it.
     substituteInPlace setup.py \
-      --replace \
+      --replace-fail \
         "install_requires=[\"colored\",\"toml\",\"attr\",\"attrs\",\"gitpython\"]," \
         "install_requires=[\"colored\",\"toml\",\"attrs\",\"gitpython\"],"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     colored
     toml
     attrs
@@ -36,6 +40,8 @@ python3.pkgs.buildPythonApplication rec {
     pytest-cov-stub
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "kb" ];
 
   meta = {
     description = "Minimalist command line knowledge base manager";

@@ -21,17 +21,16 @@ mkDerivation rec {
     hash = "sha256-z/LFNRFdQQFxEWyAjcuGezRbTsv8z6Q6fK8NLjP4HNM=";
   };
 
-  buildInputs =
-    [
-      marble.dev
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtcharts
-      qtsvg
-      qtwebengine
-      ldutils
-    ]);
+  buildInputs = [
+    marble.dev
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtcharts
+    qtsvg
+    qtwebengine
+    ldutils
+  ]);
 
   nativeBuildInputs = [
     cmake

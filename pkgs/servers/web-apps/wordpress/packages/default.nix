@@ -68,7 +68,8 @@ let
 
             meta = {
               license = lib.licenses.${license};
-            } // (args.passthru or { });
+            }
+            // (args.passthru or { });
           }
           // lib.optionalAttrs (type == "language") {
             nativeBuildInputs = [

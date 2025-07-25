@@ -12,7 +12,7 @@
   git,
   gnused,
   nix,
-  nixfmt-rfc-style,
+  nixfmt,
   rebar3-nix,
 }:
 
@@ -95,7 +95,7 @@ let
           git
           gnused
           nix
-          nixfmt-rfc-style
+          nixfmt
           (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
@@ -142,6 +142,9 @@ let
 
           # our patches cause the tests to fail
           doCheck = false;
+
+          # patchShebangs corrupts the magic escript shebang+zip files
+          dontPatchShebangs = true;
         })
       );
     in

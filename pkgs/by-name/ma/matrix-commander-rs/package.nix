@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-commander-rs";
-  version = "0.10.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
     tag = "v${version}";
-    hash = "sha256-ljRFZYfTSyiIVgABgQAVLlwhOmeMumAyZe9tASPtMZA=";
+    hash = "sha256-CvsMRxB5s891cVu03RroTQYOGA6rmhpif8VT0njXTnc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-BMVxxCOAznAsqKUgGHJ9hPgdIksCyzMVUHeLa+om09U=";
+  cargoHash = "sha256-hzWq09qJTox8yZuMOQ1///hKxY4EsWn/mHKy3svxlF8=";
 
   nativeBuildInputs = [
     pkg-config

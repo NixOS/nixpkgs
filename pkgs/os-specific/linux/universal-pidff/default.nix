@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "universal-pidff";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
     tag = version;
-    hash = "sha256-AlJIbu8xrlDXfEqzoMGyHsLLfHnBsyYcECdoU3XyE00=";
+    hash = "sha256-Ebj0s08x5+qkJFOUeiLF9lwfyJIH5llPRM+ZXcT594I=";
   };
 
   postPatch = ''

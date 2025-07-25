@@ -47,19 +47,18 @@ flutter329.buildFlutterApplication rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-vaapi
-      gst_all_1.gstreamer
-      libunwind
-      orc
-      mimalloc
-    ]
-    ++ mpv-unwrapped.buildInputs
-    ++ libplacebo.buildInputs;
+  buildInputs = [
+    mpv-unwrapped
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-vaapi
+    gst_all_1.gstreamer
+    libunwind
+    orc
+    mimalloc
+  ]
+  ++ mpv-unwrapped.buildInputs
+  ++ libplacebo.buildInputs;
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

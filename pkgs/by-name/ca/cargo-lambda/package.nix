@@ -33,11 +33,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   # Remove files that don't make builds reproducible:
   # - Remove build.rs file that adds the build date to the version.

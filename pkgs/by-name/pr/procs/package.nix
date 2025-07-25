@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do

@@ -79,7 +79,8 @@ buildPythonPackage rec {
     geopandas
     matplotlib
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pytestFlagsArray = [ "-m 'not network'" ];
 

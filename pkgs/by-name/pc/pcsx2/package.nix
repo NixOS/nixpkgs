@@ -7,6 +7,7 @@
   curl,
   extra-cmake-modules,
   ffmpeg,
+  gtk3,
   libXrandr,
   libaio,
   libbacktrace,
@@ -14,7 +15,6 @@
   libwebp,
   llvmPackages,
   lz4,
-  makeWrapper,
   pkg-config,
   qt6,
   shaderc,
@@ -23,6 +23,7 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wrapGAppsHook3,
   zip,
   zstd,
   plutovg,
@@ -34,8 +35,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "49d2f7bb0b4387e9cb7c68233e2bdc156850542b";
-    hash = "sha256-WByW40lf5h1hlnxxiiP9WyEhk8NwxATZDguWQj+j3iA=";
+    rev = "9b193aa0a61f5e93d3bd4124b111e8f296ef9fa8";
+    hash = "sha256-1hhdjFxJCNfeO/FIAnjRHESfiyzkErYddZqpRxzG7VQ=";
   };
 
   inherit (qt6)
@@ -48,13 +49,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.3.407";
+  version = "2.4.0";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3/nnGdEr7flA8g9jPC8clAyvZlwQh12/YH4+t0O9OuU=";
+    hash = "sha256-R+BdywkZKxR/+Z+o1512O3A1mg9A6s7i+JZjFyUbJVs=";
   };
 
   patches = [
@@ -76,6 +77,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     extra-cmake-modules
     pkg-config
     strip-nondeterminism
+    wrapGAppsHook3
     wrapQtAppsHook
     zip
   ];
@@ -83,6 +85,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     ffmpeg
+    gtk3
     libaio
     libbacktrace
     libpcap
@@ -124,12 +127,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
-  # https://github.com/PCSX2/pcsx2/pull/10200
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/pcsx2-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru = {
@@ -155,6 +156,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
+      _0david0mp
       hrdinka
       govanify
       matteopacini

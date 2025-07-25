@@ -546,22 +546,21 @@ in
         serviceConfig = {
           ExecStartPre =
             let
-              startPreFullPrivileges =
-                ''
-                  set -o errexit -o pipefail -o nounset -o errtrace
-                  shopt -s inherit_errexit
+              startPreFullPrivileges = ''
+                set -o errexit -o pipefail -o nounset -o errtrace
+                shopt -s inherit_errexit
 
-                  umask u=rwx,g=,o=
-                  cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
-                  chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                  ${secretReplacements}
-                ''
-                + lib.optionalString cfg.provision.localMail.enable ''
-                  openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                  replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
-                  echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
-                  cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
-                '';
+                umask u=rwx,g=,o=
+                cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
+                chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
+                ${secretReplacements}
+              ''
+              + lib.optionalString cfg.provision.localMail.enable ''
+                openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
+                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
+                echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
+                cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
+              '';
             in
             "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
           Type = "simple";

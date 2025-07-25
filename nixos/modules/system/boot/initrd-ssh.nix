@@ -171,51 +171,50 @@ in
 
       sshdCfg = config.services.openssh;
 
-      sshdConfig =
-        ''
-          UsePAM no
-          Port ${toString cfg.port}
+      sshdConfig = ''
+        UsePAM no
+        Port ${toString cfg.port}
 
-          PasswordAuthentication no
-          AuthorizedKeysFile %h/.ssh/authorized_keys %h/.ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
-          ChallengeResponseAuthentication no
+        PasswordAuthentication no
+        AuthorizedKeysFile %h/.ssh/authorized_keys %h/.ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
+        ChallengeResponseAuthentication no
 
-          ${flip concatMapStrings cfg.hostKeys (path: ''
-            HostKey ${initrdKeyPath path}
-          '')}
+        ${flip concatMapStrings cfg.hostKeys (path: ''
+          HostKey ${initrdKeyPath path}
+        '')}
 
-        ''
-        + lib.optionalString (sshdCfg.settings.KexAlgorithms != null) ''
-          KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
-        ''
-        + lib.optionalString (sshdCfg.settings.Ciphers != null) ''
-          Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
-        ''
-        + lib.optionalString (sshdCfg.settings.Macs != null) ''
-          MACs ${concatStringsSep "," sshdCfg.settings.Macs}
-        ''
-        + ''
+      ''
+      + lib.optionalString (sshdCfg.settings.KexAlgorithms != null) ''
+        KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      ''
+      + lib.optionalString (sshdCfg.settings.Ciphers != null) ''
+        Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      ''
+      + lib.optionalString (sshdCfg.settings.Macs != null) ''
+        MACs ${concatStringsSep "," sshdCfg.settings.Macs}
+      ''
+      + ''
 
-          LogLevel ${sshdCfg.settings.LogLevel}
+        LogLevel ${sshdCfg.settings.LogLevel}
 
-          ${
-            if sshdCfg.settings.UseDns then
-              ''
-                UseDNS yes
-              ''
-            else
-              ''
-                UseDNS no
-              ''
-          }
+        ${
+          if sshdCfg.settings.UseDns then
+            ''
+              UseDNS yes
+            ''
+          else
+            ''
+              UseDNS no
+            ''
+        }
 
-          ${optionalString (!config.boot.initrd.systemd.enable) ''
-            SshdAuthPath /bin/sshd-auth
-            SshdSessionPath /bin/sshd-session
-          ''}
+        ${optionalString (!config.boot.initrd.systemd.enable) ''
+          SshdAuthPath /bin/sshd-auth
+          SshdSessionPath /bin/sshd-session
+        ''}
 
-          ${cfg.extraConfig}
-        '';
+        ${cfg.extraConfig}
+      '';
     in
     mkIf enabled {
       assertions = [

@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
+  pytestFlags = [ "-Wignore::DeprecationWarning" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

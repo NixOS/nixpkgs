@@ -41,17 +41,16 @@ stdenv.mkDerivation {
     glib
   ];
 
-  buildInputs =
-    [
-      iodine
-      networkmanager
-      glib
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      libsecret
-      libnma
-    ];
+  buildInputs = [
+    iodine
+    networkmanager
+    glib
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    libsecret
+    libnma
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"

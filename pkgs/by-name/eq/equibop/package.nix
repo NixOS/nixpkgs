@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
+    fetcherVersion = 1;
     hash = "sha256-laTyxRh54x3iopGVgoFtcgaV7R6IKux1O/+tzGEy0Fg=";
   };
 
@@ -62,13 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches =
-    [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (
-      replaceVars ./use_system_equicord.patch {
-        inherit equicord;
-      }
-    );
+  patches = [
+    ./disable_update_checking.patch
+  ]
+  ++ lib.optional withSystemEquicord (
+    replaceVars ./use_system_equicord.patch {
+      inherit equicord;
+    }
+  );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

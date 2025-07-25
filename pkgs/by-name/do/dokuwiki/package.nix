@@ -80,19 +80,17 @@ stdenv.mkDerivation rec {
       basePackage.overrideAttrs (prev: {
         pname = if builtins.isFunction pname then pname prev else pname;
 
-        postInstall =
-          prev.postInstall or ""
-          + ''
-            ${lib.concatMapStringsSep "\n" (
-              tpl: "cp -r ${toString tpl} $out/share/dokuwiki/lib/tpl/${tpl.name}"
-            ) templates}
-            ${lib.concatMapStringsSep "\n" (
-              plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
-            ) plugins}
-            ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
-            ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
-            ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
-          '';
+        postInstall = prev.postInstall or "" + ''
+          ${lib.concatMapStringsSep "\n" (
+            tpl: "cp -r ${toString tpl} $out/share/dokuwiki/lib/tpl/${tpl.name}"
+          ) templates}
+          ${lib.concatMapStringsSep "\n" (
+            plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}"
+          ) plugins}
+          ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php"}
+          ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php"}
+          ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php"}
+        '';
       });
     tests = {
       inherit (nixosTests) dokuwiki;

@@ -13,7 +13,6 @@
   pkg-config,
   python3Packages,
   readline,
-  systemdMinimal,
   udev,
   # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
@@ -28,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.80";
+  version = "5.83";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pNC8oymWkfBtW9l3O4VGOCBKUaUCbEKwrX8cbPFrRZo=";
+    hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
   };
 
   buildInputs = [
@@ -58,34 +57,34 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional installTests "test";
+  ]
+  ++ lib.optional installTests "test";
 
-  postPatch =
+  postPatch = ''
+    substituteInPlace tools/hid2hci.rules \
+      --replace-fail /sbin/udevadm ${udev}/bin/udevadm \
+      --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
+  ''
+  +
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    # - test-vcp is flaky (?), see:
+    #     - https://github.com/bluez/bluez/issues/683
+    #     - https://github.com/bluez/bluez/issues/726
     ''
-      substituteInPlace tools/hid2hci.rules \
-        --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
-        --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
-    ''
-    +
-      # Disable some tests:
-      # - test-mesh-crypto depends on the following kernel settings:
-      #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
-      # - test-vcp is flaky (?), see:
-      #     - https://github.com/bluez/bluez/issues/683
-      #     - https://github.com/bluez/bluez/issues/726
-      ''
-        skipTest() {
-          if [[ ! -f unit/$1.c ]]; then
-            echo "unit/$1.c no longer exists"
-            false
-          fi
+      skipTest() {
+        if [[ ! -f unit/$1.c ]]; then
+          echo "unit/$1.c no longer exists"
+          false
+        fi
 
-          echo 'int main() { return 77; }' > unit/$1.c
-        }
+        echo 'int main() { return 77; }' > unit/$1.c
+      }
 
-        skipTest test-mesh-crypto
-        skipTest test-vcp
-      '';
+      skipTest test-mesh-crypto
+      skipTest test-vcp
+    '';
 
   configureFlags = [
     "--localstatedir=/var"

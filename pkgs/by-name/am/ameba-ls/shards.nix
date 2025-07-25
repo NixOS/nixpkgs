@@ -16,7 +16,7 @@
   };
   rwlock = {
     url = "https://github.com/spider-gazelle/readers-writer.git";
-    rev = "v1.0.7";
+    tag = "v1.0.7";
     sha256 = "1cs4ang50cza7sb5zh94rl1ppwcn9z1l8jjcsshhy4w72wkbqyny";
   };
   tree_sitter = {

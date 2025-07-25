@@ -41,9 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
+    inherit (finalAttrs)
+      src
+      patches
+      cargoRoot
+      ;
     name = "gst-devtools-${finalAttrs.version}";
-    hash = "sha256-p26jeKRDSPTgQzf4ckhLPSFa8RKsgkjUEXJG8IlPPZo=";
+    hash = "sha256-GLxevEwoTgS7kmDlul0AA2wIFRY7js8Ij4UIu1ZQf8I=";
   };
 
   patches = [
@@ -54,35 +58,40 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 2;
       hash = "sha256-CpBFTmdn+VO6ZeNe6NZR6ELvakZqQdaF3o3G5TSDuUU=";
     })
+    # dots-viewer: sort static files
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/9208
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/b3099f78775eab1ac19a9e163c0386e01e74b768.patch";
+      stripLen = 2;
+      hash = "sha256-QRHqbZ6slYcwGl+o9Oi4jV+ANMorCED4cQV5qDS74eg=";
+    })
   ];
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      rustPlatform.cargoSetupHook
-      rustc
-      cargo
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      cairo
-      python3
-      json-glib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      apple-sdk_gstreamer
-    ];
+  buildInputs = [
+    cairo
+    python3
+    json-glib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     gstreamer

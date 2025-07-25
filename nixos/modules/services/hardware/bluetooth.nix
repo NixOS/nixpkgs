@@ -127,77 +127,76 @@ in
     services.dbus.packages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
     systemd.packages = [ package ];
 
-    systemd.services =
-      {
-        bluetooth =
-          let
-            # `man bluetoothd` will refer to main.conf in the nix store but bluez
-            # will in fact load the configuration file at /etc/bluetooth/main.conf
-            # so force it here to avoid any ambiguity and things suddenly breaking
-            # if/when the bluez derivation is changed.
-            args = [
-              "-f"
-              "/etc/bluetooth/main.conf"
-            ] ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
-          in
-          {
-            wantedBy = [ "bluetooth.target" ];
-            aliases = [ "dbus-org.bluez.service" ];
-            # restarting can leave people without a mouse/keyboard
-            restartIfChanged = false;
-            serviceConfig = {
-              ExecStart = [
-                ""
-                "${package}/libexec/bluetooth/bluetoothd ${utils.escapeSystemdExecArgs args}"
-              ];
-              CapabilityBoundingSet = [
-                "CAP_NET_BIND_SERVICE" # sockets and tethering
-              ];
-              ConfigurationDirectoryMode = "0755";
-              NoNewPrivileges = true;
-              RestrictNamespaces = true;
-              ProtectControlGroups = true;
-              MemoryDenyWriteExecute = true;
-              RestrictSUIDSGID = true;
-              SystemCallArchitectures = "native";
-              SystemCallFilter = "@system-service";
-              LockPersonality = true;
-              RestrictRealtime = true;
-              ProtectProc = "invisible";
-              PrivateTmp = true;
-
-              PrivateUsers = false;
-
-              # loading hardware modules
-              ProtectKernelModules = false;
-              ProtectKernelTunables = false;
-
-              PrivateNetwork = false; # tethering
-            };
-          };
-      }
-      // (optionalAttrs cfg.hsphfpd.enable {
-        hsphfpd = {
-          after = [ "bluetooth.service" ];
-          requires = [ "bluetooth.service" ];
+    systemd.services = {
+      bluetooth =
+        let
+          # `man bluetoothd` will refer to main.conf in the nix store but bluez
+          # will in fact load the configuration file at /etc/bluetooth/main.conf
+          # so force it here to avoid any ambiguity and things suddenly breaking
+          # if/when the bluez derivation is changed.
+          args = [
+            "-f"
+            "/etc/bluetooth/main.conf"
+          ]
+          ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+        in
+        {
           wantedBy = [ "bluetooth.target" ];
+          aliases = [ "dbus-org.bluez.service" ];
+          # restarting can leave people without a mouse/keyboard
+          restartIfChanged = false;
+          serviceConfig = {
+            ExecStart = [
+              ""
+              "${package}/libexec/bluetooth/bluetoothd ${utils.escapeSystemdExecArgs args}"
+            ];
+            CapabilityBoundingSet = [
+              "CAP_NET_BIND_SERVICE" # sockets and tethering
+            ];
+            ConfigurationDirectoryMode = "0755";
+            NoNewPrivileges = true;
+            RestrictNamespaces = true;
+            ProtectControlGroups = true;
+            MemoryDenyWriteExecute = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = "@system-service";
+            LockPersonality = true;
+            RestrictRealtime = true;
+            ProtectProc = "invisible";
+            PrivateTmp = true;
 
-          description = "A prototype implementation used for connecting HSP/HFP Bluetooth devices";
-          serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/hsphfpd.pl";
+            PrivateUsers = false;
+
+            # loading hardware modules
+            ProtectKernelModules = false;
+            ProtectKernelTunables = false;
+
+            PrivateNetwork = false; # tethering
+          };
         };
-      });
+    }
+    // (optionalAttrs cfg.hsphfpd.enable {
+      hsphfpd = {
+        after = [ "bluetooth.service" ];
+        requires = [ "bluetooth.service" ];
+        wantedBy = [ "bluetooth.target" ];
 
-    systemd.user.services =
-      {
-        obex.aliases = [ "dbus-org.bluez.obex.service" ];
-      }
-      // optionalAttrs cfg.hsphfpd.enable {
-        telephony_client = {
-          wantedBy = [ "default.target" ];
-
-          description = "telephony_client for hsphfpd";
-          serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/telephony_client.pl";
-        };
+        description = "A prototype implementation used for connecting HSP/HFP Bluetooth devices";
+        serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/hsphfpd.pl";
       };
+    });
+
+    systemd.user.services = {
+      obex.aliases = [ "dbus-org.bluez.obex.service" ];
+    }
+    // optionalAttrs cfg.hsphfpd.enable {
+      telephony_client = {
+        wantedBy = [ "default.target" ];
+
+        description = "telephony_client for hsphfpd";
+        serviceConfig.ExecStart = "${pkgs.hsphfpd}/bin/telephony_client.pl";
+      };
+    };
   };
 }

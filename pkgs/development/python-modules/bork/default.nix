@@ -38,16 +38,15 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  dependencies =
-    [
-      build
-      coloredlogs
-      packaging
-      pip
-      urllib3
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ toml ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  dependencies = [
+    build
+    coloredlogs
+    packaging
+    pip
+    urllib3
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ toml ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [
     "bork"

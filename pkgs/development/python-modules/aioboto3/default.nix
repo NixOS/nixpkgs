@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "14.2.0";
+  version = "14.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-RzaMsJtGvC6IILgwj09kymw+Hv3gjyBf2PHBzYC9itE=";
+    hash = "sha256-3GdTpbU0uEEzezQPHJTGPB42Qu604eIhcIAP4rZMQiY=";
   };
 
   pythonRelaxDeps = [
@@ -38,22 +38,22 @@ buildPythonPackage rec {
   dependencies = [
     aiobotocore
     aiofiles
-  ] ++ aiobotocore.optional-dependencies.boto3;
+  ]
+  ++ aiobotocore.optional-dependencies.boto3;
 
   optional-dependencies = {
     chalice = [ chalice ];
     s3cse = [ cryptography ];
   };
 
-  nativeCheckInputs =
-    [
-      dill
-      moto
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ moto.optional-dependencies.server
-    ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    dill
+    moto
+    pytest-asyncio
+    pytestCheckHook
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     "test_patches"

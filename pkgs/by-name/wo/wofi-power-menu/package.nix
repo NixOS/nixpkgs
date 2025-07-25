@@ -6,31 +6,23 @@
   wofi,
   versionCheckHook,
   nix-update-script,
-  yq,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wofi-power-menu";
-  version = "0.2.7";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "szaffarano";
     repo = "wofi-power-menu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WPTK9izFU8xZ5YVFuEGO5EoOzgpXWXQnGgeNYjnb/zA=";
+    hash = "sha256-xio/Gt37PJ/0Di22na4USmfah2GV+xM2eV4NnGBeVfY=";
   };
 
-  postPatch = ''
-    tomlq -ti '.package.version = "0.2.7"' Cargo.toml
-  '';
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-oJd2ymNkNSGUD3cQ+bEHooAJQNeSarkIHWvGNXezwrM=";
+  cargoHash = "sha256-diDLKP7JGzrXgdZMwSmg70dbFlMLLWp4Ad/ejjiOSlc=";
 
-  nativeBuildInputs = [
-    makeWrapper
-    yq # for `tomlq`
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/wofi-power-menu \

@@ -59,43 +59,44 @@ stdenv.mkDerivation rec {
     enchant
     gobject-introspection
     wrapGAppsHook3
-  ] ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
+  ]
+  ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
 
-  buildInputs =
+  buildInputs = [
+    libxmlxx3
+    libzip
+    libuuid
+    sane-backends
+    podofo_0_10
+    libjpeg
+    djvulibre
+    tesseract
+    poppler
+    doxygen
+    cairomm
+    gtkmm3
+    gtksourceview3
+    gtksourceviewmm
+    gtkspell3
+    gtkspellmm
+    json-glib
+  ]
+  ++ lib.optionals withQt6 (
+    with qt6Packages;
     [
-      libxmlxx3
-      libzip
-      libuuid
-      sane-backends
-      podofo_0_10
-      libjpeg
-      djvulibre
-      tesseract
-      poppler
-      doxygen
-      cairomm
-      gtkmm3
-      gtksourceview3
-      gtksourceviewmm
-      gtkspell3
-      gtkspellmm
-      json-glib
+      kdePackages.poppler
+      qtbase
+      qtspell
+      qttools
+      quazip
     ]
-    ++ lib.optionals withQt6 (
-      with qt6Packages;
-      [
-        kdePackages.poppler
-        qtbase
-        qtspell
-        qttools
-        quazip
-      ]
-    );
+  );
 
   # interface type can be where <type> is either gtk, qt6
   cmakeFlags = [
     "-DINTERFACE_TYPE=gtk"
-  ] ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ];
+  ]
+  ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ];
 
   meta = with lib; {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";

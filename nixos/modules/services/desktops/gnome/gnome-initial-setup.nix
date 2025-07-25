@@ -67,11 +67,10 @@ in
 
   config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
 
-    environment.systemPackages =
-      [
-        pkgs.gnome-initial-setup
-      ]
-      ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
+    environment.systemPackages = [
+      pkgs.gnome-initial-setup
+    ]
+    ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
 
     systemd.packages = [
       pkgs.gnome-initial-setup

@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
     zlib

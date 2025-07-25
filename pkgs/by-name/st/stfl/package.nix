@@ -33,32 +33,30 @@ stdenv.mkDerivation {
       NIX_LDFLAGS = "-liconv";
     };
 
-  preBuild =
-    ''
-      sed -i s/gcc/cc/g Makefile
-      sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i s/-soname/-install_name/ Makefile
-    ''
-    # upstream builds shared library unconditionally. Also, it has no
-    # support for cross-compilation.
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
-      sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
-      sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
-      sed -i '/install -m 644 libstfl.so./d' Makefile
-      sed -i '/ln -fs libstfl.so./d' Makefile
-    '';
+  preBuild = ''
+    sed -i s/gcc/cc/g Makefile
+    sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i s/-soname/-install_name/ Makefile
+  ''
+  # upstream builds shared library unconditionally. Also, it has no
+  # support for cross-compilation.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
+    sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
+    sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
+    sed -i '/install -m 644 libstfl.so./d' Makefile
+    sed -i '/ln -fs libstfl.so./d' Makefile
+  '';
 
-  installPhase =
-    ''
-      DESTDIR=$out prefix=\"\" make install
-    ''
-    # some programs rely on libstfl.so.0 to be present, so link it
-    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-      ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
-    '';
+  installPhase = ''
+    DESTDIR=$out prefix=\"\" make install
+  ''
+  # some programs rely on libstfl.so.0 to be present, so link it
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
+  '';
 
   meta = {
     homepage = "https://web.archive.org/web/20211113222004/http://www.clifford.at/stfl/";

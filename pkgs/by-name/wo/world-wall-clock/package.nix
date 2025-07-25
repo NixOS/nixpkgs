@@ -26,10 +26,10 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*" ];
+  enabledTestPaths = [ "tests/*" ];
 
   meta = {
-    description = "TUI application that provides a multi-timezone graphical clock in a terminal environment.";
+    description = "TUI application that provides a multi-timezone graphical clock in a terminal environment";
     homepage = "https://github.com/ddelabru/world-wall-clock";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ddelabru ];

@@ -40,7 +40,8 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies.standard = [
     httptools

@@ -11,15 +11,14 @@
 }:
 
 let
-  packageFlags =
-    [
-      "-p"
-      "nix-doc"
-    ]
-    ++ lib.optionals withPlugin [
-      "-p"
-      "nix-doc-plugin"
-    ];
+  packageFlags = [
+    "-p"
+    "nix-doc"
+  ]
+  ++ lib.optionals withPlugin [
+    "-p"
+    "nix-doc-plugin"
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";

@@ -84,21 +84,20 @@ in
         Wants = [
           "systemd-user-sessions.service"
         ];
-        After =
-          [
-            "systemd-user-sessions.service"
-            "getty@${tty}.service"
-          ]
-          ++ lib.optionals (!cfg.greeterManagesPlymouth) [
-            "plymouth-quit-wait.service"
-          ];
+        After = [
+          "systemd-user-sessions.service"
+          "getty@${tty}.service"
+        ]
+        ++ lib.optionals (!cfg.greeterManagesPlymouth) [
+          "plymouth-quit-wait.service"
+        ];
         Conflicts = [
           "getty@${tty}.service"
         ];
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
+        ExecStart = "${lib.getExe cfg.package} --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
         Restart = lib.mkIf cfg.restart "on-success";
 

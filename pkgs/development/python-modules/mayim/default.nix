@@ -39,17 +39,16 @@ buildPythonPackage rec {
     sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-asyncio
-      pytest-cov-stub
-    ]
-    ++ (with optional-dependencies; [
-      postgres
-      mysql
-      sqlite
-    ]);
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+  ]
+  ++ (with optional-dependencies; [
+    postgres
+    mysql
+    sqlite
+  ]);
 
   pythonImportsCheck = [ "mayim" ];
 

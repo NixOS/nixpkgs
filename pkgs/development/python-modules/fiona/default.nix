@@ -69,7 +69,8 @@ buildPythonPackage rec {
     pytz
     shapely
     snuggs
-  ] ++ optional-dependencies.s3;
+  ]
+  ++ optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona

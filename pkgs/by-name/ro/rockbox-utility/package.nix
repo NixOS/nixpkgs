@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     qt5.qtbase
     qt5.qtmultimedia
     qt5.qttools
-  ] ++ lib.optional withEspeak espeak;
+  ]
+  ++ lib.optional withEspeak espeak;
 
   cmakeDir = "../utils";
 

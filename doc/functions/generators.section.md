@@ -27,8 +27,8 @@ let
     } ":";
   };
 
+  # the INI file can now be given as plain old nix values
 in
-# the INI file can now be given as plain old nix values
 customToINI {
   main = {
     pushinfo = true;

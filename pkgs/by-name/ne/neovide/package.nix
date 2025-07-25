@@ -26,17 +26,17 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     tag = finalAttrs.version;
-    hash = "sha256-MLiLddF53OXDPYuJbTAscezxN09mxZkuSOZtQz07JSE=";
+    hash = "sha256-2iV3g6tcCkMF7sFG/GZDz3czPZNIDi6YLfrVzYO9jYI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1ni8AZIwAz5R2Ejt9Fj5qmybvL4KZV/M3BMqQx4HFLU=";
+  cargoHash = "sha256-YlHAcUCRk6ROg5yXIumHfsiR/2TrsSzbuXz/IQK7sEo=";
 
   SKIA_SOURCE_DIR =
     let
@@ -64,16 +64,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 

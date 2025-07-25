@@ -23,15 +23,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      boost
-      eigen
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    boost
+    eigen
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   meta = with lib; {
     homepage = "http://www.iqtree.org/";

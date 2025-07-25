@@ -46,14 +46,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.42.120";
-  x86_64-darwin-sha256 = "17sam5z3f1x75ay9vm34is64r18h26lr03qrdw5ajvcgdvdqyanp";
+  x86_64-darwin-version = "4.44.65";
+  x86_64-darwin-sha256 = "14y33ds3ncgxwlcb0gvi8pfxm7ppfipzalg63x5vnj05q9wn8lby";
 
-  x86_64-linux-version = "4.42.120";
-  x86_64-linux-sha256 = "1wmxd7z742z3xvq85293kwr99vvdvczv6q32l7mrm2vp9gjyr0pz";
+  x86_64-linux-version = "4.44.65";
+  x86_64-linux-sha256 = "ca6ce66685e5897db0b19a79275e9c244693ebaf64a6b2f12a79a2b442d5be47";
 
-  aarch64-darwin-version = "4.42.120";
-  aarch64-darwin-sha256 = "0cry2f2pwkyn6rhdh7q9lfxcibz6izlwfhif3pqjv8pishn21afp";
+  aarch64-darwin-version = "4.44.65";
+  aarch64-darwin-sha256 = "1gdvvz2dd06din31qparwhnghjcxmvrc2zll09b3lfhr11im7888";
 
   version =
     {
@@ -173,47 +173,46 @@ let
     dontBuild = true;
     dontPatchELF = true;
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-        dpkg --fsys-tarfile $src | tar --extract
-        rm -rf usr/share/lintian
+      # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+      dpkg --fsys-tarfile $src | tar --extract
+      rm -rf usr/share/lintian
 
-        mkdir -p $out
-        mv usr/* $out
+      mkdir -p $out
+      mv usr/* $out
 
-        # Otherwise it looks "suspicious"
-        chmod -R g-w $out
+      # Otherwise it looks "suspicious"
+      chmod -R g-w $out
 
-        for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-          patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
-        done
+      for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+        patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
+      done
 
-        # Replace the broken bin/slack symlink with a startup wrapper.
-        # Make xdg-open overrideable at runtime.
-        rm $out/bin/slack
-        makeWrapper $out/lib/slack/slack $out/bin/slack \
-          --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-          --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
+      # Replace the broken bin/slack symlink with a startup wrapper.
+      # Make xdg-open overrideable at runtime.
+      rm $out/bin/slack
+      makeWrapper $out/lib/slack/slack $out/bin/slack \
+        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
 
-        # Fix the desktop link
-        substituteInPlace $out/share/applications/slack.desktop \
-          --replace /usr/bin/ $out/bin/ \
-          --replace /usr/share/pixmaps/slack.png slack \
-          --replace bin/slack "bin/slack -s"
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
-        # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
-        sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
-      ''
-      + ''
-        runHook postInstall
-      '';
+      # Fix the desktop link
+      substituteInPlace $out/share/applications/slack.desktop \
+        --replace /usr/bin/ $out/bin/ \
+        --replace /usr/share/pixmaps/slack.png slack \
+        --replace bin/slack "bin/slack -s"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Prevent Un-blacklist pipewire integration to enable screen sharing on wayland.
+      # https://github.com/flathub/com.slack.Slack/issues/101#issuecomment-1807073763
+      sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' $out/lib/slack/resources/app.asar
+    ''
+    + ''
+      runHook postInstall
+    '';
   };
 
   darwin = stdenv.mkDerivation {

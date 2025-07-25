@@ -10,13 +10,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-yv+TGDSUBKJf5X+73Do9KrAcCodeBPqpIHgpYZslR3o=";
+    hash = "sha256-pIOCgOC969Fj3lNnmsb6QTEV8z1KWxrUSsdl6Aogd4Q=";
   };
 
   pyproject = true;
@@ -60,6 +60,11 @@ python3Packages.buildPythonApplication rec {
     "test_run_init_django"
     # Mock is broken for Unix FHS reasons.
     "test_run_pack_services"
+    # Later version of craft-application is being used, which adds an
+    # additional kind of file to be ignored, and invalidates a somewhat
+    # static assertion. Can be removed in a later version once rockcraft
+    # catches up with craft-application version.
+    "test_lifecycle_args"
   ];
 
   versionCheckProgramArg = "--version";

@@ -28,6 +28,6 @@ for system in $systems; do
       unpack=""
     fi
     prefetch=$(nix-prefetch-url $unpack "$url")
-    hash=$(nix hash convert --hash-algo sha256 --to sri $prefetch)
+    hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $prefetch)
     update-source-version jetbrains-toolbox $latestVersion $hash --system=$system --ignore-same-version
 done

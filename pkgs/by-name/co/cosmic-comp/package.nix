@@ -47,7 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pixman
     seatd
     udev
-  ] ++ lib.optional useSystemd systemd;
+  ]
+  ++ lib.optional useSystemd systemd;
 
   # Only default feature is systemd
   buildNoDefaultFeatures = !useSystemd;

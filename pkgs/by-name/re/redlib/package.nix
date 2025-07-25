@@ -4,6 +4,7 @@
   nixosTests,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";
@@ -61,8 +62,9 @@ rustPlatform.buildRustPackage rec {
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
-  passthru.tests = {
-    inherit (nixosTests) redlib;
+  passthru = {
+    tests = nixosTests.redlib;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {

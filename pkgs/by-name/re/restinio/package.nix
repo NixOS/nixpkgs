@@ -42,24 +42,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [
-      expected-lite
-      fmt
-      openssl
-      pcre2
-      zlib
-    ]
-    ++ (
-      if with_boost_asio then
-        [
-          boost
-        ]
-      else
-        [
-          asio
-        ]
-    );
+  propagatedBuildInputs = [
+    expected-lite
+    fmt
+    openssl
+    pcre2
+    zlib
+  ]
+  ++ (
+    if with_boost_asio then
+      [
+        boost
+      ]
+    else
+      [
+        asio
+      ]
+  );
 
   buildInputs = [
     catch2_3

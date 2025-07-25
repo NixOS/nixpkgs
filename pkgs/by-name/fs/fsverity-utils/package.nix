@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     "out"
     "lib"
     "dev"
-  ] ++ lib.optional enableManpages "man";
+  ]
+  ++ lib.optional enableManpages "man";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${version}.tar.gz";
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
-  ] ++ lib.optional enableShared "USE_SHARED_LIB=1";
+  ]
+  ++ lib.optional enableShared "USE_SHARED_LIB=1";
 
   doCheck = true;
 

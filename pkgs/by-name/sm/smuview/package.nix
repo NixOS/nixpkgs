@@ -35,7 +35,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     qt5.wrapQtAppsHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -49,7 +50,8 @@ stdenv.mkDerivation {
     python3
     pcre
     libsForQt5.qwt
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
     description = "Qt based source measure unit GUI for sigrok";

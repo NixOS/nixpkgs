@@ -214,10 +214,12 @@ in
       description = "mjolnir - a moderation tool for Matrix";
       wants = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

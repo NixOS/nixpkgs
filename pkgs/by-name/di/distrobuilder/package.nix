@@ -19,20 +19,19 @@
 }:
 
 let
-  bins =
-    [
-      coreutils
-      debootstrap
-      gnupg
-      gnutar
-      squashfsTools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # repack-windows deps
-      cdrkit
-      hivex
-      wimlib
-    ];
+  bins = [
+    coreutils
+    debootstrap
+    gnupg
+    gnutar
+    squashfsTools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
+  ];
 in
 buildGoModule rec {
   pname = "distrobuilder";
@@ -55,7 +54,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-  ] ++ bins;
+  ]
+  ++ bins;
 
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}

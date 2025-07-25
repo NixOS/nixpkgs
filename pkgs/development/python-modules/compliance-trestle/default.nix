@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "compliance-trestle";
-  version = "3.8.1";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscal-compass";
     repo = "compliance-trestle";
     tag = "v${version}";
-    hash = "sha256-aEIV3XfoRnyMfR0nssmxIkQwrsx7DXxqidOZ8wZ+lWw=";
+    hash = "sha256-WWqrUfDlzpZAXtOlq3Uq8AmUOerUmMCr9KPjdjk4JHg=";
     fetchSubmodules = true;
   };
 

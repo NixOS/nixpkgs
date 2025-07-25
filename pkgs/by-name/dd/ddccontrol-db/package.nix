@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
-  autoreconfHook,
+  autoconf,
+  automake,
+  libtool,
   intltool,
   fetchFromGitHub,
 }:
@@ -18,9 +20,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
     intltool
+    libtool
   ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   meta = with lib; {
     description = "Monitor database for DDCcontrol";

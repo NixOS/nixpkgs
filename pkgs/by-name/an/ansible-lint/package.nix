@@ -95,6 +95,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ansible/ansible-lint";
     changelog = "https://github.com/ansible/ansible-lint/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sengaya ];
+    maintainers = with lib.maintainers; [
+      sengaya
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

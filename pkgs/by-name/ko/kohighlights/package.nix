@@ -27,13 +27,12 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
   dontBuild = true;
 
-  buildInputs =
-    [
-      qt5.qtbase
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      qt5.qtwayland
-    ];
+  buildInputs = [
+    qt5.qtbase
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    qt5.qtwayland
+  ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook

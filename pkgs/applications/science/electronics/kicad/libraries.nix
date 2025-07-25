@@ -16,17 +16,22 @@ let
 
       src = libSrc name;
 
-      nativeBuildInputs =
-        [ cmake ]
-        ++ lib.optionals (name == "packages3d") [
-          stepreduce
-          parallel
-          zip
-        ];
+      nativeBuildInputs = [
+        cmake
+      ]
+      ++ lib.optionals (name == "packages3d") [
+        stepreduce
+        parallel
+        zip
+      ];
 
-      postInstall = lib.optional (name == "packages3d") ''
-        find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
-      '';
+      postInstall =
+        lib.optionalString (name == "packages3d") ''
+          find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
+        ''
+        + lib.optionalString (name == "footprints") ''
+          grep -rl '\.step' $out | xargs sed -i 's/\.step/.stpZ/g'
+        '';
 
       meta = {
         license = lib.licenses.cc-by-sa-40;

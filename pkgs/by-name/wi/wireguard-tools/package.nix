@@ -40,36 +40,35 @@ stdenv.mkDerivation rec {
     "WITH_WGQUICK=yes"
   ];
 
-  postFixup =
-    ''
-      substituteInPlace $out/lib/systemd/system/wg-quick@.service \
-        --replace /usr/bin $out/bin
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for f in $out/bin/*; do
-        # Which firewall and resolvconf implementations to use should be determined by the
-        # environment, we provide the "default" ones as fallback.
-        wrapProgram $f \
-          --prefix PATH : ${
-            lib.makeBinPath [
-              procps
-              iproute2
-            ]
-          } \
-          --suffix PATH : ${
-            lib.makeBinPath [
-              iptables
-              openresolv
-            ]
-          }
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for f in $out/bin/*; do
-        wrapProgram $f \
-          --prefix PATH : ${lib.makeBinPath [ wireguard-go ]}
-      done
-    '';
+  postFixup = ''
+    substituteInPlace $out/lib/systemd/system/wg-quick@.service \
+      --replace /usr/bin $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for f in $out/bin/*; do
+      # Which firewall and resolvconf implementations to use should be determined by the
+      # environment, we provide the "default" ones as fallback.
+      wrapProgram $f \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            procps
+            iproute2
+          ]
+        } \
+        --suffix PATH : ${
+          lib.makeBinPath [
+            iptables
+            openresolv
+          ]
+        }
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ wireguard-go ]}
+    done
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -92,7 +91,6 @@ stdenv.mkDerivation rec {
       zx2c4
       globin
       ma27
-      d-xo
     ];
     mainProgram = "wg";
     platforms = platforms.unix;

@@ -27,14 +27,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    wayland
+  ];
 
   # requires internet access
   doCheck = false;

@@ -46,7 +46,8 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "mashumaro" ];
 

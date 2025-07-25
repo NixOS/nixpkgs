@@ -18,33 +18,33 @@ fi
 
 # Update Darwin hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${current_version}.dmg" \
+    "https://cdn.posit.co/positron/releases/mac/universal/Positron-${current_version}-universal.dmg" \
     | jq -r .hash)
 
 new_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${new_version}.dmg" \
+    "https://cdn.posit.co/positron/releases/mac/universal/Positron-${new_version}-universal.dmg" \
     | jq -r .hash)
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
 # Update Linux x86_64 hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${current_version}-x64.deb" \
+    "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${current_version}-x64.deb" \
     | jq -r .hash)
 
 new_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${new_version}-x64.deb" \
+    "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${new_version}-x64.deb" \
     | jq -r .hash)
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix
 
 # Update Linux aarch64 hash.
 current_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${current_version}-arm64.deb" \
+    "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${current_version}-arm64.deb" \
     | jq -r .hash)
 
 new_hash=$(nix store prefetch-file --json --hash-type sha256 \
-    "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${new_version}-arm64.deb" \
+    "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${new_version}-arm64.deb" \
     | jq -r .hash)
 
 sed -i "s|$current_hash|$new_hash|g" $positron_nix

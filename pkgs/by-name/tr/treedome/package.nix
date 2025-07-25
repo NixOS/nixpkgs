@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Local-first, encrypted, note taking application organized in tree-like structures";
-    homepage = " https://codeberg.org/solver-orgz/treedome";
+    homepage = "https://codeberg.org/solver-orgz/treedome";
     license = lib.licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";

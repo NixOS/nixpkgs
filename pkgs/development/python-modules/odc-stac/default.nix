@@ -66,7 +66,8 @@ buildPythonPackage rec {
     distributed
     pystac-client
     pytestCheckHook
-  ] ++ optional-dependencies.botocore;
+  ]
+  ++ optional-dependencies.botocore;
 
   pytestFlagsArray = [ "-m 'not network'" ];
 
@@ -85,7 +86,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Load STAC items into xarray Datasets.";
+    description = "Load STAC items into xarray Datasets";
     homepage = "https://github.com/opendatacube/odc-stac/";
     changelog = "https://github.com/opendatacube/odc-stac/tag/v${version}";
     license = lib.licenses.asl20;

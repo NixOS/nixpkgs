@@ -76,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     spirv-tools
     glew
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   strictDeps = true;
 

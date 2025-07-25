@@ -70,16 +70,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
-  ] ++ optionals enableCuda [ cuda_nvcc ];
+  ]
+  ++ optionals enableCuda [ cuda_nvcc ];
 
-  buildInputs =
-    [ ucx ]
-    ++ optionals enableCuda [
-      cuda_cccl
-      cuda_cudart
-      cuda_nvml_dev
-      nccl
-    ];
+  buildInputs = [
+    ucx
+  ]
+  ++ optionals enableCuda [
+    cuda_cccl
+    cuda_cudart
+    cuda_nvml_dev
+    nccl
+  ];
 
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable

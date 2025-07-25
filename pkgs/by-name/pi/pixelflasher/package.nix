@@ -10,14 +10,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pixelflasher";
-  version = "8.0.1.0";
+  version = "8.1.1.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "badabing2005";
     repo = "PixelFlasher";
     tag = "v${version}";
-    hash = "sha256-3cIrQ5MbYfWpxFZBJTg0h/Q8PHsWP4KYZvGUnhMEjK4=";
+    hash = "sha256-zXXc12E0ocAH0QucvmoncbEwHy/IyJU1YBPedeSpLfc=";
   };
 
   desktopItems = [
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     markdown
     platformdirs
     polib
-    protobuf4
+    protobuf
     psutil
     pyperclip
     requests

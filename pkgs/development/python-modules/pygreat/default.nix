@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  future,
   pyusb,
 }:
 
@@ -27,31 +26,22 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  pythonRemoveDeps = [ "backports.functools_lru_cache" ];
 
-  pythonRemoveDeps = [
-    "backports.functools_lru_cache"
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    future
-    pyusb
-  ];
+  dependencies = [ pyusb ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pygreat"
-  ];
+  pythonImportsCheck = [ "pygreat" ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
     description = "Python library for talking with libGreat devices";
     homepage = "https://github.com/greatscottgadgets/libgreat/";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
   };
 }

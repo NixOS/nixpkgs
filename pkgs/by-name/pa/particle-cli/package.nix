@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "particle-cli";
-  version = "3.36.2";
+  version = "3.38.2";
 
   src = fetchFromGitHub {
     owner = "particle-iot";
     repo = "particle-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KLcQmbIuhp71dpJttKA0tWAn2Qf+zl6njBypFkaLmzE=";
+    hash = "sha256-/MfT7+g3l+5Y3mRGl0yiDMRXL2heWZzVNm+LfTmy9SA=";
   };
 
-  npmDepsHash = "sha256-oQch+7hH+URMI15YOA3iz4FVPwckJ3K/DOC1PfrA2dU=";
+  npmDepsHash = "sha256-L/DfZWvJRZzHvf9pP7bHEJt85KT0s46+KErkTNRgH04=";
 
   buildInputs = [
     udev

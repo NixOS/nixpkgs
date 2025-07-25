@@ -55,13 +55,15 @@ buildPythonPackage rec {
     types-psutil
     types-setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   dependencies = [
     basedtyping
     mypy-extensions
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     dmypy = [ psutil ];
@@ -76,19 +78,18 @@ buildPythonPackage rec {
   # when testing reduce optimisation level to reduce build time by 20%
   env.MYPYC_OPT_LEVEL = 1;
 
-  pythonImportsCheck =
-    [
-      "mypy"
-      "mypy.api"
-      "mypy.fastparse"
-      "mypy.types"
-      "mypyc"
-      "mypyc.analysis"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isi686) [
-      # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
-      "mypy.report"
-    ];
+  pythonImportsCheck = [
+    "mypy"
+    "mypy.api"
+    "mypy.fastparse"
+    "mypy.types"
+    "mypyc"
+    "mypyc.analysis"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
+  ];
 
   nativeCheckInputs = [
     attrs
@@ -97,7 +98,8 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
     tomli
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # cannot find distutils, and distutils cannot find types
@@ -105,20 +107,19 @@ buildPythonPackage rec {
     "test_c_unit_test"
   ];
 
-  disabledTestPaths =
-    [
-      # fails to find typing_extensions
-      "mypy/test/testcmdline.py"
-      "mypy/test/testdaemon.py"
-      # fails to find setuptools
-      "mypyc/test/test_commandline.py"
-      # fails to find hatchling
-      "mypy/test/testpep561.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [
-      # https://github.com/python/mypy/issues/15221
-      "mypyc/test/test_run.py"
-    ];
+  disabledTestPaths = [
+    # fails to find typing_extensions
+    "mypy/test/testcmdline.py"
+    "mypy/test/testdaemon.py"
+    # fails to find setuptools
+    "mypyc/test/test_commandline.py"
+    # fails to find hatchling
+    "mypy/test/testpep561.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

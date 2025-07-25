@@ -92,17 +92,16 @@ stdenv.mkDerivation (
     # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
     strictDeps = true;
 
-    nativeBuildInputs =
-      [
-        bison
-        flex
-        fontforge
-        makeWrapper
-        pkg-config
-      ]
-      ++ lib.optionals supportFlags.mingwSupport (
-        mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
-      );
+    nativeBuildInputs = [
+      bison
+      flex
+      fontforge
+      makeWrapper
+      pkg-config
+    ]
+    ++ lib.optionals supportFlags.mingwSupport (
+      mingwGccs ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin
+    );
 
     buildInputs = toBuildInputs pkgArches (
       with supportFlags;
@@ -276,13 +275,12 @@ stdenv.mkDerivation (
 
     # https://bugs.winehq.org/show_bug.cgi?id=43530
     # https://github.com/NixOS/nixpkgs/issues/31989
-    hardeningDisable =
-      [
-        "bindnow"
-        "stackclashprotection"
-      ]
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
-      ++ lib.optional (supportFlags.mingwSupport) "format";
+    hardeningDisable = [
+      "bindnow"
+      "stackclashprotection"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) "fortify"
+    ++ lib.optional (supportFlags.mingwSupport) "format";
 
     passthru = {
       inherit pkgArches;

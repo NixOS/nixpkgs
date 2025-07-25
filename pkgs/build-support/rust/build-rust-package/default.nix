@@ -22,6 +22,7 @@ lib.extendMkDerivation {
     "depsExtraArgs"
     "cargoUpdateHook"
     "cargoLock"
+    "useFetchCargoVendor"
   ];
 
   extendDrvArgs =
@@ -140,13 +141,12 @@ lib.extendMkDerivation {
 
       PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
 
-      postUnpack =
-        ''
-          eval "$cargoDepsHook"
+      postUnpack = ''
+        eval "$cargoDepsHook"
 
-          export RUST_LOG=${logLevel}
-        ''
-        + (args.postUnpack or "");
+        export RUST_LOG=${logLevel}
+      ''
+      + (args.postUnpack or "");
 
       configurePhase =
         args.configurePhase or ''

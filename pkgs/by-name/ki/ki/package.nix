@@ -29,18 +29,19 @@ python3Packages.buildPythonApplication {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs =
-    [ anki ]
-    ++ (with python3Packages; [
-      beartype
-      click
-      colorama
-      git-filter-repo
-      gitpython
-      lark
-      tqdm
-      whatthepatch
-    ]);
+  propagatedBuildInputs = [
+    anki
+  ]
+  ++ (with python3Packages; [
+    beartype
+    click
+    colorama
+    git-filter-repo
+    gitpython
+    lark
+    tqdm
+    whatthepatch
+  ]);
 
   nativeCheckInputs = with python3Packages; [
     bitstring

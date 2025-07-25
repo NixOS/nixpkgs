@@ -35,25 +35,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      caja
-      gtk3
-      hicolor-icon-theme
-      json-glib
-      mate-desktop
-    ]
-    ++ lib.optionals withMagic [
-      file
-    ];
+  buildInputs = [
+    caja
+    gtk3
+    hicolor-icon-theme
+    json-glib
+    mate-desktop
+  ]
+  ++ lib.optionals withMagic [
+    file
+  ];
 
-  configureFlags =
-    [
-      "--with-cajadir=$$out/lib/caja/extensions-2.0"
-    ]
-    ++ lib.optionals withMagic [
-      "--enable-magic"
-    ];
+  configureFlags = [
+    "--with-cajadir=$$out/lib/caja/extensions-2.0"
+  ]
+  ++ lib.optionals withMagic [
+    "--enable-magic"
+  ];
 
   enableParallelBuilding = true;
 

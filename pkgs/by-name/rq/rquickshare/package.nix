@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage rec {
       patches
       ;
     postPatch = "cd ${pnpmRoot}";
+    fetcherVersion = 1;
     hash = app-type-either "sha256-V46V/VPwCKEe3sAp8zK0UUU5YigqgYh1GIOorqIAiNE=" "sha256-8QRigYNtxirXidFFnTzA6rP0+L64M/iakPqe2lZKegs=";
   };
 
@@ -76,20 +77,19 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoHash = app-type-either "sha256-XfN+/oC3lttDquLfoyJWBaFfdjW/wyODCIiZZksypLM=" "sha256-4vBHxuKg4P9H0FZYYNUT+AVj4Qvz99q7Bhd7x47UC2w=";
 
-  nativeBuildInputs =
-    [
-      proper-cargo-tauri.hook
+  nativeBuildInputs = [
+    proper-cargo-tauri.hook
 
-      # Setup pnpm
-      nodejs
-      pnpm_9.configHook
+    # Setup pnpm
+    nodejs
+    pnpm_9.configHook
 
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      wrapGAppsHook4
-    ];
+    protobuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
     [

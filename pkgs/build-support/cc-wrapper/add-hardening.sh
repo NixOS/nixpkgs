@@ -18,21 +18,6 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
   hardeningEnableMap["fortify"]=1
 fi
 
-# Remove unsupported flags.
-for flag in @hardening_unsupported_flags@; do
-  unset -v "hardeningEnableMap[$flag]"
-  # fortify being unsupported implies fortify3 is unsupported
-  if [[ "$flag" = 'fortify' ]] ; then
-    unset -v "hardeningEnableMap['fortify3']"
-  fi
-done
-
-# now make fortify and fortify3 mutually exclusive
-if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
-  unset -v "hardeningEnableMap['fortify']"
-fi
-
-
 # strictflexarrays3 implies strictflexarrays1 enablement - make explicit before
 # we filter unsupported flags because unsupporting strictflexarrays3
 # doesn't mean we should unsupport strictflexarrays1 too
@@ -40,14 +25,25 @@ if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then
   hardeningEnableMap["strictflexarrays1"]=1
 fi
 
+
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
+  # fortify being unsupported implies fortify3 is unsupported
+  if [[ "$flag" = 'fortify' ]] ; then
+    unset -v "hardeningEnableMap['fortify3']"
+  fi
   # strictflexarrays1 being unsupported implies strictflexarrays3 is unsupported
   if [[ "$flag" = 'strictflexarrays1' ]] ; then
     unset -v "hardeningEnableMap['strictflexarrays3']"
   fi
 done
+
+
+# now make fortify and fortify3 mutually exclusive
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  unset -v "hardeningEnableMap['fortify']"
+fi
 
 # now make strictflexarrays1 and strictflexarrays3 mutually exclusive
 if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then

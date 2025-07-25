@@ -64,29 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     cargo
     rustc
-  ] ++ lib.optional withCockpit rsync;
+  ]
+  ++ lib.optional withCockpit rsync;
 
-  buildInputs =
-    [
-      cracklib
-      lmdb
-      json_c
-      linux-pam
-      libevent
-      libxcrypt
-      nspr
-      nss
-      cyrus_sasl
-      icu
-      krb5
-      pcre2
-      openssl
-      zlib
-    ]
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withOpenldap openldap
-    ++ lib.optional withBdb db
-    ++ lib.optional withNetSnmp net-snmp;
+  buildInputs = [
+    cracklib
+    lmdb
+    json_c
+    linux-pam
+    libevent
+    libxcrypt
+    nspr
+    nss
+    cyrus_sasl
+    icu
+    krb5
+    pcre2
+    openssl
+    zlib
+  ]
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withOpenldap openldap
+  ++ lib.optional withBdb db
+  ++ lib.optional withNetSnmp net-snmp;
 
   postPatch = ''
     patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
@@ -100,33 +100,32 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${finalAttrs.cargoDeps} ./vendor
   '';
 
-  configureFlags =
-    [
-      "--enable-rust-offline"
-      "--enable-autobind"
-    ]
-    ++ lib.optionals withSystemd [
-      "--with-systemd"
-      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    ]
-    ++ lib.optionals withOpenldap [
-      "--with-openldap"
-    ]
-    ++ lib.optionals withBdb [
-      "--with-db-inc=${lib.getDev db}/include"
-      "--with-db-lib=${lib.getLib db}/lib"
-    ]
-    ++ lib.optionals withNetSnmp [
-      "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
-      "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
-    ]
-    ++ lib.optionals (!withCockpit) [
-      "--disable-cockpit"
-    ]
-    ++ lib.optionals withAsan [
-      "--enable-asan"
-      "--enable-debug"
-    ];
+  configureFlags = [
+    "--enable-rust-offline"
+    "--enable-autobind"
+  ]
+  ++ lib.optionals withSystemd [
+    "--with-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ]
+  ++ lib.optionals withOpenldap [
+    "--with-openldap"
+  ]
+  ++ lib.optionals withBdb [
+    "--with-db-inc=${lib.getDev db}/include"
+    "--with-db-lib=${lib.getLib db}/lib"
+  ]
+  ++ lib.optionals withNetSnmp [
+    "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+  ]
+  ++ lib.optionals (!withCockpit) [
+    "--disable-cockpit"
+  ]
+  ++ lib.optionals withAsan [
+    "--enable-asan"
+    "--enable-debug"
+  ];
 
   enableParallelBuilding = true;
   # Disable parallel builds as those lack some dependencies:

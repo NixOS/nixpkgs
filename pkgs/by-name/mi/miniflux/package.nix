@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "miniflux";
-  version = "2.2.9";
+  version = "2.2.10";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     tag = version;
-    hash = "sha256-pp+QaofbU6Vkh2ifQLpUq+dbQTx/jX2JgM/9uji13tU=";
+    hash = "sha256-hCRtopJ+PN9bjnImPXKuQRq2Sk62By2+T6z17yISfds=";
   };
 
-  vendorHash = "sha256-6tgZdwr9g/VCnLUEmwAl8vzOzQu6SEGV9PhTp47eXds=";
+  vendorHash = "sha256-jKtlIDPOElp37NlOIbT6IXn2s59NqNTRNK0LbTlxWsM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

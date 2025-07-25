@@ -90,7 +90,7 @@ buildPythonPackage rec {
     "tests/tests_microstates.py"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Otherwise, test collection fails with:
     # AttributeError: module 'scipy.ndimage._delegators' has no attribute '@py_builtins_signature'. Did you mean: 'grey_dilation_signature'?
     # https://github.com/scipy/scipy/issues/22236

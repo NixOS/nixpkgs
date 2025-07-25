@@ -7,16 +7,16 @@
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.5.3";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
     tag = version;
-    hash = "sha256-EDfAjcgmQ6qZrQMm4Oo04TSGY2I12HpqpLNLp7iQ8Fc=";
+    hash = "sha256-bB2tT6vb+QJaju1/VauAA7SsbPaRkGKIMgq1cCVBDdM=";
   };
 
-  mvnHash = "sha256-Tj+W0Dqr0FQijqYSzeAmYnbKtPZQGqry62PAZuaiGbI=";
+  mvnHash = "sha256-q61OyBg84Zaf9prM6J3lUVsJXEnmoptcq2EuNs+faDc=";
 
   doCheck = false; # Requires networking
 

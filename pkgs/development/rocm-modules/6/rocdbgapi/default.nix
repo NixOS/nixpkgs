@@ -45,13 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
   version = "6.3.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -60,17 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      git
-    ]
-    ++ lib.optionals buildDocs [
-      latex
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
+    git
+  ]
+  ++ lib.optionals buildDocs [
+    latex
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     rocm-comgr

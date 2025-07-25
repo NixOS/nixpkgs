@@ -23,13 +23,12 @@
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
-  espanso,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
 assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
   version = "2.2-unstable-2024-05-14";
 
@@ -52,41 +51,39 @@ rustPlatform.buildRustPackage {
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
-  buildFeatures =
-    [
-      "modulo"
-    ]
-    ++ lib.optionals waylandSupport [
-      "wayland"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "vendored-tls"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "native-tls"
-    ];
+  buildFeatures = [
+    "modulo"
+  ]
+  ++ lib.optionals waylandSupport [
+    "wayland"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "vendored-tls"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "native-tls"
+  ];
 
-  buildInputs =
-    [
-      libpng
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      dbus
-      libnotify
-      libxkbcommon
-    ]
-    ++ lib.optionals waylandSupport [
-      wl-clipboard
-    ]
-    ++ lib.optionals x11Support [
-      libXi
-      libXtst
-      libX11
-      xclip
-      xdotool
-    ];
+  buildInputs = [
+    libpng
+    wxGTK32
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    dbus
+    libnotify
+    libxkbcommon
+  ]
+  ++ lib.optionals waylandSupport [
+    wl-clipboard
+  ]
+  ++ lib.optionals x11Support [
+    libXi
+    libXtst
+    libX11
+    xclip
+    xdotool
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
@@ -130,7 +127,7 @@ rustPlatform.buildRustPackage {
       '';
 
   passthru.tests.version = testers.testVersion {
-    package = espanso;
+    package = finalAttrs.finalPackage;
     # remove when updating to a release version
     version = "2.2.1";
   };
@@ -151,4 +148,4 @@ rustPlatform.buildRustPackage {
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';
   };
-}
+})

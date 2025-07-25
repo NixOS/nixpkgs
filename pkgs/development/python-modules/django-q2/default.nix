@@ -79,21 +79,20 @@ buildPythonPackage rec {
     REDIS_HOST = "127.0.0.1";
   };
 
-  disabledTests =
-    [
-      # requires a running mongodb
-      "test_mongo"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fails with an assertion
-      "test_max_rss"
-      "test_recycle"
-      # cannot connect to redis
-      "test_broker"
-      "test_custom"
-      "test_redis"
-      "test_redis_connection"
-    ];
+  disabledTests = [
+    # requires a running mongodb
+    "test_mongo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails with an assertion
+    "test_max_rss"
+    "test_recycle"
+    # cannot connect to redis
+    "test_broker"
+    "test_custom"
+    "test_redis"
+    "test_redis_connection"
+  ];
 
   disabledTestPaths = [
     "django_q/tests/test_commands.py"

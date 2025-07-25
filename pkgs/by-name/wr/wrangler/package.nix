@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.20.5";
+  version = "4.22.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-jf4HZVLNqwl8IcS/Po2PKPCd1iMvBuFybhz0z3b0stM=";
+    hash = "sha256-4uE1Jv70aDqAUk7GWmFr65SNXLnDDIZiFN87DQxluKg=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
+    fetcherVersion = 1;
     hash = "sha256-r3QswmqP6CNufnsFM0KeKojm/HjHogrfYO/TdL3SrmA=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
@@ -42,27 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
 
-  buildInputs =
-    [
-      llvmPackages.libcxx
-      llvmPackages.libunwind
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      musl # not used, but requires extra work to remove
-      xorg.libX11 # for the clipboardy package
-    ];
+  buildInputs = [
+    llvmPackages.libcxx
+    llvmPackages.libunwind
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    musl # not used, but requires extra work to remove
+    xorg.libX11 # for the clipboardy package
+  ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      nodejs
-      pnpm_9.configHook
-      jq
-      moreutils
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm_9.configHook
+    jq
+    moreutils
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    autoPatchelfHook
+  ];
 
   # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
   # so I simply removed it

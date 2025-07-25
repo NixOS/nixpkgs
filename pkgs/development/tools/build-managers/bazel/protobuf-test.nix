@@ -168,27 +168,26 @@ let
     buildInputs = [
       (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
     ];
-    bazelScript =
-      ''
-        ${bazel}/bin/bazel \
-          build \
-          --distdir=${distDir} \
-          --verbose_failures \
-          --curses=no \
-          --subcommands \
-          --strict_java_deps=off \
-          --strict_proto_deps=off \
-          //... \
-      ''
-      + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-        --host_javabase='@local_jdk//:jdk' \
-        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-        --javabase='@local_jdk//:jdk' \
-      ''
-      + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-        --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
-      '';
+    bazelScript = ''
+      ${bazel}/bin/bazel \
+        build \
+        --distdir=${distDir} \
+        --verbose_failures \
+        --curses=no \
+        --subcommands \
+        --strict_java_deps=off \
+        --strict_proto_deps=off \
+        //... \
+    ''
+    + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
+      --host_javabase='@local_jdk//:jdk' \
+      --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+      --javabase='@local_jdk//:jdk' \
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+      --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
+    '';
   };
 
 in

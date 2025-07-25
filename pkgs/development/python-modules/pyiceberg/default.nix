@@ -182,7 +182,8 @@ buildPythonPackage rec {
     s3fs
     sqlalchemy
     thrift
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ moto.optional-dependencies.server;
 
   pytestFlagsArray = [
     "-W"
@@ -198,61 +199,60 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  disabledTests =
-    [
-      # ModuleNotFoundError: No module named 'puresasl'
-      "test_create_hive_client_with_kerberos"
-      "test_create_hive_client_with_kerberos_using_context_manager"
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'puresasl'
+    "test_create_hive_client_with_kerberos"
+    "test_create_hive_client_with_kerberos_using_context_manager"
 
-      # Require unpackaged pyiceberg_core
-      "test_bucket_pyarrow_transforms"
-      "test_transform_consistency_with_pyarrow_transform"
-      "test_truncate_pyarrow_transforms"
+    # Require unpackaged pyiceberg_core
+    "test_bucket_pyarrow_transforms"
+    "test_transform_consistency_with_pyarrow_transform"
+    "test_truncate_pyarrow_transforms"
 
-      # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
-      "test_checking_if_a_file_exists"
-      "test_closing_a_file"
-      "test_fsspec_file_tell"
-      "test_fsspec_getting_length_of_file"
-      "test_fsspec_pickle_round_trip_s3"
-      "test_fsspec_raise_on_opening_file_not_found"
-      "test_fsspec_read_specified_bytes_for_file"
-      "test_fsspec_write_and_read_file"
-      "test_writing_avro_file"
+    # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
+    "test_checking_if_a_file_exists"
+    "test_closing_a_file"
+    "test_fsspec_file_tell"
+    "test_fsspec_getting_length_of_file"
+    "test_fsspec_pickle_round_trip_s3"
+    "test_fsspec_raise_on_opening_file_not_found"
+    "test_fsspec_read_specified_bytes_for_file"
+    "test_fsspec_write_and_read_file"
+    "test_writing_avro_file"
 
-      # Require unpackaged gcsfs
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_fsspec_new_input_file_gcs"
-      "test_fsspec_new_output_file_gcs"
-      "test_fsspec_pickle_roundtrip_gcs"
+    # Require unpackaged gcsfs
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_fsspec_new_input_file_gcs"
+    "test_fsspec_new_output_file_gcs"
+    "test_fsspec_pickle_roundtrip_gcs"
 
-      # Timeout (network access)
-      "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
-      "test_fsspec_new_abfss_output_file_adls"
-      "test_fsspec_new_input_file_adls"
-      "test_fsspec_pickle_round_trip_aldfs"
-      "test_partitioned_write"
-      "test_token_200_w_oauth2_server_uri"
+    # Timeout (network access)
+    "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
+    "test_fsspec_new_abfss_output_file_adls"
+    "test_fsspec_new_input_file_adls"
+    "test_fsspec_pickle_round_trip_aldfs"
+    "test_partitioned_write"
+    "test_token_200_w_oauth2_server_uri"
 
-      # Hangs forever (from tests/io/test_pyarrow.py)
-      "test_getting_length_of_file_gcs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
-      "test_converting_an_outputfile_to_an_inputfile_gcs"
-      "test_new_input_file_gcs"
-      "test_new_output_file_gc"
+    # Hangs forever (from tests/io/test_pyarrow.py)
+    "test_getting_length_of_file_gcs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+    "test_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_new_input_file_gcs"
+    "test_new_output_file_gc"
 
-      # PermissionError: [Errno 13] Failed to open local file
-      # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
-      "test_identity_transform_column_projection"
-      "test_identity_transform_columns_projection"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError:
-      # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
-      "test_read_not_struct_type"
-    ];
+    # PermissionError: [Errno 13] Failed to open local file
+    # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
+    "test_identity_transform_column_projection"
+    "test_identity_transform_columns_projection"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError:
+    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
+    "test_read_not_struct_type"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

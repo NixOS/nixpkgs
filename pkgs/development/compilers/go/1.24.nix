@@ -103,35 +103,34 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  preInstall =
-    ''
-      # Contains the wrong perl shebang when cross compiling,
-      # since it is not used for anything we can deleted as well.
-      rm src/regexp/syntax/make_perl_groups.pl
-    ''
-    + (
-      if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
-        ''
-          mv bin/*_*/* bin
-          rmdir bin/*_*
-          ${lib.optionalString
-            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-            ''
-              rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
-            ''
-          }
-        ''
-      else
-        lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-          rm -rf bin/*_*
-          ${lib.optionalString
-            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-            ''
-              rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
-            ''
-          }
-        ''
-    );
+  preInstall = ''
+    # Contains the wrong perl shebang when cross compiling,
+    # since it is not used for anything we can deleted as well.
+    rm src/regexp/syntax/make_perl_groups.pl
+  ''
+  + (
+    if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
+      ''
+        mv bin/*_*/* bin
+        rmdir bin/*_*
+        ${lib.optionalString
+          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          ''
+            rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+          ''
+        }
+      ''
+    else
+      lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
+        rm -rf bin/*_*
+        ${lib.optionalString
+          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          ''
+            rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+          ''
+        }
+      ''
+  );
 
   installPhase = ''
     runHook preInstall
@@ -163,6 +162,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+    badPlatforms = [
+      # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
+      # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
+      # https://github.com/golang/go/issues/19074 - Dropped support for big-endian POWER < 8, with community pushback
+      # https://github.com/golang/go/issues/73349 - upstream will not accept submissions to fix this
+      "powerpc64-linux"
+    ];
     mainProgram = "go";
   };
 })

@@ -145,7 +145,8 @@ rec {
         yarn
         nodejs
         git
-      ] ++ extraNativeBuildInputs;
+      ]
+      ++ extraNativeBuildInputs;
       buildInputs = extraBuildInputs;
 
       configurePhase =
@@ -401,7 +402,8 @@ rec {
           yarn
           nodejs
           rsync
-        ] ++ extraBuildInputs;
+        ]
+        ++ extraBuildInputs;
 
         node_modules = deps + "/node_modules";
 
@@ -471,16 +473,16 @@ rec {
         passthru = {
           inherit package packageJSON deps;
           workspaceDependencies = workspaceDependenciesTransitive;
-        } // (attrs.passthru or { });
+        }
+        // (attrs.passthru or { });
 
-        meta =
-          {
-            inherit (nodejs.meta) platforms;
-          }
-          // lib.optionalAttrs (package ? description) { inherit (package) description; }
-          // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
-          // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
-          // (attrs.meta or { });
+        meta = {
+          inherit (nodejs.meta) platforms;
+        }
+        // lib.optionalAttrs (package ? description) { inherit (package) description; }
+        // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
+        // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
+        // (attrs.meta or { });
       }
     );
 

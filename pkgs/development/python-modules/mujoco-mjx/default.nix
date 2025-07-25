@@ -38,7 +38,8 @@ buildPythonPackage {
     mujoco
     scipy
     trimesh
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "mujoco.mjx" ];
 

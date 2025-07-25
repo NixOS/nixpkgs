@@ -25,27 +25,26 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtmultimedia
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir -p $out/Applications
-          mv qtalarm.app $out/Applications
-        ''
-      else
-        ''
-          install -Dm755 qtalarm -t $out/bin
-          install -Dm644 Icons/1349069370_Alarm_Clock.png $out/share/icons/hicolor/48x48/apps/qtalarm.png
-          install -Dm644 Icons/1349069370_Alarm_Clock24.png $out/share/icons/hicolor/24x24/apps/qtalarm.png
-          install -Dm644 Icons/1349069370_Alarm_Clock16.png $out/share/icons/hicolor/16x16/apps/qtalarm.png
-        ''
-    )
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        mv qtalarm.app $out/Applications
+      ''
+    else
+      ''
+        install -Dm755 qtalarm -t $out/bin
+        install -Dm644 Icons/1349069370_Alarm_Clock.png $out/share/icons/hicolor/48x48/apps/qtalarm.png
+        install -Dm644 Icons/1349069370_Alarm_Clock24.png $out/share/icons/hicolor/24x24/apps/qtalarm.png
+        install -Dm644 Icons/1349069370_Alarm_Clock16.png $out/share/icons/hicolor/16x16/apps/qtalarm.png
+      ''
+  )
+  + ''
+    runHook postInstall
+  '';
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook

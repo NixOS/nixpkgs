@@ -34,7 +34,8 @@ buildPythonPackage rec {
     cachecontrol
     gitpython
     mkdocs
-  ] ++ cachecontrol.optional-dependencies.filecache;
+  ]
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     feedparser

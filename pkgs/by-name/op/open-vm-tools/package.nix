@@ -52,13 +52,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "12.5.2";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     tag = "stable-${finalAttrs.version}";
-    hash = "sha256-gKtPyLsmTrbA3aG/Jiod/oAl5aMpVm3enuCe+b7jsY4=";
+    hash = "sha256-1ZW1edwKW3okKNdWw6rBgfeOt9afESbhe1L1TNp0+Kc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
@@ -75,37 +75,36 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
   ];
 
-  buildInputs =
-    [
-      fuse3
-      glib
-      icu
-      libdnet
-      libdrm
-      libmspack
-      libtirpc
-      libxcrypt
-      libxml2
-      openssl
-      pam
-      procps
-      rpcsvc-proto
-      udev
-      xercesc
-      xmlsec
-    ]
-    ++ optionals withX [
-      gdk-pixbuf-xlib
-      gtk3
-      gtkmm3
-      libX11
-      libXext
-      libXinerama
-      libXi
-      libXrender
-      libXrandr
-      libXtst
-    ];
+  buildInputs = [
+    fuse3
+    glib
+    icu
+    libdnet
+    libdrm
+    libmspack
+    libtirpc
+    libxcrypt
+    libxml2
+    openssl
+    pam
+    procps
+    rpcsvc-proto
+    udev
+    xercesc
+    xmlsec
+  ]
+  ++ optionals withX [
+    gdk-pixbuf-xlib
+    gtk3
+    gtkmm3
+    libX11
+    libXext
+    libXinerama
+    libXi
+    libXrender
+    libXrandr
+    libXtst
+  ];
 
   postPatch = ''
     sed -i Makefile.am \
@@ -138,7 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-kernel-modules"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     "--with-fuse=fuse3"
-  ] ++ optional (!withX) "--without-x";
+  ]
+  ++ optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
 

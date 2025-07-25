@@ -35,7 +35,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fedora-messaging
     pytestCheckHook
-  ] ++ jsonschema.optional-dependencies.format;
+  ]
+  ++ jsonschema.optional-dependencies.format;
 
   pythonImportsCheck = [ "weblate_schemas" ];
 

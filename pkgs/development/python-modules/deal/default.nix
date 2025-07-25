@@ -53,34 +53,33 @@ buildPythonPackage rec {
     vaa
   ];
 
-  disabledTests =
-    [
-      # Tests need internet access
-      "test_smoke_has"
-      "test_pure_offline"
-      "test_raises_doesnt_override_another_contract"
-      "test_raises_doesnt_override_another_contract_async"
-      "test_raises_generator"
-      # AttributeError: module 'vaa' has no attribute 'Error'
-      "test_source_vaa_scheme"
-      "test_vaa_scheme_and_custom_exception"
-      "test_scheme_string_validation_args_correct"
-      "test_method_chain_decorator_with_scheme_is_fulfilled"
-      "test_scheme_contract_is_satisfied_when_setting_arg"
-      "test_scheme_contract_is_satisfied_within_chain"
-      "test_scheme_errors_rewrite_message"
-      # assert errors
-      "test_doctest"
-      "test_no_violations"
-      "test_source_get_lambda_multiline_splitted_dec"
-      # assert basically correct but fails in string match due to '' removed
-      "test_unknown_command"
-    ]
-    ++ lib.optional (pythonAtLeast "3.13") [
-      # assert basically correct but string match fails in due to
-      # ('pathlib._local', 'Path.write_text') != ('pathlib', 'Path.write_text')
-      "test_infer"
-    ];
+  disabledTests = [
+    # Tests need internet access
+    "test_smoke_has"
+    "test_pure_offline"
+    "test_raises_doesnt_override_another_contract"
+    "test_raises_doesnt_override_another_contract_async"
+    "test_raises_generator"
+    # AttributeError: module 'vaa' has no attribute 'Error'
+    "test_source_vaa_scheme"
+    "test_vaa_scheme_and_custom_exception"
+    "test_scheme_string_validation_args_correct"
+    "test_method_chain_decorator_with_scheme_is_fulfilled"
+    "test_scheme_contract_is_satisfied_when_setting_arg"
+    "test_scheme_contract_is_satisfied_within_chain"
+    "test_scheme_errors_rewrite_message"
+    # assert errors
+    "test_doctest"
+    "test_no_violations"
+    "test_source_get_lambda_multiline_splitted_dec"
+    # assert basically correct but fails in string match due to '' removed
+    "test_unknown_command"
+  ]
+  ++ lib.optional (pythonAtLeast "3.13") [
+    # assert basically correct but string match fails in due to
+    # ('pathlib._local', 'Path.write_text') != ('pathlib', 'Path.write_text')
+    "test_infer"
+  ];
 
   disabledTestPaths = [
     # Test needs internet access

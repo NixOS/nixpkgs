@@ -29,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     linux-pam
-  ] ++ (lib.optionals x11Support [ libxcb ]);
+  ]
+  ++ (lib.optionals x11Support [ libxcb ]);
 
   postPatch = ''
     ln -s ${
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "TUI display manager";
     license = lib.licenses.wtfpl;
     homepage = "https://codeberg.org/AnErrupTion/ly";
-    maintainers = [ lib.maintainers.vidister ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "ly";
   };

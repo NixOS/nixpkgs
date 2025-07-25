@@ -35,22 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     help2man
     html-tidy
-  ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
 
-  buildInputs =
-    [
-      boost
-      curl
-      htmlcxx
-      jsoncpp
-      liboauth
-      rhash
-      tinyxml-2
-    ]
-    ++ lib.optionals enableGui [
-      libsForQt5.qtbase
-      libsForQt5.qtwebengine
-    ];
+  buildInputs = [
+    boost
+    curl
+    htmlcxx
+    jsoncpp
+    liboauth
+    rhash
+    tinyxml-2
+  ]
+  ++ lib.optionals enableGui [
+    libsForQt5.qtbase
+    libsForQt5.qtwebengine
+  ];
 
   cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
 

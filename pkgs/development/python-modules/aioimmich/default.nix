@@ -1,4 +1,5 @@
 {
+  aiofiles,
   aiohttp,
   aioresponses,
   buildPythonPackage,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.9.1";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-bEbWvDNcKH/9Mtr3fZMk7+Qa41suSUpVAGAsnCmzGaY=";
+    hash = "sha256-+k696FDr8LoJr90SfCNzjhwxC3776IN3kRLqdtPk/LI=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     aiohttp
     mashumaro
   ];

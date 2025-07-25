@@ -26,28 +26,27 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  postInstall =
+  postInstall = ''
+    install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications
+  ''
+  + (
+    let
+      vault-tasks =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.vault-tasks;
+    in
     ''
-      install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications
-    ''
-    + (
-      let
-        vault-tasks =
-          if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-            placeholder "out"
-          else
-            buildPackages.vault-tasks;
-      in
-      ''
-        # vault-tasks tries to load a config file from ~/.config/ before generating completions
-        export HOME="$(mktemp -d)"
+      # vault-tasks tries to load a config file from ~/.config/ before generating completions
+      export HOME="$(mktemp -d)"
 
-        installShellCompletion --cmd vault-tasks \
-          --bash <(${vault-tasks}/bin/vault-tasks generate-completions bash) \
-          --fish <(${vault-tasks}/bin/vault-tasks generate-completions fish) \
-          --zsh <(${vault-tasks}/bin/vault-tasks generate-completions zsh)
-      ''
-    );
+      installShellCompletion --cmd vault-tasks \
+        --bash <(${vault-tasks}/bin/vault-tasks generate-completions bash) \
+        --fish <(${vault-tasks}/bin/vault-tasks generate-completions fish) \
+        --zsh <(${vault-tasks}/bin/vault-tasks generate-completions zsh)
+    ''
+  );
 
   passthru.updateScript = nix-update-script { };
 

@@ -56,18 +56,17 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-      zbar
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    zbar
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+  ]);
 
   passthru = {
     updateScript = nix-update-script { };

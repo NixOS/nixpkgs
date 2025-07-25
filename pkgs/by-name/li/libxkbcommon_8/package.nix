@@ -52,17 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     doxygen
     xorg.xvfb
-  ] ++ lib.optional withWaylandTools wayland-scanner;
-  buildInputs =
-    [
-      xkeyboard_config
-      libxcb
-      libxml2
-    ]
-    ++ lib.optionals withWaylandTools [
-      wayland
-      wayland-protocols
-    ];
+  ]
+  ++ lib.optional withWaylandTools wayland-scanner;
+  buildInputs = [
+    xkeyboard_config
+    libxcb
+    libxml2
+  ]
+  ++ lib.optionals withWaylandTools [
+    wayland
+    wayland-protocols
+  ];
   nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
@@ -96,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      primeos
       ttuegel
     ];
     mainProgram = "xkbcli";

@@ -38,9 +38,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "statgrab" ];
 
-  # Tests don't work on darwin due to seg fault
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   meta = with lib; {
     description = "Python bindings for libstatgrab";
     homepage = "https://github.com/libstatgrab/pystatgrab";

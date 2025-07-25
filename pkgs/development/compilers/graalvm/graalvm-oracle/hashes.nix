@@ -2,7 +2,7 @@
 # https://www.oracle.com/java/technologies/javase/graalvm-jdk23-archive-downloads.html
 # Then run this script:
 # $ rg -No "(https://.+)\"" -r '$1' pkgs/development/compilers/graalvm/graalvm-oracle/hashes.nix | \
-#   parallel -k 'echo {}; nix hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
+#   parallel -k 'echo {}; nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(curl -s {}.sha256)'
 {
   "23" = {
     "aarch64-linux" = {

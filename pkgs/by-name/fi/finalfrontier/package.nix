@@ -28,11 +28,12 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   postInstall = ''
     installManPage man/*.1

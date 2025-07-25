@@ -43,25 +43,24 @@ stdenv.mkDerivation (finalAttrs: {
     libical
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      icu
-      ninja
-      perl
-      pkg-config
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-      # Docs building fails:
-      # https://github.com/NixOS/nixpkgs/pull/67204
-      # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
-      # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    cmake
+    icu
+    ninja
+    perl
+    pkg-config
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+    # Docs building fails:
+    # https://github.com/NixOS/nixpkgs/pull/67204
+    # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
+    # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
   nativeInstallCheckInputs = [
     # running libical-glib tests
     (python3.pythonOnBuildForHost.withPackages (
@@ -77,15 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     icu
   ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_GTK_DOC=False"
-      "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
-      "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
-    ];
+  cmakeFlags = [
+    "-DENABLE_GTK_DOC=False"
+    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
+    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
+  ];
 
   patches = [
     # Will appear in 3.1.0

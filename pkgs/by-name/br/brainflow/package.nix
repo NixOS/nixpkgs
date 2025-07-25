@@ -37,10 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_ONNX" buildONNX)
   ];
 
-  buildInputs =
-    [ dbus ]
-    ++ lib.optional (buildBluetooth || buildBluetoothLowEnergy) bluez
-    ++ lib.optional useLibFTDI libftdi1;
+  buildInputs = [
+    dbus
+  ]
+  ++ lib.optional (buildBluetooth || buildBluetoothLowEnergy) bluez
+  ++ lib.optional useLibFTDI libftdi1;
 
   nativeBuildInputs = [
     cmake

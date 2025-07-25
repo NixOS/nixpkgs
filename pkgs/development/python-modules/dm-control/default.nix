@@ -70,7 +70,8 @@ buildPythonPackage rec {
     scipy
     setuptools
     tqdm
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "dm_control" ];
 

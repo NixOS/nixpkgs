@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "naja";
-  version = "0.1.16";
+  version = "0.1.24";
 
   src = fetchFromGitHub {
     owner = "najaeda";
     repo = "naja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MwMpxmmr8fJN49RkRguiEEwPVUIm+OcNFjEixpjn9UY=";
+    hash = "sha256-vfP/xusfY11bk0GsIZcW38rXPMgutTDgTNjO40Uz1bU=";
     fetchSubmodules = true;
   };
 
@@ -47,17 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      doxygen
-      flex
-      pkg-config
-    ]
-    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      python3 # test scripts
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    doxygen
+    flex
+    pkg-config
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    python3 # test scripts
+  ];
 
   buildInputs = [
     boost

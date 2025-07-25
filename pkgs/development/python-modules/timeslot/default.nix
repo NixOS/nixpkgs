@@ -27,11 +27,11 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # The pyproject.toml specifies the flag `--cov=timeslot`,
     # This causes an error when running without pytest-cov,
     # so use this flag to override that option, as we don't need coverage.
-    "--override-ini addopts=''"
+    "--override-ini=addopts="
   ];
 
   pythonImportsCheck = [ "timeslot" ];

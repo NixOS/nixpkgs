@@ -5,7 +5,6 @@
   ninja,
   gettext,
   fetchurl,
-  fetchpatch,
   pkg-config,
   gtk4,
   glib,
@@ -38,28 +37,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "48.3";
+  version = "48.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2ilT5+K3O/dHPAozl5EE15NieVKV6qCio46hiFN9rxM=";
+    hash = "sha256-D2ZVKtZZPHlSo93uW/UVZWyMQ0hxB22fGpGnr5NGsbQ=";
   };
-
-  patches = [
-    # shell: Fix startup crash on Pantheon
-    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1818
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/da4437beb7f1fbc9c2fa3d4629b8c826d484835e.patch";
-      hash = "sha256-meufd5gnhLcK0dgIXEMDnid9e1R2M1D3jZ9Yoh6YobM=";
-    })
-
-    # action-bar-end: Fix startup crash on Pantheon
-    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1819
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/d69866854b315123c8832fae58c6de008da20ea0.patch";
-      hash = "sha256-GnZQC4rtBYRr+x9mF8pCFDcDOjEJj+27ECdXBNL42kQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -73,46 +56,44 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.gtk4
   ];
 
-  buildInputs =
-    [
-      gcr_4
-      gdk-pixbuf
-      glib
-      glib-networking
-      gnome-desktop
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gstreamer
-      gtk4
-      icu
-      isocodes
-      json-glib
-      libadwaita
-      libportal-gtk4
-      libarchive
-      libsecret
-      libsoup_3
-      libxml2
-      nettle
-      p11-kit
-      sqlite
-      webkitgtk_6_0
-    ]
-    ++ lib.optionals withPantheon [
-      pantheon.granite7
-    ];
+  buildInputs = [
+    gcr_4
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-desktop
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
+    gtk4
+    icu
+    isocodes
+    json-glib
+    libadwaita
+    libportal-gtk4
+    libarchive
+    libsecret
+    libsoup_3
+    libxml2
+    nettle
+    p11-kit
+    sqlite
+    webkitgtk_6_0
+  ]
+  ++ lib.optionals withPantheon [
+    pantheon.granite7
+  ];
 
   # Tests need an X display
-  mesonFlags =
-    [
-      "-Dunit_tests=disabled"
-    ]
-    ++ lib.optionals withPantheon [
-      "-Dgranite=enabled"
-    ];
+  mesonFlags = [
+    "-Dunit_tests=disabled"
+  ]
+  ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

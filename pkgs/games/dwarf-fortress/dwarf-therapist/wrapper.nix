@@ -56,13 +56,14 @@ stdenv.mkDerivation {
 
   paths = [ dwarf-therapist ];
 
-  nativeBuildInputs =
-    [ wrapQtAppsHook ]
-    ++ lib.optionals unsupportedVersion [
-      expect
-      xvfb-run
-      dfHackWrapper
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals unsupportedVersion [
+    expect
+    xvfb-run
+    dfHackWrapper
+  ];
 
   passthru = { inherit dwarf-fortress dwarf-therapist; };
 

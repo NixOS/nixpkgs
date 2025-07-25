@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MrGlockenspiel";
     repo = "activate-linux";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6XnoAoZwAs2hKToWlDqkaGqucmV1VMkEc4QO0G0xmrg=";
   };
 

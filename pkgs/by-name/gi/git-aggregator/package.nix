@@ -8,6 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
   version = "4.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "acsone";

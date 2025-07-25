@@ -42,7 +42,7 @@ buildLuarocksPackage {
   '';
 
   meta = {
-    description = "A tiny, neat lua library that portably invokes native file open and save dialogs.";
+    description = "Tiny, neat Lua library that invokes native file open and save dialogs";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.scoder12 ];

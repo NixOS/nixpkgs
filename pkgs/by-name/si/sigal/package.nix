@@ -36,13 +36,12 @@ python3.pkgs.buildPythonApplication rec {
     cryptography
   ];
 
-  nativeCheckInputs =
-    [
-      ffmpeg
-    ]
-    ++ (with python3.pkgs; [
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    ffmpeg
+  ]
+  ++ (with python3.pkgs; [
+    pytestCheckHook
+  ]);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_nonmedia_files"

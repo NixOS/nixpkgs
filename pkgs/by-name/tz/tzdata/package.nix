@@ -35,36 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildOutputs = [ ];
 
-  makeFlags =
-    [
-      "TOPDIR=${placeholder "out"}"
-      "TZDIR=${placeholder "out"}/share/zoneinfo"
-      "BINDIR=${placeholder "bin"}/bin"
-      "ZICDIR=${placeholder "bin"}/bin"
-      "ETCDIR=$(TMPDIR)/etc"
-      "TZDEFAULT=tzdefault-to-remove"
-      "LIBDIR=${placeholder "dev"}/lib"
-      "MANDIR=${placeholder "man"}/share/man"
-      "AWK=awk"
-      "CURL=:" # disable network access
-      "CFLAGS=-DHAVE_LINK=0"
-      "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
-      "cc=${stdenv.cc.targetPrefix}cc"
-      "AR=${stdenv.cc.targetPrefix}ar"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "CFLAGS+=-DHAVE_DIRECT_H"
-      "CFLAGS+=-DHAVE_SETENV=0"
-      "CFLAGS+=-DHAVE_SYMLINK=0"
-      "CFLAGS+=-DRESERVE_STD_EXT_IDS"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "CFLAGS+=-DNETBSD_INSPIRED=0"
-      "CFLAGS+=-DSTD_INSPIRED=0"
-      "CFLAGS+=-DUSE_TIMEX_T=1"
-      "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
-      "CFLAGS+=-DEXTERN_TIMEOFF=1"
-    ];
+  makeFlags = [
+    "TOPDIR=${placeholder "out"}"
+    "TZDIR=${placeholder "out"}/share/zoneinfo"
+    "BINDIR=${placeholder "bin"}/bin"
+    "ZICDIR=${placeholder "bin"}/bin"
+    "ETCDIR=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
+    "LIBDIR=${placeholder "dev"}/lib"
+    "MANDIR=${placeholder "man"}/share/man"
+    "AWK=awk"
+    "CURL=:" # disable network access
+    "CFLAGS=-DHAVE_LINK=0"
+    "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
+    "cc=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SETENV=0"
+    "CFLAGS+=-DHAVE_SYMLINK=0"
+    "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "CFLAGS+=-DNETBSD_INSPIRED=0"
+    "CFLAGS+=-DSTD_INSPIRED=0"
+    "CFLAGS+=-DUSE_TIMEX_T=1"
+    "CFLAGS+=-DMKTIME_FITS_IN\\(min,max\\)=0"
+    "CFLAGS+=-DEXTERN_TIMEOFF=1"
+  ];
 
   enableParallelBuilding = true;
 

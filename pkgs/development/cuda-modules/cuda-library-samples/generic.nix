@@ -81,12 +81,10 @@ in
       ];
 
       # CUTENSOR_ROOT is double escaped
-      postPatch =
-        prevAttrs.postPatch or ""
-        + ''
-          substituteInPlace CMakeLists.txt \
-            --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
-        '';
+      postPatch = prevAttrs.postPatch or "" + ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
+      '';
 
       CUTENSOR_ROOT = cutensor;
 
@@ -121,21 +119,17 @@ in
           cuda_cccl # <nv/target>
         ];
 
-      postPatch =
-        prevAttrs.postPatch or ""
-        + ''
-          substituteInPlace CMakeLists.txt \
-            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
-            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
-        '';
+      postPatch = prevAttrs.postPatch or "" + ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+      '';
 
-      postInstall =
-        prevAttrs.postInstall or ""
-        + ''
-          mkdir -p $out/bin
-          cp matmul_example $out/bin/
-          cp matmul_example_static $out/bin/
-        '';
+      postInstall = prevAttrs.postInstall or "" + ''
+        mkdir -p $out/bin
+        cp matmul_example $out/bin/
+        cp matmul_example_static $out/bin/
+      '';
 
       CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
       CUSPARSELT_PATH = lib.getLib cusparselt;

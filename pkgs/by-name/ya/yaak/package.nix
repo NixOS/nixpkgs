@@ -55,18 +55,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk3
-      openssl
-      pango
-      cairo
-      pixman
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    glib
+    gtk3
+    openssl
+    pango
+    cairo
+    pixman
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

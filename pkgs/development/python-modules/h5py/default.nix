@@ -67,13 +67,14 @@ buildPythonPackage rec {
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
 
-  dependencies =
-    [ numpy ]
-    ++ lib.optionals mpiSupport [
-      mpi4py
-      openssh
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  dependencies = [
+    numpy
+  ]
+  ++ lib.optionals mpiSupport [
+    mpi4py
+    openssh
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   nativeCheckInputs = [
     pytestCheckHook

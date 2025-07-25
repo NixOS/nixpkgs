@@ -66,17 +66,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ nasm ];
 
-  buildInputs =
-    [
-      xxHash
-      fmt
-    ]
-    ++ (with qt5; [
-      qtbase
-      qtdeclarative
-      qtquickcontrols
-      qtquickcontrols2
-    ]);
+  buildInputs = [
+    xxHash
+    fmt
+  ]
+  ++ (with qt5; [
+    qtbase
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+  ]);
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")

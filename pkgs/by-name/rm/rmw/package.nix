@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gettext;
 
   # The subproject "canfigger" has asan and ubsan enabled by default, disable it here
   mesonFlags = [

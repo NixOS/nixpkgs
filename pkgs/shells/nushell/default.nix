@@ -20,6 +20,9 @@
 }:
 
 let
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
   version = "0.105.1";
 in
 rustPlatform.buildRustPackage {
@@ -36,22 +39,28 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-v3BtcEd1eMtHlDLsu0Y4i6CWA47G0CMOyVlMchj7EJo=";
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    [ zstd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      nghttp2
-      libgit2
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+    nghttp2
+    libgit2
+  ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
+
+  preCheck = ''
+    export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
+  '';
 
   checkPhase = ''
     runHook preCheck

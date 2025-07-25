@@ -73,22 +73,21 @@ python3Packages.buildPythonApplication rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      python3Packages.numpy_1
-      python3Packages.pyqt5
-      qt5.qtbase
-      glew
-      glm
-      libpng
-      libxml2
-      freetype
-      netcdf
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      mmtf-cpp
-      msgpack
-    ];
+  buildInputs = [
+    python3Packages.numpy_1
+    python3Packages.pyqt5
+    qt5.qtbase
+    glew
+    glm
+    libpng
+    libxml2
+    freetype
+    netcdf
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    mmtf-cpp
+    msgpack
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
@@ -126,22 +125,21 @@ python3Packages.buildPythonApplication rec {
     "tests/api/seqalign.py"
   ];
 
-  disabledTests =
-    [
-      # the output image does not exactly match
-      "test_commands"
-      # touch the network
-      "testFetch"
-      # requires collada2gltf which is not included in nixpkgs
-      "testglTF"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # require mmtf-cpp which does not support darwin
-      "test_bcif"
-      "test_bcif_array"
-      "testMMTF"
-      "testSave_symmetry__mmtf"
-    ];
+  disabledTests = [
+    # the output image does not exactly match
+    "test_commands"
+    # touch the network
+    "testFetch"
+    # requires collada2gltf which is not included in nixpkgs
+    "testglTF"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # require mmtf-cpp which does not support darwin
+    "test_bcif"
+    "test_bcif_array"
+    "testMMTF"
+    "testSave_symmetry__mmtf"
+  ];
 
   preCheck = ''
     cd testing

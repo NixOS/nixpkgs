@@ -48,21 +48,20 @@ let
 
   pythonWithPefile = python.withPackages (ps: [ ps.pefile ]);
 
-  deps =
-    [
-      bash
-      btrfs-progs
-      coreutils
-      cpio
-      gnutar
-      kmod
-      systemdForMkosi
-      util-linux
-    ]
-    ++ extraDeps
-    ++ lib.optionals withQemu [
-      qemu
-    ];
+  deps = [
+    bash
+    btrfs-progs
+    coreutils
+    cpio
+    gnutar
+    kmod
+    systemdForMkosi
+    util-linux
+  ]
+  ++ extraDeps
+  ++ lib.optionals withQemu [
+    qemu
+  ];
 in
 buildPythonApplication rec {
   pname = "mkosi";
@@ -81,24 +80,23 @@ buildPythonApplication rec {
     hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
   };
 
-  patches =
-    [
-      (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
-        UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
-        PYTHON_PEFILE = lib.getExe pythonWithPefile;
-        NIX_PATH = toString (lib.makeBinPath deps);
-        MKOSI_SANDBOX = null; # will be replaced in postPatch
-      })
-      (replaceVars ./0002-Fix-library-resolving.patch {
-        LIBC = "${stdenv.cc.libc}/lib/libc.so.6";
-        LIBSECCOMP = "${libseccomp.lib}/lib/libseccomp.so.2";
-      })
-    ]
-    ++ lib.optional withQemu (
-      replaceVars ./0003-Fix-QEMU-firmware-path.patch {
-        QEMU_FIRMWARE = "${qemu}/share/qemu/firmware";
-      }
-    );
+  patches = [
+    (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
+      UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
+      PYTHON_PEFILE = lib.getExe pythonWithPefile;
+      NIX_PATH = toString (lib.makeBinPath deps);
+      MKOSI_SANDBOX = null; # will be replaced in postPatch
+    })
+    (replaceVars ./0002-Fix-library-resolving.patch {
+      LIBC = "${stdenv.cc.libc}/lib/libc.so.6";
+      LIBSECCOMP = "${libseccomp.lib}/lib/libseccomp.so.2";
+    })
+  ]
+  ++ lib.optional withQemu (
+    replaceVars ./0003-Fix-QEMU-firmware-path.patch {
+      QEMU_FIRMWARE = "${qemu}/share/qemu/firmware";
+    }
+  );
 
   postPatch = ''
     # As we need the $out reference, we can't use `replaceVars` here.

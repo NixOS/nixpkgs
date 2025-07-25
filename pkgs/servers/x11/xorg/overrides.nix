@@ -159,7 +159,8 @@ self: super:
     configureFlags = [
       "--enable-xkb"
       "--enable-xinput"
-    ] ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    ]
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [
       "out"
       "dev"
@@ -207,13 +208,12 @@ self: super:
       attrs.configureFlags or [ ]
       ++ malloc0ReturnsNullCrossFlag
       ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
-    depsBuildBuild =
-      [
-        buildPackages.stdenv.cc
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isStatic [
-        (xorg.buildPackages.libc.static or null)
-      ];
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      (xorg.buildPackages.libc.static or null)
+    ];
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
@@ -480,7 +480,10 @@ self: super:
       "dev"
       "doc"
     ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libICE ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+      xorg.libICE
+      xorg.xtrans
+    ];
   });
 
   libXrender = super.libXrender.overrideAttrs (attrs: {
@@ -1029,24 +1032,23 @@ self: super:
           prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''
             export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
           '';
-          configureFlags =
-            [
-              "--enable-kdrive" # not built by default
-              "--enable-xephyr"
-              "--enable-xcsecurity" # enable SECURITY extension
-              "--with-default-font-path="
-              # there were only paths containing "${prefix}",
-              # and there are no fonts in this package anyway
-              "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
-              "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
-              "--with-xkb-output=$out/share/X11/xkb/compiled"
-              "--with-log-dir=/var/log"
-              "--enable-glamor"
-              "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
-            ]
-            ++ lib.optionals stdenv.hostPlatform.isMusl [
-              "--disable-tls"
-            ];
+          configureFlags = [
+            "--enable-kdrive" # not built by default
+            "--enable-xephyr"
+            "--enable-xcsecurity" # enable SECURITY extension
+            "--with-default-font-path="
+            # there were only paths containing "${prefix}",
+            # and there are no fonts in this package anyway
+            "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+            "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+            "--with-xkb-output=$out/share/X11/xkb/compiled"
+            "--with-log-dir=/var/log"
+            "--enable-glamor"
+            "--with-os-name=Nix" # r13y, embeds the build machine's kernel version otherwise
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isMusl [
+            "--disable-tls"
+          ];
 
           env.NIX_CFLAGS_COMPILE = toString [
             # Needed with GCC 12
@@ -1111,12 +1113,10 @@ self: super:
             ./darwin/stub.patch
           ];
 
-          postPatch =
-            attrs.postPatch
-            + ''
-              substituteInPlace hw/xquartz/mach-startup/stub.c \
-                --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
-            '';
+          postPatch = attrs.postPatch + ''
+            substituteInPlace hw/xquartz/mach-startup/stub.c \
+              --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
+          '';
 
           configureFlags = [
             # note: --enable-xquartz is auto
@@ -1157,24 +1157,23 @@ self: super:
   # and doesn't support hardware accelerated rendering
   # so remove it from the rebuild heavy path for mesa
   xvfb = super.xorgserver.overrideAttrs (old: {
-    configureFlags =
-      [
-        "--enable-xvfb"
-        "--disable-xorg"
-        "--disable-xquartz"
-        "--disable-xwayland"
-        "--disable-glamor"
-        "--disable-glx"
-        "--disable-dri"
-        "--disable-dri2"
-        "--disable-dri3"
-        "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
-        "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
-        "--with-xkb-output=$out/share/X11/xkb/compiled"
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin [
-        "--without-dtrace"
-      ];
+    configureFlags = [
+      "--enable-xvfb"
+      "--disable-xorg"
+      "--disable-xquartz"
+      "--disable-xwayland"
+      "--disable-glamor"
+      "--disable-glx"
+      "--disable-dri"
+      "--disable-dri2"
+      "--disable-dri3"
+      "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+      "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+      "--with-xkb-output=$out/share/X11/xkb/compiled"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      "--without-dtrace"
+    ];
 
     buildInputs = old.buildInputs ++ [
       xorg.pixman
@@ -1227,15 +1226,14 @@ self: super:
       (attrs: {
         nativeBuildInputs = attrs.nativeBuildInputs ++ lib.optional isDarwin bootstrap_cmds;
         depsBuildBuild = [ buildPackages.stdenv.cc ];
-        configureFlags =
-          [
-            "--with-xserver=${xorg.xorgserver.out}/bin/X"
-          ]
-          ++ lib.optionals isDarwin [
-            "--with-bundle-id-prefix=org.nixos.xquartz"
-            "--with-launchdaemons-dir=\${out}/LaunchDaemons"
-            "--with-launchagents-dir=\${out}/LaunchAgents"
-          ];
+        configureFlags = [
+          "--with-xserver=${xorg.xorgserver.out}/bin/X"
+        ]
+        ++ lib.optionals isDarwin [
+          "--with-bundle-id-prefix=org.nixos.xquartz"
+          "--with-launchdaemons-dir=\${out}/LaunchDaemons"
+          "--with-launchagents-dir=\${out}/LaunchAgents"
+        ];
         postPatch = ''
           # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
           substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
@@ -1300,27 +1298,6 @@ self: super:
         name = "fno-common.patch";
         url = "https://github.com/freedesktop/openchrome-xf86-video-openchrome/commit/edb46574d4686c59e80569ba236d537097dcdd0e.patch";
         sha256 = "0xqawg9zzwb7x5vaf3in60isbkl3zfjq0wcnfi45s3hiii943sxz";
-      })
-    ];
-  });
-
-  xf86videoxgi = super.xf86videoxgi.overrideAttrs (attrs: {
-    patches = [
-      # fixes invalid open mode
-      # https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/commit/?id=bd94c475035739b42294477cff108e0c5f15ef67
-      (fetchpatch {
-        url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=bd94c475035739b42294477cff108e0c5f15ef67";
-        sha256 = "0myfry07655adhrpypa9rqigd6rfx57pqagcwibxw7ab3wjay9f6";
-      })
-      (fetchpatch {
-        url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=78d1138dd6e214a200ca66fa9e439ee3c9270ec8";
-        sha256 = "0z3643afgrync280zrp531ija0hqxc5mrwjif9nh9lcnzgnz2d6d";
-      })
-      # Pull upstream fix for -fno-common toolchains.
-      (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/freedesktop/xorg-xf86-video-xgi/commit/3143bdee580c4d397e21adb0fa35502d4dc8e888.patch";
-        sha256 = "0by6k26rj1xmljnbfd08v90s1f9bkmnf17aclhv50081m83lmm07";
       })
     ];
   });

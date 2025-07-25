@@ -78,68 +78,67 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     ninja
     pkg-config
-  ] ++ lib.optionals withCups [ cups.dev ];
+  ]
+  ++ lib.optionals withCups [ cups.dev ];
 
   # bash is only used to rewrite shebangs
-  buildInputs =
-    [
-      bash
-      curl
-      jemalloc
-      json_c
-      libuv
-      libyaml
-      lz4
-      protobuf
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libossp_uuid
-    ]
+  buildInputs = [
+    bash
+    curl
+    jemalloc
+    json_c
+    libuv
+    libyaml
+    lz4
+    protobuf
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libossp_uuid
+  ]
 
-    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-      libcap
-      libuuid
-      lm_sensors
-    ]
-    ++ lib.optionals withConnPrometheus [ snappy ]
-    ++ lib.optionals withConnPubSub [
-      google-cloud-cpp
-      grpc
-    ]
-    ++ lib.optionals withCups [ cups ]
-    ++ lib.optionals withEbpf [
-      libbpf
-      libelf
-    ]
-    ++ lib.optionals withIpmi [ freeipmi ]
-    ++ lib.optionals withLibbacktrace [ libbacktrace ]
-    ++ lib.optionals withNetfilter [
-      libmnl
-      libnetfilter_acct
-    ]
-    ++ lib.optionals withSsl [ openssl ]
-    ++ lib.optionals withSystemdJournal [ systemd ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    libcap
+    libuuid
+    lm_sensors
+  ]
+  ++ lib.optionals withConnPrometheus [ snappy ]
+  ++ lib.optionals withConnPubSub [
+    google-cloud-cpp
+    grpc
+  ]
+  ++ lib.optionals withCups [ cups ]
+  ++ lib.optionals withEbpf [
+    libbpf
+    libelf
+  ]
+  ++ lib.optionals withIpmi [ freeipmi ]
+  ++ lib.optionals withLibbacktrace [ libbacktrace ]
+  ++ lib.optionals withNetfilter [
+    libmnl
+    libnetfilter_acct
+  ]
+  ++ lib.optionals withSsl [ openssl ]
+  ++ lib.optionals withSystemdJournal [ systemd ];
 
-  patches =
-    [
-      # Allow ndsudo to use non-hardcoded `PATH`
-      # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
-      #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
-      ./ndsudo-fix-path.patch
+  patches = [
+    # Allow ndsudo to use non-hardcoded `PATH`
+    # See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+    #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+    ./ndsudo-fix-path.patch
 
-      ./use-local-libbacktrace.patch
-    ]
-    ++ lib.optional withCloudUi (
-      replaceVars ./dashboard-v3-add.patch {
-        # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 04/01/2025 04:45:14
-        dashboardTarball = fetchurl {
-          url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
-        };
-      }
-    );
+    ./use-local-libbacktrace.patch
+  ]
+  ++ lib.optional withCloudUi (
+    replaceVars ./dashboard-v3-add.patch {
+      # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
+      # last update 04/01/2025 04:45:14
+      dashboardTarball = fetchurl {
+        url = "https://web.archive.org/web/20250401044514/https://app.netdata.cloud/agent.tar.gz";
+        hash = "sha256-NtmM1I3VrvFErMoBl+w63Nt0DzOOsaB98cxE/axm8mE=";
+      };
+    }
+  );
 
   # Guard against unused build-time development inputs in closure. Without
   # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
@@ -151,42 +150,41 @@ stdenv.mkDerivation (finalAttrs: {
   donStrip = withDebug || withLibbacktrace;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
-  postInstall =
-    ''
-      # Relocate one folder above.
-      mv $out/usr/* $out/
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
-      # rename this plugin so netdata will look for setuid wrapper
-      mv $out/libexec/netdata/plugins.d/apps.plugin \
-         $out/libexec/netdata/plugins.d/apps.plugin.org
-      mv $out/libexec/netdata/plugins.d/cgroup-network \
-         $out/libexec/netdata/plugins.d/cgroup-network.org
-      mv $out/libexec/netdata/plugins.d/perf.plugin \
-         $out/libexec/netdata/plugins.d/perf.plugin.org
-      mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
-         $out/libexec/netdata/plugins.d/slabinfo.plugin.org
-      mv $out/libexec/netdata/plugins.d/debugfs.plugin \
-         $out/libexec/netdata/plugins.d/debugfs.plugin.org
-      ${lib.optionalString withSystemdJournal ''
-        mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
-           $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
-      ''}
-      ${lib.optionalString withIpmi ''
-        mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
-           $out/libexec/netdata/plugins.d/freeipmi.plugin.org
-      ''}
-      ${lib.optionalString withNetworkViewer ''
-        mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
-           $out/libexec/netdata/plugins.d/network-viewer.plugin.org
-      ''}
-      ${lib.optionalString withNdsudo ''
-        mv $out/libexec/netdata/plugins.d/ndsudo \
-          $out/libexec/netdata/plugins.d/ndsudo.org
+  postInstall = ''
+    # Relocate one folder above.
+    mv $out/usr/* $out/
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    # rename this plugin so netdata will look for setuid wrapper
+    mv $out/libexec/netdata/plugins.d/apps.plugin \
+       $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/cgroup-network \
+       $out/libexec/netdata/plugins.d/cgroup-network.org
+    mv $out/libexec/netdata/plugins.d/perf.plugin \
+       $out/libexec/netdata/plugins.d/perf.plugin.org
+    mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
+       $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+    mv $out/libexec/netdata/plugins.d/debugfs.plugin \
+       $out/libexec/netdata/plugins.d/debugfs.plugin.org
+    ${lib.optionalString withSystemdJournal ''
+      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+         $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+    ''}
+    ${lib.optionalString withIpmi ''
+      mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
+         $out/libexec/netdata/plugins.d/freeipmi.plugin.org
+    ''}
+    ${lib.optionalString withNetworkViewer ''
+      mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
+         $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+    ''}
+    ${lib.optionalString withNdsudo ''
+      mv $out/libexec/netdata/plugins.d/ndsudo \
+        $out/libexec/netdata/plugins.d/ndsudo.org
 
-        ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
-      ''}
-    '';
+      ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
+    ''}
+  '';
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -233,7 +231,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ML" withML)
     # Suggested by upstream.
     "-G Ninja"
-  ] ++ lib.optional withML "-DNETDATA_DLIB_SOURCE_PATH=${dlib.src}";
+  ]
+  ++ lib.optional withML "-DNETDATA_DLIB_SOURCE_PATH=${dlib.src}";
 
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}

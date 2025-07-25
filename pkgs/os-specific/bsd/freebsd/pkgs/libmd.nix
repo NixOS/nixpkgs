@@ -23,7 +23,8 @@ mkDerivation (
     extraPaths = [
       "sys/crypto"
       "sys/sys"
-    ] ++ extraSrc;
+    ]
+    ++ extraSrc;
 
     outputs = [
       "out"
@@ -41,13 +42,12 @@ mkDerivation (
       ]
       ++ compatIfNeeded;
 
-    preBuild =
-      ''
-        mkdir $BSDSRCDIR/lib/libmd/sys
-      ''
-      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
-      '';
+    preBuild = ''
+      mkdir $BSDSRCDIR/lib/libmd/sys
+    ''
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    '';
 
     installPhase =
       if (!bootstrapInstallation) then

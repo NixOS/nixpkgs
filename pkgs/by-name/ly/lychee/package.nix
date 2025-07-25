@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.18.1";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = "lychee";
     rev = "lychee-v${version}";
-    hash = "sha256-aT7kVN2KM90M193h4Xng6+v69roW0J4GLd+29BzALhI=";
+    hash = "sha256-OyJ3K6ZLAUCvvrsuhN3FMh31sAYe1bWPmOSibdBL9+4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-TKKhT4AhV2uzXOHRnKHiZJusNoCWUliKmKvDw+Aeqnc=";
+  cargoHash = "sha256-hruCTnj6rZak5JbZjtdSpajg+Y+GVTZqvS0Z09S7cfE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     #  Network errors for all of these tests
     # "error reading DNS system conf: No such file or directory (os error 2)" } }
-    "--skip=archive::wayback::tests::wayback_suggestion"
-    "--skip=archive::wayback::tests::wayback_suggestion_unknown_url"
+    "--skip=archive::wayback::tests::wayback_suggestion_real_unknown"
+    "--skip=archive::wayback::tests::wayback_api_no_breaking_changes"
     "--skip=cli::test_dont_dump_data_uris_by_default"
     "--skip=cli::test_dump_data_uris_in_verbose_mode"
     "--skip=cli::test_exclude_example_domains"

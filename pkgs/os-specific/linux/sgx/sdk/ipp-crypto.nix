@@ -22,7 +22,8 @@ gcc11Stdenv.mkDerivation rec {
     "-DARCH=intel64"
     # sgx-sdk now requires FIPS-compliance mode turned on
     "-DIPPCP_FIPS_MODE=on"
-  ] ++ extraCmakeFlags;
+  ]
+  ++ extraCmakeFlags;
 
   nativeBuildInputs = [
     cmake

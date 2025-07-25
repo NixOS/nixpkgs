@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     libpq.pg_config
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     curl

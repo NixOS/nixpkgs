@@ -28,6 +28,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -99,6 +100,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";

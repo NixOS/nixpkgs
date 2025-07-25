@@ -61,64 +61,63 @@ stdenv.mkDerivation rec {
     ./CVE-2025-5278.patch
   ];
 
-  postPatch =
-    ''
-      # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
-      sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
-      sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
-      sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
-      sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
-      sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
-      sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
-      sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
+  postPatch = ''
+    # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
+    sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
+    sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
+    sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
+    sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+    sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
+    sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
+    sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
-      # The test tends to fail on cephfs
-      sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
+    # The test tends to fail on cephfs
+    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
 
-      # Some target platforms, especially when building inside a container have
-      # issues with the inotify test.
-      sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
+    # Some target platforms, especially when building inside a container have
+    # issues with the inotify test.
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
 
-      # sandbox does not allow setgid
-      sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
-      substituteInPlace ./tests/install/install-C.sh \
-        --replace 'mode3=2755' 'mode3=1755'
+    # sandbox does not allow setgid
+    sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
+    substituteInPlace ./tests/install/install-C.sh \
+      --replace 'mode3=2755' 'mode3=1755'
 
-      # Fails on systems with a rootfs. Looks like a bug in the test, see
-      # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
-      sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
 
-      # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
-      for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
-        sed '2i echo Skipping chgrp && exit 77' -i "$f"
-      done
-      for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
-        echo "int main() { return 77; }" > "$f"
-      done
+    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+      sed '2i echo Skipping chgrp && exit 77' -i "$f"
+    done
+    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
 
-      # We don't have localtime in the sandbox
-      for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
-        echo "int main() { return 77; }" > "$f"
-      done
+    # We don't have localtime in the sandbox
+    for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
+      echo "int main() { return 77; }" > "$f"
+    done
 
-      # intermittent failures on builders, unknown reason
-      sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+    # intermittent failures on builders, unknown reason
+    sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
-      # fails when syscalls related to acl not being available, e.g. in sandboxed environment
-      sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
-    ''
-    + (optionalString (stdenv.hostPlatform.libc == "musl") (
-      concatStringsSep "\n" [
-        ''
-          echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-          echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-        ''
-      ]
-    ))
-    + (optionalString stdenv.hostPlatform.isAarch64 ''
-      # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-      sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-    '');
+    # fails when syscalls related to acl not being available, e.g. in sandboxed environment
+    sed '2i echo Skipping ls -al with acl test && exit 77' -i ./tests/ls/acl.sh
+  ''
+  + (optionalString (stdenv.hostPlatform.libc == "musl") (
+    concatStringsSep "\n" [
+      ''
+        echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+        echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+      ''
+    ]
+  ))
+  + (optionalString stdenv.hostPlatform.isAarch64 ''
+    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
+  '');
 
   outputs = [
     "out"
@@ -126,16 +125,15 @@ stdenv.mkDerivation rec {
   ];
   separateDebugInfo = true;
 
-  nativeBuildInputs =
-    [
-      perl
-      xz.bin
-    ]
-    ++ optionals stdenv.hostPlatform.isCygwin [
-      # due to patch
-      autoreconfHook
-      texinfo
-    ];
+  nativeBuildInputs = [
+    perl
+    xz.bin
+  ]
+  ++ optionals stdenv.hostPlatform.isCygwin [
+    # due to patch
+    autoreconfHook
+    texinfo
+  ];
 
   buildInputs =
     [ ]
@@ -152,32 +150,33 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  configureFlags =
-    [ "--with-packager=https://nixos.org" ]
-    ++ optional (singleBinary != false) (
-      "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
-    )
-    ++ optional withOpenssl "--with-openssl"
-    ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
-    ++ optional withPrefix "--program-prefix=g"
-    # the shipped configure script doesn't enable nls, but using autoreconfHook
-    # does so which breaks the build
-    ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
-    # The VMULL-based CRC implementation produces incorrect results on musl.
-    # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
-    ++ optional (
-      stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
-    ) "utils_cv_vmull_intrinsic_exists=no"
-    ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
-      # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
-      # don't know why it is not properly detected cross building with glibc.
-      "fu_cv_sys_stat_statfs2_bsize=yes"
-    ]
-    # /proc/uptime is available on Linux and produces accurate results even if
-    # the boot time is set to the epoch because the system has no RTC. We
-    # explicitly enable it for cases where it can't be detected automatically,
-    # such as when cross-compiling.
-    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
+  configureFlags = [
+    "--with-packager=https://nixos.org"
+  ]
+  ++ optional (singleBinary != false) (
+    "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
+  )
+  ++ optional withOpenssl "--with-openssl"
+  ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
+  ++ optional withPrefix "--program-prefix=g"
+  # the shipped configure script doesn't enable nls, but using autoreconfHook
+  # does so which breaks the build
+  ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
+  # The VMULL-based CRC implementation produces incorrect results on musl.
+  # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
+  ++ optional (
+    stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
+  ) "utils_cv_vmull_intrinsic_exists=no"
+  ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
+    # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
+    # don't know why it is not properly detected cross building with glibc.
+    "fu_cv_sys_stat_statfs2_bsize=yes"
+  ]
+  # /proc/uptime is available on Linux and produces accurate results even if
+  # the boot time is set to the epoch because the system has no RTC. We
+  # explicitly enable it for cases where it can't be detected automatically,
+  # such as when cross-compiling.
+  ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),

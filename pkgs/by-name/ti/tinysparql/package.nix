@@ -26,7 +26,6 @@
   libsoup_3,
   json-glib,
   avahi,
-  systemd,
   dbus,
   man-db,
   writeText,
@@ -56,68 +55,59 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      asciidoc
-      gettext
-      glib
-      wrapGAppsNoGuiHook
-      (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    gettext
+    glib
+    wrapGAppsNoGuiHook
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      glib
-      libxml2
-      sqlite
-      icu
-      libsoup_3
-      libuuid
-      json-glib
-      avahi
-      libstemmer
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
-    ];
+  buildInputs = [
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup_3
+    libuuid
+    json-glib
+    avahi
+    libstemmer
+  ];
 
   nativeCheckInputs = [
     dbus
     man-db
   ];
 
-  mesonFlags =
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+  ]
+  ++ (
+    let
+      # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+      '';
+    in
     [
-      "-Ddocs=true"
-      (lib.mesonEnable "introspection" withIntrospection)
-      (lib.mesonEnable "vapi" withIntrospection)
+      "--cross-file=${crossFile}"
     ]
-    ++ (
-      let
-        # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
-        crossFile = writeText "cross-file.conf" ''
-          [properties]
-          sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
-        '';
-      in
-      [
-        "--cross-file=${crossFile}"
-      ]
-    )
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dsystemd_user_services=false"
-    ];
+  );
 
   doCheck = true;
 

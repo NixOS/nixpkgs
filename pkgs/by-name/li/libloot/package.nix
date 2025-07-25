@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocs [ "doc" ];
+  ]
+  ++ lib.optionals withDocs [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "loot";
@@ -52,17 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      python3Packages.sphinx
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    python3Packages.sphinx
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+  ];
 
   buildInputs = [
     boost

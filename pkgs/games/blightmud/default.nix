@@ -30,10 +30,11 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals (withTTS && stdenv.hostPlatform.isLinux) [ speechd-minimal ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   checkFlags =
     let

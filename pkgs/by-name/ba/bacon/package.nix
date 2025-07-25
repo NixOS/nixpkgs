@@ -43,13 +43,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "sound"
   ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals withSound [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withSound [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals withSound soundDependencies;
 

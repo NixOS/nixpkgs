@@ -81,10 +81,7 @@ The function understands several forms of source directory trees:
 
 For instance, packaging the Bresenham algorithm for line interpolation looks like this, see `pkgs/development/compilers/factor-lang/vocabs/bresenham` for the complete file:
 ```nix
-{
-  factorPackages,
-  fetchFromGitHub,
-}:
+{ factorPackages, fetchFromGitHub }:
 
 factorPackages.buildFactorVocab {
   pname = "bresenham";

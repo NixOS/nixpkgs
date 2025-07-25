@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
   };
 
-  buildInputs =
-    [
-      libpq
-      openssl
-    ]
-    ++ lib.optional withLibiodbc libiodbc
-    ++ lib.optional withUnixODBC unixODBC;
+  buildInputs = [
+    libpq
+    openssl
+  ]
+  ++ lib.optional withLibiodbc libiodbc
+  ++ lib.optional withUnixODBC unixODBC;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -39,22 +38,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  passthru =
-    {
-      updateScript = nix-update-script { };
-    }
-    // lib.optionalAttrs withUnixODBC {
-      fancyName = "PostgreSQL";
-      driver = "lib/psqlodbcw.so";
-    };
+  passthru = {
+    updateScript = nix-update-script { };
+  }
+  // lib.optionalAttrs withUnixODBC {
+    fancyName = "PostgreSQL";
+    driver = "lib/psqlodbcw.so";
+  };
 
-  configureFlags =
-    [
-      "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
-      "--with-libpq=${lib.getDev libpq}"
-    ]
-    ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
-    ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
+  configureFlags = [
+    "CPPFLAGS=-DSQLCOLATTRIBUTE_SQLLEN" # needed for cross
+    "--with-libpq=${lib.getDev libpq}"
+  ]
+  ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}"
+  ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}";
 
   meta = with lib; {
     homepage = "https://odbc.postgresql.org/";

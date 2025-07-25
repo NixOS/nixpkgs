@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    XDP_COSMIC = lib.getExe xdg-desktop-portal-cosmic;
+    XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
     ORCA = "orca"; # get orca from $PATH
   };
 

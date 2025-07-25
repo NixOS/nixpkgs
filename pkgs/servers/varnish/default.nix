@@ -41,19 +41,18 @@ let
         sphinx
         makeWrapper
       ];
-      buildInputs =
-        [
-          libxslt
-          groff
-          ncurses
-          readline
-          libedit
-          python3
-        ]
-        ++ lib.optional (lib.versionOlder version "7") pcre
-        ++ lib.optional (lib.versionAtLeast version "7") pcre2
-        ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
-        ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+      buildInputs = [
+        libxslt
+        groff
+        ncurses
+        readline
+        libedit
+        python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/run" ];
 

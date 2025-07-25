@@ -23,14 +23,13 @@ stdenv.mkDerivation rec {
   pname = "libdmapsharing";
   version = "3.9.13";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withGtkDoc [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withGtkDoc [
+    "devdoc"
+  ];
 
   outputBin = "dev";
 
@@ -44,31 +43,29 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      libtool
-      gtk-doc # gtkdocize
-      pkg-config
-      gobject-introspection
-      vala
-    ]
-    ++ lib.optionals withGtkDoc [
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    gtk-doc # gtkdocize
+    pkg-config
+    gobject-introspection
+    vala
+  ]
+  ++ lib.optionals withGtkDoc [
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ];
 
-  buildInputs =
-    [
-      avahi
-      gdk-pixbuf
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ]
-    ++ lib.optionals withGtkDoc [
-      gtk-doc
-    ];
+  buildInputs = [
+    avahi
+    gdk-pixbuf
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]
+  ++ lib.optionals withGtkDoc [
+    gtk-doc
+  ];
 
   propagatedBuildInputs = [
     glib

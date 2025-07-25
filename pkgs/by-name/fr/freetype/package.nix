@@ -58,19 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
   ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs =
-    [
-      pkg-config
-      which
-      __flattenIncludeHackHook
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
-    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-    ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
+  nativeBuildInputs = [
+    pkg-config
+    which
+    __flattenIncludeHackHook
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
 
   patches = [
     ./enable-table-validation.patch
-  ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
+  ]
+  ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [
     "out"
@@ -96,16 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   # pkgsCross.mingwW64.pkg-config doesn't build
   # makeWrapper doesn't cross-compile to windows #120726
-  postInstall =
-    ''
-      substituteInPlace $dev/bin/freetype-config \
-        --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
+  postInstall = ''
+    substituteInPlace $dev/bin/freetype-config \
+      --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
 
-      wrapProgram "$dev/bin/freetype-config" \
-        --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
-    '';
+    wrapProgram "$dev/bin/freetype-config" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+  '';
 
   passthru.tests = {
     inherit

@@ -30,14 +30,13 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      libsodium
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libseccomp
-    ];
+  buildInputs = [
+    libsodium
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libseccomp
+  ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"
   # in "checkPhase", hence fails in sandbox of "nix".

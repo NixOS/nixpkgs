@@ -52,7 +52,8 @@ buildPythonPackage rec {
     pyyaml
     pytest-django
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";

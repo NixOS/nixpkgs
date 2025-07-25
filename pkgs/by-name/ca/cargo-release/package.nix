@@ -28,14 +28,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   nativeCheckInputs = [
     git

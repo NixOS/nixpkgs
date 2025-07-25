@@ -77,14 +77,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-function-inclusion-fixes-for-gcc14.patch ];
 
-  postPatch =
-    ''
-      sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Don't fix Darwin app bundle
-      sed -i '/fixup_bundle/d' CMakeLists.txt
-    '';
+  postPatch = ''
+    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Don't fix Darwin app bundle
+    sed -i '/fixup_bundle/d' CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -111,14 +110,13 @@ stdenv.mkDerivation rec {
     yaml-cpp
   ];
 
-  cmakeFlags =
-    [
-      "-DOpenGL_GL_PREFERENCE=${GL}"
-      "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DOPENMW_OSX_DEPLOYMENT=ON"
-    ];
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=${GL}"
+    "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DOPENMW_OSX_DEPLOYMENT=ON"
+  ];
 
   meta = with lib; {
     description = "Unofficial open source engine reimplementation of the game Morrowind";

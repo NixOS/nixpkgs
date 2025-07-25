@@ -310,7 +310,8 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.server;
+  ]
+  ++ optional-dependencies.server;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";

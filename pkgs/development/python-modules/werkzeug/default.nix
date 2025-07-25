@@ -52,7 +52,8 @@ buildPythonPackage rec {
     ephemeral-port-reserve
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "werkzeug" ];
 
@@ -62,7 +63,8 @@ buildPythonPackage rec {
     # ResourceWarning: subprocess 309 is still running
     "test_basic"
     "test_long_build"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused

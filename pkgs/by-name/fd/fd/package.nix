@@ -35,16 +35,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_invalid_utf8"
   ];
 
-  postInstall =
-    ''
-      installManPage doc/fd.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd fd \
-        --bash <($out/bin/fd --gen-completions bash) \
-        --fish <($out/bin/fd --gen-completions fish)
-      installShellCompletion --zsh contrib/completion/_fd
-    '';
+  postInstall = ''
+    installManPage doc/fd.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
+    installShellCompletion --zsh contrib/completion/_fd
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = fd;

@@ -25,21 +25,21 @@ stdenv.mkDerivation rec {
   ];
   outputBin = "dev";
 
-  preConfigure =
-    ''
-      cd nspr
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace '@executable_path/' "$out/lib/"
-      substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
-    '';
+  preConfigure = ''
+    cd nspr
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
+    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
+  '';
 
   HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
-  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
+  ]
+  ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
   postInstall = ''
     find $out -name "*.a" -delete

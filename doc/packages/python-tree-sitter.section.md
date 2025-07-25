@@ -8,7 +8,7 @@ For example, to experiment with the Rust grammar, you can create a shell environ
 
 ```nix
 {
-  pkgs ? <nixpkgs> { },
+  pkgs ? import <nixpkgs> { },
 }:
 
 pkgs.mkShell {

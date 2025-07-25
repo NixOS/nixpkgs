@@ -8,19 +8,19 @@
   gitMinimal,
 }:
 let
-  version = "1.4.1";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-0RmX/uANgU/di3Iu0V6Oe3jZj4ikzeegW/XQUZhPgRc=";
+    hash = "sha256-IHRYgKcYP+JDGu8Vtawgzlhq25vpROFqb8KmpfVMwCk=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-/8eiZyJEwPXAviwVMFTr+NKSwMwxdraKtrlXNU0cBM4=";
+    cargoHash = "sha256-QsVCugYWRri4qu64wHnbJQZBhy4tQrr+gCYbXtRBlqE=";
 
     nativeBuildInputs = [ gitMinimal ];
 
@@ -58,6 +58,7 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       balssh
       redxtech
+      llakala
     ];
   };
 

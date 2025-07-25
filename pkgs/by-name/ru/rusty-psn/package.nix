@@ -35,46 +35,43 @@ rustPlatform.buildRustPackage rec {
   # Tests require network access
   doCheck = false;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals withGui [
-      copyDesktopItems
-      cmake
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals withGui [
+    copyDesktopItems
+    cmake
+  ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals withGui [
-      fontconfig
-      glib
-      gtk3
-      freetype
-      openssl
-      xorg.libxcb
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXrandr
-      xorg.libXi
-      xorg.libxcb
-      libGL
-      libxkbcommon
-      wayland
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals withGui [
+    fontconfig
+    glib
+    gtk3
+    freetype
+    openssl
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libxcb
+    libGL
+    libxkbcommon
+    wayland
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ (if withGui then "egui" else "cli") ];
 
-  postFixup =
-    ''
-      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
-    ''
-    + lib.optionalString withGui ''
-      mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
-    '';
+  postFixup = ''
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
+  ''
+  + lib.optionalString withGui ''
+    mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
+  '';
 
   desktopItem = lib.optionalString withGui (makeDesktopItem {
     name = "rusty-psn";

@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     libopus
     openssl
-  ] ++ lib.optional withNotifications libnotify;
+  ]
+  ++ lib.optional withNotifications libnotify;
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withNotifications "notifications" ++ lib.optional withOgg "ogg";

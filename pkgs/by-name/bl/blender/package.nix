@@ -15,6 +15,7 @@
   dbus,
   embree,
   fetchzip,
+  fetchFromGitHub,
   ffmpeg,
   fftw,
   fftwFloat,
@@ -48,6 +49,7 @@
   libxkbcommon,
   llvmPackages,
   makeWrapper,
+  manifold,
   mesa,
   nix-update-script,
   openUsdSupport ? !stdenv.hostPlatform.isDarwin,
@@ -56,7 +58,7 @@
   opencolorio,
   openexr,
   openimagedenoise,
-  openimageio_2,
+  openimageio,
   openjpeg,
   openpgl,
   opensubdiv,
@@ -72,7 +74,7 @@
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  tbb,
+  tbb_2022,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -100,25 +102,26 @@ let
     patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
   });
 
-  optix = fetchzip {
-    # Look at upstream Blender BuildBot logs to determine the current version,
-    # see Git blame here for historical details
-    url = "https://developer.download.nvidia.com/redist/optix/v7.4/OptiX-7.4.0-Include.zip";
-    hash = "sha256-ca08XetwaUYC9foeP5bff9kcDfuFgEzopvjspn2s8RY=";
+  # See build_files/config/pipeline_config.yaml in upstream source for version
+  optix = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "optix-dev";
+    tag = "v8.0.0";
+    hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
   };
+
+  tbb = tbb_2022;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.4.3";
+  version = "4.5.0";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vHDOKI7uqB5EbdRu711axBuYX1zM746E6GvK2Nl5hZg=";
+    hash = "sha256-ERT/apulQ9ogA7Uk/AfjBee0rLjxEXItw6GwDOoysXk=";
   };
-
-  patches = [ ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -140,65 +143,64 @@ stdenv'.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
-  cmakeFlags =
-    [
-      "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
-      "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
-      "-DPYTHON_LIBPATH=${python3}/lib"
-      "-DPYTHON_LIBRARY=${python3.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
-      "-DPYTHON_VERSION=${python3.pythonVersion}"
-      "-DWITH_ALEMBIC=ON"
-      "-DWITH_ASSERT_ABORT=OFF"
-      "-DWITH_BUILDINFO=OFF"
-      "-DWITH_CODEC_FFMPEG=ON"
-      "-DWITH_CODEC_SNDFILE=ON"
-      "-DWITH_CPU_CHECK=OFF"
-      "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
-      "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
-      "-DWITH_CYCLES_OSL=OFF"
-      "-DWITH_FFTW3=ON"
-      "-DWITH_HYDRA=${if openUsdSupport then "ON" else "OFF"}"
-      "-DWITH_IMAGE_OPENJPEG=ON"
-      "-DWITH_INSTALL_PORTABLE=OFF"
-      "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
-      "-DWITH_LIBS_PRECOMPILED=OFF"
-      "-DWITH_MOD_OCEANSIM=ON"
-      "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
-      "-DWITH_OPENCOLORIO=ON"
-      "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
-      "-DWITH_OPENSUBDIV=ON"
-      "-DWITH_OPENVDB=ON"
-      "-DWITH_PIPEWIRE=OFF"
-      "-DWITH_PULSEAUDIO=OFF"
-      "-DWITH_PYTHON_INSTALL=OFF"
-      "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
-      "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
-      "-DWITH_SDL=OFF"
-      "-DWITH_STRICT_BUILD_OPTIONS=ON"
-      "-DWITH_TBB=ON"
-      "-DWITH_USD=${if openUsdSupport then "ON" else "OFF"}"
+  cmakeFlags = [
+    "-DMaterialX_DIR=${python3Packages.materialx}/lib/cmake/MaterialX"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+    "-DPYTHON_LIBPATH=${python3}/lib"
+    "-DPYTHON_LIBRARY=${python3.libPrefix}"
+    "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
+    "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
+    "-DPYTHON_VERSION=${python3.pythonVersion}"
+    "-DWITH_ALEMBIC=ON"
+    "-DWITH_ASSERT_ABORT=OFF"
+    "-DWITH_BUILDINFO=OFF"
+    "-DWITH_CODEC_FFMPEG=ON"
+    "-DWITH_CODEC_SNDFILE=ON"
+    "-DWITH_CPU_CHECK=OFF"
+    "-DWITH_CYCLES_DEVICE_OPTIX=${if cudaSupport then "ON" else "OFF"}"
+    "-DWITH_CYCLES_EMBREE=${if embreeSupport then "ON" else "OFF"}"
+    "-DWITH_CYCLES_OSL=OFF"
+    "-DWITH_FFTW3=ON"
+    "-DWITH_HYDRA=${if openUsdSupport then "ON" else "OFF"}"
+    "-DWITH_IMAGE_OPENJPEG=ON"
+    "-DWITH_INSTALL_PORTABLE=OFF"
+    "-DWITH_JACK=${if jackaudioSupport then "ON" else "OFF"}"
+    "-DWITH_LIBS_PRECOMPILED=OFF"
+    "-DWITH_MOD_OCEANSIM=ON"
+    "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
+    "-DWITH_OPENCOLORIO=ON"
+    "-DWITH_OPENIMAGEDENOISE=${if openImageDenoiseSupport then "ON" else "OFF"}"
+    "-DWITH_OPENSUBDIV=ON"
+    "-DWITH_OPENVDB=ON"
+    "-DWITH_PIPEWIRE=OFF"
+    "-DWITH_PULSEAUDIO=OFF"
+    "-DWITH_PYTHON_INSTALL=OFF"
+    "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
+    "-DWITH_PYTHON_INSTALL_REQUESTS=OFF"
+    "-DWITH_SDL=OFF"
+    "-DWITH_STRICT_BUILD_OPTIONS=ON"
+    "-DWITH_TBB=ON"
+    "-DWITH_USD=${if openUsdSupport then "ON" else "OFF"}"
 
-      # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
-      "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
-      "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
-    ]
-    ++ lib.optionals waylandSupport [
-      "-DWITH_GHOST_WAYLAND=ON"
-      "-DWITH_GHOST_WAYLAND_DBUS=ON"
-      "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
-      "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DLIBDIR=/does-not-exist"
-      "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
-    ]
-    ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
-    ++ lib.optionals cudaSupport [
-      "-DOPTIX_ROOT_DIR=${optix}"
-      "-DWITH_CYCLES_CUDA_BINARIES=ON"
-    ];
+    # Blender supplies its own FindAlembic.cmake (incompatible with the Alembic-supplied config file)
+    "-DALEMBIC_INCLUDE_DIR=${lib.getDev alembic}/include"
+    "-DALEMBIC_LIBRARY=${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ]
+  ++ lib.optionals waylandSupport [
+    "-DWITH_GHOST_WAYLAND=ON"
+    "-DWITH_GHOST_WAYLAND_DBUS=ON"
+    "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
+    "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DLIBDIR=/does-not-exist"
+    "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
+  ]
+  ++ lib.optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS=" # Clang doesn't support "-export-dynamic"
+  ++ lib.optionals cudaSupport [
+    "-DOPTIX_ROOT_DIR=${optix}"
+    "-DWITH_CYCLES_CUDA_BINARIES=ON"
+  ];
 
   preConfigure = ''
     (
@@ -211,101 +213,100 @@ stdenv'.mkDerivation (finalAttrs: {
     )
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.llvm.dev
-      makeWrapper
-      python3Packages.wrapPython
-    ]
-    ++ lib.optionals cudaSupport [
-      addDriverRunpath
-      cudaPackages.cuda_nvcc
-    ]
-    ++ lib.optionals waylandSupport [
-      pkg-config
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.llvm.dev
+    makeWrapper
+    python3Packages.wrapPython
+  ]
+  ++ lib.optionals cudaSupport [
+    addDriverRunpath
+    cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals waylandSupport [
+    pkg-config
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      alembic
-      boost
-      ffmpeg
-      fftw
-      fftwFloat
-      freetype
-      gettext
-      glew
-      gmp
-      jemalloc
-      libepoxy
-      libharu
-      libjpeg
-      libpng
-      libsamplerate
-      libsndfile
-      libtiff
-      libwebp
-      opencolorio
-      openexr
-      openimageio_2
-      openjpeg
-      openpgl
-      (opensubdiv.override { inherit cudaSupport; })
-      openvdb
-      potrace
-      pugixml
-      python3
-      python3Packages.materialx
-      tbb
-      zlib
-      zstd
-    ]
-    ++ lib.optional embreeSupport embree
-    ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
-    ++ (
-      if (!stdenv.hostPlatform.isDarwin) then
-        [
-          libGL
-          libGLU
-          libX11
-          libXext
-          libXi
-          libXrender
-          libXxf86vm
-          openal
-          openxr-loader
-        ]
-      else
-        [
-          SDL
-          # blender chooses Metal features based on runtime system version
-          # lets use the latest SDK and let Blender handle falling back on older systems.
-          apple-sdk_15
-          brotli
-          llvmPackages.openmp
-          sse2neon
-        ]
-    )
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
-    ++ lib.optionals waylandSupport [
-      dbus
-      libdecor'
-      libffi
-      libxkbcommon
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional colladaSupport opencollada-blender
-    ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional spaceNavSupport libspnav
-    ++ lib.optionals vulkanSupport [
-      shaderc
-      vulkan-headers
-      vulkan-loader
-    ];
+  buildInputs = [
+    alembic
+    boost
+    ffmpeg
+    fftw
+    fftwFloat
+    freetype
+    gettext
+    glew
+    gmp
+    jemalloc
+    libepoxy
+    libharu
+    libjpeg
+    libpng
+    libsamplerate
+    libsndfile
+    libtiff
+    libwebp
+    (manifold.override { tbb_2021 = tbb; })
+    opencolorio
+    openexr
+    openimageio
+    openjpeg
+    (openpgl.override { inherit tbb; })
+    (opensubdiv.override { inherit cudaSupport; })
+    (openvdb.override { inherit tbb; })
+    potrace
+    pugixml
+    python3
+    python3Packages.materialx
+    tbb
+    zlib
+    zstd
+  ]
+  ++ lib.optional embreeSupport embree
+  ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
+  ++ (
+    if (!stdenv.hostPlatform.isDarwin) then
+      [
+        libGL
+        libGLU
+        libX11
+        libXext
+        libXi
+        libXrender
+        libXxf86vm
+        openal
+        openxr-loader
+      ]
+    else
+      [
+        SDL
+        # blender chooses Metal features based on runtime system version
+        # lets use the latest SDK and let Blender handle falling back on older systems.
+        apple-sdk_15
+        brotli
+        llvmPackages.openmp
+        sse2neon
+      ]
+  )
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ]
+  ++ lib.optionals waylandSupport [
+    dbus
+    libdecor'
+    libffi
+    libxkbcommon
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional colladaSupport opencollada-blender
+  ++ lib.optional jackaudioSupport libjack2
+  ++ lib.optional spaceNavSupport libspnav
+  ++ lib.optionals vulkanSupport [
+    shaderc
+    vulkan-headers
+    vulkan-loader
+  ];
 
   pythonPath =
     let
@@ -419,6 +420,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they

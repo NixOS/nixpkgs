@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
+  hardeningDisable = [
+    # causes tests tset_ld & tsprintf to fail
+    "trivialautovarinit"
+  ];
+
   configureFlags =
     lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
     ++ lib.optional stdenv.hostPlatform.is64bit "--with-pic"

@@ -23,24 +23,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.3";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-IzerctJUc478dJu2AH20s/A3psiAZWDjQG3USQWqpos=";
+    hash = "sha256-5wSUDNFQ6GWT9aGO3Msm+GFSXpNcty8L8UdGw4R0GDw=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional tlsSupport openssl;
+  buildInputs = [
+    lua
+  ]
+  ++ lib.optional useSystemJemalloc jemalloc
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
 
@@ -49,14 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -70,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
@@ -85,12 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
-    # skip some more flaky tests
+    # Skip some more flaky tests.
+    # Skip test requiring custom jemalloc (unit/memefficiency).
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit unit/memefficiency \
       --skipunit integration/failover \
       --skipunit integration/aof-multi-part
 

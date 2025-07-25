@@ -2,23 +2,29 @@
   stdenv,
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   pkg-config,
   alsa-lib,
-  rust,
   udevCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.0.2";
+  version = "1.1.2";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-3DzBNebg1y/+psD2zOpDsnRJmabQLeO1UMxPq9M0CsU=";
+  src = fetchFromGitHub {
+    owner = "AsahiLinux";
+    repo = "speakersafetyd";
+    tag = finalAttrs.version;
+    hash = "sha256-sSGoF2c5HfPM2FBrBJwJ9NvExYijGx6JH1bJp3epfe0=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DnOnqi60JsRX8yqEM/5zZ3yX/rk85/ruwL3aW1FRXKg=";
+
+  cargoHash = "sha256-9XbrIY1VwnHtqi/ZfS952SyjNjA/TJRdOqCsPReZI8o=";
+
+  patches = [
+    ./remove-install-paths.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -27,32 +33,43 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ alsa-lib ];
 
   postPatch = ''
-    substituteInPlace speakersafetyd.service --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "target/release" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
-    # creating files in /var does not make sense in a nix package
-    substituteInPlace Makefile --replace 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
+    substituteInPlace speakersafetyd.service \
+      --replace-fail "User=speakersafetyd" \
+                     "" \
+      --replace-fail "/usr" \
+                     "$out"
+
+    substituteInPlace Makefile \
+      --replace-fail "target/release" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
   '';
 
   installFlags = [
-    "BINDIR=$(out)/bin"
-    "UNITDIR=$(out)/lib/systemd/system"
-    "UDEVDIR=$(out)/lib/udev/rules.d"
-    "SHAREDIR=$(out)/share"
-    "TMPFILESDIR=$(out)/lib/tmpfiles.d"
+    "DESTDIR=$(out)"
+    "BINDIR=bin"
+    "UNITDIR=lib/systemd/system"
+    "UDEVDIR=lib/udev/rules.d"
+    "SHAREDIR=share"
+    "TMPFILESDIR=lib/tmpfiles.d"
   ];
 
   dontCargoInstall = true;
   doInstallCheck = true;
 
-  meta = with lib; {
-    description = "Userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Userspace daemon that implements the Smart Amp protection model";
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      normalcea
       flokli
       yuka
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
-}
+})

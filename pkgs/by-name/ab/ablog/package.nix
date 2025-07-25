@@ -39,13 +39,10 @@ python3Packages.buildPythonApplication rec {
     defusedxml
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning"
-    "--rootdir"
-    "src/ablog"
-    "-W"
-    "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
+  pytestFlags = [
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning"
+    "--rootdir=src/ablog"
+    "-Wignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
   # assert "post 1" not in html
@@ -55,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    description = "ABlog for blogging with Sphinx";
+    description = "Sphinx extension that converts any documentation or personal website project into a full-fledged blog";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
     license = lib.licenses.mit;

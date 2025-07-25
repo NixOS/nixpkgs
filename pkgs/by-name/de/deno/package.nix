@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   cmake,
   yq,
@@ -30,46 +29,37 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.3.6";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-l3cWnv2cEmoeecYj38eMIlgqlRjDbtQuc6Q3DmOJoqE=";
+    hash = "sha256-7VHw+jjQ/N2b2AIBrGBcnLJ/k3MRkPnKRHD134A7mmw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-alvn+d7XTYrw8KXw+k+++J3CsBwAUbQQlh24/EOEzwY=";
-  cargoPatches = [
-    (fetchpatch {
-      name = "fix-sigsegv-on-x86_64-unknown-linux-gnu-targets";
-      url = "https://github.com/denoland/deno/commit/400a9565c335b51d78c8909f4dbf1dbd4fb5e5d8.patch";
-      hash = "sha256-dTIw7P6sB6Esf+lSe/gc3cX54GkzLWF5X55yxP/QYoo=";
-      includes = [ "cli/Cargo.toml" ];
-    })
-  ];
+  cargoHash = "sha256-ZEWSnath9v04wU1VyFDAx3LANnVhfE5s93jX4QW3XlI=";
 
   patches = [
     ./tests-replace-hardcoded-paths.patch
     ./tests-darwin-differences.patch
     ./tests-no-chown.patch
   ];
-  postPatch =
-    ''
-      # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-      tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
-        ''
-          # LTO crashes with the latest Rust + LLVM combination.
-          # https://github.com/rust-lang/rust/issues/141737
-          # TODO: remove this once LLVM is upgraded to 20.1.7
-          tomlq -ti '.profile.release.lto = false' Cargo.toml
-        '';
+  postPatch = ''
+    # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
+      ''
+        # LTO crashes with the latest Rust + LLVM combination.
+        # https://github.com/rust-lang/rust/issues/141737
+        # TODO: remove this once LLVM is upgraded to 20.1.7
+        tomlq -ti '.profile.release.lto = false' Cargo.toml
+      '';
 
   buildInputs = [
     libffi
@@ -87,7 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
@@ -149,48 +140,47 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
     #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
   ];
-  checkFlags =
-    [
-      # Internet access
-      "--skip=check::ts_no_recheck_on_redirect"
-      "--skip=js_unit_tests::quic_test"
-      "--skip=js_unit_tests::net_test"
-      "--skip=node_unit_tests::http_test"
-      "--skip=node_unit_tests::http2_test"
-      "--skip=node_unit_tests::net_test"
-      "--skip=node_unit_tests::tls_test"
-      "--skip=npm::lock_file_lock_write"
+  checkFlags = [
+    # Internet access
+    "--skip=check::ts_no_recheck_on_redirect"
+    "--skip=js_unit_tests::quic_test"
+    "--skip=js_unit_tests::net_test"
+    "--skip=node_unit_tests::http_test"
+    "--skip=node_unit_tests::http2_test"
+    "--skip=node_unit_tests::net_test"
+    "--skip=node_unit_tests::tls_test"
+    "--skip=npm::lock_file_lock_write"
 
-      # GPU access
-      "--skip=js_unit_tests::webgpu_test"
-      "--skip=js_unit_tests::jupyter_test"
+    # GPU access
+    "--skip=js_unit_tests::webgpu_test"
+    "--skip=js_unit_tests::jupyter_test"
 
-      # Use of /usr/bin
-      "--skip=specs::permission::proc_self_fd"
+    # Use of /usr/bin
+    "--skip=specs::permission::proc_self_fd"
 
-      # Flaky
-      "--skip=init::init_subcommand_serve"
-      "--skip=serve::deno_serve_parallel"
-      "--skip=js_unit_tests::stat_test" # timing-sensitive
-      "--skip=repl::pty_complete_imports"
-      "--skip=repl::pty_complete_expression"
+    # Flaky
+    "--skip=init::init_subcommand_serve"
+    "--skip=serve::deno_serve_parallel"
+    "--skip=js_unit_tests::stat_test" # timing-sensitive
+    "--skip=repl::pty_complete_imports"
+    "--skip=repl::pty_complete_expression"
 
-      # Test hangs, needs investigation
-      "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+    # Test hangs, needs investigation
+    "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
 
-      # Use of VSOCK, might not be available on all platforms
-      "--skip=js_unit_tests::serve_test"
-      "--skip=js_unit_tests::fetch_test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Expects specific shared libraries from macOS to be linked
-      "--skip=shared_library_tests::macos_shared_libraries"
+    # Use of VSOCK, might not be available on all platforms
+    "--skip=js_unit_tests::serve_test"
+    "--skip=js_unit_tests::fetch_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Expects specific shared libraries from macOS to be linked
+    "--skip=shared_library_tests::macos_shared_libraries"
 
-      # Darwin sandbox issues
-      "--skip=watcher"
-      "--skip=node_unit_tests::_fs_watch_test"
-      "--skip=js_unit_tests::fs_events_test"
-    ];
+    # Darwin sandbox issues
+    "--skip=watcher"
+    "--skip=node_unit_tests::_fs_watch_test"
+    "--skip=js_unit_tests::fs_events_test"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

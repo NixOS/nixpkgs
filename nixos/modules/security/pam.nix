@@ -2270,16 +2270,17 @@ in
           a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
           See https://github.com/NixOS/nixpkgs/issues/31611
         ''
-      ++ lib.optional
-        (
-          with config.security.pam.rssh;
-          enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
-        )
-        ''
-          security.pam.rssh.settings.auth_key_file will be ignored as
-          security.pam.rssh.settings.authorized_keys_command has been specified.
-          Explictly set the former to null to silence this warning.
-        '';
+      ++
+        lib.optional
+          (
+            with config.security.pam.rssh;
+            enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
+          )
+          ''
+            security.pam.rssh.settings.auth_key_file will be ignored as
+            security.pam.rssh.settings.authorized_keys_command has been specified.
+            Explictly set the former to null to silence this warning.
+          '';
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
@@ -2310,46 +2311,45 @@ in
 
     environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
-    security.pam.services =
-      {
-        other.text = ''
-          auth     required pam_warn.so
-          auth     required pam_deny.so
-          account  required pam_warn.so
-          account  required pam_deny.so
-          password required pam_warn.so
-          password required pam_deny.so
-          session  required pam_warn.so
-          session  required pam_deny.so
-        '';
+    security.pam.services = {
+      other.text = ''
+        auth     required pam_warn.so
+        auth     required pam_deny.so
+        account  required pam_warn.so
+        account  required pam_deny.so
+        password required pam_warn.so
+        password required pam_deny.so
+        session  required pam_warn.so
+        session  required pam_deny.so
+      '';
 
-        # Most of these should be moved to specific modules.
-        i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
-        i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
-        vlock.enable = lib.mkDefault config.console.enable;
-        xlock.enable = lib.mkDefault config.services.xserver.enable;
-        xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
+      # Most of these should be moved to specific modules.
+      i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
+      i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
+      vlock.enable = lib.mkDefault config.console.enable;
+      xlock.enable = lib.mkDefault config.services.xserver.enable;
+      xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
 
-        runuser = {
-          rootOK = true;
-          unixAuth = false;
-          setEnvironment = false;
-        };
-
-        /*
-          FIXME: should runuser -l start a systemd session? Currently
-          it complains "Cannot create session: Already running in a
-          session".
-        */
-        runuser-l = {
-          rootOK = true;
-          unixAuth = false;
-        };
-      }
-      // lib.optionalAttrs (config.security.pam.enableFscrypt) {
-        # Allow fscrypt to verify login passphrase
-        fscrypt = { };
+      runuser = {
+        rootOK = true;
+        unixAuth = false;
+        setEnvironment = false;
       };
+
+      /*
+        FIXME: should runuser -l start a systemd session? Currently
+        it complains "Cannot create session: Already running in a
+        session".
+      */
+      runuser-l = {
+        rootOK = true;
+        unixAuth = false;
+      };
+    }
+    // lib.optionalAttrs (config.security.pam.enableFscrypt) {
+      # Allow fscrypt to verify login passphrase
+      fscrypt = { };
+    };
 
     security.apparmor.includes."abstractions/pam" =
       lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (

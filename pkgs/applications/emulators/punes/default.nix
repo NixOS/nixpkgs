@@ -54,21 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      ffmpeg
-      libGLU
-      qtbase
-      qtsvg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libX11
-      libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isBSD [
-      sndio
-    ];
+  buildInputs = [
+    ffmpeg
+    libGLU
+    qtbase
+    qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libX11
+    libXrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isBSD [
+    sndio
+  ];
 
   cmakeFlags = [
     "-DENABLE_GIT_INFO=OFF"

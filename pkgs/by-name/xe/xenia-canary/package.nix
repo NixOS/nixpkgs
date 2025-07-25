@@ -12,21 +12,21 @@
   wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
-  llvmPackages_18,
+  llvmPackages_20,
   autoPatchelfHook,
   unstableGitUpdater,
   fetchFromGitHub,
 }:
-llvmPackages_18.stdenv.mkDerivation {
+llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-06-14";
+  version = "0-unstable-2025-07-07";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "f65f044ee51360de6dd26f5ea0a247e92d8f2275";
-    hash = "sha256-cxwawoCLE0E/HaELfI3FG4yhk4GRtjB9pCs9gkeM+uc=";
+    rev = "0aeac841b8354806f1c455402edb0815dfe9729e";
+    hash = "sha256-KgFwQSXj5s5WuFboFyKqQRHrzH3ENatqWp0WeHEJgRg=";
   };
 
   dontConfigure = true;

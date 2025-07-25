@@ -38,19 +38,18 @@ stdenv.mkDerivation {
     "--without-openssl-version-check"
   ];
 
-  buildInputs =
-    [
-      gmp
-      libxml2
-      stoken
-      zlib
-      (if useOpenSSL then openssl else gnutls)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      p11-kit
-      pcsclite
-    ]
-    ++ lib.optional useDefaultExternalBrowser xdg-utils;
+  buildInputs = [
+    gmp
+    libxml2
+    stoken
+    zlib
+    (if useOpenSSL then openssl else gnutls)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    p11-kit
+    pcsclite
+  ]
+  ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [
     pkg-config
     autoreconfHook

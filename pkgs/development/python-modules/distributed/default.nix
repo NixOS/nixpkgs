@@ -48,7 +48,8 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml;
 
   pythonRelaxDeps = [ "dask" ];
 

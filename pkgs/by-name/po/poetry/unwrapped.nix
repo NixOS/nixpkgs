@@ -63,41 +63,40 @@ buildPythonPackage rec {
     "virtualenv"
   ];
 
-  dependencies =
-    [
-      build
-      cachecontrol
-      cleo
-      dulwich
-      fastjsonschema
-      findpython
-      installer
-      keyring
-      packaging
-      pbs-installer
-      pkginfo
-      platformdirs
-      poetry-core
-      pyproject-hooks
-      requests
-      requests-toolbelt
-      shellingham
-      tomlkit
-      trove-classifiers
-      virtualenv
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      xattr
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ pbs-installer.optional-dependencies.download
-    ++ pbs-installer.optional-dependencies.install;
+  dependencies = [
+    build
+    cachecontrol
+    cleo
+    dulwich
+    fastjsonschema
+    findpython
+    installer
+    keyring
+    packaging
+    pbs-installer
+    pkginfo
+    platformdirs
+    poetry-core
+    pyproject-hooks
+    requests
+    requests-toolbelt
+    shellingham
+    tomlkit
+    trove-classifiers
+    virtualenv
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    xattr
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ pbs-installer.optional-dependencies.download
+  ++ pbs-installer.optional-dependencies.install;
 
   postInstall = ''
     installShellCompletion --cmd poetry \
@@ -145,6 +144,11 @@ buildPythonPackage rec {
     "test_threading_single_thread_safe"
     "test_threading_property_caching"
     "test_threading_atomic_cached_property_different_instances"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandbox violation:
+    # PermissionError: [Errno 1] Operation not permitted: '/Library/Frameworks/Python.framework/Versions'
+    "test_find_all"
   ];
 
   pytestFlagsArray = [

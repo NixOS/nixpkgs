@@ -182,7 +182,7 @@ in
         after = [
           "network.target"
           "local-fs.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
       };
 

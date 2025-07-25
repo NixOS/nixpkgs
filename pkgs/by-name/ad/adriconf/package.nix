@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "adriconf";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
   };
 

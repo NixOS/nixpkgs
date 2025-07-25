@@ -62,9 +62,7 @@ hash using `nix-hash --to-sri --type sha256 "<original sha256>"`.
 :::
 
 ```nix
-{
-  cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
-}
+{ cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8="; }
 ```
 
 If this method does not work, you can resort to copying the `Cargo.lock` file into nixpkgs
@@ -77,9 +75,7 @@ then be taken from the failed build. A fake hash can be used for
 `cargoHash` as follows:
 
 ```nix
-{
-  cargoHash = lib.fakeHash;
-}
+{ cargoHash = lib.fakeHash; }
 ```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
@@ -478,11 +474,7 @@ and fetches every dependency as a separate fixed-output derivation.
 `importCargoLock` can be used as follows:
 
 ```nix
-{
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
-}
+{ cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; }; }
 ```
 
 If the `Cargo.lock` file includes git dependencies, then their output
@@ -1000,8 +992,8 @@ let
     cargo = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
     rustc = rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
   };
-in
 
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
   version = "14.1.1";

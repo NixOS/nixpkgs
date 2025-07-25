@@ -82,7 +82,8 @@ stdenv.mkDerivation rec {
     boost
     lapack
     suitesparse
-  ] ++ lib.optionals withMPI [ mpi ];
+  ]
+  ++ lib.optionals withMPI [ mpi ];
 
   preConfigure =
     if withMPI then

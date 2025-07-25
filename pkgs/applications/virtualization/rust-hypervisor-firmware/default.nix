@@ -12,14 +12,14 @@ let
 
 in
 
-assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
-
 let
   cross = import ../../../.. {
     system = stdenv.hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
       rust.rustcTarget = "${arch}-unknown-none";
-      rust.platform = lib.importJSON target;
+      rust.platform =
+        assert lib.assertMsg (builtins.pathExists target) "Target spec not found";
+        lib.importJSON target;
     };
   };
 

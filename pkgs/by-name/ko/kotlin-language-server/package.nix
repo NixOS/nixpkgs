@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    mainProgram = "kotlin-language-server";
   };
 }

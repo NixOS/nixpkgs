@@ -37,13 +37,12 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gnome-keyring
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gnome-keyring
+  ];
 
   postPatch = ''
     substituteInPlace src/manage.rs \

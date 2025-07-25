@@ -31,7 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     vulkan-loader

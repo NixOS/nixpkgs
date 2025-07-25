@@ -105,21 +105,20 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs =
-    [
-      hdf5-cpp
-      python
-      armadillo
-      libxc
-      gsl.dev
-      boost
-      blas-ilp64
-      lapack-ilp64
-    ]
-    ++ lib.optionals enableMpi [
-      mpi
-      globalarrays
-    ];
+  buildInputs = [
+    hdf5-cpp
+    python
+    armadillo
+    libxc
+    gsl.dev
+    boost
+    blas-ilp64
+    lapack-ilp64
+  ]
+  ++ lib.optionals enableMpi [
+    mpi
+    globalarrays
+  ];
 
   passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
@@ -139,13 +138,12 @@ stdenv.mkDerivation rec {
     (lib.strings.cmakeBool "MPI" enableMpi)
   ];
 
-  preConfigure =
-    ''
-      cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
-    ''
-    + lib.optionalString enableMpi ''
-      export GAROOT=${globalarrays};
-    '';
+  preConfigure = ''
+    cmakeFlagsArray+=("-DLINALG_LIBRARIES=-lblas -llapack")
+  ''
+  + lib.optionalString enableMpi ''
+    export GAROOT=${globalarrays};
+  '';
 
   # The Makefile will install pymolcas during the build grrr.
   postConfigure = ''

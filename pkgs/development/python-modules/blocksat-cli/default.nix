@@ -46,7 +46,8 @@ buildPythonPackage rec {
     python-gnupg
     qrcode
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -69,32 +69,33 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.07";
 
-  nativeBuildInputs =
-    [ perl ]
-    ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
-    ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  nativeBuildInputs = [
+    perl
+  ]
+  ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
   buildInputs = [
     ncurses
-  ] ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
 
-  propagatedBuildInputs =
-    [
-      re
-      stdlib-shims
-    ]
-    ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
-    ++ (
-      if lib.versionAtLeast version "1.13" || version == "dev" then
-        [
-          ppxlib
-          ppx_deriving
-        ]
-      else
-        [
-          ppxlib_0_15
-          ppx_deriving_0_15
-        ]
-    );
+  propagatedBuildInputs = [
+    re
+    stdlib-shims
+  ]
+  ++ (if lib.versionAtLeast version "1.15" || version == "dev" then [ menhirLib ] else [ camlp5 ])
+  ++ (
+    if lib.versionAtLeast version "1.13" || version == "dev" then
+      [
+        ppxlib
+        ppx_deriving
+      ]
+    else
+      [
+        ppxlib_0_15
+        ppx_deriving_0_15
+      ]
+  );
 
   meta = with lib; {
     description = "Embeddable λProlog Interpreter";
@@ -103,11 +104,10 @@ buildDunePackage {
     homepage = "https://github.com/LPCIC/elpi";
   };
 
-  postPatch =
-    ''
-      substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
-    ''
-    + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
-      substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
-    '';
+  postPatch = ''
+    substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
+  ''
+  + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
+    substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
+  '';
 }

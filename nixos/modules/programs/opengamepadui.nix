@@ -264,7 +264,8 @@ in
 
     environment.systemPackages = [
       cfg.package
-    ] ++ lib.optional cfg.gamescopeSession.enable opengamepadui-gamescope;
+    ]
+    ++ lib.optional cfg.gamescopeSession.enable opengamepadui-gamescope;
   };
 
   meta.maintainers = with lib.maintainers; [ shadowapex ];

@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pluggy";
   version = "0.13.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

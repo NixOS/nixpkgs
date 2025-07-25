@@ -43,23 +43,22 @@ stdenv.mkDerivation {
     libarchive
   ];
 
-  postPatch =
-    ''
-      # Fix a /usr/bin/env reference in here that breaks sandboxed builds
-      patchShebangs arch/lkl/scripts
+  postPatch = ''
+    # Fix a /usr/bin/env reference in here that breaks sandboxed builds
+    patchShebangs arch/lkl/scripts
 
-      patchShebangs scripts/ld-version.sh
+    patchShebangs scripts/ld-version.sh
 
-      # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
-      sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
-      echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
-      echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
-    ''
-    + lib.optionalString firewallSupport ''
-      cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
-    '';
+    # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
+    sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isLoongArch64) ''
+    echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
+    echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
+  ''
+  + lib.optionalString firewallSupport ''
+    cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $lib/lib $dev

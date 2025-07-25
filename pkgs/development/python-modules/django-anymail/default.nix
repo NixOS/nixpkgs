@@ -38,7 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     responses
-  ] ++ optional-dependencies.amazon-ses;
+  ]
+  ++ optional-dependencies.amazon-ses;
 
   optional-dependencies = {
     amazon-ses = [ boto3 ];

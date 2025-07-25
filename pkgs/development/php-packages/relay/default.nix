@@ -81,47 +81,46 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
   internalDeps = [ php.extensions.session ];
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 relay.so -t $out/lib/php/extensions
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        let
-          args =
-            lib.strings.concatMapStrings
-              (
-                v:
-                " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
-              )
-              (
-                with lib.attrsets;
-                [
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                  (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-                ]
-              );
-        in
-        # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
-        ''
-          install_name_tool${args} $out/lib/php/extensions/relay.so
-        ''
-      else
-        ""
-    )
-    + ''
-      # Random UUID that's required by the extension. Can be anything, but must be different from default.
-      sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
-      chmod -w $out/lib/php/extensions/relay.so
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 relay.so -t $out/lib/php/extensions
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      let
+        args =
+          lib.strings.concatMapStrings
+            (
+              v:
+              " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
+            )
+            (
+              with lib.attrsets;
+              [
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
+                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
+              ]
+            );
+      in
+      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+      ''
+        install_name_tool${args} $out/lib/php/extensions/relay.so
+      ''
+    else
+      ""
+  )
+  + ''
+    # Random UUID that's required by the extension. Can be anything, but must be different from default.
+    sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
+    chmod -w $out/lib/php/extensions/relay.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''

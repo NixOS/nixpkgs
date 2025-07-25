@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "tygo";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "gzuidhof";
     repo = "tygo";
     rev = "v${version}";
-    hash = "sha256-W2PgBcbkreP61QtAuOZ+VHUUZ4Mhe++1SK1p4Tg4Ack=";
+    hash = "sha256-Eyvvqk8D9q8rOODR72kJSg+g7cVjx3FJCPmSog6eP1E=";
   };
 
   vendorHash = "sha256-E73yqGhPzZA/1xTYGvTBy0/b4SE9hzx+gdhjX3ClE/Y=";

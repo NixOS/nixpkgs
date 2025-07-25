@@ -42,15 +42,14 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ curl ];
 
-  nativeCheckInputs =
-    [
-      git
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.system_cmds
-      libiconv
-    ];
+  nativeCheckInputs = [
+    git
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.system_cmds
+    libiconv
+  ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
