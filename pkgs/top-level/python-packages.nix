@@ -4152,6 +4152,8 @@ self: super: with self; {
 
   dmgbuild = callPackage ../development/python-modules/dmgbuild { };
 
+  dmsuite = callPackage ../development/python-modules/dmsuite { };
+
   dmt-core = callPackage ../development/python-modules/dmt-core { };
 
   dnachisel = callPackage ../development/python-modules/dnachisel { };
@@ -5756,6 +5758,8 @@ self: super: with self; {
   getmac = callPackage ../development/python-modules/getmac { };
 
   gevent = callPackage ../development/python-modules/gevent { };
+
+  gevent-eventemitter = callPackage ../development/python-modules/gevent-eventemitter { };
 
   gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
 
@@ -17247,9 +17251,13 @@ self: super: with self; {
 
   stdlibs = callPackage ../development/python-modules/stdlibs { };
 
+  steam = callPackage ../development/python-modules/steam { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steamship = callPackage ../development/python-modules/steamship { };
+
+  steamworkspy = callPackage ../development/python-modules/steamworkspy { };
 
   stem = callPackage ../development/python-modules/stem { };
 

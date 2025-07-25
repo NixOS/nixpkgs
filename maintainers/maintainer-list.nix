@@ -8285,6 +8285,12 @@
     githubId = 92429150;
     name = "Paul Meinhold";
   };
+  feyorsh = {
+    email = "george@feyor.sh";
+    github = "Feyorsh";
+    githubId = 44840644;
+    name = "George Huebner";
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
@@ -10143,6 +10149,11 @@
     github = "hhm0";
     githubId = 3656888;
     name = "hhm";
+  };
+  hhr2020 = {
+    name = "hhr2020";
+    github = "HHR2020";
+    githubId = 76608828;
   };
   hhydraa = {
     email = "hcurfman@keemail.me";

@@ -113,12 +113,10 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
-  ### Evaluating the entire Nixpkgs naively will fail, make failure fast
+  ### Evaluating the entire Nixpkgs naively will likely fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
-    Please be informed that this pseudo-package is not the only part
-    of Nixpkgs that fails to evaluate. You should not evaluate
-    entire Nixpkgs without some special measures to handle failing
-    packages, like using pkgs/top-level/release-attrpaths-superset.nix.
+    This pseudo-package is likely not the only part of Nixpkgs that fails to evaluate.
+    You should not evaluate entire Nixpkgs without measures to handle failing packages.
   '';
 
   tests = callPackages ../test { };
@@ -170,7 +168,6 @@ with pkgs;
         system = stdenv.hostPlatform.system;
         callTest = config: config.test.driver;
       };
-      __attrsFailEvaluation = true;
     };
 
   ### BUILD SUPPORT
@@ -3530,8 +3527,6 @@ with pkgs;
 
   mhonarc = perlPackages.MHonArc;
 
-  mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
-
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   netdata = callPackage ../tools/system/netdata {
@@ -4007,9 +4002,7 @@ with pkgs;
   opl3bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor { };
   opn2bankeditor = libsForQt5.callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
-  orangefs = callPackage ../tools/filesystems/orangefs {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  orangefs = callPackage ../tools/filesystems/orangefs { };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
     libclang = llvmPackages_19.libclang;
@@ -10078,15 +10071,11 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
-  rPackages =
-    (dontRecurseIntoAttrs (
-      callPackage ../development/r-modules {
-        overrides = (config.rPackageOverrides or (_: { })) pkgs;
-      }
-    ))
-    // {
-      __attrsFailEvaluation = true;
-    };
+  rPackages = dontRecurseIntoAttrs (
+    callPackage ../development/r-modules {
+      overrides = (config.rPackageOverrides or (_: { })) pkgs;
+    }
+  );
 
   ### SERVERS
 
@@ -16250,10 +16239,6 @@ with pkgs;
   terraforming = callPackage ../applications/networking/cluster/terraforming { };
 
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape { };
-
-  trufflehog = callPackage ../tools/security/trufflehog {
-    buildGoModule = buildGo123Module;
-  };
 
   unityhub = callPackage ../development/tools/unityhub { };
 
