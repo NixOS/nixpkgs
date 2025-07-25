@@ -262,6 +262,17 @@ in
       lib.optional (cfg.use != "")
         "Setting `use` is deprecated, ddclient now supports `usev4` and `usev6` for separate IPv4/IPv6 configuration.";
 
+    assertions = [
+      {
+        assertion = !((cfg.passwordFile != null) && (cfg.secretsFile != null));
+        message = "You cannot use both services.ddclient.passwordFile and services.ddclient.secretsFile at the same time.";
+      }
+      {
+        assertion = !(cfg.protocol == "nsupdate") || (cfg.passwordFile == null && cfg.secretsFile == null);
+        message = "You cannot use services.ddclient.passwordFile and or services.ddclient.secretsFile when services.ddclient.protocol is \"nsupdate\".";
+      }
+    ];
+
     systemd.services.ddclient = {
       description = "Dynamic DNS Client";
       wantedBy = [ "multi-user.target" ];
