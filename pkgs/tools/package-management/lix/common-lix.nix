@@ -130,7 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     # We don't want the underlying GCC neither!
     stdenv.cc.cc.stdenv.cc.cc
   ];
-  __structuredAttrs = true;
+  # __structuredAttrs breaks static build due to cmake failure trying to find toml11.
+  # Hack: enable only when needed separateDebugInfo, which is not the case for static.
+  __structuredAttrs = finalAttrs.separateDebugInfo;
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
