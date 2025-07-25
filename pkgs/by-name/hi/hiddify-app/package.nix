@@ -1,17 +1,17 @@
 {
   lib,
-  fetchFromGitHub,
-  flutter324,
   buildGoModule,
-  libayatana-appindicator,
-  makeDesktopItem,
-  copyDesktopItems,
+  flutter324,
+  fetchFromGitHub,
   autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
+  libayatana-appindicator,
 }:
 
 let
   metaCommon = {
-    description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
+    description = "Proxy client based on Sing-box universal proxy tool-chain";
     license = with lib.licenses; [
       unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
       gpl3Only
@@ -19,41 +19,43 @@ let
     maintainers = with lib.maintainers; [ ];
   };
 
-  libcore = buildGoModule rec {
+  libcore = buildGoModule (finalAttrs: {
     pname = "hiddify-core";
     version = "3.1.8";
 
     src = fetchFromGitHub {
       owner = "hiddify";
       repo = "hiddify-core";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-NRzzkC3xbRVP20Pm29bHf8YpxmnjISgF46c8l9qU4rA=";
     };
 
     vendorHash = "sha256-a7NFZt4/w2+oaZG3ncaOrrhASxUptcWS/TeaIQrgLe4=";
 
-    GO_BUILD_FLAGS = ''
-      -tags "with_gvisor,with_quic,with_wireguard,with_ech,with_utls,with_clash_api,with_grpc" \
-      -trimpath \
-      -ldflags "-s -w" \
-    '';
+    buildPhase =
+      let
+        GO_BUILD_FLAGS = ''
+          -tags "with_gvisor,with_quic,with_wireguard,with_ech,with_utls,with_clash_api,with_grpc" \
+          -trimpath \
+          -ldflags "-s -w" \
+        '';
+      in
+      ''
+        runHook preBuild
 
-    buildPhase = ''
-      runHook preBuild
+        go build ${GO_BUILD_FLAGS} -buildmode=c-shared -o bin/lib/libcore.so ./custom
+        mkdir lib
+        cp bin/lib/libcore.so ./lib/libcore.so
+        CGO_LDFLAGS="./lib/libcore.so" go build ${GO_BUILD_FLAGS} -o bin/HiddifyCli ./cli/bydll
 
-      go build ${GO_BUILD_FLAGS} -buildmode=c-shared -o bin/lib/libcore.so ./custom
-      mkdir lib
-      cp bin/lib/libcore.so ./lib/libcore.so
-      CGO_LDFLAGS="./lib/libcore.so" go build ${GO_BUILD_FLAGS} -o bin/HiddifyCli ./cli/bydll
-
-      runHook postBuild
-    '';
+        runHook postBuild
+      '';
 
     installPhase = ''
       runHook preInstall
 
       install -Dm0755 bin/HiddifyCli $out/bin/HiddifyCli
-      install -Dm0755 lib/libcore.so $out/lib/libcore.so
+      install -Dm0644 lib/libcore.so $out/lib/libcore.so
 
       runHook postInstall
     '';
@@ -62,9 +64,9 @@ let
       homepage = "https://github.com/hiddify/hiddify-core";
       mainProgram = "HiddifyCli";
     };
-  };
+  });
 in
-flutter324.buildFlutterApplication {
+flutter324.buildFlutterApplication rec {
   pname = "hiddify-app";
   version = "2.5.7-unstable-2025-01-06";
 
@@ -85,7 +87,7 @@ flutter324.buildFlutterApplication {
 
   postPatch = ''
     substituteInPlace linux/my_application.cc \
-      --replace-fail "./hiddify.png" "${placeholder "out"}/share/pixmaps/hiddify.png"
+      --replace-fail "./hiddify.png" "$out/share/pixmaps/hiddify.png"
   '';
 
   nativeBuildInputs = [
@@ -93,9 +95,7 @@ flutter324.buildFlutterApplication {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    libayatana-appindicator
-  ];
+  buildInputs = [ libayatana-appindicator ];
 
   preBuild = ''
     mkdir -p libcore/bin
@@ -137,15 +137,15 @@ flutter324.buildFlutterApplication {
   '';
 
   preFixup = ''
-    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/hiddify-app/lib/lib*.so
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/${pname}/lib/lib*.so
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/hiddify-app/lib
+    --prefix LD_LIBRARY_PATH : $out/app/${pname}/lib
   '';
 
   meta = metaCommon // {
-    homepage = "https://hiddify.com";
+    homepage = "https://github.com/hiddify/hiddify-app";
     mainProgram = "hiddify";
     platforms = lib.platforms.linux;
   };
