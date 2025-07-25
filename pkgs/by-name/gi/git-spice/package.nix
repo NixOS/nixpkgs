@@ -37,21 +37,20 @@ buildGo124Module rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck =
-    ''
-      # timeout on both aarch64-darwin and x86_64-linux
-      rm testdata/script/issue725_pre_push_hook_worktree.txt
+  preCheck = ''
+    # timeout on both aarch64-darwin and x86_64-linux
+    rm testdata/script/issue725_pre_push_hook_worktree.txt
 
-      # failing on both aarch64-darwin and x86_64-linux
-      # TODO: check if this still fails after next release
-      rm testdata/script/branch_restack_conflict_no_edit.txt
-    ''
+    # failing on both aarch64-darwin and x86_64-linux
+    # TODO: check if this still fails after next release
+    rm testdata/script/branch_restack_conflict_no_edit.txt
+  ''
 
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      # timeout
-      rm testdata/script/branch_submit_remote_prompt.txt
-      rm testdata/script/branch_submit_multiple_pr_templates.txt
-    '';
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # timeout
+    rm testdata/script/branch_submit_remote_prompt.txt
+    rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gs \
