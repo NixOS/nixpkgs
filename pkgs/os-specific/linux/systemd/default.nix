@@ -878,8 +878,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
       (
-        builtins.map (p: p.__spliced.buildHost or p) (
-          builtins.filter (p: p != null) finalAttrs.nativeBuildInputs
+        builtins.filter (p: p != null) (
+          builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
         )
       );
 
