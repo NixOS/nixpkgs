@@ -120,7 +120,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/lib/test-driver  @tfc
 
 # NixOS QEMU virtualisation
-/nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
+/nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
+/nixos/modules/services/backup/libvirtd-autosnapshot.nix  @6543
 
 # ACME
 /nixos/modules/security/acme                @NixOS/acme
