@@ -15,6 +15,7 @@
   skia-pathops,
   syrupy,
   ufolib2,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-FUITbL+FnscmZjZMlgh/dX4+tJR6MD0LoH5jDNisQkI=";
   };
+
+  patches = [
+    # Unreleased patch for fonttools >= 4.58.5
+    # https://github.com/googlefonts/ufo2ft/issues/920
+    (fetchpatch {
+      name = "ufo2ft-fonttools-4.58.5.patch";
+      url = "https://github.com/googlefonts/ufo2ft/commit/5ca4800ef39167c377fc669b41e146520cfa641b.patch";
+      hash = "sha256-7hEO6D7LK+LxTK1jcaC8kLw/9ZOOpr41qFysLrZBZ4M=";
+    })
+  ];
 
   build-system = [
     setuptools-scm
