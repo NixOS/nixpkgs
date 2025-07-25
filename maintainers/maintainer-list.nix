@@ -10144,6 +10144,11 @@
     githubId = 3656888;
     name = "hhm";
   };
+  hhr2020 = {
+    name = "hhr2020";
+    github = "HHR2020";
+    githubId = 76608828;
+  };
   hhydraa = {
     email = "hcurfman@keemail.me";
     github = "hcur";
