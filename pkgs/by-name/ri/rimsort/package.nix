@@ -72,38 +72,37 @@ stdenv.mkDerivation {
     makeBinaryWrapper
   ];
 
-  buildInputs =
-    [
-      todds
-      steamfiles
-    ]
-    ++ builtins.attrValues {
-      inherit (python3Packages)
-        beautifulsoup4
-        certifi
-        chardet
-        imageio
-        loguru
-        lxml
-        msgspec
-        natsort
-        networkx
-        packaging
-        platformdirs
-        psutil
-        pygit2
-        pygithub
-        pyperclip
-        pyside6
-        requests
-        sqlalchemy
-        steam
-        toposort
-        watchdog
-        xmltodict
-        steamworkspy
-        ;
-    };
+  buildInputs = [
+    todds
+    steamfiles
+  ]
+  ++ builtins.attrValues {
+    inherit (python3Packages)
+      beautifulsoup4
+      certifi
+      chardet
+      imageio
+      loguru
+      lxml
+      msgspec
+      natsort
+      networkx
+      packaging
+      platformdirs
+      psutil
+      pygit2
+      pygithub
+      pyperclip
+      pyside6
+      requests
+      sqlalchemy
+      steam
+      toposort
+      watchdog
+      xmltodict
+      steamworkspy
+      ;
+  };
 
   dontBuild = true;
 
