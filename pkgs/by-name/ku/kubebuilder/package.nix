@@ -13,18 +13,18 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "4.5.1";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    hash = "sha256-KXT7rW4HH9sSidqofp86tHClfpRQPnMo1K1LzfDyL3I=";
+    hash = "sha256-nyjwLP1qy6X7BFtagXoqFawqRoDbKq6YSY7/XjsgC7M=";
   };
 
-  vendorHash = "sha256-rcL79JLZfuvFraqrRWQKrGuUfnRh1IxGidZ/vMeBrZM=";
+  vendorHash = "sha256-YtvIx0+kKEjC3hsHvXbZZhNqJD2gmjaS3tWtEWaU7SQ=";
 
-  subPackages = [ "cmd" ];
+  subPackages = [ "." ];
 
   allowGoReference = true;
 
@@ -43,7 +43,6 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
       --prefix PATH : ${
         lib.makeBinPath [
