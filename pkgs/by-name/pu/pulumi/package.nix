@@ -17,18 +17,18 @@
 }:
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.162.0";
+  version = "3.185.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${version}";
-    hash = "sha256-avtqURmj3PL82j89kLmVsBWqJJHnOFqR1huoUESt4L4=";
+    hash = "sha256-/7VaFeEQXVqF7g+CR2oTSmOWgWjw/LS9s0+VZcSlFvU=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-fJFpwhbRkxSI2iQfNJ9qdL9oYM1SVVMJ30VIymoZBmg=";
+  vendorHash = "sha256-aAxBVMLL7JRSJSVIR9/gNTNj8sZHg39ftv+ZAO8PS54=";
 
   sourceRoot = "${src.name}/pkg";
 
@@ -81,6 +81,11 @@ buildGoModule rec {
         "TestPulumiNewWithOrgTemplates"
         "TestPulumiNewWithoutPulumiAccessToken"
         "TestPulumiNewWithoutTemplateSupport"
+        "TestGeneratingProjectWithAIPromptSucceeds"
+        "TestPulumiNewWithRegistryTemplates"
+
+        # Connects to https://api.pulumi.com/…
+        "TestGetLatestPluginIncludedVersion"
 
         # Connects to https://pulumi-testing.vault.azure.net/…
         "TestAzureCloudManager"

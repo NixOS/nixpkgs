@@ -58,7 +58,7 @@
   opencolorio,
   openexr,
   openimagedenoise,
-  openimageio_2,
+  openimageio,
   openjpeg,
   openpgl,
   opensubdiv,
@@ -250,7 +250,7 @@ stdenv'.mkDerivation (finalAttrs: {
     (manifold.override { tbb_2021 = tbb; })
     opencolorio
     openexr
-    openimageio_2
+    openimageio
     openjpeg
     (openpgl.override { inherit tbb; })
     (opensubdiv.override { inherit cudaSupport; })

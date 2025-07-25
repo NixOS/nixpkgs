@@ -152,5 +152,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ codyopel ];
     teams = [ teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

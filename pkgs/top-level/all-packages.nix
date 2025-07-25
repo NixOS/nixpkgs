@@ -12524,8 +12524,6 @@ with pkgs;
 
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
 
-  hue-cli = callPackage ../tools/networking/hue-cli { };
-
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
   };
@@ -13336,8 +13334,6 @@ with pkgs;
   opencpn = callPackage ../applications/misc/opencpn {
     inherit (darwin) DarwinTools;
   };
-
-  openimageio_2 = callPackage ../by-name/op/openimageio/2.nix { };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
