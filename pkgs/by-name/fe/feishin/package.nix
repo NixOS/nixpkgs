@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     --publish always --linux \
     --dir \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version} 
+      -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
