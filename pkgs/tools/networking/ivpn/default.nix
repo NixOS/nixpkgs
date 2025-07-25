@@ -21,7 +21,7 @@ builtins.mapAttrs
       attrs
       // rec {
         inherit pname;
-        version = "3.14.29";
+        version = "3.14.34";
 
         buildInputs = [
           wirelesstools
@@ -31,7 +31,7 @@ builtins.mapAttrs
           owner = "ivpn";
           repo = "desktop-app";
           tag = "v${version}";
-          hash = "sha256-8JScty/sGyxzC2ojRpatHpCqEXZw9ksMortIhZnukoU=";
+          hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
         };
 
         proxyVendor = true; # .c file
@@ -68,7 +68,7 @@ builtins.mapAttrs
     };
     ivpn-service = {
       modRoot = "daemon";
-      vendorHash = "sha256-REIY3XPyMA2Loxo1mKzJMJwZrf9dQMOtnQOUEgN5LP8=";
+      vendorHash = "sha256-DVKSCcEeE7vI8aOYuEwk22n0wtF7MMDOyAgYoXYadwI=";
       nativeBuildInputs = [ makeWrapper ];
 
       patches = [ ./permissions.patch ];
