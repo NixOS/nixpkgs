@@ -223,8 +223,10 @@ in
 
       environment =
         config.nix.envVars
-        // {
+        // lib.optionalAttrs (config.environment.sessionVariables.NIX_PATH or null != null) {
           inherit (config.environment.sessionVariables) NIX_PATH;
+        }
+        // {
           HOME = "/root";
         }
         // config.networking.proxy.envVars;

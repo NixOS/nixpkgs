@@ -9,6 +9,8 @@
 }:
 let
 
+  inherit (lib) filterAttrs;
+
   cfg = config.environment;
 
 in
@@ -42,6 +44,7 @@ in
     };
 
     environment.profileRelativeSessionVariables = lib.mkOption {
+      # TODO: Use lazyAttrsOf and nullOr, like environment.variables
       type = lib.types.attrsOf (lib.types.listOf lib.types.str);
       example = {
         PATH = [ "/bin" ];
@@ -98,7 +101,7 @@ in
               # environment from a shell.
               { PATH = [ config.security.wrapperDir ]; }
 
-              (lib.mapAttrs (n: lib.toList) cfg.sessionVariables)
+              (lib.mapAttrs (n: lib.toList) (filterAttrs (k: v: v != null) cfg.sessionVariables))
               suffixedVariables
             ]
           )
