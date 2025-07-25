@@ -112,5 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
       ylh
     ];
     mainProgram = "vkquake";
+    license = lib.licenses.gpl2Plus;
   };
 })
