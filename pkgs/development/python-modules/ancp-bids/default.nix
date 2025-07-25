@@ -21,7 +21,8 @@ buildPythonPackage rec {
     owner = "ANCPLabOldenburg";
     repo = "ancp-bids";
     tag = version;
-    hash = "sha256-n8QfQ2PGdAO6kTfkbFpj3f2gYa3vwuYg+vPpZlGNpb0=";
+    hash = "sha256-EYapqNyfAPj6oCdiSqu/4828N1SPuBDLv75jRSNOjpo=";
+    pureExportSubst = true;
   };
 
   build-system = [ setuptools ];
