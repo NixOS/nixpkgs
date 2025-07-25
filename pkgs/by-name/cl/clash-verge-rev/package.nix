@@ -66,6 +66,7 @@ let
     maintainers = with lib.maintainers; [
       Guanran928
       bot-wxt1221
+      hhr2020
     ];
     platforms = lib.platforms.linux;
   };

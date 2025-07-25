@@ -48,14 +48,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.2";
+  version = "2.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
+    hash = "sha256-v9xFUjjk7KHsUtuZjQWLtc1m3f6VOUPlQtSBtUR6Pcg=";
   };
 
   patches = [
@@ -99,6 +99,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       aiohttp
+      chardet
       mashumaro
       orjson
     ]
@@ -154,6 +155,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/providers/jellyfin/test_init.py::test_initial_sync"
     "tests/core/test_server_base.py::test_start_and_stop_server"
     "tests/core/test_server_base.py::test_events"
+    # not compatible with the required py-subsonic version
+    "tests/providers/opensubsonic/test_parsers.py"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

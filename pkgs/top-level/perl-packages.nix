@@ -36,11 +36,7 @@ with self;
 {
 
   inherit perl;
-  perlPackages = self // {
-    perlPackages = self.perlPackages // {
-      __attrsFailEvaluation = true;
-    };
-  };
+  perlPackages = self;
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule;

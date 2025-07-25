@@ -38,14 +38,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.17.0";
+    version = "0.18.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-RlWJcxSCKTbj6MNeQwweu20rPBQGzumEk42MtTAhGRU=";
+      hash = "sha256-S9SZ9UfohEHfwmXmHsTeSW45BHTJA4wPdFQXsX3Pk34=";
     };
 
     nativeBuildInputs = [
@@ -114,6 +114,7 @@ buildFHSEnv {
       xorg.libSM
       xorg.libXxf86vm
       xorg.libX11
+      xorg.libXi
       xorg.libXext
       glib
       pango

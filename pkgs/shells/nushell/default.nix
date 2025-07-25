@@ -58,6 +58,10 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
+  preCheck = ''
+    export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
+  '';
+
   checkPhase = ''
     runHook preCheck
     (
