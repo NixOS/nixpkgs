@@ -146,11 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.3";
+  version = "10.1.0-rc4";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XIkSZ7FTSndEZduLGg38sMXm1+y29xNFYlrfTgiJlFs=";
+    hash = "sha256-Lkr1t4+XgI3fcm7MDwqfFGfhw5KbzROlY+K7SYRAz4o=";
   };
 
   depsBuildBuild = [
@@ -296,6 +296,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace-fail "'VERSION'" "'QEMU_VERSION'"
+    substituteInPlace docs/conf.py \
+      --replace-fail "'../VERSION'" "'../QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';
