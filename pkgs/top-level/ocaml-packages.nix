@@ -118,8 +118,6 @@ let
 
         binning = callPackage ../development/ocaml-modules/binning { };
 
-        biocaml = throw "biocaml has been removed"; # 2025-06-04
-
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
         bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
@@ -655,7 +653,6 @@ let
 
         gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
         gen = callPackage ../development/ocaml-modules/gen { };
@@ -1415,8 +1412,6 @@ let
         ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
-
-        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -2200,6 +2195,10 @@ let
 
         ### End ###
 
+      } // lib.optionalAttrs config.allowAliases {
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
+        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
     )).overrideScope
       liftJaneStreet;
