@@ -21,7 +21,7 @@ replace_hash() {
     sed -i "s#$1 = \"sha256-.\{44\}\"#$1 = \"$2\"#" "$NIX_DRV"
 }
 
-VER=$(list-git-tags --url=https://github.com/envoyproxy/envoy | rg 'v[0-9\.]*$' | sed -e 's/^v//' | sort -V | tail -n 1)
+VER=$(list-git-tags --url=https://github.com/envoyproxy/envoy | rg 'v1\.34\.[0-9]*$' | sed -e 's/^v//' | sort -V | tail -n 1)
 
 LINUX_X64_HASH=$(fetch_arch "$VER" "x86_64")
 LINUX_AARCH64_HASH=$(fetch_arch "$VER" "aarch_64")

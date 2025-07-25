@@ -269,3 +269,7 @@ a034fb50f79816c6738fb48b48503b09ea3b0132
 
 # treewide: switch instances of lib.teams.*.members to the new meta.teams attribute
 05580f4b4433fda48fff30f60dfd303d6ee05d21
+
+# nixfmt 1.0.0
+a46262ae77e4016fe5a4a390c4a39c0c1b266428 # !autorebase nix-shell --run treefmt
+aefcb0d50d1124314429a11ed6b7aaaedf2861c5 # !autorebase nix-shell --run treefmt

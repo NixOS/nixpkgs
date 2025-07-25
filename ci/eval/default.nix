@@ -64,8 +64,7 @@ let
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
-            --option eval-system "${evalSystem}" \
-            --arg enableWarnings false > $out/paths.json
+            --option eval-system "${evalSystem}" > $out/paths.json
       '';
 
   singleSystem =
