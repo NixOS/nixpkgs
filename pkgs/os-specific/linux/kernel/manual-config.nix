@@ -178,6 +178,7 @@ lib.makeOverridable (
         outputs = [
           "out"
           "dev"
+          "modules"
         ];
       })
       // {
@@ -336,12 +337,12 @@ lib.makeOverridable (
         ++ extraMakeFlags;
 
         installFlags = [
-          "INSTALL_PATH=$(out)"
+          "INSTALL_PATH=${placeholder "out"}"
         ]
-        ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+        ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
         ++ optionals buildDTBs [
           "dtbs_install"
-          "INSTALL_DTBS_PATH=$(out)/dtbs"
+          "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
         ];
 
         preInstall =
@@ -438,8 +439,7 @@ lib.makeOverridable (
             installFlags+=("INSTALL_MOD_STRIP=1")
           fi
           make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
-          unlink $out/lib/modules/${modDirVersion}/build
-          rm -f $out/lib/modules/${modDirVersion}/source
+          unlink $modules/lib/modules/${modDirVersion}/build
 
           mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
@@ -567,6 +567,20 @@ lib.makeOverridable (
 
         makeFlags = [
           "O=$(buildRoot)"
+
+          # We have a `modules` variable in the environment for our
+          # split output, but the kernel Makefiles also define their
+          # own `modules` variable. Their definition wins, but Make
+          # remembers that the variable was originally from the
+          # environment and exports it to all the build recipes. This
+          # breaks the build with an “Argument list too long” error due
+          # to passing the huge list of every module object file in the
+          # environment of every process invoked by every build recipe.
+          #
+          # We use `--eval` here to undefine the inherited environment
+          # variable before any Makefiles are read, ensuring that the
+          # kernel’s definition creates a new, unexported variable.
+          "--eval=undefine modules"
         ]
         ++ commonMakeFlags;
 
