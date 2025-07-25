@@ -1008,6 +1008,17 @@ in
         };
 
   /**
+    The empty fileset. It can be useful as a default value or as starting accumulator for a folding operation.
+
+    # Type
+
+    ```
+    empty :: FileSet
+    ```
+  */
+  empty = _emptyWithoutBase;
+
+  /**
     Tests whether a given value is a fileset, or can be used in place of a fileset.
 
     # Inputs
