@@ -107,16 +107,14 @@ let
         outputDev = "devkit";
         outputLib = "devkit";
 
-        meta =
-
-          {
-            description = "Trusted Execution Environment for ARM";
-            homepage = "https://github.com/OP-TEE/optee_os";
-            changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
-            license = lib.licenses.bsd2;
-            maintainers = [ lib.maintainers.jmbaur ];
-          }
-          // extraMeta;
+        meta = {
+          description = "Trusted Execution Environment for ARM";
+          homepage = "https://github.com/OP-TEE/optee_os";
+          changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
+          license = lib.licenses.bsd2;
+          maintainers = [ lib.maintainers.jmbaur ];
+        }
+        // extraMeta;
       }
       // removeAttrs args [ "extraMeta" ]
     )
