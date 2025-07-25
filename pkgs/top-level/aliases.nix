@@ -911,6 +911,7 @@ mapAliases {
   hawknl = throw "'hawknl' has been removed as it was unmaintained and the upstream unavailable"; # Added 2025-05-07
   HentaiAtHome = hentai-at-home; # Added 2024-06-12
   hll2390dw-cups = throw "The hll2390dw-cups package was dropped since it was unmaintained."; # Added 2024-06-21
+  hieroglyphic = throw "'hieroglyphic' has been removed because its packageing was severly out of date"; # Added 2025-07-25
   hoarder = throw "'hoarder' has been renamed to 'karakeep'"; # Added 2025-04-21
   hmetis = throw "'hmetis' has been removed as it was unmaintained and the upstream was unavailable"; # Added 2025-05-05
   hop-cli = throw "hop-cli has been removed as the service has been shut-down"; # Added 2024-08-13
