@@ -14,7 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wdisplays";
-  version = "1.1.1";
+  version = "1.1.3";
+
+  src = fetchFromGitHub {
+    owner = "artizirk";
+    repo = "wdisplays";
+    tag = finalAttrs.version;
+    hash = "sha256-KabaW2BH4zAS0xWkzCM8YaAnP/hkZL7Wq3EARantRis=";
+  };
 
   nativeBuildInputs = [
     meson
@@ -30,19 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  src = fetchFromGitHub {
-    owner = "artizirk";
-    repo = "wdisplays";
-    rev = finalAttrs.version;
-    sha256 = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Graphical application for configuring displays in Wayland compositors";
-    homepage = "https://github.com/luispabon/wdisplays";
-    maintainers = with maintainers; [ ma27 ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    homepage = "https://github.com/artizirk/wdisplays";
+    maintainers = with lib.maintainers; [ ma27 ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "wdisplays";
   };
 })
