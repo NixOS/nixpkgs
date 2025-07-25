@@ -30,6 +30,8 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
+  pyproject = true;
+
   build-system = with python3Packages; [
     setuptools
   ];
