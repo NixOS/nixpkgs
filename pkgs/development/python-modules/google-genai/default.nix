@@ -12,6 +12,7 @@
   pytestCheckHook,
   requests,
   setuptools,
+  tenacity,
   twine,
   typing-extensions,
   websockets,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "google-genai";
-  version = "1.20.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
     tag = "v${version}";
-    hash = "sha256-7DwLIK3/VCVSt9lq0Q0IRbhfLXOWw1TbPpDgI4jr9cg=";
+    hash = "sha256-iHpbCWJER5TI5XZhcgNeCeK29QMKD46iFqNb/raoOIo=";
   };
 
   build-system = [
@@ -36,7 +37,11 @@ buildPythonPackage rec {
     twine
   ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    # https://github.com/googleapis/python-genai/issues/1005
+    "tenacity"
+    "websockets"
+  ];
 
   dependencies = [
     anyio
@@ -44,6 +49,7 @@ buildPythonPackage rec {
     httpx
     pydantic
     requests
+    tenacity
     typing-extensions
     websockets
   ];
