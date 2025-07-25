@@ -15,18 +15,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.9-1";
+  version = "1.0.11-pre.3";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NyEhvW5NMqvESdbauxur7xWAzQiQdTVklGMYhckNAnw=";
+    hash = "sha256-60ppzHY5alnDsJwkIJZUPH1sERwFWI9rNWdwEeToY7g=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-xB4kWpPQbA1OkXNr5sozPIP96dLJhwoDUpesE6DORzg=";
+    hash = "sha256-KTa4OhfhzVVa9FSFtzEUq+b47hJKRS9IBl22y/tKw1g=";
   };
 
   nativeBuildInputs = [
