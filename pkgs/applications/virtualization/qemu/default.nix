@@ -293,9 +293,9 @@ stdenv.mkDerivation (finalAttrs: {
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
-      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+      --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
-      --replace "'VERSION'" "'QEMU_VERSION'"
+      --replace-fail "'VERSION'" "'QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';
