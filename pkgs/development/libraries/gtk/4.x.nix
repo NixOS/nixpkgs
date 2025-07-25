@@ -116,24 +116,24 @@ stdenv.mkDerivation (finalAttrs: {
   ++ finalAttrs.setupHooks;
 
   buildInputs = [
-    libxkbcommon
     libpng
     libtiff
     libjpeg
     (libepoxy.override { inherit x11Support; })
     isocodes
-  ]
-  ++ lib.optionals vulkanSupport [
-    vulkan-headers
-    libdrm
-  ]
-  ++ [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     fribidi
     harfbuzz
   ]
-  ++ (with xorg; [
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    libdrm
+  ]
+  ++ lib.optionals (x11Support || waylandSupport) [
+    libxkbcommon
+  ]
+  ++ lib.optionals x11Support (with xorg; [
     libICE
     libSM
     libXcursor
