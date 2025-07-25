@@ -430,12 +430,8 @@ in
       services.display-manager = {
         after = [
           "systemd-user-sessions.service"
-          "getty@tty7.service"
           "plymouth-quit.service"
           "systemd-logind.service"
-        ];
-        conflicts = [
-          "getty@tty7.service"
         ];
       };
     };
