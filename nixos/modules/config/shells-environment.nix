@@ -9,7 +9,7 @@
 }:
 let
 
-  inherit (lib) filterAttrs;
+  inherit (lib) all filterAttrs isList;
 
   cfg = config.environment;
 
@@ -29,7 +29,7 @@ let
 
       exportVariables = lib.mapAttrsToList (
         n: v: ''export ${n}="${lib.concatStringsSep ":" v}"''
-      ) (filterAttrs (k: v: v != null) allVariables);
+      ) (filterAttrs (_n: v: v != null && (isList v -> ! all isNull v)) allVariables);
     in
     lib.concatStringsSep "\n" exportVariables;
 in
