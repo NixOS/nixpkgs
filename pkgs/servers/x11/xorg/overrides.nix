@@ -1169,17 +1169,19 @@ self: super:
       "--without-dtrace"
     ];
 
-    buildInputs = old.buildInputs ++ [
-      dri-pkgconfig-stub
-      libdrm
-      libGL
-      mesa-gl-headers
-      xorg.pixman
-      xorg.libXfont2
-      xorg.xtrans
-      xorg.libxcvt
-      xorg.libxshmfence
-    ];
+    buildInputs =
+      old.buildInputs
+      ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform dri-pkgconfig-stub) dri-pkgconfig-stub
+      ++ [
+        libdrm
+        libGL
+        mesa-gl-headers
+        xorg.pixman
+        xorg.libXfont2
+        xorg.xtrans
+        xorg.libxcvt
+        xorg.libxshmfence
+      ];
   });
 
   twm = super.twm.overrideAttrs (attrs: {
