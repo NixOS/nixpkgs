@@ -9,14 +9,11 @@
   opencolorio,
   ffmpeg_6,
   cmake,
-  wrapQtAppsHook,
   openimageio,
   openexr,
   portaudio,
   imath,
-  qtwayland,
-  qtmultimedia,
-  qttools,
+  qt6,
 }:
 
 let
@@ -71,7 +68,7 @@ stdenv.mkDerivation {
     pkg-config
     which
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -82,18 +79,18 @@ stdenv.mkDerivation {
     imath
     openexr
     portaudio
-    qtwayland
-    qtmultimedia
-    qttools
+    qt6.qtwayland
+    qt6.qtmultimedia
+    qt6.qttools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Professional open-source NLE video editor";
     homepage = "https://www.olivevideoeditor.org/";
     downloadPage = "https://www.olivevideoeditor.org/download.php";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.balsoft ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ balsoft ];
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "olive-editor";
