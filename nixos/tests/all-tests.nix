@@ -640,6 +640,7 @@ in
   image-contents = handleTest ./image-contents.nix { };
   immich = handleTest ./web-apps/immich.nix { };
   immich-public-proxy = handleTest ./web-apps/immich-public-proxy.nix { };
+  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   incron = handleTest ./incron.nix { };
   incus = pkgs.recurseIntoAttrs (
     handleTest ./incus {
