@@ -155,7 +155,13 @@ builtins.intersectAttrs super {
   # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
   streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
-  threadscope = enableSeparateBinOutput super.threadscope;
+  # Requires wrapGAppsHook otherwise we get: https://github.com/haskell/ThreadScope/issues/143
+  # We cannot use enableSeparateBinOutput here since it doesn't work with wrapGAppsHook
+  threadscope = (
+    overrideCabal (drv: {
+      executableToolDepends = (drv.executableToolDepends or [ ]) ++ [ pkgs.wrapGAppsHook3 ];
+    }) super.threadscope
+  );
 
   # Binary may be used separately for e.g. editor integrations
   cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
