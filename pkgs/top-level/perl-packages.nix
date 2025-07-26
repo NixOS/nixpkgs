@@ -24609,10 +24609,10 @@ with self;
 
   Mouse = buildPerlModule {
     pname = "Mouse";
-    version = "2.5.10";
+    version = "2.5.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.10.tar.gz";
-      hash = "sha256-zo3COUYVOkZ/8JdlFn7iWQ9cUCEg9IotlEFzPzmqMu4=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.11.tar.gz";
+      hash = "sha256-4qDQkwGQwhpES5YHk6ouNp7yih3QuPNIKXlfhqGRWVY=";
     };
     buildInputs = [
       ModuleBuildXSUtil
