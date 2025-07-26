@@ -22,6 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-G9M+1OWp2jlDeSDFagH/YOCdxGQbcru1KFyKEUcMe7g=";
 
+  patches =
+    lib.optional (stdenv.hostPlatform.system == "x86_64-darwin")
+      # work around rust 1.88 compiler / linker bug for x86_64-darwin. This is
+      # applied conditionally because it will introduce a performance penalty on
+      # other host platforms. NOTE: Please check the patch applies if you update
+      # the package on a different platform (e.g x86_64-linux).
+      # see: https://github.com/NixOS/nixpkgs/issues/427072
+      ./fix-cargo-1_88-reqwest.patch;
+
   nativeBuildInputs = [
     pkg-config
     installShellFiles
