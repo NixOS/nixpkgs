@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "martin";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rbdHa9J2puQySBJpDKIx+3N7aolv+OIYouTCh+VkABM=";
   };
 
@@ -54,13 +54,13 @@ rustPlatform.buildRustPackage rec {
     "--skip tables_multiple_geom_ok"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})
