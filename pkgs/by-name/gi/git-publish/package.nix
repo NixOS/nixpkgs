@@ -1,19 +1,19 @@
 {
   lib,
   stdenv,
-  python,
+  python3,
   perl,
   fetchFromGitHub,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-publish";
   version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "stefanha";
     repo = "git-publish";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jjpbr+ZqG4U8/z0PurnXR+IUKQkG3QB8YqhDkH8uu2Y=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     perl
     installShellFiles
   ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   installPhase = ''
     runHook preInstall
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stefanha/git-publish";
     mainProgram = "git-publish";
   };
-}
+})
