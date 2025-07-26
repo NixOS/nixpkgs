@@ -43,7 +43,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.3.1-1";
+  version = "25.5.1-1";
 
   src =
     let
@@ -59,8 +59,8 @@ let
     fetchurl {
       url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-U6hhCUY8/XC6esqzltQW5iMBKRTu4ARynh7Nb+lOjGk=";
-        aarch64-linux = "sha256-TKoMJmq3JrRAzK1Ap0d0FnSU4AHaXeKBt08tVnPkrOk=";
+        x86_64-linux = "sha256-YSrxE7SdsDaOK+QaxNUbcIjuvV8x2u64nyP/+Pkg21g=";
+        aarch64-linux = "sha256-t9YR3Kpjjv1wCkpOsk+8ufe5TMF3PXxlWVnDMNC2jhY=";
       };
     };
 
