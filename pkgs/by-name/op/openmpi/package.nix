@@ -157,8 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
           "shmem"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
           "osh"
         ];
         s = [
